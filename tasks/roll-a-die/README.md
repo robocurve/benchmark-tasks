@@ -12,7 +12,8 @@ statistical fairness is required.
 182 actions / **9.10 simulated seconds**, with clearly visible face-turnover
 evidence. The final Dream run scores **0.0** after its full **1,200 actions /
 60 simulated seconds**, without a qualifying pickup. Both final runs use the
-same frozen scene, scorer and core source. Media is prepared; upload is pending.
+same frozen scene, scorer and core source. The final videos and setup screenshot
+are uploaded as media **M-PV3ZXY**, recorded in `task.json`.
 Earlier blank-cube trials are historical evidence only, not results for this
 marked-die scene and revised rubric.
 See [JUDGING.md](JUDGING.md) for the review protocol and
@@ -230,6 +231,7 @@ motion supplement the full recording; they must not invent missing frames.
 Videos must be H.264 MP4, at most 50 MB each, with browser-compatible fast start.
 The setup PNG must be at most 10 MB. Text and media must not identify the team.
 
-Only report measured scores and upload the final verified media. The media ID
-returned by `tools/upload_media.py` belongs in `task.json`. Media upload and a
-ready task folder do not by themselves authorize opening a competition PR.
+The submitted media bundle **M-PV3ZXY** contains the complete final Dream
+trial, complete full-score demonstration and actual initial setup screenshot.
+The `media` field in `task.json` associates this bundle with the task. Only
+measured scores are reported; historical trials are not submitted as current media.

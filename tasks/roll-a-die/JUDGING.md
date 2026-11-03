@@ -12,7 +12,8 @@ physical face through a turnover.
 **9.10 simulated seconds** and shows the qualifying face sequence clearly.
 The matching final Dream run scores **0.0** after 1,200 actions / 60 simulated
 seconds, without a qualifying pickup. Both final runs use the same frozen scene,
-scorer and core source. The media is prepared and upload remains pending.
+scorer and core source. The final videos and setup screenshot are uploaded as
+media **M-PV3ZXY**, referenced in `task.json`.
 Historical blank-cube recordings and v2 scores are development evidence only,
 not feasibility evidence for this revised scene/rubric.
 
