@@ -1,0 +1,20 @@
+{
+  "title": "Lay stickers on a lumber pile directly above the beams below",
+  "category": "Impact on jobs",
+  "keywords": [
+    "lumber yard",
+    "sawmill",
+    "air drying",
+    "stacking",
+    "load path",
+    "alignment"
+  ],
+  "instruction": "Lay the two red stickers across the tan boards, one directly above each of the two brown beams underneath, then lay the yellow board on the stickers directly above one of the tan boards.",
+  "context": "Lumber is air-dried in piles with stickers between courses. USDA Forest Products Laboratory, Air Drying of Lumber (FPL-GTR-117): 'Stickers should be in good vertical alignment'; misaligned ones let the pile's weight 'act on the span of the boards to cause warp.' Done by: lumber stackers in sawmills and lumber yards.",
+  "setup": "Positions are in cm on the table, from the midpoint between the two arm bases: x forward (away from the arms), y to the robot's left. Every piece is wood, edges square to the table unless stated. Two dark brown beams (bolsters), each 2 cm wide, 22 cm long and 2 cm tall, lie on the table running left to right (along y), centred at y 21, one at x 18 and one at x 34 (16 cm apart, centre to centre). The first course: two tan boards, each 24 cm long, 6 cm wide and 2 cm thick, lie flat on the beams pointing straight out (along x), centred at x 26, one at y 17 and one at y 25 (a 2 cm gap between them). The beams and tan boards are fixed. Two red stickers, each 16 cm long and 2 x 2 cm in section, 30 g, lie flat on the table running left to right, centred at y 1, one at x 20 and one at x 30. One yellow board, the same size as the tan boards, 120 g, lies flat on the table pointing straight out, centred at x 26, y 37. The rest of the table is clear.",
+  "scoring": "At the end, grippers open. Flat on a surface: lowest corner within 4 mm of it, leaning at most 10 degrees (a board on a broad face, either way up; a sticker on any long face). A sticker lies across the course when it is flat on the tan boards and bears at least 1.5 cm on each. 0.25 for each beam with a sticker across the course whose two ends are both within 5 mm of the beam's centreline, measured along the boards; 0.125 if within 15 mm; 0 otherwise (two stickers over one beam count once). Plus 0.5 if each sticker is across the course within 15 mm of a different beam and the yellow board lies flat on them, its centre within 1 cm of a tan board's centre (left to right) and of x 26, pointing the same way as the tan boards within 5 degrees. Score = the sum: 0, 0.125, 0.25, 0.375, 0.5, 0.75, 0.875 or 1.0. The trial ends at 1.0 once all is in place and still for 1 s; otherwise the last step is scored. Check with a tape measure from each sticker's ends to a mark on each beam's centreline.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Put the stickers back on the table running left to right and the yellow board pointing straight out, at their start positions. The beams and the tan boards do not move.",
+  "fidelity": "Tabletop scale: boards a tenth of real length and 6 cm wide so the gripper can hold them; stickers 16 cm apart (40-60 cm is common); thicknesses (2 cm) close to real. One fixed first course on two beams, one board for the next course. Every piece is a rigid block with the same rubber-like friction (1.2 static, 1.0 dynamic), more than wood on wood. The sim can't tell a gripped piece from a released one: on a real table, open the grippers before measuring.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0"
+}
