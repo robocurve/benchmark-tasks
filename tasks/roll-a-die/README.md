@@ -1,33 +1,150 @@
 # Pick up and roll a die
 
-Category: **Societal relevance**. Scorer version: **roll-a-die-v2**.
+Category: **Societal relevance**. Scorer: **roll-a-die-v3**.
 
-Status: the v2 scoring correction passes 33 scorer tests, 10 bridge tests and
-3 recorded-evidence replay tests.
-Rescoring the retained measured trajectories gives demo **1.0** and Dream **0.0**.
-The demo reaches 133.207 degrees maximum tilt excursion from its verified
-free-flight reference (164.434 degrees cumulative motion) and one second of
-rest, completing at 9.30 simulated seconds. Dream uses its full 60-second
-allowance, with 25 requests in one continuous session and no retries.
+Pick up the small coloured die and roll it on the table. Release it so a marked
+face turns from facing up to facing down while free, then leave it untouched
+until it stops. Handling game pieces is one component of helping someone
+participate in tabletop games. No particular face value, randomness or
+statistical fairness is required.
 
-These are recorded physics runs re-evaluated by v2, **not new physics trials**.
-The source scene and policy are unchanged. Two attempted VM restarts for fresh
-repeat trials failed because regional GPU capacity was unavailable. Media upload
-is pending. The remaining review concern is whether the visual cross-check
-meets the guide's simple-tools scoring criterion; telemetry validation alone
-does not establish that. No competition PR has been opened.
-See [JUDGING.md](JUDGING.md) for the reviewer packet and
-[VALIDATION.json](VALIDATION.json) for the versioned replay results and hashes.
+**Validation status:** the final v3 demonstration scores **1.0** after
+182 actions / **9.10 simulated seconds**, with clearly visible face-turnover
+evidence. The final Dream run scores **0.0** after its full **1,200 actions /
+60 simulated seconds**, without a qualifying pickup. Both final runs use the
+same frozen scene, scorer and core source. Media is prepared; upload is pending.
+Earlier blank-cube trials are historical evidence only, not results for this
+marked-die scene and revised rubric.
+See [JUDGING.md](JUDGING.md) for the review protocol and
+[VALIDATION.json](VALIDATION.json) for versioned evidence.
 
-The task uses a 16 mm, 5 g blue blank die surrogate on the calibrated YAM station.
-It tests a small-object grasp followed by an uncontrolled tumbling release. It
-does not test a numbered outcome, fairness or random-number generation.
+## Fixed setup and scoring
 
-## Environment
+The only loose object is a **16 × 16 × 16 mm, 5 g die**, with visually distinct
+coloured faces and pips. Opposite faces sum to seven. Face markings identify the
+same physical face through a roll; they do not change the collision shape or
+assign a requested outcome.
 
-Use the competition's Brev simulation launchable and its Isaac Lab-Arena
-environment. The development trials used these deployed versions; commit IDs
-below are abbreviated:
+| Local face | Pips | Colour |
+|---|---:|---|
+| +Z | 1 | White |
+| −Z | 6 | Yellow |
+| +X | 2 | Red |
+| −X | 5 | Cyan |
+| +Y | 3 | Green |
+| −Y | 4 | Purple |
+
+The die starts at world `(0.20, 0.16, 0.7555)` metres, identity orientation,
+on the calibrated YAM station's horizontal oak-coloured table. The tabletop is
+1.10 × 1.30 m, centred at `(0.36, 0)` m, with surface height `z=0.7475` m.
+World X points away from the arm bases, Y left and Z up. Both arms start in the
+station ready pose; there is no object jitter. The review-only fixed close-up camera records at 1600 × 1280 pixels from
+`(0.84, -0.25, 1.55)` m towards `(0.25, 0.17, 0.90)` m, with a 40 mm lens and
+20.955 mm aperture. It does not add a model observation. A render-only tabletop
+ruler spans X=0.14–0.42 m at Y=0.275–0.292 m; a vertical guide spans X=0.102–0.138 m,
+Y=0.295 m, from the tabletop to 207 mm above it. Both use 5 mm ticks and
+10 mm major ticks; the vertical guide labels 0, 3, 10 and 20 cm and highlights
+30 mm in red. These guides have no
+collision or support geometry. Perspective must be considered when comparing
+objects outside a guide’s plane.
+
+| Score | Requirement |
+|---|---|
+| 0 | No qualifying pickup, or a permanent invalidation. |
+| 0.25 | Hold the die with its bottom at least 30 mm above the table for 0.20 s; the measured holding TCP is less than 35 mm away and its normalized opening is below 0.30. |
+| 0.5 | After pickup, release it with its bottom at least 10 mm above the table and both gripper TCPs at least 50 mm from its centre. |
+| 1.0 | After release, a named face is seen pointing up within 30°, then the same face points down within 30°; the die subsequently rests on a face for one continuous second with both TCPs at least 60 mm away. |
+
+Rest means position stays within 2 mm and full orientation, including yaw,
+stays within 5° of a fixed pose at the start of the rest interval,
+with a face within 10° of level and the bottom within 3 mm of the table.
+After release, either TCP entering the 50 mm clearance or the die leaving the
+permitted tabletop area permanently erases all credit. Report the final score,
+not its historical maximum. Exact dwell, pose and boundary rules are in
+[scoring.py](scoring.py) and the [judging protocol](JUDGING.md).
+
+A TCP is the tool centre between the gripper finger pads, 13 mm short of the
+pad tips along the approach axis. The visible
+up-to-down face sequence requires a substantial turnover. Flat yaw
+spin, repeated small rocking, turning while held, or a final pose alone cannot
+establish it. A full revolution can qualify even if it returns to its starting
+orientation. When the downward face is hidden underneath the die, its known
+opposite face pointing upward is equivalent evidence; preserve continuous
+footage and the fixed opposite-face mapping.
+
+## Run and reproduce
+
+Use the competition's Brev simulation launchable with the Isaac Lab-Arena/YAM
+environment. Configure the Dream SDK credential securely on the VM, outside
+Git and logs. Run from the repository root and use a new directory for every
+attempt; the runner refuses to overwrite an existing trajectory.
+
+```bash
+source ~/IsaacLab-Arena/yam.env
+python -m unittest discover -s tasks/roll-a-die -p 'test_*.py' -v
+python tasks/roll-a-die/demo_policy.py --check
+
+python tasks/roll-a-die/run.py --policy demo --max-steps 1200 \
+  --seed 0 --log-dir artifacts/die-v3-demo-new
+
+python tasks/roll-a-die/run.py --policy dream --max-steps 1200 \
+  --seed 0 --log-dir artifacts/die-v3-dream-new
+
+python tasks/roll-a-die/replay.py artifacts/die-v3-demo-new/trajectory.jsonl
+python tasks/roll-a-die/replay.py artifacts/die-v3-dream-new/trajectory.jsonl
+```
+
+Both policies receive the same task instruction, scene, seed, scorer, control
+rate and joint/gripper velocity limits. The limit is **1,200 actions / 60
+simulated seconds** for either policy. The fresh Dream run uses the standard
+direct integration; `--dream-server-url` is omitted. The retained optional
+`dream_bridge.py` supports the earlier batched SSH transport, but is not required
+for direct execution.
+
+The offline policy check verifies reachable targets and joint limits; it does
+not prove a grasp or roll. The scripted policy commands joints and grippers
+only. It never moves the die directly or changes the scorer. Keep the scene,
+scorer and action limits fixed when comparing policies. Scene or rubric changes
+require newly identified evidence, rather than relabelling old recordings.
+
+Tests and trajectory replay can run locally without a GPU. Replay needs Python
+and NumPy. The complete test suite also uses Inspect Robots, the Dream
+integration and `dreamlabs-client`; the policy check needs the YAM adapter.
+
+## Runtime and artifacts
+
+Control runs at **20 Hz**, physics at **240 Hz**, and the original three policy
+camera frames are **320 × 176 pixels**. The separate **1600 × 1280** close-up is
+for review only; preserve
+the complete trial and the setup image. A trial's control duration is not its
+wall time: simulator startup, rendering and model requests also take time.
+The final demonstration used **44.457 seconds of wall time**; final Dream used
+**184.133 seconds**.
+
+| Current v3 run | Score | Actions / simulated time | Wall time |
+|---|---:|---:|---:|
+| Demonstration 002 | 1.0 | 182 / 9.10 s | 44.457 s |
+| Dream 002 | 0.0 | 1,200 / 60.00 s | 184.133 s |
+
+The demonstration's pickup was credited at 4.60 s, release at 7.85 s and
+turnover at 8.00 s. The cyan five-pip face is visible upward at 7.85 s; its
+opposite red two-pip face is visible upward at 8.00 s, establishing cyan down.
+Rest is continuous from 8.10 to 9.10 s. Maximum tilt excursion of 160.551° and
+cumulative motion of 272.987° are diagnostics, not alternative scoring rules.
+Dream ran directly on the VM: **25 requests, 25 attempts, one continuous
+session and zero retries**. The model reported 7.981 s of inference work, not a
+billed dollar amount. It returned **380 prediction rows containing values
+outside action bounds**. This is a prediction count, not an executed-action
+count: the returned stream also includes 32 unused rows from the final chunk.
+`DreamPolicy` returns raw predictions; Inspect's standard execution bounds clamp
+(`ClampApprover`) and per-step limit (`DeltaLimitApprover`) review actions before
+execution, and the adapter clips to bounds again defensively. An independent
+audit found **all 1,200 executed Dream actions and all 182 demo actions within
+bounds and per-step limits**. The recorded result includes this standard
+execution behaviour. Thirty-five scorer tests and ten bridge tests pass.
+
+The initial deployed environment used these revisions; every new run records
+its actual packages and source hashes in `runtime.json`:
 
 | Component | Version or revision |
 |---|---|
@@ -35,279 +152,84 @@ below are abbreviated:
 | Isaac Lab-Arena | `c7edf3a9` |
 | Isaac Lab | `91a0906` |
 | Isaac Sim | `6.1.0.0` |
-| Inspect Robots | `0.60.0` |
-| Inspect Robots YAM | `0.37.0` |
+| Inspect Robots / YAM | `0.60.0` / `0.37.0` |
+| Dream integration | `b5e936a201cec66c54c297e522c920d98445e339` |
+| Dream client | `1.0.14` |
 
-The fixed station uses `object_jitter=0`, control at 20 Hz, PhysX at 240 Hz,
-and Dream camera frames at 320 x 176 pixels. Seed: 0. The cube's centre starts at
-world `(0.20, 0.16, 0.7555)` metres. These settings are shared by the scripted
-demonstration and Dream-1. Record deployed revisions alongside each result;
-package version numbers alone do not identify an editable checkout.
+Each trial saves:
 
-## File map
+- `trajectory.jsonl`: measured die pose/bounds/velocity, measured hands and
+  joints, timestamps and scorer diagnostics at each control step.
+- `score-summary.json`: scorer version, final score, events and any invalidation.
+- `setup.png` and `setup-closeup.png`: the settled initial scene and review
+  close-up before the first policy action.
+- `review.mp4`: the complete close-up streamed at 20 Hz to H.264;
+  `review-video.json` records frame timing and `visuals.json` records face
+  markings and the camera configuration. These review artifacts are not model
+  observations.
+- `runtime.json` and `task-source/`: actual runtime, configuration, package
+  versions, source hashes and the Python source used by that trial.
+- The Inspect evaluation and recorded camera frames, from which complete videos
+  are rendered. The task score is also in
+  `samples[0].epochs[0].task_score`; evaluation status `success` only means the
+  evaluation completed without an infrastructure error.
 
-| File | Role |
-|---|---|
-| `task.py` | Defines the fixed scene, cube and task instruction. |
-| `scoring.py` | Turns measured cube and gripper motion into pickup, release, tumble and rest credit. |
-| `demo_policy.py` | Scripts joint targets for the demonstration and provides its offline motion check. |
-| `run.py` | Connects a policy to the simulator, records measurements and saves evaluation artifacts. |
-| `dream_bridge.py` | Batches observations over the SSH tunnel before each model call, keeping the Dream credential on the operator's computer. |
-| `replay.py` | Recomputes the score from a saved trajectory without running the simulator. |
-| `test_scoring.py` | Exercises the scorer with synthetic valid and invalid trajectories; these tests do not prove physical feasibility. |
-| `test_bridge.py` | Checks observation ordering, retries, real HTTP transport and equivalence with the Dream client's observation window. |
-| `task.json` | Holds the submission description, measured results and uploaded-media references. |
-| `JUDGING.md` | Explains the review criteria, visual audit, limitations and comparison examples. |
-| `VALIDATION.json` | Records v2 replay scores, input hashes and the distinction from fresh physics runs. |
-| `evidence/*.jsonl.gz` | Anonymous measured trajectories, compressed without changing their contents. |
-| `test_replay.py` | Independently checks the retained input hashes and three recorded outcomes. |
+Replay uses measured states, not policy targets or saved per-frame scores.
+Use a trial's archived scorer when reproducing its historical result. Tests
+establish properties of the rubric and transport, not physical realism,
+repeatability or competition acceptance.
 
-## Walk through one trial
+## Historical v1/v2 evidence
 
-1. Read `task.py` for the object and fixed starting pose, then `scoring.py` for
-   the measured conditions. The cube must be picked up, released, tumble at
-   least 90 degrees away from its verified free-flight reference orientation,
-   and come to rest on the table. Repeated small rocking cannot add up to credit.
-2. Run the tests and the offline motion check below. The latter checks reachable
-   poses, joint limits and target speeds; it cannot establish that the fingers
-   will grip or release the cube in simulation. The full test suite requires
-   NumPy, Inspect Robots, the Dream integration and `dreamlabs-client`; the
-   motion check also requires the YAM adapter. These checks need no simulator
-   or Dream credentials.
-3. Activate the launchable's Python environment and run a short GPU trial from
-   the repository root. Give every attempt a fresh log directory; the runner
-   refuses to overwrite an existing trajectory.
+The earlier scene used an unmarked blue cube. V1 accumulated post-release
+rotation and could reward repeated small rocking. V2 changed that criterion to
+at least 90° maximum tilt excursion from a verified free-flight reference.
+Existing measured trajectories were rescored offline; the physics recordings
+were not changed. [VALIDATION-v2.json](VALIDATION-v2.json) preserves the previous
+manifest separately from the current validation record.
 
-```bash
-source ~/IsaacLab-Arena/yam.env
-python -m unittest discover -s tasks/roll-a-die -p 'test_*.py' -v
-python tasks/roll-a-die/demo_policy.py --check
-
-python tasks/roll-a-die/run.py --policy demo --max-steps 200 \
-  --seed 0 --log-dir artifacts/die-check-new
-```
-
-4. Read `score-summary.json` and `runtime.json`, replay the numeric audit, and
-   watch the recorded camera views. Check whether the fingers grasped the cube,
-   whether release was detected, and how much rotation occurred while free.
-   A score of 0.25 establishes only the pickup stage.
-
-```bash
-python tasks/roll-a-die/replay.py artifacts/die-check-new/trajectory.jsonl
-```
-
-5. Adjust the demonstration's motion in `demo_policy.py`, rerun the offline
-   check, and make another recorded GPU attempt. The current candidate uses a
-   gentle 15 mm target jaw gap around the 16 mm cube, then an upward stroke and
-   wrist rotation about world X with delayed finger opening. It only commands
-   arm and gripper joints; it never moves the cube directly. Trial 004 reached
-   full instrumented credit and passed visual review. Keep the scorer and scene
-   fixed when comparing policies; changing the motion creates a new policy
-   version to evaluate.
-6. Run the longer demonstration candidate and the Dream-1 evaluation on the
-   same setup. These limits are ceilings; a trial can end earlier.
-
-```bash
-# Up to 30 seconds of simulation/control time.
-python tasks/roll-a-die/run.py --policy demo --max-steps 600 \
-  --seed 0 --log-dir artifacts/die-demo-new
-
-# Up to 60 seconds of simulation/control time; bridge setup is below.
-python tasks/roll-a-die/run.py --policy dream --max-steps 1200 \
-  --seed 0 --dream-server-url http://127.0.0.1:8210 \
-  --log-dir artifacts/die-dream-new
-```
-
-With the Dream SDK credential configured securely on the VM, omit
-`--dream-server-url` to use the standard direct Dream integration. The retained
-clean baseline used the bridge; direct-on-VM execution remains untested.
-
-To keep the Dream credential on the operator's computer, run this task's bridge
-there from the repository root and forward the VM's loopback port over SSH.
-The runner's `--dream-server-url` expects this bridge's batched endpoint:
-
-```bash
-# Once, on the operator's computer, using Python 3.12:
-python3.12 -m venv .venv
-source .venv/bin/activate
-python -m pip install \
-  'inspect-robots-dream[client] @ git+https://github.com/kairosiann/inspect-robots-dream@b5e936a201cec66c54c297e522c920d98445e339' \
-  'dreamlabs-client==1.0.14'
-
-# On the operator's computer, in the Dream client environment:
-DREAM_LOG=off python tasks/roll-a-die/dream_bridge.py --host 127.0.0.1 --port 8210
-
-# In a separate terminal; replace INSTANCE_SSH_ALIAS with the configured alias:
-ssh -N -T -o ExitOnForwardFailure=yes \
-  -R 127.0.0.1:8210:127.0.0.1:8210 INSTANCE_SSH_ALIAS
-```
-
-The bridge uses the locally configured Dream credentials, sends observations to
-Dream and returns actions to the VM. Its HTTP interface has no authentication,
-so keep both listeners on loopback and verify the remote binding. Keep the local
-computer and tunnel available throughout the run, then close the bridge and
-tunnel. The supported integration revision is
-`inspect-robots-dream@b5e936a201cec66c54c297e522c920d98445e339` with
-`dreamlabs-client==1.0.14`.
-
-The task bridge queues every observation and replays the complete ordered batch
-on the local Dream session immediately before each model call. This reduces SSH
-HTTP round trips while preserving the same nine-frame model window, measured
-states, prompt, simulation timestamps and commanded joints. It does not discard
-observations or alter the policy's action chunks. Its ten tests passed,
-including an actual HTTP round trip and comparison with the Dream client's real
-observation-window implementation.
-
-The runner invokes Inspect Robots in-process and registers an audited YAM
-embodiment plus the custom demonstration. The demonstration extends the stock
-Cartesian planner to interpolate wrist rotation about world X. The task file
-intentionally refuses to report success without its measured-state audit.
-
-## What development has shown
-
-These are development attempts, not repeated evaluations of one frozen policy.
-Their changing grasp/release settings must not be treated as a success-rate
-estimate.
-
-| Trial | Change and observed result | Final score | Measured wall time | Estimated Brev runtime cost |
-|---|---|---:|---:|---:|
-| 001 | Full finger closure produced vibration; pickup was not established. | 0.00 | 72.533 s | $0.066 |
-| 002 | A gentle 15 mm jaw gap enabled pickup; a complete roll was not achieved. | 0.25 | 48.979 s | $0.045 |
-| 003 | Delayed opening produced a valid detected release; cumulative motion was 30.274 degrees and v2 maximum excursion is 29.656 degrees, below its 90-degree threshold. | 0.25 | 46.005 s | $0.042 |
-| 004 | Higher upward stroke and rotation about world X produced 164.434 degrees of free tumble and continuous rest. | 1.00 | 321.206 s | $0.293 |
-
-Trial 004 completed after 186 actions, or 9.30 seconds of simulation. Pickup was
-credited at 4.60 seconds, verified release at 8.00 seconds, and the final rest
-lasted one continuous second. No invalidation was recorded. Replaying the audit
-matches the 1.0 score, and visual review confirms the cube enters free flight
-and lands.
-
-The displayed running rate is $3.28/hour ($3.23 compute plus $0.05 storage).
-Trials 001–003 each account for roughly 4–7 cents; trial 004 accounts for about 29 cents because a parallel
-simulator process encountered a shader-cache miss during startup. These are
-prorated estimates from the runner's elapsed times, not billing statements.
-Cold setup took approximately 40 minutes and is excluded, as are time between
-attempts, storage retained after shutdown and Dream API charges.
-
-The first Dream trial completed 1,200 steps / 60 seconds of simulation in
-664.804 seconds of wall time and scored 0.0. However, its 25 action chunks
-required 49 inference attempts across 25 distinct sessions, with 24 session
-expiries. It is an infrastructure-affected result, not a clean model baseline.
-The batched bridge addresses the per-observation transport overhead without
-changing the task or model inputs. Dream rerun 002 completed in 197.996 seconds
-of wall time, scoring 0.0 after the full 1,200 actions. All 25 requests succeeded
-on their first attempt in one continuous session, with no action rows outside
-joint limits. The model reported 7.646 seconds of inference work; this is not a
-Dream billing measurement. Estimated Brev runtime cost was $0.180, excluding
-Dream API charges. Use this second run as the submitted model baseline.
-
-Control time is not GPU wall time: simulator startup, rendering and model calls
-also cost time. Measure actual elapsed time and account usage instead of deriving
-spend from the number of control steps. Stop the Brev instance when finished;
-retained disk storage continues to be billed.
-
-## Scorer v2 and evidence provenance
-
-The original scorer added angular travel after release. That allowed synthetic
-small back-and-forth rocking to accumulate enough credit. V2 requires the
-**maximum tilt excursion from the verified free-flight reference to reach 90
-degrees**. The reference is the first pose of the uninterrupted verified free
-history, or the release-confirmation pose if no earlier interval qualifies.
-Cumulative motion remains a diagnostic; a full revolution can still qualify
-when the cube returns to its starting orientation.
-
-Eleven new regression/boundary tests cover small rocking, partial turns and
-returns, full revolutions, release anchors, yaw, pending free-flight history and
-slow motion. There are 33 scorer, 10 bridge and 3 recorded-evidence tests. Offline
-replay of unchanged historical measurements gives:
-
-| Retained trial | V2 score | Maximum tilt excursion | Cumulative motion |
+| Historical trial | V2 score | Max tilt excursion | Original wall time |
 |---|---:|---:|---:|
-| Partial demonstration 003 | 0.25 | 29.656° | 30.274° |
-| Full demonstration 004 | 1.00 | 133.207° | 164.434° |
-| Clean Dream baseline 002 | 0.00 | 0° | 0° |
+| Partial demonstration 003 | 0.25 | 29.656° | 46.005 s |
+| Demonstration 004 | 1.00 | 133.207° | 321.206 s |
+| Clean Dream baseline 002 | 0.00 | 0° | 197.996 s |
 
-The original logs, scores and runtime files have not been overwritten. Derived
-results and input SHA-256 hashes are recorded in `VALIDATION.json`. Anonymous
-measured trajectories are included in `evidence/`; detailed replay CSVs are local
-artifacts. The gzip files preserve their original v1 `metrics` fields for
-provenance; replay ignores those fields and recomputes v2 from measured state.
-Existing recordings show the same measured
-motion. The first full-score time remains 9.30 seconds, so this rescoring does
-not depend on motion that would occur after v2 success termination. A fresh
-validation batch would add repeatability evidence and remains pending GPU
-capacity. The guide does not explicitly require fresh physics after a scorer-only
-change; rescoring the final recorded evidence is already complete.
-
-Reproduce all three recorded outcomes from a fresh clone, without Isaac Sim,
-Dream credentials or GPU access (Python and NumPy are sufficient):
-
-```bash
-python tasks/roll-a-die/replay.py tasks/roll-a-die/evidence/demo.jsonl.gz
-python tasks/roll-a-die/replay.py tasks/roll-a-die/evidence/dream.jsonl.gz
-python tasks/roll-a-die/replay.py tasks/roll-a-die/evidence/partial-turn.jsonl.gz
-python -m unittest discover -s tasks/roll-a-die -p 'test_replay.py' -v
-```
-
-## Audit and score
-
-Each run writes the usual Inspect report and frames, plus:
-
-- `trajectory.jsonl`: simulator time, die pose, velocities and AABB, measured
-  joints, gripper TCP positions/rotations/openings, and score diagnostics at
-  every control step.
-- `score-summary.json`: final score, event times, tumble angle and invalidation.
-- `setup.png`: the actual settled initial scene, saved before any policy action.
-- `runtime.json`: package versions, settings, elapsed wall time and task-source
-  SHA-256 hashes.
-- `task-source/`: a copy of the Python source used by the current runner. Use
-  this snapshot when replaying a trial after the working scorer changes.
-
-The scorer awards 0 for no verified pickup, 0.25 for pickup, 0.5 for a verified
-release with a maximum tilt excursion of at least 90 degrees from its verified
-free-flight reference, and 1.0 when the rolled cube
-also rests continuously for one second. Pickup requires the cube's bottom to
-stay at least 30 mm above the table for 0.20 seconds, with a nearby closed hand
-and limited cube speed. Release uses measured jaw clearance, airborne position
-and acceleration consistent with gravity. Rotation counts only over verified
-free intervals; rotating while held, placing the cube, or spinning it about
-world vertical cannot earn roll credit.
-
-A late invalidation erases earlier partial credit, so the task uses the final
-score, never the best historical score. The final task score is also recorded
-in the evaluation JSON at `samples[0].epochs[0].task_score`. An evaluation's
-`status: "success"` means it finished without an evaluation error; it does not
-mean the cube completed the task.
-
-The runner retains the action bounds and per-step limiter. Its maximum changes
-are derived from the published YAM joint/gripper velocity limits at 20 Hz and
-applied equally to Dream-1 and the scripted demonstration. The default generic
-5%-of-range limit would change the tested release trajectory.
-
-Table containment uses the whole die AABB inside x=[-0.17, 0.89] m and
-y=[-0.63, 0.63] m, giving 20 mm clearance from the table's horizontal edges.
-A drop below z=0.7325 m is invalid. See `scoring.py` for all numeric predicates.
-The measured TCP/opening predicates are conservative contact proxies, not direct
-contact-force measurements. Inspect the videos as well as the numeric audit
-before claiming a valid demonstration. The original scorer remained fixed throughout the recorded physical trials.
-The v2 revision is explicit and preserves historical evidence. Preserve the
-current scorer and scene for future evaluations; version later changes.
+The historical demo completed in 9.30 simulated seconds. The historical Dream
+trial used 60 seconds, 25 requests, one session and no retries. Its preceding
+attempt had repeated session expiry and is not a clean model baseline. These
+numbers explain development decisions; **none is a current v3 result**. V3 adds
+recognizable faces, review footage and a simpler pose-based rubric, so the new
+scene and both policies were recorded afresh. An initial v3 camera angle
+hid the qualifying upward face, despite a numerical full-score demo. Those
+first v3 runs are development evidence only; the final camera is raised to
+show the face sequence. The final demonstration above uses this raised view;
+the matching final Dream recording uses the same frozen task source.
 
 ## Media and submission
 
-Render the evaluation JSON file with
-`inspect-robots video path/to/evaluation.json --out path/to/media --fps 20`.
-This emits one H.264 MP4 per camera. Select or combine views that visibly show
-the grasp, free tumble and final rest; keep the complete trial and its score.
-Remux the final MP4 with `ffmpeg -i input.mp4 -map_metadata -1 -c copy -movflags
-+faststart output.mp4` for browser playback. Each uploaded video must be at most
-50 MB, and the setup image at most 10 MB.
-Keep names, usernames, paths and team identity out of the task text and images.
-Use the runner's actual `setup.png` after visually verifying it. A full-score
-scripted demonstration is required if Dream-1 does not earn full score. Trial
-004 reaches the v2 threshold when its measured trajectory is replayed; its
-recording passed visual review. Completed media uploads remain pending.
+First export the three policy views from the actual evaluation JSON, then
+build a complete review video from the trial directory:
 
-Update `task.json` with measured results, verified fidelity and the media ID
-returned by `tools/upload_media.py`. Submit one task folder in one pull request
-to `robocurve/benchmark-tasks`. Do not use placeholder or invented scores/media.
+```bash
+inspect-robots video RUN_DIR/EVALUATION.json --out RUN_DIR/media --fps 20
+python tasks/roll-a-die/render_review.py RUN_DIR --output OUTPUT.mp4
+```
+
+The renderer uses `review.mp4` and the three standard per-camera MP4 files in
+`RUN_DIR/media`. Replace `EVALUATION.json` with the run's actual evaluation
+filename. Missing camera videos produce an error with export instructions; the
+review renderer does not export them automatically. The result combines the full
+1600-pixel review view with 640-pixel policy views; it preserves the complete
+recorded trial and does not invent intermediate frames. Use a different output
+path for each trial.
+
+Include the complete Dream trial, a full-score demonstration when Dream does
+not reach 1.0, and the actual setup screenshot. Select views that show the
+pickup, hand clearance, named-face turnover and final rest. Close-ups or slow
+motion supplement the full recording; they must not invent missing frames.
+Videos must be H.264 MP4, at most 50 MB each, with browser-compatible fast start.
+The setup PNG must be at most 10 MB. Text and media must not identify the team.
+
+Only report measured scores and upload the final verified media. The media ID
+returned by `tools/upload_media.py` belongs in `task.json`. Media upload and a
+ready task folder do not by themselves authorize opening a competition PR.

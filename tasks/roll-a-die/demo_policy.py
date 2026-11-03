@@ -1,6 +1,6 @@
 """YAM pickup-and-roll demonstration, with an offline IK reach check.
 
-The recorded fourth GPU trial reached full score in 9.30 simulated seconds.
+The v3 candidate uses a faster release for a visible marked-face turnover.
 The separate offline check establishes only kinematic feasibility. This policy
 applies only joint targets: it never moves the die directly or changes the scorer.
 
@@ -42,13 +42,13 @@ RELEASE_END = (0.255, 0.14, TOP + 0.35)
 # Moving the opposed pads around the die transfers tumble through their normal
 # forces; turning around the closing axis relies on pad torsional friction.
 WINDUP_ROLL_DEG = 10.0
-FOLLOWTHROUGH_ROLL_DEG = -75.0
-FLICK_SECONDS = 0.30
-# Hold the gentle grasp through the first 45% of the stroke, then open smoothly.
+FOLLOWTHROUGH_ROLL_DEG = -80.0
+FLICK_SECONDS = 0.22
+# Hold the gentle grasp through the first 35% of the stroke, then open smoothly.
 # This delays release until the wrist has built speed without changing its path.
-RELEASE_GRIP_DELAY_FRACTION = 0.45
-# Each finger ends 14 mm from its closed position: a 28 mm final gap.
-RELEASE_FINGER_TARGET = -0.014
+RELEASE_GRIP_DELAY_FRACTION = 0.35
+# Each finger ends 22 mm from its closed position: a 44 mm final gap.
+RELEASE_FINGER_TARGET = -0.022
 FINAL_HOLD_SECONDS = 3.0
 POLICY_NAME = "roll_die_demo"
 

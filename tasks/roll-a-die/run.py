@@ -3,10 +3,13 @@
 from __future__ import annotations
 
 import argparse
+import atexit
 from dataclasses import replace
 import hashlib
 import json
 import platform
+import os
+import subprocess
 import time
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
@@ -16,13 +19,13 @@ import numpy as np
 from scoring import RollTracker, SCORE_VERSION
 
 HERE = Path(__file__).resolve().parent
-INSTRUCTION = "Pick up the small blue cube and roll it like a die on the table. Release it so it tumbles freely, then leave it untouched until it stops."
+INSTRUCTION = "Pick up the small coloured die and roll it on the table. Release it so a marked face turns from facing up to facing down while free, then leave it untouched until it stops."
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--policy", choices=("demo", "dream"), default="demo")
-    parser.add_argument("--max-steps", type=int, default=600)
+    parser.add_argument("--max-steps", type=int, default=1200)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--log-dir", type=Path, required=True)
     parser.add_argument("--headless", choices=("true", "false"), default="true")
@@ -52,6 +55,37 @@ def main():
             semantics = replace(self.info.action_space.semantics, max_step=per_arm * 2)
             self.info = replace(self.info, action_space=replace(self.info.action_space, semantics=semantics))
 
+        def _ensure_sim(self, goal):
+            # The adapter imports scene construction only after Kit starts. Start
+            # its shared app identically, then add this task's passive review
+            # camera before construction. No installed adapter files are changed.
+            from yam_arena import inspect_embodiment as adapter
+            if adapter._APP is None:
+                os.environ.setdefault("OMNI_KIT_ACCEPT_EULA", "YES")
+                from isaaclab.app import AppLauncher
+                options = {"headless": self.headless, "device": self.device, "enable_cameras": True}
+                if not self.headless:
+                    options["visualizer"] = ["kit"]
+                    os.environ["DISPLAY"] = adapter.window_display(os.environ)
+                    if os.environ["DISPLAY"] == adapter.DESKTOP_DISPLAY:
+                        options["window_width"], options["window_height"] = adapter.DESKTOP_SIZE
+                adapter._APP = AppLauncher(**options).app
+                atexit.register(adapter._close_app_at_exit)
+            from yam_arena import scene as scene_module
+            from visuals import add_review_camera, install_scene_visuals
+            make_env = scene_module.make_env
+
+            def make_review_env(embodiment, **kwargs):
+                add_review_camera(embodiment)
+                return make_env(embodiment, **kwargs)
+
+            scene_module.make_env = make_review_env
+            try:
+                super()._ensure_sim(goal)
+            finally:
+                scene_module.make_env = make_env
+            self.visual_metadata = install_scene_visuals(self._base)
+
         def reset(self, scene, *, seed=None):
             observation = super().reset(scene, seed=seed)
             import cv2
@@ -64,6 +98,9 @@ def main():
                 raise RuntimeError("could not save the initial scene image")
             self.task.module._tracker = RollTracker()
             self.audit = (args.log_dir / "trajectory.jsonl").open("x")
+            self.review_encoder = None
+            self.review_frames = 0
+            (args.log_dir / "visuals.json").write_text(json.dumps(self.visual_metadata, indent=2) + "\n")
             self._audit_sample()
             return observation
 
@@ -90,12 +127,45 @@ def main():
             sample["metrics"] = self.task.module._tracker.summary()
             self.audit.write(json.dumps(sample, allow_nan=False) + "\n")
             self.audit.flush()
+            self._record_review_frame()
+
+        def _record_review_frame(self):
+            import cv2
+            output = self._base.scene["review_cam"].data.output["rgb"]
+            output = output.torch if hasattr(output, "torch") else output
+            rgb = np.ascontiguousarray(output[0, ..., :3].detach().cpu().numpy(), dtype=np.uint8)
+            if self.review_encoder is None:
+                height, width = rgb.shape[:2]
+                if not cv2.imwrite(str(args.log_dir / "setup-closeup.png"), cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)):
+                    raise RuntimeError("could not save the review setup image")
+                self.review_stderr = (args.log_dir / "review-encoder.log").open("wb")
+                self.review_encoder = subprocess.Popen([
+                    "ffmpeg", "-hide_banner", "-loglevel", "error", "-n",
+                    "-f", "rawvideo", "-pixel_format", "rgb24", "-video_size", f"{width}x{height}",
+                    "-framerate", "20", "-i", "pipe:0", "-an", "-c:v", "libx264",
+                    "-preset", "veryfast", "-crf", "18", "-pix_fmt", "yuv420p",
+                    "-movflags", "+faststart", str(args.log_dir / "review.mp4"),
+                ], stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=self.review_stderr)
+            self.review_encoder.stdin.write(rgb.tobytes())
+            self.review_frames += 1
 
         def _task_step(self):
             self._audit_sample()
             return super()._task_step()
 
         def close(self):
+            if getattr(self, "review_encoder", None) is not None:
+                self.review_encoder.stdin.close()
+                result = self.review_encoder.wait(timeout=60)
+                self.review_stderr.close()
+                self.review_encoder = None
+                if result:
+                    raise RuntimeError("review video encoder failed; see review-encoder.log")
+                (args.log_dir / "review-video.json").write_text(json.dumps({
+                    "camera": "review_cam", "frames": self.review_frames, "fps": 20,
+                    "first_time": 0.0, "last_time": (self.review_frames - 1) / 20,
+                    "sent_to_dream": False,
+                }, indent=2) + "\n")
             if hasattr(self, "audit") and not self.audit.closed:
                 self.audit.close()
                 (args.log_dir / "score-summary.json").write_text(json.dumps(self.task.module._tracker.summary(), indent=2) + "\n")

@@ -1,52 +1,63 @@
 {
-  "score_version": "roll-a-die-v2",
-  "validation_type": "offline_rescore_of_retained_measured_simulation_trajectories",
+  "score_version": "roll-a-die-v3",
+  "validation_type": "fresh_marked_die_simulation_runs_and_independent_offline_rescore",
   "date": "2026-11-03",
-  "scorer_sha256": "183fbd119b2d810298fe11ff042a6cab7051688a76bd1ec459933a785a95cfef",
-  "scorer_tests_passed": 33,
-  "bridge_tests_passed": 10,
-  "physics_rerun": false,
+  "physics_rerun": true,
+  "status": "Final marked-die demo and direct Dream run completed; both independently rescored with the current core sources.",
+  "core_source_sha256": {
+    "task.py": "e84817cc499f3f4ee3ff291be85ecec7980094e4855a94ddb87f10cae6aab341",
+    "scoring.py": "fadb590a8e9de5b6942eaf755a50aad9f070b685137b4d1922ab1801d44e1878",
+    "run.py": "5fb8e1ae4e64e57bf39937ae6d212f4ddefc0caa65f8836d99a2675bc790c69e",
+    "demo_policy.py": "0d130774310a26b72c1738df68842ef29d06249654f8ecc09fc1971f6a24af0d",
+    "visuals.py": "94af5eff4085759a1e04d2c22cb52f3a9ac887919815111b6694ec161c83c6be"
+  },
+  "provenance_notes": [
+    "Each gzip expands byte-for-byte to the original measured trajectory; no original line or stored metric was rewritten.",
+    "Current scores are independently recomputed from measured state; stored metrics are preserved for provenance and are ignored by replay.",
+    "Five core source files match both the retained run snapshots and the current task. Test files may subsequently change without changing run semantics.",
+    "The review camera is excluded from model observations; its frame count and time mapping match the measured audit.",
+    "These fixed-layout runs demonstrate feasibility and a model baseline, not repeated-success probability, random outcomes, or calibrated physical fidelity."
+  ],
+  "evidence_privacy_check": {
+    "schema": "measured cube and two gripper states plus fixed scorer metrics/events",
+    "unexpected_fields": false,
+    "unexpected_free_text": false,
+    "private_identifiers_or_paths": false
+  },
   "runs": {
-    "die-debug-003": {
-      "input_trajectory_sha256": "9fee4de9c7787484989ad881e1494f60bbeb8c5ae80b82910702a1d8a82aed9d",
-      "observations": 221,
-      "first_full_score_simulation_seconds": null,
+    "die-v3-demo-002": {
+      "policy": "demo",
+      "seed": 0,
+      "evidence_file": "evidence/v3-demo.jsonl.gz",
+      "input_trajectory_sha256": "9a545c125d28149bfb3a778203bf2c94ae985cdbedc06af12affd7e7dffa603f",
+      "evidence_gzip_sha256": "c0ce5152f4a3fd87b40ce3a491e751c9b5e90d4e2b893f6e0227e25e4e35961a",
+      "observations": 183,
+      "actions": 182,
+      "control_hz": 20,
+      "max_steps": 1200,
+      "simulation_seconds": 9.099999999999994,
+      "first_full_score_simulation_seconds": 9.099999999999994,
+      "elapsed_wall_seconds": 44.457,
       "result": {
-        "score_version": "roll-a-die-v2",
-        "score": 0.25,
-        "lifted": true,
-        "released": true,
-        "max_tilt_excursion_degrees": 29.656338250926424,
-        "cumulative_tumble_degrees": 30.27395571951489,
-        "tumble_degrees": 30.27395571951489,
-        "rest_seconds": 0.0,
-        "invalid": null,
-        "events": [
-          {
-            "time": 4.599999999999992,
-            "event": "pickup"
-          },
-          {
-            "time": 7.99999999999998,
-            "event": "release",
-            "credited_from": 7.99999999999998
-          }
-        ]
-      },
-      "evidence_file": "evidence/partial-turn.jsonl.gz"
-    },
-    "die-debug-004": {
-      "input_trajectory_sha256": "8b9b53574224b73ba6ba07dd75dcd4658d26d1c19a8093a7f9059755dffa03eb",
-      "observations": 187,
-      "first_full_score_simulation_seconds": 9.299999999999997,
-      "result": {
-        "score_version": "roll-a-die-v2",
+        "score_version": "roll-a-die-v3",
         "score": 1.0,
         "lifted": true,
         "released": true,
-        "max_tilt_excursion_degrees": 133.2071812827089,
-        "cumulative_tumble_degrees": 164.43409743474203,
-        "tumble_degrees": 164.43409743474203,
+        "turned_over": true,
+        "turnover_faces": [
+          "-X"
+        ],
+        "face_up_times": {
+          "-X": 7.84999999999998,
+          "+X": 7.99999999999998,
+          "+Z": 8.09999999999998
+        },
+        "face_down_times": {
+          "-X": 7.99999999999998
+        },
+        "max_tilt_excursion_degrees": 160.55115560315616,
+        "cumulative_tumble_degrees": 272.9870471519215,
+        "tumble_degrees": 272.9870471519215,
         "rest_seconds": 1.0000000000000142,
         "invalid": null,
         "events": [
@@ -55,23 +66,116 @@
             "event": "pickup"
           },
           {
-            "time": 7.99999999999998,
+            "time": 7.84999999999998,
             "event": "release",
-            "credited_from": 7.99999999999998
+            "credited_from": 7.84999999999998
+          },
+          {
+            "time": 7.84999999999998,
+            "event": "face_up",
+            "face": "-X",
+            "pips": 5,
+            "color": "cyan",
+            "direction": "up",
+            "normal_z": 0.9543058643998137
+          },
+          {
+            "time": 7.99999999999998,
+            "event": "face_up",
+            "face": "+X",
+            "pips": 2,
+            "color": "red",
+            "direction": "up",
+            "normal_z": 0.9548815321596891
+          },
+          {
+            "time": 7.99999999999998,
+            "event": "face_down",
+            "face": "-X",
+            "pips": 5,
+            "color": "cyan",
+            "direction": "down",
+            "normal_z": -0.9548815321596891,
+            "up_time": 7.84999999999998
+          },
+          {
+            "time": 8.09999999999998,
+            "event": "face_up",
+            "face": "+Z",
+            "pips": 1,
+            "color": "white",
+            "direction": "up",
+            "normal_z": 0.9999465470050845
           }
         ]
       },
-      "evidence_file": "evidence/demo.jsonl.gz"
+      "source_sha256": {
+        "demo_policy.py": "0d130774310a26b72c1738df68842ef29d06249654f8ecc09fc1971f6a24af0d",
+        "dream_bridge.py": "28e9dd6425e48e4d2ab5d33d10f7785d2e36db5cbb0d6bf24380f04c081e126d",
+        "replay.py": "0a0276d8121112efadc62462904f1858756336930a195a7b5ae24d63b8a1144d",
+        "run.py": "5fb8e1ae4e64e57bf39937ae6d212f4ddefc0caa65f8836d99a2675bc790c69e",
+        "scoring.py": "fadb590a8e9de5b6942eaf755a50aad9f070b685137b4d1922ab1801d44e1878",
+        "task.py": "e84817cc499f3f4ee3ff291be85ecec7980094e4855a94ddb87f10cae6aab341",
+        "test_bridge.py": "cb5a969eb3628c8f02be0be7b4da2a0e6ccc1de1276776e2ac30b21333122d80",
+        "test_replay.py": "3d2d8d961be3ffeb0b675c7493ff1f569549b99670c02a238f602e3bce6286c4",
+        "test_scoring.py": "871f689bebf4489f3c590dce9403ffefafce47688c8abcc098830b4cf1edf25a",
+        "visuals.py": "94af5eff4085759a1e04d2c22cb52f3a9ac887919815111b6694ec161c83c6be"
+      },
+      "python": "3.12.16",
+      "packages": {
+        "numpy": "2.3.1",
+        "yam-arena": "0.1.0",
+        "inspect-robots": "0.60.0",
+        "inspect-robots-yam": "0.37.0",
+        "inspect-robots-dream": "0.1.0",
+        "dreamlabs-client": "1.0.14",
+        "isaaclab": "17.0.2",
+        "isaacsim": "6.1.0.0"
+      },
+      "review_video": {
+        "camera": "review_cam",
+        "frames": 183,
+        "fps": 20,
+        "first_time": 0.0,
+        "last_time": 9.1,
+        "sent_to_dream": false
+      },
+      "evaluation_status": "success",
+      "termination_reasons": [
+        "success"
+      ],
+      "executed_action_audit": {
+        "source_action_log_sha256": "0fb6b971c01c6fbeccc6046a99f9e8af358b245a77e730bfab12993126d0aafe",
+        "executed_actions": 182,
+        "range_violations": 0,
+        "adjacent_action_step_limit_violations": 0,
+        "action_dimension": 14,
+        "numeric_tolerance": 1e-09,
+        "note": "Audit of logged approved actions; first action has no previous-action delta comparison. Full action logs remain local; only their hashes and aggregate checks are published."
+      }
     },
-    "die-dream-002": {
-      "input_trajectory_sha256": "318784ecf5dc7c2f408af09a4c75b4ef03365407645207c05f9a8afbc98bffa9",
+    "die-v3-dream-002": {
+      "policy": "dream",
+      "seed": 0,
+      "evidence_file": "evidence/v3-dream.jsonl.gz",
+      "input_trajectory_sha256": "406d433248e7555f8005260a41b2ef48b51c5a846407f7f6e726d45288fe6401",
+      "evidence_gzip_sha256": "5b833950a16d714fbcaf7b71f1a12d4ce9f80c2790a2e0945f68ed3157b56604",
       "observations": 1201,
+      "actions": 1200,
+      "control_hz": 20,
+      "max_steps": 1200,
+      "simulation_seconds": 59.99999999999873,
       "first_full_score_simulation_seconds": null,
+      "elapsed_wall_seconds": 184.133,
       "result": {
-        "score_version": "roll-a-die-v2",
+        "score_version": "roll-a-die-v3",
         "score": 0.0,
         "lifted": false,
         "released": false,
+        "turned_over": false,
+        "turnover_faces": [],
+        "face_up_times": {},
+        "face_down_times": {},
         "max_tilt_excursion_degrees": 0.0,
         "cumulative_tumble_degrees": 0.0,
         "tumble_degrees": 0.0,
@@ -79,8 +183,66 @@
         "invalid": null,
         "events": []
       },
-      "evidence_file": "evidence/dream.jsonl.gz"
+      "source_sha256": {
+        "demo_policy.py": "0d130774310a26b72c1738df68842ef29d06249654f8ecc09fc1971f6a24af0d",
+        "dream_bridge.py": "28e9dd6425e48e4d2ab5d33d10f7785d2e36db5cbb0d6bf24380f04c081e126d",
+        "replay.py": "0a0276d8121112efadc62462904f1858756336930a195a7b5ae24d63b8a1144d",
+        "run.py": "5fb8e1ae4e64e57bf39937ae6d212f4ddefc0caa65f8836d99a2675bc790c69e",
+        "scoring.py": "fadb590a8e9de5b6942eaf755a50aad9f070b685137b4d1922ab1801d44e1878",
+        "task.py": "e84817cc499f3f4ee3ff291be85ecec7980094e4855a94ddb87f10cae6aab341",
+        "test_bridge.py": "cb5a969eb3628c8f02be0be7b4da2a0e6ccc1de1276776e2ac30b21333122d80",
+        "test_replay.py": "3d2d8d961be3ffeb0b675c7493ff1f569549b99670c02a238f602e3bce6286c4",
+        "test_scoring.py": "871f689bebf4489f3c590dce9403ffefafce47688c8abcc098830b4cf1edf25a",
+        "visuals.py": "94af5eff4085759a1e04d2c22cb52f3a9ac887919815111b6694ec161c83c6be"
+      },
+      "python": "3.12.16",
+      "packages": {
+        "numpy": "2.3.1",
+        "yam-arena": "0.1.0",
+        "inspect-robots": "0.60.0",
+        "inspect-robots-yam": "0.37.0",
+        "inspect-robots-dream": "0.1.0",
+        "dreamlabs-client": "1.0.14",
+        "isaaclab": "17.0.2",
+        "isaacsim": "6.1.0.0"
+      },
+      "review_video": {
+        "camera": "review_cam",
+        "frames": 1201,
+        "fps": 20,
+        "first_time": 0.0,
+        "last_time": 60.0,
+        "sent_to_dream": false
+      },
+      "evaluation_status": "success",
+      "termination_reasons": [
+        "max_steps"
+      ],
+      "dream": {
+        "model": "dreamlabs/dream-1-beta",
+        "transport": "direct",
+        "requests": 25,
+        "attempts": 25,
+        "retries": 0,
+        "sessions": 1,
+        "model_inference_ms": 7981,
+        "returned_prediction_rows": 1200,
+        "returned_prediction_rows_beyond_limits": 380,
+        "preroll_steps": 32,
+        "rows_per_request": 48,
+        "bound_count_note": "Counts returned model prediction rows before execution, including unused rows in the final chunk; it is not a count of executed out-of-bounds robot states.",
+        "execution_bounds_handling": "Default Inspect CLI ClampApprover then DeltaLimitApprover review predictions before action logging/execution; the YAM adapter also clips absolute action bounds. The returned prediction counter does not count executed limit violations."
+      },
+      "executed_action_audit": {
+        "source_action_log_sha256": "ecb419d3aa98524f70bebba1de0740f629bc9d8a2077dbea8c90bd36e6b40d41",
+        "executed_actions": 1200,
+        "range_violations": 0,
+        "adjacent_action_step_limit_violations": 0,
+        "action_dimension": 14,
+        "numeric_tolerance": 1e-09,
+        "note": "Audit of logged approved actions; first action has no previous-action delta comparison. Full action logs remain local; only their hashes and aggregate checks are published."
+      }
     }
   },
-  "recorded_evidence_tests_passed": 3
+  "adapter_git_commit": "0059d02a1a91bc6834c1d0846022891df0c78730"
 }

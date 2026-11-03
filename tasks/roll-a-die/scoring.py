@@ -1,11 +1,28 @@
-"""Temporal scoring for a physical roll, independent of Isaac Sim.
+"""Version 3: score visible pickup, release and a marked-face turnover.
 
-Inputs are measured object poses and measured gripper states, never action targets.
-The runner writes these inputs to JSONL so a score can be reproduced offline.
+The physical rubric uses a ruler and frame-by-frame video, not acceleration or
+contact-force estimation:
 
-Version 2 requires a 90-degree tilt excursion from a verified free-flight pose.
-Cumulative angular travel remains diagnostic only: repeated small rocking cannot
-substitute for a turnover, and a complete revolution need not finish tilted.
+* 0.25: hold the cube's bottom at least 30 mm above the tabletop for 0.20 s.
+* 0.50: after that pickup, observe its bottom at least 10 mm above the table
+  with both gripper tool centres at least 50 mm from the cube centre.
+* 1.00: after release, observe any marked face within 30 degrees of upward,
+  then that same face within 30 degrees of downward. Subsequently, the cube
+  must rest on a face for 1.00 s: bottom within 3 mm of the tabletop, a face
+  within 10 degrees of horizontal, both tool centres at least 60 mm away,
+  and centre/orientation within 2 mm/5 degrees of one fixed resting pose.
+
+A tool centre is the point midway between its finger pads. For the measured
+simulation audit, "held" means a tool centre within 35 mm and gripper opening
+below 0.30. No velocity or acceleration threshold changes the score. Once
+released, a tool centre returning within 50 mm, or the cube leaving the
+permitted tabletop area, permanently erases all credit. The final score counts.
+
+Face identity is physical, so world-yaw and small repeated rocking cannot
+substitute for an upward-to-downward inversion. Only observations at or after
+the first visibly separated release can start a turnover; held rotation and
+the held-to-free boundary interval never count. Inputs are measured poses and
+hand states, not action targets. The runner retains them for offline replay.
 """
 
 from __future__ import annotations
@@ -15,17 +32,27 @@ from dataclasses import dataclass, field
 
 import numpy as np
 
-SCORE_VERSION = "roll-a-die-v2"
+SCORE_VERSION = "roll-a-die-v3"
 TABLE_TOP = 0.7475
 EDGE = 0.016
 LIFT_CLEARANCE = 0.03
 LIFT_HOLD_S = 0.20
-MIN_TUMBLE = math.pi / 2
+RELEASE_CLEARANCE = 0.01
+RELEASE_HAND_DISTANCE = 0.05
+FACE_DIRECTION_COS = math.cos(math.radians(30))
 REST_HOLD_S = 1.0
+REST_TRANSLATION = 0.002
+REST_ROTATION = math.radians(5)
 TABLE_X = (-0.17, 0.89)
 TABLE_Y = (-0.63, 0.63)
-FINGER_TRAVEL = 0.04695  # metres per finger at normalized opening 1 (YAM linear gripper)
-JAW_CLEARANCE = 0.002    # required empty space between each jaw and the die
+EPSILON = 1e-9
+
+# The scene paints these rigidly attached faces. Opposite pips sum to seven.
+FACES = (
+    ("+X", 0, 1, 2, "red"), ("-X", 0, -1, 5, "cyan"),
+    ("+Y", 1, 1, 3, "green"), ("-Y", 1, -1, 4, "purple"),
+    ("+Z", 2, 1, 1, "white"), ("-Z", 2, -1, 6, "yellow"),
+)
 
 
 def tilt_separation(first_up, second_up):
@@ -36,8 +63,10 @@ def tilt_separation(first_up, second_up):
 def rotation(q):
     """Rotation matrix for an XYZW quaternion, invariant to its sign."""
     q = np.asarray(q, dtype=float)
+    if q.shape != (4,) or not np.isfinite(q).all():
+        raise ValueError("die quaternion must contain four finite numbers")
     norm = float(np.linalg.norm(q))
-    if not math.isfinite(norm) or norm < 1e-9:
+    if norm < 1e-9:
         raise ValueError("invalid die quaternion")
     x, y, z, w = q / norm
     return np.array([
@@ -47,29 +76,16 @@ def rotation(q):
     ])
 
 
-def clear_of_hand(hand, position, die_rotation, distance):
-    """Whether measured jaw geometry excludes a pinch, or the hand is distant.
+def orientation_separation(first, second):
+    """Full orientation distance, including yaw, in radians."""
+    return math.acos(float(np.clip((np.trace(first.T @ second) - 1) / 2, -1, 1)))
 
-    ``closing_axis`` is the unit world vector along the gripper's local X axis.
-    Project both the die's half-width and its displacement from the TCP onto it;
-    an opening alone is insufficient if the die is off-centre between the jaws.
-    Older audit samples without this field retain the conservative 55% rule.
-    """
-    if distance >= 0.07:
-        return True
-    if "closing_axis" not in hand:
-        return float(hand["opening"]) >= 0.55
-    axis = np.asarray(hand["closing_axis"], dtype=float)
-    if axis.shape != (3,) or not np.isfinite(axis).all():
-        raise ValueError("closing_axis must contain three finite numbers")
-    norm = float(np.linalg.norm(axis))
-    if norm < 1e-9:
-        raise ValueError("closing_axis must be nonzero")
-    axis = axis / norm
-    offset = abs(float(np.dot(position - np.asarray(hand["tcp"], dtype=float), axis)))
-    half_width = EDGE / 2 * float(np.abs(axis @ die_rotation).sum())
-    half_gap = float(hand["opening"]) * FINGER_TRAVEL
-    return half_gap - offset - half_width >= JAW_CLEARANCE
+
+def vector(value, name):
+    result = np.asarray(value, dtype=float)
+    if result.shape != (3,) or not np.isfinite(result).all():
+        raise ValueError(f"{name} must contain three finite numbers")
+    return result
 
 
 @dataclass
@@ -85,15 +101,13 @@ class RollTracker:
     lift_hold: float = 0.0
     rest_hold: float = 0.0
     previously_held: bool = False
-    previously_resting: bool = False
     last_time: float | None = None
     last_up: np.ndarray | None = None
-    last_velocity: np.ndarray | None = None
-    last_clear_airborne: bool = False
-    pending_tumble: float = 0.0
-    pending_start: float | None = None
-    pending_up: np.ndarray | None = None
-    pending_max_tilt_excursion: float = 0.0
+    face_up_times: dict = field(default_factory=dict)
+    face_down_times: dict = field(default_factory=dict)
+    rest_start: float | None = None
+    rest_position: np.ndarray | None = None
+    rest_rotation: np.ndarray | None = None
     value: float = 0.0
     events: list = field(default_factory=list)
 
@@ -104,116 +118,109 @@ class RollTracker:
         if self.last_time is not None and t <= self.last_time:
             raise ValueError("sample times must increase; reset the tracker for each episode")
         dt = 0.0 if self.last_time is None else t - self.last_time
-        if dt > 0.075:
+        if dt > 0.075 + EPSILON:
             raise ValueError("scoring expects 20 Hz observations with no gap above 75 ms")
-        previous_time = self.last_time
-        self.last_time = t
-        p = np.asarray(sample["pos"], dtype=float)
-        lo = np.asarray(sample["low"], dtype=float)
-        hi = np.asarray(sample["high"], dtype=float)
-        velocity = np.asarray(sample["lin_vel"], dtype=float)
-        spin = np.asarray(sample["ang_vel"], dtype=float)
+        p = vector(sample["pos"], "die position")
+        lo = vector(sample["low"], "die lower bounds")
+        hi = vector(sample["high"], "die upper bounds")
+        # Retained in the audit but deliberately not used to award credit.
+        vector(sample["lin_vel"], "die linear velocity")
+        vector(sample["ang_vel"], "die angular velocity")
         r = rotation(sample["quat_xyzw"])
-        up = r[2, :]  # world vertical expressed in the die frame; yaw does not change it
+        up = r[2, :]  # world vertical expressed in the die frame
         hands = sample["hands"]
-        distances = [float(np.linalg.norm(p - np.asarray(h["tcp"]))) for h in hands]
+        if len(hands) != 2:
+            raise ValueError("two finite measured hand states are required")
+        distances = [float(np.linalg.norm(p - vector(h["tcp"], "tool centre"))) for h in hands]
         openings = [float(h["opening"]) for h in hands]
-        if len(hands) != 2 or not np.isfinite(np.r_[p, lo, hi, velocity, spin, distances, openings]).all():
-            raise ValueError("two finite measured hand states and a finite die state are required")
+        if not np.isfinite(openings).all():
+            raise ValueError("two finite measured hand states are required")
+        self.last_time = t
 
-        if lo[2] < TABLE_TOP - 0.015 or lo[0] < TABLE_X[0] or hi[0] > TABLE_X[1] or lo[1] < TABLE_Y[0] or hi[1] > TABLE_Y[1]:
-            self.invalid = "die left the permitted tabletop area"
+        if (lo[2] < TABLE_TOP - 0.015 - EPSILON
+                or lo[0] < TABLE_X[0] - EPSILON or hi[0] > TABLE_X[1] + EPSILON
+                or lo[1] < TABLE_Y[0] - EPSILON or hi[1] > TABLE_Y[1] + EPSILON):
+            self.invalid = self.invalid or "die left the permitted tabletop area"
 
-        near_closed_hand = any(d < 0.035 and opening < 0.30 for d, opening in zip(distances, openings))
         if not self.lifted:
-            held = lo[2] >= TABLE_TOP + LIFT_CLEARANCE and np.linalg.norm(velocity) <= 0.15 and near_closed_hand
+            near_closed_hand = any(d < 0.035 and opening < 0.30 for d, opening in zip(distances, openings))
+            held = lo[2] + EPSILON >= TABLE_TOP + LIFT_CLEARANCE and near_closed_hand
             self.lift_hold = self.lift_hold + dt if held and self.previously_held else 0.0
             self.previously_held = bool(held)
-            if self.lift_hold + 1e-9 >= LIFT_HOLD_S:
+            if self.lift_hold + EPSILON >= LIFT_HOLD_S:
                 self.lifted = True
                 self.events.append({"time": t, "event": "pickup"})
 
-        hands_released = all(clear_of_hand(hand, p, r, d) for hand, d in zip(hands, distances))
-        clear_airborne = hands_released and lo[2] >= TABLE_TOP + 0.012
-        ballistic_interval = False
-        if self.last_velocity is not None and dt > 0:
-            acceleration = (velocity - self.last_velocity) / dt
-            ballistic_interval = abs(acceleration[2] + 9.81) <= 2.5 and np.linalg.norm(acceleration[:2]) <= 3.0
-        angle = 0.0
-        if self.last_up is not None:
-            angle = tilt_separation(up, self.last_up)
-            if angle < math.radians(0.5):
-                angle = 0.0
         newly_released = False
-        if self.lifted and not self.released:
-            # Preserve only intervals with clear jaws and an airborne die at
-            # BOTH endpoints, plus measured gravitational acceleration. This
-            # includes upward free flight without crediting a held-to-free
-            # orientation jump. Any unverified interval breaks this history.
-            if clear_airborne and self.last_clear_airborne and ballistic_interval:
-                if self.pending_start is None:
-                    self.pending_start = previous_time
-                    self.pending_up = self.last_up.copy()
-                self.pending_tumble += angle
-                self.pending_max_tilt_excursion = max(
-                    self.pending_max_tilt_excursion,
-                    tilt_separation(up, self.pending_up),
-                )
-            else:
-                self.pending_tumble = 0.0
-                self.pending_start = None
-                self.pending_up = None
-                self.pending_max_tilt_excursion = 0.0
-            if clear_airborne and min(distances) >= 0.022 and ballistic_interval:
-                self.released = True
-                newly_released = True
-                self.tumble += self.pending_tumble
-                self.release_up = (up if self.pending_up is None else self.pending_up).copy()
-                self.max_tilt_excursion = self.pending_max_tilt_excursion
-                self.events.append({
-                    "time": t, "event": "release",
-                    "credited_from": self.pending_start if self.pending_start is not None else t,
-                })
-                self.pending_tumble = 0.0
-                self.pending_start = None
-                self.pending_up = None
-                self.pending_max_tilt_excursion = 0.0
+        if (self.lifted and not self.released
+                and lo[2] + EPSILON >= TABLE_TOP + RELEASE_CLEARANCE
+                and min(distances) + EPSILON >= RELEASE_HAND_DISTANCE):
+            self.released = True
+            newly_released = True
+            self.release_up = up.copy()
+            self.events.append({"time": t, "event": "release", "credited_from": t})
 
         if self.released:
-            if not hands_released or min(distances) < 0.020:
-                self.invalid = "gripper re-entered the die clearance after release"
+            if min(distances) + EPSILON < RELEASE_HAND_DISTANCE:
+                self.invalid = self.invalid or "gripper tool centre returned within 50 mm after release"
             if self.last_up is not None and not newly_released:
-                self.tumble += angle
-            self.max_tilt_excursion = max(
-                self.max_tilt_excursion, tilt_separation(up, self.release_up),
-            )
+                angle = tilt_separation(up, self.last_up)
+                if angle >= math.radians(0.5):
+                    self.tumble += angle
+            self.max_tilt_excursion = max(self.max_tilt_excursion, tilt_separation(up, self.release_up))
+            for face, axis, sign, pips, color in FACES:
+                normal_z = float(sign * up[axis])
+                if normal_z + EPSILON >= FACE_DIRECTION_COS and face not in self.face_up_times:
+                    self.face_up_times[face] = t
+                    self.events.append({"time": t, "event": "face_up", "face": face,
+                                        "pips": pips, "color": color, "direction": "up",
+                                        "normal_z": normal_z})
+                if (normal_z - EPSILON <= -FACE_DIRECTION_COS
+                        and face in self.face_up_times and t > self.face_up_times[face]
+                        and face not in self.face_down_times):
+                    self.face_down_times[face] = t
+                    self.events.append({"time": t, "event": "face_down", "face": face,
+                                        "pips": pips, "color": color, "direction": "down",
+                                        "normal_z": normal_z, "up_time": self.face_up_times[face]})
 
-        rolled = self.released and self.max_tilt_excursion + 1e-9 >= MIN_TUMBLE
         resting = (
-            rolled
-            and abs(lo[2] - TABLE_TOP) <= 0.003
-            and np.linalg.norm(velocity) < 0.01
-            and np.linalg.norm(spin) < 0.25
-            and max(abs(up)) >= math.cos(math.radians(10))
-            and min(distances) >= 0.06
+            bool(self.face_down_times)
+            and abs(lo[2] - TABLE_TOP) <= 0.003 + EPSILON
+            and max(abs(up)) + EPSILON >= math.cos(math.radians(10))
+            and min(distances) + EPSILON >= 0.06
         )
-        self.rest_hold = self.rest_hold + dt if resting and self.previously_resting else 0.0
-        self.previously_resting = bool(resting)
-        self.value = 1.0 if self.rest_hold + 1e-9 >= REST_HOLD_S else 0.5 if rolled else 0.25 if self.lifted else 0.0
+        if not resting:
+            self.rest_start = None
+            self.rest_position = self.rest_rotation = None
+            self.rest_hold = 0.0
+        elif (self.rest_start is None
+                or np.linalg.norm(p - self.rest_position) > REST_TRANSLATION + EPSILON
+                or orientation_separation(self.rest_rotation, r) > REST_ROTATION + EPSILON):
+            # Anchor one fixed pose. Comparing only consecutive frames would
+            # incorrectly accept arbitrarily long slow sliding or yawing.
+            self.rest_start = t
+            self.rest_position, self.rest_rotation = p.copy(), r.copy()
+            self.rest_hold = 0.0
+        else:
+            self.rest_hold = t - self.rest_start
+
+        self.value = (1.0 if self.rest_hold + EPSILON >= REST_HOLD_S
+                      else 0.5 if self.released else 0.25 if self.lifted else 0.0)
         if self.invalid:
             self.value = 0.0
-        self.last_up, self.last_velocity = up.copy(), velocity.copy()
-        self.last_clear_airborne = bool(clear_airborne)
+        self.last_up = up.copy()
         return self.value
 
     def summary(self):
         return {
             "score_version": SCORE_VERSION,
             "score": self.value, "lifted": self.lifted, "released": self.released,
+            "turned_over": bool(self.face_down_times),
+            "turnover_faces": list(self.face_down_times),
+            "face_up_times": dict(self.face_up_times), "face_down_times": dict(self.face_down_times),
             "max_tilt_excursion_degrees": math.degrees(self.max_tilt_excursion),
             "cumulative_tumble_degrees": math.degrees(self.tumble),
-            # Keep the original telemetry name for older analysis consumers.
-            # It no longer determines whether the roll earns credit.
+            # Historical consumers retain this diagnostic; it never awards credit.
             "tumble_degrees": math.degrees(self.tumble), "rest_seconds": self.rest_hold,
             "invalid": self.invalid, "events": self.events,
         }
