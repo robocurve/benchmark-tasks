@@ -1,0 +1,19 @@
+{
+  "title": "Map switches to lamps, light only the target",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "causal discovery",
+    "experiment design",
+    "buttons",
+    "logic"
+  ],
+  "instruction": "Four switches (1 to 4) control four lamps (A to D) through unknown wiring. A switch can affect several lamps, a lamp can depend on a combination of switches, one switch can block another, and for some lamps the order in which switches are turned on matters. Each press toggles a switch. Find out how the switches control the lamps, then leave the switches so that exactly the lamps on the red squares are lit.",
+  "context": "Working out unknown wiring by flipping switches and watching the result is everyday troubleshooting for electricians and lab technicians. Here a lamp may need two switches, may be blocked by another switch, or may light only if switches come on in a particular order, so testing one switch at a time misreads the wiring; the robot has to design tests, including the order of presses, that separate the possibilities before acting.",
+  "setup": "Four latching push-button switches (dark grey plastic caps 3.6 x 3.6 cm, 3 cm tall, 0.8 cm travel) stand in a row 25 cm in front of the arm bases, centred between the arms, 10 cm apart, labelled 1 to 4 from left to right on printed cards beside them; each has a small green ON light that is lit while the switch is latched on. Four lamps (4.4 cm frosted globes on 6 cm posts) stand in a row 42 cm in front of the bases, each directly behind one switch, labelled A to D. Two red squares (8 x 8 cm) lie under the two target lamps. All switches start off and all lamps dark.",
+  "scoring": "0: no switch is pressed. 0.25: at least one switch is pressed. 0.5: at least one switch combination with a switch on is held for 1 s or more, so its lamps can be read. 0.75: the combinations held for 1 s or more (with the order in which their switches came on), and the lamps lit in each, leave only one possible rule for every lamp, out of 46 per lamp: toggled by a set of switches, lit while two switches are both on, lit while one switch is on and another is off, or lit while two switches are on and came on in a given order. 1.0: the 0.75 condition holds and at the end exactly the two lamps on red squares are lit. The score is the highest level reached; the provided scorer checks the record of held switch states and press order, which a reviewer can also read from the video.",
+  "run_limit": "6,000 steps (5 min 00 s at 20 Hz)",
+  "reset_notes": "Hidden per trial (redrawn every trial from its seed): Per trial, each lamp gets one rule: two lamps are toggle lamps (lit iff an odd number of their 1 or 2 switches are on), one is a blocker lamp (lit while switch p is on and switch q is off), and one is an order lamp (lit while p and q are both on, but only if p came on before q). One switch feeds at least three lamps and every switch is used. The target is two lamps including the order lamp, at least two presses from the start, and missed by switching 1, 2, 3, 4 on in turn and reading each switch's effect as a toggle.",
+  "fidelity": "Wiring is a hidden table evaluated in code at each press.",
+  "scores": "Dream-1 run: 0.5; demo: 1",
+  "media": "M-MKD9YU"
+}
