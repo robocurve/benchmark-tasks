@@ -1,0 +1,19 @@
+{
+  "title": "Sort colored blocks from a moving conveyor",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "conveyor",
+    "sorting",
+    "moving objects"
+  ],
+  "instruction": "Sort the red and blue blocks from the moving conveyor into the matching colored bins.",
+  "context": "Sorting moving items into designated containers reflects a common material-handling workflow.",
+  "setup": "Five plastic-like 4 cm cubes, 50 g each, start on a fixed 49 x 10 x 2 cm loading shelf at y=-0.50 m, z=0.7875 m, at x=0.46, 0.55, 0.64, 0.73 and 0.82 m, in order red, blue, blue, red, red. At 0, 16, 32, 48 and 64 s they slide along the shelf at 0.06 m/s toward x=0.34 m and onto a 12 x 120 x 2 cm belt centred at (0.34, 0, 0.7575) m. The belt moves toward +y at 0.025 m/s with ten yellow bands. Red and blue open bins are centred at (0.15, 0.22) and (0.15, -0.22) m, closer to the arms; each has a 14 x 20 x 1 cm floor and 1 cm walls 6 cm above the 0.7475 m table. Positions use the station frame.",
+  "scoring": "Each correctly placed still block earns 0.2. Other blocks earn partial credit only when a gripper opening is below 0.8 and its tool centre is within 0.06 m of the block: 0.2*L*(0.2+0.78*P), where L=clamp((bottom height-0.7675 m)/0.04 m,0,1) and P=clamp(1-horizontal distance to matching bin centre/0.45 m,0,1). Full placement requires the entire footprint inside the matching 12 x 18 cm bin interior, bottom within 1.2 cm of its floor, linear speed below 0.01 m/s and angular speed below 0.5 rad/s. All five placements must hold for one second for success; otherwise score is evaluated at the end.",
+  "run_limit": "2,400 steps (120 seconds at 20 Hz)",
+  "reset_notes": "All blocks begin on the loading shelf. Loading begins at fixed 16-second intervals. A missed block beyond y=0.60 m is removed from play to prevent accumulation. Reset restores the blocks and arms; object jitter is disabled.",
+  "fidelity": "PhysX surface velocity drives the kinematic belt at 0.025 m/s; visual stripes match its speed. Shelf transfers are kinematic, and missed blocks are removed at the end; physical feeder, reject mechanism, rollers and belt deformation are omitted. CPU PhysX maintains contacts; an RTX GPU renders 480 x 270 frames. Submitted videos use the original station camera; the screenshot uses a raised view to show the shelf.",
+  "scores": "Dream-1 run: 0.2; scripted demo: 1.0 (original station camera)",
+  "media": "M-5LGMVQ"
+}
