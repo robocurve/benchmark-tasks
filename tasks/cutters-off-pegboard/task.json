@@ -1,0 +1,21 @@
+{
+  "title": "Take the diagonal cutters off a crowded pegboard",
+  "category": "Impact on jobs",
+  "keywords": [
+    "pegboard",
+    "tool retrieval",
+    "hanging objects",
+    "lift then pull",
+    "clutter",
+    "SimReady"
+  ],
+  "instruction": "Take the diagonal cutters off the pegboard and lay them on the mat.",
+  "context": "Workshop and lab technicians fetch hand tools from pegboards many times a day. Pegboard hooks end in an upturned tip, so a tool has to be lifted before it slides off, and its neighbours hang a few centimetres away.",
+  "setup": "Left and right are the robot's. Positions are centres in metres from the midpoint between the two arm bases: x forward, y to the robot's left, heights above the table. Pegboard: a 90 x 46 cm hardboard panel, 12 mm thick, standing on the table with its front face at x = 0.48, from y = -0.46 to y = 0.44 (in front of both arms), fixed. Pegs: 6 mm square steel, 6 cm long, each ending in a 15 mm upturned tip that rises 9 mm above the peg. Twelve tools hang. Each y is the tool's peg (or the middle of its two pegs): Phillips PH1 (15 cm, 60 g) at -0.40 and PH2 (19 cm, 100 g) at -0.34, on pegs 15 cm up. Diagonal cutters (19 cm, 200 g) at -0.26, peg 15 cm up, and above them a Torx T10 screwdriver (15 cm, 60 g), pegs 35 cm up. Combination pliers (19 cm, 250 g) at -0.18, long-nose pliers (23.5 cm, 180 g) at -0.10 and curved long-nose pliers (23.5 cm, 180 g) at -0.02, pegs 15 cm up. A combination wrench (26 cm, 150 g) at 0.06, by its ring end on a peg 30 cm up. Groove-joint pliers (25 cm, 300 g) at 0.13, peg 21 cm up. A claw hammer (30 cm, 450 g) at 0.205, head up on two pegs 4.4 cm apart, 32 cm up. A slotted 5.5 mm screwdriver (19 cm, 100 g) at 0.31 and a Torx T20 (19 cm, 100 g) at 0.37, pegs 15 cm up. Pliers hang jaws up on one peg between the handles. Screwdrivers hang blade down between two pegs 1.6 cm apart, resting on the bolster. Mat: a 24 x 14 cm green rubber mat, 3 mm thick, centred at (0.20, -0.26), its long side along x.",
+  "scoring": "Positions are tool centres. A tool has fallen when its centre is more than 5 cm below where it hangs. 0 if any tool has fallen off the table. Success (1.0, held 1 s): the cutters' centre is over the mat and less than 3 cm above the table, the cutters are still, and no other tool has fallen. 0.5: the same, with exactly one other tool fallen. 0.25: the cutters are off their peg (centre at least 2 cm nearer the robot than the peg tips, held or set down off the mat) and no other tool has fallen. Else 0.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Hang each tool back as in the setup image: pliers jaws up with the peg between the handles, screwdrivers blade down between their two pegs, the wrench by its ring end, the hammer head up.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. NVIDIA SimReady tool meshes at real size with signed-distance-field collision. The pliers' hinges are locked, so each pair moves as one piece. Spin is damped to stand in for peg friction. The pegboard is a plain panel without holes, and the pegs are square bars. Masses are typical values.",
+  "scores": "Dream-1 run: 0.0 (the cutters stayed on the board), demo: 1.0 (success at step 231)",
+  "media": "M-C7Y3VV"
+}
