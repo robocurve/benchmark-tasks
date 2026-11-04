@@ -2,12 +2,13 @@
 
 Needs ``yam_arena`` importable (it is in the simulator's environment; elsewhere put a clone of yam-isaac-lab-arena
 on PYTHONPATH). Checks the scene loads, the outcome table, the controller's rules step by step, that every demo
-waypoint is reachable, and a kinematic replay of the demo: the guard follows the fingers that push its handle, the
-cube follows the closed fingers, and the button's cap follows the right arm's tips.
+waypoint is reachable, that the wrist cameras clear every fixture, and a kinematic replay of the demo: the guard
+follows the fingers that push its handle, the cube follows the closed fingers, and the button's cap follows the right
+arm's tips.
 """
 
+import itertools
 import json
-import math
 import pathlib
 import sys
 
@@ -19,24 +20,32 @@ import pytest  # noqa: E402
 from benchkit import tool_state  # noqa: E402
 from plantkit import HZ, box_state, leaning  # noqa: E402
 from yam_arena import station, task_file  # noqa: E402
+from yam_arena.constants import TCP_OFFSET  # noqa: E402
 from yam_arena.demo import ArmPlan  # noqa: E402
 from yam_arena.task_file import ObjectState  # noqa: E402
+from yam_arena.urdf import quat_xyzw_to_matrix  # noqa: E402
 
 TASK = task_file.load(HERE / "close_the_guard_before_pressing_start.py")
 M = TASK.module
 UP = (0.0, 0.0, 0.0, 1.0)
 HALF = M.BLANK / 2
 ON_TABLE_Z = M.TOP + HALF
+ON_PALLET_Z = M.TOP + M.PALLET_H + HALF
 ON_FLOOR_Z = M.TOP + M.FLOOR + HALF
 OPEN = 0.0
 SHUT = -M.GUARD_TRAVEL
 PRESSED = -M.BUTTON_TRAVEL
 PLACES = {"start": M.BLANK_XY, "machine": M.MACHINE_XY, "tray": M.TRAY_XY, "elsewhere": (0.40, -0.20)}
+REST_Z = {"start": ON_PALLET_Z, "machine": ON_FLOOR_Z, "tray": ON_TABLE_Z, "elsewhere": ON_TABLE_Z}
 
 # The gripper, measured from the URDF's meshes in the gripper frame (fingers close along world y under the down grip):
 # each finger is 10 mm thick within 3 cm above the TCP and 20 mm thick from 3 to 5 cm; the finger carriages span the pad
 # gap plus 48 mm from 5 to 7 cm; the 102 mm housing starts 70 mm above the TCP.
 FINGER_THICK_3CM, FINGER_THICK_5CM, CARRIAGE_EXTRA, HOUSING_ABOVE_TCP = 0.010, 0.020, 0.048, 0.070
+# The wrist camera body (a D405: 42 x 42 x 23 mm, the short side along its optical axis), placed from the station's
+# calibration: about 7 cm ahead of the TCP and 6 cm above it, pitched towards the fingers.
+CAM_HALF = np.array([0.021, 0.021, 0.0115])
+CAM_CLEARANCE = 0.011  # m: the least any fixture may come to a wrist camera during the demo (the tightest is 11.7 mm)
 
 
 def machine(guard=OPEN, pos=None, quat=UP):
@@ -52,10 +61,9 @@ def cube(x, y, z=ON_TABLE_Z, quat=UP, **kw):
 
 
 def scene(where="start", guard=OPEN, cap=0.0):
-    """The blank at ``where`` (start: on the table where it began; machine: on the machine's floor; tray; elsewhere)."""
+    """The blank at ``where`` (start: on its pallet; machine: on the machine's floor; tray; elsewhere on the table)."""
     x, y = PLACES[where]
-    return {"machine": machine(guard), "blank": cube(x, y, ON_FLOOR_Z if where == "machine" else ON_TABLE_Z),
-            "start_button": button(cap)}
+    return {"machine": machine(guard), "blank": cube(x, y, REST_Z[where]), "start_button": button(cap)}
 
 
 def run(steps):
@@ -70,6 +78,49 @@ def press():
     return [("machine", SHUT, PRESSED)] * 5 + [("machine", SHUT, 0.0)] * 5
 
 
+def aabb(centre, size):
+    c, s = np.asarray(centre, dtype=float), np.asarray(size, dtype=float) / 2
+    return c - s, c + s
+
+
+def gap(a, b):
+    """Metres between two world-aligned boxes, 0 if they touch or overlap."""
+    return float(np.linalg.norm(np.maximum(np.maximum(a[0] - b[1], b[0] - a[1]), 0.0)))
+
+
+def fixtures(guard=OPEN):
+    """World boxes of everything fixed or taped down, with the guard at slider position ``guard``."""
+    mx, my, mz = M.MACHINE_XY[0], M.MACHINE_XY[1], M.TOP + M.BOX_SIZE[2] / 2
+    guard_y = my + M.GUARD_TRAVEL + guard
+    out = {
+        "wall+x": aabb((mx + M.BOX_SIZE[0] / 2 - M.WALL / 2, my, mz), (M.WALL, M.BOX_SIZE[1], M.BOX_SIZE[2])),
+        "wall-x": aabb((mx - M.BOX_SIZE[0] / 2 + M.WALL / 2, my, mz), (M.WALL, M.BOX_SIZE[1], M.BOX_SIZE[2])),
+        "wall+y": aabb((mx, my + M.BOX_SIZE[1] / 2 - M.WALL / 2, mz), (M.INNER, M.WALL, M.BOX_SIZE[2])),
+        "wall-y": aabb((mx, my - M.BOX_SIZE[1] / 2 + M.WALL / 2, mz), (M.INNER, M.WALL, M.BOX_SIZE[2])),
+        "stand": aabb((mx, my + M.STAND_Y, mz), M.STAND),
+        "guard": aabb((mx, guard_y, M.TOP + M.BOX_SIZE[2] + M.GUARD_GAP + M.GUARD_T / 2),
+                      (M.BOX_SIZE[0], M.BOX_SIZE[1], M.GUARD_T)),
+        "handle": aabb((mx, guard_y + M.HANDLE_Y, M.TOP + M.BOX_SIZE[2] + M.GUARD_GAP + M.GUARD_T + M.HANDLE[2] / 2),
+                       M.HANDLE),
+        "pallet": aabb((*M.BLANK_XY, M.TOP + M.PALLET_H / 2), M.PALLET_SIZE),
+        "button": aabb((*M.BUTTON_XY, M.TOP + (M.BUTTON_BASE[2] + M.BUTTON_CAP[2]) / 2),
+                       (M.BUTTON_BASE[0], M.BUTTON_BASE[1], M.BUTTON_BASE[2] + M.BUTTON_CAP[2])),
+    }
+    for o in TASK.objects:
+        if o.name.startswith(("lamp", "cycle_lamp", "tray_")):
+            out[o.name] = aabb(o.pos, o.size)
+    return out
+
+
+def wrist_camera_aabb(side, tcp, rot):
+    """The camera body's world box for a TCP at ``tcp`` with gripper rotation ``rot``."""
+    cam = station.wrist_camera(side)
+    r_cam = quat_xyzw_to_matrix(np.array(cam.rot_xyzw))
+    corners = np.array([[sx, sy, sz] for sx in (-1, 1) for sy in (-1, 1) for sz in (-1, 1)]) * CAM_HALF
+    pts = np.array([tcp + rot @ (np.array(cam.pos) - np.array(TCP_OFFSET) + r_cam @ c) for c in corners])
+    return pts.min(0), pts.max(0)
+
+
 # -- the scene -----------------------------------------------------------------------------------------------------
 
 
@@ -80,7 +131,8 @@ def test_the_task_loads_with_its_objects_hooks_and_docs():
     assert {s.name for s in M.MACHINE.sliders} == {"guard"} and {s.name for s in M.START_BUTTON.sliders} == {"cap"}
     lamp = next(o for o in TASK.objects if o.name == "cycle_lamp")
     assert lamp.mass is None and lamp.color == M.LAMP.colours["off"]
-    for word in ("guard", "start button", "blank", "tray", "lamp", "handle"):
+    assert next(o for o in TASK.objects if o.name == "lamp_base").color == M.DARK
+    for word in ("guard", "start button", "blank", "tray", "lamp", "handle", "pallet"):
         assert word in TASK.docs
     assert TASK.success_hold_s == 1.0
 
@@ -100,6 +152,27 @@ def test_the_guard_stays_where_it_is_pushed_and_the_button_springs_back():
     assert M.MACHINE.mass == 3.0 and M.START_BUTTON.mass == 3.0
 
 
+def test_no_two_fixtures_overlap_and_the_stand_is_under_the_open_guard():
+    f = fixtures(OPEN)
+    moving = {"guard", "handle"}
+    for a, b in itertools.combinations(f, 2):
+        joined = (a.startswith("wall") and b.startswith("wall")) or (a.startswith("tray_") and b.startswith("tray_"))
+        if {a, b} <= moving or {a, b} == {"stand", "guard"} or joined:
+            continue
+        if {a, b} == {"lamp_base", "cycle_lamp"}:
+            assert gap(f[a], f[b]) == 0.0  # the lamp stands on its base
+            continue
+        assert gap(f[a], f[b]) > 0.0, (a, b)
+    stand, guard = f["stand"], f["guard"]
+    assert np.all(stand[0][:2] >= guard[0][:2]) and np.all(stand[1][:2] <= guard[1][:2])  # under its footprint
+    assert 0.0 < guard[0][2] - stand[1][2] <= 0.002  # resting 1 mm over it
+    shut = fixtures(SHUT)["guard"]
+    walls = [f[k] for k in ("wall+x", "wall-x", "wall+y", "wall-y")]
+    assert np.all(shut[0][:2] <= np.min([w[0][:2] for w in walls], axis=0) + 1e-9)
+    assert np.all(shut[1][:2] >= np.max([w[1][:2] for w in walls], axis=0) - 1e-9)  # shut, it covers the opening
+    assert gap(f["wall-x"], f["pallet"]) >= 0.02 and gap(f["guard"], f["tray_f"]) >= 0.005
+
+
 # -- the outcome table --------------------------------------------------------------------------------------------
 
 
@@ -112,9 +185,9 @@ def test_the_guard_stays_where_it_is_pushed_and_the_button_springs_back():
         ("machine", SHUT, "done", 0.5),
         ("elsewhere", OPEN, "done", 0.5),  # cycle done, part put down anywhere else
         ("start", OPEN, "done", 0.5),
-        ("machine", OPEN, "idle", 0.2),  # loaded, no cycle
-        ("machine", SHUT, "idle", 0.2),  # loaded and shut, start never pressed
-        ("machine", SHUT, "running", 0.2),  # cycle still running at the end
+        ("machine", SHUT, "idle", 0.3),  # loaded and shut, start never pressed
+        ("machine", SHUT, "running", 0.3),  # cycle still running at the end
+        ("machine", OPEN, "idle", 0.2),  # loaded, guard open
         ("tray", OPEN, "idle", 0.0),  # blank straight into the tray
         ("tray", SHUT, "idle", 0.0),
         ("start", SHUT, "idle", 0.0),  # guard shut on an empty machine
@@ -142,8 +215,10 @@ def test_a_tipped_machine_scores_zero(where, state):
 
 
 def test_a_fault_scores_below_every_honest_partial():
-    assert M.grade(scene("tray", OPEN), "fault") < M.grade(scene("machine", OPEN), "idle") < M.grade(
-        scene("machine", OPEN), "done") < M.grade(scene("tray", OPEN), "done")
+    ladder = [M.grade(scene("tray", OPEN), "fault"), M.grade(scene("machine", OPEN), "idle"),
+              M.grade(scene("machine", SHUT), "idle"), M.grade(scene("machine", SHUT), "done"),
+              M.grade(scene("tray", OPEN), "done")]
+    assert ladder == sorted(ladder) and len(set(ladder)) == 5 and ladder[0] == 0.0
 
 
 def test_the_thresholds_are_the_stated_numbers():
@@ -158,6 +233,8 @@ def test_the_thresholds_are_the_stated_numbers():
     assert M.in_tray(cube(M.TRAY_XY[0] + M.TRAY_INNER / 2 - 0.001, M.TRAY_XY[1]))
     assert not M.in_tray(cube(M.TRAY_XY[0] + M.TRAY_INNER / 2 + 0.001, M.TRAY_XY[1]))
     assert M.in_tray(cube(*M.TRAY_XY, quat=leaning(34))) and not M.in_tray(cube(*M.TRAY_XY, quat=leaning(36)))
+    assert M.grade(scene("machine", SHUT + 0.0099), "idle") == pytest.approx(0.3)
+    assert M.grade(scene("machine", SHUT + 0.0101), "idle") == pytest.approx(0.2)
 
 
 def test_a_cube_resting_on_another_face_is_flat():
@@ -221,11 +298,19 @@ def test_pressing_with_the_guard_shut_on_an_empty_machine_does_nothing():
 def test_opening_the_guard_mid_cycle_is_a_fault():
     c = run([("machine", SHUT, 0.0)] * 3 + press() + [("machine", SHUT, 0.0)] * 20)
     assert c.state == "running"
-    M._watch(scene("machine", SHUT + 0.02))
+    M._watch(scene("machine", SHUT + 0.0101))
     assert c.state == "fault" and c.fault == "guard opened mid-cycle" and M.LAMP.is_("fault")
     for _ in range(M.CYCLE_STEPS):
         M._watch(scene("machine", SHUT))
     assert c.state == "fault"
+
+
+def test_a_guard_wobble_under_a_centimetre_mid_cycle_does_not_fault():
+    c = run([("machine", SHUT, 0.0)] * 3 + press())
+    assert c.state == "running"
+    for i in range(M.CYCLE_STEPS):
+        M._watch(scene("machine", SHUT + 0.0099 * (i % 2)))  # chattering between the stop and 9.9 mm off it
+    assert c.state == "done" and M.LAMP.is_("done") and not c.fault
 
 
 def test_holding_the_button_down_is_one_press_and_the_cap_thresholds_are_the_stated_numbers():
@@ -241,6 +326,7 @@ def test_holding_the_button_down_is_one_press_and_the_cap_thresholds_are_the_sta
     M._watch(scene("machine", SHUT, -0.29 * M.BUTTON_TRAVEL))  # released
     M._watch(scene("machine", SHUT, PRESSED))
     assert c.presses == 2 and c.state == "running"
+    assert M.PRESS_AT * M.BUTTON_TRAVEL == pytest.approx(0.0056)
 
 
 def test_pressing_again_after_the_cycle_follows_the_same_rule():
@@ -283,7 +369,7 @@ def test_shoving_the_machine_along_changes_nothing():
     objects = scene("machine", SHUT)
     objects["machine"] = machine(SHUT, pos=np.array(M.MACHINE.pos) + shift)
     objects["blank"] = cube(*(objects["blank"].pos + shift))
-    assert M.grade(objects, "idle") == pytest.approx(0.2)
+    assert M.grade(objects, "idle") == pytest.approx(0.3)
     assert M.grade(objects, "done") == pytest.approx(0.5)
 
 
@@ -328,6 +414,15 @@ def test_the_demo_stays_on_each_arms_side():
     assert all(w.pos[1] <= 0.0 for w in plan["right"])
 
 
+def test_the_arms_park_to_their_own_sides_while_the_cycle_runs():
+    left, right = M.demo()["left"], M.demo()["right"]
+    park = next(w for w in left if w.label == "wait for the cycle")
+    assert park.pos[1] - M.OPEN_START_Y >= 0.15 and park.pos[2] >= M.HOVER_Z  # 15 cm to the left of its work
+    assert next(w for w in left if w.label == "park").duration + park.duration == pytest.approx(
+        M.BUTTON_APPROACH_S + M.PRESS_S + M.PRESS_HOLD_S + M.PRESS_LIFT_S + M.AFTER_PRESS_S)
+    assert right[0].pos[1] <= M.BUTTON_XY[1] - 0.15 and right[-1].pos == right[0].pos  # waits and ends 15 cm right
+
+
 def test_the_pushes_reach_both_stops():
     shut_face = M.SHUT_END_Y - M.FINGER_Y  # the fingers' -y face at the end of the shut push
     assert M.HANDLE_SHUT_Y + M.HANDLE[1] / 2 - 0.01 < shut_face <= M.HANDLE_SHUT_Y + M.HANDLE[1] / 2
@@ -341,45 +436,41 @@ def test_the_pushes_reach_both_stops():
 
 def test_the_gripper_fits_through_the_opening_and_round_the_cube():
     rim = M.TOP + M.BOX_SIZE[2]
-    gap = -2 * M.FINGER_IN
-    assert gap - M.BLANK >= 0.020 - 1e-9  # 10 mm round the cube
-    assert rim - M.GRIP_IN_Z <= 0.050  # inside the opening, only the fingers' first 5 cm
-    assert M.INNER - (gap + 2 * FINGER_THICK_5CM) >= 0.024  # 12 mm to each wall at the rim
-    assert M.INNER - (gap + 2 * FINGER_THICK_3CM) >= 0.040
+    gap_ = -2 * M.FINGER_IN
+    assert gap_ - M.BLANK >= 0.020 - 1e-9  # 10 mm round the cube
+    assert rim - M.GRIP_IN_Z <= 0.030 + 1e-9  # inside the opening, only the fingers' thin first 3 cm
+    assert M.INNER - (gap_ + 2 * FINGER_THICK_3CM) >= 0.040  # 22 mm to each wall at the rim, 20 at the least
+    assert M.INNER - (gap_ + 2 * FINGER_THICK_5CM) >= 0.020  # and 10 mm even if they went 2 cm deeper
     assert M.INNER - (M.BLANK + CARRIAGE_EXTRA) >= 0.030  # even the carriages clear the walls while holding the cube
-    assert M.GRIP_IN_Z + HOUSING_ABOVE_TCP > rim + 0.015  # the housing stays above the rim
+    assert M.GRIP_IN_Z + HOUSING_ABOVE_TCP > rim + 0.03  # the housing stays well above the rim
     assert M.TRAVEL_Z - 0.024 > rim + 0.03  # the carried cube clears the rim
-    pads = M.TRAY_PLACE_Z - 0.013
-    assert pads > M.TOP + M.TRAY_H  # the tips stay above the tray's walls when the part is let go
-    assert M.TRAY_PLACE_Z - 0.024 - M.TOP < 0.015  # and it drops under 1.5 cm
+    assert M.GRIP_Z - 0.013 > M.TOP + M.PALLET_H  # the tips stay above the pallet at the pick
+    assert M.TRAY_PLACE_Z - 0.013 > M.TOP + M.TRAY_H  # and above the tray's walls when the part is let go
+    assert M.TRAY_PLACE_Z - 0.024 - M.TOP < 0.025  # the part drops under 2.5 cm
+    assert M.BLANK * 2**0.5 < M.BOX_SIZE[2] + M.GUARD_GAP  # a cube on its edge still fits under the shut guard
 
 
-def test_the_lamp_and_stand_are_clear_of_the_machine_and_the_tray_of_the_open_guard():
-    assert M.LAMP_XY[0] - M.LAMP_BASE[0] / 2 > M.MACHINE_XY[0] + M.BOX_SIZE[0] / 2 + 0.005
-    assert M.TRAY_XY[0] + M.TRAY_INNER / 2 + M.TRAY_WALL < M.MACHINE_XY[0] - M.BOX_SIZE[0] / 2
-    assert abs(M.STAND_Y - (M.GUARD_TRAVEL + M.BOX_SIZE[1] / 2 - M.STAND[1])) < 0.03  # under the open guard's far end
-
-
-def replay(wait_s=None):
-    """Play both arms' plans at 20 Hz through the step hook with hand-built states. Returns the step of each event."""
+def replay(shorten=()):
+    """Play both arms' plans at 20 Hz through the step hook with hand-built states. ``shorten`` names left-arm
+    waypoints to cut to zero. Returns the step of each event, the final states and the least wrist-camera gap to
+    each fixture over the whole demo."""
     plan = M.demo()
-    if wait_s is not None:
-        plan["left"] = [w if w.label != "wait for the cycle" else type(w)(wait_s, w.pos, w.finger, w.label, w.yaw)
-                        for w in plan["left"]]
+    plan["left"] = [w if w.label not in shorten else type(w)(0.0, w.pos, w.finger, w.label, w.yaw)
+                    for w in plan["left"]]
     left = ArmPlan(list(plan["left"]), station.BASES["left"])
     right = ArmPlan(list(plan["right"]), station.BASES["right"])
     M._reset({})
     guard, held = OPEN, False
-    pos = np.array([*M.BLANK_XY, ON_TABLE_Z])
+    pos = np.array([*M.BLANK_XY, ON_PALLET_Z])
     grip_above_centre = 0.024 - HALF
     handle_lo = M.HANDLE_OPEN_Y - M.HANDLE[1] / 2
     handle_hi = M.HANDLE_OPEN_Y + M.HANDLE[1] / 2
     guard_top = M.TOP + M.BOX_SIZE[2] + M.GUARD_GAP + M.GUARD_T
     cap_top = M.BUTTON_Z + M.BUTTON_BASE[2] / 2 + M.BUTTON_CAP[2]
-    events = {}
+    events, gaps = {}, {}
     for t in np.arange(0.0, max(left.duration, right.duration) + 1.0, 1 / HZ):
-        tcp_l, _, finger_l, _ = left.target(t)
-        tcp_r, _, finger_r, _ = right.target(t)
+        tcp_l, rot_l, finger_l, _ = left.target(t)
+        tcp_r, rot_r, finger_r, _ = right.target(t)
         # The guard follows closed fingers that run into its handle at push height: when the fingers' span along y
         # overlaps the handle's, the guard moves the shorter way out of it (the way the fingers came).
         tips = tcp_l[2] - 0.013
@@ -399,7 +490,8 @@ def replay(wait_s=None):
         else:
             held = False
             inside = abs(pos[0] - M.MACHINE_XY[0]) <= M.INNER / 2 and abs(pos[1] - M.MACHINE_XY[1]) <= M.INNER / 2
-            pos = np.array([pos[0], pos[1], ON_FLOOR_Z if inside else ON_TABLE_Z])
+            on_pallet = abs(pos[0] - M.BLANK_XY[0]) <= 0.03 and abs(pos[1] - M.BLANK_XY[1]) <= 0.03
+            pos = np.array([pos[0], pos[1], ON_FLOOR_Z if inside else ON_PALLET_Z if on_pallet else ON_TABLE_Z])
         # The cap follows the right arm's tips.
         cap = 0.0
         if np.linalg.norm(tcp_r[:2] - np.array(M.BUTTON_XY)) < 0.02:
@@ -412,19 +504,24 @@ def replay(wait_s=None):
             events["shut"] = step
         if "shut" in events and not shut and "reopened" not in events:
             events["reopened"] = step
+        for name in ("running", "done", "fault"):
+            if M.CYCLE.state == name and name not in events:
+                events[name] = step
         if M.CYCLE.presses and "pressed" not in events:
             events["pressed"] = step
-        if M.CYCLE.state == "running" and "running" not in events:
-            events["running"] = step
-        if M.CYCLE.state == "done" and "done" not in events:
-            events["done"] = step
-        if M.CYCLE.state == "fault" and "fault" not in events:
-            events["fault"] = step
-    return events, states
+        # The wrist cameras against everything on the bench, with the guard where it is now.
+        boxes = fixtures(guard)
+        for arm, cam in (("left", wrist_camera_aabb("left", tcp_l, rot_l)),
+                         ("right", wrist_camera_aabb("right", tcp_r, rot_r))):
+            for name, box in boxes.items():
+                g = gap(cam, box)
+                if g < gaps.get((arm, name), (1.0,))[0]:
+                    gaps[(arm, name)] = (g, step)
+    return events, states, gaps
 
 
 def test_a_kinematic_replay_of_the_demo_scores_one():
-    events, states = replay()
+    events, states, _ = replay()
     assert "fault" not in events, M.CYCLE.fault
     assert M.CYCLE.state == "done" and M.LAMP.is_("done")
     assert M.grade(states, M.CYCLE.state) == pytest.approx(1.0)
@@ -433,21 +530,33 @@ def test_a_kinematic_replay_of_the_demo_scores_one():
 
 
 def test_the_replay_follows_the_demos_order_with_margin():
-    events, _ = replay()
-    assert events["shut"] + 0.5 * HZ <= events["pressed"]  # the guard was shut before start was pressed
+    events, _, _ = replay()
+    cue = M.shut_done_at(M.demo()["left"])
+    assert 2.7 <= cue - events["shut"] / HZ <= 3.3  # shut in the push's last second, then held and lifted off
+    assert events["pressed"] / HZ - cue == pytest.approx(M.BUTTON_APPROACH_S + 1.2, abs=0.2)  # the press lands
     assert events["running"] == events["pressed"]
     assert events["done"] == events["running"] + M.CYCLE_STEPS  # the lamp turns green 3 s after the press
-    assert events["done"] + 1.0 * HZ <= events["reopened"]  # the guard is reopened at least 1 s after the green light
-    assert (events["reopened"] - events["done"]) / HZ >= 3.5  # the demo's 3.5 s wait holds
-    assert abs(events["shut"] / HZ - M.shut_done_at(M.demo()["left"])) < 3.5  # the right arm's cue is this lift-off
+    reopen_after_done = (events["reopened"] - events["done"]) / HZ
+    assert reopen_after_done >= M.AFTER_PRESS_S + 1.0  # the 3.5 s wait, and at least a second more
+    assert reopen_after_done < M.AFTER_PRESS_S + 6.0  # but the demo does not dawdle
 
 
 def test_the_demo_waits_long_enough_and_not_blindly():
-    """Cut the left arm's wait short and the demo reopens the guard mid-cycle: the wait is what makes it safe."""
-    events, _ = replay(wait_s=0.0)
+    """Cut the left arm's park and wait and the demo reopens the guard mid-cycle: the wait is what makes it safe."""
+    events, _, _ = replay(shorten=("park", "wait for the cycle"))
     assert "fault" in events and M.CYCLE.fault == "guard opened mid-cycle"
-    events, _ = replay()
+    events, _, _ = replay()
     assert "fault" not in events
+
+
+def test_the_wrist_cameras_clear_every_fixture_throughout_the_demo():
+    """The sim has no camera collider; the real rig does. Each camera body keeps CAM_CLEARANCE from every wall, the
+    guard and its handle wherever they are, the stand, the pallet, the lamp, the button and the tray, at every step."""
+    _, _, gaps = replay()
+    assert gaps, "no gaps recorded"
+    tight = {k: v for k, v in gaps.items() if v[0] < CAM_CLEARANCE}
+    assert not tight, tight
+    assert min(g for g, _ in gaps.values()) < 0.03  # and the check is live: something comes within 3 cm
 
 
 # -- the record ----------------------------------------------------------------------------------------------------
@@ -460,9 +569,12 @@ def test_task_json_matches_the_task_file():
     assert spec["run_limit"] == "2,400 steps (2 minutes at 20 Hz)"
     for key in ("title", "context", "setup", "scoring", "reset_notes", "fidelity", "scores"):
         assert isinstance(spec[key], str) and spec[key].strip(), key
-    assert 4 <= len(spec["keywords"]) <= 6
+    assert 4 <= len(spec["keywords"]) <= 6 and "interlocked guard" not in spec["keywords"]
     assert len(spec["fidelity"]) <= 600 and len(spec["scores"]) <= 300
     assert "media" not in spec
     assert spec["fidelity"].startswith("Approximate.")
     assert "object_jitter=0" in spec["reset_notes"]
+    assert "stamp" not in spec["setup"] and "stamp" not in spec["fidelity"]
+    for number in ("6 cm tall", "pallet 6 x 6 x 1.5 cm", "5.6 mm", "1 cm", "3.0 s", "0.3", "0.2", "0.5"):
+        assert number in spec["setup"] + spec["scoring"], number
     assert (HERE / "README.md").read_text().count(M.INSTRUCTION) == 2

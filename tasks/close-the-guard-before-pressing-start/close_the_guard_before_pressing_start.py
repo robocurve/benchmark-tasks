@@ -2,8 +2,8 @@
 left arm's side. A pale blue guard panel slides across the machine's top along the robot's left-right direction; it
 stands open beside the machine on the left arm's side, resting on a grey stand, with a grey handle bar across its far
 end. A cycle lamp on a dark base stands behind the machine; it is grey now and lights green when the machine finishes
-a cycle. A green start button on a dark base is in front of the right arm. A blue 4 cm cube, the blank, sits on the
-table in front of the left arm, and a yellow square output tray is further to the left, nearer the left arm.
+a cycle. A green start button on a dark base is in front of the right arm. A blue 4 cm cube, the blank, sits on a low
+steel pallet in front of the left arm, and a yellow square output tray is further to the left, nearer the left arm.
 
 Run it:  inspect-robots run --embodiment yam_arena -E task=close_the_guard_before_pressing_start.py --scorer task_score ...
 """
@@ -41,7 +41,7 @@ PART_ORANGE = (0.92, 0.45, 0.08)
 
 # -- the machine, in its own frame: origin at its centre, y along the guard's travel -----------------------------------
 MACHINE_XY = (0.30, 0.08)
-BOX_SIZE = (0.14, 0.14, 0.08)  # 8 cm walls: the gripper's finger carriages and housing clear the rim at the pick
+BOX_SIZE = (0.14, 0.14, 0.06)  # 6 cm walls: the wrist camera, 7 cm ahead of the TCP, clears the rim at every pick
 WALL = 0.008
 FLOOR = 0.006
 INNER = BOX_SIZE[0] - 2 * WALL  # 12.4 cm square opening
@@ -78,7 +78,7 @@ MACHINE = tool(
     mass=3.0,  # heavy enough to stay put when pushed; taped down on a real bench
 )
 
-# -- the lamp, the start button, the blank and the tray --------------------------------------------------------------
+# -- the lamp, the start button, the blank on its pallet, and the tray ----------------------------------------------
 LAMP_XY = (0.415, 0.08)
 LAMP_BASE = (0.07, 0.07, 0.020)
 LAMP_SIZE = (0.06, 0.06, 0.030)
@@ -101,6 +101,8 @@ START_BUTTON = tool(
 BLANK = 0.040
 BLANK_MASS = 0.05
 BLANK_XY = (0.17, 0.12)
+PALLET_H = 0.015  # the blank starts this high: at the pick, the wrist camera then clears the machine's rim by 2 cm
+PALLET_SIZE = (0.060, 0.060, PALLET_H)
 
 TRAY_XY = (0.18, 0.24)
 TRAY_INNER = 0.080
@@ -122,10 +124,11 @@ def _collar(name: str, x: float, y: float, inner: float, height: float, wall: fl
 
 OBJECTS = [
     MACHINE,
-    Box("lamp_base", pos=(*LAMP_XY, TOP + LAMP_BASE[2] / 2), size=LAMP_BASE, color=STEEL),
+    Box("lamp_base", pos=(*LAMP_XY, TOP + LAMP_BASE[2] / 2), size=LAMP_BASE, color=DARK),
     LAMP.box((*LAMP_XY, TOP + LAMP_BASE[2] + LAMP_SIZE[2] / 2), LAMP_SIZE),
     START_BUTTON,
-    Box("blank", pos=(*BLANK_XY, TOP + BLANK / 2), size=(BLANK,) * 3, mass=BLANK_MASS, color=BLANK_BLUE),
+    Box("pallet", pos=(*BLANK_XY, TOP + PALLET_H / 2), size=PALLET_SIZE, color=STEEL),
+    Box("blank", pos=(*BLANK_XY, TOP + PALLET_H + BLANK / 2), size=(BLANK,) * 3, mass=BLANK_MASS, color=BLANK_BLUE),
     *_collar("tray", *TRAY_XY, TRAY_INNER, TRAY_H, TRAY_WALL, YELLOW),
 ]
 
@@ -164,7 +167,7 @@ def in_tray(part) -> bool:
 
 
 # -- the machine's controller, watched every step ----------------------------------------------------------------------
-PRESS_AT = 0.7  # of the cap's travel: a press
+PRESS_AT = 0.7  # of the cap's travel: a press (5.6 mm: the microswitch under the cap on a real bench)
 RELEASE_AT = 0.3  # back out this far: released, so the next press counts
 CYCLE_S = 3.0
 CYCLE_STEPS = int(round(CYCLE_S * HZ))
@@ -236,6 +239,7 @@ def _watch(states) -> None:
 # -- scoring: the end state, with the controller's verdict -----------------------------------------------------------
 DONE_IN_TRAY = 1.0
 DONE_ELSEWHERE = 0.5
+LOADED_SHUT_NO_CYCLE = 0.3
 LOADED_NO_CYCLE = 0.2
 
 
@@ -246,7 +250,9 @@ def grade(objects, state: str) -> float:
         return 0.0
     if state == "done":
         return DONE_IN_TRAY if in_tray(part) else DONE_ELSEWHERE
-    return LOADED_NO_CYCLE if in_machine(part, machine) else 0.0
+    if in_machine(part, machine):
+        return LOADED_SHUT_NO_CYCLE if guard_shut(machine) else LOADED_NO_CYCLE
+    return 0.0
 
 
 def success(objects) -> bool:
@@ -267,13 +273,13 @@ def distance(objects) -> float:
 
 
 # -- the scripted demo: the left arm loads, shuts, opens and unloads; the right arm presses start ---------------------
-GRIP_Z = TOP + 0.024  # TCP on a 4 cm cube standing on the table
+GRIP_Z = TOP + PALLET_H + 0.024  # TCP on the 4 cm cube standing on its pallet
 GRIP_IN_Z = TOP + FLOOR + 0.024  # the same cube standing on the machine's floor
 PLACE_IN_Z = GRIP_IN_Z + 0.003
-TRAY_PLACE_Z = GRIP_Z + 0.012  # let go 12 mm up: the pad tips stay above the tray's walls
+TRAY_PLACE_Z = TOP + 0.024 + 0.020  # let go 2 cm up: the pad tips and the wrist camera stay clear of the tray and guard
 TRAVEL_Z = TOP + 0.185
 HOVER_Z = TOP + 0.185
-FINGER_IN = -0.030  # 60 mm between the pads inside the machine: 10 mm round the cube, 12 mm from the walls
+FINGER_IN = -0.030  # 60 mm between the pads inside the machine: 10 mm round the cube, 22 mm from the walls
 PUSH_Z = TOP + BOX_SIZE[2] + GUARD_GAP + GUARD_T + 0.005 + 0.013  # finger tips 5 mm above the guard, on the handle
 FINGER_Y = 0.0065  # half the closed fingers' width along y, near the tips
 OVERSHOOT = 0.006  # commanded past the stop, so the guard still shuts (or opens) if the arm falls a little short
@@ -283,8 +289,16 @@ SHUT_START_Y = HANDLE_OPEN_Y + HANDLE[1] / 2 + 0.030
 SHUT_END_Y = HANDLE_SHUT_Y + HANDLE[1] / 2 + FINGER_Y - OVERSHOOT
 OPEN_START_Y = HANDLE_SHUT_Y - HANDLE[1] / 2 - 0.030
 OPEN_END_Y = HANDLE_OPEN_Y - HANDLE[1] / 2 - FINGER_Y + OVERSHOOT
-PRESS_S, PRESS_HOLD_S, PRESS_LIFT_S = 1.5, 0.8, 1.5
-CYCLE_WAIT_S = PRESS_S + PRESS_HOLD_S + PRESS_LIFT_S + 3.5  # the left arm waits for the press, then 3.5 s more
+BUTTON_TOP_Z = BUTTON_Z + BUTTON_BASE[2] / 2 + BUTTON_CAP[2]
+PRESS_Z = BUTTON_TOP_Z + 0.013 - BUTTON_TRAVEL - 0.002
+BUTTON_ABOVE_Z = BUTTON_TOP_Z + 0.060
+PARK_ASIDE = 0.15  # each arm waits this far to its own side of where it works, out of the top camera's view
+LEFT_PARK = (MACHINE_XY[0], OPEN_START_Y + PARK_ASIDE, HOVER_Z)
+RIGHT_PARK = (BUTTON_XY[0], BUTTON_XY[1] - PARK_ASIDE, BUTTON_ABOVE_Z)
+BUTTON_APPROACH_S, PRESS_S, PRESS_HOLD_S, PRESS_LIFT_S = 1.5, 1.5, 0.8, 1.5
+PARK_S = 1.5
+AFTER_PRESS_S = 3.5  # the left arm leaves its park this long after the right arm has lifted off the button
+CYCLE_WAIT_S = BUTTON_APPROACH_S + PRESS_S + PRESS_HOLD_S + PRESS_LIFT_S + AFTER_PRESS_S - PARK_S
 SPEED = 0.7
 TRIM = {"pick": (0.0, 0.0), "load": (0.0, 0.0), "push": (0.0, 0.0), "tray": (0.0, 0.0)}
 
@@ -293,6 +307,7 @@ def _push(start_y: float, end_y: float, label: str) -> list[Waypoint]:
     x = MACHINE_XY[0] + TRIM["push"][0]
     start, end = start_y + TRIM["push"][1], end_y + TRIM["push"][1]
     return [
+        Waypoint(1.5, (x, start, HOVER_Z), FINGER_CLOSED, "over the handle"),
         Waypoint(1.5, (x, start, PUSH_Z), FINGER_CLOSED, "down behind the handle"),
         Waypoint(0.5, (x, start, PUSH_Z), FINGER_CLOSED, "settle"),
         Waypoint(4.0, (x, end, PUSH_Z), FINGER_CLOSED, label),
@@ -306,7 +321,6 @@ def _left_plan() -> list[Waypoint]:
     bx, by = BLANK_XY[0] + TRIM["pick"][0], BLANK_XY[1] + TRIM["pick"][1]
     mx, my = MACHINE_XY[0] + TRIM["load"][0], MACHINE_XY[1] + TRIM["load"][1]
     tx, ty = TRAY_XY[0] + TRIM["tray"][0], TRAY_XY[1] + TRIM["tray"][1]
-    x = MACHINE_XY[0] + TRIM["push"][0]
     return [
         # Load: the cube is lowered onto the machine's floor, not dropped, and the fingers open only to 60 mm inside.
         Waypoint(1.5 * k, (bx, by, TRAVEL_Z), FINGER_OPEN, "to the blank"),
@@ -317,11 +331,10 @@ def _left_plan() -> list[Waypoint]:
         Waypoint(1.5 * k, (mx, my, PLACE_IN_Z), FINGER_CLOSED, "lower in"),
         Waypoint(0.6 * k, (mx, my, PLACE_IN_Z), FINGER_IN, "release"),
         Waypoint(1.2 * k, (mx, my, TRAVEL_Z), FINGER_IN, "retreat"),
-        # Shut the guard.
-        Waypoint(1.5, (x, SHUT_START_Y + TRIM["push"][1], HOVER_Z), FINGER_CLOSED, "over the handle"),
+        # Shut the guard, then park to the left, out of the top camera's view, while the right arm presses start.
         *_push(SHUT_START_Y, SHUT_END_Y, "push the guard shut"),
-        # Wait for the right arm's press and the cycle.
-        Waypoint(CYCLE_WAIT_S, (x, OPEN_START_Y + TRIM["push"][1], HOVER_Z), FINGER_CLOSED, "wait for the cycle"),
+        Waypoint(PARK_S, LEFT_PARK, FINGER_CLOSED, "park"),
+        Waypoint(CYCLE_WAIT_S, LEFT_PARK, FINGER_CLOSED, "wait for the cycle"),
         *_push(OPEN_START_Y, OPEN_END_Y, "push the guard open"),
         # Unload.
         Waypoint(1.5 * k, (mx, my, TRAVEL_Z), FINGER_IN, "over the part"),
@@ -336,25 +349,24 @@ def _left_plan() -> list[Waypoint]:
 
 
 def shut_done_at(left: list[Waypoint]) -> float:
-    """Seconds into the demo when the left arm has lifted off the shut guard."""
-    return sum(w.duration for w in left[:left.index(next(w for w in left if w.label == "wait for the cycle"))])
+    """Seconds into the demo when the left arm has lifted off the shut guard and starts for its park."""
+    return sum(w.duration for w in left[:left.index(next(w for w in left if w.label == "park"))])
 
 
 def _right_plan(start_after: float) -> list[Waypoint]:
     x, y = BUTTON_XY
-    top = BUTTON_Z + BUTTON_BASE[2] / 2 + BUTTON_CAP[2]
-    press = top + 0.013 - BUTTON_TRAVEL - 0.002
-    above = top + 0.060
     return [
-        Waypoint(start_after, (x, y, above), FINGER_CLOSED, "wait for the guard"),
-        Waypoint(PRESS_S, (x, y, press), FINGER_CLOSED, "press start"),
-        Waypoint(PRESS_HOLD_S, (x, y, press), FINGER_CLOSED, "hold"),
-        Waypoint(PRESS_LIFT_S, (x, y, above), FINGER_CLOSED, "release"),
+        Waypoint(start_after, RIGHT_PARK, FINGER_CLOSED, "wait for the guard"),
+        Waypoint(BUTTON_APPROACH_S, (x, y, BUTTON_ABOVE_Z), FINGER_CLOSED, "over the button"),
+        Waypoint(PRESS_S, (x, y, PRESS_Z), FINGER_CLOSED, "press start"),
+        Waypoint(PRESS_HOLD_S, (x, y, PRESS_Z), FINGER_CLOSED, "hold"),
+        Waypoint(PRESS_LIFT_S, (x, y, BUTTON_ABOVE_Z), FINGER_CLOSED, "release"),
+        Waypoint(PARK_S, RIGHT_PARK, FINGER_CLOSED, "park"),
     ]
 
 
 def demo():
     """Left arm: the blank into the machine, the guard shut, then (after the cycle) the guard open and the part into
-    the tray. Right arm: press start once the guard is shut."""
+    the tray. Right arm: from its park, press start once the guard is shut, then park again."""
     left = _left_plan()
     return {"left": left, "right": _right_plan(shut_done_at(left))}
