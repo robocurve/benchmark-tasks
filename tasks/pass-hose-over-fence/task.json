@@ -1,0 +1,24 @@
+{
+  "title": "Pass a garden hose over a fence",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "hand-over",
+    "hose",
+    "deformable",
+    "garden",
+    "agriculture",
+    "fence",
+    "placement",
+    "release"
+  ],
+  "instruction": "Pass the green garden hose over the white fence: lift its orange nozzle over the fence with the left arm, take it on the far side with the right arm and lay it in the grey trough, leaving the hose draped over the top of the fence. Then let go of the hose.",
+  "context": "Landscaping and groundskeeping workers water with hoses (O*NET 37-3011.00), and a hose must sometimes be passed over a fence or hedge. Here the fence splits the work: neither arm reaches the other side, so the nozzle must be handed over the top.",
+  "setup": "Positions in cm from the midpoint between the arm bases on the table (x away from the robot, y to its left). Fence: white 20 mm plywood board 12 cm tall on the midline (y -1 to +1) along the whole table (x -19 to 91), screwed down. Mats 2 mm, x 5-85: green grass mat on the left (y 1.1-58), brown soil mat on the right. Tap: grey 40x40x45 mm block, centre x 10.5, y 5.9, turned 55 deg. Hose: green 9 mm PVC garden hose, 55 cm, fixed at the tap, straight on the grass at 55 deg (away and left) from x 12, y 8. Nozzle: orange 50x22x22 mm plastic box, 20 g, on the hose end (centre x 45, y 55). Trough: grey open box of four fixed 10 mm walls, 4 cm tall, inner x 24-36, y -27 to -19, floor = soil mat.",
+  "scoring": "Measured at the end with a tape measure. Score 0 if: either gripper is within 3.5 cm of the hose or nozzle (not let go); the nozzle centre is not inside the trough's inner walls (x 24-36, y -19 to -27) below the 4 cm wall top; the fence, trough or tap was moved; or the hose was pulled off the tap. Otherwise 0.7, and 1.0 if the hose crosses the fence line exactly once, resting on the fence top (hose centre within 2 cm below to 3 cm above the top where it crosses). Success (1.0) must hold 1 s.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Lift the nozzle back over the fence and lay the hose straight on the grass from the tap at 55 deg (tape marks at the tap face and at the nozzle centre, x 45, y 55), nozzle lying flat with its long side along the hose. Nothing in the trough.",
+  "fidelity": "Hose is 28 rigid 2 cm segments with bending springs, no twist or plasticity (a real hose is stiffer and springier); nozzle is a rigid box welded to the hose end; the tap end is welded to the world. Fence, trough and tap are fixed rigid boxes; mats are flat coloured boxes (no grass/soil texture or compliance). Release is checked geometrically (each gripper's finger centre >= 3.5 cm from hose and nozzle).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-NNAZUP"
+}
