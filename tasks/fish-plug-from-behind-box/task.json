@@ -1,0 +1,24 @@
+{
+  "title": "Fish a charger out from behind a box by its cord",
+  "category": "Societal relevance",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "deformable",
+    "occluded retrieval",
+    "tension awareness",
+    "handoff",
+    "household",
+    "constraint keeping",
+    "placement"
+  ],
+  "instruction": "The unplugged phone charger has fallen into the gap behind the brown box. Fish it out by its white cord and put it in the green tray, then let go. Don't move the box: keep it in place (within 2 cm) and upright.",
+  "context": "Fetching dropped or out-of-reach objects is a valuable job for assistive home robots (needs study with ALS patients, Choi et al., ICORR 2009). Here the charger is reachable only through its cord, and the obvious pull wedges it behind the box and drags the box: the robot must pull along the gap first.",
+  "setup": "Cm from the midpoint between the arm bases (x away from robot, y left). Back panel: grey wood board 2 x 36 x 25 cm tall, fixed, front face x 46.5, y -14 to 22. Box: brown cardboard box 12 x 30 x 20 cm tall, 2 kg, free, x 31-43, y -10 to 20 (3.5 cm gap to panel). Charger: black brick 45 x 26 x 16 mm, 20 g, flat in the gap, centre x 44.75, y 9, long side along y. Cord: white 6 mm round PVC, 25 cm, from the charger's left end straight along the gap (x 44.75) to y 36; silver USB-C plug 25 x 12 x 8 mm on its end. Tray: green, fixed, inner 10 x 10 cm, 15 mm walls, centre x 33, y -23.5.",
+  "scoring": "Score 0 if: at any time a box corner moves more than 2 cm from its tape mark or the box tilts more than 10 deg; the box or charger leaves the table; at the end a gripper is within 3 cm of the cord, charger or USB-C plug. Otherwise: 1.0 if the charger lies in the tray (centre at least 5 mm inside the inner walls, on the floor); 0.5 if it is out from behind the box (centre at least 5 cm nearer the robot than the box's back face, on the table) but not in the tray; else 0. Judged from tape marks and the top video.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Stand the box upright on its tape marks (3.5 cm gap to the panel). Lay the charger flat in the gap at its mark (centre y 9), cord straight along the gap and out past the box's left end, USB-C plug at y 37.5. Empty the tray.",
+  "fidelity": "Cord: 2 cm rigid segments with bending springs, no twist or stretch; charger and USB-C plug are rigid boxes welded to its ends. Box: one uniform rigid body, rubber-like friction (static 1.2); in the sim the wedged pull drags it ~5 cm. Panel and tray fixed. The wedge is pure geometry (gap 35 mm, charger 45 mm long), no snagging on fabric. Box movement and release are read from object state (real: tape marks, top video).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-GZDYHV"
+}
