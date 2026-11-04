@@ -2,8 +2,9 @@
 open bins beyond it, a red one and a blue one. In front of the right arm: a white tank, open at the top, with a strip
 of eight level segments up its front face that lights from the bottom as the tank fills, and a brass inlet valve block
 nearer the arm with a dark handle that slides along a slot in the block's top. At the near end of the slot (toward
-the arm) the inlet is open; pushed to the far end (toward the tank) it is closed. A grey lamp on a short base stands
-beyond the tank, and a dark mat lies around the tank's foot.
+the arm) the inlet is open; pushed to the far end (toward the tank) it is closed, and a white line across the block
+marks the middle of the slot. A grey lamp on a short base stands beyond the tank and to its right, and a dark mat
+lies around the tank's foot.
 
 Run it:  inspect-robots run --embodiment yam_arena -E task=close_the_inlet_when_the_high_level_alarm_comes_on.py --scorer task_score ...
 """
@@ -51,32 +52,40 @@ BIN_WALL = 0.004
 IN_BIN_BOTTOM = TOP + 0.015  # a cube counts with its underside under this: on the bin's floor, not on another cube
 
 # -- the tank, its level strip, the alarm lamp and the spill mat, in front of the right arm ----------------------------
-TANK_XY = (0.30, -0.14)
+TANK_XY = (0.30, -0.08)  # 6 cm nearer the midline than the valve's row, so the right wrist camera clears its corner
 TANK_INNER = 0.12
 TANK_WALL = 0.006
-TANK_H = 0.16
 TANK_FACE_X = TANK_XY[0] - TANK_INNER / 2 - TANK_WALL  # the front wall's outer face, toward the arms
+MAT_T = 0.001
+FLOOR_T = 0.004  # the blue floor insert, on the mat
+FLOOR_TOP = TOP + MAT_T + FLOOR_T  # where the water starts
 SEGMENTS = 8
 SEGMENT = (0.004, 0.080, 0.016)  # one level segment, on the front face
+GAP = 0.002
+PITCH = SEGMENT[2] + GAP  # 1.8 cm of depth per segment
+DEPTH = SEGMENTS * PITCH  # 14.4 cm: eight segments reach the rim
+TANK_H = FLOOR_TOP - TOP + DEPTH  # the walls, 14.9 cm
 LEVEL = Level("tank_level", SEGMENTS)
-LAMP_XY = (0.38, -0.26)
+LAMP_XY = (0.38, -0.20)  # beyond the tank and to its right, clear of its corner and of the mat
 LAMP_BASE = (0.056, 0.056, 0.020)
 LAMP_BOX = (0.050, 0.050, 0.030)
 LAMP = Lamp("alarm_lamp", {"off": LAMP_OFF, "red": LAMP_RED}, "off")
-MAT = 0.17
+MAT = 0.15  # square, under the tank; it stays right of the midline
 MAT_DRY = STRIP_DARK
 MAT_WET = WATER_BLUE
 
 # -- the inlet valve: a brass block with a handle that slides along it, in front of the right arm ----------------------
-VALVE_XY = (0.17, -0.22)  # 6 cm in front of the tank's wall, so the gripper clears it during the push
+VALVE_XY = (0.17, -0.22)
 BLOCK = (0.050, 0.080, 0.040)
 HANDLE = (0.022, 0.012, 0.036)  # the grip: 3.6 cm tall above the block, for the closed fingers to push on
 HANDLE_TRAVEL = 0.030
 HANDLE_REST_Y = -HANDLE_TRAVEL / 2  # open at the near end of the slot (toward the arm); +y to the far end closes
 SLOT = (0.006, HANDLE_TRAVEL + HANDLE[1] + 0.004, 0.001)
+MARK = (0.012, 0.002, 0.001)  # the white closed line, one piece either side of the slot, across the block's middle
 HANDLE_Z = BLOCK[2] / 2 + SLOT[2] + 0.0005 + HANDLE[2] / 2
 VALVE_Z = TOP + BLOCK[2] / 2
-CLOSED_AT = 0.7  # of the handle's travel: 2.1 cm of 3
+MOVED_AT = 0.3  # of the handle's travel: 9 mm. Pushed this far before the alarm, the inlet is being shut early
+CLOSED_AT = 0.7  # of the handle's travel: 2.1 cm, the handle's near edge at the white line
 VALVE_UPRIGHT_DEG = 20.0  # a valve knocked over further than this reads as open: its handle means nothing
 
 INLET_VALVE = tool(
@@ -85,9 +94,12 @@ INLET_VALVE = tool(
     boxes=[
         ((0.0, 0.0, 0.0), BLOCK, BRASS),
         ((0.0, 0.0, BLOCK[2] / 2 + SLOT[2] / 2), SLOT, DARK),
+        ((SLOT[0] / 2 + MARK[0] / 2, 0.0, BLOCK[2] / 2 + MARK[2] / 2), MARK, WHITE),
+        ((-SLOT[0] / 2 - MARK[0] / 2, 0.0, BLOCK[2] / 2 + MARK[2] / 2), MARK, WHITE),
     ],
     sliders=[
-        # No spring: the handle stays where it is pushed. When it crossed 70% of its travel is tracked step by step.
+        # No spring: the handle stays where it is pushed. When it crossed 30% and 70% of its travel is tracked step by
+        # step; the end position is what is scored.
         Slider("handle", rest=(0.0, HANDLE_REST_Y, HANDLE_Z), size=HANDLE, axis="Y", lower=0.0, upper=HANDLE_TRAVEL,
                color=DARK, rate=0.0, damping=8.0, mass=0.02),
     ],
@@ -114,25 +126,35 @@ OBJECTS = [
       for name, (colour, xy) in CUBES.items()),
     *(w for colour in ("red", "blue")
       for w in _walls(f"{colour}_bin", BIN_XY[colour], BIN_INNER[colour], BIN_H, BIN_WALL, COLOUR[colour])),
-    Box("spill_mat", pos=(*TANK_XY, TOP + 0.0005), size=(MAT, MAT, 0.001), color=MAT_DRY),
+    Box("spill_mat", pos=(*TANK_XY, TOP + MAT_T / 2), size=(MAT, MAT, MAT_T), color=MAT_DRY),
     *_walls("tank", TANK_XY, (TANK_INNER, TANK_INNER), TANK_H, TANK_WALL, WHITE),
-    Box("tank_floor", pos=(*TANK_XY, TOP + 0.003), size=(TANK_INNER, TANK_INNER, 0.004), color=WATER_BLUE),
-    *LEVEL.boxes((TANK_FACE_X - SEGMENT[0] / 2 - 0.001, TANK_XY[1]), TOP + 0.010, SEGMENT, lit=2),
+    Box("tank_floor", pos=(*TANK_XY, TOP + MAT_T + FLOOR_T / 2), size=(TANK_INNER, TANK_INNER, FLOOR_T),
+        color=WATER_BLUE),
+    *LEVEL.boxes((TANK_FACE_X - SEGMENT[0] / 2 - 0.001, TANK_XY[1]), FLOOR_TOP, SEGMENT, lit=2, gap=GAP),
     Box("lamp_base", pos=(*LAMP_XY, TOP + LAMP_BASE[2] / 2), size=LAMP_BASE, color=DARK),
     LAMP.box((*LAMP_XY, TOP + LAMP_BASE[2] + LAMP_BOX[2] / 2), LAMP_BOX),
     INLET_VALVE,
 ]
 
 # -- the process: the tank fills while the inlet is open; the lamp, strip and mat show what the sim can't --------------
-START_ML = 200.0
-INFLOW_ML_PER_S = 20.0  # one 100 mL segment every 5 s
-SEGMENT_ML = 100.0
-FULL_ML = SEGMENTS * SEGMENT_ML  # 800 mL: above this the tank overflows
-ALARM_ML = 600.0  # the high-level alarm
-ALARM_S = (ALARM_ML - START_ML) / INFLOW_ML_PER_S  # 20 s after the start if the inlet stays open
-OVERFLOW_S = (FULL_ML - START_ML) / INFLOW_ML_PER_S  # 30 s
+# The level is counted in segments: each is 1.8 cm of depth, about 260 mL in this tank, and the inlet fills one every
+# 5 s. Two are full at the start; the alarm comes on at six and the tank overflows above eight, its rim.
+START_SEGMENTS = 2.0
+ALARM_SEGMENTS = 6.0
+FULL_SEGMENTS = float(SEGMENTS)
+SEGMENT_S = 5.0  # seconds per segment while the inlet is open
+STEPS_PER_SEGMENT = int(SEGMENT_S * HZ)  # 100
+ALARM_S = (ALARM_SEGMENTS - START_SEGMENTS) * SEGMENT_S  # 20 s after the start if the inlet stays open
+OVERFLOW_S = (FULL_SEGMENTS - START_SEGMENTS) * SEGMENT_S  # 30 s
+SEGMENT_ML = TANK_INNER**2 * PITCH * 1e6  # 259 mL
+INFLOW_ML_PER_S = SEGMENT_ML / SEGMENT_S  # 52 mL/s, about 3.1 L/min
 CLOCK = Clock()
-STATE = {"ml": START_ML, "alarm_at": None, "closed_at": None, "overflow_at": None}  # times in control steps
+STATE = {"open_steps": 0, "alarm_at": None, "moved_at": None, "closed_at": None, "overflow_at": None}  # steps
+
+
+def level(state) -> float:
+    """The level in segments: two at the start, one more for every 5 s the inlet has been open."""
+    return START_SEGMENTS + state["open_steps"] / STEPS_PER_SEGMENT
 
 
 def inlet_closed(valve) -> bool:
@@ -143,33 +165,37 @@ def inlet_closed(valve) -> bool:
 @on_reset
 def _reset(states) -> None:
     CLOCK.reset()
-    STATE.update(ml=START_ML, alarm_at=None, closed_at=None, overflow_at=None)
+    STATE.update(open_steps=0, alarm_at=None, moved_at=None, closed_at=None, overflow_at=None)
     LAMP.reset()
-    LEVEL.show(START_ML / FULL_ML)
+    LEVEL.show(START_SEGMENTS / FULL_SEGMENTS)
     recolor("spill_mat", MAT_DRY)
 
 
 @on_step
 def _watch(states) -> None:
     CLOCK.tick()
-    closed = inlet_closed(states["inlet_valve"])
+    valve = states["inlet_valve"]
+    closed = inlet_closed(valve)
+    if STATE["moved_at"] is None and pushed(valve, "handle", HANDLE_TRAVEL, MOVED_AT):
+        STATE["moved_at"] = CLOCK.step
     if closed and STATE["closed_at"] is None:
         STATE["closed_at"] = CLOCK.step
     if not closed:
-        STATE["ml"] += INFLOW_ML_PER_S / HZ
-    if STATE["alarm_at"] is None and STATE["ml"] >= ALARM_ML:
+        STATE["open_steps"] += 1
+    now = level(STATE)
+    if STATE["alarm_at"] is None and now >= ALARM_SEGMENTS:
         STATE["alarm_at"] = CLOCK.step
         LAMP.set("red", CLOCK.step)
-    if STATE["overflow_at"] is None and STATE["ml"] > FULL_ML:
+    if STATE["overflow_at"] is None and now > FULL_SEGMENTS:
         STATE["overflow_at"] = CLOCK.step
         recolor("spill_mat", MAT_WET)
-    LEVEL.show(STATE["ml"] / FULL_ML)
+    LEVEL.show(now / FULL_SEGMENTS)  # lit to the nearest segment
 
 
 # -- scoring -------------------------------------------------------------------------------------------------------
 PER_CUBE = 0.2
 CLOSED_IN_TIME = 0.4
-EARLY_CAP = 0.3  # the inlet closed before the alarm: the batch was stopped early, whatever the sorting
+EARLY_CAP = 0.3  # the inlet shut before the alarm: the batch was stopped short, whatever the sorting
 
 
 def in_bin(cube, colour: str) -> bool:
@@ -184,20 +210,23 @@ def sorted_cubes(objects) -> int:
 
 
 def closed_early(state) -> bool:
-    """The first close came before the alarm (or the alarm never came, because the inlet was shut first)."""
-    return state["closed_at"] is not None and (state["alarm_at"] is None or state["closed_at"] < state["alarm_at"])
+    """The handle went past 30% before the alarm (or the alarm never came, because the inlet was shut first)."""
+    return state["moved_at"] is not None and (state["alarm_at"] is None or state["moved_at"] < state["alarm_at"])
 
 
 def grade(objects, state) -> float:
     """The score as the outcome table states it."""
     if state["overflow_at"] is not None:
         return 0.0
+    closed = inlet_closed(objects["inlet_valve"])
+    if state["alarm_at"] is not None and not closed:
+        return 0.0  # the alarm is on and the inlet open at the end: never answered, or opened again
     base = PER_CUBE * sorted_cubes(objects)
-    if state["closed_at"] is None:
-        return round(base, 6)  # the inlet is still open and the tank still filling
     if closed_early(state):
         return round(min(base, EARLY_CAP), 6)
-    return round(base + (CLOSED_IN_TIME if inlet_closed(objects["inlet_valve"]) else 0.0), 6)
+    if state["alarm_at"] is None:
+        return round(base, 6)  # still sorting, nothing to answer yet (only before 20 s)
+    return round(base + CLOSED_IN_TIME, 6)
 
 
 def success(objects) -> bool:
@@ -220,8 +249,10 @@ def distance(objects) -> float:
 # -- the scripted demo: left arm sorts the cubes, right arm waits for the alarm and closes the inlet -------------------
 GRIP_Z = TOP + TRAY_SIZE[2] + 0.022
 TRAVEL_Z = TOP + 0.150
-PLACE_Z = TOP + BIN_H + 0.013 + 0.009  # the pad tips 9 mm above the rim when the fingers open: the cube drops 3 cm
+RELEASE_Z = TOP + BIN_H + 0.013 + 0.009  # the pad tips 9 mm above the rim when the fingers open: the cube drops 3 cm
+OVER_A_CUBE = 0.012  # the second red is let go this much higher, so the pad passing over the first clears it
 DROP_XY = {"cube0": (0.32, 0.075), "cube1": (0.32, 0.125), "cube2": (0.32, 0.22)}  # the reds side by side
+DROP_Z = {"cube0": RELEASE_Z, "cube1": RELEASE_Z + OVER_A_CUBE, "cube2": RELEASE_Z}
 SORT_SPEED = 1.0
 PUSH_Z = TOP + BLOCK[2] + 0.005 + 0.013  # the pad tips 5 mm above the block, against the handle
 HOVER_Z = TOP + 0.150
@@ -242,7 +273,7 @@ def _left_plan() -> list[Waypoint]:
     qx, qy = TRIM["drop"]
     for name, (_, (x, y)) in CUBES.items():
         dx, dy = DROP_XY[name]
-        plan += pick_place_waypoints((x + px, y + py, GRIP_Z), (dx + qx, dy + qy, PLACE_Z), travel_z=TRAVEL_Z,
+        plan += pick_place_waypoints((x + px, y + py, GRIP_Z), (dx + qx, dy + qy, DROP_Z[name]), travel_z=TRAVEL_Z,
                                      speed=SORT_SPEED)
     return plan
 
