@@ -8,7 +8,7 @@ The fixed scene, numerical score and reset are specified in `task.json`, `pilot.
 
 ## Recorded trials
 
-Dream-1 beta scored **0.0** after 1200 controls (60 simulated seconds, 343.0 seconds measured wall time). The scripted demonstration scored **1.0** after 296 controls (14.80 simulated seconds, 115.6 seconds measured wall time including startup and rendering). Both use seed 0 and this fixed starting layout. `evaluation.json` records versions and evidence hashes. A single run is not a reliability estimate.
+Dream-1 beta scored **0.0** after 1200 controls (60 simulated seconds, 495.8 seconds measured wall time). The scripted demonstration scored **1.0** after 296 controls (14.8 simulated seconds, 124.1 seconds measured wall time including startup and rendering). Both use seed 0, this fixed starting layout and the standard calibrated top camera. `evaluation.json` records versions and evidence hashes. A single run is not a reliability estimate.
 
 ## Run and score
 
