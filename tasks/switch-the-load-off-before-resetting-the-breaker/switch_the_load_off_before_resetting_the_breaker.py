@@ -59,9 +59,9 @@ STRIPE = (HANDLE[0], 0.0015, 0.001)  # the white line across a handle's top that
 # Marks on the face above each handle, 1 mm proud: ticks where the handle's centre line sits at rest and at the two
 # thresholds, and a coloured dot at the end of its travel.
 TICK = (0.002, 0.0015, 0.008)
-DOT = (0.002, 0.012, 0.012)
+DOT = (0.002, 0.010, 0.010)
 TICKS_ALONG = (0.0, REST_WITHIN * TRAVEL, THROWN_AT * TRAVEL)  # m along the travel from the rest centre
-MARK_Z = HANDLE_Z + HANDLE[2] / 2 + 0.008
+MARK_Z = HANDLE_Z + HANDLE[2] / 2 + 0.009  # the row of marks, just above the handles and under the panel's top
 MARK_X = FACE_X  # centred on the face: half the mark's 2 mm sits proud of it
 
 
@@ -209,7 +209,7 @@ def distance(objects) -> float:
     return (TRAVEL - load) + 2 * TRAVEL
 
 
-# -- the gripper under the down grip, from its collision hulls and the rig's camera mount -------------------------------
+# -- the gripper under the down grip, from its collision hulls and the rig's camera mount ------------------------------
 # The closed fingers' half-width in x by height above the TCP (the pad tips are 1.3 cm below it): the pads, then the
 # taper out to the finger carriages. FINGER_Y is their half-width along y near the tips, which pushes the handles.
 FINGER_DZ = (-0.013, 0.000, 0.010, 0.020, 0.025, 0.040, 0.050, 0.081)

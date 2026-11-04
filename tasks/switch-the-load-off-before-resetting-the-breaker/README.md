@@ -67,7 +67,7 @@ motor lamp red and cannot be undone.
 | Load switched off, breaker reset with the load verified off, load still off or part way back: power lamp green, motor lamp off | 0.6 |
 | Load switched off only, breaker still tripped | 0.3 |
 | Breaker reset before the load switch was verified off: on, part way, or off for under 0.5 s (unexpected start, motor lamp red), whatever else | 0 |
-| Either end of the panel moved, lifted or turned more than 3 cm, or the panel tipped more than 20 degrees | 0 |
+| Either end of the panel moved, lifted, turned or tipped more than 3 cm, or its face leaning more than 20 degrees | 0 |
 | Load switch left part way, breaker still tripped | 0 |
 | Nothing done | 0 |
 
@@ -90,8 +90,8 @@ motor lamp red and cannot be undone.
   what it has done, and a person can score the video from the lamps and the handles' centre lines against the ticks.
 - **Unintended strategies.** Breaker first: 0. Both handles at once: 0. Load off and on again without the breaker:
   0, the start state. Shoving the panel: the handles are read in the panel's own frame, so a shove under 3 cm changes
-  nothing; either end moved, lifted or turned more than 3 cm, or the panel tipped more than 20 degrees: 0, and it is
-  taped down on a real bench. Pushing the breaker on and back off: scored as tripped unless it started the motor.
+  nothing; either end moved, lifted, turned or tipped more than 3 cm (a sideways tip of 15 degrees does that), or
+  its face leaning more than 20 degrees: 0, and it is taped down on a real bench. Pushing the breaker on and back off: scored as tripped unless it started the motor.
 - **Geometry for the gripper.** The closed fingers widen from 4 cm across (x) at the pads to 6.8 cm at the finger
   carriages 5 cm above the TCP, and the wrist camera's housing sits 7 cm beyond the TCP and 6 cm above it. Handles
   6 cm up a 12 cm face, 3 cm deep, would put the carriages inside the panel while the pads were on a handle. So the
