@@ -1,0 +1,23 @@
+{
+  "title": "Sort cables onto matching coloured hooks",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "deformable",
+    "sorting",
+    "colour matching",
+    "hanging",
+    "cable rack",
+    "draping"
+  ],
+  "instruction": "Sort the cables onto the rack: hang each cable on the hook that has the same colour as the plug on its end, draping it over the hook so that it hangs down on both sides of the hook. Then let go of the cables.",
+  "context": "Putting returned stock back in its labelled place is listed inventory work (O*NET 43-5071.00 Shipping, Receiving, and Inventory Clerks); here cables are sorted by plug colour onto matching hooks. The robot has to identify each cable by the small coloured plug on its end, pick a floppy object by that end and drape it over the right hook so it stays there, while no plug lies next to its own hook.",
+  "setup": "Station table; positions in cm from the midpoint between the two arm bases projected onto the table (x forward away from the robot, y to the robot's left). Cable rack, fixed to the table: a grey upright board (MDF or PLA), 44 cm wide (y -22 to +22), 15 cm tall, 1.2 cm thick, its front face at x 27.5. Three hooks stick out of the board's front face towards the robot, 18 cm apart: red at y +18, green at y 0, blue at y -18. Each hook is a 3D-printed PLA peg 60 mm long (x 21.5 to 27.5), 20 mm wide and 10 mm thick, its top face 11.0 cm above the table, with an upturned lip at its tip (6 mm thick, rising 15 mm above the peg top); peg and lip are in the hook's colour. A colour tag (30 x 25 mm, same colour) is stuck on the board above each hook, centred 13.5 cm above the table. Cables: three identical black 6 mm round PVC cords, 28 cm long, each with one bare end and a 3D-printed PLA plug (35 x 16 x 12 mm box, long side along the cord, 8 g) epoxied on the other end; the plugs are red, green and blue. Start: all three cables lie straight on the table running left-right, plugs flat on the inner (midline) end. Blue-plug cable at x 16.5 from its bare end at y +42 to y +14, plug from y +14 to +10.5. Red-plug cable at x 11 from its bare end at y +34 to y +6, plug from y +6 to +2.5. Green-plug cable at x 14 from its bare end at y -42 to y -14, plug from y -14 to -10.5. So from left to right the plugs are blue, red, green while the hooks are red, green, blue: no plug lies in the same left-to-right place as its hook, and no plug's nearest hook is its own colour.",
+  "scoring": "Judged at the end of the episode from a photo (front or side) of the rack. Score 0 if a gripper still holds or touches any cable or plug (both grippers open and at least 3 cm from every cable), or if the rack or a hook was moved or broken. A cable counts as hung on a hook when part of it rests on top of that hook's peg (between the lip and the board) and the cable hangs down on both sides of the peg (left and right of it) to at least 4 cm below the peg top; the rest of a cable may lie on the table. Each cable hung only on the hook of its plug's colour counts +1; each cable hung on a hook of another colour (or on two hooks at once) counts -1; a cable not hung on any hook counts 0. Score = max(0, (sum) / 3): all three correct = 1.0 (success); two correct and one not hung = 0.67; one correct = 0.33; any wrong hook cancels one correct cable, so hanging cables without matching colours (e.g. all on one hook, in their left-to-right order, or each on the hook nearest to it) scores 0. Success (1.0) when all three are correctly hung, released and at rest for 1 s.",
+  "run_limit": "1,800 steps (1.5 minutes at 20 Hz)",
+  "reset_notes": "Lift the cables off the hooks and lay each straight along its tape line (blue x 16.5, red x 11, green x 14 cm) with the bare ends at the tape marks (blue y +42, red y +34, green y -42 cm) and the plugs lying flat towards the midline. Check that the rack is at its mark.",
+  "fidelity": "Each cable is 14 rigid 2 cm capsule segments with bending springs, no twist, no plasticity, friction 0.8; the plug is a rigid box welded to the end segment. Rack, pegs, lips and tags are fixed rigid boxes; the tags are visual cues. Hanging is computed from the cable centre line (segment centres plus plug centre).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-PXYKXU"
+}
