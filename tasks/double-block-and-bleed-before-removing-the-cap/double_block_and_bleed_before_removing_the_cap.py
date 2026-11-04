@@ -3,8 +3,8 @@ two dark supports. Three valves sit on it. The block valves near the left and ri
 a dark handle bar standing on top that slides along the body away from the arms: back is OPEN, forward is CLOSED. The
 smaller bleed valve in the middle has a red handle that slides the same way: back is SHUT, forward is OPEN. Handles
 stay where they are put. In front of the pipe, a little left of the middle, a grey seat holds a red test cap resting
-on it. Behind the pipe on the midline a lamp marked PRESSURE stands on a post, lit red at the start. A yellow tray
-sits in front of the left valve.
+on it. Behind the pipe, between the bleed and the left valve, the pressure lamp sits on a short post, lit red at the
+start. A yellow tray sits in front of the left valve.
 
 Run it:  inspect-robots run --embodiment yam_arena -E task=double_block_and_bleed_before_removing_the_cap.py --scorer task_score ...
 """
@@ -48,8 +48,9 @@ SUPPORT = (0.040, 0.030, PIPE_Z - PIPE_SECTION / 2 - TOP)  # from the table up t
 BLOCK_Y = 0.160  # the block valves: left at +y, right at -y
 BLOCK = 0.050  # the block valves' body, a cube
 BLEED = 0.040  # the bleed valve's body
-HANDLE = (0.030, 0.020, 0.050)  # x, y, z: tall enough for the fingers to push on
+HANDLE = (0.030, 0.020, 0.040)  # x, y, z: 4 cm tall, so its top stays within 2.2 cm of the TCP (see FINGER_X)
 HANDLE_TRAVEL = 0.030
+PLATE_MARGIN = 0.020  # each body's base plate is this much wider than the body, 1 cm a side, so a push can't tip it
 THROWN_AT = 0.7  # past this fraction of its travel a block valve is closed, the bleed open
 
 
