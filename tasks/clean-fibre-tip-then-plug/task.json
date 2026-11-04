@@ -1,0 +1,24 @@
+{
+  "title": "Clean a fibre connector's end face, then plug it in",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "fibre optic",
+    "connector cleaning",
+    "inspect-clean-connect",
+    "process order",
+    "contamination avoidance",
+    "connector insertion",
+    "telecom"
+  ],
+  "instruction": "Before connecting the yellow fibre, clean its blue connector: wipe the connector's front end face across the white cleaning pad in one stroke of at least 4 cm, keep that end face from touching anything else, then push the connector fully into the grey adapter socket and let go.",
+  "context": "Dirty connector end faces are the leading cause of fibre link failures; network and telecom technicians (O*NET 15-1231.00, 49-2022.00) clean the end face on a lint-free pad right before mating it and keep it from touching anything in between.",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left); fixed parts taped down. Patch cord: yellow 6 mm fibre cord, 40 cm, loose, straight along x 22 from y +25 to -15; a blue SC/UPC connector body (55 x 14 x 12 mm, 10 g) on the right end lies flat pointing right (-y); a green one on the left end. Cleaning card: white lint-free pad 150 x 40 mm (3 mm thick), standing upright facing left, front face at y -23.5, from x 33 to 48, 5 to 45 mm above the table, glued to a grey PLA holder block 150 x 30 x 45 mm. Fibre adapter: grey PLA sleeve 27 mm wide x 36.5 mm tall x 40 mm long, socket opening 19 x 17 mm, 26 mm deep, centre x 28 and 24 mm above the table, face at y -23.5 facing left; a dark panel block 80 x 30 x 60 mm behind it.",
+  "scoring": "Score 0 if: the blue connector goes more than 2 mm into the socket before a valid wipe; no valid wipe stands at the end (none, or after it the end face touched anything but the pad or the inside of the socket: table, holder, adapter rim); a gripper still holds the blue connector at the end (sim: TCP within 4 cm of its centre). Valid wipe: end face flat on the pad (connector axis within 20 deg of the pad normal, whole face on the pad, gap at most 1.5 mm) sliding at least 4 cm in one continuous contact. Otherwise: 1.0 if the end face is at least 15 mm inside the socket (15 mm mark on the connector hidden), else 0.5. Judged from video and a top photo.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Pull the connector out, wipe the pad surface clean (or fit a fresh pad), and lay the cord straight along the x 22 cm tape line from y +25 to y -15 with both connectors flat, the blue one pointing right. The card holder and adapter stay taped at their marks.",
+  "fidelity": "Cord: 1.6 cm rigid segments with bending springs, no twist. Connectors are rigid boxes (no ferrule, spring or latch); seating is judged by depth and the socket has 2.5 mm clearance per side (real SC adapters are tighter). Dirt is not simulated: cleanliness is tracked geometrically every physics step (end face within 1 mm of a surface = touched), the same rule a video judge applies in a real trial. Holder and adapter are fixed (taped down).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-89GCCM"
+}
