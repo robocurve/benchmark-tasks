@@ -59,8 +59,8 @@ their 8 mm travel (5.6 mm) for 3.0 s without a break; any release restarts the c
 is **in the tray** when its centre is inside the collar and its bottom is under 1.5 cm above the table. A **reach-in**
 is the part's centre more than 2 cm from the die centre, or its bottom more than 1 cm above the plate, at any step
 while both buttons were held before the cycle completed. A **prop** is a cap pushed in while a loose object (the part,
-the spare block or the other button) has its centre within 2 cm of the cap's centre and its bottom above the cap's
-seat, at any step.
+the spare block or the other button) has its centre within 2 cm of the cap's centre and its bottom more than 2 mm
+above the cap's seat (the top of the base), at any step.
 
 | Outcome | Score |
 |---|---|
@@ -86,11 +86,12 @@ seat, at any step.
   and down on the plate. That also makes a cycle run on an empty die worth 0, since the part was never formed.
 - **The cycle is a timer; nothing bleeds down.** Three seconds of both caps in completes it. Done is permanent,
   the lamp turns green and the part turns orange; releasing early restarts the count. The scorer reads the flags and
-  the part's position at the end.
-- **The frame stands 4 cm behind the die plate.** Pointing straight down over the part, the gripper body reaches
+  the part's position at the end. On a real bench the two caps' switches in series drive a 3 s on-delay relay that
+  latches the green lamp on; the part turning orange is sim-only, so a person reads the lamp.
+- **The frame stands 6 cm behind the die plate.** Pointing straight down over the part, the gripper body reaches
   3.3 cm past the part's centre towards the frame and the wrist camera 7 cm. A frame right behind the plate would
-  be hit by the body and looked into by the camera, so the frame's face is at x 37 cm, 9 cm from the part's
-  centre. The ram and the head of a C-frame are not modelled.
+  be hit by the body and looked into by the camera, so the frame's face is at x 39 cm, 11 cm from the part's
+  centre: the body clears it by 7.8 cm and the camera by 4 cm. The ram and the head of a C-frame are not modelled.
 - **Unintended strategies.** Part shoved or thrown into the tray without a cycle: 0. Cycle run with a block on one
   button: 0. Part taken out mid-cycle: 0, even if it ends in the tray. One button pressed and held: nothing happens.
   Spare block put in the tray instead of the part: 0.4 at best, the part still on the die. The frame, die plate,
@@ -103,7 +104,9 @@ seat, at any step.
   through the die-closing part of the stroke, and ISO 13851 (two-hand control devices) requires the device to resist
   being worked with one hand or with a prop.
 - **What isn't modelled.** No ram, no anti-repeat, no guard, no safety distance between the buttons and the die, and
-  no stroke interruption when a hand is released: a release simply restarts the 3 s count.
+  no stroke interruption when a hand is released: a release simply restarts the 3 s count. Nor ISO 13851's
+  synchronous-actuation window: a real two-hand control starts only if the second button is pressed within 0.5 s of
+  the first, while here one cap can be held indefinitely before the other is pressed.
 
 ## Runtime and seeds
 

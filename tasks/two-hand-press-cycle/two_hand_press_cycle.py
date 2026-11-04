@@ -39,25 +39,25 @@ BLUE = (0.20, 0.35, 0.65)
 FORMED = (0.92, 0.45, 0.08)  # the part once the press has formed it
 
 # -- the press: frame, cycle lamp, die plate and the part standing on it -------------------------------------------
-# The frame stands 4 cm behind the die plate: pointing down over the part, the gripper body reaches 3.3 cm and the
-# wrist camera 7 cm towards the frame, so a frame right behind the plate would be hit and looked into.
-FRAME_XY = (0.43, 0.0)
+# The frame stands 6 cm behind the die plate: pointing down over the part, the gripper body reaches 3.3 cm and the
+# wrist camera 7 cm towards the frame, so the body clears the frame's face by 7.8 cm and the camera by 4 cm.
+FRAME_XY = (0.45, 0.0)
 FRAME_SIZE = (0.12, 0.14, 0.16)
 LAMP_SIZE = (0.06, 0.06, 0.03)
 DIE_XY = (0.28, 0.0)
 DIE_SIZE = (0.10, 0.10, 0.006)
 DIE_TOP = TOP + DIE_SIZE[2]
 PART = 0.040  # the part and the spare block are 4 cm cubes
-PART_MASS = 0.05
+PART_MASS = 0.05  # kg
 
 LAMP = Lamp("cycle_lamp", {"off": LAMP_OFF, "done": LAMP_GREEN}, "off")
 
 # -- the two push buttons, 44 cm apart: an open gripper spans 9.4 cm, so one gripper can never press both -----------
-BUTTON_X = 0.22
+BUTTON_X = 0.22  # m in front of the arm bases
 BUTTON_Y = 0.22  # each side of the midline
 BUTTON_BASE = (0.07, 0.07, 0.030)
 BUTTON_CAP = (0.040, 0.040, 0.015)
-BUTTON_TRAVEL = 0.008
+BUTTON_TRAVEL = 0.008  # m: the cap's full travel into its base
 BUTTON_Z = TOP + BUTTON_BASE[2] / 2
 CAP_REST = (0.0, 0.0, BUTTON_BASE[2] / 2 + BUTTON_CAP[2] / 2)  # the cap's centre at rest (tool frame)
 CAP_SEAT = (0.0, 0.0, BUTTON_BASE[2] / 2)  # the base's top, which the cap sits on (tool frame)
@@ -206,12 +206,18 @@ def score(objects) -> float:
     return grade(objects, PRESS)
 
 
+DIE_TO_TRAY = float(np.linalg.norm(np.subtract(TRAY_XY, DIE_XY)))  # the formed part's run, 15.6 cm
+
+
 def distance(objects) -> float:
-    """Metres from the part to the tray, plus what is left of both caps' travel to the pressed point until the cycle
-    is done."""
-    to_press = 0.0 if PRESS.done else sum(max(PUSHED_AT * BUTTON_TRAVEL - abs(objects[n].sliders["cap"]), 0.0)
-                                          for n in BUTTONS)
-    return distance_xy(objects["part"], TRAY_XY) + to_press
+    """Metres to go. Until the cycle is done: the part's distance from the die centre (it belongs in the die), what
+    is left of both caps' travel to the pressed point, and the die-to-tray run. After it: the part's distance from
+    the tray."""
+    part = objects["part"]
+    if PRESS.done:
+        return distance_xy(part, TRAY_XY)
+    to_press = sum(max(PUSHED_AT * BUTTON_TRAVEL - abs(objects[n].sliders["cap"]), 0.0) for n in BUTTONS)
+    return distance_xy(part, DIE_XY) + to_press + DIE_TO_TRAY
 
 
 # -- the scripted demo: both arms press together, then the left arm moves the part -----------------------------------

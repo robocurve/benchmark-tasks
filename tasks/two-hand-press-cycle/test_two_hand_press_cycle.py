@@ -239,15 +239,45 @@ def test_success_needs_the_safe_finish_with_the_part_at_rest():
     assert TASK.success_hold_s == 1.0
 
 
-def test_distance_falls_to_the_end():
+def test_distance_falls_to_the_end_and_rises_if_the_part_leaves_the_die_early():
     M._reset({})
     start = M.distance(scene())
     pressed = M.distance(BOTH)
+    early = M.distance(scene(part=IN_TRAY))  # the raw part carried to the tray is further from the goal, not nearer
     run([BOTH] * 60)
     done = M.distance(scene())
     finished = M.distance(scene(part=IN_TRAY))
-    assert finished < done <= pressed < start
     assert finished == pytest.approx(0.0)
+    assert finished < done < start < early
+    assert done == pytest.approx(pressed) == pytest.approx(M.DIE_TO_TRAY)
+
+
+def test_the_spare_block_in_the_tray_is_not_the_part():
+    assert M.grade(scene(spare=IN_TRAY), press(done=True)) == pytest.approx(0.4)
+    assert M.grade(scene(spare=IN_TRAY), press()) == 0.0
+    beside = cube((M.TRAY_XY[0] - 0.02, M.TRAY_XY[1] + 0.02), M.TOP + M.PART)  # on top of the part, in the tray
+    assert M.grade(scene(part=IN_TRAY, spare=beside), press(done=True)) == pytest.approx(1.0)
+
+
+def test_a_cheat_timeline_ends_at_zero():
+    """The block on the left cap, the right cap held by a gripper, the part snatched out mid-cycle and put in the
+    tray: the cycle completes and the lamp turns green, and the trial still scores 0."""
+    on_left_cap = cube((M.BUTTON_X, M.BUTTON_Y), M.CAP_TOP_Z - PROPPED_BY_BLOCK)
+
+    def at(part):
+        return scene(part=part, spare=on_left_cap, left=PROPPED_BY_BLOCK, right=FULL)
+
+    lifted = cube(M.DIE_XY, M.DIE_TOP + 0.05)
+    p = run([at(ON_DIE)] * 30 + [at(lifted)] * 20 + [at(IN_TRAY)] * 30)
+    assert p.done and p.done_at == 60 and M.LAMP.is_("done")
+    assert p.propped and p.reached_in
+    final = at(IN_TRAY)
+    assert M.in_tray(final["part"])
+    assert M.grade(final, p) == 0.0 and M.score(final) == 0.0 and not M.success(final)
+    # The prop alone, with the part left in the die and taken out only after the lamp, is 0 as well.
+    p = run([scene(spare=on_left_cap, left=PROPPED_BY_BLOCK, right=FULL)] * 60)
+    assert p.done and p.propped and not p.reached_in
+    assert M.grade(scene(spare=on_left_cap, part=IN_TRAY), p) == 0.0
 
 
 # -- the demo --------------------------------------------------------------------------------------------------------
@@ -277,7 +307,7 @@ def test_the_gripper_and_wrist_camera_clear_the_frame_at_the_pick():
     # on the arm's collision hulls and the station's camera mount).
     face = M.FRAME_XY[0] - M.FRAME_SIZE[0] / 2
     assert face - (M.DIE_XY[0] + 0.0325) >= 0.05 - 1e-9
-    assert face - (M.DIE_XY[0] + 0.070) >= 0.02 - 1e-9
+    assert face - (M.DIE_XY[0] + 0.070) >= 0.04 - 1e-9
     assert M.DIE_XY[0] + M.DIE_SIZE[0] / 2 <= face  # the plate stops short of the frame
 
 
