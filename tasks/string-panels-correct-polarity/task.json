@@ -1,0 +1,23 @@
+{
+  "title": "String three solar panels in series with correct polarity",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "connector",
+    "polarity",
+    "series wiring",
+    "solar PV",
+    "reasoning",
+    "deformable"
+  ],
+  "instruction": "Wire the solar panels in series, left to right: in each grey coupler, push a panel's red (+) lead and the black (-) lead of the panel to its right in from opposite sides until both touch the centre stop. Leave the left panel's black and the right panel's red lead free for the inverter, then let go.",
+  "context": "Solar PV installers (O*NET 47-2231.00) string modules in series by mating each module's + lead to the next module's - lead with MC4 connectors; a reversed or skipped pair gives a string that fails the polarity and open-circuit voltage checks done at commissioning, before the inverter is connected. On each coupler's outer side the nearest lead is the wrong one (the home-run end), so the robot must reason about which panel and polarity each lead belongs to.",
+  "setup": "Station table; cm from the midpoint between the arm bases (x away from robot, y to its left). Panels: dark blue PLA blocks 10 (x) x 12 (y) x 2.5 cm, centres x 50, y +21 / 0 / -21, a 6 mm silver strip along each front top edge. Leads: 7 mm PVC, 21 cm, leaving each panel's front face 0.75 cm above the table; each ends in a 4 x 1.6 x 1.4 cm connector body (15 g) of its colour. Left panel: red at y 24, black at y 18; right panel: red at y -18, black at y -24; both straight towards the robot (connectors at x 19.4-23.4). Middle panel: black at y +3.5, red at -3.5, splayed 10 deg outwards (connector centres x 21.8, y +/-7.5). Couplers (grey PLA, fixed) centred x 32, y +10 and -10: two side walls 5 mm thick, 8 mm tall, 3.8 cm long along y, 22 mm apart, with a 2 mm centre stop 12 mm tall across the gap.",
+  "scoring": "Score 0 if, at the end: a gripper is within 3 cm of any connector; the left panel's black or the right panel's red connector lies at a coupler (centre within 3 cm across / 6 cm along the coupler from its stop); a coupler has two connectors that are not left red + middle black or middle red + right black; a panel or coupler was moved. Otherwise 0.5 per correct pair seated in one coupler: one connector from each side, centre within 8 mm of the channel line, lying on the table, pointing at the stop (within 30 deg), front end within 5 mm of the stop. 1.0 when both pairs are seated.",
+  "run_limit": "1,400 steps (70 s at 20 Hz)",
+  "reset_notes": "Take the connectors out of the couplers and lay each lead straight from its panel along its tape line (outer panels: straight towards the robot; middle panel: 10 deg outwards), connectors flat. Check panels and couplers sit on their marks.",
+  "fidelity": "Leads are 10 rigid 2 cm capsule segments with bending springs, no twist; connectors are rigid boxes welded to the lead ends. MC4 latching is simplified to an open coupler channel with a centre stop: connectors are held only by walls and friction and mating is judged by position. Panels and couplers are fixed rigid boxes (taped down in real trials).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-BLMLPY"
+}
