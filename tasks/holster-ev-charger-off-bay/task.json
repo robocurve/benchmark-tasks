@@ -1,0 +1,23 @@
+{
+  "title": "Holster an EV charger and hang its cable off the parking bay",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "deformable",
+    "EV charging",
+    "cable management",
+    "hanging",
+    "holster",
+    "trip hazard"
+  ],
+  "instruction": "Put the charger plug in its holster and hang the cable over the hook on the charger post, so that no part of the cable or plug lies in the taped parking bay, then let go.",
+  "context": "Charging cables left lying across a parking bay are a trip hazard and get in the way of the next vehicle, so chargers have a holster and cable hook and cables are stowed after each session. The robot must get both the heavy plug and the cable's slack up off the ground, using a hook and a holster on the charger post.",
+  "setup": "Station table; cm from the midpoint between the arm bases (x forward, y left). Charger post: white box 9 (x) x 20 (y) x 22 cm tall, fixed, front face at x 29, centred on y 0. Cable boot: grey block 8.5 x 2 x 3.2 cm at the foot of its front-left corner (x 20.5-29, y 8.5-10.5). Cable: black 12 mm round rubber cable, 50 cm, 75 g, leaves the boot's right side at x 23.5, y 7.3 and lies straight towards -y to y -42.7; plug: black box 60 x 35 x 30 mm, 30 g, on its end, lying flat. Hook (grey PLA): peg 60 x 16 x 14 mm out of the front face at y 6, top 14 cm above the table, 12 mm wide x 15 mm tall lip at its tip. Holster (grey PLA): open-top slot on the front face at y -5.5, floor 9 cm above the table, 7.4 cm long (x), 43 mm inner width, 5 mm side walls 10 mm tall, 8 mm lip at the open end. Parking bay: yellow 15 mm tape rectangle, outer edge x 18-38, y -12 to -42.",
+  "scoring": "Measured at the end. Score 0 if: any part of the cable or plug lies over the bay (inside the tape's outer edge, seen from above); a gripper is within 4 cm of the cable or 6 cm of the plug centre; the post, hook or holster was moved or the cable pulled from the boot. Otherwise: +0.6 if the plug lies in the holster (centre between the side walls and between the lip and the post face, 3 mm tolerance, resting on the slot floor); +0.4 if the cable rests on the hook peg (between its lip and the post face). A plug anywhere else earns 0 for its term. 1.0 = both, held 1 s at rest.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lift the cable off the hook and the plug out of the holster; lay the cable straight from the boot to the right along a tape line at x 23.5, plug flat at its end (cable end at the y -42.7 mark). Check the post, hook and holster sit at their marks.",
+  "fidelity": "Cable: 25 rigid 2 cm segments with bending springs, no twist, no plasticity, friction 0.8; a real EV cable is stiffer and heavier (use a 12 mm rubber cord). Its start is welded at the boot. The plug is a rigid box kept in the holster by gravity, walls and lip, not a latch. Post, hook and holster are fixed rigid boxes; the tape is 1 mm thick. Bay check uses the cable centreline plus radius.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-9XRWR2"
+}
