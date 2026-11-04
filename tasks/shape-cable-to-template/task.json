@@ -1,0 +1,23 @@
+{
+  "title": "Shape a cable to a printed S-curve template",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "deformable",
+    "shape matching",
+    "cable laying",
+    "fixture-free",
+    "sequential manipulation",
+    "precision placement"
+  ],
+  "instruction": "Lay the black cable along the blue S-shaped band on the paper template, starting at the box, so that it lies inside the band along its whole length with its free end on the orange circle. Then let go of the cable.",
+  "context": "Harness makers lay wires and cables along the routes drawn on a formboard before they are clipped or tied (O*NET 51-2022.00 Electrical and Electronic Equipment Assemblers). With no walls to hold it, the cable must be placed precisely, section by section from the fixed end, and left where it stays by friction alone.",
+  "setup": "Station table; positions in cm from the midpoint between the two arm bases projected onto the table (x forward away from the robot, y to the robot's left). Template: a white paper sheet 22 x 34 cm, taped flat to the table, spanning x 15 to 37 and y -16.5 to 17.5. Printed on it is a bright blue band 20 mm wide (printed in a mid-blue such as RGB 26,102,230) whose centreline (50.1 cm long) starts at the sheet's left edge at x 20, y 17.5 heading in -y (towards the right arm), turns left through a quarter circle of 6 cm radius (centre x 26, y 17.5) to x 26, y 11.5 heading +x, turns right through a half circle of 6 cm radius (centre x 26, y 5.5, passing x 32, y 5.5) to x 26, y -0.5 heading -x, turns left through a half circle of 6 cm radius (centre x 26, y -6.5, passing x 20, y -6.5) to x 26, y -12.5 heading +x, and runs 3 cm straight to x 29, y -12.5. An orange filled circle 30 mm in diameter is printed centred on the band's end (x 29, y -12.5). For scoring, a real template may also carry fine tick marks across the band every 7.8 mm and heavier marks dividing it into 8 sections of 6.27 cm (not drawn in the simulation). Device box: grey 5 x 5 x 4 cm box (e.g. a small ABS project enclosure) fixed to the table just off the sheet's left edge, centred at x 20, y 20.5; its right (-y) face is at y 18. Cable: black 6 mm round PVC-jacketed 4-core cable (e.g. LiYY 4 x 0.5 mm2), 50 cm long from the box face to its free end (exactly the band's length), no plug; it is strain-relieved into the middle of the box's right face (x 20, y 17.5, 3.5 mm above the table) and lies straight on the table in -y along x = 20, its free end at x 20, y -32.5. The starting cable crosses the sheet along x = 20 and only touches the band at its start and at the leftmost point of the last turn.",
+  "scoring": "Judged at the end of the episode from a top photo of the template. Score 0 unless (a) the robot has let go: neither gripper touches the cable (both at least 3 cm from it), and (b) the cable's free end lies on the orange circle (end tip within 15 mm of its centre, resting on the sheet). Otherwise the band is divided into 8 sections of 6.27 cm from the box, each with 8 tick marks. A section is laid when (1) at every one of its tick marks some part of the cable lies flat on the sheet within 1 cm of the band's centreline (i.e. inside the 20 mm band at that tick), and (2) the matching stretch of cable (the same 6.27 cm measured along the cable from the box, plus 1 cm before it) lies entirely inside the band; the last section also needs the end on the circle. Score = number of consecutive laid sections counted from the box / 8 (a section after the first bad one does not count). 1.0 (success) = all 8 sections laid, end on the circle, cable released and at rest for 1 s. A cable held by a gripper, lifted off the sheet, left straight, dragged across the template, or laid with its end off the circle scores 0. Score 0 if the template sheet or the box has been moved, or the cable pulled out of the box.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lift the cable off the template and lay it straight from the box along x = 20 towards the right arm (tape marks at the box exit and at the end position x 20, y -32.5); check that the sheet and box are on their tape marks.",
+  "fidelity": "Cable is 25 rigid 2 cm capsule segments with soft bending springs (no twist, no plasticity, friction 1.0); its box end is welded to the world. A real LiYY cable keeps some set curvature (plasticity) which helps it stay in shape; in simulation it stays in shape by friction only. The paper sheet and printed band are thin fixed boxes (0.2-0.4 mm proud of the table); the band's turns are approximated by 1 cm straight pieces for rendering, while scoring uses the exact arcs.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-VKCD79"
+}
