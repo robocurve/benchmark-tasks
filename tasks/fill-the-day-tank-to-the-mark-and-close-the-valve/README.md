@@ -3,8 +3,9 @@
 A white day tank with a level strip up its front face and a red mark at the sixth segment, and a brass transfer valve
 with a handle that slides open and shut. The robot is told to top the tank up: open the valve, watch the level climb
 one segment every two seconds, and close the valve when it reaches the red mark. A valve left open runs the tank over
-onto the mat; closing it early or late scores less. There is no sensor or timer doing the watching: the robot has to
-attend the transfer, as the rules for chemical day tanks ask of an operator.
+onto the mat, and a valve not closed at the end scores nothing whatever the level; closing it early or late scores
+less. There is no sensor or timer doing the watching: the robot has to attend the transfer, as the rules for chemical
+day tanks ask of an operator.
 
 The task needs one arm: the right pushes the handle open from one side, waits, and pushes it closed from the other.
 
@@ -54,20 +55,23 @@ python -m pytest -q test_fill_the_day_tank_to_the_mark_and_close_the_valve.py
 
 ## Scoring
 
-Scored from the end state plus one latch: whether the level ever went above the rim. The level is read in mL against
-the strip, 100 mL per segment, starting at 200 mL. The valve passes liquid once the handle is past 70% of its 3 cm
-travel (21 mm), at 50 mL/s, and is closed when the handle is back within 30% (9 mm) of its closed stop. The red mark
-is 600 mL; the tank runs over above 800 mL.
+Scored from the end state plus one latch: whether the level ever went above the rim. The tank is 10 x 10 cm inside,
+so 1 cm of depth is 100 mL; the strip's eight segments are 2.5 cm apart, 250 mL each, and the tank starts at 500 mL
+(two lit). The valve passes liquid once the handle is past 70% of its 3 cm travel (21 mm), at 125 mL/s, and is closed
+when the handle is back within 30% (9 mm) of its closed stop. The red mark is the 1500 mL line; the rim is 2000 mL.
+
+In the sim the strip lights the nearest whole segment, and the bands are drawn where it changes: six lit is exactly
+1375 to 1625 mL, the surface within 1.25 cm of the red line; four or five lit is 875 to under 1375 mL; seven or eight
+lit is over 1625 mL up to the rim.
 
 | Outcome | Score |
 |---|---|
-| Level 500 to 650 mL at the end, valve closed | 1.0 |
-| Level 350 to 500 mL, valve closed (stopped early) | 0.5 |
-| Level 650 to 800 mL, valve closed (overshot, nothing spilled) | 0.3 |
-| Level 500 to 650 mL, valve not closed | 0.3 |
-| Level 350 to 500 mL or 650 to 800 mL, valve not closed | 0.1 |
-| Overflowed at any time (above 800 mL: liquid on the mat), whatever follows | 0 |
-| Level under 350 mL: valve never opened, or open for under 3 s | 0 |
+| Level 1375 to 1625 mL at the end (six lit), valve closed | 1.0 |
+| Level 875 to under 1375 mL (four or five lit), valve closed (stopped early) | 0.5 |
+| Level over 1625 up to 2000 mL (seven or eight lit), valve closed (overshot, nothing spilled) | 0.3 |
+| Valve not closed at the end, at any level | 0 |
+| Overflowed at any time (above 2000 mL: liquid on the mat), whatever follows | 0 |
+| Level under 875 mL: valve never opened, or open for under 3 s | 0 |
 | Valve tipped more than 20 degrees | 0 |
 | Nothing done | 0 |
 
@@ -76,39 +80,44 @@ is 600 mL; the tank runs over above 800 mL.
 - **The trial doesn't end when the safe state is reached.** With the usual 1 s hold, closing the valve at the mark
   would end the trial at 1.0 while a robot might be about to reopen it. `SUCCESS_HOLD_S` is set longer than the run,
   so the end state decides.
+- **A valve not closed scores 0, whatever the level.** The run is 120 s and the tank runs over after 12 s of flow, so
+  any end with the valve open and the tank not yet over means it was opened in the last 12 s. Paying for the level
+  in that state would reward idling and opening the valve late; so it pays nothing.
 - **An overflow is for good.** The step hook counts the level up while the handle is open, and the first step past
-  800 mL recolours the mat blue and latches. Closing the valve afterwards, or draining nothing, scores 0.
-- **Leaving the valve open scores below closing it at every level.** Reaching the mark with the valve open earns
-  0.3, the same as overshooting and closing it: the tank hasn't run over yet, but nobody is watching it any more.
-  Short of the mark or past it with the valve open earns 0.1.
-- **Timing.** The mark band is 6 to 9 s of flow. The demo's handle passes liquid for 7.5 s, 1.5 s inside both ends,
-  so a handle that lags the fingers a little in the simulator still lands at the mark. A kinematic replay in the
-  tests plays the demo's waypoints against a rigid model of the handle and checks the result: 575 mL, sixth segment
-  lit, valve closed.
+  2000 mL recolours the mat blue and latches. Closing the valve afterwards scores 0.
+- **Bands sit on what can be seen.** The strip lights the nearest whole segment, so a band edge inside a segment
+  could not be read from the picture. The edges are at 875, 1375 and 1625 mL, exactly where the fourth, sixth and
+  seventh segments light; on a real bench they are the 8.75, 13.75 and 16.25 cm lines of the sight gauge.
+- **Timing.** The mark band is 7 to 9 s of flow. The demo's handle passes liquid for 8 s, 1 s inside both ends, so
+  a handle that lags or leads the fingers a little in the simulator still lands at the mark. A kinematic replay in
+  the tests plays the demo's waypoints against a rigid model of the handle and checks the result: 1500 mL, six
+  segments lit, valve closed.
 - **Nothing springs back.** The handle has no spring and stays where it is pushed; the scorer reads it at the end.
-  A handle left between 30% and 70% passes nothing in the sim, but it isn't closed, so it scores as open.
+  A handle left between 30% and 70% passes nothing in the sim, but it isn't closed, so it scores 0.
 - **Where the fingers push.** The closed fingers are 13 mm wide for the 3 cm above their pad tips and widen above
   that, so the demo pushes the 5 cm handle 2 cm up its height, where its top still meets the narrow part.
-- **Clearance.** The valve stands 12 cm in front of the tank's face and 15 cm to its right. The gripper housing is
-  6.8 cm across and the wrist camera sits 7 cm ahead of the fingers and 7.5 cm above their tips, so at push height
-  both would meet a tank wall any nearer; a test proves the clearance from the task file's layout.
+- **Clearance.** The handle travels at x 20, while the tank's front face is at x 27.4 and its right-hand face at
+  y -12.6. The gripper housing is 6.8 cm across, so at push height its near edge stays 4.0 cm short of the front
+  face; the wrist camera rides 7 cm ahead of the fingers and 7.5 cm above their tips, and passes 4.9 cm to the right
+  of the right-hand face. A test proves both from the task file's layout.
 - **Unintended strategies.** Shoving the valve along the table changes nothing: the handle is read against its own
   block. Tipping the valve more than 20 degrees scores 0, and it is taped down on a real bench. There is nothing loose
-  to prop the handle with. Pumping the handle part way passes nothing. Reopening after the mark either overflows (0)
-  or ends with the valve open (0.3 at most).
-- **Scoring a real trial.** A photo of the strip and of the handle against a tape measure at the end gives the level
-  and the valve; the video shows whether anything ran over. The mat is dark so liquid shows.
-- **The rule behind it.** The Ten States Standards (Recommended Standards for Water Works, 2012) ask for a calibrated
-  gauge on a day tank showing its actual volume, and for chemical storage tanks to have a level indicator, an overflow
-  and a basin or drain for accidental spills. Illinois's adoption
+  to prop the handle with. Pumping the handle part way passes nothing. Reopening after the mark either overflows or
+  ends with the valve open: 0 either way.
+- **Scoring a real trial.** A photo of the sight gauge and of the handle against a tape measure at the end gives the
+  level and the valve; the video shows whether anything ran over. The mat is dark so liquid shows.
+- **The rule behind it.** The Ten States Standards (Recommended Standards for Water Works, 2012) ask that a day tank
+  be scale-mounted or carry a calibrated gauge showing its actual volume, and that chemical storage tanks have a level
+  indicator, an overflow and a basin or drain for accidental spills. Illinois's adoption
   ([35 Ill. Adm. Code 604.1105](https://my.ilga.gov/ftp/JCAR/AdminCode/035/035006040K11050R.html)) adds that filling
   a day tank must not be automated: an operator attends the transfer.
-- **What isn't modelled.** No liquid: the level is a count shown on the strip, and the strip is a gauge rather than
-  the liquid's height (800 mL in a 12 cm square tank is only 5.6 cm deep). A real gate valve passes some liquid at any
-  opening; here it passes liquid only past 70% of travel. The hypochlorite is water on a real bench.
+- **What isn't modelled.** No liquid: the level is a count shown on the strip to the nearest whole segment, so a
+  surface between graduations has no sim equivalent. A real gate valve passes some liquid at any opening; here it
+  passes liquid only past 70% of travel. The strip stands on a vertical face, so the top camera sees it edge-on and
+  small; it reads best from the right wrist camera. The hypochlorite is water on a real bench.
 
 ## Runtime and seeds
 
-- The scripted demo takes about 16 s of simulated time (312 steps at 20 Hz).
+- The scripted demo takes about 16 s of simulated time (322 steps at 20 Hz).
 - Dream-1 runs the full 2,400 steps (2 minutes of simulated time).
 - One fixed layout: `-E object_jitter=0`, so the seed does not change the start.

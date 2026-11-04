@@ -6,7 +6,7 @@ Nearer the arm, and further to the robot's right, stands a brass transfer valve:
 that slides along the block. Pushed towards the robot's right the handle opens the valve; pushed back towards the
 robot's left it closes it. It starts closed.
 
-Run it:  inspect-robots run --embodiment yam_arena -E task=fill_the_day_tank_to_the_mark_and_close_the_valve.py --scorer task_score ...
+Run it:  inspect-robots run --embodiment yam_arena -E task=fill_the_day_tank_to_the_mark_and_close_the_valve.py ...
 """
 
 from __future__ import annotations
@@ -35,53 +35,55 @@ INSTRUCTION = (
 BRASS = (0.78, 0.60, 0.22)
 MAT_DARK = (0.15, 0.16, 0.18)
 
-# -- the day tank, its level strip and the red mark --------------------------------------------------------------------
-TANK_XY = (0.32, -0.09)
-TANK_INNER = 0.120
+# -- the day tank: 10 x 10 cm inside, so 1 cm of depth is 100 mL; its level strip------------------------------------
+TANK_XY = (0.33, -0.07)
+TANK_INNER = 0.100
 TANK_WALL = 0.006
-TANK_H = 0.160
+TANK_BASE = 0.010  # the floor plate
+TANK_DEPTH = 0.200  # inside, floor to rim
 TANK_OUTER = TANK_INNER + 2 * TANK_WALL
 MAT_SIZE = (0.160, 0.160, 0.001)
-TANK_FLOOR_Z = TOP + MAT_SIZE[2]  # the tank stands on the mat
-TANK_RIM_Z = TANK_FLOOR_Z + TANK_H
+TANK_FLOOR_Z = TOP + MAT_SIZE[2] + TANK_BASE  # the inside floor: the tank stands on the mat
+TANK_RIM_Z = TANK_FLOOR_Z + TANK_DEPTH
 TANK_FRONT_X = TANK_XY[0] - TANK_OUTER / 2  # the face towards the arms, which carries the strip
 TANK_RIGHT_Y = TANK_XY[1] - TANK_OUTER / 2  # the face towards the right arm's base
 SEGMENTS = 8
-SEG_SIZE = (0.004, 0.100, 0.016)  # thickness (x), width (y), height (z)
+SEG_SIZE = (0.004, 0.080, 0.023)  # thickness (x), width (y), height (z)
 SEG_GAP = 0.002
-SEG_PITCH = SEG_SIZE[2] + SEG_GAP  # m of strip per segment
-STRIP_Z0 = TOP + 0.010  # the bottom of the lowest segment
+SEG_PITCH = SEG_SIZE[2] + SEG_GAP  # 2.5 cm of strip, and of depth, per segment
+STRIP_Z0 = TANK_FLOOR_Z  # the strip starts level with the inside floor
 STRIP_X = TANK_FRONT_X - SEG_SIZE[0] / 2
-MARK_SEGMENT = 6  # the red mark sits on top of this segment
-MARK_SIZE = (0.005, 0.100, 0.003)
-MARK_Z = STRIP_Z0 + MARK_SEGMENT * SEG_PITCH - SEG_GAP + MARK_SIZE[2] / 2  # underside on the sixth segment's top
+MARK_SEGMENT = 6  # the red mark is the line at the top of this segment's pitch
+MARK_SIZE = (0.005, 0.080, 0.005)
+MARK_Z = STRIP_Z0 + MARK_SEGMENT * SEG_PITCH  # centred on the 1500 mL line, in the gap above the sixth segment
 MARK_X = STRIP_X - SEG_SIZE[0] / 2 - MARK_SIZE[0] / 2  # proud of the strip
 
-ML_PER_SEGMENT = 100.0
-TANK_ML = SEGMENTS * ML_PER_SEGMENT  # 800 mL: the rim
-START_ML = 200.0  # a quarter full: two segments lit
-MARK_ML = MARK_SEGMENT * ML_PER_SEGMENT  # 600 mL
-FILL_ML_PER_S = 50.0  # while the valve is open: one segment every 2 s
+ML_PER_SEGMENT = 250.0  # one segment pitch of depth: 2.5 cm x 100 cm2
+TANK_ML = 2000.0  # 20 cm deep: the rim
+START_ML = 500.0  # a quarter full, 5 cm deep: two segments lit
+MARK_ML = MARK_SEGMENT * ML_PER_SEGMENT  # 1500 mL, 15 cm deep
+FILL_ML_PER_S = 125.0  # while the valve is open: 1.25 cm/s, one segment every 2 s
 
 
 def _tank_walls() -> list[Box]:
-    """Four fixed white walls and a floor, standing on the mat."""
+    """A fixed white base plate on the mat, with four walls standing on it."""
     x, y = TANK_XY
     off = TANK_INNER / 2 + TANK_WALL / 2
-    z = TANK_FLOOR_Z + TANK_H / 2
+    z = TANK_FLOOR_Z + TANK_DEPTH / 2
     return [
-        Box("tank_floor", pos=(x, y, TANK_FLOOR_Z + 0.001), size=(TANK_INNER, TANK_INNER, 0.002), color=WHITE),
-        Box("tank_wall_far", pos=(x + off, y, z), size=(TANK_WALL, TANK_OUTER, TANK_H), color=WHITE),
-        Box("tank_wall_near", pos=(x - off, y, z), size=(TANK_WALL, TANK_OUTER, TANK_H), color=WHITE),
-        Box("tank_wall_left", pos=(x, y + off, z), size=(TANK_INNER, TANK_WALL, TANK_H), color=WHITE),
-        Box("tank_wall_right", pos=(x, y - off, z), size=(TANK_INNER, TANK_WALL, TANK_H), color=WHITE),
+        Box("tank_base", pos=(x, y, TOP + MAT_SIZE[2] + TANK_BASE / 2), size=(TANK_OUTER, TANK_OUTER, TANK_BASE),
+            color=WHITE),
+        Box("tank_wall_far", pos=(x + off, y, z), size=(TANK_WALL, TANK_OUTER, TANK_DEPTH), color=WHITE),
+        Box("tank_wall_near", pos=(x - off, y, z), size=(TANK_WALL, TANK_OUTER, TANK_DEPTH), color=WHITE),
+        Box("tank_wall_left", pos=(x, y + off, z), size=(TANK_INNER, TANK_WALL, TANK_DEPTH), color=WHITE),
+        Box("tank_wall_right", pos=(x, y - off, z), size=(TANK_INNER, TANK_WALL, TANK_DEPTH), color=WHITE),
     ]
 
 
 LEVEL = Level("tank_level", SEGMENTS)
 MAT = Lamp("spill_mat", {"dry": MAT_DARK, "wet": WATER_BLUE}, "dry")
 
-# -- the transfer valve: a block with a handle that slides along y and stays where it is pushed ---------------------------
+# -- the transfer valve: a block with a y-sliding handle that stays where it is pushed---------------------------
 VALVE_XY = (0.20, -0.24)
 VALVE_BLOCK = (0.050, 0.050, 0.050)
 VALVE_Z = TOP + VALVE_BLOCK[2] / 2
@@ -133,7 +135,8 @@ def _reset(states) -> None:
 
 @on_step
 def _fill(states) -> None:
-    """Liquid runs in at 50 mL/s while the valve is open; past the rim it runs over the mat, which stays wet."""
+    """Liquid runs in at 125 mL/s while the valve is open; past the rim it runs over the mat, which stays wet. The
+    strip lights the nearest whole segment."""
     CLOCK.tick()
     if valve_open(states["transfer_valve"]):
         TANK["ml"] += FILL_ML_PER_S / HZ
@@ -145,19 +148,19 @@ def _fill(states) -> None:
 
 
 # -- scoring: the end state, read with the overflow latch -------------------------------------------------------------
-MARK_BAND = (500.0, 650.0)  # mL, inclusive: at the mark
-EARLY_BAND = (350.0, 500.0)  # mL, up to the mark band: stopped early
-OVER_BAND = (650.0, 800.0)  # mL, above the mark band up to the rim: overshot
+# The band edges are where the strip changes: six segments lit is 1375 to 1625 mL, the surface within 1.25 cm of the
+# red line; four or five lit is 875 to under 1375 mL; seven or eight lit is over 1625 mL up to the rim.
+MARK_BAND = (1375.0, 1625.0)  # mL, inclusive: at the mark
+EARLY_BAND = (875.0, 1375.0)  # mL, from 875 up to under the mark band: stopped early
+OVER_BAND = (1625.0, 2000.0)  # mL, over the mark band up to the rim: overshot
 AT_MARK = 1.0
 STOPPED_EARLY = 0.5
 OVERSHOT = 0.3
-LEFT_OPEN_AT_MARK = 0.3
-LEFT_OPEN = 0.1
 UPRIGHT_DEG = 20.0
 
 
 def level_band(ml: float) -> str | None:
-    """Which row of the outcome table the level falls in, or None under 350 mL."""
+    """Which row of the outcome table the level falls in, or None under 875 mL or over the rim."""
     if MARK_BAND[0] <= ml <= MARK_BAND[1]:
         return "mark"
     if EARLY_BAND[0] <= ml < MARK_BAND[0]:
@@ -168,13 +171,12 @@ def level_band(ml: float) -> str | None:
 
 
 def grade(objects, ml: float, overflowed: bool) -> float:
-    """The score as the outcome table states it."""
+    """The score as the outcome table states it. A valve not closed at the end scores 0 at every level: the tank
+    is still filling, and a late opening would otherwise earn credit for a level it never attended."""
     valve = objects["transfer_valve"]
     band = level_band(ml)
-    if overflowed or band is None or valve.tilt_deg() > UPRIGHT_DEG:
-        return 0.0  # ran over, never got going, or the valve was knocked over
-    if not valve_closed(valve):
-        return LEFT_OPEN_AT_MARK if band == "mark" else LEFT_OPEN
+    if overflowed or band is None or valve.tilt_deg() > UPRIGHT_DEG or not valve_closed(valve):
+        return 0.0
     return {"mark": AT_MARK, "early": STOPPED_EARLY, "over": OVERSHOT}[band]
 
 
@@ -190,15 +192,17 @@ def score(objects) -> float:
 def distance(objects) -> float:
     """Metres still to go: until the level reaches the mark band, the handle's travel left to open, the strip height
     still to light up to the band, and the handle's travel back to closed; from then on, the handle's travel left to
-    close."""
+    close, plus the strip height the level has gone past the band, which can't be undone, and one more segment if
+    it ran over."""
     h = min(abs(objects["transfer_valve"].sliders["handle"]), HANDLE_TRAVEL)
     short = MARK_BAND[0] - TANK["ml"]
     if short > 0:
         return (HANDLE_TRAVEL - h) + short / ML_PER_SEGMENT * SEG_PITCH + HANDLE_TRAVEL
-    return h
+    past = max(TANK["ml"] - MARK_BAND[1], 0.0) / ML_PER_SEGMENT * SEG_PITCH
+    return h + past + (SEG_PITCH if TANK["overflowed"] else 0.0)
 
 
-# -- the scripted demo: the right arm pushes the handle open, waits, and pushes it closed from the other side -----------
+# -- the scripted demo: the right arm pushes the handle open, waits, and pushes it closed from the far side-----------
 # The closed fingers are 13 mm wide for the 3 cm above their pad tips and widen above that, so they push the handle
 # 2 cm up its 5 cm height, where the handle's top still meets the narrow part.
 PUSH_ABOVE_BLOCK = 0.020  # the pad tips travel this far above the block's top
@@ -206,7 +210,7 @@ PUSH_Z = BLOCK_TOP_Z + PUSH_ABOVE_BLOCK + 0.013  # TCP: the pad tips sit 13 mm b
 HOVER_Z = TOP + 0.185
 FINGER_Y = 0.0085  # half the closed fingers' width along y, over the 3 cm above the pad tips (URDF collision meshes)
 HOUSING_HALF_X = 0.034  # half the gripper housing's width across the fingers, 6 to 10 cm above the pad tips
-WRIST_CAM_AHEAD_X = 0.070  # the wrist camera's body sits this far ahead of the TCP (+x), 7.5 cm above the pad tips
+WRIST_CAM_AHEAD_X = 0.070  # the wrist camera's body rides this far ahead of the TCP (+x), 7.5 cm above the tips
 WRIST_CAM_HALF = 0.025
 OVERSHOOT = 0.006  # commanded past the stop, so the handle still gets there if the arm falls a little short
 BEHIND = 0.030  # the fingers come down this far from the handle's face
@@ -218,7 +222,7 @@ OPEN_END_Y = CLOSED_LEFT_FACE_Y - HANDLE_TRAVEL + FINGER_Y - OVERSHOOT
 CLOSE_START_Y = OPEN_RIGHT_FACE_Y - BEHIND
 CLOSE_END_Y = OPEN_RIGHT_FACE_Y + HANDLE_TRAVEL - FINGER_Y + OVERSHOOT
 PUSH_S = 2.0  # each push: about 30 mm/s
-WATCH_S = 1.3  # hover with the valve open; with the pushes' own time it passes liquid for 7.5 s (575 mL)
+WATCH_S = 1.8  # hover with the valve open; with the pushes' own time it passes liquid for 8 s (1500 mL, the mark)
 TRIM = {"push": (0.0, 0.0)}
 
 
