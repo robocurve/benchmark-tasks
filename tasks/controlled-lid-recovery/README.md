@@ -12,12 +12,12 @@ Dream-1 beta scored **0.0** after 1200 controls (60 simulated seconds, 447.2 sec
 
 ## Run and score
 
-Use Linux, an NVIDIA GPU and Python 3.12 with Isaac Sim 6.1.0.0, Isaac Lab 17.0.2, Isaac Lab-Arena 0.3.0, inspect-robots 0.60.0, inspect-robots-dream 0.1.0 and dreamlabs-client 1.0.14. The included `runtime/pyproject.toml` pins yam-arena to commit bd62771e60320433893bd1d2df0fc79b5ddcd6d1. Use a separate environment for each submitted task's bundled runtime. FFmpeg must be installed. Review and accept NVIDIA's applicable license yourself before setting `OMNI_KIT_ACCEPT_EULA=YES`; the runner does not accept it for you.
+Use Linux, an NVIDIA GPU and Python 3.12 with Isaac Sim 6.1.0.0, Isaac Lab 17.0.2, Isaac Lab-Arena 0.3.0, inspect-robots 0.60.0, inspect-robots-dream 0.1.0 and dreamlabs-client 1.0.14. The included `runtime/pyproject.toml` pins yam-arena to commit bd62771e60320433893bd1d2df0fc79b5ddcd6d1. Use a separate environment for each submitted task's bundled runtime. Install uv and FFmpeg. Exact native dependency source revisions are recorded in `dependency-revisions.json`; the checked dependency trees had no tracked modifications. Review and accept NVIDIA's applicable license yourself before setting `OMNI_KIT_ACCEPT_EULA=YES`; the runner does not accept it for you.
 
 From the repository root, in that environment:
 
 ```bash
-python -m pip install --no-deps -e tasks/controlled-lid-recovery/runtime
+uv pip install --no-deps -e tasks/controlled-lid-recovery/runtime
 python tasks/controlled-lid-recovery/run_demo.py tasks/controlled-lid-recovery /tmp/controlled-lid-recovery-demo --policy recovery --seed 0
 ```
 
