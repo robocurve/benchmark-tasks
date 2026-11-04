@@ -4,7 +4,7 @@ Free the screwdriver and hold it over the green marker with the left gripper 15 
 
 Release a tool from a spring jaw while retaining the tool and keeping a loose fixture in place. Opening the jaw and counterholding are possible strategies, not mandatory action sequences.
 
-The fixed scene, numerical score and reset are specified in `task.json`, `pilot.json` and `scene_inventory.json`. `setup.png` is the actual initial overview. The physics, controller trajectory, appearance assets and scoring implementation are byte-identical to the evaluated version; `evaluated-source-hashes.json` records those files. Submission documentation and the self-contained runner packaging are new. Asset licenses and attribution are retained under `assets/` and `SOURCES.json`.
+The fixed scene, numerical score and reset are specified in `task.json`, `pilot.json` and `scene_inventory.json`. `setup.png` is the actual initial overview. The physics, controller trajectory, appearance assets and scoring implementation are byte-identical to the evaluated version; `evaluated-source-hashes.json` records those files. Submission documentation and the self-contained runner packaging are new. Asset licenses and attribution are retained under `assets/` and `SOURCES.json`. Asset provenance files retain historical conversion notes; `evaluation.json` and `package-verification.json` provide current validation.
 
 ## Recorded trials
 
