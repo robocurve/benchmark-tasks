@@ -15,12 +15,12 @@ sys.path.insert(0, str(HERE))
 
 import numpy as np  # noqa: E402
 import pytest  # noqa: E402
-from benchkit import _RESET, _STEP  # noqa: E402
+from benchkit import _RESET, _STEP, _rotation  # noqa: E402
 from plantkit import HZ, UP, box_state, leaning  # noqa: E402
 from yam_arena import station, task_file  # noqa: E402
 from yam_arena.constants import FINGER_OPEN, PAD_TIP_PAST_TCP  # noqa: E402
 from yam_arena.demo import ArmPlan  # noqa: E402
-from yam_arena.task_file import Box, Cylinder  # noqa: E402
+from yam_arena.task_file import Box, Cylinder, ObjectState  # noqa: E402
 
 TASK = task_file.load(HERE / "load_no_more_than_the_rated_three_plates_on_the_shelf.py")
 M = TASK.module
@@ -48,6 +48,27 @@ def on_board(j, dx=0.0, dy=0.0, quat=UP):
 
 def in_tray_at(j):
     return plate_at(*M.TRAY_XY, M.TOP + j * T)
+
+
+def leaning_plate(edge_xz, deg, towards):
+    """A plate ``deg`` degrees off level, one end on the table, its underside resting on an edge at ``edge_xz`` (x, z)
+    and rising towards ``towards`` (+1: +x, -1: -x), in line with the rack in y. Its bounding box comes from its
+    rotated corners, as the simulator reports it. Also returns how far along the underside the edge is, and the foot
+    (where the underside meets the table)."""
+    th = np.radians(deg)
+    up = np.array([towards * np.cos(th), 0.0, np.sin(th)])  # along the plate, from its foot up to the edge
+    face = np.array([-towards * np.sin(th), 0.0, np.cos(th)])  # out of its top face
+    reach = (edge_xz[1] - M.TOP) / np.sin(th)
+    foot = np.array([edge_xz[0], M.RACK_XY[1], edge_xz[1]]) - reach * up
+    centre = foot + up * M.PLATE[0] / 2 + face * T / 2
+    quat = (0.0, float(np.sin(-towards * th / 2)), 0.0, float(np.cos(th / 2)))
+    rot = _rotation(quat)
+    assert np.allclose(rot[:, 2], face) and np.allclose(abs(rot[:, 0] @ up), 1.0)
+    corners = np.array([centre + rot @ (np.array([a, b, c]) * np.array(M.PLATE) / 2)
+                        for a in (-1, 1) for b in (-1, 1) for c in (-1, 1)])
+    state = ObjectState(pos=centre, quat_xyzw=np.array(quat), lin_vel=np.zeros(3), ang_vel=np.zeros(3),
+                        low=corners.min(0), high=corners.max(0))
+    return state, reach, foot
 
 
 def scene(rack=0, tray=0):
@@ -247,10 +268,32 @@ def test_plates_on_the_table_or_off_it_earn_nothing():
     assert M.grade(objects, False) == pytest.approx(0.6)
 
 
-def test_a_plate_leaning_on_the_rack_from_the_table_is_not_on_it():
-    objects = scene(3, 0)
-    objects["plate1"] = plate_at(M.RACK_XY[0] - M.BOARD[0] / 2 - 0.05, M.RACK_XY[1], M.TOP, quat=leaning(20.0))
-    assert "plate1" not in M.rack_load(objects) and M.grade(objects, False) == pytest.approx(0.6)
+def test_a_fourth_plate_leaning_from_the_table_onto_the_full_stack_is_an_overload():
+    deg = 50.0
+    far_end = M.RACK_XY[0] + M.PLATE[0] / 2
+    plate, reach, foot = leaning_plate((far_end, M.BOARD_TOP + 3 * T), deg, towards=-1)
+    assert reach < M.PLATE[0] and plate.low[2] == pytest.approx(M.TOP)  # on the table, resting on the stack's far edge
+    board_end = M.RACK_XY[0] + M.BOARD[0] / 2
+    assert M.TOP + (foot[0] - board_end) * np.tan(np.radians(deg)) > M.BOARD_TOP  # clear of the board's far corner
+    assert M.tilt_deg(plate) == pytest.approx(deg)
+    objects = {**scene(3, 1), "plate0": plate}  # three on the rack, one in the tray, the last leaning on the stack
+    assert len(M.on_rack(objects)) == 3 and len(M.in_tray(objects)) == 1 and len(M.rack_load(objects)) == 4
+    assert M.grade(objects, False) == 0.0
+    run([objects])
+    assert M.overloaded() and M.score(scene(3, 2)) == 0.0
+
+
+def test_a_plate_leaning_on_the_boards_edge_from_the_table_loads_the_rack_without_credit():
+    deg = 70.0
+    near_edge = M.RACK_XY[0] - M.BOARD[0] / 2
+    plate, reach, foot = leaning_plate((near_edge, M.BOARD_TOP), deg, towards=1)
+    assert reach < M.PLATE[0] and plate.low[2] == pytest.approx(M.TOP)  # on the table, resting on the board's edge
+    stack_start = M.RACK_XY[0] - M.PLATE[0] / 2
+    assert M.TOP + (stack_start - foot[0]) * np.tan(np.radians(deg)) > M.BOARD_TOP + 3 * T  # over a full stack
+    alone = {**scene(0, 0), "plate4": plate}
+    assert M.rack_load(alone) == ["plate4"] and M.on_rack(alone) == [] and M.grade(alone, False) == 0.0
+    full = {**scene(3, 0), "plate1": plate}
+    assert len(M.on_rack(full)) == 3 and len(M.rack_load(full)) == 4 and M.grade(full, False) == 0.0
 
 
 def test_a_plate_pushed_under_the_board_is_not_on_it():
@@ -340,8 +383,9 @@ def test_the_set_downs_land_counted_and_the_tray_releases_clear_its_walls():
         assert underside - (M.BOARD_TOP + j * T) == pytest.approx(M.SET_DOWN_ABOVE) and M.SET_DOWN_ABOVE < 0.008
     for j in range(len(M.TO_TRAY)):
         underside = M.tray_place_z(j) - M.GRIP_ABOVE_TOP - T
-        assert M.tray_place_z(j) - PAD_TIP_PAST_TCP >= M.TOP + M.TRAY_H + 0.005  # fingers open over the walls
-        assert 0.0 < underside - (M.TOP + j * T) <= 0.015  # a short drop
+        assert M.tray_place_z(j) - PAD_TIP_PAST_TCP >= M.TOP + M.TRAY_H + M.TRAY_CLEAR - 1e-9  # pads 1 cm over walls
+        assert 0.0 < underside - (M.TOP + j * T) <= 0.018 + 1e-9  # a short drop
+    assert M.TRAY_CLEAR >= 0.010
 
 
 def plan():
@@ -359,11 +403,18 @@ def test_every_demo_arm_is_reachable():
 
 def test_the_demo_fits_the_run_limit():
     assert plan().duration * HZ + 60 < RUN_LIMIT
-    assert plan().duration == pytest.approx(60.0)
+    assert plan().duration == pytest.approx(M.N_PLATES * 9.6 / M.SPEED + M.PARK_S) == pytest.approx(62.0)
 
 
 def test_the_demo_stays_on_the_left_arms_side():
     assert all(w.pos[1] >= 0.06 for w in M.demo()["left"])
+
+
+def test_the_demo_ends_parked_clear_of_the_tray():
+    *_, lift, park = M.demo()["left"]
+    assert lift.pos == (M.TRAY_XY[0], M.TRAY_XY[1], M.TRAVEL_Z) and lift.finger == FINGER_OPEN  # straight up first
+    assert park.pos == M.PARK and park.pos[2] == M.TRAVEL_Z and park.finger == FINGER_OPEN
+    assert park.pos[1] - (M.TRAY_XY[1] + M.TRAY_INNER[1] / 2 + M.TRAY_WALL) >= 0.10  # outboard, off the tray
 
 
 # -- a kinematic replay of the demo ------------------------------------------------------------------------------------

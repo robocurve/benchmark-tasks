@@ -16,7 +16,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 
 from benchkit import on_reset, on_step  # noqa: E402
 from plantkit import GREY, WHITE, Clock, distance_xy, over, tilt_deg  # noqa: E402
-from yam_arena.constants import PAD_TIP_PAST_TCP  # noqa: E402
+from yam_arena.constants import FINGER_OPEN, PAD_TIP_PAST_TCP  # noqa: E402
 from yam_arena.demo import Waypoint, pick_place_waypoints  # noqa: E402
 from yam_arena.task_file import TABLE_TOP, Box, Cylinder  # noqa: E402
 
@@ -35,7 +35,7 @@ DARK_BLUE = (0.13, 0.24, 0.56)
 WOOD = (0.72, 0.55, 0.36)
 
 # -- the plates: one pile in front of the left arm, long side along x (away from the arms) -----------------------------
-PLATE = (0.18, 0.062, 0.024)  # m: long (x), wide (y, across the fingers), thick
+PLATE = (0.18, 0.060, 0.024)  # m: long (x), wide (y, across the fingers: the 2-6 cm a straight-down grip takes), thick
 PLATE_MASS = 0.12  # kg, painted wood
 N_PLATES = 5
 PILE_XY = (0.22, 0.225)
@@ -109,10 +109,22 @@ def _on_board_footprint(state) -> bool:
     return bool(state.low[0] < x + hx and state.high[0] > x - hx and state.low[1] < y + hy and state.high[1] > y - hy)
 
 
-def _landed(plates: dict, base_z: float, on_base, member) -> list[str]:
-    """Plates that rest on a base (bottom within LANDED_WITHIN of ``base_z``, where ``on_base`` accepts it) or on a
-    plate already found (bottom within LANDED_WITHIN of its top, their footprints overlapping), counting only plates
-    ``member`` accepts. Built up from the base, so a pile counts from the bottom."""
+def _rests(p, z: float) -> bool:
+    """The plate's bottom is within LANDED_WITHIN of a surface at height ``z``: set down on it."""
+    return bool(abs(p.low[2] - z) <= LANDED_WITHIN)
+
+
+def _bears(p, z: float) -> bool:
+    """The plate reaches from at or below LANDED_WITHIN over a surface at height ``z`` to above that: set down on it,
+    or leaning on it from lower down (one end on the table, the other on the board or the stack)."""
+    return bool(p.low[2] <= z + LANDED_WITHIN < p.high[2])
+
+
+def _landed(plates: dict, base_z: float, on_base, member, touches=_rests) -> list[str]:
+    """Plates that touch a base at ``base_z`` (where ``on_base`` accepts them) or a plate already found (at its top,
+    their footprints overlapping), counting only plates ``member`` accepts. ``touches(plate, z)`` decides contact with
+    a surface at height z: by default the plate's bottom within LANDED_WITHIN of it. Built up from the base, so a
+    pile counts from the bottom."""
     found: list[str] = []
     grew = True
     while grew:
@@ -120,9 +132,8 @@ def _landed(plates: dict, base_z: float, on_base, member) -> list[str]:
         for name, p in plates.items():
             if name in found or not member(p):
                 continue
-            on_floor = on_base(p) and abs(p.low[2] - base_z) <= LANDED_WITHIN
-            on_plate = any(abs(p.low[2] - plates[n].high[2]) <= LANDED_WITHIN and _overlap_xy(p, plates[n])
-                           for n in found)
+            on_floor = on_base(p) and touches(p, base_z)
+            on_plate = any(_overlap_xy(p, plates[n]) and touches(p, plates[n].high[2]) for n in found)
             if on_floor or on_plate:
                 found.append(name)
                 grew = True
@@ -134,8 +145,10 @@ def _plates(objects) -> dict:
 
 
 def rack_load(objects) -> list[str]:
-    """Every plate whose weight is on the rack: resting on the board or on a plate that is, however it lies."""
-    return _landed(_plates(objects), BOARD_TOP, _on_board_footprint, lambda p: True)
+    """Every plate whose weight is on the rack, however it lies: any part of it over the board or over a plate that
+    loads the rack, reaching from within LANDED_WITHIN above that surface's top (or from lower down) to above it. So a
+    plate set down on the board or the stack counts, and so does one leaning on them from the table."""
+    return _landed(_plates(objects), BOARD_TOP, _on_board_footprint, lambda p: True, touches=_bears)
 
 
 def on_rack(objects) -> list[str]:
@@ -216,12 +229,14 @@ def distance(objects) -> float:
 GRIP_BELOW_TOP = 0.012  # m: the pad tips grip the plate's sides this far below its top, half its thickness
 GRIP_ABOVE_TOP = PAD_TIP_PAST_TCP - GRIP_BELOW_TOP  # the TCP sits 1 mm above the gripped plate's top
 SET_DOWN_ABOVE = 0.006  # m: released with the plate's underside this far above what it lands on
-TRAY_CLEAR = 0.005  # m: the pad tips at least this far above the tray's walls when the fingers open over it
+TRAY_CLEAR = 0.010  # m: the pad tips at least this far above the tray's walls when the fingers open over it
 TRAVEL_Z = TOP + 0.170  # a carried plate's underside 14.5 cm up: clear of the full rack and the pile
 SPEED = 0.8  # pick_place pace: 12 s per plate
 PICK_ORDER = tuple(reversed(PLATE_NAMES))  # top of the pile first
 TO_RACK = PICK_ORDER[:RATED]
 TO_TRAY = PICK_ORDER[RATED:]
+PARK = (TRAY_XY[0], TRAY_XY[1] + 0.16, TRAVEL_Z)  # 16 cm outboard of the tray, so the top camera sees it, unblocked
+PARK_S = 2.0
 # The arm settles a few millimetres off its target; the open-loop demo can aim off by that much (m).
 TRIM = {"pick": (0.0, 0.0), "rack": (0.0, 0.0), "tray": (0.0, 0.0)}
 
@@ -238,7 +253,7 @@ def rack_place_z(j: int) -> float:
 
 def tray_place_z(j: int) -> float:
     """TCP height to let the ``j``-th plate go in the tray: just above the ``j`` already there, and high enough that
-    the opening fingers pass over the tray's walls (the first drops 1.3 cm)."""
+    the opening fingers pass 1 cm over the tray's walls (the first drops 1.8 cm)."""
     natural = TOP + (j + 1) * PLATE[2] + GRIP_ABOVE_TOP + SET_DOWN_ABOVE
     return max(natural, TOP + TRAY_H + TRAY_CLEAR + PAD_TIP_PAST_TCP)
 
@@ -255,10 +270,11 @@ def _left_plan() -> list[Waypoint]:
         else:
             place = (TRAY_XY[0] + tx, TRAY_XY[1] + ty, tray_place_z(k - RATED))
         plan += pick_place_waypoints(pick, place, travel_z=TRAVEL_Z, speed=SPEED)
+    plan.append(Waypoint(PARK_S, PARK, FINGER_OPEN, "park clear of the tray"))  # after the lift off the last plate
     return plan
 
 
 def demo():
     """Left arm: the top three plates of the pile onto the rack, stacked, then the last two into the overflow tray,
-    stacked. The right arm stays at its ready pose."""
+    stacked, then park outboard of the tray. The right arm stays at its ready pose."""
     return {"left": _left_plan()}
