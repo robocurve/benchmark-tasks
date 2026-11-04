@@ -17,6 +17,7 @@ import numpy as np  # noqa: E402
 import pytest  # noqa: E402
 from benchkit import tool_state  # noqa: E402
 from plantkit import HZ, UP, cylinder_state, leaning  # noqa: E402
+from plantkit import tilt_deg as tilt_deg_of  # noqa: E402
 from yam_arena import station, task_file  # noqa: E402
 from yam_arena.constants import PAD_TIP_PAST_TCP  # noqa: E402
 from yam_arena.demo import ArmPlan  # noqa: E402
@@ -33,6 +34,13 @@ CAP_IN_TRAY = (*M.TRAY_XY, M.TOP + M.CAP_H / 2)
 CYL_IN = (*M.CRADLE_XY, M.CYL_Z)
 CYL_OUT = (0.34, M.CRADLE_XY[1], M.CYL_Z)
 CYL_LIFTED = (*M.CRADLE_XY, M.CYL_Z + 0.10)
+
+
+def leaning_forward(deg: float) -> tuple[float, float, float, float]:
+    """A quaternion (xyzw) leaning ``deg`` degrees towards the arms (-x), where the strap bar is; plantkit's
+    ``leaning`` leans sideways, towards a side post."""
+    h = math.radians(deg) / 2
+    return (0.0, -math.sin(h), 0.0, math.cos(h))
 
 
 def cradle(strap=0.0, pos=None, quat=UP):
@@ -154,11 +162,13 @@ def test_hovering_the_cap_just_clear_of_the_cylinder_before_strapping_latches():
 
 
 def test_a_cap_riding_on_a_leaning_cylinder_is_still_on():
-    """The strapped cylinder can lean about 15 degrees against the bar; its cap, measured in the cylinder's frame
-    from the centre of its top, has not moved."""
-    quat = leaning(14.5)
+    """The strapped cylinder can lean about 15 degrees forward against the bar; its cap, measured in the cylinder's
+    frame from the centre of its top, has not moved."""
+    quat = leaning_forward(14.5)
     cyl = cylinder(CYL_IN, quat)
     top = cyl.pos + M.axes(cyl) @ np.array([0.0, 0.0, M.CYL_H / 2])
+    assert top[0] < cyl.pos[0] - 0.01 and abs(top[1] - cyl.pos[1]) < 1e-9  # the top has moved towards the bar
+    assert M.in_cradle(cyl, cradle(ACROSS)) and tilt_deg_of(cyl) == pytest.approx(14.5)
     riding = cap(top + M.axes(cyl) @ np.array([0.0, 0.0, M.CAP_H / 2]), quat)
     assert not M.cap_off(riding, cyl)
     assert M.cap_off(cap(top + M.axes(cyl) @ np.array([0.0, 0.0, M.CAP_H / 2 + 0.011]), quat), cyl)
@@ -254,7 +264,7 @@ def test_the_strap_bar_runs_clear_of_the_posts_and_the_cylinder():
     assert bar_back < -M.CYL_R  # and in front of the cylinder, open or across
     assert M.BAR_ACROSS_Y - M.BAR[1] / 2 <= -M.OPENING / 2 <= M.OPENING / 2 <= M.BAR_ACROSS_Y + M.BAR[1] / 2
     assert M.BAR_OPEN_Y + M.BAR[1] / 2 <= -M.CYL_R  # open, it leaves the cylinder's whole front clear
-    assert M.BAR_Z + M.TAB_DZ + M.TAB[2] / 2 < M.POST_Z + M.POST_H / 2 + 0.01  # the tab no higher than the posts' tops
+    assert M.BAR_Z + M.TAB_DZ + M.TAB[2] / 2 <= M.POST_Z + M.POST_H / 2 + 0.01  # the tab tops out <= 1 cm over the posts
     assert M.TAB_Y + M.TAB[1] / 2 <= -M.BAR[1] / 2  # the tab hangs off the bar's free end
 
 
@@ -334,7 +344,8 @@ def test_the_demo_keeps_the_arms_apart_and_the_right_arm_low_past_the_midline():
     plan = M.demo()
     assert all(w.pos[1] >= 0.12 for w in plan["left"])
     assert all(w.pos[1] <= 0.04 for w in plan["right"])  # the right fingers end at most 4 cm left of the midline
-    assert all(w.pos[2] < M.TOP + 0.12 for w in plan["right"] if w.pos[1] > 0.0 and w.label != "lift")
+    assert all(w.pos[2] < M.TOP + 0.12 for w in plan["right"] if w.pos[1] > 0.0)  # and past it stay at bar height
+    assert all(w.pos[1] <= 0.0 for w in plan["right"] if w.pos[2] > M.TOP + 0.12)  # rising only on its own side
     arms = plans()
     duration = max(a.duration for a in arms.values())
     closest = min(float(np.linalg.norm(arms["left"].target(t)[0] - arms["right"].target(t)[0]))

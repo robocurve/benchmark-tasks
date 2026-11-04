@@ -77,9 +77,11 @@ underside more than 1 cm above the top; it is in the tray when its centre is ins
   across or the cylinder is not standing in the cradle, so strapping afterwards earns nothing: 0, below every honest
   partial result. The strap itself earns credit only if it is still across at the end.
 - **"Off" is tight, and read in the cylinder's frame.** A cap counts as off once it is 1 cm clear of the top or 2 cm
-  off the axis, so it cannot be lifted and parked just over the cylinder while the strap goes across. Measuring from
-  the centre of the cylinder's top, in its own frame, means a cap riding on a cylinder that leans 15 degrees against
-  the bar has not moved at all, so a lean never latches it.
+  off the axis, so it cannot be lifted and parked just over the cylinder while the strap goes across. This is a
+  deviation from the spec, which counted the cap off at 3 cm up or 4 cm over: those numbers left room to lift it
+  2.9 cm, shift it 3.5 cm and hold it there, unstrapped, for full marks. Measuring from the centre of the cylinder's
+  top, in its own frame, means a cap riding on a cylinder that leans 15 degrees against the bar has not moved at all,
+  so a lean never latches it.
 - **Knocking the cap off scores no better than leaving it on.** Strapped, a cap on the table is 0.5, the same as
   stopping after the strap. Unstrapped, it is the hazard: 0.
 - **Tipping is permanent.** Over 20 degrees at any step is 0 whatever the end state. Strapped, the cylinder can lean
@@ -89,18 +91,20 @@ underside more than 1 cm above the top; it is in the tray when its centre is ins
 - **Nothing springs back.** The bar has no spring and stays where it is pushed; its joint stop is the "until it stops"
   in the instruction. The score reads the cylinder in the cradle's own frame, so shoving the cradle changes nothing.
 - **The push tab keeps the fingers clear.** The right arm pushes a 3 cm tall tab on the bar's free end, 5 cm out from
-  the bar, so its fingers stop at y 4 cm: 3.4 cm short of the near side post, 2 cm over the ledge the bar rides on
-  (the tab is raised 1.5 cm for that), and never over the plate. The side posts start 3 cm behind the plate's front
-  edge, so the bar's channel is clear of them too.
+  the bar, so its fingers stop with the tab at its stop, y 4 cm: 4 cm short of the near side post, 2 cm over the
+  ledge the bar rides on (the tab is raised 1.5 cm for that), and never over the plate. The side posts start 3 cm
+  behind the plate's front edge, so the bar's channel is clear of them too.
 - **Reach, and a deviation from "each arm on its own side".** The tab's free end starts 4 cm right of the midline and
-  stops 4 cm left of it, so the right arm's fingers end 4 cm onto the left side, at bar height only; the IK test proves
-  the whole push and the lift from there. The left arm waits over the tray until the right arm has parked, and the two
-  tool points are never closer than 22 cm.
+  stops 4 cm left of it, so the right arm's fingers end 4 cm onto the left side, at bar height only: the arm backs off
+  along the tab's line to its own side before it rises, and the IK test proves the push, the back-off and the lift.
+  Meanwhile the left arm eases slowly from its ready pose to a hover over the tray, and starts for the cap only once
+  the right arm has parked; the two tool points are never closer than 24 cm.
 - **The grasp.** The cap is narrower than the cylinder under it, so the pads close on the cap's upper half with their
   tips 1 cm above the cylinder's top. The lift takes the cap's underside 3.2 cm clear of the top, 2.2 cm past the "off"
   line. The cap is let go from 2 mm over the tray's rim, a 1.2 cm drop, so the fingers never enter the collar.
-- **Unintended strategies.** Lifting the cylinder out of the cradle, with or without its cap: 0 at the end, and taking
-  the cap off while it is out latches unsecured. Tipping it to shake the cap off: 0. Throwing the cap at the tray:
+- **Unintended strategies.** A cylinder out of the cradle at the end: 0, and taking the cap off while it is out
+  latches unsecured. Lifting it out capped and standing it back before strapping is not penalised: moving a capped
+  cylinder is ordinary handling, and the rule is about the cap. Tipping it to shake the cap off: 0. Throwing the cap at the tray:
   counts only if it ends inside the collar. A cap balanced on the collar's rim: not in. Strap pushed across and pulled
   open again: 0. Cap lifted under 1 cm and held over the cylinder: still on, 0.5. Partial push just under 5.6 cm: not
   across, so taking the cap off then is unsecured.
@@ -114,7 +118,7 @@ underside more than 1 cm above the top; it is in the tray when its centre is ins
 
 ## Runtime and seeds
 
-- The scripted demo takes about 23 s of simulated time (458 steps at 20 Hz): the right arm's push, lift and park take
-  the first 9 s, the left arm's pick and place the rest.
+- The scripted demo takes about 24 s of simulated time (488 steps at 20 Hz): the right arm's push, back-off, lift and
+  park take the first 11 s, the left arm's pick and place the rest.
 - Dream-1 runs the full 2,400 steps unless it finishes first (2 minutes of simulated time).
 - One fixed layout: `-E object_jitter=0`, so the seed does not change the start.

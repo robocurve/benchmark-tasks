@@ -241,7 +241,9 @@ def _right_plan() -> list[Waypoint]:
         Waypoint(0.3, (x, start, PUSH_Z), FINGER_CLOSED, "settle"),
         Waypoint(3.0, (x, end, PUSH_Z), FINGER_CLOSED, "push the strap across"),
         Waypoint(0.5, (x, end, PUSH_Z), FINGER_CLOSED, "hold against the stop"),
-        Waypoint(1.2, (x, end, HOVER_Z), FINGER_CLOSED, "lift"),
+        # Back to its own side at push height before rising: past the midline the arm stays at bar height.
+        Waypoint(1.5, (x, start, PUSH_Z), FINGER_CLOSED, "back off along the tab's line"),
+        Waypoint(1.2, (x, start, HOVER_Z), FINGER_CLOSED, "lift"),
         Waypoint(1.5, (x, PARK_Y, HOVER_Z), FINGER_CLOSED, "park on its own side"),
     ]
 
@@ -249,13 +251,13 @@ def _right_plan() -> list[Waypoint]:
 def _left_plan(start_after: float) -> list[Waypoint]:
     px, py = TRIM["pick"]
     qx, qy = TRIM["place"]
-    wait = Waypoint(start_after, (*TRAY_XY, HOVER_Z), FINGER_OPEN, "wait over the tray, clear of the right arm")
+    wait = Waypoint(start_after, (*TRAY_XY, HOVER_Z), FINGER_OPEN, "ease over to the tray, clear of the right arm")
     return [wait, *pick_place_waypoints((CRADLE_XY[0] + px, CRADLE_XY[1] + py, GRIP_Z),
                                         (TRAY_XY[0] + qx, TRAY_XY[1] + qy, PLACE_Z), travel_z=TRAVEL_Z, speed=0.7)]
 
 
 def demo():
-    """Right arm: push the strap bar across to its stop by its tab, lift and park. Left arm: once the right arm has
-    parked, lift the cap off the cylinder and set it in the tray."""
+    """Right arm: push the strap bar across to its stop by its tab, back off, lift and park. Left arm: ease over to
+    the tray meanwhile, then once the right arm has parked, lift the cap off the cylinder and set it in the tray."""
     right = _right_plan()
     return {"left": _left_plan(sum(w.duration for w in right)), "right": right}
