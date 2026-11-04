@@ -3,14 +3,14 @@ in the middle of the table, between the arms. Its front face is 26 cm from the t
 straight ahead of the robot, at x = +0.91 m). Slide the box toward that edge, as close as you can, without any
 part of it sticking out past the edge.
 
-Scoring (at the end of the episode): the gap is the shortest distance from the box to the plane of the table's
-far edge. Any overhang (gap below 0), a box that isn't resting flat on the table top, or a box off the table
-scores 0. Otherwise the closer the better: 1.0 within 1 cm, 0.75 within 2 cm, 0.5 within 4 cm, 0.25 within
-8 cm, else 0. There is no early end on success: the episode runs to its limit (or until the policy stops), so
-the box can still be pushed over the edge after reaching full score.
+Scoring (at the end of the episode): 0 if any part of the box is past any edge of the table, or if the box is not
+flat on the table top. Otherwise the gap is the average distance from the far edge to the box's two corners
+nearest it, and the score is linear in the gap: 0 at the starting gap (26 cm) and 1.0 at 1 cm or less, so each
+centimetre is worth 0.04. Run with -E object_jitter=0: the code uses the fixed starting gap. There is no early
+end on success, so the box can still be pushed over the edge after it reaches full score.
 
 Run it:  inspect-robots run --embodiment yam_arena --policy yam_scripted -E task=slide_cardboard_box.py \\
-           -E object_jitter=0 --scorer task_score --grader none --max-steps 1200 \\
+           -E object_jitter=0 --scorer task_score --grader none --max-steps 2400 \\
            --instruction "Slide the cardboard box as close as you can to the far edge of the table without letting any part of it hang over the edge."
 """
 
@@ -18,6 +18,7 @@ import numpy as np
 
 from yam_arena.constants import FINGER_CLOSED
 from yam_arena.demo import Waypoint
+from yam_arena.station import TABLE_CENTER, TABLE_SIZE
 from yam_arena.task_file import TABLE_TOP, Box
 
 SCENE = "station"
@@ -27,14 +28,16 @@ SCORE_OVER = "end"
 CARDBOARD = (0.62, 0.48, 0.32)
 
 # ---- geometry (m) ----
-EDGE_X = 0.91  # the station table's far edge (table spans x -0.19..0.91)
+TABLE_LOW = np.subtract(TABLE_CENTER[:2], np.divide(TABLE_SIZE[:2], 2))  # x -0.19, y -0.65
+TABLE_HIGH = np.add(TABLE_CENTER[:2], np.divide(TABLE_SIZE[:2], 2))  # x 0.91, y 0.65
+EDGE_X = float(TABLE_HIGH[0])  # the far edge, straight ahead of the arms
 BOX_SIZE = (0.50, 0.40, 0.20)  # x (towards the edge), y (across), z
 BOX_MASS = 1.0  # kg: an empty corrugated moving box
 BOX_POS = (0.40, 0.0, TOP + BOX_SIZE[2] / 2)  # middle of the table; table centre is x 0.36
-START_GAP = EDGE_X - (BOX_POS[0] + BOX_SIZE[0] / 2)  # 0.26
+START_GAP = EDGE_X - (BOX_POS[0] + BOX_SIZE[0] / 2)  # 0.26; score 0 here, so run with -E object_jitter=0
 
 # ---- thresholds ----
-TIERS = ((0.01, 1.0), (0.02, 0.75), (0.04, 0.5), (0.08, 0.25))  # gap at most (m) -> score
+FULL_GAP = 0.01  # score 1.0 at an average gap of 1 cm or less; 0 at START_GAP or more, linear in between
 ON_TABLE_TOL = 0.01  # the box's bottom within 1 cm of the table top
 MAX_TILT_DEG = 10.0  # the box's top face within 10 deg of level
 
@@ -43,10 +46,32 @@ OBJECTS = [
 ]
 
 
-def gap(objects):
-    """Shortest distance (m) from any part of the box to the plane of the table's far edge; negative is
-    overhang. The world-aligned bounding box includes the corners of a turned box."""
-    return float(EDGE_X - objects["cardboard_box"].high[0])
+def _rotation(quat_xyzw) -> np.ndarray:
+    x, y, z, w = quat_xyzw
+    return np.array(
+        [
+            [1 - 2 * (y * y + z * z), 2 * (x * y - z * w), 2 * (x * z + y * w)],
+            [2 * (x * y + z * w), 1 - 2 * (x * x + z * z), 2 * (y * z - x * w)],
+            [2 * (x * z - y * w), 2 * (y * z + x * w), 1 - 2 * (x * x + y * y)],
+        ]
+    )
+
+
+def overhang(objects) -> bool:
+    """Any part of the box is past any of the table's four edges. The world-aligned bounding box includes the
+    corners of a turned box."""
+    box = objects["cardboard_box"]
+    return bool(np.any(box.low[:2] < TABLE_LOW) or np.any(box.high[:2] > TABLE_HIGH))
+
+
+def gap(objects) -> float:
+    """Average distance (m) from the plane of the table's far edge to the box's two corners nearest it, seen from
+    above. Negative values mean the corners are past the edge."""
+    box = objects["cardboard_box"]
+    hx, hy = BOX_SIZE[0] / 2, BOX_SIZE[1] / 2
+    corners = np.array([[sx * hx, sy * hy, 0.0] for sx in (-1, 1) for sy in (-1, 1)])
+    xs = box.pos[0] + corners @ _rotation(box.quat_xyzw)[0]
+    return float(EDGE_X - np.sort(xs)[-2:].mean())
 
 
 def _tilt_deg(quat_xyzw):
@@ -60,15 +85,11 @@ def _flat_on_table(box):
 
 
 def score(objects):
-    """0 for any overhang or a box not flat on the table top; otherwise by the gap to the edge."""
-    box = objects["cardboard_box"]
-    g = gap(objects)
-    if g < 0.0 or not _flat_on_table(box):
+    """0 for any overhang or a box not flat on the table top. Otherwise linear in the gap, clipped to 0..1:
+    0 at START_GAP, 1.0 at FULL_GAP or less."""
+    if overhang(objects) or not _flat_on_table(objects["cardboard_box"]):
         return 0.0
-    for limit, value in TIERS:
-        if g <= limit:
-            return value
-    return 0.0
+    return float(np.clip((START_GAP - gap(objects)) / (START_GAP - FULL_GAP), 0.0, 1.0))
 
 
 # No success(): it would end the episode early with 1.0 and spare the robot the risk of pushing on past the
