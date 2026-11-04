@@ -1,10 +1,10 @@
 """On the station table, in front of the left arm: a white feed tray holding three cubes, two red and one blue, and two
-open bins beyond it, a red one and a blue one. In front of the right arm: a white tank, open at the top, with a strip
-of eight level segments up its front face that lights from the bottom as the tank fills, and a brass inlet valve block
-nearer the arm with a dark handle that slides along a slot in the block's top. At the near end of the slot (toward
-the arm) the inlet is open; pushed to the far end (toward the tank) it is closed, and a white line across the block
-marks the middle of the slot. A grey lamp on a short base stands beyond the tank and to its right, and a dark mat
-lies around the tank's foot.
+open bins beyond it, a red one and a blue one. On the right-hand half of the table: a white tank, open at the top,
+standing a little right of the midline, with a strip of eight level segments up its front face that lights from the
+bottom as the tank fills; and, in front of the right arm, a brass inlet valve block with a dark handle that slides
+along a slot in the block's top. At the near end of the slot (toward the arm) the inlet is open; pushed to the far end
+(toward the tank) it is closed, and a white line across the block marks the middle of the slot. A grey lamp on a short
+base stands beyond the tank and to its right, and a dark mat lies under the tank and around its foot.
 
 Run it:  inspect-robots run --embodiment yam_arena -E task=close_the_inlet_when_the_high_level_alarm_comes_on.py --scorer task_score ...
 """
@@ -51,7 +51,7 @@ BIN_H = 0.030
 BIN_WALL = 0.004
 IN_BIN_BOTTOM = TOP + 0.015  # a cube counts with its underside under this: on the bin's floor, not on another cube
 
-# -- the tank, its level strip, the alarm lamp and the spill mat, in front of the right arm ----------------------------
+# -- the tank, its level strip, the alarm lamp and the spill mat, right of the midline --------------------------------
 TANK_XY = (0.30, -0.08)  # 6 cm nearer the midline than the valve's row, so the right wrist camera clears its corner
 TANK_INNER = 0.12
 TANK_WALL = 0.006
@@ -66,11 +66,12 @@ PITCH = SEGMENT[2] + GAP  # 1.8 cm of depth per segment
 DEPTH = SEGMENTS * PITCH  # 14.4 cm: eight segments reach the rim
 TANK_H = FLOOR_TOP - TOP + DEPTH  # the walls, 14.9 cm
 LEVEL = Level("tank_level", SEGMENTS)
-LAMP_XY = (0.38, -0.20)  # beyond the tank and to its right, clear of its corner and of the mat
+LAMP_XY = (0.38, -0.21)  # beyond the tank and to its right, clear of its corner and of the mat
 LAMP_BASE = (0.056, 0.056, 0.020)
 LAMP_BOX = (0.050, 0.050, 0.030)
 LAMP = Lamp("alarm_lamp", {"off": LAMP_OFF, "red": LAMP_RED}, "off")
-MAT = 0.15  # square, under the tank; it stays right of the midline
+MAT_XY = (0.30, -0.09)  # offset to the tank's right, so the mat stays right of the midline
+MAT_SIZE = (0.19, 0.16)  # a 2.4 to 2.9 cm border round the tank on three sides, wide enough to show in the frames
 MAT_DRY = STRIP_DARK
 MAT_WET = WATER_BLUE
 
@@ -126,7 +127,7 @@ OBJECTS = [
       for name, (colour, xy) in CUBES.items()),
     *(w for colour in ("red", "blue")
       for w in _walls(f"{colour}_bin", BIN_XY[colour], BIN_INNER[colour], BIN_H, BIN_WALL, COLOUR[colour])),
-    Box("spill_mat", pos=(*TANK_XY, TOP + MAT_T / 2), size=(MAT, MAT, MAT_T), color=MAT_DRY),
+    Box("spill_mat", pos=(*MAT_XY, TOP + MAT_T / 2), size=(*MAT_SIZE, MAT_T), color=MAT_DRY),
     *_walls("tank", TANK_XY, (TANK_INNER, TANK_INNER), TANK_H, TANK_WALL, WHITE),
     Box("tank_floor", pos=(*TANK_XY, TOP + MAT_T + FLOOR_T / 2), size=(TANK_INNER, TANK_INNER, FLOOR_T),
         color=WATER_BLUE),
