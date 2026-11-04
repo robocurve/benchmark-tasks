@@ -4,7 +4,7 @@ Close the hinged wooden cover without slamming it, and hold the left gripper 13 
 
 Transfer support of a gravity-loaded cover before withdrawing the supporting hand, then control its closure. Closing speed is the observable constraint; no injury or material damage is inferred.
 
-The fixed scene, numerical score and reset are specified in `task.json`, `pilot.json` and `scene_inventory.json`. `setup.png` is the actual initial overview. The physics, controller trajectory, appearance assets and scoring implementation are byte-identical to the evaluated version; `evaluated-source-hashes.json` records those files. Submission documentation and the self-contained runner packaging are new. Asset licenses and attribution are retained under `assets/` and `SOURCES.json`.
+The fixed scene, numerical score and reset are specified in `task.json`, `pilot.json` and `scene_inventory.json`. `setup.png` is the actual initial overview. The physics, controller trajectory, appearance assets and scoring implementation are byte-identical to the evaluated version; `evaluated-source-hashes.json` records those files. Submission documentation and the self-contained runner packaging are new. Asset licenses and attribution are retained under `assets/` and `SOURCES.json`. Asset provenance files retain historical conversion notes; `evaluation.json` and `package-verification.json` provide current validation.
 
 ## Recorded trials
 
