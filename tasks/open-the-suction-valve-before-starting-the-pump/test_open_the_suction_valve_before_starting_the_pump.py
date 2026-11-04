@@ -16,7 +16,7 @@ sys.path.insert(0, str(HERE))
 
 import numpy as np  # noqa: E402
 import pytest  # noqa: E402
-from benchkit import tool_state  # noqa: E402
+from benchkit import Tool, tool_state  # noqa: E402
 from plantkit import HZ, leaning  # noqa: E402
 from yam_arena import station, task_file  # noqa: E402
 from yam_arena.demo import ArmPlan  # noqa: E402
@@ -33,12 +33,13 @@ GREEN_S = M.FLOW_S
 # The gripper, from its URDF, straight down with the fingers closing along y: the pads are 13 mm wide in y and 4 cm
 # across in x; the finger links widen to 8.2 cm across in x from 4 cm above the TCP; the finger carriages span the pad
 # gap plus 48 mm from 5 cm above the TCP; the housing (10 cm in x, 6.8 cm in y) starts 7 cm above the TCP. The wrist
-# camera sits 7 cm ahead (+x) of the TCP, 6 to 7.5 cm above the pad tips.
+# camera sits 7 cm ahead (+x) of the TCP, 6 to 7.5 cm above the pad tips, about 2.4 cm deep in x and 5 cm across in y.
 PAD_HALF_Y, PAD_HALF_X = 0.0065, 0.020
 LINK_HALF_X, LINK_ABOVE_TCP = 0.041, 0.040
 CARRIAGE_HALF_Y, CARRIAGE_ABOVE_TCP = 0.024, 0.050
 HOUSING_HALF_Y, HOUSING_ABOVE_TCP = 0.034, 0.070
-CAMERA_AHEAD_X, CAMERA_ABOVE_TIPS, CAMERA_HALF_Y = 0.070, 0.060, 0.025
+CAMERA_AHEAD_X, CAMERA_ABOVE_TIPS, CAMERA_TOP_ABOVE_TIPS = 0.070, 0.060, 0.075
+CAMERA_HALF_X, CAMERA_HALF_Y = 0.012, 0.025
 TIPS = 0.013  # pad tips below the TCP
 
 
@@ -124,8 +125,8 @@ def test_the_handle_stays_where_it_is_pushed_and_the_button_springs_back():
     [
         (OPEN, "running", True, 1.0),  # valve open, started, light green: the safe finish
         (OPEN, "running", False, 0.5),  # started properly, light not yet green at the end
-        (HALF, "running", True, 0.5),  # light green, but the valve eased back partly shut
-        (HALF, "running", False, 0.5),
+        (HALF, "running", True, 0.0),  # light green, but the valve eased back under 70 %: a part-shut suction
+        (HALF, "running", False, 0.0),
         (OPEN, "stopped", False, 0.3),  # valve open, pump never started
         (HALF, "stopped", False, 0.0),  # valve pushed, not far enough to count as open
         (SHUT, "stopped", False, 0.0),  # did nothing
@@ -154,9 +155,10 @@ def test_a_moved_or_tipped_valve_scores_zero(state, flowing):
     assert M.grade(scene(OPEN, quat=leaning(90.0)), p) == 0.0
 
 
-def test_a_dry_run_scores_below_every_honest_partial():
+def test_a_dry_run_or_a_part_shut_suction_scores_below_every_honest_partial():
     dry = max(M.grade(scene(h), pump("dry_run")) for h in (SHUT, HALF, OPEN))
-    assert dry == 0.0
+    throttled = max(M.grade(scene(HALF), pump("running", green)) for green in (False, True))
+    assert dry == 0.0 and throttled == 0.0
     assert dry < M.grade(scene(OPEN), pump("stopped")) < M.grade(scene(OPEN), pump("running")) < M.grade(
         scene(OPEN), pump("running", True))
 
@@ -167,9 +169,9 @@ def test_the_thresholds_are_the_stated_numbers():
     assert M.grade(scene(at + 0.0001), pump()) == pytest.approx(0.3)
     assert M.grade(scene(at - 0.0001), pump()) == 0.0
     assert M.grade(scene(at + 0.0001), pump("running", True)) == pytest.approx(1.0)
-    assert M.grade(scene(at - 0.0001), pump("running", True)) == pytest.approx(0.5)
-    assert M.grade(scene(below + 0.0001), pump("running", True)) == pytest.approx(0.5)
-    assert M.grade(scene(below - 0.0001), pump("running", True)) == 0.0
+    assert M.grade(scene(at - 0.0001), pump("running", True)) == 0.0
+    assert M.grade(scene(at + 0.0001), pump("running", False)) == pytest.approx(0.5)
+    assert M.grade(scene(at - 0.0001), pump("running", False)) == 0.0
     assert M.FLOW_STEPS == 2.0 * HZ
     assert M.MOVED_M == 0.03 and M.TIPPED_DEG == 20.0
 
@@ -248,14 +250,16 @@ def test_shutting_the_valve_while_running_runs_the_pump_dry(green):
     assert p.state == "dry_run" and M.grade(scene(OPEN), p) == 0.0
 
 
-def test_easing_the_valve_partly_shut_while_running_is_not_a_dry_run_but_not_in_service():
+def test_a_running_pump_with_its_valve_eased_back_under_70_percent_at_the_end_scores_zero():
+    """Between 30 % and 70 % the lamp stays green (it isn't a dry run), but the end state scores 0, the same as one."""
     p = fresh()
     watch(OPEN, seconds=0.5)
     press(OPEN)
     watch(HALF, seconds=GREEN_S + 1.0)
     assert p.state == "running" and p.flowing and M.LAMP.is_("flow")
-    assert M.grade(scene(HALF), p) == pytest.approx(0.5)
-    watch(OPEN, seconds=0.5)  # pushed fully open again
+    assert M.grade(scene(HALF), p) == 0.0
+    assert M.grade(scene(0.69 * M.TRAVEL), p) == 0.0 and M.grade(scene(0.71 * M.TRAVEL), p) == pytest.approx(1.0)
+    watch(OPEN, seconds=0.5)  # pushed fully open again before the end: the end state decides
     assert M.grade(scene(OPEN), p) == pytest.approx(1.0)
 
 
@@ -288,10 +292,11 @@ def test_holding_the_button_down_is_one_press_and_pressing_again_does_nothing():
 def test_the_reset_clears_the_starter_the_lamp_and_the_clock():
     p = fresh()
     watch(SHUT, PRESSED, seconds=0.2)
-    assert p.state == "dry_run" and p.clock.step == 4 and M.LAMP.is_("dry")
+    watch(SHUT, pos=np.array(M.VALVE.pos) + np.array([0.05, 0.0, 0.0]))
+    assert p.state == "dry_run" and p.clock.step == 5 and M.LAMP.is_("dry") and p.knocked
     p2 = fresh()
     assert p2 is p and p.state == "stopped" and not p.flowing and p.presses == 0 and not p.pressed
-    assert p.clock.step == 0 and p.why == "" and M.LAMP.is_("off")
+    assert p.clock.step == 0 and p.why == "" and p.knocked == "" and M.LAMP.is_("off")
 
 
 # -- unintended strategies ---------------------------------------------------------------------------------------------
@@ -305,6 +310,41 @@ def test_shoving_the_valve_body_does_not_open_it():
     watch(SHUT, PRESSED, pos=shoved)
     assert p.state == "dry_run"
     assert M.grade(scene(SHUT, pos=shoved), pump()) == 0.0
+
+
+@pytest.mark.parametrize("fixture", ["suction_valve", "start_button"])
+@pytest.mark.parametrize("how", ["shoved", "tipped"])
+def test_a_fixture_knocked_out_of_place_and_put_back_still_scores_zero(fixture, how):
+    """The in-place checks are watched every step and latch: a valve shoved 5 cm (the line torn off) and pushed back,
+    or a button tipped and set down again, scores 0 at the end."""
+    p = fresh()
+    watch(OPEN, seconds=0.5)
+    press(OPEN)
+    watch(OPEN, seconds=GREEN_S)
+    assert p.flowing and M.grade(scene(OPEN), p) == pytest.approx(1.0)
+    spec = M.VALVE if fixture == "suction_valve" else M.START_BUTTON
+    pos = np.array(spec.pos) + np.array([0.05, 0.0, 0.0]) if how == "shoved" else spec.pos
+    quat = leaning(30.0) if how == "tipped" else UP
+    states = scene(OPEN)
+    states[fixture] = tool_state(spec, pos, quat, sliders=dict(states[fixture].sliders))
+    M._watch(states)
+    watch(OPEN, seconds=1.0)  # back in place
+    assert p.knocked.startswith("suction valve" if fixture == "suction_valve" else "start button")
+    assert p.state == "running" and p.flowing  # not a dry run: the lamp stays green
+    assert M.grade(scene(OPEN), p) == 0.0 and not M.success(scene(OPEN))
+    assert M.distance(scene(OPEN)) == M.OUT_OF_REACH
+    fresh()
+
+
+@pytest.mark.parametrize(("state", "flowing"), [("running", True), ("stopped", False)])
+def test_a_moved_or_tipped_button_at_the_end_scores_zero(state, flowing):
+    p = pump(state, flowing)
+    origin = np.array(M.START_BUTTON.pos)
+    for shift, quat, kept in (((0.029, 0.0, 0.0), UP, True), ((0.0, -0.031, 0.0), UP, False),
+                              ((0.0, 0.0, 0.0), leaning(19.0), True), ((0.0, 0.0, 0.0), leaning(21.0), False)):
+        objects = scene(OPEN)
+        objects["start_button"] = tool_state(M.START_BUTTON, origin + np.array(shift), quat, sliders={"cap": 0.0})
+        assert M.grade(objects, p) == pytest.approx(M.grade(scene(OPEN), p) if kept else 0.0)
 
 
 def test_pressing_start_alone_earns_nothing():
@@ -321,7 +361,11 @@ def test_distance_falls_to_the_goal():
     press(OPEN)
     assert p.state == "running"
     assert M.distance(scene(OPEN)) == pytest.approx(0.0)
-    assert 0.0 < opened < start
+    assert 0.0 < opened < start < M.OUT_OF_REACH
+    p = fresh()
+    watch(SHUT, PRESSED)
+    assert p.state == "dry_run"
+    assert M.distance(scene(OPEN)) == M.OUT_OF_REACH  # a dry run can't be undone: the goal is out of reach
     fresh()
 
 
@@ -341,7 +385,8 @@ def test_the_layout_fits_together():
     assert vz - M.BLOCK / 2 - M.BRACKET[2] == pytest.approx(M.TOP)
     for x in (M.HANDLE_REST_X, M.HANDLE_REST_X + M.TRAVEL):
         assert abs(x) <= M.BLOCK / 2 and abs(x) + M.HANDLE[0] / 2 - M.BLOCK / 2 <= 0.005 + 1e-9
-    assert M.HANDLE[2] >= 0.03 and M.HANDLE[1] > 2 * PAD_HALF_Y + 0.005
+    assert M.HANDLE[1] > 2 * PAD_HALF_Y + 0.005
+    assert M.TOP + M.BLOCK_TOP + M.HANDLE[2] - (M.PUSH_Z - TIPS) >= 0.03  # the pads meet at least 3 cm of handle
     # The lamp sits on the pump; everything is clear of everything else.
     assert M.PUMP_XY[1] + M.PUMP_SIZE[1] / 2 < vy - M.BRACKET[1] / 2 - 0.05
     bx, by = M.BUTTON_XY
@@ -366,10 +411,9 @@ def test_the_gripper_clears_the_valve_and_the_line_while_pushing():
     assert M.PUSH_Z + LINK_ABOVE_TCP >= handle_top + 0.005
     assert M.PUSH_Z + CARRIAGE_ABOVE_TCP >= handle_top + 0.015
     assert M.PUSH_Z + HOUSING_ABOVE_TCP >= handle_top + 0.02
-    # The wrist camera passes over the handle, 7 cm ahead of the TCP, and stays 4 cm clear of the pump in y.
-    assert M.PUSH_Z - TIPS + CAMERA_ABOVE_TIPS >= handle_top + 0.01
+    # The wrist camera passes 2 cm over the handle's top, and stays 4 cm clear of the pump in y.
+    assert M.PUSH_Z - TIPS + CAMERA_ABOVE_TIPS == pytest.approx(handle_top + 0.020)
     assert M.VALVE_XY[1] - CAMERA_HALF_Y - (M.PUMP_XY[1] + M.PUMP_SIZE[1] / 2) >= 0.04
-    assert M.PUSH_END_X + CAMERA_AHEAD_X < M.VALVE_XY[0] + 0.10
     # The pads land beside the block, not on it, and stay clear of the suction line, in y and above it.
     assert M.PUSH_START_X + PAD_HALF_X <= M.VALVE_XY[0] - M.BLOCK / 2 - 0.02
     assert M.VALVE_XY[1] - PAD_HALF_Y - M.LINE_Y1 >= 0.02
@@ -378,6 +422,47 @@ def test_the_gripper_clears_the_valve_and_the_line_while_pushing():
     assert M.PUSH_Z + HOUSING_ABOVE_TCP >= M.LINE_Z + M.LINE / 2 + 0.05
     pump_side = M.PUMP_XY[1] + M.PUMP_SIZE[1] / 2
     assert M.VALVE_XY[1] - HOUSING_HALF_Y > pump_side + 0.05 and M.VALVE_XY[1] - CARRIAGE_HALF_Y > pump_side + 0.05
+
+
+def fixture_boxes():
+    """World bounds (name, low, high) of every box on the table: the fixed boxes, each tool's boxes, and each slider
+    at both ends of its travel."""
+    out = []
+    for o in TASK.objects:
+        pos = np.array(o.pos, dtype=float)
+        if isinstance(o, Tool):
+            for c, size, _ in o.boxes:
+                out.append((o.name, pos + np.array(c) - np.array(size) / 2, pos + np.array(c) + np.array(size) / 2))
+            for sl in o.sliders:
+                for q in (sl.lower, sl.upper):
+                    c = np.array(sl.rest, dtype=float)
+                    c["XYZ".index(sl.axis)] += q
+                    half = np.array(sl.size) / 2
+                    out.append((f"{o.name}.{sl.name}", pos + c - half, pos + c + half))
+        else:
+            out.append((o.name, pos - np.array(o.size) / 2, pos + np.array(o.size) / 2))
+    return out
+
+
+def box_gap(lo_a, hi_a, lo_b, hi_b) -> float:
+    """Metres between two axis-aligned boxes, 0 if they overlap."""
+    return float(np.linalg.norm(np.maximum(np.maximum(lo_b - hi_a, lo_a - hi_b), 0.0)))
+
+
+@pytest.mark.parametrize("arm", ["left", "right"])
+def test_the_wrist_camera_keeps_2_cm_from_every_fixture_through_the_demo(arm):
+    """The camera has no collider in the sim, but the real rig has one: 7 cm ahead of the TCP, 6 to 7.5 cm above the
+    pad tips, about 2.4 cm deep and 5 cm across."""
+    a = plans()[arm]
+    boxes = fixture_boxes()
+    closest = np.inf
+    for t in np.arange(0.0, a.duration + 0.05, 1 / HZ):
+        x, y, z = a.target(t)[0]
+        tips = z - TIPS
+        lo = np.array([x + CAMERA_AHEAD_X - CAMERA_HALF_X, y - CAMERA_HALF_Y, tips + CAMERA_ABOVE_TIPS])
+        hi = np.array([x + CAMERA_AHEAD_X + CAMERA_HALF_X, y + CAMERA_HALF_Y, tips + CAMERA_TOP_ABOVE_TIPS])
+        closest = min(closest, min(box_gap(lo, hi, b_lo, b_hi) for _, b_lo, b_hi in boxes))
+    assert closest >= 0.020 - 1e-6, closest
 
 
 def test_the_demo_stays_on_each_arms_side():
