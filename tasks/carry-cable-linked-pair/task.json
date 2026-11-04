@@ -1,0 +1,23 @@
+{
+  "title": "Carry two cord-linked devices onto a shelf without pulling the cord",
+  "category": "Societal relevance",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "deformable",
+    "tethered objects",
+    "coordinated carry",
+    "tension awareness",
+    "pick and place",
+    "household"
+  ],
+  "instruction": "Put the action camera, the power bank and the cord joining them on the wooden shelf, then let go. The cord is already taut: lift and carry the devices so the cord never pulls on either one. Never drag, slide or hang a device by the cord, and leave no part of the cord hanging off the shelf.",
+  "context": "A device corded to its power source should be carried by its body, not the cord. Makita's PDC1200 power pack manual warns: \"Do not pick up or carry this unit by holding only the cord.\" Robot work on tethered tools reports that cable tension can shift a tool set down on a table (Sanchez et al., arXiv:2009.14089). Here an action camera is cabled to a power bank: the robot must see that the cord links two objects and move both, never letting the cord pull one along.",
+  "setup": "Station table; cm from the midpoint between the arm bases on the table (x forward, y left). Action camera: dark-grey box 5 (x) x 4 (y) x 4 cm, 80 g, free, centred x 16, y 17. Power bank: blue box 6 x 3.5 x 2.8 cm, 120 g, free, centred x 16, y -14.75. Cord: black 6 mm round USB cord, 28 cm, glued into the camera's right (-y) face and the bank's left (+y) face at table level; it lies straight and just taut along x 16 from y 15 to y -13. Shelf: light-wood board 12 x 40 x 3 cm high, fixed, centred x 37, y 0 (x 31-43, y -20..20).",
+  "scoring": "Score 0 if at any moment a device slides more than 3 cm along the table or shelf from where it rested (dragged by the cord or pushed; it may only travel while lifted), hangs more than 1.5 cm above any surface with no gripper on it (pulled up by the cord), leans more than 30 deg or falls off; 0 if a gripper is within 2 cm of a device or the cord at the end. Otherwise: 1.0 = both devices on the shelf (whole footprint over it, flat on it, tilt <= 10 deg) and the whole cord over the shelf, lying on it (<= 1.2 cm above it); 0.5 = both devices on the shelf, cord partly off; 0.25 = exactly one device on the shelf; else 0. Success when 1.0 holds 1 s at rest.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Set the camera and bank on their tape marks (camera centre x 16, y 17; bank centre x 16, y -14.75), cord faces towards each other, and lay the cord straight between them along x 16 (just taut). Check the shelf is at its tape marks.",
+  "fidelity": "Cord: 14 rigid 2 cm segments with bending springs, no twist, no plasticity; its end segments are welded to the devices (a glued strain relief, no connector that can pull out). Devices are uniform rigid boxes. The shelf is a fixed box. 'Pulled by the cord' is judged from motion (slide / unsupported hang), as on video; there is no force sensing.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-JVV3RF"
+}
