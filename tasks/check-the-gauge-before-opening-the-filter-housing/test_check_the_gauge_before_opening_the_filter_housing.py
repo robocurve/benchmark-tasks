@@ -20,7 +20,7 @@ from plantkit import HZ, UP, box_state, cylinder_state, gap_to, leaning  # noqa:
 from yam_arena import station, task_file  # noqa: E402
 from yam_arena.constants import FINGER_CLOSED, TCP_OFFSET  # noqa: E402
 from yam_arena.demo import ArmPlan, Waypoint, grip_rotation  # noqa: E402
-from yam_arena.task_file import ObjectState  # noqa: E402
+from yam_arena.task_file import Box, ObjectState  # noqa: E402
 from yam_arena.urdf import quat_xyzw_to_matrix  # noqa: E402
 
 TASK = task_file.load(HERE / "check_the_gauge_before_opening_the_filter_housing.py")
@@ -365,13 +365,11 @@ def test_the_demo_parks_clear_of_the_lamp():
     and the lamp."""
     last = M.demo()["right"][-1]
     assert last.pos[1] <= M.BUTTON_XY[1] - 0.12 and last.pos[2] >= M.ABOVE_Z
-    lamp = by_name("call_lamp")
-    _, lamp_px = top_camera_px(lamp)
-    hand = box_state(last.pos, (0.04, 0.04, 0.04))
-    _, hand_px = top_camera_px(hand)
+    _, lamp_px = top_camera_px(by_name("call_lamp"))
+    hand = (0.04, 0.04, 0.04)  # the gripper's end, roughly, around the TCP
+    _, hand_px = top_camera_px(Box("hand", pos=tuple(last.pos), size=hand))
     assert hand_px[:, 0].min() - lamp_px[:, 0].max() >= 15.0  # 15 px of clear image between them
-    hovering = box_state((*M.BUTTON_XY, M.ABOVE_Z), (0.04, 0.04, 0.04))
-    _, hover_px = top_camera_px(hovering)
+    _, hover_px = top_camera_px(Box("hovering", pos=(*M.BUTTON_XY, M.ABOVE_Z), size=hand))
     assert abs(hover_px[:, 0].mean() - lamp_px[:, 0].mean()) < 6.0  # which hovering over the button would not leave
 
 
