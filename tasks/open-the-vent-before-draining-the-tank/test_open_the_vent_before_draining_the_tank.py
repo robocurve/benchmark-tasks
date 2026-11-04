@@ -1,9 +1,9 @@
 """The task file without a simulator: python -m pytest -q test_open_the_vent_before_draining_the_tank.py
 
 Needs ``yam_arena`` importable (it is in the simulator's environment; elsewhere put a clone of yam-isaac-lab-arena
-on PYTHONPATH). Checks the scene loads, the demo is reachable, the outcome table, and a timed replay of the demo
-through the step hook: the valves move as the fingers push them, the clock ticks at 20 Hz, and the level has to read
-empty before the plan ends.
+on PYTHONPATH). Checks the scene loads, the demo is reachable and keeps the grippers and wrist cameras clear of the
+tank, the outcome table, and a timed replay of the demo through the step hook: the valves move as the fingers push
+them, the clock ticks at 20 Hz, and the level has to read empty before the plan ends.
 """
 
 import json
@@ -17,9 +17,9 @@ import numpy as np  # noqa: E402
 import pytest  # noqa: E402
 from benchkit import tool_state  # noqa: E402
 from plantkit import HZ, leaning  # noqa: E402
-from yam_arena import station, task_file  # noqa: E402
+from yam_arena import ik, station, task_file  # noqa: E402
+from yam_arena.constants import TCP_OFFSET  # noqa: E402
 from yam_arena.demo import ArmPlan  # noqa: E402
-from yam_arena.task_file import ObjectState  # noqa: E402
 
 TASK = task_file.load(HERE / "open_the_vent_before_draining_the_tank.py")
 M = TASK.module
@@ -28,11 +28,23 @@ OPEN = M.TRAVEL
 SHUT = 0.0
 EMPTY = M.DRAIN_S
 
-# The gripper, from its URDF, straight down with the fingers closing along y: the pads are 4 cm across in x; the
-# finger bodies above them 7 cm across from 4 cm above the TCP; the housing's underside is 7 cm above the TCP.
-PAD_HALF_X = 0.020
-BODY_HALF_X = 0.034
-BODY_ABOVE_TCP = 0.040
+# The closed fingers' half-width by height above the TCP (m), along the gripper's y axis (world x for a straight-down
+# grip) and along its x axis (world y, the closing axis), from the URDF's tip_left, tip_right and gripper collision
+# meshes: for each convex piece, the largest extent of its vertices over the piece's own height range, so the
+# envelope only ever overstates the fingers. The pad tips are 13 mm below the TCP; the housing's underside is 70 mm
+# above it. The push plans use FINGER_Y (6.5 mm, the pads' width where they meet a handle) for the contact itself.
+FINGER_HALF_X = ((-0.013, 0.0180), (0.0025, 0.0180), (0.0050, 0.0201), (0.0150, 0.0201), (0.0175, 0.0276),
+                 (0.0200, 0.0276), (0.0225, 0.0291), (0.0400, 0.0291), (0.0425, 0.0340), (0.0900, 0.0340))
+FINGER_HALF_Y = ((-0.013, 0.0085), (0.0025, 0.0085), (0.0050, 0.0100), (0.0150, 0.0100), (0.0175, 0.0175),
+                 (0.0200, 0.0175), (0.0225, 0.0190), (0.0400, 0.0190), (0.0425, 0.0238), (0.0600, 0.0238),
+                 (0.0625, 0.0478), (0.0750, 0.0478), (0.0775, 0.0510), (0.0900, 0.0510))
+FINGER_CLEAR = 0.010  # m: the margin the pushes rely on between the fingers and anything they pass
+CAMERA_CLEAR = 0.040  # m: each wrist camera's point stays this far from the tank and the vent handle
+
+
+def finger_half(envelope, h: float) -> float:
+    hs, ws = zip(*envelope)
+    return float(np.interp(h, hs, ws)) if h >= hs[0] else ws[0]
 
 
 def tank(vent=SHUT, drain=SHUT, pos=None, quat=UP, lin_vel=(0.0, 0.0, 0.0)):
@@ -64,6 +76,30 @@ def watch(vent, drain, seconds=1 / HZ, **kw):
         M._watch(scene(vent, drain, **kw))
 
 
+def turned(deg: float):
+    """A quaternion (xyzw) spun ``deg`` degrees about the vertical."""
+    h = np.radians(deg) / 2
+    return (0.0, 0.0, float(np.sin(h)), float(np.cos(h)))
+
+
+def gap_to_box(point, lo, hi) -> float:
+    return float(np.linalg.norm(np.maximum(lo - point, 0.0) + np.maximum(point - hi, 0.0)))
+
+
+def tank_box():
+    tx, ty, _ = M.TANK.pos
+    return (np.array([tx - M.TANK_SIZE[0] / 2, ty - M.TANK_SIZE[1] / 2, M.TOP]),
+            np.array([tx + M.TANK_SIZE[0] / 2, ty + M.TANK_SIZE[1] / 2, M.TOP + M.TANK_H]))
+
+
+def vent_handle_box():
+    """The vent handle's box over its whole travel, shut to open."""
+    tx, ty, _ = M.TANK.pos
+    x, y, top = tx + M.VENT_X, ty + M.VENT_Y, M.TOP + M.TANK_H
+    return (np.array([x - M.HANDLE[0] / 2, y - M.TRAVEL - M.HANDLE[1] / 2, top]),
+            np.array([x + M.HANDLE[0] / 2, y + M.HANDLE[1] / 2, top + M.HANDLE[2]]))
+
+
 def test_the_task_loads_with_its_objects_hooks_and_docs():
     assert TASK.scene == "station"
     assert TASK.free_objects == ("tank",)
@@ -73,7 +109,7 @@ def test_the_task_loads_with_its_objects_hooks_and_docs():
     names = TASK.names
     assert {f"tank_level{i}" for i in range(8)} <= set(names) and {"sump_f", "sump_b", "sump_l", "sump_r"} <= set(names)
     docs = TASK.docs.lower()
-    for word in ("vent", "drain", "sump", "level gauge", "eight segments"):
+    for word in ("vent", "drain", "valve body", "sump", "level gauge", "eight segments"):
         assert word in docs
 
 
@@ -84,9 +120,11 @@ def test_what_the_agent_reads_describes_the_scene_and_does_not_steer_it():
         assert word not in prose
 
 
-def test_nothing_springs_back():
+def test_nothing_springs_back_and_the_tool_is_one_colour_but_for_its_handles():
     assert all(s.rate == 0.0 for s in M.TANK.sliders)
     assert M.TANK.mass == 3.0
+    assert all(colour == M.TANK_GREY for _, _, colour in M.TANK.boxes)
+    assert all(s.color == M.HANDLE_DARK for s in M.TANK.sliders)
 
 
 @pytest.mark.parametrize(
@@ -97,8 +135,8 @@ def test_nothing_springs_back():
         (OPEN, OPEN, 0.0, False, 0.5),  # drain just opened, after the vent
         (SHUT, SHUT, 6.0, False, 0.5),  # both shut again after draining started: the order was right
         (OPEN, SHUT, 0.0, False, 0.2),  # vent open, drain never opened
-        (OPEN, 0.5 * OPEN, 0.0, False, 0.2),  # drain pushed, but not far enough to count as open
-        (SHUT, SHUT, 0.0, False, 0.0),  # did nothing
+        (OPEN, 0.5 * OPEN, 0.0, False, 0.2),  # drain pushed after the vent, but not far enough to count as open
+        (SHUT, SHUT, 0.0, False, 0.0),  # did nothing, or opened the vent and shut it again
         (SHUT, OPEN, 0.0, True, 0.0),  # drain first: collapsed
         (OPEN, OPEN, 0.0, True, 0.0),  # drain first, then the vent: still collapsed
         (OPEN, OPEN, EMPTY, True, 0.0),  # a collapsed tank cannot earn the finish
@@ -124,19 +162,37 @@ def test_the_thresholds_are_the_stated_numbers():
     assert M.grade(scene(OPEN, OPEN, pos=shifted(0.031)), trial(drained_s=EMPTY)) == 0.0
     assert M.grade(scene(OPEN, OPEN, quat=leaning(19.0)), trial(drained_s=EMPTY)) == pytest.approx(1.0)
     assert M.grade(scene(OPEN, OPEN, quat=leaning(21.0)), trial(drained_s=EMPTY)) == 0.0
+    assert M.grade(scene(OPEN, OPEN, quat=turned(19.0)), trial(drained_s=EMPTY)) == pytest.approx(1.0)
+    assert M.grade(scene(OPEN, OPEN, quat=turned(-21.0)), trial(drained_s=EMPTY)) == 0.0
+    # The collapse: a drain handle moved 0.5 cm with the vent under 2.1 cm.
+    fresh()
+    watch(at - 0.0001, M.DRAIN_CRACK - 0.0001, seconds=2.0)
+    assert not M.TRIAL.collapsed
+    watch(at - 0.0001, M.DRAIN_CRACK)
+    assert M.TRIAL.collapsed
 
 
-def test_shoving_or_tipping_the_tank_earns_nothing():
+def test_shoving_tipping_or_turning_the_tank_earns_nothing():
     across = np.array(M.TANK.pos) + np.array([0.0, -0.04, 0.0])
     assert M.grade(scene(OPEN, OPEN, pos=across), trial(drained_s=EMPTY)) == 0.0
     assert M.grade(scene(OPEN, SHUT, quat=leaning(45.0)), trial()) == 0.0
+    assert M.grade(scene(OPEN, OPEN, quat=turned(90.0)), trial(drained_s=EMPTY)) == 0.0
 
 
-def test_opening_the_drain_before_the_vent_collapses_the_tank_for_good():
+def test_a_cracked_drain_with_the_vent_shut_collapses_the_tank():
     t = fresh()
-    watch(SHUT, OPEN)  # one step is enough
+    watch(SHUT, 0.003, seconds=5.0)  # 0.3 cm: the valve is still shut
+    assert not t.collapsed and M.grade(scene(SHUT, 0.003), t) == 0.0
+    watch(SHUT, 0.006)  # 0.6 cm: it passes liquid, and one step is enough
     assert t.collapsed
-    watch(OPEN, OPEN, seconds=EMPTY + 3.0)  # opening the vent afterwards and waiting changes nothing
+    assert M.grade(scene(SHUT, 0.006), t) == 0.0
+
+
+def test_a_drain_cracked_before_the_vent_cannot_be_rescued():
+    t = fresh()
+    watch(SHUT, 0.020, seconds=1.0)  # pushed 2 cm with the vent shut: short of open, but the tank has collapsed
+    assert t.collapsed
+    watch(OPEN, OPEN, seconds=EMPTY + 3.0)  # venting and finishing afterwards changes nothing
     assert t.collapsed and t.drained_steps == 0 and t.segments_lit() == 8
     assert M.grade(scene(OPEN, OPEN), t) == 0.0
 
@@ -144,6 +200,23 @@ def test_opening_the_drain_before_the_vent_collapses_the_tank_for_good():
 def test_a_partly_open_vent_does_not_count_as_venting():
     t = fresh()
     watch(0.6 * OPEN, OPEN)
+    assert t.collapsed
+
+
+def test_both_valves_reading_open_on_the_same_step_is_not_a_collapse():
+    """The scorer's one tie rule: both handles past their thresholds on the same control step is a vented tank."""
+    t = fresh()
+    watch(OPEN, OPEN)
+    assert not t.collapsed and t.drained_steps == 1
+
+
+def test_pushing_both_handles_together_collapses_the_tank():
+    """A real simultaneous push is no tie: the drain passes 0.5 cm long before the vent passes 2.1 cm."""
+    t = fresh()
+    watch(0.006, 0.006)  # both 0.6 cm along
+    assert t.collapsed
+    t = fresh()
+    watch(0.020, 0.020)  # both 2 cm along: the vent still short of open
     assert t.collapsed
 
 
@@ -155,6 +228,23 @@ def test_shutting_the_vent_while_draining_collapses_the_tank():
     watch(SHUT, OPEN)
     assert t.collapsed
     assert M.grade(scene(SHUT, OPEN), t) == 0.0
+
+
+def test_an_empty_tank_cannot_collapse():
+    t = fresh()
+    watch(OPEN, OPEN, seconds=EMPTY)
+    assert t.empty
+    watch(SHUT, OPEN, seconds=2.0)  # air comes in through the open drain: no vacuum
+    assert not t.collapsed and M.grade(scene(SHUT, OPEN), t) == pytest.approx(1.0)
+
+
+def test_venting_alone_scores_0_2_and_venting_then_shutting_scores_nothing():
+    t = fresh()
+    watch(OPEN, SHUT, seconds=3.0)
+    assert not t.collapsed and t.drained_steps == 0
+    assert M.grade(scene(OPEN, SHUT), t) == pytest.approx(0.2)
+    watch(SHUT, SHUT, seconds=1.0)
+    assert M.grade(scene(SHUT, SHUT), t) == 0.0
 
 
 def test_the_level_falls_one_segment_per_1_5_s_and_reads_empty_at_12_s():
@@ -194,14 +284,31 @@ def test_success_needs_an_empty_tank_standing_still():
     assert not M.success(scene(OPEN, OPEN))
 
 
-def test_the_reset_clears_everything():
+def test_the_reset_clears_everything_including_the_paint():
     t = fresh()
     watch(SHUT, OPEN)
+    assert t.collapsed and t.painted
     t2 = fresh()
-    assert t2 is t and not t.collapsed and t.drained_steps == 0 and t.clock.step == 0 and M.LEVEL.lit == 8
+    assert t2 is t and not t.collapsed and not t.painted and t.drained_steps == 0 and t.clock.step == 0
+    assert M.LEVEL.lit == 8
     watch(OPEN, OPEN, seconds=EMPTY)
     fresh()
-    assert not t.empty and t.segments_lit() == 8 and M.LEVEL.lit == 8
+    assert not t.empty and t.segments_lit() == 8 and M.LEVEL.lit == 8 and not t.painted
+
+
+def test_a_reset_after_a_collapse_repaints_the_tank_grey_then_the_handles_dark(monkeypatch):
+    calls = []
+    monkeypatch.setattr(M, "recolor", lambda name, colour: calls.append((name, colour)))
+    fresh()
+    calls.clear()
+    watch(SHUT, OPEN)
+    assert calls == [("tank", M.COLLAPSED_RED)]
+    calls.clear()
+    fresh()
+    assert calls == [("tank", M.TANK_GREY), ("vent", M.HANDLE_DARK), ("drain", M.HANDLE_DARK)]
+    calls.clear()
+    fresh()  # nothing to repaint after a trial without a collapse
+    assert calls == []
 
 
 def test_distance_falls_to_the_end():
@@ -230,18 +337,21 @@ def test_the_pushes_reach_the_open_positions():
 def test_the_layout_fits_together():
     tx, ty, tz = M.TANK.pos
     block_front = tx + M.BLOCK_X - M.BLOCK[0] / 2
-    # The sump's far wall stops short of the valve block, and the spout's mouth overhangs the sump above its walls.
+    # The sump's far wall stops short of the valve body, and the spout's mouth overhangs the sump above its walls.
     assert M.SUMP_XY[0] + M.SUMP_INNER / 2 + M.SUMP_WALL < block_front - 0.015
     spout_mouth = tx + M.SPOUT_REST[0] - M.SPOUT[0] / 2
     assert M.SUMP_XY[0] - M.SUMP_INNER / 2 < spout_mouth < M.SUMP_XY[0] + M.SUMP_INNER / 2 - 0.01
     assert abs(M.SPOUT_Y - M.SUMP_XY[1]) + M.SPOUT[1] / 2 < M.SUMP_INNER / 2
     assert M.TOP + M.SPOUT_BOTTOM >= M.TOP + M.SUMP_H + 0.005
-    # The open drain handle clears the spout (in z) and stays on the valve block (in y).
+    # The open drain handle clears the spout (in z) and stays on the valve body (in y).
     handle_bottom = tz + M.DRAIN_REST[2] - M.HANDLE[2] / 2
     assert tz + M.SPOUT_REST[2] + M.SPOUT[2] / 2 <= handle_bottom - 0.003
     assert ty + M.DRAIN_Y + M.TRAVEL + M.HANDLE[1] / 2 <= ty + M.BLOCK_Y + M.BLOCK[1] / 2
     assert ty + M.DRAIN_Y - M.HANDLE[1] / 2 >= ty + M.BLOCK_Y - M.BLOCK[1] / 2
-    # The gauge stands beside the block, just in front of the face without touching it, under the tank's top.
+    # The vent handle stands on the top plate over its whole travel.
+    assert tx + M.VENT_X + M.HANDLE[0] / 2 <= tx + M.TANK_SIZE[0] / 2 - 0.01
+    assert ty + M.VENT_Y + M.HANDLE[1] / 2 <= ty + M.TANK_SIZE[1] / 2
+    # The gauge stands beside the valve body, just in front of the face without touching it, under the tank's top.
     assert M.GAUGE_Y - M.SEG[1] / 2 >= ty + M.BLOCK_Y + M.BLOCK[1] / 2
     assert 0.001 <= M.FRONT_X - (M.GAUGE_X + M.SEG[0] / 2) <= 0.003
     assert M.GAUGE_Z0 + M.GAUGE_H < M.TOP + M.TANK_H
@@ -250,15 +360,31 @@ def test_the_layout_fits_together():
     assert M.DRAIN_START_Y < 0 and M.DRAIN_END_Y <= 0 and ty + M.DRAIN_Y + M.TRAVEL == pytest.approx(0.0)
 
 
-def test_the_gripper_clears_the_tank_and_the_gauge_while_pushing_the_drain():
-    # The pads pass in front of the gauge, and the finger bodies above them pass over the tank's top.
-    assert M.DRAIN_WORLD_X + PAD_HALF_X <= M.GAUGE_X - M.SEG[0] / 2 - 0.005
-    assert M.DRAIN_PUSH_Z + BODY_ABOVE_TCP >= M.TOP + M.TANK_H + 0.005
-    assert M.DRAIN_WORLD_X + BODY_HALF_X < M.FRONT_X  # and would clear the face even if they didn't
-    # Coming down behind the drain handle, the pads land beside the block, not on it.
-    assert M.DRAIN_START_Y + 0.010 <= M.TANK.pos[1] + M.BLOCK_Y - M.BLOCK[1] / 2
-    # Coming down behind the vent handle, the pads land beside the tank, not on it.
-    assert M.VENT_START_Y - 0.010 >= M.TANK.pos[1] + M.TANK_SIZE[1] / 2
+def test_the_fingers_clear_the_tank_and_the_gauge_while_pushing_the_drain():
+    """Along the drain push the fingers' x-reach at every height stays FINGER_CLEAR short of whatever stands at that
+    height: the gauge's front up to the gauge's top, the tank's face up to its top, nothing above."""
+    gauge_front, gauge_top = M.GAUGE_X - M.SEG[0] / 2, M.GAUGE_Z0 + M.GAUGE_H
+    face, top = M.FRONT_X, M.TOP + M.TANK_H
+    for h in np.arange(-0.013, 0.090, 0.0005):
+        z, reach = M.DRAIN_PUSH_Z + h, M.DRAIN_WORLD_X + finger_half(FINGER_HALF_X, h)
+        if z <= gauge_top:
+            assert reach <= gauge_front - FINGER_CLEAR, h
+        if z <= top:
+            assert reach <= face - FINGER_CLEAR, h
+    # The finger bodies (7 cm across) are above the tank's top altogether, with room to spare.
+    assert M.DRAIN_PUSH_Z + 0.0425 >= top + 0.02
+
+
+def test_the_fingers_come_down_beside_the_tank_and_the_valve_body_not_on_them():
+    ty = M.TANK.pos[1]
+    # Behind the drain handle, everything below the valve body's top stays clear of the body's near edge.
+    body_edge, body_top = ty + M.BLOCK_Y - M.BLOCK[1] / 2, M.TOP + M.BLOCK_TOP
+    for h in np.arange(-0.013, body_top - M.DRAIN_PUSH_Z, 0.0005):
+        assert M.DRAIN_START_Y + finger_half(FINGER_HALF_Y, h) <= body_edge - 0.005, h
+    # Behind the vent handle, everything below the top plate stays clear of the tank's left edge.
+    tank_edge, top = ty + M.TANK_SIZE[1] / 2, M.TOP + M.TANK_H
+    for h in np.arange(-0.013, top - M.VENT_PUSH_Z, 0.0005):
+        assert M.VENT_START_Y - finger_half(FINGER_HALF_Y, h) >= tank_edge + 0.005, h
 
 
 def test_the_demo_stays_on_each_arms_side():
@@ -282,6 +408,28 @@ def test_the_demo_fits_the_run_limit():
     assert max(a.duration for a in plans().values()) * HZ + 60 < 2400
 
 
+def wrist_camera_path(arm):
+    """The arm's wrist camera point in the world at every control step of its plan, from the plan's own IK."""
+    a = ArmPlan(list(M.demo()[arm]), station.BASES[arm])
+    cam = np.array(station.wrist_camera(arm).pos)  # in the gripper link frame
+    out = []
+    for t in np.arange(0.0, a.duration + 0.5, 1 / HZ):
+        q, label = a.action7(t)
+        tcp, rot = ik.tcp_pose(q[:6], station.BASES[arm])
+        out.append((t, label, tcp - rot @ np.array(TCP_OFFSET) + rot @ cam))
+    return out
+
+
+def test_the_wrist_cameras_clear_the_tank_and_the_vent_handle():
+    """The right camera rides 7 cm beyond its TCP and 6 cm above it, over the near half of the top plate while the
+    drain is pushed; it must stay CAMERA_CLEAR from the tank and from the vent handle anywhere along its travel."""
+    body, vent = tank_box(), vent_handle_box()
+    for arm in ("left", "right"):
+        for t, label, cam in wrist_camera_path(arm):
+            assert gap_to_box(cam, *body) >= CAMERA_CLEAR, (arm, round(t, 2), label, cam.round(3))
+            assert gap_to_box(cam, *vent) >= CAMERA_CLEAR, (arm, round(t, 2), label, cam.round(3))
+
+
 def test_a_timed_replay_of_the_demo_scores_one():
     """Both arms run from t = 0. A handle moves as far as the pad's leading face is pushed past its own, while the
     fingers are at push height over it, and stays there. The step hook sees the tank every 1/20 s."""
@@ -293,7 +441,7 @@ def test_a_timed_replay_of_the_demo_scores_one():
     empty_at = None
     for t in np.arange(0.0, t_end, 1 / HZ):
         tcp = arms["left"].target(t)[0]
-        if abs(tcp[2] - M.VENT_PUSH_Z) < 0.01 and abs(tcp[0] - M.VENT_X) < 0.02:
+        if abs(tcp[2] - M.VENT_PUSH_Z) < 0.01 and abs(tcp[0] - M.VENT_WORLD_X) < 0.02:
             vent = max(vent, min(max(M.VENT_FACE_SHUT - (tcp[1] - M.FINGER_Y), 0.0), M.TRAVEL))
         tcp = arms["right"].target(t)[0]
         if abs(tcp[2] - M.DRAIN_PUSH_Z) < 0.01 and abs(tcp[0] - M.DRAIN_WORLD_X) < 0.02:
@@ -307,8 +455,12 @@ def test_a_timed_replay_of_the_demo_scores_one():
             empty_at = t
     assert not trial.collapsed
     assert vent == pytest.approx(M.TRAVEL) and drain == pytest.approx(M.TRAVEL)
+    # The timings the task file and README state, to the control step.
+    assert opened["vent"] == pytest.approx(M.REPLAY["vent_open_s"], abs=0.026)
+    assert opened["drain"] == pytest.approx(M.REPLAY["drain_open_s"], abs=0.026)
+    assert empty_at == pytest.approx(M.REPLAY["empty_s"], abs=0.026)
     assert opened["vent"] + 2.0 <= opened["drain"]  # the vent reads open well before the drain does
-    assert opened["drain"] < M.RIGHT_STARTS_AFTER + 1.5 + 0.5 + 3.0  # the drain opens during its push
+    assert opened["vent"] < M.RIGHT_STARTS_AFTER  # and before the right arm even starts down
     assert empty_at == pytest.approx(opened["drain"] + EMPTY, abs=0.1)
     assert arms["right"].duration >= empty_at + TASK.success_hold_s + 1.0  # the plan outlasts the drain by over 1 s
     assert M.grade({"tank": state}, trial) == pytest.approx(1.0)
@@ -328,4 +480,9 @@ def test_task_json_matches_the_task_file():
     assert "media" not in spec
     assert spec["fidelity"].startswith("Approximate.")
     assert "object_jitter=0" in spec["reset_notes"]
-    assert (HERE / "README.md").read_text().count(M.INSTRUCTION) == 2
+    for number in ("0.5 cm", "2.1 cm", "1.5 s", "12 s", "3 cm", "20 degrees"):
+        assert number in spec["scoring"]
+    readme = (HERE / "README.md").read_text()
+    assert readme.count(M.INSTRUCTION) == 2
+    for number in ("0.5 cm", "2.1 cm", f"{M.REPLAY['vent_open_s']} s", f"{M.REPLAY['drain_open_s']} s"):
+        assert number in readme

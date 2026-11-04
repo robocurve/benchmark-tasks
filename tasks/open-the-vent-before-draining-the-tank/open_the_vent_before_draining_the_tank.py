@@ -2,8 +2,8 @@
 sideways 3 cm and stay where they are put. The vent valve's handle stands on the top plate toward the far side, on the
 robots' left of centre, and opens when pushed toward the midline. The drain valve's handle stands on the valve body
 that steps out from the foot of the face toward the arms, on the robots' right of centre, and also opens when pushed
-toward the midline. Both start shut. A grey spout leads out of the valve body's front over a grey sump collar on the
-table. Up the left of the same face runs the level gauge, a column of eight segments; all eight are lit blue.
+toward the midline. Both start shut. A light-grey spout leads out of the valve body's front over a grey sump collar
+on the table. Up the left of the same face runs the level gauge, a column of eight segments; all eight are lit blue.
 
 Run it:  inspect-robots run --embodiment yam_arena -E task=open_the_vent_before_draining_the_tank.py --scorer task_score ...
 """
@@ -54,7 +54,8 @@ VENT_REST = (VENT_X, VENT_Y, TANK_H / 2 + HANDLE[2] / 2)
 
 # The drain valve body steps out from the foot of the front face. A handle flush with the face can't be pushed by a
 # straight-down gripper (the finger bodies are 7 cm across from 4 cm above the TCP), so the handle stands on the
-# body's front edge, 4 cm proud of the face, high enough that the finger bodies pass over the tank's top.
+# body's front edge, 4 cm proud of the face: the finger bodies begin above the tank's top, and reach at most x 0.204,
+# still short of the face at x 0.21.
 BLOCK = (0.050, 0.085, 0.050)
 BLOCK_X = -TANK_SIZE[0] / 2 - BLOCK[0] / 2
 BLOCK_Y = -0.0175  # from y -0.06 to y 0.025: under the drain handle's whole travel and the spout
