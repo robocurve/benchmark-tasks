@@ -4,7 +4,7 @@ Park the left gripper pointing down over the green pad and leave both books flat
 
 Unload two books from a supporting hand before parking that hand. A valid solution preserves both books and places them flat; no particular unloading sequence is required.
 
-The fixed scene, numerical score and reset are specified in `task.json`, `pilot.json` and `scene_inventory.json`. `setup.png` is the actual initial overview. The physics, controller trajectory, appearance assets and scoring implementation are byte-identical to the evaluated version; `evaluated-source-hashes.json` records those files. Submission documentation and the self-contained runner packaging are new. Asset licenses and attribution are retained under `assets/` and `SOURCES.json`.
+The fixed scene, numerical score and reset are specified in `task.json`, `pilot.json` and `scene_inventory.json`. `setup.png` is an additional native view of the fixed reset, chosen to expose both books. Only the camera moved after reset; book poses and velocities remained unchanged and no physics steps were taken. It was not supplied to the evaluated policy. `setup-policy-overview.png` preserves that policy's original overview; `setup-view.json` records the documentation camera pose. The physics, controller trajectory, appearance assets and scoring implementation are byte-identical to the evaluated version; `evaluated-source-hashes.json` records those files. Submission documentation and the self-contained runner packaging are new. Asset licenses and attribution are retained under `assets/` and `SOURCES.json`.
 
 ## Recorded trials
 
@@ -12,12 +12,12 @@ Dream-1 beta scored **0.0** after 1200 controls (60 simulated seconds, 324.2 sec
 
 ## Run and score
 
-Use Linux, an NVIDIA GPU and Python 3.12 with Isaac Sim 6.1.0.0, Isaac Lab 17.0.2, Isaac Lab-Arena 0.3.0, inspect-robots 0.60.0, inspect-robots-dream 0.1.0 and dreamlabs-client 1.0.14. The included `runtime/pyproject.toml` pins yam-arena to commit bd62771e60320433893bd1d2df0fc79b5ddcd6d1. Use a separate environment for each submitted task's bundled runtime. FFmpeg must be installed. Review and accept NVIDIA's applicable license yourself before setting `OMNI_KIT_ACCEPT_EULA=YES`; the runner does not accept it for you.
+Use Linux, an NVIDIA GPU and Python 3.12 with Isaac Sim 6.1.0.0, Isaac Lab 17.0.2, Isaac Lab-Arena 0.3.0, inspect-robots 0.60.0, inspect-robots-dream 0.1.0 and dreamlabs-client 1.0.14. The included `runtime/pyproject.toml` pins yam-arena to commit bd62771e60320433893bd1d2df0fc79b5ddcd6d1. Use a separate environment for each submitted task's bundled runtime. Install uv and FFmpeg. Exact native dependency source revisions are recorded in `dependency-revisions.json`; the checked dependency trees had no tracked modifications. Review and accept NVIDIA's applicable license yourself before setting `OMNI_KIT_ACCEPT_EULA=YES`; the runner does not accept it for you.
 
 From the repository root, in that environment:
 
 ```bash
-python -m pip install --no-deps -e tasks/book-load-recovery/runtime
+uv pip install --no-deps -e tasks/book-load-recovery/runtime
 python tasks/book-load-recovery/run_demo.py tasks/book-load-recovery /tmp/book-load-recovery-demo --policy recovery --seed 0
 ```
 
