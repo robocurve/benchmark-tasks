@@ -29,7 +29,7 @@ For Dream-1, configure the Dream client with your own credential outside the rep
 inspect-robots run --embodiment resist_isaac --policy dream \
   -P model=dreamlabs/dream-1-beta -P record=false \
   -E task=tasks/loaded-tray-recovery -E condition=recoverable -E object_jitter=0 \
-  -E control_hz=20 -E cam_width=640 -E cam_height=360 -E headless=true -E device=cuda:0 \
+  -E top_cam=calibrated -E control_hz=20 -E cam_width=640 -E cam_height=360 -E headless=true -E device=cuda:0 \
   --instruction 'Move the left hand to the green marker and leave the loaded tray resting flat on the blue mat without spilling its contents.' --scorer task_score --seed 0 --max-steps 1200 \
   --store-frames --no-prompt --grader none --no-rerun --no-rerun-save --fail-on-error 1 \
   --log-dir /tmp/loaded-tray-recovery-dream
@@ -44,3 +44,7 @@ Zero is latched if either tin center in tray-local coordinates has |x| > 0.085 m
 For position and orientation checks, use a ruler/grid and perpendicular calibrated views of the body origins and local axes; a protractor gives tilt and hinge angle. World Z is measured from the station frame, not from the tabletop. TCP means the gripper tool center defined by the pinned YAM model. Linear speed is a displacement/time measurement; angular speed is angle/time. A 20 Hz video gives 50 ms observation intervals, but finite differences are an approximation to the instantaneous native velocities used by the simulation. Decisions close to speed thresholds cannot be certified from a single still image or low-resolution footage. This measurement-equivalence limitation remains explicit rather than treating a damage proxy as observed damage.
 
 The scene uses intact rigid bodies and passive joints. Alternative robot-only strategies are allowed if they satisfy the score; the demonstration is not a required sequence. No fracture or electrical hazard is modeled, and no physical safety certification is claimed. Real-world validation is outside the present preparation scope.
+
+## Submission camera
+
+The submitted video and setup image use `yam_arena.station.top_camera("calibrated")`, the fixed standard YAM top camera. Wrist-camera recordings are supplementary and are not the uploaded main video. See `camera-verification.json` for the camera calibration and evidence association.
