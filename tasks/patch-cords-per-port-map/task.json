@@ -1,0 +1,23 @@
+{
+  "title": "Patch cords per the port-map card",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "deformable",
+    "data centre",
+    "networking",
+    "label reading",
+    "plug insertion",
+    "handover"
+  ],
+  "instruction": "Patch the three cords from the switch into the patch panel exactly as the port map card says: push each plug fully into the numbered port listed for its colour. Leave all other ports empty, then let go of the plugs.",
+  "context": "Patching cords to the ports on a cut sheet or port map is routine work of telecom and network technicians (O*NET 49-2022.00 Telecommunications Equipment Installers and Repairers, Except Line Installers: 'remove and remake connections ... following work orders or diagrams'). A cord in the wrong port breaks or misroutes a live link, so a wrong patch counts as failure. The robot must read the card and the port numbers; the nearest or in-order ports are never right.",
+  "setup": "Cm from the midpoint between the arm bases on the table (x away from robot, y to robot's left). Patch panel: dark grey block 48 wide x 6 deep x 3 tall, front face at x 40, y -24..24; six ports facing the robot (20 x 16.5 mm openings, 26 mm deep, at table level) at y 20/12/4/-4/-12/-20, numbered 1-6 left to right by black 28 mm digits on white labels on the panel top. Switch: grey block 7 x 10 x 4, x 20-27, y -5..5. Three 6 mm patch cords, 28 cm, plug 55 x 16 x 14 mm (15 g) in cord colour: blue leaves its left face at x 21.5 and lies straight to the left; yellow (x 21.5) and white (x 25.5) leave its right face and lie straight to the right; plugs flat at y +/-36. Port map card: white 12 x 20 cm at x 5-17, y -10..10, 28 mm black capitals: BLUE 2 / YELLOW 5 / WHITE 3.",
+  "scoring": "A plug is IN a port when its front end is at least 5 mm inside that port's opening. Score 0 if: any plug is in a port other than the one the card gives for its colour; a gripper is within 3 cm of any plug at the end (still holding); a cord is pulled off the switch; the panel or switch was moved. Otherwise 1/3 per plug whose front end is at least 15 mm inside its mapped port (a mark 15 mm from the plug's front end is hidden): 0, 0.33, 0.67, 1.0. Success (1.0) when all three hold, released and at rest, for 1 s.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Unplug all cords. Lay blue straight to the left from the switch along x 21.5 cm, yellow and white straight to the right along x 21.5 and 25.5 cm, plugs flat on the table with their tape marks at y +/-36 cm. Check panel, switch and card are on their marks; the card always reads BLUE 2 / YELLOW 5 / WHITE 3.",
+  "fidelity": "Cords: rigid 2 cm capsule segments with bending springs, no twist; the switch end is welded. Plugs are rigid boxes with no latch, held in a port only by its walls and friction; the real trial uses the same latchless plug bodies and judges seating by depth. Port clearance is 2 mm per side (real RJ45 fit is tighter). Labels and card text are thin black boxes (printed in the real setup). No link lights or network state are simulated.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-89HAP5"
+}
