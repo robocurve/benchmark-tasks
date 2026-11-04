@@ -1,0 +1,23 @@
+{
+  "title": "Clamp a cable straight in a fixture",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "deformable",
+    "tensioning",
+    "fixture",
+    "clamping",
+    "manufacturing",
+    "cable assembly"
+  ],
+  "instruction": "Pull the black cable straight and taut along the fixture line marked by the blue ticks, so it runs through the grey U-seat, then place the orange clamp block in the U on top of the cable. Let go of both the block and the cable.",
+  "context": "Cable assemblers (O*NET 51-2022.00 Electrical and Electronic Equipment Assemblers) load cables into test, crimp and potting fixtures and hold them straight under even tension, with a snug clamp that does not pinch the jacket; a cable clamped slack or wavy is a workmanship defect (NASA-STD-8739.4A requires even tension and undistorted clamping). The robot must pull a deformable cable straight along a line and hold it there while the other hand clamps it.",
+  "setup": "Cm from the midpoint between the arm bases on the table (x away from the robot, y to its left). Fixture block: grey PLA, 4 cm cube, fixed, centre x 30, y 31.5. Cable: black 6 mm round PVC cord, 50 cm, leaves the block's -y face through a rubber grommet at x 30, y 28.9 (held there, free to swing sideways), black 30x14x10 mm plug (12 g) on its free end; it lies straight, swung 17 deg towards the robot from -y, plug at about x 15, y -20. Fixture line: x 30 from the exit along -y. U-seat: two fixed grey PLA blocks 10x40x16 mm (x, y, z) at y 4.9, inner faces at x 28.3 and 31.7 (34 mm gap). Blue tape ticks 30x5 mm, 8 mm either side of the line (x 26.2-29.2 and 30.8-33.8) at y 25 and y -10. Clamp block: orange aluminium 30x30x20 mm, 50 g, free, at x 18, y 15.",
+  "scoring": "At the end, ruler from above. Score 0 if: a gripper is within 3 cm of the cable, plug or block; the block's centre is not inside the U (between the walls, within their 4 cm length); the cable does not pass under the block; the block bottom is more than 6 mm above the cable top; the cable's largest sideways distance from the line between the exit and the far tick (y -10) exceeds 15 mm; or the U or fixture block was moved. Else 0.5 + 0.5 x straightness: max deviation 5 mm or less = 1.0, linear to 0.5 at 15 mm.",
+  "run_limit": "1,600 steps (80 seconds at 20 Hz)",
+  "reset_notes": "Lift the clamp block back onto its tape outline at x 18, y 15. Lay the cable straight from the exit to the tape mark for the plug at x 15, y -20 (17 deg off the line), plug flat. Fixture block, U-seat and ticks stay glued/taped in place.",
+  "fidelity": "Cable: 2 cm rigid segments with bending springs, inextensible, no twist or plasticity, friction 0.8; at the exit it is pinned on a vertical pivot (real: a snug grommet). The clamp block holds the cable by weight and friction only (no screw/toggle); same in the real setup. 'Taut' is judged by straightness (max sideways deviation), as the cable has no measurable stretch. Fixture block, U and 0.5 mm ticks are fixed rigid boxes.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-7JU64L"
+}
