@@ -4,11 +4,11 @@ Move the left hand to the green marker and leave the loaded tray resting flat on
 
 Transfer a tray and its two sealed tins from temporary hand-and-rest support to a receiving shelf, then withdraw the hand. The contents must remain in the tray; this is not a fluid-spill or damage simulation.
 
-The fixed scene, numerical score and reset are specified in `task.json`, `pilot.json` and `scene_inventory.json`. `setup.png` is the actual initial overview. The physics, controller trajectory and appearance assets match the selected version 36. The scorer additionally rejects a tin center more than 82 mm above the tray origin, closing the elevated-tin loophole. Both the packaged demo and a new real Dream-1 evaluation are verified with this guard; `evaluated-source-hashes.json` records those files. Submission documentation and the self-contained runner packaging are new. Asset licenses and attribution are retained under `assets/` and `SOURCES.json`.
+The fixed scene, numerical score and reset are specified in `task.json`, `pilot.json` and `scene_inventory.json`. `setup.png` is the actual initial overview. The physics, controller trajectory and appearance assets match the selected version 36. The scorer additionally rejects a tin center more than 82 mm above the tray origin, closing the elevated-tin loophole. Both the packaged demo and a new real Dream-1 evaluation are verified with this guard; `evaluated-source-hashes.json` records those files. Submission documentation and the self-contained runner packaging are new. Asset licenses and attribution are retained under `assets/` and `SOURCES.json`. Asset provenance files retain historical conversion notes; `evaluation.json` and `package-verification.json` provide current validation.
 
 ## Recorded trials
 
-Dream-1 beta scored **0.0** after 1200 controls (60 simulated seconds, 281.8 seconds measured wall time). The scripted demonstration scored **1.0** after 375 controls (18.75 simulated seconds, 392.4 seconds measured wall time including startup and rendering). Both use seed 0 and this fixed starting layout. `evaluation.json` records versions and evidence hashes. A single run is not a reliability estimate.
+Dream-1 beta scored **0.0** after 1200 controls (60 simulated seconds, 327.3 seconds measured wall time). The scripted demonstration scored **1.0** after 375 controls (18.75 simulated seconds, 88.4 seconds measured wall time including startup and rendering). Both use seed 0 and the corrected containment scorer in this package. `evaluation.json` records versions and evidence hashes. A single run is not a reliability estimate.
 
 ## Run and score
 
