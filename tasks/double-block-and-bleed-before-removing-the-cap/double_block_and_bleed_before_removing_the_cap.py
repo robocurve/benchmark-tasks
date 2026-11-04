@@ -44,26 +44,27 @@ GAP = 0.001  # between a fixed pipe end and the loose valve body beside it
 SUPPORT_Y = 0.080
 SUPPORT = (0.040, 0.030, PIPE_Z - PIPE_SECTION / 2 - TOP)  # from the table up to the pipe's underside
 
-# -- the valves: loose 3 kg tools, each a block on a bracket with a handle that slides +x along its top --------------
+# -- the valves: loose 3 kg tools, each a block on a base plate with a handle that slides +x along its top -----------
 BLOCK_Y = 0.160  # the block valves: left at +y, right at -y
 BLOCK = 0.050  # the block valves' body, a cube
 BLEED = 0.040  # the bleed valve's body
 HANDLE = (0.030, 0.020, 0.040)  # x, y, z: 4 cm tall, so its top stays within 2.2 cm of the TCP (see FINGER_X)
 HANDLE_TRAVEL = 0.030
-PLATE_MARGIN = 0.020  # each body's base plate is this much wider than the body, 1 cm a side, so a push can't tip it
+PLATE_MARGIN = 0.040  # each body's base plate is this much wider than the body, 2 cm a side, so a push can't tip it
 THROWN_AT = 0.7  # past this fraction of its travel a block valve is closed, the bleed open
 
 
 def _valve(name: str, y: float, body: float, handle_colour) -> Tool:
-    """A valve body centred on the pipe's axis, standing on a bracket down to the table. Its handle rests flush with
-    the body's near face and slides forward (+x) along the top; no spring, so it stays where it is pushed."""
-    bracket = (body - 0.010, body - 0.010, PIPE_Z - body / 2 - TOP)
+    """A valve body centred on the pipe's axis, standing on a base plate down to the table that is 2 cm wider than the
+    body all round. Its handle rests flush with the body's near face and slides forward (+x) along the top; no spring,
+    so it stays where it is pushed."""
+    plate = (body + PLATE_MARGIN, body + PLATE_MARGIN, PIPE_Z - body / 2 - TOP)
     return tool(
         name,
         pos=(PIPE_X, y, PIPE_Z),
         boxes=[
             ((0.0, 0.0, 0.0), (body, body, body), BRASS),
-            ((0.0, 0.0, -body / 2 - bracket[2] / 2), bracket, DARK),
+            ((0.0, 0.0, -body / 2 - plate[2] / 2), plate, DARK),
         ],
         sliders=[Slider("handle", rest=(-body / 2 + HANDLE[0] / 2, 0.0, body / 2 + HANDLE[2] / 2), size=HANDLE,
                         axis="X", lower=0.0, upper=HANDLE_TRAVEL, color=handle_colour, rate=0.0, damping=8.0,
@@ -109,8 +110,8 @@ CAP_H = 0.030
 CAP_MASS = 0.06
 CAP = Cylinder("cap", pos=(*SEAT_XY, SEAT_TOP + CAP_H / 2), radius=CAP_R, height=CAP_H, mass=CAP_MASS, color=RED)
 
-LAMP_XY = (0.380, 0.000)
-LAMP_POST = (0.040, 0.040, 0.080)  # tall enough to show over the bleed handle from the top camera
+LAMP_XY = (0.380, 0.080)  # behind the pipe between the bleed and the left valve: out of both wrist cameras' way
+LAMP_POST = (0.040, 0.040, 0.040)  # low; off the midline it shows over the pipe from the top camera
 LAMP_SIZE = (0.050, 0.050, 0.030)
 LAMP = Lamp("pressure_lamp", {"on": LAMP_RED, "off": LAMP_OFF}, "on")
 LAMP_DELAY_S = 2.0  # the line vents this long after the last of the three handles is thrown
@@ -162,14 +163,30 @@ def bleed_open(state: ToolState) -> bool:
     return pushed(state, "handle", HANDLE_TRAVEL, THROWN_AT)
 
 
+CRACKED_AT = 0.3  # a bleed handle past this fraction of its travel has started to open
+
+
+def bleed_cracked(state: ToolState) -> bool:
+    return pushed(state, "handle", HANDLE_TRAVEL, CRACKED_AT)
+
+
+# Two readings of the cap. The loose one gives end-state credit; the tight one latches the hazard, so a cap nudged on a
+# live line is caught long before it would stop counting as on its seat.
 OFF_SEAT_XY = 0.030  # the cap is off its seat when its centre is this far from the port, or
 LIFTED_ABOVE = 0.020  # its bottom this far above the seat's top, or
 STANDING_DEG = 35.0  # it is leaning more than this (knocked over, so the port is open)
+DISTURBED_XY = 0.010  # on a live line the cap counts as moved this far across, or
+DISTURBED_ABOVE = 0.005  # this far up
 
 
 def on_seat(cap) -> bool:
     return bool(distance_xy(cap, SEAT_XY) <= OFF_SEAT_XY and cap.low[2] <= SEAT_TOP + LIFTED_ABOVE
                 and tilt_deg(cap) <= STANDING_DEG)
+
+
+def disturbed(cap) -> bool:
+    return bool(distance_xy(cap, SEAT_XY) > DISTURBED_XY or cap.low[2] > SEAT_TOP + DISTURBED_ABOVE
+                or tilt_deg(cap) > STANDING_DEG)
 
 
 @on_reset
@@ -185,8 +202,8 @@ def _watch(states) -> None:
     CLOCK.tick()
     left, right = block_closed(states["left_valve"]), block_closed(states["right_valve"])
     bleed = bleed_open(states["bleed_valve"])
-    if bleed and not (left and right):
-        FLAGS["vented_live"] = True  # the bleed is open to a line still fed from one side
+    if bleed_cracked(states["bleed_valve"]) and not (left and right):
+        FLAGS["vented_live"] = True  # the bleed has started to open on a line still fed from one side
     if left and right and bleed:
         if ISOLATED["since"] is None:
             ISOLATED["since"] = CLOCK.step
@@ -195,15 +212,15 @@ def _watch(states) -> None:
     else:
         ISOLATED["since"] = None
         LAMP.set("on", CLOCK.step)  # any handle put back brings the pressure back
-    if LAMP.is_("on") and not on_seat(states["cap"]):
-        FLAGS["removed_live"] = True  # the port is open while the lamp is lit
+    if LAMP.is_("on") and disturbed(states["cap"]):
+        FLAGS["removed_live"] = True  # the cap moved while the lamp is lit
 
 
 # -- scoring: the end state, with the two remembered flags -------------------------------------------------------------
 BLOCKED = 0.3  # both block valves closed, nothing else
 ISOLATED_SCORE = 0.6  # both closed, bleed open, light out, cap still on
 LIFTED = 0.6  # cap lifted after the light went out, but not in the tray
-VENTED_LIVE_CAP = 0.5
+VENTED_LIVE_CAP = 0.2  # under the 0.3 for an honest stop with both block valves closed
 BODY_MOVED = 0.030  # a valve body shoved this far, or
 BODY_TILT_DEG = 20.0  # tipped this far, has been pulled off the pipe
 
@@ -255,13 +272,18 @@ def distance(objects) -> float:
 HOVER_Z = TOP + 0.150
 PUSH_BACK = 0.030  # the fingers start this far behind a handle
 OVERSHOOT = 0.006  # commanded past the stop, so the handle is still thrown if the arm falls a little short
-FINGER_X = 0.020  # half the closed fingers' extent along x from the TCP up to 4 cm above it, where a handle meets them
+# The closed fingers' half-extent along x, measured on the gripper's meshes under the straight-down grip: 0.8 cm at the
+# pad tips, 1.4 cm 5 mm above the TCP, 2.0 cm at 2.2 cm above it, then widening to 2.8 cm by 4 cm up. A handle that
+# ends within 2.2 cm of the TCP meets this face, so it reaches its stop where the plan says.
+FINGER_X = 0.020
+HANDLE_TOP_ABOVE_TCP = 0.022  # the most a handle may stand above the TCP for FINGER_X to be the face that meets it
 PUSH_ABOVE = 0.005 + 0.013  # TCP height over the surface the finger tips travel across
 GRIP_Z = SEAT_TOP + CAP_H / 2 + 0.013
 PLACE_Z = TOP + CAP_H / 2 + 0.013 + 0.012  # let go 1.2 cm up, with the open fingers clear of the tray's walls
 TRAVEL_Z = TOP + 0.150
 LIGHT_MARGIN_S = 1.0  # the left arm goes for the cap this long after the light is due out
 RIGHT_PARK = (0.260, -BLOCK_Y, HOVER_Z)
+LEFT_PARK = (0.260, 0.240, HOVER_Z)  # clear of the tray for the end photo
 TRIM = {"push": (0.0, 0.0), "pick": (0.0, 0.0), "place": (0.0, 0.0)}
 
 
@@ -309,12 +331,13 @@ def _left_plan(light_out_by: float) -> list[Waypoint]:
     qx, qy = TRIM["place"]
     plan += pick_place_waypoints((SEAT_XY[0] + px, SEAT_XY[1] + py, GRIP_Z),
                                  (TRAY_XY[0] + qx, TRAY_XY[1] + qy, PLACE_Z), travel_z=TRAVEL_Z, speed=0.7)
+    plan.append(Waypoint(1.5, LEFT_PARK, FINGER_CLOSED, "back to its side"))
     return plan
 
 
 def demo():
     """Left arm: close the left valve, hold off while the right arm closes the right valve and opens the bleed, then,
-    once the light is due out, lift the cap off its seat and set it in the tray. Right arm: close the right valve,
-    open the bleed, and go back to its own side."""
+    once the light is due out, lift the cap off its seat, set it in the tray and move clear. Right arm: close the
+    right valve, open the bleed, and go back to its own side."""
     right = _right_plan()
     return {"left": _left_plan(until(right, "push the bleed") + LAMP_DELAY_S), "right": right}

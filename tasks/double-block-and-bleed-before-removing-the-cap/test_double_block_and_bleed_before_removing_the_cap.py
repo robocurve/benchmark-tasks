@@ -17,7 +17,8 @@ import numpy as np  # noqa: E402
 import pytest  # noqa: E402
 from benchkit import tool_state  # noqa: E402
 from plantkit import HZ, UP, cylinder_state, leaning  # noqa: E402
-from yam_arena import station, task_file  # noqa: E402
+from yam_arena import ik, station, task_file  # noqa: E402
+from yam_arena.constants import TCP_OFFSET, WRIST_CAM_POS  # noqa: E402
 from yam_arena.demo import ArmPlan  # noqa: E402
 
 TASK = task_file.load(HERE / "double_block_and_bleed_before_removing_the_cap.py")
@@ -88,9 +89,10 @@ def test_nothing_springs_back_and_the_bodies_are_heavy():
         (0.0, 0.0, 0.0, False, ON_SEAT, False, False, 0.0),  # did nothing
         (0.0, 0.0, THROWN, False, ON_SEAT, True, False, 0.0),  # bleed opened on a live line, nothing else
         (THROWN, 0.0, THROWN, False, ON_SEAT, True, False, 0.0),
-        (THROWN, THROWN, THROWN, True, IN_TRAY, True, False, 0.5),  # vented live, then everything else right
-        (THROWN, THROWN, THROWN, True, ON_SEAT, True, False, 0.5),
-        (THROWN, THROWN, 0.0, False, ON_SEAT, True, False, 0.3),  # vented live, bleed shut again: under the cap anyway
+        (THROWN, THROWN, THROWN, True, IN_TRAY, True, False, 0.2),  # vented live, then everything else right
+        (THROWN, THROWN, THROWN, True, BESIDE, True, False, 0.2),
+        (THROWN, THROWN, THROWN, True, ON_SEAT, True, False, 0.2),
+        (THROWN, THROWN, 0.0, False, ON_SEAT, True, False, 0.2),  # vented live, bleed shut again: capped under 0.3
         (THROWN, THROWN, THROWN, True, IN_TRAY, False, True, 0.0),  # the cap came off while the light was on
         (THROWN, THROWN, THROWN, False, IN_TRAY, False, False, 0.0),  # cap in the tray with the light still on
         (THROWN, THROWN, THROWN, False, BESIDE, False, False, 0.0),
@@ -108,7 +110,8 @@ def test_unsafe_paths_score_below_every_honest_partial():
     isolated = M.grade(scene(THROWN, THROWN, THROWN, ON_SEAT), True, False, False)
     assert 0.0 < blocked < isolated < 1.0
     assert M.grade(scene(THROWN, THROWN, THROWN, IN_TRAY), True, False, True) < blocked  # removed live
-    assert M.grade(scene(THROWN, THROWN, THROWN, IN_TRAY), True, True, False) < isolated  # vented live
+    assert M.grade(scene(THROWN, THROWN, THROWN, IN_TRAY), True, True, False) < blocked  # vented live
+    assert M.VENTED_LIVE_CAP == pytest.approx(0.2)
 
 
 def test_the_thresholds_are_the_stated_numbers():
@@ -125,6 +128,10 @@ def test_the_thresholds_are_the_stated_numbers():
     assert not M.on_seat(cap_at((x + 0.0301, y, z)))
     assert M.on_seat(cap_at(ON_SEAT, leaning(34)))
     assert not M.on_seat(cap_at(ON_SEAT, leaning(36)))
+    # The live latch is tighter: 5 mm up, 1 cm across, or knocked over.
+    assert not M.disturbed(cap_at((x, y, z + 0.0049))) and M.disturbed(cap_at((x, y, z + 0.0051)))
+    assert not M.disturbed(cap_at((x, y + 0.0099, z))) and M.disturbed(cap_at((x, y + 0.0101, z)))
+    assert not M.disturbed(cap_at(ON_SEAT, leaning(34))) and M.disturbed(cap_at(ON_SEAT, leaning(36)))
     # In the tray: inside its 8 cm opening, bottom under 3 cm up, standing or lying.
     tx, ty = M.TRAY_XY
     assert M.in_tray(cap_at((tx + 0.039, ty, M.TOP + M.CAP_H / 2)))
@@ -147,9 +154,47 @@ def test_the_lamp_goes_out_two_seconds_after_the_isolation_and_comes_back_if_it_
     assert M.LAMP.is_("on")  # the two seconds start again
     feed(scene(THROWN, THROWN, THROWN), 1)
     assert M.LAMP.is_("off")
-    assert M.score(scene(THROWN, THROWN, THROWN, IN_TRAY)) == pytest.approx(0.5)
+    assert M.score(scene(THROWN, THROWN, THROWN, IN_TRAY)) == pytest.approx(0.2)
     reset()
     assert M.LAMP.is_("on") and not M.FLAGS["vented_live"] and M.ISOLATED["since"] is None and M.CLOCK.step == 0
+
+
+def test_a_bleed_cracked_open_on_a_live_line_is_remembered_from_thirty_percent():
+    cracked = M.CRACKED_AT * M.HANDLE_TRAVEL  # 9 mm of 30
+    assert cracked == pytest.approx(0.009)
+    reset()
+    feed(scene(THROWN, 0.0, cracked - 0.0001), 1)
+    assert not M.FLAGS["vented_live"]
+    feed(scene(THROWN, 0.0, cracked + 0.0001), 1)
+    assert M.FLAGS["vented_live"]
+    reset()
+    feed(scene(THROWN, THROWN, cracked + 0.0001), 1)  # both blocks closed first: fine, and not open yet either
+    assert not M.FLAGS["vented_live"] and M.ISOLATED["since"] is None
+
+
+def test_nudging_the_cap_on_a_live_line_is_remembered_though_it_still_counts_as_on_its_seat():
+    reset()
+    x, y, z = ON_SEAT
+    nudged = (x + 0.012, y, z)
+    feed(scene(cap=nudged), 1)
+    assert M.FLAGS["removed_live"] and M.on_seat(cap_at(nudged))
+    feed(scene(THROWN, THROWN, THROWN, nudged), int(M.LAMP_DELAY_S * HZ) + 1)
+    assert M.LAMP.is_("off") and M.score(scene(THROWN, THROWN, THROWN, IN_TRAY)) == 0.0
+    reset()
+    feed(scene(cap=(x, y, z + 0.006)), 1)
+    assert M.FLAGS["removed_live"]
+    reset()
+    assert not M.FLAGS["removed_live"]
+
+
+def test_shutting_the_bleed_again_after_the_cap_is_off_relights_the_lamp_and_scores_zero():
+    reset()
+    feed(scene(THROWN, THROWN, THROWN), int(M.LAMP_DELAY_S * HZ) + 1)
+    feed(scene(THROWN, THROWN, THROWN, IN_TRAY), HZ)
+    assert M.score(scene(THROWN, THROWN, THROWN, IN_TRAY)) == pytest.approx(1.0)
+    feed(scene(THROWN, THROWN, 0.0, IN_TRAY), 1)
+    assert M.LAMP.is_("on") and M.FLAGS["removed_live"]
+    assert M.score(scene(THROWN, THROWN, THROWN, IN_TRAY)) == 0.0
 
 
 def test_lifting_the_cap_while_the_light_is_on_is_remembered():
@@ -190,7 +235,8 @@ def test_opening_the_bleed_first_is_remembered():
     assert M.LAMP.is_("off")
     feed(scene(THROWN, THROWN, THROWN, IN_TRAY), 1)
     assert not M.FLAGS["removed_live"]
-    assert M.score(scene(THROWN, THROWN, THROWN, IN_TRAY)) == pytest.approx(0.5)
+    assert M.score(scene(THROWN, THROWN, THROWN, IN_TRAY)) == pytest.approx(0.2)
+    assert M.score(scene(THROWN, THROWN, THROWN, BESIDE)) == pytest.approx(0.2)
 
 
 def test_a_valve_body_pulled_off_the_pipe_scores_zero():
@@ -247,8 +293,46 @@ def test_the_handles_stand_tall_enough_to_push_and_clear_the_gripper():
         base = M.body_top(v)
         assert v.pos[2] + s.rest[2] - s.size[2] / 2 == pytest.approx(base)  # the handle stands on the body's top
         tcp, top = base + M.PUSH_ABOVE, base + s.size[2]
-        assert tcp < top < tcp + 0.070  # met by the finger body, and under the housing, 7 cm above the TCP
+        assert tcp < top <= tcp + M.HANDLE_TOP_ABOVE_TCP  # it ends where the finger face is still FINGER_X wide
         assert s.rest[0] - s.size[0] / 2 == pytest.approx(-v.boxes[0][1][0] / 2)  # flush with the near face at rest
+    assert M.HANDLE_TOP_ABOVE_TCP <= 0.022 and M.FINGER_X == pytest.approx(0.020)  # the measured finger profile
+
+
+def test_a_push_on_a_handle_cannot_tip_the_body():
+    for v in M.VALVES.values():
+        body, plate = v.boxes[0][1], v.boxes[1][1]
+        assert plate[0] >= body[0] + 0.040 and plate[1] >= body[1] + 0.040  # 2 cm wider all round
+        assert v.pos[2] + v.boxes[1][0][2] - plate[2] / 2 == pytest.approx(M.TOP)  # standing on the table
+        # The finger face widens upward, so it first touches the handle at its top edge: the worst lever arm.
+        contact_height = M.body_top(v) + v.sliders[0].size[2] - M.TOP
+        assert v.mass * 9.81 * plate[0] / 2 / contact_height >= 10.0  # a 6 mm overshoot pushes with a few newtons
+
+
+def test_the_wrist_cameras_clear_the_lamp_and_the_handles():
+    """Under the straight-down grip the wrist camera rides 8.0 cm ahead of the TCP and 13.4 cm above it. Trace it
+    through the demo as a 42 x 42 x 23 mm body."""
+    half = np.array([0.021, 0.021, 0.012])
+    lamp = (np.array([M.LAMP_XY[0] - M.LAMP_SIZE[0] / 2, M.LAMP_XY[1] - M.LAMP_SIZE[1] / 2, M.TOP]),
+            np.array([M.LAMP_XY[0] + M.LAMP_SIZE[0] / 2, M.LAMP_XY[1] + M.LAMP_SIZE[1] / 2,
+                      M.TOP + M.LAMP_POST[2] + M.LAMP_SIZE[2]]))
+    handles = []
+    for v in M.VALVES.values():
+        s = v.sliders[0]
+        lo = np.array(v.pos) + np.array(s.rest) - np.array(s.size) / 2
+        hi = np.array(v.pos) + np.array(s.rest) + np.array(s.size) / 2 + np.array([M.HANDLE_TRAVEL, 0.0, 0.0])
+        handles.append((lo, hi))
+
+    def gap(p, lo, hi):
+        return float(np.linalg.norm(np.maximum(lo - half - p, 0.0) + np.maximum(p - hi - half, 0.0)))
+
+    for arm, waypoints in M.demo().items():
+        a = ArmPlan(list(waypoints), station.BASES[arm])
+        for t in np.arange(0.0, a.duration + 0.5, 1 / HZ):
+            q, _ = a.action7(t)
+            tcp, rot = ik.tcp_pose(q[:6], station.BASES[arm])
+            cam = tcp + rot @ (np.array(WRIST_CAM_POS) - np.array(TCP_OFFSET))
+            assert gap(cam, *lamp) >= 0.05
+            assert all(gap(cam, lo, hi) >= 0.03 for lo, hi in handles)
 
 
 def test_the_push_reaches_the_thrown_position():
