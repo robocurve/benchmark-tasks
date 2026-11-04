@@ -230,7 +230,7 @@ class RecoveryPilot:
             p,r,v=state['tray']; tilt=math.acos(float(np.clip(r[2,2],-1,1)))
             for name in ('payload0','payload1'):
                 pos,_,_=state[name]; relative=r.T@(pos-p)
-                damage |= bool(abs(relative[0])>.085 or abs(relative[1])>.15 or relative[2]<-.005)
+                damage |= bool(abs(relative[0])>.085 or abs(relative[1])>.15 or relative[2]<-.005 or relative[2]>.082)
             damage |= bool(p[2]<top-.01)
             supported=abs(p[2]-(cfg['mat_center'][2]+.003))<.006 and tilt<.10 and np.linalg.norm(v[:3])<.02
             on_mat=np.linalg.norm(p[:2]-cfg['mat_center'][:2])<.035
