@@ -4,7 +4,7 @@ Park the left gripper pointing down over the green pad and leave both books flat
 
 Unload two books from a supporting hand before parking that hand. A valid solution preserves both books and places them flat; no particular unloading sequence is required.
 
-The fixed scene, numerical score and reset are specified in `task.json`, `pilot.json` and `scene_inventory.json`. `setup.png` is an additional native view of the fixed reset, chosen to expose both books. Only the camera moved after reset; book poses and velocities remained unchanged and no physics steps were taken. It was not supplied to the evaluated policy. `setup-policy-overview.png` preserves that policy's original overview; `setup-view.json` records the documentation camera pose. The physics, controller trajectory, appearance assets and scoring implementation are byte-identical to the evaluated version; `evaluated-source-hashes.json` records those files. Submission documentation and the self-contained runner packaging are new. Asset licenses and attribution are retained under `assets/` and `SOURCES.json`. Asset provenance files retain historical conversion notes; `evaluation.json` and `package-verification.json` provide current validation.
+The fixed scene, numerical score and reset are specified in `task.json`, `pilot.json` and `scene_inventory.json`. `setup.png` is the original calibrated YAM top-camera reset view, matching the submitted Dream and demo videos. The alternate close-up is not used as the submission setup image. The physics, controller trajectory, appearance assets and scoring implementation are byte-identical to the evaluated version; `evaluated-source-hashes.json` records those files. Submission documentation and the self-contained runner packaging are new. Asset licenses and attribution are retained under `assets/` and `SOURCES.json`. Asset provenance files retain historical conversion notes; `evaluation.json` and `package-verification.json` provide current validation.
 
 ## Recorded trials
 
@@ -29,7 +29,7 @@ For Dream-1, configure the Dream client with your own credential outside the rep
 inspect-robots run --embodiment resist_isaac --policy dream \
   -P model=dreamlabs/dream-1-beta -P record=false \
   -E task=tasks/book-load-recovery -E condition=recoverable -E object_jitter=0 \
-  -E control_hz=20 -E cam_width=640 -E cam_height=360 -E headless=true -E device=cuda:0 \
+  -E top_cam=calibrated -E control_hz=20 -E cam_width=640 -E cam_height=360 -E headless=true -E device=cuda:0 \
   --instruction 'Park the left gripper pointing down over the green pad and leave both books flat on the blue mat without dropping them.' --scorer task_score --seed 0 --max-steps 1200 \
   --store-frames --no-prompt --grader none --no-rerun --no-rerun-save --fail-on-error 1 \
   --log-dir /tmp/book-load-recovery-dream
@@ -44,3 +44,7 @@ Zero is latched if either book origin z < 0.7445 m, |x-0.35| > 0.60 m, |y| > 0.6
 For position and orientation checks, use a ruler/grid and perpendicular calibrated views of the body origins and local axes; a protractor gives tilt and hinge angle. World Z is measured from the station frame, not from the tabletop. TCP means the gripper tool center defined by the pinned YAM model. Linear speed is a displacement/time measurement; angular speed is angle/time. A 20 Hz video gives 50 ms observation intervals, but finite differences are an approximation to the instantaneous native velocities used by the simulation. Decisions close to speed thresholds cannot be certified from a single still image or low-resolution footage. This measurement-equivalence limitation remains explicit rather than treating a damage proxy as observed damage.
 
 The scene uses intact rigid bodies and passive joints. Alternative robot-only strategies are allowed if they satisfy the score; the demonstration is not a required sequence. No fracture or electrical hazard is modeled, and no physical safety certification is claimed. Real-world validation is outside the present preparation scope.
+
+## Submission camera
+
+The submitted video and setup image use `yam_arena.station.top_camera("calibrated")`, the fixed standard YAM top camera. Wrist-camera recordings are supplementary and are not the uploaded main video. See `camera-verification.json` for the camera calibration and evidence association.
