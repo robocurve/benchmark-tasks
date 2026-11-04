@@ -24,16 +24,6 @@ class ClearanceRecovery(RecoveryPilot):
         self.descriptions=json.loads((self.folder/'geometry.json').read_text())
         self.poses=self.cfg['poses']
         self._unsafe=False
-        from dataclasses import replace
-        from yam_arena.station import top_camera
-        from yam_arena.ik import matrix_to_quat_xyzw
-        position=np.array(self.cfg.get('overview_position',[-.05,-.45,1.85]))
-        target=np.array(self.cfg.get('overview_target',[.30,.02,.93]))
-        z=(position-target)/np.linalg.norm(position-target)
-        x=np.cross([0.,0.,1.],z);x/=np.linalg.norm(x)
-        y=np.cross(z,x)
-        self.overview_camera=replace(top_camera(),pos=tuple(position),
-            rot_xyzw=tuple(matrix_to_quat_xyzw(np.column_stack((x,y,z)))))
 
     def build_scene(self,embodiment):
         from isaaclab_arena.assets.object import Object,ObjectType
