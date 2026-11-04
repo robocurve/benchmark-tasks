@@ -1,0 +1,25 @@
+{
+  "title": "Recover a crawler by its tether around a wall",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "tether",
+    "indirect manipulation",
+    "deformable",
+    "inspection robot",
+    "hazardous zone",
+    "handoff",
+    "routing",
+    "constraint keeping"
+  ],
+  "instruction": "Recover the orange crawler into the green taped zone using only its blue tether: never touch the crawler, don't let it hit the grey wall or its post or tip over. Steer it around the wall's end, then let go of the tether.",
+  "context": "Inspection crawlers in pipes and in radioactive nuclear tunnels are pulled out by their tethers when they get stuck or disabled, and the tether itself can catch on things along the way. This tests planning a pull through a deformable tether, not grasping.",
+  "setup": "Positions in cm from the midpoint between the arm bases on the table (x away from the robot, y left). Wall: grey PLA box 2 x 20 x 6 cm, fixed, x 46-48, y -13 to 7; end post: 3 cm round, 8 cm tall, at x 47, y 7. Crawler: orange box 8 x 6 x 4 cm, 120 g, PTFE skids (friction ~0.3), black camera head on top front; centre x 66, y -2, front turned 45 deg to the right of straight ahead. Tether: blue 6 mm cord, 65 cm, fixed to the crawler's rear centre 3.5 mm above the table, lying straight at 135 deg (towards the robot's left, passing 8.5 cm beyond the post) to a black 50 x 20 x 16 mm handle centred x 15, y 49. Zone: 15 x 15 cm inside 12 mm green tape, centre x 32, y -4.",
+  "scoring": "Score 0 if: the crawler ever tilts more than 45 deg; a gripper ever comes within 3 cm of the crawler or any robot part touches it; the crawler ever comes within 3 mm of the wall or post; or at the end a gripper is within 3.5 cm of the tether or handle. Otherwise: 1.0 if the crawler's whole footprint is inside the tape square; 0.5 if it has come around the wall end (footprint entirely nearer the robot than the wall's front face, centre between the wall's ends) but is not fully in the square; else 0. Real trial: also 0 if the wall is moved.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Place the crawler at its tape marks (centre x 66, y -2, front 45 deg right), lay the tether straight from its rear at 135 deg with the handle at its end; wall and zone are fixed.",
+  "fidelity": "Tether: chain of 2 cm rigid segments with bending springs (no twist or stretch), welded to the crawler. Crawler: rigid box sliding on skids at friction 0.3 (no wheels or motors; real setup: unpowered crawler, brakes off). Wall touch: crawler footprint within 3 mm of wall or post, from top-view geometry (real: video). Robot touch: contact sensing on all robot links.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-MWLSFN"
+}
