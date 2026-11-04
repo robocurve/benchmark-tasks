@@ -86,8 +86,9 @@ lit is over 1625 mL up to the rim.
 - **An overflow is for good.** The step hook counts the level up while the handle is open, and the first step past
   2000 mL recolours the mat blue and latches. Closing the valve afterwards scores 0.
 - **Bands sit on what can be seen.** The strip lights the nearest whole segment, so a band edge inside a segment
-  could not be read from the picture. The edges are at 875, 1375 and 1625 mL, exactly where the fourth, sixth and
-  seventh segments light; on a real bench they are the 8.75, 13.75 and 16.25 cm lines of the sight gauge.
+  could not be read from the picture. The edges are at 875, 1375 and 1625 mL: the first level with four lit, the
+  first with six lit, and the last with six lit (the seventh lights at the next step); on a real bench they are the
+  8.75, 13.75 and 16.25 cm lines of the sight gauge.
 - **Timing.** The mark band is 7 to 9 s of flow. The demo's handle passes liquid for 8 s, 1 s inside both ends, so
   a handle that lags or leads the fingers a little in the simulator still lands at the mark. A kinematic replay in
   the tests plays the demo's waypoints against a rigid model of the handle and checks the result: 1500 mL, six
@@ -102,8 +103,9 @@ lit is over 1625 mL up to the rim.
   of the right-hand face. A test proves both from the task file's layout.
 - **Unintended strategies.** Shoving the valve along the table changes nothing: the handle is read against its own
   block. Tipping the valve more than 20 degrees scores 0, and it is taped down on a real bench. There is nothing loose
-  to prop the handle with. Pumping the handle part way passes nothing. Reopening after the mark either overflows or
-  ends with the valve open: 0 either way.
+  to prop the handle with. Pumping the handle part way passes nothing. Reopening after the mark and closing again
+  ends overshot (0.3), or still at the mark if the valve was open for 1 s or less; reopening and walking away ends
+  with the valve open or overflows, 0 either way.
 - **Scoring a real trial.** A photo of the sight gauge and of the handle against a tape measure at the end gives the
   level and the valve; the video shows whether anything ran over. The mat is dark so liquid shows.
 - **The rule behind it.** The Ten States Standards (Recommended Standards for Water Works, 2012) ask that a day tank
@@ -113,8 +115,10 @@ lit is over 1625 mL up to the rim.
   a day tank must not be automated: an operator attends the transfer.
 - **What isn't modelled.** No liquid: the level is a count shown on the strip to the nearest whole segment, so a
   surface between graduations has no sim equivalent. A real gate valve passes some liquid at any opening; here it
-  passes liquid only past 70% of travel. The strip stands on a vertical face, so the top camera sees it edge-on and
-  small; it reads best from the right wrist camera. The hypochlorite is water on a real bench.
+  passes liquid only past 70% of travel. The strip stands on a vertical face: the top camera sees it at a grazing
+  angle of about 30 degrees, about 19 px tall at 320 x 176 (2.4 px per segment, the red mark about 1.5 px), and the
+  right wrist camera, which looks down and back at the valve from the watch pose, does not see it unless the wrist is
+  turned. The hypochlorite is water on a real bench.
 
 ## Runtime and seeds
 

@@ -54,8 +54,8 @@ SEG_PITCH = SEG_SIZE[2] + SEG_GAP  # 2.5 cm of strip, and of depth, per segment
 STRIP_Z0 = TANK_FLOOR_Z  # the strip starts level with the inside floor
 STRIP_X = TANK_FRONT_X - SEG_SIZE[0] / 2
 MARK_SEGMENT = 6  # the red mark is the line at the top of this segment's pitch
-MARK_SIZE = (0.005, 0.080, 0.005)
-MARK_Z = STRIP_Z0 + MARK_SEGMENT * SEG_PITCH  # centred on the 1500 mL line, in the gap above the sixth segment
+MARK_SIZE = (0.005, 0.080, 0.015)  # 1.5 cm tall, so it shows as more than a pixel in the top camera
+MARK_Z = STRIP_Z0 + MARK_SEGMENT * SEG_PITCH  # centred on the 1500 mL line, the top of the sixth segment's pitch
 MARK_X = STRIP_X - SEG_SIZE[0] / 2 - MARK_SIZE[0] / 2  # proud of the strip
 
 ML_PER_SEGMENT = 250.0  # one segment pitch of depth: 2.5 cm x 100 cm2
@@ -105,7 +105,7 @@ VALVE = tool(
 OBJECTS = [
     MAT.box((*TANK_XY, TOP + MAT_SIZE[2] / 2), MAT_SIZE),
     *_tank_walls(),
-    *LEVEL.boxes((STRIP_X, TANK_XY[1]), STRIP_Z0, SEG_SIZE, lit=int(START_ML / ML_PER_SEGMENT)),
+    *LEVEL.boxes((STRIP_X, TANK_XY[1]), STRIP_Z0, SEG_SIZE, lit=int(START_ML / ML_PER_SEGMENT), gap=SEG_GAP),
     Box("full_mark", pos=(MARK_X, TANK_XY[1], MARK_Z), size=MARK_SIZE, color=RED),
     VALVE,
 ]
@@ -149,7 +149,9 @@ def _fill(states) -> None:
 
 # -- scoring: the end state, read with the overflow latch -------------------------------------------------------------
 # The band edges are where the strip changes: six segments lit is 1375 to 1625 mL, the surface within 1.25 cm of the
-# red line; four or five lit is 875 to under 1375 mL; seven or eight lit is over 1625 mL up to the rim.
+# red line; four or five lit is 875 to under 1375 mL; seven or eight lit is over 1625 mL up to the rim. The inclusive
+# 1625 edge (and the 875 one) rely on Level.show rounding half to even: 6.5 segments shows 6, 3.5 shows 4. The tests
+# check both.
 MARK_BAND = (1375.0, 1625.0)  # mL, inclusive: at the mark
 EARLY_BAND = (875.0, 1375.0)  # mL, from 875 up to under the mark band: stopped early
 OVER_BAND = (1625.0, 2000.0)  # mL, over the mark band up to the rim: overshot

@@ -96,7 +96,7 @@ def test_the_strip_and_the_mark_sit_on_the_tanks_front_face():
     assert M.MARK_Z - M.MARK_SIZE[2] / 2 <= sixth_top < M.MARK_Z  # which the mark covers from the sixth segment's top
     assert strip[-1].pos[2] + M.SEG_SIZE[2] / 2 < M.TANK_RIM_Z
     assert M.MARK_X < M.STRIP_X < M.TANK_FRONT_X
-    assert M.SEG_SIZE[2] >= 0.020 and M.MARK_SIZE[2] >= 0.004  # readable from above
+    assert M.SEG_SIZE[2] >= 0.020 and M.MARK_SIZE[2] >= 0.010  # readable from above
 
 
 def test_the_band_edges_are_where_the_strip_changes():
