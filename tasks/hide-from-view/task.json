@@ -1,0 +1,14 @@
+{
+  "title": "Hide the present behind the box from Mia's point of view, not the robot's",
+  "category": "Societal relevance",
+  "keywords": ["perspective taking", "line of sight", "hiding", "home robot"],
+  "instruction": "Hide the present behind the cardboard box so Mia, sitting at the green placemat, can't see it.",
+  "context": "Home and care robots should reason about what people can see from where they sit. 'Behind the box' from the robot's side is in Mia's plain view; the present has to go on the side of the box away from her.",
+  "setup": "A white tablecloth covers the table. A green placemat (14 x 30 cm) with Mia's teacup lies 80 cm in front of the arm bases on their midline, where Mia sits facing the robot; her eyes are 35 cm above the table, 88 cm in front of the bases. A cardboard box (10 x 22 x 22 cm tall, 1 kg) stands 40 cm in front of the bases on the midline. A wrapped present (6 cm cube, 150 g) lies 15 cm in front of the bases, 27 cm left of the midline. A pumpkin and a candle decorate the table.",
+  "scoring": "0 if the cardboard box ends more than 2 cm from its start or the present is not resting on the table. Otherwise 1.0 if all four top corners of the present are hidden from Mia's eyes by the box (the straight line from each corner to her eyes passes through the box), 0.5 if only the top centre is, 0 if she can see it. A string stretched to her eye point checks it.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Return the present to its mark and stand the cardboard box back on its mark.",
+  "fidelity": "Rigid bodies only. Mia is not simulated: her view is a fixed eye point 35 cm above the far end of her placemat, and the box's outline is what blocks it. Every surface has the same rubber-like friction (1.2).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-ARP5FY"
+}
