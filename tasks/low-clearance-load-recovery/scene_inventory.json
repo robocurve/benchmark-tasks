@@ -1,0 +1,361 @@
+{
+  "coordinate_system": "Metres; X forward from robot bases, Y left, Z up. Quaternions in pilot.json and reset states are XYZW; geometry orientations are WXYZ.",
+  "shape_size_convention": "Box sizes are HALF extents; cylinders use radius and half length. fromto lists segment endpoints, capsules add their endcap radius. Mesh vertices, scale, orientation and offset define the visual bounds. Shapes are body-local; bodies are asset-local.",
+  "station": {
+    "table_size_m": [
+      1.1,
+      1.3,
+      0.06
+    ],
+    "table_center_m": [
+      0.36,
+      0,
+      0.7175
+    ],
+    "table_top_m": 0.7475,
+    "left_robot_base_m": [
+      0,
+      0.305,
+      0.75
+    ],
+    "right_robot_base_m": [
+      0,
+      -0.305,
+      0.75
+    ],
+    "robot": "Two native YAM arms with parallel finger grippers, geometry from the pinned yam-arena dependency. Table and camera stand are rigid station fixtures."
+  },
+  "nominal_materials": {
+    "wood": "Brown shelves, rests and cover frame; wooden tray/cover.",
+    "polymer": "Blue receiving pads and green marker; battery casing and screwdriver handle.",
+    "metal": "Clamp base, pivot, spring and lever; screwdriver shaft and blade; sealed tray tins.",
+    "paper_and_board": "Books, represented by rigid bodies with retained texture."
+  },
+  "material_scope": "Nominal visual material labels, not measured constitutive properties. Rigid contact uses per-shape friction or the defaults in the bundled USD authoring code; no fracture, deformation, electronics or fluids.",
+  "asset_root_positions_m": {
+    "fixture": [
+      0,
+      0,
+      0
+    ],
+    "load": [
+      0.25,
+      0.04,
+      0.8705
+    ]
+  },
+  "asset_root_orientations_xyzw": {
+    "load": [
+      0,
+      0,
+      0.7071067811865476,
+      0.7071067811865476
+    ]
+  },
+  "geometry": {
+    "fixture": {
+      "name": "Fixture",
+      "bodies": [
+        {
+          "name": "fixture",
+          "shapes": [
+            {
+              "type": "box",
+              "size": [
+                0.04,
+                0.04,
+                0.001
+              ],
+              "position": [
+                0.5,
+                0.2,
+                0.7485
+              ],
+              "color": [
+                0.08,
+                0.65,
+                0.18,
+                1
+              ]
+            },
+            {
+              "type": "box",
+              "size": [
+                0.1,
+                0.09,
+                0.003
+              ],
+              "position": [
+                0.4,
+                0.04,
+                0.856
+              ],
+              "color": [
+                0.08,
+                0.25,
+                0.55,
+                1
+              ]
+            },
+            {
+              "type": "box",
+              "size": [
+                0.012,
+                0.012,
+                0.052749999999999964
+              ],
+              "position": [
+                0.46,
+                -0.04,
+                0.80025
+              ],
+              "color": [
+                0.45,
+                0.39,
+                0.3,
+                1
+              ]
+            },
+            {
+              "type": "box",
+              "size": [
+                0.012,
+                0.012,
+                0.052749999999999964
+              ],
+              "position": [
+                0.46,
+                0.12,
+                0.80025
+              ],
+              "color": [
+                0.45,
+                0.39,
+                0.3,
+                1
+              ]
+            },
+            {
+              "type": "box",
+              "size": [
+                0.03,
+                0.085,
+                0.008
+              ],
+              "position": [
+                0.27,
+                0.04,
+                1.0
+              ],
+              "color": [
+                0.45,
+                0.39,
+                0.3,
+                1
+              ]
+            },
+            {
+              "type": "box",
+              "size": [
+                0.012,
+                0.012,
+                0.12224999999999997
+              ],
+              "position": [
+                0.27,
+                0.113,
+                0.86975
+              ],
+              "color": [
+                0.45,
+                0.39,
+                0.3,
+                1
+              ]
+            }
+          ],
+          "mass": 0.2,
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "static": true,
+          "center_of_mass": [
+            0.3666987214512076,
+            0.04349688558627473,
+            0.8626815102174625
+          ],
+          "inertia": {
+            "tensor": [
+              [
+                0.0015039437949827266,
+                -9.322786391785287e-05,
+                0.0005642831729063586
+              ],
+              [
+                -9.322786391785287e-05,
+                0.0021818176604357213,
+                7.985593545970498e-05
+              ],
+              [
+                0.0005642831729063586,
+                7.985593545970498e-05,
+                0.0023885254224226176
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "load": {
+      "name": "BatteryLoad",
+      "bodies": [
+        {
+          "name": "load",
+          "shapes": [
+            {
+              "type": "mesh",
+              "mesh_file": "assets/battery.obj",
+              "texture": "assets/texture_map.png",
+              "collision": false
+            },
+            {
+              "type": "box",
+              "size": [
+                0.05,
+                0.027,
+                0.019
+              ],
+              "position": [
+                0,
+                0,
+                0.019
+              ],
+              "color": [
+                0.35,
+                0.38,
+                0.4,
+                1
+              ],
+              "visible": false,
+              "friction": [
+                0.45,
+                0.35
+              ]
+            }
+          ],
+          "mass": 0.15,
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "static": false,
+          "center_of_mass": [
+            0.0,
+            0.0,
+            0.019
+          ],
+          "inertia": {
+            "tensor": [
+              [
+                5.4499999999999997e-05,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.00014305000000000003,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.00016145000000000002
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "robot_start": {
+    "left_tcp_m": [
+      0.36,
+      0.04,
+      0.817
+    ],
+    "left_rotation_xyzw": [
+      0,
+      0.7071067811865476,
+      0,
+      0.7071067811865476
+    ],
+    "right_joint_angles_rad": [
+      0,
+      1,
+      1,
+      -0.6,
+      0,
+      0
+    ]
+  },
+  "observed_demo_reset": {
+    "robots": {
+      "left": {
+        "q": [
+          -0.9477203488349915,
+          2.295522451400757,
+          0.7088043689727783,
+          1.554927945137024,
+          -0.9474397897720337,
+          1.5684975385665894
+        ],
+        "tcp": [
+          0.3592620504405099,
+          0.04101401266667631,
+          0.8097315371965201
+        ]
+      },
+      "right": {
+        "q": [
+          -1.0139014072763075e-09,
+          1.0,
+          1.0,
+          -0.6000000238418579,
+          -3.014534399881086e-08,
+          -8.257247663401301e-10
+        ],
+        "tcp": [
+          0.3234096111914071,
+          -0.30499579132363785,
+          1.0081040599917979
+        ]
+      }
+    },
+    "objects": {
+      "load": [
+        [
+          0.2514008581638336,
+          0.039803676307201385,
+          0.8596053719520569
+        ],
+        [
+          -0.040614865720272064,
+          -0.05690695717930794,
+          0.7065568566322327,
+          0.7041940689086914
+        ],
+        [
+          0.00043101501069031656,
+          0.0005644849152304232,
+          -0.0014400598593056202,
+          1.8565520804258995e-05,
+          -0.07091863453388214,
+          -0.011522729881107807
+        ]
+      ]
+    }
+  }
+}
