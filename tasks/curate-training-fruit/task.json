@@ -1,0 +1,21 @@
+{
+  "title": "Curate a robot dataset: fruit of a known kind in the bowl, a new kind on the plate",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "dataset curation",
+    "novelty detection",
+    "visual comparison",
+    "robot learning",
+    "pick and place",
+    "bimanual"
+  ],
+  "instruction": "put fruit of a kind shown on the training set mat in the bowl, and fruit of a new kind on the plate",
+  "context": "Robot learning at scale needs datasets curated for coverage: telling which objects a model has already seen from new ones. Here the robot compares each fruit against a reference mat, and the nearest target is the wrong one for two of the three.",
+  "setup": "Positions are measured on the table from the midpoint between the two arm bases: forward is away from the arms, left and right as seen from behind the arms. (1) Bowl: the station's cream-glazed ceramic bowl, 16.6 cm across and 5.75 cm tall, fixed, centred 28 cm forward on the midline. (2) Plate: the station's cream ceramic plate, 14.6 cm across and 1.1 cm tall, fixed, centred 28.5 cm forward and 22 cm right. (3) Training-set mat: a grey board 12 cm front to back, 22 cm left to right and 3 mm thick, fixed, centred 43 cm forward and 20 cm left, holding a fixed apple (5 cm left of the mat's centre) and a fixed orange (5 cm right of it), with a white card printed \"TRAINING SET\" just in front of it. (4) Loose fruit: a red apple (6.9 cm across, 120 g), 13.5 cm forward and 15 cm left; a lemon (7 x 5.1 cm, 5.8 cm tall, 100 g), 12 cm forward on the midline; an orange (7.3 cm across, 110 g), 14 cm forward and 13 cm right. Nothing else is on the table.",
+  "scoring": "Scored once, after the episode ends. A fruit is in the bowl when it rests still with its centre within 6 cm of the bowl's centre and its bottom below the rim, and on the plate when it rests still within 6 cm of the plate's centre and its bottom within 3 cm of the plate's top. The right targets: the apple and the orange (kinds on the mat) in the bowl, the lemon (a new kind) on the plate. One third for each fruit on its right target, minus one sixth for each on the wrong one, never below 0; 1.0 for all three right.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Put the apple, lemon and orange back on their starting spots. The bowl, plate, mat, its two fruits and the card are fixed (putty) and stay in place.",
+  "fidelity": "Dream Labs' YAM station replica in Isaac Lab-Arena (Isaac Sim). The bowl, plate, apple and orange are the station's own models at its scale; the lemon is a library model. Fruit collide as convex hulls (the orange through its decomposition). The card's letters are thin black boxes on a white board.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-B3TR98"
+}
