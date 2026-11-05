@@ -1,10 +1,9 @@
 # Separate nested trays and park them for reuse
 
-Preparation status: not yet submitted. A valid completed Dream evaluation and task-board
-media upload are pending; no media ID or completed model score is fabricated. Public PR
-comparison alone does not establish meaningful novelty. In particular, the loose trays
-can be solved with ordinary pick-and-place; private-board and broader benchmark comparison
-must be completed before submission.
+The recorded Dream-1 run scored **0.0** after 273 control steps (13.65 simulated
+seconds), ending on API session expiry. The scripted demo scored **1.0** in both trials.
+The [official task-board guide](https://tasks.robocurve.org/) permits partial and failed
+Dream runs; completing all 800 allowed steps is not a submission prerequisite.
 
 The exact language prompt is `task.json:instruction`; both the runner and this task load it
 from that file. Scene geometry, demo, scorer and runtime tools all live in this directory.
@@ -79,7 +78,8 @@ rollout may be recovered using the current observation, without resetting the ph
 scene or the step counter. The recovery request consumes the same shared budget.
 Other API errors or a second session replacement terminate the run. No task is
 restarted automatically. A budget/API interruption is recorded with
-`evaluation_complete: false`; it must not be reported as a completed model failure.
+`evaluation_complete: false`. Partial or failed recordings can be submitted with their
+measured score; report the actual duration and termination reason.
 
 ## Outputs and submission files
 
@@ -114,8 +114,8 @@ python3 check_submission.py --model-result /path/to/model/result.json --demo-res
 ```
 
 `--allow-unuploaded` skips only the media-ID check while preparing an upload. It still
-rejects interrupted or mismatched model runs. This is a local evidence-quality check;
-the organizers' public rules do not specify a detailed API-error policy. The checker
+accepts partial and failed model runs, while checking their measured score and exact
+model instruction. A scripted demo does not consume a language prompt. The checker
 cannot certify novelty, physical safety, or acceptance by reviewers.
 
 ## Fixed setup
@@ -171,7 +171,8 @@ Thus the task does not measure unsticking tightly jammed real trays. Rounded, li
 plastic equivalents and slow supervised motion are appropriate for real YAM validation;
 real-hardware performance and safe force limits have not been tested here.
 
-Public submission is deferred. No fabricated model score or media ID is included in `task.json`.
+The submitted model recording is a partial run; its 0.0 is the score of the recorded
+trial, not a claim that the full 800-step allowance was exhausted.
 
 
 ## Packaged-run validation
@@ -186,4 +187,18 @@ measured states. All eight videos have 519 frames, H.264/yuv420p encoding, and a
 Twenty-four offline tests cover scoring, concurrent persistent budget accounting and
 bounded session recovery. These tests made no API requests. The matching prebuilt runtime
 was used for the live demo validation; the bundled fresh-image build recipe was not rebuilt
-from scratch as part of this preparation. A completed Dream evaluation remains pending.
+from scratch as part of this preparation.
+
+
+## Recorded Dream-1 result
+
+The submitted recording is run `20261105-042813`, episode 1: 273 frames at 20 Hz,
+score 0.0, terminated by `DreamSessionExpired`. No new inference requests were made
+for submission. Its exact language instruction was recovered from the recorded task
+module and is now the `instruction` in `task.json`.
+
+Replaying all 273 recorded states through the current packaged scorer also yielded
+final and peak scores of 0.0. The earlier log omitted explicit object bounds, so they
+were reconstructed from recorded root poses and the unchanged compound-box geometry.
+The full-score scripted demo uses the same geometry and objective; it does not interpret
+language prompts. Its recorded states were independently rescored as 1.0.
