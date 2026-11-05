@@ -1,0 +1,23 @@
+{
+  "title": "Hold a bag's pocket flap open and stow a charger inside",
+  "category": "Societal relevance",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "deformable",
+    "articulated object",
+    "hold open",
+    "container packing",
+    "household",
+    "travel"
+  ],
+  "instruction": "Pack the white phone charger into the bag's top pocket: hold the pocket flap open by its grey knob, put the brick, the whole cable and the plug inside, then let the flap fall shut over it and let go of everything.",
+  "context": "Bags are used throughout homes, stores and healthcare, and opening a bag and inserting items is still hard for robots (AutoBag, Chen et al., ICRA 2023; SLIP, Chen et al., IROS 2023). Deformable cables are a long-standing manipulation challenge (Seita et al., ICRA 2021). Stowing a phone charger in a travel bag's pocket combines both. A flap that falls shut unless held makes it need two hands at once: one holds the flap, the other feeds the charger in.",
+  "setup": "Origin: table top midway between the arm bases; x forward, y to the robot's left (cm). Bag: navy fabric-covered foam block 26 x 58 x 5 cm, fixed, x 14 to 40, y -43 to +15. Pocket: opening x 25 to 30, y -10 to +10, 5 cm deep. Flap: blue 4 mm PLA plate 7 x 22 cm, 40 g, hinged on the opening's far edge (x 30.5), stop at 80 deg, lying shut over x 23.5 to 30.5, y -11 to +11. Knob: grey 18 mm ball, 5 g, on the flap's front edge at y +9. Charger on the bag top along x 17.5: white 6 mm PVC cable, 30 cm, 32 g, from y -40 to -10; grey USB-C plug 22 x 12 x 7 mm, 4 g, at y -42 to -40; white brick 36 x 26 x 16 mm, 20 g, at y -10 to -6.",
+  "scoring": "Score 0 if at the end: a gripper is within 3.5 cm of the charger, flap or knob (still holding); the flap is open more than 3 deg (front edge about 4 mm above the bag top, e.g. resting on a plug or cable); any point of the cable, the brick centre or the plug centre is outside the opening's footprint (x 25 to 30, y -10 to +10) or less than 3 mm below the bag top (sticking out); or, in a real trial, the bag moved more than 1 cm (it is fixed in simulation). Otherwise 1.0. No partial credit: packing only the brick, leaving the cable draped over the edge or the flap propped on the charger all score 0.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Take the charger out of the pocket and lay it straight along tape line x 17.5 on the bag top, USB-C plug on the right (cable end at y -40), brick on the left (cable end at y -10), brick lying on its 36 x 26 mm face. Close the flap. The bag is taped to the table at its tape marks.",
+  "fidelity": "Cable: 2 cm rigid segments with bending springs, no twist, stretch or memory. Plug and brick: rigid boxes welded to the cable ends; the brick is 20 g in simulation, so a real trial should use a brick of about that mass (a real charger may be heavier). Bag: one rigid fixed block; real bag fabric and pocket walls are soft (real setup: foam block covered in fabric, taped down). Flap: rigid plate on an ideal hinge with an 80 deg stop and no spring (real: printed hinge with a stop), knob welded on.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-4WG2DL"
+}
