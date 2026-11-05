@@ -1,0 +1,21 @@
+{
+  "title": "Swap two failed fans in a running fan wall, one bay at a time",
+  "category": "Impact on jobs",
+  "keywords": [
+    "data center",
+    "server cooling",
+    "hot-swap fan",
+    "redundancy",
+    "maintenance",
+    "procedure order"
+  ],
+  "instruction": "Two fans in this running server's fan wall have failed: the bays with a red status tile in front of them. Replace both with the spares from the white tray and put the failed fans in the black return bin. The servers stay on, so never have more than one fan bay empty at a time: take out one failed fan, seat a spare in its bay, then do the other. Do not move the working fans.",
+  "context": "Servers and storage chassis cool through a wall of hot-swap fan modules with one fan of redundancy (N+1), so a failed fan can be swapped while the system runs. Vendor service guides tell technicians to replace fans one at a time with the system powered: with a second bay open the remaining fans cannot hold airflow and the system throttles or shuts down. The skill is the concurrency rule, which the end state does not show. Unlike TK-XE2VEC and TK-59C3CG (replace a fuse) or TK-CUFGCQ (swap one unit in one bay), two swaps must be interleaved so that two bays are never empty at once, checked at every step; DataCenterBench has no fan or cooling task. Done by: data-center and computer equipment repairers, network support technicians (O*NET 49-2011.00, 15-1231.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. Fan wall: a fixed steel sill 6 cm deep, 24.4 cm long, 0.75 cm tall, centred at x 30, y 25, with five fixed steel dividers (8 x 0.6 x 3 cm) on it at y 36.4, 30.7, 25.0, 19.3 and 13.6, forming four bays 5.1 cm wide. In each bay a dark grey fan module (8 cm deep, 4.5 cm wide, 6 cm tall, 150 g) stands on the sill, 3 mm from each divider, centred at x 30 and y 33.55 (bay 1), 27.85 (bay 2), 22.15 (bay 3) and 16.45 (bay 4). Status tiles (2 x 3 cm, 3 mm thick, fixed) lie on the table at x 22.5 in front of each bay: red for bays 2 and 4, green for bays 1 and 3. Spares tray: a fixed white open frame (walls 0.6 cm thick, 1.5 cm tall, round an 11 x 13 cm pocket) centred at x 15, y 25, holding two spare fan modules of the same size and mass at y 28 and y 22. Return bin: the same frame in black, centred at x 42, y 25.",
+  "scoring": "From the episode's recorded poses, with the grippers open at the end. 0.25 for each failed fan at rest in the return bin (centre inside the inner walls, bottom within 2 cm of the table) and 0.25 for each of bays 2 and 4 with a spare seated in it: centre within 4 mm of the bay centre along the wall and 6 mm across it, bottom within 2 mm of the sill, square within 5 degrees, still. A bay is empty when no fan module has its centre within 2 cm of the bay centre and its bottom within 1.5 cm of the sill. If two bays are ever empty at the same time, or a working fan ends more than 3 mm or 4 degrees from its start, the score is capped at 0.25. Possible scores: 0, 0.25, 0.5, 0.75, 1.0. Success: score 1, held 1 s.",
+  "run_limit": "1,800 steps (90 seconds at 20 Hz)",
+  "reset_notes": "Stand the two failed fans back in bays 2 and 4 and the spares in the white tray at their marks; the working fans, sill, dividers, tiles, tray and bin do not move. On a real rig the one-bay-at-a-time rule is judged from the trial video.",
+  "fidelity": "Rigid boxes with one shared friction (1.2 static, 1.0 dynamic). The fan wall lies flat on the table with the bays opening upward instead of facing the cold aisle; fan modules are plain boxes held by gravity, with no connector, latch or spinning rotor, and the failure is shown by a fixed red tile instead of a status LED. Airflow is not simulated: the rule is judged from simulator poses every step.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-UT34DN"
+}
