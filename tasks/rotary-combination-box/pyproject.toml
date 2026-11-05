@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robocurve-rotary-combination-box"
+version = "0.1.0"
+
+[project.entry-points."inspect_robots.embodiments"]
+yam_rotary_box = "rotary_box.embodiment:make_embodiment"
+
+[project.entry-points."inspect_robots.policies"]
+rotary_box_scripted = "rotary_box.policy:make_policy"
+
+[tool.setuptools.packages.find]
+include = ["rotary_box*"]

@@ -1,0 +1,19 @@
+{
+  "title": "Open a box with a three-wheel combination lock",
+  "category": "Impact on jobs",
+  "keywords": [
+    "rotary manipulation",
+    "combination lock",
+    "hinged lid",
+    "sequential manipulation"
+  ],
+  "instruction": "Set the three numbered wheels to 3–1–7, then open the lid.",
+  "context": "Opening a latched enclosure requires setting three rotary controls accurately, releasing them at the chosen digits and then pulling the lid open.",
+  "setup": "The YAM station uses x forward, y left and z up; coordinates are in metres and the tabletop is at z=0.7475. A fixed blue box, 140 × 400 × 60 mm, occupies x=0.250–0.390 and y=-0.200–0.200. Three numbered wheels sit on a 120 × 400 × 10 mm ledge. Their centers are (0.190, 0.120, 0.7875), (0.190, 0, 0.7875) and (0.190, -0.120, 0.7875), in left-to-right code order in the top view. Initial digits are 2, 0 and 8. Each wheel is 70 mm in diameter, 26.5 mm thick and 80 g, with a 45 × 18 × 12 mm gripping bar and a fixed orange index triangle. Wheel spacing is 120 mm. The separate 140 × 400 × 8 mm lid weighs 120 g and hinges about world y at (0.250, 0, 0.8125). Its raised 55 × 18 × 12 mm handle is centered at (0.360, -0.120, 0.8385). Seed 0, no jitter. Cameras record at 640 × 360, using the original station top-camera pose and intrinsics and unchanged wrist calibrations.",
+  "scoring": "Score the final state: 0.2 per wheel set within 5° of its requested digit. To verify a setting, angular speed must stay below 0.1 rad/s and both tool-center points must stay more than 80 mm away for one second. A later wrong setting loses credit. Axle displacement over 5 mm or tilt over 5° permanently invalidates that wheel. The lid earns 0.4 when open at least 60° after measured-code unlocking. Opening over 5° while locked, hinge displacement over 5 mm or hinge-axis tilt over 5° permanently invalidates lid credit.",
+  "run_limit": "3,600 steps (180 seconds at 20 Hz)",
+  "reset_notes": "Restore the initial wheel angles and object poses, close and relock the lid, clear scoring history and refresh camera history before the first observation.",
+  "fidelity": "Catalog bin and wheel-hub visuals use analytic collisions. Wheels and lid have revolute joints; equal sinusoidal detents hold all ten digits. A simplified latch locks the hinge at 0° until measured wheel angles match 3–1–7, then allows up to 110° and stays unlocked until reset. Contact and gravity move the lid; there is no opening motor or pose teleportation. The internal mechanism of a commercial combination lock is omitted.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-QXQPSE"
+}

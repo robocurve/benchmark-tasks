@@ -1,0 +1,398 @@
+{
+  "tested_runtime_revision": "a3cbf1145df54a0676f433ca2543ec22762c4916cc086e3cfca8c95269cc3660",
+  "runtime_input_sha256": {
+    "assets/box.usdc": "8e0e4192ad3e425f439906930fb42e86650cb653f716c4f5d2d5f8ef7f3f238f",
+    "assets/digits.png": "52884b1ca57a3d383ee02afe668b322eea7bba628c04c07e51b566daff5853c5",
+    "assets/fixture.usdc": "5ce4ef4f11b3c32e16c10bfb57c608c5426f2f1770a44100ae79863b9bd2d426",
+    "assets/lid.usdc": "b63d3b2844dd92bb13347528ca9b2237d314f4daa2b06187900ec9268a4c5d98",
+    "assets/wheel.usdc": "d1f4adfdf2c907ccf24812e282c09d2076e39aa9e6e5fad05608302f57507df4",
+    "build_assets.py": "c0dade3bd1d84920c5e7b2b4ccb95b18d2213c097938592027a16246926aee9a",
+    "pyproject.toml": "810682a183567b0006c498bafac9d5e73ee42d4b2456500057ee8a46b33d41d1",
+    "rotary_box/__init__.py": "bc97b0fab80abc4b0ce22e61054d06aa1a31b845d04650918eea1aadfa851a5f",
+    "rotary_box/embodiment.py": "6c640cb029d0311f3abf7652a03a89b0766d901076edd0614eb66fe0c10557d8",
+    "rotary_box/policy.py": "f8c6b3edeefe3fbd58e934b6e65684736bfe71ab875a8989482f06f7513b2696",
+    "rotary_box/scoring.py": "34a066f9881b71f1e8202b72cd1a179c829687d53b67cdd07d0eb3acafeb8166",
+    "task.py": "13af2d220b5193f8c8044c4f82b126722b5ced7a060335e61fa1c493700e4200",
+    "test_scoring.py": "7fb6d3e5646b29955e51619ae9805f7ccd1b3b795ca616fc88004786f3f45900"
+  },
+  "fixed_config": {
+    "seed": 0,
+    "jitter": 0,
+    "control_hz": 20,
+    "physics_hz": 240,
+    "device": "cpu",
+    "camera_size": [
+      640,
+      360
+    ],
+    "max_steps": 3600
+  },
+  "camera_calibration": {
+    "pos": [
+      -0.16649487853050232,
+      -0.008999999612569809,
+      1.5418205499649047
+    ],
+    "rot_xyzw": [
+      0.2126292878609637,
+      -0.2126292878609637,
+      -0.6743802977131967,
+      0.6743802977131964
+    ],
+    "convention": "opengl",
+    "lens": {
+      "fx": 392.195617675781,
+      "fy": 391.722351074219,
+      "cx": 318.389434814453,
+      "cy": 177.876312255859,
+      "width": 640,
+      "height": 360
+    }
+  },
+  "scripted_demo": {
+    "trial": "next-rotary-combination-box-original-camera-01",
+    "score": 1.0,
+    "steps": 941,
+    "video_s": 47.1,
+    "wall_s": 108.63835244625807,
+    "run_limit": 3600,
+    "errored_trials": 0
+  },
+  "dream": {
+    "trial": "next-rotary-combination-box-dream-original-camera-01",
+    "score": 0.0,
+    "steps": 3600,
+    "video_s": 180.05,
+    "wall_s": 659.8662788211368,
+    "run_limit": 3600,
+    "errored_trials": 0
+  },
+  "same_runtime_inputs_for_both_trials": true,
+  "scorer_checks": 7,
+  "milestones": [
+    {
+      "trial": "next-rotary-combination-box-prototype-01",
+      "score": 0.2,
+      "maximum_prototype_score": 0.2,
+      "steps": 360,
+      "video_s": 18.05,
+      "retained_digit": 3
+    }
+  ],
+  "physics_and_reset_audit": {
+    "note": "Recorded before camera-only revision; all physics, geometry, scoring and policy inputs remain identical. Only native top-camera framing was restored.",
+    "record": {
+      "environment_revision": "87ff4164e56a15938dfb2b705320e0c8c67f030568279b804a557dd1608c713b",
+      "assets": {
+        "box": {
+          "mass_kg": null,
+          "world_aabb_m": [
+            0.25999999046325684,
+            0.4000000059604645,
+            0.06000000238418579
+          ],
+          "colliders": [
+            {
+              "path": "box/Floor",
+              "shape": "Cube",
+              "static_friction": 1.2000000476837158,
+              "dynamic_friction": 1.0
+            },
+            {
+              "path": "box/Near",
+              "shape": "Cube",
+              "static_friction": 1.2000000476837158,
+              "dynamic_friction": 1.0
+            },
+            {
+              "path": "box/Far",
+              "shape": "Cube",
+              "static_friction": 1.2000000476837158,
+              "dynamic_friction": 1.0
+            },
+            {
+              "path": "box/Left",
+              "shape": "Cube",
+              "static_friction": 1.2000000476837158,
+              "dynamic_friction": 1.0
+            },
+            {
+              "path": "box/Right",
+              "shape": "Cube",
+              "static_friction": 1.2000000476837158,
+              "dynamic_friction": 1.0
+            },
+            {
+              "path": "box/WheelLedge",
+              "shape": "Cube",
+              "static_friction": 1.2000000476837158,
+              "dynamic_friction": 1.0
+            },
+            {
+              "path": "box/Axle0",
+              "shape": "Cylinder",
+              "radius_m": 0.006,
+              "height_m": 0.016,
+              "axis": "Z",
+              "static_friction": 1.2000000476837158,
+              "dynamic_friction": 1.0
+            },
+            {
+              "path": "box/IndexPost0",
+              "shape": "Cube",
+              "static_friction": 1.2000000476837158,
+              "dynamic_friction": 1.0
+            },
+            {
+              "path": "box/Axle1",
+              "shape": "Cylinder",
+              "radius_m": 0.006,
+              "height_m": 0.016,
+              "axis": "Z",
+              "static_friction": 1.2000000476837158,
+              "dynamic_friction": 1.0
+            },
+            {
+              "path": "box/IndexPost1",
+              "shape": "Cube",
+              "static_friction": 1.2000000476837158,
+              "dynamic_friction": 1.0
+            },
+            {
+              "path": "box/Axle2",
+              "shape": "Cylinder",
+              "radius_m": 0.006,
+              "height_m": 0.016,
+              "axis": "Z",
+              "static_friction": 1.2000000476837158,
+              "dynamic_friction": 1.0
+            },
+            {
+              "path": "box/IndexPost2",
+              "shape": "Cube",
+              "static_friction": 1.2000000476837158,
+              "dynamic_friction": 1.0
+            }
+          ]
+        },
+        "lid": {
+          "mass_kg": 0.11999999731779099,
+          "world_aabb_m": [
+            0.14002837240695953,
+            0.4000000059604645,
+            0.03611046075820923
+          ],
+          "colliders": [
+            {
+              "path": "lid/Panel",
+              "shape": "Cube",
+              "static_friction": 1.2000000476837158,
+              "dynamic_friction": 1.0
+            },
+            {
+              "path": "lid/HandlePost0",
+              "shape": "Cube",
+              "static_friction": 1.2000000476837158,
+              "dynamic_friction": 1.0
+            },
+            {
+              "path": "lid/HandlePost1",
+              "shape": "Cube",
+              "static_friction": 1.2000000476837158,
+              "dynamic_friction": 1.0
+            },
+            {
+              "path": "lid/Handle",
+              "shape": "Cube",
+              "static_friction": 1.2000000476837158,
+              "dynamic_friction": 1.0
+            }
+          ]
+        },
+        "wheel_0": {
+          "mass_kg": 0.07999999821186066,
+          "world_aabb_m": [
+            0.08820515871047974,
+            0.08820514380931854,
+            0.038249969482421875
+          ],
+          "colliders": [
+            {
+              "path": "wheel_0/HubCollision",
+              "shape": "Cylinder",
+              "radius_m": 0.035,
+              "height_m": 0.0265,
+              "axis": "Z",
+              "static_friction": 1.2000000476837158,
+              "dynamic_friction": 1.0
+            },
+            {
+              "path": "wheel_0/GripBar",
+              "shape": "Cube",
+              "static_friction": 1.2000000476837158,
+              "dynamic_friction": 1.0
+            }
+          ]
+        },
+        "wheel_1": {
+          "mass_kg": 0.07999999821186066,
+          "world_aabb_m": [
+            0.06999999284744263,
+            0.07000000029802322,
+            0.038249969482421875
+          ],
+          "colliders": [
+            {
+              "path": "wheel_1/HubCollision",
+              "shape": "Cylinder",
+              "radius_m": 0.035,
+              "height_m": 0.0265,
+              "axis": "Z",
+              "static_friction": 1.2000000476837158,
+              "dynamic_friction": 1.0
+            },
+            {
+              "path": "wheel_1/GripBar",
+              "shape": "Cube",
+              "static_friction": 1.2000000476837158,
+              "dynamic_friction": 1.0
+            }
+          ]
+        },
+        "wheel_2": {
+          "mass_kg": 0.07999999821186066,
+          "world_aabb_m": [
+            0.08820515871047974,
+            0.08820514380931854,
+            0.038249969482421875
+          ],
+          "colliders": [
+            {
+              "path": "wheel_2/HubCollision",
+              "shape": "Cylinder",
+              "radius_m": 0.035,
+              "height_m": 0.0265,
+              "axis": "Z",
+              "static_friction": 1.2000000476837158,
+              "dynamic_friction": 1.0
+            },
+            {
+              "path": "wheel_2/GripBar",
+              "shape": "Cube",
+              "static_friction": 1.2000000476837158,
+              "dynamic_friction": 1.0
+            }
+          ]
+        }
+      },
+      "joints": [
+        {
+          "path": "WheelJoint0",
+          "axis": "Z",
+          "body0": [],
+          "body1": [
+            "wheel_0"
+          ],
+          "local0": [
+            0.1899999976158142,
+            0.11999999731779099,
+            0.7875000238418579
+          ],
+          "local1": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "lower": -Infinity,
+          "upper": Infinity
+        },
+        {
+          "path": "WheelJoint1",
+          "axis": "Z",
+          "body0": [],
+          "body1": [
+            "wheel_1"
+          ],
+          "local0": [
+            0.1899999976158142,
+            0.0,
+            0.7875000238418579
+          ],
+          "local1": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "lower": -Infinity,
+          "upper": Infinity
+        },
+        {
+          "path": "WheelJoint2",
+          "axis": "Z",
+          "body0": [],
+          "body1": [
+            "wheel_2"
+          ],
+          "local0": [
+            0.1899999976158142,
+            -0.11999999731779099,
+            0.7875000238418579
+          ],
+          "local1": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "lower": -Infinity,
+          "upper": Infinity
+        },
+        {
+          "path": "LidJoint",
+          "axis": "Y",
+          "body0": [],
+          "body1": [
+            "lid"
+          ],
+          "local0": [
+            0.25,
+            0.0,
+            0.8125
+          ],
+          "local1": [
+            -0.07000000029802322,
+            0.0,
+            0.0
+          ],
+          "lower": 0.0,
+          "upper": 0.0
+        }
+      ],
+      "reset": {
+        "passed": true,
+        "wheel_angles_deg": [
+          71.99999997267713,
+          0.0,
+          -71.99999997267713
+        ],
+        "locked": true,
+        "score": 0.0
+      }
+    }
+  },
+  "visual_review": {
+    "demo": {
+      "reviewed": true,
+      "score": 1.0,
+      "scope": "Full47.10 s top timeline at0.5 s intervals, both synchronized wrist timelines and final frame.",
+      "findings": "Original wider station view shows both arms, all three wheels and entire lid. Robot rotates wheels, releases at3-1-7, then opens and holds the lid beyond60 degrees. Final lid remains open and all wheels remain set. No runtime errors."
+    },
+    "dream": {
+      "reviewed": true,
+      "score": 0.0,
+      "scope": "Complete180.05 s top timeline at0.5 s intervals (16 sheets), both wrist timelines and final frame.",
+      "findings": "Native wider station view matches the paired full-score demo. Dream attempts wheel and locked-lid interactions but never changes the measured digits to the code or opens the lid. Wheels finish at their original incorrect settings. No runtime errors."
+    }
+  },
+  "owner_video_review_pending": false,
+  "media_uploaded": true
+}
