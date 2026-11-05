@@ -1,0 +1,20 @@
+{
+  "title": "Quench two hot aluminium fittings within 6 seconds of the furnace, and air-cool the glowing steel one",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "parallel work",
+    "deadline",
+    "heat treatment",
+    "safety rule"
+  ],
+  "instruction": "The furnace tray has just come out: put both bare aluminium fittings into the blue water tank within 6 seconds, and put the glowing steel fitting on the grey cooling rack. The steel fitting must never go in the water, and hot fittings may only be set down on the tray, in the tank or on the rack.",
+  "context": "In heat treatment, aluminium parts leave the solution furnace and must be in the quench water within a few seconds (the quench delay), or they lose much of the strength the treatment gives them; for thin parts the limit is 5 to 7 seconds. Steel being normalised must instead cool in still air, and cracks if quenched. Two hot aluminium parts only both make the deadline if they are carried at the same time, one in each hand.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) Furnace tray: a fixed dark steel plate, 11 cm front to back x 36 cm side to side x 1 cm thick, centred 17 cm forward on the centre line. On it lie three fittings, blocks 4 cm front to back x 7 cm side to side x 2.5 cm tall: two bare silver aluminium ones (190 g) 12 cm left and 12 cm right of the centre line, and a glowing orange steel one (550 g) on the centre line. (2) Quench tank: fixed dark walls 1 cm thick and 6 cm tall round a 14 x 36 cm blue floor (the water), centred 36 cm forward on the centre line; the water line is 4.5 cm above its floor. (3) Cooling rack: three fixed grey slats, 10 cm front to back x 1.2 cm wide x 1.5 cm tall, 2.5 cm apart, centred 20 cm forward and 30 cm right. The layout is the same in every trial, as in the screenshot; the clock starts with the trial.",
+  "scoring": "Measured from the overhead and wrist videos, with a stopwatch and a ruler. 1.0: both aluminium fittings lie in the tank with their tops below the water line and the steel fitting lies on the cooling rack's slats, all still for 2 s; and each aluminium fitting was below the water line within 6.0 s of the start and stayed there, the steel fitting never went into the tank, and no fitting was ever set down on the bench (the table outside the tank) or on another fitting. 0.5: those conditions hold and both aluminium fittings lie under water, but the steel fitting is not on the rack. 0.0: anything else, including an aluminium fitting reaching the water after 6 s.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed: dry the fittings and put them back on the tray at their marks.",
+  "fidelity": "Rigid-body PhysX (Isaac Sim 6.1, 20 Hz control) of a calibrated two-arm table. Simplified: heat, glow and water are not simulated; the tank is a walled pocket whose blue floor stands for the water, and 'under water' is read from the fittings' heights. The fittings are rigid blocks. Loose objects get rubber-like friction (1.2 static, 1.0 dynamic). Dream-1 sees the 320 x 176 frames it expects; the demo video is rendered at 1280 x 720.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-W2VVE5"
+}
