@@ -1,0 +1,20 @@
+{
+  "title": "Pour a glass of wine with both hands, one on the bottle's neck and one on its body",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "pouring",
+    "hospitality",
+    "aiming",
+    "liquid"
+  ],
+  "instruction": "Pick up the wine bottle with both hands, one on its neck and one on its body, and pour the wine into the glass without spilling any or knocking the glass over.",
+  "context": "Pouring wine is part of serving at table: the bottle is steadied with two hands and its mouth held just over a narrow, top-heavy glass, so that the wine goes in and the glass is never touched.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) A slim dark green glass wine bottle with a cream label, 27.5 cm tall and 6 cm across: a 16 cm straight body, a sloping shoulder and a neck 2.5 cm across and 5 cm long; open, 0.8 kg empty, loose, standing upright with its centre 22 cm forward on the centre line. (2) The wine: 10 dark red plastic beads 5 mm across, 0.6 g each, inside the bottle on its floor. (3) A clear stemmed wine glass, 7.8 cm tall: a foot 6.4 cm across, a 2 cm stem and a bowl 6 cm across inside and 5 cm deep; 150 g, loose, standing with its centre 34 cm forward on the centre line. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Counted at the end of the trial, placing each bead by its centre. 0.0 if at any time the bottle is tipped more than 45 degrees from upright without both grippers holding it (fingers closed on it), its neck points more than 60 degrees below level, or the glass is tilted 30 degrees or more (knocked over); or if the glass does not end standing upright on the table. Otherwise 1.0 with at least 8 of the 10 beads in the glass and at most 1 spilled (outside both the glass and the bottle); 0.5 with at least 5 in the glass and at most 3 spilled; 0.25 with at least 2 in the glass; else 0.0. The trial ends at the run limit, or once the full score has held with everything still for 1 s.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Nothing is consumed: drop the beads back into the bottle and stand the bottle and the glass back on their marks.",
+  "fidelity": "Rigid-body simulation (Isaac Sim 6.1, PhysX, 20 Hz control) of a calibrated two-arm table. Simplified: the wine is 10 rigid 5 mm beads standing in for liquid (they roll out and drop, without flowing, glugging or dripping); the bottle's and glass's round walls are 12 to 16 flat panels; friction is set (bottle 0.8, glass 0.6, beads 0.3); the cameras render at 1280 x 704 (Dream-1 sees 320 x 176).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-SNXZJM"
+}
