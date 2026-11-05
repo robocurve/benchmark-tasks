@@ -1,0 +1,20 @@
+{
+  "title": "Share oranges fairly when one child already has some",
+  "category": "Societal relevance",
+  "keywords": [
+    "fairness",
+    "counting",
+    "implicit goal",
+    "pick and place",
+    "bimanual"
+  ],
+  "instruction": "share the oranges fairly between Maya's red tray and Leo's blue tray",
+  "context": "Home robots will serve families, and fairness between people is something they are rarely told outright. Leo already has two oranges, so a fair share is not an even split of the four left; the robot has to count what is already there.",
+  "setup": "Positions are measured on the table from the midpoint between the two arm bases: forward is away from the arms, left and right as seen from behind the arms. (1) Maya's tray: four red walls, each 1 cm thick and 3 cm tall, fixed to the table around a 16 x 16 cm square (the table is its floor), centred 30 cm forward and 22 cm left. (2) Leo's tray: an identical tray with blue walls, centred 30 cm forward and 22 cm right. (3) Oranges: six identical oranges (the station's orange model, 6.4 cm across, 110 g), loose. Four stand on the table between the trays at 16 cm and 26 cm forward, 6 cm left and 6 cm right. Two stand inside Leo's tray, 26 cm and 34 cm forward and 20 cm right. Maya's tray starts empty. Nothing else is on the table.",
+  "scoring": "Scored once, after the episode ends. An orange counts for a tray when it rests still with its centre inside the tray's walls and its underside within 3.5 cm of the table (so one resting on another still counts). 1.0: three oranges in each tray. 0.5: one tray has exactly one more orange than the other. 0.25: both trays have the same number but fewer than three each. 0.0: the trays differ by two or more, as at the start (none and two) or after splitting the four evenly (two and four).",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Put four oranges back on the table between the trays and two in Leo's tray. The trays are fixed (putty) and stay in place.",
+  "fidelity": "Dream Labs' calibrated YAM station replica in Isaac Lab-Arena (Isaac Sim), with the station's own orange model, colliding through its convex decomposition. The trays are fixed rigid walls with the table as their floor; the children's names are given in the instruction and by tray colour, not on labels.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-B7CX86"
+}
