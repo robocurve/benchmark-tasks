@@ -1,0 +1,20 @@
+{
+  "title": "Lift a tin cup out of a campfire that is out of reach, using two sticks together as tongs",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "bimanual",
+    "tool use",
+    "improvised tongs",
+    "out of reach",
+    "coordination"
+  ],
+  "instruction": "The tin cup in the fire pit is out of reach. Hold one stick in each gripper and use the two sticks together like tongs to lift the cup out over the stones and stand it on the flat stone.",
+  "context": "When something is too far away or too hot to take by hand, people use two sticks together, like tongs or chopsticks: each hand holds one stick and the two ends close on the object from opposite sides. One stick alone can only push the object about; lifting it needs both, moved together.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. A small campfire pit at the far end of the table: fixed grey stone walls 1.5 cm thick and 4.5 cm tall round a 15 x 15 cm bed of embers (a fixed orange slab 5 mm thick), centred 58 cm forward on the centre line. In it, standing on the embers 60.5 cm forward, a tin cup (a silver cylinder 6.6 cm across and 8 cm tall, 50 g). On the centre line the arms reach about 40 cm forward, so the cup is out of reach. Two wooden sticks, 34 cm long and 1.2 x 1.2 cm thick, 25 g, lie on the table pointing forward, 20 cm left and 20 cm right of the centre line, from 19 to 53 cm forward. A flat stone (a fixed grey slab 10 x 10 x 2 cm) lies 42 cm forward on the centre line, in front of the fire pit. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Measured from the overhead and wrist videos and with a ruler and a protractor. 1.0: the cup stands upright on the flat stone (tilted less than 10 degrees, its bottom within 5 mm of the stone's top, its centre within 4 cm of the stone's centre), still for 2 s. 0.5: the cup is out of the fire pit (wholly in front of its front wall) but not standing on the flat stone. 0.0: anything else, including the cup still in the pit or on its stones.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Stand the cup back on the embers at its mark and lay the sticks back at their marks; nothing is consumed.",
+  "fidelity": "Rigid-body PhysX (Isaac Sim 6.1, 20 Hz control) of a calibrated two-arm table. Simplified: fire and heat are not simulated; the embers are a fixed orange slab and the stones fixed blocks. The cup is a rigid cylinder and the sticks rigid square bars. Loose objects get rubber-like friction (1.2 static, 1.0 dynamic). Dream-1 sees the 320 x 176 frames it expects; the demo video is rendered at 1280 x 720.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-2X3BDJ"
+}
