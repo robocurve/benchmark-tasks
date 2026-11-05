@@ -1,0 +1,19 @@
+{
+  "title": "Find the blown fuses with a group tester and a test budget",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "group testing",
+    "fault finding",
+    "experiment design",
+    "test budget"
+  ],
+  "instruction": "Some of the eight fuses F1 to F8 are blown. The tester lights its lamp when you press TEST only if every fuse in its slots is good. Put every blown fuse, and no good fuse, in the red bin, using at most seven presses of TEST.",
+  "context": "Finding failed units with a tester that checks several at once is how technicians and labs save tests (pooled testing). The number of blown fuses is not given, so a search that assumes a single fault stops too early; the robot has to choose tests that cover every possibility within seven presses.",
+  "setup": "Eight cream cartridge fuses F1 to F8 (3 x 3 x 6 cm blocks, labelled, identical look) stand upright in a row 22 cm in front of the arm bases, 7.5 cm apart, centred on the centre line between the arms, in random order. The tester is four marked slots in a row 36 cm in front of the bases, 9 cm apart and centred, joined by a printed trace and wired in series with a lamp (4.4 cm globe on a 5 cm post) 45 cm out, 7 cm left of the centre line. A red TEST push button (3.6 cm cap, labelled TEST) stands 45 cm out, 7 cm right of the centre line. A red bin (14 x 14 cm, 3 cm walls) stands 40 cm out, 38.5 cm left of the centre line.",
+  "scoring": "0: no fuse or the tester is touched. 0.25: a fuse is touched or TEST is pressed. 0.5: TEST is pressed with at least one fuse seated in a slot. 0.75: the results of the first seven TEST presses (which fuses were seated, lamp lit or dark) leave exactly one set of blown fuses that fits them all, and it is the true set. 1.0: the 0.75 condition holds and every blown fuse, and no good fuse, is in the red bin. The score is the highest level reached.",
+  "run_limit": "12,000 steps (10 min 00 s at 20 Hz)",
+  "reset_notes": "Hidden per trial (redrawn every trial from its seed): Exactly two fuses are blown (uniform over the 28 pairs; the number is not told). The budget is 7 tests, one more than the minimum worst-case 6 for a 4-slot tester (exhaustive minimax search). Halving search for a single fault ends after 3 tests with up to 28 pairs still possible.",
+  "fidelity": "Fuse state is a hidden flag; the lamp result is computed in code at each TEST press.",
+  "scores": "Dream-1 run: 0.25 (a run capped at 4,830 steps, 241 s, of the 12,000-step limit); demo: 1",
+  "media": "M-6PQ3EY"
+}
