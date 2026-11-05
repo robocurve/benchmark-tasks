@@ -1,0 +1,21 @@
+{
+  "title": "Kit fasteners for two bracket assemblies",
+  "category": "Impact on jobs",
+  "keywords": [
+    "kitting",
+    "bill of materials",
+    "fasteners",
+    "line-side logistics",
+    "bimanual",
+    "counting"
+  ],
+  "instruction": "Kit two bracket assemblies, one in each half of the white kit tray. Each assembly needs two bolts, a nut on every bolt and a washer under every bolt head and every nut. Put each part type in its own pocket and leave every other part in the bins.",
+  "context": "Kitters stage the exact parts for each assembly at the line, working the quantities out from the bill of materials. Unlike counting identical bolts, the count for every part type has to be derived (2 bolts, 2 nuts, 4 washers per assembly), three part types go to their own pockets, and the bins hold more stock than a kit needs. BEHAVIOR's household kit activities (e.g. make_a_car_emergency_kit) only gather items into a container, with no derived counts. Done by: material handlers and production kitters (O*NET 53-7062.00, 51-2092.00).",
+  "setup": "Positions in cm from the midpoint between the two arm bases (x forward, y left); everything square to the table. Each arm has its own mirrored station (left arm y > 0, right arm y < 0). Bins: three fixed dark-blue frames of 0.6 cm thick, 1.5 cm tall walls round open pockets, the table as floor, centred at x 16.5 (bolts), 30 (nuts) and 43.5 (washers); bolt and nut bins 12 x 10 cm inside centred at y +-40, washer bin 12 x 13 cm inside centred at y +-41.5. Kit tray halves: three fixed white frames of the same walls, each pocket 9 x 7 cm inside, centred at the same x and y +-20, in the same order. Parts per side, standing on the table: 3 bolts (grey steel rod 1.2 cm across, 4.5 cm tall, 35 g) at the bolt bin's centre and 3.5 cm either side along x; 3 nuts (dark grey steel disc 1.8 cm across, 0.9 cm tall, 10 g) the same way in the nut bin; 5 washers (light steel disc 2.4 cm across, 0.6 cm thick, 6 g), a row of 3 the same way 3 cm nearer the middle than the bin's centre and a row of 2 at 1.75 cm either side of it, 3 cm further out.",
+  "scoring": "From a top photo and a ruler, with the grippers open. A part is in a pocket when it is still, its centre is inside the pocket's inner walls and its lowest point is less than 5 cm above the table (standing, lying or stacked on parts in the same pocket). Each of the six pockets earns 1/6 when it holds exactly its own type in the required count (bolt pocket 2 bolts, nut pocket 2 nuts, washer pocket 4 washers) and no other part. Possible scores: 0, 1/6, 2/6, ... 1.0. Success: all six right, held 1 s. Parts left in bins, on walls or on the table are not counted.",
+  "run_limit": "4,800 steps (4 minutes at 20 Hz)",
+  "reset_notes": "Stand every part back on its mark in its bin; the bins and tray do not move.",
+  "fidelity": "Rigid primitives with one shared friction (1.2 static, 1.0 dynamic). Bolts are plain rods without heads or threads; nuts are discs, not hexagons; washers are 6 mm solid discs (real fender washers are 2 mm with a hole) so a parallel gripper can pinch them. Bins and tray halves are fixed open frames with the table as floor, and parts start spaced out rather than piled.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-JMRQCK"
+}
