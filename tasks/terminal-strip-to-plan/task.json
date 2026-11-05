@@ -1,0 +1,21 @@
+{
+  "title": "Rework a terminal strip to its terminal plan",
+  "category": "Impact on jobs",
+  "keywords": [
+    "DIN rail",
+    "terminal block",
+    "terminal plan",
+    "control cabinet",
+    "panel building",
+    "rework"
+  ],
+  "instruction": "The terminal strip was started wrong. Take the blue block off the rail, then fit the strip to the terminal plan, starting against the fixed end clamp on the left: grey, grey, blue, green, grey. Close the strip with the loose end clamp. Leave no gap of more than 3 mm.",
+  "context": "Panel builders fit terminal strips to a terminal plan: every block's function (line feed-through, neutral, protective earth) and position is specified, and a wrong block has to come off before the strip can be fitted. Grey, blue and green-yellow are the IEC colours for feed-through, neutral and earth terminals; here the earth block is plain green. Unlike RoboDojo stack_blocks_by_language (a colour order given in words), the order comes from a terminal plan of functional block types, a wrong block must come off first, and an end clamp locks the strip. Done by: electrical and electronic equipment assemblers (O*NET 51-2022.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. Rail: a steel TS35 x 7.5 DIN rail lying flat, 3.5 cm wide, 20 cm long, 0.75 cm tall, along y, centred at x 38, y 33, fixed. A fixed dark end clamp (4.5 x 1 x 3.5 cm, steel) stands on the rail 1 cm in from its left end (centre y 41.5). Terminal blocks: PA plastic boxes 5.5 cm across the rail, 1.22 cm wide, 5 cm tall, 20 g. One blue block stands on the rail against the clamp (centre y 40.34). On the table, standing, long side along x: four grey blocks at x 20, y 40, 35, 30 and 25; two blue blocks at x 29, y 40 and 35; two green blocks at x 29, y 30 and 25. A loose dark end clamp (steel, 4.5 x 1 x 3.5 cm, 15 g) stands at x 29, y 20.",
+  "scoring": "From a top photo and a ruler, with the grippers open. An item is on the rail when it stands on the rail's top face (bottom within 2 mm), centred across it within 4 mm, square and upright within 5 degrees, and still. Reading from the fixed clamp, each next item on the rail continues the strip if its near face is within 3 mm of the previous item's far face; the strip ends at the first larger gap. The plan is six items: grey, grey, blue, green, grey, end clamp. Score: 1/6 for each plan item matched in order from the clamp, stopping at the first mismatch, so the start (blue against the clamp) scores 0. Success: all six, held 1 s.",
+  "run_limit": "4,800 steps (4 minutes at 20 Hz)",
+  "reset_notes": "Stand the blue block back against the fixed clamp and the spares and the loose end clamp on their marks.",
+  "fidelity": "Rigid boxes with one shared friction (1.2 static, 1.0 dynamic). The rail lies flat on the table instead of on an upright panel, and its top-hat profile is a solid bar. Terminal blocks are plain boxes with no clamp screws or DIN foot: they rest on the rail by gravity and lift straight off, where real blocks hook on and snap down. Blocks are 12.2 mm wide (16 mm2 size) so a parallel gripper can hold one; the earth block is green rather than green-yellow.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-JT5AS4"
+}
