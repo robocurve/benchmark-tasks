@@ -1,0 +1,21 @@
+{
+  "title": "Fit a rod that is longer than the tray by laying it corner to corner",
+  "category": "Societal relevance",
+  "keywords": [
+    "spatial reasoning",
+    "packing",
+    "orientation",
+    "diagonal fit",
+    "long object",
+    "household"
+  ],
+  "instruction": "Put the long orange rod in the grey tray, lying flat on the tray floor, then let go.",
+  "context": "Packing a long item into a shorter box, drawer or car boot: it goes in flat only when turned to lie corner to corner. Here the rod is longer than both inside sides of the tray, so lining it up with either side cannot work. Unlike putting a box away lying down or turning a parcel lengthwise, no turn that lines the rod up with an edge works: the angle has to be worked out from the two sides.",
+  "setup": "World frame for this text: 'in front' is away from the arm bases, 'left' and 'right' are from the robot's view, heights are above the table top, and the midline is halfway between the two arm bases. Tray (grey plastic, taped or clamped to the table so it cannot move): a floor plate 220 mm front to back, 170 mm across and 4 mm thick, lying on the table centred on the midline 30.0 cm in front of the arm bases; on it, four walls 10 mm thick and 40 mm tall (their tops 44 mm above the table). The inside of the tray is 200 mm front to back (20.0 to 40.0 cm in front of the arm bases) and 150 mm across (7.5 cm left to 7.5 cm right of the midline), with its floor 4 mm above the table. Rod (loose, orange-painted aluminium square tube): 220 mm long with a 20 x 20 mm section, 66 g, lying flat on the table to the left of the tray with its long side front to back, centred 30.0 cm in front of the arm bases and 19.0 cm left of the midline (it spans 19.0 to 41.0 cm in front and 18.0 to 20.0 cm left of the midline, 95 mm clear of the tray's left wall). The rod is longer than both inside sides of the tray; lying flat it fits only when turned between about 30.5 and 37.5 degrees from the tray's long side (the inside diagonal is 250 mm). Nothing else is on the table.",
+  "scoring": "Measure with a ruler from the tray floor and look from above. Wholly inside: seen from above, no part of the rod is more than 1 mm past the inside face of any wall. On the floor: the rod's lowest point is at most 1 mm above the tray floor (resting on it). Flat: the rod's highest point is at most 25 mm above the tray floor (the rod is 20 mm thick, so its two ends differ in height by at most about 5 mm). At rest means moving less than 1 cm/s and turning less than 0.5 rad/s. Score 1.0: wholly inside, on the floor, flat and at rest. Score 0.3: propped in the tray: at rest, its lowest point on the floor (at most 1 mm above it), its midpoint over the tray floor (inside the four inside wall faces), not wholly inside (part of it reaches over a wall, as when one end rests on a wall top), and its highest point more than 25 mm and at most 100 mm above the floor. Score 0 in every other case: the rod on the table, held in the air (even 2 mm above the floor), resting across the wall tops (lowest point about 40 mm above the floor), stood on end or leaning steeply (highest point more than 100 mm above the floor), with its midpoint outside the tray, or still moving. The trial ends at 1.0 once the 1.0 condition has held for 1 s; otherwise it scores the condition at the last step.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "The tray stays taped or clamped in place. Lay the rod back on the table to the left of the tray, long side front to back, at the position above. Nothing is consumed.",
+  "fidelity": "Approximate. Both objects are rigid boxes: the rod is a solid box with the mass of a 1.5 mm-wall aluminium tube and square, unrounded edges; the tray is five fixed boxes with sharp inside corners and no draft on its walls. The rod has no distinct ends or faces, so which way round it lies is not scored. Friction and the rod's mass distribution are the simulator's values, not measured. Turned 34 degrees, the rod clears the end walls by about 3 mm and the side walls by about 5 mm on each side.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-DZTXD7"
+}
