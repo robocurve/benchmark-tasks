@@ -1,0 +1,25 @@
+{
+  "title": "Take a round turn on a bollard",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "hand-over",
+    "rope",
+    "deformable",
+    "marine",
+    "mooring",
+    "wrapping",
+    "topology",
+    "placement",
+    "release"
+  ],
+  "instruction": "Take a round turn with the orange line on the black bollard: lead the line's black end all the way around the bollard post, under its cap, so the line goes at least one full turn around it, then lay the end in the grey tray on the right and let go of the line with both grippers.",
+  "context": "A round turn is a complete turn of a line around an object. The USCG Boat Crew Seamanship Manual (COMDTINST M16114.5C) has the crew take a working turn on a bitt or cleat to keep control of an anchor rode, which may not be held with hands alone. Handling lines to moor vessels is a deckhand task (O*NET 53-5011.00 Sailors and Marine Oilers). Here the line must go fully around the post, which takes both arms: only one arm reaches the end, only the other the tray.",
+  "setup": "Positions in cm from the midpoint between the arm bases on the table (x away from the robot, y to its left). Bollard: black steel, 50 mm round post 6 cm tall with a 70 mm round cap 1 cm thick on top (7 cm total), axis x 32, y 0, bolted down. Deck eye: grey 30x40x12 mm steel block, centre x 29.2, y -12.1, long side turned 95 deg from x. Line: orange 8 mm braided rope, 68 cm, fixed in the eye, lying straight on the table at 95 deg (to the left) from x 29, y -10 to x 23.1, y 57.7, passing 1 cm in front of the post; black 35x16x12 mm whipped end (12 g) on its free end. Tray: grey, four fixed 10 mm walls 2 cm tall, inner x 33-43, y -22 to -14, floor = table.",
+  "scoring": "Measured at the end from a top photo. Winding = total angle the line's centre line sweeps around the bollard axis, counted only where the line is within 3 cm of the post and below the cap. Score 0 if: either gripper is within 3.5 cm of the line or its end; no part of the line below the cap is within 1 cm of the post; the winding is under 330 deg (half wraps, no turn); or the bollard, eye or tray was moved. Otherwise 0.5, and 1.0 if the whipped end's centre is inside the tray walls below their tops. Success (1.0) must hold 1 s.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Unwind the line and lay it straight from the deck eye at 95 deg (tape marks at the eye face, x 29, y -10, and at the line end, x 23.1, y 57.7), the whipped end lying flat with its long side along the line. Nothing in the tray.",
+  "fidelity": "Line is 34 rigid 2 cm capsule segments with bending springs, no twist or plasticity, friction 0.8; the whipped end is a rigid box welded to the line end; the eye end is welded to the world. Bollard, eye and tray are fixed rigid shapes. Winding is computed from the line's centre line in top view; release is checked geometrically (finger centre >= 3.5 cm from line and end).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-TZYAPS"
+}
