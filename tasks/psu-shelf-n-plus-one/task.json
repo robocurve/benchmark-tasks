@@ -1,0 +1,21 @@
+{
+  "title": "Populate a power shelf to N+1 from the rack's load",
+  "category": "Impact on jobs",
+  "keywords": [
+    "data center",
+    "power shelf",
+    "PSU",
+    "N+1 redundancy",
+    "rack power",
+    "capacity planning"
+  ],
+  "instruction": "This power shelf feeds a rack that draws 8.4 kW. Each PSU supplies 3 kW, and the shelf must run N+1: enough PSUs to carry the whole load, plus one redundant PSU. Two bays already hold PSUs. Install spare PSUs from the mat into empty bays so the shelf has exactly the N+1 count, no more, and leave the other spares on the mat. Do not move the installed PSUs.",
+  "context": "Data-center technicians populate rack power shelves to a redundancy rule: N PSUs to carry the rack's load plus spares (N+1 here), so one PSU can fail or be hot-swapped without dropping the rack. The count comes from the load and the PSU rating, not from the empty bays: too few PSUs and a single failure overloads the rest; extras are spares taken from a counted pool and run each PSU further below its efficient load range. Open Rack v3-style shelves hold six PSUs. Unlike TK-MEMWHK, which fills every rail bay, and TK-PLJPH7, which seats one drive in one named bay, here the robot must compute how many to add (ceil(8.4/3)+1-2 = 2) and stop there; DataCenterBench's Tier 1 steps have no power-shelf task. Done by: electrical and electronics repairers (O*NET 49-2094.00); data center technicians.",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. Shelf, all fixed: a dark base 10 x 27.8 x 1 cm centred at x 30, y 25; on it six bays along y, 3.8 cm clear width at a 4.4 cm pitch, centred at x 30 and y 14.0, 18.4, 22.8, 27.2, 31.6, 36.0 (bays 1 to 6); five steel walls (5 cm along x, 0.6 cm thick, 3.5 cm tall) between them; an orange end plate (6 x 1 x 5 cm) at y 11.6 beside bay 1 and a steel one at y 38.4 beside bay 6. Installed PSUs: off-white boxes 8 cm along x, 3.2 cm wide, 5 cm tall, 250 g, standing on the base in bays 2 and 5. Spares mat: fixed, 11 x 26 x 0.2 cm, centred at x 18, y 25; on it four identical spare PSUs standing upright, centred at x 18 and y 16, 22, 28 and 34.",
+  "scoring": "From a top photo and a ruler, with the grippers open. A PSU is in a bay when its centre is inside the bay's 3.8 cm width, within 2 cm of the shelf centreline in x, and its bottom within 1 cm of the base top; seated when also within 4 mm of the bay centre along y and 1 cm in x, bottom within 3 mm of the base, upright and square within 8 degrees, still. N+1 = ceil(8.4 / 3) + 1 = 4, so two spares must be added. Score: 0.5 for each spare seated in a bay, up to two. Capped at 0.25 if three or more spares are in bays (over-populated) or an installed PSU is no longer seated in bay 2 or 5. Success: score 1.0 held for 1 s.",
+  "run_limit": "1,800 steps (90 seconds at 20 Hz)",
+  "reset_notes": "Stand the four spares back on the mat at their marks; the PSUs in bays 2 and 5 stay.",
+  "fidelity": "Rigid boxes, one shared friction (1.2/1.0). The shelf lies on its back so PSUs go straight down into bays; real PSUs slide in horizontally, latch and mate a rear connector. PSUs are plain boxes with no handles, latches or power. Bay pitch and the 3 mm clearance are widened so the gripper pads clear neighbours, not taken from any product; bay walls are shorter than the PSU so the pads reach its ends.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-UDPLWN"
+}
