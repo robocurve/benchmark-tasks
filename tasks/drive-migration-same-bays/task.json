@@ -1,0 +1,21 @@
+{
+  "title": "Move a failed server's drives into the same bay numbers of a turned replacement chassis",
+  "category": "Impact on jobs",
+  "keywords": [
+    "data center",
+    "server",
+    "drive bay",
+    "RAID",
+    "chassis replacement",
+    "bay mapping"
+  ],
+  "instruction": "The nearer chassis has failed. Move all four drives into the replacement chassis further out, each into the bay with the same number it had in the old chassis, so the RAID array assembles. In each chassis the bays are numbered 1 to 4 starting from the end with the orange end wall. Stand each drive upright between its bay's guides.",
+  "context": "When a server chassis or backplane fails, data-center technicians move the drives to a replacement bay for bay: procedures have each drive labelled with its slot before removal and put back in the same-numbered slot, because RAID controllers and storage arrays can track members by slot and a reordered set may not import cleanly. Here the replacement chassis stands turned 180 degrees and offset, so its bay 1 is at the opposite end and copying positions gives the wrong mapping: the numbering has to be read from each chassis' marked end. Unlike TK-PLJPH7 (seat one hot-swap carrier with its cam handle) and DataCenterBench's Tier 1 connect-equipment steps, the skill is preserving the bay mapping across four drives. Done by: computer, ATM and office machine repairers; computer network support specialists (O*NET 49-2011.00, 15-1231.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. Each chassis: a fixed floor plate 15 x 23 cm, 0.4 cm thick; four bays 4.5 cm apart along y, each two fixed dark guide walls (7 cm long along x, 0.3 cm thick, 3.5 cm tall) either side of a 2.5 cm channel; end walls 7 x 0.6 x 4 cm, 3.5 cm beyond the end bays, orange beyond bay 1 and grey beyond bay 4; a dark front bezel 0.8 x 20 x 3 cm, 6.5 cm in front of the bays. Old chassis: centred at x 20, y 21.5, bezel on the near side (x 13.5), bays 1 to 4 at y 28.25, 23.75, 19.25, 14.75 (orange end at y 31.75). New chassis, empty, turned 180 degrees: centred at x 38, y 23.5, bezel on the far side (x 44.5), bays 1 to 4 at y 16.75, 21.25, 25.75, 30.25 (orange end at y 13.25). Drives: four 2.5-inch drives in carriers, boxes 7 cm wide (x), 1.8 cm thick, 10 cm tall, 120 g, standing on end in the old bays: red in bay 1, yellow in 2, blue in 3, green in 4.",
+  "scoring": "From a top photo and a ruler, with the grippers open. A drive is seated in a new bay when it is still, upright within 8 degrees, square to the bay within 6 degrees, its centre within 5 mm of the bay's centreline and 8 mm of its centre along it, its bottom within 3 mm of the floor. 0.25 for each drive seated in the new bay with the same number as its old bay (red 1, yellow 2, blue 3, green 4). A drive in a new bay with another number (centre within 1 cm of its centreline and 4 cm of its centre, bottom less than 2 cm above the floor) earns nothing and caps the score at 0.25. Possible scores: 0, 0.25, 0.5, 0.75, 1.0. Success: all four in their own bay numbers, held 1 s.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Stand the four drives back in the old chassis, red in bay 1 to green in bay 4; both chassis are fixed.",
+  "fidelity": "Rigid boxes, one shared friction (1.2 static, 1.0 dynamic). A drive in its carrier is one box at real 2.5-inch drive size (100 x 70 x 15 mm, plus 3 mm for the carrier). The chassis are open top-loading cages: a bay is two guide walls on a floor, with no backplane connector, carrier latch or handle, so a drive is held by gravity. Bay pitch is 45 mm (real about 20 mm) to leave room for the 38 mm fingers. Carrier colour stands in for a slot label.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-C73THX"
+}
