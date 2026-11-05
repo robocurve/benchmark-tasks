@@ -1,0 +1,20 @@
+{
+  "title": "Hot-swap a running station's failing battery pack without its bay ever staying empty more than 4 seconds",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "make-before-break",
+    "hot swap",
+    "timing",
+    "battery handling"
+  ],
+  "instruction": "Swap the failing battery pack in the running station (red tile) for the charged spare (green tile), not the one still charging (amber tile), and put the failing pack in the orange return bin. The station can run for at most 4 seconds with its bay empty, and packs may only be set down in the bay, their own charger or the return bin.",
+  "context": "Field radios, medical carts, UPS shelves and robot docks are hot-swapped: a pack is changed while the equipment keeps running on a few seconds of hold-up. That is a make-before-break job: the new pack must be ready in one hand, right at the bay, before the other hand pulls the old one, which a single gripper cannot do. Lithium packs are also never set down loose, and a damaged pack never goes back on a charger.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) Station: a fixed dark grey housing 10 cm deep x 24 cm wide x 10 cm tall, centred 37 cm forward on the centre line. (2) Its battery bay in front of it: a pocket of fixed dark grey walls 1 cm thick and 3 cm tall around a 9 cm deep x 8 cm wide floor (the table), centred 25 cm forward on the centre line, with a red tile (tape) in front of it. (3) Three identical dark blue battery packs, 7 cm deep x 6 cm wide x 8 cm tall, 400 g each: the failing one stands in the bay. (4) Charger rack on the right: two black cradles, the same pocket as the bay, centred 30 cm right of the centre line at 22 cm forward (green tile in front: charged) and 11 cm forward (amber tile: still charging), a pack standing in each. (5) Return bin on the left: fixed orange walls 1 cm thick and 4 cm tall around a 12 x 12 cm floor, centred 18 cm forward and 28 cm left. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Measured from the overhead and wrist videos (with their timestamps) and a ruler. A pack is in the bay when its centre is within 1.5 cm of the bay's centre seen from above and its bottom within 1 cm of the table. 1.0: the charged spare stands in the bay and the failing pack stands in the return bin, the charging pack still in its cradle, everything still for 2 s; and at no time was the bay empty for more than 4 s in a row, was a pack set down anywhere it may not be (the failing pack anywhere but the bay or the bin, the spare anywhere but its cradle or the bay: on the table, the station, another pack or a wrong pocket), did a pack lean more than 25 degrees, or did the charging pack move more than 1 cm. 0.5: those 'at no time' conditions hold and the charged spare stands in the bay, but the failing pack is not in the bin. 0.0: anything else.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed: stand one pack in the bay and one in each cradle, as in the screenshot.",
+  "fidelity": "Rigid-body PhysX (Isaac Sim 6.1, 20 Hz control) of a calibrated two-arm table. Simplified: the packs are rigid uniform blocks with no connector or latch (a pack counts as installed by position alone), the station's power and hold-up time are not simulated (the empty-bay time is judged from poses every step), and charge state is shown by tiles. Loose objects get rubber-like friction (1.2 static, 1.0 dynamic). Dream-1 sees the 320 x 176 frames it expects; the demo video is rendered at 1280 x 720.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-YQMD7P"
+}
