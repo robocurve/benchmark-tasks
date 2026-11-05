@@ -1,0 +1,21 @@
+{
+  "title": "Bridge the terminals the plan commons",
+  "category": "Impact on jobs",
+  "keywords": [
+    "DIN rail",
+    "terminal block",
+    "jumper bridge",
+    "terminal plan",
+    "control cabinet",
+    "panel building"
+  ],
+  "instruction": "The terminals are numbered 1 to 8 from the left end clamp. Following the terminal plan, bridge terminals 2 and 3, and terminals 5 and 6: lay one red jumper bar along the strip on top of each pair, centred over the gap between them. Bridge nothing else and leave the spare bar in the tray.",
+  "context": "Panel builders common terminals with plug-in jumper bridges exactly as the terminal plan says; a bridge between the wrong neighbours shorts two circuits together, so a misplaced bridge is a wiring fault, not just a miss. The plan here is given by terminal number, so the robot has to count positions along an otherwise uniform strip. Unlike TK-7ZYLQV, where the panel's ports are numbered and listed on a card at the station, nothing marks terminals 2-3 and 5-6: the positions come only from the plan, and a stray bridge is penalised as a short. Unlike TK-PZUTS3, where one bridge goes into two named, marked test sockets, the two bridge positions must be found by counting along the strip. Done by: electrical and electronic equipment assemblers (O*NET 51-2022.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. Rail: a steel TS35 x 7.5 DIN rail lying flat, 3.5 cm wide, 20 cm long, 0.75 cm tall, along y, centred at x 38, y 33, fixed. On it, all fixed: a dark steel end clamp (4.5 x 1 x 3.5 cm) centred at y 41.5; eight grey terminal blocks (5.5 cm across the rail, 1.22 cm wide, 5 cm tall), 0.5 mm apart, centred at x 38 and y 40.34, 39.07, 37.8, 36.53, 35.26, 33.99, 32.72 and 31.45 (terminals 1 to 8); a second end clamp centred at y 30.29. Jumper bars: three red plastic bars 1 cm across, 2.3 cm long, 1.2 cm tall, 5 g, lying flat with their long side along y at x 24 and y 34.5, 30 and 25.5, inside a fixed white open tray (walls 0.6 cm thick, 1 cm tall, round a 6 x 14 cm pocket) centred at x 24, y 30.",
+  "scoring": "From a top photo and a ruler, with the grippers open. A bar bridges a pair of neighbouring terminals when it rests still on top of the blocks (bottom within 2 mm of their top), its centre within 4 mm of the strip's centreline and within 3 mm of the midpoint between the two terminals, its long side along the strip within 8 degrees. Score: 0.5 for each plan pair bridged (2-3 and 5-6), 0.5 off for each bar resting on top of the strip anywhere else; floored at 0. Possible scores: 0, 0.5, 1.0. Success: both pairs bridged and nothing else on the strip, held 1 s.",
+  "run_limit": "1,800 steps (90 seconds at 20 Hz)",
+  "reset_notes": "Lay the three bars back in the tray on their marks.",
+  "fidelity": "Rigid boxes with one shared friction (1.2 static, 1.0 dynamic). The rail lies flat on the table and the terminal strip is fixed. Real plug-in bridges push down into a jumper channel in the middle of each block and are held by their contact legs; here the bar rests on top of the blocks and is held by gravity, so bridged means lying in place, not inserted.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-PYZPJA"
+}
