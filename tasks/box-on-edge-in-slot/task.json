@@ -1,0 +1,20 @@
+{
+  "title": "Stand a flat box, too wide for one gripper, on edge in a narrow slot beside a riser",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "compression grasp",
+    "reorientation",
+    "tipping",
+    "multi-stage"
+  ],
+  "instruction": "Put the flat white box into the slot between the wooden riser and the wall, standing on edge with its longest side upright.",
+  "context": "Flat cartons, trays and panels are stored on edge in slot racks, but they arrive lying flat. Lying flat, a wide carton cannot be picked up by one hand from above, and turning it on edge needs a lever or an edge to tip it over: lifted onto a ledge with both hands, it can be tipped over the ledge's edge into the rack, the way people stand up heavy panels.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) A closed white corrugated cardboard box with no handles, 12 cm deep x 20 cm wide x 9 cm thick, 350 g, lying flat with its centre 15 cm forward on the centre line. Lying flat it is wider and deeper than a gripper opens (about 9 cm). (2) A fixed dark wooden riser, 12 cm deep x 12 cm wide x 10 cm tall (half the box's width), centred 30 cm forward and 4 cm right; its left face is 2 cm left of the centre line. (3) The slot: a 14.5 cm gap between the riser's left face and a fixed dark wooden wall (14 cm long x 1.5 cm thick x 9 cm tall) whose inner face is 16.5 cm left of the centre line, from 23 to 37 cm forward. Standing on edge in the slot, the box is 20 cm tall. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Measured from the overhead and wrist videos, with a tape measure and a protractor. 1.0: the box stands on edge in the slot, on one of its 12 x 9 cm faces, with its 20 cm side within 20 degrees of vertical, its underside within 1.5 cm of the table and its centre between the riser and the wall and within the slot's length, still for 2 s. 0.5: the box lies flat on top of the riser (tilted under 10 degrees, its underside within 1 cm of the riser's top), lifted there but not stood up in the slot. 0.0: anything else, including the box on the table outside the slot, on its side or fallen off the riser.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed: lay the box flat on its start mark. Replace it if squeezing has dented a side by more than 5 mm.",
+  "fidelity": "Rigid-body PhysX (Isaac Sim 6.1, 20 Hz control) of a calibrated two-arm table. Simplified: the box is a rigid, uniformly dense block (no flex or shifting contents), the riser and wall are fixed, and the squeeze comes only from the arms' joint stiffness. Loose objects get rubber-like friction (1.2 static, 1.0 dynamic), so the box slides less readily than real cardboard. Dream-1 sees the 320 x 176 frames it expects; the demo video is rendered at 1280 x 720.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-WSFLGJ"
+}
