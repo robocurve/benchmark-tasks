@@ -1,0 +1,22 @@
+{
+  "title": "Connect harness branches to the sockets they can reach",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "wire harness",
+    "connector insertion",
+    "length reasoning",
+    "automotive",
+    "deformable"
+  ],
+  "instruction": "Connect the wiring harness: plug each of the three grey branches into one of the three module sockets so that all three are plugged in, then let go.",
+  "context": "Wire-harness assemblers and vehicle electronics installers (O*NET 51-2022.00, 49-2096.00) lay each branch to the connector its length is cut for; aircraft wiring practice sets lengths so each connector reaches only its own mate, to prevent mis-mating (FAA AC 43.13-1B, 11-235b). Here only one assignment connects all three, and each plug starts nearest a socket it must not go to: the robot must judge branch length, not plug into the closest socket.",
+  "setup": "Station table; cm from the midpoint between the arm bases (x away from the robot, y to its left); headings in degrees, 0 = straight ahead, negative = to the right. Clamp: black round breakout boss (3D-printed PLA), 7 cm diameter, 3 cm tall, fixed, centre (17.5, 15), black 2.2 cm trunk stub to the back-left. Branches: 7 mm grey PVC cord, 20 / 33 / 46 cm, each leaving the clamp through a grommet 4.1 cm from its centre (free to swing sideways), laid straight at headings -43 / -83 / -57, each ending in a dark-grey 5 x 1.6 x 1.4 cm plug (15 g); plug centres (37, -3), (22, -24), (46, -29). Modules: three identical black PLA blocks 7 deep x 8 wide x 3.5 cm tall, fixed, each with one socket cavity 2.0 wide x 1.7 tall x 2.8 cm deep at table level opening towards the clamp; openings at (38.4, 13.2), (41.5, -9.0), (13.4, -31.8), i.e. 21, 34 and 47 cm from the clamp centre at headings -5, -45, -95.",
+  "scoring": "Score 0 if, at the end: a gripper is within 3.5 cm of any plug centre; or any plug's tip is 5 mm or more inside a socket that is not its match (short branch -> near module, middle -> middle, long -> far); or the clamp or a module was moved. A plug is inside a socket only if its centre is within 8 mm of the socket axis sideways. Otherwise 1/3 per branch whose plug tip is at least 15 mm inside its matching socket; 1.0 when all three are.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "Unplug all three plugs and lay each branch straight from its clamp exit along its tape line (headings 43, 57 and 83 degrees right of straight ahead for the 20, 46 and 33 cm branches), plugs flat. Check the clamp and modules sit on their marks.",
+  "fidelity": "Branches are 2 cm rigid capsule segments with bending springs, no twist; plugs are rigid boxes welded to the branch ends, held in the sockets by friction (no latch), insertion judged by position. Each branch is pinned at its clamp exit about a vertical axis (a grommet). Clamp and modules are fixed rigid boxes (screwed or taped down in real trials).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-GLSPMP"
+}
