@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robocurve-square-demo"
+version = "0.1.0"
+
+[project.entry-points."inspect_robots.policies"]
+square_scripted = "square_demo:make_policy"
+
+[tool.setuptools]
+py-modules = ["square_demo"]

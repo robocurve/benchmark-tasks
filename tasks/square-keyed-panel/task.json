@@ -1,0 +1,19 @@
+{
+  "title": "Assemble a four-piece keyed square panel",
+  "category": "Impact on jobs",
+  "keywords": [
+    "manufacturing",
+    "assembly",
+    "keyed parts",
+    "orientation"
+  ],
+  "instruction": "Assemble the four keyed pieces into a flat square at the center of the table.",
+  "context": "A simplified fixture-free assembly task illustrates choosing orientations and fitting keyed components in a manufacturing workspace.",
+  "setup": "On a simulated 110 by 130 cm workbench, four loose, rigid, colored components have 50 by 50 by 24 mm square main bodies, each with mass 80 g. Internal mating edges have 12 mm-deep T-shaped tabs, with 14 mm necks, 20 mm heads, distinct offsets and 2 mm nominal clearance; each part has a tab or recess on each of two sides. Four fixed 6 by 6 by 0.5 mm orange corner marks indicate the 100 by 100 mm assembly region centred at world x=0.36 m, y=0. The rotated local-bounds reference centres start at (0.190, 0.180), (0.285, 0.205), (0.180, -0.180), and (0.285, -0.205) metres (world-axis-aligned bounds can shift slightly under rotation); their yaw angles are 0, 0.40, -0.40 and 0.65 radians, respectively. The table and parts have stylized materials.",
+  "scoring": "Award 0.25 per piece whose transformed local-geometry bounds centre (Arena reference centroid) is within 4 mm of its target horizontally and in height, with 3-D orientation within 8 degrees of zero, linear speed below 0.01 m/s and angular speed below 0.5 rad/s. Targets, in metres, are (0.341, 0.019, 0.7595), (0.385, 0.019, 0.7595), (0.341, -0.025, 0.7595), and (0.385, -0.025, 0.7595). If all four meet their targets but any of the four internal seams differs from the target relative displacement by more than 2 mm on any axis, cap the score at 0.75. Full score is 1.0 at the trial end; holding it for one second triggers success termination.",
+  "run_limit": "3,600 control steps (180 seconds at 20 Hz)",
+  "reset_notes": "Restore the four pieces to the specified fixed initial positions and yaw angles; object jitter is disabled.",
+  "fidelity": "Stylized compound rigid parts use primitive box colliders, approximate friction, 2 mm nominal key clearance, 0.5 mm contact offsets and zero rest offsets. Solver iterations are 32/4. Robot colliders and actuators are unchanged. Geometry and materials are not calibrated to physical manufactured parts. The scripted demonstration uses privileged pose feedback and robot joint targets only.",
+  "scores": "Dream-1 beta: 0 after 3600 steps (max_steps); scripted demo: 1.0 after 3507 steps (success).",
+  "media": "M-YMLUDT"
+}

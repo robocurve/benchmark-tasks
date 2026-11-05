@@ -1,0 +1,100 @@
+{
+  "demo": {
+    "score": 1.0,
+    "termination_reason": "success",
+    "control_steps": 3507,
+    "control_hz": 20,
+    "simulated_seconds": 175.35,
+    "wall_seconds": 600.3544423328713,
+    "seed": 0,
+    "object_jitter": 0,
+    "max_steps": 3600,
+    "policy": "square_scripted",
+    "embodiment": "yam_arena",
+    "environment_revision": "c846ccba648d",
+    "video_seconds": 175.4,
+    "resolution": [
+      640,
+      360
+    ],
+    "codec": "h264",
+    "pixel_format": "yuv420p",
+    "visual_review": "Top camera sequence and final top/right-wrist views inspected; all four keyed pieces seated."
+  },
+  "runtime_sources": {
+    "yam_arena": "0059d02a1a91bc6834c1d0846022891df0c78730",
+    "isaaclab_arena": "c7edf3a9d5d8276565208f72422f8f8a0806d6cf",
+    "inspect_robots": "0.60.0",
+    "hardware": "NVIDIA L40S"
+  },
+  "input_sha256": {
+    "task.py": "c846ccba648dcb9271eeb31b8cc99f0a36da6f8bbcc7f7580f4faebc8500a770",
+    "square_demo.py": "cb7ea9607f4fda2452d7cc84b6f53c9602389e04b8787e22307435afd286a046",
+    "closure.py": "f57ba65489c257fd0ac9a2fe8e16eea8587cef65789ba12b11b806f5498ab302",
+    "geometry.py": "0fed5b66d721236a6bf19ce67e0fad17dccf8cb6386dd027683516ff85f17f3d",
+    "procedural.py": "1e503a4c175f0aa200fdfe9293fc1adcd688b18bcf2a4bff66647e98517c6aa6",
+    "demo_calibration.json": "72b98e280665da232e4e32eb8f0b11c31fc648afcf124f03227cb755b3cf9cc3",
+    "pyproject.toml": "a339d7dd8ba34987d926105070a6e2e5cfab530786ff20aa1b15d6a7a132938d"
+  },
+  "pending": [],
+  "runtime_packages": {
+    "python": "3.12.12",
+    "isaacsim": "6.1.0.0",
+    "isaaclab": "17.0.2",
+    "isaaclab-arena": "0.3.0",
+    "yam-arena": "0.1.0",
+    "inspect-robots": "0.60.0",
+    "numpy": "2.3.1",
+    "torch": "2.11.0+cu128"
+  },
+  "dream": {
+    "trial": "square-keyed-panel-dream-01",
+    "checkpoint": "dreamlabs/dream-1-beta",
+    "score": 0.0,
+    "termination_reasons": [
+      "max_steps"
+    ],
+    "steps": 3600,
+    "max_steps": 3600,
+    "control_hz": 20,
+    "simulated_seconds": 180.0,
+    "wall_seconds": 364.40468794014305,
+    "mean_inference_latency_seconds": 0.5759908687074979,
+    "seed": 0,
+    "object_jitter": 0,
+    "resolution": [
+      640,
+      360
+    ],
+    "top_cam": "demo",
+    "environment_revision": "c846ccba648d",
+    "visual_review": "The reviewed sequence shows the right arm attempting to grasp and reposition the purple component. The parts remain separated at the end, and no square assembly is completed. The top sequence, final frame and a right-wrist interaction view were inspected.",
+    "videos": [
+      {
+        "camera": "top",
+        "duration": 180.05,
+        "sha256": "a1149397bad7e5f687df6465fae03b71d59225821eb84f2048b7cef73b39b140",
+        "bytes": 3616478
+      },
+      {
+        "camera": "left",
+        "duration": 180.05,
+        "sha256": "1c9849867d80d265205a79fdbfa767b85b8510647e1374879dea6a372f92b0e6",
+        "bytes": 2592501
+      },
+      {
+        "camera": "right",
+        "duration": 180.05,
+        "sha256": "fe153cba5f37c80058575835ab0ec7023f7509d93b562a4451514cad31b11157",
+        "bytes": 4218396
+      }
+    ],
+    "video_hash_scope": "The videos array hashes the original source-camera recordings; submission_video hashes the faststart stream-copy used in the handoff.",
+    "submission_video": {
+      "file": "model.mp4",
+      "sha256": "f218fb820b57805ddfef6448a9362eb5585ae6c86019cd74070c8d1ec5d8bd38",
+      "bytes": 3616478,
+      "encoding": "H.264/yuv420p, stream-copy remux with faststart; frames unchanged"
+    }
+  }
+}
