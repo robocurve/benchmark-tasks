@@ -1,0 +1,19 @@
+{
+  "title": "Find the best heat conductor, fairly",
+  "category": "Other",
+  "keywords": [
+    "fair test",
+    "heat conduction",
+    "comparison",
+    "confound"
+  ],
+  "instruction": "Rods R1, R2 and R3 look the same but conduct heat differently. Each has a strip of heat-sensitive paint that turns orange above 45 C, and the red plate is hot. At the start, a rod showing no orange is at room temperature, and a rod left off the plate for 2 minutes has cooled back to about room temperature. The PLATE display counts the seconds a rod has been on the plate; the CLOCK display counts seconds since the start. Put the rod that conducts heat best on the red mat.",
+  "context": "Comparing materials is only fair if every sample starts in the same state. Here one rod was just used and is still warm, so testing it at once makes a poor conductor look good. The robot is told how long a rod takes to cool and has timers to check it, so it has to test the cold rods one at a time for the same 20 s and test the warm rod only once it has cooled.",
+  "setup": "Three grey metal bars R1, R2, R3 (12 x 3.2 x 3.2 cm, 120 g) lie along the forward axis with their centres 22 cm in front of the arm bases, 10.5 cm apart, R1 nearest the left arm; printed name cards lie 9 cm nearer the arms. Each bar carries a strip of thermochromic paint in 8 segments on top: dark blue below about 42 C, orange above 48 C. A red hot plate (6 x 35 cm, flush with the table, 90 C) lies across the table 42 to 48 cm in front of the bases, centred between the arms, with a printed HOT card. A red mat (14 x 14 cm) lies 30 cm in front of the left arm's base. At the start one bar is still warm from earlier use, and part of its strip is orange. Two red 7-segment displays lie flat on dark panels 46 cm in front of the bases: PLATE (2 digits, 24.5 cm left of the centre line, just left of the plate) counts the whole seconds the bar now on the plate has been there, blank when none is; CLOCK (3 digits, 25.5 cm right of the centre line) counts whole seconds since the start. Printed PLATE and CLOCK labels lie 5 cm nearer the bases.",
+  "scoring": "0: no bar is touched or moved. 0.25: a bar is touched or moved. 0.5: at least one bar has rested with an end on the hot plate for 20 s on the PLATE display, and its orange segments are counted at that moment. 0.75: every bar has such a 20 s count from a fair start, and one bar's count is strictly the largest. A start is fair if the bar showed no orange at the start of the trial and had not been on the plate since, or if it had been off the plate for at least 120 s on the CLOCK (the start of the trial counts as its last contact). 1.0: the 0.75 condition holds and that bar lies alone on the red mat at the end. The score is the highest level reached; the provided scorer logs each time a bar is laid on the plate, whether its start was fair, and its 20 s count.",
+  "run_limit": "6,000 steps (5 min 00 s at 20 Hz)",
+  "reset_notes": "Hidden per trial (redrawn every trial from its seed): Conductivities as easy; the middle conductor starts warm, as if just taken off the plate after 140-170 s of heating (5-8 orange segments at the start; the orange fades after about 35 s and its mean temperature is below 30 C after about 100 s). Heated straight away it shows a band as long as or longer than the best rod's.",
+  "fidelity": "Heat flow is simulated in code: 1-D diffusion along 8 nodes per rod, the plate heats the end resting on it, rods cool to 22 C in air (60 s time constant); the paint colour is set from the node temperatures.",
+  "scores": "Dream-1 run: 0 (a run capped at 1,230 steps, 61 s, of the 6,000-step limit); demo: 1",
+  "media": "M-EZ6R87"
+}
