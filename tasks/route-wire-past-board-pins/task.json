@@ -1,0 +1,24 @@
+{
+  "title": "Route a wire past formboard pins along the drawn path, then plug it in",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "wire harness",
+    "formboard",
+    "routing",
+    "pin field",
+    "drawing reading",
+    "insertion",
+    "topological planning"
+  ],
+  "instruction": "Route the orange wire on the harness board along the blue printed line: the wire must pass every steel pin on the same side as the blue line. Then push the wire's plug into the black connector at the end of the line and let go.",
+  "context": "Wire-harness builders lay each wire on a formboard by leading it between routing pins as the layout drawing on the board shows (O*NET 51-2022.00 Electrical and Electronic Equipment Assemblers). The pins define the harness shape, so a wire on the wrong side of a pin gives a harness of the wrong shape and branch lengths. Here the wire's plug must then be mated into a connector at the end of the line.",
+  "setup": "Coordinates in cm from the midpoint between the arm bases (x forward, y left). White 1 mm layout sheet, x 5-50, y -45..25. 12 dark steel pins (15 mm dia, 40 mm tall) at x 20/28/36, y 8/0/-8/-16. Blue 6 mm printed line through (13,17),(13,4),(24,4),(24,-4),(32,-4),(32,-12),(42,-12). Grey start fixture 4x3x2.5 cm, wire exit at (13,17). Orange 7 mm PVC-insulated wire, 50 cm, lies straight from the exit towards the right (angled 2 deg away from the robot), ending in a black 45x16x12 mm plug at about (15,-35). Black connector block 6x7x3 cm behind the field, cavity 20 mm wide, 15 mm tall, 25 mm deep, mouth at (42,-12) facing the robot.",
+  "scoring": "Score 0 if: the wire passes any pin on the other side from the blue line (or lies over a pin top); any part of the wire is more than 25 mm above the board; the plug is not let go (a gripper within 3.5 cm of the plug centre); or the plug is more than 4 cm from the connector mouth. Otherwise: plug tip pushed at least 12 mm into the cavity (straight, within 6 mm of its axis) 1.0; tip inside the cavity mouth but under 12 mm 0.5; plug lying within 4 cm in front of the mouth 0.25. Slack and exact wire position do not matter; a moved pin or connector scores 0.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Pull the plug out, lift the wire off the pins and lay it straight from the start fixture along the board's front edge, plug at about (15,-35). Pins, sheet, fixture and connector are fixed to the board and never move.",
+  "fidelity": "Wire: 2 cm rigid segments with bending springs, no twist or plasticity. Pins, fixture and connector are rigid. The plug is a plain box held in the cavity by friction (no latch); real connectors would click. The printed line is a flat 0.3 mm strip. Pin sides are judged from the top view, as from a photo.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-X5USE4"
+}
