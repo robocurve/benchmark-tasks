@@ -1,0 +1,23 @@
+{
+  "title": "Lift a wire out of a deep trough with a hook pick",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "deformable",
+    "tool use",
+    "hook",
+    "handoff",
+    "aircraft wiring",
+    "debris removal"
+  ],
+  "instruction": "A loose wire offcut has fallen into the deep wiring trough, where the grippers do not fit. Use the hook pick to lift the wire out of the trough, then lay the whole wire in the grey tray. Leave nothing in the grippers.",
+  "context": "Avionics technicians (O*NET 49-2091.00: \"Adjust, repair, or replace malfunctioning components or assemblies, using hand tools or soldering irons.\") work in wire runs too tight for fingers, and EASA AMC 20-21 asks for \"protect, clean as you go\" so that no debris is left in wiring. Here a loose wire sits too deep for the gripper: one arm must hook it out with a pick, and the other must carry it to the tray, which only it can reach. Tests lifting a flexible wire vertically with a hook.",
+  "setup": "Cm from the midpoint between the arm bases (x forward, y left). Trough: white PLA, inside x 27.6-30.4, y -15..15, 6 cm deep, 6 mm walls, open top. Six PLA ribs 28x8x8 mm across its floor at y -10.7, -6.3, -1.9, 2.5, 6.9, 11.3. Wire: yellow 6 mm PVC, 24 cm, straight on the ribs from y -12 to 12 at x 28.7. Pick: blue PLA L, 10x10x100 mm shank, 14x6x4 mm foot at its bottom pointing +y, 30 g, upright in a black PLA holder (16x32 mm pocket, 3 cm tall) at x 25, y -22. Tray: grey, 20x22 cm inside (x by y), walls 1.5 cm high and 6 mm thick, centred at x 27, y 28.5.",
+  "scoring": "Score 0 if: at the end a gripper still holds the wire or the pick (gripper centre within 3 cm of either), or (real trial only) the trough or tray moved. Otherwise: 1.0 if the whole wire lies inside the tray's inner outline; 0.5 + 0.5 x (fraction of wire length inside the tray) if no part of the wire is within the trough outline lower than 1 cm above its rim; 0.25 if at least half the wire length is out of the trough; else 0.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lay the wire straight on the ribs along the trough, 11 mm from the near inner wall, ends 3 cm from the trough ends (tape marks at y -12 and 12). Stand the pick in its holder with the foot pointing left. The trough, ribs, holder and tray are clamped to the table; check them against their tape marks.",
+  "fidelity": "Wire: 12 rigid 2 cm segments with bending springs, no twist, no plasticity. Pick: two rigid boxes joined by a fixed joint (one printed L part in reality). Trough, ribs, holder and tray are fixed boxes (clamped in reality). In sim 'holding' is read from the gripper centre's distance to wire and pick; in reality from the final photo.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-J6JLWG"
+}
