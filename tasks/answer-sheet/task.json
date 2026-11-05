@@ -1,0 +1,19 @@
+{
+  "title": "Mark answers on a printed form",
+  "category": "Impact on jobs",
+  "keywords": [
+    "tool use",
+    "writing",
+    "contact-based ink",
+    "forms"
+  ],
+  "instruction": "Pick up the pen and mark A for question 1, C for question 2, D for question 3, and B for question 4.",
+  "context": "The task models filling out a paper inspection form: pick up a writing tool and mark the requested fields without marking the wrong ones.",
+  "setup": "The YAM station uses x forward, y left and z up; coordinates are in metres and the tabletop is at z=0.7475. A fixed 235 × 235 × 1 mm sheet is centered at (0.285, 0.020), with its top 1 mm above the table. Rows 1–4 are at x=0.355, 0.310, 0.265 and 0.220; columns A–D are at y=0.080, 0.040, 0.000 and -0.040. Each labeled box is 22 mm square. One uncapped marker, 120 × 19.44 × 19.44 mm and 25 g, lies along x at root (0.240, -0.240, 0.7575), with its nib pointing toward -x. The layout is fixed, with seed 0 and no jitter. Cameras record at 640 × 360. The station top camera keeps its original pose and intrinsics, and the calibrated wrist cameras are unchanged.",
+  "scoring": "Score the final state: 0.25 per correctly answered row. The requested box must contain a connected ink component spanning at least 12 mm and occupying at least 20 connected 0.5 mm cells, measured inside a 0.6 mm inset. Any ink in another answer box, even a dot, invalidates that row. Dots, hovering and disconnected short dashes earn no answer credit. All other rows score 0.",
+  "run_limit": "2,400 steps (120 seconds at 20 Hz)",
+  "reset_notes": "Return the marker and robot to their starting poses. Keep the sheet fixed, erase all ink, clear the scorer and refresh camera history before the first observation.",
+  "fidelity": "The paper is rigid and fixed. Permanent visual ink follows measured nib-paper contacts, using finite contact tolerances and a 0.5 mm scoring grid. Fluid flow, paper deformation and handwriting recognition are omitted. The marker uses a trimmed catalog barrel, analytic collisions and an exposed spherical nib. Static/dynamic friction of 1.2/1.0 approximates a grippy surface.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-XSHMV8"
+}

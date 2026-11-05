@@ -1,0 +1,74 @@
+{
+  "source_url": "https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.2/Isaac/Props/YCB/Axis_Aligned/040_large_marker.usd",
+  "source_sha256": "75673b47d4fcddfc2d7d5e825cf43b071f5e385c9f237126f8fe95abfc82df07",
+  "asset_origin": "YCB 040 large marker, NVIDIA catalog conversion",
+  "terms_url": "https://www.nvidia.com/en-us/agreements/enterprise-software/isaac-sim-additional-software-and-materials-license/",
+  "use": "Isaac Sim / Isaac Lab simulation and rendered task evidence; retain source and applicable additional-material terms",
+  "modifications": "Use only central 86mm mesh barrel; remove scanned end assemblies and all scanned materials/lettering. Add shoulder, exposed nib, 2mm-radius writing sphere, end band and analytic collision cylinder. Physical marker mass 25g; friction static/dynamic 1.2/1.0; 0.3mm contact offset. No removable cap or writing behavior supplied by catalog.",
+  "dimensions_m": {
+    "body_length": 0.1,
+    "body_radius": 0.0097,
+    "tip_center_x": -0.066,
+    "tip_radius": 0.002
+  },
+  "physics_verification": {
+    "passed": true,
+    "mass_kg": 0.02500000037252903,
+    "aabb_dimensions_m": [
+      0.12000004947185516,
+      0.01944100856781006,
+      0.019441306591033936
+    ],
+    "colliders": [
+      {
+        "path": "/World/envs/env_0/marker/BarrelCollision",
+        "shape": "Cylinder",
+        "radius_m": 0.0097,
+        "height_m": 0.1,
+        "axis": "X",
+        "contact_offset_m": 0.0003000000142492354,
+        "rest_offset_m": 0.0,
+        "static_friction": 1.2000000476837158,
+        "dynamic_friction": 1.0
+      },
+      {
+        "path": "/World/envs/env_0/marker/Shoulder",
+        "shape": "Cylinder",
+        "radius_m": 0.007,
+        "height_m": 0.012,
+        "axis": "X",
+        "contact_offset_m": 0.0003000000142492354,
+        "rest_offset_m": 0.0,
+        "static_friction": 1.2000000476837158,
+        "dynamic_friction": 1.0
+      },
+      {
+        "path": "/World/envs/env_0/marker/End",
+        "shape": "Cylinder",
+        "radius_m": 0.0097,
+        "height_m": 0.006,
+        "axis": "X",
+        "contact_offset_m": 0.0003000000142492354,
+        "rest_offset_m": 0.0,
+        "static_friction": 1.2000000476837158,
+        "dynamic_friction": 1.0
+      },
+      {
+        "path": "/World/envs/env_0/marker/Tip",
+        "shape": "Sphere",
+        "radius_m": 0.002,
+        "contact_offset_m": 0.0003000000142492354,
+        "rest_offset_m": 0.0,
+        "static_friction": 1.2000000476837158,
+        "dynamic_friction": 1.0
+      }
+    ],
+    "reset_passed": true
+  },
+  "registry_candidates": [
+    "marker_hot3d_robolab",
+    "dry_erase_marker_ycb_robolab"
+  ],
+  "search_record": "Arena registry inspected and NVIDIA SimReady hybrid search performed before authored functional geometry; scan candidate without a functioning removable cap selected.",
+  "terms_document_sha256": "82c29d73525cdc97ee483dbf8be6d24a5341c11fe8585fc615ea24a5054b303c"
+}

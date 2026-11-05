@@ -1,0 +1,156 @@
+{
+  "tested_runtime_revision": "01b108f4fb38e7df7e1110b8a0df76346c9b1542496f44b2f8021bcc561c84ab",
+  "runtime_input_sha256": {
+    "answer_sheet/__init__.py": "a5ef7176c15ccd3a6020f320036ca65e16e1095275bc3f991ad0e6db6002ff55",
+    "answer_sheet/embodiment.py": "43c8f30d6ec0a2bbc7e5f7a39bb1e96a6f911e9929ea9481b2f31435bd0b4da4",
+    "answer_sheet/layout.py": "9e1d028808be40b562f9de0f0ea8fc3e681a75300abc464c815535f82187c73a",
+    "answer_sheet/policy.py": "24a49ecd8babaf91977d646d5872e63185393a4fc9c02bf8043c10caaf669308",
+    "answer_sheet/scoring.py": "df19da1981a2ce2b50988d82270b0d93e15fed6fa3f17b5f3bf7dbf89b828d70",
+    "assets/form.png": "329851be4e32f7b4bd9e281ff2c94987a7f25ea53c1e65e2632251d5b990a03c",
+    "assets/marker.usdc": "78565a856a14c8f673979b682ab146d501e3931617b5f82f2eb3c3bcfef82bcb",
+    "build_assets.py": "3bc980a94f624f8dceac53fb3c3c744ac8cb51fbf465d063fbd64be344536025",
+    "pyproject.toml": "d47849901c2aa6a1da5aca01576be2a895ffd80d3860d3f1553396fc4416690f",
+    "task.py": "d37edc51ad1060d0dc1b1cc68ef0b5636846ced85657dd63837f05fc2d576a0a",
+    "test_ink.py": "219d767c8339fe9d94363de50acc57949164c339b62bec5dad0f249083084536"
+  },
+  "fixed_config": {
+    "seed": 0,
+    "jitter": 0,
+    "control_hz": 20,
+    "physics_hz": 240,
+    "device": "cpu",
+    "camera_size": [
+      640,
+      360
+    ],
+    "max_steps": 2400
+  },
+  "camera_calibration": {
+    "pos": [
+      -0.16649487853050232,
+      -0.008999999612569809,
+      1.5418205499649047
+    ],
+    "rot_xyzw": [
+      0.2126292878609637,
+      -0.2126292878609637,
+      -0.6743802977131967,
+      0.6743802977131964
+    ],
+    "convention": "opengl",
+    "lens": {
+      "fx": 392.195617675781,
+      "fy": 391.722351074219,
+      "cx": 318.389434814453,
+      "cy": 177.876312255859,
+      "width": 640,
+      "height": 360
+    }
+  },
+  "scripted_demo": {
+    "trial": "next-answer-sheet-original-camera-01",
+    "score": 1.0,
+    "steps": 1401,
+    "video_s": 70.1,
+    "wall_s": 165.23128909105435,
+    "run_limit": 2400,
+    "errored_trials": 0
+  },
+  "dream": {
+    "trial": "next-answer-sheet-dream-original-camera-01",
+    "score": 0.0,
+    "steps": 2400,
+    "video_s": 120.05,
+    "wall_s": 522.7739724330604,
+    "run_limit": 2400,
+    "errored_trials": 0
+  },
+  "same_runtime_inputs_for_both_trials": true,
+  "scorer_checks": {
+    "passed": 7,
+    "command": "pytest -q test_ink.py"
+  },
+  "milestones": [],
+  "physics_and_reset_audit": {
+    "note": "Recorded before camera-only revision; all physics, geometry, scoring and policy inputs remain identical. Only native top-camera framing was restored.",
+    "record": {
+      "scope": "actual physics attributes and synthetic-ink graphics reset only; not a scored demonstration",
+      "mass_kg": 0.02500000037252903,
+      "aabb_dimensions_m": [
+        0.12000004947185516,
+        0.01944100856781006,
+        0.019441306591033936
+      ],
+      "colliders": [
+        {
+          "path": "/World/envs/env_0/marker/BarrelCollision",
+          "shape": "Cylinder",
+          "radius_m": 0.0097,
+          "height_m": 0.1,
+          "axis": "X",
+          "contact_offset_m": 0.0003000000142492354,
+          "rest_offset_m": 0.0,
+          "static_friction": 1.2000000476837158,
+          "dynamic_friction": 1.0
+        },
+        {
+          "path": "/World/envs/env_0/marker/Shoulder",
+          "shape": "Cylinder",
+          "radius_m": 0.007,
+          "height_m": 0.012,
+          "axis": "X",
+          "contact_offset_m": 0.0003000000142492354,
+          "rest_offset_m": 0.0,
+          "static_friction": 1.2000000476837158,
+          "dynamic_friction": 1.0
+        },
+        {
+          "path": "/World/envs/env_0/marker/End",
+          "shape": "Cylinder",
+          "radius_m": 0.0097,
+          "height_m": 0.006,
+          "axis": "X",
+          "contact_offset_m": 0.0003000000142492354,
+          "rest_offset_m": 0.0,
+          "static_friction": 1.2000000476837158,
+          "dynamic_friction": 1.0
+        },
+        {
+          "path": "/World/envs/env_0/marker/Tip",
+          "shape": "Sphere",
+          "radius_m": 0.002,
+          "contact_offset_m": 0.0003000000142492354,
+          "rest_offset_m": 0.0,
+          "static_friction": 1.2000000476837158,
+          "dynamic_friction": 1.0
+        }
+      ],
+      "joints": [],
+      "reset": {
+        "passed": true,
+        "test_pixels": 20,
+        "dirty_rgb_delta": 72.93333333333334,
+        "returned_observation_rgb_delta": 1.6666666666666667,
+        "scorer_empty": true,
+        "visual_mesh_empty": true
+      },
+      "environment_revision": "1e0fd0de3ba0784f68c0adf416cae3d59d1daa02d79a90a05cbc123507421dc1"
+    }
+  },
+  "visual_review": {
+    "demo": {
+      "reviewed": true,
+      "score": 1.0,
+      "scope": "Full 70.10 s timeline at0.5 s intervals, both wrist timelines and final frame.",
+      "findings": "Native wider station view shows both arms and the complete answer sheet throughout the demo. Four two-stroke checks remain at1A,2C,3D,4B; right wrist supplies close detail. No runtime errors. Left wrist is mostly empty and not selected for review output."
+    },
+    "dream": {
+      "reviewed": true,
+      "score": 0.0,
+      "scope": "Complete120.05 s top timeline at0.5 s intervals (11 sheets), both wrist timelines and final frame.",
+      "findings": "Dream contacts and displaces the marker but never maintains a writing grasp or draws a valid answer stroke. The sheet remains blank and fixed. The native wider view matches the paired demo, and the right wrist shows unsuccessful marker approaches. Completed with no runtime errors."
+    }
+  },
+  "owner_video_review_pending": false,
+  "media_uploaded": true
+}
