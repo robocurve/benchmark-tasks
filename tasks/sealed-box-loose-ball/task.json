@@ -1,0 +1,19 @@
+{
+  "title": "Find the sealed box with a loose ball",
+  "category": "Other",
+  "keywords": [
+    "hidden structure",
+    "inference",
+    "tilt test",
+    "control condition"
+  ],
+  "instruction": "One of the sealed boxes A, B and C has a loose ball inside. Put that box on the red mat.",
+  "context": "Inferring what is inside a closed container from how it moves is common in inspection and logistics. One box holds an off-centre fixed weight that also keeps a rocker tipped, so a test in one direction cannot tell it from the loose ball; the robot has to test both directions.",
+  "setup": "Three sealed cardboard boxes A, B, C (8 cm cubes, 150 g, labelled) sit in a row 20 cm in front of the arm bases, 13.5 cm apart, centred on the centre line between the arms, in random order. A rocker plate (12 x 22 cm, long side left-right) on a centre pivot 6 cm high, tilting up to 6 deg, with white push pads at both ends, sits 36 cm out on the centre line and rests level when empty. A red mat (15 x 15 cm) lies 27 cm out, 37.5 cm left of the centre line.",
+  "scoring": "0: no box or the plate is touched. 0.25: a box or the plate is touched or moved. 0.5: at least one test: a box alone on the plate, one end pushed down and released, plate watched for 1.5 s. 0.75: the tests leave exactly one candidate, the true loose-ball box: it stays tipped toward the pushed end after pushes on both ends, and every other box has failed to follow a push on at least one end. 1.0: the 0.75 condition holds and only the loose-ball box rests on the red mat. The score is the highest level reached.",
+  "run_limit": "5,200 steps (4 min 20 s at 20 Hz)",
+  "reset_notes": "Hidden per trial (redrawn every trial from its seed): Which box holds the loose ball (uniform), and which other box is a decoy with its 120 g fixed 2.4 cm off-centre (diagonally, random corner). On the rocker plate the decoy holds the plate tipped toward its heavy side after any push, so it 'follows' a push on that end. Only the loose-ball box follows pushes on both ends.",
+  "fidelity": "The ball moves on two frictionless slide joints inside the box rather than rolling; the plate's restoring force is a small bob under the pivot.",
+  "scores": "Dream-1 run: 0.25 (a run capped at 4,830 steps, 241 s, of the 5,200-step limit); demo: 1",
+  "media": "M-Q2TBTH"
+}
