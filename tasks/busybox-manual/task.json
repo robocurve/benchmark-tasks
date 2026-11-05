@@ -1,0 +1,24 @@
+{
+  "title": "Set up a machine from its setup sheet and start it with a two-hand control",
+  "category": "Impact on jobs",
+  "keywords": [
+    "machine operation",
+    "setup sheet",
+    "control panel",
+    "two-hand control",
+    "reading instructions",
+    "bimanual",
+    "switches",
+    "dial",
+    "sliders"
+  ],
+  "instruction": "Set the machine up for program P2 as the setup sheet says, then start it.",
+  "context": "Operating machinery is a core job on shop floors, in labs and in kitchens: before a run the operator sets the machine up from a printed setup sheet (program, set points, options) on its control panel, then starts it. Presses, cutters and other dangerous machines are started with a two-hand control, which by safety standards (ISO 13851) needs both hands on two buttons, pressed together and held, so one hand cannot be in the machine. The task checks that a robot can read the sheet, find the right line, work several kinds of controls (rocker switches, a detented dial, friction sliders) to the stated settings, and make the two-hand start only once the machine is set up.",
+  "setup": "Coordinates: x forward from the line between the two arm bases, y to the left, from the midpoint between the bases. A control panel (busybox) stands loose on the table, centred at (30, 0) cm: a dark grey case 25 x 37 x 5 cm (x by y by z), 2.5 kg, with six 11 x 11 cm grey modules on top in two rows. Far row, left to right as seen from the arms: (1) four rocker switches, 33 x 15.6 mm white rockers in 5 mm black frames, rocking 20 degrees either way, far end down is ON, a red lamp above each lit while it is on, numbered 1 to 4 from left to right; (2) a dial, a black bar knob 42 x 12 x 18 mm on a 40 mm disk with a white pointer, 8 detents 45 degrees apart, numbers 1 to 8 clockwise with 1 pointing away from the arms; (3) two sliders, black knobs 12 x 20 x 16 mm moving 72 mm along x against 1 N of friction, marks 1 (near) to 5 (far) printed between them. Near row: (4) a big button, 56 mm white cap labelled START, 5 mm travel; (5) a keypad, a small display reading WATER above six 23 mm keys with Greek letters (not used); (6) four 26 mm buttons, red and green (far), yellow and blue (near), 4 mm travel. A serial sticker KD4XR7 is on the case's left side face. Start: dial at 3, left slider at 2, right slider at 4, switches 1 and 3 on, 2 and 4 off. A printed setup sheet, a 20 x 32 cm white card, lies flat on the table between the arm bases and the box, 1 cm short of the box, centred at (6.5, 0) cm, its text upright as read from the arms' side. It reads: SETUP SHEET; columns PROG, DIAL, LEFT SLIDER, RIGHT SLIDER, SWITCHES ON; P1: 2, 1, 5, 2 3; P2: 5, 4, 2, 1 4; P3: 7, 3, 3, 1 2 3; 'Other switches off.'; 'To start: press START and GREEN together, hold 2 s'.",
+  "scoring": "0.15 each for the dial, the left slider (nearest mark), the right slider (nearest mark) and the four switches set as program P2 says (dial 5, left slider 4, right slider 2, switches 1 and 4 on, 2 and 3 off), judged at the end; plus 0.4 for a two-hand start made while all four were right: START and the green button pressed down (beyond 60 % of their travel) within 0.5 s of each other and both held down together for 2 s. A start with wrong settings earns nothing; correcting them and starting again counts. Full score (1.0) ends the trial: started while set up, and still set up 1 s later. 0 if the red, yellow or blue button or a keypad key was pressed at any time.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Set the dial back to 3, the left slider to 2 and the right slider to 4, switches 1 and 3 on and 2 and 4 off, and put the box back on its mark. Nothing is consumed.",
+  "fidelity": "Approximate: rigid case and parts that don't collide with the case or each other; joint limits bound their travel. Switches are bistable and the dial has detents (weak springs); sliders are held by 1 N of friction; buttons are springs (2-3 N at full travel), pressed beyond 60% of travel. Lamps follow the switches. The sheet is a thin fixed box with a printed texture. Presses are sampled at 20 Hz. The machine behind the panel is not modelled: the start is judged from the buttons and settings.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-BZUGFK"
+}
