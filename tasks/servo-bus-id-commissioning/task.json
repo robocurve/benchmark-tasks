@@ -1,0 +1,24 @@
+{
+  "title": "Give three identical servo modules their IDs, one at a time, on a shared bus",
+  "category": "Impact on AI timelines",
+  "context": "Commissioning daisy-chained actuators is a core procedure in assembling and bringing up robots and automated hardware. Doing it in the wrong order or with bus address clashes causes silent hardware failures, making autonomous multi-step commissioning an essential skill for automated robot engineering.",
+  "instruction": "Three new servo modules (red, green, blue) are plugged into the bus and the bus status lamp is red. Press the white ASSIGN button on the front of the controller box (numbers the single un-numbered servo on the bus; yellow RESET button behind it clears numbers) until red is 1, green is 2, blue is 3 (the 3 x 3 readout board lights each servo's number in its colour row, columns 1 to 3), all three are plugged in, and the lamp turns green.",
+  "setup": "A rigid free-standing fixture (one 8.0 kg body, friction 1.0, not bolted down) on the station table (z = 74.8 cm) holds a 3-socket bus strip and a controller box with a readout board. Three keyed sockets (pitch 7.0 cm, mouths at x = 24.0 cm, z = 2.5 cm above table) sit at y = -5.0 cm (socket 0, blue), y = -12.0 cm (socket 1, red), and y = -19.0 cm (socket 2, green), each with aluminium flange 56 x 42 x 6 mm, dark shell 38 x 30 x 24 mm, 30 x 18 mm cavity (1.0 mm clearance per side to 28 x 16 mm nose), 8 x 3 mm key slot offset 1 mm to the right of centre (toward -y, the same side as the plug's key rib), and 12 N/mm spring plunger (round 4 mm tip, 1.5 mm proud on +y wall). Controller box (140 x 80 x 40 mm, centre at x = 26.0 cm, y = 10.0 cm) holds a white ASSIGN button cap (36 x 36 x 12 mm, 4 g, centre at x = 21.5 cm, y = 8.5 cm, cap top 6.0 cm above the table at rest, 8 mm travel to a hard stop where the cap bottom is flush with the box top, soft 100 N/m spring so the stop is reached with 0.8 N), a yellow RESET button cap (identical, centre at x = 28.5 cm, y = 8.5 cm), a 30 mm diameter, 15 mm tall status lamp dome standing on the box top (centre at x = 25.0 cm, y = 12.0 cm; red, shown green when the bus is clash-free), and an adjacent 3x3 readout board (120 x 80 x 6 mm, centre at x = 26.0 cm, y = 21.0 cm) with 20 mm diameter, 4 mm tall lamps (dark when off; a 1 mm taller disc in the servo's colour when lit) at 3.0 cm pitch (rows red, green, blue at x = 23.0, 26.0, 29.0 cm; columns 1, 2, 3 at y = 24.0, 21.0, 18.0 cm, marked on the far edge of the board by 1, 2 and 3 white dots). Three servo modules (80 g each, friction 0.8; 45 x 18 x 28 mm housing with central red, green, or blue band, steel nose 28 x 16 x 18 mm with 6 x 3 mm key rib and 5 x 1.5 mm detent groove on +y face) start seated in sockets 0 (blue), 1 (red), and 2 (green) with nose pointing +x.",
+  "scoring": "Partial credit ladder (the highest partial tier reached latches for the rest of the episode; 1.0 needs all conditions at once): 0.25 if any module is unplugged (nose depth < 16 mm, lateral offset > 1.5 mm, or rotation error > 10.0 deg from seated pose) or either button is depressed beyond 2.0 mm (travel >= 2.0 mm); 0.50 if the red servo receives bus ID 1 (requires an ASSIGN press with cap travel >= 6.4 mm of its 8 mm while red is the sole un-numbered seated module); 0.75 if red has ID 1 and green has ID 2; 1.0 if red=1, green=2, blue=3, all three servos are seated (depth >= 16 mm, lateral error <= 1.5 mm, angle error <= 10.0 deg), bus status lamp is green, both grippers are open, and all objects are still (linear velocity <= 5 mm/s, angular <= 0.2 rad/s) held continuously for 1.0 s (20 control steps). Zero-gate: fixture displacement > 5.0 mm, fixture tilt > 5.0 deg, or any module dropped off table (> 20 cm below table plane) scores 0.0 permanently.",
+  "reset_notes": "Return all three servo modules to their starting sockets (blue in socket 0, red in socket 1, green in socket 2). Press the yellow RESET button on the controller box to clear all assigned IDs and reset the bus counter; the bus status lamp returns to red and all readout lamps turn off. No parts or materials are consumed.",
+  "keywords": [
+    "bring-up",
+    "commissioning",
+    "actuator",
+    "bus",
+    "arbitration",
+    "keyed connector",
+    "pushbutton",
+    "state machine",
+    "hardware assembly"
+  ],
+  "run_limit": "3,000 steps (2.5 minutes at 20 Hz)",
+  "fidelity": "Servos, keyed sockets (1 mm clearance per side, spring plunger) and pushbuttons (8 mm travel, hard stop, soft 100 N/m spring chosen because the arms' joints are soft) are simulated physically. Bus arbitration, ID logic and the lamp/readout lights are computed in code and drawn as markers. Strip, controller box and readout board form one rigid fixture.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-XTK9S4"
+}
