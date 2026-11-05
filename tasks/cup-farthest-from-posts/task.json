@@ -1,0 +1,19 @@
+{
+  "title": "Place a cup farthest from every post",
+  "category": "Other",
+  "keywords": [
+    "spatial reasoning",
+    "maximin placement",
+    "pick and place",
+    "measurement"
+  ],
+  "instruction": "Put the cup inside the green taped box so that it is as far as possible from every post.",
+  "context": "The placement rule is farthest-point (maximin) selection: of all allowed spots, pick the one whose distance to the nearest existing point is largest. People make this choice constantly when they add one more sample to cover a gap: a new soil or water sampling site between existing ones, a new sensor or wireless access point in a room, a new test case or survey location that covers what the existing ones miss. Doing it physically means estimating distances to several reference objects at once, comparing candidate spots, respecting a boundary, and then placing an object precisely there. Here the best spot is not a corner or the centre of the box but the interior point equally far from three posts, so there is no visual target to copy and a policy that only recognizes objects and drops them in a box will not succeed.",
+  "setup": "A light wooden tabletop with two robot arms whose bases sit on one line along the near side, 30.5 cm either side of the midline. Positions are cm forward of that base line and cm left or right of the midline (left = the left arm's side). Green adhesive tape (2.5 cm wide, 2 mm thick, negligible mass) is laid flat as a rectangle: inside edges at 27.5 and 42.5 cm forward and at 2 and 24 cm right, so the inside is 15 cm (forward) by 22 cm (sideways) and the outside 20 by 27 cm. Four identical grey rigid plastic posts, 3 cm diameter and 8 cm tall, are fixed to the table and cannot move; centres: A 28.5 forward, 2.5 left; B 41.5 forward, 2.5 left; C 35 forward, 19.5 right (inside the tape); D 36 forward, 20 left. A, B and D are outside the tape. One empty plastic yogurt cup (6.8 cm diameter, 5.4 cm tall, 100 g) stands upright with its centre 30 cm forward and 32 cm right, outside the tape. The cup counts as inside the box only when its centre is at least 3.5 cm inside every inner tape edge (31 to 39 cm forward, 5.5 to 20.5 cm right), so the whole cup lies inside the tape.",
+  "scoring": "Measured once at the end with a tape measure, from the centre of the cup's round base. Score 0 if the cup is tilted more than 8 degrees from upright, or if its centre is less than 3.5 cm from any inner tape edge. Otherwise let d be the distance from the cup's centre to the nearest post's centre: 1.0 if d is at least 10.0 cm, 0.5 if d is at least 7.0 cm and less than 10.0 cm, 0 if d is less than 7.0 cm. The best possible d is 11.96 cm, at 35 cm forward and 7.5 cm right, the one point equally far from posts A, B and C, 2 cm inside the edge of the allowed area. No corner of the allowed area reaches 10.0 cm (at most 8.4 cm), and the centre of the box is 6.5 cm from post C, so neither scores 1.0.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Only the cup moves; put it back upright at its starting point. The tape and posts stay in place between trials.",
+  "fidelity": "Approximate. The posts are fixed rigid cylinders, the tape is a 2 mm flat strip the cup can sit on, and the cup is a rigid scanned model with uniform mass. Friction is the same (1.2) for every contact. Nothing deforms. The score is computed from the cup's simulated pose, which matches what a tape measure and a level would give on a real table.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-BCR4SM"
+}
