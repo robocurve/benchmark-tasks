@@ -1,0 +1,20 @@
+{
+  "title": "Two-bin kanban: put the empty bin on the reorder shelf and bring the full bin to the front",
+  "category": "Impact on jobs",
+  "keywords": [
+    "hospital supply",
+    "two-bin kanban",
+    "replenishment",
+    "precedence",
+    "bimanual"
+  ],
+  "instruction": "Lift the empty red bin out of the front of the grey lane and set it on the orange reorder shelf on your left, then move the full blue bin to the front of the lane, against the stop.",
+  "context": "Hospital supply rooms run two-bin kanban: when the front bin of an item empties, it goes on the reorder shelf where the buyer scans it, and the full back bin moves to the front so the ward never runs out. Leaving the empty bin in the lane, or putting the full one on the shelf, breaks the reorder signal. Done by: hospital supply technicians, materials management staff, stock clerks.",
+  "setup": "A grey plastic shelf lane is fixed to the table between the arms, running away from them: inside 8 cm side to side and 23 cm front to back, from 13 cm to 36 cm in front of the arm bases. It is built on a 5 mm thick floor plate 10 cm wide and 25 cm long (from 12 cm to 37 cm in front of the arm bases), which covers the lane's inside plus its side walls, stop lip and back wall. On top of the plate stand 1 cm thick side walls and a back wall, 4 cm tall, and a stop lip 1 cm thick and 1.5 cm tall across the near end; these heights are measured from the plate's top. Two rigid plastic bins (each 10 cm long front to back, 7 cm wide, 8 cm tall) stand in the lane, long side along it, centred side to side: the empty red bin (80 g) at the front, 1 mm behind the stop lip, and the full blue bin (500 g) behind it with a 1 cm gap, so its back face is 1.9 cm from the back wall. A fixed orange wooden block, the reorder shelf, 15 cm by 15 cm and 7 cm tall, stands on the robot's left, its centre 25 cm in front of the arm bases and 26 cm left of the midline between them (4.5 cm right of the line straight ahead of the left arm's base). Nothing else is on the table.",
+  "scoring": "The red bin counts as on the shelf when its whole outline seen from above is inside the shelf's 15 x 15 cm top, its bottom is within 2 mm of the shelf top (set down; a bin held higher in the gripper doesn't count) and it is tilted at most 10 degrees: 0.5. The blue bin counts as at the front when its outline is inside the lane's inside (give or take 5 mm), its bottom is within 2 mm of the lane floor (set down, not held above it), it is tilted at most 10 degrees, its front face is at most 10 mm behind the stop lip's inner face, and no part of it is more than 1 mm in front of that face (a bin with its front edge up on the lip doesn't count): 0.5. Both: 1.0. The score is 0 if any part of the red bin's outline seen from above is over the lane's outline, walls and stop lip included (left in the lane, perched on a wall, put back in it, or stacked on the blue bin), if the blue bin's centre is over the shelf's top, or if either bin's bottom is more than 1 cm below the table top (fallen off the table). The trial ends at 1.0 once both bins meet these conditions and are still for 2.5 s; otherwise the score at the last step counts.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Stand the red bin back in the lane 1 mm behind the stop lip and the blue bin behind it with a 1 cm gap, both centred side to side with the long side along the lane; a 1 cm spacer block makes the gap quick to set. The lane and the shelf are fixed and don't move.",
+  "fidelity": "Approximate: each bin is one rigid closed box, so the supplies inside aren't modelled; the empty and full bins differ only in mass. The reorder shelf is a 7 cm block beside the lane rather than a rail above the lane, within the left arm's reach. The lane and shelf are fixed (clamp them for real trials). Every object has the same rubber-like friction (1.2 static, 1.0 dynamic), grippier than plastic.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-CWPM6G"
+}
