@@ -1,0 +1,19 @@
+{
+  "title": "Find the breaking height with two capsules",
+  "category": "Other",
+  "keywords": [
+    "experiment design",
+    "destructive testing",
+    "search",
+    "budget"
+  ],
+  "instruction": "Each capsule breaks if it is dropped from its threshold slot or any higher slot (1 to 12; every capsule breaks from slot 12); all capsules have the same threshold. Standing a capsule on a numbered pad and pressing DROP drops it from that slot; a broken capsule turns red and cannot be used again. You have 2 capsules and at most 5 drops, and every drop must keep you sure of finishing within those 5 drops whatever happens. Find the threshold slot exactly, then stand the blue flag on its pad.",
+  "context": "Destructive tests use up samples: finding the drop height, load or voltage at which a part fails with only a few samples is everyday quality control. Halving the range, the obvious search, breaks both samples early; the robot has to plan a schedule that still pins down the exact threshold.",
+  "setup": "Twelve grey drop pads (3.8 x 3.8 cm, flush with the table) lie in a row 31 cm in front of the arm bases, 4.5 cm apart, numbered 1 to 12 on printed cards 4 cm nearer the arms; pad 1 is 6 cm toward the right arm from the left arm's base line and pad 12 is 55.5 cm toward it. An orange DROP push button (3.6 cm cap, 3 cm tall) stands 42 cm in front of the bases on the midline, with a printed DROP card. Two white test capsules (3 cm plastic cubes, 50 g) stand 20 cm in front of the bases, 25 cm and 36 cm toward the right arm from the left arm's base line; a blue flag (3 cm cube) stands 20 cm in front, 14 cm toward the right arm. Pressing DROP drops every capsule standing on a pad from that pad's slot; a capsule that breaks turns red.",
+  "scoring": "0: no capsule, flag or button is touched. 0.25: a capsule or the flag is touched or moved, or DROP is pressed. 0.5: at least one drop (a capsule standing on a pad when DROP is pressed). 0.75: the first five drops (the minimum that always suffices with two capsules) leave exactly one possible threshold slot (a capsule breaks at its threshold slot and every higher slot; drops of an already broken capsule tell nothing), and every drop kept a guarantee of finishing within the 5 drops whatever its outcome (after each drop, the slots still possible can always be resolved with the capsules and drops left). 1.0: the 0.75 condition holds and the blue flag stands on that slot's pad (its centre within 2.3 cm of the pad centre) at the end. The score is the highest level reached.",
+  "run_limit": "9,000 steps (7 min 30 s at 20 Hz)",
+  "reset_notes": "Hidden per trial (redrawn every trial from its seed): The threshold slot, uniform over 1-12 as stated. Two capsules and 5 drops, exactly the minimum worst case. Stage 3 also needs every drop to keep the guarantee of finishing within the budget whatever its outcome (the two-egg minimax schedule, e.g. 5, 9, 12 then a linear scan), so trying 1, 2, 3, ... or halving the range earns no science credit even when it happens to hit.",
+  "fidelity": "The drop is simulated in code: pressing DROP decides from the slot whether each capsule on a pad breaks and turns it red; the capsule is not physically raised or dropped.",
+  "scores": "Dream-1 run: 0.25 (a run capped at 1,230 steps, 61 s, of the 9,000-step limit); demo: 1",
+  "media": "M-7GEFX3"
+}
