@@ -1,0 +1,23 @@
+{
+  "title": "Lower a cable into a trench without touching the edge",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "deformable",
+    "underground cable",
+    "trench",
+    "lowering",
+    "constraint-keeping",
+    "energy"
+  ],
+  "instruction": "Lower the whole black cable, end caps included, down into the trench without letting any part of it touch the orange trench edge, then let go of it.",
+  "context": "Power-line installers \"Lay underground cable directly in trenches\" (O*NET 49-9051.00). A Transpower NZ quality alert (2018) says \"The majority of cable outer sheath damage occurs during installation when the cable is being pulled and rubs against sharp objects\"; Belden's fiber cable guide says \"Avoid pulling cables over edges\". This toy task applies that no-edge-contact rule while lowering a 50 cm cord into a trench; one straight-down grasp cannot lift it clear of the slab.",
+  "setup": "Station table; cm from the midpoint between the arm bases on the table (x forward, y left). Trench: two grey MDF slabs 4 cm thick on the table, near slab x 14-27, far slab x 33-40, both y -33 to +33, leaving a 6 cm wide, 4 cm deep slot (x 27-33; its floor is the table) closed at both ends by 2 cm thick blocks (slot y -31 to +31). The rim is painted orange: a 1 cm strip along each long side, flush with the slab tops, and the tops of both end blocks. Cable: black 8 mm round PVC cord, 50 cm, with a black PLA end cap (35 x 16 x 12 mm, 15 g) glued on each end; it lies straight on the near slab along y at x 19, cord y -25 to +25, caps out to y -28.5 and +28.5.",
+  "scoring": "Before a trial the rim edge (the corner where the slab top meets the slot wall, all four sides) is rubbed with chalk; touched length = total length of chalk marks on the cord and caps (sim: cord/cap points whose centre came within their radius + 2 mm of that corner line, checked every physics step; cap radius 10 mm). Score 0 if: touched length is over 1 cm; at the end any point on the centre line of the cord or caps is not inside the slot below the rim; a gripper centre is within 3 cm of the cord or caps. Otherwise 1.0 if nothing touched the rim, 0.5 if 1 cm or less did (a graze). Release height is not scored. Success: 1.0 held 1 s with the cord at rest.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Lift the cord out of the trench, wipe off any chalk, re-chalk the orange rim and lay the cord straight on the near slab along the tape line at x 19 cm, cord ends at the y -25 and +25 marks.",
+  "fidelity": "Cord: 25 rigid 2 cm segments with bending springs (0.01 N·m/rad, not fitted to a real cord), no twist, stretch or plasticity; caps are rigid boxes welded to the ends. The rim edge is a sharp rigid corner; chalk transfer is modelled as a point passing within radius + 2 mm of it. Toy scale: the slot is formed by raised slabs on the table, not dug, and is only 4 cm deep.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-C294WM"
+}
