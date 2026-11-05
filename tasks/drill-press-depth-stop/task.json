@@ -1,0 +1,19 @@
+{
+  "title": "Set a drill-press depth stop and prove the depth twice",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "machining setup",
+    "depth stop",
+    "repeatability"
+  ],
+  "instruction": "Hold the orange catch open and slide the blue depth stop to the green 10 mm mark. Release the catch, take both hands off the press, then press and release the yellow test button twice, waiting for the spindle to return to the top each time.",
+  "context": "A machinist sets the physical downfeed stop for repeated blind holes. The same setting must stop the spindle at the requested depth under two feed loads, even after the operator lets go.",
+  "setup": "Fixed YAM station and unpowered drill-press trainer. Aluminium frame (203 x 285 mm base, 152 mm column), spring-return steel spindle with blunt 16 mm square tip, slotted aluminium workpiece, blue polymer stop with five steel detents (4 mm pitch), orange spring-return steel catch with polymer paddle, and yellow polymer test switch. The spindle starts 5 mm above the workpiece and the stop at 2 mm depth. All dimensions and positions are in task.py and README.md.",
+  "scoring": "Zero initially. With the catch engaged and hands clear, two test strokes at 8 N then 12 N must settle against the stop and return home. Measure tip depth below the workpiece face. Score 0.5 if both settle at 5–15 mm without exceeding 15 mm. Score 1.0 if both settle at 9–11 mm without exceeding 11 mm and differ by at most 1 mm. Other results, assistance, or modified or broken parts score 0. Invalid strokes can be retried.",
+  "run_limit": "600 control steps (30 seconds at 20 Hz)",
+  "reset_notes": "Return the spindle and yellow button to their upper rests. Open the orange catch, raise the blue stop to the 2 mm detent, and release the catch. Reset the test sequence to its first load.",
+  "fidelity": "Unpowered scale trainer. Guided rigid bodies, a spring-loaded catch with positive steel detents, and physical contact between spindle and stop. A bounded external force represents each test stroke; the spindle returns on its spring. No drilling, cutting, motor power, or modeled wear.",
+  "scores": "Dream-1 run 0.0 in 600 actions. Scripted YAM demo 1.0 in 420 actions.",
+  "media": "M-VC3UH7"
+}
