@@ -1,0 +1,20 @@
+{
+  "title": "Clear a photo-eye's beam",
+  "category": "Impact on jobs",
+  "keywords": [
+    "photo-eye",
+    "line of sight",
+    "minimal intervention",
+    "spatial reasoning",
+    "packaging line"
+  ],
+  "instruction": "Clear the beam between the black photo-eye and the red reflector. Move only the cartons that block it, each no more than 10 cm, and leave every carton standing.",
+  "context": "Packaging and conveyor lines stop when something breaks a photo-eye's beam to its reflector. The fix is to clear the line between the two without disturbing anything else on the line: nothing marks the beam, so the operator has to judge which items are actually in it and which only look close. Done by: packaging and filling machine operators.",
+  "setup": "Positions are in cm on the table, from the midpoint between the two arm bases: x forward (away from the arms), y to the robot's left. A black plastic photo-eye on a black post (3 x 3 cm, 7 cm tall, housing and post as one block) is fixed at x 16, y 10, and a red plastic reflector on an identical red post is fixed at x 42, y 30; the two are turned to face each other, so the beam runs straight between them, 4 cm above the table, with nothing marking it. Four blue cardboard cartons (6 x 6 cm across, 8 cm tall, 150 g each) stand upright, square to the table edge, centred at (23.9, 12.1), (21.0, 23.9), (34.1, 16.1) and (35.1, 26.6). Nothing else is on the table.",
+  "scoring": "The beam is the straight line from the photo-eye's post to the reflector's, 4 cm above the table; a carton blocks it if any part of it comes within 1 cm of that line. At the start, the cartons at (23.9, 12.1) and (35.1, 26.6) block it (the first only clips it, by 1 cm); the other two stand 2.0 cm and 3.8 cm clear of it. A carton is standing when its 8 cm axis is within 10 degrees of vertical (either way up) and its lowest point is within 3 mm of the table; it is still when it moves under 1 cm/s and turns under 0.5 rad/s; it is off the table when its lowest point is more than 1 cm below the table top. A carton is untouched when its centre is within 5 mm of where it stood and it has turned at most 5 degrees; a moved carton is measured centre to centre. 1.0 if, at the end, no carton blocks the beam, the two blocking cartons were each moved at most 10 cm, the other two are untouched, and every carton is standing and still. 0.5 if the beam is clear, the other two are untouched and every carton is standing and still, but a blocking carton was moved more than 10 cm. 0.25 if one of the two blocking cartons was moved clear (at most 10 cm) and is still, with the other two untouched. 0 otherwise: if either carton that didn't block the beam was moved, or any carton ends knocked over or off the table.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Stand the four cartons back at their marks, square to the table edge.",
+  "fidelity": "No light is simulated: the beam is the straight line between the two posts, and the score checks it geometrically, with 1 cm to spare for the beam's width. The posts are fixed blocks with no lens or reflector face. The cartons are rigid boxes; every object has the same rubber-like friction (1.2 static, 1.0 dynamic), more than cardboard on a conveyor.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-MG6ZTD"
+}
