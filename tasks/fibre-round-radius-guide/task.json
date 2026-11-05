@@ -1,0 +1,23 @@
+{
+  "title": "Route a fibre patch cord round a radius guide without over-bending it",
+  "category": "Safety and alignment",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "fibre optic",
+    "bend radius",
+    "radius guide",
+    "constraint keeping",
+    "routing",
+    "data centre"
+  ],
+  "instruction": "Route the yellow fibre patch cord round the white radius guide and seat its connector in the white holder beyond the guide, then let go. Never bend the cord tighter than the guide's curve (its minimum bend radius is 25 mm) at any moment, and leave it lying against the guide.",
+  "context": "Fibre cords lose signal or break when bent too tightly; TIA-568-B.3 gave a 25 mm minimum bend radius for 2-4-fibre indoor horizontal cable with no pulling load (50 mm under a 222 N pull), and rack routing fittings keep a set bend radius (e.g. 2 in). Installers route cords to equipment (O*NET 49-2022.00: \"Route and connect cables and lines to ... distributing frames\"). Here a sharp bracket sits where a careless swing would drag the cord; the limit holds at every moment, not only at the end.",
+  "setup": "Station table; positions in cm from the midpoint between the arm bases on the table (x away from the robot, y to its left). Fibre enclosure: grey box 8 (x) x 6 (y) x 5 cm, centred x 22.0, y 30.6. Patch cord: yellow 3.0 mm simplex fibre cord, 44.5 cm, leaving the enclosure's front face at x 22.0 (clamped) and lying straight along -y on the table to y -17.5; black SC-style connector (30 x 12 x 10 mm, 8 g) on its end, flat, y -17.5 to -20.5. Radius guide: white PLA cylinder, 76 mm diameter, 25 mm tall, centred x 26.2, y 0 (3 mm from the cord). Bracket: dark grey square steel block 30 x 30 x 30 mm with sharp edges, x 22.6-25.6, y -13 to -10 (5 mm from the cord). Connector holder: white PLA open-top U slot, inside 40 (x) x 18 (y) x 10 mm deep, 4 mm walls, centred on y -3.95, open end at x 36.2, closed at x 40.2. All but the cord fixed.",
+  "scoring": "Score 0 if: at any moment any 3 cm of the cord turns through more than 1.2 rad, about 69 deg (bend radius under 25 mm; checked on the videos every 50 ms); at the end the connector is not lying in the holder slot (at most 4 mm out of its open end); a gripper is within 3 cm of the cord or connector; the cord is not round the guide (within 20 mm of its face at 15, 45 and 75 deg round the guide quarter between the cord's two legs); a fixed part moved. Otherwise 1.0 if the cord lies within 8 mm of the guide face at all three points, else 0.5.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lift the connector out, unwind the cord and lay it straight along the tape line at x 22 cm, connector flat with its tip at the y -20.5 cm mark, 3 mm from the guide and 5 mm from the bracket. Use a fresh cord if the previous trial bent it tighter than 25 mm.",
+  "fidelity": "Cord: 30 rigid 1.5 cm segments with bending springs; no twist, no plasticity, no optical loss model, so damage is judged only by geometry (radius over each 3 cm, every 50 ms); bends confined to one joint read as spread over 3 cm. Connector is a rigid box resting in the holder (no latch). Enclosure, guide, bracket and holder are fixed rigid parts; the cord is welded at the enclosure exit (a real trial clamps it).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-8N2CGC"
+}
