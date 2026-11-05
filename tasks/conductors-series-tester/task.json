@@ -1,0 +1,19 @@
+{
+  "title": "Sort conductors with a two-pad series tester",
+  "category": "Other",
+  "keywords": [
+    "property testing",
+    "electrical continuity",
+    "sorting",
+    "inference"
+  ],
+  "instruction": "Six bars labelled R1 to R6 look the same, but some conduct electricity and some do not; at least two conduct. The tester's two brass pads are wired in series with its lamp. Put the conductors in the bin marked LIT and the insulators in the bin marked DARK.",
+  "context": "Sorting parts by a hidden property with a test fixture is everyday lab and recycling work. Here the tester only lights when both of its pads hold a conductor, so testing one bar at a time reads every bar as an insulator; the robot has to find a conducting pair and then use a known conductor to probe the rest.",
+  "setup": "Six grey bars R1 to R6 (3 x 3 x 6 cm, labelled, identical look) stand upright in a row 22 cm in front of the arm bases, 10 cm apart, centred on the centre line between the arms, in random order. Two brass pads (5 x 5 cm) lie 36 cm out, 6.5 cm either side of the centre line, joined by printed wires in series with a lamp (4.4 cm globe on a 5 cm post) 45 cm out on the centre line. A blue bin labelled LIT (16 x 16 cm, 3 cm walls) stands 40 cm out, 36.5 cm left of the centre line; a grey bin labelled DARK stands 40 cm out, 36.5 cm right of it.",
+  "scoring": "0: no bar is touched. 0.25: a bar is touched or moved. 0.5: at least one test: a bar resting released on each pad for 1 s or more, lamp observed. 0.75: the tests leave exactly one possible set of conducting bars (of the 50 sets with 2 to 4 conductors), and it is the true set. 1.0: the 0.75 condition holds and every bar is in the correct bin (conductors in LIT, insulators in DARK). The score is the highest level reached.",
+  "run_limit": "12,000 steps (10 min 00 s at 20 Hz)",
+  "reset_notes": "Hidden per trial (redrawn every trial from its seed): As easy (2 to 4 of 6 conduct, 50 possible sets). The lamp lights only when both pads hold a conducting bar, so a single bar never lights it and testing bars one at a time reads all six as insulators. Pair tests narrow the 50 sets; once one conductor is known it probes the rest.",
+  "fidelity": "Conduction is a hidden per-bar flag read by code when the bar rests on the plate (hard: on a pad); the series circuit through two bars is not modelled physically.",
+  "scores": "Dream-1 run: 0.25 (a run capped at 4,830 steps, 241 s, of the 12,000-step limit); demo: 1",
+  "media": "M-YHMWQ9"
+}
