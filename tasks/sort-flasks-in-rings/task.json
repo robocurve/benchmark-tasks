@@ -1,0 +1,20 @@
+{
+  "title": "Sort round-bottom flasks into their rings when every ring is taken",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "rearrangement",
+    "no free slot",
+    "hand as buffer",
+    "laboratory"
+  ],
+  "instruction": "Put each round-bottom flask in the cork ring tagged with its colour. No flask may touch the bench: keep every flask either in a ring or in a gripper the whole time.",
+  "context": "Round-bottom flasks roll and crack on a flat bench, so labs keep them in cork rings. When every ring is taken, rearranging them is a two-handed job: one hand has to hold a flask while the other moves the rest round, then put it in the ring that comes free.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) Three cork rings, fixed to the table in a row 26 cm forward, centred 11 cm left of the centre line, on it, and 11 cm right of it. Each ring is square: four cork bars 1.2 cm wide and 2.5 cm tall around a 5 x 5 cm opening (7.4 cm square outside). A flask resting in a ring sits on the four inner edges, its bottom 1.6 cm above the table. (2) Three coloured tape tags (fixed, 1 mm thick, 5 x 1.2 cm) on the table just in front of the rings, on the robot's side: red in front of the left ring, green in front of the middle ring, blue in front of the right ring. (3) Three round-bottom flasks, 8 cm across, 150 g each, tinted red, green and blue, one in each ring: blue in the left ring, red in the middle ring and green in the right ring. Nothing else is on the table. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Measured from the overhead and wrist videos and with a ruler. A flask is in a ring when its centre is within 12 mm of the ring's centre (seen from above) and it rests on the ring's edges (its bottom 1.0-2.2 cm above the table). 1.0: every flask is in the ring tagged with its colour, all still for 2 s, and no flask touched the bench at any time. 0.5: two flasks are in their own rings at the end and no flask touched the bench. 0.25: one flask is in its own ring at the end and no flask touched the bench. 0.0: otherwise, including any moment when a flask's lowest point came within 3 mm of the table (set down, dropped or rolled off), whatever happened afterwards.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed: put the flasks back with blue in the left ring, red in the middle and green on the right.",
+  "fidelity": "Rigid-body PhysX (Isaac Sim 6.1, 20 Hz control) of a calibrated two-arm table. Simplified: each flask is a uniform 8 cm ball (no neck, no contents), so it sits in a ring like a round flask but does not tip over by itself; the never-on-the-bench rule stands in for that risk. Loose objects get rubber-like friction (1.2 static, 1.0 dynamic), more than glass. Dream-1 sees the 320 x 176 frames it expects; the demo video is rendered at 1280 x 720.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-UDWN38"
+}
