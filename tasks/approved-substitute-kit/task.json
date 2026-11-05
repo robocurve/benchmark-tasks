@@ -1,0 +1,20 @@
+{
+  "title": "Kit an assembly with an approved substitute part",
+  "category": "Impact on jobs",
+  "keywords": [
+    "kitting",
+    "part substitution",
+    "engineering change",
+    "bill of materials",
+    "fasteners"
+  ],
+  "instruction": "Kit one bracket assembly into the white pockets: it needs two bolts, each with a nut and a washer under the nut. The hex-nut bin is empty, so use the approved substitute: the yellow flange nut, which has its own washer face and replaces both a hex nut and its washer. Put bolts in the bolt pocket and nuts in the nut pocket, and leave everything else in the bins.",
+  "context": "When a part runs out, kitters may only use a substitute engineering has approved, and the approval can change the rest of the kit: a flange nut carries its own washer face, so the separate washers drop out. Kitting the original list with the substitute nut adds washers the assembly no longer takes. Unlike counting one part type, the right kit has to be derived from the substitution rule. BEHAVIOR's household kit activities (e.g. make_a_car_emergency_kit) only gather items into a container, with no derived counts. Done by: material handlers and production kitters (O*NET 53-7062.00, 51-2092.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. Bins: four fixed dark-blue open frames (walls 0.6 cm thick, 1.5 cm tall, round an 11.5 x 9 cm pocket, table floor) centred at y 41 and x 15 (bolts), 27.5 (washers), 40 (flange nuts) and 52.5 (hex nuts, empty). Each stocked bin holds three parts standing on end, 3.5 cm apart along x: bolts (grey steel rod 1.2 cm across, 4.5 cm tall, 35 g), washers (light steel disc 2.4 cm across, 0.6 cm thick, 6 g), flange nuts (zinc-yellow steel disc 2.3 cm across, 1 cm tall, 14 g). Kit pockets: three fixed white frames of the same walls round 9 x 7 cm pockets centred at y 20 and x 18 (bolts), 30 (nuts) and 42 (washers).",
+  "scoring": "From a top photo and a ruler, with the grippers open. A part is in a pocket when it is still, its centre inside the pocket's inner walls and its lowest point less than 5 cm above the table. 0.5 when the bolt pocket holds exactly two bolts and nothing else; 0.5 when the nut pocket holds exactly two flange nuts and nothing else. If anything is in the washer pocket the score is capped at 0.25. Possible scores: 0, 0.25, 0.5, 1.0. Success: bolts and flange nuts right and the washer pocket empty, held 1 s.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Stand every part back on its mark in its bin.",
+  "fidelity": "Rigid primitives with one shared friction (1.2 static, 1.0 dynamic). Bolts are plain rods without heads or threads, nuts are discs rather than hexagons, the flange nut's flange is not modelled separately and is told apart by colour and size, and washers are 6 mm solid discs so a parallel gripper can pinch them. Bins and pockets are fixed open frames.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-3UQAEC"
+}
