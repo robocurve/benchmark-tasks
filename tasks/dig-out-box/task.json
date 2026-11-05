@@ -1,0 +1,20 @@
+{
+  "title": "Take a box out from under a stack and restack the rest",
+  "category": "Impact on jobs",
+  "keywords": [
+    "warehouse",
+    "stockroom",
+    "unstacking",
+    "sequencing",
+    "restacking"
+  ],
+  "instruction": "Take the green box out from the bottom of the stack and put it on the yellow square, then restack the other two boxes where the stack was.",
+  "context": "In stockrooms and warehouses the carton you need is often under others: pickers unstack, take it out and restack the rest where it stood, so the stack stays tidy and nothing falls. Done by: stockers and order fillers, and hand material movers.",
+  "setup": "Positions are in cm on the table, from the midpoint between the two arm bases: x forward (away from the arms), y to the robot's left. Three boxes, each 6 x 6 cm and 4 cm tall, 80 g (for example small cardboard or wooden boxes), stand in one stack centred at x 24, y 20, edges square to the table: a green box at the bottom and two brown boxes on top. A yellow square, 9 x 9 cm (paper or tape, flat on the table), is centred at x 14, y 20, between the stack and the left arm. The rest of the table is clear.",
+  "scoring": "At the end, with the grippers open. A box is flat when it lies on a 6 x 6 cm face, either way up, leaning at most 10 degrees (a box on its side is not flat), and on a surface when its lowest corner is within 4 mm of it. The green box is in the square when it is flat on the square with all four bottom corners inside it. The brown boxes are stacked when one is flat on the table and the other is flat on top of it with its centre within 1.5 cm of the lower box's centre. 1.0: green box in the square and the brown boxes stacked with the lower one's centre within 1 cm of the original spot (x 24, y 20); the trial ends at 1.0 once this has held, with every box still, for 1 s, and otherwise the last step is scored. 0.5: green box in the square and the brown boxes stacked somewhere else. 0: the green box not in the square, or the brown boxes not stacked (left side by side, knocked over or off the table). Possible scores: 0, 0.5, 1.0. Check with a tape measure and a top-down photo.",
+  "run_limit": "3,600 steps (3 minutes at 20 Hz)",
+  "reset_notes": "Restack the three boxes at x 24, y 20, green at the bottom, edges square to the table.",
+  "fidelity": "The boxes are solid rigid blocks of equal size and weight; every object has the same rubber-like friction (1.2 static, 1.0 dynamic), more than cardboard on wood, so boxes slide less than real ones. The yellow square is a 1 mm fixed plate. The sim cannot tell a gripped box from a released one; on a real table, open the grippers before measuring.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-HQ4CNH"
+}
