@@ -1,0 +1,19 @@
+{
+  "title": "Get a stalled gear train turning",
+  "category": "Other",
+  "keywords": [
+    "fault diagnosis",
+    "gears",
+    "swap testing",
+    "mechanical repair"
+  ],
+  "instruction": "Pressing RUN should turn every gear and the flag at the end, but it does not. Spare gears S1 and S2 are on the table. Get the flag turning, and put every faulty gear you remove in the red bin.",
+  "context": "Finding the bad component in a drive train is a common machine-shop and repair task. A seized gear stalls the motor, so a run shows nothing turning and does not say which gear is at fault, and one spare is itself stripped; the robot has to swap and re-test systematically.",
+  "setup": "A gear board lies 32 cm in front of the arm bases across the table, centred on the centre line between the arms, with a motor 15.5 cm left of the centre line, an output shaft with a red flag 15.5 cm right of it, and four numbered gear seats between them, 6.2 cm apart. Brass gears G1 to G4 (5.8 cm diameter, labelled knob on top) sit on the seats in order from the motor end. Spares S1 and S2 lie 20 cm out, 11 cm left and right of the centre line. A green RUN push button (3.6 cm cap, labelled RUN; the motor runs 4 s per press) stands 20 cm out on the centre line. Two empty parking spots are marked 22 cm out, 27.5 cm either side of the centre line. A red bin (14 x 14 cm, 3 cm walls) stands 40 cm out, 38.5 cm left of the centre line.",
+  "scoring": "0: no gear or the button is touched. 0.25: a gear is touched or RUN pressed. 0.5: RUN is pressed with all four seats filled. 0.75: the recorded runs leave exactly one possible faulty installed gear, and it is the seized one. 1.0: the 0.75 condition holds, every seat holds a good gear (the flag turns on RUN), and the seized gear, with no good gear, is in the red bin. The score is the highest level reached.",
+  "run_limit": "8,400 steps (7 min 00 s at 20 Hz)",
+  "reset_notes": "Hidden per trial (redrawn every trial from its seed): Which installed gear is seized (uniform over G1-G4): a seized gear stalls the motor, so a run shows nothing turning and does not say which gear it is. One spare is stripped (it turns but does not drive the next gear). Blaming the first gear because nothing turns is right only 1 time in 4; swapping replacements into one seat at a time finds it.",
+  "fidelity": "Gears do not mesh physically: rotation is set kinematically in code from which gear sits on which seat.",
+  "scores": "Dream-1 run: 0.25 (a run capped at 4,830 steps, 241 s, of the 8,400-step limit); demo: 1",
+  "media": "M-VVDY7Q"
+}
