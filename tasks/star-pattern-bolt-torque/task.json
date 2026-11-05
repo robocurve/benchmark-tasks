@@ -1,0 +1,23 @@
+{
+  "title": "Tighten a cold plate's four bolts in a star pattern through three torque passes",
+  "category": "Impact on AI timelines",
+  "context": "Cold plates, heat sinks and gasketed joints on AI hardware are tightened in a cross (star) pattern in stages so the part seats flat; uneven tightening warps the plate and ruins the thermal contact.",
+  "instruction": "Tighten the cold plate's four white bolt buttons in three passes, pressing each bolt once per pass with diagonal corners pressed consecutively and no bolt more than one stage ahead. The large status lamp turns green when all four bolts reach stage 3 without plate warp.",
+  "setup": "A heavy plate fixture (200 x 260 x 15 mm, 6.0 kg, friction 1.0, dark grey) centered at x = 28.0 cm on the station table (z = 74.8 cm) holds an aluminium cold plate top (140 x 200 x 10 mm). Four bolt heads modelled as spring buttons (36 x 36 x 12 mm white caps, 8 mm travel to hard stop, 100 N/m spring, 4 g mass) sit at the corners spaced 110 mm in x (x = 22.5, 33.5 cm) and 210 mm in y (y = ±10.5 cm): L-near, L-far (y = +10.5 cm), R-near, R-far (y = -10.5 cm). Distance from each shoulder base to the opposite far bolt is 52.9 cm (> 50 cm), requiring two arms. Beside each bolt, a column of three cyan lamp discs (diameter 28 mm, height 3 mm, pitch 32 mm along x at y = ±5.5 cm) indicates stage 0 to 3 lit from bottom to top. A large status lamp (diameter 50 mm, height 15 mm) sits centered at (28.0, 0.0 cm): off initially, red on warp, green when fully torqued.",
+  "scoring": "Partial credit ladder (highest partial tier latches; 1.0 requires all conditions together): 0.25 if any button is pressed (travel >= 2.0 mm) or any stage >= 1; 0.50 if pass 1 completes (all four bolts at stage >= 1) with no WARP; 0.75 if pass 2 completes (all four bolts at stage >= 2) with no WARP; 1.0 if all four bolts reach stage 3, status lamp is green, no WARP, both grippers open, and all objects still (linear velocity <= 5 mm/s, angular <= 0.2 rad/s) held continuously for 1.0 s (20 control steps). Zero-gate: plate WARP (latched on violation of LEVEL: max stage - min stage <= 1 after press, STAR ORDER: diagonal pairs pressed consecutively with each bolt pressed once per pass, or NO OVER-TORQUE: press on bolt at stage 3) or fixture displacement > 5.0 mm scores 0.0 permanently.",
+  "reset_notes": "Depress the four bolt heads back to their uncompressed starting positions; all four stage lamp columns clear to dark (stage 0) and the status lamp turns off. No consumables or plastic deformation.",
+  "keywords": [
+    "cold plate",
+    "bolt torque",
+    "star pattern",
+    "cross tightening",
+    "hardware assembly",
+    "state machine",
+    "pushbutton",
+    "thermal interface"
+  ],
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "fidelity": "Cold plate fixture, spring buttons (8 mm travel, hard stop, soft 100 N/m spring chosen for arm compliance) and contacts are simulated physically. Stage arbitration, star pattern validation and lamp indicators are computed in code and displayed via visual markers.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-KT5MN5"
+}
