@@ -1,0 +1,21 @@
+{
+  "title": "Disconnect both coolant couplers before pulling a liquid-cooled tray",
+  "category": "Impact on jobs",
+  "keywords": [
+    "data center",
+    "liquid cooling",
+    "quick disconnect",
+    "server tray",
+    "maintenance",
+    "procedure order"
+  ],
+  "instruction": "The grey compute tray needs to come out of the rack for service, but it is still connected to the coolant loop by its two blue quick-disconnect couplers on its top. First disconnect both couplers: put each one upright in one of the two blue park pockets beside the slot. Only then lift the tray out of its slot and put it on the white service mat. Do not move the tray while a coupler is still on it.",
+  "context": "In direct-to-chip liquid-cooled racks each compute tray is fed by a supply and a return hose that meet the rack manifold at dry-break quick-disconnect couplings (the Open Compute Project publishes a universal quick-disconnect specification). Service procedures have the technician disconnect and park both couplings before the tray is slid out; pulling a tray still connected strains the hoses and spills coolant onto live equipment. The order is the skill: the end state alone does not show it. Unlike DataCenterBench unplug (pull one connector) or TK-8YB397 (cap a manifold's open ports), the disconnection here gates a removal that follows it, and moving the tray first scores 0 for the rest of the trial. Done by: data-center and computer equipment repairers, HVAC mechanics (O*NET 49-2011.00, 49-9021.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. Compute tray: a grey box 7.5 cm deep (x) by 13 cm wide by 2.5 cm tall, 250 g, standing on the table centred at x 36, y 20, between two fixed steel rails (11 x 0.8 x 3.5 cm, along x) 3 mm from its sides. Behind it a fixed dark blue manifold bar (1.5 x 15 x 6 cm) centred at x 43.75, y 20. Couplers: two blue cylinders 2.4 cm across and 4 cm tall, 30 g each, standing on the tray's top at x 38, y 23.5 (supply) and y 16.5 (return). Park pockets: two fixed dark blue open frames (walls 0.5 cm thick, 1.2 cm tall, round a 4 x 4 cm opening) on the table at x 38, y 32 and y 37.5. Service mat: a fixed white pad 15 x 18 cm, 3 mm thick, centred at x 20, y 20.",
+  "scoring": "From the episode's recorded poses, with the grippers open at the end. 0.25 for each coupler at rest, upright, its centre inside either park pocket's opening, standing on the table; 0.5 more for the tray at rest and flat on the service mat (centre within 4 cm of the mat's centre) once both couplers are parked. Spill: if the tray's centre ever moves more than 1 cm from its start while a coupler is still on it (its centre over the tray and its bottom at the tray's top), the score is 0 for the rest of the trial, whatever follows. Possible scores: 0, 0.25, 0.5, 1.0. Success: score 1, held 1 s.",
+  "run_limit": "1,800 steps (90 seconds at 20 Hz)",
+  "reset_notes": "Stand the tray back in its slot between the rails and both couplers on its top at their marks; the rails, manifold, pockets and mat do not move. On a real rig the order is judged from the trial video.",
+  "fidelity": "Rigid primitives with one shared friction (1.2 static, 1.0 dynamic). No hoses, latches or valve springs: a coupler is connected by standing on the tray and disconnected by being lifted off, and the tray is held by gravity and lifted straight up rather than slid on runners. Couplers resting on a moving tray ride along by friction. The order is judged from simulator poses every step.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-UHKA4F"
+}
