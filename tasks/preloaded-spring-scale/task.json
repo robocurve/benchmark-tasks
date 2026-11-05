@@ -1,0 +1,19 @@
+{
+  "title": "Weigh an unknown block with an uncalibrated spring",
+  "category": "Other",
+  "keywords": [
+    "quantitative prediction",
+    "calibration",
+    "Hooke's law",
+    "measurement"
+  ],
+  "instruction": "Put the card showing the mass of the block marked '?' on the red mat.",
+  "context": "Calibrating an instrument with known references before measuring an unknown is basic metrology. The spring is preloaded, so the pan only moves above a threshold and the reading is not proportional to mass; the robot has to use both reference blocks to fit a line, not scale by one.",
+  "setup": "A spring scale with a 9 x 9 cm pan (empty pan top 13 cm high) stands 36 cm in front of the arm bases on the centre line between the arms. A 3-digit red LED display (3.2 cm digits, fixed decimal point) showing the pan's drop in mm, with an 'mm' label, lies flat 36 cm out, 15.5 cm left of the centre line; it reads 00.0 with the pan empty. Three grey 4 cm cubes printed '50g', '100g' and '?' sit 22 cm out, 6.5 cm left of, on, and 6.5 cm right of the centre line. Four white cards (5 x 5 x 2.4 cm blocks) printed 170g, 190g, 210g, 230g stand 22 cm out, 16.5 and 23.5 cm either side of the centre line, in random order. A red mat (12 x 12 cm) lies 30 cm out, 36.5 cm left of the centre line.",
+  "scoring": "0: no block or card is touched. 0.25: a block or card is touched or moved. 0.5: the '?' block rests alone on the pan, released and still, for 1 s or more. 0.75: the 50 g and 100 g blocks are also each measured alone on the pan, and the line through their two readings gives the '?' block a mass whose nearest card is the right one. 1.0: the 0.75 condition holds and the right card is alone on the red mat. The score is the highest level reached.",
+  "run_limit": "4,000 steps (3 min 20 s at 20 Hz)",
+  "reset_notes": "Hidden per trial (redrawn every trial from its seed): As easy, plus a spring preload of 22-35 g: the pan rests on its top stop until the load exceeds the preload, so sink = (m - P) g / k. The '?' mass is 150-230 g and cards are 20 g apart. Scaling the '?' sink by the 100 g sink (no intercept) over-estimates it by 14-60 g; a line through the 50 g and 100 g readings gives the right card.",
+  "fidelity": "The spring is a linear slide joint with hidden stiffness. The display shows the simulated pan drop rounded to 0.1 mm; a real build needs a displacement sensor (or a load cell) under the pan.",
+  "scores": "Dream-1 run: 0.25; demo: 1",
+  "media": "M-UGTSUW"
+}
