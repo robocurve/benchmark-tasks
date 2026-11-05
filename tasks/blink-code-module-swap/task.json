@@ -1,0 +1,23 @@
+{
+  "title": "Read the status lamp's blink code, then swap the module it names",
+  "category": "Impact on AI timelines",
+  "context": "Servers and robots report which module failed as a blink pattern on a status LED; a service robot must read the pattern over time, replace the named field-replaceable unit and verify, without touching the healthy ones.",
+  "instruction": "While you hold the white DIAG button the status lamp blinks the number of the failed socket (count the dots beside each socket); replace that module with the teal spare, then hold DIAG again until the lamp stays green.",
+  "setup": "A rigid free-standing fixture (one 8.0 kg body, friction 1.0, not bolted down) on the station table (z = 74.8 cm) holds a 4-socket bus strip and a DIAG controller box. Four keyed sockets (pitch 7.0 cm, mouths at x = 24.0 cm, z = 2.5 cm above table) sit at y = -5.0 cm (socket 1, 1 dot), y = -12.0 cm (socket 2, 2 dots), y = -19.0 cm (socket 3, 3 dots), and y = -26.0 cm (socket 4, 4 dots), each with aluminium flange 56 x 42 x 6 mm, dark shell 38 x 30 x 24 mm, 30 x 18 mm cavity (1.0 mm clearance per side to 28 x 16 mm nose), 8 x 3 mm key slot, and 12 N/mm spring plunger (round 4 mm tip, 1.5 mm proud on +y wall). Controller box (140 x 120 x 40 mm, centre at x = 25.0 cm, y = 20.0 cm) holds a white DIAG button cap (36 x 36 x 12 mm, 4 g, centre at x = 22.0 cm, y = 20.0 cm, cap top 6.0 cm above the table at rest, 8 mm travel to a hard stop, soft 100 N/m spring) and a 60 mm diameter, 15 mm tall status lamp dome (centre at x = 28.5 cm, y = 20.0 cm; off = dark grey, blink = amber/yellow, verified = green, healthy missing = red). Four servo modules (80 g each, friction 0.8; 45 x 18 x 28 mm housing with grey band, steel nose 28 x 16 x 18 mm with key rib and detent groove) start seated in sockets 1 to 4 with nose pointing +x. One spare servo module with a teal band starts staged on the table at x = 38.0 cm, y = -15.0 cm.",
+  "scoring": "Partial credit ladder: 0.25 if DIAG button is held >= 3 s once (held >= 60 control steps) or any module is touched / displaced > 5 mm or DIAG button depressed >= 2.0 mm; 0.50 if failed module (module 3) is out of socket 3 (depth < 16 mm, lateral offset > 1.5 mm, or angle error > 10.0 deg) with every healthy module (1, 2, 4) still seated; 0.75 if teal spare is seated in socket 3 (depth >= 16 mm, lateral error <= 1.5 mm, angle error <= 10.0 deg), failed module is not in any socket, and all healthy modules are seated; 1.00 if additionally DIAG is held >= 3 s showing steady green lamp, all four sockets seated, both grippers open, and all objects still (linear speed <= 5 mm/s, angular <= 0.2 rad/s) held continuously for 1.0 s (20 control steps). Zero-gate: any healthy module removed from socket for > 1 s (20 control steps) and not re-seated by end, fixture displacement > 5.0 mm, fixture tilt > 5.0 deg, or any module dropped off table (> 20 cm below table plane) permanently scores 0.0.",
+  "reset_notes": "Return the original grey module to socket 3 and return the teal spare to its staging spot (x = 38.0 cm, y = -15.0 cm). If any healthy modules were disturbed, return them to their marked sockets (1 to 4). Release the white DIAG button. No parts or materials are consumed.",
+  "keywords": [
+    "bring-up",
+    "field-replaceable unit",
+    "blink code",
+    "diagnostic led",
+    "keyed connector",
+    "pushbutton",
+    "state machine",
+    "hardware maintenance"
+  ],
+  "run_limit": "3,000 steps (2.5 minutes at 20 Hz)",
+  "fidelity": "Servos, keyed sockets (1 mm clearance per side, spring plunger) and the DIAG pushbutton (8 mm travel, hard stop, soft 100 N/m spring chosen for soft arm compliance) are simulated physically. Bus strip, sockets and controller box form one rigid fixture. Status lamp blinks and verification color states are computed in code and teleported as visual markers.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-ZZCVS9"
+}
