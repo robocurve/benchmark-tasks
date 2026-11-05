@@ -1,0 +1,19 @@
+{
+  "title": "Aim a geared pointer whose gears have play",
+  "category": "Other",
+  "keywords": [
+    "instrument calibration",
+    "backlash",
+    "buttons",
+    "measurement"
+  ],
+  "instruction": "The + and - buttons turn the pointer through a small gearbox: each press turns the motor by the same unknown number of degrees, but the gears have play (backlash), so after a change of direction the motor turns some degrees before the pointer moves. The pointer was last turned with +. Turn the pointer to the angle on the red plate, and put the card showing the backlash in degrees on the red mat. Use at most 10 presses in total.",
+  "context": "Positioning through gears with play (backlash) is everyday work on telescope mounts, machine-tool axes and valve actuators: after a change of direction the output lags the motor. The robot has to measure both the step and the play before committing its presses, then report the play.",
+  "setup": "A white dial plate (13.6 x 23.6 cm) lies flat 40 cm in front of the arm bases, centred between them, printed with a protractor arc of radius 10 cm (0 deg toward the right arm, 90 deg straight ahead, 180 deg toward the left arm; a tick every 10 deg, long ticks every 30 deg) and a black pointer on a centre pivot; a red tick marks the target angle. Two push buttons (dark grey caps 3.6 x 3.6 cm, 3 cm tall) stand 22 cm in front of the bases, 5.5 cm left (marked -) and 5.5 cm right (marked +) of centre. A 3-digit red LED display 30 cm in front, centred, shows the pointer angle in whole degrees; a pink plate 12.5 cm to its right is printed with the target angle. Five white cards (5 x 5 x 2.4 cm) printed 0°, 2°, 4°, 6° and 8° lie in front of the left arm, and a 12 x 12 cm red mat lies 30 cm in front of the left arm's base. For seed 0 the pointer starts at 96 deg and the target is 70 deg.",
+  "scoring": "0: no button pressed and nothing touched. 0.25: a button is pressed or a card touched. 0.5: at least one reading: the pointer held still for 1 s after a press. 0.75: the angles read after each press, before the last press, leave only one gear model (step per press 5-12 deg, backlash 0-10 deg) consistent with the presses made, and the card showing the backlash is alone on the red mat. 1.0: the 0.75 condition holds, the display shows the target angle (within 1 deg) at the end, and at most 10 presses were used. The score is the highest level reached.",
+  "run_limit": "4,000 steps (3 min 20 s at 20 Hz)",
+  "reset_notes": "Hidden per trial (redrawn every trial from its seed): Step s (6-10 deg), backlash b (2, 4 or 6 deg), start angle 70-110 deg, gear engaged in the + direction. Target = start + b - j s (j = 3-5): reachable only while turning -. Pressing + once and computing the - presses from that step lands one step short whenever b/s > 0.5; and it takes the backlash to be 0. Budget 10 presses (oracle: 2 + j).",
+  "fidelity": "The pointer is moved in code from a gear model (motor step, backlash) when a button press registers; a real build would use a stepper motor and a geared dial with an encoder display.",
+  "scores": "Dream-1 run: 0; demo: 1",
+  "media": "M-5RVVL8"
+}
