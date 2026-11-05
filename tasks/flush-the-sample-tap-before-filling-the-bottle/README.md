@@ -12,7 +12,7 @@ once the bottle is on the mark.
 
 | File | What |
 |---|---|
-| `flush_the_sample_tap_before_filling_the_bottle.py` | The yam_arena task file: objects, the water ledger, `success()`, `score()`, `distance()` and the scripted `demo()` |
+| `flush_the_sample_tap_before_filling_the_bottle.py` | The task file: objects, water ledger, scoring, `demo()` |
 | `benchkit.py` | Tools built from several boxes with sliders (the lever), and per-step hooks |
 | `plantkit.py` | The flow lamp, the clock and the slider checks |
 | `test_flush_the_sample_tap_before_filling_the_bottle.py` | Offline tests: no GPU needed |
@@ -28,13 +28,15 @@ key in `~/.dreamlabs/credentials`, from this folder:
 ```bash
 # Dream-1
 inspect-robots run --embodiment yam_arena --policy dream \
-  -E task=flush_the_sample_tap_before_filling_the_bottle.py -E object_jitter=0 -E control_hz=20 -E cam_width=320 -E cam_height=176 \
+  -E task=flush_the_sample_tap_before_filling_the_bottle.py -E object_jitter=0 \
+  -E control_hz=20 -E cam_width=320 -E cam_height=176 \
   --instruction "Take a water sample: open the tap and let it run to the waste cup for at least ten seconds, then hold the bottle under the tap and fill it to between the two lines, set the bottle on the mark, and close the tap." \
   --scorer task_score --max-steps 2400 --store-frames --log-dir ~/yam-eval/tap-dream
 
 # The scripted demo, which reaches full score
 inspect-robots run --embodiment yam_arena --policy yam_scripted \
-  -E task=flush_the_sample_tap_before_filling_the_bottle.py -E object_jitter=0 -E control_hz=20 -E cam_width=640 -E cam_height=352 \
+  -E task=flush_the_sample_tap_before_filling_the_bottle.py -E object_jitter=0 \
+  -E control_hz=20 -E cam_width=640 -E cam_height=352 \
   --instruction "Take a water sample: open the tap and let it run to the waste cup for at least ten seconds, then hold the bottle under the tap and fill it to between the two lines, set the bottle on the mark, and close the tap." \
   --scorer task_score --max-steps 2400 --store-frames --log-dir ~/yam-eval/tap-demo
 
@@ -103,19 +105,25 @@ under 2 cm up, leaning under 15 degrees, and no gripper within 1 cm of the bottl
   gripped by its body can't be put under a spout: the spout would be inside the gripper. The holder's post sits 7.5 cm
   to the left of the bottle's mouth, which keeps the gripper's body 2.4 cm clear of the spout's tip. The post is held
   with the pads 4 cm apart on the way in, 2 cm clear of the bottle's rim.
+- **The post stands on a leg.** Out on its bar the post pulls the centre of mass 3 cm off the bottle's centre, past the
+  edge of its 5 cm floor, so without support the bottle tips over onto the post (in the simulator it settled 24
+  degrees over before the trial began, and the gripper closed on the bottle's wall instead of the post). A leg 1.5 x 1
+  x 3 cm under the post's middle stands it on the table, with the centre of mass 2 cm inside the feet. On the mark the
+  leg stands on the table beside the 3 mm plate, so the bottle leans about 3 degrees towards it: still upright.
 - **The lever is pushed with the gripper turned 90 degrees.** Each wrist camera sits 7 cm in front of its tool point,
   so a straight push would put it inside the pipe and spout. Turned, the camera swings to the side, and the pads'
   long side leads the push; the sweep in the tests keeps a 5 x 5 x 4 cm box round each camera about 3.5 cm from the
-  pipe and spout (the tests require 3 cm) and about 2.4 cm above the handle at every step. Each wrist can turn only one way within its joint limit, so the
-  cameras swing towards the midline: the left arm's tool point ends 6 mm right of the midline at the open stop with
-  its camera over the right-hand side, which is why the right arm waits 20 cm out until the bottle is down.
+  pipe and spout (the tests require 3 cm) and about 2.4 cm above the handle at every step. Each wrist can turn only
+  one way within its joint limit, so the cameras swing towards the midline: the left arm's tool point ends 6 mm right
+  of the midline at the open stop with its camera over the right-hand side, which is why the right arm waits 20 cm
+  out until the bottle is down.
 - **The spout points left, the lever points at the arms, and the lever is long.** The same gripper column rules out
   pushing a short handle right under the spout or next to the pipe, so the spout runs 8.5 cm along the top of the pipe
   with its tip 7 cm left of the pipe's axis, and the lever is a 10 cm bar pushed 2.5 cm from its tip, with the
-  gripper's body 2.4 cm short of the pipe. The bottle slides in under the spout from the left at a height with 2 cm under the spout and 2 cm over
-  the cup's rim, which is why the cup is 4 cm tall and the pipe 20 cm. The offline tests sweep a box model of the
-  gripper and its camera through every step of the demo against the tap, the cup, the lamp, the bottle and the other
-  arm.
+  gripper's body 2.4 cm short of the pipe. The bottle slides in under the spout from the left at a height with 2 cm
+  under the spout and 2 cm over the cup's rim, which is why the cup is 4 cm tall and the pipe 20 cm. The offline
+  tests sweep a box model of the gripper and its camera through every step of the demo against the tap, the cup, the
+  lamp, the bottle and the other arm.
 - **Nothing latches.** The lever has no spring and stays where it is pushed; the scorer reads it at the end. The tap
   weighs 3 kg on a flange and stays put when pushed; moved more than 2 cm or leaning more than 20 degrees it scores 0,
   and its stream, which falls from wherever the spout is, misses the cup.
@@ -126,11 +134,14 @@ under 2 cm up, leaning under 15 degrees, and no gripper within 1 cm of the bottl
   about 11 degrees with its mouth still under the stream, so it fills like a held one, which is fair; it still needs
   the flush first and the mark at the end. Holding the bottle on the mark by its post, body or rim: 0.7, a gripper's
   tool point is within 1 cm of it. Opening the tap after the bottle is down: scored as open.
-- **Demo trims.** `TRIM` holds per-spot offsets for the open-loop demo, all zero until the GPU run says otherwise.
+- **Demo trims.** `TRIM` holds per-spot offsets for the open-loop demo. All are zero: in the simulator the bottle's
+  mouth stays 2 to 3 mm from the point under the spout's tip while it fills, and the bottle ends 5 mm from the
+  mark's centre, well inside the 2 and 3 cm checks.
 
 ## Runtime and seeds
 
 - The scripted demo takes about 43 s of simulated time (868 steps at 20 Hz): the left arm's plan ends at 34 s and the
-  right arm shuts the tap after it.
+  right arm shuts the tap after it. In the simulator it scores 1.0, with 198 mL run to waste before the first drop
+  and 109.5 mL in the bottle, and the run stops at step 929, 3 s after the plan ends.
 - Dream-1 runs the full 2,400 steps (2 minutes of simulated time).
 - One fixed layout: `-E object_jitter=0`, so the seed does not change the start.

@@ -1,8 +1,8 @@
 """On the station table: a steel sample tap standing on the midline, its spout turned to the robots' left, with a dark
 lever handle 10 cm long sticking out towards the arms 9 cm above the table; the lever slides sideways across the pipe.
 A grey waste cup stands under the spout's tip, and a small lamp at the tap's foot lights green while the tap runs. In
-front of the left arm stands a clear square sample bottle with two blue lines round it and a dark handle post on its
-left side; further to the left a white square mark is taped to the table.
+front of the left arm stands a clear square sample bottle with two blue lines round it and a dark handle post on a
+short leg at its left side; further to the left a white square mark is taped to the table.
 
 Run it:  inspect-robots run --embodiment yam_arena -E task=flush_the_sample_tap_before_filling_the_bottle.py --scorer task_score ...
 """
@@ -108,6 +108,10 @@ _INNER = (BOTTLE_SIZE[0] - 2 * BOTTLE_WALL, BOTTLE_SIZE[1] - 2 * BOTTLE_WALL)  #
 POST = (0.03, 0.02, 0.06)  # the handle post the gripper holds
 POST_Y = 0.075  # its centre, left of the bottle's centre: far enough that the gripper's body clears the spout
 POST_Z = BOTTLE_SIZE[2] / 2 - POST[2] / 2  # its top level with the bottle's top
+# A leg under the post's middle, down to the table. Without it the post, 7.5 cm out, puts the centre of mass 3.0 cm
+# off the bottle's centre, past the edge of its 5 cm floor, and the bottle tips over onto the post.
+LEG = (0.015, 0.01, BOTTLE_SIZE[2] / 2 + POST_Z - POST[2] / 2)
+LEG_Z = -BOTTLE_SIZE[2] / 2 + LEG[2] / 2
 BAR_Y0 = BOTTLE_SIZE[1] / 2 - BOTTLE_WALL  # the bar starts inside the bottle's left wall ...
 BAR_Y1 = POST_Y - POST[1] / 2 + 0.005  # ... and ends 5 mm into the post
 BAR = (0.015, BAR_Y1 - BAR_Y0, 0.012)
@@ -141,6 +145,7 @@ BOTTLE = tool(
         *_lines(),
         ((0.0, (BAR_Y0 + BAR_Y1) / 2, BAR_Z), BAR, DARK),
         ((0.0, POST_Y, POST_Z), POST, DARK),
+        ((0.0, POST_Y, LEG_Z), LEG, DARK),
     ],
     mass=BOTTLE_MASS,
     points=[("mouth", MOUTH), ("grip", GRIP)],

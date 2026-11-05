@@ -125,6 +125,79 @@ def test_the_holder_bar_joins_the_wall_to_the_post():
     assert M.BAR == pytest.approx((0.015, 0.048, 0.012))
 
 
+def _hull(points):
+    """The convex hull of 2-D points, counter-clockwise (monotone chain)."""
+    pts = sorted(set(points))
+
+    def cross(o, a, b):
+        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+
+    lower, upper = [], []
+    for p in pts:
+        while len(lower) >= 2 and cross(lower[-2], lower[-1], p) <= 0:
+            lower.pop()
+        lower.append(p)
+    for p in reversed(pts):
+        while len(upper) >= 2 and cross(upper[-2], upper[-1], p) <= 0:
+            upper.pop()
+        upper.append(p)
+    return lower[:-1] + upper[:-1]
+
+
+def _inside_by(point, hull) -> float:
+    """How far a 2-D point is inside a counter-clockwise hull (negative outside)."""
+    out = []
+    for a, b in zip(hull, hull[1:] + hull[:1]):
+        edge, to = np.subtract(b, a), np.subtract(point, a)
+        out.append(float((edge[0] * to[1] - edge[1] * to[0]) / np.linalg.norm(edge)))
+    return min(out)
+
+
+def _centre_of_mass(boxes):
+    """Where the simulator puts a tool's centre of mass: its mass spread evenly over the volume of its boxes."""
+    volume = np.array([np.prod(size) for _, size, _ in boxes])
+    centres = np.array([centre for centre, _, _ in boxes])
+    return (volume[:, None] * centres).sum(0) / volume.sum()
+
+
+def test_the_bottle_stands_on_its_floor_and_the_posts_leg():
+    """The post, 7.5 cm out on its bar, pulls the centre of mass 3 cm off the bottle's centre, past the edge of its
+    5 cm floor: without the leg the bottle tips over onto its post when the trial starts (24 degrees in the simulator)
+    and the open pads come down beside the post's old place. The leg puts the centre of mass 2 cm inside the feet."""
+    bottom = -M.BOTTLE_SIZE[2] / 2
+    feet = [(c, s) for c, s, _ in M.BOTTLE.boxes if abs(c[2] - s[2] / 2 - bottom) < 1e-9]
+    assert [s for c, s in feet if abs(c[1] - M.POST_Y) < 1e-9] == [M.LEG]  # the leg reaches the table
+    assert M.POST_Z - M.POST[2] / 2 == pytest.approx(M.LEG_Z + M.LEG[2] / 2)  # and meets the post
+    footprint = _hull([(c[0] + sx * s[0] / 2, c[1] + sy * s[1] / 2) for c, s in feet for sx in (-1, 1)
+                       for sy in (-1, 1)])
+    com = _centre_of_mass(M.BOTTLE.boxes)
+    assert _inside_by(tuple(com[:2]), footprint) >= 0.015
+    without_leg = _centre_of_mass([b for b in M.BOTTLE.boxes if b[1] != M.LEG])
+    assert without_leg[1] - M.BOTTLE_SIZE[1] / 2 > 0.004  # past the floor's edge: it tips
+    # The leg is inside the bottle's bounds, so every clearance the sweep below measures holds for it too.
+    assert M.BOTTLE.size == pytest.approx((M.BOTTLE_SIZE[0] + 0.002, M.POST_Y + M.POST[1] / 2 + M.BOTTLE_SIZE[1] / 2
+                                           + 0.001, M.BOTTLE_SIZE[2]))
+
+
+def test_on_the_mark_the_leg_stands_on_the_table_and_the_bottle_leans_a_little():
+    """The leg lands beside the 3 mm plate, so the bottle rests on its floor's left edge and the leg, leaning about 3
+    degrees towards the post: still upright and on the mark."""
+    leg_out = M.POST_Y + M.LEG[1] / 2
+    assert M.MARK_XY[1] + M.POST_Y - M.LEG[1] / 2 > M.MARK_XY[1] + M.MARK[1] / 2  # off the plate
+    lean = math.asin(M.MARK[2] / (leg_out - M.BOTTLE_SIZE[1] / 2))
+    assert math.degrees(lean) == pytest.approx(3.1, abs=0.1)
+    assert _centre_of_mass(M.BOTTLE.boxes)[1] > M.BOTTLE_SIZE[1] / 2  # so it does lean onto the leg
+    half_y, half_z = M.BOTTLE_SIZE[1] / 2, M.BOTTLE_SIZE[2] / 2
+    pivot_y, pivot_z = M.MARK_XY[1] + half_y, M.TOP + M.MARK[2]
+    centre = (M.MARK_XY[0], pivot_y - half_y * math.cos(lean) + half_z * math.sin(lean),
+              pivot_z + half_y * math.sin(lean) + half_z * math.cos(lean))
+    resting = bottle_at(centre, quat=leaning(-math.degrees(lean)))
+    foot = resting.to_world((0.0, leg_out, -half_z))
+    assert foot[2] == pytest.approx(M.TOP, abs=1e-4)
+    assert M.on_mark(resting) and resting.tilt_deg() < M.UPRIGHT_DEG - 10.0
+    assert M.grade(ledger(GOOD_ML), tap_at(), resting, False) == pytest.approx(1.0)
+
+
 def test_the_drip_point_is_over_the_waste_cup_and_the_bottle_fits_under_it():
     drip = tap_at().point("drip")
     assert M.over_cup(drip) and drip[2] == pytest.approx(M.TOP + 0.17)
