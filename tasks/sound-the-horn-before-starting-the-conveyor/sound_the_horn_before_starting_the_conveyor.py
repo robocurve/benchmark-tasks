@@ -1,8 +1,8 @@
 """On the station table: two push buttons on dark bases, one in front of each arm. The button in front of the left arm
 has a yellow cap and works the conveyor's horn; the button in front of the right arm has a green cap and starts the
-conveyor. A lamp stands on a short dark post beyond each button, out to that arm's side. The horn lamp, beyond the
-yellow button, is grey and lights amber while the yellow cap is held in. The run lamp, beyond the green button, is grey
-now and lights green while the conveyor runs. A short dark conveyor with a grey tote on it lies on the midline at the
+conveyor. Beside each button, on its outer side, a lamp stands on a short dark post. The horn lamp, beside the yellow
+button, is grey and lights amber while the yellow cap is held in. The run lamp, beside the green button, is grey now
+and lights green while the conveyor runs. A short dark conveyor with a grey tote on it lies on the midline at the
 back of the table.
 
 Run it:  inspect-robots run --embodiment yam_arena -E task=sound_the_horn_before_starting_the_conveyor.py --scorer task_score ...
@@ -60,12 +60,13 @@ HORN_BUTTON = _button("horn_button", BUTTON_Y, YELLOW)
 START_BUTTON = _button("start_button", -BUTTON_Y, GREEN)
 BUTTONS = ("horn_button", "start_button")
 
-# -- the lamps, each on a short post beyond its button and out to its arm's side ---------------------------------------
-# The wrist camera rides about 7 cm forward of the TCP and 6 cm or more above the pad tips. Pressing a cap, it passes
-# over the near edge of the lamp beyond it, so post and lamp stand only 6 cm tall: 3.5 cm under the camera.
-LAMP_X = 0.32
-LAMP_Y = 0.22  # each side of the midline
-POST = (0.030, 0.030, 0.030)
+# -- the lamps, each on a short post beside its button, on the outer side ----------------------------------------------
+# The top camera looks over the arms from behind them. A lamp beyond its button stands on its sight line behind the
+# gripper and forearm pressing that button, hidden just while it is lit; beside the button, 12 cm outboard of its
+# centre, the camera sees past the arm. Post and lamp stand 5.5 cm tall, under the gripper's carriages and housing.
+LAMP_X = BUTTON_X
+LAMP_Y = 0.28  # each side of the midline: 12 cm outboard of the button's centre, 6 cm clear of its base
+POST = (0.030, 0.030, 0.025)
 LAMP_SIZE = (0.050, 0.050, 0.030)
 LAMP_Z = TOP + POST[2] + LAMP_SIZE[2] / 2
 LAMP_TOP_Z = TOP + POST[2] + LAMP_SIZE[2]
@@ -101,10 +102,11 @@ CLOCK = Clock()
 
 
 class Starter:
-    """The conveyor's starter. ``held`` counts consecutive steps with the horn cap in; any step with it out ends the
-    hold. ``warned_at`` is the step the latest hold of HORN_S or more ended. The first start press runs the conveyor if
-    the horn is still held in after HORN_S, or a hold that long ended no more than WINDOW_S before; otherwise it is a
-    fault, for the rest of the trial. Once the conveyor runs or has faulted, later presses change nothing."""
+    """The conveyor's starter. ``held`` counts consecutive steps with the horn cap in; any one step with it out ends
+    the hold. ``warned_at`` is the step the latest hold of HORN_S or more ended. The first start press runs the conveyor
+    if the horn has been held in for HORN_S and still is, or the latest hold that long ended no more than WINDOW_S
+    before; a shorter blast neither starts, refreshes nor cancels that window. Any other first press is a fault, for the
+    rest of the trial. Once the conveyor runs or has faulted, later presses change nothing."""
 
     def __init__(self) -> None:
         self.reset()
@@ -176,11 +178,12 @@ def _watch(states) -> None:
 RUNNING = 1.0
 HORN_ONLY = 0.3  # the horn sounded long enough, start never pressed
 UPRIGHT_DEG = 20.0
-ON_TABLE_WITHIN = 0.010  # m: a button's base this close to the height it stands at is on the table
+ON_TABLE_WITHIN = 0.010  # m: a button's base within this above or below its resting height is on the table
 
 
 def standing(button: ToolState) -> bool:
-    """Upright on the table: not knocked over, lifted, or pushed off the edge. Read from the base's own centre."""
+    """Upright on the table: leaning UPRIGHT_DEG or less, its base's centre within ON_TABLE_WITHIN above or below its
+    resting height (not lifted, not pushed off the edge). Sliding along the table changes neither."""
     return bool(button.tilt_deg() <= UPRIGHT_DEG and abs(button.pos[2] - BUTTON_Z) <= ON_TABLE_WITHIN)
 
 
@@ -218,10 +221,10 @@ def distance(objects) -> float:
 # -- the scripted demo: the left arm sounds the horn and parks, then the right arm presses start -----------------------
 PRESS_Z = CAP_TOP_Z + PAD_TIP_PAST_TCP - BUTTON_TRAVEL - 0.002  # the pad tips 2 mm past the cap's full travel
 ABOVE_Z = CAP_TOP_Z + 0.060
-PARK_DY = 0.15  # each arm parks this far out to its own side, clear of the top camera's view of the buttons and lamps
+PARK_DX = 0.10  # each arm parks this far forward of its button: the top camera sees the button and its lamp past it
 TO_BUTTON_S = 1.5
-HORN_DOWN_S = 1.0  # the horn cap goes in past 70% about 2.3 s into the trial
-HORN_HOLD_S = 3.6  # at full press; with the way down and up, the cap is in past 70% for about 4 s
+HORN_DOWN_S = 1.0  # the horn cap goes in past 70% about 2.4 s into the trial
+HORN_HOLD_S = 3.6  # at full press; with the way down and up, the cap is in past 70% for about 4.05 s
 START_AFTER_S = 7.0  # the right arm hovers over the start button until then, after the horn has stopped
 START_DOWN_S = 1.5
 START_HOLD_S = 0.8
@@ -236,7 +239,7 @@ def _left_plan() -> list[Waypoint]:
         Waypoint(HORN_DOWN_S, (x, y, PRESS_Z), FINGER_CLOSED, "press the horn"),
         Waypoint(HORN_HOLD_S, (x, y, PRESS_Z), FINGER_CLOSED, "hold the horn"),
         Waypoint(LIFT_S, (x, y, ABOVE_Z), FINGER_CLOSED, "release"),
-        Waypoint(PARK_S, (x, y + PARK_DY, ABOVE_Z), FINGER_CLOSED, "park"),
+        Waypoint(PARK_S, (x + PARK_DX, y, ABOVE_Z), FINGER_CLOSED, "park"),
     ]
 
 
@@ -247,11 +250,11 @@ def _right_plan(start_after: float) -> list[Waypoint]:
         Waypoint(START_DOWN_S, (x, y, PRESS_Z), FINGER_CLOSED, "press start"),
         Waypoint(START_HOLD_S, (x, y, PRESS_Z), FINGER_CLOSED, "hold"),
         Waypoint(LIFT_S, (x, y, ABOVE_Z), FINGER_CLOSED, "release"),
-        Waypoint(PARK_S, (x, y - PARK_DY, ABOVE_Z), FINGER_CLOSED, "park"),
+        Waypoint(PARK_S, (x + PARK_DX, y, ABOVE_Z), FINGER_CLOSED, "park"),
     ]
 
 
 def demo():
-    """Left arm: down onto the yellow button, hold it in for 3.6 s, lift off and park to its side. Right arm: hover over
-    the green button until 7 s in, by when the horn has sounded and stopped, then press it, lift off and park."""
+    """Left arm: down onto the yellow button, hold it in for 3.6 s, lift off and park 10 cm forward. Right arm: hover
+    over the green button until 7 s in, by when the horn has sounded and stopped, then press it, lift off and park."""
     return {"left": _left_plan(), "right": _right_plan(START_AFTER_S)}

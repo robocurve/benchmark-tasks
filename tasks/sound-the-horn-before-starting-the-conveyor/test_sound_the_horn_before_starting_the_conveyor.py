@@ -8,6 +8,8 @@ is reachable, and a kinematic replay of the demo: each button's cap follows the 
 import json
 import pathlib
 import sys
+import xml.etree.ElementTree as ET
+from functools import lru_cache
 
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
@@ -17,9 +19,10 @@ import numpy as np  # noqa: E402
 import pytest  # noqa: E402
 from benchkit import tool_state  # noqa: E402
 from plantkit import HZ, leaning  # noqa: E402
-from yam_arena import station, task_file  # noqa: E402
-from yam_arena.constants import PAD_TIP_PAST_TCP  # noqa: E402
+from yam_arena import YAM_URDF, station, task_file  # noqa: E402
+from yam_arena.constants import ARM_JOINTS, PAD_TIP_PAST_TCP  # noqa: E402
 from yam_arena.demo import ArmPlan, Waypoint  # noqa: E402
+from yam_arena.urdf import forward_kinematics, rpy_matrix  # noqa: E402
 
 TASK = task_file.load(HERE / "sound_the_horn_before_starting_the_conveyor.py")
 M = TASK.module
@@ -28,10 +31,11 @@ IN = -M.BUTTON_TRAVEL  # a cap pushed all the way in
 OUT = 0.0
 SPECS = {"horn_button": M.HORN_BUTTON, "start_button": M.START_BUTTON}
 
-# The gripper and wrist camera, as measured from the URDF and the station's calibration: the closed fingers span
-# +-4.1 cm along x at 4 cm above the TCP; the camera (42 x 42 mm across) rides about 7 cm forward (+x) of the TCP
-# with its underside 6 cm or more above the pad tips.
-FINGER_X_WIDE = 0.041
+# The gripper and wrist camera, as measured from the URDF and the station's calibration: with the fingers closed, the
+# finger carriages span +-2.4 cm across the fingers (y) from 5 to 7 cm above the TCP, and the housing +-3.4 cm from
+# 7 cm up; the camera (42 x 42 mm across) rides about 7 cm forward (+x) of the TCP with its underside 6 cm or more
+# above the pad tips.
+CARRIAGE_HALF_Y, HOUSING_HALF_Y = 0.024, 0.034
 CAMERA_FORWARD, CAMERA_HALF, CAMERA_ABOVE_TIPS = 0.07, 0.021, 0.060
 
 
@@ -123,7 +127,7 @@ def test_the_buttons_spring_back_and_stay_put():
         ("idle", 0.0, 0.0),  # did nothing
         ("fault", 0.0, 0.0),  # start with no horn
         ("fault", 2.5, 0.0),  # start after a short horn
-        ("fault", 3.5, 0.0),  # start too long after the horn, or during a short one, or the horn after the start
+        ("fault", 3.5, 0.0),  # start over 10 s after the latest full hold (a short blast or none since), or before it
     ],
 )
 def test_outcome_table(state, horn_s, expected):
@@ -137,6 +141,7 @@ def test_outcome_table(state, horn_s, expected):
         ((horn(3.5), wait(9.0), press()), 1.0),  # start 9 s after the horn stopped
         ((horn(3.5), [(IN, IN, 0.5)]), 1.0),  # start pressed while the horn, held 3.5 s, still sounds
         ((horn(4.0), wait(3.0), horn(1.0), wait(3.0), press()), 1.0),  # a short blast after a full one changes nothing
+        ((horn(4.0), wait(2.0), [(IN, OUT, 0.25), (IN, IN, 0.25)]), 1.0),  # start pressed during a short blast, 2 s on
         ((horn(4.0), wait(12.0), horn(3.2), wait(1.0), press()), 1.0),  # a stale horn sounded again in full
         ((horn(4.0), wait(2.0), press(), wait(2.0), press()), 1.0),  # pressing start again while it runs
         ((horn(3.5), wait(2.0), press(), horn(4.0)), 1.0),  # the horn again once it runs
@@ -148,6 +153,7 @@ def test_outcome_table(state, horn_s, expected):
         ((horn(1.5), wait(0.5), horn(1.5), wait(0.5), press()), 0.0),  # two short blasts don't add up
         ((horn(3.5), wait(10.5), press()), 0.0),  # start 10.5 s after the horn stopped
         ((horn(4.0), wait(12.0), horn(1.0), wait(1.0), press()), 0.0),  # a stale horn topped up with a short blast
+        ((horn(4.0), wait(12.0), [(IN, OUT, 0.25), (IN, IN, 0.25)]), 0.0),  # start during a short blast, horn stale
         ((press(), wait(1.0), horn(4.0), wait(1.0), press()), 0.0),  # start first, then the horn and start again
         ((press(), horn(3.5)), 0.0),  # start first, then a full horn and no second press
         ((press(),), 0.0),  # start alone
@@ -225,7 +231,7 @@ def test_the_thresholds_are_the_stated_numbers():
 
 
 def test_a_release_ends_the_hold():
-    c = run(horn(2.0), [(-0.5 * M.BUTTON_TRAVEL, OUT, 0.05)], horn(2.0))
+    c = run(horn(2.0), [(-0.5 * M.BUTTON_TRAVEL, OUT, 0.05)], horn(2.0))  # one step eased to 4 mm in ends the hold
     assert c.longest == 2.0 * HZ and c.held == 2.0 * HZ and c.warned_at is None
     M._watch(states(OUT, IN))
     assert c.state == "fault" and c.fault == "start pressed without a fresh 3 s horn"
@@ -277,15 +283,22 @@ def test_reset_clears_the_starter_the_lamps_and_the_clock():
 # -- the layout --------------------------------------------------------------------------------------------------------
 
 
-def test_the_lamps_stand_clear_of_the_pressing_gripper_and_its_camera():
+def test_the_lamps_stand_beside_their_buttons_clear_of_the_pressing_gripper_and_its_camera():
     tips = M.PRESS_Z - PAD_TIP_PAST_TCP
-    near_x = M.LAMP_X - M.LAMP_SIZE[0] / 2
-    near_y = M.LAMP_Y - M.LAMP_SIZE[1] / 2
-    assert tips + CAMERA_ABOVE_TIPS - M.LAMP_TOP_Z >= 0.03  # the camera passes 3 cm over the lamp
-    assert near_y - (M.BUTTON_Y + CAMERA_HALF) >= 0.01  # and beside it
-    assert M.BUTTON_X + CAMERA_FORWARD + CAMERA_HALF > near_x  # it does reach over the lamp's edge: hence the low lamp
-    assert near_x - (M.BUTTON_X + FINGER_X_WIDE) >= 0.02  # the fingers keep 2 cm from the lamp
-    assert near_x - (M.BUTTON_X + M.BUTTON_BASE[0] / 2) >= 0.02  # the lamp stands apart from the button
+    inner_y = M.LAMP_Y - M.LAMP_SIZE[1] / 2  # the lamp's face towards its button
+    assert M.LAMP_X == M.BUTTON_X and M.LAMP_Y - M.BUTTON_Y == pytest.approx(0.12)  # 12 cm outboard of the button
+    assert inner_y - (M.BUTTON_Y + M.BUTTON_BASE[1] / 2) == pytest.approx(0.06)  # 6 cm clear of the button's base
+    assert inner_y - (M.BUTTON_Y + HOUSING_HALF_Y) >= 0.06  # the housing and carriages pass 6 cm inboard of it
+    assert inner_y - (M.BUTTON_Y + CARRIAGE_HALF_Y) >= 0.07
+    assert M.LAMP_TOP_Z < tips + 0.05  # and the carriages start above its top anyway
+    # The closest the wrist camera's box (42 mm across, from 6 cm over the tips) comes to the lamp's box.
+    camera_x = M.BUTTON_X + CAMERA_FORWARD
+    camera_lo = np.array([camera_x - CAMERA_HALF, M.BUTTON_Y - CAMERA_HALF, tips + CAMERA_ABOVE_TIPS])
+    camera_hi = np.array([camera_x + CAMERA_HALF, M.BUTTON_Y + CAMERA_HALF, tips + 0.10])
+    lamp_lo = np.array([M.LAMP_X - M.LAMP_SIZE[0] / 2, inner_y, M.TOP])
+    lamp_hi = np.array([M.LAMP_X + M.LAMP_SIZE[0] / 2, M.LAMP_Y + M.LAMP_SIZE[1] / 2, M.LAMP_TOP_Z])
+    gap = np.linalg.norm(np.maximum(np.maximum(lamp_lo - camera_hi, camera_lo - lamp_hi), 0.0))
+    assert gap >= 0.08
     assert M.LAMP_Z - M.LAMP_SIZE[2] / 2 == pytest.approx(M.TOP + M.POST[2])  # the lamp sits on its post
 
 
@@ -408,6 +421,202 @@ def test_the_demo_waits_long_enough_and_not_too_long():
 
 
 # -- the record --------------------------------------------------------------------------------------------------------
+
+
+def _stl(path) -> np.ndarray:
+    """A binary STL's triangles (n x 3 x 3, m)."""
+    data = path.read_bytes()
+    n = int(np.frombuffer(data, dtype="<u4", count=1, offset=80)[0])
+    record = np.dtype([("normal", "<f4", 3), ("v", "<f4", (3, 3)), ("attr", "<u2")])
+    return np.frombuffer(data, dtype=record, count=n, offset=84)["v"].astype(float)
+
+
+class Part:
+    """A rigid piece of an arm's surface: triangles and vertices in its own frame, placed in the world by ``rot`` and
+    ``pos``, with a bounding sphere so the checks below can skip pieces nowhere near."""
+
+    def __init__(self, triangles, rot=np.eye(3), pos=np.zeros(3)) -> None:
+        self.triangles, self.rot, self.pos = triangles, rot, np.asarray(pos, dtype=float)
+        self.vertices = np.unique(triangles.reshape(-1, 3), axis=0)
+        mid = (self.vertices.min(axis=0) + self.vertices.max(axis=0)) / 2
+        self.radius = float(np.linalg.norm(self.vertices - mid, axis=1).max())
+        self.mid = mid
+
+    def placed(self, rot, pos) -> "Part":
+        part = object.__new__(Part)
+        part.__dict__.update(self.__dict__, rot=rot, pos=np.asarray(pos, dtype=float))
+        return part
+
+    def centre(self) -> np.ndarray:
+        return self.rot @ self.mid + self.pos
+
+    def world_triangles(self) -> np.ndarray:
+        return self.triangles @ self.rot.T + self.pos
+
+    def world_vertices(self) -> np.ndarray:
+        return self.vertices @ self.rot.T + self.pos
+
+
+@lru_cache(maxsize=1)
+def arm_meshes():
+    """Each link's visual mesh from the URDF, in its link's frame."""
+    out = []
+    for link in ET.parse(YAM_URDF).getroot().iter("link"):
+        for visual in link.findall("visual"):
+            origin, mesh = visual.find("origin"), visual.find("geometry/mesh")
+            xyz = np.array(origin.get("xyz").split(), dtype=float)
+            rot = rpy_matrix(np.array(origin.get("rpy").split(), dtype=float))
+            out.append((link.get("name"), Part(_stl(YAM_URDF.parent / mesh.get("filename")) @ rot.T + xyz)))
+    return tuple(out)
+
+
+def _cube(centre, half) -> np.ndarray:
+    corner = np.array([[x, y, z] for x in (-1, 1) for y in (-1, 1) for z in (-1, 1)], dtype=float) * half + centre
+    quads = ((0, 1, 3, 2), (4, 6, 7, 5), (0, 4, 5, 1), (2, 3, 7, 6), (0, 2, 6, 4), (1, 5, 7, 3))
+    return np.array([corner[list(t)] for a, b, c, d in quads for t in ((a, b, c), (a, c, d))])
+
+
+def arm_surface(arm, q) -> list:
+    """The arm's visual surface in the world at joints ``q`` (fingers closed), its wrist camera a 42 mm cube."""
+    base = np.asarray(station.BASES[arm])
+    poses = forward_kinematics(YAM_URDF, {n: float(v) for n, v in zip(ARM_JOINTS, q, strict=True)})
+    parts = [part.placed(poses[link][:3, :3], poses[link][:3, 3] + base) for link, part in arm_meshes()]
+    gripper = poses["gripper"]
+    camera = gripper[:3, :3] @ np.asarray(station.wrist_camera(arm).pos) + gripper[:3, 3] + base
+    return parts + [Part(_cube(camera, CAMERA_HALF))]
+
+
+def blocked(parts, eye, points) -> float:
+    """The share of the sight lines from ``eye`` to ``points`` that pass through a triangle (Moller-Trumbore). Only
+    the triangles near the cone of sight lines are tested."""
+    points = np.asarray(points)
+    target = points.mean(axis=0)
+    axis = target - eye
+    reach = float(np.linalg.norm(axis))
+    axis = axis / reach
+    spread = float(np.linalg.norm(points - target, axis=1).max())
+
+    def near(centres, radii):
+        w = centres - eye
+        along = w @ axis
+        off = np.linalg.norm(w - along[..., None] * axis, axis=-1)
+        return off <= radii + spread * np.clip(along / reach, 0.0, 1.0) + 1e-3
+
+    candidates = []
+    for part in parts:
+        if near(part.centre()[None], np.array([part.radius]))[0]:
+            tri = part.world_triangles()
+            mid = tri.mean(axis=1)
+            keep = near(mid, np.linalg.norm(tri - mid[:, None], axis=2).max(axis=1))
+            candidates.append(tri[keep])
+    triangles = np.concatenate(candidates) if candidates else np.zeros((0, 3, 3))
+    v0, e1, e2 = triangles[:, 0], triangles[:, 1] - triangles[:, 0], triangles[:, 2] - triangles[:, 0]
+    hits = 0
+    for point in points:
+        d = point - eye
+        length = float(np.linalg.norm(d))
+        d = d / length
+        h = np.cross(d, e2)
+        a = np.einsum("ij,ij->i", e1, h)
+        ok = np.abs(a) > 1e-12
+        f = np.divide(1.0, a, out=np.zeros_like(a), where=ok)
+        s = eye - v0
+        u = f * np.einsum("ij,ij->i", s, h)
+        qv = np.cross(s, e1)
+        v = f * (qv @ d)
+        t = f * np.einsum("ij,ij->i", e2, qv)
+        hits += bool(np.any(ok & (u >= 0) & (v >= 0) & (u + v <= 1) & (t > 1e-6) & (t < length - 1e-4)))
+    return hits / len(points)
+
+
+def gap_to_box(parts, lo, hi) -> float:
+    """The closest any part's vertex comes to a box (m), skipping parts whose bounding sphere is far from it."""
+    closest = np.inf
+    for part in parts:
+        if np.linalg.norm(np.maximum(np.maximum(lo - part.centre(), part.centre() - hi), 0.0)) - part.radius > 0.05:
+            continue
+        v = part.world_vertices()
+        closest = min(closest, float(np.linalg.norm(np.maximum(np.maximum(lo - v, v - hi), 0.0), axis=1).min()))
+    return closest
+
+
+def lamp_points(name, eye) -> list:
+    """Points on the lamp's top and on its sides that face the camera."""
+    lamp = next(o for o in TASK.objects if o.name == name)
+    centre, half = np.array(lamp.pos), np.array(lamp.size) / 2
+    grid = np.linspace(-0.8, 0.8, 4)
+    points = [centre + half * (a, b, 1.0) for a in grid for b in grid]
+    for axis in (0, 1):
+        side = np.sign(eye[axis] - centre[axis])
+        other = 1 - axis
+        for a in grid:
+            for b in (-0.5, 0.5):
+                k = np.zeros(3)
+                k[axis], k[other], k[2] = side, a, b
+                points.append(centre + half * k)
+    return points
+
+
+@lru_cache(maxsize=1)
+def demo_joints(every=5):
+    """Both arms' joints along the demo at 20 Hz, kept every ``every`` steps: (loop index, left q, right q)."""
+    arms = plans()
+    duration = max(a.duration for a in arms.values()) + 1.0
+    out = []
+    for k, t in enumerate(np.arange(0.0, duration, 1 / HZ)):
+        q = {arm: a.action7(t)[0][:6] for arm, a in arms.items()}
+        if k % every == 0:
+            out.append((k, q["left"], q["right"]))
+    return tuple(out)
+
+
+def test_the_top_camera_sees_each_lamp_past_the_arms_whenever_it_is_lit():
+    """Ray-traced from the calibrated top camera through both arms' meshes, every 0.25 s of the demo while a lamp is
+    lit: the amber of the horn and the colour of the run lamp have to be readable from the video."""
+    events, _ = replay()
+    eye = np.array(station.top_camera("calibrated").pos)
+    points = {name: lamp_points(name, eye) for name in ("horn_lamp", "run_lamp")}
+    worst = {"horn_lamp": 0.0, "run_lamp": 0.0}
+    seen = {"horn_lamp": 0, "run_lamp": 0}
+    for k, q_left, q_right in demo_joints():
+        step = k + 1  # the step hook's count after this control step
+        lit = {"horn_lamp": events["horn_on"] <= step < events["horn_off"], "run_lamp": step >= events["running"]}
+        if not any(lit.values()):
+            continue
+        surface = arm_surface("left", q_left) + arm_surface("right", q_right)
+        for name in points:
+            if lit[name]:
+                seen[name] += 1
+                worst[name] = max(worst[name], blocked(surface, eye, points[name]))
+    assert seen["horn_lamp"] >= 14 and seen["run_lamp"] >= 20  # the whole horn, and from the press to the plan's end
+    assert worst["horn_lamp"] <= 0.05 and worst["run_lamp"] <= 0.05, worst
+
+
+def test_a_lamp_beyond_its_button_would_be_hidden_while_the_button_is_pressed():
+    """Why the lamps stand beside their buttons: one 10 cm beyond the horn button and 6 cm out, at the same height,
+    is behind the pressing arm on the top camera's sight line."""
+    eye = np.array(station.top_camera("calibrated").pos)
+    ((_, q_left, _),) = [j for j in demo_joints() if j[0] == int(round(4.0 * HZ))]  # holding the horn in
+    surface = arm_surface("left", q_left)
+    beyond = np.array([M.BUTTON_X + 0.10, M.BUTTON_Y + 0.06, M.LAMP_Z])
+    half = np.array(M.LAMP_SIZE) / 2
+    grid = np.linspace(-0.8, 0.8, 4)
+    assert blocked(surface, eye, [beyond + half * (a, b, 1.0) for a in grid for b in grid]) >= 0.9
+    assert blocked(surface, eye, lamp_points("horn_lamp", eye)) == 0.0
+
+
+def test_the_arms_keep_clear_of_the_lamps_and_the_conveyor_along_the_demo():
+    """Every vertex of both arms' meshes, and their wrist cameras, stays 2 cm or more from each fixed fixture, and 7 cm
+    or more from the lamps and their posts."""
+    boxes = {o.name: (np.array(o.pos) - np.array(o.size) / 2, np.array(o.pos) + np.array(o.size) / 2)
+             for o in TASK.objects if o.mass is None}
+    closest = dict.fromkeys(boxes, np.inf)
+    for _, q_left, q_right in demo_joints():
+        surface = arm_surface("left", q_left) + arm_surface("right", q_right)
+        for name, (lo, hi) in boxes.items():
+            closest[name] = min(closest[name], gap_to_box(surface, lo, hi))
+    assert all(gap >= 0.02 for gap in closest.values()), closest
+    assert all(closest[n] >= 0.07 for n in ("horn_lamp", "horn_post", "run_lamp", "run_post")), closest
 
 
 def test_task_json_matches_the_task_file():
