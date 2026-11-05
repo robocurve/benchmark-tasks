@@ -1,0 +1,21 @@
+{
+  "title": "Regrasp a dropped terminal block into its mounting grip by handing it over in the air",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "handover",
+    "regrasp",
+    "terminal block",
+    "DIN rail",
+    "control cabinet"
+  ],
+  "instruction": "Pick up the dropped terminal block with the left arm and hand it over in the air to the right arm. The right arm takes it by its two narrow ends and holds it upright, latch foot down, ready to clip onto a DIN rail. Do not set it down again.",
+  "context": "A terminal block dropped while wiring a control cabinet lands flat. Lying flat, it can only be picked up by its long top and bottom edges, which is the wrong grip for mounting: clipping it onto a rail needs it upright, held by its narrow ends so the latch foot is free. Passing it between two hands gets it into that grip without putting it down.",
+  "setup": "Positions are measured forward from the line joining the two arm bases (61 cm apart), left of their midline as seen from behind the robot, and up from the table top. Table: the station's light-coloured table, otherwise empty. Terminal block: one grey polyamide feed-through terminal block (the shape of a Phoenix Contact XTV 16, 1329672), 77.2 mm long, 49.8 mm tall from the latch foot to its top edge, 12.1 mm thick, 38 g. It lies flat on one of its two large faces, centred 25 cm in front of the bases and 18 cm left of the midline, its length running left to right, its bottom edge (with the latch foot that clips onto the rail) facing the robot and its top edge facing away.",
+  "scoring": "Lifted: the block's lowest point is 5 cm or more above the table. Upright: the line from its bottom (latch-foot) edge to its top edge points up, within 15 degrees of vertical. A gripper holds the block when the point midway between its finger pads is within 3 cm of the block and its pads are closed onto it, 3 to 85 mm apart; the right gripper holds it by its narrow ends when its pads are 70 to 85 mm apart (the block is 77.2 mm long). The left gripper has let go when that midpoint is 8 cm or more from the block. Still: the block's centre moves less than 5 mm over 0.5 s. Set down: once lifted, the block's lowest point comes within 4 mm of the table. Score 1.0, and the run ends, once all of these hold for 3 s in a row: lifted, upright, held by the right gripper by its narrow ends, left gripper let go, still, both grippers held it at the same time while it was lifted earlier in the run, and it was never set down. Otherwise the score at the end of the run: 0 if not lifted; 0.25 if lifted; 0.5 if lifted and upright; 0.75 if lifted and both grippers held it at the same time while it was lifted at some point. Capped at 0.25 if it was ever set down after being lifted. Distances are read with a rule, or from a photo with a scale in view.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lay the block back flat in its starting place, as in the setup photo. Nothing is consumed; about 10 seconds.",
+  "fidelity": "PhysX at 240 Hz in the station scene, arms with the station's gains. The block's shape is the manufacturer's CAD model; its housing and latch foot are one rigid body (the latch spring plays no part in a handover and is not modelled), with convex-decomposition colliders. Mass from volume x 1,190 kg/m3. Pad-to-block friction is the scene's rubber-like default (1.2 static, 1.0 dynamic). Scoring reads each gripper's pad midpoint and opening from the simulated joints.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-Y5EKDG"
+}
