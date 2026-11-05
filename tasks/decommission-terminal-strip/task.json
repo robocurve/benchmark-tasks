@@ -1,0 +1,21 @@
+{
+  "title": "Strip a decommissioned terminal rail, keeping the earth blocks",
+  "category": "Impact on jobs",
+  "keywords": [
+    "DIN rail",
+    "terminal block",
+    "decommissioning",
+    "control cabinet",
+    "sorting by function",
+    "disassembly"
+  ],
+  "instruction": "This terminal strip is being taken out of service. Take everything off the rail from its open right end: put the grey blocks in the red scrap bin, and the green earth blocks and the loose end clamp in the white reuse tray.",
+  "context": "When a control cabinet is rebuilt, technicians strip old terminal rails: feed-through blocks are scrapped, while protective-earth blocks and end clamps are reused. Packed blocks can only come off from the strip's open end, so the strip must be taken apart in order, and each item's destination depends on its function. Unlike ordering blocks by a stated colour sequence (RoboDojo stack_blocks_by_language) or pulling one connector (DataCenterBench unplug), the strip comes apart from its open end and each item's bin follows from its function. Done by: electricians and electrical equipment assemblers (O*NET 47-2111.00, 51-2022.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. Rail: a steel TS35 x 7.5 DIN rail lying flat, 3.5 cm wide, 20 cm long, 0.75 cm tall, along y, centred at x 38, y 33, fixed, with a fixed dark steel end clamp (4.5 x 1 x 3.5 cm) 1 cm in from its left end (centre y 41.5). Against it, standing on the rail, 0.5 mm apart: six terminal blocks (PA plastic boxes 5.5 cm across the rail, 1.22 cm wide, 5 cm tall, 20 g), from the clamp grey, green, grey, grey, green, grey, then a loose dark steel end clamp (4.5 x 1 x 3.5 cm, 15 g). Red scrap bin: a fixed open frame, walls 0.6 cm thick and 2 cm tall round a 7 x 13 cm pocket (table floor), centred at x 25, y 39. White reuse tray: the same frame in white, centred at x 25, y 22.5.",
+  "scoring": "From a top photo and a ruler, with the grippers open. An item is in a container when it is still, its centre is inside the container's inner walls and its lowest point is below the walls' top (standing, lying or leaning). Each of the seven items (six blocks, end clamp) earns 1/7 when it is in its container: grey blocks in the scrap bin, green blocks and the end clamp in the reuse tray. Each green block or end clamp put in the scrap bin takes 1/7 off. Floored at 0. Success: all seven right, held 1 s.",
+  "run_limit": "4,800 steps (4 minutes at 20 Hz)",
+  "reset_notes": "Stand the six blocks back on the rail in order against the fixed clamp, 0.5 mm apart, then the loose end clamp.",
+  "fidelity": "Rigid boxes with one shared friction (1.2 static, 1.0 dynamic). The rail lies flat on the table instead of on an upright panel and its profile is a solid bar. Blocks and clamps are plain boxes resting on the rail by gravity, so they lift straight off, where real ones are levered off the rail; the earth blocks are green rather than green-yellow.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-V9APX2"
+}
