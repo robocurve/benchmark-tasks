@@ -2,8 +2,9 @@
 
 Needs ``yam_arena`` importable (it is in the simulator's environment; elsewhere put a clone of yam-isaac-lab-arena
 on PYTHONPATH). Checks the scene loads, the outcome table, the permit timer and the transit rules, that every demo
-waypoint is reachable and never hides the lamp from the top camera (a ray-cast against the arm's own meshes), and a
-kinematic replay of the demo against the timer: every lift falls inside a green window with margin to spare.
+waypoint is reachable and never hides the lamp from the top camera (a ray-cast against the arm's own meshes), a
+kinematic replay of the demo against the timer: every lift falls inside a green window with margin to spare, and the
+arm's lag behind its targets on the way into the carrier: every vial clears its collar's walls.
 """
 
 import json
@@ -18,9 +19,9 @@ import numpy as np  # noqa: E402
 import pytest  # noqa: E402
 from benchkit import _RESET, _STEP, tool_state  # noqa: E402
 from plantkit import HZ, LAMP_OFF, UP, box_state, cylinder_state, leaning  # noqa: E402
-from yam_arena import YAM_URDF, station, task_file  # noqa: E402
-from yam_arena.constants import ARM_JOINTS, PAD_TIP_PAST_TCP  # noqa: E402
-from yam_arena.demo import ArmPlan  # noqa: E402
+from yam_arena import YAM_URDF, ik, station, task_file  # noqa: E402
+from yam_arena.constants import ARM_JOINTS, PAD_TIP_PAST_TCP, READY, SHOULDER, WRIST  # noqa: E402
+from yam_arena.demo import ArmPlan, pick_place_waypoints  # noqa: E402
 from yam_arena.urdf import forward_kinematics, quat_xyzw_to_matrix, rpy_matrix  # noqa: E402
 
 TASK = task_file.load(HERE / "wait_for_the_permit_lamp_before_moving_the_vials.py")
@@ -575,7 +576,9 @@ def test_the_demo_waits_follow_the_permit_timers():
     assert M.SECOND_PRESS_AT >= first_green + M.GREEN_S + 1.0  # asked again only once the permit has lapsed
     second_green = M.SECOND_PRESS_AT + M.PRESS_S + M.PENDING_S
     assert M.LEFT_RESTART + (1.5 + 1.5 + 0.8) / M.SPEED >= second_green + 1.0
-    assert M.LEFT_RESTART + 2 * 9.6 / M.SPEED <= second_green + M.GREEN_S - 1.0
+    assert sum(w.duration for w in M._move(3, 0)) == pytest.approx(M.MOVE_S)
+    assert M.LEFT_START + 2 * M.MOVE_S <= first_green + M.GREEN_S - 1.0  # both pairs done inside their windows
+    assert M.LEFT_RESTART + 2 * M.MOVE_S <= second_green + M.GREEN_S - 1.0
 
 
 # -- the lamp seen from the top camera ---------------------------------------------------------------------------------
@@ -799,6 +802,94 @@ def test_a_kinematic_replay_of_the_demo_scores_one_with_every_lift_under_a_green
     assert second_press - green[0][1] >= 1.0  # asked again at least 1 s after the first permit lapsed
     assert green[1][0] > second_press and green[0][0] > first_press
     assert green[0][1] + 1.0 <= M.SECOND_PRESS_AT <= green[1][0]  # the first permit is over before the second ask
+
+
+# -- the arm's lag on the way into the carrier ------------------------------------------------------------------------
+# The replay above moves a vial exactly along the plan, so it cannot see how a real run loses one. The joints trail
+# their targets by damping / stiffness, which on a fast descent swings the gripper towards the base and tips it. A
+# first-order lag at those time constants, 20 Hz targets as in a run, fits the simulator to a couple of millimetres.
+OVER_THE_TOP = 0.012  # m: the rim counts against the collar walls from this far above their tops
+ON_THE_WAY_DOWN = ("lower", "lower over the slot", "settle", "seat")
+FAST_TRIM = {0: (0.004, -0.005), 1: (0.003, -0.003), 2: (0.002, -0.003), 3: (0.001, -0.003)}
+# Left TCP from a GPU run of the fast plan, on the way down: (control step, x, y, z above the table).
+MEASURED = ((260, 0.1576, 0.0730, 0.1099), (455, 0.2058, 0.0745, 0.0912), (862, 0.2544, 0.0743, 0.0971),
+            (1052, 0.3022, 0.0731, 0.1096), (1054, 0.3021, 0.0731, 0.0970))
+
+
+def fast_plan(travel_z=M.TRAVEL_Z):
+    """The left arm's plan with pick_place's own 1.2 s lower, all the way down: what scored 0.75 on the GPU."""
+
+    def move(vial, slot):
+        qx, qy = FAST_TRIM[slot]
+        return pick_place_waypoints((M.SLOT_X[vial], M.RACK_Y, M.GRIP_Z),
+                                    (M.SLOT_X[slot] + qx, M.CARRIER_Y + qy, M.PLACE_Z),
+                                    travel_z=travel_z, speed=M.SPEED)
+
+    return M._left_plan(move)
+
+
+def lagged_path(waypoints):
+    """{control step: (TCP position, TCP rotation, commanded x, label)} with each joint trailing its target."""
+    arm = ArmPlan(list(waypoints), station.BASES["left"])
+    lag = np.array([SHOULDER["damping"] / SHOULDER["stiffness"]] * 3 + [WRIST["damping"] / WRIST["stiffness"]] * 3)
+    follow = 1.0 - np.exp(-DT / lag)
+    q, path = np.array(READY, dtype=float), {}
+    for step in range(1, round((arm.duration + 0.5) * HZ)):
+        action, label = arm.action7(step * DT)
+        q += follow * (action[:6] - q)
+        pos, rot = ik.tcp_pose(q, station.BASES["left"])
+        path[step] = (pos, rot, float(arm.target(step * DT)[0][0]), label)
+    return path
+
+
+def collar_gaps(path):
+    """Each carrier slot's least gap (m) from the held vial's bottom rim to a wall of its collar, seen from above, while
+    the rim is at or below OVER_THE_TOP above the walls' tops. Below zero the rim lands on the wall."""
+    gaps = {}
+    for pos, rot, x, label in path.values():
+        if label not in ON_THE_WAY_DOWN:
+            continue
+        axis = rot[:, 2]  # the approach axis, down the vial
+        bottom = pos + (M.GRIP_Z - M.TOP) * axis
+        if bottom[2] - M.VIAL_R * np.sqrt(max(1.0 - axis[2] ** 2, 0.0)) > M.TOP + M.SLOT_H + OVER_THE_TOP:
+            continue
+        slot = int(np.argmin([abs(x - slot_x) for slot_x in M.SLOT_X]))
+        off = np.abs(bottom[:2] - np.array([M.SLOT_X[slot], M.CARRIER_Y]))
+        gaps[slot] = min(gaps.get(slot, np.inf), float((M.CARRIER_INNER / 2 - M.VIAL_R - off).min()))
+    return gaps
+
+
+def test_the_lag_model_fits_what_the_simulator_did():
+    path = lagged_path(fast_plan())
+    for step, x, y, z in MEASURED:
+        assert np.linalg.norm(path[step][0] - np.array([x, y, M.TOP + z])) < 0.002, step
+
+
+def test_at_the_pick_place_pace_the_far_vial_lands_on_its_collar_wall():
+    """The check has teeth: the GPU run with this plan lost the vial for slot 3 and only that one. Its bottom edge came
+    down 1.4 mm over the collar's near wall, the arm stalled on it, and the vial tipped out as the fingers opened."""
+    gaps = collar_gaps(lagged_path(fast_plan()))
+    assert gaps[3] < 0.0 and all(gaps[slot] > 0.0 for slot in (0, 1, 2)), gaps
+
+
+def test_the_higher_carry_is_what_took_the_far_vial_onto_the_wall():
+    """pick_place's lower takes 1.2 s from whatever height: 2 cm more carry height is 2 cm more in the same time."""
+    assert collar_gaps(lagged_path(fast_plan(M.TOP + 0.150)))[3] > 0.0
+
+
+def test_every_vial_clears_its_collar_walls_with_the_arm_lagging():
+    gaps = collar_gaps(lagged_path(M.demo()["left"]))
+    assert set(gaps) == set(range(M.N_VIALS))
+    assert min(gaps.values()) >= 0.004, gaps
+
+
+def test_the_set_down_stops_over_the_collar_and_goes_in_slowly():
+    above = M.OVER_SLOT_Z - M.GRIP_Z - M.SLOT_H
+    assert above >= OVER_THE_TOP + 0.005  # the descent's lag has room to die away before the rim reaches the walls
+    assert M.SETTLE_S >= 2 * WRIST["damping"] / WRIST["stiffness"]  # two of the slowest joints' time constants
+    assert 1.5 * (M.OVER_SLOT_Z - M.PLACE_Z) / M.SEAT_S <= 0.045  # m/s: a smoothstep's peak is 1.5 x its mean
+    labels = [w.label for w in M._move(3, 0)]
+    assert labels.index("lower over the slot") + 2 == labels.index("seat") and "lower" not in labels
 
 
 # -- the submission record ---------------------------------------------------------------------------------------------

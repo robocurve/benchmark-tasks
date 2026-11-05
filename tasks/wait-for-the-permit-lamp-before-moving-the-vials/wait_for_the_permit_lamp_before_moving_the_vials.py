@@ -287,14 +287,24 @@ def distance(objects) -> float:
 # -- the scripted demo: the right arm asks for the permit, the left arm moves the vials while the lamp is green --------
 GRIP_Z = TOP + 0.060
 TRAVEL_Z = TOP + 0.170  # a held vial's bottom rides 2 cm over the standing vials' caps (9 cm tall)
+OVER_SLOT_Z = TOP + 0.110  # a held vial's bottom is 2 cm over the carrier collars' tops
 PLACE_Z = TOP + 0.066
-SPEED = 1.0  # pick_place pace: 9.6 s per vial
+SPEED = 1.0  # pick_place pace for everything but the set-down
+# On the way down the arm trails its target: each joint lags by damping / stiffness (0.0625 s at the shoulder, 0.15 s at
+# the wrist), which swings the gripper towards the base and tips it, in proportion to the speed. At the pick_place pace
+# (13 cm/s) a vial crosses the far collar's top 9 mm off the path, past the 8 mm the collar leaves round it, and lands
+# on the wall. So it stops 2 cm over the collar, settles, and goes in at 4 cm/s.
+LOWER_S = 1.0  # s: from the carry height to over the slot (replaces pick_place's 1.2 s lower, all the way down)
+SETTLE_S = 0.4  # s: the lag dies away
+SEAT_S = 1.6  # s: into the slot
+MOVE_S = (1.5 + 1.5 + 0.8 + 1.2 + 1.8 + 0.6 + 1.0) / SPEED + LOWER_S + SETTLE_S + SEAT_S  # s per vial: 11.4
 # Far vial first, into carrier slots 0 to 3: the slot 5 cm ahead of the gripper is then always empty, so the left
 # wrist camera, which hangs ahead of the fingers, never passes over a cap.
 PICK_ORDER = (3, 2, 1, 0)
-# The arm settles a few millimetres off its target at the carrier, so the open-loop demo aims off by that much (m).
-# Starting values borrowed from the tubes exemplar's measured error for the same motion; re-measured after the GPU run.
-TRIM = {"pick": (0.0, 0.0), "place": {0: (0.004, -0.005), 1: (0.003, -0.003), 2: (0.002, -0.003), 3: (0.001, -0.003)}}
+# Even at the seat's pace the arm trails 2 to 3 mm towards its base and to the left, and it settles about a millimetre
+# that way too, so the open-loop demo aims off by this much (m). Measured on the GPU: a vial's bottom keeps at least
+# 5.6 mm from its collar's walls going in, and every vial ends within about 2 mm of its slot's centre.
+TRIM = {"pick": (0.0, 0.0), "place": {slot: (0.002, -0.001) for slot in range(N_VIALS)}}
 TO_BUTTON_S = 1.5  # s: the right arm's move from its ready pose to the hover above the button
 FIRST_PRESS_AT = TO_BUTTON_S  # s: the first press starts; the cap registers about 0.85 s in
 LEFT_START = 5.5  # s: the left arm starts on the first pair of vials; the lamp is green from about 5.35 s
@@ -313,12 +323,20 @@ ABOVE_Z = CAP_TOP + 0.060
 def _move(vial: int, slot: int) -> list[Waypoint]:
     px, py = TRIM["pick"]
     qx, qy = TRIM["place"][slot]
-    return pick_place_waypoints((SLOT_X[vial] + px, RACK_Y + py, GRIP_Z), (SLOT_X[slot] + qx, CARRIER_Y + qy, PLACE_Z),
-                                travel_z=TRAVEL_Z, speed=SPEED)
+    place = (SLOT_X[slot] + qx, CARRIER_Y + qy)
+    plan = pick_place_waypoints((SLOT_X[vial] + px, RACK_Y + py, GRIP_Z), (*place, PLACE_Z), travel_z=TRAVEL_Z,
+                                speed=SPEED)
+    lower = next(k for k, w in enumerate(plan) if w.label == "lower")
+    plan[lower:lower + 1] = [
+        Waypoint(LOWER_S, (*place, OVER_SLOT_Z), FINGER_CLOSED, "lower over the slot"),
+        Waypoint(SETTLE_S, (*place, OVER_SLOT_Z), FINGER_CLOSED, "settle"),
+        Waypoint(SEAT_S, (*place, PLACE_Z), FINGER_CLOSED, "seat"),
+    ]
+    return plan
 
 
-def _left_plan() -> list[Waypoint]:
-    moves = [_move(vial, slot) for slot, vial in enumerate(PICK_ORDER)]
+def _left_plan(move=_move) -> list[Waypoint]:
+    moves = [move(vial, slot) for slot, vial in enumerate(PICK_ORDER)]
     plan = [Waypoint(LEFT_START, (SLOT_X[PICK_ORDER[0]], RACK_Y, TRAVEL_Z), FINGER_OPEN, "wait for the permit")]
     plan += moves[0] + moves[1]
     plan.append(Waypoint(LEFT_RESTART - sum(w.duration for w in plan), (SLOT_X[PICK_ORDER[2]], RACK_Y, TRAVEL_Z),
