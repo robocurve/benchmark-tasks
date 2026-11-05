@@ -1,0 +1,19 @@
+{
+  "title": "Stand a calibration board in its holder, facing the camera",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "robot fleet maintenance",
+    "camera calibration",
+    "reorientation",
+    "insertion"
+  ],
+  "instruction": "stand the calibration board in its holder, facing the camera",
+  "context": "Every robot camera in a fleet is recalibrated by holding a checkerboard in front of it, a chore that currently needs a person. A robot that can set up the board for itself, or for another robot, removes one step of human upkeep from scaling robot fleets.",
+  "setup": "Positions are measured on the table from the midpoint between the two arm bases: forward is away from the arms, left and right as seen from behind the arms. (1) Camera: a black 6 x 9 x 4 cm camera body on a 22 cm steel post (3 cm across), fixed to the table, 55 cm forward and centred, its top 26 cm up, looking back toward the arms. (2) Holder: two black rails, each 1 cm thick, 12 cm long left to right and 3 cm tall, fixed to the table 2 cm apart, forming a slot that runs left to right, centred 32 cm forward. (3) Storage slot: two steel rails of the same size, fixed to the table 2 cm apart, forming a slot that runs front to back, centred 18 cm forward and 22 cm right. (4) Calibration board: a white double-sided checkerboard, 16 cm wide, 10 cm tall and 8 mm thick, 100 g, loose, standing on its long edge in the storage slot, edge-on to the camera. Nothing else is on the table.",
+  "scoring": "Scored once, after the episode ends. The board counts as standing when it rests still with its bottom on the table and its top at least 8.5 cm above its bottom; it faces the camera when it is no more than 5 cm deep front to back and at least 14.5 cm wide left to right. 1.0: standing in the holder's slot, facing the camera. 0.5: standing and facing the camera with its centre within 10 cm of the holder's slot, but not in it. 0.25: out of the storage slot and standing anywhere else, or turned edge-on. 0.0: still in the storage slot, lying flat, dropped or held.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Stand the board back in the storage slot, edge-on to the camera. The camera, the holder and the storage slot are fixed (screws or putty) and stay in place.",
+  "fidelity": "Dream Labs' calibrated YAM station replica in Isaac Lab-Arena (Isaac Sim). The camera is a fixed prop that does not record; the board and rails are rigid boxes with default friction, and the checkerboard pattern is not drawn. The board is sized to the YAM's reach, which ends about 20 cm above the table.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-8M7XB5"
+}
