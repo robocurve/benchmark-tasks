@@ -1,0 +1,22 @@
+{
+  "title": "Load four blanks into a gravity magazine with 2.5 mm clearance, squaring each one up before letting go",
+  "category": "Impact on jobs",
+  "keywords": [
+    "machine tending",
+    "feeder",
+    "gravity magazine",
+    "insertion",
+    "yaw alignment",
+    "repetition",
+    "manufacturing"
+  ],
+  "instruction": "Load all four aluminium blanks from the blue tray into the steel magazine, each lying flat, one on top of another.",
+  "context": "Machine feeders and offbearers load parts into the gravity magazines that feed automatic presses, mills and assembly machines. A magazine is only slightly wider than the part, so each part must be centred and turned square before it is released, or it jams at the mouth and stops the machine.",
+  "setup": "World frame for this text: 'in front' is away from the arm bases, 'left' and 'right' are from the robot's view, heights are above the table top, and the midline is halfway between the two arm bases. Magazine (fixed, bare steel): a square vertical channel standing on the table, open at the top, 46 x 46 mm inside and 90 mm tall, its walls 4 mm thick (54 x 54 mm outside), its sides square to the table edges, its centre 30.0 cm in front of the arm bases and 12.0 cm left of the midline. The wall nearest the robot has a sight slot 12 mm wide, centred, running its full height (the two strips beside it are 21 mm wide); the slot is narrower than a blank is thick, so no blank fits through it. The table inside the channel is its floor. Tray pad (fixed, blue plastic sheet): 300 x 90 mm and 3 mm thick, its long side front to back, centred 23.5 cm in front and 25.0 cm left of the midline. Blanks (loose, machined aluminium, 41 x 41 x 15 mm, 68 g each): four, lying flat on the pad in a row 25.0 cm left of the midline, their centres 13.0, 20.0, 27.0 and 34.0 cm in front of the arm bases, turned about the vertical by 20, -15, 30 and -25 degrees respectively from square to the table edges (positive is counter-clockwise seen from above). Nothing else is on the table.",
+  "scoring": "A blank is loaded when all of these hold: it is wholly inside the magazine, with its centre within 3 mm of the channel's centre line both ways (so it lies inside the walls) and its top no more than 1 mm above the rim; it lies flat, its 15 mm side within 5 degrees of vertical, either face up (a blank standing on an edge does not count); it is supported, its lowest point within 2 mm of the magazine floor (the table) or of the top of a loaded blank below it; and it is at rest (moving less than 1 cm/s and turning less than 0.5 rad/s). Count the blanks through the sight slot and measure the top blank's height with a ruler from the rim. Score = n / 4, where n is the number of loaded blanks: 1.0 for all four, 0.75 for three, 0.5 for two, 0.25 for one, 0 for none. A blank jammed across the mouth, resting on top of a wall, standing on edge in the channel, still falling, or anywhere outside the channel counts 0, and does not stop the blanks below it from counting; a blank resting on one that does not count does not count either. The trial ends at 1.0 once all four have been loaded for 1 s; otherwise it scores n at the last step.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Take the blanks out of the top of the magazine and lay them back on the pad at their spots and angles. Nothing is consumed.",
+  "fidelity": "Approximate. Rigid boxes with the simulator's default friction. A real magazine has an outlet at its foot and often a weight on the stack; here the table closes the channel and nothing is fed out. The blanks have no chamfer or orientation feature, so any face may be up. Clearance is 2.5 mm per side, so a blank turned up to about 7.5 degrees drops in; at 15 mm thick its 43.7 mm diagonal cannot wedge across the 46 mm channel, which a thicker part could.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-Z5LA6T"
+}
