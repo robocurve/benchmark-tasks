@@ -1,0 +1,22 @@
+{
+  "title": "Set up a chess position from its FEN",
+  "category": "Societal relevance",
+  "keywords": [
+    "chess",
+    "FEN",
+    "notation",
+    "board setup",
+    "object recognition",
+    "pick and place",
+    "bimanual"
+  ],
+  "instruction": "Set up this chess position, white at the near side: 6k1/8/1q3n2/4p3/3P4/2B5/8/4K2R w - - 0 1",
+  "context": "Setting up a position from its notation, as for a lesson, a puzzle or an adjourned game: decode the standard FEN text, find the squares on an unlabelled board, tell the piece types apart and leave unused pieces off the board.",
+  "setup": "Coordinates: x forward from the line between the two arm bases, y to the left, from the midpoint between the bases. A chessboard, 25 x 25 x 1 cm, fixed to the table, centred at (24.5, 0) cm: 8 x 8 squares of 2.8 cm, buff and green, in a 1.3 cm off-white border, no coordinates printed. Rank 1 is nearest the arms (x 14.7 cm), the a-file on the left (y 9.8 cm), so a1 is dark. Ten Staunton-style wooden pieces, ivory or black, each with a 2.2 cm wide, 6 mm tall round base: pawn 3.8 cm tall, 20 g; rook 4.6 cm, 30 g; knight 5.2 cm, 30 g; bishop 6.0 cm, 30 g; queen 6.2 cm, 35 g; king 7.1 cm, 40 g. They stand on the table beside the board: at y 17 cm, white bishop (x 15 cm), black queen (20), white knight (25), white pawn (30); at y -17 cm, black knight (13), white king (17), black rook (21), black pawn (25), white rook (29), black king (33). White knights face away from the arms, black ones towards them.",
+  "scoring": "A piece is on its square when its centre is within 1 cm horizontally of the square's centre, its bottom within 5 mm of the board's top, and it is tilted less than 20 degrees. The position has eight pieces (white king e1, rook h1, bishop c3, pawn d4; black king g8, queen b6, knight f6, pawn e5). Score at the end of the trial: 1/8 per piece of the position on its square, minus 1/8 per other piece whose centre is over the 64 squares (a piece of the position elsewhere on the board or toppled, or the white knight or black rook), at least 0. 1.0 once all eight are on their squares, no other piece is over the board, and every piece is at rest (under 1 cm/s and 0.5 rad/s) for 1 s, which ends the trial. Knights may face any way.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed; put the ten pieces back at their starting positions.",
+  "fidelity": "Approximate: pieces are rigid compounds of cylinders, spheres and boxes with rubber-like friction and a low centre of mass; the board is a fixed slab with printed squares.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-QN84CX"
+}
