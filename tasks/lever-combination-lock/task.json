@@ -1,0 +1,19 @@
+{
+  "title": "Work out a two-lever combination lock and open the box",
+  "category": "Other",
+  "keywords": [
+    "causal discovery",
+    "combination lock",
+    "bimanual",
+    "feedback"
+  ],
+  "instruction": "The box is locked and the levers A, B, C work its lock. Open the lid and put the block from inside the box on the red mat.",
+  "context": "Opening an unfamiliar mechanism by trying controls and reading its feedback is a common maintenance and household problem. The lid unlocks only after two levers are pressed in the right order, and a small LED shows a correct first press, so the robot has to use that feedback to find the order.",
+  "setup": "A wooden box (12 x 12 cm outside, 7 cm tall) stands 32 cm in front of the arm bases, 2.5 cm right of the centre line between the arms, with a lid that slides 13 cm toward the right arm and a black knob (1.2 cm) on top. Inside is a blue 4 cm block. Three yellow spring levers (push buttons, 3.6 cm caps) labelled A, B, C stand 17.5 cm left of the centre line, 20, 28 and 36 cm out. A small green LED stands 44 cm out in the same line. A red mat (12 x 12 cm) lies 30 cm out, 36.5 cm left of the centre line.",
+  "scoring": "0: no contact with the box, levers or block. 0.25: the lid, a lever or the block is touched. 0.5: the lid knob is pulled at least once after a lever press. 0.75: the presses, the LED after each press and the pulls leave only one possible ordered lever pair, and it is the true one. 1.0: the 0.75 condition holds and the block rests on the red mat. The score is the highest level reached.",
+  "run_limit": "3,000 steps (2 min 30 s at 20 Hz)",
+  "reset_notes": "Hidden per trial (redrawn every trial from its seed): A combination: two different levers pressed in order (6 ordered pairs, uniform) release the lock for 12 s. A green LED lights while the first lever of the combination has just been pressed. Holding one lever down while pulling only works by luck (when two consecutive single-lever tries happen to form the combination).",
+  "fidelity": "The lock is a joint constraint switched in code from the lever states (hard: a combination state machine).",
+  "scores": "Dream-1 run: 0.25; demo: 1",
+  "media": "M-M7K4GM"
+}
