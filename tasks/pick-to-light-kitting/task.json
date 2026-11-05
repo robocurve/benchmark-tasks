@@ -1,0 +1,20 @@
+{
+  "title": "Kit from the bins whose pick lights are on",
+  "category": "Impact on jobs",
+  "keywords": [
+    "pick-to-light",
+    "kitting",
+    "order picking",
+    "light-directed picking",
+    "fasteners"
+  ],
+  "instruction": "Kit the current order into the white tray using the pick lights in front of the bins. Take parts only from a bin whose light is on, and take as many from it as it has green segments lit. Take nothing from a bin whose lights are all off.",
+  "context": "On pick-to-light kitting lines the order is not on paper: the light module on each bin's lip comes on for the bins in the current order and shows how many to take, and the picker follows the lights bin by bin. Picking from a dark bin or taking the wrong count is a kitting error caught downstream at assembly. Unlike TK-CDVSJF, which counts a fixed number of one part given in the instruction, and TK-Q65SGP, where the kit list is spoken and the reasoning is spotting damaged items, here which bins to pick from and how many of each come only from the station's light display. BEHAVIOR's household kit activities (e.g. make_a_car_emergency_kit) only gather items into a container, with no derived counts. Done by: stockers and order fillers and hand material movers on kitting lines (O*NET 53-7065.00, 53-7062.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. Bins: four fixed dark-blue open frames (walls 0.6 cm thick, 1.5 cm tall, round an 11.5 x 9 cm pocket, table floor) centred at y 40 and x 12.5 (bolts), 25 (spacers), 37.5 (nuts) and 50 (washers). Each holds three parts standing on end, 3.5 cm apart along x: bolts (grey steel rod 1.2 cm across, 4.5 cm tall, 35 g), spacers (aluminium disc 1.8 cm across, 2 cm tall, 12 g), nuts (steel disc 1.9 cm across, 0.8 cm tall, 10 g), washers (steel disc 2.4 cm across, 0.6 cm thick, 6 g). Pick lights: on the table 2 mm in front of each bin's inner wall (y 34.1), two fixed segments 3 x 1.2 cm, 1 cm tall, side by side along x 4 cm apart; lit segments bright green, unlit dark grey. Lit: one on the bolt bin, two on the spacer bin, none on the nut bin, one on the washer bin. Kit tray: a fixed white frame of the same walls round a 17 x 8 cm pocket centred at x 30, y 20.",
+  "scoring": "From a top photo and a ruler, with the grippers open. A part is in the tray when it is still, its centre inside the tray's inner walls and its lowest point less than 5 cm above the table. Each lit bin is worth a third: full when the tray holds exactly its lit count from that bin (1 bolt, 2 spacers, 1 washer), half for one spacer of two, nothing for more than the lit count. Each part in the tray from the unlit nut bin takes 0.25 off, not below 0. Success: exactly 1 bolt, 2 spacers, 1 washer and no nut, held 1 s.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Stand every part back on its mark in its bin; the bins, lights and tray do not move.",
+  "fidelity": "Rigid primitives with one shared friction (1.2 static, 1.0 dynamic). Bolts are plain rods, spacers, nuts and washers plain discs (washers 6 mm thick so a parallel gripper can pinch them). Pick lights are coloured tiles, not emissive lamps, and show the quantity as a count of lit segments where real modules show a digit; there is no confirm button. Bins and tray are fixed open frames.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-MMHFAG"
+}
