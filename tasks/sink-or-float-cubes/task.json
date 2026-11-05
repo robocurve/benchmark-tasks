@@ -1,0 +1,19 @@
+{
+  "title": "Sort look-alike cubes by whether they float",
+  "category": "Other",
+  "keywords": [
+    "property testing",
+    "buoyancy",
+    "observation time",
+    "sorting"
+  ],
+  "instruction": "Some of the four cubes float in water and some sink. Put every cube that floats in the blue bin and every cube that sinks in the grey bin.",
+  "context": "Density checks by flotation are used in materials sorting and food inspection. Two classes are close to water's density and one sealed cube leaks slowly, so the robot must watch each cube long enough before deciding, not judge at first contact.",
+  "setup": "A clear glass water tank (18 x 18 cm inside, 8 cm walls, water 6 cm deep) stands 34 cm in front of the arm bases, 2.5 cm left of the centre line between the arms. Four orange cubes labelled 1 to 4 (4 cm, identical look) sit in a row 20 cm out, 12 cm apart, centred on the centre line, in random order. Two bins (13 x 20 cm, 3 cm walls) stand 36.5 cm left of the centre line: a blue bin marked F 22 cm out and a grey bin marked S 37.5 cm out.",
+  "scoring": "0: no cube is touched. 0.25: a cube is touched or moved. 0.5: at least one cube rests released in the water for 1 s or more. 0.75: every cube has been in the water and the last behaviour seen for each (floating or resting on the bottom) is its true one; the leaky cube counts only once it has been seen to sink. 1.0: the 0.75 condition holds and every floating cube is in the blue bin and every sinking cube in the grey bin. The score is the highest level reached.",
+  "run_limit": "6,800 steps (5 min 40 s at 20 Hz)",
+  "reset_notes": "Hidden per trial (redrawn every trial from its seed): Each cube's density: floaters 0.80-0.92 g/cm3, sinkers 1.08-1.25 (floaters ride low, sinkers fall slowly). One sinker is a sealed hollow cube with a pinhole: it floats high (0.55-0.70) for the first 9-12 s it spends in water, then fills over 3 s and sinks (and stays heavy). Reading each cube as soon as it settles bins the leaky cube as a floater.",
+  "fidelity": "Buoyancy and water drag are forces computed in code from how deep each cube sits in the tank's water volume; there is no fluid simulation or splash.",
+  "scores": "Dream-1 run: 0.25 (a run capped at 4,830 steps, 241 s, of the 6,800-step limit); demo: 1",
+  "media": "M-9SF47U"
+}
