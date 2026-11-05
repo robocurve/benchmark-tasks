@@ -1,0 +1,23 @@
+{
+  "title": "Sort kitchen waste by the local rules of Karlsruhe",
+  "category": "Societal relevance",
+  "keywords": [
+    "waste sorting",
+    "recycling",
+    "local rules",
+    "world knowledge",
+    "household",
+    "pick and place",
+    "bimanual",
+    "handover"
+  ],
+  "instruction": "This kitchen is in Karlsruhe, Germany. The bins are colour-coded according to the local waste sorting rules. Sort the waste on the table into the bins where it belongs; leave anything that has no fitting bin on the table.",
+  "context": "German waste separation follows federal law and each city's own bins; the robot is told only the city's name and that the bins follow its colour code, and must know what goes where, including items where the obvious guess is wrong (a drink carton is not paper, a ceramic mug is residual waste, a smartphone goes in no household bin).",
+  "setup": "Coordinates: x forward from the line between the two arm bases, y to the left, from the midpoint between the bases. Four open square plastic bins fixed to the table, inside 16 x 16 x 9 cm, 6 mm walls, unlabelled, coloured like the lids of Karlsruhe's household bins: blue (paper) centred at (20, 36) cm, green (organic) at (40, 33) cm, red (Wertstoffe: plastic, metal, composite packaging) at (20, -36) cm, black (residual waste) at (40, -33) cm. Items on the table (x by y by z): an empty tomato soup tin can, 6.6 cm diameter, 10 cm tall, 50 g, at (15, 10) cm; a small banana lying with its long side along x, 12 x 7.4 x 2.5 cm, 100 g, at (25, 16) cm; a smartphone lying flat, 4.8 x 10 x 0.7 cm, 150 g, at (34, 6) cm; an empty orange juice drink carton standing, 4.7 x 4.6 x 12 cm, 30 g, at (17, -14) cm; an empty cardboard popcorn box standing on its long edge, 2.7 x 8 x 5.5 cm, 50 g, at (30, -7) cm; a ceramic espresso mug, handle along y, 5.8 x 7.6 x 5 cm, 150 g, at (29, -18) cm.",
+  "scoring": "An item is in a bin when the centre of its bounding box is inside the bin's 16 x 16 cm opening and below its rim (9.6 cm above the table). The tin can and the carton belong in the red bin, the popcorn box in the blue, the banana in the green, the mug in the black; the smartphone in none. Score at the end of the trial: +1/5 per waste item in its bin, -1/5 per waste item in a wrong bin, -1/5 if the smartphone is in any bin, at least 0. 1.0 once all five are in their bins, the smartphone is in none, and every item is at rest (under 1 cm/s and 0.5 rad/s) for 1 s, which ends the trial.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed; take the items out of the bins and put them back at their starting positions.",
+  "fidelity": "Approximate: the items are scanned library models scaled to the listed sizes, with rubber-like friction; the drink carton collides as one convex hull; the bins are rigid boxes.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-59RN52"
+}
