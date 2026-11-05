@@ -1,0 +1,24 @@
+{
+  "title": "Pull one decommissioned cable out of a clipped bundle",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "deformable",
+    "cable tray",
+    "cable extraction",
+    "data centre",
+    "telecom",
+    "distractors",
+    "colour identification"
+  ],
+  "instruction": "The blue cable in the white tray is decommissioned. Pull it out of the tray through the two black clips and lay it on the table completely outside the tray, then let go. The three grey cables are live: they must stay in the tray under both clips.",
+  "context": "Telecommunications equipment installers and repairers (O*NET 49-2022.00) remove decommissioned cables from live cable trays: the right cable must be found in the bundle and drawn out through its clips without disturbing the live cables next to it.",
+  "setup": "Positions in cm, origin on the table midway between the arm bases, x away from the robot, y to its left. Tray: white PLA, floor 8.8x40x0.3 centred x 30 y 0, walls 0.4 thick, 3 above the floor, inner faces x 26/34, open ends y ±20. Two black PLA clip bars 8 (x) x 2 (y) x 0.5 span the walls, underside 1 above the floor, at y +6 and -10. Four 6 mm round PVC cables (30 g) on the tray floor along y, at x 27.75 grey A, 29.25 blue, 30.75 grey B, 32.25 grey C. Left ends: greys y +18, blue +9. All leave the right end; each ends in a black 30x10x10 mm plug (8 g) centred at y -29.5 (A, B), -35.5 (blue), -41.5 (C).",
+  "scoring": "Score 0 if: at the end either gripper is within 4 cm of any cable or plug; or any grey cable no longer passes under both clips; or any grey plug is more than 3 cm (tape) from its starting mark. Otherwise: 1.0 if no part of the blue cable or its plug is over the tray in top view (walls included); 0.5 if the blue cable no longer passes under either clip but part of it is still over the tray; 0 if it still passes under a clip (e.g. untouched). Fixed parts moved: 0. Success when 1.0 holds for 1 s.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lay the four cables straight along the tray in their rows (tape marks on the floor), under both clips, left ends at their marks; put each plug on its table mark beyond the tray's right end, long side along the cable, lying flat.",
+  "fidelity": "Cables: 2 cm rigid segments with bending springs, no twist or plasticity, friction 0.8; plugs rigid boxes. Tray and clips fixed rigid. Cables lie loose with 9 mm gaps and are not tied; in sim pulling the blue cable barely drags its neighbours (<5 mm), so holding the bundle down is good practice, not strictly needed. Real trials: grey plugs on tape marks.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-GX2NSH"
+}
