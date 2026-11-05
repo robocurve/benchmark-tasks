@@ -1,0 +1,25 @@
+{
+  "title": "Sort laundry by colour, but send hand-wash-tagged items to the mesh bag",
+  "category": "Impact on jobs",
+  "keywords": [
+    "laundry",
+    "sorting",
+    "rule exception",
+    "care tag",
+    "commercial laundry",
+    "household",
+    "bimanual",
+    "pick and place",
+    "release",
+    "instruction following"
+  ],
+  "instruction": "Sort this laundry into the three containers: white items in the white basket, coloured items in the blue basket, but any item with a red hand-wash tag goes in the grey mesh bag, whatever its colour. Keep the tags on the items, and let go of each item once it is in.",
+  "context": "Hotel, hospital and commercial laundries mark items that need special handling with coloured tags, and sorters must follow the tag even when it contradicts the usual colour rule: one delicate garment in a hot colour wash is ruined. A robot sorting laundry has to notice a small marker and let it override the obvious feature.",
+  "setup": "Positions in cm from the midpoint between the two arm bases (bases at y = +30.5 left and -30.5 right): x forward, y to the left, heights above the table top. Fixed: three open containers in a row at x 30, each 16 x 16 cm inside with 1 cm thick walls 5 cm tall standing on the table and a 1 cm floor (rim 4 cm above the floor; outside 18 x 18 cm): a white plastic basket centred at y +20, a grey mesh wash bag (rigid stand-in) at y 0, a blue plastic basket at y -20. Loose: six folded garments, each a rigid fabric block 8 (x) x 5 (y) x 2.5 cm, 60 g (cotton shirts and towel, a silk blouse, a wool sweater), lying flat in one row at x 14 with the long side along x, listed by y (centre): -20 green shirt; -12 green sweater with tag; -4 white towel; +4 navy shirt; +12 white blouse with tag; +20 white shirt. Two loose red tags, each a 2.5 x 2.5 x 0.4 cm card, 3 g, lying flat on top of the tagged garments, centred 2.5 cm further out (x 16.5) than the garment's centre. Everything is square to the table edges.",
+  "scoring": "Hard 0 if any garment or tag ends with its lowest point more than 5 cm below the table top (fell off the table), or a tag is not on its own garment (its centre not over the garment's upper face, or its lowest point more than 1 cm above that face). Otherwise score = 0.9 x max(0, C/6 - W/3), where C = garments wholly inside their correct container and W = garments wholly inside a wrong one; wholly inside = within the inner walls (2 mm tolerance for a garment resting against a wall), no part above the rim, and its lowest point within 5 mm of the floor or resting on another garment. Correct: white towel and white shirt in the white basket, navy and green shirts in the blue basket, the tagged white blouse and green sweater in the mesh bag. Doing nothing, sorting by colour alone (tags ignored) and putting everything in one container all score 0. 1.0 requires all six correct, both tags on, everything still (under 1 cm/s and 0.5 rad/s) and every fingertip of both grippers at least 3 cm from every garment and tag, all held for 1 s.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed. The containers are fixed in the simulation: in a real trial, tape or clip them to the table. Put the six garments back in the row and each red tag back on top of its garment, 2.5 cm out from the garment's centre.",
+  "fidelity": "Rigid boxes stand in for folded clothes at about 1/3 scale, so the 9.4 cm gripper can hold one across its 5 cm width; cloth isn't available. The hand-wash tag is a loose card lying on the garment, as a task file can't join two boxes; losing it is a hard 0. The mesh bag is a rigid open box; all containers are fixed. Friction is the simulator default. Grasp, contact and release are approximate; release is checked from fingertip positions by forward kinematics.",
+  "scores": "Dream-1 run: 0.0 (both arms hovered over and nudged garments at the ends of the row for the full 2 minutes; no garment reached a container); scripted demo: 1.0 (4 of 4 runs)",
+  "media": "M-4PA3HE"
+}
