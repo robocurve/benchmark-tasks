@@ -1,0 +1,20 @@
+{
+  "title": "Find the warmest can with a slow, noisy probe",
+  "category": "Other",
+  "keywords": [
+    "measurement",
+    "sensor lag",
+    "noise",
+    "replication",
+    "temperature"
+  ],
+  "instruction": "Cans A, B and C hold water at different temperatures. The grey probe pad measures the temperature of the can standing on it and shows it in degrees C on the display beside it. Put the warmest can on the red mat.",
+  "context": "Lab and kitchen thermometers take seconds to settle and their readings jitter, so one quick glance can rank samples by the order they were measured rather than by temperature. The robot has to wait for the reading to settle and repeat it until the difference is real.",
+  "setup": "Three sealed aluminium cans (4 cm cubes, 150 g, labelled A, B, C on every face) stand in a row 22 cm in front of the arm bases, centred between the arms, 10.5 cm apart, A nearest the left arm. A grey probe pad (7 x 7 cm, flush with the table) lies 32 cm in front of the bases on the midline, with a printed PROBE card beside it. A 3-digit red LED display (3.2 cm digits, one decimal, degrees C, refreshed every 0.5 s) lies flat 34 cm in front of the bases, 15.5 cm toward the left arm, with a printed degrees-C card. A red mat (12 x 12 cm) lies 30 cm in front of the left arm's base. The display starts at room temperature, about 22.0.",
+  "scoring": "0: no can is touched or moved. 0.25: a can is touched or moved. 0.5: at least one settled stretch: a can stood untouched on the probe pad until the display stopped drifting (a straight line through its last 8 or more readings, 0.5 s apart, has no slope beyond twice its standard error). 0.75: every can has settled readings, and the warmest can's mean settled reading beats every other can's by more than twice the standard error of the difference, computed from the pooled scatter of the readings themselves. 1.0: the 0.75 condition holds and the warmest can stands alone on the red mat at the end. The score is the highest level reached; the provided scorer logs every displayed reading with the can on the pad.",
+  "run_limit": "13,200 steps (11 min 00 s at 20 Hz)",
+  "reset_notes": "Hidden per trial (redrawn every trial from its seed): Can temperatures 2.0-2.5 C apart (warmest 48-62 C); the probe follows the can with a 5 s time constant and each 0.5 s display update adds 1.0 C of noise. A reading 2 s after setting a can down is only a third of the way from the previous reading.",
+  "fidelity": "Temperatures are simulated in code: the pad's sensor follows the can on it as a first-order lag with Gaussian reading noise; cans do not cool during the trial.",
+  "scores": "Dream-1 run: 0.25 (a run capped at 4,830 steps, 241 s, of the 13,200-step limit); demo: 1",
+  "media": "M-EQ3E3R"
+}
