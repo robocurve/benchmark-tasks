@@ -1,0 +1,23 @@
+{
+  "title": "Corbel a bridge across a gap with bricks shorter than the gap",
+  "category": "Other",
+  "keywords": [
+    "corbel",
+    "cantilever",
+    "overhang",
+    "centre of mass",
+    "stacking",
+    "bimanual",
+    "dry masonry",
+    "stability"
+  ],
+  "instruction": "Build a bridge over the gap between the two grey blocks with the bricks: stack bricks out from both blocks so that the top bricks from the two sides meet over the middle of the gap. At the end, no brick may rest on the table in the gap.",
+  "context": "A corbelled arch, as in dry-stone masonry, crosses a span no single stone can by stepping each course out over the one below, keeping the centre of mass of everything above each brick over its support. The task scores two cantilevers built out from the piers that meet over the middle (or are joined by a capstone), with every brick resting freely; several stepping patterns pass, but a stack stepped too far out tips. Each arm builds one side.",
+  "setup": "World frame for this text: 'in front' is away from the arm bases, 'left' and 'right' are from the robot's view, heights are above the table top, and the midline is halfway between the two arm bases. Piers (fixed, grey stone): two blocks, each 100 mm front to back, 100 mm side to side and 40 mm tall, centred 30.0 cm in front of the arm bases and 14.0 cm left and 14.0 cm right of the midline. Their inner faces are 9.0 cm either side of the midline, so the gap between them is 180 mm side to side. Bricks (loose, red-orange fired clay, all identical): eight rectangular bricks, each 40 mm front to back, 120 mm long and 25 mm tall, 230 g, lying flat with the 120 mm length running side to side. Four lie in a row 30.0 cm left of the midline, centred 14, 22, 30 and 38 cm in front of the arm bases; the other four mirror them 30.0 cm right of the midline. Nothing else is on the table.",
+  "scoring": "Judged on the end state from photos and a ruler, with everything at rest (every brick moving less than 1 cm/s and turning less than 0.5 rad/s; otherwise 0). A brick is on the table when its lowest point is less than 2 mm above it. Score 0 if any brick is on the table in the gap: any part of it between the piers' inner faces and within the piers' front-to-back extent (25 to 35 cm in front of the arm bases). Bricks on the table anywhere else are ignored. Every brick off the table must lie flat on its 120 x 40 mm face (its 25 mm side within 3 degrees of vertical), with its 120 mm length within 5 degrees of side to side, and must rest on a pier or another brick: its bottom face within 1 mm of that object's top and their outlines, seen from above, overlapping by more than 2 mm in both directions. Otherwise (a brick on its side or end, tilted, turned, hovering or held) the score is 0. Stability check, also 0 if it fails: each brick's weight, plus whatever it carries, is shared equally between the objects it rests on and passed down; for every brick, the centre of mass of itself and its share of everything above it must lie, seen from above, within the span of its contact patches with all its supports. All bricks weigh the same. A side is every brick resting on that pier, directly or through other bricks. Its reach is the distance from the pier's inner face to the centre of that side's innermost brick end face, measured side to side from the brick's true outline (not its widened outline when turned). The sides meet when each reaches at least 80 mm and either one brick rests on both sides (a capstone), or the two innermost end faces' centres are at most 5 mm apart side to side, at most 20 mm apart front to back and at most 15 mm apart in height. Score 1.0: the sides meet. Score 0.5: they do not, and both sides reach at least 60 mm. Score 0.25: exactly one side reaches at least 60 mm. Score 0 otherwise. Spare bricks may be used anywhere, for example as counterweights or a capstone. The trial ends at 1.0 once the 1.0 condition has held for 1 s; otherwise it scores the condition at the last step.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Lay the eight bricks back in their two rows, flat, 120 mm length side to side. Nothing is consumed.",
+  "fidelity": "Approximate. Bricks and piers are rigid boxes with the simulator's default friction; no mortar, roughness or chipping, and all bricks have the same size and mass. The stability check is rigid-body statics (centre of mass over the supports) on the resting positions, with a brick on two supports sharing its load equally; real masonry also depends on friction and bricks bearing on each other. Tops within 5 mm count as meeting without any load passing between them.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-CBQ96T"
+}
