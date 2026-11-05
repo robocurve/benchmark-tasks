@@ -1,0 +1,23 @@
+{
+  "title": "Keep a condensate drain hose sloping downhill",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "hose",
+    "deformable",
+    "routing",
+    "HVAC",
+    "plumbing",
+    "constraint keeping"
+  ],
+  "instruction": "Route the air conditioner's white condensate hose into the drain tundish so that it slopes downhill all the way from the unit to the drain, with no dip that would trap water: lay it over the two grey steps and put the nozzle inside the tundish. Then let go of the hose.",
+  "context": "Condensate drain lines must fall continuously: the International Mechanical Code (sec. 307.2) requires a uniform slope of at least 1/8 in per ft (1%), and AC installation manuals (Daikin, Toshiba) say the drain pipe must be inclined downward with no trap and must not run up and down. HVAC installers (O*NET 49-9021.00: install pipes) and plumbers (47-2152.00: install pipe assemblies) route such lines.",
+  "setup": "Cm from the midpoint between the arm bases on the table (x forward, y to robot's left). White unit box 12x10x20 cm, x 8-20, y 34.6-44.6. 8 mm off-white PVC hose, 56 cm, fixed in an outlet on the unit's right face at x 14, y 34, 14 cm high; it hangs to the table and lies straight to y -19, ending in a grey 30x14x14 mm nozzle (12 g). Two grey wooden steps: high 10x6 cm, 10.5 cm tall, centre (23.7, 23.3), long axis at -48 deg (pointing from the outlet to the low step); low 8x8 cm, 8 cm tall, centre (32, 14), turned -80 deg. Drain: grey 11x11x2.5 cm plinth at (22, -10) with a dark open tundish on it (inner 6.5x6.5 cm, 8 mm walls, 2 cm tall; rim 4.5 cm above the table). All fixed (taped).",
+  "scoring": "Score 0 if: a gripper is within 3.5 cm of the hose or nozzle at the end; the nozzle centre is not inside the tundish (within its 6.5 cm opening, below the rim); the hose does not rest on both steps (a part of the hose over each step top, its underside touching or at most 1.1 cm above it); the unit, steps or drain were moved. Otherwise measure the hose centre height from the outlet to the nozzle (photo from the side, or ruler every 2 cm): total rise = sum of every climb along the way, ignoring wiggles under 2 mm. 1.0 if total rise <= 5 mm, 0.5 if <= 15 mm, else 0. Success (1.0) when this holds for 1 s.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Lay the hose straight from the outlet towards the robot's right along x 14 cm (it hangs from the outlet to the table), nozzle flat on the table at y -19 cm. Check unit, steps and drain are on their tape marks; tundish empty.",
+  "fidelity": "Hose: 2 cm rigid capsule segments with soft bending springs, no twist, octagonal colliders; outlet end welded to the unit. Nozzle is a rigid box welded to the hose end. Steps, unit and drain are fixed rigid boxes. No water is simulated: the trap is judged only from the hose's height profile.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-ZYCCNA"
+}
