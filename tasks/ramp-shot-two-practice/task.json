@@ -1,0 +1,19 @@
+{
+  "title": "Two practice rolls, then land the ball in the zone",
+  "category": "Other",
+  "keywords": [
+    "quantitative prediction",
+    "calibration",
+    "rolling",
+    "extrapolation"
+  ],
+  "instruction": "Roll the orange ball down the ramp so that it stops inside the green zone on the far lane (T). Only your first roll on lane T counts. Before it you may practise at most twice on the near lane (P) with the white ball, fetching it back between rolls. A ball rests against one of the numbered pins; the orange button drops the pins.",
+  "context": "Predicting an outcome from a few trial runs and committing to one real attempt is how engineers calibrate dispensers and launchers. With only two practice rolls and five release heights, the target often belongs to an untried height, so the robot has to fit a model and interpolate or extrapolate.",
+  "setup": "A two-lane ramp (25.5 cm long, 20 deg) has its top 11 cm left of the left arm's base and its foot 13 cm right of it, with five numbered release pins (1.2 to 7.2 cm above the lane, 1.5 cm apart in height) that drop for 2.5 s when the orange release button (3.6 cm cap, 17 cm in front of the bases, 37.5 cm left of the centre line between the arms) is pressed. Two flat lanes with 10 cm marks run from the ramp foot toward the right arm to an end wall 61.5 cm right of the centre line: the practice lane P 28 cm in front of the bases and the test lane T 40 cm out. A green target zone, 5 cm long, is marked on lane T. A white practice ball and an orange test ball (4 cm, 60 g) rest 18 cm out, 8.5 cm left and 9.5 cm right of the centre line.",
+  "scoring": "0: no ball or the button is touched. 0.25: a ball is touched or the button pressed. 0.5: at least one practice roll on lane P (ball released from a pin and stopped) before the first roll on lane T. 0.75: exactly two practice rolls from two different pins before the first roll on lane T, and that roll starts from the pin that a straight line through the two practice results (stopping distance against pin height) predicts for the zone. 1.0: the 0.75 condition holds and the first ball on lane T stops inside the green zone. The score is the highest level reached.",
+  "run_limit": "3,600 steps (3 min 00 s at 20 Hz)",
+  "reset_notes": "Hidden per trial (redrawn every trial from its seed): As easy, but five pins (1.2 to 7.2 cm high, 1.5 cm apart) and a 5 cm zone centred on one pin's distance. Only two practice runs are allowed, so at most two pins can be tried: the zone pin must be predicted by fitting distance against pin height and interpolating or extrapolating. Shooting from whichever practised pin landed nearer the zone fails when the zone belongs to an untried pin (3 of 5 pins for a fixed pair).",
+  "fidelity": "Lane rolling resistance is MuJoCo's rolling-friction coefficient on the ball. Release pins are kinematic bars that drop together.",
+  "scores": "Dream-1 run: 0.25; demo: 1",
+  "media": "M-46CXAR"
+}
