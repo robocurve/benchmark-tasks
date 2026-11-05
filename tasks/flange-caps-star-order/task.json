@@ -1,0 +1,21 @@
+{
+  "title": "Start the nuts on a six-stud flange in star order",
+  "category": "Impact on jobs",
+  "keywords": [
+    "flange bolting",
+    "star pattern",
+    "cross pattern",
+    "gasketed joint",
+    "procedure order",
+    "pipefitting"
+  ],
+  "instruction": "Start a nut on every stud of the flange, in the star (cross) bolting order: the orange stud first, then the stud directly across from it, then the next stud clockwise from the orange one (seen from above), then the one across from that, and so on until all six studs have a nut. Take the nuts from the black mat and set each one flat on the end of its stud.",
+  "context": "Gasketed flange joints are bolted up in a cross (star) pattern so the gasket is compressed evenly; going round the circle in turn cocks the flange and makes it leak (ASME PCC-1). The fitter works the sequence out from the stud count and the numbering: for six studs it is 1-4-2-5-3-6. The order, not the end state, is what is checked: six nuts on six studs scores only as far as the order was right. Unlike TK-YEYBRK (align two flanges and insert four locating pins), the skill is deriving and keeping the star sequence. Done by: pipefitters and industrial machinery mechanics (O*NET 47-2152.00, 49-9041.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left). Flange: a fixed grey steel disc 22 cm across, 2 cm thick, centred at x 30, y 20. Studs: six fixed steel posts 2.4 cm across, standing 3.5 cm proud of the flange face on a 15 cm bolt circle. Stud 1 (orange) is the one furthest from the arms, at x 37.5, y 20; the others (bare steel) follow clockwise seen from above every 60 degrees, so stud 2 is at x 33.75, y 13.5 and stud 4 at x 22.5, y 20. Nuts: six loose steel nuts, plain discs 3.6 cm across and 2 cm tall, 100 g each, standing in a row 5 cm apart along x (x 15 to 40) at y 42 on a fixed black parts mat (32 x 7 cm, 3 mm thick).",
+  "scoring": "From the recorded poses, with the grippers open at the end. A stud is nutted when a nut is at rest with its centre within 8 mm of the stud's axis and its bottom on the stud's top (within 2 mm below to 4 mm above). The trial records the order in which studs are first nutted. 1/6 for each stud nutted in turn, counted from the first in the order 1-4-2-5-3-6 and still nutted; the count stops at the first stud nutted out of turn, so the later ones earn nothing even if right. Possible scores: 0, 1/6, ..., 1. Success: all six in star order, held 1 s.",
+  "run_limit": "3,600 steps (3 minutes at 20 Hz)",
+  "reset_notes": "Stand the six nuts back on their marks on the mat. On a real rig the order is judged from the trial video.",
+  "fidelity": "Rigid primitives with one shared friction (1.2 static, 1.0 dynamic). The nuts are plain discs set on the stud ends rather than threaded on, and no torque is applied: the task models the sequence of starting the nuts, the first pass of a star bolt-up. The flange and studs are fixed to the table and the gasket is not modelled. The order is judged from simulator poses every step.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-489P26"
+}
