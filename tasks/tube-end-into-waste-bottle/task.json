@@ -1,0 +1,23 @@
+{
+  "title": "Put the tube end in the waste bottle",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "tube",
+    "deformable",
+    "label reading",
+    "lab automation",
+    "handover",
+    "placement"
+  ],
+  "instruction": "This tube is the pump's outlet. Put the weighted end of the tube into the bottle labelled WASTE so it rests at least 3 cm below the rim, then let go of the tube. Do not let the tube go into any other bottle.",
+  "context": "Routing a pump's outlet tubing into the wrong vessel (product or feed instead of waste) is a setup error, and clinical guidance on tubing misconnections says to trace every tube to its origin before connecting; lab technicians (O*NET 19-4021.00 Biological Technicians) set up lab equipment, including its tubing, and must read the vessel labels. The robot must read printed labels, not rely on position or colour.",
+  "setup": "Cm from the midpoint between the arm bases on the table (x forward, y to robot's left). Pump: grey 10x8x6 cm box at x 18, y 43. Tube: orange 6 mm silicone tube, 55 cm, leaving the pump's right side at x 18, lying straight to y -16.6; 30x10x10 mm stainless sinker (14 g) glued on its end. Four identical off-white open-top square bottles, 60x60 mm inside, 80 mm tall, 2.5 mm walls, centred at x 36, y 25.5 / 8.5 / -8.5 / -25.5, taped down. In front of each (1 cm gap) a white card on the table, black block capitals 29 mm tall: FEED, WASTE, PRODUCT, RINSE (robot's left to right).",
+  "scoring": "Score 0 if: a gripper is still within 3 cm of the tube or sinker at the end; any part of the tube or sinker is inside another bottle (within its 60 mm opening, below its rim); the sinker is not inside the WASTE bottle; a bottle, card or the pump was moved. Otherwise, sinker inside WASTE: 1.0 if its centre is at least 3 cm below the rim (ruler from the rim), 0.5 if less. Success (1.0) when this holds for 1 s.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Lay the tube straight from the pump towards the right along x 18 cm (tape marks at the pump and at y -16.6), sinker flat on the table at its end. Empty all bottles; check bottles and label cards are on their tape marks in the order FEED, WASTE, PRODUCT, RINSE.",
+  "fidelity": "Tube: 2 cm rigid capsule segments with soft bending springs, no twist; the pump end is welded in place. Sinker is a rigid box welded to the tube end. Bottles are fixed rigid boxes; labels are thin black boxes on white cards (printed labels in the real setup). Liquid and flow are not simulated: only where the tube end ends up is scored.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-BQDEYD"
+}
