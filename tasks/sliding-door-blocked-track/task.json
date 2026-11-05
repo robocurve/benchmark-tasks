@@ -1,0 +1,20 @@
+{
+  "title": "Open a sliding door jammed by a block in its track",
+  "category": "Societal relevance",
+  "keywords": [
+    "bimanual",
+    "sliding door",
+    "jammed track",
+    "obstruction",
+    "finding the cause of a jam"
+  ],
+  "instruction": "Slide the door to the left along its track until it touches the track's left end stop. Keep the door in its track and everything on the table.",
+  "context": "Sliding doors on wardrobes, display cases and machine guards usually jam because something has fallen into the track, and pushing harder derails the door or bends the track. The instruction does not mention the block: the robot has to work out why the door stops 8 cm short, lift the block out of the track, and then finish opening the door. The 60 cm track is longer than one arm can cover: the left arm cannot reach the closed door, and the right arm cannot reach the open position.",
+  "setup": "Positions in cm from the midpoint between the two arm bases, on the table top (x forward, y left). Left and right are the robot's: the left arm's side, on the left of the setup image. Both arms start in the ready pose, grippers open; the arm bases are at y +30.5 and -30.5. A straight aluminium bottom track, fixed to the table, runs left to right along x 25 from y -41 to y +19: a 60 x 4 cm base strip 0.6 cm thick, with two side lips 0.4 cm thick and 1.5 cm tall on top of it leaving a 1.3 cm wide channel, and an end stop at each end (1 cm long, 2.1 cm wide, 1.5 cm tall) whose inner faces are at y -40 and y +18. A loose clear acrylic sliding door, 18 cm wide, 12 cm tall and 1 cm thick (257 g; rendered light blue in simulation), stands upright in the channel against the right end stop, covering y -40 to -22. A loose red-painted pine block, 8 cm long, 4.5 cm tall and 1 cm thick (18 g), stands on its long thin edge in the channel against the left end stop, covering y +10 to +18 and sticking up 3 cm above the lips. Nothing else is on the table.",
+  "scoring": "Measured at the end with a tape measure and a photo. The block counts as on the table when it lies on the table or the track with its bottom less than 3 cm above the table top (not on the floor, not held up). 0 if the door is out of its track: its bottom edge more than 0.5 cm above or below the channel floor, its centre more than 0.6 cm off the track's centre line, or the door leaning more than 10 degrees. Otherwise: 1.0 if the door's left edge is within 2 cm of the left end stop and the block is on the table, with both still for 1 s; 0.5 if the door is open that far but the block is not on the table or something is still moving, or if no part of the block is left in the track between the door's left edge and the left end stop (below the height of the door's top edge) and the block is on the table; 0.25 if the door's left edge has moved at least 10 cm to the left; else 0. Only the end state is scored: a door lifted out and set back in the track at the left end counts as slid there, since the block still has to be moved out of the door's way. Possible scores: 0, 0.25, 0.5, 1.0.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Slide the door back against the right end stop, and stand the block on its long thin edge in the channel against the left end stop.",
+  "fidelity": "Approximate. Rigid boxes only. The track's base, lips and end stops are fixed colliders; the door and block are loose rigid bodies, so the track guides the door by contact alone (no slide joint, rollers or top guide) and the 1.5 cm lips keep it upright. All loose objects use the simulator's one rubber-like friction (static 1.2, dynamic 1.0), well above acrylic on aluminium, so the door drags harder than a real one. The door is opaque light blue, not clear.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-RFQ3GV"
+}
