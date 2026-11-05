@@ -1,0 +1,21 @@
+{
+  "title": "Set a pin at the one spot equally far from three survey marks",
+  "category": "Impact on jobs",
+  "keywords": [
+    "surveying",
+    "construction layout",
+    "circumcentre",
+    "centre of a circle from three points",
+    "implicit target",
+    "spatial reasoning"
+  ],
+  "instruction": "Stand the blue pin upright on the table at the one spot that is the same distance from all three orange survey marks, then let go.",
+  "context": "Surveyors (O*NET 17-1022) and construction layout workers set out the centre of a circular footing, tank or roundabout from three points on its edge; carpenters find the centre of an arc the same way. Unlike lining in or spacing, there is no straight-line cue: the marks lie on one side of the centre, so the spot is outside their triangle and must be estimated from all three at once.",
+  "setup": "World frame for this text: 'in front' is away from the arm bases, 'left' and 'right' are from the robot's view, heights are above the table top, and the midline is halfway between the two arm bases (the bases are 61.0 cm apart). Nothing is drawn on the table. Survey marks: three identical fluorescent-orange painted-steel cylinders, 16 mm in diameter and 80 mm tall, standing on the table and fixed to it. Mark A is centred 13.9 cm in front of the arm bases and 2.1 cm right of the midline; mark B 30.6 cm in front and 11.8 cm right; mark C 42.8 cm in front and 0.4 cm left. Centre to centre, A to B is 193.1 mm, B to C 172.5 mm and A to C 290.1 mm. Pin: one blue plastic cylinder, 30 mm in diameter and 60 mm tall, 50 g, loose, standing upright on the table centred 15.0 cm in front of the arm bases and 20.0 cm left of the midline. Nothing else is on the table.",
+  "scoring": "Judged on the pin after it is let go; on a real rig the end state is judged after the arm has withdrawn (the simulator cannot see the gripper, so in simulation a pin held still with its bottom on the table also counts as standing). The pin counts as standing when its axis is within 5 degrees of vertical (either end down), its bottom is within 1 mm of the table top, and it is at rest (moving under 1 cm/s and turning under 0.5 rad/s); otherwise the score is 0 (lying down, tilted more than 5 degrees, held above the table, on top of a mark or still moving). For a standing pin, measure with a tape the three distances from the pin's axis, taken at half the pin's height (30 mm up when it stands), to the centres of marks A, B and C, and take the spread: the largest distance minus the smallest. Spread at most 10 mm: 1.0. Over 10 and at most 18 mm: 0.5. Over 18 and at most 28 mm: 0.25. Over 28 mm: 0. The only spot with zero spread is the centre of the circle through the three marks, 28.0 cm in front of the arm bases and 3.0 cm left of the midline, 150.1 mm from each mark; a spread of 10 mm corresponds to the pin being between about 5 and 14 mm from that spot, depending on direction. For reference, the pin at its start has a spread of 133 mm, at the centroid of the three marks 79 mm, and at the midpoint between marks A and C 33 mm, all scoring 0. Success, which ends the trial early, is the 1.0 condition holding for 1 s; otherwise the trial scores the condition at its last step. The marks are fixed, so they cannot be moved to make the pin equidistant.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Stand the pin back upright on its start spot (15.0 cm in front of the arm bases, 20.0 cm left of the midline; a small tape mark there, away from the marks and the centre, makes this quick). The marks do not move. Nothing is consumed.",
+  "fidelity": "Approximate. Marks and pin are rigid cylinders; real survey marks are pegs, nails or monuments metres apart, and the centre is found with tapes, string lines or an instrument, not across a table. In simulation the marks are fixed to the table; on a real rig they would be glued or screwed down. The scorer reads the pin's centre and tilt from the simulator; on a real rig the same distances are taped. Friction and mass are the simulator's values.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-EYEK5C"
+}
