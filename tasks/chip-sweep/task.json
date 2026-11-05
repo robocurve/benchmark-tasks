@@ -1,0 +1,19 @@
+{
+  "title": "Clear undercut machining-fixture T-slots with a rake",
+  "category": "Impact on jobs",
+  "keywords": [
+    "manufacturing",
+    "tool use",
+    "T-slot cleaning",
+    "constrained access"
+  ],
+  "instruction": "Use the T-slot rake to clear all five metal chips from the three undercut channels into the green collection bay. Return the rake to its supports and open both grippers.",
+  "context": "Removing trapped chips from undercut workholding-fixture slots requires a shaped rake that enters from an open end and draws debris out beneath the ledges.",
+  "setup": "YAM station, tabletop z=0.7475 m. Five 12 x 8 x 6 mm, 6 g chip surrogates sit in three 200 mm long undercut channels centered at y=0.075,0.130,0.185 m. Lower chambers are 32 mm wide with 14 mm top slots; ledge undersides are 24 mm above table. All channels open at their rear ends and front into a green collection bay. An 80 g rigid T-slot rake has a 20 mm T-foot, 6 mm neck and raised grip, initially on two supports at y=0.27 m. task.py and build_assets.py specify geometry and fixed poses.",
+  "scoring": "Final score: 0.16 for each chip that has measured rake contact or a chip-contact chain from a rake-contacted chip and rests fully within x=(0.185,0.305), y=(0.045,0.215) m with bottom within 3 mm of tray floor z=0.7595 m. Add 0.20 only when all five qualify, the rake is flat and resting on its supports, and both grippers are at least 75% open with TCPs over 90 mm from the rake reference center. Full score held 1 second succeeds. Direct robot-chip contact, drops below tabletop minus 20 mm, nonfinite poses or leaving the workspace invalidate the trial. All other outcomes score zero.",
+  "run_limit": "2400 control steps (120 seconds at 20 Hz)",
+  "reset_notes": "Fixed seed 0; zero jitter; restore all chips, rake and arms, clear history and settle. Nothing consumed.",
+  "fidelity": "Rigid 20 mm T-foot and 6 mm neck pass through an undercut fixture with 32 mm chambers and 14 mm top openings. Blunt rigid blocks approximate loose chips; no cutting or chip deformation. Contact offsets are 0.5 mm and solver iterations 32/4 for loose objects. Materials and friction are uncalibrated. Motion uses robot joints and contact only; direct robot-chip contact invalidates.",
+  "scores": "Dream-1 beta: 0 after 2400 steps (max_steps); scripted demo: 1.0 after 2032 steps (success).",
+  "media": "M-9BDA74"
+}

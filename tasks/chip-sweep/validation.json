@@ -1,0 +1,88 @@
+{
+  "demo": {
+    "trial": "chip-sweep-06",
+    "score": 1.0,
+    "termination_reason": "success",
+    "steps": 2032,
+    "simulated_seconds": 101.6,
+    "wall_seconds": 204.82395502598956,
+    "seed": 0,
+    "object_jitter": 0,
+    "max_steps": 2400,
+    "control_hz": 20,
+    "resolution": [
+      640,
+      360
+    ],
+    "top_cam": "demo",
+    "visual_review": "All three videos local. Top sequence, final bay, left-wrist channel interaction and return inspected. Five chips collected, rake parked, hands clear."
+  },
+  "runtime_sources": {
+    "yam_arena": "0059d02a1a91bc6834c1d0846022891df0c78730",
+    "isaaclab_arena": "c7edf3a9d5d8276565208f72422f8f8a0806d6cf",
+    "inspect_robots": "0.60.0",
+    "isaacsim": "6.1.0.0",
+    "hardware": "NVIDIA L40S"
+  },
+  "input_sha256": {
+    "task.py": "45097d1157b669d2cfc8b16394e17b016863c75c903e7c18df01c954f7fe0afc",
+    "chip_sweep/embodiment.py": "65a9b44d07bd1acd999632cc975ed69006467c14d4470cea50f6aa51b4504e8e",
+    "chip_sweep/policy.py": "2458ee2ae0448d49316539671a6997b590f6fdde7beec9585e76eb3a0bb9cece",
+    "chip_sweep/scoring.py": "1ff16118fc384341f7e1a7c776a2163e8182358ad825f36749fc56f5e38348e4",
+    "build_assets.py": "96f3dfc6ce209627563163a9549c79fea57c13739291d1e41db3b674866df893",
+    "pyproject.toml": "94acf16a91d3ce529a88cae20551d1b607aa8bb2811ab5835bb1542dc8acc586",
+    "assets/rake.usdc": "e1aab57ab116cb8991bdfdb002d2e9b7e7541c186b0438648c5e407b39a0f978",
+    "assets/chip_tray.usdc": "da01a013c5e9a904417ab21e9bba1a60033fd1c3d4ccf57b4f83a9b4a28a63f6"
+  },
+  "pending": [],
+  "dream": {
+    "trial": "chip-sweep-dream-01",
+    "checkpoint": "dreamlabs/dream-1-beta",
+    "score": 0.0,
+    "termination_reasons": [
+      "max_steps"
+    ],
+    "steps": 2400,
+    "max_steps": 2400,
+    "control_hz": 20,
+    "simulated_seconds": 120.0,
+    "wall_seconds": 267.88911970425397,
+    "mean_inference_latency_seconds": 0.6156564160156995,
+    "seed": 0,
+    "object_jitter": 0,
+    "resolution": [
+      640,
+      360
+    ],
+    "top_cam": "demo",
+    "environment_revision": "45097d1157b6",
+    "visual_review": "The reviewed sequence shows grasp attempts near the rake and fixture, but the rake remains on its supports and the five chips stay in their starting channels. No chips are cleared into the collection bay. Final history has no rake-chip contact or chip-contact provenance. The top sequence, final frame and both wrist views were inspected.",
+    "videos": [
+      {
+        "camera": "top",
+        "duration": 120.05,
+        "sha256": "2522502a82ee6e7bc1465c6dbb1e44a64c767f044c11020e1df2a6fe784887a2",
+        "bytes": 2003860
+      },
+      {
+        "camera": "left",
+        "duration": 120.05,
+        "sha256": "ca927a8e4d609f7531cf1213a969db26466ddc2f59aa4ba27b1492be4d1fb0e4",
+        "bytes": 3713798
+      },
+      {
+        "camera": "right",
+        "duration": 120.05,
+        "sha256": "a810c9594bf9a238cdc89848c5e2a6f08dd6f1af59e75e9bf058483522e589d5",
+        "bytes": 1796550
+      }
+    ],
+    "video_hash_scope": "The videos array hashes the original source-camera recordings; submission_video hashes the faststart stream-copy used in the handoff.",
+    "submission_video": {
+      "file": "model.mp4",
+      "sha256": "766c56ebb36af9dfcc416dd785ebe7f098db394ff247c6af5d23819d284ba80c",
+      "bytes": 2003860,
+      "encoding": "H.264/yuv420p, stream-copy remux with faststart; frames unchanged"
+    }
+  }
+}
