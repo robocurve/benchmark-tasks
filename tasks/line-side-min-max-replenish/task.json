@@ -1,0 +1,20 @@
+{
+  "title": "Top up line-side bins to their max level",
+  "category": "Impact on jobs",
+  "keywords": [
+    "line-side replenishment",
+    "min-max",
+    "supermarket",
+    "water spider",
+    "lean manufacturing"
+  ],
+  "instruction": "Each blue line-side bin is for one part type and its max level is 3 parts. Top every line-side bin up to exactly 3 with parts of its own type from the grey supermarket bins. Do not overfill a bin, do not put a part in a bin of another type, and leave a full bin alone.",
+  "context": "On a lean line a material handler (the water spider) tours the line-side bins on a fixed route and tops each one up to its max level from the supermarket, so the line never starves and never holds excess stock. Each bin's shortfall is different, so the job is counting what each bin needs, not moving a fixed number. Unlike TK-CDVSJF, which counts five bolts into one tray, the counts here are three separate shortfalls (1, 0 and 2) of three part types matched by shape, with one bin already full. BEHAVIOR's household kit activities (e.g. make_a_car_emergency_kit) only gather items into a container, with no derived counts. Done by: material handlers and stockers (O*NET 53-7062.00, 43-5081.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. Bins: fixed open frames (walls 0.6 cm thick, 1.5 cm tall, round a 12 x 9 cm pocket, table floor). Line-side bins (dark blue) centred at y 20 and x 16.5 (square nuts), 29.7 (bolts) and 42.9 (bushings); supermarket bins (grey) centred at y 42 and x 16.5 (bushings), 29.7 (square nuts) and 42.9 (bolts). Parts stand on end in a bin's places 3.7 cm apart along x: bolts (grey steel rod 1.2 cm across, 4.5 cm tall, 35 g), bushings (bronze disc 2.4 cm across, 2 cm tall, 30 g), square nuts (black block 2.2 x 2.2 x 1.2 cm, 20 g). Line-side bins hold 1 square nut, 2 bolts and 3 bushings, filling their places from the front; each supermarket bin holds 3.",
+  "scoring": "From a top photo and a ruler, with the grippers open. A part is in a bin when it is still, its centre inside the bin's inner walls and its lowest point less than 5 cm above the table. Credit is 1/3 per part of the shortfall filled: one bolt and two square nuts. Parts above a bin's max do not count, and a part taken out of a line-side bin counts back. Each line-side bin with more than 3 of its type, or with any part of another type, costs 1/3. The score is clipped to 0..1; the start scores 0. Possible scores: 0, 1/3, 2/3, 1.0. Success: all three line-side bins hold exactly 3 of their own type and nothing else, held 1 s.",
+  "run_limit": "1,800 steps (90 seconds at 20 Hz)",
+  "reset_notes": "Put 1 square nut, 2 bolts and 3 bushings back in the line-side bins, front places first, and 3 spares in each supermarket bin.",
+  "fidelity": "Rigid primitives with one shared friction (1.2 static, 1.0 dynamic). Bolts are plain rods without heads or threads, bushings are solid discs without a bore, and square nuts are solid blocks. Bins are fixed open frames on the table rather than bins on a flow rack, and a max level is given in the instruction instead of a marked line or kanban label.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-BN7BZV"
+}
