@@ -1,0 +1,20 @@
+{
+  "title": "Reset the table to its outlines for the next episode",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "autonomous reset",
+    "data collection",
+    "pick and place",
+    "reorientation",
+    "bimanual"
+  ],
+  "instruction": "put everything back on its outline so the next run can start",
+  "context": "Collecting robot training data needs a person to reset the scene between episodes, which caps how much data a fleet can gather. A robot that puts its own workspace back to a marked layout lets collection run unattended.",
+  "setup": "Positions are measured on the table from the midpoint between the two arm bases: forward is away from the arms, left and right as seen from behind the arms. Four flat 1 mm outlines are fixed to the table in a row 36 cm forward: (1) a grey 17 cm circle 20 cm left, for the bowl; (2) an orange 6 cm square 7 cm left, for the cube; (3) a red 8 cm circle 6 cm right, for the can; (4) a yellow 11 x 6 cm rectangle 20 cm right, its long side running front to back, for the cracker box. The objects are loose and start scattered: (a) a grey bowl (the library's bowl_ycb_robolab, 16 cm across and 5.5 cm tall, 100 g), upright, 20 cm forward and 30 cm left; (b) an orange 5 cm wooden cube, 100 g, 10 cm forward and 12 cm left; (c) a red soup can, 6.6 cm across and 10 cm tall, 350 g, upright, 12 cm forward and 10 cm right; (d) a small Cheez-It cracker box (the library's YCB model scaled to 5.3 x 10 x 13 cm, 120 g), standing, 20 cm forward and 30 cm right, its long side running left to right (a quarter turn from its outline). Nothing else is on the table.",
+  "scoring": "Scored once, after the episode ends. An object is home when it rests still, upright, with its underside on the table and its centre within 2 cm of its outline's centre (upright means at least 4 cm tall for the cube, 9 cm for the can and 12 cm for the cracker box); the cracker box must also be turned to match its outline, measuring no more than 8 cm left to right (about 18 degrees off). 0.25 for each object home; 1.0 when all four are.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Put the four objects back on their scattered starting spots, the cracker box turned left to right. The outlines are tape and stay in place.",
+  "fidelity": "Dream Labs' calibrated YAM station replica in Isaac Lab-Arena (Isaac Sim), with the library's bowl (colliding through its own convex decomposition, so it is hollow and can be gripped by the rim) and cracker-box model (a convex hull, scaled down to fit the YAM's reach). The outlines are 1 mm fixed plates rather than tape.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-FLFAN6"
+}
