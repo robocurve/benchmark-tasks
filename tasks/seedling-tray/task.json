@@ -1,0 +1,20 @@
+{
+  "title": "Fill the gaps in a seedling tray",
+  "category": "Impact on jobs",
+  "keywords": [
+    "horticulture",
+    "plug tray",
+    "gapping",
+    "finding gaps",
+    "placement among neighbours"
+  ],
+  "instruction": "Fill the empty cells of the seedling tray with the spare plugs, one plug per cell, without disturbing the plugs already in the tray or knocking any plug over.",
+  "context": "Seeds don't all come up: \"about 10% of plugs in a tray will not contain a germinated seed or seedling and are called dud plugs\", and the gaps are filled \"to plant the field substantially gap-free\" (US patent 11,337,364 B2, https://patents.google.com/patent/US11337364B2/en). Here the gaps are scattered among filled cells and have to be found first, one spare is extra, and the seedlings already in the tray must be left alone, unlike filling an empty holder slot by slot (RoboDojo's egg holder). Done by: farmworkers and laborers in nurseries and greenhouses.",
+  "setup": "Positions are in cm on the table, from the midpoint between the two arm bases: x forward (away from the arms), y to the robot's left. A black plastic plug tray is fixed to the table, its centre at (28, 20), its long side running straight out from the arms: 12 square cells in 3 rows of 4, 6 cm apart, with walls 4 mm thick and 1.2 cm tall on a 5 mm floor. Green seedling plugs (upright cylinders of potting mix, 3 cm across, 5 cm tall, 50 g) stand in 9 of the cells, one per cell; 3 cells are empty: the second cell out in the right-hand row, the fourth cell out in the middle row and the first cell out in the left-hand row. Four spare plugs stand on the table in a line at y = 35, centred at x = 18, 24, 30 and 36. Nothing else is on the table.",
+  "scoring": "A plug is in a cell when it stands upright (within 10 degrees) with its bottom within 3 mm of the tray floor and its centre inside the cell's walls, wherever it stands there; still means moving under 1 cm/s and turning under 0.5 rad/s. Each of the 3 empty cells scores 1/3 if it ends holding a spare plug that is in it and still. All three: 1.0. The score is 0 if any of the 9 plugs already in the tray ends more than 5 mm from where it stood or out of its cell, or if any plug ends knocked over (tilted more than 10 degrees) or off the table (its lowest point more than 1 cm below the table top). The fourth spare can stand anywhere on the table.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Put the spare plugs back in their line beside the tray and leave the same 3 cells empty.",
+  "fidelity": "The plugs are rigid cylinders, not soft root balls with leaves, and the tray is a rigid fixed grid with flat-bottomed cells, not a flexible tray with tapered cells. Every object has the same rubber-like friction (1.2 static, 1.0 dynamic). The sim can't tell a gripped plug from a released one: a spare held still up to 3 mm above a gap's floor counts, so on a real tray open the gripper before scoring.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-8HYF29"
+}
