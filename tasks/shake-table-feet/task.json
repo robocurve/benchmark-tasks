@@ -1,0 +1,19 @@
+{
+  "title": "Find the steadiest foot on an uneven shake table",
+  "category": "Other",
+  "keywords": [
+    "controlled experiment",
+    "vibration",
+    "friction",
+    "confound"
+  ],
+  "instruction": "Feet F1, F2 and F3 look the same but grip differently. Find the foot that stays in place best on the shake table and put it on the red mat. The two buttons start the shake table.",
+  "context": "Picking anti-slip feet for equipment means testing them under the same vibration, as in product and lab testing. The table shakes harder at one end than the other, so feet shaken in different spots are not comparable; the robot has to test them in the same spot.",
+  "setup": "A shake table deck (30 x 15 cm, long side pointing away from the robot) is centred 30 cm in front of the arm bases, 0.5 cm left of the centre line between the arms; it shakes left-right for 4 s per button press and has three printed spots 22, 30 and 38 cm out. Three dark rubber feet F1, F2, F3 (5 x 5 x 4 cm, 100 g, labelled) stand 25.5 cm left of the centre line, 24, 32 and 40 cm out. A yellow LOW button and a red HIGH button (3.6 cm caps, labelled) stand 17 cm out, 34.5 and 25.5 cm left of the centre line. A red mat (11 x 11 cm) lies 48 cm out, 22.5 cm left of the centre line.",
+  "scoring": "0: no foot or button is touched. 0.25: a foot is touched or a button pressed. 0.5: at least one shake with a foot on the deck, its drift visible. 0.75: all three feet shaken at the same setting on the same spot (or each foot on every spot), with the least-drifting foot ahead of the next by more than 3 mm, and it is the steadiest foot. 1.0: the 0.75 condition holds and only the steadiest foot is on the red mat. The score is the highest level reached.",
+  "run_limit": "3,600 steps (3 min 00 s at 20 Hz)",
+  "reset_notes": "Hidden per trial (redrawn every trial from its seed): Foot friction a random permutation of 0.20 / 0.40 / 0.60. The deck is three pads, one under each spot, and the stroke grows toward one end: 0.6x / 1.0x / 1.6x the setting's stroke, end chosen at random. Feet shaken on different spots are not comparable; shaking all three at once picks the wrong foot in about half the episodes.",
+  "fidelity": "The deck is a position-controlled slide following a scripted stroke; foot grip is MuJoCo's Coulomb friction on the foot (the deck itself is near-frictionless).",
+  "scores": "Dream-1 run: 0.25; demo: 1",
+  "media": "M-UKTNX3"
+}
