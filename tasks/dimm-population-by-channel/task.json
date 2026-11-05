@@ -1,0 +1,21 @@
+{
+  "title": "Populate server memory one DIMM per channel, first slots first",
+  "category": "Impact on jobs",
+  "keywords": [
+    "data center",
+    "server",
+    "DIMM",
+    "memory population",
+    "channel",
+    "slot order"
+  ],
+  "instruction": "The board has four memory channels, each a pair of neighbouring slots, two pairs on each side of the processor. Install the four DIMMs from the trays following the population rule: one DIMM per channel, in each channel's first slot (the slot of the pair farther from the processor, with white latches), before any second slot (black latches). Stand each DIMM upright between its slot's guides.",
+  "context": "Data-center technicians add or replace server memory following the board's population rules. With daisy-chained channels and one DIMM per channel, each channel's slot farthest from the processor is filled first and second slots stay empty until every channel has one; many server vendors mark first slots with white latches and second slots with black. A DIMM in the wrong slot can leave a channel unused, halving bandwidth, or fail memory training at boot. Unlike TK-LBT7XW (insert one flexible memory module into its slot with two hands) and DataCenterBench's Tier 1 plug and connect steps, the skill is choosing slots by the population rule, by position as well as colour. Done by: computer, ATM and office machine repairers; computer network support specialists (O*NET 49-2011.00, 15-1231.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. Board: a fixed dark-green plate 15 x 35 cm, 0.3 cm thick, centred at x 38, y 0. Processor: a fixed steel block 7 x 6 cm, 2.5 cm tall, on the board at x 38, y 0. Eight slots on the board, each two fixed dark guide walls (7.8 cm long along x, 0.2 cm thick, 0.8 cm tall) either side of a 1.4 cm channel centred at x 38, at y 6 (A2), 8.5 (A1), 12 (B2), 14.5 (B1), -6 (C2), -8.5 (C1), -12 (D2) and -14.5 (D1); at both ends of each slot (x 31.5 and 44.5) a fixed latch block 1 x 1.2 x 1.2 cm, white for A1, B1, C1, D1 and black for A2, B2, C2, D2. Trays: two fixed blue plates 11 x 13 cm, 0.4 cm thick, centred at x 20, y 12.5 and -12.5, each with two guide channels like the slots, at y 10 and 15 and at y -10 and -15. DIMMs: four green boxes 7.8 cm long (along x), 1 cm thick, 3.2 cm tall, 35 g, standing on their long edge in the tray channels at x 20.",
+  "scoring": "From a top photo and a ruler, with the grippers open. A DIMM is seated in a slot when it is still, upright within 8 degrees, square to the slot within 6 degrees, its centre within 3 mm of the slot's centreline and 8 mm of its centre along it, its bottom within 3 mm of the board top. 0.25 for each first slot (A1, B1, C1, D1) holding a seated DIMM. A DIMM in any second slot (centre within 8 mm of its centreline and 4 cm of its centre, bottom less than 1.5 cm above the board) while a first slot is empty caps the score at 0.25. Possible scores: 0, 0.25, 0.5, 0.75, 1.0. Success: all four first slots seated and no second slot used, held 1 s.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Stand the four DIMMs back in the tray channels; the board, processor, guides, latches and trays do not move.",
+  "fidelity": "Rigid boxes, one shared friction (1.2 static, 1.0 dynamic). DIMMs are 78 x 10 x 32 mm boxes (real: 133 x about 7 x 31 mm), shortened so the gripper spans them end to end. Slot pitch is widened to 25 mm in a channel and 35 mm between channels (real about 10 mm) to leave room for the 38 mm fingers. A slot is two low guide walls: no edge connector, key notch or spring latch, so a DIMM is held by gravity rather than clicked in. Latches are fixed blocks.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-KLDX8L"
+}
