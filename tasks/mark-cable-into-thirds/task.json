@@ -1,0 +1,24 @@
+{
+  "title": "Mark a cable into equal thirds along its route",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "deformable",
+    "measurement",
+    "arclength",
+    "cable routing",
+    "marking",
+    "placement",
+    "spatial reasoning"
+  ],
+  "instruction": "Without moving the black cable, stand one orange marker on the table beside it at one third and the other at two thirds of its length, measured along the cable from plug to plug. Then let go.",
+  "context": "Aircraft assemblers \"Verify dimensions of cable assemblies or positions of fittings, using measuring instruments\" (O*NET 51-2011.00), and cable installers plan a pull by \"measuring the actual distance from one end of the cable run to the other\" (Cabling Installation & Maintenance, 1996). Here the cable winds round three pegs, so the straight line between the plugs is useless: the robot must measure along the cable, and each arm can reach only one of the two thirds.",
+  "setup": "Station table; cm from the midpoint between the arm bases on the table (x forward, y left). Black 6 mm round PVC cable, 75 cm between two black plug bodies (30x14x10 mm, 10 g). Three grey pegs (wooden dowel, 44 mm dia, 35 mm tall, fixed) at (39, 13), (26, 7), (26, -15). Cable laid in an S, 5 mm clear of the pegs: start plug face at (42, 25.5), plug towards +y; along x 42 to y 13; a 3 cm-radius turn round peg 1; along y 10 to x 26; turn round peg 2; along x 23 to y -15; turn round peg 3; along y -18 to its end plug face at (39.6, -18). Two free orange PLA marker pucks (24 mm dia, 25 mm tall, 15 g) standing at (12, 20) and (12, -22).",
+  "scoring": "Along-cable position of a marker = flexible-tape distance along the cable from the start-plug face to the cable point nearest the marker centre. Score 0 if: a gripper is within 3 cm of the cable, a plug or a marker at the end; any cable segment centre is more than 2.5 cm (horizontally) from where it was laid; a peg moved. A marker counts only if it stands on the table (not on the cable, a peg or the other marker) with its centre within 3 cm of the cable centreline. Pair markers with the 25 and 50 cm points the better way; each earns 0.5 within 1.5 cm of its point, 0.25 within 2.5 cm, else 0. 1.0 (success, held 1 s) when both are within 1.5 cm.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Stand the markers back on their spots. Lay the cable back along its route (draw the route on the table: the straight runs and the three turns 5 mm clear of the pegs) with the start-plug face at (42, 25.5) and the end-plug face at (39.6, -18); check the 25 cm and 50 cm points with a flexible tape.",
+  "fidelity": "Cable: 38 rigid ~2 cm segments with bending springs whose rest angles are set to the laid S, so the simulated cable springs back towards that shape if disturbed (a real cable has a weaker set and stays in place mainly by friction against table and pegs), no twist, no plasticity, friction 0.8; segment chains don't stretch, so lengths are exact. Pegs fixed rigid cylinders; markers rigid. 'Let go' = both grippers at least 3 cm from the cable and markers.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-KEN6HM"
+}
