@@ -1,5 +1,5 @@
 """On the station table: a steel sample tap standing on the midline, its spout turned to the robots' left, with a dark
-lever handle 8 cm long sticking out towards the arms 9 cm above the table; the lever slides sideways across the pipe.
+lever handle 10 cm long sticking out towards the arms 9 cm above the table; the lever slides sideways across the pipe.
 A grey waste cup stands under the spout's tip, and a small lamp at the tap's foot lights green while the tap runs. In
 front of the left arm stands a clear square sample bottle with two blue lines round it and a dark handle post on its
 left side; further to the left a white square mark is taped to the table.
@@ -9,6 +9,7 @@ Run it:  inspect-robots run --embodiment yam_arena -E task=flush_the_sample_tap_
 
 from __future__ import annotations
 
+import math
 import pathlib
 import sys
 
@@ -17,7 +18,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import numpy as np  # noqa: E402
 from benchkit import Slider, ToolState, on_reset, on_step, tool  # noqa: E402
 from plantkit import (  # noqa: E402
-    DARK, GREY, HZ, LAMP_GREEN, LAMP_OFF, STEEL, WHITE, Clock, Lamp, at_rest, pushed, tool_points,
+    DARK, GREY, HZ, LAMP_GREEN, LAMP_OFF, STEEL, WHITE, Clock, Lamp, at_rest, gap_to, pushed, tool_points,
 )
 from yam_arena.constants import FINGER_CLOSED, FINGER_OPEN  # noqa: E402
 from yam_arena.demo import Waypoint  # noqa: E402
@@ -40,10 +41,10 @@ LINE_BLUE = (0.15, 0.35, 0.80)
 TAP_XY = (0.30, 0.00)
 PIPE = (0.03, 0.03, 0.20)
 FLANGE = (0.08, 0.05, 0.01)
-SPOUT = (0.03, 0.085, 0.03)  # from the pipe's centre line to 7 cm left of it, along the top of the pipe
+SPOUT = (0.03, 0.085, 0.03)  # 8.5 cm along the top of the pipe, from its right face to 7 cm left of its axis
 SPOUT_Y = SPOUT[1] / 2 - PIPE[1] / 2  # the spout's centre: its root is flush with the pipe's right face
 DRIP = (0.0, SPOUT_Y + SPOUT[1] / 2, PIPE[2] - SPOUT[2])  # the underside of the spout's tip, where the stream falls
-HANDLE = (0.08, 0.02, 0.04)
+HANDLE = (0.10, 0.02, 0.035)
 HANDLE_Z = 0.09  # the handle's centre above the table
 HANDLE_REST = (-(PIPE[0] / 2 + HANDLE[0] / 2), 0.0, HANDLE_Z)  # its root against the pipe's front face
 LEVER_TRAVEL = 0.03  # pushed this far to the robots' right (-y) the tap runs; its rest stop is shut
@@ -67,6 +68,8 @@ SAMPLE_TAP = tool(
     points=[("drip", DRIP)],
 )
 DRIP_WORLD = (TAP_XY[0] + DRIP[0], TAP_XY[1] + DRIP[1], TOP + DRIP[2])
+TAP_STANDS = 20.0  # degrees: a tap leaning more has been knocked over
+TAP_MOVED = 0.02  # m: a tap whose foot is further than this from its spot has been shoved
 
 # -- the waste cup under the spout, and the flow lamp at the tap's foot ----------------------------------------------
 CUP_XY = DRIP_WORLD[:2]
@@ -96,15 +99,19 @@ def _collar(name: str, xy, inner: float, height: float, wall: float, color) -> l
 # -- the sample bottle in its holder (bottle frame: origin at the bottle's centre, z up) -----------------------------
 BOTTLE_XY = (0.20, 0.16)
 BOTTLE_SIZE = (0.05, 0.05, 0.09)
-BOTTLE_WALL = 0.003
+BOTTLE_WALL = 0.003  # walls and floor
 BOTTLE_MASS = 0.08  # bottle and holder together
-LINE_Z = (0.05, 0.07)  # the two fill lines above the bottle's bottom: the 150 and 200 mL marks
+LINE_Z = (0.05, 0.07)  # the two fill lines above the bottle's bottom
 LINE_H = 0.003  # each line stands 1 mm proud of the wall
 MOUTH = (0.0, 0.0, BOTTLE_SIZE[2] / 2)
+_INNER = (BOTTLE_SIZE[0] - 2 * BOTTLE_WALL, BOTTLE_SIZE[1] - 2 * BOTTLE_WALL)  # the opening, 4.4 x 4.4 cm
 POST = (0.03, 0.02, 0.06)  # the handle post the gripper holds
-POST_Y = 0.07  # its centre, left of the bottle's centre: far enough that the gripper's body clears the spout
+POST_Y = 0.075  # its centre, left of the bottle's centre: far enough that the gripper's body clears the spout
 POST_Z = BOTTLE_SIZE[2] / 2 - POST[2] / 2  # its top level with the bottle's top
-BAR = (0.015, BOTTLE_SIZE[1] / 2 + 0.01, 0.012)  # joins the bottle's left face, at mid-height, to the post
+BAR_Y0 = BOTTLE_SIZE[1] / 2 - BOTTLE_WALL  # the bar starts inside the bottle's left wall ...
+BAR_Y1 = POST_Y - POST[1] / 2 + 0.005  # ... and ends 5 mm into the post
+BAR = (0.015, BAR_Y1 - BAR_Y0, 0.012)
+BAR_Z = -0.009  # its centre: mid-height, 3.0 to 4.2 cm above the bottle's bottom
 GRIP = (0.0, POST_Y, 0.02)  # the gripper's tool point when holding the post: its finger tips 2.8 cm down the post
 
 
@@ -122,7 +129,6 @@ def _lines() -> list:
     return out
 
 
-_INNER = (BOTTLE_SIZE[0] - 2 * BOTTLE_WALL, BOTTLE_SIZE[1] - 2 * BOTTLE_WALL)
 BOTTLE = tool(
     "bottle",
     pos=(*BOTTLE_XY, TOP + BOTTLE_SIZE[2] / 2),
@@ -133,7 +139,7 @@ BOTTLE = tool(
         ((0.0, BOTTLE_SIZE[1] / 2 - BOTTLE_WALL / 2, 0.0), (_INNER[0], BOTTLE_WALL, BOTTLE_SIZE[2]), CLEAR),
         ((0.0, -BOTTLE_SIZE[1] / 2 + BOTTLE_WALL / 2, 0.0), (_INNER[0], BOTTLE_WALL, BOTTLE_SIZE[2]), CLEAR),
         *_lines(),
-        ((0.0, BOTTLE_SIZE[1] / 2 + BAR[1] / 2 - 0.0025, -0.009), BAR, DARK),  # into the wall and the post by 2.5 mm
+        ((0.0, (BAR_Y0 + BAR_Y1) / 2, BAR_Z), BAR, DARK),
         ((0.0, POST_Y, POST_Z), POST, DARK),
     ],
     mass=BOTTLE_MASS,
@@ -155,17 +161,50 @@ OBJECTS = [
 # -- the water: a ledger in millilitres, since the simulator has no liquid -------------------------------------------
 FLOW_ML_S = 15.0  # while the lever is open
 FLUSH_ML = 150.0  # to waste before the first drop enters the bottle: 10 s of flow
-FILL_RANGE = (150.0, 200.0)  # between the two lines
-CAPACITY_ML = 220.0  # past it the bottle overflows
-CATCH_XY = 0.02  # the mouth within this of the drip point, seen from above
-SPILL_TILT = 30.0  # degrees: a bottle leaning past this empties onto the bench
-TAP_STANDS = 20.0  # degrees: a tap leaning more has been knocked; its stream misses the cup
+
+
+def _ml(height: float) -> float:
+    """Millilitres in the bottle when the water stands ``height`` above its bottom (the floor is 3 mm thick)."""
+    return round((height - BOTTLE_WALL) * _INNER[0] * _INNER[1] * 1e6)
+
+
+FILL_RANGE = (_ml(LINE_Z[0]), _ml(LINE_Z[1]))  # between the two lines: 91 to 130 mL
+CAPACITY_ML = _ml(BOTTLE_SIZE[2])  # at the brim, 168 mL; past it the bottle overflows
+CATCH_XY = 0.02  # the mouth within this of the drip point, seen from above, for the water to count
+SPILL_TILT = 30.0  # degrees: a bottle leaning past this empties
 SPILL_CAP_ML = 30.0
 
 
 def over_cup(point) -> bool:
     """Seen from above, the point is inside the waste cup's opening."""
     return bool(abs(point[0] - CUP_XY[0]) <= CUP_INNER / 2 and abs(point[1] - CUP_XY[1]) <= CUP_INNER / 2)
+
+
+def tap_standing(tap: ToolState) -> bool:
+    """On its spot and upright: neither shoved along the bench nor knocked over."""
+    return bool(tap.tilt_deg() <= TAP_STANDS and float(np.linalg.norm(tap.pos[:2] - np.array(TAP_XY))) <= TAP_MOVED)
+
+
+def stream_in_mouth(tap: ToolState, bottle: ToolState) -> bool:
+    """The falling stream enters the bottle's opening: where the vertical line through the drip point crosses the
+    plane of the mouth (tilted with the bottle) it is inside the 4.4 cm opening, with the mouth below the drip point,
+    above the cup's rim, and the bottle not lying down. This is what wets the bottle, however badly it is held."""
+    drip, mouth = tap.point("drip"), bottle.point("mouth")
+    if not (RIM_Z < mouth[2] < drip[2]) or bottle.tilt_deg() >= 90.0:
+        return False
+    to_bottle = bottle.rotation().T
+    p = to_bottle @ (drip - mouth)  # the drip point in the bottle's frame, from the mouth's centre
+    d = to_bottle @ np.array([0.0, 0.0, -1.0])  # the stream's direction in that frame; d[2] is -cos(tilt), not 0
+    crossing = p - (p[2] / d[2]) * d  # where the stream meets the mouth's plane, local z = 0
+    return bool(abs(crossing[0]) <= _INNER[0] / 2 and abs(crossing[1]) <= _INNER[1] / 2)
+
+
+def catching(tap: ToolState, bottle: ToolState) -> bool:
+    """The stream is credited to the bottle: it enters the opening, the mouth is within 2 cm of the drip point seen
+    from above, the bottle leans under 30 degrees, and the tap stands on its spot with its spout over the cup."""
+    drip, mouth = tap.point("drip"), bottle.point("mouth")
+    return bool(stream_in_mouth(tap, bottle) and np.linalg.norm(mouth[:2] - drip[:2]) <= CATCH_XY
+                and bottle.tilt_deg() <= SPILL_TILT and over_cup(drip) and tap_standing(tap))
 
 
 class Ledger:
@@ -179,7 +218,7 @@ class Ledger:
         self.waste = 0.0
         self.bottle = 0.0
         self.spilled = 0.0
-        self.waste_at_first_drop: float | None = None  # mL already run to waste when the bottle took its first drop
+        self.waste_at_first_drop: float | None = None  # mL already run to waste when the stream first wet the bottle
         self.open = False
 
     @property
@@ -187,30 +226,31 @@ class Ledger:
         before = self.waste if self.waste_at_first_drop is None else self.waste_at_first_drop
         return before >= FLUSH_ML
 
-    def catching(self, tap: ToolState, bottle: ToolState) -> bool:
-        """The stream falls into the bottle: its mouth is under the spout's tip, below it and above the cup's rim, and
-        the bottle stands near enough upright."""
-        mouth, drip = bottle.point("mouth"), tap.point("drip")
-        return bool(np.linalg.norm(mouth[:2] - drip[:2]) <= CATCH_XY and RIM_Z < mouth[2] < drip[2]
-                    and bottle.tilt_deg() <= SPILL_TILT)
+    def _lose(self, ml: float, mouth) -> None:
+        """Water leaving the bottle lands in the cup when its mouth is over the opening, otherwise on the bench."""
+        if over_cup(mouth):
+            self.waste += ml
+        else:
+            self.spilled += ml
 
     def update(self, tap: ToolState, bottle: ToolState) -> None:
         """One control step."""
+        mouth = bottle.point("mouth")
         if self.bottle > 0.0 and bottle.tilt_deg() > SPILL_TILT:
-            self.spilled += self.bottle
+            self._lose(self.bottle, mouth)
             self.bottle = 0.0
         self.open = pushed(tap, "lever", LEVER_TRAVEL, OPEN_AT)
         if not self.open:
             return
         ml = FLOW_ML_S / HZ
-        if self.catching(tap, bottle):
-            if self.waste_at_first_drop is None:
-                self.waste_at_first_drop = self.waste
+        if self.waste_at_first_drop is None and stream_in_mouth(tap, bottle):
+            self.waste_at_first_drop = self.waste
+        if catching(tap, bottle):
             self.bottle += ml
             if self.bottle > CAPACITY_ML:
-                self.spilled += self.bottle - CAPACITY_ML
+                self._lose(self.bottle - CAPACITY_ML, mouth)
                 self.bottle = CAPACITY_ML
-        elif over_cup(tap.point("drip")) and tap.tilt_deg() <= TAP_STANDS:
+        elif over_cup(tap.point("drip")) and tap_standing(tap):
             self.waste += ml
         else:
             self.spilled += ml
@@ -238,12 +278,13 @@ def _track(states) -> None:
 ON_MARK_WITHIN = 0.03  # m, the bottle's centre from the mark's centre
 UPRIGHT_DEG = 15.0
 STANDING_BELOW = TOP + 0.02  # the bottle's bottom at most this high: standing on the mark, not on something else
-HELD_WITHIN = 0.03  # m: a gripper's tool point this close to the post's grip point is still holding the bottle
+HELD_WITHIN = 0.01  # m: a gripper's tool point this close to the bottle or its holder is still holding it
 FULL = 1.0
-UNFINISHED = 0.7  # flushed and filled, but the tap open or the bottle not set on the mark
+UNFINISHED = 0.7  # flushed and filled, tap shut, but the bottle not set on the mark
 FLUSHED_ONLY = 0.3  # flushed and shut, the bottle not filled (or overfilled, which earns no fill credit)
+TAP_OPEN_CAP = 0.25  # flushed and filled but the tap left running; anything less with the tap running is 0
+SPILL_CAP = 0.25  # more than 30 mL on the bench
 NO_FLUSH = 0.2  # filled, set down and shut without the flush
-SPILL_CAP = 0.5
 
 
 def tap_closed(tap: ToolState) -> bool:
@@ -265,25 +306,28 @@ def on_mark(bottle: ToolState) -> bool:
 
 
 def held(bottle: ToolState) -> bool:
-    """A gripper's tool point is still at the handle post. Empty outside the simulator, so never held there."""
-    grip = bottle.point("grip")
-    return any(float(np.linalg.norm(p - grip)) <= HELD_WITHIN for p in tool_points())
+    """A gripper's tool point is at the bottle or its holder. Empty outside the simulator, so never held there."""
+    return any(gap_to(p, bottle) <= HELD_WITHIN for p in tool_points())
 
 
 def grade(ledger: Ledger, tap: ToolState, bottle: ToolState, holding: bool) -> float:
     """The score as the outcome table states it."""
+    if not tap_standing(tap):
+        return 0.0
     flushed, shut, good = ledger.flushed, tap_closed(tap), filled(ledger)
     placed = on_mark(bottle) and not holding
-    if flushed and good and placed and shut:
+    if flushed and good and placed:
         score = FULL
     elif flushed and good:
         score = UNFINISHED
-    elif flushed and shut:
+    elif flushed:
         score = FLUSHED_ONLY
-    elif good and placed and shut:
+    elif good and placed:
         score = NO_FLUSH
     else:
         score = 0.0
+    if not shut:
+        score = min(score, TAP_OPEN_CAP) if flushed and good else 0.0
     if overfilled(ledger):
         score = min(score, FLUSHED_ONLY)
     if ledger.spilled > SPILL_CAP_ML:
@@ -310,44 +354,50 @@ def distance(objects) -> float:
 
 
 # -- the scripted demo: left arm opens the tap, flushes, fills and sets the bottle down; right arm shuts the tap -----
-FINGER_Y = 0.0065  # half the closed fingers' width along y, near the tips
+# The lever is pushed with the gripper turned 90 degrees, so the wrist camera (7 cm off the tool point) swings to the
+# side instead of into the pipe, and the pads' long side leads the push. Each arm's wrist turns one way only.
+PUSH_YAW = {"left": -math.pi / 2, "right": math.pi / 2}
+FINGER_PUSH = 0.020  # the pads' half-length along the push, with the gripper turned
 OVERSHOOT = 0.006  # commanded past the stop, so the lever still reaches it if the arm falls a little short
 HOVER_Z = TOP + 0.165  # carrying height: the bottle's bottom 10 cm up, 6 cm over the cup's rim, never over the lever
-PUSH_X = 0.24  # along the handle: the fingers' wide part stays 1 cm short of the pipe's face
+PUSH_X = 0.21  # 2.5 cm in from the handle's tip (the pads 1.5 cm): the gripper's body stays 2.4 cm short of the pipe
 PUSH_Z = TOP + HANDLE_Z - HANDLE[2] / 2 + 0.005 + 0.013  # finger tips 5 mm above the handle's bottom edge
 HANDLE_SHUT_Y = TAP_XY[1] + HANDLE[1] / 2  # the handle's left face when shut
 HANDLE_OPEN_Y = HANDLE_SHUT_Y - LEVER_TRAVEL
-OPEN_START_Y = HANDLE_SHUT_Y + 0.030
-OPEN_END_Y = HANDLE_OPEN_Y + FINGER_Y - OVERSHOOT
-SHUT_START_Y = TAP_XY[1] - HANDLE[1] / 2 - LEVER_TRAVEL - 0.030  # 3 cm beyond the open handle's right face
-SHUT_END_Y = TAP_XY[1] - HANDLE[1] / 2 - FINGER_Y + OVERSHOOT
-GRIP_OPEN = -0.020  # finger target: pads 4 cm apart, 1 cm either side of the post and 1.5 cm clear of the bottle's rim
+LEVER_WAY_Y = 0.16  # the left arm turns here and comes in over the lever along x = PUSH_X, well clear of the spout
+OPEN_START_Y = HANDLE_SHUT_Y + FINGER_PUSH + 0.025  # the pads 2.5 cm behind the shut handle
+OPEN_END_Y = HANDLE_OPEN_Y + FINGER_PUSH - OVERSHOOT  # the tool point 6 mm right of the midline at the open stop
+SHUT_START_Y = TAP_XY[1] - HANDLE[1] / 2 - LEVER_TRAVEL - FINGER_PUSH - 0.025  # 2.5 cm beyond the open handle
+SHUT_END_Y = TAP_XY[1] - HANDLE[1] / 2 - FINGER_PUSH + OVERSHOOT
+GRIP_OPEN = -0.020  # finger target: pads 4 cm apart, 1 cm either side of the post and 2 cm clear of the bottle's rim
 GRIP_Z = TOP + BOTTLE_SIZE[2] / 2 + GRIP[2]  # the tool point on the post while the bottle stands on the table
 PLACE_Z = GRIP_Z + 0.005
 POUR_Z = RIM_Z + 0.02 + BOTTLE_SIZE[2] / 2 + GRIP[2]  # bottle bottom 2 cm above the rim, mouth 2 cm under the spout
 POUR_TCP = (CUP_XY[0], CUP_XY[1] + GRIP[1])  # the tool point when the mouth is under the spout's tip
 APPROACH_Y = CUP_XY[1] + BOTTLE_SIZE[1] / 2 + 0.02 + GRIP[1]  # the bottle's right face 2 cm past the spout's tip
-FILL_HOLD_S = 10.3  # with the slide in and out under the stream, about 11.7 s of flow: 175 mL
-RIGHT_WAIT = (PUSH_X, -0.16, TOP + 0.15)
+FILL_HOLD_S = 6.0  # with the slide in and out under the stream, about 7.4 s of flow: 110 mL, between the lines
+RIGHT_WAIT = (PUSH_X, -0.20, TOP + 0.15)  # clear of the left arm's camera, which swings right of the midline
 TRIM = {"lever": (0.0, 0.0), "bottle": (0.0, 0.0), "pour": (0.0, 0.0), "mark": (0.0, 0.0)}
 
 
 def _left_plan() -> list[Waypoint]:
+    yaw = PUSH_YAW["left"]
     lx = PUSH_X + TRIM["lever"][0]
+    ty = TRIM["lever"][1]
     bx, by = BOTTLE_XY[0] + TRIM["bottle"][0], BOTTLE_XY[1] + GRIP[1] + TRIM["bottle"][1]
     px, py = POUR_TCP[0] + TRIM["pour"][0], POUR_TCP[1] + TRIM["pour"][1]
     ay = APPROACH_Y + TRIM["pour"][1]
     mx, my = MARK_XY[0] + TRIM["mark"][0], MARK_XY[1] + GRIP[1] + TRIM["mark"][1]
-    ty = TRIM["lever"][1]
     return [
-        Waypoint(2.0, (lx, OPEN_START_Y + ty, HOVER_Z), FINGER_CLOSED, "over the lever"),
-        Waypoint(1.5, (lx, OPEN_START_Y + ty, PUSH_Z), FINGER_CLOSED, "down beside the lever"),
-        Waypoint(0.5, (lx, OPEN_START_Y + ty, PUSH_Z), FINGER_CLOSED, "settle"),
-        Waypoint(2.0, (lx, OPEN_END_Y + ty, PUSH_Z), FINGER_CLOSED, "push the lever open"),
-        Waypoint(0.5, (lx, OPEN_END_Y + ty, PUSH_Z), FINGER_CLOSED, "hold"),
-        Waypoint(1.5, (lx, OPEN_END_Y + ty, HOVER_Z), FINGER_CLOSED, "lift off"),
-        Waypoint(2.0, (bx, by, HOVER_Z), GRIP_OPEN, "over the bottle's handle"),
-        Waypoint(1.0, (bx, by, HOVER_Z), GRIP_OPEN, "let the tap run"),
+        Waypoint(2.0, (lx, LEVER_WAY_Y, HOVER_Z), FINGER_CLOSED, "in from the left, turned", yaw),
+        Waypoint(1.0, (lx, OPEN_START_Y + ty, HOVER_Z), FINGER_CLOSED, "over the lever", yaw),
+        Waypoint(1.5, (lx, OPEN_START_Y + ty, PUSH_Z), FINGER_CLOSED, "down beside the lever", yaw),
+        Waypoint(0.5, (lx, OPEN_START_Y + ty, PUSH_Z), FINGER_CLOSED, "settle", yaw),
+        Waypoint(2.0, (lx, OPEN_END_Y + ty, PUSH_Z), FINGER_CLOSED, "push the lever open", yaw),
+        Waypoint(0.5, (lx, OPEN_END_Y + ty, PUSH_Z), FINGER_CLOSED, "hold", yaw),
+        Waypoint(1.5, (lx, OPEN_END_Y + ty, HOVER_Z), FINGER_CLOSED, "lift off", yaw),
+        Waypoint(2.0, (bx, by, HOVER_Z), GRIP_OPEN, "over the bottle's handle", yaw),
+        Waypoint(1.0, (bx, by, HOVER_Z), GRIP_OPEN, "turn back, let the tap run"),
         Waypoint(1.5, (bx, by, GRIP_Z), GRIP_OPEN, "down to the handle"),
         Waypoint(0.8, (bx, by, GRIP_Z), FINGER_CLOSED, "grip"),
         Waypoint(1.2, (bx, by, HOVER_Z), FINGER_CLOSED, "lift"),
@@ -365,17 +415,18 @@ def _left_plan() -> list[Waypoint]:
 
 
 def _right_plan(start_after: float) -> list[Waypoint]:
+    yaw = PUSH_YAW["right"]
     x = PUSH_X + TRIM["lever"][0]
     ty = TRIM["lever"][1]
     return [
-        Waypoint(start_after, RIGHT_WAIT, FINGER_CLOSED, "wait for the bottle to be set down"),
-        Waypoint(1.5, (x, SHUT_START_Y + ty, HOVER_Z), FINGER_CLOSED, "over the lever"),
-        Waypoint(1.5, (x, SHUT_START_Y + ty, PUSH_Z), FINGER_CLOSED, "down beside the lever"),
-        Waypoint(0.5, (x, SHUT_START_Y + ty, PUSH_Z), FINGER_CLOSED, "settle"),
-        Waypoint(2.0, (x, SHUT_END_Y + ty, PUSH_Z), FINGER_CLOSED, "push the lever shut"),
-        Waypoint(0.5, (x, SHUT_END_Y + ty, PUSH_Z), FINGER_CLOSED, "hold"),
-        Waypoint(1.5, (x, SHUT_END_Y + ty, HOVER_Z), FINGER_CLOSED, "lift off"),
-        Waypoint(1.5, RIGHT_WAIT, FINGER_CLOSED, "return"),
+        Waypoint(start_after, RIGHT_WAIT, FINGER_CLOSED, "wait for the bottle to be set down", yaw),
+        Waypoint(1.5, (x, SHUT_START_Y + ty, HOVER_Z), FINGER_CLOSED, "over the lever", yaw),
+        Waypoint(1.5, (x, SHUT_START_Y + ty, PUSH_Z), FINGER_CLOSED, "down beside the lever", yaw),
+        Waypoint(0.5, (x, SHUT_START_Y + ty, PUSH_Z), FINGER_CLOSED, "settle", yaw),
+        Waypoint(2.0, (x, SHUT_END_Y + ty, PUSH_Z), FINGER_CLOSED, "push the lever shut", yaw),
+        Waypoint(0.5, (x, SHUT_END_Y + ty, PUSH_Z), FINGER_CLOSED, "hold", yaw),
+        Waypoint(1.5, (x, SHUT_END_Y + ty, HOVER_Z), FINGER_CLOSED, "lift off", yaw),
+        Waypoint(1.5, RIGHT_WAIT, FINGER_CLOSED, "return", yaw),
     ]
 
 
