@@ -1,0 +1,19 @@
+{
+  "title": "Find the rigged spinner",
+  "category": "Other",
+  "keywords": [
+    "statistics",
+    "replication",
+    "base rates",
+    "randomness"
+  ],
+  "instruction": "One of the two spinners, A or B, is rigged to land on red more often than a fair spin would; the other is fair. Put the rigged spinner on the red mat.",
+  "context": "Deciding whether a device is biased needs repeated trials and the right baseline, as in quality control of random generators and test equipment. The spinners have different red areas, so the one that shows red most often is not necessarily the rigged one; the robot has to compare each spinner with its own area.",
+  "setup": "Two spinners A and B (7 x 7 x 3 cm blocks, top face divided into red and blue sectors, black pointer, labelled) stand 32 cm in front of the arm bases, 11.5 cm left (A) and 11.5 cm right (B) of the centre line between the arms. One face is one third red, the other two thirds red. A white push button (3.6 cm cap) in front of each, 21 cm out, spins it for 2 s. A red mat (15 x 15 cm) lies 27 cm out, 37.5 cm left of the centre line.",
+  "scoring": "0: no spinner or button is touched. 0.25: a spinner is touched or a button pressed. 0.5: at least one spin observed to its stop. 0.75: the recorded spins give probability 0.9 or more that the rigged spinner is the true one, taking a fair spinner to land on red as often as its red area and the rigged one 0.25 more often. 1.0: the 0.75 condition holds and only the rigged spinner rests on the red mat. The score is the highest level reached.",
+  "run_limit": "4,800 steps (4 min 00 s at 20 Hz)",
+  "reset_notes": "Hidden per trial (redrawn every trial from its seed): Red sectors cover 1/3 of one spinner's face and 2/3 of the other's (random). The fair spinner lands on red with probability equal to its red area; the rigged one 0.25 more (0.58 or 0.92). When the rigged spinner is the 1/3 one it shows fewer reds than the fair 2/3 one, so 'most reds' is wrong half the time.",
+  "fidelity": "The spin is animated in code: pressing the button runs a 2 s decelerating rotation that stops in a sector drawn from the hidden bias.",
+  "scores": "Dream-1 run: 0; demo: 1",
+  "media": "M-SEHHP6"
+}
