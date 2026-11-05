@@ -1,0 +1,19 @@
+{
+  "title": "Transfer a loaded fixture pallet with a forked lifter",
+  "category": "Impact on jobs",
+  "keywords": [
+    "manufacturing",
+    "tool use",
+    "pallet handling",
+    "contact transport"
+  ],
+  "instruction": "Use the forked lifter to move the loaded pallet onto the two green inspection rests. Withdraw and return the lifter to its supports, then open both grippers.",
+  "context": "Moving a loaded fixture pallet without gripping the workpiece requires inserting a shaped tool beneath the pallet, maintaining contact support, seating it on inspection rests and withdrawing the tool.",
+  "setup": "Calibrated YAM station; tabletop z=0.7475 m. A 120 g rigid pallet has a 120 x 160 x 6 mm plate, four 20 mm feet, central round blank and fasteners; root starts at (0.40,0.08,0.7705) m. An 80 g lifter has two 150 x 12 x 5 mm tines spaced 60 mm center-to-center, handle and rigid grip sleeve. It starts on supports at root (0.24,0.28,0.7825) m. Two 150 x 18 x 15 mm inspection rails are centered at x=0.37, y=-0.19 and -0.05 m. Mesh generators and exact poses are included.",
+  "scoring": "Final score: require lifter-pallet contact and verified whole-pallet clearance above tabletop plus 60 mm. Then 0.25 while still lifted; 0.75 if resting within 12 mm of (0.37,-0.12) m, bottom within 4 mm of 15 mm rail height, orientation within 8 degrees and vertical extent below 42 mm. Full 1.0 also requires the lifter parked flat on supports and both grippers 75% open, TCPs over 90 mm from both loose objects. Direct robot-pallet contact, drops, nonfinite poses or leaving workspace invalidate. Otherwise zero; full success held 1 second.",
+  "run_limit": "1800 control steps (90 seconds at 20 Hz)",
+  "reset_notes": "Fixed seed 0, zero jitter. Restore pallet, lifter and arms; clear contact and lift history; settle physics. Nothing consumed.",
+  "fidelity": "Rigid lifter and loaded pallet with compound primitive contact geometry. The pallet is supported by friction/contact only; no attachments, pose writes or payload animation. Loose-object solver 32/4, contact/rest offsets 0.5/0 mm; robot unchanged. Lightweight training masses, friction and material looks are approximate and uncalibrated. Scripted demo uses privileged pose feedback.",
+  "scores": "Dream-1 beta: 0 after 1800 steps (max_steps); scripted demo: 1.0 after 957 steps (success).",
+  "media": "M-KTMRY9"
+}

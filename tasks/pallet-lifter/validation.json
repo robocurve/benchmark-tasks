@@ -1,0 +1,89 @@
+{
+  "demo": {
+    "trial": "pallet-lifter-06",
+    "score": 1.0,
+    "termination_reason": "success",
+    "steps": 957,
+    "simulated_seconds": 47.85,
+    "wall_seconds": 103.51766966795549,
+    "seed": 0,
+    "object_jitter": 0,
+    "max_steps": 1800,
+    "control_hz": 20,
+    "resolution": [
+      640,
+      360
+    ],
+    "top_cam": "demo",
+    "visual_review": "All three videos local; top sequence and final frame inspected, plus wrist views. Pallet on rails, fork withdrawn and returned; hands clear."
+  },
+  "runtime_sources": {
+    "yam_arena": "0059d02a1a91bc6834c1d0846022891df0c78730",
+    "isaaclab_arena": "c7edf3a9d5d8276565208f72422f8f8a0806d6cf",
+    "inspect_robots": "0.60.0",
+    "isaacsim": "6.1.0.0",
+    "hardware": "NVIDIA L40S"
+  },
+  "input_sha256": {
+    "task.py": "486dc90db4077c137ec402cd85fc3804e82562d36846e240133baff7df6bcbfa",
+    "pallet_lifter/embodiment.py": "78615999bdafeaff21e30be4af23b450be29c723feb8bd643d4657848614390b",
+    "pallet_lifter/policy.py": "631c6c5fb6effa88f1308447b9dcc72a30be9805d608c328871cf73a0400db65",
+    "pallet_lifter/scoring.py": "f1375ae4226890b301e10efb505d516f9643bf5d15693357d73bf5c110a85ae1",
+    "build_assets.py": "2f44106d85cc5061435ec454ab37f1854a6d42674bb5c615f8f2c028e68541ca",
+    "pyproject.toml": "e9a256f1265469b5ceca5124c0a7d3db980dc44a4b9bd2b468698f6261b7121c",
+    "assets/lifter.usdc": "40e27e685fef2ba699113cdca3cd87695cd0ce434b6fb7f8fca1043d53aedad3",
+    "assets/pallet.usdc": "c5b23db189491d045dd5fca23af9a9951c8b8446d2f97f9fe155e3c6089d7481",
+    "assets/rests.usdc": "edd8fce105711f76c0ad8782a9f99d25cb3509fc28f1dcfe0b33f630e9058207"
+  },
+  "pending": [],
+  "dream": {
+    "trial": "pallet-lifter-dream-01",
+    "checkpoint": "dreamlabs/dream-1-beta",
+    "score": 0.0,
+    "termination_reasons": [
+      "max_steps"
+    ],
+    "steps": 1800,
+    "max_steps": 1800,
+    "control_hz": 20,
+    "simulated_seconds": 90.0,
+    "wall_seconds": 204.6136605287902,
+    "mean_inference_latency_seconds": 0.6043671206571162,
+    "seed": 0,
+    "object_jitter": 0,
+    "resolution": [
+      640,
+      360
+    ],
+    "top_cam": "demo",
+    "environment_revision": "486dc90db407",
+    "visual_review": "The reviewed sequence shows the left arm reaching around the fork and loaded pallet, while the lifter remains on its supports and the pallet stays in its starting position. No contact-verified lift or transfer is completed. Final history has no lifter-pallet contact and no verified lift. The top sequence, final frame and both wrist views were inspected.",
+    "videos": [
+      {
+        "camera": "top",
+        "duration": 90.05,
+        "sha256": "a882acff8f4fa6b71e239d7950fb5fc6ea8262646dbeda7af9a7d5b5d0a871d9",
+        "bytes": 1634407
+      },
+      {
+        "camera": "left",
+        "duration": 90.05,
+        "sha256": "9660f299b618a739101d0d37974202f4006a9539f290fee2be0118e2e2e68480",
+        "bytes": 2045357
+      },
+      {
+        "camera": "right",
+        "duration": 90.05,
+        "sha256": "ac09d45edc5e3bd78df77c0dfec6f3632529be958dc7e56031141fff7ff438e1",
+        "bytes": 1986106
+      }
+    ],
+    "video_hash_scope": "The videos array hashes the original source-camera recordings; submission_video hashes the faststart stream-copy used in the handoff.",
+    "submission_video": {
+      "file": "model.mp4",
+      "sha256": "eb23c6cfbb20ba72a4cf95fd2eb03a81a3a30cab81a06df81adae0ada85305c2",
+      "bytes": 1634407,
+      "encoding": "H.264/yuv420p, stream-copy remux with faststart; frames unchanged"
+    }
+  }
+}
