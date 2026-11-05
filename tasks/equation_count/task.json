@@ -1,0 +1,21 @@
+{
+  "title": "Count out the sum of an equation",
+  "category": "Impact on jobs",
+  "keywords": [
+    "arithmetic",
+    "reading",
+    "counting",
+    "kitting",
+    "symbolic instruction",
+    "bimanual"
+  ],
+  "instruction": "Put as many cubes on the grey plate as the sum on the table.",
+  "context": "Kitting and picking work often states a quantity in writing; here it is a small sum laid out on the table that the robot must read and add before counting out the parts.",
+  "setup": "Coordinates: x forward from the line between the two arm bases, y to the left, from the midpoint between the bases. 27 flat black painted wooden disks (2.4 cm diameter, 3 mm thick), glued to the table, spell '2 + 3' as three dot-matrix glyphs of 5 rows x 3 columns on a 3 cm grid with one empty column between glyphs: rows at x = 54, 51, 48, 45, 42 cm; columns at y = 15, 12, 9 cm ('2': rows ###, ..#, ###, #.., ###), y = 3, 0, -3 cm ('+': rows ..., .#., ###, .#., ...) and y = -9, -12, -15 cm ('3': rows ###, ..#, ###, ..#, ###), read left to right from the arms' side. A grey painted wooden plate, 16 x 16 x 0.5 cm, taped to the table, centred at (25, 0) cm. Eight red painted wooden 4 cm cubes, 50 g each, axis-aligned on the table: in front of the left arm at (14, 19), (14, 27), (22, 19), (22, 27) cm; in front of the right arm at (14, -19), (14, -27), (22, -19), (22, -27) cm.",
+  "scoring": "A cube is on the plate when its centre is inside the plate's 16 x 16 cm outline seen from above and its lowest point is within 1 cm of the plate's top, or within 1 cm of the top of another cube on the plate (centres within 2 cm horizontally); cubes held in the air or on the table do not count. With n cubes on the plate at the end of the trial: 1.0 for n = 5 (the trial ends once this holds with every cube at rest, under 1 cm/s and 0.5 rad/s, for 1 s); 0.1 x n for n = 0 to 4; 0 for n = 6 to 8. Which cubes are used and where they stand on the plate does not matter.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed; put the eight cubes back at their starting positions.",
+  "fidelity": "Approximate: rigid cubes with PhysX default friction; the glued disks and the taped plate are fixed bodies.",
+  "scores": "Dream-1 run: 0.1; demo: 1.0",
+  "media": "M-A3K4SW"
+}
