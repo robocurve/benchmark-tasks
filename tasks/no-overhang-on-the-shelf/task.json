@@ -1,0 +1,20 @@
+{
+  "title": "Stow bars on a narrow shelf without anything over the walkway",
+  "category": "Impact on jobs",
+  "keywords": [
+    "keep-out zone",
+    "held at every moment",
+    "shelf stowing",
+    "reorientation",
+    "bimanual"
+  ],
+  "instruction": "Put the three wooden bars on the narrow grey shelf. The striped strip behind the shelf is a walkway: no part of any bar may be over it at any time, at any height, even for a moment. Each bar must end up lying wholly on the shelf.",
+  "context": "Stockrooms stow parts on narrow pass-through shelves that back onto walkways: a part carried or set down over the walkway can drop where people walk, and one left sticking out is a head-strike hazard. The bars fit only turned crosswise, so the turn during the carry, or an overshoot, is where a bar strays over it.",
+  "setup": "Positions are object centres in cm from the midpoint between the arm bases: x forward (away from the arms), y to the robot's left. Table: wood top, about 110 x 130 cm, arm bases 61 cm apart (y +30.5 and -30.5) on its near edge; nothing else on it. Shelf: a solid grey-painted pine block, 6 cm deep (x) by 42 cm long (y) by 4 cm high, centred at x 23, y 0 (front edge at x 20, back edge at x 26), fixed to the table. Walkway: the rectangle x 28 to 42, y -22 to +22 (14 x 44 cm), 2 cm behind the shelf, filled with seven 44 cm strips of yellow and black vinyl floor tape, 2 cm wide, running along y and alternating across x, yellow nearest the shelf. Bars: three unfinished pine bars, 12 x 3 x 3 cm, 55 g each, lying on the table with their long side along x, centred at x 12 and y +18, +6 and -15.",
+  "scoring": "Score 0 if at any moment any part of any bar is over the walkway (x 28 to 42, y -22 to +22), at any height, judged from video by a camera at the table side with its lens in the vertical plane of the walkway's front edge (x 28), so that plane shows as one line; any part of a bar beyond it, between y -22 and +22, is over the walkway. At the end, open both grippers, then measure; score 0 if any bar is over the shelf and higher than its top but not wholly on it (ramped, leaning, or sticking out past an edge), or any bar has fallen off the table. Otherwise 1/3 for each bar lying wholly on the shelf: on one long face, tilted 10 degrees or less, its underside within 1 cm of the shelf top, and its whole outline seen from above within the shelf's (0.3 cm allowed). A bar standing on end, on another bar, still held up, or on the table earns 0 for that bar. Possible scores: 0, 1/3, 2/3, 1.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Mark the bars' spots on the table before the first trial. Between trials, put the bars back on their marks, square to the table edges. The shelf and the tape stay down.",
+  "fidelity": "Approximate. The shelf is a fixed rigid box and the tape strips are 2 mm fixed boxes; bars are rigid boxes with default friction. The sim checks the walkway at every control step (20 Hz) from each bar's true outline. The sim scores the final step without opening the grippers, so a bar more than 1 cm above every support counts as not placed, and one over the walkway counts at any height.",
+  "scores": "Dream-1 run: 0.0 (moved both arms toward the bars but never picked any up); demo: 1.0 (carried the bars to the grey shelf with both arms, keeping them off the stripes)",
+  "media": "M-FTR4EM"
+}
