@@ -1,0 +1,25 @@
+{
+  "title": "Clip an IV line to the mattress, leaving a slack loop",
+  "category": "Societal relevance",
+  "keywords": [
+    "bimanual",
+    "deformable",
+    "tubing",
+    "medical",
+    "hospital",
+    "IV line",
+    "slack management",
+    "clip seating",
+    "two-hand hold",
+    "constraint keeping"
+  ],
+  "instruction": "Press the patient's clear IV tube into the white clip on the mattress, leaving a loose loop on the mattress between the clip and the cannula hub on the forearm: 5 to 15 cm more tube than the straight clip-to-hub distance. Do not lift the hub out of its holder. Then let go of the tube.",
+  "context": "Merck Manual (Professional), IV catheter insertion: 'Loop the IV tubing ... and tape it to the skin away from the IV insertion site, to help prevent accidental traction on the tubing from dislodging the catheter.' A meta-analysis (103 studies, 76,977 adult catheters) gives pooled dislodgement of 6.0% (Marsh et al., J Adv Nurs 2020). LPNs 'start intravenous fluids' (O*NET 29-2061.00). Here a bed clip replaces the tape; the 5-15 cm slack band is a task choice.",
+  "setup": "Cm from the midpoint between the arm bases on the table (x away from robot, y to its left). Mattress: dark-blue vinyl foam pad 40 (x) x 80 (y) x 3 cm, x 10-50, y -38 to 42, fixed. Forearm stand-in: skin-coloured foam block 20 x 6 x 2.5 cm on it, x 26-46, y -30 to -24, fixed. Cannula hub: white PLA block 30 (along y) x 14 x 10 mm, 10 g, centre x 36, y -26.5, lying in a fixed grey PLA holder on the forearm: 3 mm walls 14 mm tall on both sides and behind it (2.5 mm clearance), and a front stop at y -24.5 with a 9 mm gap the tube leaves through. Tube: clear 5 mm OD PVC IV extension tube, 60 cm, glued into the hub, lying straight along x 36 from y -25 to y 35; far end free. Clip: white PLA U-clip, two walls 20 (y) x 4 x 12 mm with a 7 mm slot running along y, centred x 22, y 0, glued to the mattress.",
+  "scoring": "From a top photo and a tape measure at the end. Score 0 if: a gripper is within 3 cm of the tube or hub; the hub's underside is more than 7 mm above the forearm or the hub is outside its holder; the tube is not seated in the clip (running through at least 12 mm of the slot, its top not above the walls); any tube point between hub and clip lies off the mattress; the tube is still moving (mean speed over 5 cm/s). Slack = tube length from the hub face to the middle of its run through the slot, minus the straight distance between those two points. Slack 5-15 cm = 1.0 (success, held 1 s at rest); 3-5 cm or over 15 cm = 0.5; under 3 cm (taut, no loop) = 0.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Lift the tube out of the clip and lay it straight along the tape line at x 36 from the hub to its free end at y 35, with the hub seated flat in its holder. Check that the clip, holder and forearm block are on their marks (all glued down).",
+  "fidelity": "Mock-up: no patient or fluid. A foam block stands in for the forearm and a fixed holder for the dressing (dislodgement = hub lifted out of it). Tube: 30 rigid 2 cm segments, bend springs 0.01 N·m/rad per joint (half the kit default), no twist, kinking or coil memory, friction 0.8. The clip has no snap lip: gravity and the 12 mm walls hold the tube. Merck tapes the loop to skin; a bed clip is used here. The pump line is not modelled (free end).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-L4D6WH"
+}
