@@ -1,0 +1,20 @@
+{
+  "title": "Swap a failed drive for the spare and send the failed one to secure destruction",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "data centre",
+    "hardware replacement",
+    "media sanitization",
+    "security",
+    "two-step"
+  ],
+  "instruction": "Swap the failed drive for the spare.",
+  "context": "Data-centre technicians replace failed drives in storage servers daily (O*NET 15-1231.00 Computer Network Support Specialists and 49-2011.00 Computer, Automated Teller, and Office Machine Repairers). A failed drive still holds data but can no longer be wiped. Under NIST SP 800-88 (Guidelines for Media Sanitization) it has to be destroyed. Sites keep a secure media-destruction bin by the racks for this. A failed drive put back in the spares tray, where the spare came from, could get reinstalled or leave the site with its data.",
+  "setup": "Positions are in cm from the midpoint between the two arm bases, with x forward, y to the robot's left and the table top at z 0. The server bay mock is a fixed dark blue mat 18 x 16 x 1 cm (x by y by height) centred at x 32, y 0. Two fixed silver rails, 12 x 1 x 0.8 cm, run along x at y +5.0 and -5.0. They form one drive slot 9 cm wide. The failed drive is a 2.5-inch drive stand-in, a rigid block 10 x 6 x 2 cm and 150 g. A red fault tag covers it, so it reads as red. It lies flat in the slot at x 32, y 0, long side along x. The spares tray has four fixed green rigid plastic walls 1 cm thick and 2 cm tall around a 14 x 14 cm opening. It is open at the top, uses the table as its floor and is centred at x 21, y -17. The silver spare drive, the same size and mass, lies flat at the tray's centre with its long side along x. The secure media-destruction bin has four fixed dark grey rigid plastic walls 1 cm thick and 8 cm tall around a 14 x 12 cm opening. It is open at the top, uses the table as its floor, is centred at x 22, y +20, and starts empty.",
+  "scoring": "A drive counts as seated when it lies flat on the mat between the rails with its centre within 2 cm of the slot centre along the slot and within 1.6 cm across it. It must also be still and not on top of another drive. A drive counts as in a container when its centre lies inside the container's walls, its bottom is on the floor, and it is still. The trial scores 0 whenever the failed drive is in the spares tray, whatever else happened. Otherwise it scores 1.0 when the spare is seated and the failed drive is in the destruction bin. It scores 0.5 when only one of those two holds. It scores 0 when neither holds, which includes doing nothing or stacking the spare on the failed drive. The possible scores are 0, 0.5 and 1.0. In a real trial, a photo from above shows which drive is in the slot, the tray and the bin.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Put the red drive back in the slot and the silver drive back in the spares tray, both flat with the long side along x. For real trials use two old 2.5-inch drives or same-size blocks, one with a red tag covering its top, and tape rails on a mat.",
+  "fidelity": "The bay is a flat slot between low rails rather than a drive cage with a carrier and latch. The destruction bin is an open box rather than a locked console. The drive's red colour shows the fault instead of an LED. The simulation uses rigid-body physics only.",
+  "scores": "Dream-1 run: 0 (2,400 steps); demo: 1.0",
+  "media": "M-7FWP9N"
+}
