@@ -1,0 +1,14 @@
+{
+  "title": "Test a GFCI outlet: press TEST, then press RESET",
+  "category": "Societal relevance",
+  "keywords": ["bimanual", "GFCI", "rocker", "sequenced verification", "housing inspection", "electrical"],
+  "instruction": "Test the GFCI outlet: press TEST, then press RESET.",
+  "context": "Ground-fault interrupters are required within six feet of water sources, and their verification is a physical sequence: press TEST to trip the outlet, confirm it trips, then press RESET to restore it. This mirrors NSPIRE deficiency D060/D062 (GFCI protection missing or not functioning). A robot that can perform an ordered test-and-reset extends automated inspection from seeing a device to proving it works.",
+  "setup": "Station scene, fixed layout (see setup.png). Between the arms at x=0.30 m a grey pedestal box (16x10x12 cm) carries a light-grey faceplate (16x14x1 cm) whose top holds a dark rocker (5.2 cm across x 9 cm long x 1.4 cm thick, ~80 g) resting level on a central fulcrum ridge (6x1.2x1 cm) rising 1 cm from the faceplate. Two light-grey walls (0.8 cm wide, 10 cm long, 2.8 cm tall) stand just outside the rocker's ends so it cannot slide off the ridge. The TEST end faces the left arm (+y), the RESET end faces the right arm (-y); the ends are otherwise identical. No other loose objects.",
+  "scoring": "task_score reads the rocker's signed tilt: an end pressed ~3 mm past level counts as pressed. 0.5 once the TEST end has been pressed down (the trip); 1.0 when the RESET end is then pressed down and held 0.4 s — the full ordered test-and-reset sequence. Order-sensitive state machine: pressing RESET without a prior TEST press scores 0; after a completed sequence the machine re-arms when the rocker returns level. success ends the trial when the sequence completes.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "The rocker is a free object resting on the fulcrum; with -E object_jitter=0 every trial starts from the exact level layout in setup.png. Trials use scene=station.",
+  "fidelity": "Rigid-body fixture built from boxes: the rocker tilts on a smooth fulcrum ridge with no internal latching mechanism. The trip and reset are a tilt-state machine read from the rocker's orientation, standing in for the outlet's internal circuitry — the same externally visible evidence a photo-based inspection reads (a tripped GFCI shows one end down). No electricity is simulated. The scripted demo presses each end ~12 mm deep with a closed parallel jaw; the 3 mm press threshold is what a visual check could verify.",
+  "scores": "Dream-1 run: 0.0; scripted demo: 1.0",
+  "media": ""
+}
