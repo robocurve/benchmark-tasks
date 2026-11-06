@@ -60,6 +60,16 @@ Do not set `OMNI_KIT_ACCEPT_EULA` until you have accepted the NVIDIA license. Th
 
 ## Recorded results and limitations
 
+The final packaged native controls used seed 0 and identical physics, reset and scoring code:
+
+| Scripted policy | Final score | Controls / simulated time | Protected-car contact |
+| --- | --- | --- | --- |
+| `recovery` | 1.0 | 872 / 43.60 s | No |
+| `one_car` | 0.5 | 663 / 33.15 s | No |
+| `touch` | 0.0 | 260 / 13.00 s | Yes, first measured at 9.1417 s |
+
+The contact flag stayed latched after the first collision. Native GPU execution, unchanged source and artifact hashes were verified for all three runs. Under shared GPU load, the partial-credit control took 1518.83 seconds wall time and the contact control 556.73 seconds. These are individual feasibility/control trials, not a reliability estimate.
+
 The final packaged scripted demonstration returned both cars with their assigned grippers, scored 1.0 and recorded 43.60 simulated seconds, including withdrawal and continued circulation. It reached 0.5 at 21.65 s and 1.0 at 32.10 s. All three cars remained powered and no protected-car contact was recorded. The 3090 run took 775.26 seconds including startup; runtime depends heavily on load and native contact recording.
 
 The actual Dream-1 beta run completed 2400 controls / 120 simulated seconds, ended at the step limit and scored 0.0. It took 20.7 minutes wall time. Its 120.05-second video includes the initial observation. Fifty action chunks required 99 API attempts and 49 server session replacements. This is disclosed evaluation evidence, **not a clean model-performance baseline**. Neither stranded car was returned in the reviewed recording; adding the assigned-gripper eligibility check cannot change that zero. The final packaged demo was rerun with the assigned-gripper eligibility check and passed.
