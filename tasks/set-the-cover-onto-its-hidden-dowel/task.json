@@ -1,0 +1,21 @@
+{
+  "title": "Set an inspection cover onto its hidden locating dowel",
+  "category": "Impact on jobs",
+  "keywords": [
+    "locating dowel",
+    "inspection cover",
+    "contact search",
+    "hidden feature",
+    "non-prehensile",
+    "machinery maintenance"
+  ],
+  "instruction": "Fit the grey cover on the gearbox so it sits flat on its locating dowel.",
+  "context": "Done by: industrial machinery mechanics and millwrights (O*NET 49-9041, 49-9044). When a gearbox cover or bearing cap is refitted, its locating dowel is out of sight under it. A mechanic finds it by feel: slide the cover slowly until the dowel drops into its hole and the cover drops flat. Bolted down off its dowel, a cover sits cocked and cracks or leaks. Unlike TK-NA7N7Y and TK-DGSHQA, whose locators are in plain view, this one is hidden under the part and found by contact.",
+  "setup": "World frame: x forward from the arm bases, y to the robot's left, heights above the table top; the midline is halfway between the two arm bases. Gearbox housing (fixed, dark grey cast iron): a block 320 mm front to back, 260 mm side to side and 40 mm tall, centred 330 mm in front of the arm bases and 10 mm to the robot's right of the midline, square to the table. Its top has one square dowel hole, 12 x 12 mm and 10 mm deep, centred 325 mm in front of the arm bases and 23 mm left of the midline (off both of the housing's centre lines). Inspection cover (loose, grey cast aluminium, 0.5 kg): a plain square block 130 x 130 x 30 mm with no marks on its top. A steel locating dowel 10 mm in diameter stands 8 mm out of its underside, 40 mm from the cover's centre toward the robot, on the cover's centre line. At the start the cover sits square on the housing top, its centre 347 mm in front of the arm bases and 7 mm left of the midline, so it hides the hole; its dowel tip is 18 mm short of the hole and 16 mm to its right. It rests tilted 4.6 degrees (measured 4.58) on its dowel tip and its far bottom edge, near edge up. Nothing else is on the table.",
+  "scoring": "Pass/fail. Score 1.0: the cover has been set down and left still, lying flat on the housing top: its top tilted less than 1.5 degrees from level and every corner of its underside within 1.5 mm of the housing top, with its dowel down in the hole (dowel centre within 1.5 mm of the hole's centre front to back and side to side, its tip more than 5 mm below the housing top). The cover may be turned to any angle about the dowel. Score 0 in every other case: the cover resting tilted on its dowel anywhere (4.6 degrees, including centred over the hole), flat on the housing with the dowel off the housing's edge, upside down, or off the housing. The trial ends at 1.0 once the 1.0 condition has held for 4 s; otherwise it scores the state at the last step.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Set the cover back square on the housing top, its centre 347 mm in front of the arm bases and 7 mm left of the midline, resting on its dowel. Nothing is consumed.",
+  "fidelity": "Rigid boxes and cylinders in PhysX, friction 0.4 static and 0.3 dynamic on the cover and the housing. The dowel hole is square, with 1 mm clearance each side and no chamfer; a real one is round, a close fit and chamfered. A real cover usually has a second dowel or bolt holes that set its turn; this one has one dowel and no bolt holes, so its turn is not scored. The hole is hidden under the cover at the start; lifting an edge to look under it with a wrist camera is allowed.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-LEQ8SM"
+}
