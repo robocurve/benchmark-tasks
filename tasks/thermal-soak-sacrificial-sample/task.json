@@ -1,0 +1,20 @@
+{
+  "title": "Soak two samples to a target core temperature, learning the lag from the first",
+  "category": "Impact on AI timelines",
+  "context": "Thermal soak, burn-in and cure steps in hardware assembly depend on a sample's core temperature, which lags the surface and the heater. A robot that can infer this lag from an expendable sample and hit the target core band on subsequent parts enables unattended thermal processing and accelerated hardware commissioning.",
+  "instruction": "Press the red HEAT button on the front left to heat the plate to its 110 deg C setpoint, soak the orange sample so its core ends between 60 and 70 deg C, then leave it on the cool pad and press the white OFF button on the front right. While a sample rests on the cool pad, the status lamp indicates its core temperature band (amber < 60, green 60-70, red > 70 deg C) and the bar shows surface temperature; the blue expendable sample may be used to gauge the thermal lag.",
+  "setup": "All positions are cm from the midpoint between the two arm bases (x forward, y left); table top is z = 0. Hot plate fixture: 16.0 x 16.0 x 3.0 cm dark grey, 8.0 kg, centre (28.0, 0.0, 1.5), fixed, carrying a 10.0 x 10.0 x 0.2 cm heating pad at (28.0, 0.0, 3.1) with 110 deg C thermostat. Two buttons on the fixture front at x = 21.5 cm: red HEAT button at y = +3.5 cm and white OFF button at y = -3.5 cm (3.6 x 3.6 x 1.2 cm caps, 4 g mass, 100 N/m spring, 0.8 cm travel to hard stop). Surface temperature bar: 9 stacked lamp discs (2.8 cm diameter) at y = -9.5 cm from x = 17.0 to 37.0 cm (lamp k lit if surface T >= 20 + 10*k deg C; discs above 70 deg C are red). Status lamp: 5.2 cm diameter dome at (40.0, 0.0) showing off / amber (< 60 deg C or heating) / green (60-70 deg C) / red (> 70 deg C). Cool pad: 20.0 x 10.0 x 0.5 cm light blue at (28.0, -20.0). Staging area: two 6.0 x 6.0 x 4.0 cm blocks (300 g each) at y = +20.0 cm: blue sample 1 (expendable) at x = 22.0 cm and orange sample 2 at x = 34.0 cm.",
+  "scoring": "Judged on sample 2; sample 1 is expendable. 0.25 if HEAT button is pressed or any sample moved > 10 mm; 0.50 if sample 1 has been placed on the hot plate, lifted, and placed on the cool pad; 0.75 if sample 2 is resting on the cool pad with core temperature between 45 and 80 deg C; 1.00 if sample 2 is resting on the cool pad with core temperature between 60 and 70 deg C, core settled (|dTc/dt| < 0.2 deg C/s), heater OFF, both grippers open, and sample 1 completed, held for 20 consecutive control steps (1.0 s). Zero-gate (0.0): any sample core > 90 deg C at any time (FIRE), any sample off table, or fixture moved > 5 mm.",
+  "reset_notes": "Return sample 1 (blue) to (22.0, +20.0) and sample 2 (orange) to (34.0, +20.0) in staging. Verify both button caps spring back to 5.0 cm above the table and that the fixture has not moved. Reset heater state to OFF and allow the hot plate and samples to cool to 20 deg C ambient (all 9 temperature bar discs dark and status lamp off).",
+  "run_limit": "3,000 steps (2.5 minutes at 20 Hz)",
+  "keywords": [
+    "bimanual",
+    "thermal soak",
+    "latent lag",
+    "active inference",
+    "sacrificial sample"
+  ],
+  "fidelity": "Blocks and pads are physical rigid bodies with Coulomb friction. Buttons use 100 N/m linear springs with hard stops and 20 Hz hysteresis. The thermal state machine (thermostat plate heating at 10 C/s to 110 C setpoint, surface-to-heater relaxation tau=10s, core-to-surface lag tau=18s, cool pad cooling tau=50s) is simulated in pure Python. The temperature bar and status lamp are code-teleported indicator markers.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-XR3K3B"
+}
