@@ -1,0 +1,23 @@
+{
+  "title": "Seat a DIP chip in a ZIF socket the right way round and close the lever",
+  "category": "Impact on jobs",
+  "keywords": [
+    "electronics",
+    "device programming",
+    "keyed insertion",
+    "orientation",
+    "reorientation in the air",
+    "lever",
+    "bimanual",
+    "small parts"
+  ],
+  "instruction": "Put the black chip in the blue socket with its notch toward the socket's lever, then push the lever down to close it.",
+  "context": "Electronics technicians load chips into the ZIF socket of a device programmer to burn firmware into microcontrollers and memories, hundreds a day. The notch marks pin 1 and must face the lever: a chip put in backwards is reverse-powered and destroyed. The chip has to be turned half a turn in the air, its pins dropped into the slots, and only then the lever closed with the other hand.",
+  "setup": "Left and right are the robot's. Positions are centres in metres from the midpoint between the two arm bases: x forward, y to the robot's left, heights above the table. Mat: a 34 x 40 cm light grey rubber anti-static mat (40 cm along y), 3 mm thick, fixed, centred at (0.30, -0.08). Programmer board: an 8.5 x 12.5 cm green glass-epoxy board (12.5 cm along y), 1.6 mm thick, fixed flat on the mat at (0.325, -0.027), with a controller chip, a USB socket, a crystal, capacitors, three LEDs and a pin header, none taller than 1.1 cm. ZIF socket: a blue plastic 40-pin zero-insertion-force socket, 2.5 cm wide, 1.2 cm tall, fixed on the board with its long side along y, its pin area centred at (0.32, -0.035): two pin slots 6 mm wide, 53 mm long and 3.5 mm deep with gold contacts, 13 mm apart centre to centre, and a 2 x 1.5 x 2 mm guide boss on its top between the slots, 2.2 cm left of the centre. At its left end, a 1.5 cm cam block (1.5 cm tall) with a white T mark. Lever: a 4.5 cm steel lever with a red tip, 4 mm thick, hinged at its bottom end 1 cm above the board at (0.30, 0.005), 6 mm in front of the socket's near side. It starts open, standing straight up. It turns 90 degrees toward the right to lie flat along the socket's near side (closed), stays open or closed, and snaps shut once pushed past 45 degrees. Chip: a black 40-pin DIP chip, body 15 x 52 x 5 mm with a notch 6.5 mm wide and 7.5 mm deep in one end and a white pin-1 dot beside it, two rows of 20 tinned legs 3 mm long, 6 g, standing on its legs on the mat at (0.24, -0.20), long side along y, notch toward the right (away from the lever). Nothing else is on the table.",
+  "scoring": "Positions are centres. In the socket: the chip's centre within 2.5 mm across and 3 mm along of the socket's pin-area centre and both ends of its body less than 3.5 mm above the socket's top (legs in the slots). Seated: in the socket, notch within 20 degrees of pointing at the lever end, both ends of the body within 0.5 mm of the socket's top. Lever closed: 85 degrees or more from upright. 1.0 (success, held 1 s): seated, lever closed, the chip seated when the lever closed, both still. 0.5: seated, lever open. 0.25: the chip in the socket the wrong way round (notch within 20 degrees of pointing away from the lever), or the lever closed while the chip was in the socket but not seated (pushing it down afterwards does not count). 0 otherwise, including closing the lever on an empty socket, and 0 if the chip falls off the table.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Open the lever (straight up) and put the chip back on the mat on its legs, notch toward the robot's right.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. The chip is one body of five boxes (body, notch, two leg rows) and the socket one fixed body of eight boxes. Meshes are drawn only. The pins have 2 to 2.5 mm of play in the slots, more than a real socket. The lever is a hinge with two detents (an over-centre spring) and does not clamp the legs. The gripper closes at 50 N per pad (the demo grips at about 5 N).",
+  "scores": "Dream-1 run: 0.0 (the right arm reaches the black chip on the mat and moves it, but never carries it to the socket), demo: 1.0 (success at step 397)",
+  "media": "M-XLNFQ2"
+}
