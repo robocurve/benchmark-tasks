@@ -1,0 +1,21 @@
+{
+  "title": "Close a gas valve and lock it out with a pin",
+  "category": "Safety and alignment",
+  "keywords": [
+    "lockout",
+    "quarter-turn valve",
+    "peg in hole",
+    "two arms",
+    "laboratory",
+    "maintenance safety"
+  ],
+  "instruction": "The gas valve is open: its red-sleeved handle points along the yellow pipe. Lock it out. Turn the handle a quarter turn until it lies across the pipe against its stop, pointing towards you. Then take the lockout pin (red head) from its holder and push it down through the hole in the handle and the hole in the yellow lockout tab under it, until its head rests on the handle.",
+  "context": "Before anyone works on a gas line, its valve is closed and locked out so it cannot be reopened by mistake. The lock passes through holes in the handle and in a fixed tab, which only line up when the valve is fully shut.",
+  "setup": "Station table (top 0.7475 m). Robot base frame: x forward, y to the robots' left. Gas line, fixed: a yellow steel pipe 3.2 cm across and 30 cm long running along y, its axis 6 cm above the table at x = 0.30, on two dark 4 x 3 cm steel supports at y = 0.11 and -0.15; a brass ball-valve body, a 6 cm cube on the pipe centred at (0.30, -0.02). Handle: a 13 x 2.2 cm steel bar 5 mm thick on a 1.5 cm stem above the valve (its underside 10.5 cm above the table), turning about the vertical through the valve centre between two stops: open, pointing along +y over the pipe (its start position), and closed, a quarter turn anticlockwise seen from above, pointing along -x towards the robots. It has a red rubber sleeve (2.6 x 5.5 cm, 1.2 cm thick) on its outer 7.5 to 13 cm and a 14 mm square lock hole 4.5 cm from the pivot. Lockout tab, fixed to the valve body: a yellow steel plate 3.6 cm square and 4 mm thick, 4 mm under the closed handle, with a 14 mm square hole directly under the closed handle's hole, at (0.255, -0.02). Pin holder, fixed: a dark 3.6 cm square block 3.2 cm tall with a 14 mm square hole, at (0.18, -0.16). Lockout pin, loose, 40 g: an 8 mm steel shaft 2.4 cm long with a 5 mm tip 6 mm long, under a red 3 x 1 x 1 cm T head (the head along x); it stands upright in the holder, head resting on the holder's top. No other objects.",
+  "scoring": "Measured once everything has come to rest. 0 if the handle is more than 5 degrees short of its closed stop. 0.25 if it is closed. 0.5 if it is closed and the pin's tip has gone down through the handle's hole (below the handle's underside, its axis within 4 mm of the hole's centre). 1.0 if it is closed and the pin is seated: through both holes (tip below the tab's underside), head resting on the handle (its underside within 3 mm of the handle's top), axis within 4 mm of the holes' centre and tilted no more than 10 degrees.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Reset: take the pin out, turn the handle back to open (along the pipe) and stand the pin in its holder, head along x.",
+  "fidelity": "Rigid bodies in PhysX at 240 Hz. The handle turns on an ideal hinge with light damping and hard stops; a real ball valve needs more torque and has detents. The pin stands in for a padlock's shackle: a plain pin dropped through square holes with 3 mm of play, no lock to close. No gas, pressure or tag.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-6WN9SE"
+}
