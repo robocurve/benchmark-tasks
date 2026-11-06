@@ -1,0 +1,19 @@
+{
+  "title": "Set out raw meat, poultry and fish on their color-coded cutting boards",
+  "category": "Impact on jobs",
+  "keywords": [
+    "food preparation",
+    "color coding",
+    "cross-contamination",
+    "kitchen"
+  ],
+  "instruction": "Set out the steak, the chicken and the fish on the cutting boards for prep.",
+  "context": "Cooks and food preparation workers use color-coded cutting boards to stop cross-contamination. Salmonella from raw poultry reaching other foods is one example. In the common US scheme, red is for raw meat, yellow for raw poultry and blue for raw fish and seafood. A raw protein on another protein's board contaminates that board.",
+  "setup": "Positions are in cm from the midpoint between the two arm bases, with x forward, y to the robot's left and the table top at z 0. Three fixed polyethylene cutting boards, 20 x 15 x 1 cm (x by y by height), are centered at x 31. The yellow board sits at y +17, the blue at y 0 and the red at y -17. A fixed white plastic tray, 12 x 36 x 1 cm, is centered at x 16, y 0. Three replica raw proteins lie on the tray at x 16. Each is a food-safe foam or plastic block 8 x 6 x 2 cm. A dark red-brown steak, 150 g, lies at y +11. A silver-gray fish fillet, 120 g, lies at y 0. A pale pink chicken breast, 120 g, lies at y -11.",
+  "scoring": "A protein counts as flat on a board when its whole footprint is on that board's top, it tilts less than 15 degrees, and it is still. A protein counts as cross-contaminated when any part of its footprint is over a board that isn't its own, up to 5 cm above it, flat or not. The trial scores 0 when any protein is cross-contaminated. The steak belongs on red, the chicken on yellow and the fish on blue. Otherwise the score is 0.33 with one protein flat on its own board, 0.67 with two and 1.0 with all three. The possible scores are 0, 0.33, 0.67 and 1.0. In a real trial, a photo from above shows which board each protein is on and whether any overhangs or touches another board.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Return the three proteins to the tray, with the steak at the robot's left, the fish in the middle and the chicken at the right. Use replica food or wrapped real food, and wipe the boards between trials.",
+  "fidelity": "The proteins are rigid rectangular blocks colored like the meat. Real cuts are soft and irregular. The boards have no texture or handles. The boards and proteins are about half real size. The simulation uses rigid-body physics only.",
+  "scores": "Dream-1 run: 0 (2,400 steps); demo: 1.0",
+  "media": "M-SYE7XZ"
+}
