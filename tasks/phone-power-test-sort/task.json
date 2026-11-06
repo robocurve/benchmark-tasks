@@ -1,0 +1,21 @@
+{
+  "title": "Test each phone's power button and sort the ones that turn on",
+  "category": "Impact on jobs",
+  "keywords": [
+    "e-waste",
+    "phone refurbishing",
+    "functional test",
+    "timed press",
+    "hidden state",
+    "sorting"
+  ],
+  "instruction": "Hold each phone's orange power button for three seconds. Put the phones whose screens light up in the green tray and the others in the grey tray.",
+  "context": "E-waste and phone refurbishing technicians triage piles of used phones: each is switched on by holding its power button, working ones go on to refurbishment and dead ones to recycling. Which phone works can't be seen until it has been tested.",
+  "setup": "Left and right are the robot's. Positions are centres in metres from the midpoint between the two arm bases: x forward, y to the robot's left, heights above the table. Phones: three smartphones, 15 x 7.5 x 0.8 cm, 180 g, metal frame and black glass front, lying screen up with their long sides along x and their top ends away from the robot, centred at x = 0.39 and y = -0.07 (phone 1, graphite frame), y = -0.19 (phone 2, silver frame) and y = -0.31 (phone 3, dark blue frame). Each rests on a black foam block 11 x 4.5 x 2.5 cm (11 cm along x), fixed and centred under it, so its long edges overhang the block by 1.5 cm. Power buttons: on each phone's right long edge (the side toward -y), an orange button 3 cm long and 5 mm tall, centred 3 cm from the phone's centre toward its top end, standing 3.5 mm proud, sprung (3 N at full travel), with 2.5 mm of travel. All three screens are dark at the start. Only phone 2 works: once its button has been held in 1.5 mm or more for 2.5 s without a break, its screen turns white and stays white. Phones 1 and 3 are dead and stay dark. Green tray: an 18 x 12 x 3 cm green plastic tray (18 cm along x) with 6 mm walls and a 4 mm ribbed floor, fixed, centred at (0.20, -0.09). Grey tray: the same in grey, centred at (0.20, -0.25). The left half of the table is empty.",
+  "scoring": "Positions are centres. A phone is tested once its button has been held in 1.5 mm or more for 2.5 s without a break. A phone has entered a tray when its centre is over either tray's 18 x 12 cm outline and less than 5 cm above the table. A phone counts if it was tested before it first entered a tray and now lies still (under 1 cm/s and 0.5 rad/s) in its right tray: centre within 8.4 cm along x and 5.4 cm along y of the tray's centre and less than 4 cm above the tray floor (stacked phones count). The right tray is green for the phone whose screen lit up and grey for a dead phone. Score: 1/3 per phone that counts. 1.0 (success, held 1 s): all three. 0 for a phone never tested, tested only after it entered a tray, or in the wrong tray. 0 overall if any phone leaves the table (centre more than 2 cm below the table top).",
+  "run_limit": "3,600 steps (3 minutes at 20 Hz)",
+  "reset_notes": "Switch phone 2 off again and put each phone back on its block, screen up, top end away from the robot, button on the right.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. Each phone collides as one 15 x 7.5 x 0.8 cm box with a detailed mesh drawn on it. The button is a box on a sprung prismatic joint with 2.5 mm of travel, more than a real phone's 1 mm. The lit screen is a white glowing mesh shown once the hold timer reaches 2.5 s, with no boot sequence. Trays and blocks are fixed boxes. The gripper closes with 50 N per pad. Masses are typical values.",
+  "scores": "Dream-1 run: 0.0 (the right arm moves a phone into the grey tray without testing it, and the other phones stay put), demo: 1.0 (success at step 666)",
+  "media": "M-RADDGL"
+}
