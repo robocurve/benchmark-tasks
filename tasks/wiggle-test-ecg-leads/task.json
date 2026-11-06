@@ -1,0 +1,23 @@
+{
+  "title": "Find the ECG lead with an intermittent break by flexing each lead",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "ECG lead wire",
+    "medical equipment",
+    "fault finding",
+    "interactive perception",
+    "intermittent fault",
+    "test lamp"
+  ],
+  "instruction": "Three ECG lead wires are connected to this training lead tester, and one of them has an intermittent break. Find the faulty lead and put it in the red reject tray.",
+  "context": "Medical equipment repairers (O*NET 49-9062.00) \"inspect, test, or troubleshoot malfunctioning medical or related equipment\". An intermittent lead-wire break only shows while the wire is flexed near its connector, so service guides tell technicians to flex each lead and watch the trace; a lead that flickers is replaced. Here the robot must make the fault appear by manipulating each lead and read the result.",
+  "setup": "Reference: table top z=0; x forward from the line through the arm bases, y left of their midline (cm). Tester: light grey PLA block 24x6x3 cm at x 21-45, y 19.6-25.6, fixed. Seats: pairs of dark rails 30x4x3 mm, 23 mm apart inside, centred x 27/33/39, y 18. Lamps: 26 mm discs on the tester top behind each seat, green LED when lit. Leads a/b/c (x 27/33/39): grey 5 mm PVC cord 28 cm, dark connector 30x20x15 mm 15 g in its seat, cord running straight to -y, black snap clip 20x15x10 mm 6 g on a brass shorting bar 20x11x0.2 cm at x 23-43, y -17 to -6. Lead a (nearest the robot) has the break. Red tray: 20x18 cm inside, 1.5 cm high 4 mm thick walls, 2 mm floor, x 32-52, y -37 to -19.",
+  "scoring": "Score 0 if: a good lead's lamp ever goes dark (connector >4 mm off, >5 mm up or >12 deg turned in its seat); a connector leaves its seat (>1 cm) with no gripper within 2.5 cm of it (pulled by the cord); not all three leads were flexed >30 deg (cord 5-7 cm from the connector vs. connector axis) while seated; or a gripper is within 3.5 cm of any lead at the end. Else: faulty lead entirely in the tray (every point inside, under 4 cm high) 1.0; faulty lead out of the tester (connector >=3 cm from seat, snap off the bar) but not in the tray 0.5; otherwise 0.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Set each connector back between its seat rails, pushed against the tester face and square to it, lay each cord straight towards the robot with its snap clip on the brass bar, and check all three lamps are lit. Take the faulty lead out of the tray.",
+  "fidelity": "Cords: 2 cm rigid segments with bending springs (no twist, stretch, plasticity). Connectors held in their seats by rails and friction (no latch or contacts). The break is scripted: lead a's lamp is dark while its cord 6 cm from the connector bends past 30 deg with the connector seated; any lamp is dark if its connector is moved out of its seat. The lamp is a visual disc switched in software. Snaps lie on the bar (real rig: clipped to studs).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-NWJR6G"
+}
