@@ -1,0 +1,14 @@
+{
+  "title": "Fill the tub under the spout, then shut the tap off",
+  "category": "Societal relevance",
+  "keywords": ["bimanual", "vessel fill", "faucet", "dwell", "housing inspection"],
+  "instruction": "Carry the tub under the spout, hold it there while the tap runs, shut the water off, and return the tub to where it started.",
+  "context": "NSPIRE deficiency D161 (Sink) covers a faucet that cannot activate or shut off: the inspector's check is end to end — run water, then prove the valve closes. A bimanual agent must do both with the same two arms: one holds the vessel under the spout while the other turns the handle, then the vessel has to come back. This is the plumbing-check companion to the faucet task: turning a handle is scored there; here the water's arrival, the shut-off, and the clean return are.",
+  "setup": "Station scene, fixed layout (see setup.png). At the table's left-centre (x=0.30 m, y=0) stands a dark faucet body (5x17x7 cm) with a gooseneck riser (3x3x14 cm) and a forward spout arm (8x2.4x2.5 cm) whose outlet hangs over x=0.38 m; its outlet is 10 cm above the seated tub's rim. On the body's left face (y=+0.065 m) a steel stem (r=1.4 cm, 3 cm) carries a square blue knob (5x5x4 cm, 150 g) riding on four small posts. The vessel is a square light-blue tub (5.2x5.2x6 cm, ~80 g) resting at (0.44 m, -0.18 m), 2 mm proud and settled. No other loose objects.",
+  "scoring": "task_score = 0.5 x fill fraction + 0.2 x shut-off + 0.3 x clean return. Fill: the tub's centre within 4 cm of the seat (0.41 m, 0) while the square knob sits >= 25 deg off either closed orientation (0/180 deg — a square knob is 180-deg symmetric), for >= 8.0 s cumulative at 20 Hz. Shut-off: the knob ends within 15 deg of a closed orientation. Clean return: the tub back within 4 cm of its start, upright within 15 deg, never tipped past 45 deg (a tip past 45 deg is a spill and voids the return credit). success ends the trial when all three hold together; SCORE_OVER=end.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "The tub is a free object; with -E object_jitter=0 every trial starts from the exact layout in setup.png. Trials use scene=station. The knob's rest orientation is axis-aligned; the dwell accumulates in success(), which the embodiment calls once per control step.",
+  "fidelity": "Water is not simulated: the open-tap dwell (the vessel held under the spout while the valve is off its seat) stands in for the delivered volume, and the shut-off is the knob's return to a closed orientation. The knob's yaw transfer from the wrist is friction-dependent and slips non-deterministically between runs, which is the intended difficulty: the model must re-grasp and re-turn rather than rely on one blind sweep. The fixture, knob, and vessel are rigid boxes; the tub's spill is scored as a 45-deg tip, not liquid loss.",
+  "scores": "Dream-1 run: 0.5; scripted demo: 1.0",
+  "media": ""
+}
