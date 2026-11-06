@@ -1,0 +1,22 @@
+{
+  "title": "Weigh out 1.00 g of granules on an analytical balance with a draft shield",
+  "category": "Impact on jobs",
+  "keywords": [
+    "laboratory",
+    "analytical balance",
+    "draft shield",
+    "tare",
+    "pouring",
+    "dosing to a target",
+    "two arms"
+  ],
+  "instruction": "Weigh out 1.00 g of the orange granules into the weighing boat on the analytical balance. Slide the balance's glass top door open by its dark handle, put the empty weighing boat in the middle of the pan and slide the door shut. Press the green TARE key, so the display reads 0.00 with the empty boat on the pan. Open the door again and pour granules from the vial into the boat, a little at a time, until the display reads 1.00 g. Then slide the door shut. Do not spill granules, and do not press TARE again once granules are in the boat.",
+  "context": "Weighing a set mass of a powder into a tared container, with the draft shield shut for the zero and the reading, is a daily step in sample and solution preparation. Pouring too fast overshoots, and an untared container or an open door gives a wrong mass.",
+  "setup": "Station table (top 0.7475 m). Robot base frame: x forward, y to the robots' left. Analytical balance, fixed, white, 39.5 x 18.2 cm, spanning x 0.13 to 0.525 at y -0.091 to 0.091. Front key strip (x 0.13 to 0.221, top 4 cm above the table): a dark screen 3 x 6.8 cm centred at (0.182, 0.03) with four green 7-segment digits 2 cm tall, decimal point after the second, reading grams to 0.01 g (tops of the digits away from the robots); a green TARE key 18 mm square at (0.172, -0.062) that travels 3 mm down against a spring (about 0.45 N at the bottom); a dark ON key at (0.172, -0.034), not used. Draft shield: a glass chamber, inside x 0.225 to 0.385 and y -0.085 to 0.085, floor 3.5 cm and walls 10 cm above the table, 4 mm light-blue glass; front and side walls fixed. Top door: a 17.4 x 17.8 cm glass plate 4 mm thick on the walls, closed at the start; it slides 13 cm back (away from the robots) over a white rear housing (x 0.385 to 0.525, 10 cm tall), on a dark handle bar 1 x 4 x 1.2 cm (along y) whose centre is at (0.234, -0.065), top 11.6 cm above the table. Pan: steel, 8 cm across, top 5 cm above the table, centred at (0.30, 0.0). The display reads 0.00 at the start. Weighing boat, loose, 1.2 g: white plastic, 5 cm square, 1.2 cm deep, 1.5 mm walls and a 4 mm floor, at (0.18, 0.20). Vial, loose, 8 g: a small square glass bottle, 2.5 cm across outside and 2.6 cm tall, 1.5 mm walls on a 2 mm base, open at the top, standing at (0.26, 0.21); its wall facing the robots leans out 30 degrees as a pouring spout, its lip 1.3 cm beyond the other walls. Granules: 70 orange polypropylene pellets, cylinders 4 mm across and 3 mm long, 0.03 g each (2.1 g in all), filling the vial to about 1.2 cm. No other objects.",
+  "scoring": "Measured once everything has come to rest. The display reads the mass resting on the pan (the boat, granules in it or on the pan, and the vial if it is put on the pan) minus the mass on it at the last TARE press, which counts once the key is down past half its travel. 0 unless that last TARE press was made with the empty boat resting on the pan and nothing else on it, and the boat is on the pan now (underside within 3 mm of the pan, centre over it). Otherwise, by how far the reading is from 1.00 g: 1.0 within 0.05 g, 0.6 within 0.15 g, 0.3 within 0.5 g, 0.1 further off. The score is halved if the top door is open more than 5 mm now or was at that TARE press, and halved again if any granule lies anywhere but in the boat or in the vial.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Pour all 70 granules back into the vial and stand it at (0.26, 0.21), put the empty boat at (0.18, 0.20), slide the door shut and zero the balance with the pan empty. In simulation the pellets restart in a three-layer stack (25, 25, 20); in the real world they settle as a loose pile to about the same height.",
+  "fidelity": "Rigid bodies in PhysX at 240 Hz. The reading is worked out from what rests on the pan (boat 1.2 g, pellets 0.03 g each, vial 8 g), not from forces; no drift, draft or settling time. In simulation the pellets weigh 0.2 g and the boat 12 g so contacts stay stable; the display still counts the real masses. Pellets are rigid 4 x 3 mm cylinders; a real powder is finer and cohesive. The door slides on a damped joint with hard stops.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-XJ3XVT"
+}
