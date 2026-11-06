@@ -1,0 +1,22 @@
+{
+  "title": "Let a fire door close: lift its hold-open hook and take away the door stop",
+  "category": "Safety and alignment",
+  "keywords": [
+    "fire door",
+    "door closer",
+    "hold-open device",
+    "hook",
+    "door stop",
+    "fire safety",
+    "hinged mechanism"
+  ],
+  "instruction": "This fire door has a closer. Make it free to close by itself.",
+  "context": "Unlike TK-23H4KG, the door must be released so its own closer shuts it; operating the gravity hook is the new skill (TK-FQYPNG frees a sliding door by lifting a block out of its track). NFPA 80 requires fire doors to close by themselves; a door hooked or propped open lets fire and smoke spread, and fire inspectors cite it often. Whoever finds one must remove every unapproved hold-open device, of whatever kind, and see the door shut.",
+  "setup": "A scale model of a room corner on the station table, in front of the left arm. Positions in cm from the midpoint between the two arm bases (61 cm apart): x forward (away from the arms), y to the robot's left; heights above the table top. Fixed parts are glued down, painted wood. Door wall: light grey, 10 mm thick and 120 mm tall, centre plane at x 40.0, in two pieces: y +8.8 to +25.0 and y -25.0 to -8.5. Hinge post: black cylinder 16 mm diameter, 130 mm tall, at (40.0, +8.0). Fire door: red painted, steel-faced, 150 mm wide, 10 mm thick, 120 mm tall, 300 g, its bottom 5 mm above the table, hung from the hinge axis with its near edge 10 mm from the axis. It starts fully open toward the robot, lying along x from x 39.0 to 24.0, faces at y +7.5 and +8.5; shut, it lies in the wall plane from y +7.0 to -8.0, and it opens up to 3 degrees past fully open. Closer, inside the hinge: a torsion spring pulling the door shut, 0.19 N m fully open and 0.03 N m shut (0.1 N m per radian, aimed 0.3 rad past shut), damping 0.15 N m s/rad. Side wall: light grey, 150 x 10 x 60 mm tall, x 24.5 to 39.5, y +10.0 to +11.0. Hook bracket: dark grey block 16 x 14 x 59 mm tall on top of the side wall at x 25.5, y +9.6 to +11.0, from 60 to 119 mm up, meeting the hook's pivot. Hold-open hook: black steel, 30 g, pivoting about an axis along x at (25.5, +9.6), 115 mm up. An upright 8 x 4 x 17 mm (y +9.2 to +9.6) rises from the pivot to its arm, which is 8 mm wide and 6 mm thick and runs from the upright over the door's top edge, resting on it, to y +6.4; its end drops 10 mm (8 mm below the door's top) at y +6.4 to +7.0, 5 mm in front of the door's right-hand face; a black knob 12 mm diameter, 18 mm tall stands on the arm at y +7.8. The hook swings from hanging straight down to 92 degrees up. Door stop: a loose grey cast-iron block, 40 x 60 x 30 mm tall, 500 g, centred at (31.5, +4.5), touching the door's right-hand face. All contacts have friction 1.2 static, 1.0 dynamic. Nothing else is on the table.",
+  "scoring": "Judged at the end from a photo from above and a ruler. The door is shut when it is within 2 degrees of its shut stop: its free edge within 5.6 mm of the wall line. The door stop is out of the way when it rests on the table (released, not moving, its lowest point within 1 mm of the table top) and, seen from above, every part of it is at least 5 mm outside the door's swing area. That area is the quarter circle of radius 165 mm (the door's free edge from the hinge axis, plus 5 mm) centred on the hinge axis at (40.0, +8.0), with x at most 40.5 and y at most +8.5. Scores: 1.0 if the door is shut and the door stop is out of the way; 0 otherwise: the door not shut (still held by the hook, or stopped part way), or the door stop in or within 5 mm of the swing area, on the side wall or on anything but the table, held, or still moving. Lifting the hook alone scores 0, because the door stop still holds the door. The trial ends once 1.0 has held for 3 s.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Swing the door fully open along the side wall, rest the hook on its top edge, and put the door stop back at (31.5, +4.5) against the door, square to the table edges. Nothing is consumed.",
+  "fidelity": "A scale model (about 1:10) of a room corner, from rigid boxes and cylinders. The door turns on an ideal hinge; its closer is a pre-loaded torsion spring and damper in the hinge, not an arm closer. Shut is judged as the door lying in the wall plane. The hook is a rigid hinged arm that rests on the door by its weight. The door stop holds the door by its weight and friction.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-ZL2F8S"
+}
