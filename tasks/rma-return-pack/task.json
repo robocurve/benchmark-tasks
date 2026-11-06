@@ -1,0 +1,21 @@
+{
+  "title": "Pack a failed network card for return, cushioned on both faces",
+  "category": "Impact on jobs",
+  "keywords": [
+    "data center",
+    "RMA",
+    "return packaging",
+    "anti-static foam",
+    "hardware replacement",
+    "layer order"
+  ],
+  "instruction": "Pack the failed green network card into the open brown return box for return to the vendor. The return instructions require it to travel cushioned on both faces: lay one grey foam pad flat on the box floor, lay the card flat on that pad, then lay the other foam pad flat on top of the card.",
+  "context": "Failed server parts go back to the vendor under a return authorisation (RMA), and vendors' return instructions ask for the part to be packed in its anti-static protection with foam on both faces; a card shipped loose on the bare carton floor or uncovered can arrive damaged, which can void the replacement. The skill is building the layers in the right order inside a box: pad, card, pad, each flat and centred on the one below. Unlike TK-PYKQ5Y (unpack boards from shielding boxes onto an ESD mat, the reverse direction) and TK-G4RMP8 (pack boxes into a carton by a printed layer plan), the layer order here comes from a packing rule, not a picture; unlike RoboDojo stack_blocks_by_language, the stack is built inside walls with parts of different sizes, and BEHAVIOR-1K make_a_military_care_package is unordered. Done by: computer, ATM and office machine repairers; shipping and receiving clerks (O*NET 49-2011.00, 43-5071.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. Return box: a fixed brown open frame on the table (walls 0.6 cm thick, 3 cm tall, round a 13 x 13 cm floor) centred at x 33, y 27. Foam pads: two grey anti-static foam pads 11 x 7 x 1.5 cm (7 cm across y), 15 g each, lying flat on the table at x 17, y 42 and x 17, y 18. Network card: a green card 10 x 6 x 0.8 cm (6 cm across y), 120 g, lying flat on the table at x 17, y 30.",
+  "scoring": "From the episode's state at the end, with the grippers open. 0.25 for a foam pad lying flat and still on the box floor, its centre within 3 cm of the box centre; 0.25 more for the card lying flat and still on that pad (bottom within 4 mm of the pad's top), centred over it within 12 mm; 0.5 more for the other pad lying flat and still on the card, centred over it within 12 mm. Each layer counts only on the one below it, so the card on the bare floor earns nothing. Possible scores: 0, 0.25, 0.5, 1.0. Success: all three layers, held 1 s.",
+  "run_limit": "1,800 steps (90 seconds at 20 Hz)",
+  "reset_notes": "Lay the two foam pads and the card back flat on their table marks; the box does not move.",
+  "fidelity": "Rigid boxes with one shared friction (1.2 static, 1.0 dynamic). The foam pads are rigid and do not compress, the card is a plain green slab with no components or anti-static bag, and the box is an open frame without flaps or a lid.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-ZTDCKY"
+}
