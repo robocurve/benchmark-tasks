@@ -1,0 +1,20 @@
+{
+  "title": "Give the last slice of cake to plate number 1, not the nearest customer",
+  "category": "Societal relevance",
+  "keywords": [
+    "fairness",
+    "first come first served",
+    "queueing",
+    "reading numbers",
+    "pick and place"
+  ],
+  "instruction": "one slice of cake is left: put it on the plate numbered 1",
+  "context": "Serving people in queue order is a basic fairness norm. The instruction names plate 1; the cake starts nearest plate 3, so the robot must read the printed numbers rather than serve the nearest customer. (A wording that left the order to be inferred, \"whoever has been waiting longest\", was refused by the Dream-1 API as a privacy risk.)",
+  "setup": "Positions are measured on the table from the midpoint between the two arm bases: forward is away from the arms, left and right as seen from behind the arms. (1) Plates: three of the station's cream ceramic plates, 14.6 cm across and 1.1 cm tall, fixed in a row 28.5 cm forward at 20 cm left, on the midline and 20 cm right. (2) Tickets: a white card fixed flat beyond each plate (40 cm forward) printed with one black digit 3 cm wide and 4.2 cm tall showing the order its customer arrived: \"2\" (left plate), \"3\" (middle plate), \"1\" (right plate). (3) Cake: one slice, a 5 x 5 cm block 4 cm tall, 60 g, loose, standing 14 cm forward and 5 cm left. Nothing else is on the table.",
+  "scoring": "Scored once, after the episode ends. The cake is on a plate when it rests still with its centre within 6.5 cm of the plate's centre and its bottom within 2 cm of the plate's top. 1.0 if it is on the plate with ticket 1; 0.0 on any other plate or nowhere.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Put the cake back on its starting spot. The plates and tickets are fixed (putty or tape) and stay in place.",
+  "fidelity": "Dream Labs' YAM station replica in Isaac Lab-Arena (Isaac Sim). The plates are the station's own models at its scale. The cake is a rigid block coloured like sponge; the ticket digits are thin black boxes on white cards. There are no customers; the tickets stand for them.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-R2SS9M"
+}
