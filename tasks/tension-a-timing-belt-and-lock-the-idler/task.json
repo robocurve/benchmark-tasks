@@ -1,0 +1,20 @@
+{
+  "title": "Hold a sprung belt tensioner at its mark with one hand while the other turns its lock knob, then let go",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "bimanual",
+    "robot assembly",
+    "timing belt",
+    "spring",
+    "lock"
+  ],
+  "instruction": "Swing the tensioner lever back by the red peg at its tip until its pointer is in the green band, hold it there with one hand while the other turns the lock knob on its pivot a quarter turn clockwise, then let go with both hands.",
+  "context": "Timing belts drive the joints of robot arms and the axes of 3D printers and CNC machines, and building or servicing them means setting the belt's tension. A sprung tensioner swings off the belt as soon as it is let go, so one hand holds it at the mark while the other locks it.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) A fixed belt drive module: a grey base plate 20 x 40 cm, 1.2 cm thick, centred 30 cm forward on the centre line, with two dark pulleys 4 cm across 14 cm left and right of the centre line and a black timing belt round them. (2) A tensioner lever, hinged on a vertical pivot bolt 36 cm forward and 7 cm right of the centre line: an aluminium bar 18 cm long reaching left from the bolt, in front of (farther than) the belt, with a dark idler wheel 2.4 cm across 10 cm from the pivot, 1.1 cm in front of the belt, and a red peg 1.4 cm across and 4 cm tall at its tip. A spring holds it against its forward stop; swinging the tip back about 2 cm (6.3 degrees about the pivot) brings the idler onto the belt. Beside the tip, a scale with a green band from 4.5 to 8.5 degrees. (3) A dark lock knob 1.8 cm across on a 3.5 cm stem on top of the pivot bolt, its top 7.8 cm above the table, with a white mark. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Judged at the end of the trial. Locked: the lock knob turned at least 75 degrees clockwise (seen from above), which locks the lever where it is at that moment; turned back, it unlocks. Tensioned: locked with the lever swung back 4.5 to 8.5 degrees (its pointer in the green band). Let go: both grippers' fingertip centres (TCPs) at least 3 cm from the knob and from the peg. 1.0: tensioned and both let go; 0.5: tensioned; 0.25: the lever held in the green band for 1 s at some point; else 0.0. The trial ends at the run limit, or once the full score has held with the lever and the knob still for 1 s.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "Turn the lock knob back a quarter turn counterclockwise; the lever springs back off the belt to its stop.",
+  "fidelity": "Rigid-body simulation (Isaac Sim 6.1, PhysX, 20 Hz control). Simplified: the belt is not simulated (it does not stretch or run); its tension is the lever's angle against a spring at the pivot (0.03 N m per degree, about 1.6 N at the peg at the mark). The lock knob, a quarter turn round, holds the lever where it is with a stiff spring (no bolt thread). The idler does not collide; the module is fixed. Cameras 1280 x 704 (Dream-1 sees 320 x 176).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-AMN5DK"
+}
