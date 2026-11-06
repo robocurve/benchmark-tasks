@@ -1,0 +1,20 @@
+{
+  "title": "Hand a memory chip from one hand to the other to turn it pins down, then seat it in its socket",
+  "category": "Societal relevance",
+  "keywords": [
+    "bimanual",
+    "handover",
+    "regrasp",
+    "assembly",
+    "insertion"
+  ],
+  "instruction": "Pick up the memory chip, hand it to your other hand so that its pins point down, and seat it in the socket on the circuit board with its notch at the socket's marked end, then let go.",
+  "context": "Chips, modules and connectors often wait upside down, in foam or a tray or after an inspection, and have to be turned over before they go in: a person takes the part in one hand, passes it to the other to turn it, then seats it pins first, the right way round. A gripper that takes a part lying flat from above holds it with its pins toward the gripper; turned pins down, the part has the gripper underneath it, where it cannot go in, so turning it over takes a handover in the air (or tipping it over on the table and taking it again).",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) A fixed pink anti-static foam block, 4.6 cm front to back, 6 cm side to side and 2.5 cm tall, centred 24 cm forward and 12 cm left of the centre line. (2) On it, upside down (pins up), a loose memory chip (a 16-pin package, scaled up): a black package 7 cm long (front to back), 3.2 cm wide and 1.2 cm thick, 30 g, with two rows of eight gold pins on one face (each 3 mm along the row, 2 mm across and 8 mm long, 6.5 mm apart; the rows 1.4 cm apart, centre to centre, along the chip's length); a pale half-round notch across its front end marks pin 1. Its two ends overhang the foam by 1.2 cm. (3) A fixed green circuit board 15 x 13 cm, 3 mm thick, centred 29 cm forward and 13 cm right, with an empty black socket for the chip, centred 28 cm forward and 12 cm right, running front to back: 6 x 2.6 cm and 1.2 cm tall, with two slots, one for each row of pins, each 6 mm wide, 5.25 cm long and 1 cm deep, whose mouths slope in at 45 degrees over their top 3 mm. A white outline is printed round the socket, with a half-round notch at its front end. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Judged at the end of the trial. The chip is seated when its pins point down (within 6 degrees), its length runs along the socket (within 6 degrees), its centre is within 3 mm of the socket's centre both ways, and it rests at the seated height (within 2.5 mm: its underside on the socket's top, every pin in a slot). A gripper has let go when its fingertip centre (TCP) is at least 5 cm from the chip's centre. The chip has been turned over in the air if, after any control step, its pins pointed down (within 20 degrees) with its centre at least 5 cm above the table. 1.0 if the chip is seated with its notch at the socket's marked (front) end and both grippers have let go; 0.5 if it is seated so but still held; 0.25 if not, but it was turned over in the air; else 0.0. The trial ends at the run limit, or once the full score has held with the chip still for 1 s.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Nothing is consumed: take the chip out of the socket and lay it back on the foam block, centred, pins up, its notch to the front.",
+  "fidelity": "Rigid-body simulation (Isaac Sim 6.1, PhysX, 20 Hz control) of a calibrated two-arm table. Simplified: the chip is scaled up to suit the gripper (a real 16-pin package is about 2 x 0.7 cm) and is one rigid body, pins included; the socket is a plain block with two open slots and no contacts or latch, so the pins drop in without force; the board and socket are fixed in place; friction is set (chip 0.5, board and socket 0.3); the cameras render at 1280 x 704 (Dream-1 sees 320 x 176).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-SWNWM5"
+}
