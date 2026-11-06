@@ -1,0 +1,119 @@
+{
+  "scope": "One actual hosted Dream-1 evaluation on the native PhysX camera-release task",
+  "original_log": "adhoc_188c865d.json",
+  "original_log_sha256": "8ebe35475375e144d5b0d43ad7f52fdf9b27e22869fbde111174b9aafdb47849",
+  "source_sha256": "ea9eeed9e722a597e2e074b3fa361911e541e9a236bc61a96ed651cd7a48f403",
+  "source_unchanged": true,
+  "eval": {
+    "created": "2026-11-04T09:06:46.804239+00:00",
+    "embodiment": "camera_release",
+    "embodiment_info": {
+      "capabilities": [
+        "privileged_success",
+        "resettable",
+        "seedable"
+      ],
+      "control_hz": 20.0,
+      "is_simulated": true
+    },
+    "environment_id": "camera-release-ea9eeed9e722a597",
+    "environment_revision": "ea9eeed9e722",
+    "git_commit": null,
+    "grader": null,
+    "grader_config": {},
+    "inspect_robots_version": "0.60.0",
+    "max_seconds": null,
+    "max_steps": 2400,
+    "policy": "dream",
+    "policy_checkpoint": "dreamlabs/dream-1-beta",
+    "policy_config": {
+      "action_horizon": 1,
+      "replan_interval": null,
+      "temperature": null
+    },
+    "seed": 0,
+    "task": "adhoc"
+  },
+  "results": {
+    "errored_trials": 0,
+    "metrics": {
+      "task_score": 0.0
+    },
+    "total_scenes": 1,
+    "total_trials": 1
+  },
+  "stats": {
+    "completed_at": "2026-11-04T09:51:18.564686+00:00",
+    "duration_s": 2671.7588611170067,
+    "mean_inference_latency_s": 0.49451847093761897,
+    "started_at": "2026-11-04T09:06:46.805831+00:00",
+    "total_steps": 2400
+  },
+  "instruction": "Remove the camera and its attached plate from the bench mount and set the assembly upright on the green pad. Keep the camera attached to the plate, do not drop it, and leave the assembly released.",
+  "termination_reasons": [
+    "max_steps"
+  ],
+  "camera_size": [
+    320,
+    176
+  ],
+  "dream_api_used": true,
+  "epochs": 1,
+  "automatic_trial_reruns": false,
+  "inference": {
+    "returned_chunks": 50,
+    "request_attempts": 99,
+    "expiration_retry_notices": 49,
+    "distinct_gateway_sessions": 50,
+    "rows_per_request": 48,
+    "preroll_steps": 32,
+    "rows_beyond_declared_limits": 2115,
+    "tracking_error_rad": {
+      "max": 0.06402989562209,
+      "mean": 0.0375755987112965
+    }
+  },
+  "interpretation": "Recorded score for this one attempt; gateway session-expiration retries and standard joint-target clipping limit interpretation as a clean measurement of task difficulty. No repeat evaluation was made.",
+  "video": {
+    "source_run": "camera-release-dream-001",
+    "original_log": "adhoc_188c865d.json",
+    "original_log_sha256": "8ebe35475375e144d5b0d43ad7f52fdf9b27e22869fbde111174b9aafdb47849",
+    "source_sha256": "ea9eeed9e722a597e2e074b3fa361911e541e9a236bc61a96ed651cd7a48f403",
+    "model": "dreamlabs/dream-1-beta",
+    "epochs": 1,
+    "seed": 0,
+    "steps": 2400,
+    "score": 0.0,
+    "composition": "Every native frame in order; top view above both wrists; resize/stack only; no overlays or generated frames.",
+    "dream_api_used": true,
+    "encoding_requires_inference": false,
+    "ffprobe": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 640,
+          "height": 528,
+          "pix_fmt": "yuv420p",
+          "r_frame_rate": "20/1",
+          "nb_frames": "2401"
+        }
+      ],
+      "format": {
+        "duration": "120.050000",
+        "size": "3223363"
+      }
+    },
+    "files": {
+      "dream-1.mp4": {
+        "bytes": 3223363,
+        "sha256": "fbb2ef32d681b15a083e7b6aa01f50f9239175edfdeb062193f582e04214daa3"
+      },
+      "setup-dream.png": {
+        "bytes": 55027,
+        "sha256": "4f997a9a004b4c778d8c7704b1347e1cd2e8fd31498ce97f03b016d691bf099c"
+      }
+    }
+  }
+}

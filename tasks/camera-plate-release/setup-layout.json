@@ -1,0 +1,504 @@
+{
+  "units": "metres, kilograms and radians; explicit XYZW quaternions",
+  "material_note": "Nominal reconstruction materials only. The simulator uses authored aggregate masses, rigid colliders, display colors and uniform contact coefficients; elasticity/density/friction are not calibrated from material names.",
+  "station": {
+    "robot": "Two standard six-axis YAM arms, metal mechanisms with polymer covers; full dimensions/colliders are in the pinned public YAM URDF/STLs.",
+    "arm_base_positions_m": {
+      "left": [
+        0,
+        0.305,
+        0.75
+      ],
+      "right": [
+        0,
+        -0.305,
+        0.75
+      ]
+    },
+    "initial_joint_targets_per_arm_rad": [
+      0,
+      1,
+      1,
+      -0.6,
+      0,
+      0
+    ],
+    "initial_normalized_gripper_target": 1,
+    "table": {
+      "size_m": [
+        1.1,
+        1.3,
+        0.06
+      ],
+      "centre_m": [
+        0.36,
+        0.0,
+        0.7174999999999999
+      ],
+      "top_z_m": 0.7474999999999999,
+      "nominal_material": "wood"
+    },
+    "observation_camera_support": [
+      {
+        "name": "stand_foot",
+        "type": "box",
+        "position_m": [
+          -0.23649487853050233,
+          -0.008999999612569809,
+          0.7555
+        ],
+        "quaternion_xyzw": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "nominal_material": "painted steel",
+        "fixed": true,
+        "size_m": [
+          0.11,
+          0.11,
+          0.016
+        ]
+      },
+      {
+        "name": "stand_mast",
+        "type": "capsule",
+        "position_m": [
+          -0.23649487853050233,
+          -0.008999999612569809,
+          1.2276602749824523
+        ],
+        "quaternion_xyzw": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "nominal_material": "painted steel",
+        "fixed": true,
+        "radius_m": 0.012,
+        "spine_length_m": 0.9283205499649047,
+        "total_end_to_end_length_m": 0.9523205499649047
+      },
+      {
+        "name": "stand_arm",
+        "type": "capsule",
+        "position_m": [
+          -0.2114948785305023,
+          -0.008999999612569809,
+          1.7018205499649046
+        ],
+        "quaternion_xyzw": [
+          0.0,
+          0.5606288093051837,
+          0.0,
+          0.8280672304692729
+        ],
+        "nominal_material": "painted steel",
+        "fixed": true,
+        "radius_m": 0.009,
+        "spine_length_m": 0.053851648071345064,
+        "total_end_to_end_length_m": 0.07185164807134506
+      },
+      {
+        "name": "camera_housing",
+        "type": "box",
+        "position_m": [
+          -0.1734948130126891,
+          -0.008999999612569809,
+          1.7039449434443779
+        ],
+        "quaternion_xyzw": [
+          0.18301085645621007,
+          -0.18301085645621007,
+          -0.6830131963726356,
+          0.6830131963726356
+        ],
+        "nominal_material": "ABS",
+        "fixed": true,
+        "size_m": [
+          0.05,
+          0.042,
+          0.022
+        ]
+      }
+    ],
+    "floor": {
+      "size_m": [
+        200,
+        200,
+        0.02
+      ],
+      "centre_m": [
+        0,
+        0,
+        -0.02250000000000007
+      ],
+      "nominal_material": "concrete",
+      "scope": "Virtual background/ground; 200 m extent is a renderer boundary, not a required physical room size."
+    },
+    "lighting": {
+      "scope": "Unmodified observation lighting; no physical movable props.",
+      "dome": {
+        "intensity": 250.0,
+        "color_srgb": [
+          0.86,
+          0.9,
+          0.915
+        ]
+      },
+      "sphere": {
+        "position_m": [
+          0.03999999999999998,
+          -0.8,
+          2.6875
+        ],
+        "radius_m": 0.1,
+        "intensity": 600000.0
+      }
+    }
+  },
+  "mount": {
+    "root_position_m": [
+      0.28,
+      0.0,
+      0.7675
+    ],
+    "root_quaternion_xyzw": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "secured_to_bench": true,
+    "stand_mass_kg": 0.4,
+    "stand_parts": [
+      {
+        "name": "Foot",
+        "type": "box",
+        "size_m": [
+          0.11,
+          0.11,
+          0.008
+        ],
+        "local_centre_m": [
+          0,
+          0,
+          -0.016
+        ],
+        "nominal_material": "aluminium",
+        "collision": true,
+        "defines_mount_clearance": true
+      },
+      {
+        "name": "Post",
+        "type": "box",
+        "size_m": [
+          0.026,
+          0.026,
+          0.008
+        ],
+        "local_centre_m": [
+          0,
+          0,
+          -0.008
+        ],
+        "nominal_material": "aluminium",
+        "collision": true,
+        "defines_mount_clearance": true
+      },
+      {
+        "name": "Adapter",
+        "type": "box",
+        "size_m": [
+          0.07,
+          0.052,
+          0.009
+        ],
+        "local_centre_m": [
+          0,
+          0,
+          0.0045
+        ],
+        "nominal_material": "aluminium",
+        "collision": true,
+        "defines_mount_clearance": true
+      },
+      {
+        "name": "RearRail",
+        "type": "box",
+        "size_m": [
+          0.054,
+          0.006,
+          0.006
+        ],
+        "local_centre_m": [
+          0,
+          0.023,
+          0.012
+        ],
+        "nominal_material": "aluminium",
+        "collision": true,
+        "defines_mount_clearance": true
+      },
+      {
+        "name": "RearLip",
+        "type": "box",
+        "size_m": [
+          0.054,
+          0.01,
+          0.003
+        ],
+        "local_centre_m": [
+          0,
+          0.021,
+          0.0165
+        ],
+        "nominal_material": "aluminium",
+        "collision": true,
+        "defines_mount_clearance": true
+      },
+      {
+        "name": "LeftGuide",
+        "type": "box",
+        "size_m": [
+          0.004,
+          0.038,
+          0.004
+        ],
+        "local_centre_m": [
+          -0.031,
+          0,
+          0.011
+        ],
+        "nominal_material": "aluminium",
+        "collision": true,
+        "defines_mount_clearance": true
+      },
+      {
+        "name": "RightGuide",
+        "type": "box",
+        "size_m": [
+          0.004,
+          0.038,
+          0.004
+        ],
+        "local_centre_m": [
+          0.031,
+          0,
+          0.011
+        ],
+        "nominal_material": "aluminium",
+        "collision": true,
+        "defines_mount_clearance": true
+      },
+      {
+        "name": "MountScrew0",
+        "type": "cylinder",
+        "radius_m": 0.003,
+        "height_m": 0.002,
+        "axis": "Z",
+        "local_centre_m": [
+          -0.045,
+          0,
+          -0.011
+        ],
+        "nominal_material": "steel",
+        "collision": true,
+        "defines_mount_clearance": false
+      },
+      {
+        "name": "MountScrew1",
+        "type": "cylinder",
+        "radius_m": 0.003,
+        "height_m": 0.002,
+        "axis": "Z",
+        "local_centre_m": [
+          0.045,
+          0,
+          -0.011
+        ],
+        "nominal_material": "steel",
+        "collision": true,
+        "defines_mount_clearance": false
+      }
+    ],
+    "cam": {
+      "pivot_in_mount_frame_m": [
+        0.025,
+        -0.03,
+        0.017
+      ],
+      "mass_kg": 0.018,
+      "initial_angle_rad": 0,
+      "joint_axis": "Z",
+      "limits_rad": [
+        0,
+        0.95
+      ],
+      "actuation": "passive; no powered task-body actuator",
+      "parts": [
+        {
+          "name": "Lever",
+          "type": "box",
+          "size_m": [
+            0.024,
+            0.014,
+            0.007
+          ],
+          "local_centre_m": [
+            -0.02,
+            -0.018,
+            0
+          ],
+          "nominal_material": "aluminium",
+          "collision": true,
+          "defines_mount_clearance": true
+        },
+        {
+          "name": "Bridge",
+          "type": "box",
+          "size_m": [
+            0.022,
+            0.008,
+            0.005
+          ],
+          "local_centre_m": [
+            -0.009,
+            -0.0081,
+            0
+          ],
+          "nominal_material": "aluminium",
+          "collision": true,
+          "defines_mount_clearance": true
+        },
+        {
+          "name": "Toe",
+          "type": "box",
+          "size_m": [
+            0.028,
+            0.008,
+            0.004
+          ],
+          "local_centre_m": [
+            -0.018,
+            0.01,
+            0
+          ],
+          "nominal_material": "steel",
+          "collision": true,
+          "defines_mount_clearance": true
+        },
+        {
+          "name": "Pivot",
+          "type": "cylinder",
+          "radius_m": 0.004,
+          "height_m": 0.008,
+          "axis": "Z",
+          "local_centre_m": [
+            0,
+            0,
+            0
+          ],
+          "nominal_material": "steel",
+          "collision": true,
+          "defines_mount_clearance": true,
+          "clearance_envelope": "enclosing box"
+        }
+      ]
+    }
+  },
+  "payload": {
+    "spawn_plate_underside_m": [
+      0.28,
+      0.0,
+      0.7775
+    ],
+    "settled_plate_underside_m": [
+      0.28,
+      0,
+      0.7765
+    ],
+    "quaternion_xyzw": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "aggregate_mass_kg": 0.083,
+    "attachment": "Camera, plate and spacer are one free rigid body.",
+    "parts": [
+      {
+        "name": "Plate",
+        "type": "box",
+        "size_m": [
+          0.05,
+          0.038,
+          0.005
+        ],
+        "local_centre_m": [
+          0,
+          0,
+          0.0025
+        ],
+        "nominal_material": "aluminium",
+        "collision": true
+      },
+      {
+        "name": "CameraHull",
+        "type": "box",
+        "size_m": [
+          0.023,
+          0.042,
+          0.042
+        ],
+        "local_centre_m": [
+          0,
+          0,
+          0.033
+        ],
+        "nominal_material": "aluminium camera housing",
+        "collision": true,
+        "appearance": "Exact licensed assets/d405.stl, translated by (0.0115,0,0.033) and rotated +90 degrees about Y; collision proxy is invisible."
+      },
+      {
+        "name": "MountSpacer",
+        "type": "cylinder",
+        "radius_m": 0.006,
+        "height_m": 0.007,
+        "local_centre_m": [
+          0,
+          0,
+          0.0085
+        ],
+        "nominal_material": "aluminium",
+        "collision": false,
+        "note": "Visible rigid attachment detail; no separate spacer collider."
+      }
+    ]
+  },
+  "receiving_pad": {
+    "type": "box",
+    "size_m": [
+      0.13,
+      0.11,
+      0.004
+    ],
+    "centre_m": [
+      0.2,
+      0.14,
+      0.7495
+    ],
+    "nominal_material": "green polyurethane",
+    "fixed": true,
+    "top_z_m": 0.7515000000000001
+  },
+  "contact_coefficients": {
+    "static_friction": 0.6,
+    "dynamic_friction": 0.5,
+    "restitution": 0,
+    "scope": "Task-owned mount, payload and receiving-pad materials. Robot/station materials and PhysX combination behavior follow the pinned integration/runtime."
+  },
+  "reset": "Restore the declared fixed layout and cam zero, hold both arms at ready targets for 0.5 simulated seconds, then capture the initial observations."
+}

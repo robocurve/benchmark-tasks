@@ -1,0 +1,119 @@
+{
+  "scope": "actual native PhysX robot execution",
+  "status": "completed",
+  "hostname": "tengu",
+  "source_sha256": "ea9eeed9e722a597e2e074b3fa361911e541e9a236bc61a96ed651cd7a48f403",
+  "policy": "demo",
+  "seed": 1,
+  "max_steps": 900,
+  "control_hz": 20,
+  "physics_hz": 240,
+  "instruction": "Remove the camera and its attached plate from the bench mount and set the assembly upright on the green pad. Keep the camera attached to the plate, do not drop it, and leave the assembly released.",
+  "versions": {
+    "isaacsim": "6.1.0.0",
+    "isaaclab": "17.0.2",
+    "isaaclab-arena": "0.3.0",
+    "yam-arena": "0.1.0",
+    "inspect-robots": "0.60.0"
+  },
+  "gpu": [
+    "0, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, 580.178.04",
+    "1, NVIDIA RTX A6000, 580.178.04"
+  ],
+  "dream_api_used": false,
+  "initial_metrics": {
+    "score": 0.0,
+    "success": false,
+    "violations": [],
+    "physics_samples": 0,
+    "max_unsupported_descent_m": 0.0,
+    "cam_angle_rad": 1.2923933923048025e-07,
+    "payload_position_m": [
+      0.2800000011920929,
+      -7.00804747566508e-10,
+      0.7764999270439148
+    ],
+    "payload_quaternion_xyzw": [
+      5.385824124459759e-07,
+      -1.3505676577096892e-08,
+      -1.4139600601481561e-08,
+      0.9999999403953552
+    ],
+    "pad_error_m": 0.1612451561658836,
+    "pad_height_error_m": 0.024999905902500896,
+    "tilt_rad": 1.0775301569576143e-06,
+    "fixture_shift_m": 1.673182107518112e-08,
+    "fixture_angle_rad": 0.0,
+    "cam_anchor_error_m": 3.5420420623416173e-08,
+    "mount_gap_lower_bound_m": 0.0,
+    "robot_clearance_lower_bound_m": 0.2774538140598431,
+    "support_contact": true,
+    "on_pad": false,
+    "released": true,
+    "stable": false
+  },
+  "final_metrics": {
+    "score": 1.0,
+    "success": true,
+    "violations": [],
+    "physics_samples": 7716,
+    "max_unsupported_descent_m": 0.0,
+    "cam_angle_rad": 0.7762826681137085,
+    "payload_position_m": [
+      0.1999252587556839,
+      0.1396351456642151,
+      0.7514999508857727
+    ],
+    "payload_quaternion_xyzw": [
+      3.756521209652419e-07,
+      -7.328743123480308e-08,
+      0.006740146782249212,
+      0.9999772906303406
+    ],
+    "pad_error_m": 0.00037243112107204453,
+    "pad_height_error_m": 6.716079881119441e-08,
+    "tilt_rad": 7.654905044461272e-07,
+    "fixture_shift_m": 1.673182107518112e-08,
+    "fixture_angle_rad": 0.0,
+    "cam_anchor_error_m": 2.137547549524635e-08,
+    "mount_gap_lower_bound_m": 0.06529986854094658,
+    "robot_clearance_lower_bound_m": 0.07583338189685486,
+    "support_contact": true,
+    "on_pad": true,
+    "released": true,
+    "stable": true
+  },
+  "steps": 643,
+  "simulated_s": 32.15,
+  "worst_ik_position_m": 8.096519977084203e-05,
+  "worst_ik_rotation_rad": 0.00024245527756091938,
+  "video_errors": {},
+  "elapsed_wall_s": 111.95145348797087,
+  "source_unchanged": true,
+  "artifacts": {
+    "setup-top_cam.png": {
+      "bytes": 170971,
+      "sha256": "a8bb80c9433764d87e10044bacbf1664bd71153a5694f8c56dd23d0d5a950dd5"
+    },
+    "left_cam.mp4": {
+      "bytes": 838027,
+      "sha256": "6f092ee667d812162c2f325fd284ffd343a7fe7b1ca35abe402bd0156b1621db"
+    },
+    "setup-left_cam.png": {
+      "bytes": 76278,
+      "sha256": "eeda451c1bfc5828e27847081828afaee45706b7d41e344a63cd031665ed5762"
+    },
+    "top_cam.mp4": {
+      "bytes": 481396,
+      "sha256": "c477dd3a00ab74f5f3078ef41aa10827b9872182c2637da4237c09e6a3510340"
+    },
+    "setup-right_cam.png": {
+      "bytes": 73278,
+      "sha256": "d52282f1fcb05eb05a666ae36070b4a47e84afba56cca1a03d0a3b1c2d31ac0b"
+    },
+    "right_cam.mp4": {
+      "bytes": 563214,
+      "sha256": "d2abf53cecd3c9dcdd7935b42aeb61412b874cce7cdf99e0633ba712782d0cc7"
+    }
+  }
+}

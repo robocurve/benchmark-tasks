@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robocurve-camera-release"
+version = "0.1.0"
+description = "Passive cam-clamped camera dismounting on the calibrated bimanual YAM station"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "yam-arena @ git+https://github.com/kairosiann/yam-isaac-lab-arena.git@bd62771e60320433893bd1d2df0fc79b5ddcd6d1",
+]
+
+[project.entry-points."inspect_robots.embodiments"]
+camera_release = "camera_release.environment:camera_release_embodiment"
+
+[project.entry-points."inspect_robots.policies"]
+camera_release_scripted = "camera_release.controller:scripted_policy"
+
+[tool.setuptools.packages.find]
+include = ["camera_release*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
