@@ -1,0 +1,22 @@
+{
+  "title": "Move one bar 5 cm, turn another a quarter turn, leave the third alone",
+  "category": "Impact on jobs",
+  "keywords": [
+    "metric instruction",
+    "relative placement",
+    "fine adjustment",
+    "rotation",
+    "leave untouched",
+    "setup and assembly",
+    "bimanual"
+  ],
+  "instruction": "Move the red bar 5 cm to the left (toward the left arm), turn the blue bar a quarter turn where it lies, and leave the green bar where it is.",
+  "context": "Assembly and installation work often involves small adjustments to parts already in place. This task combines a stated translation and rotation, measured from each bar's starting pose, with a requirement to leave the third bar in place.",
+  "setup": "Two YAM arms with parallel grippers, bases 61 cm apart at the near edge of a wooden table. Positions are in cm from the midpoint between the two arm bases: x straight out across the table, y to the left (toward the left arm). Three loose wooden bars (pine, square section, 8.0 cm long x 2.5 cm x 2.5 cm, painted matte, about 25 g each) lie flat on the table in one row, each with its long side running left to right (along y), all centred at x = 30: a red bar centred at y = +16, a green bar centred at y = 0, and a blue bar centred at y = -16. There is 8 cm of bare table between neighbouring bars. Nothing else is on the table and nothing marks where any bar should end up. Every amount in the instruction is measured from the bar's own starting position.",
+  "scoring": "Measured with a tape measure or an overhead photo against each bar's starting position, after everything is still. Red (up to 0.5): 0.5 if its centre moved 3.5 to 6.5 cm toward the left arm (+y), moved no more than 2.5 cm along x, and its long axis turned no more than 15 degrees; 0.25 if it moved 2.5 to 7.5 cm toward +y, no more than 4.0 cm along x, and turned no more than 30 degrees; otherwise 0 (including any move to the right, a move only toward or away from the arms, or a move of more than 7.5 cm). Blue (up to 0.5): 0.5 if its long axis turned at least 80 degrees (a quarter turn, 90 +/- 10 degrees, either clockwise or anticlockwise; a bar looks the same end for end, so a three-quarter turn also counts and a half turn is no turn) and its centre is within 2.5 cm of where it started; 0.25 if turned at least 65 degrees with its centre within 4.0 cm; otherwise 0. Green (a multiplier on red + blue): x1 if its centre is within 0.8 cm of where it started and its long axis turned no more than 8 degrees; x0.5 if within 2.0 cm and 20 degrees; x0 otherwise. Score = (red + blue) x green, from 0 to 1. A bar earns credit only while lying flat on one of its long faces directly on the table (long axis within 10 degrees of level, a face within 10 degrees of flat, bottom within 0.5 cm of the table top) and, for red and blue, still (under 1 cm/s); a bar held up, standing on end, propped at an angle, lying on another bar or off the table scores 0, and the green bar in any of these states makes the whole score 0. Doing nothing scores 0. Lifting a bar and sliding it are scored the same: only where it ends up counts. Full score (1.0): red and blue at 0.5 and green at x1, all three still, held for 1 second, which ends the trial; otherwise the score at the end of the run.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Put the three bars back at their stated starting positions, measured from the arm bases with a tape measure or set with a card jig that is removed before the run. Nothing left on the table may mark a bar's start or goal; the scorer measures each bar's final position against the stated start.",
+  "fidelity": "Each bar is one rigid uniform box with one flat colour; any square wooden stick of the stated size reproduces the task. Bar mass is estimated from pine (about 500 kg/m^3). All objects use the simulator's rubber-like friction (static 1.2, dynamic 1.0), higher than painted pine on wood, so a pushed bar slides less easily than in reality. The scene runs without start jitter so the scorer can compare with each bar's start; a real trial uses positions measured before the run.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-ECLBWR"
+}
