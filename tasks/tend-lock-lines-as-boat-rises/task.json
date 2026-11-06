@@ -1,0 +1,26 @@
+{
+  "title": "Tend a boat's bow and stern lines while the lock fills, then make both fast",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "rope",
+    "line handling",
+    "mooring",
+    "navigation lock",
+    "moving load",
+    "constraint-keeping",
+    "transport",
+    "marine",
+    "seating"
+  ],
+  "instruction": "The lock is filling and the orange boat will rise. Using only its two lines, keep the boat against the lock wall the whole time it rises. When it stops rising, make each line fast in its slotted cleat, taut, with the boat against the wall, and let go of both lines.",
+  "context": "Sailors and marine oilers \"Handle lines to moor vessels to wharfs, to tie up vessels to other vessels, or to rig towing lines\" (O*NET 53-5011.00). Locking through, a US Army Corps of Engineers guide says this \"will require a person at each end of the boat to pay out or take in mooring lines as the water level changes\"; 33 CFR 207.476(f)(5) requires \"constant attention to the mooring lines, to provide slack or retain tautness as needed.\"",
+  "setup": "Station table, cm from the midpoint between the arm bases (x forward, y left). Lock wall: fixed grey MDF box 5 x 64 x 10.5 cm at x 32-37, topped by a half-round coping (half a 50 mm PVC pipe). Boat: orange PLA block 8 x 50 x 2.5 cm, 150 g, wall-side edge at x 38.5, on a lead-screw lift (11 cm, t 3-15 s) with a cross slide (0-10 cm from the wall) and yaw bearing; an 8 g weight on a pulley pushes it off the wall from t 3 s. Two blue 6 mm cords, 42 cm, tied to deck cleats at y +-23, run over the coping, down the wall and along the table; each carries four white PLA toggles 10 x 28 x 8 mm, 21.4/26.4/31.4/36.4 cm from the deck cleat. Slotted cleats: two black PLA posts 12 x 12 x 60 mm, 12 mm slot, at x 18, y +-27.5.",
+  "scoring": "Score 0 if: either end of the boat's wall-side edge is ever more than 3 cm off its start position before 1 s after the rise ends; a gripper comes within 4 cm of the boat; or at the end a gripper is within 3.5 cm of a line or toggle. Otherwise 0.5 per line made fast: its second toggle (26.4 cm from the boat, the one leaving the line taut) 0-2.5 cm in front of that cleat's posts, the line through the slot below the post tops, and that end of the boat within 1.5 cm of its start position. 0.5 = one line made fast; 1.0 = both.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "Lower the lift to the bottom, push the boat onto its fenders, take both lines out of the cleats and lay each from its deck cleat over the coping, down the wall and straight along the table at y +-23 cm. Nothing is randomised.",
+  "fidelity": "Tabletop model lock; each 6 mm cord is simulated as 2 cm rigid segments. The fill is a scripted lift; a constant 0.08 N push with drag stands in for the water pushing the boat off the wall, and a spring end stop for the fenders. The coping has friction 0.8. Making fast is a toggle stopped by a slotted cleat instead of a hitch on a bollard, so the line length is set by which toggle is used; the toggle may sit 0-5 cm up the posts (+-1.2 cm of line).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-AJFYDV"
+}
