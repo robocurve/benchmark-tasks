@@ -1,0 +1,22 @@
+{
+  "title": "Split a lamp cord apart to the white band",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "zip cord",
+    "wire preparation",
+    "controlled separation",
+    "stop at a mark",
+    "electrical assembly"
+  ],
+  "instruction": "Separate the two legs of the brown lamp cord, starting at its free end, up to the white band. Do not split it past the band. Let go of the cord when you are done.",
+  "context": "Two-conductor zip cord is split back to a set length before its legs are fitted to a plug, switch or terminal block. O*NET 51-2022.00 Electrical and Electronic Equipment Assemblers: 'Position, align, or adjust workpieces or electrical parts to facilitate wiring or assembly.'",
+  "setup": "Table, robot frame: x forward, y left, origin between the arm bases. Grey clamp block 40 x 30 x 20 mm (PLA) at x 30, y 37.6 cm. A brown two-leg lamp cord (SPT-1 style zip cord, legs 4 mm, joined by their web) leaves the clamp's -y face 3 mm above the table and lies straight along -y at x 30 cm. Near leg (robot side) 54 cm, far leg 50 cm: the near leg sticks out 4 cm past the far leg's end, and the last 2 cm of the far leg are already split off. White tape band 2 cm wide round both legs, centred 15 cm from the far leg's end (y +0.5 cm).",
+  "scoring": "S = split length, from the end of the short leg to where the legs are still joined (tape). Score 0 if: the legs are separated anywhere more than 1 cm past the band centre (S > 16 cm); the cord came out of the clamp; a gripper is within 3 cm of the cord at the end. Otherwise: 1.0 if S is 14-16 cm (band reached); 0.6 if 12-14 cm; 0.3 if 9-12 cm; 0 if under 9 cm.",
+  "run_limit": "900 steps (45 s at 20 Hz)",
+  "reset_notes": "Use a fresh cord cut to the same lengths for each trial (a split cannot be undone): split the far leg's last 2 cm, trim the far leg 4 cm shorter, wrap the band 15 cm from its end, clamp the cord straight along the line. In sim, run only ONE episode per process (restart the sim for every trial): broken web bonds are not restored on reset, so a second episode in the same process starts already split.",
+  "fidelity": "Each leg: 2 cm rigid octagonal segments with bending springs, no twist. The web is a pull-only bond between paired segments every 2 cm that breaks above 2 N; a real web tears continuously, so S is resolved to 2 cm here. A bond counts as split once the legs are 3 mm apart there. The clamp is a fixed weld holding the cord end 3 mm up.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-TRVAMR"
+}
