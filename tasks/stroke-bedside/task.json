@@ -1,0 +1,21 @@
+{
+  "title": "Set up a stroke patient's bedside on his working side",
+  "category": "Societal relevance",
+  "keywords": [
+    "assistive",
+    "stroke",
+    "bedside",
+    "unstated rule",
+    "mirrored sides",
+    "bimanual",
+    "relay between arms"
+  ],
+  "instruction": "Sam had a stroke and can't use his left arm. Put his call button, tissues and TV remote where he can reach them.",
+  "context": "After a stroke, the objects a person needs most are placed on their unaffected side (ColumbiaDoctors, \"Stroke: Problems With Ignoring the Affected Side\"). Nursing assistants (O*NET 31-1131.00) set up the bedside this way; here Sam faces the robot, so his left is the robot's right, and the instruction does not state the rule.",
+  "setup": "Positions in cm from the midpoint between the two arm bases, on the table (x forward, y to the robot's left); the arm bases are at y +30.5 and -30.5. Manikin: a fixed tan PLA board figure 1 cm thick, about 0.4 scale, on its back with its head away from the robot, so its left is the robot's right: torso 18 x 20 cm centred at x 37, y 0; upper arms 16 x 4 cm centred at x 35, y +13.5 and -13.5; hands 4 x 4 cm centred at x 25, y +13.5 (right, working) and -13.5 (left, not working); head a cylinder 12 cm across and 5 cm tall at x 52.5, y 0. A fixed grey pad 8 x 8 cm and 2 mm thick lies at x 18, y 0. Loose items, all PLA, 50 g each, standing on the table: red call button 4 x 4 x 4 cm at x 19, y -10; white tissue box 6 (x) x 4 (y) x 4 cm tall at x 19, y -19; black TV remote 10 (x) x 3.5 (y) x 3 cm tall at x 26, y -22. Nothing else is on the table.",
+  "scoring": "Measured at the end with a ruler. An item counts as reachable when its centre is within 13 cm of the centre of the right hand, it rests directly on the table (not on the manikin or another item, lowest point within 5 mm of the table) and it is still (under 1 cm/s and 0.5 rad/s). Score: 0.4 for the call button plus 0.3 each for the tissue box and the remote, so 0, 0.3, 0.4, 0.6, 0.7 or 1.0. An item anywhere else, including near the left hand or off the table, earns nothing. Success (1.0) is all three reachable, held for 1 s. On a real table, open the grippers before measuring.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "fidelity": "Approximate: the patient is a fixed, reduced-scale board figure on a table rather than a person in a bed, and the items are plain rigid blocks. Reach is a fixed 13 cm circle around the hand, not a measured arm reach. The scorer cannot see the grippers, so an item still held motionless on the table is not distinguished.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-5YD4YN"
+}
