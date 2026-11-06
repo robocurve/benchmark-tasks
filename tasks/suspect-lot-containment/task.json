@@ -1,0 +1,21 @@
+{
+  "title": "Contain a suspect lot back to the last good check",
+  "category": "Impact on jobs",
+  "keywords": [
+    "containment",
+    "in-process inspection",
+    "nonconforming material",
+    "production order",
+    "hold",
+    "machining"
+  ],
+  "instruction": "The parts on the outfeed rack stand in the order the machine made them: the oldest nearest you, the newest against the machine. The white tag marks the last part that passed the in-process check; the red tag marks the part where the next check found a defect. Contain the suspect lot: put every part made after the checked part, up to and including the defective one, in the red hold bin. Leave the checked part and the older parts where they are.",
+  "context": "When an in-process check finds a defect, the operator cannot know when the process went wrong, only that it was fine at the last good check. Containment therefore holds every part made since that check, not just the bad one, and releases the parts made before it (ISO 9001 clause 8.7, control of nonconforming outputs). The robot has to work out the suspect set from the production order and the two check results; holding only the defective part, or holding everything, is wrong. Unlike TK-8986EW (isolate a sample and everything touching it), the set is defined by production history along the rack rather than contact. Done by: machine operators and quality inspectors (O*NET 51-4081.00, 51-9061.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. Outfeed rack: two fixed steel rails (30 x 0.6 x 1 cm) along x centred at x 29, at y 36 and 30. Machine: a fixed grey block 6 x 14 x 10 cm centred at x 49.5, y 33. On the table between the rails, five loose aluminium blocks (3 x 3 cm, 4 cm tall, 90 g) at y 33 and x 17, 23, 29, 35 and 41 (parts 1 to 5, part 5 against the machine). Tags: fixed tiles 2.5 x 2 cm, 3 mm thick, at y 27.5: white at x 23 (part 2), red at x 41 (part 5). Hold bin: a fixed red open frame (walls 0.6 cm thick, 2 cm tall, round a 16 x 9 cm pocket, table floor) centred at x 30, y 17.",
+  "scoring": "From a top photo and a ruler, with the grippers open. A part is on hold when it is still, its centre inside the hold bin's inner walls and its lowest point less than 2 cm above the table. 0.25 for each of parts 3, 4 and 5 on hold, and 0.25 more when all three are and parts 1 and 2 are still within 5 mm and 5 degrees of where they started. If part 1 or 2 has been moved or put on hold, the score is capped at 0.25. Possible scores: 0, 0.25, 0.5, 0.75, 1.0. Success: score 1, held 1 s.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Stand the five blocks back between the rails on their marks; the rails, machine, tags and bin do not move.",
+  "fidelity": "Rigid boxes with one shared friction (1.2 static, 1.0 dynamic). The parts are plain blocks with no visible defect, the machine is a fixed block with no ejector, and the check results are shown by fixed coloured tags instead of an inspection record or traveller. The rack is two low rails on the table.",
+  "scores": "Dream-1 run: 0.25; demo: 1.0",
+  "media": "M-YC4WH8"
+}
