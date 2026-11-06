@@ -1,0 +1,21 @@
+{
+  "title": "Clamp a printed part in a vise at a marked height",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bench vise",
+    "clamping",
+    "3D-printed part",
+    "hold and tighten",
+    "two arms",
+    "workshop"
+  ],
+  "instruction": "Clamp the orange printed part upright in the vise with the black line round it level with the tops of the jaws. Lift the part between the open jaws and hold it at that height. While it is held, close the vise by turning the black knob at the vise's right end clockwise as seen from its end (its top moving away from you) until the jaws grip the part tightly, then let go. If the part is let go before the jaws grip it, it drops onto the vise's bed, below the line.",
+  "context": "Printed parts are clamped in a small vise to be drilled, tapped or deburred at a marked depth; clamped too deep or tilted, the hole lands in the wrong place. A loose part has to be held at height with one hand while the other closes the vise.",
+  "setup": "Station table (top 0.7475 m). Robot base frame: x forward, y to the robots' left. Drill-press vise, fixed, painted cast iron: a 9 x 11 cm base plate 1 cm thick under a body 6 cm wide (x) running along y from y = -0.025 to 0.085 at x = 0.32, its top (the bed) 7.5 cm above the table. Fixed jaw at the left end: 6 cm wide, 2.5 cm thick, 3.2 cm above the bed (jaw tops 10.7 cm above the table), steel face at y = 0.060. Moving jaw on the bed, 6 x 2 x 3.2 cm, steel face at y = 0.030 (jaws 30 mm apart); it slides along y. Knob: black, ribbed, 4 cm across and 2 cm long, on an 8 mm shaft out of the body's right end, axis along y 6.5 cm above the table, centre at (0.32, -0.043), with a white index line on its end; clockwise seen from its end closes the jaw, 16 mm per turn (opening 1 to 42 mm). Part, loose, 15 g: orange PLA block 20 x 20 x 50 mm with a 1 mm black line round it 20 mm above its bottom, standing upright at (0.22, 0.20), faces square to x and y. No other objects.",
+  "scoring": "Measured once everything has come to rest. 0 unless the part is between the jaws (the centre of its bottom face below the jaw tops, within the jaws' 6 cm width and between their faces). 0.25 if between the jaws but not clamped. Clamped: jaw gap within 0.5 mm of the part's 20 mm width and the vise tightened on it (at least 5 N; 1/32 turn past first contact). 0.5 if clamped but the line is more than 5 mm above or below the jaw tops, or the part is tilted more than 5 degrees. 0.75 if clamped and upright with the line within 5 mm of the jaw tops; 1.0 within 2 mm.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Turn the knob back until the jaws are 30 mm apart, take the part out and stand it upright at its start position, faces square to the table's edges.",
+  "fidelity": "Rigid bodies in PhysX at 240 Hz. The knob turns on a damped hinge; the moving jaw follows it through a stiff spring drive, geared faster than a real vise (16 mm per turn, real ones 2 to 3 mm), with the clamping force capped at 30 N in place of the screw's torque limit. The screw is not drawn. The part is a plain block standing in for a printed fixture; nothing is drilled.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-LTKTHV"
+}
