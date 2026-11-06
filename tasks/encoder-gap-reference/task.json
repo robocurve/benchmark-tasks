@@ -1,0 +1,20 @@
+{
+  "title": "Commission a linear encoder after a readhead adjustment",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "linear encoder",
+    "robot assembly",
+    "readhead calibration",
+    "precision stage",
+    "commissioning"
+  ],
+  "instruction": "Move the blue GAP tab and orange LOCK tab toward the rail to their end marks. Move the carriage to the far end and back. Hold the green CAL button for half a second and release it.",
+  "context": "A robot that replaces a linear encoder must set and preserve the readhead gap, verify the reference in both directions of travel, and commission the stage before use. These steps matter for autonomous precision assembly and maintenance.",
+  "setup": "Use the Isaac Lab Arena dual YAM station, tabletop world z=747.5 mm. Dimensions and locations are in mm. Mount a 370×287×8 aluminum base at x=295,y=-1. A 327×65×14 aluminum rail with silver side guides and a dark scale guard is at y=-48. The black ABS handle is 44×62×26 and starts at x=420, y=-48; the far stop is x=170 and the orange index is x=295. Blue and orange ABS tabs, 47×27×26 each, start at (229,98) and (327,98), with a 15 mm stroke toward the rail. The green ABS CAL cap is 39×26×17 at (346,-127), with 7 mm downward travel and spring return. The guides, markers, housings and all heights are specified in task.py. Both robot arms start at ready.",
+  "scoring": "0.25 for GAP and LOCK each at least 12 mm in and carriage within 3 mm of home. 0.50 for crossing the 125 mm index outward and reaching at least 247 mm of the 250 mm span. 0.75 for crossing the index on the return and stopping within 3 mm of home. 1.0 for pressing CAL at least 3.5 mm for 0.5 s and releasing it for 2.0 s with the tabs and carriage still valid. An early CAL press, overtravel beyond a 1 mm allowance, or displaced fixture (over 9 mm translation or about 7.25° rotation) zeroes the run. Score from final state and measured travel history.",
+  "run_limit": "2,400 control steps (120 seconds at 20 Hz).",
+  "reset_notes": "Set the blue and orange tabs and carriage to their joint origins, release CAL, and clear the recorded commissioning history. The readhead reading starts at 1.75 mm. Nothing is consumed.",
+  "fidelity": "Isaac Lab Arena rigid body contact and constrained prismatic travel. Tab detents are approximated by weak restoring springs. The tab positions model the gap and lock state; the reference and CAL electronics are simplified to numeric readings. No fixture pose is assigned during a trial.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-2MRQ2A"
+}
