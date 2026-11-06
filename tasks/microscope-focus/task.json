@@ -1,0 +1,22 @@
+{
+  "title": "Load a slide on a microscope, centre the specimen and focus without touching the objective",
+  "category": "Impact on jobs",
+  "keywords": [
+    "laboratory",
+    "microscope",
+    "slide holder",
+    "stage drive",
+    "focus",
+    "working distance",
+    "two arms"
+  ],
+  "instruction": "Inspect the specimen on the glass slide with the microscope. 1. Load the slide: pull back the black post on the slide holder's lever and hold it, which swings the holder's jaw aside; lay the slide flat in the holder, label on the left, against the two back posts and the left stop; then let the lever go so the jaw closes over the slide's right end. 2. Bring the purple specimen square under the objective, onto the spot of light from the illuminator, with the two drive knobs at the stage's front left. Turning the inner knob clockwise, seen from above, moves the stage away from you; turning the outer knob clockwise moves it to the left. 3. Focus: turn a focus knob on the side of the microscope so that its top moves towards you, raising the stage until the slide's top is 5.2 mm below the objective's front lens (2 mm of travel per 30 degrees). Never let the slide come within 0.5 mm of the objective.",
+  "context": "Loading, centring and focusing a slide is the start of every microscope inspection in a lab. Each step has its own failure: the slide holder snaps shut if let go, the specimen is lost if the stage is driven the wrong way, and racing the stage up cracks the slide and scratches the objective.",
+  "setup": "Station table (top 0.7475 m). Robot base frame: x forward, y to the robots' left. Upright microscope, fixed, facing the robots, centred at (0.34, 0.06): white stand with a 26 x 16 cm base, a pillar at the back and an arm over the stage carrying a steel 10x objective (24 mm across) on the axis (0.31, 0.06), front lens 12 cm above the table. Mechanical stage: dark plates (10 x 13 cm on top) that move up and down with the focus knobs and in x and y with the drive knobs; it starts 85 mm towards the robots (holder centre at (0.225, 0.06)) and 12 mm below focus. Slide holder on the stage: two back posts and a left stop, and a steel L-lever pivoting behind the slide's right end, its jaw across that end and its 9 cm handle out to the right with a black post (10 mm across, 2 cm tall) at the end; a light spring holds it closed. Drive knobs: two black ribbed knobs 34 mm across on a bracket out to the stage's front left, inner one (x drive) at (0.235, 0.165), outer one (y drive) at (0.235, 0.23), tops 9.5 cm above the table; they rise with the stage. Illuminator: a pale yellow spot of light 24 mm across on the objective's axis, shown on the slide (or the stage) under the objective; it rises with the stage. Focus: one shaft through a housing under the stage, with a black ribbed knob 4.2 cm across on each side (axis 7 cm above the table at x = 0.30). Slide, loose, 6 g: glass 76 x 26 mm (drawn 2 mm thick), purple 10 mm specimen square 10 mm right of centre, white label on the left end; it lies on a grey rest 1.6 x 6 x 3 cm at (0.18, 0.26), long side along y, label to the left.",
+  "scoring": "Measured once everything has come to rest. 0 unless the slide is loaded: flat (tilt up to 3 degrees) in the holder with its centre within 3 mm of the holder's centre, label on the left, holder jaw closed. 0 also if, once loaded, the slide came within 0.5 mm of the objective at any time. 0.25 if loaded; 0.5 if loaded and the specimen square's centre is within 1.5 mm of the objective's axis (inside the 10x field of view); 0.75 if also within 2 mm of focus (slide top 5.2 mm below the front lens); 1.0 if within 0.5 mm of focus.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Lower the stage 12 mm below focus, drive it 85 mm towards the robots and centre it left to right, take the slide out and lay it on its rest, label to the left.",
+  "fidelity": "Rigid bodies in PhysX at 240 Hz. Knobs turn on damped hinges; the stage follows them through stiff drives, geared faster than a real stage (x 170, y 40, focus 24 mm per turn). The slide is drawn 2 mm thick (real 1 mm). No optics: focus is judged by the gap and centring by the specimen's distance from the axis; the illuminator is a flat spot of light. In a real trial, check both with the microscope camera at 10x: the specimen fills a sharp image.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-QEJAZN"
+}
