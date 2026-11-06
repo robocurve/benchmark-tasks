@@ -1,0 +1,22 @@
+{
+  "title": "Insert the SD card into the reader, label up, until it clicks",
+  "category": "Impact on jobs",
+  "keywords": [
+    "electronics bench",
+    "card insertion",
+    "keyed slot",
+    "push-push latch",
+    "thin part",
+    "bimanual",
+    "precision insertion"
+  ],
+  "instruction": "Hold the black card reader down with the left hand. With the right hand, pick up the red SD card and push it into the reader's SD slot, label up and contacts first, until it clicks.",
+  "context": "Loading a memory card is part of setting up cameras, single-board computers, 3D printers and data loggers. A 2.1 mm card goes into its slot only one way round and must be pushed until the latch clicks, while the other hand steadies the light reader.",
+  "setup": "Left and right are the robot's. Positions are centres in metres from the midpoint between the two arm bases: x forward, y to the robot's left, heights above the table. Bench shelf: an oak shelf top 56 x 23.5 cm, 18 mm thick, on two oak end panels, its top 13 cm above the table, front edge at x = 0.375, from y = -0.30 to 0.26, fixed. Monitor: a 54 cm office monitor on its stand on the shelf's back half at (0.52, 0.03), facing the robot, fixed. Keyboard: a black 44 x 14 cm keyboard on the table at (0.20, 0.16), fixed. Card reader: a black plastic USB card reader and hub, 14 x 4.5 x 1.4 cm, 60 g, loose on the shelf at (0.398, -0.036), its front face flush with the shelf's front edge, a flat cable to the back. Its SD slot (25 mm wide, 3 mm high, 24 mm deep, 5 mm above its bottom, in a silver frame) is in the front face at its right end, centred at y = -0.085. A microSD slot and two USB ports sit to its left. SD card: a full-size SD card, 32 x 24 x 2.1 mm, 2 g, black with a red label, lying flat on the shelf at (0.378, -0.18), label up, contacts toward the back of the shelf, its back end overhanging the shelf's front edge by 13 mm.",
+  "scoring": "The card's depth is how far its deepest corner is past the slot's mouth, along the slot, measured on the reader wherever it now lies. In the slot: the middle of the card's leading edge within the slot's width and within 2 mm of its centre plane, depth 3 mm or more. Right way round: label up, contacts first (axes within 15 degrees). Latched: the latch clicked (the card was pushed 22 mm or more in the right way round) and the card is still 21.5 mm or more in. 1.0 (success, held 1 s): latched. 0.5: in the slot the right way round, 15 mm or more in, not latched. 0.25: in the slot the right way round, 3 mm or more in. 0 otherwise, including a card in the slot upside down or reversed at any depth, a card off the table, or the reader fallen off the shelf (centre 1 cm or more below its start).",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Push the card once more to eject it (or pull it out), lay it back on the shelf label up with its back end over the edge, and put the reader back with its front face flush with the shelf's edge.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. Card and reader collide as boxes (meshes drawn only). The slot is 3 mm high, not 2.4 mm, with a 1 mm flare at its mouth, and the card's cut corner is 5 mm, so a held card can enter. Wrong ways round, a stop halts the card 21 mm in. A 0.4 N/mm eject plate acts from 18 mm. The click is a joint switched on at 22 mm. A second push does not eject. Monitor and keyboard are SimReady props. Gripper 50 N per pad.",
+  "scores": "Dream-1 run: 0.0 (both arms reach the shelf, the right arm knocks the red card off the shelf edge and never puts it in the slot), demo: 1.0 (success at step 273)",
+  "media": "M-6X7254"
+}
