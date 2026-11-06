@@ -1,0 +1,20 @@
+{
+  "title": "Seat four plates and peg any that won't sit",
+  "category": "Impact on jobs",
+  "keywords": [
+    "laboratory",
+    "sample plates",
+    "lab automation",
+    "reporting failure",
+    "bimanual"
+  ],
+  "instruction": "Set the four plates in the nests on the deck. If a plate won't sit flat, take it out, put it on the green mat and stand a red peg in the board hole behind its nest.",
+  "context": "Why: Agilent's automation guide warns that badly seated labware can cause collisions. Here one nest is faulty from the start: the failure is the scene's, not the robot's. The job is to clear the deck and say which nest failed. Rule: 42 CFR 493.1495(b)(5) has high-complexity clinical testers fix a problem or tell a supervisor at once. That covers the report, not the seating; the peg is this task's own record. Done by: laboratory technicians.",
+  "setup": "Positions in cm from the arm bases' midpoint: x forward, y left. All taped down but plates and pegs. Slate paper mat 13.5 x 47 cm at x 15, y 0. On it, at x 15, y 16.5, 5.5, -5.5, -16.5: four hard white plastic plates, 10 x 6.2 x 3 cm (10 along x), 120 g, yellow band round the lowest 8 mm. Dark wood deck 13 x 45 x 1 cm at x 28.5, y 0. On it four nests at those y, 11.8 x 8.2 cm inside, pale plastic rims 5 mm thick, 8 mm tall. Orange plastic block 2.4 x 5 x 1.6 cm glued in the nest at y -5.5, x 24.5 to 26.9. Pale plastic peg board 4.6 x 37.6 x 2.5 cm at x 37.5, y 0, a 4 cm square through-hole at each y. Two round red plastic pegs, 2.4 cm wide, 6 cm tall, 20 g, stand at x 37.5, y 25 and -25. Green paper mat 15 x 10 cm at x 28.5, y -28.5.",
+  "scoring": "At trial end. Seated: centre inside an open nest's rim, right way up, no corner over 3.4 cm above the deck, within 5 degrees of flat. The nest at y -5.5 is blocked. On a mat or deck: centre over it. Held: underside over 6 cm up. Peg in: centre inside the hole behind that nest, foot under 1.5 cm up, leaning under 35 degrees. 0: a peg in another hole, a plate off the mats and deck unless held, an unseated plate on the deck, no peg, or none seated. 0.1 per seated plate: unseated plate on the deck, peg in. 0.15 per seated plate: under three seated, none unseated on the deck. With three seated: 0.45: fourth on slate mat with no peg, or held. 0.6: fourth on green mat, no peg. 0.85: fourth on slate mat, peg in. 1.0: fourth on green mat, peg in.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lay all four plates back on the slate mat at their y positions, flat. Stand both pegs at the ends of the board. Check the block is still fixed in the nest at y -5.5. Run with -E object_jitter=0 (one fixed layout).",
+  "fidelity": "Approximate. Plates are small rigid boxes, 10 x 6.2 cm rather than the standard 12.8 x 8.5, so the gripper can hold them across. They hold no sample. The fault is a fixed block, not a warped plate or a bent nest. A peg stands in for a fault log. Nothing models a real collision: the risk is judged by where the plate ends up. Friction is rubber-like.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-CAX3SZ"
+}
