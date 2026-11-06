@@ -1,0 +1,24 @@
+{
+  "title": "Lay a figure-eight round twin posts",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "rope",
+    "deformable",
+    "winding",
+    "figure-eight",
+    "cleat",
+    "bitts",
+    "topological routing"
+  ],
+  "instruction": "Make one full figure-eight with the blue rope around the two grey posts: take it around the outer side of the right post, back diagonally between the posts, around the outer side of the left post, and back diagonally between the posts again so it crosses the first diagonal. Keep the rope low on the posts, below their heads, then let go of it.",
+  "context": "Belaying a line on a cleat or a pair of bitts starts with figure-eight turns, a basic deckhand and dock-worker skill for mooring and securing lines (O*NET 53-5011.00 Sailors and Marine Oilers). The robot must wind a deformable line around fixed posts in a prescribed order and direction (opposite turns around the two posts, the second diagonal laid over the first), a topological goal that no single pick-and-place of the rope end achieves.",
+  "setup": "Station table; positions in cm from the midpoint between the two arm bases projected onto the table (x forward away from the robot, y to the robot's left). Twin-post cleat (bitts), grey, fixed to the table: two upright posts, each a 30 mm diameter rod 7 cm tall topped by a 42 mm diameter, 10 mm thick round head (total height 8 cm), aluminium or 3D-printed PLA, centres at x 32, y -6 (left post) and x 32, y -14 (right post), 8 cm apart centre to centre. Deck fitting: grey block 5 cm (x) by 6 cm (y) by 4 cm tall, fixed to the table, centred at x 24, y +5. Rope: dark blue 8 mm braided nylon rope, 60 cm long, one end fixed in the right-hand (-y) face of the block at x 24, y +2. Start: the rope lies straight along y on the table at x 24 from the block (y +2) to its free end at y -58, passing 6.5 cm in front of the post surfaces.",
+  "scoring": "Measured at the end of the episode from a top-view photo. Score 0 if a gripper still holds or touches the rope (gripper centres, between the finger pads, at least 3 cm from every part of it). Draw the cleat line through both post centres. Follow the rope from the block to its free end and list where it crosses the cleat line, counting only crossings where the rope lies at least 1 cm below the post heads (at most 6 cm above the table): 'outer right' / 'outer left' = beyond the right / left post, within 4.5 cm of that post's centre; 'middle' = between the two post centres; crossings farther out are ignored. Each crossing also has a direction (from the robot side to the far side, or back). The right post must be done first: the first crossing in the list must be 'outer right', otherwise the score is 0 (a wrap that starts round the left post scores 0). From that first crossing, count the run of consecutive crossings that alternates middle / outer, with the outer crossings alternating between the two posts, all outer crossings in one direction and all middle crossings in the other (this means the rope turns one way around one post and the opposite way around the other). Run length 0-2 (nothing done, rope draped over or across the posts, wound around one post only, looped around both posts together, or started round the left post) = 0; 3 (around the right post, between the posts, around the left post) = 0.5; 4 or more (back between the posts again: one full figure-eight) = 1.0. Success (1.0) when it holds for 1 s with the rope at rest.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Unwind the rope and lay it straight along the tape line at x 24 cm from the block to its free end at y -58 cm. Check both posts and the block are at their marks.",
+  "fidelity": "Rope is 30 rigid 2 cm capsule segments with bending springs (max 69 degrees per joint), no twist, no plasticity, friction 0.8, self-collision on; the anchored end is welded in place. Posts, heads and block are fixed rigid cylinders/boxes. Crossings are computed from the rope's centreline.",
+  "scores": "Dream-1 run: 0.0 (the run stopped after 1.6 s: the policy sent a gripper command outside the 0..1 range, which the runner rejects; repeated twice with the same result); demo: 1.0",
+  "media": "M-YWR68L"
+}
