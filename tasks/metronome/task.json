@@ -1,0 +1,21 @@
+{
+  "title": "Start a metronome at 120 beats per minute",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "metronome",
+    "music practice",
+    "tempo",
+    "reading a scale",
+    "dynamics",
+    "fine positioning"
+  ],
+  "instruction": "Start the metronome at 120 beats per minute.",
+  "context": "Metronomes set the tempo for music practice. Setting a mechanical one takes two things robots rarely do together: reading a fine, uneven scale (the marks are millimetres apart, and on a real metronome they must be read, not remembered) and sliding the weight to the mark, then giving the pendulum a big enough swing and leaving it to tick on its own. Doing nothing, or starting it without moving the weight (it ticks at 60), scores 0.",
+  "setup": "Positions in cm from the midpoint between the arm bases: x forward, y to the robot's left; heights above the table top. A wound-up mechanical pyramid metronome with a Maelzel scale (for example a Wittner Maelzel series 800; simulated: walnut case 22.5 cm tall with its cap, on an 11.8 x 11.8 cm plinth, about 600 g) stands free (not taped) on a tape outline of its base, the centre of its base at (34, 0), its scale facing the arms. Its pendulum hangs on a pivot 8.5 cm up, 0.7 cm in front of the scale: a steel rod 4 mm wide reaching 13 cm above the pivot, with a brass weight (2 x 1 x 1.3 cm, 25 g, dark on top: black tape on a real one) that slides on it, its back 1.6 mm off the scale, and clicks into a notch at each mark. The cream-coloured scale (5 x 11.6 cm) carries Maelzel's 39 marks, 40 at the top to 208 at the bottom, with Largo, Andante, Allegro and Presto beside them; the weight's top edge reads it. On the simulated one the 120 mark is 7.5 cm above the pivot, with 116 2.4 mm above it and 126 3.6 mm below; on a real one the marks fall where its maker put them. The weight is on 60 and the pendulum is upright and still (not latched). Both arms start at the ready pose with open grippers.",
+  "scoring": "Judged from the video and a photo at the end, taken square to the scale with the camera level with the weight's top edge. 1.0 (success, ends the trial): the weight is on the 120 mark (the mark nearest its top edge) and the metronome, standing on the table, has ticked on its own for the last 5 s with nothing touching it, never knocked over. 0.5: the weight on 120 but not ticking on its own for the last 5 s (never started, stopped, held or touched); or ticking on its own for the last 5 s with the weight one mark off (116 or 126). 0: anything else, including doing nothing, starting it without moving the weight (it ticks at 60), the weight two or more marks off, and knocking the metronome over at any time (tilted more than 45 degrees, even if stood up again). Counting ticks (one per swing each way) checks the tempo: 60 in 30 s at 120.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Stop the pendulum and leave it upright and still, slide the weight back up to 60, give the key a few turns if it has run down, and stand the metronome on its tape outline, scale facing the arms.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. The metronome is a floating articulation standing free. Its pendulum is a compound pendulum (bob below the pivot, sliding weight above), so its period follows the weight's height. The escapement is task code: at each centre crossing with enough swing it nudges the swing toward 25 degrees. The weight's joint clicks between notches. 'On its own': the swing's energy undisturbed for 5 s.",
+  "scores": "Dream-1 run: 0.0 (its right arm reached toward the metronome several times but neither arm touched it; the weight stayed on 60 and the pendulum never moved); demo: 1.0",
+  "media": "M-6LJ7CJ"
+}

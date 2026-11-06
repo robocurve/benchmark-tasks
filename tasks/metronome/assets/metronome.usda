@@ -1,0 +1,316 @@
+#usda 1.0
+(
+    defaultPrim = "metronome"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "metronome"
+{
+    def "Looks"
+    {
+        def Material "walnut"
+        {
+            token outputs:surface.connect = </metronome/Looks/walnut/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.3, 0.16, 0.08)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.45
+                token outputs:surface
+            }
+        }
+
+        def Material "walnut_dark"
+        {
+            token outputs:surface.connect = </metronome/Looks/walnut_dark/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.2, 0.1, 0.05)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.5
+                token outputs:surface
+            }
+        }
+
+        def Material "brass"
+        {
+            token outputs:surface.connect = </metronome/Looks/brass/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.78, 0.6, 0.25)
+                float inputs:metallic = 0.6
+                float inputs:roughness = 0.3
+                token outputs:surface
+            }
+        }
+
+        def Material "steel"
+        {
+            token outputs:surface.connect = </metronome/Looks/steel/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.62, 0.64, 0.67)
+                float inputs:metallic = 0.7
+                float inputs:roughness = 0.3
+                token outputs:surface
+            }
+        }
+
+        def Material "black"
+        {
+            token outputs:surface.connect = </metronome/Looks/black/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.04, 0.04, 0.04)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.6
+                token outputs:surface
+            }
+        }
+
+        def Material "scale"
+        {
+            token outputs:surface.connect = </metronome/Looks/scale/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor.connect = </metronome/Looks/scale/texture.outputs:rgb>
+                float inputs:metallic = 0
+                float inputs:roughness = 0.7
+                token outputs:surface
+            }
+
+            def Shader "st"
+            {
+                uniform token info:id = "UsdPrimvarReader_float2"
+                token inputs:varname = "st"
+                float2 outputs:result
+            }
+
+            def Shader "texture"
+            {
+                uniform token info:id = "UsdUVTexture"
+                asset inputs:file = @./textures/scale.png@
+                float2 inputs:st.connect = </metronome/Looks/scale/st.outputs:result>
+                float3 outputs:rgb
+            }
+        }
+    }
+
+    def Xform "case" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsArticulationRootAPI", "PhysxArticulationAPI"]
+    )
+    {
+        float physics:mass = 0.5
+        custom bool physxArticulation:enabledSelfCollisions = 0
+        custom float physxArticulation:sleepThreshold = 0
+        custom float physxArticulation:stabilizationThreshold = 0
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Mesh "shell" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+            rel material:binding = </metronome/Looks/walnut>
+            uniform token physics:approximation = "convexHull"
+            point3f[] points = [(-0.055, 0.055, 0), (0.055, 0.055, 0), (0.055, -0.055, 0), (-0.055, -0.055, 0), (-0.055, -0.0225, 0.22), (-0.01, -0.0225, 0.22), (-0.01, 0.0225, 0.22), (-0.055, 0.0225, 0.22), (-0.055, -0.055, 0), (-0.055, -0.0225, 0.22), (-0.055, 0.0225, 0.22), (-0.055, 0.055, 0), (0.055, -0.055, 0), (0.055, 0.055, 0), (-0.01, 0.0225, 0.22), (-0.01, -0.0225, 0.22), (-0.055, -0.055, 0), (0.055, -0.055, 0), (-0.01, -0.0225, 0.22), (-0.055, -0.0225, 0.22), (0.055, 0.055, 0), (-0.055, 0.055, 0), (-0.055, 0.0225, 0.22), (-0.01, 0.0225, 0.22)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "scale" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform bool doubleSided = 1
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            rel material:binding = </metronome/Looks/scale>
+            point3f[] points = [(-0.0554, 0.025, 0.097), (-0.0554, -0.025, 0.097), (-0.0554, -0.025, 0.213), (-0.0554, 0.025, 0.213)]
+            texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1)] (
+                interpolation = "faceVarying"
+            )
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Cube "cap" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+        )
+        {
+            rel material:binding = </metronome/Looks/walnut_dark>
+            double size = 1
+            float3 xformOp:scale = (0.047, 0.047, 0.005)
+            double3 xformOp:translate = (-0.0325, 0, 0.2225)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "plinth" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+        )
+        {
+            rel material:binding = </metronome/Looks/walnut_dark>
+            double size = 1
+            float3 xformOp:scale = (0.118, 0.118, 0.008)
+            double3 xformOp:translate = (0, 0, 0.004)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cylinder "hub" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.006999999999999999
+            rel material:binding = </metronome/Looks/steel>
+            double radius = 0.005
+            double3 xformOp:translate = (-0.058499999999999996, 0, 0.085)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cylinder "key" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "Y"
+            double height = 0.016
+            rel material:binding = </metronome/Looks/brass>
+            double radius = 0.004
+            double3 xformOp:translate = (0, -0.053, 0.06)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cube "key_wing" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+        )
+        {
+            rel material:binding = </metronome/Looks/brass>
+            double size = 1
+            float3 xformOp:scale = (0.004, 0.003, 0.024)
+            double3 xformOp:translate = (0, -0.062, 0.06)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def Xform "pendulum" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, -0.038819876)
+        float3 physics:diagonalInertia = (0.00010623789, 0.00010623789, 0.0000029)
+        float physics:mass = 0.0805
+        double3 xformOp:translate = (-0.062, 0, 0.085)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cube "rod" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+        )
+        {
+            rel material:binding = </metronome/Looks/steel>
+            double size = 1
+            float3 xformOp:scale = (0.002, 0.004, 0.135)
+            double3 xformOp:translate = (0, 0, 0.0625)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def Xform "weight" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, -0.0065)
+        float3 physics:diagonalInertia = (0.0000011854166, 0.0000011854166, 0.0000011854166)
+        float physics:mass = 0.025
+        double3 xformOp:translate = (-0.062, 0, 0.19585163406255882)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cube "block" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+        )
+        {
+            rel material:binding = </metronome/Looks/brass>
+            double size = 1
+            float3 xformOp:scale = (0.01, 0.02, 0.013)
+            double3 xformOp:translate = (0, 0, -0.0065)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "top" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </metronome/Looks/black>
+            double size = 1
+            float3 xformOp:scale = (0.0102, 0.0202, 0.001)
+            double3 xformOp:translate = (0, 0, -0.0004)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cylinder "screw" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.002
+            rel material:binding = </metronome/Looks/walnut_dark>
+            double radius = 0.0028
+            double3 xformOp:translate = (-0.006, 0, -0.0078)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def "joints"
+    {
+        def PhysicsRevoluteJoint "pendulum" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.0004
+            float drive:angular:physics:stiffness = 0
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "X"
+            rel physics:body0 = </metronome/case>
+            rel physics:body1 = </metronome/pendulum>
+            point3f physics:localPos0 = (-0.062, 0, 0.085)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -45
+            float physics:upperLimit = 45
+        }
+
+        def PhysicsPrismaticJoint "weight" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 3
+            float drive:linear:physics:stiffness = 400
+            float drive:linear:physics:targetPosition = 0.11146476
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "Z"
+            rel physics:body0 = </metronome/pendulum>
+            rel physics:body1 = </metronome/weight>
+            point3f physics:localPos0 = (0, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = 0.015
+            float physics:upperLimit = 0.123
+        }
+    }
+}
+
