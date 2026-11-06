@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "piston-tdc"
+version = "0.1.0"
+description = "Find a small engine's true top dead centre with a positive piston stop, two YAM arms"
+requires-python = ">=3.11"
+dependencies = ["numpy", "yam-arena"]
+
+[project.entry-points."inspect_robots.embodiments"]
+yam_piston_tdc = "piston_tdc.embodiment:PistonTdcEmbodiment"
+
+[project.entry-points."inspect_robots.policies"]
+piston_tdc_scripted = "piston_tdc.policy:PistonTdcScriptedPolicy"
+
+[tool.setuptools.packages.find]
+include = ["piston_tdc*"]
