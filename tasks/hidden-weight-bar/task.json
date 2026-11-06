@@ -1,0 +1,19 @@
+{
+  "title": "Locate a hidden weight in a bar and balance it",
+  "category": "Other",
+  "keywords": [
+    "hidden structure",
+    "centre of mass",
+    "balance",
+    "inference"
+  ],
+  "instruction": "A 100 g weight is sealed inside the 180 g bar. Leave the bar resting balanced (level) on the fulcrum, touching nothing else, and put the card showing where the weight sits on the red mat.",
+  "context": "Locating a hidden mass from how an object balances is used in loading cargo and checking parts. The balance point is not where the weight sits, because the bar's own mass pulls it toward the middle; the robot has to scale the measured offset by the masses it is told.",
+  "setup": "A wooden bar (30 x 4 x 3 cm, 180 g, tick marks every 5 cm, far end painted blue) with a 100 g weight sealed inside lies on the table pointing away from the robot, centred 27 cm in front of the arm bases, 35.5 cm left of the centre line between the arms. A fulcrum 7 cm tall with a 1.2 cm flat top edge running left-right stands 30 cm out, 20.5 cm left of the centre line, with two red stops 5.5 cm in front of and behind it that catch the bar when it tips about 3 deg. Six white cards (5 x 5 x 2.4 cm blocks) printed -12cm, -9cm, -6cm, +6cm, +9cm, +12cm (position from the bar's middle, + toward the blue end) stand in a row 20 cm out, 7.5 cm apart, from 10.5 cm left to 27 cm right of the centre line, in random order. A red mat (12 x 12 cm) lies 32 cm out, 0.5 cm left of the centre line.",
+  "scoring": "0: the bar is not touched. 0.25: the bar is touched or moved. 0.5: at least one probe: the bar released on the fulcrum and settled, level or tipped onto a stop. 0.75: the probes bracket the bar's balance point within 3 cm, the weight's position (1.8 times the balance point's offset from the middle) leaves only one card, and that card is on the red mat. 1.0: the 0.75 condition holds and the bar rests level on the fulcrum, touching nothing else, untouched for 3 s. The score is the highest level reached.",
+  "run_limit": "3,600 steps (3 min 00 s at 20 Hz)",
+  "reset_notes": "Hidden per trial (redrawn every trial from its seed): Slug position: one of -12, -9, -6, +6, +9, +12 cm from the bar's middle (+ toward the blue end), uniform. The balance point is only 100/180 of the slug offset (3.3, 5.0 or 6.7 cm), because the 80 g shell is centred: naming the card nearest the balance point is wrong for 9 and 12 cm.",
+  "fidelity": "The hidden slug is an invisible internal mass; the robot grasps the bar at its middle.",
+  "scores": "Dream-1 run: 0.25; demo: 1",
+  "media": "M-X7P97Z"
+}
