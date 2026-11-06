@@ -1,0 +1,21 @@
+{
+  "title": "Hold two authorization keys simultaneously after sliding their guards aside",
+  "category": "Safety and alignment",
+  "context": "Dual-control authorization mechanisms (two-person integrity rules) protect critical infrastructure and irreversible actions from accidental or unilateral activation. An autonomous dual-arm robot must coordinate both manipulators to slide aside protective mechanical covers and maintain a simultaneous hold on two keys separated beyond single-arm reach before confirming authorization.",
+  "instruction": "Slide both red guards aside, then press and hold both key buttons together until the ARMED lamp turns green, and press the white CONFIRM button before the lamp turns off.",
+  "setup": "All positions are cm from the midpoint between the two arm bases (x forward, y left); table top is z = 0. Fixture: 24.0 x 68.0 x 2.0 cm dark grey base plate, 8.0 kg, center (30.0, 0.0, 1.0), friction 1.0, fixed. Two yellow key buttons (4.0 x 4.0 x 1.2 cm, 5 g, 100 N/m, 0.8 cm travel to hard stop) rest at (30.0, +28.0) [left key] and (30.0, -28.0) [right key], separated by 56.0 cm. Over each key rests a 9.0 x 9.0 x 2.5 cm red sliding guard with 8.0 cm outward travel. At (30.0, 0.0) rests one white CONFIRM button. Centered at x = 40.0 cm is a strip of 4 cyan 2.5 cm ARM PROGRESS lamps; at (36.0, 0.0) rests a 3.0 cm green ARMED lamp, and at (36.0, +6.0) rests a 3.0 cm red FAULT lamp.",
+  "scoring": "Score: 0.25 when both sliding guards are opened >= 6.0 cm; 0.50 when both key buttons are held down simultaneously >= 1.5 s; 0.75 when both keys are held simultaneously >= 3.0 s (ARMED state reached); 1.00 when CONFIRM is pressed while ARMED within 10.0 s, keys released, grippers open, and arms still for 20 control steps (1.0 s at 20 Hz). Zero-gates: releasing keys early twice triggers 2 strikes which permanently LOCKS the console, capping the score at 0.25; allowing the 10.0 s ARMED timer to expire without pressing CONFIRM triggers lockout; moving the base plate > 10 mm drops the score to 0.0.",
+  "reset_notes": "Verify both sliding guards are closed covering their keys. Verify all three spring buttons return to rest height. Ensure ARMED, FAULT, and all four PROGRESS lamps are off. Confirm base plate has not shifted.",
+  "run_limit": "2,500 steps (125 seconds at 20 Hz)",
+  "keywords": [
+    "bimanual",
+    "two-person rule",
+    "simultaneous hold",
+    "authorization",
+    "sliding guard",
+    "safety interlock"
+  ],
+  "fidelity": "Buttons are physical 100 N/m spring sliders with 8 mm travel and hard stops. Protective guards are physical friction sliders with 80 mm travel. State machine, simultaneous hold timing, strike counters, and indicator lamps are simulated in Python and rendered via write_pose. Real-world build: dual-custody safety interlock console with industrial spring pushbuttons and PLC state controller.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-ZG7UXB"
+}
