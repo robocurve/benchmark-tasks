@@ -1,0 +1,24 @@
+{
+  "title": "Roll a firmware update across two redundant units without dropping the load",
+  "category": "Impact on AI timelines",
+  "context": "Data-centre and robot fleets are updated one redundant unit at a time while the other carries the load; updating the active unit causes an outage. Updating needs a maintenance door open (a service interlock).",
+  "instruction": "Update both units to the new firmware without ever turning the load lamp red: a unit updates only while its orange service door is held open and its yellow UPDATE button has been pressed, and the white SWITCH button moves the load between units.",
+  "setup": "A rigid free-standing fixture (one 8.0 kg body, friction 1.0, not bolted down) on the station table (z = 74.8 cm) holds two redundant unit panels (Unit A on the left at y = +16.0 cm, Unit B on the right at y = -16.0 cm, each 120 x 90 x 55 mm) and a shared central panel (180 x 50 x 40 mm, y = 0.0). On each unit panel: a spring slider service door (24 x 20 x 20 mm orange handle at x = 25.5 cm, y = -2.5 cm on A, +2.5 cm on B, 25 mm travel along x against a 2 N spring of rate 80 N/m) that slides aside to uncover a recessed yellow UPDATE button cap (38 x 38 x 12 mm, 4 g, 8 mm travel to hard stop, 100 N/m spring, center at x = 29.0 cm, y = +/- 16.0 cm), an ACTIVE lamp (40 mm blue disc at x = 23.0 cm), a VERSION lamp (40 mm disc at x = 35.0 cm; grey for v0, amber while updating, white for v1), and a 4-lamp progress bar (four 28 mm cyan discs along y = +/- 20.0 cm). On the shared central panel: a white SWITCH button cap (38 x 38 x 12 mm, 4 g, 8 mm travel to hard stop, 100 N/m spring, center at x = 20.5 cm, y = 0.0) and a LOAD lamp (60 mm disc at x = 32.0 cm, y = 0.0; green when load served, red on outage).",
+  "scoring": "Partial credit ladder (highest partial tier latches; 1.0 requires all conditions together): 0.25 if any service door is deflected >= 18.0 mm or any pushbutton is depressed beyond 6.4 mm; 0.50 if either unit is updated to v1 with no outage; 0.75 if a unit is updated to v1 AND that unit carries the active load, with no outage; 1.00 if both units are updated to v1, no outage occurred, both service doors are fully released (< 2.0 mm deflection), both grippers are open, and all objects are still (linear velocity <= 5 mm/s, angular <= 0.2 rad/s) held continuously for 1.0 s (20 control steps). Zero-gate: OUTAGE (active unit goes offline while updating) or fixture displacement > 5.0 mm or tilt > 5.0 deg scores 0.0 permanently.",
+  "reset_notes": "Return both service doors to their rest stops (0 mm deflection, covering the recessed UPDATE buttons). Verify Unit A is active (blue lamp on A lit), Unit B is standby (blue lamp off), LOAD lamp is green, and both VERSION lamps display grey (v0). If an outage occurred or units are at v1, reload the task environment. No parts or materials are consumed.",
+  "keywords": [
+    "redundancy",
+    "firmware-update",
+    "service-door",
+    "interlock",
+    "bimanual",
+    "pushbutton",
+    "high-availability",
+    "data-centre",
+    "state machine"
+  ],
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "fidelity": "Panels, service doors (25 mm travel spring sliders, 2 N spring), pushbuttons (8 mm travel, hard stops, 100 N/m springs chosen for arm compliance) and contact dynamics are physically simulated. Redundant load arbitration, update timer progress and status lamps are computed in code and displayed via kinematic markers. All panels form one rigid free-standing fixture.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-PAEU34"
+}
