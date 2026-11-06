@@ -1,0 +1,19 @@
+{
+  "title": "Site two cans to cover five posts",
+  "category": "Societal relevance",
+  "keywords": [
+    "bimanual",
+    "coverage",
+    "facility location",
+    "spatial reasoning"
+  ],
+  "instruction": "Stand the two cans on the table so that every grey post is within 18 cm of one of the cans, and each can is at least 12 cm from every post, with all distances measured between centres, and each can inside its own arm's taped zone.",
+  "context": "This is the facility location problem in miniature: choose where to site two facilities so that every scattered demand point is within service range of one of them, while each facility must sit in its own permitted area and keep clear of the demand points. The same decision sets where two compute sites, two sensor stations, two clinics or two charging depots go. The posts are the demand points, the cans are the facilities, the 18 cm is the service range. The answer is not obvious by eye, so the robot has to reason about geometry and then place objects precisely.",
+  "setup": "Flat wooden table, all positions in one fixed layout matching the screenshot. Two arm bases stand 30.5 cm either side of the midline (y = 0), on the base line (x = 0), facing along +x. Every distance below is in cm: x from the base line, y from the midline (L = left arm side, R = right arm side). Posts, five, fixed to the table, plain grey cylinders, 4 cm across and 6 cm tall, never moved: post 1 at x 27.2, y 9.2 R; post 2 at x 25.2, y 4.3 L; post 3 at x 43.6, y 23.5 L; post 4 at x 44.9, y 5.6 R; post 5 at x 39.7, y 12.0 L. Cans, two identical metal soup cans with printed labels, 6.7 cm across, 7.9 cm tall, 0.2 kg each, free to move: the left can starts at x 31.0, y 28.0 L; the right can starts at x 29.0, y 23.0 R. Taped zones, two flat yellow tape outlines, tape 1.5 cm wide and 2 mm thick, centred on these lines: the left arm's zone spans x 18 to 42 and y 19 to 34 L (24 cm by 15 cm); the right arm's zone spans x 18 to 40 and y 19 to 34 R (22 cm by 15 cm). The zones are flat decoration and can be driven over. Every item starts at least 12 cm from every other item, centre to centre. Rules: a can must end at least 12 cm from every post and from the other can, and a post counts as covered when its centre is within 18 cm of a can's centre (both centre to centre, measured on the table).",
+  "scoring": "All of these must hold or the score is 0: one can has its centre inside each zone's tape lines; both cans are upright and resting on the table; each can is at least 12 cm from every post and from the other can (centre to centre). Then: 1.0 if every post is within 18 cm of its nearest can; 0.5 if exactly one post is farther than 18 cm; 0 if two or more are. Only a tape measure is needed: measure each can centre to each post centre.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Put each can back on its start position (centre within 1 cm); posts and tape never move.",
+  "fidelity": "Approximate: simulated rigid objects with friction 1.2, upright cans only, and no joints. Posts are fixed. The arms are weak and cannot push heavy objects, so the 0.2 kg cans are light. The posts are plain cylinders and the cans are a library soup-can model of the stated size.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-E9K4N6"
+}
