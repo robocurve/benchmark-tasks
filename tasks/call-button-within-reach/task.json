@@ -1,0 +1,20 @@
+{
+  "title": "Leave the nurse-call button within the patient's reach",
+  "category": "Impact on jobs",
+  "keywords": [
+    "healthcare",
+    "fall prevention",
+    "nursing assistant",
+    "call light",
+    "patient safety"
+  ],
+  "instruction": "Leave the call button for the patient.",
+  "context": "Nursing assistants settle patients in bed and leave the room many times a shift (O*NET 31-1131.00, Nursing Assistants). Universal fall precautions require the call light to be left within the patient's reach. AHRQ's Preventing Falls in Hospitals toolkit and hospital fall programs both include this. A patient who can't reach the call light tries to get up alone and falls. The common mistake is putting the button back on the bedside table where it started.",
+  "setup": "Positions are in cm from the midpoint between the two arm bases, with x forward, y to the robot's left and the table top at z 0. The bed is a fixed white rigid platform 28 x 24 x 4 cm, spanning x 18 to 46 and y -6 to +18. Its head end faces away from the arms. A patient doll is fixed to the bed. Its light-blue torso block, 18 x 10 x 6 cm, is centered at x 31, y +9. Its skin-colored head block, 4 x 6 x 6 cm, sits at x 42.5, y +9. Its right hand is a skin-colored block 5 x 4 x 2 cm lying on the mattress at x 30, y 0, on the torso's side toward the robot's right. The bedside table is a fixed dark-brown block 12 x 12 x 8 cm centered at x 22, y -18. The nurse-call button is a red rigid plastic box 4 x 4 x 2.5 cm and 50 g, lying at the center of the bedside table.",
+  "scoring": "The button counts as on the bed when it rests still with its center over the bed and its bottom on the mattress or on the patient's hand. A button up on the torso or head doesn't count. It counts as within reach when its center is within 8 cm of the center of the patient's hand, measured horizontally. The trial scores 1.0 when the button is on the bed and within reach. It scores 0.5 when the button is on the bed but farther than 8 cm from the hand, for example at the foot of the bed, by the head or on the far side. It scores 0 anywhere else. That includes still on the bedside table, on the patient's torso or head, on the table top or held. The possible scores are 0, 0.5 and 1.0. In a real trial, measure from the center of the doll's hand to the center of the button with a tape measure at the end.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Put the call button back in the middle of the bedside table.",
+  "fidelity": "The bed and patient are a doll set at about one-third scale, so the 8 cm reach radius stands for about 25 cm. The call button has no cord and no working switch. The simulation uses rigid-body physics only.",
+  "scores": "Dream-1 run: 1.0 (390 steps); demo: 1.0",
+  "media": "M-B5BBKM"
+}
