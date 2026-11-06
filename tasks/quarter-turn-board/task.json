@@ -1,0 +1,22 @@
+{
+  "title": "Turn a wide board a quarter turn in place",
+  "category": "Impact on jobs",
+  "keywords": [
+    "nonprehensile",
+    "pushing",
+    "in-place rotation",
+    "force couple",
+    "bimanual",
+    "ungraspable object",
+    "panel handling"
+  ],
+  "instruction": "Turn the board a quarter turn so its long side faces you, keeping it where it is.",
+  "context": "Panels on a workbench often need to be turned without being carried elsewhere. The board is too wide for a top-down grasp, so the task tests turning it by pushing while limiting movement of its centre.",
+  "setup": "Two YAM arms with parallel grippers (fully open, the pads are 9.4 cm apart), bases 61 cm apart at the near edge of a wooden table. Positions are in cm from the midpoint between the two arm bases: x straight out across the table, y to the left (toward the left arm). One loose board lies flat on the bare table: a length of 1x6 pine shelving board (actual 1.9 cm thick x 14.0 cm wide), cut to 24.0 cm long, painted blue, about 0.32 kg. Its centre is at x = 30, y = 0, and its long side runs along x (straight out from the arms). Nothing else is on the table. Mark the board's starting centre on the table with a small pencil dot under it or by measuring from the arm bases; nothing that shows its goal may be left on the table. The board is wider than the open gripper in both directions, so it cannot be picked up from above, and while it lies flat its edges cannot be pinched from the side.",
+  "scoring": "Measured with a protractor and a tape measure, or an overhead photo, after the board is still. Yaw error: the angle between the board's long side and the y axis (across the table, parallel to the line between the arm bases), 0 to 90 degrees; the board looks the same turned end for end, so a quarter turn either way, or a three-quarter turn, has yaw error 0, and a half turn has 90. Drift: the distance between the board's centre and its starting centre (x = 30, y = 0). The board earns credit only lying flat directly on the table: tilted at most 5 degrees and its bottom within 0.5 cm of the table top (not propped on a gripper, not held up, not on its edge, not off the table). 1.0: yaw error at most 5 degrees and drift at most 2.0 cm, with the board still (under 1 cm/s) for 1 second, which ends the trial. Otherwise, at the end of the run: 0.5 if yaw error is at most 15 degrees and drift at most 4.0 cm; 0.2 if yaw error is at most 15 degrees and drift at most 10.0 cm; 0 otherwise, including the untouched start, a board slid anywhere without being turned at least 75 degrees, a half turn, a board turned but more than 10 cm from its start, and a board pushed off the table or lying on the floor.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Put the board back with its centre at x = 30, y = 0 and its long side along x, measured from the arm bases.",
+  "fidelity": "The board is one rigid uniform box with one flat colour; its mass is estimated from pine (about 500 kg/m^3). It uses the simulator's rubber-like friction (1.2/1.0) and the table its default (assumed 0.5), roughly 0.85 static and 0.75 dynamic between them (assumed, not measured); painted pine on wood is likely more slippery, so a real board slides farther per push. The scene runs without start jitter so the scorer can compare with the starting centre.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-NKBP3Z"
+}
