@@ -1,0 +1,24 @@
+{
+  "title": "Herd three cans into a bay with a seine rope",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "rope",
+    "deformable",
+    "indirect manipulation",
+    "seine hauling",
+    "gathering",
+    "coordination",
+    "fisheries",
+    "constraint keeping"
+  ],
+  "instruction": "Haul all three cans into the green bay using only the blue rope, the way a beach seine is hauled. Never touch a can with a gripper, never tip one over and never lift the rope over a can. Let go of the rope when you are done.",
+  "context": "FAO/FIIT beach seine fact sheet: \"The drag lines are towed simultaneously from the beach. The fish is herded in front of the bag or bunt.\" O*NET 45-3031 (Fishing and Hunting Workers) task: \"Put fishing equipment into the water and anchor or tow equipment, according to the fishing method used.\" This mock-up tests gathering loose objects with a rope's bight, which needs two arms to close the wings evenly.",
+  "setup": "Positions in cm from the midpoint between the arm bases, on the table (x away from the robot, y left). Cans: three steel cans 5 cm across, 6 cm tall, 60 g (smooth, friction about 0.5), standing upright at x 30, y +12, 0 and -12 (red, yellow, orange). Rope: blue 8 mm braided cord, 40 cm, 40 g, with black 20 x 15 x 15 mm end caps (8 g), lying straight across the table at x 40 from y -20 to +20 (caps centred at y -21 and +21). Bay: flat green vinyl rectangle 11 cm deep x 15 cm wide, x 9.5 to 20.5, y -7.5 to +7.5.",
+  "scoring": "Score 0 if: any robot part ever touches a can; any can ever tilts more than 30 deg; the rope or a cap ever passes over a can in top view; or at the end a gripper is within 5 cm of the rope or its caps. Otherwise: 1.0 if all three cans stand with their whole base inside the bay (and are at rest for 1 s); 0.5 if exactly two do; else 0. Judged from a top photo/video and a tape measure.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Stand the cans on their tape marks (x 30; y +12, 0, -12). Lay the rope straight along x 40 with its caps at y -21 and +21. The bay decal is fixed.",
+  "fidelity": "Rope: 2 cm rigid segments with bending springs, no twist or stretch; caps are rigid boxes. Cans: rigid cylinders, friction 0.5. Bay: flat decal 0.2 mm proud of the table. Can touches use PhysX contact on every robot link each physics substep (real: video). Rope over a can and can base in the bay are top-view geometry (real: top video and tape measure).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-ZELMKA"
+}
