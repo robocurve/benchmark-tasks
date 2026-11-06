@@ -1,0 +1,19 @@
+{
+  "title": "Find and replace the faulty parts in a circuit",
+  "category": "Other",
+  "keywords": [
+    "fault diagnosis",
+    "swap testing",
+    "circuits",
+    "electronics repair"
+  ],
+  "instruction": "The circuit on the board should light the bulb when the switch is on, but it does not. The spare batteries (B), bulbs (L) and wires (W) on the table are all good. Make the bulb light, and put every faulty part, and no good part, in the red bin.",
+  "context": "Swap testing with known-good spares is the standard repair method for electronics. Here more than one installed part may be bad and the number is not given, so a single swap that leaves the bulb dark proves nothing; the robot has to plan swaps that separate the possibilities.",
+  "setup": "A circuit board lies 34 cm in front of the arm bases, centred on the centre line between the arms, with four labelled slots in a row 9.5 cm apart, in loop order battery (B), wire (W), bulb (L), wire (W) from left to right. Installed parts B1 (blue), W1 (white), L1 (yellow) and W2 (white), 5 x 5 x 4 cm labelled snap blocks, sit in the slots. A dark latching push-button switch with a green ON light sits 22 cm out on the centre line, and the bulb lamp 44 cm out on the centre line. Spares B2, B3 (blue), L2, L3 (yellow), W3, W4 (white) stand 22 cm out, 10, 19 and 28 cm either side of the centre line, in random order. Two empty parking spots are marked 31 cm out, 32.5 cm either side of the centre line. A red bin (14 x 14 cm, 3 cm walls) stands 27 cm out, 40.5 cm left of the centre line. The switch starts off.",
+  "scoring": "0: no part or the switch is touched. 0.25: a part is touched or the switch pressed. 0.5: at least one test: switch on with all four slots filled, bulb watched for 1 s. 0.75: the recorded tests leave exactly one possible set of dead installed parts (one or two parts), and it is the true set. 1.0: the 0.75 condition holds, the board holds only good parts, and the dead parts (and no good part) are in the red bin. The score is the highest level reached.",
+  "run_limit": "12,000 steps (10 min 00 s at 20 Hz)",
+  "reset_notes": "Hidden per trial (redrawn every trial from its seed): Two installed parts are dead (uniform over the 6 pairs; the number is not told). Every single-part swap leaves the bulb dark, so it rules nothing out; replacing two parts at once is needed.",
+  "fidelity": "Parts rest in slots by friction (no snap mechanism); conduction is computed from which part sits in which slot.",
+  "scores": "Dream-1 run: 0.25 (a run capped at 4,830 steps, 241 s, of the 12,000-step limit); demo: 1",
+  "media": "M-F6RPG5"
+}
