@@ -1,0 +1,21 @@
+{
+  "title": "Slide a casting too wide to grip onto its 3-2-1 locating pins",
+  "category": "Impact on jobs",
+  "keywords": [
+    "machining fixture",
+    "3-2-1 location",
+    "datums",
+    "non-prehensile",
+    "pushing",
+    "casting"
+  ],
+  "instruction": "Locate the aluminium casting in the fixture. It is too wide to pick up, so slide it along the steel plate without lifting it until it touches both black pins on the far side and the black pin on the left side, and leave it flat on the plate.",
+  "context": "Before a casting is machined, the setter locates it in the fixture by the 3-2-1 rule: the base sits on the plate (three points), one edge against two pins and a second edge against one pin, so that every part is cut in the same place. The part is slid across the plate into the pins rather than dropped on them, and a part that misses one pin is machined out of tolerance. This housing is wider than the gripper both ways, so it can only be pushed. Unlike TK-Q28DLV (slide a box up to a table edge), the walled-maze crate push (steer a too-wide crate round a corner) and ManiSkill3 PushT (push a block to a pose in open space), the goal is contact with three fixed pins, reached by two pushes in turn; unlike TK-DGSHQA, the part cannot be grasped. Done by: machinists and CNC tool operators (O*NET 51-4041.00, 51-9161.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left). Fixture plate: a fixed steel slab 23 x 26 cm, 1 cm thick, centred at x 31, y 20. Pins: three fixed black cylinders 1.2 cm across and 1.2 cm tall on the plate, two on the far datum line at x 39.1, y 19 and y 25, one on the left datum line at x 35.5, y 29.1. Casting: a loose aluminium box 11 cm deep (x) by 13 cm wide by 4 cm tall, 250 g, flat on the plate centred at x 29.5, y 19.5 and turned 3 degrees, 3.5 cm short of the far pins and 2.5 cm short of the side pin. Located, its centre is at x 33, y 22.",
+  "scoring": "From the episode's recorded poses. 0.25 for each pin the casting bears on: its face within 1.5 mm of the pin (and not more than 3 mm into it). 1.0 once it bears on all three pins, lies flat on the plate (bottom within 3 mm of the plate top, tilted under 3 degrees) and is still. Possible scores: 0, 0.25, 0.5, 0.75, 1.0. Success: score 1, held 1 s.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Lay the casting back flat on the plate at its start mark, turned 3 degrees; the plate and pins do not move.",
+  "fidelity": "Rigid primitives with one shared friction (1.2 static, 1.0 dynamic). The casting is a solid box with a casting's footprint and mass but no ribs, bosses or draft; the pins are plain cylinders and there are no clamps, so the casting is left resting against them rather than clamped.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-DT44RE"
+}
