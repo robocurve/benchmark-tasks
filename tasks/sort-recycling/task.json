@@ -1,0 +1,21 @@
+{
+  "title": "Sort rubbish into compost, landfill and recycling by a stated rule",
+  "category": "Societal relevance",
+  "keywords": [
+    "recycling",
+    "waste sorting",
+    "rule following",
+    "household",
+    "pick and place",
+    "bimanual"
+  ],
+  "instruction": "sort the rubbish: cans in the blue bin, food scraps in the green bin, everything else in the grey bin",
+  "context": "Rubbish put in the wrong bin contaminates a whole load of recycling or compost, and sorting it is a daily household and workplace chore. The nearest bin is the wrong one for three of the four items, so the robot has to follow the rule, not proximity.",
+  "setup": "Positions are measured on the table from the midpoint between the two arm bases: forward is away from the arms, left and right as seen from behind the arms. Three open bins stand in a row 32 cm forward, each made of four walls 1 cm thick and 4 cm tall fixed to the table, the table being the floor: (1) a green compost bin, 14 x 14 cm inside, centred 20 cm left; (2) a grey landfill bin, 14 x 14 cm inside, centred on the midline; (3) a blue recycling bin, 14 cm front to back and 18 cm left to right inside, centred 21 cm right. Four loose items: (a) a broken ceramic mug (10 cm with its handle, 7 cm tall, 250 g), upright, 14 cm forward and 24 cm left; (b) a banana (14 cm long, 120 g), lying flat 15 cm forward and 8 cm left; (c) an empty tomato soup can (7.3 cm across, 10.8 cm tall, 50 g), upright, 14 cm forward and 8 cm right; (d) an empty tuna can (8.5 cm across, 3.4 cm tall, 30 g), upright, 14 cm forward and 24 cm right. Nothing else is on the table.",
+  "scoring": "Scored once, after the episode ends. An item is in a bin when it rests still with its centre inside that bin's walls and its underside within 4 cm of the table. The right bins: the mug in the grey bin, the banana in the green bin, both cans in the blue bin. Score: 0.25 for each item in its right bin, minus 0.125 for each item in a wrong bin, never below 0; 1.0 with all four in their right bins. An item outside every bin counts for nothing.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Put the four items back on their starting spots. The bins are fixed (putty) and stay in place. Use a mug already broken in a way that leaves no sharp edge exposed, or a whole mug labelled as broken.",
+  "fidelity": "Dream Labs' YAM station replica in Isaac Lab-Arena (Isaac Sim), with library models for the mug, banana, soup can and tuna can (convex hulls; the banana through its own decomposition). The bins are fixed walls with no lid. The mug is whole in simulation; the setup calls it broken, which is why it is not recyclable.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-73BMXJ"
+}
