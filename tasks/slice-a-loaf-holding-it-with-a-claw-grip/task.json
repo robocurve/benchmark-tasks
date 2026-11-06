@@ -1,0 +1,20 @@
+{
+  "title": "Hold a loaf with one hand, clear of the blade, while the other saws a slice 1 to 2 cm thick off its end",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "food preparation",
+    "bread knife",
+    "sawing",
+    "knife safety"
+  ],
+  "instruction": "Hold the loaf on the board with one hand, keeping that hand at least 3 cm from the blade, and with the other cut a slice 1 to 2 cm thick off its right end with the bread knife.",
+  "context": "Slicing bread by hand is everyday work in bakeries, delis and kitchens. The free hand steadies the loaf in a claw grip, fingertips curled back from the blade: sawing drags an unheld loaf along with the knife, and cuts to the holding hand are among the commonest kitchen injuries, so it must stay clear of the blade throughout.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) A fixed wooden cutting board, 36 x 18 cm and 1.5 cm thick, centred 30 cm forward and 6 cm left. (2) A loose square sandwich loaf, 360 g, 9 cm wide, 8 cm tall and 20 cm long, golden crust and pale crumb, lying on the board along the left-right line, its middle 29.5 cm forward, from 4 cm right of the centre line to 16 cm left. (3) A loose bread knife, 100 g: a steel blade 20 cm long and 3.5 cm tall and a dark wooden handle 11 cm long, standing blade down in a fixed dark knife rest 20 cm right of the centre line, its blade from 22 to 42 cm forward and its handle toward the arms. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Judged over the whole trial. The blade cuts into the loaf only as it is sawn along itself against the loaf (each 5 cm sawn cuts up to 1 cm deeper, no deeper than its edge); a cut through the loaf's whole height frees the slice. A slice's thickness is measured from the loaf's right end, in 5 mm steps. Safe: both grippers' fingertip centres (TCPs) always at least 3 cm from the blade (not its handle). 1.0: a slice 1 to 2 cm thick cut off, safely; 0.5: a slice of another thickness cut off, or a cut 1 to 2 cm from the end at least half way down, safely; 0.25: any cut at least 1 cm deep, safely; 0.0 if a hand ever came within 3 cm of the blade. The trial ends at the run limit, or once the full score has held with the loaf still for 1 s.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "Use a fresh loaf (or put the cut slice back on the end), lay it where it was, and stand the knife back in its rest.",
+  "fidelity": "Rigid-body simulation (Isaac Sim 6.1, PhysX, 20 Hz control). Simplified: the loaf is rigid, its right 3 cm six 5 mm slabs held to it by fixed joints. The knife passes through bread: the task file deepens a cut along a joint only as the blade is sawn, pushes the knife up off uncut bread, drags the loaf along with the blade (at most 5 N) and frees the slice once the cut is through (nudged to fall away). No crumbs. Board and rest fixed. Cameras 1280 x 704 (Dream-1 sees 320 x 176).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-PH4G7P"
+}
