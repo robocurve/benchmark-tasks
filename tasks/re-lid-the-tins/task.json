@@ -1,0 +1,23 @@
+{
+  "title": "Put each lid back on the tin it fits",
+  "category": "Impact on jobs",
+  "keywords": [
+    "lids",
+    "size matching",
+    "fit by diameter",
+    "cyclic swap",
+    "temporary buffer",
+    "pick and place",
+    "kitchen",
+    "putting away"
+  ],
+  "instruction": "The lids are on the wrong tins. Put each lid on the tin it fits, lying flat and centred. One lid per tin.",
+  "context": "Putting containers away includes matching lids to containers of the same size. Every tin starts with a wrong lid, so the robot must manage a temporary place for a lid while correcting the three-way mix-up.",
+  "setup": "Two YAM arms with parallel grippers, bases 61 cm apart at the near edge of a wooden table. Positions are in cm from the midpoint between the two arm bases: x straight out across the table, y to the left. Three round steel tins with closed flat tops, straight-sided, all 5.0 cm tall, taped to the table so they cannot move, in a row at x = 30: a 4.0 cm diameter tin at y = +13 (in front of the left arm), a 6.0 cm diameter tin at y = 0 (between the arms) and an 8.0 cm diameter tin at y = -13 (in front of the right arm). Any closed-top straight-sided cylinder of these sizes reproduces a tin, for example a sealed steel tin, or a steel tin stood upside down so its flat base is on top. Three loose lids: flat round discs, all 2.5 cm thick and painted the same blue, 4.0, 6.0 and 8.0 cm in diameter (turned hardwood, about 23, 51 and 90 g; cast acrylic discs of the same sizes also work). No lip or skirt. Each lid lies flat and centred on a tin it does not fit: the 8.0 cm lid on the 4.0 cm tin (overhanging it by 2 cm all round), the 4.0 cm lid on the 6.0 cm tin (leaving a 1 cm ring of the tin top bare) and the 6.0 cm lid on the 8.0 cm tin. A lid fits the tin of its own diameter, so the 4.0 cm lid belongs on the left tin, the 6.0 cm lid on the middle tin and the 8.0 cm lid on the right tin. There is no free tin, so one lid must be set down on the table, or held, while the others move. The rest of the table is clear.",
+  "scoring": "Each tin is scored on its own and the three scores add (maximum 1.0). 1/3 for a tin when the lid of its own diameter lies on it: the lid's centre within 1.0 cm of the tin's axis (its edge overhangs the tin's side by at most 1.0 cm anywhere), its underside within 3 mm of the tin top, tilted less than 5 degrees from flat (either face up), and still (under 1 cm/s), and no other lid overlapping the tin's outline anywhere from the tin top to 7.5 cm above it (a lid stacked on it). 0 for a tin otherwise: no lid on it, a lid of another diameter on it (smaller or larger), two or more lids on it, its own lid more than 1.0 cm off-centre, tilted 5 degrees or more, still moving, held above it, or lying on top of another lid. Lids left on the table or knocked off it earn nothing. Full score (1.0): all three tins at 1/3 at the same moment for 1 second, which ends the trial; otherwise the score at the end of the run.",
+  "run_limit": "3,600 steps (3 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Put the lids back on their starting tins (8.0 cm lid on the 4.0 cm tin, 4.0 cm lid on the 6.0 cm tin, 6.0 cm lid on the 8.0 cm tin), centred; the tins stay taped down.",
+  "fidelity": "Rigid primitives with one flat colour. Each tin is a fixed solid cylinder with a flat top (a closed-top tin taped down); each lid is a solid disc with no lip or skirt. A real slip lid would seat over its rim and centre itself, so the task uses closed-top tins and flat lids, and 'fits' means 'has the same diameter'. Masses are estimates for hardwood. Loose objects use the simulator's rubber-like friction (static 1.2, dynamic 1.0), higher than painted wood on steel.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-C3KSLX"
+}
