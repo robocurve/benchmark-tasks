@@ -1,0 +1,20 @@
+{
+  "title": "Put away a medication delivery, with the Schedule II drug in the locked cabinet",
+  "category": "Impact on jobs",
+  "keywords": [
+    "healthcare",
+    "controlled substances",
+    "medication storage",
+    "DEA",
+    "medical assistant"
+  ],
+  "instruction": "Put away the medication delivery.",
+  "context": "Medical assistants and nurses in physicians' offices receive and shelve medication deliveries (O*NET 31-9092.00, Medical Assistants). Under 21 CFR 1301.75(b), Schedule II to V controlled substances must be stored in a securely locked, substantially constructed cabinet. Only pharmacies and institutional practitioners may disperse them through non-controlled stock instead. An office practice locks them up. The red carton is the Schedule II drug. The white cartons are ordinary stock that goes on the open shelf.",
+  "setup": "Positions are in cm from the midpoint between the two arm bases, with x forward, y to the robot's left and the table top at z 0. The open shelf is a fixed blue-gray painted steel platform, 22 x 18 x 6 cm (x by y by height), centered at x 28, y +16. The controlled-substance cabinet has four fixed dark gray steel or rigid plastic walls, 1 cm thick and 9 cm tall, around a 14 x 14 cm opening. It is open at the top, uses the table as its floor and is centered at x 32, y -16. A brass-colored hasp block, 2 x 3 x 3 cm, is fixed to the outside of its front wall near the top. Three medication cartons lie flat in a row at x 14. Each is a rigid cardboard box 7 x 5 x 4 cm and 50 g. A white carton lies at y +12, a red carton at y +2 and a white carton at y -8. The red carton is the Schedule II drug. In the real setup it also carries a red 'C-II' label.",
+  "scoring": "A carton counts as in the cabinet when its center lies inside the cabinet's walls, its top is below the rim, and it is still. A carton counts as on the shelf when its center is over the shelf, its bottom rests on the shelf top or on another carton there, and it is still. The trial scores 0 whenever the red Schedule II carton isn't in the cabinet, whatever else happened. That includes the red carton on the shelf, on the table, on a rim or held. With the red carton in the cabinet, the trial scores 1.0 if both white cartons are on the shelf. Otherwise it scores 0.5, for example with a white carton left on the table, also put in the cabinet, or anywhere else. The possible scores are 0, 0.5 and 1.0. In a real trial, a photo from above at the end shows what is on the shelf and what is inside the cabinet.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lay the three cartons back flat in their row at x 14, white, red and white from the robot's left to right.",
+  "fidelity": "The cabinet is an open box with no door or lock. The hasp block only marks it as a lockable cabinet. The cartons are plain colored boxes with no printed labels. The simulation uses rigid-body physics only.",
+  "scores": "Dream-1 run: 0 (2,400 steps); demo: 1.0",
+  "media": "M-NCYZ6T"
+}
