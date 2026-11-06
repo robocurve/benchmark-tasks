@@ -1,0 +1,54 @@
+#usda 1.0
+(
+    defaultPrim = "Led"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Led" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+)
+{
+    float physics:mass = 0.012
+
+    def Cube "base" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        double size = 1
+        color3f[] primvars:displayColor = [(0.95, 0.95, 0.93)]
+        float3 xformOp:translate = (0, 0, 0.010)
+        float3 xformOp:scale = (0.076, 0.024, 0.020)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cylinder "dome" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double radius = 0.008
+        double height = 0.012
+        color3f[] primvars:displayColor = [(0.90, 0.10, 0.10)]
+        float3 xformOp:translate = (0, 0, 0.026)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cube "plus_tab"
+    {
+        double size = 1
+        color3f[] primvars:displayColor = [(0.90, 0.10, 0.10)]
+        float3 xformOp:translate = (0.030, 0, 0.0205)
+        float3 xformOp:scale = (0.014, 0.020, 0.001)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "minus_tab"
+    {
+        double size = 1
+        color3f[] primvars:displayColor = [(0.08, 0.08, 0.08)]
+        float3 xformOp:translate = (-0.030, 0, 0.0205)
+        float3 xformOp:scale = (0.014, 0.020, 0.001)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+}
