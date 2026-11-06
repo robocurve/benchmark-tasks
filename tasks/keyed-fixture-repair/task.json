@@ -1,0 +1,18 @@
+{
+  "title": "Repair a fixture that lets a part seat backward",
+  "category": "Impact on jobs",
+  "keywords": [
+    "assembly",
+    "fault diagnosis",
+    "functional verification"
+  ],
+  "instruction": "Show that the test part seats in the installed guide with the arrows opposed. Put the faulty guide in the red tray. Install a spare that lets the part seat with the arrows aligned and stops it short with the arrows opposed. Show both results, letting go each time. Leave that guide installed and return the test part to its cradle.",
+  "context": "Assembly fixtures use keys to prevent reversed parts entering production. Verify that replacing a faulty guide restores correct seating and blocks reversed seating. Done by industrial machinery mechanics and assembly technicians.",
+  "setup": "Unpowered 92 × 84 × 10 mm aluminium fixture, X/Y 335/−195 mm, with a white arrow and depth marks 12 mm apart. Three 60 × 53 × 36 mm polymer guides: installed, spare at 350/−325, spare at 465/−210; respectively no key, three-prong key, oversized steel key. Blue 34 × 26 × 70 mm polymer test part starts backward in a 67 × 64 mm cradle at 225/−118. Fixed red 135 × 84 mm tray at 226/−299. See README and task.py for offsets and reset.",
+  "scoring": "Sequential quarters: (1) prove backward part seats in original; (2) quarantine original and install spare; (3) show aligned seat and backward block on same spare; (4) keep guide installed, original in tray, part in cradle, hands clear for 1 s. Seat within 1 mm of floor; block 11–13 mm above, upright within 3°, centered and released for 1 s. Removing spare clears its tests. Blind swap or fallen object: 0. See README for all tolerances.",
+  "run_limit": "1,800 steps (90 seconds at 20 Hz)",
+  "reset_notes": "Original guide in nest, spare guides on table, backward test part in cradle, red tray empty. Clear all recorded checks; fixed layout, seed 0, no jitter.",
+  "fidelity": "Rigid compound colliders set the physical stops under gravity. The bench trainer is unpowered. The removable guide geometry, tolerances and depth marks are represented directly. Parts do not deform or wear.",
+  "scores": "Dream-1 run: 0.0 (1,800 actions); scripted demo: 1.0 (1,453 actions).",
+  "media": "M-5B8HNH"
+}
