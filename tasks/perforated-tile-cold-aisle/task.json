@@ -1,0 +1,20 @@
+{
+  "title": "Put the perforated floor tile back in the cold aisle and the solid one in the hot aisle",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "data centre",
+    "raised floor",
+    "airflow management",
+    "hot aisle cold aisle",
+    "perforated tile"
+  ],
+  "instruction": "Put the two floor tiles back.",
+  "context": "Data-centre technicians lift raised-floor tiles to reach cabling and put them back afterwards. Cold air from the cooling units comes up through perforated tiles. Perforated tiles therefore go only in the cold aisle, in front of the equipment intakes. A perforated tile in the hot aisle sends cold air straight into the exhaust and creates hot spots (IBM and STULZ airflow guidelines, standard hot-aisle and cold-aisle practice). The hot aisle gets solid tiles.",
+  "setup": "Positions are in cm from the midpoint between the two arm bases, with x forward, y to the robot's left and the table top at z 0. The scene is a raised-floor model at about 1 to 8 scale, and the table is the subfloor. A black rigid block (wood or foam) stands in for the rack row. It measures 26 x 6 x 8 cm (x by y by height), is fixed, and is centred at x 31, y 0, running away from the robot. The cold aisle is a column of floor tiles on the robot's right, centred at y -10. The hot aisle is a column on its left, centred at y +10. Each column has fixed grey tiles (rigid plastic or MDF squares, 8.6 x 8.6 x 1.5 cm) at x 21 and x 39.8. The middle position, x 30.4, is an open gap with 10.2 cm between the neighbouring tiles' edges. A blue tape strip, 28 x 2 cm, runs along the cold aisle's outer edge at y -16. A red tape strip, 28 x 2 cm, runs along the hot aisle's outer edge at y +16. The cart is a fixed grey rigid box, 10 x 26 x 2 cm, centred at x 11.5, y 0. Two loose tiles lie on the cart, each 7 x 7 x 1.5 cm and 80 g. The perforated tile is dark grey and sits at x 11.5, y +6.5, in front of the hot aisle. In a real build, drill a grid of holes in it or use perforated board. The solid tile is light grey and sits at x 11.5, y -6.5, in front of the cold aisle.",
+  "scoring": "A tile counts as in a gap when it lies flat (tilted under 10 degrees) and still on the subfloor with its whole footprint inside that aisle's gap square. The gap square is 10.2 x 10.2 cm between the neighbouring tiles' edges. The score is 0 if the perforated tile is in the hot-aisle gap or the solid tile is in the cold-aisle gap, whatever else happened. Moving each tile straight ahead produces this swap. Otherwise the score is 1.0 if the perforated tile is in the cold-aisle gap and the solid tile is in the hot-aisle gap. It is 0.5 if only the perforated tile is in the cold-aisle gap. It is 0.25 if only the solid tile is in the hot-aisle gap. It is 0 if neither gap is filled. The possible scores are 0, 0.25, 0.5 and 1.0. In a real trial, a photo from above at the end shows which tile lies in which gap and that each lies flat on the subfloor.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Put the two loose tiles back on the cart, the perforated one on the left (y +6.5) and the solid one on the right (y -6.5). The rack row, tape and fixed tiles do not move.",
+  "fidelity": "This is a scale model. The tiles are 7 cm instead of 60 cm. The loose tiles are smaller than the gaps so a parallel gripper can set them down. A real tile fits its gap exactly and is lifted with a suction tile puller. No airflow is simulated, and the perforated tile is a plain dark-grey slab. The simulation uses rigid-body physics only.",
+  "scores": "Dream-1 run: 0 (2,400 steps); demo: 1.0",
+  "media": "M-9QHHKH"
+}
