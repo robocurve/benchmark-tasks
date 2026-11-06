@@ -1,0 +1,20 @@
+{
+  "title": "Throw oily rags into the oily-waste can instead of the trash",
+  "category": "Impact on jobs",
+  "keywords": [
+    "auto shop",
+    "painting",
+    "oily waste",
+    "spontaneous combustion",
+    "fire prevention"
+  ],
+  "instruction": "Throw away the oily rags.",
+  "context": "Mechanics, painters and furniture finishers wipe up oil, stain and solvent with shop rags. Rags soaked in oil or stain heat up as they oxidize and can catch fire on their own. OSHA requires them to be kept in a covered, fire-resistant container until they leave the site (29 CFR 1926.252(e)). In practice that means a red metal oily-waste can with a self-closing lid. An ordinary trash can doesn't qualify.",
+  "setup": "Positions are in cm from the midpoint between the two arm bases, with x forward, y to the robot's left and the table top at z 0. Two open-top waste containers are both centred at x 33. Each has four fixed walls 1 cm thick and 12 cm tall and uses the table as its floor. A grey plastic trash can, 20 x 20 cm inside (x by y), sits at y +5. A red metal oily-waste can, 18 x 18 cm inside, sits at y -19. Two folded cotton shop rags, dark brown with oil, lie flat along x. Each is 12 x 5 x 2.5 cm (x by y by height) and 40 g. One lies at x 15, y +10 and the other at x 15, y -2.",
+  "scoring": "A rag counts as in a container when its centre lies inside the container's walls, the whole rag is below the rim, and it is still. The trial scores 0 whenever either rag is in the trash can, whatever else happened. Otherwise each rag in the oily-waste can earns 0.5. A rag on the bench, on a rim or held earns nothing. Both rags in the oily-waste can score 1.0. The possible scores are 0, 0.5 and 1.0. In a real trial, look into both containers at the end and note where each rag is. A straight edge laid across the rim confirms nothing sticks out.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Take the rags out of whichever container holds them, fold each to 12 x 5 cm and lay them back at their start positions.",
+  "fidelity": "The rags are rigid blocks with no cloth simulation. The oily-waste can is a square open box with no lid or foot pedal. A real one is round with a self-closing lid, which the robot would hold open or which can be propped open for the trial. The simulation uses rigid-body physics only.",
+  "scores": "Dream-1 run: 0 (2,400 steps); demo: 1.0",
+  "media": "M-AXT44H"
+}
