@@ -1,0 +1,19 @@
+{
+  "title": "Store vaccine cartons in the middle of the fridge, away from the door and the walls",
+  "category": "Impact on jobs",
+  "keywords": [
+    "pharmacy",
+    "vaccine storage",
+    "cold chain",
+    "placement"
+  ],
+  "instruction": "Put the vaccine boxes in the fridge.",
+  "context": "Pharmacy technicians and medical assistants stock vaccine refrigerators. CDC storage guidance puts vaccines in the middle of the unit, 2 to 3 inches (5 to 7.5 cm) from the walls. The door bins are out because the temperature swings each time the door opens. The back wall is out because vaccines there can freeze. Spoiled vaccine must be discarded, and patients given it may need revaccination.",
+  "setup": "Positions are in cm from the midpoint between the two arm bases, with x forward, y to the robot's left and the table top at z 0. The vaccine-fridge mock has an open top and an open front facing the robot. All its parts are fixed and made of white rigid plastic or painted wood. The side walls are 20 x 1 x 16 cm (x by y by height), span x 22 to 42, and have inner faces at y +13 and y -13. The back wall is 1 x 28 x 16 cm and spans x 42 to 43. A shelf, 20 x 26 x 1 cm, spans the inside from x 22 to 42 with its top 7 cm above the table. The door stands open at 90 degrees on the robot's right. It is a panel 18 x 1 x 16 cm spanning x 4 to 22 along y -14 to -15. A door bin sits on its inner face. The bin's floor is 12 x 5.5 x 1 cm, spans x 8 to 20 and y -13.5 to -8, and has its top 6 cm above the table. The bin's front lip is 12 x 0.4 x 3 cm and runs along y -8. Two vaccine cartons lie flat on the table at x 15, y +8 and x 15, y -2. Each is pale blue cardboard, 6 x 4 x 3 cm and 60 g.",
+  "scoring": "A carton counts as on the shelf when it lies flat (tilted under 15 degrees) and still, with its bottom on the shelf top and its footprint inside the fridge. It counts as clear of the walls when its nearest point is at least 5 cm from the back wall and from both side walls. It counts as in the door bin when its center is over the door bin, below the top of the lip. The score is 0 if either carton is in the door bin, or on the shelf but not clear of the walls. Otherwise each carton on the shelf and clear of the walls earns 0.5. A carton left on the table, stacked on the other, or on a wall top earns nothing. The possible scores are 0, 0.5 and 1.0. In a real trial, measure with a tape from each carton to the back and side walls, and look in the door bin.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lay both cartons back flat on the table at their start positions. Real trials use empty vaccine cartons or same-size cardboard boxes.",
+  "fidelity": "The fridge has no top, door hinge, lighting or cooling, and it has only one shelf. The door is fixed open. The cartons are plain pale-blue boxes with no labels. The simulation uses rigid-body physics only.",
+  "scores": "Dream-1 run: 0.5 (2,400 steps); demo: 1.0",
+  "media": "M-4N7NNU"
+}
