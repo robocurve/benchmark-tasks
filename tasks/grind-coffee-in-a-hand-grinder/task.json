@@ -1,0 +1,20 @@
+{
+  "title": "Hold a hand coffee grinder steady with one hand and turn its crank three times with the other",
+  "category": "Societal relevance",
+  "keywords": [
+    "bimanual",
+    "kitchen",
+    "crank",
+    "stabilizing",
+    "rotation"
+  ],
+  "instruction": "Hold the coffee grinder steady with one hand and turn its crank three full turns clockwise with the other.",
+  "context": "Hand-cranked tools such as coffee and spice grinders, can openers, pencil sharpeners and winches need one hand to hold the tool while the other turns the crank: the crank's resistance would otherwise spin, drag or tip a light tool over.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. A manual coffee grinder stands loose on the table, its axis 24 cm forward and 2 cm right of the centre line: (1) a steel body, a cylinder 6.6 cm across and 18 cm tall, 0.30 kg; (2) on top, a black crank: a hub 2.4 cm across and an arm 6.5 cm long (axis to knob), 1.4 cm wide and 1 cm thick, just above the body's top, turning about the body's axis against the burrs' resistance (0.15 N m for each radian per second, about 0.3 N m at one turn every 3 s); at the start the arm points to the right; (3) at the arm's end, an upright wooden knob 1.8 cm across and 7 cm tall that spins freely on its pin. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Judged at the end of the trial. The crank's turn against the grinder's body is followed after every control step and added up, net, clockwise as seen from above counting positive. 0.0 unless the grinder ends standing upright on the table (tilted less than 10 degrees). Otherwise 1.0 with at least 3 full turns; 0.5 with at least 2; 0.25 with at least 1; else 0.0. The trial ends at the run limit, or once the full score has held with the grinder still for 1 s.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Nothing is consumed: stand the grinder back in place with its crank arm pointing to the right.",
+  "fidelity": "Rigid-body simulation (Isaac Sim 6.1, PhysX, 20 Hz control) of a calibrated two-arm table. Simplified: the grinding is a damper on the crank's axle (0.15 N m for each radian per second; no beans, no grounds); the crank and the knob turn on PhysX revolute joints; the body is a plain cylinder; friction is set (body 0.5, knob 0.8); the cameras render at 1280 x 704 (Dream-1 sees 320 x 176).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-MT4ZTZ"
+}
