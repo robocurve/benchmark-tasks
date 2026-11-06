@@ -1,0 +1,20 @@
+{
+  "title": "Put the 9-volt battery in the picking bin",
+  "category": "Impact on jobs",
+  "keywords": [
+    "pick and place",
+    "distractors",
+    "order picking",
+    "small parts",
+    "SimReady"
+  ],
+  "instruction": "Put the 9-volt battery in the cardboard picking bin.",
+  "context": "Order picking: a worker takes one small item for an order from a cluttered bench and drops it into the picking bin. The other items are not part of the order.",
+  "setup": "Left and right are the robot's. Positions are centres in metres from the midpoint between the two arm bases: x forward, y to the robot's left. Battery: a 9-volt alkaline battery (17.5 x 26.5 x 48.5 mm body, 53 mm with its snaps, 45 g, black and green case), standing on its base with its snaps up at (0.19, 0.00), its 26.5 mm sides facing left and right. Blocks: four 4 cm painted wooden cubes, 40 g each, one on each diagonal around the battery: red at (0.13, 0.08), blue at (0.13, -0.08), green at (0.25, 0.08) and yellow at (0.25, -0.08). Picking bin, behind them: an open corrugated-cardboard box 24 cm wide (y), 20 cm deep (x), its front wall 6.5 cm tall and its back wall 13.5 cm, the side walls sloping between them, taped to the table with its centre at (0.415, 0.00), so its front wall is at x = 0.30, and its low wall toward the robot.",
+  "scoring": "0 at the end if a block's centre is over the bin's footprint or any object has fallen off the table. Success (1.0, held 1 s): the battery's centre at least 1.2 cm inside the bin's outer walls and less than 4 cm above the table (lying on the bin floor, upright or on its side), and the battery still. Otherwise 0.5 if its centre is inside the bin but it is not lying still on the floor (held above it or moving). 0.25 if its centre is more than 6 cm above the table outside the bin (lifted). Else 0.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Stand the battery back on its base at its mark, snaps up, and put each block on its mark.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. NVIDIA SimReady meshes: the battery collides as its convex hull (a box) with steel friction (0.3). The bin is the SimReady open box scaled to 45 % (1.8 mm floor), fixed, with signed-distance-field collision. The blocks grip like rubber (1.2). No deformation of the cardboard.",
+  "scores": "Dream-1 run: 1.0 (success at step 536), demo: 1.0 (success at step 187)",
+  "media": "M-WYF4LB"
+}
