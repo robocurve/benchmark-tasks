@@ -1,0 +1,22 @@
+{
+  "title": "Set each stack-nest tote the right way round so it stacks on the full tote instead of nesting onto its parts",
+  "category": "Impact on jobs",
+  "keywords": [
+    "warehouse",
+    "totes",
+    "stack-nest",
+    "orientation",
+    "mating geometry",
+    "insertion",
+    "material handling"
+  ],
+  "instruction": "Stack each empty grey tote on the full blue tote behind it.",
+  "context": "Stack-nest totes nest one way round and stack when turned end for end. An empty tote set nested into a full one presses on the parts inside, so a handler must check each tote's orientation before setting it down. Unlike TK-CHXEKF (denesting trays) and TK-TM2UVS (orientation from a printed arrow), this task makes the robot read, for each tote, how its wall slots meet the ledges below, turn the one that would nest and not the other.",
+  "setup": "World frame: x is forward from the arm bases, y to the robot's left, heights above the table top; the midline is halfway between the two arm bases. Two blue polypropylene totes (fixed), centred 330 mm in front of the arm bases at 130 mm left and 130 mm right of the midline. Each is 140 mm front to back, 120 mm wide and 60 mm tall outside, with 5 mm walls and floor (130 x 110 mm inside). On the inside of each of its two side walls (the walls running front to back) are two yellow plastic ledge blocks, part of the blue tote, 12 mm along the wall, 10 mm out from it and 8 mm tall, their tops 45 mm above the table (15 mm below the rim), centred 45 mm nearer the robot and 20 mm further from the robot than the tote's centre. On each blue tote's floor, centred, lies an orange parts box (loose, rigid plastic, 110 x 80 x 30 mm, 0.2 kg; top 35 mm above the table). Two grey polypropylene totes (loose, 0.12 kg each), 122 mm front to back, 102 mm wide and 55 mm tall outside, 5 mm walls and floor, open side up on the table, centred 190 mm in front of the arm bases at 130 mm left and 130 mm right of the midline. Each grey side wall has two full-height slots 22 mm wide, their edges marked with dark grey strips 4 mm wide; the slot centred 45 mm from the tote's centre runs right up to the end wall, and the floor is notched 10 mm in from the wall under each slot. On the left grey tote the slots are centred 45 mm nearer the robot and 20 mm further than its centre, as the ledges are; the right grey tote is the same tote turned 180 degrees, so its slots are 45 mm further and 20 mm nearer than its centre. Nothing else is on the table.",
+  "scoring": "Pass/fail: 1.0 only when both blue totes qualify, otherwise 0. A blue tote qualifies when all of these hold: a grey tote (either one) rests on its yellow ledges, released and still, with all four outer top corners of the grey tote 98.5 to 101.5 mm above the table and its centre within 6 mm of the blue tote's centre; that blue tote's orange parts box is within 5 mm of where it started; and at no time in the trial did a grey tote go down past the yellow ledges inside that blue tote (its underside below 43 mm above the table, its rim below 98 mm), judged from the video. It does not qualify if: a grey tote nested onto the parts box (rim about 90 mm), tilted, upside down, resting on the blue rim, held above it, or put elsewhere; a parts box moved; or a grey tote lowered past the ledges and lifted out again. The trial ends at 1.0 once both blue totes have qualified for 1 s; otherwise it scores the state at the last step.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Lift the grey totes out and set each back at its start in its starting orientation (left: slots in line with the ledges; right: turned 180 degrees); recentre the parts boxes on the blue floors. Nothing is consumed. Real trials may swap which grey tote starts turned; the scoring rule is unchanged.",
+  "fidelity": "Rigid boxes in PhysX. The totes are a 180-degree stack-nest pair, scaled so the stacking tote sits in the full tote's mouth: aligned, its slots pass the ledges and it nests onto the parts; turned end for end, it rests on the ledges, on at least 2 mm of ledge at every one even when pushed fully to one side. The parts are one rigid box. Masses are typical; friction is the simulator's default for these parts.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-J77Y7B"
+}
