@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robocurve-square-cut-line"
+version = "0.1.0"
+description = "Contact-based square-guided cut-line marking task for simulated bimanual YAM arms"
+requires-python = ">=3.12,<3.13"
+license = "MIT"
+dependencies = ["numpy>=1.26", "inspect-robots==0.60.0", "Pillow>=10"]
+
+[project.entry-points."inspect_robots.embodiments"]
+square_cut_line = "square_cut_line.runtime:make_embodiment"
+
+[project.entry-points."inspect_robots.policies"]
+square_cut_line_demo = "square_cut_line.feedback_policy:make_demo_policy"
+
+[tool.setuptools.packages.find]
+include = ["square_cut_line*"]
+
+[tool.setuptools.package-data]
+square_cut_line = ["assets/*.usda"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

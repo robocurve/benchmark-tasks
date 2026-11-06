@@ -1,0 +1,35 @@
+#usda 1.0
+(
+    defaultPrim = "Square"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Square" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxRigidBodyAPI"])
+{
+    bool physics:rigidBodyEnabled = true
+    bool physics:kinematicEnabled = false
+    float physics:mass = 0.18
+    float physxRigidBody:maxDepenetrationVelocity = 1
+    int physxRigidBody:solverPositionIterationCount = 16
+    int physxRigidBody:solverVelocityIterationCount = 4
+    def Cube "Stock" (prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"])
+    {
+        double size = 1
+        double3 xformOp:translate = (0, 0, 0)
+        double3 xformOp:scale = (0.024, 0.25, 0.036)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.06, 0.18, 0.5)]
+        float physxCollision:contactOffset = 0.001
+        float physxCollision:restOffset = 0
+    }
+    def Cube "Blade" (prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"])
+    {
+        double size = 1
+        double3 xformOp:translate = (0.085, -0.1075, 0.001)
+        double3 xformOp:scale = (0.17, 0.02, 0.006)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.65, 0.68, 0.72)]
+        float physxCollision:contactOffset = 0.001
+        float physxCollision:restOffset = 0
+    }
+}
