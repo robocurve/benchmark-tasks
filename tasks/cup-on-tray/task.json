@@ -1,0 +1,17 @@
+{
+  "title": "Put a cup on a tray",
+  "category": "Societal relevance",
+  "keywords": [
+    "pick and place",
+    "upright",
+    "serving"
+  ],
+  "instruction": "Put the cup on the tray.",
+  "context": "Placing a cup upright and fully on a tray is the first step of serving or clearing a table in a restaurant, hospital or care home.",
+  "setup": "Two YAM arms at a table (top 74.75 cm above the floor), bases at y = +30.5 cm and -30.5 cm. A dark paper takeaway coffee cup with a printed logo and a fitted lid, 8 cm across at its widest and 12.6 cm tall with the lid on (50 g), stands upright 17 cm in front of the arm bases and 12 cm left of centre. A grey wooden tray, modeled as a flat board 20 cm deep, 16 cm wide and 2 cm thick (300 g), lies flat 25 cm in front of the arm bases and 5 cm right of centre, its edges parallel to the table's. Both are loose. Nothing else is on the table.",
+  "scoring": "1.0 if, at the end, the cup's centre is at least 4 cm (half the cup's width) inside every edge of the tray, its bottom is within 1 cm of the tray's top surface, its axis is within 10 degrees of upright, and the cup and tray are both still (under 1 cm/s and 0.5 rad/s) for 1 second. 0.5 if the cup's centre is over the tray and its bottom is within 1 cm of the tray's top surface, but it fails the 4 cm or 10-degree conditions. 0.0 otherwise.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "fidelity": "Approximate: the cup is a rigid, lidded paper-cup model with nothing inside it, colliding as a single convex shape, and the tray is a flat rigid board with no rim. Friction and mass are nominal values. The scorer cannot see the grippers, so a cup still held motionless on the tray is not distinguished; on a real table, open the grippers before scoring.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-B5MEDL"
+}
