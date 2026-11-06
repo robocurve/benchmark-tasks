@@ -1,0 +1,21 @@
+{
+  "title": "Clamp a chip carrier pin-1-aligned under a stage's spring clip",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "hold open",
+    "spring clip",
+    "pin-1 orientation",
+    "laboratory",
+    "sample mounting"
+  ],
+  "instruction": "Clamp the chip carrier under the spring clip, centred on the dark square on the stage, chip side up, with the carrier's red pin-1 dot at the corner next to the stage's red mark. The clip is spring-loaded: press its black thumb tab down to lift the jaw, slide the carrier in underneath, then let the tab go so the jaw comes down on the carrier.",
+  "context": "Mounting a sample under a spring clip on a microscope, probe-station or inspection stage is routine laboratory and cleanroom work. It takes two hands, one holding the fixture's clip open while the other positions the part, and the part must go in pin-1 aligned, because probe cards, test sockets and image coordinates all assume it, with the jaw landing on the carrier's margin, not on the chip.",
+  "setup": "Station table (top 0.7475 m). Robot base frame: x forward, y to the robots' left. Inspection stage, fixed: a 10 x 10 cm aluminium block 2 cm tall, centred at (0.30, -0.04); its top has a flush 4 x 4 cm dark target square at the centre, and a red 5 x 5 mm sticker (0.4 mm thick) on the aluminium just beyond the square's far left corner (the corner at larger x and larger y). Spring clip, fixed to the stage: a 12 x 12 mm steel post 2 cm tall on the table, 2.5 cm off the stage's near (robot-facing) edge, at (0.225, -0.04); a 3 mm steel bar pivots on it about the y axis, 2.2 cm above the table. Towards the stage the bar is a 10 mm wide jaw ending 1 cm short of the stage centre, resting 0.5 mm above the stage top; away from the stage it is a 6 x 3 cm black rubber thumb tab over the table. A torsion spring (1.0 N m per radian) holds the jaw down; pressing the tab down by about 1.7 cm (to its stop) lifts the jaw tip about 2.2 cm. Chip carrier, loose, 30 g: a 36 x 36 x 8 mm aluminium plate with a 10 x 10 x 0.7 mm silicon chip glued at the centre of its top face and a red 4 mm pin-1 dot on the top face 12.5 mm from the centre along both edges (at one corner of the chip), lying chip up on the table at (0.20, 0.17), edges parallel to the table's, with the dot at its far right corner (larger x, smaller y): a quarter turn clockwise from pin-1 orientation. No other objects.",
+  "scoring": "The carrier's centre and orientation are measured once everything has come to rest. 0 if the carrier is not lying flat, chip up, on the stage top (tilted more than 5 degrees, upside down, on the table, or held). 0.25 if it lies flat on the stage top. 0.5 if it is also centred on the target square (centre within 3 mm of the square's centre) and in pin-1 orientation (its red dot at the corner next to the stage's red mark, edges within 10 degrees of parallel to the square's; the other three quarter turns count as not oriented). 1.0 if it is also clamped: the tab has been let go and the jaw rests on the carrier's edge (the bar lifted between 0.08 and 0.20 rad from its closed position, which is where an 8 mm carrier holds it; empty it lies at 0, and a held-open clip is past 0.20).",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Reset: let the clip close on the bare stage and put the carrier back at its start, chip up, dot at its far right corner.",
+  "fidelity": "Rigid bodies in PhysX at 240 Hz. The clip is a rigid bar on an ideal hinge with a linear torsion spring and a hard stop when closed; bar bending and spring hysteresis are not modelled. The chip cannot break, so only the 3 mm centring limit keeps the jaw off it (it then lands at least 2 mm clear). The carrier is a plain box, friction 1.0; no adhesive, vacuum or electrostatics.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-WLBZBX"
+}
