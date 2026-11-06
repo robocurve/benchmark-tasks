@@ -1,0 +1,21 @@
+{
+  "title": "Swap a failed optical transceiver, keeping the cage and the new optic capped",
+  "category": "Impact on jobs",
+  "keywords": [
+    "data center",
+    "networking",
+    "optical transceiver",
+    "fibre hygiene",
+    "dust cap",
+    "procedure order"
+  ],
+  "instruction": "The optic in the switch cage with the red link tile has failed. Put it in the black return tray. As soon as it is out, plug the empty cage with the blue dust plug from the blue tray. Then take the plug out again, put it back in the blue tray, and seat the new optic from the white tray in that cage, keeping its black dust cap on until it is seated. Finally lift the cap off and put it in the blue tray. Do not touch the working optics.",
+  "context": "Dust on an optical interface is a leading cause of link failures, so fibre-hygiene practice (inspect-and-clean guidance such as IEC 61300-3-35, and transceiver vendors' handling notes) keeps every open cage and every unused optic capped: an empty cage gets its dust plug at once, and a new optic keeps its dust cap until it is installed and ready for its fibre. The skill is handling small parts in the right order, which the end state does not show: both rules are checked at every step. Unlike DataCenterBench's Tier 1 plug and unplug tasks (one connector, no caps) and TK-U3S7ZZ (clean a fibre connector, then plug it in), this is a three-part swap in which a cap and a plug must come and go at the right moments. Done by: telecommunications equipment installers and repairers; computer network support specialists (O*NET 49-2022.00, 15-1231.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. Switch: a fixed steel faceplate 6 x 26 cm, 0.3 cm thick, centred at x 34, y 25, with four fixed steel cages (open frames, walls 0.4 cm thick, 1.2 cm tall, round a 2.8 x 3 cm opening) centred at x 34 and y 34 (cage 1), 28 (2), 22 (3), 16 (4). Fixed link tiles (2 x 3 cm) at x 29 in front of each cage: red for cage 2, green for the others. Optics: five light grey boxes 2.2 (x) x 2.4 x 6 cm tall, 40 g, standing in cages 1 to 4 and in the white tray; the one in cage 2 has failed. The new optic's dust cap is a black box 3 (x) x 1.6 x 1.8 cm, 8 g, sitting on its top. The cage dust plug is a blue box 2.2 x 2.4 x 4 cm tall, 10 g. Trays (fixed open frames, walls 0.6 cm thick, 1 cm tall): white spares tray round a 7 x 7 cm opening at x 17, y 33 (new optic at its centre); blue cap tray round a 14 x 7 cm opening at x 17, y 24 (plug at x 13.5); black return tray round an 8 x 7 cm opening at x 17, y 15.",
+  "scoring": "From the episode's recorded poses, with the grippers open at the end. 0.25 for the failed optic at rest in the return tray; 0.25 once the plug has stood at rest in cage 2 after the failed optic left it; 0.25 for the new optic seated in cage 2 (still, upright and square within 6 degrees, centre within 3.5 mm of the cage centre, bottom within 2 mm of the faceplate); 0.25 for the cap and the plug both at rest in the blue tray while it is seated. Checked every step: if the new optic's centre moves 1 cm from its start before cage 2 has been plugged, or its cap is ever off it (centres more than 1 cm apart, or not resting on its top) before it is seated, or a working optic ends more than 4 mm or 5 degrees from its start, the score is capped at 0.25. Possible scores: 0, 0.25, 0.5, 0.75, 1.0. Success: score 1, held 1 s.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Stand the failed optic back in cage 2, the new optic in the white tray with its cap on top, and the plug in the blue tray at its mark; the working optics stay in their cages. On a real rig the order is judged from the trial video.",
+  "fidelity": "Rigid boxes, one shared friction (1.2 static, 1.0 dynamic). An optic (real QSFP about 18 x 8.5 x 72 mm) is a plain box drawn wider so each part is at least 20 mm across the fingers; it stands in a top-open cage held by gravity, with no latch, connector or fibre. The dust cap rests on the optic's top instead of fitting its bore, and the cage plug is a block. Dust is not simulated: the rules are judged from poses every step.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-5PLA44"
+}
