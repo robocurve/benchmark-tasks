@@ -1,0 +1,13 @@
+{
+  "title": "Align a coupled shaft and prove low runout",
+  "category": "Impact on AI timelines",
+  "instruction": "Slide the blue front and rear adjusters toward the spindle and slide the orange cradle lock. Press the green TEST cap and let the guarded spindle turn twice.",
+  "context": "Robot spindle commissioning requires removing shaft offset and angular error before loading the coupling.",
+  "setup": "A 356 x 255 x 8 mm aluminum base sits at (298,-2,751.5) mm on the YAM table. Front, rear and lock tabs start at x=211,291,372 mm, y=98 mm, z=798 mm with 15 mm of travel. The green cap at (270,-106,789) mm has 7 mm of travel. Guarded steel rotors turn about Z and X. Exact dimensions and reset geometry are specified in task.py.",
+  "scoring": "0.25 for one aligned axis with the cradle locked. 0.50 for radial error <=0.5 mm and angular error <=0.5 degrees at the same locked setting. 0.75 after one output turn and 1.0 after two turns at <=0.25 N m peak coupling torque. Movement of the fixture, changed settings, or >0.50 N m torque zeroes the trial.",
+  "run_limit": "2,400 control steps (120 seconds at 20 Hz)",
+  "reset_notes": "Use the fixed ready poses and fixture joint origins. The proof system starts disabled and the trial history is cleared.",
+  "fidelity": "Physical tabs set calibrated equivalent shaft alignment. The test cap enables an effort-controlled input. A compliant torsional model drives the actual guarded output shaft. Alignment and drag are equivalent calibrated bench quantities, with output turns measured from the joint.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-AKFPHH"
+}
