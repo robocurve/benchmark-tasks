@@ -1,0 +1,14 @@
+{
+  "title": "Continue a shop display's product pattern",
+  "category": "Impact on jobs",
+  "keywords": ["retail", "planogram", "pattern", "restocking"],
+  "instruction": "Fill the two empty spots on the display so it continues the same pattern.",
+  "context": "Shops lay shelves out to a planogram, and staff restocking a display must continue its arrangement. The robot has to infer the repeating sequence from the display itself; the stock is shuffled so the item in front of each gap is the wrong one.",
+  "setup": "A wooden display shelf (66 x 11 cm) runs left to right 33 cm in front of the arm bases, with a white back panel carrying a red sign and a yellow price strip in front. Its seven spots, 9 cm apart, hold from the robot's left: soup can, ketchup bottle, green beans can, soup can, ketchup bottle, then two empty spots. On a cardboard mat 15 cm in front of the bases stand, left to right: ketchup, yogurt cup, soup can, mustard, green beans can.",
+  "scoring": "0 if any product ever tips past 45 degrees or a display product is ever moved more than 2 cm. Otherwise 0.5 for each empty spot holding the product that continues the pattern (sixth: green beans can, seventh: soup can), upright within 15 degrees and centred within 3 cm of the spot.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Return the display products and stock to their marks, leaving the last two spots empty.",
+  "fidelity": "Rigid bodies only; the products are solid models of real groceries (cans 6.8 cm wide, bottles 17 cm tall). Every surface has the same rubber-like friction (1.2). The shelf, back panel, sign and mat are fixed.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-KJS7WG"
+}
