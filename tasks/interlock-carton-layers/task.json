@@ -1,0 +1,22 @@
+{
+  "title": "Stack cartons in two interlocked layers",
+  "category": "Impact on jobs",
+  "keywords": [
+    "palletizing",
+    "unit load",
+    "interlock stacking pattern",
+    "stacking",
+    "pick and place",
+    "warehouse",
+    "spatial reasoning"
+  ],
+  "instruction": "Stack the four cartons on the pallet board in two layers of two, with the second layer turned 90 degrees to the first so that each top carton rests across both cartons below it.",
+  "context": "Packing work includes following prescribed stacking patterns. Each carton in the upper layer must span both cartons below it; the score measures the completed pattern rather than the load's stability during transport.",
+  "setup": "Two YAM arms with parallel grippers, bases 61 cm apart at the near edge of a wooden table. Positions are in cm from the midpoint between the two arm bases: x straight out across the table, y to the left; sizes are length (x) x width (y) x height. A pallet board (grey-painted plywood, 24.0 x 24.0 x 1.2 cm, taped to the table so it cannot move) centred at x = 25, y = 0. Four identical loose shipping cartons (closed single-wall corrugated board, plain kraft, no print, 18.0 x 7.5 x 5.0 cm, packed with light goods to about 200 g each) lie flat on the table on their largest face, long side along x (pointing away from the arms), all centred at x = 25: two to the left of the board at y = +21.0 and +32.5, two to the right at y = -21.0 and -32.5 (4 cm apart side to side). Two cartons side by side with a 3 cm gap make an 18 x 18 cm square layer, leaving 3 cm of board around it; two cartons cannot lie end to end on the board.",
+  "scoring": "Each carton is graded on its own and the grades add (maximum 1.0). First layer: a carton lying flat (tilted under 10 degrees) and still (under 1 cm/s) on the board, its bottom within 1 cm of the board surface and its whole footprint inside the board's edges (0.5 cm tolerance), scores 0.2; at most two count. Second layer: a carton lying flat and still with its bottom within 1 cm of the top of the first layer (5 cm above the board) and its footprint inside the board's edges scores 0.3 if it is interlocked, meaning its long side is at 90 +/- 10 degrees to the long sides of both first-layer cartons and at least a fifth of its length (3.6 cm) rests on each of them, so it bridges the joint between them; it scores 0.1 if it rests (a fifth of its length) on at least one first-layer carton but is not interlocked, for example the same way round as the carton below it (column stacking); at most two count. Gaps between the cartons of a layer are allowed. A carton anywhere else (left on the table, held, still moving, stacked higher, overhanging the board, leaning 10 to 20 degrees) scores 0. The whole score is 0 if any carton is tilted more than 20 degrees (on its side or end, or a collapsed stack) or falls off the table. So an interlocked two-layer stack scores 1.0, a column stack 0.6 and a single layer 0.4. Full score (1.0): all four cartons in place at the same moment for 1 second, which ends the trial; otherwise the score at the end of the run.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Put the four cartons back at their starting spots, long side along x; the board stays taped down.",
+  "fidelity": "Rigid primitives, one flat colour each. A carton is one uniform rigid box (no flaps, flex, crush or shifting contents), so a column stack is as stable as an interlocked one here: the score, not the physics, carries the palletizing rule. The pallet is one fixed box. Scaled to the 8.4 cm grip: long narrow cartons, two per layer, and the 3 cm finger gaps a packer would close are allowed. Masses are estimates; friction is the simulator's rubber-like 1.2/1.0, higher than board on board.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-3WX3R3"
+}
