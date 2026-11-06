@@ -1,0 +1,21 @@
+{
+  "title": "Drop a T-nut into the profile slot, quarter-turn it, slide it to the mark",
+  "category": "Impact on jobs",
+  "keywords": [
+    "T-slot",
+    "aluminium profile",
+    "T-nut",
+    "in-hand rotation",
+    "fastening",
+    "maker space"
+  ],
+  "instruction": "Drop the yellow T-nut into the slot on top of the aluminium profile, turn it a quarter turn so it locks under the lips, then slide it along the slot to the red mark and let go.",
+  "context": "Machine builders and maker-space staff fit T-nuts into aluminium profiles to mount brackets, guards and sensors on frames. A drop-in T-nut passes the slot's opening only lengthwise, so it has to be turned a quarter turn inside the slot, out of sight under the lips, before it holds, then slid to where the part goes.",
+  "setup": "Left and right are the robot's. Positions are centres in metres from the midpoint between the two arm bases: x forward, y to the robot's left, heights above the table. Cutting mat: a 28 x 36 cm green self-healing cutting mat (36 cm along y) with a 1 cm grid, 2 mm thick, fixed, centred at (0.28, -0.08). Profile: a 45 x 45 mm clear-anodised aluminium T-slot profile, 30 cm long, fixed on the mat along y at x = 0.30, from y = -0.21 to y = 0.09, slot facing up, with black plastic end caps (4 mm) closing both ends. The top slot opens 16 mm between two 5 mm thick lips onto a channel 30 mm wide and 9 mm high. Its other three faces have smaller slots. Mark: red tape 6 mm wide across the profile's top at y = -0.12. T-nut: a yellow-zinc steel drop-in T-nut, 24 x 10 x 6 mm, with an 8 mm threaded stud 40 mm long screwed into its middle, 25 g in all, standing on the mat at (0.21, -0.14) with its 24 mm side along x (across the slot). On the robot's left, fixed: a steel speed square (17 x 13 cm) lying flat at (0.25, 0.20) and a white marker pen with a dark blue cap (12 cm) at (0.20, 0.06). Nothing else is on the table.",
+  "scoring": "Positions are of the nut's centre (under the stud). In the channel: the stud within 20 degrees of vertical, the nut's centre within 8 mm of the slot's line across it, below the underside of the lips and between the end caps. Locked: in the channel with the nut's 24 mm side within 10 degrees of perpendicular to the slot. 1.0 (success, held 1 s): locked, the nut's centre within 1 cm of the mark along the slot, no finger within 3 mm of the T-nut, and the T-nut still (under 1 cm/s and 0.5 rad/s). 0.5: locked, but 1 cm or more from the mark, or still held or moving. 0.25: in the channel but not turned. 0 otherwise, including resting on top of the profile, and 0 if the T-nut falls off the table.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. The T-nut is one rigid body of two box colliders (nut and an 8 mm square stud, drawn round and threaded), contacts from 2 mm out. The profile collides as boxes (floor, walls, lips, end caps). Its other slots and the mark are drawn only. Sizes are about twice a 2020 profile's and its 6 mm slot, which are too small for these contacts. The gripper closes with 50 N per pad.",
+  "scores": "Dream-1 run: 0.0 (the right arm reaches over the profile near the yellow nut but never picks it up or puts it in the slot), demo: 1.0 (success at step 330)",
+  "reset_notes": "Take the T-nut out of the slot (turn it lengthwise first) and stand it back on the mat with its 24 mm side along x.",
+  "media": "M-8F2264"
+}
