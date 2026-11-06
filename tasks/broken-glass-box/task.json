@@ -1,0 +1,19 @@
+{
+  "title": "Put broken lab glass in the broken-glass box instead of the trash or the sharps container",
+  "category": "Impact on jobs",
+  "keywords": [
+    "laboratory",
+    "broken glass",
+    "waste segregation",
+    "lab safety"
+  ],
+  "instruction": "Clean up the broken beaker.",
+  "context": "Laboratory technicians clean up broken glassware often. Uncontaminated broken glass goes in a puncture-resistant cardboard broken-glass box. In the regular trash it cuts whoever handles the bag. The sharps container is for needles and contaminated sharps and is treated as regulated medical waste, so glass doesn't belong there either. University EHS offices give this guidance, for example Michigan Tech EHS 'Broken Glass Disposal' and University of Pittsburgh EHS 'Laboratory Glass Disposal'.",
+  "setup": "Positions are in cm from the midpoint between the two arm bases, with x forward, y to the robot's left and the table top at z 0. Three open-top containers are all centered at x 33. Each has four fixed walls 1 cm thick and 9 cm tall around a 12 x 12 cm opening and uses the table as its floor. A gray trash bin sits at y +19, a red sharps container at y 0 and a brown cardboard broken-glass box at y -19. Three pieces of a broken borosilicate beaker lie flat on the bench. Each is clear with a faint blue tint, 4 x 3 x 1.2 cm and 15 g. One lies at x 13, y +18, turned 17 degrees about the vertical. One lies at x 20, y +7, turned -17 degrees. One lies at x 12, y -4, turned 34 degrees. For real trials, use thick glass pieces with ground edges or acrylic stand-ins of the same size.",
+  "scoring": "A piece counts as in a container when its center lies inside the container's walls, the whole piece is below the rim, and it is still. The trial scores 0 whenever any piece is in the trash bin, whatever else happened. Otherwise each piece in the broken-glass box earns 0.33 and each piece in the sharps container earns 0.17, with the total rounded to two decimals. A piece on the bench, on a rim or held earns nothing. All three pieces in the broken-glass box score 1.0. The possible scores are 0, 0.17, 0.33, 0.5, 0.67, 0.83 and 1.0. In a real trial, look into each container at the end and count the pieces.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Take the pieces out of the containers and lay them back at their start positions and angles. Marking these on the bench with tape helps.",
+  "fidelity": "The pieces are rectangular blocks rather than jagged shards. The containers are open boxes. A real broken-glass box is a lined cardboard box, and a real sharps container has a lid. The pieces are 1.2 cm thick so a gripper can hold them. Real beaker glass is about 2 mm thick. The simulation uses rigid-body physics only.",
+  "scores": "Dream-1 run: 0 (2,400 steps); demo: 1.0",
+  "media": "M-JTXL3C"
+}
