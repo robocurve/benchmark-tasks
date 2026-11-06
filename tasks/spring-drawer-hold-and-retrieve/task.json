@@ -1,0 +1,21 @@
+{
+  "title": "Hold a spring-return drawer open while retrieving an enclosed block",
+  "category": "Impact on jobs",
+  "context": "Industrial cabinets, tool chests, and automated dispensing units frequently employ self-closing spring mechanisms for dust, thermal, or safety containment. An autonomous dual-arm robot must coordinate manipulators to hook and retain a spring-loaded drawer against continuous closing force, while the second manipulator reaches into the recessed compartment, extracts a payload, transfers it to external staging, and allows the drawer to close smoothly without pinching.",
+  "instruction": "Pull the drawer fully open and keep it open while you take the white block out and put it on the green shelf, then let the drawer close.",
+  "setup": "All positions are cm from the midpoint between arm bases (x forward, y left); table top is z = 0. Cabinet: 22.0 x 16.0 x 8.0 cm open-front shell at (41.5, 0.0) with front face at x = 30.5 cm and a cover plate over its rear half (x >= 38.0 cm). A 19.0 x 12.0 x 3.0 cm open-top drawer (1.0 cm walls) with a 2.5 x 6.0 x 3.5 cm front handle slides along x toward the robot with 14.0 cm travel against an 18 N/m return spring. On the drawer floor, under the cover plate, rests one 4.0 cm cubic white block (0.10 kg) at x = 45.0 cm. A 2.5 cm cyan marker lamp on the cover plate at (45.0, 0.0) lights when drawer displacement is >= 9.0 cm. A 13.0 x 13.0 x 1.0 cm green shelf rests on the right at (30.0, -28.0).",
+  "scoring": "Score: 0.25 when the drawer is opened >= 9.0 cm (cyan lamp lit) for >= 1.0 s; 0.50 when the white block is grasped and lifted >= 3.0 cm clear of the drawer floor; 0.75 when the block rests on the green shelf; 1.00 when the drawer is closed (< 0.5 cm) afterwards with both arms clear and holds for 20 control steps (1.0 s at 20 Hz). Zero-gates: allowing the drawer to close (< 3.0 cm out) while the block is still within 6.0 cm behind the cabinet front face triggers a PINCH fault, latching score to 0.0; dropping the block off the table drops score to 0.0.",
+  "reset_notes": "Verify the spring drawer is fully closed (< 0.5 cm). Confirm the white block rests inside the back covered compartment. Verify cyan open lamp is off and green shelf is clear.",
+  "run_limit": "2,500 steps (125 seconds at 20 Hz)",
+  "keywords": [
+    "bimanual",
+    "spring-return",
+    "drawer",
+    "pinch hazard",
+    "retrieval",
+    "coordination"
+  ],
+  "fidelity": "Cabinet is a heavy rigid enclosure. Drawer is a physical prismatic slider along X with an 18 N/m spring return, 140 mm travel limit, and viscous damping. White block is a physical rigid body. Top indicator lamp is rendered via write_pose. Real-world build: spring-loaded instrument drawer with safety interlock switch and external parts shelf.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-CDBQXE"
+}
