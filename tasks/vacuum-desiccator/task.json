@@ -1,0 +1,23 @@
+{
+  "title": "Load a sample into a vacuum desiccator and pump it back down",
+  "category": "Impact on jobs",
+  "keywords": [
+    "vacuum desiccator",
+    "venting",
+    "stopcock",
+    "dome lid",
+    "pump switch",
+    "pressure gauge",
+    "sample storage",
+    "two arms"
+  ],
+  "instruction": "Put the sample vial on the dark ring inside the vacuum desiccator, then leave the desiccator back under vacuum, at -90 kPa or lower, with its stopcock shut and the pump off. Don't blow the powder inside about.",
+  "context": "Air- and moisture-sensitive samples are kept in vacuum desiccators. Venting too fast scatters powders, a dome set down on the bench gets knocked or scratched, and shutting the pump before the stopcock lets air back into the box.",
+  "setup": "Station table, both arms parked. A vacuum desiccator centred at (0.25, -0.06) m: a white polypropylene bowl base 24 cm across its flange and 7 cm tall, 2 kg on rubber feet, with a perforated white polypropylene plate 3 cm above its floor and a dark ring 32 mm across marked on the plate 4.5 cm to the left of its centre; a clear polycarbonate dome 6.5 cm tall (0.45 kg) seated on the flange, with a ribbed clear knob 32 mm across and 22 mm tall on top; the box at 8 kPa absolute (-93 kPa). On the base's right side, on a 2.5 cm port, a red polypropylene stopcock with a 40 mm lever and a 9 mm post at its end, lever pointing at the robots (shut); an amber rubber hose from its barb through a tee with a 50 mm steel-cased dial gauge facing up on a short steel stand (dial 3 cm above the bench, centred at (0.245, -0.275) m; 0 to -100 kPa, 270 degree scale, red ticks past -90), on to a grey ABS plastic pump controller box (8 x 5 x 8 cm) at (0.17, -0.36) m with a 32 mm red/black plastic rocker switch on top, black end down (pump off). Inside on the plate, a 44 mm glass dish of yellow powder. On the bench at (0.20, 0.20) m, a glass sample vial 22 mm across and 45 mm tall with a blue polypropylene cap, standing upright.",
+  "scoring": "Scored from the final state, after the seal check. 0 unless the vial stands upright (within 10 degrees) on the plate inside the base and the dome is seated on the flange (flat within 1.5 degrees, rim within 1.5 mm of the flange, centre within 8 mm of the base's axis). Then 0.25; 0.5 if the box is also at -90 kPa or lower; 0.75 if, besides, the stopcock is shut (lever within 10 degrees of pointing at the robots) and the pump switched off; 1.0 if, besides, the vial's centre is within 1.5 cm of the ring's centre. Capped at 0.25 if the box was ever vented faster than 12 kPa a second. The pressure is simulated from the stopcock opening and the pump switch, and is read off the gauge in a real trial.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Take the vial out and stand it at (0.20, 0.20); seat the dome; switch the pump on, open the stopcock, pump down to -93 kPa, shut the stopcock, switch the pump off.",
+  "fidelity": "Rigid-body sim. Air is a simple model: pressure set by the stopcock opening and the pump switch, and a vacuum load that holds the dome down while sealed. The seal is a pose check. Base and dome are lathe meshes; only the dome's rim and knob collide. The powder is a static dish.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-EE9ZSY"
+}
