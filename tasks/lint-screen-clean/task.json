@@ -1,0 +1,14 @@
+{
+  "title": "Clean the dryer lint screen and reseat it fully",
+  "category": "Societal relevance",
+  "keywords": ["lint screen", "dryer", "fire hazard", "multi-stage", "housing inspection"],
+  "instruction": "Clean the lint screen and reseat it fully.",
+  "context": "A lint screen blocked with visible lint accumulation is a clothes-dryer fire hazard (NSPIRE D021/D023), and verifying it is a routine inspection act: pull the screen out, check it, clear the lint, and reseat it fully. The routine is photo-verifiable end to end — the screen's position and the lint's absence are both visible in a single photo, making this the cheapest multi-stage manipulation task in an inspection portfolio.",
+  "setup": "Station scene, fixed layout (see setup.png). On the table at (x=0.40 m, y=0) stands the top section of a clothes dryer: a light-grey cabinet box (30x26x10 cm) with a slot along its front edge formed by two steel walls (0.8 cm thick, 26 cm long, 2 cm tall) 4.4 cm apart. In the slot lies the lint screen: a white tray 2.4 cm across, 22 cm long, 2 cm thick (~120 g) with a long handle bar; seated, its handle end protrudes 7 cm past the slot mouth at y=+0.13 (the handle end at y=+0.20). Six grey lint flakes (8 mm cubes, ~2 g) are settled on the screen's face inside the slot at y=0.07..0.11. No other loose objects.",
+  "scoring": "task_score: 0.5 for the screen fully reseated (centre within 6 mm of the seated pose in xy and 4 mm in z); 0.5 for the lint cleared (no flake within the screen's footprint plus 4 mm of its centre and within 1.8 cm of its height — flakes knocked off onto the cabinet or table count as cleared, flakes in the slot's side cracks do not, being off the screen); 1.0 for both. success ends the trial when both hold 0.4 s; the final state is static (SCORE_OVER=end).",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "The screen and the lint flakes are free objects; with -E object_jitter=0 every trial starts from the exact layout in setup.png. Trials use scene=station.",
+  "fidelity": "The screen is a rigid tray in an open-walled slot (no mesh), and the lint is six rigid flakes: 'cleaning' means no flake remains on the screen's face, which is exactly what a photo-based inspection reads. The dryer is represented by its top section only — sufficient for the slot-and-screen mechanic and honest about scope. No airflow or fire risk is simulated; the scoring criterion is the visible lint, the same evidence the NSPIRE checklist records.",
+  "scores": "Dream-1 run: 0.5; scripted demo: 1.0",
+  "media": ""
+}
