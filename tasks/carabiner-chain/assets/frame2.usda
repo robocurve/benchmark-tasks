@@ -1,0 +1,157 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Asset" (
+    apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxRigidBodyAPI"]
+)
+{
+    float physics:mass = 0.018
+    custom bool physxRigidBody:enableCCD = 1
+
+    def Capsule "Arc0" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.00721110255092798
+        color3f[] primvars:displayColor = [(0.83, 0.57, 0.07)]
+        double radius = 0.00225
+        quatd xformOp:orient = (-0.2049083366179597, -0.2049083366179597, 0.6767662621499841, 0.676766262149984)
+        double3 xformOp:translate = (0.014, 0.025, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Arc1" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.00824621125123532
+        color3f[] primvars:displayColor = [(0.83, 0.57, 0.07)]
+        double radius = 0.00225
+        quatd xformOp:orient = (-0.4351621464935996, -0.4351621464935993, 0.5573454101893036, 0.5573454101893036)
+        double3 xformOp:translate = (0.008, 0.028999999999999998, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Arc2" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.012
+        color3f[] primvars:displayColor = [(0.83, 0.57, 0.07)]
+        double radius = 0.00225
+        quatd xformOp:orient = (-0.5000000000000002, -0.5, 0.5, 0.5)
+        double3 xformOp:translate = (-0.002, 0.03, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Arc3" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.007211102550927979
+        color3f[] primvars:displayColor = [(0.83, 0.57, 0.07)]
+        double radius = 0.00225
+        quatd xformOp:orient = (0.6234380875887414, 0.6234380875887416, -0.3336539389003114, -0.33365393890031136)
+        double3 xformOp:translate = (-0.011, 0.027999999999999997, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Arc4" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.006324555320336757
+        color3f[] primvars:displayColor = [(0.83, 0.57, 0.07)]
+        double radius = 0.00225
+        quatd xformOp:orient = (0.6979762349196629, 0.697976234919663, -0.11326595025589799, -0.11326595025589799)
+        double3 xformOp:translate = (-0.015, 0.023, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Arc5" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.04
+        color3f[] primvars:displayColor = [(0.83, 0.57, 0.07)]
+        double radius = 0.00225
+        quatd xformOp:orient = (0.7071067811865475, 0.7071067811865476, 0, 0)
+        double3 xformOp:translate = (-0.016, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Arc6" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.006324555320336757
+        color3f[] primvars:displayColor = [(0.83, 0.57, 0.07)]
+        double radius = 0.00225
+        quatd xformOp:orient = (0.6979762349196629, 0.697976234919663, 0.11326595025589799, 0.11326595025589799)
+        double3 xformOp:translate = (-0.015, -0.023, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Arc7" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.007211102550927979
+        color3f[] primvars:displayColor = [(0.83, 0.57, 0.07)]
+        double radius = 0.00225
+        quatd xformOp:orient = (0.6234380875887414, 0.6234380875887416, 0.3336539389003114, 0.33365393890031136)
+        double3 xformOp:translate = (-0.011, -0.027999999999999997, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Arc8" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.012
+        color3f[] primvars:displayColor = [(0.83, 0.57, 0.07)]
+        double radius = 0.00225
+        quatd xformOp:orient = (0.4999999999999999, 0.5000000000000001, 0.5000000000000001, 0.5000000000000001)
+        double3 xformOp:translate = (-0.002, -0.03, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Arc9" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.00824621125123532
+        color3f[] primvars:displayColor = [(0.83, 0.57, 0.07)]
+        double radius = 0.00225
+        quatd xformOp:orient = (0.43516214649359924, 0.43516214649359936, 0.5573454101893037, 0.5573454101893037)
+        double3 xformOp:translate = (0.008, -0.028999999999999998, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Arc10" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.00721110255092798
+        color3f[] primvars:displayColor = [(0.83, 0.57, 0.07)]
+        double radius = 0.00225
+        quatd xformOp:orient = (0.20490833661795962, 0.2049083366179597, 0.6767662621499841, 0.676766262149984)
+        double3 xformOp:translate = (0.014, -0.025, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+}

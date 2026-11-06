@@ -1,0 +1,18 @@
+{
+  "title": "Assemble a hanging carabiner chain",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "assembly",
+    "spring gates",
+    "interlinking"
+  ],
+  "instruction": "Make one hanging chain using all three carabiners. Clip one to the stand, then link each remaining carabiner through the previous one. Close all gates and let go.",
+  "context": "Serial assembly requires stabilizing a growing movable chain while aligning and operating the next passive gate.",
+  "setup": "Three loose 64.5 x 36.5 mm nonlocking accessory carabiners have 4.5 mm frame sections, 20 g total mass each and a passive 30 degree spring gate. A fixed pole carries a closed, empty D eye offset 80 mm toward the robot; its lower physical edge is 220 mm above the table. Layout seed 17 fixes the default nonoverlapping positions, full-circle yaws and either broad face down. Native cameras remain unchanged.",
+  "scoring": "The longest valid unbranched serial path from the eye earns 1/3 per carabiner. Gates must be within 5 degrees of closed with tip gap <=1.5 mm. Every carabiner must be released, all robot collider bounds at least 5 mm clear, speed <=10 mm/s and spin <=0.2 rad/s for two continuous seconds. Counted links must remain at least 20 mm above the table. Spanning-surface interlink tests and physics-step checks reject closed-gate tunneling. Branches and extra direct hooks do not extend the serial prefix. Missing, invalid or broken state and stand displacement invalidate the trial.",
+  "run_limit": "4,800 actions, 240 seconds at 20 Hz; development mechanism probes use shorter recorded limits.",
+  "fidelity": "Original capsule frames preserve open collision holes. Separate flat-ended cylinder gates have constant passive torsion springs and angular stops. Own gate/frame contact is disabled; all inter-object contact remains physical. CPU240Hz, CCD,64/16 solver iterations and uniform5/s angular drag approximate small hardware. Measured topology and physics-step crossing/penetration audits reject invalid links. No snaps, welds, kinematic links or completed-part freezing.",
+  "scores": "Dream-1 beta: 0.0; scripted demo: 1.0; fresh-reset repeat demo: 1.0.",
+  "media": "M-Y48BBS"
+}

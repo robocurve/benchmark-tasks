@@ -1,0 +1,682 @@
+{
+  "status": "Two qualifying full-score demos and one completed Dream trial; local review only",
+  "environment_revision": "2e4653b694a6e975ba1be9d440e541859ca6618b29b149fc2605d15c812dac5f",
+  "results": [
+    {
+      "trial": "chain-triple-026",
+      "policy": "carabiner_chain_scripted",
+      "score": 1.0,
+      "actions": 4123,
+      "sim_seconds": 206.15,
+      "wall_seconds": 569.4268675707281,
+      "termination": "success",
+      "eval_seed": 17,
+      "actual_engine_seed": 3841821929,
+      "layout_seed": 17,
+      "environment_revision": "2e4653b694a6e975ba1be9d440e541859ca6618b29b149fc2605d15c812dac5f"
+    },
+    {
+      "trial": "chain-triple-repeat-029",
+      "policy": "carabiner_chain_scripted",
+      "score": 1.0,
+      "actions": 4123,
+      "sim_seconds": 206.15,
+      "wall_seconds": 573.6272120093927,
+      "termination": "success",
+      "eval_seed": 17,
+      "actual_engine_seed": 3841821929,
+      "layout_seed": 17,
+      "environment_revision": "2e4653b694a6e975ba1be9d440e541859ca6618b29b149fc2605d15c812dac5f"
+    },
+    {
+      "trial": "chain-dream-030",
+      "policy": "dream",
+      "score": 0.0,
+      "actions": 4800,
+      "sim_seconds": 240.0,
+      "wall_seconds": 790.3417977550998,
+      "termination": "max_steps",
+      "eval_seed": 17,
+      "actual_engine_seed": 3841821929,
+      "layout_seed": 17,
+      "environment_revision": "2e4653b694a6e975ba1be9d440e541859ca6618b29b149fc2605d15c812dac5f"
+    }
+  ],
+  "offline_tests_passed": 21,
+  "mechanism_probe": {
+    "diagnostic_only": true,
+    "fixture": "Main frame temporarily clamped above table; external torque on gate2 only. No assembly or credited scores.",
+    "checks": [
+      {
+        "name": "quiet_live_audit_240_hz",
+        "passed": true
+      },
+      {
+        "name": "disabled_joint_invalidates",
+        "passed": true
+      },
+      {
+        "name": "disabled_joint_reset_restores",
+        "passed": true
+      },
+      {
+        "name": "altered_joint_frame_invalidates",
+        "passed": true
+      },
+      {
+        "name": "altered_joint_frame_reset_restores",
+        "passed": true
+      },
+      {
+        "name": "altered_spring_invalidates",
+        "passed": true
+      },
+      {
+        "name": "altered_spring_reset_restores",
+        "passed": true
+      },
+      {
+        "name": "kinematic_frame_invalidates",
+        "passed": true
+      },
+      {
+        "name": "kinematic_frame_reset_restores",
+        "passed": true
+      },
+      {
+        "name": "same_seed_settled_reset_reproduces",
+        "passed": true,
+        "maximum_position_difference_m": 6.322027275018627e-07
+      },
+      {
+        "name": "post_gauge_normal_reset",
+        "passed": true
+      }
+    ],
+    "torque_gauge": [
+      {
+        "external_torque_Nm": 0.0,
+        "angle_deg": -9.827073682221578e-16,
+        "equivalent_tip_force_N": 0.0
+      },
+      {
+        "external_torque_Nm": 0.002,
+        "angle_deg": 4.001082159225645,
+        "equivalent_tip_force_N": 0.05128205128205128
+      },
+      {
+        "external_torque_Nm": 0.005,
+        "angle_deg": 10.013009954494636,
+        "equivalent_tip_force_N": 0.12820512820512822
+      },
+      {
+        "external_torque_Nm": 0.01,
+        "angle_deg": 20.103222109687476,
+        "equivalent_tip_force_N": 0.25641025641025644
+      },
+      {
+        "external_torque_Nm": 0.02,
+        "angle_deg": 30.000090667256096,
+        "equivalent_tip_force_N": 0.5128205128205129
+      },
+      {
+        "external_torque_Nm": 0.0,
+        "angle_deg": 3.569076178244124e-06,
+        "equivalent_tip_force_N": 0.0
+      }
+    ],
+    "wall_seconds": 92.6843300908804
+  },
+  "extra_layout_checks": [
+    {
+      "trial": "extra-seed23-027",
+      "layout_seed": 23,
+      "access_preflight": {
+        "initial_interlinks": false,
+        "generator_matches_settled_poses": true,
+        "robot_collision_hulls": 315,
+        "grasp_choices": {
+          "link0": {
+            "side": "left",
+            "jaw_flip": 0,
+            "max_position_error_m": 7.093808470854404e-05,
+            "max_rotation_error_rad": 0.00022319306279706565,
+            "sampling_seconds": 0.1
+          },
+          "link1": {
+            "side": "right",
+            "jaw_flip": 0,
+            "max_position_error_m": 6.966987543292213e-05,
+            "max_rotation_error_rad": 0.00022316259132896046,
+            "sampling_seconds": 0.1
+          },
+          "link2": {
+            "side": "right",
+            "jaw_flip": 0,
+            "max_position_error_m": 7.346043159941746e-05,
+            "max_rotation_error_rad": 0.00022385290332078248,
+            "sampling_seconds": 0.1
+          }
+        },
+        "rejected_candidates": [],
+        "scope": "Sampled normal flat-spine approaches from READY with the other arm READY; later clipping still requires separate path checks."
+      },
+      "positions": {
+        "stand": [
+          0.5,
+          0.0,
+          0.7475000023841858
+        ],
+        "link0": [
+          0.3077560067176819,
+          0.2256569266319275,
+          0.7497499585151672
+        ],
+        "gate0": [
+          0.29670608043670654,
+          0.21408778429031372,
+          0.7497498393058777
+        ],
+        "link1": [
+          0.2861337959766388,
+          0.014138206839561462,
+          0.7497499585151672
+        ],
+        "gate1": [
+          0.2813599407672882,
+          -0.0011329252738505602,
+          0.7497498989105225
+        ],
+        "link2": [
+          0.2887207269668579,
+          -0.2113366425037384,
+          0.7497499585151672
+        ],
+        "gate2": [
+          0.3044503927230835,
+          -0.2142655849456787,
+          0.7497499585151672
+        ]
+      },
+      "closed": {
+        "eye": true,
+        "link0": true,
+        "link1": true,
+        "link2": true
+      },
+      "settled": true,
+      "audit_invalid": false,
+      "audit_steps": 4801
+    },
+    {
+      "trial": "extra-seed41-028",
+      "layout_seed": 41,
+      "access_preflight": {
+        "initial_interlinks": false,
+        "generator_matches_settled_poses": true,
+        "robot_collision_hulls": 315,
+        "grasp_choices": {
+          "link0": {
+            "side": "left",
+            "jaw_flip": 0,
+            "max_position_error_m": 6.940446533450803e-05,
+            "max_rotation_error_rad": 0.0002355469796845072,
+            "sampling_seconds": 0.1
+          },
+          "link1": {
+            "side": "right",
+            "jaw_flip": 0,
+            "max_position_error_m": 7.158036766964186e-05,
+            "max_rotation_error_rad": 0.00022084471413287413,
+            "sampling_seconds": 0.1
+          },
+          "link2": {
+            "side": "right",
+            "jaw_flip": 0,
+            "max_position_error_m": 0.00011794388808136476,
+            "max_rotation_error_rad": 0.014559766611153883,
+            "sampling_seconds": 0.1
+          }
+        },
+        "rejected_candidates": [],
+        "scope": "Sampled normal flat-spine approaches from READY with the other arm READY; later clipping still requires separate path checks."
+      },
+      "positions": {
+        "stand": [
+          0.5,
+          0.0,
+          0.7475000023841858
+        ],
+        "link0": [
+          0.3181658089160919,
+          0.230717271566391,
+          0.7497499585151672
+        ],
+        "gate0": [
+          0.30692148208618164,
+          0.21933479607105255,
+          0.7497499585151672
+        ],
+        "link1": [
+          0.2939613163471222,
+          -0.006008552853018045,
+          0.7497499585151672
+        ],
+        "gate1": [
+          0.30991899967193604,
+          -0.004862083122134209,
+          0.7497498989105225
+        ],
+        "link2": [
+          0.30409836769104004,
+          -0.22644630074501038,
+          0.7497499585151672
+        ],
+        "gate2": [
+          0.3156370222568512,
+          -0.21536186337471008,
+          0.7497499585151672
+        ]
+      },
+      "closed": {
+        "eye": true,
+        "link0": true,
+        "link1": true,
+        "link2": true
+      },
+      "settled": true,
+      "audit_invalid": false,
+      "audit_steps": 4801
+    }
+  ],
+  "same_seed_max_settled_position_difference_m": 6.322027275018627e-07,
+  "two_link_prerequisite": {
+    "trial": "chain-pair-024",
+    "score": 0.6666666666666666,
+    "actions": 2729,
+    "wall_seconds": 372.894644913,
+    "review_completed_before_third_controller_added": true
+  },
+  "full_score_pair": true,
+  "qualified_for_dream": true,
+  "visual_review": {
+    "demos": [
+      "chain-triple-026",
+      "chain-triple-repeat-029"
+    ],
+    "all_native_frames_each": 4124,
+    "native_seconds_each": [
+      0,
+      206.15
+    ],
+    "native_pages_each": 52,
+    "critical_synchronized_wrist_pairs_each": 451,
+    "wrist_pages_each": 31,
+    "critical_intervals": [
+      [
+        5,
+        6.5
+      ],
+      [
+        28.5,
+        30.5
+      ],
+      [
+        56.5,
+        58
+      ],
+      [
+        67,
+        69
+      ],
+      [
+        94.5,
+        97
+      ],
+      [
+        108,
+        110
+      ],
+      [
+        141.5,
+        143
+      ],
+      [
+        152,
+        154
+      ],
+      [
+        179,
+        182
+      ],
+      [
+        193,
+        195
+      ],
+      [
+        201,
+        203
+      ]
+    ],
+    "contacts_correct": true,
+    "no_unexplained_jumps_or_clipping_observed": true,
+    "release_visible": true,
+    "occlusions": "Some second-clip contact partly occluded by fingers; complementary native/diagnostic views and 240 Hz measured geometry audits retained."
+  },
+  "runtime": {
+    "isaac_sim": "6.1.0.0",
+    "isaac_lab": "17.0.2",
+    "isaac_lab_commit": "37ddf626",
+    "isaac_lab_arena": "0.3.0",
+    "isaac_lab_arena_commit": "c7edf3",
+    "yam_commit": "0059d02a1a91bc6834c1d0846022891df0c78730",
+    "inspect_robots": "0.60.0",
+    "dream_plugin": "1.0.0",
+    "dream_model": "dreamlabs/dream-1-beta",
+    "torch": "2.11.0+cu128",
+    "remote_numpy": "2.3.1",
+    "local_numpy": "1.26.4",
+    "hppfcl_local": "2.4.4",
+    "hppfcl_remote_compatibility": "Coal 3.0.2",
+    "gpu": "NVIDIA L40S",
+    "physics_device": "cpu",
+    "control_hz": 20,
+    "physics_hz": 240,
+    "solver_position_iterations": 64,
+    "solver_velocity_iterations": 16,
+    "ccd": true,
+    "body_angular_damping_per_second": 5.0,
+    "linear_damping_per_second": 0.05,
+    "contact_offset_m": 0.0001,
+    "rest_offset_m": 0.0,
+    "friction_static_dynamic": [
+      0.6,
+      0.4
+    ]
+  },
+  "camera_runtime": {
+    "top_cam": {
+      "position": [
+        -0.16649487853050232,
+        -0.008999999612569809,
+        1.5418205499649047
+      ],
+      "rotation": [
+        0.2126292878609637,
+        -0.2126292878609637,
+        -0.6743802977131967,
+        0.6743802977131964
+      ],
+      "convention": "opengl",
+      "width": 640,
+      "height": 360,
+      "intrinsic_matrix": [
+        [
+          392.19561767578125,
+          0.0,
+          318.3894348144531
+        ],
+        [
+          0.0,
+          391.72235107421875,
+          177.87631225585938
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "policy_observation": true
+    },
+    "left_cam": {
+      "position": [
+        0.0003999999999999915,
+        -0.069638,
+        0.07276200000000001
+      ],
+      "rotation": [
+        0.9756188502039811,
+        -0.002816999567479388,
+        0.003226999504528134,
+        0.21942996630883527
+      ],
+      "convention": "opengl",
+      "width": 640,
+      "height": 360,
+      "intrinsic_matrix": [
+        [
+          390.6659851074219,
+          0.0,
+          317.5260009765625
+        ],
+        [
+          0.0,
+          390.1619873046875,
+          176.14599609375
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "policy_observation": true
+    },
+    "right_cam": {
+      "position": [
+        -8.528195379902339e-18,
+        -0.069638,
+        0.071699
+      ],
+      "rotation": [
+        0.9756188502039811,
+        -0.002816999567479388,
+        0.003226999504528134,
+        0.21942996630883527
+      ],
+      "convention": "opengl",
+      "width": 640,
+      "height": 360,
+      "intrinsic_matrix": [
+        [
+          390.6659851074219,
+          0.0,
+          317.5260009765625
+        ],
+        [
+          0.0,
+          390.1619873046875,
+          176.14599609375
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "policy_observation": true
+    },
+    "overview_cam": {
+      "position": [
+        0.85,
+        -0.55,
+        1.28
+      ],
+      "rotation": [
+        0.48749715195492654,
+        0.16794887619950752,
+        0.27908706853257187,
+        0.8100926551926348
+      ],
+      "convention": "opengl",
+      "width": 640,
+      "height": 360,
+      "intrinsic_matrix": [
+        [
+          549.7494506835938,
+          0.0,
+          320.0
+        ],
+        [
+          0.0,
+          549.7494506835938,
+          180.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "policy_observation": false
+    }
+  },
+  "bodies_runtime": {
+    "link0": {
+      "mass_kg": [
+        0.017999999225139618
+      ],
+      "inertia_eigenvalues": [
+        2.384348363193567e-06,
+        1.0660892257874366e-05,
+        1.300161693507107e-05
+      ],
+      "com_in_body_m": [
+        -0.005074851214885712,
+        7.37943262052454e-10,
+        0.0
+      ],
+      "authored_physics": {
+        "angularDamping": 5.0,
+        "linearDamping": 0.05000000074505806,
+        "solverPositionIterationCount": 64,
+        "solverVelocityIterationCount": 16,
+        "maxDepenetrationVelocity": 0.5
+      }
+    },
+    "gate0": {
+      "mass_kg": [
+        0.0020000000949949026
+      ],
+      "inertia_eigenvalues": [
+        5.062498864560894e-09,
+        2.5603122821848956e-07,
+        2.56031256640199e-07
+      ],
+      "com_in_body_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "authored_physics": {
+        "angularDamping": 5.0,
+        "linearDamping": 0.05000000074505806,
+        "solverPositionIterationCount": 64,
+        "solverVelocityIterationCount": 16,
+        "maxDepenetrationVelocity": 0.5
+      }
+    },
+    "link1": {
+      "mass_kg": [
+        0.017999999225139618
+      ],
+      "inertia_eigenvalues": [
+        2.384348363193567e-06,
+        1.0660892257874366e-05,
+        1.300161693507107e-05
+      ],
+      "com_in_body_m": [
+        -0.005074851214885712,
+        7.37943262052454e-10,
+        0.0
+      ],
+      "authored_physics": {
+        "angularDamping": 5.0,
+        "linearDamping": 0.05000000074505806,
+        "solverPositionIterationCount": 64,
+        "solverVelocityIterationCount": 16,
+        "maxDepenetrationVelocity": 0.5
+      }
+    },
+    "gate1": {
+      "mass_kg": [
+        0.0020000000949949026
+      ],
+      "inertia_eigenvalues": [
+        5.062498864560894e-09,
+        2.5603122821848956e-07,
+        2.56031256640199e-07
+      ],
+      "com_in_body_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "authored_physics": {
+        "angularDamping": 5.0,
+        "linearDamping": 0.05000000074505806,
+        "solverPositionIterationCount": 64,
+        "solverVelocityIterationCount": 16,
+        "maxDepenetrationVelocity": 0.5
+      }
+    },
+    "link2": {
+      "mass_kg": [
+        0.017999999225139618
+      ],
+      "inertia_eigenvalues": [
+        2.384348363193567e-06,
+        1.0660892257874366e-05,
+        1.300161693507107e-05
+      ],
+      "com_in_body_m": [
+        -0.005074851214885712,
+        7.37943262052454e-10,
+        0.0
+      ],
+      "authored_physics": {
+        "angularDamping": 5.0,
+        "linearDamping": 0.05000000074505806,
+        "solverPositionIterationCount": 64,
+        "solverVelocityIterationCount": 16,
+        "maxDepenetrationVelocity": 0.5
+      }
+    },
+    "gate2": {
+      "mass_kg": [
+        0.0020000000949949026
+      ],
+      "inertia_eigenvalues": [
+        5.062498864560894e-09,
+        2.5603122821848956e-07,
+        2.56031256640199e-07
+      ],
+      "com_in_body_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "authored_physics": {
+        "angularDamping": 5.0,
+        "linearDamping": 0.05000000074505806,
+        "solverPositionIterationCount": 64,
+        "solverVelocityIterationCount": 16,
+        "maxDepenetrationVelocity": 0.5
+      }
+    }
+  },
+  "publication": {
+    "local_commits_only": true,
+    "pushed": false,
+    "uploaded": false,
+    "pr": false,
+    "media_id": null
+  },
+  "limitations": [
+    "Default assembly controller is validated only on realized layout17. Seeds23 and41 test reset, settling and sampled grasp access, not complete assembly.",
+    "Constant angular damping5/s is a numerical drag approximation, applied uniformly for the entire episode. No completed-part freezing.",
+    "Collision and topology audits have explicit conservative geometric tolerances; visual review does not resolve every partially occluded contact.",
+    "No real-world execution is claimed."
+  ]
+}

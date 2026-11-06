@@ -1,0 +1,293 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Asset"
+{
+    def Cube "Base" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        color3f[] primvars:displayColor = [(0.16, 0.18, 0.19)]
+        double size = 1
+        float3 xformOp:scale = (0.16, 0.12, 0.02)
+        double3 xformOp:translate = (0, 0, 0.01)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Capsule "Pole" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.27999999999999997
+        color3f[] primvars:displayColor = [(0.31, 0.33, 0.35)]
+        double radius = 0.012
+        quatd xformOp:orient = (-0.7071067811865475, 0, 0, 0.7071067811865476)
+        double3 xformOp:translate = (0, 0, 0.16)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Eye0" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.05
+        color3f[] primvars:displayColor = [(0.58, 0.6, 0.61)]
+        double radius = 0.0025
+        quatd xformOp:orient = (6.123233995736766e-17, 0, 0.7071067811865475, 0.7071067811865476)
+        double3 xformOp:translate = (-0.08, 0, 0.2725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Eye1" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.025000000000000022
+        color3f[] primvars:displayColor = [(0.58, 0.6, 0.61)]
+        double radius = 0.0025
+        quatd xformOp:orient = (6.123233995736766e-17, 0.7071067811865475, 0.7071067811865476, 0)
+        double3 xformOp:translate = (-0.08, 0.025, 0.26)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Eye2" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.004900857016478029
+        color3f[] primvars:displayColor = [(0.58, 0.6, 0.61)]
+        double radius = 0.0025
+        quatd xformOp:orient = (0.0346960852539703, 0.7062550401009888, 0.7062550401009887, -0.0346960852539704)
+        double3 xformOp:translate = (-0.08, 0.024759816005040382, 0.2450613709747984)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Eye3" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.004900857016478028
+        color3f[] primvars:displayColor = [(0.58, 0.6, 0.61)]
+        double radius = 0.0025
+        quatd xformOp:orient = (0.10375411349410588, 0.6994534179865391, 0.6994534179865391, -0.10375411349410577)
+        double3 xformOp:translate = (-0.08, 0.023808310161431465, 0.2402778280702348)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Eye4" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.004900857016478033
+        color3f[] primvars:displayColor = [(0.58, 0.6, 0.61)]
+        double radius = 0.0025
+        quatd xformOp:orient = (0.24298017990326382, 0.9700312531945442, 0, 0)
+        double3 xformOp:translate = (-0.08, 0.0219418643101729, 0.23577182918269135)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Eye5" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.0049008570164780245
+        color3f[] primvars:displayColor = [(0.58, 0.6, 0.61)]
+        double radius = 0.0025
+        quatd xformOp:orient = (0.3368898533922203, 0.9415440651830207, 0, 0)
+        double3 xformOp:translate = (-0.08, 0.01923220491861366, 0.23171653732242314)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Eye6" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.00490085701647804
+        color3f[] primvars:displayColor = [(0.58, 0.6, 0.61)]
+        double radius = 0.0025
+        quatd xformOp:orient = (0.427555093430281, 0.9039892931234439, 0, 0)
+        double3 xformOp:translate = (-0.08, 0.015783462677576875, 0.22826779508138634)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Eye7" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.004900857016478028
+        color3f[] primvars:displayColor = [(0.58, 0.6, 0.61)]
+        double radius = 0.0025
+        quatd xformOp:orient = (0.5141027441932219, 0.857728610000272, 0, 0)
+        double3 xformOp:translate = (-0.08, 0.011728170817308653, 0.22555813568982708)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Eye8" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.004900857016478028
+        color3f[] primvars:displayColor = [(0.58, 0.6, 0.61)]
+        double radius = 0.0025
+        quatd xformOp:orient = (0.5956993044924342, 0.8032075314806442, 0, 0)
+        double3 xformOp:translate = (-0.08, 0.007222171929765228, 0.22369168983856852)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Eye9" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.0049008570164780305
+        color3f[] primvars:displayColor = [(0.58, 0.6, 0.61)]
+        double radius = 0.0025
+        quatd xformOp:orient = (0.6715589548470183, 0.7409511253549591, 0, 0)
+        double3 xformOp:translate = (-0.08, 0.002438629025201605, 0.22274018399495962)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Eye10" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.0049008570164780305
+        color3f[] primvars:displayColor = [(0.58, 0.6, 0.61)]
+        double radius = 0.0025
+        quatd xformOp:orient = (0.7409511253549591, 0.6715589548470184, 0, 0)
+        double3 xformOp:translate = (-0.08, -0.0024386290252016015, 0.22274018399495962)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Eye11" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.004900857016478028
+        color3f[] primvars:displayColor = [(0.58, 0.6, 0.61)]
+        double radius = 0.0025
+        quatd xformOp:orient = (0.8032075314806444, 0.5956993044924342, 0, 0)
+        double3 xformOp:translate = (-0.08, -0.007222171929765224, 0.22369168983856852)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Eye12" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.004900857016478024
+        color3f[] primvars:displayColor = [(0.58, 0.6, 0.61)]
+        double radius = 0.0025
+        quatd xformOp:orient = (0.8577286100002721, 0.5141027441932217, 0, 0)
+        double3 xformOp:translate = (-0.08, -0.011728170817308647, 0.22555813568982708)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Eye13" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.004900857016478044
+        color3f[] primvars:displayColor = [(0.58, 0.6, 0.61)]
+        double radius = 0.0025
+        quatd xformOp:orient = (0.9039892931234437, 0.42755509343028136, 0, 0)
+        double3 xformOp:translate = (-0.08, -0.015783462677576868, 0.22826779508138634)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Eye14" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.004900857016478029
+        color3f[] primvars:displayColor = [(0.58, 0.6, 0.61)]
+        double radius = 0.0025
+        quatd xformOp:orient = (0.9415440651830205, 0.33688985339222094, 0, 0)
+        double3 xformOp:translate = (-0.08, -0.01923220491861366, 0.23171653732242314)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Eye15" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.004900857016478031
+        color3f[] primvars:displayColor = [(0.58, 0.6, 0.61)]
+        double radius = 0.0025
+        quatd xformOp:orient = (0.9700312531945441, 0.24298017990326354, 0, 0)
+        double3 xformOp:translate = (-0.08, -0.021941864310172903, 0.23577182918269135)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Eye16" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.004900857016478028
+        color3f[] primvars:displayColor = [(0.58, 0.6, 0.61)]
+        double radius = 0.0025
+        quatd xformOp:orient = (-0.6994534179865396, -0.10375411349410572, -0.10375411349410568, 0.6994534179865387)
+        double3 xformOp:translate = (-0.08, -0.023808310161431465, 0.2402778280702348)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Eye17" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.004900857016478029
+        color3f[] primvars:displayColor = [(0.58, 0.6, 0.61)]
+        double radius = 0.0025
+        quatd xformOp:orient = (-0.7062550401009888, -0.034696085253970395, -0.034696085253970395, 0.7062550401009887)
+        double3 xformOp:translate = (-0.08, -0.024759816005040382, 0.2450613709747984)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Eye18" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.025000000000000022
+        color3f[] primvars:displayColor = [(0.58, 0.6, 0.61)]
+        double radius = 0.0025
+        quatd xformOp:orient = (-0.7071067811865475, 0, 0, 0.7071067811865476)
+        double3 xformOp:translate = (-0.08, -0.025, 0.26)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Capsule "Mount" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.08
+        color3f[] primvars:displayColor = [(0.31, 0.33, 0.35)]
+        double radius = 0.006
+        quatd xformOp:orient = (-0.5000000000000002, -0.5, 0.5, 0.5)
+        double3 xformOp:translate = (-0.04, 0, 0.2725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+}

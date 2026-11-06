@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "robocurve-carabiner-chain"
+version = "0.1.0"
+[project.entry-points."inspect_robots.embodiments"]
+yam_carabiner_chain = "chain_task.embodiment:make_embodiment"
+[project.entry-points."inspect_robots.policies"]
+carabiner_chain_scripted = "chain_task.third:make_policy"
+carabiner_two_link_scripted = "chain_task.pair:make_policy"
+carabiner_handoff_clip_scripted = "chain_task.handoff:make_policy"
+carabiner_spine_clip_scripted = "chain_task.policy:make_spine_clip_policy"
+carabiner_long_clip_scripted = "chain_task.policy:make_long_clip_policy"
+carabiner_first_clip_scripted = "chain_task.policy:make_first_clip_policy"
+carabiner_hold_scripted = "chain_task.policy:make_hold_policy"
+[tool.setuptools.packages.find]
+include = ["chain_task*"]
