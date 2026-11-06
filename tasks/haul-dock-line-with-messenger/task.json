@@ -1,0 +1,26 @@
+{
+  "title": "Haul a heavy dock line across the gap with its messenger and drop the eye over the bollard",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "rope",
+    "deformable",
+    "marine",
+    "mooring",
+    "heaving line",
+    "hand-over",
+    "hand-over-hand hauling",
+    "reach-forced relay",
+    "placement",
+    "release"
+  ],
+  "instruction": "Moor the boat: drop the red eye of the heavy white dock line over the black bollard on the dock. The eye is out of reach, so haul it across the water gap with the thin yellow messenger line tied to it. Then let go of the eye and the dock line.",
+  "context": "\"Heavy mooring lines are often passed from larger vessels to people on a mooring by smaller, weighted heaving lines\" (Wikipedia, Mooring); a lightweight line tied to a heavier one lets the heavy line \"be drawn to the target easily\" (Wikipedia, Monkey's fist). O*NET 53-5011.00 Sailors and Marine Oilers: \"Handle lines to moor vessels to wharfs\". Here only the left arm reaches the messenger and only the right arm the bollard.",
+  "setup": "Station table; cm from the midpoint between the arm bases (x away from the robot, y to its left). Water gap: blue tape 6 cm wide, y -3 to 3, x -5 to 85; boat deck y > 3, dock y < -3. Cleat: white PLA block 30x30x24 mm at x 59.3, y 5.5, turned 70 deg, fixed. Dock line: white 12 mm braided rope, 50 cm, 150 g, tied into the cleat at x 60, y 7.5, lying straight to x 77.1, y 54.5, knotted through the throat bar of a red PLA square eye (60x60x12 mm of 12 mm bars, 36 mm opening, 20 g) centred x 78.1, y 57.3. Messenger: yellow 6 mm cord, 65 cm, 30 g, tied to the eye's left side bar at x 74.9, y 58.5, lying straight to x 10.2, y 52.8. Bollard: black 20 mm round, 50 mm tall, at x 38, y -15, fixed.",
+  "scoring": "Measured at the end (tape, top photo). Score 0 if: either gripper's centre (between the finger pads) is within 3.5 cm of the eye or the dock line; or the cleat or bollard was moved. Otherwise 1.0 if the eye is over the bollard: the bollard's axis inside the eye's 36 mm opening (top view) and the eye's centre at least 12 mm below the bollard top; 0.5 if the eye lies on the dock (centre past the tape's dock edge, y < -3 cm, under 2 cm above the table) within 8 cm of the bollard axis; 0.25 if it lies on the dock farther away; else 0. 1.0 must hold 1 s with the dock line at rest.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Lay the dock line straight from the cleat at 70 deg (tape marks at x 60, y 7.5 and x 77.1, y 54.5), the eye flat with its centre at x 78.1, y 57.3, its sides square to the line. Lay the messenger straight from the eye's left side bar to x 10.2, y 52.8. Nothing on the bollard.",
+  "fidelity": "Toy scale, dry table: the water gap is tape (no buoyancy, current or wind). Ropes: rigid 2 cm segments with bending springs, no twist or plasticity; dock line start fixed to the cleat. The eye is a rigid printed square loop on the dock line end, not a spliced eye; the messenger is tied to it by a free-turning knot; the bollard is a plain post. The messenger is laid across, not thrown. Release is judged from gripper centre distances.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-PJDT9T"
+}
