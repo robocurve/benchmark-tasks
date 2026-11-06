@@ -1,0 +1,21 @@
+{
+  "title": "Wash, rinse, sanitize and air-dry a pan",
+  "category": "Impact on jobs",
+  "keywords": [
+    "warewashing",
+    "three-compartment sink",
+    "sanitizer contact time",
+    "air drying",
+    "food safety",
+    "commercial kitchen"
+  ],
+  "instruction": "Wash the pan from the soiled drainboard in the three-compartment sink: lower it into the wash basin, then the rinse basin, then the sanitize basin, in that order. Leave it in the sanitize basin for at least 3 seconds, then set it on the air-dry rack on the clean side. Do not put the pan on the towel.",
+  "context": "Commercial kitchens without a dish machine wash by hand in a three-compartment sink: wash, rinse, then sanitize, each in its own basin, with the item left in the sanitizer for the contact time on the product label, then air-dried on a clean drainboard or rack, never towel-dried (FDA Food Code, e.g. 4-301.12, 4-703.11, 4-901.11). Skipping the rinse leaves detergent that weakens the sanitizer, and a towel recontaminates the clean pan. The robot must keep the order, hold the pan in the last basin long enough, and hand it across the sink to the other arm. Unlike RoboCasa RinseBowls (hold under a faucet) and PreRinseStation (sort into basins) and TK-2GN4TD (drain a washed part over a bath), the pan goes through three basins in a fixed order with a timed dwell in the last. Done by: dishwashers and food preparation workers (O*NET 35-9021.00, 35-2021.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. Sink: three fixed steel basins at x 30, each four walls 0.6 cm thick and 5 cm tall round a 14 x 10.5 cm pocket with the table as its floor: wash centred at y 25, rinse at y 12.5, sanitize at y 0. Soiled drainboard: a fixed dark plate 14 x 10 cm, 0.4 cm thick, at x 30, y 40, with a loose steel pan (a solid box 8 x 5 x 2.5 cm, 120 g, long side along x) on it. Air-dry rack at x 30, y -14.5: a fixed drip tray 12 x 10 cm, 0.4 cm thick, with three steel bars (0.8 x 9 cm, 2.5 cm tall) along y at x 27, 30 and 33. Towel: a fixed white pad 12 x 10 cm, 0.4 cm thick, at x 17, y -15.",
+  "scoring": "Checked on every control step from the pan's pose. The pan is in a basin when its centre is inside the basin's walls and its bottom less than 1.5 cm above the floor. 0.2 once it has been in the wash basin, 0.2 more once it has then been in the rinse basin, 0.2 more once it has then stayed in the sanitize basin for 3 s without a break; going back to the wash or rinse basin drops these steps back. The last 0.4 for the sanitized pan still, level and resting on the rack bars, unless it has been on the towel at any point. Possible scores: 0, 0.2, 0.4, 0.6, 1.0. Success: score 1, held 1 s.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Put the pan back on the soiled drainboard, long side along x; the basins, rack and towel do not move.",
+  "fidelity": "Rigid boxes with one shared friction (1.2 static, 1.0 dynamic). The basins hold no water, detergent or sanitizer, so washing is a dip and contact time is time spent in the basin; there is no scrubbing, temperature or concentration check. The pan is a solid box rather than a hollow pan, and the 3 s dwell is far shorter than a real sanitizer's contact time.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-8Z8LJ8"
+}
