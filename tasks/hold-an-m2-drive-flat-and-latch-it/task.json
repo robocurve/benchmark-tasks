@@ -1,0 +1,20 @@
+{
+  "title": "Hold a sprung-up M.2 drive flat in its socket with one hand while the other turns the latch over its end",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "bimanual",
+    "computer assembly",
+    "M.2 drive",
+    "spring",
+    "latch"
+  ],
+  "instruction": "Hold the M.2 drive down flat in its socket with one hand while the other turns the latch's knob a quarter turn counterclockwise so its arm holds the drive's end down, then let go with both hands.",
+  "context": "Building and servicing computers and servers includes fitting M.2 drives. A drive goes into its socket at an angle and springs up, so a technician holds it flat with one hand while the other fastens its end; many motherboards use a tool-less quarter-turn latch on the standoff instead of a screw.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) A fixed green motherboard, 18 x 22 cm and 1.2 cm thick, centred 28 cm forward and 3.5 cm left, with low memory slots, a CPU socket and chips on it. (2) Its M.2 socket, 28 cm forward and 9 cm left, holding a loose M.2 drive (22 x 110 mm, 8 g: a black board with chips and a white label) that points right along the left-right line, sprung up 20 degrees from flat (its far end 3.8 cm up). (3) At the drive's far end, 1.75 cm right of the centre line, a standoff with a quarter-turn latch: an arm 13 mm long just over where the flat drive's top would be, pointing right (off the drive's end) at the start, and a black stem 6 mm across and 4 cm tall topped by a black knob 14 mm across and 12 mm tall. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Judged at the end of the trial. Flat: the drive within 2.5 degrees of flat in its socket. Latched: flat, with the latch turned at least 70 degrees counterclockwise (seen from above) from its start, its arm over the drive's end. Let go: both grippers' fingertip centres (TCPs) at least 3 cm from the drive and from the latch's knob. 1.0: latched and both let go; 0.5: latched; 0.25: the drive held flat for 1 s at some point; else 0.0. The trial ends at the run limit, or once the full score has held with the drive and latch still for 1 s.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "Turn the latch back so its arm points right, off the drive's end, and let the drive spring back up 20 degrees in its socket.",
+  "fidelity": "Rigid-body simulation (Isaac Sim 6.1, PhysX, 20 Hz control). Simplified: the drive's spring is a hinge spring at the socket (0.03 N m holding it 20 degrees up, 0.09 N m pressed flat); the latch is a damped hinge on its standoff with a stop at a quarter turn; no electrical contact. The latch's knob stands on a 4 cm stem, taller than real ones, so a gripper fits on it. The motherboard is fixed. Cameras 1280 x 704 (Dream-1 sees 320 x 176).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-5M4XXV"
+}
