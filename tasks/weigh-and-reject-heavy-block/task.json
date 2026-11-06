@@ -1,0 +1,21 @@
+{
+  "title": "Weigh three look-alike blocks on a spring scale and reject the heavy one",
+  "category": "Impact on jobs",
+  "context": "Automated quality control and check-weigher sorting in logistics and manufacturing require isolating defective or off-spec items using physical mass measurements. An autonomous dual-arm robot must sequentially place visually identical items onto a spring scale, allow physical settling to verify mass, and relay the defective heavy unit into quarantine while routing conforming items to staging.",
+  "instruction": "Weigh each grey block on the scale, then put only the heavy one into the red reject tray, and leave the other two on the green shelf.",
+  "setup": "All positions are cm from the midpoint between arm bases (x forward, y left); table top is z = 0. Supply rack: 30.0 x 8.0 x 1.0 cm dark plate at (25.0, +30.0). Three grey 4.0 cm cubic blocks rest on the rack at (15.0, +30.0) [0.10 kg], (25.0, +30.0) [0.30 kg, heavy], and (35.0, +30.0) [0.10 kg]. Scale: 14.0 x 14.0 x 2.0 cm base at (30.0, 0.0) with a 10.0 x 10.0 x 0.8 cm platform on a 600 N/m Z-spring (1.2 cm travel). Readout meter at (45.0, 0.0) carries a needle with x10 gain and a red band beyond 3.2 cm. Green shelf (26.0 x 9.0 x 1.0 cm) rests at (30.0, +12.0); red reject tray (13.0 x 13.0 x 2.0 cm) rests at (30.0, -30.0).",
+  "scoring": "Score: 0.25 when all three blocks are weighed on the scale (each >= 1.0 s steady deflection with arm clear); 0.50 when the heavy block is placed in the reject tray AND it was weighed; 0.75 additionally when both light blocks rest on the green shelf; 1.00 additionally when the scale is empty, nothing on the floor, grippers open, and arms still for 20 control steps (1.0 s at 20 Hz). Zero-gates: placing a light block in the reject tray after being weighed caps score at 0.25; placing the heavy block in reject tray without weighing gives no credit (caps at 0.25); dropping a block drops score to 0.0.",
+  "reset_notes": "Verify all three grey blocks rest at their marked positions on the supply rack. Ensure the scale platform is at rest height, green shelf and reject tray are empty, and readout needle is at zero.",
+  "run_limit": "2,500 steps (125 seconds at 20 Hz)",
+  "keywords": [
+    "bimanual",
+    "relay",
+    "spring scale",
+    "inspection",
+    "sorting",
+    "mass measurement"
+  ],
+  "fidelity": "Scale platform is a physical 600 N/m spring slider with 12 mm travel. Blocks are physical rigid bodies of differing mass (100 g vs 300 g) with identical visual appearance. Readout needle is teleported via write_pose to reflect physical platform deflection. Real-world build: industrial check-weigher station with load cell / spring platform and mechanical reject bin.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-677NQ4"
+}
