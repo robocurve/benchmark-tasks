@@ -1,0 +1,23 @@
+{
+  "title": "Connect a sensor's flex cable to a ZIF connector on a board held in helping hands",
+  "category": "Impact on AI timelines",
+  "instruction": "Connect the tactile sensor's flat flex cable to the connector on the green board: open the connector's latch, slide the cable all the way in, and close the latch.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-X2YVVJ",
+  "keywords": [
+    "robot wiring",
+    "flat flex cable",
+    "FPC",
+    "ZIF connector",
+    "flip-lock latch",
+    "tactile sensor",
+    "deformable cable",
+    "two arms"
+  ],
+  "context": "Plugging a sensor's flat flex cable into a ZIF connector is a routine, fiddly step in assembling robot hands and electronics: the latch must be opened before the cable goes in and closed after, or the cable is not held. The board is held in a helping-hands stand, as on an electronics bench.",
+  "setup": "Station table (top 0.7475 m). Robot base frame: x forward, y to the robots' left. A helping-hands stand: cast iron base 10 x 14 x 1.5 cm at x 0.35 to 0.45 m, y -0.08 to 0.06 m, with steel rods ending in two steel alligator clips that hold a green FR4 board, 50 x 72 x 1.6 mm (x 0.275 to 0.325, y -0.052 to 0.020), level, its underside 11.5 cm above the table; one clip on the board's left end, one on its far edge at y -0.015. A small LED work light (black ABS head, 4 x 2 cm panel) on a third rod shines back at the board from (0.395, -0.04), 5 cm above it. On the board, centred at (0.30, -0.04): a flip-lock ZIF connector, 18 x 5 x 1.8 mm, black nylon housing with a 13 mm wide slot opening towards the robots' right (-y), and a brown PPS actuator hinged along its back edge, lying flat (locked), with a 10 x 1 x 4 mm tab on its front edge. A grey polyurethane foam block, 4 cm wide (x 0.28 to 0.32) and 10 cm tall, runs from y -0.235 to -0.067, with a slot 30 mm wide and 45 mm deep cut across it at y -0.115 to -0.085. On it lies a tactile sensor pad, 18 x 15 x 4 mm (FR4 with a black silicone skin), centred at y -0.196, and its 10 mm wide, 115 mm long, amber polyimide flat flex cable runs flat along +y across the slot, its contact end (blue stiffener on the last 15 mm) at y -0.071. Sensor 10 g, cable about 1 g. Fixed layout matching the screenshot.",
+  "scoring": "Measured at the end, relative to the board. 0 if the cable was ever pushed 2 mm into the slot while the actuator was shut (forced). Otherwise: 1.0 if the cable is fully inserted (its end within 0.5 mm of the slot's back, its sides inside the slot's walls, turned no more than 10 degrees, lying on the slot's floor) with the actuator shut (within 6 degrees of flat) and both hands at least 3 cm from the connector; 0.5 if the cable is fully inserted but the actuator is not shut or a hand is still at the connector; 0.25 if the actuator was flipped open (50 degrees or more) at some point but the cable is not fully inserted; 0 otherwise.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Open the actuator, pull the cable out, shut the actuator, and lay the sensor and cable back on the foam block as in the screenshot.",
+  "fidelity": "PhysX at 240 Hz. The flex cable is 21 short rigid links on spring hinges, 0.8 mm thick (real ones are 0.1 to 0.3 mm), and its own weight is left out, so held by one end it stays nearly straight. The board is fixed in the clips; the stand's give is not modelled. The actuator is a hinge with a detent (snaps open past 30 degrees, shut below). Electrical contact is not modelled; insertion is scored from the cable end's pose."
+}
