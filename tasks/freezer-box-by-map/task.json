@@ -1,0 +1,21 @@
+{
+  "title": "Store aliquots in a freezer box by the sample map",
+  "category": "Impact on jobs",
+  "keywords": [
+    "sample inventory",
+    "freezer box",
+    "biobank",
+    "grid positions",
+    "aliquots",
+    "laboratory"
+  ],
+  "instruction": "Store the four aliquot tubes from the bench rack in the 5 x 5 freezer box, each in the cell the sample map assigns it. The map card is a half-size copy of the box's grid, in the same orientation as the box; each blue peg on it stands in the cell for one tube and is a half-size model of that tube: thin or thick, tall or short. Stand each tube upright in its cell.",
+  "context": "Labs and biobanks track every frozen aliquot by freezer, rack, box and grid position in a sample inventory (LIMS); the position is the only way to find the tube again, so technicians place each tube in the cell the box map assigns, and a tube in the wrong cell is effectively lost (ISBER Best Practices for Repositories). The robot must read the map, match each tube to its cell by its shape, carry the coordinates over to the full-size box, and stand the tubes upright between thin dividers. Unlike RoboDojo insert_tubes (tubes into any free slots of a rack) and store_tools_in_toolbox (each tool to its matching slot), the slot for each item is given by grid coordinates read from a separate map. Done by: medical and clinical laboratory technicians, biological technicians (O*NET 29-2012.00, 19-4021.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left). Freezer box: a fixed 5 x 5 grid of white dividers (0.2 cm thick, 2 cm tall) at a 3.2 cm pitch, centred at x 33, y 30, the table as its floor. Bench rack: a fixed blue 4-cell grid (walls 0.4 cm thick, 1.5 cm tall, 4 cm pitch) along x at y 15, holding four loose upright cylinders (15 g each): thick-tall (radius 1.1 cm, 7 cm tall) at x 16, thin-tall (radius 0.8 cm, 7 cm) at x 20, thick-short (1.1 cm, 4.5 cm) at x 24, thin-short (0.8 cm, 4.5 cm) at x 28. Map card: a fixed 9.2 cm square card at x 17, y 43 printed with a half-size grid (1.6 cm pitch), with fixed blue pegs at half the tubes' radius and height. Map, counting rows away from the arms and columns from the right, both from 1: thin-tall row 1 column 2; thin-short row 2 column 4; thick-tall row 4 column 1; thick-short row 5 column 4.",
+  "scoring": "From a top photo and a ruler, with the grippers open. A tube is stored when it is still, within 10 degrees of upright, its bottom on the box floor and its centre inside the dividers of the cell the map assigns it. 0.25 for each tube stored; a tube in any other cell earns nothing. Possible scores: 0, 0.25, 0.5, 0.75, 1.0. Success: all four stored, held 1 s.",
+  "run_limit": "1,800 steps (90 seconds at 20 Hz)",
+  "reset_notes": "Stand the four tubes back in the bench rack in the order thick-tall, thin-tall, thick-short, thin-short from the arms outwards; the box, rack, card and pegs do not move.",
+  "fidelity": "Rigid cylinders and boxes with one shared friction (1.2 static, 1.0 dynamic). The tubes have no caps, labels or barcodes and are told apart by size only; the box is a grid of dividers on the table with no lid, cold or frost, and the map is a card of pegs instead of a printed or LIMS box map.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-ZJ3FYH"
+}
