@@ -1,0 +1,677 @@
+{
+  "coordinate_system": "Metres; X forward from robot bases, Y left, Z up. Quaternions in pilot.json and reset states are XYZW; geometry orientations are WXYZ.",
+  "shape_size_convention": "Box sizes are HALF extents; cylinders use radius and half length. fromto lists segment endpoints, capsules add their endcap radius. Mesh vertices, scale, orientation and offset define the visual bounds. Shapes are body-local; bodies are asset-local.",
+  "station": {
+    "table_size_m": [
+      1.1,
+      1.3,
+      0.06
+    ],
+    "table_center_m": [
+      0.36,
+      0,
+      0.7175
+    ],
+    "table_top_m": 0.7475,
+    "left_robot_base_m": [
+      0,
+      0.305,
+      0.75
+    ],
+    "right_robot_base_m": [
+      0,
+      -0.305,
+      0.75
+    ],
+    "robot": "Two native YAM arms with parallel finger grippers, geometry from the pinned yam-arena dependency. Table and camera stand are rigid station fixtures."
+  },
+  "nominal_materials": {
+    "wood": "Brown shelves, rests and cover frame; wooden tray/cover.",
+    "polymer": "Blue receiving pads and green marker; battery casing and screwdriver handle.",
+    "metal": "Clamp base, pivot, spring and lever; screwdriver shaft and blade; sealed tray tins.",
+    "paper_and_board": "Books, represented by rigid bodies with retained texture."
+  },
+  "material_scope": "Nominal visual material labels, not measured constitutive properties. Rigid contact uses per-shape friction or the defaults in the bundled USD authoring code; no fracture, deformation, electronics or fluids.",
+  "asset_root_positions_m": {
+    "fixture": [
+      0,
+      0,
+      0
+    ],
+    "clamp": [
+      0.35,
+      -0.04,
+      0.9
+    ],
+    "tool": [
+      0.35,
+      0.1,
+      0.876
+    ]
+  },
+  "asset_root_orientations_xyzw": {
+    "clamp": [
+      0,
+      0,
+      -0.7071067811865476,
+      0.7071067811865476
+    ],
+    "tool": [
+      0,
+      0,
+      -0.7071067811865476,
+      0.7071067811865476
+    ]
+  },
+  "geometry": {
+    "fixture": {
+      "name": "Fixture",
+      "bodies": [
+        {
+          "name": "fixture",
+          "shapes": [
+            {
+              "type": "box",
+              "size": [
+                0.04,
+                0.04,
+                0.001
+              ],
+              "position": [
+                0.35,
+                0.36,
+                0.7485
+              ],
+              "color": [
+                0.08,
+                0.65,
+                0.18,
+                1
+              ]
+            },
+            {
+              "type": "box",
+              "size": [
+                0.045,
+                0.026,
+                0.0555
+              ],
+              "position": [
+                0.35,
+                0.1,
+                0.803
+              ],
+              "color": [
+                0.45,
+                0.39,
+                0.3,
+                1
+              ]
+            }
+          ],
+          "mass": 0.2,
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "static": true,
+          "center_of_mass": [
+            0.30192379950402043,
+            0.04504997369805366,
+            0.8016894115878862
+          ],
+          "inertia": {
+            "tensor": [
+              [
+                0.00046790177634202854,
+                -7.885655178973214e-05,
+                2.0465152726382866e-05
+              ],
+              [
+                -7.885655178973214e-05,
+                0.0003787145811095386,
+                5.3721025906755016e-05
+              ],
+              [
+                2.0465152726382866e-05,
+                5.3721025906755016e-05,
+                0.0004179056862331286
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "clamp": {
+      "name": "SpringClamp",
+      "bodies": [
+        {
+          "name": "base",
+          "shapes": [
+            {
+              "type": "box",
+              "size": [
+                0.055,
+                0.05,
+                0.008
+              ],
+              "position": [
+                0.015,
+                0,
+                -0.1445
+              ],
+              "color": [
+                0.25,
+                0.27,
+                0.28,
+                1
+              ],
+              "friction": [
+                0.25,
+                0.2
+              ]
+            },
+            {
+              "type": "box",
+              "size": [
+                0.012,
+                0.012,
+                0.064
+              ],
+              "position": [
+                0.025,
+                -0.028,
+                -0.073
+              ],
+              "color": [
+                0.45,
+                0.47,
+                0.48,
+                1
+              ]
+            },
+            {
+              "type": "box",
+              "size": [
+                0.012,
+                0.012,
+                0.064
+              ],
+              "position": [
+                0.025,
+                0.028,
+                -0.073
+              ],
+              "color": [
+                0.45,
+                0.47,
+                0.48,
+                1
+              ]
+            },
+            {
+              "type": "box",
+              "size": [
+                0.012,
+                0.025,
+                0.006
+              ],
+              "position": [
+                -0.04,
+                0,
+                -0.032
+              ],
+              "color": [
+                0.35,
+                0.37,
+                0.38,
+                1
+              ]
+            },
+            {
+              "type": "cylinder",
+              "size": [
+                0.006
+              ],
+              "fromto": [
+                0,
+                -0.04,
+                0,
+                0,
+                0.04,
+                0
+              ],
+              "color": [
+                0.65,
+                0.67,
+                0.69,
+                1
+              ],
+              "collision": false
+            },
+            {
+              "type": "capsule",
+              "size": [
+                0.008
+              ],
+              "fromto": [
+                0.025,
+                -0.028,
+                -0.015,
+                0,
+                -0.028,
+                0
+              ],
+              "color": [
+                0.45,
+                0.47,
+                0.48,
+                1
+              ],
+              "collision": false
+            },
+            {
+              "type": "capsule",
+              "size": [
+                0.008
+              ],
+              "fromto": [
+                0.025,
+                0.028,
+                -0.015,
+                0,
+                0.028,
+                0
+              ],
+              "color": [
+                0.45,
+                0.47,
+                0.48,
+                1
+              ],
+              "collision": false
+            }
+          ],
+          "mass": 0.25,
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "static": false,
+          "center_of_mass": [
+            0.017020268990339076,
+            0.0,
+            -0.10849914756582683
+          ],
+          "inertia": {
+            "tensor": [
+              [
+                0.0007220560986691314,
+                0.0,
+                6.098531502673628e-06
+              ],
+              [
+                0.0,
+                0.0006997184320285759,
+                0.0
+              ],
+              [
+                6.098531502673628e-06,
+                0.0,
+                0.00038071875187305204
+              ]
+            ]
+          }
+        },
+        {
+          "name": "lever",
+          "shapes": [
+            {
+              "type": "box",
+              "size": [
+                0.06,
+                0.012,
+                0.004
+              ],
+              "position": [
+                0.015,
+                0,
+                0
+              ],
+              "color": [
+                0.7,
+                0.19,
+                0.1,
+                1
+              ]
+            },
+            {
+              "type": "box",
+              "size": [
+                0.015,
+                0.024,
+                0.004
+              ],
+              "position": [
+                0.07,
+                0,
+                0
+              ],
+              "color": [
+                0.7,
+                0.19,
+                0.1,
+                1
+              ]
+            },
+            {
+              "type": "box",
+              "size": [
+                0.008,
+                0.022,
+                0.004
+              ],
+              "position": [
+                -0.04,
+                0,
+                -0.023
+              ],
+              "color": [
+                0.25,
+                0.27,
+                0.28,
+                1
+              ],
+              "friction": [
+                0.9,
+                0.8
+              ]
+            }
+          ],
+          "mass": 0.03,
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "static": false,
+          "center_of_mass": [
+            0.023057324840764334,
+            0.0,
+            -0.003222929936305732
+          ],
+          "inertia": {
+            "tensor": [
+              [
+                5.226853016349542e-06,
+                0.0,
+                -6.096880197979632e-06
+              ],
+              [
+                0.0,
+                6.0223824495922744e-05,
+                0.0
+              ],
+              [
+                -6.096880197979632e-06,
+                0.0,
+                6.130627084263053e-05
+              ]
+            ]
+          },
+          "orientation": [
+            0.9987502603949663,
+            0,
+            0.04997916927067833,
+            0
+          ]
+        }
+      ],
+      "joints": [
+        {
+          "name": "release_lever",
+          "type": "revolute",
+          "parent": "base",
+          "child": "lever",
+          "axis": "Y",
+          "lower": 0,
+          "upper": 0.55,
+          "stiffness": 2,
+          "damping": 0.02,
+          "target": 0,
+          "collision": false
+        }
+      ],
+      "solver_position_iterations": 32,
+      "solver_velocity_iterations": 8
+    },
+    "tool": {
+      "name": "Screwdriver",
+      "bodies": [
+        {
+          "name": "tool",
+          "shapes": [
+            {
+              "type": "mesh",
+              "mesh_file": "assets/ycb044_handle.obj",
+              "texture": "assets/texture_map.png",
+              "collision": false
+            },
+            {
+              "type": "capsule",
+              "size": [
+                0.0175
+              ],
+              "fromto": [
+                -0.0435,
+                0,
+                0,
+                0.0435,
+                0,
+                0
+              ],
+              "visible": false,
+              "friction": [
+                0.8,
+                0.6
+              ]
+            },
+            {
+              "type": "cylinder",
+              "size": [
+                0.0015,
+                0.0325
+              ],
+              "fromto": [
+                0.06,
+                0,
+                0,
+                0.125,
+                0,
+                0
+              ],
+              "color": [
+                0.62,
+                0.65,
+                0.68,
+                1
+              ]
+            },
+            {
+              "type": "box",
+              "size": [
+                0.0075,
+                0.00175,
+                0.0003
+              ],
+              "position": [
+                0.1325,
+                0,
+                0
+              ],
+              "color": [
+                0.65,
+                0.68,
+                0.7,
+                1
+              ]
+            }
+          ],
+          "mass": 0.06,
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "static": false,
+          "center_of_mass": [
+            0.00043765781294073387,
+            0.0,
+            0.0
+          ],
+          "inertia": {
+            "tensor": [
+              [
+                8.758706698178697e-06,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                6.85709428205032e-05,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                6.857096038055219e-05
+              ]
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "robot_start": {
+    "left_tcp_m": [
+      0.35,
+      0.1,
+      0.88
+    ],
+    "left_rotation_xyzw": [
+      0,
+      1,
+      0,
+      0
+    ],
+    "right_joint_angles_rad": [
+      0,
+      1,
+      1,
+      -0.6,
+      0,
+      0
+    ]
+  },
+  "observed_demo_reset": {
+    "robots": {
+      "left": {
+        "q": [
+          -0.530086874961853,
+          2.109686851501465,
+          2.002652645111084,
+          -1.4639389514923096,
+          -0.0003758221573662013,
+          1.017325758934021
+        ],
+        "tcp": [
+          0.34983740316824713,
+          0.10006271761157513,
+          0.879971697838648
+        ]
+      },
+      "right": {
+        "q": [
+          -4.32143709705457e-10,
+          1.0,
+          1.0,
+          -0.6000000238418579,
+          -1.5074494541522654e-08,
+          -4.1305694975513063e-10
+        ],
+        "tcp": [
+          0.3234096111914071,
+          -0.30499579132363785,
+          1.0081040599917979
+        ]
+      }
+    },
+    "objects": {
+      "clamp/base": [
+        [
+          0.3517208993434906,
+          -0.04032069444656372,
+          0.9001214504241943
+        ],
+        [
+          0.0006065856432542205,
+          0.0006180410855449736,
+          -0.705207347869873,
+          0.7090006470680237
+        ],
+        [
+          -0.004379745572805405,
+          0.004869597032666206,
+          -0.00032451964216306806,
+          0.08495689928531647,
+          -0.09851840883493423,
+          0.07510054111480713
+        ]
+      ],
+      "clamp/lever": [
+        [
+          0.3517177104949951,
+          -0.04032807797193527,
+          0.9001563787460327
+        ],
+        [
+          0.04181307181715965,
+          0.042282797396183014,
+          -0.7039234638214111,
+          0.7077820897102356
+        ],
+        [
+          -0.012793554924428463,
+          -0.0009559784666635096,
+          -0.003308142302557826,
+          0.07189279049634933,
+          -0.5684072971343994,
+          -0.003026509890332818
+        ]
+      ],
+      "tool": [
+        [
+          0.34926679730415344,
+          0.10019054263830185,
+          0.8760992288589478
+        ],
+        [
+          0.00130753917619586,
+          0.0013599146623164415,
+          -0.6988532543182373,
+          0.7152625322341919
+        ],
+        [
+          0.016532372683286667,
+          -0.005037419032305479,
+          0.0029563528951257467,
+          0.13889892399311066,
+          0.5097020268440247,
+          -0.2771991193294525
+        ]
+      ]
+    }
+  }
+}
