@@ -1,0 +1,19 @@
+{
+  "title": "Sort dressing-change waste, with the blood-soaked dressing in biohazard and the packaging in the trash",
+  "category": "Impact on jobs",
+  "keywords": [
+    "healthcare",
+    "regulated medical waste",
+    "bloodborne pathogens",
+    "waste segregation"
+  ],
+  "instruction": "Throw away the waste from the dressing change.",
+  "context": "Nurses and medical assistants sort waste after every wound-dressing change. The OSHA bloodborne pathogens standard defines regulated waste as items that would release blood if compressed (29 CFR 1910.1030(b)). A soaked dressing is regulated waste and goes in a red biohazard container. Clean packaging is ordinary trash. A dressing in the regular trash exposes custodial staff. Clean packaging in the red bin is safe, but regulated waste costs several times more to treat.",
+  "setup": "Positions are in cm from the midpoint between the two arm bases, with x forward, y to the robot's left and the table top at z 0. A blue rigid plastic procedure tray, 16 x 24 x 1 cm (x by y by height), is fixed and centred at x 15, y +3. Two items lie flat on it along x. A folded dark red blood-soaked gauze dressing, 8 x 5 x 2 cm and 30 g, lies at x 15, y -3. Its empty white packaging, a folded paper-and-plastic peel pouch, 8 x 5 x 2 cm and 25 g, lies at x 15, y +9. Two open-top bins are both centred at x 32. Each has four fixed walls 1 cm thick and 10 cm tall around a 14 x 14 cm opening and uses the table as its floor. A grey regular trash bin sits at y +2 and a red biohazard bin at y -19.",
+  "scoring": "An item counts as in a bin when its centre lies inside the bin's walls, the whole item is below the rim, and it is still. The trial scores 0 whenever the dressing isn't in the biohazard bin, whatever else happened. This includes the dressing in the trash, left on the tray, on a rim or held. With the dressing in the biohazard bin, the trial scores 1.0 if the packaging is in the trash bin. It scores 0.5 if the packaging is in the biohazard bin too. It scores 0.25 if the packaging is not in a bin. The possible scores are 0, 0.25, 0.5 and 1.0. In a real trial, look into both bins at the end and note what each holds.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Take both items out of the bins and lay them back on the tray at their start positions. For real trials use a gauze pad dyed dark red, with no real blood.",
+  "fidelity": "The dressing and packaging are rigid blocks with no cloth or paper simulation. The bins are open boxes with no lid, bag or pedal. The simulation uses rigid-body physics only.",
+  "scores": "Dream-1 run: 0 (2,400 steps); demo: 1.0",
+  "media": "M-MNCP2N"
+}
