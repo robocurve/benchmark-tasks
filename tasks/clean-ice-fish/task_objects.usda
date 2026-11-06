@@ -1,0 +1,1100 @@
+#usda 1.0
+(
+    defaultPrim = "Environment"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Environment" (
+    customData = {
+        string instruction = "Use the scoop to put clean ice into the bowl."
+    }
+)
+{
+    def Xform "FishBin" (
+        prepend references = @assets/ice_bin.usda@
+    )
+    {
+        quatf xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0.385, 0.18, 0.7474999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanBin" (
+        prepend references = @assets/ice_bin.usda@
+    )
+    {
+        quatf xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0.385, -0.18, 0.7474999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanLid" (
+        prepend references = @assets/lid.usda@
+    )
+    {
+        quatf xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0.385, -0.18, 0.8524999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "Fish" (
+        prepend references = @assets/fish.usda@
+    )
+    {
+        quatf xformOp:orient = (0.70710677, 0, 0, -0.70710677)
+        double3 xformOp:translate = (0.385, 0.18, 0.7875)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "Scoop" (
+        prepend references = @assets/scoop.usda@
+    )
+    {
+        quatf xformOp:orient = (0.9659258, 0, 0, 0.25881904)
+        double3 xformOp:translate = (0.13, 0.09, 0.7484999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "Bowl" (
+        prepend references = @assets/serving_bowl.usda@
+    )
+    {
+        quatf xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0.14, -0.165, 0.7474999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_001" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (-0.5465635, 0.0220507, 0.08074355, 0.83322424)
+        double3 xformOp:translate = (0.4647820125448106, -0.26362903743005717, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_002" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (-0.014217223, 0.028325565, -0.07623097, 0.9965864)
+        double3 xformOp:translate = (0.46681439834455574, -0.12854388384733112, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_003" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.9592698, -0.029818198, 0.051628325, -0.2761282)
+        double3 xformOp:translate = (0.3047579793380286, -0.11328512785939429, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_004" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.98524725, 0.03073538, 0.051699597, 0.16021982)
+        double3 xformOp:translate = (0.4361473765301304, -0.09067807718424811, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_005" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.588408, -0.04006976, -0.026501039, 0.80713576)
+        double3 xformOp:translate = (0.33647047587236223, -0.10464403697795174, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_006" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.9365547, -0.05558958, -0.057341587, 0.34130198)
+        double3 xformOp:translate = (0.3920678279257611, -0.10821880923832686, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_007" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (-0.2994261, 0.050710905, -0.0084043415, 0.9527338)
+        double3 xformOp:translate = (0.4501969257959081, -0.23524386502712152, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_008" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.9834925, 0.049929634, 0.026021402, -0.17196628)
+        double3 xformOp:translate = (0.46184281141630407, -0.19175430748908057, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_009" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.31597707, 0.04479615, 0.0010406753, 0.94770813)
+        double3 xformOp:translate = (0.4440284346243519, -0.1750158432999853, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_010" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.75615126, 0.05207665, -0.037756614, -0.65122783)
+        double3 xformOp:translate = (0.3265402673611892, -0.1302039872221868, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_011" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (-0.5022959, -0.03902112, 0.025361545, 0.8634425)
+        double3 xformOp:translate = (0.3674923350789435, -0.11800291568505916, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_012" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.94160295, 0.07303895, 0.025479542, -0.32771942)
+        double3 xformOp:translate = (0.46289957510683, -0.15980598399125984, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_013" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (-0.41644895, -0.013560057, 0.014524684, 0.9089419)
+        double3 xformOp:translate = (0.404851271101289, -0.08902745824117769, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_014" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.09599487, 0.026939388, -0.049962137, 0.9937621)
+        double3 xformOp:translate = (0.41515806466742844, -0.1378855338663275, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_015" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.97757614, 0.064522035, 0.06827492, 0.18846838)
+        double3 xformOp:translate = (0.3684897653064809, -0.08940948400229659, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_016" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.05009497, 0.03448989, -0.032460067, 0.9976208)
+        double3 xformOp:translate = (0.4417505724584539, -0.1335380231785975, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_017" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.90088356, 0.014836739, 0.045268174, 0.43143886)
+        double3 xformOp:translate = (0.3640012800054796, -0.1185420255380776, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_018" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.75013036, 0.062485117, -0.028320828, 0.6577218)
+        double3 xformOp:translate = (0.33409215256292496, -0.11869230032486883, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_019" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.73623216, 0.010103585, -0.03656096, 0.6756652)
+        double3 xformOp:translate = (0.391125905757723, -0.12745261792591742, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_020" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.15943564, -0.03080523, 0.00020817439, 0.98672754)
+        double3 xformOp:translate = (0.456513900257032, -0.2677148375299866, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_021" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.12939088, -0.068743326, 0.058783002, 0.98745984)
+        double3 xformOp:translate = (0.447459407580165, -0.22611106188589275, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_022" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.6629009, -0.04436558, 0.0031866084, 0.7473847)
+        double3 xformOp:translate = (0.44037818094614756, -0.1897761831362409, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_023" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.84536356, -0.013221373, -0.029214958, 0.533228)
+        double3 xformOp:translate = (0.446404430982827, -0.1519004339670963, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_024" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.92384976, 0.009865282, -0.027236266, -0.3816576)
+        double3 xformOp:translate = (0.37967109563775486, -0.08540196253406107, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_025" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.7150403, 0.044534236, 0.00019189973, -0.69766325)
+        double3 xformOp:translate = (0.33271946594261786, -0.09347244303586247, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanIce_026" (
+        customData = {
+            string iceSource = "clean"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.82633704, 0.06778014, -0.041184515, -0.55756325)
+        double3 xformOp:translate = (0.44395566689819216, -0.10489733258403028, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_001" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (-0.34196013, -0.036634024, -0.05120543, 0.93760294)
+        double3 xformOp:translate = (0.42961179628639173, 0.27570060155291026, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_002" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.8325635, 0.07825785, 0.015059781, 0.5481669)
+        double3 xformOp:translate = (0.45116183083326455, 0.12662889229298985, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_003" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.22982337, -0.056389272, 0.08493134, 0.96787816)
+        double3 xformOp:translate = (0.3415531086013973, 0.2346922217957403, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_004" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (-0.059181117, -0.045421664, 0.046010323, 0.9961513)
+        double3 xformOp:translate = (0.30633522895610676, 0.17704318153089843, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_005" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.03700337, -0.015680276, -0.07454066, 0.9964078)
+        double3 xformOp:translate = (0.4417358262846181, 0.22193041371793734, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_006" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.81197447, 0.029404078, 0.017156618, -0.5826993)
+        double3 xformOp:translate = (0.4318855198036945, 0.1654271390561015, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_007" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.82697695, 0.0040184394, -0.08172021, 0.55625063)
+        double3 xformOp:translate = (0.41924688142359473, 0.09228374872848713, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_008" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.93579304, -0.029275196, 0.059927627, 0.3461836)
+        double3 xformOp:translate = (0.33263423371533724, 0.18279173465602794, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_009" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.58069485, 0.014839535, 0.0709179, 0.81089085)
+        double3 xformOp:translate = (0.4588086326175866, 0.0923211947243783, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_010" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.9963418, 0.029437998, -0.025350498, 0.07611652)
+        double3 xformOp:translate = (0.34745947322930537, 0.09894642123648291, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_011" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (-0.071508266, -0.057500433, 0.04836766, 0.9946059)
+        double3 xformOp:translate = (0.3190092765702039, 0.08585331345659954, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_012" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (-0.42291483, -0.0487584, 0.009518658, 0.9048066)
+        double3 xformOp:translate = (0.31073153702180273, 0.2570727844848155, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_013" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (-0.2400257, -0.044873282, 0.024500063, 0.9694193)
+        double3 xformOp:translate = (0.3056091941929568, 0.20890880835021658, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_014" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.6228702, 0.07344128, 0.012980576, 0.7787622)
+        double3 xformOp:translate = (0.4601285107427492, 0.25348933243423816, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_015" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.95934886, 0.0036449232, 0.08062478, 0.27043685)
+        double3 xformOp:translate = (0.33449565690715694, 0.14183308249752735, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_016" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (-0.13738115, -0.041366316, 0.07164023, 0.9870577)
+        double3 xformOp:translate = (0.3067210264460984, 0.12611056530941223, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_017" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.8854164, -0.0022468728, -0.06500393, -0.46022522)
+        double3 xformOp:translate = (0.4603265923872085, 0.17809912304850933, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_018" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.96768147, 0.034186844, 0.056983136, -0.24326286)
+        double3 xformOp:translate = (0.3440492678795837, 0.25984438137544624, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_019" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.988629, 0.060638443, 0.07939781, 0.11239098)
+        double3 xformOp:translate = (0.431626845420376, 0.19408435972199425, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_020" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.72161937, -0.02495042, 0.08304969, -0.6868375)
+        double3 xformOp:translate = (0.4281590612431753, 0.25029924454861674, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_021" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.7482715, 0.028112108, -0.08127867, -0.65779424)
+        double3 xformOp:translate = (0.46747171599358295, 0.21155364063985418, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_022" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.6749568, -0.0457161, 0.010067925, 0.7363708)
+        double3 xformOp:translate = (0.46025640769450943, 0.151040333797495, 0.7725)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_023" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.027518561, -0.037217703, 0.025898853, 0.99859244)
+        double3 xformOp:translate = (0.33524485494336015, 0.20583087328826905, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_024" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.98727715, -0.0066906335, 0.014070184, -0.15824367)
+        double3 xformOp:translate = (0.4311991815041205, 0.26091327950839344, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_025" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (-0.63663685, 0.07423274, -0.0022998624, 0.76757914)
+        double3 xformOp:translate = (0.46669543722774953, 0.2732648324742396, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_026" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.96256953, 0.009701856, -0.03126183, 0.26905105)
+        double3 xformOp:translate = (0.4411085908314858, 0.13263762866351875, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_027" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (-0.46441147, -0.053949174, -0.01690688, 0.88381314)
+        double3 xformOp:translate = (0.3197520328122986, 0.15574076579781693, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_028" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (-0.23145218, -0.010380071, -0.041368745, 0.9719109)
+        double3 xformOp:translate = (0.34126853947759805, 0.2399795680673191, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_029" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.99362737, 0.059096076, 0.026012827, -0.092388265)
+        double3 xformOp:translate = (0.4612650985445929, 0.23988448010315733, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_030" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.6124967, -0.019384125, 0.085130505, 0.7856366)
+        double3 xformOp:translate = (0.3347017951537401, 0.18089689348272958, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_031" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.9936845, -0.055238396, 0.046167742, 0.08607191)
+        double3 xformOp:translate = (0.30516075040364155, 0.2556217343646637, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_032" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (-0.53182644, 0.031884287, -0.020603297, 0.8460021)
+        double3 xformOp:translate = (0.4633734819659531, 0.21325093429228775, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_033" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.7774854, 0.041783873, -0.02888598, -0.6268462)
+        double3 xformOp:translate = (0.3232814405387473, 0.08712761006680617, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_034" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.9989937, -0.039754808, -0.008391743, -0.018993886)
+        double3 xformOp:translate = (0.3487691940344099, 0.27290850258281885, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_035" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (-0.08730023, -0.04598975, -0.050499313, 0.9938377)
+        double3 xformOp:translate = (0.3249600830633568, 0.11461142664871521, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_036" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (-0.17444612, 0.007203243, 0.0036796727, 0.9846335)
+        double3 xformOp:translate = (0.42736106221257913, 0.0865814590666872, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_037" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.72225493, -0.012872733, -0.015524795, 0.6913329)
+        double3 xformOp:translate = (0.4402174351657208, 0.19439162757928502, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_038" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (-0.59524846, -0.041521788, 0.060930446, 0.80015165)
+        double3 xformOp:translate = (0.35239966984342547, 0.09056879402357039, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_039" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.44322136, 0.0508925, 0.016183196, 0.89482003)
+        double3 xformOp:translate = (0.46226582062839927, 0.14376000195079214, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_040" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (-0.69131935, 0.04925392, 0.017251069, 0.7206622)
+        double3 xformOp:translate = (0.30346795998106163, 0.21823976480212162, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_041" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (-0.47102088, -0.030189376, 0.048320834, 0.8802801)
+        double3 xformOp:translate = (0.44759481172197824, 0.1040794680285557, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_042" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.018375948, 0.03673828, 0.041500412, 0.9982937)
+        double3 xformOp:translate = (0.46210255535066935, 0.17064047017039335, 0.8005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_043" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.9606915, -0.05709202, 0.05821078, 0.2653749)
+        double3 xformOp:translate = (0.3829383232695504, 0.21061132867687746, 0.8284999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_044" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.81199104, 0.029859846, -0.09067197, -0.5758104)
+        double3 xformOp:translate = (0.4657059091361217, 0.11621829197797875, 0.8284999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_045" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.9722635, 0.03138449, 0.004057121, 0.23173726)
+        double3 xformOp:translate = (0.46187347932795875, 0.23095174889485043, 0.8284999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_046" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.20032902, -0.061859347, 0.081469074, 0.9743739)
+        double3 xformOp:translate = (0.3344908557561779, 0.10806001620712595, 0.8284999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_047" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.5583162, -0.079692274, -0.020938043, 0.82552636)
+        double3 xformOp:translate = (0.4461520043435013, 0.16921079485347115, 0.8284999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_048" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.085311495, -0.0063433265, 0.029325765, 0.9959025)
+        double3 xformOp:translate = (0.38122517236952125, 0.10999355058496123, 0.8284999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_049" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.8511629, 0.035180826, -0.05036591, -0.5212939)
+        double3 xformOp:translate = (0.34156212958227394, 0.27457750471277076, 0.8284999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_050" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (-0.678113, -0.004214697, 0.0012077197, 0.73494464)
+        double3 xformOp:translate = (0.4672719154827061, 0.14478720497431363, 0.8284999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_051" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.6203393, -0.048188705, -0.0028168363, 0.7828468)
+        double3 xformOp:translate = (0.32013012062657104, 0.204955787870357, 0.8284999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_052" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.9928247, -0.027873836, -0.0065268767, -0.11610184)
+        double3 xformOp:translate = (0.3066881168973459, 0.17469411075027125, 0.8284999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_053" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.9837487, -0.02625892, -0.026474832, -0.17563626)
+        double3 xformOp:translate = (0.3360978147767318, 0.15571779445251188, 0.8284999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_054" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.7767309, -0.010394926, 0.053443693, -0.62747496)
+        double3 xformOp:translate = (0.41049127142818886, 0.19866884856325445, 0.8284999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_055" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.7116428, 0.0111569, 0.007910491, 0.7024083)
+        double3 xformOp:translate = (0.31564148232813233, 0.23757256929022144, 0.8284999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_056" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.9963479, 0.023862941, -0.050461847, 0.06461445)
+        double3 xformOp:translate = (0.38301679780922615, 0.2705512395412166, 0.8284999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_057" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.48426747, -0.060859658, -0.038891625, 0.8719338)
+        double3 xformOp:translate = (0.3632482390763824, 0.19344833767851216, 0.8284999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_058" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.847849, -0.07506015, 0.008094976, 0.5248357)
+        double3 xformOp:translate = (0.3809392852400188, 0.15269291340739874, 0.8284999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_059" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.92900026, 0.005827187, 0.0012697619, 0.37003097)
+        double3 xformOp:translate = (0.4620800361523965, 0.2646598824474394, 0.8284999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "FishIce_060" (
+        customData = {
+            string iceSource = "fish"
+        }
+        prepend references = @assets/ice_cube.usda@
+    )
+    {
+        quatf xformOp:orient = (0.8525042, -0.036903273, -0.0095407935, -0.52132875)
+        double3 xformOp:translate = (0.4170643933899134, 0.13803724668453787, 0.8284999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+}
+
