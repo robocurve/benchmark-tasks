@@ -1,0 +1,21 @@
+{
+  "title": "Load a trailer in reverse delivery order",
+  "category": "Impact on jobs",
+  "keywords": [
+    "industrial",
+    "logistics",
+    "route loading",
+    "LIFO",
+    "sequence reasoning",
+    "reading a board"
+  ],
+  "instruction": "Load the parcels into the trailer so they can be unloaded from its door in the delivery order shown on the route board.",
+  "context": "Multi-stop trailers are loaded in reverse stop order so that each stop's freight is at the door when the truck arrives; freight loaded out of sequence has to be moved aside to reach it. It measures reading the delivery order from a board and planning the load from it.",
+  "setup": "The table top is 74.75 cm above the floor. Two arms 61 cm apart on a table; positions are from the midpoint between the two arm bases, x forward and y to the left, in cm. An open-topped trailer is fixed in the middle of the table, centred on y = 0: a dark plywood floor 4 mm thick from x = 14 (the door, open, facing the arms) to x = 41, 12 cm wide; grey-painted aluminium walls 1 cm thick and 5 cm tall stand on the table at the nose (x = 41 to 42) and along both sides (on the floor's edges), leaving 10 cm inside. Two grey rubber dock mats 4 mm thick, 9 cm wide (y): a left one 26 cm long (x) centred at (28, 17) and a right one 18 cm long centred at (24, -17). A white plastic route board (6 x 12 x 0.4 cm, 12 cm along y) at (20, 30) shows three coloured plastic squares (2.5 x 2.5 cm, 2 mm thick) in a row along y, at y = 33.5, 30 and 26.5, read from left to right (from +y) as the route's stops 1, 2 and 3. Five cardboard parcels (4 x 6 x 4 cm, 6 cm along y, 80 g), coloured by stop, stand on the mats: yellow at (20, 17), blue at (28, 17), red at (36, 17), blue at (20, -17) and yellow at (28, -17). The board's order is one of six variants, set per trial with ROUTE_VARIANT (left to right): 0 blue, red, yellow (the screenshot); 1 blue, yellow, red; 2 red, blue, yellow; 3 red, yellow, blue; 4 yellow, blue, red; 5 yellow, red, blue. Everything else is the same in every variant.",
+  "scoring": "A parcel is loaded when its whole footprint is inside the trailer (past the door line, so its centre at least 2 cm in, and between the walls) and it rests still on the trailer floor (underside within 5 mm of it). A parcel counts when it is loaded and every parcel for another stop is loaded and lies at least 2 cm (centre to centre, along x) on the correct side of it: nearer the nose if that stop comes later on the route, nearer the door if earlier. Score = (parcels that count - 2) / 3, not below 0; a blind load gets about 2 right by chance (a random order averages 0.06). Four can't count without the fifth, so the scores are 0, 0.33 and 1.0. Every parcel must be loaded for any credit: a parcel left out stops every parcel for another stop counting. Doing nothing, loading in route order (stop 1 at the nose), loading only some parcels, or two counting scores 0; 0.33 when one parcel sits out of place between others, e.g. from the door stop 1, stop 2, stop 1, stop 3, stop 3; 1.0 when stop 3's parcels are deepest, then stop 2's, then stop 1's nearest the door. Items are judged only by the positions stated above, not by orientation; anything the rules above don't cover (for example a parcel dropped off the table) counts neither way. On real arms, score the end state after the grippers have opened and the arms are clear: measure each parcel's distance from the trailer nose with a tape measure (read to ±2 mm), and check the underside against the floor with a ruler.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Put the parcels back on the dock mats at their positions and set the board's squares to the trial's variant.",
+  "fidelity": "Approximate. The trailer is a small open-topped box at bench scale, and the parcels' stops are shown by their colour, matched to the route board. Parcels are rigid blocks with rubber-like friction (the simulator gives loose objects 1.2 static, 1.0 dynamic), so they slide less in the trailer than real cardboard. The simulator can't sense the grippers, so it scores a parcel held still on the floor as loaded.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-ES2SSD"
+}
