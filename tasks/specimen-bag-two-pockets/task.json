@@ -1,0 +1,20 @@
+{
+  "title": "Bag a blood sample with the tube in the specimen compartment and the requisition in the document pocket",
+  "category": "Impact on jobs",
+  "keywords": [
+    "healthcare",
+    "phlebotomy",
+    "specimen transport",
+    "biohazard",
+    "bloodborne pathogens"
+  ],
+  "instruction": "Bag the blood sample for the lab.",
+  "context": "Phlebotomists and medical assistants bag every specimen before it goes to the lab (O*NET 31-9097.00 Phlebotomists, transport specimens or fluids to laboratories). OSHA's Bloodborne Pathogens standard, 29 CFR 1910.1030(d)(2)(xiii), requires blood specimens to be placed in a container that prevents leakage during handling and transport. Specimen transport bags have a sealed, biohazard-marked specimen compartment and a separate outer pocket for the requisition. Lab policies require the paperwork to be kept apart from the specimen so a leak cannot contaminate it. The orange compartment is the specimen side, and the white one is the document pocket.",
+  "setup": "Positions are in cm from the midpoint between the two arm bases, with x forward, y to the robot's left and the table top at z 0. The specimen transport bag mock is one open-top box of fixed rigid plastic walls, 1 cm thick and 6 cm tall, with the table as its floor. It is centered at x 30. A fixed divider at y 0 splits it into two compartments, each 12 x 9 cm inside (x by y). The specimen compartment has orange walls and an orange divider and is centered at y +5. The document pocket has white walls and is centered at y -5. The blood tube holder is a gray one-tube holder of fixed rigid plastic, 3.5 cm tall with a 3.0 x 3.0 cm pocket, centered at x 18, y +8. The blood tube is a capped rigid plastic cylinder, 1.6 cm in diameter and 10 cm tall, 12 g, colored lavender (EDTA) all over. It stands in the holder. The lab requisition form is a folded paper form stand-in, a white rigid block 10 x 6 x 1.5 cm and 30 g. It lies flat on the table at x 17, y -8 with its long side along x.",
+  "scoring": "An item counts as in a compartment when its center lies inside that compartment's walls, its bottom is within 4 cm of the floor, and it is still. Within 4 cm covers lying on the floor or resting on the other item, and it rules out sitting up on a rim. The score is 0 if the tube is not in the specimen compartment, whatever else happened. That includes the tube in the document pocket, still in its holder, on the table, across the divider, or held. With the tube in the specimen compartment, the score is 1.0 if the form is in the document pocket. It is 0.25 if the form is in the specimen compartment with the tube. It is 0.5 if the form is anywhere else, for example left on the table, on a rim, or held. The possible scores are 0, 0.25, 0.5 and 1.0. In a real trial, a photo from above shows which compartment holds the tube and which holds the form.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Stand the tube back in its holder and lay the form flat at its start position. Real trials use an empty capped lavender-top tube and a folded sheet of card thick enough to grip, or a requisition in a 1.5 cm card wallet. They also use a box with a divider, with the specimen side marked by orange tape and a biohazard sticker. A real two-pocket specimen bag is too floppy for a repeatable layout.",
+  "fidelity": "The bag is a rigid open box with a divider in place of a zip-sealed plastic bag with a slip pocket. The tube has no separate cap, label or blood. The form is a thick rigid block. The simulation uses rigid-body physics only.",
+  "scores": "Dream-1 run: 0 (2,400 steps); demo: 1.0",
+  "media": "M-9KSYJZ"
+}
