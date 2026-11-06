@@ -1,0 +1,20 @@
+{
+  "title": "Load four weights onto a balance plank in matched pairs so that it never tips",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "bimanual",
+    "synchronised placement",
+    "balance",
+    "pairing by mass",
+    "multi-stage"
+  ],
+  "instruction": "Put all four weights on the plank, one of each colour on each side: the red ones near the two ends and the yellow ones closer in. Don't let the plank tip or come off its pivot.",
+  "context": "Planks, shelves and beams that rest on a single support (a trestle, a balance pivot, a cart axle) tip as soon as one side carries more than the other. Loading one safely means working in matched pairs: telling which loads balance each other (here the weights differ in mass, shown by colour), and setting each pair down together at mirrored distances. A robot needs this two-handed skill before it can load unstable supports.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) Pivot: a dark steel ridge fixed to the table, 12 cm long (front to back) x 2.4 cm wide x 5 cm tall, centred 30 cm forward on the centre line, with a flat top. (2) Plank: loose pine, 48 cm long (side to side) x 9 cm wide x 1.8 cm thick, 300 g, lying across the ridge, centred on it and level; tipped until an end touches the table it would lean about 13 degrees. (3) Four cylinder weights, all 5 cm across x 6 cm tall, each standing on its own dark green felt pad 8 x 8 cm (fixed, 1 mm thick): two red ones of 400 g, at 12 cm forward / 27 cm left and 17 cm forward / 16 cm right; two yellow ones of 250 g, at 17 cm forward / 14 cm left and 11 cm forward / 27 cm right. The plank stays level only while the centre of everything on it is within about 1.2 cm of the ridge: a red weight near one end on its own tips it at once, and so does a lone yellow one 8 cm out, or a red and a yellow set down at the same distance on opposite sides. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Measured from the overhead and wrist videos, with a ruler and a phone inclinometer. Distances along the plank are from its centre, and a weight counts as in a zone only with its centre within 2.5 cm of the plank's centre line. End zones: 16-22 cm out on each side; inner zones: 8-13 cm out on each side. 1.0: a red weight standing in each end zone and a yellow one in each inner zone, the plank level within 2 degrees and on the ridge, everything still for 2 s; and at no time did the plank tilt more than 6 degrees (an end dropping about 2.5 cm) or come off the ridge (its centre more than 2 cm from it, or lifted 1 cm). 0.5: those 'at no time' conditions hold and one colour's pair is in place (both red weights in the end zones, one on each side, or both yellow ones in the inner zones), with the plank level, but not both pairs. 0.0: anything else, including any tip past 6 degrees or the plank leaving the ridge at any moment.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed: lay the plank back centred and level on the ridge and stand each weight on its own pad, as in the screenshot.",
+  "fidelity": "Rigid-body PhysX (Isaac Sim 6.1, 20 Hz control) of a calibrated two-arm table. Simplified: the plank and weights are rigid uniform bodies and the pivot is a fixed ridge with a 2.4 cm flat top, so the plank stays level while the load's centre is within about 1.2 cm of it; a knife-edge balance is touchier. Loose objects get rubber-like friction (1.2 static, 1.0 dynamic). Dream-1 sees the 320 x 176 frames it expects; the demo video is rendered at 1280 x 720.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-YGJTWR"
+}
