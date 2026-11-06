@@ -1,0 +1,21 @@
+{
+  "title": "Take the cap off a child-resistant medicine bottle",
+  "category": "Societal relevance",
+  "keywords": [
+    "child-resistant cap",
+    "medicine",
+    "push and turn",
+    "bimanual",
+    "home care",
+    "elder care"
+  ],
+  "instruction": "Take the cap off the medicine bottle.",
+  "context": "Most prescription medicines come in child-resistant vials, and many older people with stiff hands can't open them, so a robot helping at home has to. The common push-and-turn cap only unscrews while pressed down; turned without pressing, it just spins. Its top says PUSH DOWN & TURN. The vial stands free, so the robot should also keep it still, for example with its other arm. Doing nothing, or turning without pressing, scores 0.",
+  "setup": "Positions in cm from the midpoint between the arm bases: x forward, y to the robot's left; heights above the table top. An amber pharmacy vial, 4.6 cm across with an 8.8 cm body (10.6 cm tall with its cap), holding pills (about 80 g, 90 g with its cap), stands free (not taped) with its centre at (34, 0). A white pharmacy label runs round its front: PHARMACY and Rx 0427 in a blue band, TAKE 1 TABLET BY MOUTH DAILY, and KEEP OUT OF REACH OF CHILDREN in an orange band. Its own push-and-turn child-resistant cap is on: white, 5.1 cm across and 2.2 cm tall, with a ribbed side and PUSH DOWN & TURN printed round an anticlockwise arrow on top. The cap presses down about 3 mm (2.4 N at the bottom in simulation; real caps are likely stiffer, so choose one the robot can press, and measure it) and comes free after about half a turn anticlockwise while pressed; turned without pressing, its outer shell spins and nothing unscrews; turned clockwise, it tightens. Both arms start at the ready pose with open grippers.",
+  "scoring": "Judged from the video and, at the end, a photo and one hand test. 1.0 (success, held 2 s): the cap is off the vial (held or put down), no pills spilled, and the vial was never knocked over. 0.5: the cap is still on the neck but loose (lifted straight up by hand at the end, without pressing or turning, it comes off), vial never knocked over. 0: anything else, including doing nothing, turning without pressing however far, a cap screwed back on, and knocking the vial over at any time (tilted more than 45 degrees, even if stood up again). A vial lifted or held upright is not knocked over.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Put the cap back on and turn it clockwise until tight (it tightens without pressing); check that it doesn't open without pressing, and stand the vial on its mark.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. The vial is a floating articulation standing free; pills are only mass. The cap has three joints: a 3 mm spring press, a free spin and a lift. The lock is task code: seated, the cap's turn relative to the vial counts anticlockwise only while pressed past 2 mm, clockwise always; after half a turn the lift unlocks. The freed cap lifts straight up its axis and counts as off once 1.5 cm up.",
+  "scores": "Dream-1 run: 0.0 (both arms went to the vial; once it pushed the cap past the unlocking depth but turned it only about 3 degrees while pressing, so nothing came loose); demo: 1.0",
+  "media": "M-9SXQ7B"
+}
