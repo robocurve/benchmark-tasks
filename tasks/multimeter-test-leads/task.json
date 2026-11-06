@@ -1,0 +1,22 @@
+{
+  "title": "Plug the multimeter's test leads into COM and V ohm, not the 10 A jack",
+  "category": "Impact on jobs",
+  "keywords": [
+    "electronics",
+    "multimeter",
+    "test leads",
+    "banana plug",
+    "peg in hole",
+    "tight insertion",
+    "polarity"
+  ],
+  "instruction": "Plug the black test lead into the COM jack and the red test lead into the V ohm jack of the yellow multimeter.",
+  "context": "Plugging the test leads in is how every voltage measurement on an electronics bench starts. The 4 mm banana pins fit their jacks with a fraction of a millimetre of play, the colour decides the jack, and the jack beside COM is the 10 A current input: a lead left there is the wrong set-up for measuring voltage, the classic way to blow the meter's fuse or short the circuit under test.",
+  "setup": "Left and right are the robot's. Positions are centres in metres from the midpoint between the two arm bases: x forward, y to the robot's left, heights above the table. Bench power supply: a dark grey box, 24 cm deep (x), 20 cm wide, 10 cm tall, fixed, centred at (0.495, -0.19), its front panel (two green displays, two knobs, three brass posts) facing the robot at x = 0.375. Multimeter: a yellow handheld digital multimeter, 17.7 x 8.5 x 4.4 cm, 120 g, plastic, lying face up on the supply with its long side along x, its jack end toward the robot and flush with the supply's front (x 0.376 to 0.552, y -0.233 to -0.148). Its three 4 mm jacks lie in a row along y across the jack end, 2.04 cm apart, the face around them 13.7 cm above the table: A (10 A) at (0.40, -0.170), COM at (0.40, -0.190), V ohm at (0.40, -0.210). Each jack's bore is 4.3 mm wide and 20 mm deep with a 1 mm chamfer at its mouth. Mat: a blue-grey antistatic mat, 20 x 17 x 0.3 cm, fixed, centred at (0.26, -0.30). Test leads, black and red, 15 g each, lying on the mat along x, pins toward the robot, plug bodies centred at (0.22, -0.26) (black) and (0.22, -0.33) (red). Each lead: a plug body 4 cm long and 1 cm across, a 4 mm nickel pin 18 mm long out of its front, and a 10 cm rigid stub of cable out of its back. Nothing else is on the table.",
+  "scoring": "Measured in the meter's own frame, wherever it lies. A pin is in a jack when its tip is within 3.3 mm of the jack's axis and below the face around it. Per lead, 0.5 when its pin is at least 12 mm into its own jack (black in COM, red in V ohm), 0.25 at 5 to 12 mm, 0 otherwise (a lead in the other lead's jack earns nothing). 1.0 (success, held 1 s): both pins at least 12 mm in their own jacks, the leads still (under 2 cm/s). 0 for the whole task if any pin is 3 mm or more into the A jack, or if the meter or a lead falls off the table (centre more than 2 cm below the table top).",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. The meter is a SimReady model whose mesh collider has no holes, so it collides as boxes: square 4.3 mm bores with a 1 mm chamfer, and 4 mm square pins without the banana spring (0.15 mm of play each side). The cable is a rigid 10 cm stub. Pins slide at friction 0.3, everything else 1.0. The supply is a fixed box drawn by a detailed mesh.",
+  "scores": "Dream-1 run: 0.0 (the right arm reaches over the leads on the mat and nudges them, but never picks one up or plugs it in), demo: 1.0 (success at step 648)",
+  "reset_notes": "Pull both leads out and lay them on the mat as in the setup image, the meter on the supply, its jack end flush with the supply's front.",
+  "media": "M-4HAHAH"
+}
