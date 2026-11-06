@@ -1,0 +1,20 @@
+{
+  "title": "Put opened low-hydrogen welding rods back in the rod oven instead of the crate",
+  "category": "Impact on jobs",
+  "keywords": [
+    "welding",
+    "low-hydrogen electrodes",
+    "E7018",
+    "rod oven",
+    "weld quality"
+  ],
+  "instruction": "Put the welding rods away.",
+  "context": "Welders using low-hydrogen stick electrodes (E7018) have to keep opened rods dry. Moisture from the air puts hydrogen into the weld and can cause cracking. AWS D1.1 (Structural Welding Code - Steel) limits how long opened low-hydrogen electrodes can be exposed to the air, 4 hours for E70XX. It requires them to be held in a storage oven at 250 °F (120 °C) or more. Putting them on an open shelf or in a crate is a common mistake.",
+  "setup": "Positions are in cm from the midpoint between the two arm bases, with x forward, y to the robot's left and the table top at z 0. There are two open-top containers, both centered at y 0. Each has four fixed walls 1 cm thick around an 8 x 40 cm opening (x by y), with the table as the floor. A brown wooden storage crate with 6 cm walls is centered at x 29. An orange rod holding oven with 12 cm walls is centered at x 40. Two banded bundles of opened E7018 electrodes (gray flux coating) lie on the table along y, centered at y 0, one at x 10 and the other at x 19. Each bundle is about ten rods held by two rubber bands. It is 35 cm long, 2.4 cm across and 300 g.",
+  "scoring": "A bundle counts as in a container when its whole footprint lies inside the container's walls, it is entirely below the rim, and it is still. Each bundle in the rod oven earns 0.5. A bundle earns nothing in the crate, on the bench, across a rim, standing on end, or held. The score is 1.0 with both bundles in the oven. The possible scores are 0, 0.5 and 1.0. In a real trial, a photo from above at the end shows which container holds each bundle. A straight edge laid across the oven's rim confirms nothing sticks out.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lift the bundles out and lay them back at their start positions along y.",
+  "fidelity": "Each bundle is one square-section rigid bar of the bundle's size. Shapes in this simulator can only be turned about the vertical, so a cylinder cannot lie down. The oven is an open box with no lid, door or heater. A real top-loading rod oven's lid can be propped open for the trial. The simulation uses rigid-body physics only.",
+  "scores": "Dream-1 run: 0 (2,400 steps); demo: 1.0",
+  "media": "M-LTAJ9M"
+}
