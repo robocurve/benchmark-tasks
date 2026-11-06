@@ -1,0 +1,21 @@
+{
+  "title": "Find the drive the controller released by its offset, and replace it with the spare",
+  "category": "Impact on jobs",
+  "keywords": [
+    "data center",
+    "storage",
+    "hot-swap drive",
+    "drive replacement",
+    "fault isolation",
+    "RAID"
+  ],
+  "instruction": "One drive in this cage has failed and the storage controller has released it: its carrier stands out from the bay, further towards you than the others. Take that drive out and put it in the black return bin, then seat the spare drive from the white tray in the same bay, pushed fully home against the backplane like its neighbours. Do not move the drives that are still seated.",
+  "context": "When a drive in a hot-swap array fails, the technician must pull exactly that drive: pulling a healthy member of a degraded array can take the whole volume offline. Service procedures identify the failed drive by its fault indicator and, on many enclosures, by its released latch, which leaves the carrier standing proud of its neighbours; the replacement then goes into the same bay, fully seated, so the array rebuilds onto it. Here no colour marks the failed drive: it is found only by its 30 mm offset. Unlike TK-PLJPH7 (seat one carrier in a known bay with its cam handle), the fault-tagged drive swap (the failed drive is marked red) and DataCenterBench's Tier 1 plug and unplug steps (a known target), the target has to be found from a geometric cue among identical neighbours that must stay untouched. Done by: computer, ATM and office machine repairers; computer network support specialists (O*NET 49-2011.00, 15-1231.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. Drive cage: a fixed light grey floor plate 15 x 21 cm, 0.4 cm thick, centred at x 31.2, y 25; a fixed green backplane bar (0.6 x 20 x 3 cm) centred at x 37.85; four bays along y at y 32.8 (bay 1), 27.6, 22.4 and 17.2, each two fixed dark guide rails (9 cm long, centred at x 33, 0.3 cm thick, 2 cm tall) either side of a 3.3 cm channel. Drives: five identical grey boxes 9 cm long (x), 2.4 cm thick, 7 cm tall, 150 g, standing on their long edge. Bays 1, 2 and 4 hold seated drives centred at x 33 (back end 0.5 mm from the backplane); the drive in bay 3 is released and stands 3 cm proud, centred at x 30. Spares tray: a fixed white open frame (walls 0.6 cm thick, 1.5 cm tall, round a 12 x 7 cm opening) centred at x 17, y 31, holding the spare drive at its centre. Return bin: the same frame in black round a 13 x 8 cm opening, centred at x 17, y 20.",
+  "scoring": "From the episode's recorded poses, with the grippers open at the end. 0.5 for the released drive at rest in the return bin (centre inside the inner walls, bottom within 2 cm of the table). 0.5 for the spare seated in bay 3: still, upright within 8 degrees, square within 6 degrees, its centre within 5 mm of the bay's centreline and within 5 mm of fully home, its bottom within 3 mm of the floor plate. If any of the three seated drives ends more than 4 mm or 5 degrees from its start, the score is capped at 0.25. Possible scores: 0, 0.25, 0.5, 1.0. Success: score 1, held 1 s.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Stand drives back in bays 1, 2 and 4 against the backplane, the released drive in bay 3 at 3 cm proud, and the spare in the white tray; the cage, tray and bin are fixed. On a real rig, mark the 3 cm offset with a gauge block.",
+  "fidelity": "Rigid boxes, one shared friction (1.2 static, 1.0 dynamic). A drive in its carrier is one plain box (real 2.5-inch drive 100 x 70 x 15 mm; the carrier is drawn 24 mm thick for the fingers) in a top-open cage: no connector, latch, handle or fault LED, held by gravity and loaded from above. Bay pitch is 52 mm (real about 20 mm) to leave room for the 38 mm pads. The release is shown only by the 30 mm offset.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-GH997C"
+}
