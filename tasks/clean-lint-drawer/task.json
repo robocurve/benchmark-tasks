@@ -1,0 +1,25 @@
+{
+  "title": "Clean a dryer's lint screen before sliding it back into the dryer",
+  "category": "Impact on jobs",
+  "keywords": [
+    "laundry",
+    "tumble dryer",
+    "lint screen",
+    "fire safety",
+    "commercial laundry",
+    "step order",
+    "cleaning",
+    "slot insertion",
+    "pick and place",
+    "release"
+  ],
+  "instruction": "Clean the dryer's lint screen and put it back: lift the grey lint pad off the white screen and drop it in the black bin, then slide the screen straight back into the slot in the dryer until it stops, and let go of it.",
+  "context": "Laundry attendants empty a dryer's lint screen after every load: lint is highly flammable, and failing to clean it is a leading cause of clothes-dryer fires. A screen slid back with the lint still on it, or lint scraped off onto the floor, defeats the point, so the order and the destination of the lint both matter.",
+  "setup": "Positions in cm from the midpoint between the two arm bases (bases at y = +30.5 left and -30.5 right): x forward, y to the left, heights above the table top. Fixed: the dryer's lint-drawer housing, a grey slot 8 cm wide (y) and 2.2 cm high, open towards the arms, centred on y -12, its opening at x 34 and its back stop at x 45 (11 cm deep); 1 cm thick side walls, a 1 cm roof, and above the roof a darker grey dryer cabinet block 10 x 14 x 6 cm set back 3 cm from the opening (x 37 to 47). A black open bin centred at x 20, y 0, 10 x 10 cm inside with 1 cm thick walls 6 cm tall standing on the table and a 1 cm floor (rim 5 cm above the floor). Loose: the lint screen, a rigid white plastic-and-mesh frame 16 (x) x 7 (y) x 1.5 cm, 120 g, lying flat on the table centred at x 20, y -12, long side along x (it spans x 12 to 28, so its far end is 6 cm short of the opening). The lint pad, a rigid grey felt block 9 (x) x 5.5 (y) x 1.6 cm, 15 g, lying flat centred on top of the screen. Everything is square to the table edges.",
+  "scoring": "Hard 0 if the screen or the lint ends with its lowest point more than 5 cm below the table top (fell off the table); any part of the screen is inside the bin's outer footprint below its rim (thrown away); or the screen's far end is 2 cm or more inside the opening while the lint is still on it (lint centre over the screen's top face and its underside within 1 cm of that face). Otherwise score = 0.9 x (0.35 L + 0.65 L d): L = 1 if the lint is wholly in the bin (within the inner walls, 2 mm tolerance, no part above the rim, underside within 5 mm of the bin floor), else 0; d = how far the screen's far end is inside the opening, 0 to 11 cm, divided by 11, counted only while the far end is within the slot's 8 cm width and the screen's underside is below the slot's 2.2 cm roof. Doing nothing, sliding the screen in without binning the lint, and brushing the lint onto the table all score 0. 1.0 requires the lint in the bin, the screen's far end within 5 mm of the back stop with its long axis within 5 degrees of the slot's axis and lying flat (tilt under 5 degrees), both still (under 1 cm/s and 0.5 rad/s) and every fingertip of both grippers at least 3 cm from the screen and the lint, all held for 1 s.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Nothing is consumed. In a real trial, fix the housing and the bin to the table. Take the lint pad out of the bin, slide the screen out, and lay both back as in the setup.",
+  "fidelity": "The housing and bin are fixed rigid boxes; the screen is one rigid box and the lint pad a rigid felt block, as task files have no cloth or fibres, so lint can't cling, tear or shed. The slot gives 7 mm of vertical clearance, so lint left on the screen is scraped off at the opening, as on a real drawer. Friction is the simulator default. Release is checked from fingertip positions by forward kinematics.",
+  "scores": "Dream-1 run: 0.0 (the right arm hovered over the screen and nudged it and the lint pad for the full 60 seconds; the lint never left the screen and the screen never entered the slot); scripted demo: 1.0 (3 of 3 runs)",
+  "media": "M-RKL78L"
+}
