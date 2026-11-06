@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robosci-roll-race"
+version = "1.0"
+requires-python = ">=3.11"
+dependencies = ["mujoco==3.13.0", "numpy>=2.2,<2.6", "imageio[ffmpeg]==2.38.1", "pillow>=10", "inspect-robots==0.60.0"]
+
+[project.entry-points."inspect_robots.tasks"]
+"robosci/roll_race" = "robosci.inspect_tasks:roll_race"
+
+[project.entry-points."inspect_robots.policies"]
+robosci_oracle = "robosci.embodiment:make_oracle_policy"
+robosci_guess = "robosci.embodiment:make_guess_policy"
+
+[project.entry-points."inspect_robots.embodiments"]
+robosci_mujoco = "robosci.embodiment:make_embodiment"
+
+[tool.setuptools.packages.find]
+include = ["robosci*"]
+
+[tool.setuptools.package-data]
+"*" = ["fonts/*", "assets/**/*"]
