@@ -5,7 +5,7 @@ the vials across, but only while the lamp is green. Pressing the button asks for
 then green for 25 s, then off again. The green window is shorter than four moves at the demo's pace, so the robot has
 to notice the lamp go out, press again, and wait for green before carrying on. Lifting a vial under an off or amber
 lamp is the fault the task is about, and so is holding a vial in the air for more than 3 s after the lamp goes out: on a
-real line, a lamp that is out means someone is working in the cabinet.
+real automated sample line, a lamp that is out means someone is working in the biosafety cabinet it feeds.
 
 The task needs both arms: the left moves the vials and the right presses the button.
 
