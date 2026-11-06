@@ -1,0 +1,23 @@
+{
+  "title": "Staple a cable near the box and at a maximum spacing",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "deformable",
+    "measurement",
+    "rule-based spacing",
+    "placement",
+    "building wiring",
+    "construction"
+  ],
+  "instruction": "Lay the white cable straight along the wooden stud and fix it with the orange staple blocks, each set over the cable so the cable runs through its slot: one staple within 6 cm of the box, one within 6 cm of the black end mark, and no more than 20 cm between neighbouring staples. Then let go.",
+  "context": "Electricians fasten NM cable to studs with staples: NEC 334.30 (Baltimore City 2024 code) requires securing within 12 in. (300 mm) of every outlet box, junction box, cabinet or fitting, and at intervals not exceeding 4½ ft (1.4 m). O*NET 47-2111.00 Electricians: \"Assemble, install, test, or maintain electrical or electronic wiring ... using hand tools or power tools.\" The 6 cm / 20 cm rules here are a scaled-down version for a tabletop run; the end mark stands for the next box; no other marks.",
+  "setup": "Cm from the midpoint between the arm bases (x away from the robot, y to its left). Outlet box: blue PVC, 7.5x5x5.7 cm (x,y,z), fixed, centre x 34.5, y 35.5. Stud: dark-stained pine strip 64x3.8x0.5 cm, fixed, centred on x 34.5, from the box face (y 33) to y -31. End mark: black tape 3.8x0.5 cm across the stud, 55 cm from the box face (y -22). Cable: white 6 mm round PVC cord, 62 cm, leaves the box face at x 34.5 (held there, free to swing sideways), lies straight, swung 15 deg towards the robot from -y, end at about x 18.5, y -27.5. Staple blocks (4): orange PLA, 36x15x20 mm, 15 g, 12 mm wide x 9 mm high slot under the middle (along y), upright at x 16, y 25; x 16, y 17; x 43, y -10; x 44, y -19.",
+  "scoring": "At the end, ruler and top photo. Score 0 if: a gripper is within 3.5 cm of the cable or a staple; the cable centreline is over 2 cm sideways from the stud centre line anywhere from box face to end mark; or the box or stud moved. A staple counts only if both legs sit flat on the stud (gap <= 3 mm, tilt < 10 deg) with the cable through its slot; its position is its centre, along the stud from the box face. Start at the counted staple within 6 cm of the box (none: 0) and step to the next one while the gap is <= 20 cm. 1.0 if a staple reached is within 6 cm of the end mark; else 0.75 / 0.5 / 0.25 if the last one reached is >= 45 / 30 / 15 cm from the box; less: 0.",
+  "run_limit": "1,600 steps (80 seconds at 20 Hz)",
+  "reset_notes": "Lay the cable straight from the box entry to the tape mark for its end at x 18.5, y -27.5 (15 deg off the stud, towards the robot). Put the four staple blocks upright on their tape outlines (x 16, y 25; x 16, y 17; x 43, y -10; x 44, y -19), slot along y. Box, stud and end mark stay in place.",
+  "fidelity": "Cable: 2 cm rigid segments with bending springs, no twist or plasticity; 6 mm round, not flat NM. Held at the box face by a vertical pin (real: snug knockout clamp). Staples are rigid 15 g slotted PLA blocks that straddle the cable and rest by weight; real staples are driven into the stud, so this tests placement and spacing, not driving. The stud is a 5 mm stained pine strip lying on the table, not an upright wall stud.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-SFGB76"
+}
