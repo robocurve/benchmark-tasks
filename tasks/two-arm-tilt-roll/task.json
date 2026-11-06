@@ -1,0 +1,22 @@
+{
+  "title": "Tilt a long board with both arms to roll a ball into a cup",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "two arms required",
+    "coordinated lift",
+    "tilting",
+    "rolling object",
+    "long object handling",
+    "material handling"
+  ],
+  "instruction": "Hold the board with both grippers, one in each open gap of the guide slot, lift it clear of the table and tilt it so the ball rolls off the right end of the board into the cup.",
+  "context": "Emptying a long board or tray requires controlling its tilt while supporting the load. Here the arms lift the board and set its slope so a loose ball rolls into a cup.",
+  "setup": "Station table (top 0.7475 m; x forward from the arm bases, y to the left; arm bases at x 0, y +-0.305 m). Board: oak strip, 84.8 cm long, 8.0 cm wide, 1.6 cm thick, 0.81 kg, loose, lying flat on the table along y with its centre line at x 0.28 m, its left end at y +0.400 m and its right end at y -0.448 m. Ball: soft foam ball, red, 10.0 cm diameter, 0.05 kg, loose, resting on the board at x 0.28 m, y -0.358 m (4 cm of board left between the ball and the board's right end). Guide slot: two upright grey boards, 1.2 cm thick, 16 cm tall, 48.7 cm long (y from -0.186 to +0.301 m), fixed (clamped or taped down), standing on the table 5 mm from each side of the board. This leaves two open gaps where the board can be held: its left end (y +0.301 to +0.400 m, in front of the left arm) and a 12.8 cm gap from y -0.314 to -0.186 m (in front of the right arm). Ball rails: two upright blue boards, 0.8 cm thick, 14 cm tall, 14.4 cm long (y from -0.458 to -0.314 m), fixed, 12 mm from each side of the board, so the ball (10 cm) sits between them with 2 mm to spare. Cup: open yellow box, fixed, inner 14 x 14 cm, walls 0.8 cm thick and 7.5 cm tall, no floor of its own (the table is its floor), centred at x 0.28 m, y -0.536 m, its near wall 1 cm past the board's right end. Nothing else on the table. The ball is wider than an open gripper (9.4 cm) and its centre sits below the cup's rim while the board lies on the table.",
+  "scoring": "1.0 if the ball rests in the cup: its centre over the cup's inner 14 x 14 cm, its bottom within 1 cm of the table, and still (under 1 cm/s) for 1 s; the trial then ends. Otherwise, at the end of the run: 0.8 if the ball is in the cup but still moving; 0.3 + 0.3 x progress if the ball is on the board's top face and the whole board is held at least 1 cm clear of the table, where progress = 1 - d / 17.8 cm, d is the ball's horizontal distance to the cup's centre, clipped to 0..1 (so 0.3 to 0.6); 0 if the ball is on a board that still touches the table, on the table, on a rim or wall top, or anywhere else; 0 if the ball or the board has fallen off the table (its bottom more than 2 cm below the table top or its centre outside the table).",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Lay the board back flat in the slot with its ends at the marked positions and put the ball on it 4 cm from its right end; mark both on the table and the board with tape.",
+  "fidelity": "Rigid primitives: the board is one box, the ball a solid sphere; the slot, rails and cup are fixed boxes, as if clamped. Every object uses the simulator's rubber-like material (static 1.2, dynamic 1.0) with no restitution or rolling resistance, so the simulated ball rolls a little faster on a slope than a real foam ball and does not bounce. The board's sides rub the slot with the same friction; a real guide should be smooth (waxed or lined). One flat colour per object.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-9M4MPW"
+}
