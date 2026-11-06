@@ -1,0 +1,21 @@
+{
+  "title": "Push a wide GPU sled home with both arms without racking it",
+  "category": "Impact on jobs",
+  "keywords": [
+    "data center",
+    "GPU server",
+    "sled insertion",
+    "bimanual",
+    "pushing",
+    "anti-racking"
+  ],
+  "instruction": "Push the grey GPU sled all the way into its bay until it meets the black backplane. Use both arms at once, one on each side of its front face, and keep it square: it must not turn more than 2 degrees while it is between the steel guides.",
+  "context": "GPU and accelerator sleds are wide, heavy modules that slide into a chassis bay on side guides and mate blind with the backplane at the back. Service guides tell technicians to push evenly on both sides of the sled's front: a sled pushed off-centre turns in its guides (racks), binds, and can bend the guides or strike the connectors off-axis. The skill is two arms pushing in step so the part stays square, checked at every step. Unlike RLBench bimanual_push_box (two arms push a box to a zone in open space) and DataCenterBench's plug and join tasks (one connector at a time), here a part wider than either arm's reach is pushed into a close-fitting bay with a squareness limit; the board has no sled or blade insertion done by pushing. Done by: data-center and computer equipment repairers (O*NET 49-2011.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. Guides: two fixed steel rails 12 x 0.8 x 2.5 cm along x, centred at x 38 and y 17.8 and -17.8, open toward the arms at x 32. Backplane: a fixed black bar 1.2 cm deep, 36.4 cm long, 3 cm tall across the guides' far ends, its near face at x 44. Sled: a loose grey box 13 cm deep (x) by 34 cm wide by 3.5 cm tall, 500 g, flat on the table centred at x 29, y 0, its far 3.5 cm between the guides, with 4 mm of air at each side.",
+  "scoring": "From the episode's recorded poses, with the grippers clear at the end. 0.25 once the sled has been pushed 3 cm further in, 0.5 at 6 cm, 0.75 with its far face within 2 mm of the backplane; 1.0 seated: there, square to the guides within 1 degree, flat and still. Racking: if the sled ever turns more than 2 degrees while its far face is between the guides, the score is 0 for the rest of the trial. Possible scores: 0, 0.25, 0.5, 0.75, 1.0. Success: score 1, held 1 s.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Slide the sled back out to its start mark, square, with its far 3.5 cm between the guides; the guides and backplane do not move. On a real rig racking is judged from the trial video.",
+  "fidelity": "Rigid boxes with one shared friction (1.2 static, 1.0 dynamic). The bay lies on the table rather than in a vertical chassis, the sled is a plain box without handles, latches or connectors, and the backplane is a fixed bar: seating is judged from the sled's pose, not from a mated connector. Racking is judged from the sled's yaw every step.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-LQ8WJB"
+}
