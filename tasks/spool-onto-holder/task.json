@@ -1,0 +1,22 @@
+{
+  "title": "Lift the filament spool with both hands onto the holder's rod",
+  "category": "Impact on jobs",
+  "keywords": [
+    "fab lab",
+    "3D printing",
+    "bimanual",
+    "reorientation",
+    "peg in hole",
+    "heavy object",
+    "filament spool"
+  ],
+  "instruction": "Lift the orange filament spool with both hands, stand it up and slide it onto the grey holder's rod until it touches the stop.",
+  "context": "Fab lab and print farm technicians change filament spools all day. A 1 kg spool is 20 cm across and hangs on a rod only 7 mm narrower than its bore, so it has to be stood up from lying flat, lifted level with both hands and threaded on square, or it jams on the rod's tip.",
+  "setup": "Left and right are the robot's. Positions are centres in metres from the midpoint between the two arm bases: x forward, y to the robot's left, heights above the table. Box: a closed cardboard parts box, 22 cm along x, 11 cm along y, 10 cm tall, fixed, at (0.21, 0). Spool: a 1 kg spool of orange PLA filament, 20 cm across and 7 cm wide, black plastic flanges 6 mm thick with six windows, a grey hub with a 52 mm bore, the filament wound 13 cm across (3.5 cm of each flange stands proud of it), a blank white label on one flange. It lies flat on the box, label up, centred over it, its rim overhanging the box by 4.5 cm on the left and the right. Holder, fixed: a 4 x 4 cm grooved aluminium post 29 cm tall at (0.47, 0) on a 14 x 16 x 1.2 cm grey steel foot plate centred at (0.49, 0). A smooth steel rod 45 mm across sticks 12 cm out of the post toward the robot, along x, its axis 25 cm above the table, its tip at x = 0.33, its last 2 cm chamfered to a 28 mm nose. A black stop collar 70 mm across and 1 cm thick sits on the rod against the post, its face at x = 0.44. Nothing else is on the table.",
+  "scoring": "Positions are centres. On the rod means: the spool's centre within 2.6 cm of the rod's axis (the rod runs through the bore), its axis within 10 degrees of the rod's, and both its faces between the rod's tip and the stop. 1.0 (success, held 1 s): on the rod, its inner flange within 1 cm of the stop collar, no finger within 5 mm of the spool, and the spool still (under 1 cm/s and 0.5 rad/s). 0.5: on the rod but 1 cm or more from the stop, or still held, or still moving. 0.25: the spool's centre within 5 cm of the centre of the rod's tip. 0 otherwise (lying on its box, standing anywhere off the rod), and 0 if the spool falls off the table (centre more than 2 cm below the table top).",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Lift the spool off the rod and lay it flat on the box, label up, centred, its rim overhanging both sides equally. Nothing is consumed.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. The spool is one rigid 1 kg body of 72 box colliders: a 24-sided bore (flats 26 mm from the axis), the hub and filament as one solid core, and two flanges with the gap between them open above the filament. The filament doesn't unwind. The rod (friction 0.3) and the collar are cylinder colliders, the rod's nose a convex cone. The meshes are drawn only. The gripper squeezes up to 50 N per pad. The holder and box are fixed.",
+  "scores": "Dream-1 run: 0.0 (both arms come to the spool's sides and hover there, but never grip and lift it), demo: 1.0 (success at step 364)",
+  "media": "M-BWJV8D"
+}
