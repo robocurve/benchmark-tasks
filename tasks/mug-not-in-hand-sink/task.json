@@ -1,0 +1,20 @@
+{
+  "title": "Put a dirty mug to soak in the dish sink instead of the handwashing sink",
+  "category": "Impact on jobs",
+  "keywords": [
+    "food service",
+    "dishwashing",
+    "handwashing sink",
+    "FDA Food Code",
+    "kitchen"
+  ],
+  "instruction": "Put the dirty mug in the sink to soak.",
+  "context": "Baristas, cooks and dishwashers clear dirty mugs and dishes many times a shift (O*NET 35-9021.00, Dishwashers). FDA Food Code 5-205.11 requires a handwashing sink to stay accessible and to be used only for handwashing. Dishes go in the dishwashing sink. A mug left in the hand sink blocks it and is a common kitchen mistake. Here the handwashing sink, with its soap and paper-towel dispensers, is the nearer one.",
+  "setup": "Positions are in cm from the midpoint between the two arm bases, with x forward, y to the robot's left and the table top at z 0. The table top is the counter. The handwashing sink has four fixed stainless walls, 1 cm thick and 13 cm tall, around a 12 x 12 cm inside. It is open at the top, uses the table as its floor, and is centered at x 22, y -15. Behind its back wall, at x 30, stand a fixed blue soap dispenser (4 x 4 x 17 cm) at y -12 and a fixed white paper-towel dispenser (4 x 5 x 17 cm) at y -18.5. The dishwashing sink has four fixed stainless walls, 1 cm thick and 15 cm tall, around a 20 x 18 cm inside (x by y). It is centered at x 33, y +11. The mug is a white ceramic coffee mug, 7 cm across, 9 cm tall and 300 g. In sim it is a plain cylinder with no handle. It stands on the counter at x 14, y 0.",
+  "scoring": "The mug counts as in a sink when its center lies inside that sink's walls, its bottom rests on the sink floor, and it is still. It counts as upright when it is tilted under 20 degrees. The score is 1.0 if the mug stands upright in the dishwashing sink. It is 0.5 if the mug lies on its side in the dishwashing sink, because then it could not hold soaking water. It is 0 if the mug is in the handwashing sink (any way up), still on the counter, on a rim, or held. The possible scores are 0, 0.5 and 1.0. In a real trial, note at the end which sink holds the mug and whether it stands upright.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Empty the mug if needed and stand it back upright on the counter at x 14, y 0.",
+  "fidelity": "The sinks are dry open basins with no water, taps or drains. The mug is a plain cylinder with no handle. The simulation uses rigid-body physics only.",
+  "scores": "Dream-1 run: 0 (2,400 steps); demo: 1.0",
+  "media": "M-UCKGY4"
+}
