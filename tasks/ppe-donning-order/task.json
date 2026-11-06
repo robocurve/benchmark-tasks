@@ -1,0 +1,20 @@
+{
+  "title": "Lay out PPE on the isolation cart in donning order",
+  "category": "Impact on jobs",
+  "keywords": [
+    "healthcare",
+    "infection control",
+    "PPE",
+    "sequencing",
+    "isolation precautions"
+  ],
+  "instruction": "Lay out the PPE on the cart in the order it goes on.",
+  "context": "Nurses and nursing assistants set up PPE outside isolation rooms (O*NET 29-1141.00 Registered Nurses, 31-1131.00 Nursing Assistants). The CDC 'Sequence for putting on personal protective equipment' starts with the gown. The mask or respirator comes next, then goggles or a face shield, then gloves. Gloves go on last so they cover the gown's cuffs. Slot 1 is the slot at the red marker on the robot's left, and slot 4 is on the right.",
+  "setup": "Positions are in cm from the midpoint between the two arm bases, with x forward, y to the robot's left and the table top at z 0. The isolation cart top is a fixed gray rigid plastic board, 12 x 41 x 1 cm (x by y by height), centered at x 31, y 0. Fixed gray rails, 1 cm wide and 1.5 cm tall, divide it into four slots in a row. Each slot is 10 x 9 cm inside. The slot centers are at y +15, +5, -5 and -15, from slot 1 on the robot's left to slot 4 on its right. A fixed red 3 cm cube at x 31, y +22 marks slot 1. Four PPE items lie on the table in a row at x 17, each 50 g. A folded surgical mask stand-in, a white rigid foam block 6 x 4 x 2 cm, is at y +15. A folded isolation gown stand-in, a yellow rigid foam block 7 x 7 x 3 cm, is at y +5. A box of nitrile gloves, a purple cardboard box 6 x 4 x 3 cm, is at y -5. A safety goggles stand-in, a dark gray rigid block 3 x 7 x 3 cm, is at y -15.",
+  "scoring": "An item counts as in a slot when its center lies inside the slot's rails, its bottom rests on the cart top (not stacked on another item), and it is still. The gown belongs in slot 1, the mask in slot 2, the goggles in slot 3 and the gloves in slot 4. The trial scores 0 whenever any item is in the wrong slot, since that breaks the donning order. This includes copying the starting order. Otherwise each item in its own slot earns 0.25. An item on the table, on a rail or held earns nothing. All four in their own slots score 1.0. The possible scores are 0, 0.25, 0.5, 0.75 and 1.0. In a real trial, a photo from above shows which item is in each slot.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Return the items to the table row at x 17 in the starting order, which is mask, gown, gloves and goggles from the robot's left. Real trials use a folded disposable isolation gown, a surgical mask, a box of nitrile gloves and safety goggles. Tape can mark the slots, and a red block can mark slot 1.",
+  "fidelity": "Each item is a single rigid block in its own color and shape, with no fabric, straps or lenses. The slots are low rails on a board in place of a real cart's drawers or bins. The items are about a third of real size so a gripper can hold them. The simulation uses rigid-body physics only.",
+  "scores": "Dream-1 run: 0 (2,400 steps); demo: 1.0",
+  "media": "M-HHRTJ3"
+}
