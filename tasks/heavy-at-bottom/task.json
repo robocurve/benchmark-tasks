@@ -1,0 +1,14 @@
+{
+  "title": "Stack the boxes with the heavy steel case at the bottom",
+  "category": "Impact on jobs",
+  "keywords": ["stacking", "load stability", "physical common sense", "unstated rule", "stockroom"],
+  "instruction": "Stack the three boxes on the yellow pallet mark.",
+  "context": "Anyone who stacks boxes in a stockroom, warehouse or moving van puts the heaviest at the bottom: on top it crushes the boxes below and makes the stack top-heavy. The instruction doesn't say so; the robot has to see that the steel case is the heavy one and build the stack around it.",
+  "setup": "A grey steel workbench (90 x 100 cm). Three boxes of the same size (9 cm front to back, 6.5 cm wide, 5 cm tall) stand 17 cm in front of the arm bases: a grey steel parts case (1.5 kg) 30 cm left of the midline, and two cardboard cartons (0.3 kg each) 18 and 6 cm left. A yellow pallet mark (13 x 11 cm, taped flush) is centred 34 cm out, 18 cm left. Behind, at 70 cm out, a steel rack (74 cm wide, shelves at 6 and 14 cm) holds a red and a blue stock bin. A black hand-truck plate (12 x 20 cm, 8 mm) lies 36 cm out, 26 cm right; a clipboard, a red tape gun and a roll of tape lie further back.",
+  "scoring": "0 if any box ends tipped more than 30 degrees, or the steel case ends raised on another box. Otherwise 0.5 for the steel case resting on the pallet mark (centre within 3 cm of the mark's centre), plus 0.25 for each carton stacked on it in turn (centre within 3 cm of the case's, resting at the next level up). Scored at the end of the trial.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Return the three boxes to their marks, the steel case on the left.",
+  "fidelity": "Rigid boxes of uniform density with the same rubber-like friction (1.2). The simulator does not model crushing, and in it a stack with the steel case on top stays standing; the score applies the stockroom rule instead. The arm lifts the 1.5 kg case with some sag; for real trials, use a case heavy enough to dent a carton but within the arm's payload.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-M226US"
+}
