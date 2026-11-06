@@ -1,0 +1,21 @@
+{
+  "title": "Transfer a reference angle with a bevel gauge",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "workshop",
+    "angle transfer",
+    "adjustable tool",
+    "marking",
+    "passive hinge"
+  ],
+  "instruction": "Fit the blue-stock bevel gauge to the two grey reference faces by adjusting its hinged blade. Lift and carry the gauge to the wooden board without changing the captured angle. Seat its stock against the board's near edge and use the orange marker along the blade to draw one straight line through the red tick across the board. Avoid extra marks, then lift the marker clear. The gauge has a passive friction hinge; there is no locking screw.",
+  "context": "Copying a reference angle onto a separate workpiece is a workshop layout operation. The robot adjusts a passive hinge and carries the captured angle between work surfaces.",
+  "setup": "Fixed layout in metres with x away from the arm bases, y left and z up. Tabletop z = 0.7475. Bimanual YAM bases at (0, +0.305, 0.75) and (0, -0.305, 0.75). Wood board 140 × 180 × 16 mm at (0.29, 0, 0.7555), with top at z = 0.7635 and a printed red 4 × 2 mm tick at (0.222, −0.03). Grey rigid plastic reference stock fence 20 × 50 × 25 mm at (0.23, 0.365, 0.7600) and blade fence 140 × 20 × 25 mm at (0.295128859, 0.127004133, 0.7600), yaw −20°. Loose blue plastic gauge stock 24 × 250 × 36 mm, 180 g, at (0.18, 0.28, 0.7655), yaw 0°. Hollow plastic blade 170 × 20 × 6 mm with an 18 × 18 × 24 mm raised tab, 18 g combined. Pivot at (0, −0.1075, 0.001) in the stock frame and tab at (0.115, 0.015, 0.015) in the blade frame. Initial hinge angle +10°, limits -45 to +45 degrees. Loose orange rigid plastic marker, 40 g, root at (0.18, −0.19, 0.8175), barrel 22 × 22 × 80 mm centred 15 mm above the root, nose 4 × 4 × 23 mm, and a 2 mm-radius rigid sphere representing the felt nib centred 50 mm below the root. Fixed rigid plastic holder has a 40 × 40 × 18 mm base and four 15 mm walls around a 6 × 6 mm opening. See the README and scene code for the full layout.",
+  "scoring": "Score 0 without a valid retained transfer. For 0.25, fit both reference faces within 2° and 3 mm with both side contacts above 5 mN for 0.3 s. Adjust the blade by at least 10° from a measured initial mismatch of at least 15°. During capture, limit angle span to 0.25° and stock position envelope diagonal to 0.5 mm. At the fixture, release the blade for 0.1 s with both finger forces at or below 5 mN and at least 18 mm right TCP clearance from the blade and tab. Preserve that clearance and captured relative angle within 2°, lift at least 20 mm, carry at least 80 mm while at least 10 mm above capture height, and seat the stock against the board. For 0.5, also achieve at least 50% coverage within 5 mm, internal gaps at most 5 mm, angle error at most 5°, stray ink at most 10 mm-equivalent, transverse RMS error at most 3 mm and at least 50% guided ink. For 1.0, require at least 90% coverage within 3 mm, gaps at most 3 mm, angle error at most 2°, stray ink at most 5 mm-equivalent, RMS error at most 1.5 mm and at least 90% guided ink. Finish with 0.5 s of continuous nib clearance of at least 5 mm without new ink. Both the visible ink and its guided subset must meet the geometry thresholds. Both line grades cap visible ink-equivalent length at 150% of target length. Actual nib contact creates 2 mm-wide ink. All marks remain visible and are assessed for stray ink. See the README and scorer for the contact and guide gates.",
+  "run_limit": "2,400 control steps (120 seconds at 20 Hz)",
+  "reset_notes": "Clear ink and temporal scoring state. Restore the fixed layout, loose tool poses and +10° initial blade angle. Use zero layout jitter and seed 0. Clean or replace the board for physical reproduction.",
+  "fidelity": "PhysX simulates rigid tools and a passive friction hinge with damping and no angle target. Capture, retention, and guidance use measured poses and contacts. Rigid nib contact produces geometric ink. Ink flow, nib wear and compliance, and wood deformation are omitted. The scripted demo uses measured tool poses. Dream-1 receives camera and joint observations. See the README for hinge parameters and solver settings.",
+  "scores": "Dream-1 beta run: 0.0 in 2,400 control steps. Scripted demo: 1.0 in 1,834 control steps.",
+  "media": "M-6KCFQS"
+}

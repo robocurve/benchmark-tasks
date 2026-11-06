@@ -1,0 +1,90 @@
+#usda 1.0
+(
+    defaultPrim = "Gauge"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Gauge"
+{
+    def Xform "stock" (prepend apiSchemas = ["PhysicsArticulationRootAPI", "PhysxArticulationAPI", "PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI"])
+    {
+        bool physxArticulation:enabledSelfCollisions = false
+        int physxArticulation:solverPositionIterationCount = 16
+        int physxArticulation:solverVelocityIterationCount = 4
+        float physxRigidBody:maxDepenetrationVelocity = 1
+        float physics:mass = 0.18
+
+        def Cube "Body" (prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"])
+        {
+            double size = 1
+            double3 xformOp:scale = (0.024, 0.25, 0.036)
+            uniform token[] xformOpOrder = ["xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.06, 0.18, 0.5)]
+            float physxCollision:contactOffset = 0.001
+            float physxCollision:restOffset = 0
+        }
+
+        def Cylinder "Pivot"
+        {
+            uniform token axis = "Z"
+            double radius = 0.009
+            double height = 0.004
+            double3 xformOp:translate = (0, -0.1075, 0.02)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.5, 0.53, 0.56)]
+        }
+    }
+
+    def Xform "blade" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI"])
+    {
+        double3 xformOp:translate = (0, -0.1075, 0.001)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        float physxRigidBody:maxDepenetrationVelocity = 1
+        float physics:mass = 0.018
+
+        def Cube "Body" (prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"])
+        {
+            double size = 1
+            double3 xformOp:translate = (0.085, 0, 0)
+            double3 xformOp:scale = (0.17, 0.02, 0.006)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.65, 0.68, 0.72)]
+            float physxCollision:contactOffset = 0.001
+            float physxCollision:restOffset = 0
+        }
+
+        def Cube "GraspTab" (prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"])
+        {
+            double size = 1
+            double3 xformOp:translate = (0.115, 0.015, 0.015)
+            double3 xformOp:scale = (0.018, 0.018, 0.024)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.06, 0.18, 0.5)]
+            float physxCollision:contactOffset = 0.001
+            float physxCollision:restOffset = 0
+        }
+    }
+
+    def PhysicsRevoluteJoint "hinge" (
+        prepend apiSchemas = ["PhysxJointAxisAPI:angular", "PhysicsDriveAPI:angular"]
+    )
+    {
+        rel physics:body0 = </Gauge/stock>
+        rel physics:body1 = </Gauge/blade>
+        uniform token physics:axis = "Z"
+        point3f physics:localPos0 = (0, -0.1075, 0.001)
+        point3f physics:localPos1 = (0, 0, 0)
+        float physics:lowerLimit = -45
+        float physics:upperLimit = 45
+        bool physics:collisionEnabled = false
+        float physxJointAxis:angular:staticFrictionEffort = 0.01
+        float physxJointAxis:angular:dynamicFrictionEffort = 0.008
+        float physxJointAxis:angular:viscousFrictionCoefficient = 0.001
+        uniform token drive:angular:physics:type = "force"
+        float drive:angular:physics:stiffness = 0
+        float drive:angular:physics:targetVelocity = 0
+        float drive:angular:physics:damping = 0.01
+        float drive:angular:physics:maxForce = 0.1
+    }
+}
