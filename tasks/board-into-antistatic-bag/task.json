@@ -1,0 +1,22 @@
+{
+  "title": "Slide a circuit board into an antistatic bag held by the other hand",
+  "category": "Impact on jobs",
+  "keywords": [
+    "electronics refurbishing",
+    "e-waste",
+    "ESD packaging",
+    "bimanual",
+    "hold and insert",
+    "thin flat parts",
+    "bag"
+  ],
+  "instruction": "Hold the pink antistatic bag with the left hand, slide the green circuit board flat into it with the right hand until it is fully inside, then lay the bag in the grey crate.",
+  "context": "Refurbishers and e-waste triage lines bag thousands of bare boards for resale or storage. A board must go into its antistatic bag flat and all the way in, and a bag on a slick bench mat slides away when the board is pushed in, so one hand holds the bag while the other feeds the board.",
+  "setup": "Left and right are the robot's. Positions are centres in metres from the midpoint between the two arm bases: x forward, y to the robot's left, heights above the table. Everything except the crate lies along one line on the table, turned 120 degrees from x (from front right to back left). Mat: a 24 x 28.2 cm dark grey rubber anti-static mat, 5 mm thick, long side along the line, fixed, centred at (0.29, -0.037), friction 0.25. Circuit board: a bare green 6.5 x 14 cm board, 1.6 mm thick with parts up to 2 mm tall (3.6 mm in all), 45 g, lying flat on the mat along the line, centred at (0.34, -0.124), parts up, its near end overhanging the mat's front end by 3 cm. Bag: a pink antistatic bag, 7.7 x 15.2 cm, 1.2 cm thick, 15 g, lying flat on the mat along the line, centred at (0.242, 0.046), its mouth (centre at (0.28, -0.02)) facing the board's far end 5 cm away, its closed end overhanging the mat's back end by 3 cm. Its cavity is 7.3 cm wide, 14.8 cm deep and 8 mm high, with a 3 x 1.5 cm thumb notch in the top layer at the mouth. Crate: a grey plastic crate, 25.4 x 17 x 7.2 cm (inside 24.4 x 16 cm), long side along y, fixed, on the robot's left at (0.30, 0.28). The bag and the board slide on the mat (friction 0.25) and grip each other (friction 1.0). Nothing else is on the table.",
+  "scoring": "Positions are centres. Where the board is in the bag is measured in the bag's own frame, wherever the bag lies. 0 if the board or the bag falls off the table (centre more than 2 cm below the table top). 1.0 (success, held 1 s): the whole board in the cavity (every corner past the mouth's line and within the side seams, its centre between the bag's layers, 2 mm of slack), its far edge within 1 cm of the closed end, and the bag's centre within 7 cm along x and 11.2 cm along y of the crate's centre and below its rim, the bag still (under 1 cm/s and 0.5 rad/s). 0.5: the board fully in as above, the bag anywhere else or still moving. 0.25: the board's centre in the cavity (at least half of the board in). 0 otherwise, including a board on, under or beside the bag.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Take the board out of the bag and lay both flat on the mat as in the setup image, the bag's mouth facing the board.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. The bag is a rigid stand-in for a soft one: one rigid body of thin box walls around a fixed 8 mm cavity, so it never opens wider, sags or folds. The board is one 3.6 mm box (its parts are drawn only). The mat's friction is 0.25, everything else 1.0. The crate is a SimReady model, fixed. The bag, board and mat are drawn by detailed meshes, the colliders are boxes. The gripper closes with up to 50 N per pad. Masses are typical values.",
+  "scores": "Dream-1 run: 0.0 (both arms reach the mat and push the bag and board around, but the board never goes into the bag), demo: 1.0 (success at step 409)",
+  "media": "M-J6CZKF"
+}
