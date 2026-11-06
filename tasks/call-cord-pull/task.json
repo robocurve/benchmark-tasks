@@ -1,0 +1,14 @@
+{
+  "title": "Pull the call-for-aid cord down 15 cm",
+  "category": "Societal relevance",
+  "keywords": ["call-for-aid", "cord pull", "displacement", "housing inspection", "single-arm"],
+  "instruction": "Pull the call cord down 15 centimetres to call for aid.",
+  "context": "Call-for-aid cords let a fallen resident summon help; NSPIRE deficiency D009 ('pull cord is higher than 6 inches off the floor') is life-threatening because a cord hung too high cannot be reached from the floor. The verification act is pulling the cord down at least 15 cm, and the fix is measurable with a tape measure — the pull end must end within 15 cm of the surface. This is the smallest actuation task in an inspection portfolio: one grasp, one downward pull.",
+  "setup": "Station scene, fixed layout (see setup.png). At the table's left side (x=0.38 m, y=0.10 m) a grey pedestal mount (6x6x15 cm) stands on the table carrying a steel pivot ridge (6x1.2x1 cm) on its top. Across the ridge rests a red pull rod (1 cm across x 40 cm long x 1.2 cm thick, ~80 g), balanced level like a see-saw: its grip end reaches out over the table to y=+0.30 m at height 0.916 m, its tail end extends to y=-0.10 m behind the bracket. No other loose objects.",
+  "scoring": "task_score reads the rod's tilt about its pivot: the grip end's drop below its level height is 20 cm x sin(tilt). 0.5 at 7.5 cm of drop; 1.0 at 15 cm or more (48.6 deg of swing). The rod must still be riding its pivot: centre within 1.5 cm of the ridge and above pivot height minus 2 cm; a rod knocked off onto the table scores 0. success ends the trial when the full pull holds 0.4 s; SCORE_OVER=best keeps a pull that later swings back.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "The rod is a free object resting on the ridge; with -E object_jitter=0 every trial starts from the exact level layout in setup.png. Trials use scene=station.",
+  "fidelity": "The hanging call cord is modeled as a light rigid rod balanced on a pivot ridge: a free object cannot hang from a fixed structure in this simulator, and a rigid rod on a pivot reproduces the same externally visible evidence — the pull end starts level with the bracket and ends 15 cm lower, which is what a photo-and-tape-measure inspection reads. The unit's cord, ceiling anchor and internal latching are simplified; pulling down is scored, not any signal being sent. The 15 cm criterion is D009's 6-inch threshold verbatim.",
+  "scores": "Dream-1 run: 0.0; scripted demo: 1.0",
+  "media": ""
+}
