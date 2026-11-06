@@ -1,0 +1,22 @@
+{
+  "title": "Measure a pin's diameter with a digital caliper, holding it in the jaws",
+  "category": "Impact on jobs",
+  "keywords": [
+    "metrology",
+    "digital caliper",
+    "measuring",
+    "inspection",
+    "hold and close",
+    "two arms",
+    "machine shop"
+  ],
+  "instruction": "Measure the diameter of the aluminium pin with the digital caliper. Pick the pin up with one hand and hold it upright between the caliper's open jaws, square to them and close to the fixed jaw (the jaw at the caliper's left end). Keep holding it, but loosely, so it can slide across the jaws: there is nothing under the jaws, so a pin let go falls. With the other hand, push the black thumb rest at the slider's right end to the left to close the sliding jaw until it has carried the pin against the fixed jaw and both jaws just touch it. Do not squeeze: pressing on the jaw makes the display read low. Then take that hand off the slider and keep the pin still between the jaws, so the display shows its diameter.",
+  "context": "Checking a part's size with a caliper is a routine step in machining, inspection and lab work. A part held cocked or stiffly off the fixed jaw, or a heavy thumb on the slider, gives a wrong reading, so one hand holds the part square but loosely while the other closes the jaw gently and lets it seat the part on the fixed jaw.",
+  "setup": "Station table (top 0.7475 m). Robot base frame: x forward, y to the robots' left. Holder block, fixed: black aluminium, 3 x 19.5 x 5 cm, x 0.296 to 0.326, y -0.100 to 0.095. Digital caliper (0 to 100 mm), fixed, lying flat on the holder with its jaws pointing at the robots: a stainless beam 16 mm wide and 3.5 mm thick along y (x 0.296 to 0.312, y -0.105 to 0.097), its underside 5 cm above the table. Fixed jaw at the beam's left end: a stainless plate 45 x 8 x 3.5 mm reaching from the beam's front edge towards the robots (x 0.251 to 0.296), level with the beam, measuring face at y = 0.085 facing right. Sliding jaw: the same plate, its face at y = 0.045 (jaws 40 mm apart at the start); nothing is under either jaw. Slider: a dark grey housing 38 x 77 mm and 9 mm tall on top of the beam (x 0.294 to 0.332, y -0.034 to 0.043 at the start), carrying a grey-green screen 20 x 50 mm centred at (0.313, 0.003) with four dark 7-segment digits 14 mm tall, tops away from the robots, a decimal point after the second: the jaw gap in mm to 0.01 mm (tens blank under 10 mm), 40.00 at the start; a red ZERO and a black ON/OFF button (not used); and at its right end a black thumb rest 20 x 6 mm, 16 mm tall above the beam (x 0.296 to 0.316, its right face at y = -0.040 at the start). The slider moves along y with light friction, gap 0 to 99 mm; pushing the thumb rest left closes the jaws. Pin, loose, 46 g: an aluminium cylinder 23.40 mm across and 40 mm long, standing on end at (0.19, 0.17). No other objects.",
+  "scoring": "Measured once everything has come to rest. The display reads the slider's position; the sliding jaw flexes back 0.1 mm per newton pressed on it, so squeezing makes it read low. 0 unless the pin is between the jaws: upright within 30 degrees, its axis crossing the jaws' mid-plane (5.18 cm above the table) between the two measuring faces, at least 2 mm in from the jaw tips and at least 2 mm from either end of the pin (with nothing under the jaws, the pin has to be held there). 0.1 if it is between the jaws; 0.25 if the display also reads within 1.00 mm of 23.40; 0.5 if within 0.20 mm, the pin's axis within 3 degrees of parallel to the jaw faces and the sliding jaw pressing on it with at most 2 N; 1.0 if within 0.05 mm, within 1 degree and at most 0.3 N. In simulation the jaw force comes from the jaw's flex; in a real trial, after the photo of the display the gripper opens, and the pin must drop free.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Take the pin out of the jaws and stand it on end at (0.19, 0.17); slide the jaws back open until the display reads 40.00.",
+  "fidelity": "Rigid bodies in PhysX at 240 Hz. The caliper is clamped in place; its slider is a damped slide with light friction. The display shows the slider's position, and the sliding jaw rides on a spring, 0.1 mm per newton (a real jaw is far stiffer), so squeezing shows as a low reading. The digits are raised boxes, larger than a real caliper's. The pin is an ideal cylinder, with no burrs or dirt.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-FYQQ3K"
+}
