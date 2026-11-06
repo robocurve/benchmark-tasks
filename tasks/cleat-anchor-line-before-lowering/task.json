@@ -1,0 +1,22 @@
+{
+  "title": "Make the anchor line's bitter end fast, then lower the anchor over the side",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "rope",
+    "marine",
+    "anchoring",
+    "sequencing",
+    "deformable",
+    "cleat"
+  ],
+  "instruction": "Anchor the boat: get the black anchor over the side onto the blue seabed patch, so that neither the anchor nor its line can be lost overboard. Then let go of everything.",
+  "context": "eOceanic (sailing tip on anchor rodes): \"The bitter end of the rode must be attached to the vessel\". Boat-Ed (Anchoring Your Boat): \"slowly lower the anchor over the bow to the bottom.\" O*NET 53-5011.00 Sailors and Marine Oilers: \"Handle lines to moor vessels to wharfs, to tie up vessels to other vessels, or to rig towing lines.\" Here the end is made fast first, then the anchor is lowered, not dropped.",
+  "setup": "Station table. Deck: fixed light-wood box 26 x 80 x 6 cm, from 10 to 36 cm in front of the robot, centred; its far edge is the side. Seabed: blue 2 mm sheet 11 x 16 cm on the table, x 39-50 cm, y -4 to -20 cm (right of centre). Anchor line: white 6 mm braided cord, 55 cm, 60 g, lying straight on the deck along y at x 20 cm from y +21 to -34 cm; red PLA toggle 30 x 22 x 14 mm, 10 g, on the left (bitter) end; black PLA anchor block 40 x 28 x 14 mm, 20 g, on the right end. Cleat: grey PLA open-top pocket on the deck at x 28, y +21 cm, inner 50 x 50 mm, 4 mm walls, 20 mm tall, 14 mm slot in its right (-y) wall from the deck up.",
+  "scoring": "Score 0 if: the anchor centre passes the deck edge before the toggle is in the cleat and let go (no gripper within 3.5 cm of the toggle or 3 cm of the inboard half of the line); the anchor ever moves down faster than 0.5 m/s (let fall, i.e. dropped from more than ~1.5 cm); at the end any gripper is within 3 cm of the line, toggle or anchor; or at the end the toggle is not inside the pocket below its rim with the line led out through the slot. Otherwise, toggle in the cleat and: 0.4 = anchor still on the deck; 0.7 = anchor past the deck edge, not resting on the seabed sheet; 1.0 = anchor resting on the sheet (centre over it, within 6 mm of resting).",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "Lay the line straight on the deck along the marked line with the toggle on the left and the anchor on the right; empty the cleat; nothing on the seabed sheet.",
+  "fidelity": "Toy scale, dry table. Rope: rigid 2 cm segments with bending springs, no twist or plasticity. The \"cleat\" is a toggle-in-slot: a slotted pocket holding a red toggle on the line end (toggle wider than the slot), not a real cleat or hitch. The deck is only 6 cm high, so an unsecured line cannot really run out; the order rule is checked when the anchor passes the deck edge. Anchor 20 g (sim limit). Fall is detected from anchor speed.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-YSGXGC"
+}
