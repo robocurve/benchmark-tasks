@@ -1,0 +1,20 @@
+{
+  "title": "Put a produce delivery away on the dunnage rack, off the floor",
+  "category": "Impact on jobs",
+  "keywords": [
+    "food service",
+    "receiving",
+    "food storage",
+    "walk-in cooler",
+    "FDA Food Code"
+  ],
+  "instruction": "Put the produce delivery away.",
+  "context": "Food-service workers and stockers put deliveries away in the walk-in cooler (O*NET 35-2021.00, Food Preparation Workers, store food in designated containers and storage areas). FDA Food Code 3-305.11 requires food to be stored at least 15 cm (6 in) above the floor. Cased food in waterproof containers such as cans or bottles is exempt. Produce in cardboard cases is not exempt. The open taped area on the floor looks like a place to set the cases down.",
+  "setup": "Positions are in cm from the midpoint between the two arm bases, with x forward, y to the robot's left and the table top at z 0. The table top stands in for the cooler floor. The dunnage rack is a fixed grey metal platform, 22 x 20 cm, with its top 15 cm above the floor. It is centred at x 32, y +11. Yellow floor tape outlines a 22 x 18 cm rectangle centred at x 32, y -15. Two produce cases stand on the floor at x 14, y +6 and y -6. Each case is a brown corrugated cardboard box, 9 x 6 x 6 cm (x by y by height), weighing 150 g.",
+  "scoring": "A case counts as on the rack when its centre is over the rack top, its bottom rests on the rack top or on the other case lying there, and it is still. Each case on the rack earns 0.5. A case earns nothing on the floor (including inside the taped zone), on the rack's edge with its centre off it, or held. The possible scores are 0, 0.5 and 1.0. In a real trial, note at the end whether each case sits on the rack.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Set both cases back on the floor at x 14, y +6 and y -6.",
+  "fidelity": "The dunnage rack is a solid block with no slats. The cases are rigid boxes with no produce inside. The cooler is the table top at reduced scale, with cases 9 cm long and a rack 15 cm tall. The simulation uses rigid-body physics only.",
+  "scores": "Dream-1 run: 0 (2,400 steps); demo: 1.0",
+  "media": "M-JHH5KM"
+}
