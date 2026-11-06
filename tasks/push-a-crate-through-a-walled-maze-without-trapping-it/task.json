@@ -1,0 +1,22 @@
+{
+  "title": "Push a crate too wide to grip round the corner of a walled maze without driving it into the dead end",
+  "category": "Impact on jobs",
+  "keywords": [
+    "nonprehensile",
+    "pushing",
+    "push planning",
+    "maze",
+    "dead end",
+    "ungraspable object",
+    "repositioning"
+  ],
+  "instruction": "Push the wooden crate through the maze into the goal between the green marks, without pushing it into the dead end. Keep it on the floor; do not lift it.",
+  "context": "Material movers push bulky loads along narrow aisles; a load driven past a turn into a blind end jams the aisle and is hard to recover from one side. Unlike TK-ERNEST (turn a parcel, then push it into a bay against a stop) and pushing a load up to any stop, here nothing stops the crate at the turn: the robot must stop it in a 40 mm window, move round to its side and change push direction.",
+  "setup": "World frame for this text: x is distance in front of the line between the two arm bases, y is distance to the robot's left of the midpoint between them (negative is to the right), heights are above the table top. Maze (fixed), spanning x = 120 to 570 mm and y = -250 to +140 mm: seven walls of grey-painted wood, each 70 mm tall and 10 mm thick, standing on the table. A straight corridor 220 mm wide runs away from the robot: its right wall's inner face is at y = -240 mm and its left wall's inner face at y = -20 mm; it is open at its near end (x = 120 mm) and closed by an end wall whose inner face is at x = 560 mm (the end wall is 10 mm thick and spans y = -240 to -20 mm). Its right wall runs from x = 120 to 570 mm. Its left wall has a 140 mm gap from x = 300 to 440 mm: the near part runs from x = 120 to 300 mm and the far part from x = 440 to 570 mm. Through the gap a side corridor 140 mm wide (inner faces at x = 300 and 440 mm) runs to the robot's left from y = -20 mm to an end wall whose inner face is at y = 130 mm; its two side walls run from y = -10 to 130 mm and its end wall spans x = 290 to 450 mm (130 to 140 mm left). The part of the straight corridor beyond the gap, x = 440 to 560 mm, is a dead end. Goal: the side corridor's floor from y = -5 mm to its end wall (135 mm long, 140 mm wide), marked by 10 mm green tape along the tops of the side corridor's two walls from y = -5 mm to the end wall, and along the top of the end wall; nothing is on the floor. Crate (loose): a closed wooden box 100 x 100 x 50 mm tall, 0.6 kg, wider than the 94 mm open gripper in every horizontal direction, standing flat with its centre at x = 200 mm, y = -130 mm and its sides square to the corridor. Nothing else is on the table.",
+  "scoring": "Measured on an overhead photo with a ruler on the maze, after the crate has stopped; the two whole-trial rules are judged from the video. On the floor: flat (tilted at most 5 degrees) with its bottom within 2 mm of the table. Whole-trial rules (breaking either scores 0 whatever happens after): lifted, the crate's lowest point more than 20 mm above the table at any moment; and dead end, the crate's centre more than 440 mm in front of the arm bases (past the line of the side corridor's far wall) at any moment. 1.0: the crate wholly inside the goal (all four bottom corners at or past the start of the tape, 15 mm past the line of the straight corridor's left wall), on the floor, and neither rule broken. 0.5: on the floor, rules not broken, its centre in the side corridor (at or past the line of the straight corridor's left wall) but not wholly in the goal. 0.25: on the floor, rules not broken, still in the straight corridor but lined up with the side corridor, its centre 350 to 390 mm (inclusive) in front of the arm bases. 0 in every other case: near its start or elsewhere in the straight corridor, pushed out of the open end, tipped, or either rule broken.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Stand the crate back flat with its centre at x = 200 mm, y = -130 mm, sides square to the corridor. Nothing is consumed.",
+  "fidelity": "Approximate. Rigid boxes: the walls are fixed and do not flex; the crate is a uniform rigid box with no handles or contents. The goal tape is on the wall tops, not the floor, so the crate meets no step. A bench-scale maze: corridor widths and the 40 mm stopping window at the turn are scaled to the crate, not to a full-size aisle.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-F4SPE5"
+}
