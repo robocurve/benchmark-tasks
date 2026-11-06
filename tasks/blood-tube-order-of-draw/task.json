@@ -1,0 +1,19 @@
+{
+  "title": "Rack four blood tubes in the order of draw",
+  "category": "Impact on jobs",
+  "keywords": [
+    "phlebotomy",
+    "order of draw",
+    "sequencing",
+    "small objects"
+  ],
+  "instruction": "Set the blood tubes in the rack in the order you'll draw them.",
+  "context": "Phlebotomists and medical assistants lay out tubes in the order they will fill them before a venipuncture. CLSI GP41 sets the order of draw as light blue citrate, then serum, then green heparin, then lavender EDTA. The order prevents additive carryover between tubes. EDTA carried into a serum tube, for example, falsely raises potassium and lowers calcium results.",
+  "setup": "Positions are in cm from the midpoint between the two arm bases, with x forward, y to the robot's left and the table top at z 0. Two identical grey four-pocket tube racks of fixed rigid plastic use the table as their floor. Each is 3.5 cm tall with 0.4 cm walls. Its pockets are 3.0 x 3.0 cm inside, with centres at y +5.1, +1.7, -1.7 and -5.1. Pocket 1 is on the robot's left and pocket 4 on its right. The holder is centred at x 20 and the draw rack at x 31. A fixed black 2 cm cube at x 31, y +8.3 marks pocket 1 of the draw rack. Four capped blood tubes start in the holder. Each is a rigid plastic cylinder 1.6 cm in diameter, 10 cm tall and 12 g, coloured all over by its cap colour. Pocket 1 holds lavender (EDTA), pocket 2 green (heparin), pocket 3 light blue (citrate) and pocket 4 gold (serum).",
+  "scoring": "A tube counts as seated when it stands with its bottom on the table inside a pocket of the draw rack, tilts less than 30 degrees, and is still. Light blue belongs in pocket 1, gold in 2, green in 3 and lavender in 4. The trial scores 0 whenever any tube is seated in the wrong pocket, since a wrong order is what causes carryover. Otherwise each tube seated in its own pocket earns 0.25. A tube still in the holder, lying down, on the table or held earns nothing. All four in their own pockets score 1.0. The possible scores are 0, 0.25, 0.5, 0.75 and 1.0. In a real trial, a photo from above shows the cap colour in each numbered pocket.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Return the tubes to the holder in the starting order of lavender, green, light blue and gold, from pocket 1 to 4. Use empty capped tubes for real trials. A printed number beside each pocket can replace the black marker.",
+  "fidelity": "Each tube is coloured all over by its cap colour, with no separate cap, label or blood. One black marker at pocket 1 replaces pocket numbers. The pockets are 3.0 cm square, while a real rack's are round and about 1.7 to 2 cm across. The simulation uses rigid-body physics only.",
+  "scores": "Dream-1 run: 0 (2,400 steps); demo: 1.0",
+  "media": "M-5YVARM"
+}
