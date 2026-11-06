@@ -1,0 +1,22 @@
+{
+  "title": "Stack five balls into a pyramid in a square tray",
+  "category": "Impact on jobs",
+  "keywords": [
+    "retail",
+    "produce display",
+    "stacking",
+    "round objects",
+    "packing",
+    "stability",
+    "bimanual"
+  ],
+  "instruction": "Put four of the balls in the tray in a two-by-two square, then rest the fifth ball on top of them, in the middle.",
+  "context": "Displays of round produce depend on how the lower layer supports the items above it. This task uses wooden balls and a tray to test placement and release on a confined lower layer.",
+  "setup": "Positions are centres in metres: x forward from the line of the two arm bases, y to the left of the midline between them (bases at y = +0.305 and -0.305); heights are above the table top. (1) Five identical balls: unfinished hardwood craft balls, 76 mm (3 in) diameter, 161 g each, all painted the same red. (2) Display tray: plywood, inner 168 x 168 mm, a 5 mm floor and a rim of 10 mm thick strips standing 25 mm tall on it (188 x 188 mm outside, 30 mm tall overall), centred at (0.30, 0.00), sides along x and y. (3) Left ball rack: 12 mm plywood board, 290 x 90 mm, lying on the table centred at (0.255, 0.215), long side along x, with three 50 x 50 mm square holes cut through it on its centre line at x = 0.160, 0.255 and 0.350. (4) Right ball rack: the same kind of board with two holes, 195 x 90 mm, centred at (0.2575, -0.215), holes at x = 0.210 and 0.305. (5) One ball sits in each of the five holes, resting on the hole's four edges (centre 40.6 mm above the table, bottom 2.6 mm clear of it). The tray and both racks are fixed to the table.",
+  "scoring": "A ball is on the tray floor when it is resting (moving under 1 cm/s) with its centre 38 mm (+-4 mm) above the tray floor and no further out from the tray centre, in x or in y, than 51.3 mm (48.3 mm, where a ball touches two rims, plus 3 mm). Each ball on the tray floor earns 0.15; at most four fit, for 0.6. With four balls on the tray floor, a fifth ball resting with its centre within 15 mm (horizontally) of the tray centre and 28.3 to 58.7 mm above the bottom balls' centres (its top 104 to 135 mm above the tray floor) earns 0.4. A ball anywhere else (in a rack, on the table, on the rim, on the room floor, held by the robot outside that band, on top of an incomplete bottom layer, or lying in a gap at the edge of the layer) earns 0. Success (1.0): four balls on the tray floor and one on top, all resting, for 1 s, which ends the trial. Otherwise the score at the end of the run limit.",
+  "run_limit": "3,600 steps (3 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Lift the five balls out of the tray and set one in each rack hole.",
+  "fidelity": "The balls are rigid uniform spheres with the simulator's default friction and no rolling resistance, so a ball keeps any motion it has; real wooden balls stop within a short roll. The rim is lower than a ball's equator, so a cornered ball's centre sits 35.7 mm from the rim's inner face, which sets the 48.3 mm corner position in scoring. Tray and racks are fixed rigid slabs (no plywood joints or hole lips). Ball masses assume wood at 700 kg/m^3.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-WJD2C6"
+}
