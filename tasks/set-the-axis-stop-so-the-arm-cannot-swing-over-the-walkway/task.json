@@ -1,0 +1,23 @@
+{
+  "title": "Fit the stop pin that lets a swinging arm reach its work pad but not the walkway",
+  "category": "Impact on jobs",
+  "keywords": [
+    "mechanical stop",
+    "hard stop",
+    "range of motion",
+    "restricted space",
+    "robot cell commissioning",
+    "swing arm",
+    "pin",
+    "safety"
+  ],
+  "instruction": "Put the steel stop pin in the socket that lets the orange arm swing round onto the blue work pad but stops it before it reaches the yellow walkway. Then swing the arm round onto the pad and leave it there.",
+  "context": "Technicians commissioning a robot cell fit adjustable mechanical stops on a robot's first axis so the arm reaches every work position but never swings into an aisle people walk in (the restricted space of ISO 10218). A stop in the wrong hole stops the robot short of its work or leaves people unprotected. Unlike TK-N4LAP2, which sets a stop at a marked position, and TK-W6W94V, which pins a table at a stated angle, here the robot works out which stop position allows one zone and excludes another.",
+  "setup": "Station table. Positions are in mm: x forward from the line through the two arm bases, y to the robot's left from the midpoint between them; heights are above the table top. Angles of the arm are measured counter-clockwise seen from above from its start direction (pointing to the robot's right, -y). Stop station (fixed, painted steel): a grey stop plate 135 x 195 x 10 mm spanning x 170 to 305, y -50 to 145; a dark grey pivot post 40 mm across from 10 to 50 mm high, centred at (200, 40). Orange arm (painted aluminium, 150 g): a bar 30 mm wide, 20 mm thick and 215 mm long, its underside 50 mm high, turning on a vertical hinge through the post centre; it reaches 200 mm in front of the pivot and 15 mm behind it. At the start it points to the robot's right (x 185 to 215, y +55 to -160). A white knob (cylinder 20 mm across, 25 mm tall) stands on top of the arm 170 mm from the pivot. The hinge turns freely, with light damping, from 0 deg (start, its stop) to 160 deg counter-clockwise; the arm stays where it is left. Four sockets (fixed, dark grey steel) stand on the plate on an 80 mm circle around the pivot, at 30, 70, 115 and 160 deg; each is a square hole 28 x 28 mm inside, hole sides parallel to the table edges, with 5 mm walls 35 mm tall, its floor the plate top. Centres: 30 deg (240.0, -29.3), 70 deg (275.2, 12.6), 115 deg (272.5, 73.8), 160 deg (227.4, 115.2). The arm passes 5 mm above the socket walls. Blue work pad (tape, 1 mm): 60 x 60 mm centred at (357.6, -23.7), under the knob's path around 68 deg. Yellow walkway (tape, 1 mm): x 310 to 530, y 115 to 165; part of the arm is over it for arm angles of about 108 to 143 deg. Stop pin (loose, steel, 180 g): a cylinder 20 mm across and 75 mm long, standing upright on the table at (170, 200). A pin standing in a socket sticks up 40 mm above the socket walls, so the arm's side strikes it about 18 deg before that socket's angle.",
+  "scoring": "The pin stands in a socket when its foot is inside that socket's square hole, its lowest point is no more than 1 mm above the socket floor (it rests on the floor, released), it leans at most 20 deg from upright, and it is still. The knob is on the pad when its centre, seen from above, is over the blue pad (arm angle about 57 to 78 deg). The arm has passed a socket when its angle is more than that socket's angle; at exactly that angle it has not. Score 1.0: the pin stands in the 115 deg socket, the arm has not passed it, and the knob is on the pad. Score 0.5: the pin stands in the 115 deg socket and the arm has not passed it, but the knob is not on the pad. Score 0 for anything else, including: the pin in the 30 or 70 deg socket (the arm cannot reach the pad), the pin in the 160 deg socket (the arm can still reach the walkway), the arm past the socket holding the pin, the pin not standing in a socket (on the table, on the plate, lying down, held up or moving). The trial ends at 1.0 once the 1.0 condition has held for 3 s; otherwise it scores the condition at the last step.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Lift the pin out and stand it upright at (170, 200); swing the arm back to its 0 deg stop, pointing to the robot's right. Nothing is consumed.",
+  "fidelity": "Approximate, rigid primitives. The station is a bench model of a robot's first axis: a passive arm on a lightly damped vertical hinge, moved by hand as a technician does when proving the stops, with a drop-in stop pin in one of four square sockets by design. Masses and friction are simulator values.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-P3T2XQ"
+}
