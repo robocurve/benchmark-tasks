@@ -1,0 +1,20 @@
+{
+  "title": "Tear a sheet off a paper-towel roll with both hands and wipe crumbs off a mat with it",
+  "category": "Societal relevance",
+  "keywords": [
+    "bimanual",
+    "tearing",
+    "cleaning",
+    "kitchen",
+    "tool use"
+  ],
+  "instruction": "Hold the paper-towel roll with one hand and tear the outer sheet off at the perforation with the other, then use the torn sheet to wipe all the yellow cubes off the blue mat.",
+  "context": "Tearing a sheet off a kitchen roll and wiping up crumbs or a spill with it is an everyday cleaning job in homes, kitchens and labs. A loose roll needs two hands: pulled with one, the roll just follows the sheet; and the torn sheet then has to be used as a tool, not the bare hand.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) A white paper-towel roll, 8 cm across and 14 cm tall, 0.12 kg, loose, standing on its end with its centre 30 cm forward and 15 cm left of the centre line. (2) A strip of two white sheets unrolled from the roll's front, standing on their lower edges on the table in a straight line running to the right, 26 cm forward; each sheet is 12 cm long, 14 cm tall, 4 mm thick and 5 g. The inner sheet is still on the roll (hinged to it at the roll's front, free to swing out); the outer sheet, from 3 cm left to 9 cm right of the centre line, is joined to it along a perforation (a faint grey line), a hinge that parts under a pull of 3 N. (3) A blue mat, 14 cm square, flat on the table, centred 23 cm forward and 20 cm right of the centre line. (4) The crumbs: 6 yellow cubes, 2 cm, 5 g each, loose on the mat in two rows (19 and 23 cm forward) of three (16, 20 and 24 cm right). The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Judged at the end of the trial. The outer sheet is torn off once its edge at the perforation is more than 1 cm from the inner sheet's. A cube counts as wiped off when its centre is off the mat and, at the moment its centre last left the mat, the torn sheet was within 5 cm of it and neither gripper's TCP (the point between the fingertips) within 6 cm. 0.0 unless the outer sheet is torn off. Otherwise 1.0 with all 6 cubes wiped off; 0.5 with at least 3; else 0.25. The trial ends at the run limit, or once the full score has held with every cube still for 1 s.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Nothing is consumed in simulation: put the cubes back on the mat and the roll and its strip back in place; the torn perforation is rebuilt at every reset. On a real table, unroll a fresh pair of sheets for each trial.",
+  "fidelity": "Rigid-body simulation (Isaac Sim 6.1, PhysX, 20 Hz control) of a calibrated two-arm table. Simplified: paper is stiff: each sheet is a rigid 4 mm panel that cannot bend, crumple or drape; sheets turn on vertical hinges; the perforation is a PhysX joint that breaks under a 3 N pull (bending does not tear it); the roll is a solid cylinder that does not unroll; crumbs are 2 cm cubes; friction is set (paper 1.0, roll 0.5, cubes 0.4); cameras render at 1280 x 704 (Dream-1 sees 320 x 176).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-JXV6UU"
+}
