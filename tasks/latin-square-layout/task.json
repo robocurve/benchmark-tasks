@@ -1,0 +1,23 @@
+{
+  "title": "Complete a Latin-square layout: every row and column one of each colour and one of each length",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "Latin square",
+    "counterbalanced design",
+    "experiment layout",
+    "constraint satisfaction",
+    "two-attribute",
+    "planning",
+    "pick and place",
+    "bimanual"
+  ],
+  "instruction": "Three blocks are already fixed on the 3 x 3 board. Put the six loose blocks in the six empty squares, one block per square, so that every row and every column has one red, one yellow and one blue block, and one short, one medium and one long block.",
+  "context": "Automated labs and robot-evaluation rigs lay out trials as Latin squares so that position on the bench, plate or field does not confound the condition being tested (the same counterbalancing a research technician or agronomist uses for field plots and assay plates). A robot that sets up experiments has to satisfy two crossed constraints at once while handling the parts, not copy a one-dimensional pattern.",
+  "setup": "Two YAM arms with parallel grippers, bases 61 cm apart at the near edge of a wooden table. Positions are in cm from the midpoint between the two arm bases: x straight out across the table, y to the left (toward the left arm). Board (fixed, taped down): slate-grey painted hardboard, 26 x 50 x 0.5 cm, spanning x 15 to 41 and y -25 to +25. White vinyl tape lines, 0.6 cm wide and 0.1 cm thick, centred at x = 16, 24, 32, 40 (running left to right, from y -24 to +24) and at y = +24, +8, -8, -24 (running front to back, from x 16 to 40), make a 3 x 3 grid of squares 8 cm front to back by 16 cm left to right. Row centres: near x = 20, middle x = 28, far x = 36. Column centres: left y = +16, middle y = 0, right y = -16. Blocks: nine painted pine blocks, all 2.5 x 2.5 cm in cross-section, one of each colour (matte red, yellow, blue) and each length (short 4 cm, medium 8 cm, long 12 cm), about 12, 25 and 38 g. Fixed to the board (glued or taped, centred in their squares, long side running left to right): red short in the near-left square (x 20, y +16), blue long in the near-right square (x 20, y -16), blue short in the centre square (x 28, y 0). Loose on the bare table, lying flat with the long side running front to back (along x): left column at y = +32: blue medium centred at x 17, yellow long at x 30, yellow medium at x 43; right column at y = -32: yellow short at x 15, red medium at x 24, red long at x 38. Nothing else is on the table.",
+  "scoring": "Measured after everything is still, by eye or from an overhead photo with the tape lines as the reference. A square holds a block when the block's centre (seen from above) is inside the square's tape centre lines and the block rests directly on the board (its lowest point at most 0.6 cm above the board surface, so a block lying on the tape still counts; a block on top of another block, held in the air, or on the table does not), and it is the only such block in that square; a square with two or more such blocks counts as empty. The block's heading and which face is down do not matter. There are six lines: three rows (near, middle, far) and three columns (left, middle, right). A line is satisfied when each of its three squares holds a block and the three blocks are three different colours and three different lengths. Score = (number of satisfied lines) / 6, so 0, 1/6, 2/6, ... 1. Full success (1.0): all six lines satisfied with every loose block still (under 1 cm/s), held for 1 second, which ends the trial; otherwise the score at the end of the run. Doing nothing scores 0 (no line is complete at the start). For reference, filling the six squares at random averages 0.10, and a fill that gets every colour right but ignores length (or the reverse) averages 0.28 and can score 0. Blocks knocked onto the table or floor simply leave their squares empty.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Put the six loose blocks back at their stated staging positions (long side front to back); the board and its three fixed blocks stay taped down.",
+  "fidelity": "Blocks are uniform rigid boxes with one flat colour (real setup: square pine sticks cut to 4, 8 and 12 cm and painted). The board, tape lines and three givens are fixed boxes, so the givens cannot be knocked loose as glued real blocks might. Mass from pine density (~500 kg/m^3). Grip friction is the simulator's rubber-like default (1.2/1.0), higher than painted pine on hardboard. No start jitter; physics at 240 Hz.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-5J2BVG"
+}
