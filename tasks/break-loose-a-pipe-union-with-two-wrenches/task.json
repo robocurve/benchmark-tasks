@@ -1,0 +1,20 @@
+{
+  "title": "Hold a backup wrench with one hand while the other turns a pipe union's nut loose with a second wrench",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "plumbing",
+    "wrenches",
+    "threaded joint",
+    "backup wrench"
+  ],
+  "instruction": "Break the pipe union loose: hold the blue backup wrench's handle down with one hand so the pipe piece cannot turn, and with the other press the red wrench's handle down, turning the union nut at least 25 degrees loose; then let go of both.",
+  "context": "Plumbers and pipe fitters loosen threaded joints with two wrenches: one turns the nut, the other (the backup wrench) holds the fitting behind it. With one wrench the turning force passes on through the pipe and loosens whichever joint gives first, often the wrong one, and can twist or crack the pipework.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) A pipe line on the centre line, its axis 7 cm above the table: a fixed pipe 2.4 cm thick from 15 to 26.4 cm forward on a bracket; a brass union nut 4.2 cm across from 26.5 to 29 cm forward; the pipe piece from 29 to 36 cm forward, with a dark hex 3.6 cm across at 33 to 35 cm; and a fixed brass elbow from 36 to 40 cm forward on its riser, the pipe piece screwed into it. (2) A red wrench fixed on the union nut, its handle 14 cm long reaching out to the right and up 25 degrees, with a flat dark pad 3 cm square at its end (12.7 cm right of the centre line, its top 13.7 cm above the table). (3) A blue backup wrench fixed on the pipe piece's hex, its handle the same, reaching out to the left. Pressing the red handle down turns the union nut loose; the pipe piece, turned the same way (its blue handle going up), turns loose in the elbow. Each joint holds until turned hard enough (the union nut about 0.2 N m, the elbow joint about 0.06 N m) and then turns against a drag; neither turns the tightening way. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Judged at the end of the trial. 0.0 if the elbow joint was ever turned 15 degrees loose (the wrong joint). Otherwise 1.0: the union nut turned at least 25 degrees loose against the pipe piece, the elbow joint under 8 degrees, and each gripper's fingertip centre (TCP) at least 4 cm from both pads; 0.5: the union nut 25 degrees loose otherwise; 0.25: 10 degrees loose; else 0.0. The trial ends at the run limit, or once the full score has held for 1 s.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "Tighten the union nut and the pipe piece back up, with both wrench handles reaching up 25 degrees.",
+  "fidelity": "Rigid-body simulation (Isaac Sim 6.1, PhysX, 20 Hz control). Simplified: the wrenches are fixed on their nuts. Each thread is a hinge with a spring that holds it until it is turned 2 degrees past its hold (then the task file moves the hold to it) and a drag while it turns; stops keep both from turning the tightening way. Cameras 1280 x 704 (Dream-1 sees 320 x 176).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-MGZRS6"
+}
