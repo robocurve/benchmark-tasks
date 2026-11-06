@@ -1,0 +1,22 @@
+{
+  "title": "Lay a roll of roofing felt on each of two roof faces so that neither can roll off",
+  "category": "Safety and alignment",
+  "keywords": [
+    "roof work",
+    "falling objects",
+    "material storage",
+    "slope",
+    "rolling",
+    "orientation",
+    "bimanual"
+  ],
+  "instruction": "Put one roll of roofing felt on each roof face, lying on its side, so that it stays where you leave it.",
+  "context": "Material left on a pitched roof can roll off the eaves onto people below. A roll laid on its side along the fall line stays put; laid across the pitch it rolls off, and stood on end it topples and then rolls. The two faces here fall in directions 90 degrees apart, so the robot has to read each slope. Unlike TK-QJR5HS (chock a rolling cradle) and TK-DLB27W (tilt a board to roll a ball into a cup), nothing is added to stop the roll: its orientation alone keeps it on the roof.",
+  "setup": "Positions are from the robot's view: 'in front' is away from the arm bases, 'left' and 'right' are the robot's, the midline is halfway between the arm bases, heights are above the table top. Roof model (fixed): two grey painted plywood boards, each 20 cm long down the slope, 16 cm wide and 1 cm thick, pitched 22 degrees, each with a dark-red ridge strip (1.2 cm wide, 6 mm tall) along the top of its high edge. Left face: its high edge runs left to right 46 cm in front of the arm bases, 12.5 cm high, from 7 to 23 cm left of the midline; it falls toward the robot to a low edge 27.5 cm in front of the bases, 5 cm high. Right face: its high edge runs front to back 3 cm right of the midline, 12.5 cm high, from 24 to 40 cm in front of the bases; it falls toward the robot's right to a low edge 21.5 cm right of the midline, 5 cm high. Each face rests on a dark-grey post under its high edge (2 cm thick, 11.3 cm tall, full width); a dark-grey low wall (1.5 cm thick, 3.5 cm tall, full width) stands under each face 2 cm inside its low edge, clear of the board. Felt rolls (loose, two, black): each 5 cm in diameter and 14 cm long, 0.25 kg, with four 1 mm lap ridges along its length; they lie on the table centred 18 cm in front of the arm bases, 15 cm left and 15 cm right of the midline, axes left to right. Each roll lies between two fixed wooden battens 1 cm wide, 14 cm long and 8 mm tall, centred 2.5 cm in front of and behind its axis. Nothing else is on the table.",
+  "scoring": "Pass/fail. Score 1.0 only when each roof face holds a roll lying on it: the whole roll within the board's edges, lying on its side on the board (gap at most 3 mm, axis within 5 degrees of the board's surface), its axis pointing down the slope (within 20 degrees of the fall line), still, with the board at its 22 degree pitch (within 1 degree), and neither roll has touched the table since it was first put on a roof face, in any direction (judged on the video). Two rolls on one face count once. Every other outcome scores 0: one face only, a roll across the slope, stood on its end, held above the board, sticking past an edge, still moving, or one that rolled off a face, even if put back. The trial ends at 1.0 once that has held for 3 s; otherwise it scores the state at the last step.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Lay each roll back between its battens, axis left to right. Nothing is consumed.",
+  "fidelity": "Rigid bodies with the simulator's default friction for these parts. Each roll is a solid cylinder with four lap edges along its length, standing 1 mm proud of its round surface. In the simulator each board is hinged at its high edge and settles by gravity onto a 22 degree stop before the trial starts.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-WZU347"
+}
