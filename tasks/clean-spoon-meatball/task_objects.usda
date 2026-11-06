@@ -1,0 +1,122 @@
+#usda 1.0
+(
+    defaultPrim = "Environment"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Environment" (
+    customData = {
+        string instruction = "Scoop one meatball onto the empty plate."
+    }
+)
+{
+    def Xform "CleanPlate" (
+        prepend references = @assets/platter.usda@
+    )
+    {
+        quatf xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0.335, 0.32, 0.7474999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "RawPlate" (
+        prepend references = @assets/platter.usda@
+    )
+    {
+        quatf xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0.335, -0.32, 0.7474999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "MeatballBowl" (
+        prepend references = @assets/bowl.usda@
+    )
+    {
+        quatf xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0.39, 0, 0.7474999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "Plate" (
+        prepend references = @assets/plate.usda@
+    )
+    {
+        quatf xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0.13, 0, 0.7474999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "CleanSpoon" (
+        prepend references = @assets/spoon_clean.usda@
+    )
+    {
+        quatf xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0.335, 0.32, 0.7519999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "UsedSpoon" (
+        prepend references = @assets/spoon_used.usda@
+    )
+    {
+        quatf xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0.335, -0.32, 0.7519999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "Meatball_1" (
+        prepend references = @assets/meatball.usda@
+    )
+    {
+        quatf xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0.41475, -0.02475, 0.7539999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "RawChicken_1" (
+        prepend references = @assets/raw_chicken.usda@
+    )
+    {
+        quatf xformOp:orient = (0.76604444, 0, 0, 0.64278764)
+        double3 xformOp:translate = (0.43000000000000005, -0.4, 0.7519999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "RawChicken_2" (
+        prepend references = @assets/raw_chicken.usda@
+    )
+    {
+        quatf xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0.35500000000000004, -0.41200000000000003, 0.7519999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "RawChicken_3" (
+        prepend references = @assets/raw_chicken.usda@
+    )
+    {
+        quatf xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0.24000000000000002, -0.42000000000000004, 0.7519999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "RawChicken_4" (
+        prepend references = @assets/raw_chicken.usda@
+    )
+    {
+        quatf xformOp:orient = (0.9396926, 0, 0, 0.34202015)
+        double3 xformOp:translate = (0.43000000000000005, -0.23, 0.7519999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "RawChicken_5" (
+        prepend references = @assets/raw_chicken.usda@
+    )
+    {
+        quatf xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0.34500000000000003, -0.22, 0.7519999999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+}
+
