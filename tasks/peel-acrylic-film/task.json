@@ -1,0 +1,23 @@
+{
+  "title": "Hold the acrylic sheet down and peel its protective film off by the tab",
+  "category": "Impact on jobs",
+  "keywords": [
+    "laser cutting",
+    "makerspace",
+    "peeling",
+    "protective film",
+    "bimanual",
+    "hold and pull",
+    "breakable bond",
+    "deformable proxy"
+  ],
+  "instruction": "Hold the white acrylic sheet down with your left hand. With your right hand, pinch the brown paper tab on the far edge of the film and peel the film off by lifting it up and back toward you, then drop the film in the blue basket on the right.",
+  "context": "Laser-cutting shops and makerspaces peel the masking paper off every acrylic part they cut. The film comes off in an arc while the other hand holds the light sheet down: pulled straight back, the tab tears, and pulled without a hand on the sheet, the sheet lifts with the film.",
+  "setup": "Left and right are the robot's. Positions are centres in metres from the midpoint between the two arm bases: x forward, y to the robot's left, heights above the table. Cutting mat: a 22 x 24 cm green self-healing cutting mat (24 cm along y), 3 mm thick, fixed, at (0.33, -0.05). Sheet: an opal white cast acrylic sheet, 15 x 20 cm (20 cm along y), 3 mm thick, 105 g, lying loose on the mat at (0.33, -0.05). Film: brown kraft masking paper printed \"PROTECTIVE FILM\" on the sheet's right half (y from -0.15 to -0.05), cut across x into four strips 3.75 cm wide and 10 cm long (1.5 mm thick, 5 g each), joined to each other at the middle of each cut. Each strip is stuck along its edge nearer the robot: it comes unstuck when its far edge is pulled up, about as hard as it takes to tip the loose sheet up, and holds 8 N pulled along the sheet. The sheet's left half is bare. Tab: a folded paper tab, 3 cm wide (along y), 2.5 cm tall and 3 mm thick, 4 g, standing on the film's far edge at (0.40, -0.10), free to turn on its fold. It tears off at 4 N. Basket: a blue open-weave plastic basket, 12 x 16 cm (16 cm along y) and 6.9 cm tall, fixed, on the robot's right at (0.235, -0.265), off the mat. Nothing else is on the table.",
+  "scoring": "Positions are centres. A strip counts as peeled once its centre has been 1 cm or more from its place on the sheet (measured on the sheet), and stays peeled. 0 for the rest of the trial once the tab has torn off (its centre 2 cm or more from its fold on the film), or once the sheet's centre has been more than 2 cm from its start or the sheet tilted more than 10 degrees (lifted with the film or dragged), and 0 if it is off the table. Otherwise: 1.0 (success, held 1 s with the film still): all four strips peeled and the centre of every strip and of the tab within 6 cm along x and 8 cm along y of the basket's centre and lower than its rim. 0.5: all four strips peeled, the film not all in the basket. 0.25: two or three strips peeled. 0 otherwise, including doing nothing or peeling one strip.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Stick the film back on with fresh tape at its four cut lines, or use a new film, and stand the tab up on the far edge. A torn tab means a new film.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. The paper film is four rigid strips 1.5 mm thick and 5 g each (real film: 0.1 mm, under 1 g), joined by free ball joints, and the tab turns on a ball joint. Each strip's glue is a fixed joint that breaks at a 0.06 N m twist or 8 N, with no creep or re-sticking. The tab tears at 4 N. The sheet, mat and strips collide as boxes, the basket as its mesh. The gripper closes with 50 N per pad.",
+  "scores": "Dream-1 run: 0.0 (both hands reach over the sheet and the right hovers by the tab, but it never pinches the tab and no strip comes off), demo: 1.0 (success at step 348)",
+  "media": "M-JNHNDM"
+}
