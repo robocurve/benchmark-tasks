@@ -1,0 +1,19 @@
+{
+  "title": "Put a used syringe in the sharps container that isn't full",
+  "category": "Impact on jobs",
+  "keywords": [
+    "healthcare",
+    "sharps disposal",
+    "fill line",
+    "needlestick prevention"
+  ],
+  "instruction": "Put the used syringe in the sharps container.",
+  "context": "Medical assistants, nurses and phlebotomists throw away used needles after every procedure. Once a sharps container reaches its fill line, staff close it and swap in a new one. Pushing more sharps into a full container is a common cause of needlestick injuries.",
+  "setup": "Positions are in cm from the midpoint between the two arm bases, with x forward, y to the robot's left and the table top at z 0. A blue rigid plastic procedure tray, 20 x 14 x 1 cm (x by y by height), is fixed and centred at x 17, y 0. The used syringe is a white rigid plastic rod standing in for a capped syringe, 13 x 1.8 x 1.8 cm and 10 g. It lies on the tray along x, centred at x 17, y 0. Two red sharps containers are both centred at x 29. Each has four fixed rigid plastic walls 1 cm thick and 10 cm tall around a 16 x 12 cm opening, is open at the top and uses the table as its floor. The full container sits at y +16. A fixed grey block, 16 x 12 x 7.5 cm, fills it up to its fill line at 7.5 cm. The empty container sits at y -16.",
+  "scoring": "The syringe counts as in a container when it lies wholly inside the container's walls, entirely below the rim, and is still. The trial scores 1.0 when the syringe is in the empty container. Anything else scores 0. That includes the syringe in or on top of the full container's contents, still on the tray, on the table, across a rim, sticking out above a rim, or held. The possible scores are 0 and 1.0. In a real trial, a photo from above at the end shows which container holds the syringe. A straight edge laid across the rim confirms nothing sticks out.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lift the syringe out of whichever container it is in and lay it back on the tray at its start position. The full container's contents are fixed and stay the same between trials.",
+  "fidelity": "The syringe is a plain white rod with no plunger, needle or cap. The containers are open boxes with no lid, aperture flap or printed fill line. The full container's contents are one solid grey block at the fill line. The simulation uses rigid-body physics only.",
+  "scores": "Dream-1 run: 1.0 (742 steps); demo: 1.0",
+  "media": "M-ADJ856"
+}
