@@ -1,0 +1,21 @@
+{
+  "title": "Press two new floor tiles down flush with the laid ones",
+  "category": "Impact on jobs",
+  "keywords": [
+    "tiling",
+    "lippage",
+    "pressing to a reference height",
+    "one-way motion",
+    "bimanual",
+    "construction"
+  ],
+  "instruction": "Bed the two new tiles: press them down until they are flush with the tiles around them.",
+  "context": "Done by: tile and stone setters (O*NET 47-2044). A new tile is pressed into its mortar until level with its neighbours; a tile left proud is a trip edge, and one pushed below them cannot be pulled back up and must be lifted and rebedded. No stop sets the depth: the press must end at the neighbours' level. Unlike TK-QXR5CL (re-lay a deck board flat) and TK-JYVVCS (tiles with 3 mm joints), this task scores pressing a one-way part to a 1 mm window set by its neighbours.",
+  "setup": "Station table, top 0.7475 m. World frame: x away from the robot, y to its left, origin midway between the arm bases (y = ±0.305 m). A strip of floor centred at x = 0.32 m, y = 0, running along y: a grey concrete slab 100 mm (x) × 315 mm (y) × 30 mm, standing on the table. On it, a row of five glazed ceramic tiles, each 60 × 60 × 10 mm, centres at y = -0.126, -0.063, 0, +0.063, +0.126 m (3 mm joints). The tiles at y = -0.126, 0 and +0.126 are laid (a darker cream): they sit on the slab, tops 40 mm above the table, and are fixed. The tiles at y = +0.063 (the robot's left) and -0.063 (right) are new (a lighter cream): each sits on a dark grey bed of fresh mortar with the tile's own 60 × 60 mm footprint, so that it stands proud of the laid tiles, the left one by about 5.5 mm and the right one by about 8.5 mm (6 and 9 mm of mortar, settled 0.5 mm under the 50 g of tile and bed). The proud heights show in the side and wrist views, not in the overhead screenshot. Fresh mortar gives way under a press of about 0.5 N and holds where it is pressed; when the press stops the tile comes back up about 0.5 mm, and it can be pressed at most 15 mm in all. A new tile cannot rise above its starting height. Nothing else is on the table.",
+  "scoring": "Lippage: a new tile's top above or below the laid tiles' tops, measured with a straightedge and feeler gauge, with nothing pressing on the tile. A tile is flush when its lippage is 1.0 mm or less either way and it has been let go. 1.0: both new tiles flush. 0.5: exactly one new tile flush and let go, the other still proud by more than 1.0 mm. 0: neither flush. 0 also if either new tile is ever pressed so deep that it rests more than 1.0 mm below the laid tiles, even if the other is flush (a sunk tile has to be lifted and rebedded; on this bed it cannot come back up). A tile held down by the robot is not scored as flush.",
+  "run_limit": "600 steps (30 seconds at 20 Hz)",
+  "fidelity": "Rigid boxes. Each new tile slides straight down on a 1,000 N/m spring whose rest point follows it down, so the bed holds where pressed, yields to about 0.5 N and springs back 0.5 mm on release. Tile and bed move as one 50 g body (a real tile this size is about 80 g). Real tiles can also tilt and rock; here only height is modelled. A tile counts as let go when pressed with under about 0.26 N.",
+  "reset_notes": "On a real floor, lift both new tiles, re-spread fresh mortar so they stand about 5.5 and 8.5 mm proud. In simulation the scene reset restores both beds.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-S86F3V"
+}
