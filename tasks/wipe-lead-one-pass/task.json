@@ -1,0 +1,23 @@
+{
+  "title": "Wipe a monitor lead from the plug end to the clip end in one pass",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "deformable",
+    "sliding contact",
+    "healthcare",
+    "cleaning",
+    "process constraint",
+    "placement"
+  ],
+  "instruction": "Disinfect the grey monitor lead: hold it by the plug, close the other gripper around the lead at the blue band and wipe along it in one pass toward the clip end, never moving back toward the plug. Wipe all the way to the red band, then lay the whole lead on the white drape and let go.",
+  "context": "O*NET 31-9093.00 Medical Equipment Preparers: \"Disinfect and sterilize equipment, such as respirators, hospital beds, or oxygen or dialysis equipment\". Philips IntelliVue ECG lead sets: \"Clean and disinfect the ECG cable and accessories after each use.\" Nunavut \"Damp Wiping\" guide: \"Avoid using a back and forth motion to prevent the cloth picking up dirt going one way and then dropping it off on the way back.\" Holding the plug still is this task's own rule.",
+  "setup": "Cm from the midpoint between the arm bases on the table (x forward, y to robot's left). Arm bases at x 0, y +30.5 (left arm) and y -30.5 (right arm); at the start both arms are in their ready pose, with the gripper about 26 cm above the table at x 32, directly in front of its base (left at y +30.5, right at y -30.5), so the right gripper hovers over the middle of the lead in the top-view image and hides part of it; the lead itself is untouched and in the positions below. Lead: grey 6 mm round PVC cord, 60 cm, lying straight along y at x 40 from y 6.25 to y -53.75; grey plug 35x16x12 mm (12 g) on its left end (centre y 8), red patient clip 25x15x15 mm (10 g) on its right end. Coloured tape bands 2 cm wide on the lead: blue 14-16 cm from the plug end of the cord (y -7.75 to -9.75), red 54-56 cm (y -47.75 to -49.75). Clean drape: white cloth on a 3 mm board, 18x76 cm, x 12-30, y -56 to 20, taped down.",
+  "scoring": "Score 0 if: a gripper closed on the lead (finger gap at most 7 mm) ever goes more than 3 cm back toward the plug, measured along the lead or as straight-line distance to the plug, from the furthest it has reached; the plug is not on the drape at the end; a gripper is within 3 cm of the lead, plug or clip at the end. Otherwise c = fraction of the 41 1 cm marks from blue to red band wiped. A mark is wiped when the pinch point of a closed gripper slides over it in one continuous closed slide (regrasping or hopping does not count) while the other gripper holds the plug. Reviewers read c as marks clean under a UV torch, or in the video as the closed gripper's slide: c = 0.5 is 35 cm from the plug end, 0.8 is 47 cm, 0.95 is 53 cm. 0.3: slid to between 35 and 47 cm. 0.6: slid to between 47 and 53 cm, or all the way to the red band with part of the lead or the clip off the drape. 1.0: slid to 53 cm or beyond and the whole lead, plug and clip lie on the drape.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Lay the lead straight along the tape line at x 40 cm, plug centre on its mark at y 8 cm, clip end to the right; drape flat and empty on its tape marks. Real trial: dust the blue-to-red stretch with UV tracer powder before the trial; afterwards, wiped marks are the 1 cm marks clean under a UV torch.",
+  "fidelity": "Lead: 2 cm rigid segments with soft bending springs and octagonal colliders, no twist, no plasticity; plug and clip are rigid boxes. The wipe is the bare pads (no cloth): a mark counts when it passes between pads closed to <= 7 mm; in a real trial a disinfectant wipe sits in the hand and wiped marks are read from UV tracer. Drape is a fixed rigid board.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-352HEY"
+}
