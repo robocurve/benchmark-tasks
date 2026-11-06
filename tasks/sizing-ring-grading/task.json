@@ -1,0 +1,21 @@
+{
+  "title": "Grade apricots by size with a sizing board",
+  "category": "Impact on jobs",
+  "keywords": [
+    "agriculture",
+    "grading",
+    "sorting",
+    "tool use",
+    "size test",
+    "bimanual"
+  ],
+  "instruction": "Grade the fruit with the sizing board: fruit that passes through the opening belongs in the small-grade bin, the rest in the large-grade bin.",
+  "context": "Fruit can be graded by whether it passes through a sizing opening. The board provides a physical size test for fruit whose diameters are difficult to distinguish in the top-camera view.",
+  "setup": "Positions are centres in metres: x forward from the line of the two arm bases, y to the left of the midline between them (bases at y = +0.305 and -0.305); heights are above the table top. All five apricots share one colour. (1) Picking tray (rigid dark grey plastic tray, 0.37 x 0.17 m outside, 3 mm floor, 10 mm thick rim 25 mm tall), centred at (0.28, 0.20), long side along x. (2) Five loose apricots in the tray in one row along x at y = 0.20, from near to far: x = 0.150 small, 0.215 large, 0.280 small, 0.345 large, 0.410 small. Small = 44 mm diameter, 45 g; large = 56 mm diameter, 92 g (fresh apricots measured with calipers, or for repeatable trials orange-painted wooden balls of those diameters and masses). (3) Small-grade bin: open-top plywood box, 0.17 x 0.17 m outside, 10 mm walls, 5 mm floor, walls 95 mm tall, centred at (0.25, 0.00). (4) Sizing board: 12 mm plywood board, 0.17 x 0.17 m, with a 50 x 50 mm square opening cut in its centre, screwed flat on top of the small-grade bin's walls as its lid, so the opening (centred at (0.25, 0.00), top surface 112 mm above the table) is the only way into the bin. (5) Large-grade bin: open-top blue plastic box, 0.17 x 0.17 m outside, 10 mm walls, 5 mm floor, 55 mm tall overall, centred at (0.30, -0.21). Tray, bins and board are fixed to the table.",
+  "scoring": "Per apricot: +0.2 when it is resting (moving under 1 cm/s) with its centre inside its correct bin: inside the bin's inner walls and below its rim, which for the small-grade bin is the underside of the sizing board. The correct bin is the small-grade bin for the three 44 mm apricots and the large-grade bin for the two 56 mm apricots. -0.2 for each apricot inside the wrong bin. An apricot anywhere else (in the tray, on the table, on the board, sitting in the opening, held by the robot above a bin, on a bin rim) scores 0. The total is floored at 0. An apricot on the floor (centre below the table top) scores 0 and caps the total at 0.6. Success (1.0): all five apricots resting in their correct bins for 1 s, which ends the trial. Otherwise the score at the end of the run limit.",
+  "run_limit": "3,600 steps (3 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed. To reset, unscrew or lift off the sizing board to take the small apricots out of the small-grade bin, refit the board, and set all five apricots back in the tray in the listed order.",
+  "fidelity": "The opening is square, not a round sizing ring: a sphere passes a 50 mm square exactly when it would pass a 50 mm ring, but a fruit too big rests on four edge contacts, and a real non-round fruit could pass a square diagonally. The apricots are rigid uniform spheres; real ones are soft and slightly oval, so passing can depend on how one is turned. Board and bins are fixed rigid slabs; friction and rolling resistance are simulator defaults. Fruit masses assume 1000 kg/m^3.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-85EN7K"
+}
