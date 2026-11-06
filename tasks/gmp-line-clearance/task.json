@@ -1,0 +1,21 @@
+{
+  "title": "Clear a packaging line of the last batch before setting out the next",
+  "category": "Impact on jobs",
+  "keywords": [
+    "line clearance",
+    "GMP",
+    "pharmaceutical packaging",
+    "batch changeover",
+    "reconciliation",
+    "search"
+  ],
+  "instruction": "Changeover on this packaging line. First clear the steel line bed: every item left on it from the last batch, including anything hidden behind something else, goes into the blue reconciliation bin. Only when the line bed is completely clear, take the new batch's blue label reel from the staging mat and stand it on the white set-out tile. Never bring the new reel onto the line before it is clear.",
+  "context": "Under GMP, a packaging line must be cleared before a new batch starts: every component, carton and stray unit of the last batch is removed and reconciled, and a second person verifies it. Stray labels or units behind equipment are a classic cause of mix-ups and recalls, so the search must be exhaustive, not just what is in plain view. Here one vial stands behind a 12 cm carton where the top camera cannot see it; it is only found by moving the carton or looking round it. Unlike RoboCasa's ClearReceptaclesForCleaning and BEHAVIOR's clean_up_your_desk, clearance is a checked gate before the next set-out, and one item is hidden. Done by: packaging machine operators and quality inspectors (O*NET 51-9111.00, 51-9061.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. Line bed: a fixed steel plate 20 x 22 cm, 2 mm thick, centred at x 36, y 29, with a fixed white set-out tile 6 x 6 cm, 2.5 mm thick, centred at x 30, y 35.5. On the bed, loose: a kraft shipper carton 5 cm deep (x), 7 cm wide, 12 cm tall (90 g) centred at x 36, y 30; a glass vial 2.2 cm across, 4 cm tall (20 g) standing 6 mm behind the carton's far face, centred at x 40.2, y 30.5; a second vial at x 30, y 22.5; a leaflet bundle 4.5 x 3 x 1.6 cm (15 g) at x 42, y 21.5. Reconciliation bin: a fixed blue open frame (walls 0.6 cm thick, 3 cm tall, round a 15 x 14 cm pocket, table floor) centred at x 17.5, y 44. Staging mat: fixed, dark grey, 10 x 10 cm, 2 mm thick, centred at x 17, y 22, holding the new label reel (blue, 5 cm across, 3 cm tall, 60 g) standing on end.",
+  "scoring": "From the episode's recorded poses, with the grippers open at the end. An item is in the bin when it is still, its centre inside the bin's inner walls and its lowest point less than 3 cm above the table (standing or lying). 0.2 for each of the four previous-batch items in the bin; 0.2 more when all four are and the reel stands on the tile (centre within 2 cm of the tile centre, upright within 8 degrees, still). An item is on the line when its centre is over the bed and its lowest point less than 3 cm above it. If the reel is ever on the line while a previous-batch item still is, the score is capped at 0.4. Possible scores: 0, 0.2, 0.4, 0.6, 0.8, 1.0. Success: score 1, held 1 s.",
+  "run_limit": "1,800 steps (90 seconds at 20 Hz)",
+  "reset_notes": "Put the carton, both vials (one tight behind the carton) and the leaflets back on the line bed on their marks and the reel on the staging mat; the bed, tile, mat and bin do not move. On a real rig the clear-before-set-out rule is judged from the trial video.",
+  "fidelity": "Rigid primitives with one shared friction (1.2 static, 1.0 dynamic). The carton is a closed box, vials are plain cylinders, the leaflet bundle is a block and the label reel a solid disc with no core. The labeller, the batch record and the second-person check are not modelled; the order rule is judged from simulator poses every step.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-ZYYH3P"
+}
