@@ -1,0 +1,22 @@
+{
+  "title": "Set a one-handed diner's place with the right dish on her non-slip mat",
+  "category": "Societal relevance",
+  "keywords": [
+    "assistive",
+    "one-handed eating",
+    "adaptive tableware",
+    "non-slip mat",
+    "unstated rule",
+    "mirrored sides",
+    "bimanual",
+    "relay between arms"
+  ],
+  "instruction": "Ana can only use her right hand. Set out her cup and whichever of the two dishes is easier for her to eat from.",
+  "context": "An NHS leaflet lists adapted plates and bowls as \"Good for one-handed eating\" and says non-slip mats stop \"plates and cups from sliding\" (Cumbria, Northumberland, Tyne and Wear NHS Foundation Trust, \"Small aids to help you at home\"). Occupational therapy assistants (O*NET 31-2011.00) assist with daily activities and teach the use of adaptive equipment; here Ana faces the robot, so her right is the robot's left, and the instruction does not mention the mat.",
+  "setup": "Positions in cm from the midpoint between the two arm bases, on the table (x forward, y to the robot's left); the arm bases are at y +30.5 and -30.5. Figure: a fixed tan PLA board figure 1 cm thick, seated across the table facing the robot, so her right is the robot's left: shoulders 6 x 26 cm centred at x 46, y 0; forearms 5 x 4 cm centred at x 41, y +12 (right) and -12 (left); head a cylinder 10 cm across and 5 cm tall standing on the shoulders at x 46, y 0. A fixed dark grey rubber non-slip mat 14 (x) x 24 (y) cm and 2 mm thick is centred at x 27, y 2. A fixed grey pad 8 x 8 cm and 2 mm thick lies at x 18, y 0. Loose items, all PLA: a white bowl, 8.5 cm across and 2.9 cm tall (100 g), at x 19, y -13; a blue cup, 5 cm across and 8 cm tall (50 g), at x 19, y -23; a flat white dish, 12 cm across and 1 cm tall (100 g), at x 15, y +19. Nothing else is on the table.",
+  "scoring": "Measured at the end with a ruler and a top photo. 0 if the centre of the flat dish is over the mat. An item counts as on the mat when its centre is over the mat, its base is within 5 mm of the mat's top surface, it stands the right way up, within 10 degrees of upright, and it is still (under 1 cm/s and 0.5 rad/s). Otherwise: 0.5 for the bowl on the mat, 0.25 for the cup on the mat, and 0.25 more if both are on the mat with the cup's centre at least 6 cm to Ana's right of the bowl's centre (toward the robot's left), so 0, 0.25, 0.5, 0.75 or 1.0. Success (1.0) is that condition held for 1 s. On a real table, open the grippers before measuring.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "fidelity": "Approximate: the person is a fixed, reduced-scale board figure. The bowl is a scaled-down library model colliding as one convex shape; the dish and cup are solid cylinders; there is no food or liquid. The mat is a fixed thin box with no extra friction. Cup on her right is a task rule, not from the cited leaflet. The scorer cannot see the grippers, so an item held still on the mat is not distinguished.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-CH7XEK"
+}
