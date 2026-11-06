@@ -1,0 +1,24 @@
+{
+  "title": "Turn a camera turntable without wrapping its cable",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "deformable",
+    "articulated object",
+    "winding",
+    "topological reasoning",
+    "cable routing",
+    "rotary stage",
+    "sequencing"
+  ],
+  "instruction": "Turn the camera turntable half a turn so its red arrow points at the green mark, then let go. Its cable must not end up wound round the turntable or wrapped round the grey post.",
+  "context": "Cables feeding rotating stages limit how they may turn: at one telescope 'A cable wrap feeds wiring from the fixed cart to the rotating mainframe', whose rotator is limited to +/-179.5 deg; a stage vendor sells a slip ring for 'continuous rotation without cable tangling or wrap up'. Robotics technicians 'Install new robotic systems in stationary positions or on tracks' (O*NET 17-3024.01). Here a robot must turn a cabled stage the way that unwinds it and route the cable past an obstacle.",
+  "setup": "Positions in cm from the midpoint between the arm bases on the table (x away from the robot, y left). Turntable: grey disc 120 mm dia, 20 mm thick, 100 g, on a vertical axle at x 30, y -7, resting on the table; red arrow on top points +x. Knob: dark grey cylinder 20 mm dia, 25 mm tall, on its own pin on the disc at x 30, y -11. Green tape mark 14 x 24 mm at x 22.8, y -7. Cable: black, 6 mm diameter, 56 cm, leaves a swivel strain relief on the rim at x 36.35, y -7, runs straight along +y through a fixed clip (dark grey, 18 x 16 mm opening, 20 mm long) at x 36.35, y 18, loose to y 49. Post: dark grey cylinder 25 mm dia, 45 mm tall, fixed at x 33.3, y 7.",
+  "scoring": "Top view, cable from connector to clip. Score 0 if: physics NaN; a gripper (TCP) is within 3 cm of cable, disc or knob at the end; cable out of the clip; the cable sweeps >= 180 deg either way round the turntable axle (signed angle sum seen from the axle, connector to clip); or the post lies inside the loop cable + straight line clip-to-connector (hooked round the post). Else 1.0 if the arrow is within 10 deg of the green mark, 0.5 if within 30 deg, else 0. Post and clip are fixed in place.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Turn the disc back so the arrow points away from the robot (+x) and the knob is on the right; lay the cable straight from the connector along +y through the clip, 25 cm of it on the turntable side of the clip (tape mark on the cable at the clip), the rest loose beyond. Check the post and clip are on their tape marks.",
+  "fidelity": "Cable: 2 cm rigid segments with bending springs at half the kit's default stiffness, no twist; it leaves the rim through a swivel pin (-200..+20 deg; real: flexible strain relief) and passes through the fixed clip by contact. Axle: a joint free in yaw and +/-3 mm height; bearing drag is the 100 g disc's friction on the table plus light damping. Knob on its own pin so a pinch does not lock the disc. Disc, post, clip rigid; no camera on the turntable (the red arrow stands in for its heading).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-BJMR27"
+}
