@@ -1,0 +1,23 @@
+{
+  "title": "Give two trauma kits by triage colour",
+  "category": "Societal relevance",
+  "keywords": [
+    "triage",
+    "START",
+    "mass-casualty incident",
+    "scarce resources",
+    "priority",
+    "colour coding",
+    "bimanual",
+    "pick and place"
+  ],
+  "instruction": "Three casualties, two trauma kits. Treat by triage tag: red first, then yellow, then green. Put one kit on the white pad in front of each casualty you treat.",
+  "context": "At a mass-casualty incident, EMTs, paramedics and trained volunteer responders tag casualties with START triage colours (red immediate, yellow delayed, green minor) and send scarce supplies by tag, not to whoever is closest. Here there are fewer kits than casualties, and the nearest casualty is the one who should wait.",
+  "setup": "World frame: x forward from the line through the two arm bases, y to the robot's left, measured from the midpoint between the bases; all on the bare table top. Three casualty stand-ins (fixed, taped down) lie side by side, heads away from the robot, centred on y = +220 mm (robot's left), 0 and -220 mm (robot's right). Each is a body block of grey-blue painted foam or wood, 160 mm long (x 390-550 mm), 80 mm wide and 35 mm tall, with a head: a skin-tone painted wooden disc 60 mm across and 35 mm tall, centred at x = 585 mm. On each body's chest lies a square triage tag, 50 x 50 x 4 mm (painted card or plastic), centred at x = 470 mm: green on the left casualty (y = +220 mm), red on the centre one (y = 0), yellow on the right one (y = -220 mm). Treatment pads (fixed, white 3 mm foam sheet, taped down): one in front of each casualty, 130 mm (x 245-375 mm) by 110 mm (the casualty's y +-55 mm). Trauma kits (loose, 2, identical): navy nylon belt-pouch trauma kits on a rigid insert, as boxes 100 mm (along x) x 50 mm (along y) x 45 mm tall, 150 g each, standing on the bare table centred at x = 160 mm and y = +180 mm and +70 mm (both left of the midline, on the green casualty's side).",
+  "scoring": "A kit is on a pad when its centre (seen from above) is over that pad (x 245-375 mm, the casualty's y +-55 mm) and its lowest point is at most 15 mm above the pad top, in any orientation. Score = 0.6 if at least one kit is on the red casualty's pad + 0.4 if at least one kit is on the yellow casualty's pad - 0.4 for each kit on the green casualty's pad, never below 0. A kit anywhere else (where it started, on the table, on a casualty's body, stacked on the other kit, held above a pad, on the floor) earns nothing, and a second kit on the same red or yellow pad adds nothing. So: red + yellow 1.0; red only, or both on red 0.6; yellow only, or both on yellow 0.4; red + green 0.2; yellow + green, green only, both on green, or nothing moved 0. Full success (1.0): one kit on the red pad and the other on the yellow pad, both at rest (under 1 cm/s) for 1 second. The order of delivery is not scored. The score is taken at the end of the run.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Stand the two kits back at their start marks (x 160 mm, y +180 and +70 mm), long side along x; the casualties, tags and pads stay taped down.",
+  "fidelity": "Casualties are rigid block stand-ins (body block, head disc, flat tag) at about a tenth of life size; kits are full size. The task tests allocation by priority, not treatment. A real START tag is a paper tag with colour strips; here it is a flat tile on the chest, and the black (expectant) category is left out. Kits are rigid uniform boxes with no straps or contents, with rubber-like friction (1.2 static, 1.0 dynamic).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-V62NLH"
+}
