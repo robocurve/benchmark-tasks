@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robocurve-tool-retrieval"
+version = "0.1.0"
+
+[project.entry-points."inspect_robots.embodiments"]
+yam_retrieval = "tool_retrieval.embodiment:make_embodiment"
+
+[project.entry-points."inspect_robots.policies"]
+yam_retrieval_scripted = "tool_retrieval.policy:make_policy"
+
+[tool.setuptools.packages.find]
+include = ["tool_retrieval*"]

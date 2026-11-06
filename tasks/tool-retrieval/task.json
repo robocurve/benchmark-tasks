@@ -1,0 +1,19 @@
+{
+  "title": "Recover a part from under a machine guard with a spatula",
+  "category": "Impact on jobs",
+  "keywords": [
+    "tool use",
+    "retrieval",
+    "constrained access",
+    "bimanual"
+  ],
+  "instruction": "Use the spatula to pull the blue part out from under the grey guard. Put the part in the green tray, return the spatula to its two supports, and release both objects.",
+  "context": "Recovering dropped components beneath unpowered equipment requires extending reach through a low opening and drawing the part back through it.",
+  "setup": "Official calibrated YAM station. Fixed blue-grey mesh housing with chamfered cover, mounting lugs, fasteners and slot trim with a closed back and sides, 28 mm front opening, 20 mm roof viewing slit. Blue 30 x 25 x 10 mm, 25 g part starts at (0.40,0.075) m beneath the roof. Existing 273 mm Arena spatula with a rigid grip sleeve, total 80 g, rests on two 35 mm supports at y=0.27 m. Green tray at (0.235,-0.175) m. Table z=0.7475 m; x forward, y left. task.py and scene_inventory.json and build_fixture.py specify geometry and poses.",
+  "scoring": "Final score: 0.25 for tool-contact-verified extraction with the whole part forward of x=0.305 m; 0.75 for the extracted part resting fully inside the tray; 1.0 also requires the spatula flat on its supports, both grippers at least 75% open and both TCPs at least 90 mm from both loose-object centres, held 1 s. Direct robot-part contact before extraction, drops or leaving the specified table area permanently score 0. Exact bounds and all other outcomes: README.md and scoring.py.",
+  "run_limit": "2400 control steps (120 simulated seconds at 20 Hz)",
+  "reset_notes": "Fixed seed 0, zero reset jitter. Restore both loose objects and both arms; clear contact and failure history; settle physics.",
+  "fidelity": "Rigid spatula from Arena, with a visible rigid grip sleeve and convex blade/handle collision approximations. Hood has mesh visuals and five box panel collision envelopes plus mounting lugs; 0.7 mm visual chamfers. Part and tray are primitives. No attachments, teleportation or breakaway constraints. Materials and friction are uncalibrated. The part is access-constrained, not friction-jammed. PhysX contact history verifies tool-only extraction.",
+  "scores": "Dream-1 beta: 0 after 2400 steps (max_steps); scripted demo: 1.0 after 823 steps (success).",
+  "media": "M-QELTUH"
+}

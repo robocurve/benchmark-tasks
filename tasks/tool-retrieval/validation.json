@@ -1,0 +1,79 @@
+{
+  "demo": {
+    "trial": "retrieval-hood-02",
+    "score": 1.0,
+    "termination_reason": "success",
+    "steps": 823,
+    "wall_seconds": 92.55861948989332,
+    "seed": 0,
+    "control_hz": 20,
+    "max_steps": 2400,
+    "resolution": [
+      640,
+      360
+    ],
+    "top_cam": "calibrated",
+    "visual_review": "Updated robot prim-path rejection enabled; top video sequence inspected, physical extraction, tray placement and tool return visible. All three videos local."
+  },
+  "input_sha256": {
+    "task.py": "c9a4bd57ef91f4d05c0236e142d06d9586b5ca91933367957ea457d35422b16d",
+    "tool_retrieval/embodiment.py": "ca88295fea3cfaf8f71aee72eb5dc0f2587f06becf62bdb4eafeeb03ca82c6c9",
+    "tool_retrieval/policy.py": "bcf397bb753d8deb1493fe3f0d521f66c68b7521e053aa1c62b1ac59a1538d2d",
+    "tool_retrieval/scoring.py": "8230be492ee5391bcdc3cf299b66fa9d289e57a4170594d2b1ed026497e7fb0a",
+    "assets/spatula.usdc": "ab5df5cf212d3d099a6ef214e9dbcf1ed962f2b73d71d717558b3a8d21f523e0",
+    "assets/recovery_hood.usdc": "2fd5e30a8e6c4f98344f69c43cc8b428dc0e37e2d14f11c77f88d02d1c968d3e",
+    "build_fixture.py": "d00469dbd11af9166c787652047a86ae4b9c1a6d2f3694bc0bba2240c1a6a6a4",
+    "pyproject.toml": "cd160c2d3b246fb6b9106f678e6ea69a2fceedb74442ab65ccca906d5a2ac8ac"
+  },
+  "pending": [],
+  "dream": {
+    "trial": "tool-retrieval-dream-01",
+    "checkpoint": "dreamlabs/dream-1-beta",
+    "score": 0.0,
+    "termination_reasons": [
+      "max_steps"
+    ],
+    "steps": 2400,
+    "max_steps": 2400,
+    "control_hz": 20,
+    "simulated_seconds": 120.0,
+    "wall_seconds": 282.52103232592344,
+    "mean_inference_latency_seconds": 0.6450159500073641,
+    "seed": 0,
+    "object_jitter": 0,
+    "resolution": [
+      640,
+      360
+    ],
+    "top_cam": "calibrated",
+    "environment_revision": "c9a4bd57ef91",
+    "visual_review": "The reviewed sequence shows grasp attempts around the spatula while the blue part remains beneath the housing. No extraction or tray placement is completed. The final contact history records no tool-part contact and no extraction. The top sequence, final frame and both wrist views were inspected.",
+    "videos": [
+      {
+        "camera": "top",
+        "duration": 120.05,
+        "sha256": "3f993a1c5c321a74d72fcefc730491b2fafd03aecab63d1bf159621b695c0bde",
+        "bytes": 2119822
+      },
+      {
+        "camera": "left",
+        "duration": 120.05,
+        "sha256": "f19a550f0d05895e7e9ce24b0d4a0b56aa3874782a62351ec8553998bafef485",
+        "bytes": 2539349
+      },
+      {
+        "camera": "right",
+        "duration": 120.05,
+        "sha256": "3279799c5c12b04ce1ab454754dae838eccf40ba5908a71a825a8c57ee5e92aa",
+        "bytes": 3082013
+      }
+    ],
+    "video_hash_scope": "The videos array hashes the original source-camera recordings; submission_video hashes the faststart stream-copy used in the handoff.",
+    "submission_video": {
+      "file": "model.mp4",
+      "sha256": "a11dc3557e9c0299eedd64f51c3124ec65a9e468dd1c0142902e72757a16c6ee",
+      "bytes": 2119822,
+      "encoding": "H.264/yuv420p, stream-copy remux with faststart; frames unchanged"
+    }
+  }
+}
