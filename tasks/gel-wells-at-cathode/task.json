@@ -1,0 +1,21 @@
+{
+  "title": "Load a gel into the tank with its wells at the black cathode",
+  "category": "Impact on jobs",
+  "keywords": [
+    "laboratory",
+    "gel electrophoresis",
+    "DNA",
+    "orientation",
+    "molecular biology",
+    "procedure"
+  ],
+  "instruction": "Load this agarose gel into the electrophoresis tank for a DNA run. Lift the comb straight up out of the gel and stand it in the white comb rack. Then set the gel tray square on the grey deck inside the tank with its wells (the end where the comb was) at the black electrode, so the DNA runs toward the red one.",
+  "context": "In agarose gel electrophoresis DNA is negatively charged and migrates toward the positive (red) anode, so the gel must sit with its wells at the negative (black) cathode end; lab protocols teach this as 'run to red'. A gel loaded backwards runs the samples out of the wells and off the gel, wasting them. Here the comb end of the cast gel faces the red electrode's side, so the robot must remember which end held the comb after taking it out and turn the tray 180 degrees on the way in. Unlike VIMA-Bench rotate (turn an object by a stated angle), the turn has to be inferred from the electrode rule; no gel task was found on the board or in AutoBio, LabUtopia or the other wet-lab suites. Done by: biological technicians, medical and clinical laboratory technicians (O*NET 19-4021.00, 29-2012.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. Casting bench: a gel tray with its gel (pale blue box 7 cm wide in x, 11 cm long in y, 1.5 cm tall, 120 g) at x 19, y 27, with the comb (dark box 6 cm across x, 1.2 cm thick, 2.5 cm tall, 20 g) standing on the gel 4 cm from the tray's centre toward its left (+y) end. Tank (fixed): a clear open frame (walls 0.6 cm thick, 3 cm tall) round a 13.6 x 19 cm floor centred at x 38, y 25, with a grey gel deck 6 x 10 cm, 1 cm tall, at its centre, the black electrode (8 x 0.6 x 0.4 cm bar) at y 17.5 (the right end) and the red one at y 32.5 (the left end). Comb rack (fixed): a white open frame (walls 0.6 cm thick, 1.5 cm tall) round a 9 x 7 cm floor at x 15, y 42.",
+  "scoring": "From the episode's recorded poses, with the grippers open. The wells end is the tray end that held the comb at the start. 0.25 for the comb at rest inside the comb rack's walls, on its floor. 0.75 for the tray seated on the deck (down flat within 3 mm, tilt under 5 degrees, centre within 8 mm of the deck centre, square to the tank within 8 degrees, still) with its wells end pointing at the black electrode within 20 degrees. A tray seated the wrong way round earns nothing. Possible scores: 0, 0.25, 0.75, 1.0. Success: score 1, held 1 s.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Put the tray back on its bench mark with the comb end to the left (+y) and stand the comb on the gel at that end. The tank, deck, electrodes and rack do not move.",
+  "fidelity": "Rigid boxes with one shared friction (1.2 static, 1.0 dynamic). The gel and its tray are one solid box and the comb a plain block resting on the gel, with no teeth, wells or casting gates; there is no buffer, lid or power supply, and the electrodes are fixed coloured bars. The tank is an open frame on the table. Orientation is judged from the tray's yaw.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-JLC9K9"
+}
