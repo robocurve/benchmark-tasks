@@ -1,0 +1,14 @@
+{
+  "title": "Find the 10 mg pack among look-alike cartons whose labels face away, and dispense only it",
+  "category": "Impact on AI timelines",
+  "keywords": ["active perception", "pharmacy", "dispensing", "label check", "medication safety"],
+  "instruction": "Put the 10 mg box in the basket. The 10 mg packs have a red band on their label.",
+  "context": "The cartons were put back with their labels facing away, so no camera can see a label at the start: the robot has to turn or lift them to look before it chooses, which current policies, acting on what they see, rarely do. Checking the label before dispensing is a basic pharmacy rule; picking the wrong strength of a look-alike pack is a common dispensing error.",
+  "setup": "A pharmacy bench with a white mat. A blue plastic tote (7.5 x 49.5 cm inside, 3 cm walls) runs across the bench 29 to 37 cm in front of the arm bases. In it stand four identical white card medicine cartons (4 x 5 x 10 cm, 60 g) at 19 cm left, 6.5 cm left, 6.5 cm right and 19 cm right of the midline, each with its label face turned away from the arms. The labels carry a 3.5 cm strength band: red on the carton 6.5 cm right, green on the other three. A white dispensing basket (10 x 10 cm inside, 5 cm walls) is 19 cm out, 30 cm right. Also: a prescription, a counting tray, a tablet bottle, a pharmacy bag.",
+  "scoring": "0 if a green-band carton ends in the basket. Otherwise 1.0 for the red-band carton ending in the basket after its label had been turned to face the arms (within 45 degrees) at some point; 0.5 for it in the basket without that check; 0.25 for it turned to face the arms but not in the basket; 0 otherwise. In the basket: centre inside the walls and at most 2 cm above the rim.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Stand the cartons back in the tote with their labels facing away from the arms, the red-band one second from the right.",
+  "fidelity": "Rigid card cartons. The label is reduced to a coloured strength band (red 10 mg, green 5 mg) because the simulation renders no readable text; on a real pack the band would sit beside the printed strength.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-2PAMEK"
+}
