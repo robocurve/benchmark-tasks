@@ -1,0 +1,19 @@
+{
+  "title": "Put a solvent bottle in a fume hood at least 15 cm behind the sash",
+  "category": "Impact on jobs",
+  "keywords": [
+    "laboratory",
+    "fume hood",
+    "chemical safety",
+    "placement depth"
+  ],
+  "instruction": "Put the solvent bottle in the fume hood.",
+  "context": "Chemists and lab technicians handle volatile solvents in fume hoods. Containers should sit at least 15 cm (6 in.) behind the sash. Air near the opening is turbulent and lets vapour escape into the lab. A bottle just inside the opening isn't properly contained.",
+  "setup": "Positions are in cm from the midpoint between the two arm bases, with x forward, y to the robot's left and the table top at z 0. The fume-hood mock has an open top and its opening faces the robot. All its parts are fixed and made of grey painted wood or rigid plastic. A sill runs across the opening. It is 1 x 34 x 2 cm (x by y by height), spans x 12 to 13, and is centred on y 0. Two side walls, each 30 x 1 x 15 cm, span x 12 to 42 and are centred at y +16.5 and y -16.5. Their inner faces are at y +16 and y -16. A back wall, 1 x 34 x 15 cm, spans x 41.5 to 42.5. The solvent bottle is an amber glass 250 mL bottle with a cap. It is a cylinder 5 cm in diameter and 10 cm tall, weighs 250 g, and stands upright at x 16, y -24, outside the hood to its right.",
+  "scoring": "The bottle counts as inside when the whole bottle stands on the table between the side walls' inner faces, behind the sill's rear edge (x 13) and in front of the back wall. It must also be upright (tilted under 20 degrees) and still. The score is 1.0 if the bottle is inside and its nearest point is at least 15 cm behind the sill's rear edge. It is 0.25 if the bottle is inside but closer than 15 cm. Anything else scores 0. That includes the bottle outside the hood, on or straddling the sill, on a wall, tipped over, held, or moving. The possible scores are 0, 0.25 and 1.0. In a real trial, measure with a tape from the sill's rear edge to the nearest point of the bottle, and check that it stands upright on the hood floor.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Stand the bottle back upright at its start position outside the hood. Real trials use a sealed bottle filled with water.",
+  "fidelity": "The hood has no sash glass, top, lights or airflow. The 15 cm line is not marked. The bottle is a plain amber cylinder with no label. The simulation uses rigid-body physics only.",
+  "scores": "Dream-1 run: 0.25 (2,400 steps); demo: 1.0",
+  "media": "M-7ZGFMY"
+}
