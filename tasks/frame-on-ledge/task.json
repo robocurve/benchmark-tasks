@@ -1,0 +1,23 @@
+{
+  "title": "Stand a picture frame on a narrow ledge",
+  "category": "Societal relevance",
+  "keywords": [
+    "picture ledge",
+    "display",
+    "lean",
+    "controlled release",
+    "tipping",
+    "pick and place",
+    "home",
+    "retail display"
+  ],
+  "instruction": "Stand the picture frame on the narrow ledge, leaning back against the wall.",
+  "context": "Picture ledges support frames by their lower edge while the wall supports their back. The task tests placing and releasing a frame on a narrow ledge so it settles into that lean.",
+  "setup": "Two YAM arms with parallel grippers, bases 61 cm apart at the near edge of a wooden table. Positions are in cm from the midpoint between the two arm bases: x straight out across the table, y to the left; sizes are depth (x) x length (y) x height (z). Everything except the frame is glued to the table. The ledge runs along y, centred at y = 13.0, 22.0 cm long: a rail (light oak strip, 2.0 x 22.0 x 2.0 cm) with its near face at x = 33.5; a lip (oak strip, 1.0 x 22.0 x 1.5 cm) glued on top of the rail along its near edge (x = 33.5 to 34.5), so the shelf is the 1.0 cm deep flat top of the rail behind the lip, 2.0 cm above the table, and the lip top is 3.5 cm above the table; and a back wall (off-white painted board, 1.5 x 22.0 x 15.0 cm) with its face at x = 40.0, leaving an open 4.5 cm gap from the shelf's back edge (x = 35.5) to the wall, down to the table. The picture frame is a loose solid wooden photo block (dark walnut stain, no glass or stand, 2.0 cm thick x 8.0 cm wide x 12.0 cm tall, about 120 g) standing upright on its 8.0 x 2.0 cm end with its face toward the arms, centred at x = 24.0, y = 37.0, in a desk slot made of two grey painted wood strips (1.0 x 10.0 x 2.0 cm each) centred at x = 22.2 and x = 25.8, y = 37.0, 0.3 cm from the frame's front and back faces.",
+  "scoring": "1.0: the frame stands on the ledge leaning back against the wall: still (under 1 cm/s); its lowest point between 0.8 cm below and 0.5 cm above the shelf top (1.2 to 2.5 cm above the table, so its foot is on the shelf, not on the lip top or down in the gap); its centre between the rail's near face (x = 33.5) and the wall (x = 40.0) and within the ledge's 22 cm length; tilted back toward the wall by 3 to 20 degrees; tilted sideways under 10 degrees; its face turned under 15 degrees from facing the arms; and its top back edge within 0.5 cm of the wall. Holding that for 1 second ends the trial with success. 0.4: the frame is still and resting at ledge level (lowest point 1.0 to 4.0 cm above the table) with its centre over the ledge (between x = 33.5 and x = 40.0, within the 22 cm length) in any other pose: upright, tipped forward onto the lip, leaning more than 20 degrees, lying flat, perched on the lip top, turned, or not touching the wall. 0: anything else, including left in the slot, anywhere on the table, fallen into the gap behind the shelf, tipped forward over the lip, lying on top of the wall, off the end of the ledge, still held or still moving. If the trial does not end in success, the score is taken at the end of the run.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Stand the frame back in the slot, face toward the arms.",
+  "fidelity": "Rigid primitives with one flat colour. The frame is one solid uniform box (a small frame or photo block, no glass or stand). The ledge (rail, lip, wall) stands on the table, 2 cm up with a 15 cm wall, because straight-down grips above about 14 cm pass the wrist joint limit; the frame is 8 cm wide to fit the 94 mm grip. Friction is the simulator's rubber-like 1.2/1.0, higher than wood on wood; the settled lean needs only about 0.08 at the shelf edge. Masses are estimates.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-FSHXUM"
+}
