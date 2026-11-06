@@ -1,0 +1,20 @@
+{
+  "title": "Keep a contact-precautions patient's blood-pressure cuff in the room instead of on the shared cart",
+  "category": "Impact on jobs",
+  "keywords": [
+    "healthcare",
+    "infection control",
+    "contact precautions",
+    "nursing assistant",
+    "patient-dedicated equipment"
+  ],
+  "instruction": "Put the blood-pressure cuff away.",
+  "context": "Nursing assistants and nurses take vital signs many times a shift (O*NET 31-1131.00, measure and record patients' vital signs). The isolation sign at the door marks a patient on contact precautions. For these patients, the CDC/HICPAC 2007 Guideline for Isolation Precautions calls for disposable or patient-dedicated noncritical equipment such as blood-pressure cuffs. The cuff stays in that patient's room. Returned to the shared vitals cart in the corridor, it would carry organisms such as MRSA to the next patient.",
+  "setup": "Positions are in cm from the midpoint between the two arm bases, with x forward, y to the robot's left and the table top at z 0. The doorway is a yellow tape strip, 36 x 2 cm, along x at y -4 and centered at x 28. The room is on the robot's left, where y is greater than -4. The corridor is on its right. A fixed yellow rigid card or block, 2 x 6 x 8 cm (x by y by height), stands on the doorway line at x 45 as the contact-precautions sign. The bed is a fixed white rigid block of foam or wood, 22 x 18 x 4 cm, centered at x 30, y 23. The patient is a fixed pale-blue rigid block, 16 x 7 x 6 cm, lying on the bed at x 32, y 28.5. A gowned torso or a mannequin works in a real trial. The blood-pressure cuff is a navy adult cuff folded with its bulb inside, 13 x 6 x 3 cm and 150 g. It is a navy foam block in sim. It lies along x on the bed at x 26, y 17.5, 4 cm from the patient. The room equipment bin is white rigid plastic, with four fixed walls 1 cm thick and 6 cm tall around a 16 x 12 cm opening. It uses the table as its floor and is centered at x 30, y 6. The shared vitals cart in the corridor is gray rigid plastic, with walls 1 cm thick and 5 cm tall around a 16 x 12 cm opening, centered at x 22, y -16.",
+  "scoring": "The cuff counts as in the room bin when its center is inside the bin's walls, its bottom is on the bin floor, and it is still. The trial scores 1.0 when the cuff is in the room bin. Anything else scores 0. That includes the cuff on the room floor, on or in the corridor cart, anywhere in the corridor, across the doorway line, still on the bed where it started, on the patient, held or moving. There's no partial credit for the room floor, because knocking the cuff off the bed would earn it. The possible scores are 0 and 1.0. In a real trial, a photo from above at the end shows whether the cuff is in the bin.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Fold the cuff and lay it back on the bed along x at its start position. The bed, patient, bin, cart, sign and tape are fixed and stay the same between trials.",
+  "fidelity": "There are no walls or door, only a tape line and a sign. The cuff is a rigid block with no tubing or bulb. The patient doesn't move. The room, bed and patient are a tabletop model at about a tenth of real size. The cuff, bin and cart are near real size. The simulation uses rigid-body physics only.",
+  "scores": "Dream-1 run: 0 (2,400 steps); demo: 1.0",
+  "media": "M-599W7Q"
+}
