@@ -1,0 +1,19 @@
+{
+  "title": "Calibrate a tool tip by touching one point from four angles",
+  "category": "Impact on jobs",
+  "keywords": [
+    "robot setup",
+    "tool center point",
+    "calibration",
+    "precision",
+    "wrist orientation"
+  ],
+  "instruction": "Calibrate the steel pin's tip on the reference post. Take the pin from its holder, put its lower end in the square pocket on top of the orange-framed post, and hold the pin still there in four different poses, at least 1 second each, keeping its lower end on the same spot. In every pose the pin must lean between 10 and 35 degrees from vertical, and its axis must be at least 15 degrees from its axis in every other pose.",
+  "context": "Before a robot uses a new or replaced tool, a technician teaches it where the tool's tip is. Universal Robots' TCP position wizard has the technician move the tool center point \"to the same position from different angles\": \"at least three points\", and \"a fourth position can be used to further verify that calculations are correct\". The robot must turn the tool while keeping its tip on one point. Done by: robotics technicians (O*NET 17-3024.01).",
+  "setup": "Positions are in cm on the table, from the midpoint between the two arm bases: x forward (away from the arms), y to the robot's left. Pin: a loose steel rod, 10 mm across, 10 cm long and 62 g, painted blue, standing upright at x 20, y 42 in a holder. Holder: a fixed grey aluminium block, 4.4 x 4.4 cm and 3 cm tall, with a 2 cm square hole through it, centred at x 20, y 42. Reference post: a fixed dark grey steel block, 6 x 6 cm and 5 cm tall, centred at x 27, y 22. On its top: a fixed orange-painted steel frame, 6 x 6 cm outside and 7 mm tall, with an 18 mm square opening in its centre. The opening and the post's top face form the pocket, 18 mm square and 7 mm deep.",
+  "scoring": "A pose counts when, for 20 control steps (1 s) in a row: the centre of the pin's lower end is inside the pocket (within 9 mm of its centre along each table axis, between 1 mm below the floor and the frame's top); the pin leans between 10 and 35 degrees from vertical; and the pin holds still (through the second, its lower end stays within 2 mm and its axis within 2 degrees of where they started). A pose is credited only if the pin's axis is at least 15 degrees from its axis in every pose credited before, and its lower end is within 4 mm of where it was in the first credited pose (one fixed point). Score: 0.25 per credited pose, up to 4. 1.0 (4 poses) ends the trial after 1 s. Possible scores: 0, 0.25, 0.5, 0.75, 1.0; the best score reached counts. Check a real trial with the video: the pin's end in the pocket, and its lean with a protractor or phone level held along it.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Stand the pin back upright in its holder.",
+  "fidelity": "Rigid shapes; every object has the same friction (1.2 static, 1.0 dynamic). A real reference point is a sharp cone; the sim has no cone shape, so a square pocket stands in. The pin's tip is the centre of its flat lower end. The sim can't tell a held pin from a released one; a released pin can't stay leaning 10 degrees or more (nothing near the post holds it up), and poses under 10 degrees don't count.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0"
+}
