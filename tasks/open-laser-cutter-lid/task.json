@@ -1,0 +1,22 @@
+{
+  "title": "Open a heavy laser cutter lid with both hands until its gas struts hold it",
+  "category": "Impact on jobs",
+  "keywords": [
+    "fab lab",
+    "laser cutter",
+    "heavy lid",
+    "gas strut",
+    "bimanual",
+    "articulated object",
+    "do not drop"
+  ],
+  "instruction": "Open the laser cutter's lid with both hands on the two ends of its black handle, and keep lifting until the gas struts take over and hold it fully open. Do not let it fall back.",
+  "context": "Opening a laser cutter is the first step of every job in a fab lab or sign shop. The steel lid is heavy and its gas struts only help once it is a third of the way up: one hand alone stalls, and a lid let go too early slams shut on the machine's glass and optics.",
+  "setup": "Left and right are the robot's. Positions are in metres from the midpoint between the two arm bases: x forward, y to the robot's left, heights above the table. Laser cutter: a desktop CO2 laser cutter, charcoal painted steel, 52 cm wide (y) x 40 cm deep (x) x 22 cm tall, fixed, centred on y = 0, its front face at x = 0.36. Its front wall is 7 cm tall, its side walls and back block 22 cm. Inside: an aluminium honeycomb bed and the laser head on its gantry, parked at the back. On the back block: a control panel with a screen, buttons and a red emergency stop, and a round exhaust duct out of the back. Lid: shut, a steel hood of 6 kg: a top panel with a brown tinted window and a 15 cm front flap, 36 cm from its front to its hinge, which runs across the machine at x = 0.69, 22 cm up. It opens up to a stop at 80 degrees. Handle: a black bar, 16 mm square, along the flap's lower edge from y = -0.21 to 0.21, 14 cm up, its centre 2.6 cm in front of the flap on a post at each end. Gas struts, one on each side inside: no help below 30 degrees open, 14.3 N m about the hinge from 38 degrees up. They balance the lid's weight at 36 degrees and lift it from there to the stop and hold it. Shut, the lid's weight is 35 N at the handle. Nothing else is on the table.",
+  "scoring": "The lid's angle is how far it is open from shut (0) to its stop (80 degrees), measured with a protractor. 0 if, at any time, the lid fell more than 20 degrees below the highest it had reached, or hit its closed stop closing faster than 60 degrees per second (a slam), even if lifted again afterwards. 1.0 (success, held 1 s): open 75 degrees or more and still (turning under 3 degrees per second). 0.5: open 37 degrees or more at the end. 0.25: open 10 degrees or more at the end. 0 otherwise, including doing nothing.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Lower the lid gently back onto the machine by its handle.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. The lid is one rigid steel body of box colliders on a revolute joint with stops, so it cannot twist or flex. The struts are a torque about the hinge set every control step from the lid's angle and speed. With 6 kg, one arm stalls at 12 degrees (measured). Fixed parts are boxes, drawn by detailed meshes. The window is drawn see-through, depth is not simulated.",
+  "scores": "Dream-1 run: 0.0 (both arms reach to the machine's sides, but never take the handle or raise the lid), demo: 1.0 (success at step 268)",
+  "media": "M-P3QEYD"
+}
