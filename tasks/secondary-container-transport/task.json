@@ -1,0 +1,21 @@
+{
+  "title": "Carry two sample bottles across a corridor only inside the secondary carrier",
+  "category": "Impact on jobs",
+  "keywords": [
+    "laboratory",
+    "biosafety",
+    "secondary containment",
+    "specimen transport",
+    "path constraint",
+    "procedure"
+  ],
+  "instruction": "Deliver both amber sample bottles to the receiving lab: they must end up standing in the white carrier, with the carrier set down on the green receiving mat across the corridor. Samples may cross the corridor (the grey strip between the yellow lines) only inside the carrier, so never take a bottle over the corridor by itself.",
+  "context": "Biological samples leaving a lab must travel in a rigid, leak-proof secondary container, so a dropped or leaking tube stays contained in public corridors and lifts (WHO Laboratory Biosafety Manual; OSHA 1910.1030 requires containers that prevent leakage during transport; institutional biosafety rules forbid carrying open-handed samples between labs). The rule is about the route, which the end state does not show: two bottles hand-carried across and loaded on the far side look the same at the end. Unlike TK-VQ82DD (store acid and base bottles in separate trays, judged at rest) or TK-DF9CF5 (carry a cup past a laptop), the robot must load a container first and every bottle's path is checked at every step. Done by: biological technicians, medical and clinical laboratory technicians (O*NET 19-4021.00, 29-2012.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. Corridor: a fixed grey floor strip 1 mm thick from x 25 to 33 and y 2 to 56, with a 1 cm yellow tape line along each edge. Sending bench (nearer the arm): two amber sample bottles (cylinders 3.2 cm across, 6 cm tall, 80 g) standing at x 18, y 40 and y 46, and an empty white bottle carrier (a rigid flat-bottomed box 7 cm deep in x, 20 cm long in y, 2.2 cm tall, 250 g) at x 17, y 22. Receiving bench: a fixed green mat 12 x 24 cm, 2 mm thick, centred at x 42, y 22.",
+  "scoring": "From the episode's recorded poses, with the grippers open at the end. A bottle is inside the carrier when it stands upright (tilt under 15 degrees) on the carrier's top within its outline (4 mm in from the edges). A bottle has crossed outside the carrier if its centre was ever over the corridor strip, at any height, while not inside the carrier. Per bottle that never crossed outside: 0.25 when it is inside the carrier, and 0.25 more when the carrier is at rest, flat, with its whole footprint past x 34 (1 cm beyond the corridor) on the receiving bench. Possible scores: 0, 0.25, 0.5, 0.75, 1.0. Success: score 1, held 1 s.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Stand the bottles back at their marks on the sending bench and the empty carrier at its mark. The corridor and mat do not move. On a real rig the route rule is judged from the trial video (a bottle over the corridor outside the carrier).",
+  "fidelity": "Rigid primitives with one shared friction (1.2 static, 1.0 dynamic). The carrier is a solid flat-topped block on which the bottles stand: its walls, lid and absorbent liner are not modelled, so a bottle counts as inside when it stands on the carrier's top within its outline. The corridor is scaled to an 8 cm strip on the table. Bottles have no caps or contents.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-DXHAT7"
+}
