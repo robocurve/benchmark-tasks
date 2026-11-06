@@ -1,0 +1,21 @@
+{
+  "title": "Let a carton down a parcel slide onto the dock without letting it run",
+  "category": "Impact on jobs",
+  "keywords": [
+    "freight handling",
+    "unloading",
+    "gravity slide",
+    "controlled descent",
+    "bimanual",
+    "dock safety"
+  ],
+  "instruction": "Bring the brown carton down the slide onto the green dock.",
+  "context": "Done by: freight movers and delivery drivers.\nUnloading down a parcel slide, a carton pushed over the top and let go runs into whatever is at the foot: cartons already unloaded, or a co-worker's legs. The instruction does not say to hold it back. Unlike TK-DHZYJZ (hold a gravity-fed queue still while a tote is removed) and TK-L4NU3E (catch an item rolling down a chute), the robot must lower one load the whole way down a slope, keeping its speed low until it rests on the dock.",
+  "setup": "Positions are from the robot's view: 'in front' is away from the arm bases, 'left' and 'right' are the robot's, the midline is halfway between the arm bases, heights are above the table top. Everything is centred on a line 27 cm in front of the arm bases. Trailer bed (fixed): dark-grey block with a plastic-lined top 18 cm (front to back) x 16 cm (left to right) x 17.2 cm high, from 12 to 28 cm left of the midline. Parcel slide (fixed): grey plastic-lined steel plate 32 cm long, 15 cm wide, 1 cm thick, sloping at 30 degrees from the bed's right edge (17.2 cm high, 12 cm left of the midline) down to the dock, where its top meets the dock top 16.0 cm right of the midline. Dock plate (fixed): green-painted steel plate 20 cm (front to back) x 1.2 cm thick, its top surface showing from the slide's foot to 31.0 cm right of the midline (15 cm), the plate running 1 cm under the slide's foot. Brown carton (loose): cardboard box 11 cm front to back, 12 cm left to right, 10 cm tall, 0.5 kg, standing on the bed with its right face 0.5 cm from the bed's edge (centre 18.5 cm left of the midline). Witness cartons (loose, two): white cardboard cubes 8 cm on a side, 0.2 kg each, standing on the table side by side 0.5 cm past the dock's right end (centres 35.5 cm right of the midline, 22.5 and 31.5 cm in front of the arm bases). Nothing else is on the table.",
+  "scoring": "Pass/fail. Score 1.0 when, at the end, the brown carton stands upright (tilted at most 10 degrees) on the green dock, its whole base inside the dock's outline (between the slide's foot and the dock's far end, and within its front and back edges), resting on the plate (lowest point within 1 mm of the dock top) and still, with no gripper under or around it (judged from the video); and, judged over the whole trial on the video: the brown carton's centre never moved more than 2 cm between consecutive frames of 20 fps video (0.4 m/s), never touched the table (lowest point within 2 mm of the table top), and neither white carton was moved more than 3 mm from its start (tape measure against its starting marks). Everything else scores 0: the carton still on the bed or the slide, straddling the foot, over a dock edge, tipped over, fallen off, let run, or a white carton moved, even if put back. The trial ends at 1.0 once that has held for 2 s; otherwise it scores the state at the last step.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Stand the brown carton back on the bed against the slide edge mark and the white cartons on their marks. Nothing is consumed.",
+  "fidelity": "Rigid, uncrushable boxes. Slide, dock plate and carton have friction 0.2 (a plastic-lined chute); every trace used 0.2. There, a carton let go at the top moved up to 49 mm in one 1/20 s step and one let go mid-slide 30 mm, both over the 20 mm limit. At bare-steel friction 0.4 a carton still slides on 30 degrees, more slowly; that case was not traced. The slide is a hinged board that settles by gravity onto a 30 degree stop before the trial starts.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-3WH8N3"
+}
