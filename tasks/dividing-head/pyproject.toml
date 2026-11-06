@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dividing-head"
+version = "0.1.0"
+description = "Index a workpiece one of 7 equal divisions on a dividing head (index crank, plate and plunger), YAM arms"
+requires-python = ">=3.11"
+dependencies = ["numpy", "yam-arena"]
+
+[project.entry-points."inspect_robots.embodiments"]
+yam_dividing_head = "dividing_head.embodiment:DividingHeadEmbodiment"
+
+[project.entry-points."inspect_robots.policies"]
+dividing_head_scripted = "dividing_head.policy:DividingHeadScriptedPolicy"
+
+[tool.setuptools.packages.find]
+include = ["dividing_head*"]
