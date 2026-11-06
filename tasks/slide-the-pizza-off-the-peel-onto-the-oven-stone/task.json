@@ -1,0 +1,22 @@
+{
+  "title": "Launch a pizza from the peel onto an oven stone that is out of reach",
+  "category": "Impact on jobs",
+  "keywords": [
+    "pizza peel",
+    "oven",
+    "tool use",
+    "friction",
+    "inertia",
+    "placing beyond reach",
+    "food service"
+  ],
+  "instruction": "Use the peel to put the pizza on the oven stone, then bring the peel back out of the oven.",
+  "context": "Loading a deck or wood-fired oven is a pizza cook's core hand skill: the stone is too hot and deep to reach, so the pizza is carried in on the peel and left there by pulling the peel out from under it; pulled out at an ordinary pace, the peel brings the pizza back. Unlike TK-DQRZBN (draw a pan out of an oven with a peel) and TK-92EVR5 (pull a part out from under a guard with a spatula), which bring a load back, this task leaves a load beyond reach by withdrawing the tool from under it.",
+  "setup": "Station table. Positions in mm: x forward from the line through the two arm bases, y to the robot's left from the midpoint between them, heights above the table top. All of the counter and oven is fixed; the peel and pizza are loose. Counter: brushed-steel box 580 x 300 x 40 mm, x 150 to 730, y -100 to 200, top at 40, ending in a dark 10 mm mouth line at x 730 to 740 (same height). Oven, open-topped, beyond the line: a dark plinth 170 x 250 x 30 mm (x 740 to 910, y -75 to 175); on it a pale baking-stone deck 150 x 200 x 10 mm, x 740 to 890, y -50 to 150, top at 40, flush with the counter; dark side walls 15 mm thick at y 160 to 175 and -75 to -60, x 740 to 910, and a dark back wall 15 mm thick at x 895 to 910, all three from 30 to 90 (50 mm above the deck). Peel (wood, 0.20 kg): a flat blade 110 x 110 x 4 mm at x 610 to 720 and a square handle 420 x 24 x 24 mm at x 190 to 610, both centred on y 50, lying flat on the counter. Pizza (0.15 kg): a pale crust disc 90 mm across and 8 mm thick with a red topping disc 76 mm across and 3 mm thick on top, centred on the blade at (665, 50). Friction: pizza on the floured peel 0.25, pizza on the stone 0.55, pizza on the counter 0.25, peel on the counter 0.4, peel on the stone 0.7.",
+  "scoring": "Pass/fail. Score 1.0 when, at the end: the pizza lies on the stone red side up and flat (tilted at most 5 deg), its lowest point no more than 2 mm above the stone, and still; seen from above the whole 90 mm crust is inside the stone's 150 x 200 mm outline (so it is clear of every wall and of the mouth line); every part of the peel is on the robot's side of the far edge of the mouth line (x 740) and no lower than 5 mm below the counter top (lying on the counter or held, not knocked onto the table or stood on end); and at no time during the trial did the pizza touch the counter or fall off onto the table (judged from the video: any part of it touching the counter top while part of it was over the counter). Score 0 in every other case: the pizza still on the peel (in or out of the oven), partly over the counter, over the stone's edge or against a wall, upside down or on edge, moving, the peel left in the oven, knocked onto the table or stood on end, or the pizza dropped on the counter or table at any time, even if it later reaches the stone. The trial ends at 1.0 once the 1.0 condition has held for 1 s; otherwise it scores the condition at the last step.",
+  "run_limit": "600 steps (30 seconds at 20 Hz)",
+  "reset_notes": "Lay the peel flat on the counter at y 50, blade tip at x 720 toward the oven, and centre the pizza on the blade at (665, 50), red side up. Nothing is consumed.",
+  "fidelity": "Rigid primitives: the pizza is a rigid two-layer disc on a floured wooden peel. The oven is unheated and open-topped so the top camera can see the deck; its stone starts 740 mm out, beyond where any part of either arm reaches at deck height. Friction values are set for a floured wooden peel (0.25) and a baking stone (0.55); masses are simulator values.",
+  "scores": "Dream-1 run: 0.0 (the right arm gripped the handle and slid the peel part way toward the oven and back; the pizza stayed on the blade); demo: 1.0",
+  "media": "M-L7F5D4"
+}
