@@ -1,0 +1,23 @@
+{
+  "title": "Close a carton's flaps so it can be taped",
+  "category": "Impact on jobs",
+  "keywords": [
+    "packing",
+    "carton",
+    "regular slotted carton",
+    "hinged flaps",
+    "spring-back",
+    "folding order",
+    "bimanual",
+    "hold while acting"
+  ],
+  "instruction": "Close the carton's flaps so it is ready to tape.",
+  "context": "Hand packers close a filled regular slotted carton before taping it. A new carton's end flaps spring back open when let go; they go down first and are held under the two long flaps. Folded in the wrong order, a flap ends on top and the carton cannot be taped flat.",
+  "setup": "Station table (top 0.7475 m; x forward from the arm bases, y to the left; arm bases at x 0, y +-0.305 m). One open corrugated kraft-board carton (regular slotted carton, about 9 x 7 x 2 in), fixed to the table: outer 180 mm (x) x 220 mm (y) x 50 mm tall, centred at x 0.29 m, y 0, built from five fixed 4 mm boards (floor; front wall with its outer face at x 0.200 m; back wall at x 0.380 m; side walls with outer faces at y +-0.110 m). Four loose 3 mm board flaps, each on a hinge along a wall's top outer edge, all starting open at 100 deg from closed (standing, leaning 10 deg outward on their stops): two end flaps (minor flaps), 172 x 90 mm, 20 g, light kraft, hinged on the side walls, each with a hinge spring pulling it open (1.3e-4 N*m per deg toward 100 deg; damping 3e-5 N*m*s/deg), which beats its own weight at every angle, so a released end flap swings back open; two long flaps (major flaps), 220 x 89.5 mm, 60 g, darker kraft, hinged on the front and back walls, with no spring (damping only), so they stay where they are put and, closed, meet in the middle with a 1 mm gap. Closed, the end flaps lie on the side walls and the long flaps lie on top of them. Nothing else is on the table.",
+  "scoring": "A flap's angle is its rotation from its closed pose (2 * acos(|w|) of its orientation); a flap is closed when its angle is under 10 deg. An end flap counts 0.25 when it is closed and its centre is lower than both long flaps' centres. A long flap counts 0.25 when it is closed and both end flaps count (each closed and lower than both long flaps). The score, taken at the trial's last step, is the sum: 0, 0.25, 0.5, 0.75 or 1.0. Examples: both end flaps held down with the long flaps open, 0.5; one end flap left open, at most 0.25 (the long flaps count nothing); long flaps closed first with the end flaps folded on top of them, 0. The trial succeeds and ends early with 1.0 when all four flaps are closed in that order and all four are resting (linear speed under 1 cm/s, angular speed under 0.5 rad/s) for 1 s. Nothing else is scored; the carton body is fixed.",
+  "run_limit": "800 steps (40 s at 20 Hz)",
+  "fidelity": "Rigid 3 mm boards on hinges; the end flaps' crease memory is a hinge spring. The long flaps have no spring and weigh 60 g (real board of that size: about 12 g), so once closed they stay down and hold the end flaps under them, as a packer's hand or the tape does on a real carton, whose long flaps also lift a little. Contacts use the simulator's one rubber-like material (friction 1.2).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "reset_notes": "Nothing is consumed. Stand the four flaps back open against their stops.",
+  "media": "M-6SMGNJ"
+}
