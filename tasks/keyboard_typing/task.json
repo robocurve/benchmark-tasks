@@ -1,0 +1,22 @@
+{
+  "title": "Type a word with capital letters on a computer keyboard",
+  "category": "Impact on jobs",
+  "keywords": [
+    "keyboard",
+    "typing",
+    "key chord",
+    "shift",
+    "computer use",
+    "bimanual",
+    "precision pressing"
+  ],
+  "instruction": "Type 'RoboCurve' on the keyboard, with a capital R and a capital C.",
+  "context": "Robots working with equipment made for people often have to type on an ordinary keyboard: a label, a code or a command. Typing needs presses accurate to a few millimetres on unlabelled-looking keys, and a capital needs a chord, with Shift held down while the letter is pressed.",
+  "setup": "Coordinates: x forward from the line between the two arm bases, y to the left, from the midpoint between the bases. A large-key computer keyboard lies flat on the table, taped down, its long side across the table, centred at (22.5, 0) cm: a dark grey plastic (ABS) housing 13.7 x 38.7 x 1.2 cm (x by y by z) with 61 keys at 25 mm pitch in the standard US (ANSI) layout of a keyboard's main block, five rows from far to near: ` 1-0 - = Backspace; Tab Q-P [ ] \\; Caps Lock A-L ; ' Enter; Left Shift Z-M , . / Right Shift; Ctrl Win Alt space bar Alt Win Menu Ctrl. The space bar row is nearest the arms. The key caps are blank (no legends): 23 x 23 mm, 8 mm tall, wider keys as on any keyboard (Backspace 2 units, Tab and backslash 1.5, Caps Lock 1.75, Enter 2.25, Left Shift 2.25, Right Shift 2.75, space bar 6.25, bottom-row modifiers 1.25; a unit is 25 mm). Character keys and the space bar are light grey, the other keys dark grey. Each key travels 4 mm and types at 2.5 mm. The keyboard is connected to a computer with an empty text field open; its screen is out of the cameras' view.",
+  "scoring": "The text in the text field at the end. 1.0 if it reads exactly RoboCurve. Otherwise, counting from the first character for as long as the text spells the word in either case: 0.05 for each character, plus 0.2 for each of the R and the C typed as a capital (so robocurve scores 0.45, Robocurve 0.65, RoboC 0.65, RoboCurv 0.8, RoboCurvex 0.85, Xrobocurve and an empty field 0). The trial ends early once the text reads RoboCurve with no key held down for 1 s.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Clear the text field; release Caps Lock if it was left on. Nothing is consumed.",
+  "fidelity": "Approximate: each key cap is a rigid box on a frictionless vertical slide with a linear return spring (150 N/m, 0.6 N at full travel; real keys need about 0.5 to 0.7 N), with no wobble or stabilisers. A key types past 2.5 mm of travel and must come back above 1.2 mm to type again. The housing is a rigid box. The computer and screen are not modelled: the text is tracked from the keys' travel as a US layout types it (Shift, Caps Lock, Backspace, Space, Tab and Enter included).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-EUENJV"
+}
