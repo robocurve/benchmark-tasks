@@ -1,0 +1,24 @@
+{
+  "title": "Cross the trailer safety chains under the tongue",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "chain",
+    "deformable",
+    "trailer coupling",
+    "safety chains",
+    "crossing",
+    "hanging/sag",
+    "constraint-keeping",
+    "reach-forced"
+  ],
+  "instruction": "Hook the trailer's two safety chains onto the tow plate: each chain's yellow end link goes over the pin on the opposite side, so the chains cross under the coupler block. Leave neither chain touching the table. Then let go of both chains.",
+  "context": "Heavy and tractor-trailer truck drivers (O*NET 53-3032.00) \"Couple or uncouple trailers\". A tow vehicle owner's manual (Kia EV6): \"Cross the safety chains under the tongue of the trailer so that the tongue will not drop to the road if it becomes separated from the hitch\"; \"Never allow safety chains to drag on the ground.\" 49 CFR 393.70(d)(4) separately requires the safety device to prevent \"the tow-bar from dropping to the ground\"; it does not mention crossing.",
+  "setup": "Station table; cm from the midpoint between the arm bases on the table (x forward, y left, z up). Fixed, dark grey PLA: tongue bar 30 x 3 x 3 (x 29-59, y 0, underside z 10); coupler block 8 x 5 x 3.5 (x 21-29, underside z 10); two eye tabs 1.6 x 3.5 x 1.5 at x 38 under the tongue sides. Fixed, grey: tow plate 8 x 10 x 5 (x 14-22, y -5 to 5, top z 5) with a 6.5 x 1.6 x 2 ball-mount bar on its midline (hitch ball inside the coupler); two 8 mm zinc pins, tops z 7.5, at x 18, y +3 and -3. Two 6 mm dark grey steel chains, 22 cm, 50 g, free to swing from eyes at x 38, y +5.6 and -5.6, z 8, lying on the table outward towards the robot at 45 degrees; each ends in a yellow printed 36 mm square link (8 mm bars, 20 mm opening, 8 g) near x 24, y +20 / -20.",
+  "scoring": "Score 0 if: a gripper centre is within 5 cm of a chain or end link at the end; an end link is on the pin on its own chain's side; any part of a chain is above the coupler underside (10 cm), i.e. laid over the tongue; in a real trial, the tongue, coupler or plate is moved. Otherwise 0.3: exactly one end link on the opposite pin (pin through its opening), the other chain not hooked. 1.0: both end links on the opposite pins, the chains cross only inside the coupler footprint (x 21-29, y within 2.5 cm of the midline) below its underside, and every chain point at least 1 cm above the table (tape measure). Neither hooked = 0. Success when 1.0 holds 1 s with both chains at rest.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "Lift both end links off the pins and lay each chain on the table outward from its eye at 45 degrees, end link flat at the tape marks near x 23, y +20 and -20 cm. Check tongue and plate are at their marks.",
+  "fidelity": "Chain is 11 rigid 2 cm capsule segments with a soft bending spring, no individual links, no twist; end link is a rigid square welded to the last segment; each eye is a ball joint (position held, free to swing). Tongue, coupler, plate and pins are fixed rigid shapes; the hitch is a tabletop scale model. The end link rests on the plate around its pin, with no latch or spring keeper as on a real safety hook.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-U386RM"
+}
