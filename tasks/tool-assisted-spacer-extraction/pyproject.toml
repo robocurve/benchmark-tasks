@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robocurve-spacer-extraction"
+version = "0.1.0"
+description = "Tool-assisted spacer extraction on the calibrated YAM station"
+requires-python = ">=3.12"
+dependencies = ["numpy>=1.26"]
+
+[project.entry-points."inspect_robots.embodiments"]
+spacer_extraction_yam = "spacer_extraction.runtime:spacer_extraction_yam"
+
+[project.entry-points."inspect_robots.policies"]
+spacer_extraction_demo = "spacer_extraction.runtime:spacer_extraction_demo"
+
+[project.scripts]
+spacer-extraction-rescore = "spacer_extraction.rescore:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+

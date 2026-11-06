@@ -1,0 +1,51 @@
+# Extract a robot-assembly spacer with a pusher
+
+Category: Impact on AI timelines
+
+## Instruction
+
+Use the long pusher to push the spacer out through the covered channel. Put the spacer flat in the green recovery nest, return the pusher flat to its starting outline, then open both grippers and move clear. Keep both parts within the table edges throughout.
+
+## Context
+
+Robot assembly sometimes leaves a temporary spacer where a gripper cannot reach it. This task models pushing that spacer out with a tool, then collecting the part and putting the tool away.
+
+## Setup
+
+Use the supplied YAM station and wooden table (1100 × 1300 × 60 mm, centred at x=360, y=0; tabletop world z=747.5 mm). Arm bases are at x=0, y=±305, world z=750 mm. Below, all measurements are in mm: x points forward, y left, and h is height above the tabletop. Part sizes are x × y × height; all parts start square to these axes.
+
+Channel: two fixed grey PETG walls, each 40 × 8 × 30, centred at (350,82,15) and (350,118,15). Two fixed PETG roof strips, each 40 × 12 × 8, are centred at (350,92,34) and (350,108,34). The passage runs from x=330 to 370, with 28 mm clear width, 30 mm clear height and a 4 mm viewing slit in the roof.
+
+Recovery nest: four fixed green PETG rails leave a 44 × 40 opening centred at (350,260). Two rails are 4 × 44 × 8, centred at (326,260,4) and (374,260,4); two are 44 × 4 × 8, centred at (350,238,4) and (350,282,4).
+
+Marks: two fixed PETG strips, each 264 × 1 × 0.5, mark the pusher's parking area at (270,322,0.25) and (270,358,0.25). Two orange PETG strips, each 1 × 8 × 0.5, sit at (330,64,0.25) and (370,64,0.25), 40 mm apart.
+
+Loose parts: an orange PETG pusher, 260 × 16 × 16 and 60 g, starts at (270,340,8). A blue aluminium spacer, 28 × 24 × 24 and 43.55 g, starts inside the channel at (351,100,12). Set the printed pusher's infill to obtain the stated mass. All fixed parts are attached to the table.
+
+## Scoring
+
+Read the final state; earlier partial scores are not kept. Positions below are (x,y,height above tabletop), in mm.
+
+0.25: The pusher has moved the spacer forward by at least 40 mm while touching it. The spacer is fully beyond x=370 mm and its centre is within 10 mm of y=100 mm.
+
+0.50: After that extraction, the spacer rests flat in the green nest. Its centre is within 8 mm in x/y and 4 mm in height of (350,260,12) mm, with orientation error ≤10°, speed <15 mm/s and spin <0.75 rad/s.
+
+1.00: The spacer stays in that position and the pusher is back within 12 mm in x/y and 10 mm in height of its start, with orientation error ≤10°, speed <10 mm/s and spin <0.5 rad/s. Both grippers are at least 80% open and their tool centre points are at least 80 mm from both parts. All these conditions must hold for one continuous second; contact or movement that breaks them restarts the timer.
+
+0: No listed outcome, or either part ever leaves the table bounds: x=-190 to 910 mm, y=-650 to 650 mm, with no underside more than 10 mm below the tabletop (solver allowance). Direct removal does not count. At the spacer's first full exit, it must still touch the pusher after at least 25 mm of measured push; otherwise the trial stays at zero. Count paired forward motion while the parts touch and subtract backward spacer motion. Contact and alignment tolerances are specified in the README.
+
+## Reset
+
+Put both loose parts back at their stated positions, return the arms to the ready pose and clear the trial history. Keep the fixtures fixed and allow 0.5 seconds to settle. Nothing is consumed. The starting score is 0; recorded seeds are in the README.
+
+## Fidelity
+
+The parts are rigid boxes. Grasping and pushing use simulated contact and friction; parts never snap into place or attach automatically. Friction and the printed pusher mass are assumptions. Contact is estimated from geometry at 20 Hz. The model does not predict jamming forces, deformation or damage. Detailed settings and contact tolerances are in the README.
+
+## Run limit
+
+2,400 control steps (120 seconds at 20 Hz).
+
+## Recorded scores
+
+Dream-1 run: 0.0; demo: 1.0

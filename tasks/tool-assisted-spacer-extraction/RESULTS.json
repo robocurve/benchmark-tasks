@@ -1,0 +1,153 @@
+{
+  "task_sha256": "0a2082e531410ee4ec55f1ddcb93bf8daa8c6bf8b6a8b81acb1273fa574d443d",
+  "evaluator_sha256": "12c246e80ae594a43fd7d1acc1aecfb6fcc5c56f2ea19abdb5858134ad8075ec",
+  "python": "3.12.16 (main, Oct 26 2026, 14:08:45) [Clang 23.1.3 ]",
+  "packages": {
+    "inspect-robots": "0.60.0",
+    "inspect-robots-yam": "0.37.0",
+    "torch": "2.11.0+cu128",
+    "numpy": "2.3.1",
+    "isaaclab": "17.0.2",
+    "isaaclab-arena": "0.3.0",
+    "robocurve-spacer-extraction": "0.1.0"
+  },
+  "instruction": "Use the long pusher to push the spacer out through the covered channel. Put the spacer flat in the green recovery nest, return the pusher flat to its starting outline, then open both grippers and move clear. Keep both parts within the table edges throughout.",
+  "trials": [
+    {
+      "trial": "release-demo1",
+      "reset_seed": 1415158438,
+      "reset_state_sha256": "43e2828467e5f8f51e458bddf0b62c784bf4c3c3e9835aab9470105e35c6d249",
+      "trace_sha256": "fecbd59aa6a9dcb6378a0509a3909373a44192ce793e4571d6b582fba93a0fd1",
+      "result": {
+        "frames": 546,
+        "duration_s": 27.250000000000252,
+        "score": 1.0,
+        "success": true,
+        "trace_agrees": true
+      },
+      "official_result": {
+        "errored_trials": 0,
+        "metrics": {
+          "task_score": 1.0
+        },
+        "total_scenes": 1,
+        "total_trials": 1
+      },
+      "runtime": {
+        "completed_at": "2026-11-03T19:40:21.661134+00:00",
+        "duration_s": 146.12358499499987,
+        "mean_inference_latency_s": null,
+        "started_at": "2026-11-03T19:37:55.537556+00:00",
+        "total_steps": 545
+      }
+    },
+    {
+      "trial": "release-demo2",
+      "reset_seed": 1415158438,
+      "reset_state_sha256": "43e2828467e5f8f51e458bddf0b62c784bf4c3c3e9835aab9470105e35c6d249",
+      "trace_sha256": "fecbd59aa6a9dcb6378a0509a3909373a44192ce793e4571d6b582fba93a0fd1",
+      "result": {
+        "frames": 546,
+        "duration_s": 27.250000000000252,
+        "score": 1.0,
+        "success": true,
+        "trace_agrees": true
+      },
+      "official_result": {
+        "errored_trials": 0,
+        "metrics": {
+          "task_score": 1.0
+        },
+        "total_scenes": 1,
+        "total_trials": 1
+      },
+      "runtime": {
+        "completed_at": "2026-11-03T19:42:33.576672+00:00",
+        "duration_s": 129.57177988399962,
+        "mean_inference_latency_s": null,
+        "started_at": "2026-11-03T19:40:24.004909+00:00",
+        "total_steps": 545
+      }
+    },
+    {
+      "trial": "release-demo3",
+      "reset_seed": 1415158438,
+      "reset_state_sha256": "43e2828467e5f8f51e458bddf0b62c784bf4c3c3e9835aab9470105e35c6d249",
+      "trace_sha256": "fecbd59aa6a9dcb6378a0509a3909373a44192ce793e4571d6b582fba93a0fd1",
+      "result": {
+        "frames": 546,
+        "duration_s": 27.250000000000252,
+        "score": 1.0,
+        "success": true,
+        "trace_agrees": true
+      },
+      "official_result": {
+        "errored_trials": 0,
+        "metrics": {
+          "task_score": 1.0
+        },
+        "total_scenes": 1,
+        "total_trials": 1
+      },
+      "runtime": {
+        "completed_at": "2026-11-03T19:44:50.702782+00:00",
+        "duration_s": 135.12678090000009,
+        "mean_inference_latency_s": null,
+        "started_at": "2026-11-03T19:42:35.576010+00:00",
+        "total_steps": 545
+      }
+    },
+    {
+      "trial": "release-dream1",
+      "reset_seed": 1415158438,
+      "reset_state_sha256": "43e2828467e5f8f51e458bddf0b62c784bf4c3c3e9835aab9470105e35c6d249",
+      "trace_sha256": "6a6634017d4ff0a3987066ef35793d5b3e869b952bc4efbb465d3b93908f18eb",
+      "result": {
+        "frames": 2401,
+        "duration_s": 119.99999999999532,
+        "score": 0.0,
+        "success": false,
+        "trace_agrees": true
+      },
+      "official_result": {
+        "errored_trials": 0,
+        "metrics": {
+          "task_score": 0.0
+        },
+        "total_scenes": 1,
+        "total_trials": 1
+      },
+      "runtime": {
+        "completed_at": "2026-11-03T19:53:44.619027+00:00",
+        "duration_s": 531.3079606419997,
+        "mean_inference_latency_s": 0.6779305783599557,
+        "started_at": "2026-11-03T19:44:53.311074+00:00",
+        "total_steps": 2400
+      }
+    }
+  ],
+  "checks": {
+    "unit_checks_passed": 97,
+    "independent_rescore": "All four release traces agree on VM and local host",
+    "code_review": "No actionable blockers"
+  },
+  "source_notes": {
+    "yam_arena_commit": "0059d02a1a91bc6834c1d0846022891df0c78730",
+    "isaaclab_arena_commit": "c7edf3a9d5d8276565208f72422f8f8a0806d6cf",
+    "asset_mirror_override": "ARENA_NUCLEUS_DIR=https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab"
+  },
+  "media_files": {
+    "demo.mp4": {
+      "sha256": "fea4d4003b5bde679cb4e1eaa8e02764022f03eed5b13e6d086c5e71ec96430c",
+      "bytes": 934567
+    },
+    "model_run.mp4": {
+      "sha256": "66479daaf228482715b7e7d776cb4f9fffe8fea1d1bf1a0ea579175c71c51572",
+      "bytes": 3862455
+    },
+    "setup.png": {
+      "sha256": "a2de01cb07d3cb4963857aa66ff689011f4ad7ed6c6e35464a6df77aa71e216f",
+      "bytes": 187963
+    }
+  }
+}
