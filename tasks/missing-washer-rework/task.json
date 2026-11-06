@@ -1,0 +1,20 @@
+{
+  "title": "Restore a missing spacer washer beneath a protective cap",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "repair",
+    "inspection",
+    "spacer",
+    "disassembly"
+  ],
+  "instruction": "Compare the two fixtures. Restore the missing orange spacer washer beneath the grey protective cap on the blue fixture so it matches the complete reference. Stabilize the blue fixture, remove and park its cap, fit the loose washer over the white post, then replace the cap. Release the parts and move both hands clear. Do not drop any part off the table.",
+  "context": "A visibly incomplete capped fixture must be repaired by undoing an earlier assembly step, adding the omitted component, and restoring its cover.",
+  "setup": "Fixed-layout tabletop scene: loose 300 g blue rigid-plastic fixture with 80 x 280 x 16 mm base, a 30 x 100 x 16 mm lateral handle extension, and ivory-white 18 x 18 x 40 mm post; loose 45 g grey open-bottom protective cap; loose orange 68 x 68 x 14 mm square spacer washer with a 22 mm opening (2 mm side clearance around the post); matching fixed complete reference, green cap parking pad and washer pad. Full poses, raised grasp tabs and dimensions are specified in the README and source.",
+  "scoring": "0.25 after lifting the cap above the post and parking it released for 0.3 s; 0.5 after subsequently seating the washer over the post; 1.0 when washer and replaced cap are seated within 4 mm laterally and 3 mm vertically, upright within 5 degrees, fixture remains within 20 mm, both hands open and clear by 100 mm, and assembly stable for 1.5 s. Disturbing the reference, invalid measurement history, or any dynamic collider point falling more than 10 mm below the tabletop permanently yields 0. Numeric contract in scoring.py.",
+  "run_limit": "2,400 control steps (120 seconds at 20 Hz).",
+  "reset_notes": "Restore all authored rigid poses, zero velocities and robot READY state; no consumed materials.",
+  "fidelity": "Lightweight rigid printed parts use 22 mm square openings around an 18 mm post (2 mm side clearance). Ordinary box-collider contact guides centering; no snapping or assembly constraints are used. PhysX PGS global minimum and per-body iterations are 64/16, verified at startup. Threads, elastic retention, wear and tightening are absent. The disclosed demo uses measured object poses; Dream receives only calibrated cameras and joint state. No hardware validation is claimed.",
+  "scores": "Dream-1 beta: 0.0 (2,400 steps); scripted demonstration: 1.0 (1,396 steps). Two additional consecutive reset demonstrations: 1.0 and 1.0 (1,396 and 1,439 steps).",
+  "media": "M-YPMRWZ"
+}

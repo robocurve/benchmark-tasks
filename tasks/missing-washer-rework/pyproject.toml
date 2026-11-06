@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "robocurve-missing-washer-rework"
+version = "0.1.0"
+description = "Restore a missing rigid spacer washer under a gravity-seated protective cap"
+requires-python = ">=3.12,<3.13"
+license = "MIT"
+dependencies = ["numpy>=1.26", "inspect-robots==0.60.0", "Pillow>=10"]
+[project.entry-points."inspect_robots.embodiments"]
+missing_washer_rework = "missing_washer_rework.runtime:make_embodiment"
+[project.entry-points."inspect_robots.policies"]
+missing_washer_rework_demo = "missing_washer_rework.feedback_policy:make_demo_policy"
+[tool.setuptools.packages.find]
+include = ["missing_washer_rework*"]
+[tool.setuptools.package-data]
+missing_washer_rework = ["assets/*.usda"]
+[tool.pytest.ini_options]
+testpaths = ["tests"]
