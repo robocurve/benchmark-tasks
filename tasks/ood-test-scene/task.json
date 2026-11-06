@@ -1,0 +1,24 @@
+{
+  "title": "Set up an out-of-distribution test scene away from the training outlines",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "robot evaluation",
+    "out-of-distribution test",
+    "distribution shift",
+    "scene setup",
+    "minimum displacement",
+    "keep-out zones",
+    "spatial constraints",
+    "pick and place",
+    "bimanual"
+  ],
+  "instruction": "The pale outlines on the grey mat show where each object stood while a robot policy was trained. Set up a test scene unlike training: move every object so its centre is at least 10 cm from the centre of its own outline, standing upright and entirely on the mat, and leave every outline uncovered.",
+  "context": "Robot policies are judged by how they do outside their training distribution, so evaluation engineers and robotics technicians (O*NET 17-3024.01 Robotics Technicians) rearrange test cells into held-out layouts. A robot that can turn a 'shift the scene' spec into a valid layout automates part of its own evaluation loop; this is the inverse of resetting a scene onto its outlines.",
+  "setup": "Two YAM arms with parallel grippers, bases 61 cm apart at the near edge of a wooden table. Positions are in cm from the midpoint between the two arm bases: x straight out across the table, y to the left (toward the left arm). Fixed: a dark grey rubber bench mat, 44 cm (y) x 34 cm (x) x 3 mm, spanning x = 12 to 46 and y = -22 to +22. On the mat, three fixed painted vinyl discs 2 mm thick (the outlines), each 1 cm larger in radius than its object and coloured a pale tint of it: pale red, 7.4 cm across, centred at (30, +11); pale yellow, 6.4 cm across, centred at (36, 0); pale blue, 6.8 cm across, centred at (30, -11). Loose, each standing upright and centred on its own outline so a 1 cm ring of the outline shows round its base: a red sealed steel food tin, 5.4 cm across x 5.5 cm tall, 150 g; a yellow lidded glass spice jar, 4.4 cm across x 6.5 cm tall, 120 g; a blue lidded plastic tub, 4.8 cm across x 7.5 cm tall, 60 g. All three are closed, so either flat end may stand down. Nothing else is on the table.",
+  "scoring": "Measured with a tape measure or an overhead photo after everything is still. Each object earns up to 1/3. An object earns credit only if it is standing upright (its axis within 10 degrees of vertical, either flat end down), still (under 1 cm/s), standing directly on the mat (its lowest point within 4 mm of the mat top, so not on an outline, another object or in a gripper), with its whole base on the mat (centre at least one object radius inside every mat edge), and with its base over no outline, its own or another's (the distance between the object's centre and every outline's centre, seen from above, at least the object's radius plus that outline's radius). If so, it earns 1/3 when its centre is at least 10.0 cm from the centre of its own outline, 1/6 when 5.0 to 10.0 cm, and 0 when under 5.0 cm. Score = the sum over the three objects (0, 1/6, 1/3, 1/2, 2/3, 5/6 or 1), except that it is 0 if any object has fallen off the table. Doing nothing scores 0; moving objects onto each other's outlines, off the mat, onto another object, or knocking them over scores 0 for each object concerned. Full score (1.0): all three objects at least 10 cm from their own outlines, upright, on the mat, every outline uncovered, held for 1 second, which ends the trial; otherwise the score at the end of the run.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Stand each object back centred on its own outline (the outlines are fixed, so the start is self-locating).",
+  "fidelity": "Mat and outlines are fixed boxes and thin fixed discs, one flat colour each (real setup: rubber mat with vinyl-cut footprint discs); 'covers an outline' is circle-footprint overlap seen from above. Objects are uniform rigid cylinders with one colour, no lid seam, label or taper; masses are estimates. Grip friction is the simulator's rubber-like default (1.2/1.0), higher than real plastic or glass. Centres are bounding-box centres. No start jitter; physics at 240 Hz.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-H4FQDH"
+}
