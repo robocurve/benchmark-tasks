@@ -1,0 +1,22 @@
+{
+  "title": "Set six blocks evenly in a ring around a post",
+  "category": "Impact on jobs",
+  "keywords": [
+    "spatial layout",
+    "radial arrangement",
+    "even spacing",
+    "estimation without marks",
+    "metric instruction",
+    "pick and place",
+    "bimanual"
+  ],
+  "instruction": "Place the six blue blocks in a ring around the post, each about 10 cm from the post's centre and evenly spaced all the way round.",
+  "context": "Table settings and display layouts often need even spacing around a shared centre. Here the robot must place six blocks at a stated radius and equal angular intervals, without marks showing the individual target positions.",
+  "setup": "Two YAM arms with parallel grippers, bases 61 cm apart at the near edge of a wooden table. Positions are in cm from the midpoint between the two arm bases: x straight out across the table, y to the left (toward the left arm). A post (a round hardwood dowel, 3.0 cm diameter x 6.0 cm tall, painted dark grey) stands upright on the midline at x = 30, y = 0, glued or screwed to the table so it cannot move. Six loose blocks (pine cubes, 3.0 cm on each side, painted matte blue, about 14 g each, identical) sit flat in a straight row at x = 15, square to the table edges, centred at y = +28, +20, +12, -12, -20 and -28: three in front of each arm, 8 cm apart centre to centre, with 24 cm between the two middle blocks. Nothing else is on the table, and nothing marks a ring, a radius or an angle.",
+  "scoring": "Measured with a tape measure or an overhead photo after everything is still. A block is in the ring if it sits flat on one of its faces directly on the table (a face within 10 degrees of flat, bottom within 0.5 cm of the table top, so not stacked, held, propped on an edge or off the table), is still (under 1 cm/s), and its centre is 8.0 to 12.0 cm from the post's centre (10 cm +/- 2 cm). Blocks not in the ring are ignored. Going round the post, take each in-ring block's angle about the post's centre; a block is placed if the angles to its two neighbours in the ring (the next in-ring block clockwise and the next anticlockwise) are both 50 to 70 degrees (60 +/- 10). Score = (number of placed blocks) / 6, from 0 to 1. So: all six placed 1.0; five evenly placed with one missing 0.5 (the two next to the empty place face a 120 degree gap); four in a run 0.33; three in a run 0.17; two or fewer 0. Any rotation of the ring and any block in any place counts the same. A pile of blocks, a stack, a straight row of any length, a ring pressed against the post, a ring too large or too small, or six blocks bunched on one side scores 0. Full score (1.0): all six placed and still, held for 1 second, which ends the trial; otherwise the score at the end of the run.",
+  "run_limit": "3,600 steps (3 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Put the six blocks back in the row at x = 15 with a ruler or a card jig that is removed before the run. Nothing left on the table may mark the ring.",
+  "fidelity": "Each block is one rigid uniform box with one flat colour; any 3 cm wooden cube reproduces the task. The post is a fixed rigid cylinder; in a real setup, a dowel fixed to the table so a push cannot move it. Block mass is estimated from pine (about 500 kg/m^3). Loose objects use the simulator's rubber-like friction (static 1.2, dynamic 1.0), higher than painted pine on wood, so a pushed block slides less easily than in reality. Physics runs at 240 Hz.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-BYS4VN"
+}
