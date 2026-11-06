@@ -1,0 +1,19 @@
+{
+  "title": "Fit a split cable guide and verify drawer travel",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable retrofit",
+    "clearance",
+    "service drawer"
+  ],
+  "instruction": "Fit a split guide around the cable at the panel opening and lock it with the orange keeper. Keep both plugs seated throughout. Withdraw both hands, then press the yellow release and let the drawer open to the marked line on its own.",
+  "context": "A service drawer's connected wiring needs a guide that protects it at the panel opening and leaves clearance for its thicker sleeve during travel.",
+  "setup": "Calibrated YAM bench. Aluminium panel and 50 mm spring drawer, 8 mm PVC cable with a 12 mm sleeve, two dummy plugs seated in fixed and drawer sockets. Two PETG guide inserts with 10 and 16 mm openings start on the left. Orange keeper starts open, yellow release raised, drawer closed. Exact dimensions, materials and poses are in README.md and task.py.",
+  "scoring": "0.5 for guide seated and keeper closed with hands clear. 1.0 if locked before release, drawer travels at least 48 mm in 3 s, sleeve clears the guide, and both conditions hold for 2 s. Permanent 0 if a plug backs out more than 2 mm, a guide falls or comes loose during proof, or a gripper enters the protected area during proof. All other outcomes score 0.",
+  "run_limit": "800 steps (40 seconds at 20 Hz)",
+  "reset_notes": "Return both inserts and sleeve to their start marks. Open the keeper, close and latch the drawer, and fully seat both plugs. Clear trial history.",
+  "fidelity": "Rigid split guides and sleeve, jointed slack loop, compliant mock plugs, and a spring force driving a constrained carriage. Contact determines whether the sleeve passes. Gripper proximity is used to detect assistance. Jacket wear, electrical behaviour and fracture are outside the model.",
+  "scores": "Dream-1: 0.0 in 800 steps. Scripted demo: 1.0 in 463 steps.",
+  "media": "M-D4EQMT"
+}
