@@ -1,0 +1,23 @@
+{
+  "title": "Lift a cable so a cart can pass",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "deformable",
+    "hold and push",
+    "clearance",
+    "logistics",
+    "slack management",
+    "collision avoidance"
+  ],
+  "instruction": "Get the blue cart past the orange finish marks without it ever touching the black power cord: lift the cord with one arm and slide the cart under it with the other. Keep the cart on the table. Then lay the cord back down along its line and let go of it.",
+  "context": "Rolling a cart over a floor cord can crush its jacket. OSHA 29 CFR 1910.334(a)(1): \"Portable equipment shall be handled in a manner which will not cause damage\"; (a)(2)(i) lists \"pinched or crushed outer jacket\" as a sign of damage to look for. So the cord is lifted clear and the cart rolled under it, then the cord is laid back flat. One hand must hold a deformable cord high enough while the other moves a load under it without contact.",
+  "setup": "Station table; cm from the midpoint between the arm bases (x forward, y left). Black 8 mm PVC cord lies straight along y at x 28 from a grey floor cord retractor (5x4x3 cm box, cord exit y -20) to a yellow wall cord reel (8x6x6 cm, slot y 38); each spring retractor pays out up to 12 cm (0.3 N rest pull, ~1 N at 12 cm). White inline switch box on the cord, 50x30x22 mm, 25 g, y -2 to +3. Grey partition 22x1.2x7 cm, x 18-40, centred y 27, with an 18 mm wide, 20 mm tall notch at x 28 at its base; the cord passes it. Cart: light blue wooden block 14x5x3 cm, 200 g, centre x 18, y 12, long side along x (front 2.4 cm before the cord). Finish line x 34: two orange tape marks 1x2 cm at y 7 and y 17.",
+  "scoring": "The cart must pass under the cord: when its centre crosses the cord line x 28 (either way) it is within 5 cm of y 12 and the cord's underside over the cart's width plus 1 cm each side is at or above the cart top (3 cm up). Score 0 if at any time (latched): a crossing fails this; the cart comes within 2 mm of the cord or switch box, rises over 1 cm or tilts over 15 deg. At the end: never passed under, or cart not fully past the finish line (rear edge beyond x 34, centre within 5 cm of y 12, upright) = 0; cart past, cord not back or still held = 0.7; cart past, cord between retractor and partition on the table (centre 1.5 cm up at most) within 3 cm of x 28, grippers 3 cm or more from all of the cord = 1.0.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "Let the cord go so both retractors pull it straight along the x 28 tape line, switch box between its y -2 and +3 marks. Slide the cart back to its tape outline (x 11-25, y 9.5-14.5).",
+  "fidelity": "Cord: rigid 2 cm segments with bending springs, no twist; switch box rigid. Retractors are modelled as linear springs (6 N/m, 5 cm preload, 12 cm hard stop) on the cord ends; a real spring cord reel gives a similar 0.3-1 N pull. Cart is a sliding block (no wheels, friction 0.5-0.8): real trial uses a block or a free-rolling toy cart. Touch is judged geometrically (gap at most 2 mm) each 50 ms step.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-DLW4PQ"
+}
