@@ -1,0 +1,19 @@
+{
+  "title": "Push a flush plate out of its nest, then take it by the overhang",
+  "category": "Impact on jobs",
+  "keywords": [
+    "pushing",
+    "creating a grasp",
+    "overhang",
+    "regrasp"
+  ],
+  "instruction": "Push the yellow plate along its slot until it overhangs the bench's left end, take it by the overhang, and lay it flat in the grey tray.",
+  "context": "Parts machined or punched in a flush nest have no edge to grip, so operators push them from a relief slot until an edge comes free, then take them. Done by: CNC tool operators (O*NET 51-9161.00) and press setters and operators (51-4031.00). Closest tasks: 'Extract a robot-assembly spacer with a pusher' and 'Recover a part from under a machine guard with a spatula'. This adds no tool, and one bare-hand push whose length creates the grasp the next step needs: too little leaves no edge to take, and 8 cm or more drops the plate.",
+  "setup": "Positions are object centres in cm from the midpoint between the arm bases: x forward (away from the arms), y to the robot's left (negative toward the right arm). Heights are above the table top. Table: oak top, arm bases 61 cm apart on its near edge. Bench, long axis along y (y -8 to +8), all fixed, dark painted steel: floor strip 1.2 x 16 cm, 4 cm tall, at x 25.4, y 0; a second strip the same at x 30.6, y 0, leaving a 4 cm slot (x 26 to 30) open at its right end only; rail 1.6 x 16 cm, 5 cm tall, at x 24.0, y 0; a second rail the same at x 32.0, y 0; end block 4 x 1 x 4 cm at x 28, y 7.5, closing the slot's left end, top level with the strips. Plate: 6 x 16 x 1 cm, 60 g, painted softwood (0.625 g/cm3) bright yellow, loose, centre x 28, y 0, 4 to 5 cm up, lying along y on the strips (1 cm on each), top level with the rails and 2 mm clear of each. Tray: grey painted plywood, fixed: floor 14 x 20 x 0.3 cm centred at x 14, y 10, with four walls 1 cm thick and 2.5 cm tall around it (inner x 7 to 21, y 0 to 20). Nothing else is on the table.",
+  "scoring": "After the grippers open, from a top-down video (camera 90 cm above x 20, y 10) and a tape measure. Score 0 if the plate ever had a point within 0.5 cm of the table or floor outside the tray, or ends held up (its bottom more than 1 cm above every surface under it), or never lay flat on the bench, moving or still, with its rear end at or past y -4, or at least 4 cm past the left end (y +8). Otherwise 1.0: at rest (still 10 s), the whole plate inside the tray (x 7 to 21, y 0 to 20) on its floor (bottom within 3 mm of it), flat (tilt at most 5 degrees: one end at most 1.4 cm higher, either face up). 0.6: at rest but not flat on the floor, with its centre over the tray outline (perched or leaning on a wall, tilted past 5 degrees, or on edge). 0.3: still flat on the bench, at least 4 cm past the left end, centre still on the bench. Else 0, including a plate pushed off the bench end.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Set the plate back in its nest between the rails, level with them, ends at y -8 and +8. A plate that fell is checked for bends before reuse. Strips, rails and tray stay put.",
+  "fidelity": "Approximate. Bench, rails and tray are fixed rigid boxes; the plate is a loose rigid box with default friction. The simulator scores the final step without opening the grippers, so a plate whose bottom is more than 1 cm above every surface under it counts as not placed. A real trial releases it first. The tray floor is a 3 mm box. The softwood plate is a light stand-in for a machined metal or plastic blank.",
+  "scores": "Dream-1 run: 0.0 (reached the plate on the bench, never moved it, tray stayed empty); demo: 1.0 (pushed plate along slot with one arm, took the overhang, laid it flat in tray)",
+  "media": "M-FY6KMY"
+}
