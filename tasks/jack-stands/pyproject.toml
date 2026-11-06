@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jack-stands"
+version = "0.1.0"
+description = "Jack a heavy beam up, set two stands under it, lower it onto them, then pull the work out, two YAM arms"
+requires-python = ">=3.11"
+dependencies = ["numpy", "yam-arena"]
+
+[project.entry-points."inspect_robots.embodiments"]
+yam_jack_stands = "jack_stands.embodiment:JackStandsEmbodiment"
+
+[project.entry-points."inspect_robots.policies"]
+jack_stands_scripted = "jack_stands.policy:JackStandsScriptedPolicy"
+
+[tool.setuptools.packages.find]
+include = ["jack_stands*"]
