@@ -1,0 +1,22 @@
+{
+  "title": "Sand a workpiece's edge: five full passes, block flat",
+  "category": "Impact on jobs",
+  "keywords": [
+    "fab lab",
+    "woodworking",
+    "sanding",
+    "sustained contact",
+    "contact force",
+    "bench vise",
+    "counting"
+  ],
+  "instruction": "Sand the top edge of the plywood piece in the blue vise with the orange sanding block: five full passes along the whole edge, keeping the block flat on the edge.",
+  "context": "Sanding an edge smooth is routine finishing work in fab labs and woodshops. The block must stay flat on a 3 mm edge for whole strokes, pressed only as hard as the vise's grip allows: tilted, it rounds the edge over, and pushed too hard, the part slips in the jaws.",
+  "setup": "Left and right are the robot's. Positions are centres in metres from the midpoint between the two arm bases: x forward, y to the robot's left, heights above the table. Vise: a blue cast-iron bench vise with 8.5 cm wide steel jaws (a 3-inch vise), fixed, its base centred at (0.287, -0.210), the jaws clamping along x, their tops 10.8 cm above the table, its handle pointing away from the robot. Workpiece: a piece of 3 mm birch plywood, 20 x 7 cm, 30 g, standing upright in the jaws, its long side along y, from y = -0.31 to y = -0.11 at x = 0.34, its top edge 3 cm above the jaws (13.8 cm above the table), a pencil line along its face 5 mm under the edge. Sanding block: an orange foam block, 10 x 7 x 3 cm, 60 g, grey sandpaper on its underside, lying flat on the table at (0.25, -0.35), its 10 cm side along y. A steel speed square (17 cm) lies at (0.24, 0.24) and a pair of safety glasses at (0.42, 0.14), on the left, not part of the task. Nothing else is on the table.",
+  "scoring": "Positions are centres. On the edge: some point of the edge's top lies under the block's sandpaper face and within 1 mm of it. Flat: the face tilted under 10 degrees. A pass: on the edge and flat at every control step (20 Hz) while the block's centre moves from within 1 cm of one end of the edge (or past it) to within 1 cm of the other. Strokes both ways count. 0.2 per pass, 1.0 with five (success, held 1 s). 0 for the rest of the trial once the workpiece's centre or an end of its edge has moved 5 mm or more, or the block has touched the edge tilted 25 degrees or more for 0.5 s.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Put the block back flat at its start, and reclamp the workpiece 3 cm proud of the jaws if it slipped.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. The vise is a fixed NVIDIA SimReady model, scaled to 0.6, colliding as its mesh. The workpiece and block are boxes with drawn meshes. The vise's grip is a joint that lets go under a 30 N push, after which the workpiece drops in the jaws. Sandpaper on plywood has friction 0.6. Nothing is abraded, and passes are counted from the block's pose. Masses are typical values.",
+  "scores": "Dream-1 run: 0.0 (the right arm reaches the orange block and the vise but never makes a full pass along the edge), demo: 1.0 (success at step 421, five passes with the block within 2.3 degrees of flat)",
+  "media": "M-KQ7LTG"
+}
