@@ -1,0 +1,20 @@
+{
+  "title": "Split five parcels between two totes without going over the tote weight limit",
+  "category": "Impact on jobs",
+  "keywords": [
+    "parcels",
+    "tote building",
+    "weight limit",
+    "packing",
+    "bimanual"
+  ],
+  "instruction": "Pack all five parcels into the two grey totes, each set flat on a tote's floor, side by side and not stacked, so that neither tote holds more than 7 kg. The red parcel weighs 4 kg, the blue and green parcels 3 kg each, and the yellow and orange parcels 2 kg each.",
+  "context": "Outbound totes go down a conveyor to a person who lifts them, and each has a weight limit set by the lifting standard and the carrier; the packer splits the parcels by their weights so no tote goes over. Loading everything into the nearest tote is the mistake caught here. Done by: warehouse packers, order fillers, shipping and receiving clerks.",
+  "setup": "Two open dark grey polypropylene totes are fixed to the table, one directly in front of each arm, each centred 32 cm in front of the arm bases (the bases are 61 cm apart): inside 15 cm front to back and 20 cm side to side, walls 8 cm tall and 5 mm thick, a 4 mm floor. A brown fibreboard inbound mat (25 cm front to back, 27 cm side to side, 5 mm thick) is fixed midway between the arms, its centre 25 cm in front of the arm bases. Five closed cardboard parcels stand upright on the mat, edges square to the table: a red one (7 cm front to back, 7 cm side to side, 6 cm tall, 400 g, stated 4 kg) 20 cm in front of the arm bases and 3.5 cm left of the centre line; a green 6 cm cube (300 g, stated 3 kg) 20 cm in front and 3.5 cm right of the centre line; an orange 5 cm cube (200 g, stated 2 kg) 20 cm in front and 10.5 cm left; a yellow 5 cm cube (200 g, stated 2 kg) 31 cm in front and 7.5 cm left; a blue 6 cm cube (300 g, stated 3 kg) 31 cm in front and 7.5 cm right (positions are the parcels' centres; left and right as the robot sees them). Each parcel weighs a tenth of its stated weight. Nothing else is on the table.",
+  "scoring": "A parcel is packed when it has been set down in a tote: its outline seen from above is inside the tote's inner outline (or within 5 mm past it), its bottom is within 5 mm of the tote's floor (a parcel held above the floor isn't packed), its top is no higher than the tote's rim (8 cm above the table), and it rests flat on any one of its faces, tilted at most 10 degrees (the parcels are unmarked, so no side is 'up'). A tote's load is the sum of the stated weights (red 4 kg, blue and green 3 kg, yellow and orange 2 kg) of every parcel whose centre is over the tote's outer outline, walls included, at any height or tilt. The split can still be completed when the parcels over neither tote can each be added to one tote without either load going over 7 kg. Each packed parcel earns 0.2 while the split can still be completed and 0.1 once it can't (so four parcels packed two and two, leaving a parcel that fits in neither tote, score 0.4); all five packed score 1.0. The score is 0 if either tote's load is more than 7 kg, or if any parcel is on the floor (its bottom more than 5 cm below the table top). Full score ends the trial once every parcel has been still for 2.5 s.",
+  "run_limit": "1,400 steps (70 seconds at 20 Hz)",
+  "reset_notes": "Stand the five parcels back upright at their marks on the mat, edges square to the table; tape outlines on the mat make this quick. The totes and the mat stay fixed.",
+  "fidelity": "Approximate: the parcels are rigid boxes weighing a tenth of their stated weights (400, 300 and 200 g, which the gripper can hold); the weights are given in the instruction, not printed on labels. The totes and mat are fixed (clamp or tape them down for real trials). Every object has the same rubber-like friction (1.2 static, 1.0 dynamic), grippier than cardboard or plastic.",
+  "scores": "Dream-1 run: 0.2; demo: 1.0",
+  "media": "M-QNR29P"
+}
