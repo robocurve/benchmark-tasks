@@ -1,0 +1,19 @@
+{
+  "title": "Dispense 150 g of tea using a digital scale",
+  "category": "Societal relevance",
+  "keywords": [
+    "liquid dispensing",
+    "scale reading",
+    "flow control",
+    "delayed feedback"
+  ],
+  "instruction": "Dispense 150 grams of tea into the cup on the digital scale. Turn the faucet handle to either side to open it; turning farther increases the flow. Return the handle to the central closed position to stop the flow. The handle does not spring back. Use the scale display and allow the remaining falling tea to land. Finish within 10 grams of 150 grams, with the faucet closed and no overflow.",
+  "context": "This task simulates real-world situations that require dispensing a precise amount of water.",
+  "setup": "Fixed YAM station; READY arms, open grippers. Frosted plastic jar (D19.7 x H31.1 cm), wooden lid, brass-colored faucet; 6564 g tea. Four-leg wooden stand: 23x23x18 cm. Empty glass cup (ID8 x H11 cm; 553 mL) on tared metal-top/plastic scale (14.5x18.6x1.7 cm), under outlet. All objects fixed. Assembly: (0.46,0,0.7475) m, yaw -90 deg. Faucet: 0 deg; scale: 0.0 g. Layout matches screenshot; exact geometry and poses are in the USD assets.",
+  "scoring": "Score 1 if, within 120 s, cup mass is 140-160 g inclusive, the faucet is closed (-10 to +10 deg), all airborne tea has landed, and zero flow with no airborne tea has persisted for at least 0.3 s, with no overflow at any time. Otherwise score 0; no partial credit. Use unrounded liquid mass; overflow below 1e-9 g is numerical zero. Passing through the target while still dispensing does not count.",
+  "run_limit": "2,400 control steps at 20 Hz, equivalent to 120 simulated seconds; the 32 initial history-warmup steps are included. End early on settled success.",
+  "reset_notes": "Return both arms to the station READY configuration with open grippers; set the faucet angle and angular velocity to zero; empty and tare the cup; remove all airborne tea; clear accumulated overflow and elapsed time; refill the dispenser to 6564.026 g. Keep the same fixed object poses and camera calibration. Evaluation seed: 0.",
+  "fidelity": "PhysX robot/faucet contact at 240 Hz. Bidirectional valve: +/-90 deg, +/-10 deg closed, no return spring; linear flow up to 30 g/s. Ballistic slices conserve mass; only landed tea is weighed, so tail water persists after closing. Liquid levels use volume-matched cylinders, not fluid simulation. Containers are fixed. No splashing, sloshing, stream interception, liquid forces or scale dynamics/noise. Overflow is counted, not animated. Flow is pressure-independent until empty.",
+  "scores": "Dream-1 recorded trajectory: 0.0, final cup mass 552.920 g with overflow and the faucet still open. Scripted demonstration: 1.0, final cup mass 149.887 g (display 149.9 g), no overflow, completed in 21.233 s. Both saved trajectories were checked against the scoring rule above.",
+  "media": "M-E47VNE"
+}
