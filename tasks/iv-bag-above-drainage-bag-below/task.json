@@ -1,0 +1,20 @@
+{
+  "title": "Hang a patient's IV bag above them and the urine drainage bag below them",
+  "category": "Impact on jobs",
+  "keywords": [
+    "nursing",
+    "patient safety",
+    "infection control",
+    "height placement",
+    "pick and place"
+  ],
+  "instruction": "hang the patient's IV bag and urine drainage bag on the bedside stands, each at the right height",
+  "context": "Nurses hang an IV drip above the patient so it runs by gravity, and keep a urine drainage bag below the bladder: raised above it, urine flows back and causes catheter-associated infections, among the commonest hospital infections. The robot must know which bag goes at which height.",
+  "setup": "Positions are measured on the table from the midpoint between the two arm bases: forward is away from the arms, left and right as seen from behind the arms. (1) Bed and patient: a white bed 12 cm front to back, 26 cm across and 6 cm tall, fixed, centred 33 cm forward and 8 cm right, with a patient (a skin-coloured block 7 x 22 x 3 cm) lying on it, so the patient is 9 cm up. (2) Bedside stands, fixed, at 18 cm left: a low stand with an 8 x 8 cm top 2 cm up, centred 24 cm forward, and a tall stand with an 8 x 8 cm top 16 cm up (above the patient), centred 36 cm forward. (3) Bags, loose, each 6 cm front to back, 4 cm across and 7 cm tall, 80 g, standing 12 cm forward: an IV drip bag (clear blue) 20 cm left and a urine drainage bag (pale yellow) 7 cm left, each with a white card fixed flat in front of it (5.5 cm forward) printed \"IV / DRIP\" and \"URINE / BAG\". Nothing else is on the table.",
+  "scoring": "Scored once, after the episode ends. A bag is on a stand when its centre is over the stand's top and its underside within 1 cm of it (and, for credit, it is at rest). 0.0 if the drainage bag is on the tall stand, above the patient, whatever else. Otherwise 0.5 for the IV bag on the tall stand and 0.5 for the drainage bag on the low stand, so 1.0 for both.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Stand the two bags back on their starting spots. The bed, patient, stands and cards are fixed (putty) and stay in place. Use empty IV and drainage bags weighted with sand for real trials.",
+  "fidelity": "Dream Labs' YAM station replica in Isaac Lab-Arena (Isaac Sim). The bags are rigid blocks the size of small bags, standing on ledges rather than hanging from hooks, with no tubing. The bed and patient are fixed blocks. The card letters are thin black boxes on white cards.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-SFSMMP"
+}
