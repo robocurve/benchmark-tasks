@@ -1,0 +1,21 @@
+{
+  "title": "Replace the whole UPS battery string that a failed module came from",
+  "category": "Impact on jobs",
+  "keywords": [
+    "data center",
+    "UPS",
+    "battery string",
+    "battery replacement",
+    "critical power",
+    "maintenance"
+  ],
+  "instruction": "A battery in this UPS failed and has already been pulled; it is in the recycling bin. Replace it with the new modules on the cart. Removed batteries go in the recycling bin.",
+  "context": "Data-centre UPS batteries are modules wired in series strings. UPS and battery makers' service guidance says not to mix new and aged batteries in one string: a new module beside aged ones is over- and under-charged, wears out early and leaves the string as weak as its oldest modules. So when one module in a string fails, technicians replace the whole string and leave the other strings in service. The job is set by a grouping rule (which modules form the failed string), not by one marked part. Unlike TK-JJD7XA and TK-2GRHHM (swap one marked pack for one charged pack) or TK-G8VJJM (one fan bay at a time), the robot must extend the replacement to the failed module's string-mate and stop at the string's boundary; DataCenterBench has no battery or UPS task. Done by: critical-facilities technicians; electrical and electronics repairers, commercial and industrial equipment (O*NET 49-2094.00); maintenance and repair workers, general (49-9071.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. UPS battery shelf, all fixed: two separate trays at x 30, string A centred at y 27 and string B at y 11, with 4 cm of bare table between them. Each tray: a dark floor plate 12 x 12 x 0.8 cm; three steel dividers (8 cm along x, 0.6 cm thick, 3.5 cm tall) forming two slots 5.1 cm wide at a 5.7 cm pitch; a copper strip 0.8 x 10.4 x 0.3 cm on the floor at x 24.6 joining the tray's two slots. Slots: A1 y 29.85, A2 y 24.15, B1 y 13.85, B2 y 8.15. Battery modules: boxes 8 cm along x, 4.5 cm wide, 7 cm tall, 300 g. Old modules (dark grey) stand in A1, B1 and B2; A2 is empty. Cart: a fixed blue deck 12 x 16 x 1 cm centred at x 16, y 27, with a steel handle bar (1 x 14 x 4 cm) at x 9.5; on it two new modules (bluer grey) at y 30 and y 24. Recycling bin: a fixed black open frame (walls 0.6 cm thick, 2 cm tall, round a 13 x 15 cm floor) centred at x 42, y 27; the failed module from A2 stands in it at y 31.",
+  "scoring": "From the episode's recorded poses, with the grippers open at the end. A module is seated in a slot when its centre is within 5 mm of the slot centre along y and 1 cm across, its bottom within 3 mm of the tray floor, upright and square within 10 degrees, and still. Score: 0.3 for each new module seated in a string-A slot, 0.3 for string A's old module at rest in the recycling bin (centre inside the inner walls, bottom within 2 cm of the table), and 0.1 more when all three hold, so the full score is 1.0. The score is 0 if a new module ends up in string B's tray, if either string-B module ever moves more than 15 mm from its start (checked every step) or is not upright in its slot at the end, or if any module falls off the table. The naive fix, one new module into the empty slot, scores 0.3. Success: score 1.0 held for 1 s.",
+  "run_limit": "1,800 steps (90 seconds at 20 Hz)",
+  "reset_notes": "Stand string A's old module back in slot A1, the two new modules on the cart at their marks and the failed module in the bin at its mark; string B's modules stay in place. On a real rig the 'string B never removed' check is judged from the trial video.",
+  "fidelity": "Rigid boxes, one shared friction (1.2/1.0). The shelf lies open with slots facing up; real modules slide into a cabinet and are cabled or plugged in. Modules are plain 300 g boxes (real ones weigh many kilograms) with no terminals, charge state or ageing; the copper strip only shows which slots form a string. Slot pitch and the 3 mm clearances are set for the gripper pads, not taken from a product.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-KPBLM3"
+}
