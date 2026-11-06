@@ -1,0 +1,21 @@
+{
+  "title": "Route the first article after a changeover",
+  "category": "Impact on jobs",
+  "keywords": [
+    "first-article inspection",
+    "changeover",
+    "setup verification",
+    "production order",
+    "hold",
+    "machining"
+  ],
+  "instruction": "The machine has just been changed over to a new job, and the three parts on its outfeed slide are the first three made on the new setup. The machine pushes each part out along the slide, so part 1, the first made, is the one furthest from the machine and part 3, the newest, is nearest it. Put the first part off the new setup in the white first-article tray for the inspector, and put the parts made after it in the red hold tray. Nothing from the new setup goes in the green good-parts bin until the first article is signed off.",
+  "context": "After a changeover, a machine shop does not trust the new setup until the first part off it has passed a first-article inspection (FAI) against the drawing (e.g. aerospace practice per AS9102). The operator sends that first part to the inspector and holds every part made in the meantime; only after sign-off do they go to the good-parts bin. The robot must pick out the first part from the production order on the slide, send it to inspection, and keep the rest out of the good-parts bin, which is where finished parts normally go. Unlike RoboCasa LoadFridgeFifo (place items by age) and TK-8986EW (isolate a sample and what touches it), the first item of a sequence goes to a different place from the ones after it. Done by: machine setters and operators and quality inspectors (O*NET 51-4034.00, 51-9061.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. Outfeed slide: two fixed steel rails (0.6 x 21.5 x 1 cm) along y at x 27 and 33, centred at y 31.75. Machine: a fixed grey block 12 x 6 x 10 cm centred at x 30, y 45.5. On the table between the rails, three loose aluminium blocks (3 x 3 cm, 4 cm tall, 90 g) at x 30 and y 25 (part 1), 31 (part 2) and 37 (part 3). Containers, each a fixed open frame of walls 0.6 cm thick and 2 cm tall on the table: white first-article tray round an 8 x 8 cm pocket centred at x 17, y 42; green good-parts bin round a 10 x 10 cm pocket at x 16.5, y 25; red hold tray round a 16 x 8 cm pocket at x 30, y 14.",
+  "scoring": "From a top photo and a ruler, with the grippers open. A part is in a container when it is still, its centre inside the container's inner walls and its lowest point less than 2 cm above the table. 0.25 for part 1 in the first-article tray, 0.25 for each of parts 2 and 3 in the hold tray, and 0.25 more when all three are. A part in the wrong container or in the good-parts bin earns nothing for itself. Possible scores: 0, 0.25, 0.5, 1.0. Success: score 1, held 1 s.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Stand the three blocks back between the rails on their marks; the rails, machine, tray, bin and hold tray do not move.",
+  "fidelity": "Rigid boxes with one shared friction (1.2 static, 1.0 dynamic). The parts are plain blocks, the machine is a fixed block with no ejector, and the changeover is stated in the instruction instead of shown on a setup sheet or traveller. The slide is two low rails on the flat table, not a sloped chute.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-RNKPHA"
+}
