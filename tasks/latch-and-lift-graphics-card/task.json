@@ -1,0 +1,22 @@
+{
+  "title": "Press the slot latch and lift the graphics card out",
+  "category": "Impact on jobs",
+  "keywords": [
+    "e-waste",
+    "IT asset disposal",
+    "latch",
+    "bimanual",
+    "release before pull",
+    "breakable lock",
+    "straight-up extraction"
+  ],
+  "instruction": "Press and hold the orange latch with the right hand, then lift the graphics card straight up with the left hand and put it in the tray on the left.",
+  "context": "E-waste recyclers and IT asset disposal technicians pull graphics cards from thousands of dead boards for resale or precious-metal recovery. The PCIe slot's retention latch has to be pressed first: a card pulled against the latch breaks it, and a card pulled at an angle jams in the slot. One hand holds the latch down while the other lifts.",
+  "setup": "Left and right are the robot's. Positions are centres in metres from the midpoint between the two arm bases: x forward, y to the robot's left, heights above the table. Mat: a 34 x 30 cm dark blue-grey rubber anti-static mat (34 cm along y), 3 mm thick, fixed, centred at (0.29, -0.04). Mainboard: a 30 x 24 cm green glass-epoxy board (30 cm along y), 2 mm thick, lying flat on the mat, fixed, centred at (0.29, -0.04), with its usual parts (processor socket, memory slots with black clips, two empty slots, small heatsinks), none taller than 1.2 cm and at least 1.5 cm from the card and the latch. Slot: a black PCIe x16 slot along y, from y = -0.11 to y = -0.02 at x = 0.28, between two black plastic rails 9 cm long, 4 mm wide and 12 mm tall, 2.4 cm apart inside (2 mm of play each side of the card). Graphics card: an 18 x 11 cm dual-fan card, 2 cm thick with its black cooler and backplate, steel bracket at its far end, 350 g, standing upright in the slot along y with its bottom edge on the board, from y = -0.11 to y = 0.07, so it overhangs the slot's left end by 9 cm, bracket on the left, fans facing the robot. It is locked in the slot by the latch and comes out straight up only. Latch: an orange plastic button 2 x 1.2 cm standing 1.2 cm out of a black housing (2.6 x 1.8 cm, 8 mm tall) on the board, in line with the slot at (0.28, -0.175), 2 cm along y, 5.5 cm right of the card's right end, sprung (2 N at full travel), 4 mm of travel. Pressed 3 mm or more, it frees the card. The lock holds 60 N: pulled harder, it breaks. Tray: a 25 x 15 cm black plastic tray (25 cm along x), 1 cm walls 3 cm high, with a 1 cm grey foam floor, fixed on the robot's left at (0.24, 0.26). Nothing else is on the table.",
+  "scoring": "Positions are centres. The latch counts as pressed once it has been 3 mm or more down at any control step, and from then on the card is free. 0 for the rest of the trial once the card has risen 5 mm or more, or moved 3 cm or more sideways, before the latch was pressed (the latch is broken), and 0 if the card falls off the table (centre more than 2 cm below the table top). 1.0 (success, held 1 s): the card's centre within 9 cm along x and 5 cm along y of the tray's centre and less than 7 cm above the tray floor (lying flat or standing in the tray), the card still (under 1 cm/s and 0.5 rad/s). 0.5: the card out of the slot (its centre 1.2 cm or more above its start, or 3 cm or more sideways), held in the air or set down anywhere out of the tray. 0.25: the latch pressed and the card raised 5 mm or more but still between the rails. 0 otherwise, including doing nothing, pressing the latch without lifting, or lifting without pressing.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "If the card was pulled out against the latch, fit a fresh latch (the lock must hold 60 N again). Seat the card back in the slot with its near end at x = 0.26 until the latch clicks.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. Every part collides as a box: the mat, board, rails and tray are fixed and the card is one 18 x 2 x 11 cm box. The detailed meshes are drawn only, so the board's small parts don't collide. The latch is a sprung button on a prismatic joint. The lock is a fixed joint that breaks at 60 N and is switched off once the latch is 3 mm down, with no creep, and never reforms. The gripper closes with 50 N per pad. Masses are typical values.",
+  "scores": "Dream-1 run: 0.0 (both arms reach toward the card and the right arm toward the latch, but it never presses the latch), demo: 1.0 (success at step 206)",
+  "media": "M-54U39B"
+}
