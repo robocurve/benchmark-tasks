@@ -1,0 +1,20 @@
+{
+  "title": "Hold a nut behind a plate with one hand and turn a screw into it through the plate with the other",
+  "category": "Societal relevance",
+  "keywords": [
+    "bimanual",
+    "assembly",
+    "fastening",
+    "screwing",
+    "coordination"
+  ],
+  "instruction": "Hold the nut flat against the plate over the hole with one hand, and with the other put the screw through the hole from the other side and turn it into the nut until both are snug against the plate, then let go.",
+  "context": "Bolting parts together through a hole is one of the most common assembly steps, in workshops, furniture assembly and maintenance: one hand holds the nut on the far side (or a spanner on it) while the other turns the screw in. A nut that is not held turns with the screw, and the screw does not go in.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) A fixed grey steel plate standing upright on the centre line, its faces turned to the left and right arms: 10 cm front to back, 25 cm tall, 8 mm thick, centred 26 cm forward, on a dark foot 10 x 8 cm. A 12 mm square hole goes through it, centred 26 cm forward and 20 cm above the table, with a yellow square printed round it on both faces. (2) A loose dark steel hex-head screw, 25 g: the head 16 mm across flats and 14 mm tall, the shank 6 mm across and 20 mm long, its last 3 mm narrower (4.4 mm). It stands head up, its shank in the 11 mm square bore of a fixed dark block 3 x 3 cm and 2.5 cm tall, centred 24 cm forward and 12 cm right of the centre line. (3) A loose long hex nut (a coupling nut), zinc, 25 g: 16 mm across flats and 30 mm long, its bore 9 mm across flats, widening to 13 mm over its last 3 mm at each end. It stands on end on a fixed dark block 3 x 3 cm and 2.5 cm tall, centred 24 cm forward and 12 cm left of the centre line, round a short peg (5 mm across, 3 mm tall). The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Judged at the end of the trial. The screw's turn against the nut, about the screw's axis, is followed after every control step. The thread catches when, with the screw's tip at least 1 mm into the nut's bore and the two lined up (axes within 10 degrees and 4 mm), the screw turns a quarter turn clockwise as seen from its head; turns are counted from then on, net, clockwise counting positive. Through: the screw's axis crosses the plate within 4 mm of the hole's centre, with its head on one side and its tip past the other face. Snug: the head and the nut together stand no more than 2 mm off the plate's faces. A gripper has let go when its fingertip centre (TCP) is at least 4 cm from both the screw's head and the nut. 1.0: through, caught in the nut on the far side, turned at least 1.5 turns, snug, and both grippers let go; 0.5: through and caught in the nut on the far side, turned at least half a turn; 0.25: through; else 0.0. The trial ends at the run limit, or once the full score has held with the screw and the nut still for 1 s.",
+  "run_limit": "1,600 steps (80 s at 20 Hz)",
+  "reset_notes": "Nothing is consumed: unscrew the screw, stand it head up in its holder and stand the nut back on its peg.",
+  "fidelity": "Rigid-body simulation (Isaac Sim 6.1, PhysX, 20 Hz control) of a calibrated two-arm table. Simplified: the shank is a plain cylinder in a plain bore; the thread is a joint switched on once it catches, which keeps the nut on the screw's axis, adds thread friction (0.15 N m s/rad) and draws the nut 5 mm per turn (a coarse pitch; spring 2,000 N/m, at most 20 N). The nut is a long coupling nut. Plate, holder and stand are fixed; the cameras render at 1280 x 704 (Dream-1 sees 320 x 176).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-JTU3QV"
+}
