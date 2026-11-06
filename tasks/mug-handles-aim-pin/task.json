@@ -1,0 +1,19 @@
+{
+  "title": "Aim two mug handles at a pin",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "bimanual",
+    "orientation",
+    "in-place rotation",
+    "spatial reasoning"
+  ],
+  "instruction": "Turn each of the two mugs in place, keeping it upright and its centre within 2 cm of the centre of its blue taped square, so that its handle points at the red pin to within 5 degrees.",
+  "context": "Setting many identical items in a prescribed orientation, such as handles facing the guest, labels facing the camera or connectors facing a port, is routine work in hospitality, packing and assembly. It needs perception of an asymmetric feature, the angle to a target and a precise in-place turn without shifting the object. Each mug is reachable by one arm only, so the two arms must work independently and both succeed. Scoring is by object pose alone and can be checked with a protractor and a tape measure.",
+  "setup": "Flat wooden table, one fixed layout matching the screenshot. Two arm bases stand 30.5 cm either side of the midline (y = 0) on the base line (x = 0), facing along +x. Distances are in cm: x from the base line, y from the midline (L = left arm side, R = right arm side). Bearings are degrees counter-clockwise seen from above, 0 = straight away from the base line, +90 = toward the left. Mugs, two identical yellow ceramic-style mugs (library model), free to move, 0.2 kg each, 6.3 cm tall, 7.2 cm across the body, 9 cm across including the handle. Left mug: body centre x 30, y 28 L, handle starts at bearing 40. Right mug: body centre x 30, y 28 R, handle starts at bearing 200. Pin, one fixed red cylinder, 4 cm across, 8 cm tall, centre x 42, y 0 (on the midline), never moved. Squares, two flat blue tape outlines, inner side 12 cm, tape 1.2 cm wide and 2 mm thick, centred on each mug's start position (x 30, y 28 L and x 30, y 28 R). Tray, a fixed open green tray (base 14 x 30 cm, walls 4 cm high), decoration only, centred at x 66, y 0, out of reach. The pin bearing from the left mug is -66.8; from the right mug it is +66.8. Each mug is 28 cm from the midline and the other mug is 56 cm away, so each mug is reachable by one arm only.",
+  "scoring": "Per mug, all three must hold: it is upright on the table; its body centre is within 2 cm of the centre of its blue square; its handle direction (from the mug's centre to the handle's outer end) is within 5 degrees of the direction from the mug's centre to the pin's centre. Score 1.0 if both mugs pass, 0.5 if exactly one passes, 0 otherwise. Needs a tape measure and a protractor or a printed angle sheet laid on a photo from above.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Put each mug back with its centre on its square's centre (within 1 cm) and its handle at the stated start bearing (within 5 degrees).",
+  "fidelity": "Approximate: rigid bodies with friction 1.2, mugs turn only about the vertical, no joints. Mugs are a library model scaled to 9 cm across, light at 0.2 kg. The pin, tape squares and tray are plain shapes. Scoring reads object poses only.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-8QU3FB"
+}
