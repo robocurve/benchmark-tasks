@@ -1,0 +1,18 @@
+{
+  "title": "Prove an overload limiter releases and resets",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "overload clutch",
+    "fault recovery",
+    "drive commissioning"
+  ],
+  "instruction": "Press blue RUN and let the silver output wheel turn at least once. Hold the orange JAM cap until the output stops while the input keeps turning. Release JAM, then press green RESET and let the output turn once again.",
+  "context": "Robot drive commissioning includes verifying that a jam releases the overload limiter and that the same drive can resume service after clearing the jam.",
+  "setup": "The dual-YAM station tabletop is at world z=747.5 mm. The 354 by 255 by 8 mm aluminum fixture base is centered at (296, 0, 751.5) mm. The blue input rotor and silver output rotor are each 52 mm diameter by 14 mm thick, centered at (232, 0, 792) and (351, 0, 792) mm. Metal guard walls and covers prevent direct access to the rotating parts. Three ABS push caps are each 36 by 28 by 16 mm, centered at z=789 mm. RUN is at (234, -111) mm, JAM at (297, 105) mm, and RESET at (347, -111) mm. Each moves down by up to 7 mm. The exact guards, support geometry and starting positions are in task.py.",
+  "scoring": "0.25 for at least one output revolution under the 0.12 N m load. 0.50 for the subsequent jam and detent release at the calibrated 0.23 N m threshold. 0.75 when RESET restores engagement after the jam cap is released. 1.0 for another loaded output revolution after reset with the reset cap released. A press requires 3 mm of stroke. Zero for an out-of-sequence clutch trip, fixture translation beyond 10 mm, or excessive fixture rotation.",
+  "run_limit": "2,400 control steps (120 seconds at 20 Hz)",
+  "reset_notes": "Start both arms at ready, both rotors stationary, the clutch engaged, all caps released, and the drive disabled.",
+  "fidelity": "Robot contact moves real prismatic caps. Isaac joint torques drive two physical rotors with a compliant coupling and a spring brake. The detent release and 0.12 N m load are modeled. The guard is part of the rigid fixture.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-RKQ8SN"
+}
