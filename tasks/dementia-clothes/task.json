@@ -1,0 +1,20 @@
+{
+  "title": "Lay out clothes in dressing order for a person with dementia",
+  "category": "Societal relevance",
+  "keywords": [
+    "assistive",
+    "dementia",
+    "dressing",
+    "unstated rule",
+    "sequencing",
+    "bimanual"
+  ],
+  "instruction": "Mr Lee has dementia. Lay out his black coat, white vest, green jumper and blue shirt on the bed so he can dress himself.",
+  "context": "The Alzheimer's Association advises caregivers to \"Lay out clothing in the order that each item should be put on\" (\"Dressing and Grooming\"). Home health aides (O*NET 31-1121.00) help patients with dressing and grooming. The instruction does not state the rule, and the items are named out of order.",
+  "setup": "Positions in cm from the midpoint between the two arm bases, on the table (x forward, y to the robot's left); the arm bases are at y +30.5 and -30.5. A fixed pale blue bed cover 16 (x) x 38 (y) cm and 2 mm thick is centred at x 25, y 0. Four loose folded clothes, each a flat block 10 (x) x 6 (y) x 3 cm tall, 100 g, lie on the table: white vest at x 18, y +27; blue shirt at x 32, y +27; green jumper at x 32, y -27; black coat at x 18, y -27. Nothing else is on the table.",
+  "scoring": "Measured at the end with a ruler. An item counts as on the bed when it rests directly on the bed cover (not on another item, lowest point within 5 mm of it), its centre is within 5 cm of the bed's centre line along x and over the bed along y, and it is still (under 1 cm/s and 0.5 rad/s). The dressing order is vest, shirt, jumper, coat. A neighbouring pair (vest-shirt, shirt-jumper, jumper-coat) is in order when both are on the bed with centres at least 7 cm apart along y, running in the same direction along the row; either direction counts. Score: 0.1 per item on the bed plus 0.2 per pair in the longest unbroken run of pairs in order, so 0.1 to 1.0 (0 if nothing is on the bed). Success (1.0) is all four on the bed with all three pairs in order, held for 1 s. On a real table, open the grippers before measuring.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "fidelity": "Approximate: folded clothes are rigid blocks told apart by colour, and the bed is a thin fixed cover at reduced scale. Real clothes are soft and need folding. The cited advice gives no direction, so either direction along the row counts. The scorer cannot see the grippers, so an item still held motionless on the bed is not distinguished.",
+  "scores": "Dream-1 run: 0.1; demo: 1.0",
+  "media": "M-4UATFL"
+}
