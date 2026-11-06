@@ -1,0 +1,21 @@
+{
+  "title": "Walk a washing machine into its space, corner by corner",
+  "category": "Impact on jobs",
+  "keywords": [
+    "appliance installation",
+    "heavy object",
+    "pivoting",
+    "walking an object",
+    "tip-over",
+    "no lifting"
+  ],
+  "instruction": "Move the washing machine back into its taped space.",
+  "context": "Installers move a washing machine into its space by tipping it onto one corner and swinging it, corner by corner. It is too heavy to lift, its rubber feet stop it sliding, and a shove high on it tips it over. Done by: appliance installers and repairers. Unlike TK-LXQYWA (tumble a block over its edges) and TK-6WGTZU (slide a heavy carton), this task moves an object that must never go over, by pivoting it on alternate corners.",
+  "setup": "Positions in cm from the midpoint between the two arm bases (61 cm apart), x away from the robot, y to its left; heights from the table top (74.75 cm above the floor). Washing machine (loose, one rigid body, 3.0 kg in total, rubber feet: friction 1.2 static, 1.0 sliding): a white cabinet, a box 11 x 11 wide and 10 tall, its centre at (18, 0), square to the table, too wide to grip; a grey control console, a box 3 deep (x) x 11 wide x 3.5 tall, standing on the cabinet's top, its back flush with the cabinet's far face (x 20.5 to 23.5), so the machine is 13.5 tall. Its space, marked with fixed blue tape 1 wide and 0.1 thick: two side lines from x 16.5 to 34.5 with inner edges at y +8.5 and -8.5, and a far line across y -9.5 to 9.5 with its inner edge at x 33.5. The side nearest the robot is open; the space's near boundary is the line between the side lines' near ends (x 16.5). At the start the cabinet's near face is at x 12.5, 4 cm short of that boundary. Nothing else on the table.",
+  "scoring": "1.0: the machine stands in its space: all four bottom corners of the cabinet within 1.5 mm of the table, every corner inside the tape (x from 16.5 to 33.5, y within 8.5 of the centre line), set down and left still for 1 s (a reviewer watching the video scores a machine still held as 0), and over the whole trial it never tilted more than 20 degrees from upright and was never lifted (its lowest corner never more than 2 mm above the table). 0.5: standing (corners within 1.5 mm of the table), set down and still, never tilted past 20 degrees or lifted, its centre at least 30 mm further from the robot than at the start, but not wholly inside the space. 0 otherwise: moved less than 30 mm, tipped over or tilted past 20 degrees at any time (even if stood back up), lifted at any time, left leaning on an edge or held off the table, or still moving. Measure the corners and the centre with a tape from a top photo; judge the tilt and lift from the video.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "Stand the machine back at (18, 0), square to the table, upright on all four feet.",
+  "fidelity": "Approximate, bench scale: an 11 cm, 3 kg cabinet stands in for a 60 cm, 70 kg machine, and the console is a rigid block the gripper can hold, where a person grips the top edges. Rigid boxes, rigid table; no hoses or cord. Tested in the simulator: a push at mid-height, a level drag by the console and an attempt to tip it back and drag it each move it under 3 mm; a hard low push with both arms, or a hard push on the console, tips it over.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-67U2K4"
+}
