@@ -1,0 +1,21 @@
+{
+  "title": "Release a complete kit and hold a short one without topping it up",
+  "category": "Impact on jobs",
+  "keywords": [
+    "kitting",
+    "kit audit",
+    "shortage",
+    "material review",
+    "conditional routing",
+    "line stock"
+  ],
+  "instruction": "Each kit on the black audit mat must hold four steel bushings. Count each kit. A complete kit goes to the grey ship lane. A short kit goes to the red hold lane exactly as it is: never complete it with bushings from the yellow line-side bin or from another kit. Move each kit by its blue plate.",
+  "context": "Kits are audited before release to the line. A complete kit is released; a short kit is tagged and held for material review, and the shortage is reported rather than covered. Kitters must not top a kit up from line-side stock, because that hides the shortage and starves the line later ('robbing'). The robot must count, route each kit by the result, and leave the shortfall visible. Unlike TK-CDVSJF (count five bolts into a tray), nothing is counted out: an existing kit is counted and routed by the result, and filling it is penalised. RoboCasa's PlaceEqualIceCubes and BEHAVIOR's kit activities also fill to a count. Done by: production kitters, material handlers and inspectors (O*NET 53-7062.00, 51-9061.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. Three fixed mats 2 mm thick: black audit mat 15 x 30 cm centred at x 19, y 30; grey ship lane 15 x 12 cm at x 39, y 37.5; red hold lane 15 x 12 cm at x 39, y 20. On the audit mat, two loose blue kit plates (11 cm along x, 7 cm across, 2 cm thick, 120 g) centred at x 19 and y 37.5 (short kit) and 22.5 (full kit). On each plate, steel bushings (2.2 x 2.2 cm, 1.8 cm tall, 25 g) stand 5.4 cm apart along x and 3.4 cm apart across, round the plate centre: four on the full kit, three on the short kit (the one at the far, right-hand corner missing). Line-side bin: a fixed yellow open frame (walls 0.6 cm thick, 2 cm tall, round a 12 x 5 cm pocket) centred at x 23, y 11, with three loose bushings at x 19.5, 23 and 26.5.",
+  "scoring": "From a top photo and a ruler, with the grippers open. A kit is on a lane when its plate is still and flat (tilt under 5 degrees) on the lane mat with its whole footprint on it. A bushing is on a plate when its centre is over the plate and its bottom within 5 mm of the plate's top. 0.5 for the full kit on the ship lane with its own four bushings; 0.5 for the short kit on the hold lane with its own three bushings and nothing added. The short kit on the ship lane scores 0. A line-side bushing moved more than 1 cm caps the score at 0.25. Possible scores: 0, 0.25, 0.5, 1.0. Success: score 1, held 1 s.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Put both kit plates back on the audit mat on their marks with their bushings (three on the outer plate) and the three loose bushings in the yellow bin; the mats and bin do not move.",
+  "fidelity": "Rigid boxes with one shared friction (1.2 static, 1.0 dynamic). Kit plates are flat blocks with no pockets or rim, so the bushings ride on them by friction; bushings are square blocks rather than tubes. The lanes are flat mats instead of conveyors, and the hold tag and shortage report are not modelled.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-SY7JWW"
+}
