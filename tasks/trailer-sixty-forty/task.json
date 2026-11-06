@@ -1,0 +1,20 @@
+{
+  "title": "Load a trailer with 60% of the weight ahead of the axle",
+  "category": "Impact on jobs",
+  "keywords": [
+    "trailer loading",
+    "weight distribution",
+    "60/40 rule",
+    "sway",
+    "planning"
+  ],
+  "instruction": "Load all three crates onto the trailer bed so that at least 60% of their total weight is ahead of the axle (the red line), on the hitch side. The grey steel crate weighs 160 g and each wooden crate 40 g.",
+  "context": "Movers, landscapers and anyone towing a trailer load at least 60% of the cargo weight ahead of the axle; a tail-heavy trailer sways and can jackknife. Here only the steel crate's side of the axle decides it, so the robot has to reason about weight, not just fill the bed.",
+  "setup": "A wooden table; positions are from the midpoint between the two arm bases, measured forward and toward the left arm. A fixed flatbed trailer: wooden bed 240 x 60 x 20 mm, long side running side to side, centred 330 mm forward and on the midline; its black tongue and hitch point left. A 6 mm red stripe across the bed, 20 mm right of its centre, marks the axle, with a black wheel block (14 x 44 x 44 mm) on each side. Three 40 mm cube crates stand on the table 220 mm forward: a grey sheet-steel crate (160 g) 150 mm left, a brown wooden crate (40 g) 50 mm left and another (40 g) 120 mm right.",
+  "scoring": "A crate counts as on the bed when it stands flat on it (centre within 4 mm of its resting height, tilted under 5 degrees) with its whole footprint over the bed. 0.2 per crate on the bed; plus 0.4 if all three are on it and the crates whose centres are on the hitch side of the axle line's centre make up at least 60% of the total weight (160 + 40 + 40 g). Success once the score is 1.0 and all crates are still for 1 s.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lift the crates back to their start marks on the table; the trailer stays fixed.",
+  "fidelity": "The trailer is fixed in place and doesn't tip or rest on its hitch, so weight ahead of the axle is judged from where the crates stand rather than from a tongue-weight reading. Crates are solid boxes with the stated masses; the trailer is scaled down to table size.",
+  "scores": "Dream-1 run: 0 (step limit reached, no crate loaded); demo: 1.0",
+  "media": "M-WNE97M"
+}
