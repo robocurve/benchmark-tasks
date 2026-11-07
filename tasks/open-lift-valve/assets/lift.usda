@@ -1,0 +1,221 @@
+#usda 1.0
+(
+    defaultPrim = "lift"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "lift" (
+    prepend apiSchemas = ["PhysicsArticulationRootAPI"]
+)
+{
+    def Xform "base" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 4
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cube "bracket_r" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            color3f[] primvars:displayColor = [(0.22, 0.24, 0.27)]
+            double size = 1
+            float3 xformOp:scale = (0.04, 0.02, 0.128)
+            double3 xformOp:translate = (-0.015, -0.126, 0.064)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cylinder "knuckle_r"
+        {
+            uniform token axis = "Y"
+            double height = 0.02
+            color3f[] primvars:displayColor = [(0.62, 0.66, 0.7)]
+            double radius = 0.009
+            double3 xformOp:translate = (0, -0.126, 0.128)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cube "bracket_l" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            color3f[] primvars:displayColor = [(0.22, 0.24, 0.27)]
+            double size = 1
+            float3 xformOp:scale = (0.04, 0.02, 0.128)
+            double3 xformOp:translate = (-0.015, 0.126, 0.064)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cylinder "knuckle_l"
+        {
+            uniform token axis = "Y"
+            double height = 0.02
+            color3f[] primvars:displayColor = [(0.62, 0.66, 0.7)]
+            double radius = 0.009
+            double3 xformOp:translate = (0, 0.126, 0.128)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cylinder "pin"
+        {
+            uniform token axis = "Y"
+            double height = 0.27
+            color3f[] primvars:displayColor = [(0.62, 0.66, 0.7)]
+            double radius = 0.004
+            double3 xformOp:translate = (0, 0, 0.128)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cylinder "barrel" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.08199999999999999
+            color3f[] primvars:displayColor = [(0.95, 0.74, 0.08)]
+            double radius = 0.026
+            double3 xformOp:translate = (-0.325, 0, 0.048999999999999995)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cylinder "foot" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.008
+            color3f[] primvars:displayColor = [(0.22, 0.24, 0.27)]
+            double radius = 0.034
+            double3 xformOp:translate = (-0.325, 0, 0.004)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cylinder "gland"
+        {
+            uniform token axis = "Z"
+            double height = 0.006
+            color3f[] primvars:displayColor = [(0.22, 0.24, 0.27)]
+            double radius = 0.027999999999999997
+            double3 xformOp:translate = (-0.325, 0, 0.087)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cylinder "port"
+        {
+            uniform token axis = "X"
+            double height = 0.012
+            color3f[] primvars:displayColor = [(0.22, 0.24, 0.27)]
+            double radius = 0.007
+            double3 xformOp:translate = (-0.35500000000000004, 0, 0.02)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "board" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.6
+        double3 xformOp:translate = (0, 0, 0.128)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cube "top" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            color3f[] primvars:displayColor = [(0.93, 0.92, 0.89)]
+            double size = 1
+            float3 xformOp:scale = (0.34, 0.22, 0.012)
+            double3 xformOp:translate = (-0.17, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "leaf"
+        {
+            color3f[] primvars:displayColor = [(0.62, 0.66, 0.7)]
+            double size = 1
+            float3 xformOp:scale = (0.02, 0.2, 0.003)
+            double3 xformOp:translate = (-0.012, 0, -0.0075)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def Xform "rod" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.05
+        double3 xformOp:translate = (-0.325, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cylinder "shaft"
+        {
+            uniform token axis = "Z"
+            double height = 0.086
+            color3f[] primvars:displayColor = [(0.85, 0.88, 0.92)]
+            double radius = 0.011
+            double3 xformOp:translate = (0, 0, 0.073)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cylinder "pad"
+        {
+            uniform token axis = "Z"
+            double height = 0.006
+            color3f[] primvars:displayColor = [(0.22, 0.24, 0.27)]
+            double radius = 0.018
+            double3 xformOp:translate = (0, 0, 0.119)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def "joints"
+    {
+        def PhysicsFixedJoint "root_joint"
+        {
+            rel physics:body1 = </lift/base>
+        }
+
+        def PhysicsRevoluteJoint "board" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0
+            float drive:angular:physics:stiffness = 0
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "Y"
+            rel physics:body0 = </lift/base>
+            rel physics:body1 = </lift/board>
+            point3f physics:localPos0 = (0, 0, 0.128)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -2
+            float physics:upperLimit = 30
+        }
+
+        def PhysicsPrismaticJoint "rod" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 0
+            float drive:linear:physics:stiffness = 0
+            float drive:linear:physics:targetPosition = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "Z"
+            rel physics:body0 = </lift/base>
+            rel physics:body1 = </lift/rod>
+            point3f physics:localPos0 = (-0.325, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = 0
+            float physics:upperLimit = 0.1
+        }
+    }
+}
+

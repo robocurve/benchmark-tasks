@@ -1,0 +1,436 @@
+#usda 1.0
+(
+    defaultPrim = "valve"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "valve" (
+    prepend apiSchemas = ["PhysicsArticulationRootAPI"]
+)
+{
+    def Xform "base" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 3
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cube "body" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            color3f[] primvars:displayColor = [(0.72, 0.55, 0.22)]
+            double size = 1
+            float3 xformOp:scale = (0.07, 0.07, 0.07)
+            double3 xformOp:translate = (0, 0, 0.035)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "porta" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            color3f[] primvars:displayColor = [(0.72, 0.55, 0.22)]
+            double size = 1
+            float3 xformOp:scale = (0.05, 0.02, 0.05)
+            double3 xformOp:translate = (0, -0.045, 0.03)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "portb" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            color3f[] primvars:displayColor = [(0.72, 0.55, 0.22)]
+            double size = 1
+            float3 xformOp:scale = (0.05, 0.02, 0.05)
+            double3 xformOp:translate = (0, 0.045, 0.03)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cylinder "bonnet" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.045
+            color3f[] primvars:displayColor = [(0.72, 0.55, 0.22)]
+            double radius = 0.02
+            double3 xformOp:translate = (0, 0, 0.0925)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cylinder "stem" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.02
+            color3f[] primvars:displayColor = [(0.62, 0.66, 0.7)]
+            double radius = 0.007
+            double3 xformOp:translate = (0, 0, 0.12)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cube "mark"
+        {
+            color3f[] primvars:displayColor = [(0.95, 0.95, 0.93)]
+            double size = 1
+            float3 xformOp:scale = (0.04, 0.008, 0.001)
+            double3 xformOp:translate = (-0.125, 0, 0.0005)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "mark_tip"
+        {
+            color3f[] primvars:displayColor = [(0.95, 0.95, 0.93)]
+            double size = 1
+            float xformOp:rotateZ = 45
+            float3 xformOp:scale = (0.014, 0.014, 0.001)
+            double3 xformOp:translate = (-0.10200000000000001, 0, 0.0005)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+        }
+    }
+
+    def Xform "wheel" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.4
+        double3 xformOp:translate = (0, 0, 0.13)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Capsule "rim00" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.03121445152258052
+            color3f[] primvars:displayColor = [(0.16, 0.34, 0.78)]
+            double radius = 0.0085
+            float xformOp:rotateZ = 101.25
+            double3 xformOp:translate = (0.07846282243225844, 0.01560722576129026, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+        }
+
+        def Capsule "rim01" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.03121445152258052
+            color3f[] primvars:displayColor = [(0.16, 0.34, 0.78)]
+            double radius = 0.0085
+            float xformOp:rotateZ = 123.75
+            double3 xformOp:translate = (0.06651756898420362, 0.04444561864156817, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+        }
+
+        def Capsule "rim02" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.03121445152258052
+            color3f[] primvars:displayColor = [(0.16, 0.34, 0.78)]
+            double radius = 0.0085
+            float xformOp:rotateZ = 146.25
+            double3 xformOp:translate = (0.04444561864156819, 0.06651756898420362, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+        }
+
+        def Capsule "rim03" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.03121445152258052
+            color3f[] primvars:displayColor = [(0.16, 0.34, 0.78)]
+            double radius = 0.0085
+            float xformOp:rotateZ = 168.75
+            double3 xformOp:translate = (0.015607225761290268, 0.07846282243225844, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+        }
+
+        def Capsule "rim04" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.03121445152258052
+            color3f[] primvars:displayColor = [(0.16, 0.34, 0.78)]
+            double radius = 0.0085
+            float xformOp:rotateZ = 191.25
+            double3 xformOp:translate = (-0.015607225761290255, 0.07846282243225844, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+        }
+
+        def Capsule "rim05" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.03121445152258052
+            color3f[] primvars:displayColor = [(0.16, 0.34, 0.78)]
+            double radius = 0.0085
+            float xformOp:rotateZ = 213.75
+            double3 xformOp:translate = (-0.04444561864156816, 0.06651756898420363, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+        }
+
+        def Capsule "rim06" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.03121445152258052
+            color3f[] primvars:displayColor = [(0.16, 0.34, 0.78)]
+            double radius = 0.0085
+            float xformOp:rotateZ = 236.25
+            double3 xformOp:translate = (-0.06651756898420363, 0.04444561864156817, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+        }
+
+        def Capsule "rim07" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.03121445152258052
+            color3f[] primvars:displayColor = [(0.16, 0.34, 0.78)]
+            double radius = 0.0085
+            float xformOp:rotateZ = 258.75
+            double3 xformOp:translate = (-0.07846282243225844, 0.015607225761290288, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+        }
+
+        def Capsule "rim08" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.03121445152258052
+            color3f[] primvars:displayColor = [(0.16, 0.34, 0.78)]
+            double radius = 0.0085
+            float xformOp:rotateZ = 281.25
+            double3 xformOp:translate = (-0.07846282243225844, -0.01560722576129027, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+        }
+
+        def Capsule "rim09" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.03121445152258052
+            color3f[] primvars:displayColor = [(0.16, 0.34, 0.78)]
+            double radius = 0.0085
+            float xformOp:rotateZ = 303.75
+            double3 xformOp:translate = (-0.06651756898420363, -0.04444561864156816, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+        }
+
+        def Capsule "rim10" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.03121445152258052
+            color3f[] primvars:displayColor = [(0.16, 0.34, 0.78)]
+            double radius = 0.0085
+            float xformOp:rotateZ = 326.25
+            double3 xformOp:translate = (-0.04444561864156817, -0.06651756898420362, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+        }
+
+        def Capsule "rim11" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.03121445152258052
+            color3f[] primvars:displayColor = [(0.16, 0.34, 0.78)]
+            double radius = 0.0085
+            float xformOp:rotateZ = 348.75
+            double3 xformOp:translate = (-0.015607225761290294, -0.07846282243225843, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+        }
+
+        def Capsule "rim12" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.03121445152258052
+            color3f[] primvars:displayColor = [(0.16, 0.34, 0.78)]
+            double radius = 0.0085
+            float xformOp:rotateZ = 371.25
+            double3 xformOp:translate = (0.015607225761290264, -0.07846282243225844, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+        }
+
+        def Capsule "rim13" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.03121445152258052
+            color3f[] primvars:displayColor = [(0.16, 0.34, 0.78)]
+            double radius = 0.0085
+            float xformOp:rotateZ = 393.75
+            double3 xformOp:translate = (0.044445618641568145, -0.06651756898420363, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+        }
+
+        def Capsule "rim14" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.03121445152258052
+            color3f[] primvars:displayColor = [(0.16, 0.34, 0.78)]
+            double radius = 0.0085
+            float xformOp:rotateZ = 416.25
+            double3 xformOp:translate = (0.06651756898420362, -0.04444561864156817, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+        }
+
+        def Capsule "rim15" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.03121445152258052
+            color3f[] primvars:displayColor = [(0.16, 0.34, 0.78)]
+            double radius = 0.0085
+            float xformOp:rotateZ = 438.75
+            double3 xformOp:translate = (0.07846282243225843, -0.015607225761290299, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+        }
+
+        def Cube "spoke0" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            color3f[] primvars:displayColor = [(0.16, 0.34, 0.78)]
+            double size = 1
+            float3 xformOp:scale = (0.08, 0.012, 0.008)
+            double3 xformOp:translate = (0.04, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "spoke1" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            color3f[] primvars:displayColor = [(0.16, 0.34, 0.78)]
+            double size = 1
+            float xformOp:rotateZ = 120
+            float3 xformOp:scale = (0.08, 0.012, 0.008)
+            double3 xformOp:translate = (-0.01999999999999999, 0.034641016151377546, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+        }
+
+        def Cube "spoke2" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            color3f[] primvars:displayColor = [(0.16, 0.34, 0.78)]
+            double size = 1
+            float xformOp:rotateZ = 240
+            float3 xformOp:scale = (0.08, 0.012, 0.008)
+            double3 xformOp:translate = (-0.020000000000000018, -0.03464101615137754, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+        }
+
+        def Cylinder "hub" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.022
+            color3f[] primvars:displayColor = [(0.16, 0.34, 0.78)]
+            double radius = 0.018
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cylinder "boss" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.01050000000000001
+            color3f[] primvars:displayColor = [(0.16, 0.34, 0.78)]
+            double radius = 0.012
+            double3 xformOp:translate = (-0.08, 9.797174393178826e-18, 0.005250000000000005)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "knob" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.03
+        double3 xformOp:translate = (-0.08, 9.797174393178826e-18, 0.163)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cylinder "grip" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.045
+            color3f[] primvars:displayColor = [(0.82, 0.12, 0.1)]
+            double radius = 0.012
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def "joints"
+    {
+        def PhysicsFixedJoint "root_joint"
+        {
+            rel physics:body1 = </valve/base>
+        }
+
+        def PhysicsRevoluteJoint "wheel" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0
+            float drive:angular:physics:stiffness = 0
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "Z"
+            rel physics:body0 = </valve/base>
+            rel physics:body1 = </valve/wheel>
+            point3f physics:localPos0 = (0, 0, 0.13)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+        }
+
+        def PhysicsRevoluteJoint "knob" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0
+            float drive:angular:physics:stiffness = 0
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "Z"
+            rel physics:body0 = </valve/wheel>
+            rel physics:body1 = </valve/knob>
+            point3f physics:localPos0 = (-0.08, 9.797174e-18, 0.033)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+        }
+    }
+}
+
