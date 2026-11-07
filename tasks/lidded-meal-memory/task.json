@@ -1,0 +1,14 @@
+{
+  "title": "Lid three lunch boxes, then serve the gluten-free one, which no longer shows once lidded",
+  "category": "Impact on AI timelines",
+  "keywords": ["memory", "occlusion", "food allergy", "kitchen", "lids"],
+  "instruction": "Put lids on the three lunch boxes, then put the gluten-free one on the green tray. The rice is gluten-free.",
+  "context": "Current robot policies act on what the camera shows now, and fail once something they saw is hidden (memory benchmarks such as RoboMME and LIBERO-Mem test this with cubes and buttons). In a kitchen it is an everyday job: meals are covered before they are carried, and serving the wrong covered meal to a guest with coeliac disease or an allergy is a serious error.",
+  "setup": "A kitchen counter with a steel prep sheet. Three plastic lunch boxes (9 x 6.6 x 5 cm, 250 g with food) stand in a row 36 cm in front of the arm bases, at 20 cm left, on the midline and 20 cm right; the middle one holds white rice, the outer two orange pasta, 2 cm deep. Three identical blue-grey plastic lids (9 x 6.6 cm, 50 g; a plug rim 1 cm deep that fits inside a box with 4 mm to spare, and a 3 x 2.4 x 2.5 cm knob) lie 19 cm out at 26 cm left, 9 cm left and 11 cm right. A green plastic tray (13 x 11 cm, 1 cm rim) is 20 cm out, 29 cm right. Also: a cutting board, a water jug, plates, a fruit bowl.",
+  "scoring": "0 if any box is moved (2 cm or lifted 2 cm) before all three are lidded at once, or if a pasta box ends on the tray. Otherwise 1.0 for the rice box ending on the tray with all three boxes lidded; 0.5 for the rice box on the tray with a lid off; 0.25 for all three lidded and no box on the tray; 0 otherwise. Lidded: a lid centred within 1 cm, sitting level (within 10 degrees) on the box rim.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Take the lids off and lay them back on their marks; put the rice box back in the middle.",
+  "fidelity": "Rigid boxes and lids; the food is a solid block of its colour, so nothing spills. The lids are identical and opaque, so a lidded box shows nothing of what is inside from any camera.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-LJY2AX"
+}
