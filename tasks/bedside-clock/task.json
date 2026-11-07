@@ -1,0 +1,20 @@
+{
+  "title": "Set a bedside clock to the time shown on an analog clock",
+  "category": "Societal relevance",
+  "keywords": [
+    "clock reading",
+    "counting",
+    "buttons",
+    "everyday chores",
+    "home care"
+  ],
+  "instruction": "Set the bedside clock to the time on the analog clock.",
+  "context": "After a power cut or a switch between summer and winter time, clocks need resetting, an everyday chore in home care. The time to set is on an analog clock: reading a clock face is a known weak spot of vision-language models, and here the reading has to drive a counted physical action. The HOUR and MIN buttons each add one and only count up; minutes roll from 59 to 00 without changing the hour, so going past 4:41 costs nearly a full lap. Doing nothing leaves 1:25 and scores 0.",
+  "setup": "Positions in cm from the midpoint between the arm bases: x forward, y to the robot's left; heights above the table top. Both clocks are taped down. Bedside clock: black ABS case 22 cm wide, 15 cm deep and 10 cm tall, from x 20 to 35, centred on the midline; its front slopes at 45 degrees from 3 cm up at x 20 to the top at x 27. On the slope, a 3.2 cm tall window between two black bezel bars (17 x 2 cm, 8 mm proud), centred at x 23.5, 6.5 cm up, shows the time as H:MM in white-on-black digits about 1.8 cm tall, hours 1 to 12, with a white colon (in simulation, printed on three number drums; a real build can use a negative-mode LCD driven by a microcontroller). It shows 1:25 at the start. Two grey 2.4 cm square button caps stand 8 mm above the flat top at x 30.5, y 7 (HOUR, on the left) and y -7 (MIN, on the right), each name printed in white in front of its button; they travel 5 mm and take about 1 N at the bottom. Each press advances the display by one: HOUR goes from 12 to 1; MIN goes from 59 to 00 without changing the hour; holding a button does not repeat. The clock does not keep time: the display changes only when a button is pressed. Analog clock: a battery clock with a 22 cm white face, black numerals 1 to 12, minute ticks and black hands, in a dark grey rim 24 cm across and 3.5 cm deep; battery out, hands set to 4:40. Centre at (58, 18), 17 cm up, face toward the robot, leaning back 25 degrees, on a wooden easel: a 14 x 16 x 1.2 cm foot centred at (60, 18), a 6 cm wide back board against the rim's back, and a 10 cm wide ledge under the rim about 5 cm up. Both arms start at the ready pose with open grippers.",
+  "scoring": "Judged from a photo of the bedside clock's display at the end, and the video. A press counts when a button is pushed in more than 3.5 mm of its 5 mm travel; it must come back to less than 1.5 mm before the next counts (the clock's own switch points). 1.0 (success): the clock shows 4:39, 4:40 or 4:41 for 4 s, which ends the trial. 0.5: the minutes show 39 to 41 and the hour is one off (3 or 5: the hour hand misread). 0: anything else, including the right hour with wrong minutes (three HOUR presses get it without reading the clock), doing nothing (1:25 stays), or the clock knocked over or moved more than 1 cm (in simulation it is fixed). Only the display counts: a gripper still on a button at the end does not matter, since holding does not repeat.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Set the bedside clock back to 1:25: press HOUR until it shows 1, then MIN until it shows 25. Check that the analog clock still reads 4:40 and that both clocks are on their marks.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. The buttons are sliding joints with a 200 N/m spring and 5 mm of travel, read after every control step, so a tap shorter than 50 ms can be missed. The number drums are turned by the task code, not a mechanism: after a counted press a drum rolls to the next number over 0.1 s, as fast as presses can come. The analog clock is a fixed body with its numerals and hands printed on the face.",
+  "scores": "Dream-1 run: 0.0 (its right arm reached over the bedside clock several times but never pressed a button, so it still showed 1:25); demo: 1.0",
+  "media": "M-TTL6T9"
+}
