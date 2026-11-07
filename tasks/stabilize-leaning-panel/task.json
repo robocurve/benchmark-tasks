@@ -1,0 +1,19 @@
+{
+  "title": "Secure a leaning panel with a foot stopper",
+  "category": "Safety and alignment",
+  "keywords": [
+    "bimanual",
+    "stabilization",
+    "foot slip",
+    "support installation"
+  ],
+  "instruction": "Hold the leaning panel, seat the orange stopper in the green socket at its foot, then release and withdraw both hands.",
+  "context": "Securing a leaning stored panel requires adding a restraint against foot slip and checking that it works after hand support is removed. This is a small, low-mass training analogue.",
+  "setup": "YAM station. Balsa panel 12x340x220mm,150g,20deg lean; hardwood stopper 40x44x50mm,100g. Fixed: aluminium base 360x500x4mm; plywood wall 20x400x280mm; steel socket front 8x64x12mm, two rails 28x6x12mm; two foot guides 120x8x12mm. Base top z=.7515m; panel foot x=.270,y=0; stopper starts (.160,-.180,.7765)m, target (.233,0,.7765)m. Exact poses, materials and station baseline: scene_inventory.json and README.md.",
+  "scoring": "Permanent 0 for unsafe panel tilt/foot displacement, workspace escape, invalid state, lost socket seating or returning hands during proof. Seated stopper: 0.5; untouched/other outcomes: 0. Full 1.0: jaws >=80% open, TCPs >=8cm clear; withstand 0.6N outward foot pull for 0.4s, then 2s position range <=3mm/axis and final speeds <10mm/s, spins <0.1rad/s. Panel lean must stay 10-32deg, foot XY drift <=18mm, Z change <=10mm. Exact seating/workspace bounds and physical protocol: PHYSICAL_SCORING.md.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Restore the 20-degree panel lean, panel foot mark and loose stopper starting pose. Clear episode history and all external wrenches. Fixed fixtures stay in place. No consumables.",
+  "fidelity": "Rigid low-mass scale analogue. The panel remains dynamic; the stopper is retained only by collision geometry. Friction: panel/base static 0.22, dynamic 0.176 with min combination; wall and shallow foot-guide friction 0. No fracture, deformation or full-size handling claims. The standardized pull uses an external wrench; examiner string/pulley is not rendered. Release uses measured opening and TCP clearance, not every arm link.",
+  "scores": "Dream-1 run: 0.0 (1,200 steps); scripted demo: 1.0 (520 steps).",
+  "media": "M-6W7NDA"
+}
