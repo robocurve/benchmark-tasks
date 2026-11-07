@@ -1,0 +1,278 @@
+[
+  {
+    "name": "cam_fixture",
+    "pos": [
+      0.28,
+      -0.035,
+      0.7475
+    ],
+    "color": [
+      0.65,
+      0.65,
+      0.65
+    ],
+    "mass": null,
+    "yaw": 0.0,
+    "size": [
+      0.18,
+      0.3,
+      0.044
+    ],
+    "parts": [
+      {
+        "pos": [
+          0,
+          0.065,
+          0.004
+        ],
+        "size": [
+          0.18,
+          0.3,
+          0.008
+        ]
+      },
+      {
+        "pos": [
+          0.038,
+          0.065,
+          0.023
+        ],
+        "size": [
+          0.016,
+          0.072,
+          0.03
+        ]
+      }
+    ],
+    "grasp_offset": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "links": [
+      {
+        "name": "cam",
+        "mass": 0.08,
+        "pos": [
+          0,
+          0,
+          0.014
+        ],
+        "parts": [
+          {
+            "pos": [
+              0.008,
+              0,
+              0
+            ],
+            "size": [
+              0.056,
+              0.056,
+              0.018
+            ],
+            "shape": "cylinder",
+            "radius": 0.028,
+            "height": 0.018,
+            "axis": "Z",
+            "color": [
+              0.12,
+              0.35,
+              0.85
+            ]
+          },
+          {
+            "pos": [
+              -0.06,
+              0,
+              0.004
+            ],
+            "size": [
+              0.12,
+              0.026,
+              0.02
+            ],
+            "color": [
+              0.12,
+              0.35,
+              0.85
+            ]
+          }
+        ]
+      },
+      {
+        "name": "compliant_stop",
+        "mass": 0.05,
+        "pos": [
+          0,
+          0.101,
+          0.023
+        ],
+        "parts": [
+          {
+            "pos": [
+              0,
+              0,
+              0
+            ],
+            "size": [
+              0.1,
+              0.012,
+              0.03
+            ]
+          }
+        ]
+      }
+    ],
+    "joints": [
+      {
+        "name": "cam_angle",
+        "body0": "root",
+        "body1": "cam",
+        "type": "revolute",
+        "axis": "Z",
+        "anchor0": [
+          0,
+          0,
+          0.014
+        ],
+        "anchor1": [
+          0,
+          0,
+          0
+        ],
+        "lower": 0.0,
+        "upper": 95.0,
+        "stiffness": 0.0,
+        "damping": 0.002,
+        "max_force": 0.0
+      },
+      {
+        "name": "stop_compliance",
+        "body0": "root",
+        "body1": "compliant_stop",
+        "type": "prismatic",
+        "axis": "Y",
+        "anchor0": [
+          0,
+          0.101,
+          0.023
+        ],
+        "anchor1": [
+          0,
+          0,
+          0
+        ],
+        "lower": 0.0,
+        "upper": 0.004,
+        "stiffness": 1500.0,
+        "damping": 4.0,
+        "max_force": 15.0
+      }
+    ],
+    "fixed_base": true,
+    "material": "printed PA12 polymer",
+    "dimensions_unit": "metres",
+    "mass_unit": "kilograms"
+  },
+  {
+    "name": "blank",
+    "pos": [
+      0.16,
+      0.14,
+      0.7695000000000001
+    ],
+    "color": [
+      0.95,
+      0.4,
+      0.08
+    ],
+    "mass": 0.155,
+    "yaw": 0.0,
+    "size": [
+      0.06,
+      0.154,
+      0.065
+    ],
+    "parts": [
+      {
+        "pos": [
+          0,
+          0,
+          0
+        ],
+        "size": [
+          0.06,
+          0.06,
+          0.028
+        ]
+      },
+      {
+        "pos": [
+          0,
+          0.022,
+          0.013
+        ],
+        "size": [
+          0.026,
+          0.016,
+          0.04
+        ]
+      },
+      {
+        "pos": [
+          0,
+          0.07,
+          0.027
+        ],
+        "size": [
+          0.026,
+          0.1,
+          0.012
+        ]
+      },
+      {
+        "pos": [
+          0,
+          0.11,
+          0.037
+        ],
+        "size": [
+          0.03,
+          0.028,
+          0.028
+        ]
+      }
+    ],
+    "grasp_offset": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "material": "printed PA12 polymer",
+    "dimensions_unit": "metres",
+    "mass_unit": "kilograms"
+  },
+  {
+    "name": "starting_pad",
+    "pos": [
+      0.16,
+      0.14,
+      0.7515000000000001
+    ],
+    "color": [
+      0.95,
+      0.95,
+      0.95
+    ],
+    "mass": null,
+    "yaw": 0.0,
+    "size": [
+      0.08,
+      0.08,
+      0.008
+    ],
+    "material": "printed PA12 polymer",
+    "dimensions_unit": "metres",
+    "mass_unit": "kilograms"
+  }
+]
