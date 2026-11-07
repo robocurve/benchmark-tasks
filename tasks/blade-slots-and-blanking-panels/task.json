@@ -1,0 +1,21 @@
+{
+  "title": "Fit compute blades to a work order and blank every open slot",
+  "category": "Impact on jobs",
+  "keywords": [
+    "data center",
+    "AI rack",
+    "compute blade",
+    "blanking panel",
+    "airflow management",
+    "work order"
+  ],
+  "instruction": "This blade chassis has six slots, numbered 1 to 6 from the orange end plate. The work order says: install the two new compute blades in slots 2 and 4. Then fit a blanking panel into every slot that is still empty, so no slot is left open. Do not move the blades already installed, and leave any part you do not need on the spares mat.",
+  "context": "Data-center technicians populate AI rack chassis from a work order that names each blade's slot, and fill every slot left empty with a blanking panel: an open slot lets hot exhaust air recirculate to the intakes and starves the blades beside it of cooling. Vertical-blade AI racks, such as NVIDIA's announced Kyber design, load compute blades into a row of slots. Here the slots are found by counting from a marked end, the panels must go only where no blade is assigned, and one panel is surplus. Unlike TK-PLJPH7, which seats one drive carrier in one named bay, and DataCenterBench's Tier 1 plug, clip and cover steps, the robot must work out which slots get which part. Done by: computer, ATM and office machine repairers (O*NET 49-2011.00); data center technicians.",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. Chassis, all fixed: a dark base 10 x 26.6 x 1 cm centred at x 30, y 25; on it six slots along y, 3.6 cm clear width at a 4.2 cm pitch, centred at x 30 and y 14.5, 18.7, 22.9, 27.1, 31.3, 35.5 (slots 1 to 6); five steel guide walls (5 cm along x, 0.6 cm thick, 3 cm tall) between them; an orange end plate (6 x 1 x 4.5 cm) at y 12.2 beside slot 1 and a steel one at y 37.8 beside slot 6. Installed blades: green boxes 8 cm along x, 3 cm thick, 7 cm tall, 200 g, standing on the base in slots 1 and 5. Spares mat: fixed, 11 x 26 x 0.2 cm, centred at x 18, y 25. On it, standing upright, centred at x 18: blanking panels (silver boxes 8 cm along x, 1.2 cm thick, 4 cm tall, 30 g) at y 15, 25 and 35; two new blades (same as the installed ones) at y 20 and 30.",
+  "scoring": "From a top photo and a ruler, with the grippers open. A part is in a slot when its centre is inside the slot's 3.6 cm width, within 2 cm of the chassis centreline in x, and its bottom within 1 cm of the base top. Seated: in the slot alone, centre within 4 mm (blade) or 1 cm (panel) of the slot centre along y and 1 cm in x, bottom within 3 mm of the base, upright and square within 8 degrees, still. Score: 0.25 for each of slots 2 and 4 holding a seated new blade, and each of slots 3 and 6 holding one seated blanking panel. Capped at 0.25 if any panel is in slot 2 or 4, a new blade is in slot 3 or 6, or an installed blade is no longer seated in slot 1 or 5. Success: score 1.0 held for 1 s.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Stand the two new blades and three panels back on the spares mat at their marks; the installed blades in slots 1 and 5 stay.",
+  "fidelity": "Rigid boxes, one shared friction (1.2/1.0). The chassis lies on its back so blades go straight down into slots; real blades slide in horizontally on rails and latch. Blades and panels are plain boxes with no connectors, latches or handles. Slot pitch and the 3 mm clearance are widened so the gripper pads clear neighbours, not taken from any product; guide walls are shorter than the blade so the pads reach its ends.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-VE9R66"
+}
