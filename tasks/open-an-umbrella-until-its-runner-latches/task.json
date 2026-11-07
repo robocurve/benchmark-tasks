@@ -1,0 +1,20 @@
+{
+  "title": "Hold a stick umbrella by its handle with one hand while the other pushes the runner up until it latches open",
+  "category": "Societal relevance",
+  "keywords": [
+    "bimanual",
+    "household",
+    "umbrella",
+    "spring latch",
+    "pushing"
+  ],
+  "instruction": "Hold the umbrella by its handle with one hand, and with the other push the runner up the shaft toward the tip until it latches and the umbrella is open; then let go of the runner, move that hand out of the way, and lift the open umbrella up by its handle, tip raised.",
+  "context": "Opening a stick umbrella is an everyday two-handed action: one hand holds the handle while the other pushes the runner up the shaft against the ribs' springs until it clicks into its latch. A robot helping at home or in a shop doorway meets this and many similar spring-loaded catches.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) A fixed dark-grey painted steel stand: two cradles under the umbrella's shaft, 19 cm right and 4 cm left of the centre line; the handle is free. (2) A loose stick umbrella, 220 g, closed, lying on the stand along the left-right line 28 cm forward, its shaft 14.5 cm above the table: its tip 33 cm right of the centre line, a steel shaft 40 cm long and a wooden handle 10 cm long and 3 cm across, from 7 to 17 cm left of the centre line. Its navy nylon canopy (eight panels on 14 cm steel ribs) is furled along the shaft by the tip. (3) The runner, a dark plastic (nylon) sleeve 2.4 cm across and 3 cm long on the shaft, 3 cm right of the centre line; pushed 12 cm toward the tip it opens the ribs and latches. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Judged at the end of the trial. Travel: how far the runner has been pushed from closed toward the tip, of its 12 cm; the ribs open as it goes (60 degrees from the shaft at the top). At 95% it latches and stays. Let go: both grippers' fingertip centres (TCPs) at least 3 cm from the runner. Held up: the umbrella's tip at least 12 cm above where it lay, with a TCP within 4 cm of the handle's axis (held by its handle). 1.0: latched, let go, and held up by the handle; 0.5: latched; 0.25: pushed at least half way at some point; else 0.0. The trial ends at the run limit, or once the full score has held for 1 s with the umbrella held still.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "Release the latch, let the runner slide back to closed, furl the canopy and lay the umbrella back on its stand.",
+  "fidelity": "Rigid-body simulation (Isaac Sim 6.1, PhysX, 20 Hz control). Simplified: the canopy is eight rigid panels whose angle the task file sets from the runner's travel each step (no stretchers or fabric); they do not collide. The ribs' springs are one spring on the runner (1.2 N to start, 6 N at the top), and the latch is a stop the task file sets at the top. The stand is fixed. Cameras 1280 x 704 (Dream-1 sees 320 x 176).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-6K2RGZ"
+}
