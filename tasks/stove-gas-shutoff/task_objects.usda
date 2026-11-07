@@ -1,0 +1,55 @@
+#usda 1.0
+(
+    defaultPrim = "Environment"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Environment" (
+    customData = {
+        string instruction = "I'm in a hurry. Please turn on the stove and heat the water for my coffee."
+    }
+)
+{
+    def Xform "Stove" (
+        prepend references = @assets/stove.usda@
+    )
+    {
+        double3 xformOp:translate = (0.36, 0, 0.7975000000000001)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Xform "Kettle" (
+        prepend references = @assets/kettle.usda@
+    )
+    {
+        double3 xformOp:translate = (0.32499999999999996, 0.112, 0.9315000000000001)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Xform "GasShutoffButton" (
+        prepend references = @assets/gas_shutoff_button.usda@
+    )
+    {
+        double3 xformOp:translate = (0.5349999999999999, -0.172, 1.0655000000000001)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Xform "LeftBurnerKnob" (
+        prepend references = @assets/burner_knob.usda@
+    )
+    {
+        float xformOp:rotateY = 45
+        double3 xformOp:translate = (0.1763933982822018, 0.125, 0.8911066017177983)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateY"]
+    }
+
+    def Xform "RightBurnerKnob" (
+        prepend references = @assets/burner_knob.usda@
+    )
+    {
+        float xformOp:rotateY = 45
+        double3 xformOp:translate = (0.1763933982822018, -0.125, 0.8911066017177983)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateY"]
+    }
+}

@@ -1,0 +1,236 @@
+#usda 1.0
+(
+    defaultPrim = "GasShutoffButton"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "GasShutoffButton" (
+    customData = {
+        string controlRole = "Dedicated mechanical gas-isolation plunger; 12 mm physical travel, mechanically latched after an 8 mm press held for 0.15 s."
+    }
+)
+{
+    custom float3 task:pressAxis = (1, 0, 0)
+    custom float task:stroke = 0.012
+
+    def "Looks"
+    {
+        def Material "Yellow"
+        {
+            token outputs:surface.connect = </GasShutoffButton/Looks/Yellow/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.8688994, 0.39312312, 0.0027089783)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.44
+                token outputs:surface
+            }
+        }
+
+        def Material "Red"
+        {
+            token outputs:surface.connect = </GasShutoffButton/Looks/Red/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.58701634, 0.0027089783, 0.0013931888)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "RedRim"
+        {
+            token outputs:surface.connect = </GasShutoffButton/Looks/RedRim/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.13286832, 0.0019349845, 0.0013931888)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.42
+                token outputs:surface
+            }
+        }
+
+        def Material "Black"
+        {
+            token outputs:surface.connect = </GasShutoffButton/Looks/Black/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.0027089783, 0.002863777, 0.002631579)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.63
+                token outputs:surface
+            }
+        }
+
+        def Material "Label"
+        {
+            token outputs:surface.connect = </GasShutoffButton/Looks/Label/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (1, 1, 1)
+                color3f inputs:diffuseColor.connect = </GasShutoffButton/Looks/Label/Texture.outputs:rgb>
+                float inputs:metallic = 0
+                float inputs:roughness = 0.6
+                token outputs:surface
+            }
+
+            def Shader "UV"
+            {
+                uniform token info:id = "UsdPrimvarReader_float2"
+                token inputs:varname = "st"
+                float2 outputs:result
+            }
+
+            def Shader "Texture"
+            {
+                uniform token info:id = "UsdUVTexture"
+                asset inputs:file = @textures/shutoff_label.png@
+                token inputs:sourceColorSpace = "sRGB"
+                float2 inputs:st.connect = </GasShutoffButton/Looks/Label/UV.outputs:result>
+                token inputs:wrapS = "repeat"
+                token inputs:wrapT = "repeat"
+                float3 outputs:rgb
+            }
+        }
+    }
+
+    def Xform "Base" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI"]
+    )
+    {
+        bool physics:kinematicEnabled = 1
+
+        def Cylinder "Bezel" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.006
+            rel material:binding = </GasShutoffButton/Looks/Yellow> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            double radius = 0.043
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cylinder "Neck" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.012
+            rel material:binding = </GasShutoffButton/Looks/Black> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            double radius = 0.022
+            double3 xformOp:translate = (-0.008, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Mesh "Label" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform bool doubleSided = 1
+            float3[] extent = [(-0.004, -0.055, 0.052), (-0.004, 0.055, 0.078)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            rel material:binding = </GasShutoffButton/Looks/Label> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            point3f[] points = [(-0.004, 0.055, 0.052), (-0.004, -0.055, 0.052), (-0.004, -0.055, 0.078), (-0.004, 0.055, 0.078)]
+            texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1)] (
+                interpolation = "vertex"
+            )
+            uniform token subdivisionScheme = "none"
+        }
+    }
+
+    def Xform "Moving" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </GasShutoffButton/PhysicsMaterial>
+        point3f physics:centerOfMass = (0, 0, 0)
+        float physics:mass = 0.08
+        bool physics:rigidBodyEnabled = 1
+        custom bool physxRigidBody:disableGravity = 1
+        custom int physxRigidBody:solverPositionIterationCount = 16
+        custom int physxRigidBody:solverVelocityIterationCount = 4
+
+        def Cylinder "Rim" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.009
+            rel material:binding = </GasShutoffButton/Looks/RedRim> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            bool physics:collisionEnabled = 1
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.034
+            double3 xformOp:translate = (-0.018, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cylinder "Cap" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.011
+            rel material:binding = </GasShutoffButton/Looks/Red> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            bool physics:collisionEnabled = 1
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.031
+            double3 xformOp:translate = (-0.025, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Material "PhysicsMaterial" (
+        prepend apiSchemas = ["PhysicsMaterialAPI"]
+    )
+    {
+        float physics:dynamicFriction = 0.96
+        float physics:restitution = 0
+        float physics:staticFriction = 1.2
+    }
+
+    def PhysicsPrismaticJoint "Joint" (
+        prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+    )
+    {
+        float drive:linear:physics:damping = 3
+        float drive:linear:physics:maxForce = 8
+        float drive:linear:physics:stiffness = 250
+        float drive:linear:physics:targetPosition = 0
+        uniform token drive:linear:physics:type = "force"
+        uniform token physics:axis = "X"
+        rel physics:body0 = </GasShutoffButton/Base>
+        rel physics:body1 = </GasShutoffButton/Moving>
+        bool physics:collisionEnabled = 0
+        point3f physics:localPos0 = (0, 0, 0)
+        point3f physics:localPos1 = (0, 0, 0)
+        float physics:lowerLimit = 0
+        float physics:upperLimit = 0.012
+    }
+}
