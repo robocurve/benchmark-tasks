@@ -1,0 +1,205 @@
+#usda 1.0
+(
+    defaultPrim = "tote"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "tote" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI"]
+)
+{
+    def "Looks"
+    {
+        def Material "tote"
+        {
+            token outputs:surface.connect = </tote/Looks/tote/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.3, 0.42, 0.55)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.7
+                token outputs:surface
+            }
+        }
+    }
+
+    def Cube "floor" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </tote/Looks/tote>
+        double size = 1
+        float3 xformOp:scale = (0.114, 0.28, 0.004)
+        double3 xformOp:translate = (0.17099999999999999, 0, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "front" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </tote/Looks/tote>
+        double size = 1
+        float3 xformOp:scale = (0.003, 0.28, 0.03)
+        double3 xformOp:translate = (0.11249999999999999, 0, 0.015)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "back" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </tote/Looks/tote>
+        double size = 1
+        float3 xformOp:scale = (0.003, 0.28, 0.03)
+        double3 xformOp:translate = (0.22949999999999998, 0, 0.015)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "left" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </tote/Looks/tote>
+        double size = 1
+        float3 xformOp:scale = (0.12, 0.003, 0.03)
+        double3 xformOp:translate = (0.17099999999999999, 0.14150000000000001, 0.015)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "right" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </tote/Looks/tote>
+        double size = 1
+        float3 xformOp:scale = (0.12, 0.003, 0.03)
+        double3 xformOp:translate = (0.17099999999999999, -0.14150000000000001, 0.015)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "divider_0" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </tote/Looks/tote>
+        double size = 1
+        float3 xformOp:scale = (0.114, 0.002, 0.02)
+        double3 xformOp:translate = (0.17099999999999999, 0.07, 0.014)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "divider_1" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </tote/Looks/tote>
+        double size = 1
+        float3 xformOp:scale = (0.114, 0.002, 0.02)
+        double3 xformOp:translate = (0.17099999999999999, 0, 0.014)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "divider_2" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </tote/Looks/tote>
+        double size = 1
+        float3 xformOp:scale = (0.114, 0.002, 0.02)
+        double3 xformOp:translate = (0.17099999999999999, -0.07, 0.014)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rail_0_l" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </tote/Looks/tote>
+        double size = 1
+        float3 xformOp:scale = (0.114, 0.004, 0.01)
+        double3 xformOp:translate = (0.17099999999999999, 0.11975, 0.009000000000000001)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rail_0_r" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </tote/Looks/tote>
+        double size = 1
+        float3 xformOp:scale = (0.114, 0.004, 0.01)
+        double3 xformOp:translate = (0.17099999999999999, 0.09025, 0.009000000000000001)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rail_1_l" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </tote/Looks/tote>
+        double size = 1
+        float3 xformOp:scale = (0.114, 0.004, 0.01)
+        double3 xformOp:translate = (0.17099999999999999, 0.04975, 0.009000000000000001)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rail_1_r" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </tote/Looks/tote>
+        double size = 1
+        float3 xformOp:scale = (0.114, 0.004, 0.01)
+        double3 xformOp:translate = (0.17099999999999999, 0.020250000000000004, 0.009000000000000001)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rail_2_l" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </tote/Looks/tote>
+        double size = 1
+        float3 xformOp:scale = (0.114, 0.004, 0.01)
+        double3 xformOp:translate = (0.17099999999999999, -0.020250000000000004, 0.009000000000000001)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rail_2_r" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </tote/Looks/tote>
+        double size = 1
+        float3 xformOp:scale = (0.114, 0.004, 0.01)
+        double3 xformOp:translate = (0.17099999999999999, -0.04975, 0.009000000000000001)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rail_3_l" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </tote/Looks/tote>
+        double size = 1
+        float3 xformOp:scale = (0.114, 0.004, 0.01)
+        double3 xformOp:translate = (0.17099999999999999, -0.09025, 0.009000000000000001)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rail_3_r" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </tote/Looks/tote>
+        double size = 1
+        float3 xformOp:scale = (0.114, 0.004, 0.01)
+        double3 xformOp:translate = (0.17099999999999999, -0.11975, 0.009000000000000001)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+}
+

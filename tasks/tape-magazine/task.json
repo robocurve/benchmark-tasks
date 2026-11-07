@@ -1,0 +1,21 @@
+{
+  "title": "Load four tapes into a tape magazine in barcode order",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "data centre",
+    "tape library",
+    "reading labels",
+    "ordering",
+    "reorienting",
+    "bimanual"
+  ],
+  "instruction": "Load the four tapes into the magazine in barcode order, starting at slot 1.",
+  "context": "Tape libraries hold the archive and backup copies of training data and models, and loading cartridges into a magazine by barcode is routine data-centre work. The cartridges look alike: only small labels tell them apart, and one stands turned round with its label hidden. The robot must read them, turn that one round, load all four in barcode order label out, and push each home flush with the magazine.",
+  "setup": "Positions in cm from the midpoint between the arm bases: x forward, y to the robot's left; heights above the table top. Four LTO-9 cartridges (plastic shell, 10.2 x 10.54 x 2.15 cm, about 200 g; blank or retired ones) with barcode labels AI0001L9 to AI0004L9 on their label faces (the end with the write-protect tab) stand on edge in a blue acrylic tote taped to the table (inside 11.4 x 28 cm, x 11.4 to 22.8, centred on y 0; 4 mm floor; 3 mm walls 3 cm tall), one per bay at y +10.5, +3.5, -3.5, -10.5, between dividers 2 mm thick and 2.4 cm tall, each between two rails 4 mm thick and 1 cm tall, 2 mm clear of it, near faces at x 12. From the robot's left: AI0003L9, AI0001L9, AI0002L9 turned round (its label at x 22.2, facing the magazine) and AI0004L9. A five-slot tape magazine (dark grey 3D-printed PLA, 11.4 deep x 15.7 wide x 12.6 cm tall) is clamped to the table, its slots opening toward the arms at x 36: each 2.6 cm wide and 11.6 cm tall inside, 3 cm apart, on a 6 mm floor under a 4 mm top, walls 4 mm thick between slots and 5.5 mm at the sides; slot 1 at y +6 (robot's left) to slot 5 at y -6; a back stop 10.2 cm behind the front leaves a cartridge pushed home flush with the front. The walls taper over their front 1.6 cm to a 0.5 mm edge, an 8 mm ramp leads up to the floor, the top stops 1.5 cm behind the front (room for fingers), and the slot numbers 1 to 5 are printed along the top's front edge. Both arms start at the ready pose with open grippers.",
+  "scoring": "Judged at the end of the trial from a photo of the magazine's front, a ruler, and the video. A cartridge counts when it is the right one, upright with its label out (as it stood in the tote), and home (its label face at most 3 mm in front of the slot walls' front ends). 1.0 (success, ends the trial): slots 1 to 4 hold AI0001L9 to AI0004L9, all counted, and the robot has not touched them for the last 1 s. Otherwise 0.25 for each slot that counts, from slot 1 up to the first that does not (empty, wrong cartridge, turned round or upside down, or not home); all four but still touched scores 0.75. 0 includes doing nothing and loading them in the tote's order.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Take the cartridges out of the magazine and stand them back in the tote: AI0003L9, AI0001L9, AI0002L9 (turned round, label away from the arms), AI0004L9, from the robot's left.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. The tote and the magazine are fixed; the magazine's slots are built from walls, a floor, a top and a back stop (friction 0.3/0.25), with no keying, so a cartridge loaded turned round goes in but counts as wrong. The cartridges are 200 g rigid bodies (friction 0.5/0.4). Each step task code reads each cartridge's pose for its slot, label direction and seating, and checks the arms' collision hulls, fingers included, are 1 cm clear of the loaded ones.",
+  "scores": "Dream-1 run: 0.0 (both arms went to the tote and the left gripper nudged AI0003L9 by 2 mm, but no cartridge was lifted and the magazine stayed empty); demo: 1.0",
+  "media": "M-G2NXGD"
+}

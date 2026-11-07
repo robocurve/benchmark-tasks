@@ -1,0 +1,136 @@
+#usda 1.0
+(
+    defaultPrim = "tape_2"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "tape_2" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+)
+{
+    float physics:mass = 0.2
+
+    def "Looks"
+    {
+        def Material "shell"
+        {
+            token outputs:surface.connect = </tape_2/Looks/shell/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.1, 0.11, 0.13)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.45
+                token outputs:surface
+            }
+        }
+
+        def Material "door"
+        {
+            token outputs:surface.connect = </tape_2/Looks/door/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.4, 0.42, 0.45)
+                float inputs:metallic = 0.4
+                float inputs:roughness = 0.4
+                token outputs:surface
+            }
+        }
+
+        def Material "tab"
+        {
+            token outputs:surface.connect = </tape_2/Looks/tab/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.8, 0.12, 0.1)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.5
+                token outputs:surface
+            }
+        }
+
+        def Material "label"
+        {
+            token outputs:surface.connect = </tape_2/Looks/label/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor.connect = </tape_2/Looks/label/texture.outputs:rgb>
+                float inputs:metallic = 0
+                float inputs:roughness = 0.6
+                token outputs:surface
+            }
+
+            def Shader "st"
+            {
+                uniform token info:id = "UsdPrimvarReader_float2"
+                token inputs:varname = "st"
+                float2 outputs:result
+            }
+
+            def Shader "texture"
+            {
+                uniform token info:id = "UsdUVTexture"
+                asset inputs:file = @./textures/label_2.png@
+                float2 inputs:st.connect = </tape_2/Looks/label/st.outputs:result>
+                float3 outputs:rgb
+            }
+        }
+    }
+
+    def Cube "shell" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </tape_2/Looks/shell>
+        double size = 1
+        float3 xformOp:scale = (0.102, 0.0215, 0.1054)
+        double3 xformOp:translate = (0.051, 0, 0.0527)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "door" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </tape_2/Looks/door>
+        double size = 1
+        float3 xformOp:scale = (0.036, 0.0004, 0.05797)
+        double3 xformOp:translate = (0.07999999999999999, -0.010949999999999998, 0.06060499999999999)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "write_protect" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </tape_2/Looks/tab>
+        double size = 1
+        float3 xformOp:scale = (0.0012, 0.006, 0.008)
+        double3 xformOp:translate = (-0.0006, 0, 0.01)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Mesh "label" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </tape_2/Looks/label>
+        point3f[] points = [(-0.0004, 0.00903, 0.012648), (-0.0004, -0.00903, 0.012648), (-0.0004, -0.00903, 0.09486), (-0.0004, 0.00903, 0.09486)]
+        texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1)] (
+            interpolation = "faceVarying"
+        )
+        uniform token subdivisionScheme = "none"
+    }
+}
+

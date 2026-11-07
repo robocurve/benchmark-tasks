@@ -1,0 +1,263 @@
+#usda 1.0
+(
+    defaultPrim = "magazine"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "magazine" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI"]
+)
+{
+    def "Looks"
+    {
+        def Material "body"
+        {
+            token outputs:surface.connect = </magazine/Looks/body/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.18, 0.2)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.55
+                token outputs:surface
+            }
+        }
+
+        def Material "lip"
+        {
+            token outputs:surface.connect = </magazine/Looks/lip/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor.connect = </magazine/Looks/lip/texture.outputs:rgb>
+                float inputs:metallic = 0
+                float inputs:roughness = 0.5
+                token outputs:surface
+            }
+
+            def Shader "st"
+            {
+                uniform token info:id = "UsdPrimvarReader_float2"
+                token inputs:varname = "st"
+                float2 outputs:result
+            }
+
+            def Shader "texture"
+            {
+                uniform token info:id = "UsdUVTexture"
+                asset inputs:file = @./textures/slots.png@
+                float2 inputs:st.connect = </magazine/Looks/lip/st.outputs:result>
+                float3 outputs:rgb
+            }
+        }
+    }
+
+    def Cube "floor" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </magazine/Looks/body>
+        double size = 1
+        float3 xformOp:scale = (0.11, 0.157, 0.006)
+        double3 xformOp:translate = (0.415, 0, 0.003)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "top" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </magazine/Looks/body>
+        double size = 1
+        float3 xformOp:scale = (0.095, 0.157, 0.004)
+        double3 xformOp:translate = (0.4225, 0, 0.124)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "back" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </magazine/Looks/body>
+        double size = 1
+        float3 xformOp:scale = (0.012, 0.157, 0.116)
+        double3 xformOp:translate = (0.46799999999999997, 0, 0.064)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "wall_0" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </magazine/Looks/body>
+        double size = 1
+        float3 xformOp:scale = (0.086, 0.0055, 0.116)
+        double3 xformOp:translate = (0.419, 0.07575, 0.064)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Mesh "lead_0" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [0, 3, 2, 1, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </magazine/Looks/body>
+        uniform token physics:approximation = "convexHull"
+        point3f[] points = [(0.36, 0.078, 0.006), (0.36, 0.0785, 0.006), (0.36, 0.0785, 0.122), (0.36, 0.078, 0.122), (0.376, 0.073, 0.006), (0.376, 0.0785, 0.006), (0.376, 0.0785, 0.122), (0.376, 0.073, 0.122)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Cube "wall_1" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </magazine/Looks/body>
+        double size = 1
+        float3 xformOp:scale = (0.086, 0.004, 0.116)
+        double3 xformOp:translate = (0.419, 0.045, 0.064)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Mesh "lead_1" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [0, 3, 2, 1, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </magazine/Looks/body>
+        uniform token physics:approximation = "convexHull"
+        point3f[] points = [(0.36, 0.04475, 0.006), (0.36, 0.04525, 0.006), (0.36, 0.04525, 0.122), (0.36, 0.04475, 0.122), (0.376, 0.043, 0.006), (0.376, 0.047, 0.006), (0.376, 0.047, 0.122), (0.376, 0.043, 0.122)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Cube "wall_2" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </magazine/Looks/body>
+        double size = 1
+        float3 xformOp:scale = (0.086, 0.004, 0.116)
+        double3 xformOp:translate = (0.419, 0.015, 0.064)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Mesh "lead_2" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [0, 3, 2, 1, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </magazine/Looks/body>
+        uniform token physics:approximation = "convexHull"
+        point3f[] points = [(0.36, 0.01475, 0.006), (0.36, 0.01525, 0.006), (0.36, 0.01525, 0.122), (0.36, 0.01475, 0.122), (0.376, 0.013, 0.006), (0.376, 0.017, 0.006), (0.376, 0.017, 0.122), (0.376, 0.013, 0.122)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Cube "wall_3" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </magazine/Looks/body>
+        double size = 1
+        float3 xformOp:scale = (0.086, 0.004, 0.116)
+        double3 xformOp:translate = (0.419, -0.015, 0.064)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Mesh "lead_3" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [0, 3, 2, 1, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </magazine/Looks/body>
+        uniform token physics:approximation = "convexHull"
+        point3f[] points = [(0.36, -0.01525, 0.006), (0.36, -0.01475, 0.006), (0.36, -0.01475, 0.122), (0.36, -0.01525, 0.122), (0.376, -0.017, 0.006), (0.376, -0.013, 0.006), (0.376, -0.013, 0.122), (0.376, -0.017, 0.122)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Cube "wall_4" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </magazine/Looks/body>
+        double size = 1
+        float3 xformOp:scale = (0.086, 0.004, 0.116)
+        double3 xformOp:translate = (0.419, -0.045, 0.064)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Mesh "lead_4" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [0, 3, 2, 1, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </magazine/Looks/body>
+        uniform token physics:approximation = "convexHull"
+        point3f[] points = [(0.36, -0.04525, 0.006), (0.36, -0.04475, 0.006), (0.36, -0.04475, 0.122), (0.36, -0.04525, 0.122), (0.376, -0.047, 0.006), (0.376, -0.043, 0.006), (0.376, -0.043, 0.122), (0.376, -0.047, 0.122)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Cube "wall_5" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </magazine/Looks/body>
+        double size = 1
+        float3 xformOp:scale = (0.086, 0.0055, 0.116)
+        double3 xformOp:translate = (0.419, -0.07575, 0.064)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Mesh "lead_5" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [0, 3, 2, 1, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </magazine/Looks/body>
+        uniform token physics:approximation = "convexHull"
+        point3f[] points = [(0.36, -0.0785, 0.006), (0.36, -0.078, 0.006), (0.36, -0.078, 0.122), (0.36, -0.0785, 0.122), (0.376, -0.0785, 0.006), (0.376, -0.073, 0.006), (0.376, -0.073, 0.122), (0.376, -0.0785, 0.122)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "ramp" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [0, 3, 2, 1, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </magazine/Looks/body>
+        uniform token physics:approximation = "convexHull"
+        point3f[] points = [(0.352, -0.0785, 0), (0.352, 0.0785, 0), (0.352, 0.0785, 0.0005), (0.352, -0.0785, 0.0005), (0.36, -0.0785, 0), (0.36, 0.0785, 0), (0.36, 0.0785, 0.006), (0.36, -0.0785, 0.006)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "numbers" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </magazine/Looks/lip>
+        point3f[] points = [(0.377, 0.0785, 0.1263), (0.377, -0.0785, 0.1263), (0.399, -0.0785, 0.1263), (0.399, 0.0785, 0.1263)]
+        texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1)] (
+            interpolation = "faceVarying"
+        )
+        uniform token subdivisionScheme = "none"
+    }
+}
+
