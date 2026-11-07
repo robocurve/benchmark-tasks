@@ -1,0 +1,21 @@
+{
+  "title": "Titrate vitamin C with iodine: swirl, and stop at the first lasting blue-black",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "chemical technician",
+    "titration",
+    "real-time stop",
+    "visual cue",
+    "sprung valve"
+  ],
+  "instruction": "Titrate the vitamin C solution in the flask with the iodine in the burette. Hold the burette's spring clip squeezed with one arm to run iodine into the flask, while the other arm swirls the flask under it. Release the clip as soon as the whole solution stays blue-black. Stand the flask back on the white tile and let go with both arms.",
+  "context": "Chemical technicians (O*NET 19-4031.00) titrate by hand, one hand on the burette's valve and the other swirling the flask. It is hard because the colour comes without warning and overshoot cannot be undone, and a local colour that fades with mixing looks like the end until the flask is swirled.",
+  "setup": "Two YAM arms at the near edge of a table; positions are (x forward from the arm bases, y left) in cm, heights above the table. White ceramic tile, 14 x 14 x 0.5, centred at (32, 0). On it, a clear plastic 250 mL Erlenmeyer flask, 8.5 across the base, neck 3.8 across, 14 tall, about 190 g filled, holding about 150 mL of milky vitamin C solution with starch. Over it, on axis (32, 0), a clear plastic 25 mL burette, 1.6 across and 28 long, marked every 1 mL, full of amber iodine solution to its 0 mL mark, 50.5 up. Below the burette, a silicone hose 1 cm across, ending in a plastic jet whose tip is 16.5 up, 2 cm above the flask's rim. On the hose, 20.5 up, a spring pinch clip with two red plastic tabs, each 2.6 x 0.4 x 3, 3.8 apart at their outer faces at rest and 2.6 apart when fully squeezed, about 7 N each; the tabs squeeze along a line 10 degrees off the x axis. The clip shuts by itself when let go. Stand: black steel base, 12 x 14 x 1.2, centred at (45.5, 0), a steel rod 1.2 across and 56 tall, and an arm holding the burette 44 up, clamped to the table. The endpoint E, the iodine that this batch of vitamin C takes, is between 8 and 16 mL and differs by seed. Nothing shows it at the start.",
+  "scoring": "Read from a photo of the burette's scale and the flask, with a video of the swirl. V is the iodine delivered, read on the burette; E is this trial's endpoint, known from the batch. 1.0: the whole solution is blue-black, V is at most E + 1.0 mL, at least 80% of V went in while the flask's mouth moved at 2.5 cm/s or more, the flask stands upright within 3 cm of the tile's centre, every finger is at least 3 cm from the flask and the clip, and all is still for 1 s. 0.5: blue-black and V at most E + 3 mL, but over by more than 1 mL or under 80% swirled; or a 1.0 titration not stood back and let go. 0.25: both faults. 0: the bulk never turned, as when stopping on a local colour; V over E + 3 mL; more than 0.2 mL outside the flask; or the flask tipped past 45 degrees or fell, at any moment.",
+  "run_limit": "1,800 steps (90 s at 20 Hz)",
+  "reset_notes": "The solution is used up. Pour it away, stand a fresh weighed batch in the flask, and refill the burette to 0 mL.",
+  "fidelity": "Rigid-body physics at 240 Hz on GPU, with the clip's tabs on sprung joints. Liquid and chemistry are drawn from a model: flow from the clip's opening, up to 0.8 mL/s; mixing from the flask's speed; colour from mixed iodine past E; a local colour while iodine is unmixed. A real trial uses vitamin C, starch and about 0.01 M iodine, which do this by themselves. The falling jet may mix a still flask sooner than the model, so a real unswirled run may earn 0.5, not 0. One arm earns at most 0.5.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-P3FQSH"
+}
