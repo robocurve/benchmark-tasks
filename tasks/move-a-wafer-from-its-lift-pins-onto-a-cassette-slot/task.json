@@ -1,0 +1,22 @@
+{
+  "title": "Move a wafer from its lift pins onto a cassette slot",
+  "category": "Impact on jobs",
+  "keywords": [
+    "semiconductor",
+    "wafer handling",
+    "edge grip",
+    "cassette",
+    "lift pins",
+    "narrow ledges",
+    "placement"
+  ],
+  "instruction": "Move the wafer from the three lift pins onto the two ledges of the cassette slot, lying flat and pushed back against both stop posts, then let go. Do not drop it.",
+  "context": "Semiconductor technicians move wafers between process stations and carrier cassettes; a wafer that is dropped, set down tilted or left short of the back stops is scrapped or broken by the next machine. Unlike placing a block against a stop, the side walls leave only 6 mm beside the wafer, so it must be held front to back, and any drop fails the trial.",
+  "setup": "World frame for this text: 'in front' is away from the arm bases, 'left' and 'right' are from the robot's view, heights are above the table top, and the midline is halfway between the two arm bases. Lift pins (fixed, three bare steel cylinders 8 mm across and 30 mm tall): centres at 20.0 cm in front and 24.5 cm left; 17.8 cm in front and 20.75 cm left; 22.2 cm in front and 20.75 cm left (on a 25 mm circle around 20.0 cm in front, 22.0 cm left). Wafer (loose, dark grey silicon disc, 80 mm across, 6 mm thick, 30 g): lying flat on the three pin tops, centred 20.0 cm in front and 22.0 cm left, its underside 30 mm up. Cassette (fixed, open at the top and at the end facing the robot; slot centre line 12.0 cm left of the midline, running front to back): two white plastic side walls, 130 mm long (26.0 to 39.0 cm in front), 10 mm thick and 60 mm tall, their inner faces 7.4 and 16.6 cm left of the midline (92 mm apart); along the foot of each wall a pale plastic ledge, 120 mm long (26.0 to 38.0 cm in front), 14 mm wide and 30 mm tall, from the wall inward (ledges cover 7.4 to 8.8 cm and 15.2 to 16.6 cm left; 64 mm apart between their inner edges); and two dark grey painted steel stop posts at the far end, each 10 x 10 mm and 45 mm tall, from 38.0 to 39.0 cm in front, at 8.4 to 9.4 cm and 14.6 to 15.6 cm left (52 mm between them). The table shows between the ledges. Nothing else is on the table.",
+  "scoring": "Measured with a ruler and a feeler gauge, with the video for the at-rest and drop rules. Every limit is inclusive. The wafer is on both ledges when it lies flat (tilt at most 2 degrees) with its underside at most 1 mm from the ledge tops (30 mm up), its centre between 28.0 cm in front (20 mm past the ledges' near ends) and the stop posts' near faces (38.0 cm), and it is at rest: over the last 10 control steps (0.5 s) its centre moved at most 0.5 mm and it turned at most 0.5 degrees. The side walls keep its centre within 6 mm of the slot centre line, so a flat wafer between them always reaches both ledges. Either face up counts the same. The gap at a post is the shortest horizontal distance from the wafer's edge to that post. Score 1.0: on both ledges and the gap at each of the two stop posts at most 2 mm (pushed home; this centres it on the slot, at 34.96 cm in front). Score 0.5: on both ledges, but a gap above 2 mm. Score 0 in every other case: still on the pins, on the table, across the wall or post tops, resting on one ledge only or tilted, held above the ledges, or still moving. Score 0 for the whole trial, whatever the end state, if at any time the wafer moved faster than 0.5 m/s: dropped (a fall of about 13 mm gives this), thrown, or carried that fast. This record clears only at a scene reset: the wafer back within 0.5 mm of its start on the pins after a jump of more than 20 mm in one control step, which the robot cannot produce. How the wafer is gripped is not judged. The trial ends at 1.0 once the 1.0 condition has held for 1 s; otherwise it scores the condition at the last step.",
+  "run_limit": "900 steps (45 seconds at 20 Hz)",
+  "reset_notes": "Lay the wafer back flat on the three pin tops, centred on them. Nothing is consumed.",
+  "fidelity": "Approximate. The wafer is a rigid 80 mm, 6 mm thick disc of 30 g (a real 200 mm wafer is 0.725 mm thick); it has no notch, flat or device side. The cassette has one slot open at the top, not a stack of 25 loaded from the front by a blade or tweezers. The simulator reports about 2.4 cm/s and 1.1 rad/s for the wafer lying still, so at rest is judged from its pose over 0.5 s, not from velocity.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-V7H798"
+}
