@@ -1,0 +1,25 @@
+{
+  "title": "Take up patch-cord slack on spools, then plug in",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "deformable",
+    "data centre",
+    "networking",
+    "slack management",
+    "winding",
+    "plug insertion",
+    "hand-over",
+    "constraint keeping"
+  ],
+  "instruction": "The blue patch cord is too long. Take up its extra length by winding it once around the two grey slack spools, so the cord lies against both spools, then push its plug fully into the port of the dark socket. Keep the whole cord inside the yellow tape rectangle, then let go.",
+  "context": "Excess patch-cord length is wound on slack spools to keep racks neat and keep a proper bend radius (vendor catalogues: a spool 'neatly wraps up cord slack'; 'Provides for proper bend radius'). TIA-568 sets a patch-cord minimum bend radius of 4x the cord diameter, 24 mm here, below the 30 mm hub radius. Telecom equipment installers 'Route and connect cables and lines' (O*NET 49-2022.00). Only the right arm reaches the plug; only the left reaches round the spools and the port.",
+  "setup": "Cm from the midpoint between the arm bases on the table (x away from robot, y to its left). Spools: two light-grey PLA slack spools, fixed, 60 mm hub 4 cm tall with a 76 mm wide, 6 mm thick flange on top, centres x 31, y 22 and x 31, y 10. Device: grey block 6 (x) x 5 (y) x 4 cm, centre x 22, y 35.7. Cord: blue 6 mm patch cord, 84 cm, fixed at the device's right face (y 33.2), starting 6 mm out at x 22, y 32.6 and lying straight along x 22 to y -51.4; blue plug 45 x 16 x 14 mm (15 g) beyond it, flat. Socket: dark grey block 6 x 5 x 3.5 cm, x 12-18, y -5 to 0, fixed; port 20 mm wide, 16.5 mm tall, 26 mm deep at table level on its left (+y) face, centred x 15. Yellow tape (1 cm) rectangle, inner edges x 12-37, y 0-33.5.",
+  "scoring": "From a top photo at the end. Score 0 if: a gripper is within 3 cm of the cord or plug; under 95% of the cord's length lies inside the tape's inner edges; the cord lies against (cord surface within 15 mm of the hub surface, below the flange) under 150 deg of EITHER spool hub's circumference; a spool, the socket or the device was moved. Otherwise 1.0 if the plug's front end is at least 15 mm inside the port, 0.5 if 5-15 mm, else 0. Success (1.0) must hold 1 s with the cord at rest.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Unplug the cord, unwind it and lay it straight along the tape line at x 22 cm from the device to the plug, plug flat with its tip at the mark at y -56 cm. Check spools, socket and device are on their marks (all are screwed down).",
+  "fidelity": "Cord: rigid 2 cm segments with bending springs, no twist or plasticity, friction 0.8; the device end is welded. The plug is a rigid box with no latch, held in the port only by its walls and friction; seating is judged by depth (same latchless plug body in the real trial). Spools, socket, device are fixed rigid shapes. Lying against a spool is judged geometrically from the cord's centre line, not by contact force.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-DGBCWD"
+}
