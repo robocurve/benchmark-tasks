@@ -1,0 +1,20 @@
+{
+  "title": "Hold a large gear turned so its teeth line up with one hand while the other pushes a small gear into mesh",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "bimanual",
+    "gearbox assembly",
+    "gears",
+    "alignment",
+    "pushing"
+  ],
+  "instruction": "Turn the large gear by its knob until its teeth line up with the small gear's and hold it there with one hand, while the other pushes the small gear down its shaft into mesh; then turn the large gear on at least 30 degrees, the small gear turning with it, let go with both hands, and take both arms back to where they started.",
+  "context": "Assembling gearboxes for robots and machines means sliding gears into mesh. The teeth rarely line up by themselves: the fitter turns the mating gear a fraction of a tooth and holds it there while pushing the new gear home.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) A fixed grey cast-aluminium gearbox plate, 16 x 32 cm and 1 cm thick, centred 30 cm forward on the centre line, with two upright steel shafts 30 cm forward, 7.5 cm left and 7.5 cm right of the centre line. (2) A brass spur gear, 400 g, 36 teeth, 18 cm across and 1.2 cm thick, on the left shaft 1 cm above the plate, with a black plastic knob 2.4 cm across and 4 cm tall on its hub and a dark mark on its face; a detent holds it half a tooth (5 degrees) out of line with the small gear. (3) A steel spur gear, 150 g, 24 teeth, 12 cm across and 1.2 cm thick, on the right shaft, which is keyed (the gear slides along it but cannot turn), waiting 2.5 cm up with its teeth above the large gear's, held up by a spring; a black plastic knob 2.4 cm across and 2.5 cm tall on its hub. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Judged at the end of the trial. Lined up: the large gear turned to within 3 degrees of 5 degrees from its rest, either way (or a whole tooth, 10 degrees, further). The small gear goes down its shaft only while the teeth are lined up, otherwise it is held where it is, and against a spring (about 2 N at first, 6 N at the bottom); once it is in among the large gear's teeth, the large gear can no longer turn. In mesh: the small gear pushed all the way down (within 2 mm), where it clicks in and stays; from then on the pair turns freely together, the small gear half as fast again the other way. Driven: once in mesh, the large gear turned at least 30 degrees. Let go: both grippers' fingertip centres (TCPs) at least 3 cm from both knobs. 1.0: in mesh, driven, both let go, and both arms back where they started (each fingertip centre within 5 cm of its start); 0.5: in mesh; 0.25: the large gear held lined up for 1 s, or the small gear in among its teeth, at some point; else 0.0. The trial ends at the run limit, or once the full score has held for 1 s with both gears still.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "Pull the small gear back up its shaft to its waiting place; the large gear springs back to its detent.",
+  "fidelity": "Rigid-body simulation (Isaac Sim 6.1, PhysX, 20 Hz control). Simplified: the teeth are drawn but do not collide; the task file holds the small gear where it is unless the large gear is within 3 degrees of lining up, locks the large gear while the small one goes in, latches the small gear at the bottom, and from then on turns the small gear's teeth with the large gear. The detent and the small gear's lift are springs. The plate is fixed. Cameras 1280 x 704 (Dream-1 sees 320 x 176).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-9CXT3G"
+}
