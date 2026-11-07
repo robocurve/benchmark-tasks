@@ -1,0 +1,19 @@
+{
+  "title": "Inspect concealed slider travel and mark the largest",
+  "category": "Other",
+  "keywords": [
+    "active measurement",
+    "mechanical inspection",
+    "hard stops",
+    "bimanual probing"
+  ],
+  "context": "A robot inspecting an adjustable fixture must measure travel rather than infer it from an identical outer housing. This task requires testing both stops on every slider and then identifying the largest measured range.",
+  "setup": "Use the official bimanual YAM station with the table at z 0.7475 m. x points forward. y points left. z points up. Three rigid plastic guide housings are fixed with roots at x 230 mm and y positive 120 mm and 0 mm and negative 120 mm. Each root is on the tabletop with zero yaw. Each base is 65 mm by 75 mm by 8 mm. Each side wall is 8 mm by 70 mm by 28 mm centred at x negative 25 mm or positive 25 mm relative to its root and 18 mm above the table. Each blue knob is 28 mm by 28 mm by 18 mm and 25 g with its centre 25 mm above the table. Each knob moves along y on a passive prismatic guide. Total strokes are 20 mm for the positive y fixture and 6 mm for the central fixture and 12 mm for the negative y fixture. Each starts at mid stroke. Guides have zero stiffness and zero active drive force. Linear damping is 0.01 N seconds per metre. The outer housings conceal the mechanical travel stops. Three fixed white pads are 45 mm square and 1 mm thick with centres at x 130 mm and the same three y positions. Their centres are 0.5 mm above the table. The orange rubber coated marker is a loose 20 mm cube of mass 15 g starting at x 170 mm and y positive 230 mm with its centre 10 mm above the table. scene_inventory.json lists every solid and joint anchor.",
+  "scoring": "Each fixture earns 0.2 after both end positions have been observed. For the positive y fixture its joint must reach at most negative 9 mm and at least positive 9 mm. The central fixture must reach at most negative 2.7 mm and at least positive 2.7 mm. The negative y fixture must reach at most negative 5.4 mm and at least positive 5.4 mm. These thresholds are 90 percent of each half stroke. After all three fixtures have been tested score 0.8 when the complete marker lies on the positive y pad. Its full bounds must lie within x 107.5 mm to 152.5 mm and y 97.5 mm to 142.5 mm. Its bottom must be between negative 1 mm and positive 4 mm above the table. Marker translation must be below 10 mm per second and rotation below 0.1 radians per second. Score 1.0 when both measured grippers are also open beyond 35 mm of travel. Full success holds for one second. Otherwise score the completed inspection credits. Dropping the marker more than 8 mm below the tabletop makes the entire episode score zero. Checks run at 20 Hz.",
+  "reset_notes": "Return all three sliders to mid stroke. Put the marker back at its source pose. Restore the fixed roots from scene_inventory.json. Nothing is consumed. Run one epoch per process with seed 0 and object_jitter=0.",
+  "fidelity": "Rigid low mass knobs on ideal prismatic guides. Joint limits represent concealed mechanical stops. Guide friction and wear are omitted. The marker uses the rig's grippy material. Other contacts use simulator defaults. Compound contact offsets are 1 mm. History is sampled at 20 Hz. This is a scaled manual stroke inspection jig.",
+  "instruction": "Inspect the travel of all three loose sliders and mark the one with the most free play. Move each blue knob gently to both hard stops. Place the orange marker on the white pad beside the slider with the greatest total travel. Release every knob and the marker. The fixtures are unpowered. Do not dismantle them.",
+  "run_limit": "2400 control steps at 20 Hz. This is 120 seconds of control time.",
+  "scores": "Dream 1 score 0.2. Scripted demo score 1.0.",
+  "media": "M-SW9FR8"
+}
