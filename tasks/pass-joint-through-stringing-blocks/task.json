@@ -1,0 +1,25 @@
+{
+  "title": "Pass a line's rigid joint past a stringing block too narrow for it, keeping the line under tension",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "rope",
+    "deformable",
+    "line stringing",
+    "power line",
+    "stringing block",
+    "tension",
+    "rigid joint",
+    "reseat",
+    "cleat"
+  ],
+  "instruction": "Get the grey joint on the yellow line past the narrow middle block, to rest between it and the left block, and make the line fast with a toggle in the blue cleat, leaving the line running in all three blocks. Then let go.",
+  "context": "Line stringing: a pulling line runs through stringing blocks, and hardware on it must pass them (Pengo-Miller: a \"bullet shape accommodates passage though blocks\"; 29 CFR 1926.964(b)(11): crews \"guide the stringing sock or board over or through the stringing sheave\"). O*NET 49-9051.00: \"String wire conductors and cables between poles, towers, trenches, pylons, and buildings, setting lines in place and using winches to adjust tension.\"",
+  "setup": "Station table; cm from the midpoint between the arm bases (x forward, y left), heights above the table. Three open-top grey PLA stringing blocks at x 32, y -26, -10, +5: 5 cm stands, 3 cm long, two 1.2 cm walls over a black pad; line axis 6 cm up. Outer throats 3 cm (walls to 8.5 cm), middle 1.2 cm (walls to 7.5 cm). Orange tensioner tunnel x 32, y -59.5 to -34.5: a spring carriage pulls the line back, 0.25 N at rest, 0.40 N at 15 cm out. Yellow 6 mm cord, 70 cm, 50 g, from the tensioner through all three throats. Grey rigid joint 3.5 x 2 x 2 cm, 10 g, at y -18.5. Black 15 g toggle bar 5 x 1 x 2 cm across the line 1 cm from its end; that end droops past the left block. Blue open-top pocket cleat (inside 3.5 x 8.8 cm, rim 7.5 cm, 2.4 cm line slot in its near wall) centred x 25.8, y +23.6, turned 20 deg towards the robot.",
+  "scoring": "Score 0 if at any time the line ran back >5 cm from the most it was drawn out of the tensioner, the joint was butted end-on against the narrow block (end within 4 mm of its face, below its wall tops), or the line left an outer block's throat; or if at the end a gripper centre is within 3 cm of line, joint or toggle, the toggle is not in the cleat (inside the pocket, below its rim, line in the slot), or the joint is not wholly between the narrow and left blocks (centre within 2 cm of the run), 5 mm clear of the narrow one. Else 0.5 (line not down in the narrow throat, e.g. on its wall top); 1.0 with the line down in all three throats.",
+  "run_limit": "1,000 steps (50 seconds at 20 Hz)",
+  "reset_notes": "Let the line run back until the spring carriage sits on its home stop, joint centre at y -18.5; lay the line down in all three throats and its end with the toggle straight onto the table past the left block. Blocks, tensioner and cleat stay at their tape marks.",
+  "fidelity": "Line: 2 cm rigid segments with bending springs, no twist or stretch. Rollers are fixed smooth pads, not turning sheaves, and the pull is only 0.25-0.40 N, so the toggle is held lightly in the cleat; real lines carry far more. Real hardware is sized to pass its blocks; the narrow block is a contrived pinch. Rebuild: spring or 25 g weight over a pulley, printed blocks. Joint and toggle are rigid, glued on. Block contact is judged from joint pose; release from gripper distance.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-B6VGTX"
+}
