@@ -1,0 +1,22 @@
+{
+  "title": "Load a wafer onto a spin coater's chuck with tweezers and a wafer aligner",
+  "category": "Impact on jobs",
+  "keywords": [
+    "semiconductor",
+    "spin coating",
+    "wafer handling",
+    "wafer tweezers",
+    "tool use",
+    "centring",
+    "two arms"
+  ],
+  "instruction": "Use the tweezers to move the wafer from its stand into the aligner's pocket. Then hold the spin coater's lid open, use the aligner to set the wafer centred on the chuck, take the aligner out and let the lid close. Never touch the wafer's top or hold the wafer with the gripper.",
+  "context": "Before spin coating, a technician loads the wafer centred on the vacuum chuck, or it wobbles and the resist coats unevenly; the wafer is only handled by its edge, with tweezers and a centring fork.",
+  "setup": "Station table (top 0.7475 m). Robot base frame: x forward, y to the robots' left. A benchtop spin coater (fixed), centred at (0.28, -0.02): a white housing 220 x 220 x 40 mm with a round grey catch bowl 19 cm across inside a ribbed wall 72 mm above the table, and in the middle a black vacuum chuck 24 mm across, its top 52 mm above the table; a clear lid 220 x 220 x 5 mm (250 g) hinged along the back edge, shut at the start, with a 12 mm dispense hole over the chuck and a black handle bar 50 mm long and 10 mm thick on two 20 mm posts at its front left; it opens to 74 degrees and falls shut unless held. A grey wafer stand (fixed) at (0.40, -0.20): a 70 x 70 mm foot, a 20 mm post and a 44 x 44 x 4 mm rest, its top 25 mm above the table, with a tweezer slot 18 mm wide and 3 mm deep cut 8 mm into its front edge. On it, centred, pattern side up: a 2-inch silicon wafer, 50.8 mm across, 1 mm thick, 4 g, overhanging the rest. Wafer tweezers (stainless steel, 20 g) standing tips down in a grey cup at (0.30, -0.28): two 8 x 2.5 mm arms 85 mm long, joined at the top, ending in blades 14 mm wide and 12 mm long bent 45 degrees, sprung open 5 mm; the cup is 21.5 x 17 mm inside and 3.5 cm deep, its floor 2 cm above the table. A white PTFE wafer aligner (30 g) lying on the bench, its pocket centred at (0.125, -0.10): a plate 50 x 68 x 3 mm with 14 posts 1.5 mm tall on a 54 mm circle forming the pocket, each with a 3 mm ramp at 45 degrees on top leading the wafer in, a slot 29 mm wide from the pocket out to the plate's far end (+x, towards the coater) ending in a V that seats against the chuck, a 24 mm notch in the near rim for the tweezers, and a handle fin 10 mm wide and 12 mm tall, its top 32 mm above the plate, on a riser at the pocket's right, running 40 mm out to the robots' right (-y). Fixed layout matching the screenshot.",
+  "scoring": "Measured at the end. 0 if at any time: a fingertip came within 6 mm above the wafer's top, more than 3 mm inside its rim (top touched); a fingertip came within 2 mm of the wafer's rim at its height (held by the gripper); or the wafer tilted past 40 degrees or reached the table (dropped). Otherwise, with the wafer lying flat (within 2 degrees) on the chuck, its underside within 1 mm of the chuck's top: 1.0 if its centre is within 0.5 mm of the chuck's axis; 0.5 within 1.5 mm; 0.25 if further but still over the chuck. Halved if the lid is not shut (within 3 degrees). 0 if the wafer is not on the chuck.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Put the wafer back on its stand (pattern up), the tweezers back in their cup, the aligner back on the bench as in the screenshot, and shut the lid.",
+  "fidelity": "PhysX at 240 Hz. The wafer is rigid, drawn 1 mm thick (real 0.28 mm), and cannot chip. The chuck has no vacuum and does not spin: only the wafer's placement is scored. The tweezers are two halves on a sprung slide, not a bending spring. The lid is a rigid plate on a damped hinge. Resist dispensing and spinning are left out.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-C4ALEL"
+}
