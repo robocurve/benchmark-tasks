@@ -1,0 +1,19 @@
+{
+  "title": "Assemble a split spacer around a captive shaft",
+  "category": "Impact on jobs",
+  "keywords": [
+    "machine maintenance",
+    "captive shaft",
+    "split spacer",
+    "bimanual assembly"
+  ],
+  "instruction": "Fit both blue halves of the spacer collar around the captive square shaft below its wide head. Bring the halves together from opposite sides. Leave both seams closed to within 4 mm. Release both halves and keep the grey shaft fixed. The fixture is unpowered.",
+  "context": "A complete spacer cannot pass over the wide shaft head. This task tests assembly around a captive shaft without taking the shaft apart. The same access problem occurs when maintaining machines with inaccessible shaft ends.",
+  "setup": "Use the official bimanual YAM station. The tabletop is at z 747.5 mm. x points forward. y points left. z points up. All props are rigid PA12 polymer prototypes. All joint positions start at zero. The shaft has an initial outer envelope of 107 by 300 by 72 mm. Its authored root is at x 280 mm and y 0 mm and z 747.5 mm. Its initial yaw is 0.0 radians. Its root is fixed to the tabletop. The left half has an initial outer envelope of 80 by 115 by 35 mm. Its authored root is at x 160 mm and y 160 mm and z 757.5 mm. Its initial yaw is 0.0 radians. Its mass is 0.055 kg. Its root is free to move. The right half has an initial outer envelope of 80 by 115 by 35 mm. Its authored root is at x 160 mm and y -160 mm and z 757.5 mm. Its initial yaw is 0.0 radians. Its mass is 0.055 kg. Its root is free to move. The inventory lists each collider and body mass and joint anchor and travel limit. Local solid positions are measured from the named body root. Outer envelope sizes describe the reset pose.",
+  "scoring": "Score 1.0 when both halves enclose the shaft and both seam endpoint gaps are at most 4 mm. Each half must have its lower face within 3 mm of the table. Tilt and yaw must be below 4 degrees. Translation must be below 8 mm per second and rotation below 0.1 radians per second. The shaft must have at least 1 mm of clearance to each inner arm face and each inner crossbar. For partial alignment credit a seam may be from 6 mm past the shaft centre to 20 mm before it along the entry direction. Score 0.4 when at least one half meets those alignment checks but the full enclosure is incomplete. Full enclosure scores 0.75 until both measured grippers are open beyond 35 mm. Full success must hold for 2 seconds. A loose part more than 5 mm below the tabletop makes the entire episode score zero. All other outcomes score zero. Checks run at 20 Hz.",
+  "run_limit": "2400 control steps at 20 Hz. This is 120 seconds of control time.",
+  "reset_notes": "Restore both halves to their seam midpoint starting positions. Keep the shaft and guides fixed. Nothing is consumed. Run one epoch with seed 0 and object_jitter=0.",
+  "fidelity": "Rigid PA12 polymer halves surround a captive square shaft beneath a wide head. The head prevents lowering a closed collar from above. Actual rotated collider corners recover each half root before measuring shaft clearance and both seams. There is no snap fit or material deformation. Contacts use simulator defaults. This is an unpowered geometric assembly prototype.",
+  "scores": "Dream 1 score 0.0. Scripted demo score 1.0.",
+  "media": "M-NQYJXR"
+}
