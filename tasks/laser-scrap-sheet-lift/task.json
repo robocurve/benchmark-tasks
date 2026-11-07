@@ -1,0 +1,23 @@
+{
+  "title": "Lift the scrap sheet out of the laser cutter with both hands, leaving the cut parts",
+  "category": "Impact on jobs",
+  "keywords": [
+    "fab lab",
+    "laser cutter",
+    "unloading",
+    "bimanual",
+    "level lift",
+    "transparent object",
+    "thin sheet",
+    "pinch grasp"
+  ],
+  "instruction": "Lift the clear scrap sheet straight up off the laser cutter's bed with both hands so the four orange cut parts stay on the bed, then put the sheet in the black scrap bin.",
+  "context": "Unloading a laser cutter is daily work in fab labs and sign shops. The cut parts sit loose in the sheet they were cut from, so the scrap sheet has to come straight up off them: lifted by one edge first it pivots on its far edge, which slides and drags the parts by the walls of their holes. The sheet is clear acrylic, which depth cameras barely see, and only 5 mm thick, so it must be pinched at its overhanging edge.",
+  "setup": "Left and right are the robot's. Positions are centres in metres from the midpoint between the two arm bases: x forward, y to the robot's left, heights above the table. Laser cutter: a desktop CO2 laser cutter, 52 cm wide (y) x 40 cm deep (x) x 22 cm tall, charcoal painted steel, fixed, its front face at x = 0.295, spanning y from -0.52 to 0. Its front wall is 7 cm tall, its side walls and back block 22 cm. Inside: an aluminium honeycomb bed, its top 14.5 cm up, from x = 0.345 to 0.605, and the laser head on its gantry parked at the back, 17.5 to 20 cm up. Its lid (a steel hood with a tinted window) stands open at 80 degrees, hinged at x = 0.625, 22 cm up. Sheet: clear acrylic with a light blue tint, 22 cm (x) x 20 cm (y) x 5 mm, 219 g, lying flat on the bed, centred at (0.425, -0.15), its near edge at x = 0.315, overhanging the bed's near edge by 3 cm. Four parts cut from it lie in their holes on the bed, clear acrylic 5 mm thick with orange masking paper on top, 0.5 mm of play all round: a 6 cm disc (16.8 g) at (0.4925, -0.195), a 3 x 5 cm rectangle, long side along y (8.9 g), at (0.5075, -0.10), both 1.2 cm from the sheet's far edge, an equilateral triangle with 4 cm sides pointing along x (4.1 g, bounding box centre) at (0.40, -0.195), and a 5 x 3 cm rectangle, long side along x (8.9 g), at (0.405, -0.11). Scrap bin: an open black plastic bin, 30 cm (x) x 23.4 cm (y) x 10 cm tall, 6 mm walls and floor (inside 28.8 x 22.2 cm), fixed, centred at (0.425, 0.127), 1 cm left of the machine. Acrylic slides on acrylic and on the bed with friction 0.4. Nothing else is on the table.",
+  "scoring": "Positions are centres. A part is left on the bed when its centre is within 6 mm of where it started along the bed, at most 3 mm higher and 5 mm lower, and it is tilted 10 degrees or less. The sheet is in the bin when its centre is over the bin's inside and below its rim. With the sheet in the bin: 1.0 for all four parts left (success once the sheet is also still, under 1 cm/s and 0.5 rad/s, for 1 s), 0.75 for three, 0.5 for two, 0 for one or none. 0.25: the sheet off the bed (its centre not over the bed, or 2 cm or more above where it lay) but not in the bin, with three or more parts left. 0 otherwise, including a sheet slid along the bed, and 0 if the sheet falls off the table (centre more than 2 cm below the table top). Parts carried into the bin do not count.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lay the sheet back on the bed, its near edge 3 cm past the bed's near edge, and drop each part back into its own hole.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. The sheet is one rigid body of box colliders round its holes, with a clean 0.5 mm cut: a lift tilted 20 degrees on the far edge drags the two far parts (measured), but the sheet never bends, so one hand holding a corner lifts it level too and also scores 1.0. Acrylic friction 0.4. The machine and open lid are fixed boxes drawn by detailed meshes. The acrylic is drawn 55 % opaque, depth is not simulated.",
+  "scores": "Dream-1 run: 0.0 (both arms reach into the machine over the sheet, but never pinch its edge or lift it), demo: 1.0 (success at step 346)",
+  "media": "M-3AL3S8"
+}
