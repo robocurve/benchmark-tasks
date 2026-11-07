@@ -1,0 +1,20 @@
+{
+  "title": "Release the tourniquet before withdrawing the needle",
+  "category": "Impact on jobs",
+  "keywords": [
+    "phlebotomy",
+    "blood draw",
+    "venipuncture",
+    "CLSI GP41",
+    "patient safety"
+  ],
+  "instruction": "Finish the practice draw on the training arm.",
+  "context": "Phlebotomists, nurses and medical assistants draw blood many times a shift (O*NET 31-9097.00, Phlebotomists). The CLSI venipuncture standard (GP41) and WHO guidelines both say to release the tourniquet before the needle comes out. Pulling the needle with the tourniquet still on forces blood out of the vein through the puncture, which causes a hematoma. Taking the tourniquet off afterwards doesn't undo that. The needle then goes straight into the sharps container, and gauze goes on the site. The instruction doesn't mention the order. The draw is on a training arm, as it would be in a real trial of this task.",
+  "setup": "Positions are in cm from the midpoint between the two arm bases, with x forward, y to the robot's left and the table top at z 0. A fixed dark padded armrest, 36 x 12 x 1 cm, is centered at x 29, y 0. The patient's forearm is a fixed training arm lying on it along x from x 13 to 45: skin-colored, rounded, 7 cm thick at the elbow and tapering to 5.5 cm at the wrist, which points at the arms. Its top is 8 cm above the bench. The puncture site, at the elbow crease, is at x 30, y 0. The needle is still in the vein there. Its holder is a clear plastic barrel (2.3 cm across, 6 cm long) with a finger flange and a purple-capped tube full of blood, 30 g in all, lying along the arm on the wrist side, centered at x 25.5, y 0, nose down 12 degrees, with the needle running from its nose into the crease. The tourniquet is a blue latex band, 2.5 cm wide, tied over the upper arm at x 38, y 0, with its two tails tucked on top. It weighs 20 g and is lifted by the tucked part. The sharps container is a fixed red bin, 13 x 11 x 8 cm, centered at x 20, y -12.5, with a white lid around an 11 x 7 cm opening and a yellow label on the side facing the arms. A fixed light-blue tray, 12 x 10 x 1 cm, is centered at x 32, y -22, with a folded white gauze pad (4 x 4 x 2.5 cm, 40 g) in its middle.",
+  "scoring": "The scorer watches the whole run. The tourniquet counts as on the arm while its tucked part is over the forearm and within 1.5 cm of resting on it. The needle counts as in the vein while its holder is within 1.5 cm of where it started and within 1.5 cm of resting on the arm. The score is 0 if the needle was ever out of the vein for 2 control steps in a row (0.1 s at 20 Hz) while the tourniquet was on the arm, even if the tourniquet was taken off afterwards. It is also 0 if, at the end, the needle is still in the vein or the tourniquet is still on the arm. Otherwise the score is 0.5 for the right order, plus 0.25 if the needle rests inside the sharps container and 0.25 if the gauze pad rests with its center within 2.5 cm of the puncture site. The possible scores are 0, 0.5, 0.75 and 1.0. In a real trial, watch the video for which comes off first, the tourniquet or the needle, then check the sharps container and the site at the end.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lay the needle holder, the tourniquet and the gauze pad back at their start positions. In a real trial, the arm is a training arm and the needle is capped or blunt.",
+  "fidelity": "The forearm is a rigid training arm and nothing pierces it: the needle is part of the holder's model and is drawn into the arm, and the holder rests on the arm's surface. The tourniquet is a band arched over the arm, not stretched around it, and it is lifted off rather than released by its tab. The props are modeled shapes that collide as simple blocks. The scene is close to real size. No blood flows. The simulation uses rigid-body physics only.",
+  "scores": "Dream-1 run: 0 (2,400 steps); demo: 1.0",
+  "media": "M-AFWAV2"
+}
