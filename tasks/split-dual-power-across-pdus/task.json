@@ -1,0 +1,20 @@
+{
+  "title": "Plug each dual-corded server into both power strips",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "data center",
+    "power redundancy",
+    "A/B feeds",
+    "insertion",
+    "bimanual"
+  ],
+  "instruction": "Each pair of same-coloured plugs is one server's two power cords: plug one of each pair into the left power strip and the other into the right power strip, one plug per socket.",
+  "context": "Servers have two power supplies so that either feed (PDU A or PDU B) can be shut off for maintenance; a server with both cords on one strip goes down when that strip is switched off, the classic rack-commissioning error. Done by: data-centre technicians, computer network support specialists.",
+  "setup": "Two identical dark grey rigid plastic power strips (PDUs) are fixed to the table, each 20 cm long front to back, 6 cm wide and 4 cm tall, with three square sockets 3.2 cm across and 2.5 cm deep in a row along the strip, their centres 24, 30 and 36 cm in front of the arm bases. Each strip is centred 30 cm in front of the arm bases (its ends 20 and 40 cm out). The left strip (PDU A) is centred 27 cm left of centre, in front of the left arm; the right strip (PDU B) 27 cm right of centre, in front of the right arm. A fixed black rigid plastic staging tray, 15 cm front to back, 12 cm wide and 1 cm thick, lies on the centre line, its centre 19.5 cm in front of the arm bases. On it stand six rigid plastic plug heads, each 2.5 x 2.5 cm and 4.5 cm tall, 50 g, in two columns of three, 3 cm left and 3 cm right of centre, 15, 19.5 and 24 cm in front of the arm bases. The left column holds, from the arms outward, red, red, green; the right column green, blue, blue. Nothing else is on the table.",
+  "scoring": "A plug is seated when its centre is within 5 mm of a socket's centre (front to back and side to side), its centre within 5 mm of the height it has standing on the socket floor (so its top stands at most 2.5 cm above the strip's top, 2.0 cm when fully down), and its long axis is within 10 degrees of vertical (either end up). Per colour (server): 0.3 when both its plugs are seated, one in each strip; 0.1 when exactly one is seated. 0.1 more when all six sockets hold a plug (three per strip). All of it: 1.0. If both plugs of any colour are seated in the same strip, the score is 0, so a layout with every socket filled scores either 1.0 or 0. The trial ends early at 1.0 once all six plugs are seated and still (under 1 cm/s, 0.5 rad/s) for 2.5 s; otherwise the score above is taken at the last step.",
+  "run_limit": "1,800 steps (90 seconds at 20 Hz)",
+  "reset_notes": "Pull the six plugs out of the strips and stand them back on the tray at their marks: left column red, red, green from the arms outward, right column green, blue, blue. The strips and the tray stay fixed; tape outlines on the tray make this quick.",
+  "fidelity": "Approximate: cords are left out because the simulator can't model cables; each rigid plug head stands for a cord end, and a socket is a square pocket with 3.5 mm clearance per side, with no latch or contacts. Seating is checked by position, not electrically. The strips and tray are fixed (clamp them for real trials). Every object has the same rubber-like friction (1.2 static, 1.0 dynamic).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-E5R4C8"
+}
