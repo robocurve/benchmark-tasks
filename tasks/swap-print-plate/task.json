@@ -1,0 +1,20 @@
+{
+  "title": "Swap a finished print plate",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "bimanual",
+    "3D printing",
+    "wait for a signal",
+    "level carry",
+    "robot building"
+  ],
+  "instruction": "The print has finished, but the bed is still hot. Wait until it has cooled: the printer's screen shows the temperature falling and its lamp turns green. Then move the plate with the print onto the grey rest, and then fit the clean plate from the blue rest onto the printer.",
+  "context": "Printed parts are common in low-cost robots, and a person still clears each finished plate. The arms must wait for the bed to cool, then carry the plate level so the loose print stays on.",
+  "setup": "On a wooden table in front of two arms stands a desktop 3D printer, fixed. Its black anodised aluminium bed, 24 x 24 x 3 cm, is centred between the arms, 41 cm out from them, with three steel locating pins 8 mm across and 1.2 cm tall: two behind the plate and one at its left. Behind the bed are the printer's black aluminium extrusion frame, 29 cm tall, its print head, a spool of orange PLA on a stand, a small screen on the frame's top bar, 15 x 8.5 cm, showing PRINT DONE, the bed's temperature and a hot-surface symbol while the bed is hot, and a status lamp on the frame's left post. On the bed lies the used plate: aluminium with a gold PEI surface, 18 x 18 x 0.4 cm, with a machined aluminium lug, 2.4 x 3 x 2.9 cm, on its left and right edges, 0.6 kg in all. Loose at its centre stands the print: an orange PLA motor bracket, 6 x 6 x 4 cm, with a 1.2 cm foot and a round boss 4.2 cm across, 60 g. In front of the bed are two fixed rests of painted steel, 23 x 22 x 2 cm: a grey one, empty, on the right, and a blue one on the left, holding a clean plate identical to the used one, with no print.",
+  "scoring": "Time runs from the start of the trial. The screen shows the bed falling from 60 to 35 C, with a hot-surface symbol until it gets there. The lamp shows red, then orange from 5 s, and turns green at 10 s, when the symbol goes out. Score 0 if, at any moment: the used plate moved over 1 cm before green; the print left the used plate (its centre past the plate's edge, its base over 1 cm above the plate, or tilted over 30 degrees); or a plate dropped (a corner within 8 mm of the table, tilted over 30 degrees, or falling faster than 0.8 m/s). None of these recovers. Also 0 if the used plate is on the bed at the end (under 5 cm from its start and under 1 cm off the bed). 0.25: used plate off the bed at the end, print on it. 0.5: used plate flat within 2 mm on the grey rest, its centre within 2 cm of the rest's centre along x and along y, print on it. Moving the clean plate over 2 cm before the used plate has rested on the grey rest stops the score here. 0.75: also the clean plate on the bed, its centre within 1.2 cm of the bed's centre along x and along y and its lowest corner within 5 mm of the bed. 1.0: also the clean plate flat within 2 mm, every fingertip at least 5 cm from both plates, and both plates and the print still (under 1 cm/s and 0.5 rad/s), held for 1 s.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Put the used plate and print back on the bed and the clean plate on the blue rest. Nothing is consumed.",
+  "fidelity": "Cooling is a 10 s timer, shortened from a real bed's minutes, that drives the screen and the lamp; heat is not simulated. The renderer can show the screen and lamp up to 2 s late, never early. A real trial uses a cold bed and a tablet and LED lamp on the same timer. The print rests on the plate by friction (0.5), with no bed adhesion, so a real trial uses a loose print. Plates, print and printer are rigid; contact is by box colliders within 2 mm of the visual meshes where parts touch.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-X5BJV6"
+}
