@@ -1,0 +1,21 @@
+{
+  "title": "Open the lever, push the bare wire into the port, close the lever",
+  "category": "Impact on jobs",
+  "keywords": [
+    "electrical wiring",
+    "lever connector",
+    "wire insertion",
+    "bistable lever",
+    "over-insertion trap",
+    "connector insertion"
+  ],
+  "instruction": "Lift the near orange lever of the connector, push the bare end of the loose brown wire into the empty port under it up to its insulation, then press the lever back down.",
+  "context": "Electricians and makers splice wires into lever connectors every day. The lever has to be opened first, the stripped copper has to go in up to its insulation and no further, and the lever has to be pressed shut to clamp it. A wire pushed in until it stops puts its insulation in the clamp, a loose and unsafe joint.",
+  "setup": "Left and right are the robot's. Positions are in metres from the midpoint between the two arm bases: x forward, y to the robot's left, heights above the table. Everything is built at twice the size of a real 2.5 mm2 inline lever connector and wire. Wiring board: 21.5 x 12 cm birch plywood, 1 cm thick, fixed, centred at (0.35, -0.22), long side along x. Connector: grey plastic, 6.6 x 2 x 1.4 cm tall, screwed to the board along x from x = 0.33 to 0.40 at y = -0.22, a port at each end under its own orange lever. Near port: faces the robot at x = 0.33, an 11 mm square opening at the board's surface, a chamber 3 cm deep with a tinned contact bar on its floor from 1.1 to 2.0 cm in. Near lever: orange, 3.3 x 1.4 x 0.8 cm, hinged across the top at the port's face, shut. It springs shut below 30 degrees and open above, up to 60 degrees. Shut, its steel clamp blocks the port. Far port: holds a brown wire running back to a grey cable stub at the board's back edge, its lever shut, fixed. Loose wire: brown PVC insulation 12 cm long and 7 mm thick, bare copper end 22 mm long and 4 mm thick, 25 g, rigid, lying on the table centred at (0.25, -0.32) along x, bare end toward +x (tip at x = 0.32). Multimeter: a blue digital multimeter with red and black test leads, fixed, centred near (0.30, 0.24). Nothing else is on the table.",
+  "scoring": "Depth: how far the bare end's tip is past the near port's face along the port's axis, 0 when the tip is not inside the 11 mm port. Lever angle: how far the near lever is turned up from shut. 0 if the wire falls off the table (centre more than 2 cm below the table top). 0 if the tip is 26 mm or more in (4 mm or more of insulation in the clamp), lever open or shut. 1.0 (success, held 1 s): the tip 18 to 24 mm in (at most 4 mm of copper showing, at most 2 mm of insulation in), the lever within 5 degrees of shut, the wire's centre moving under 1 cm/s. 0.5: the tip 18 to 24 mm in, the lever more than 5 degrees open. 0.25: the lever more than 5 degrees open and the tip at least 6 mm in, outside 18 to 24 mm. 0 otherwise, including doing nothing, opening the lever only, and shutting the lever on a wire less than 18 mm in.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Pull the wire out with the lever open, lay it back at its start, and shut the lever.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control, built at twice real size. Parts collide as boxes: the wire is one rigid body (7 mm square insulation, 4 mm square bare end) and does not bend. The lever is a box on a revolute joint whose spring target flips at 30 degrees (the over-centre snap), with a box tooth as its clamp, which holds by friction only. The board, housing and multimeter are fixed. The detailed meshes are drawn only. Masses are typical.",
+  "scores": "Dream-1 run: 0.0 (the right arm hovers over the shut lever, then picks up the wire and lays it beside the connector without opening the lever), demo: 1.0 (success at step 474)",
+  "media": "M-YCZVAK"
+}
