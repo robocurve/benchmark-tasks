@@ -1,0 +1,324 @@
+#usda 1.0
+(
+    defaultPrim = "tie_rod_end_knuckle"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "tie_rod_end_knuckle" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+)
+{
+    bool physics:kinematicEnabled = 1
+
+    def Mesh "boss_00" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform token physics:approximation = "convexHull"
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(0.007430, 0.000000, 0.070296), (0.022000, 0.000000, 0.070296), (0.021250, 0.005694, 0.070296), (0.007176, 0.001923, 0.070296), (0.009095, 0.000000, 0.089600), (0.022000, 0.000000, 0.089600), (0.021250, 0.005694, 0.089600), (0.008785, 0.002354, 0.089600)]
+        float3[] extent = [(0.007176, 0.000000, 0.070296), (0.022000, 0.005694, 0.089600)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        uniform token subdivisionScheme = "none"
+    }
+    def Mesh "boss_01" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform token physics:approximation = "convexHull"
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(0.007176, 0.001923, 0.070296), (0.021250, 0.005694, 0.070296), (0.019053, 0.011000, 0.070296), (0.006434, 0.003715, 0.070296), (0.008785, 0.002354, 0.089600), (0.021250, 0.005694, 0.089600), (0.019053, 0.011000, 0.089600), (0.007876, 0.004547, 0.089600)]
+        float3[] extent = [(0.006434, 0.001923, 0.070296), (0.021250, 0.011000, 0.089600)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        uniform token subdivisionScheme = "none"
+    }
+    def Mesh "boss_02" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform token physics:approximation = "convexHull"
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(0.006434, 0.003715, 0.070296), (0.019053, 0.011000, 0.070296), (0.015556, 0.015556, 0.070296), (0.005253, 0.005253, 0.070296), (0.007876, 0.004547, 0.089600), (0.019053, 0.011000, 0.089600), (0.015556, 0.015556, 0.089600), (0.006431, 0.006431, 0.089600)]
+        float3[] extent = [(0.005253, 0.003715, 0.070296), (0.019053, 0.015556, 0.089600)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        uniform token subdivisionScheme = "none"
+    }
+    def Mesh "boss_03" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform token physics:approximation = "convexHull"
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(0.005253, 0.005253, 0.070296), (0.015556, 0.015556, 0.070296), (0.011000, 0.019053, 0.070296), (0.003715, 0.006434, 0.070296), (0.006431, 0.006431, 0.089600), (0.015556, 0.015556, 0.089600), (0.011000, 0.019053, 0.089600), (0.004547, 0.007876, 0.089600)]
+        float3[] extent = [(0.003715, 0.005253, 0.070296), (0.015556, 0.019053, 0.089600)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        uniform token subdivisionScheme = "none"
+    }
+    def Mesh "boss_04" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform token physics:approximation = "convexHull"
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(0.003715, 0.006434, 0.070296), (0.011000, 0.019053, 0.070296), (0.005694, 0.021250, 0.070296), (0.001923, 0.007176, 0.070296), (0.004547, 0.007876, 0.089600), (0.011000, 0.019053, 0.089600), (0.005694, 0.021250, 0.089600), (0.002354, 0.008785, 0.089600)]
+        float3[] extent = [(0.001923, 0.006434, 0.070296), (0.011000, 0.021250, 0.089600)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        uniform token subdivisionScheme = "none"
+    }
+    def Mesh "boss_05" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform token physics:approximation = "convexHull"
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(0.001923, 0.007176, 0.070296), (0.005694, 0.021250, 0.070296), (0.000000, 0.022000, 0.070296), (0.000000, 0.007430, 0.070296), (0.002354, 0.008785, 0.089600), (0.005694, 0.021250, 0.089600), (0.000000, 0.022000, 0.089600), (0.000000, 0.009095, 0.089600)]
+        float3[] extent = [(0.000000, 0.007176, 0.070296), (0.005694, 0.022000, 0.089600)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        uniform token subdivisionScheme = "none"
+    }
+    def Mesh "boss_06" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform token physics:approximation = "convexHull"
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(0.000000, 0.007430, 0.070296), (0.000000, 0.022000, 0.070296), (-0.005694, 0.021250, 0.070296), (-0.001923, 0.007176, 0.070296), (0.000000, 0.009095, 0.089600), (0.000000, 0.022000, 0.089600), (-0.005694, 0.021250, 0.089600), (-0.002354, 0.008785, 0.089600)]
+        float3[] extent = [(-0.005694, 0.007176, 0.070296), (0.000000, 0.022000, 0.089600)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        uniform token subdivisionScheme = "none"
+    }
+    def Mesh "boss_07" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform token physics:approximation = "convexHull"
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(-0.001923, 0.007176, 0.070296), (-0.005694, 0.021250, 0.070296), (-0.011000, 0.019053, 0.070296), (-0.003715, 0.006434, 0.070296), (-0.002354, 0.008785, 0.089600), (-0.005694, 0.021250, 0.089600), (-0.011000, 0.019053, 0.089600), (-0.004547, 0.007876, 0.089600)]
+        float3[] extent = [(-0.011000, 0.006434, 0.070296), (-0.001923, 0.021250, 0.089600)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        uniform token subdivisionScheme = "none"
+    }
+    def Mesh "boss_08" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform token physics:approximation = "convexHull"
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(-0.003715, 0.006434, 0.070296), (-0.011000, 0.019053, 0.070296), (-0.015556, 0.015556, 0.070296), (-0.005253, 0.005253, 0.070296), (-0.004547, 0.007876, 0.089600), (-0.011000, 0.019053, 0.089600), (-0.015556, 0.015556, 0.089600), (-0.006431, 0.006431, 0.089600)]
+        float3[] extent = [(-0.015556, 0.005253, 0.070296), (-0.003715, 0.019053, 0.089600)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        uniform token subdivisionScheme = "none"
+    }
+    def Mesh "boss_09" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform token physics:approximation = "convexHull"
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(-0.005253, 0.005253, 0.070296), (-0.015556, 0.015556, 0.070296), (-0.019053, 0.011000, 0.070296), (-0.006434, 0.003715, 0.070296), (-0.006431, 0.006431, 0.089600), (-0.015556, 0.015556, 0.089600), (-0.019053, 0.011000, 0.089600), (-0.007876, 0.004547, 0.089600)]
+        float3[] extent = [(-0.019053, 0.003715, 0.070296), (-0.005253, 0.015556, 0.089600)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        uniform token subdivisionScheme = "none"
+    }
+    def Mesh "boss_10" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform token physics:approximation = "convexHull"
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(-0.006434, 0.003715, 0.070296), (-0.019053, 0.011000, 0.070296), (-0.021250, 0.005694, 0.070296), (-0.007176, 0.001923, 0.070296), (-0.007876, 0.004547, 0.089600), (-0.019053, 0.011000, 0.089600), (-0.021250, 0.005694, 0.089600), (-0.008785, 0.002354, 0.089600)]
+        float3[] extent = [(-0.021250, 0.001923, 0.070296), (-0.006434, 0.011000, 0.089600)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        uniform token subdivisionScheme = "none"
+    }
+    def Mesh "boss_11" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform token physics:approximation = "convexHull"
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(-0.007176, 0.001923, 0.070296), (-0.021250, 0.005694, 0.070296), (-0.022000, 0.000000, 0.070296), (-0.007430, 0.000000, 0.070296), (-0.008785, 0.002354, 0.089600), (-0.021250, 0.005694, 0.089600), (-0.022000, 0.000000, 0.089600), (-0.009095, 0.000000, 0.089600)]
+        float3[] extent = [(-0.022000, 0.000000, 0.070296), (-0.007176, 0.005694, 0.089600)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        uniform token subdivisionScheme = "none"
+    }
+    def Mesh "boss_12" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform token physics:approximation = "convexHull"
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(-0.007430, 0.000000, 0.070296), (-0.022000, 0.000000, 0.070296), (-0.021250, -0.005694, 0.070296), (-0.007176, -0.001923, 0.070296), (-0.009095, 0.000000, 0.089600), (-0.022000, 0.000000, 0.089600), (-0.021250, -0.005694, 0.089600), (-0.008785, -0.002354, 0.089600)]
+        float3[] extent = [(-0.022000, -0.005694, 0.070296), (-0.007176, 0.000000, 0.089600)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        uniform token subdivisionScheme = "none"
+    }
+    def Mesh "boss_13" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform token physics:approximation = "convexHull"
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(-0.007176, -0.001923, 0.070296), (-0.021250, -0.005694, 0.070296), (-0.019053, -0.011000, 0.070296), (-0.006434, -0.003715, 0.070296), (-0.008785, -0.002354, 0.089600), (-0.021250, -0.005694, 0.089600), (-0.019053, -0.011000, 0.089600), (-0.007876, -0.004547, 0.089600)]
+        float3[] extent = [(-0.021250, -0.011000, 0.070296), (-0.006434, -0.001923, 0.089600)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        uniform token subdivisionScheme = "none"
+    }
+    def Mesh "boss_14" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform token physics:approximation = "convexHull"
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(-0.006434, -0.003715, 0.070296), (-0.019053, -0.011000, 0.070296), (-0.015556, -0.015556, 0.070296), (-0.005253, -0.005253, 0.070296), (-0.007876, -0.004547, 0.089600), (-0.019053, -0.011000, 0.089600), (-0.015556, -0.015556, 0.089600), (-0.006431, -0.006431, 0.089600)]
+        float3[] extent = [(-0.019053, -0.015556, 0.070296), (-0.005253, -0.003715, 0.089600)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        uniform token subdivisionScheme = "none"
+    }
+    def Mesh "boss_15" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform token physics:approximation = "convexHull"
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(-0.005253, -0.005253, 0.070296), (-0.015556, -0.015556, 0.070296), (-0.011000, -0.019053, 0.070296), (-0.003715, -0.006434, 0.070296), (-0.006431, -0.006431, 0.089600), (-0.015556, -0.015556, 0.089600), (-0.011000, -0.019053, 0.089600), (-0.004547, -0.007876, 0.089600)]
+        float3[] extent = [(-0.015556, -0.019053, 0.070296), (-0.003715, -0.005253, 0.089600)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        uniform token subdivisionScheme = "none"
+    }
+    def Mesh "boss_16" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform token physics:approximation = "convexHull"
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(-0.003715, -0.006434, 0.070296), (-0.011000, -0.019053, 0.070296), (-0.005694, -0.021250, 0.070296), (-0.001923, -0.007176, 0.070296), (-0.004547, -0.007876, 0.089600), (-0.011000, -0.019053, 0.089600), (-0.005694, -0.021250, 0.089600), (-0.002354, -0.008785, 0.089600)]
+        float3[] extent = [(-0.011000, -0.021250, 0.070296), (-0.001923, -0.006434, 0.089600)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        uniform token subdivisionScheme = "none"
+    }
+    def Mesh "boss_17" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform token physics:approximation = "convexHull"
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(-0.001923, -0.007176, 0.070296), (-0.005694, -0.021250, 0.070296), (-0.000000, -0.022000, 0.070296), (-0.000000, -0.007430, 0.070296), (-0.002354, -0.008785, 0.089600), (-0.005694, -0.021250, 0.089600), (-0.000000, -0.022000, 0.089600), (-0.000000, -0.009095, 0.089600)]
+        float3[] extent = [(-0.005694, -0.022000, 0.070296), (-0.000000, -0.007176, 0.089600)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        uniform token subdivisionScheme = "none"
+    }
+    def Mesh "boss_18" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform token physics:approximation = "convexHull"
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(-0.000000, -0.007430, 0.070296), (-0.000000, -0.022000, 0.070296), (0.005694, -0.021250, 0.070296), (0.001923, -0.007176, 0.070296), (-0.000000, -0.009095, 0.089600), (-0.000000, -0.022000, 0.089600), (0.005694, -0.021250, 0.089600), (0.002354, -0.008785, 0.089600)]
+        float3[] extent = [(-0.000000, -0.022000, 0.070296), (0.005694, -0.007176, 0.089600)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        uniform token subdivisionScheme = "none"
+    }
+    def Mesh "boss_19" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform token physics:approximation = "convexHull"
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(0.001923, -0.007176, 0.070296), (0.005694, -0.021250, 0.070296), (0.011000, -0.019053, 0.070296), (0.003715, -0.006434, 0.070296), (0.002354, -0.008785, 0.089600), (0.005694, -0.021250, 0.089600), (0.011000, -0.019053, 0.089600), (0.004547, -0.007876, 0.089600)]
+        float3[] extent = [(0.001923, -0.021250, 0.070296), (0.011000, -0.006434, 0.089600)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        uniform token subdivisionScheme = "none"
+    }
+    def Mesh "boss_20" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform token physics:approximation = "convexHull"
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(0.003715, -0.006434, 0.070296), (0.011000, -0.019053, 0.070296), (0.015556, -0.015556, 0.070296), (0.005253, -0.005253, 0.070296), (0.004547, -0.007876, 0.089600), (0.011000, -0.019053, 0.089600), (0.015556, -0.015556, 0.089600), (0.006431, -0.006431, 0.089600)]
+        float3[] extent = [(0.003715, -0.019053, 0.070296), (0.015556, -0.005253, 0.089600)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        uniform token subdivisionScheme = "none"
+    }
+    def Mesh "boss_21" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform token physics:approximation = "convexHull"
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(0.005253, -0.005253, 0.070296), (0.015556, -0.015556, 0.070296), (0.019053, -0.011000, 0.070296), (0.006434, -0.003715, 0.070296), (0.006431, -0.006431, 0.089600), (0.015556, -0.015556, 0.089600), (0.019053, -0.011000, 0.089600), (0.007876, -0.004547, 0.089600)]
+        float3[] extent = [(0.005253, -0.015556, 0.070296), (0.019053, -0.003715, 0.089600)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        uniform token subdivisionScheme = "none"
+    }
+    def Mesh "boss_22" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform token physics:approximation = "convexHull"
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(0.006434, -0.003715, 0.070296), (0.019053, -0.011000, 0.070296), (0.021250, -0.005694, 0.070296), (0.007176, -0.001923, 0.070296), (0.007876, -0.004547, 0.089600), (0.019053, -0.011000, 0.089600), (0.021250, -0.005694, 0.089600), (0.008785, -0.002354, 0.089600)]
+        float3[] extent = [(0.006434, -0.011000, 0.070296), (0.021250, -0.001923, 0.089600)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        uniform token subdivisionScheme = "none"
+    }
+    def Mesh "boss_23" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform token physics:approximation = "convexHull"
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(0.007176, -0.001923, 0.070296), (0.021250, -0.005694, 0.070296), (0.022000, -0.000000, 0.070296), (0.007430, -0.000000, 0.070296), (0.008785, -0.002354, 0.089600), (0.021250, -0.005694, 0.089600), (0.022000, -0.000000, 0.089600), (0.009095, -0.000000, 0.089600)]
+        float3[] extent = [(0.007176, -0.005694, 0.070296), (0.022000, -0.000000, 0.089600)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        uniform token subdivisionScheme = "none"
+    }
+    def Cube "arm" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        double size = 1
+        float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        double3 xformOp:translate = (0.046000, 0.000000, 0.078296)
+        float3 xformOp:scale = (0.068000, 0.024000, 0.016000)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+    def Cube "upright" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        double size = 1
+        float3[] extent = [(-0.5, -0.5, -0.5), (0.5, 0.5, 0.5)]
+        color3f[] primvars:displayColor = [(0.24, 0.25, 0.27)]
+        double3 xformOp:translate = (0.095000, 0.000000, 0.070000)
+        float3 xformOp:scale = (0.030000, 0.080000, 0.140000)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+}
