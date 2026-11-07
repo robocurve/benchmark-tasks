@@ -1,0 +1,105 @@
+{
+  "revision": "vertical-rack-observable",
+  "task_sha256": "7151cd98509565ece6f1aa1dab73f26dee7c94a64cb8926cab91d6b6d02c6b09",
+  "physics_hz": 240,
+  "control_hz": 20,
+  "seed": 0,
+  "object_jitter_m": 0,
+  "offline_tests_passed": 18,
+  "reachability": {
+    "left": {
+      "worst_position_error_mm": 0.095323,
+      "worst_orientation_error_deg": 0.018904
+    },
+    "right": {
+      "worst_position_error_mm": 0.092173,
+      "worst_orientation_error_deg": 0.018998
+    }
+  },
+  "trials": {
+    "scripted_demo": {
+      "score": 1.0,
+      "control_steps": 1239,
+      "simulated_time_s": 61.95,
+      "wall_time_s": 431.7979815530016,
+      "termination_reason": "success",
+      "errored_trials": 0,
+      "environment_revision": "4866ea2bc4be"
+    },
+    "dream_1": {
+      "score": 0.0,
+      "control_steps": 2400,
+      "simulated_time_s": 120.0,
+      "wall_time_s": 744.6959442049993,
+      "termination_reason": "max_steps",
+      "errored_trials": 0,
+      "environment_revision": "4866ea2bc4be"
+    }
+  },
+  "scripted_demo_safety": {
+    "peak_force_n": {
+      "blue_swap": 9.150286674499512,
+      "red_left": 0.7883649468421936,
+      "red_right": 0.7883109450340271,
+      "red_swap": 5.707616329193115,
+      "blue_left": 0.7884055376052856,
+      "blue_right": 0.7883334159851074
+    },
+    "max_tilt_deg": {
+      "blue_swap": 8.87253381052839,
+      "red_left": 0.0010655211404033505,
+      "red_right": 0.001050423014846928,
+      "red_swap": 4.644911372183404,
+      "blue_left": 0.0010478662077996986,
+      "blue_right": 0.0010643222542169146
+    },
+    "safety_violations": [],
+    "sorted_count": 6,
+    "grippers_clear": true,
+    "stable_window": true
+  },
+  "submission_status": {
+    "media_upload": "Complete: official uploader returned M-7UJQES; task.json records the media ID.",
+    "duplicate_check": "Authenticated board checked 2026-11-03; closest pending bottle-retrieval task compared in SUBMISSION_REVIEW.md; reviewer judgment remains.",
+    "pull_request": "Prepared for submission to robocurve/benchmark-tasks main; live review status is on GitHub and the task board.",
+    "registered_pr_author_confirmed": true,
+    "simple_tools_scoring": "Finalized: pose/fall/release/stability criteria, ruler/protractor/calibrated-video protocol. Force is telemetry only.",
+    "blind_review": "Public task prose, setup and five sampled frames from each final camera-only video checked; no identifiers found; no audio.",
+    "preflight": "Strict validation passed: required media ID, every task.json section at most 500 characters, source equivalence, measured scores, traces, media hashes and format.",
+    "task_json_max_section_characters": 486
+  },
+  "edge_probe": {
+    "diagnostic_only": true,
+    "initial_horizontal_velocity_m_s": -0.6,
+    "bottle": "blue_left",
+    "termination": "unsafe",
+    "control_steps": 2,
+    "safety_violations": [
+      "blue_left:tipped"
+    ],
+    "maximum_tilt_deg": 36.11443798666877
+  },
+  "evaluated_task_sha256": "4866ea2bc4be32b68680ae147e6a8b90ae9ff6147dd8d453dbb993197959e09c",
+  "prepared_task_sha256": "7151cd98509565ece6f1aa1dab73f26dee7c94a64cb8926cab91d6b6d02c6b09",
+  "source_preparation": {
+    "change": "Module description only after observable-scoring evaluation; executable AST identical.",
+    "executable_ast_unchanged": true,
+    "rerun_required": false,
+    "evaluated_source_preserved_in_bundle": "evidence/evaluated-task.py"
+  },
+  "evaluated_runner_sha256": "3749ab2a60d4cc0ab6dda60f6acb9080d035022fefb08539bd98c305fea242db",
+  "dream_safety": {
+    "safety_violations": [],
+    "sorted_count": 4,
+    "grippers_clear": false,
+    "stable_window": false,
+    "max_tilt_deg": {
+      "blue_swap": 0.0010504393222855598,
+      "red_left": 0.0010655211404033505,
+      "red_right": 0.001050423014846928,
+      "red_swap": 0.0009078304092928991,
+      "blue_left": 0.0010507213662230884,
+      "blue_right": 0.0010643222542169146
+    }
+  }
+}
