@@ -1,0 +1,20 @@
+{
+  "title": "Fix the deck to match the setup sheet",
+  "category": "Impact on jobs",
+  "keywords": [
+    "laboratory",
+    "liquid handler",
+    "deck setup",
+    "spot the difference",
+    "checking against a reference"
+  ],
+  "instruction": "One plate on the deck is in the wrong position. Move it so the deck matches the setup sheet.",
+  "context": "Why: A liquid handler goes to fixed deck positions, so a plate in the wrong place can spoil a run. Rule: 42 CFR 493.1251(a) has labs doing nonwaived testing follow their procedure manual, and 21 CFR 58.81(a) has FDA safety studies keep to written procedures, with deviations documented. Neither mentions decks, so the setup sheet is this task's own local procedure. Done by: biological technicians.",
+  "setup": "Positions in cm from the arm bases' midpoint: x forward, y left. Deck, taped down: dark plastic slab 37.8 x 20 x 0.4 cm centred at x 27.3, y 12.5. On it six light grey card pads, 11.2 x 8 x 0.1 cm, numbered from the far left: 1 and 2 at x 39.5, 3 and 4 at x 27.3, 5 and 6 at x 15.1, odd at y 17.5, even at y 7.5. White 8 mm card squares on the arm side of each pad count its number. Five painted wood plates, 9.6 x 6.4 x 2.4 cm, 80 g, long side along x, sit centred: yellow 1, blue 2, green 3, orange 4, pink 5; 6 is empty. Setup sheet, taped down: white card 24.5 x 13 x 0.2 cm at x 27.3, y -6, same way round as the deck at 0.6 scale, with a 6.2 x 4.6 cm painted block per position: pad grey 1 (empty), blue 2, green 3, orange 4, pink 5, yellow 6.",
+  "scoring": "At trial end. Flat: leaning under 10 degrees. On a position: centre inside the pad, bottom under 3 cm above it. Down: on it, flat, bottom under 0.5 cm above it. In place: down, centre within 2 cm of the pad's centre along x and y, turned under 15 degrees. Beside 6: flat, bottom under 1 cm above the table, on no position, centre under 10 cm from 6's centre. 0.15: yellow beside 6, another not in place. 0.3: yellow beside 6, others in place. 0.35: yellow down on 6, not in place, another not in place. 0.5: yellow in place on 6, another not in place. 0.7: yellow down on 6, not in place, others in place. 1.0: yellow in place on 6, others in place. 0: any plate on a position not its own, another off its own, any off the table, or anything else.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Set the plates back centred on their pads: yellow 1, blue 2, green 3, orange 4, pink 5, with 6 empty. Nothing is used up. The deck and sheet are taped down. A plate looks the same turned half a circle, so either way round is fine. Run with -E object_jitter=0 (one fixed layout).",
+  "fidelity": "Approximate. Plates are solid three-quarter-size blocks so the gripper can hold them, with no wells or notched corner. Pads have no locating corners, so nothing seats a plate. No instrument runs, and a wrong plate has no effect in the sim. Colour stands in for the labware names, which won't read at 320 x 176, and a real lab may check a screen, not a card. Friction is rubber-like.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-P2STYD"
+}
