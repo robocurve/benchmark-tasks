@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "robocurve-plunger-gauge"
+version = "0.1.0"
+[project.entry-points."inspect_robots.embodiments"]
+yam_plunger_gauge = "plunger_gauge.embodiment:make_embodiment"
+[project.entry-points."inspect_robots.policies"]
+plunger_gauge_scripted = "plunger_gauge.policy:make_policy"
+[tool.setuptools.packages.find]
+include = ["plunger_gauge*"]

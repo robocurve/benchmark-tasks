@@ -1,0 +1,91 @@
+{
+  "demo": {
+    "trial": "plunger-gauge-04",
+    "score": 1.0,
+    "termination_reason": "success",
+    "steps": 724,
+    "simulated_seconds": 36.2,
+    "wall_seconds": 94.97523798793554,
+    "seed": 0,
+    "object_jitter": 0,
+    "max_steps": 1800,
+    "control_hz": 20,
+    "resolution": [
+      640,
+      360
+    ],
+    "top_cam": "demo",
+    "visual_review": "All three videos local; top sequence, both left-wrist insertions and final top reviewed. Both tested pins returned; tool parked."
+  },
+  "runtime_sources": {
+    "yam_arena": "0059d02a1a91bc6834c1d0846022891df0c78730",
+    "isaaclab_arena": "c7edf3a9d5d8276565208f72422f8f8a0806d6cf",
+    "inspect_robots": "0.60.0",
+    "isaacsim": "6.1.0.0",
+    "hardware": "NVIDIA L40S"
+  },
+  "input_sha256": {
+    "task.py": "00a80a3a0cd03f6a226726b9b986945d8b648dfb087f1ba00e6f87ff05b89ced",
+    "plunger_gauge/embodiment.py": "77e61b36021a18b8e88a6779676f6b9f3ef047ce00f69fc233adfee4f7206502",
+    "plunger_gauge/policy.py": "f540d7dc8135f554326e9c5f6bd1c83305954273a3281155d9d7c5fc7e2c8d2e",
+    "plunger_gauge/scoring.py": "c49f57703e6024e9b300e5f968e2c111f5aa73a66b400fe0ae9d72ecd41441b8",
+    "build_assets.py": "e913d8ddbab0da4bea3451ad42a36bb35bba7b62ef912e014461e161959b4f95",
+    "pyproject.toml": "ba2d52494b3d6e02f6b47fefd8b38c79913559d7f22bd21279f0e410808a4d84",
+    "assets/fixture.usdc": "2beba8c2335c8975f84264e5af686d8af28c879402c766b5da4bc2323b42981e",
+    "assets/plunger_0.usdc": "8f03cb68a3314f45f50ca99bdbbcedc4a2881c95e08443b9a10601ce3d7daefb",
+    "assets/plunger_1.usdc": "f3e1346b6c1e127e0cadbc047d8441102c11e559d85d011f8e12a15f0bdb627f",
+    "assets/punch.usdc": "1813df78d552a459946a99d134cf69543970ff6c4f435b041d2833dafcba7d4f",
+    "assets/punch_stand.usdc": "7f57e8b4b324b1199c044f37d8cf43b4321d31423e58bbef8d4b50b6b09c3755"
+  },
+  "pending": [],
+  "dream": {
+    "trial": "plunger-gauge-dream-01",
+    "checkpoint": "dreamlabs/dream-1-beta",
+    "score": 0.0,
+    "termination_reasons": [
+      "max_steps"
+    ],
+    "steps": 1800,
+    "max_steps": 1800,
+    "control_hz": 20,
+    "simulated_seconds": 90.0,
+    "wall_seconds": 236.0590742654167,
+    "mean_inference_latency_seconds": 0.6473174686543643,
+    "seed": 0,
+    "object_jitter": 0,
+    "resolution": [
+      640,
+      360
+    ],
+    "top_cam": "demo",
+    "environment_revision": "00a80a3a0cd0",
+    "visual_review": "The reviewed sequence shows the left arm approaching the tool stand and fixture, but the pin tool remains in its stand and neither recessed plunger completes a test stroke. Final contact history has no tool-pin contacts and no tested plungers. The top sequence, final frame and both wrist views were inspected.",
+    "videos": [
+      {
+        "camera": "top",
+        "duration": 90.05,
+        "sha256": "d7a23fcd759396e66ffcd1e81c3a97a5c11f6874ac4304a1a661c20d1419248e",
+        "bytes": 1578619
+      },
+      {
+        "camera": "left",
+        "duration": 90.05,
+        "sha256": "b1435eb0c5bc88a9dc3a6caa52959a3bbfb77d5b3f4351bab3381d3e0852ce41",
+        "bytes": 2180465
+      },
+      {
+        "camera": "right",
+        "duration": 90.05,
+        "sha256": "04e4dba4ebd778de85b78eb328fa41bfdd9359c8c125d0e06e3bac64fa54e7b3",
+        "bytes": 1345884
+      }
+    ],
+    "video_hash_scope": "The videos array hashes the original source-camera recordings; submission_video hashes the faststart stream-copy used in the handoff.",
+    "submission_video": {
+      "file": "model.mp4",
+      "sha256": "2c60a2de8f0e7f6a2ed53300b8bf6eb55b9fcf38231edd71f9fb4e486f2f96e8",
+      "bytes": 1578619,
+      "encoding": "H.264/yuv420p, stream-copy remux with faststart; frames unchanged"
+    }
+  }
+}

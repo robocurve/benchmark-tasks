@@ -1,0 +1,19 @@
+{
+  "title": "Test two recessed spring plungers with a pin tool",
+  "category": "Impact on jobs",
+  "keywords": [
+    "manufacturing",
+    "tool use",
+    "functional inspection",
+    "spring plungers"
+  ],
+  "instruction": "Use the pin tool to test both recessed spring plungers. Press each at least 8 mm, release both, return the tool to its stand, and open both grippers.",
+  "context": "Functional inspection of recessed spring plungers in an unpowered service fixture checks stroke and return through restricted access. The tool extends the gripper into the wells.",
+  "setup": "YAM station, tabletop z=0.7475 m. Two 30 g pins, 10 mm diameter by 12 mm, at x=0.35, y=0.04 and 0.14, nominal center height 30 mm above table. The fixed metal fixture has 15 mm bores and well mouths 51 mm above table. Each pin has a world Z prismatic guide with 10 mm travel and a passive 500 N/m spring. An 80 g upright pin tool with 7 mm shaft starts at root (0.20,0.27,0.8175) m in a fixed 70 mm square, 55 mm high stand. Exact meshes, joint anchors and poses are in build_assets.py and task.py.",
+  "scoring": "Final score: 0.4 per plunger that has measured tool contact, reaches a reference-center height no more than tabletop plus 22.1 mm for six consecutive 20 Hz steps, then rests within 1.2 mm of nominal center height tabletop plus 30.1 mm. Add 0.2 when both qualify, the tool is parked upright in its stand, and both grippers are 75% open with TCPs over 90 mm from the tool center. Full score held 1 second succeeds. Direct robot-pin contact permanently invalidates; tool drops, nonfinite tool pose or leaving workspace also invalidate. All other outcomes earn zero for each unqualified condition.",
+  "run_limit": "1800 control steps (90 seconds at 20 Hz)",
+  "reset_notes": "Use seed 0 and zero object jitter. Joint world anchors are authored for this fixed layout. Restore tool, pins and robot, clear contact/test history and settle; spring preload under gravity depresses each pin about 0.6 mm.",
+  "fidelity": "Rigid pin tool and pins. Maximal-coordinate prismatic joints approximate passive springs: 500 N/m stiffness, 2 N s/m damping, 20 N drive cap, 10 mm travel. Convex sector colliders approximate circular well walls; visual bores are circular. No object-pose writes or attachments during the trial. No tactile force sensor or electrical test is simulated. Materials are uncalibrated.",
+  "scores": "Dream-1 beta: 0 after 1800 steps (max_steps); scripted demo: 1.0 after 724 steps (success).",
+  "media": "M-HLB8H4"
+}
