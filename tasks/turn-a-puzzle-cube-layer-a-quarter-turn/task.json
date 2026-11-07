@@ -1,0 +1,20 @@
+{
+  "title": "Hold a puzzle cube's left two layers with one hand while the other turns its right layer a quarter turn",
+  "category": "Other",
+  "keywords": [
+    "bimanual",
+    "puzzle cube",
+    "twisting",
+    "detent",
+    "toy"
+  ],
+  "instruction": "Hold the puzzle cube's left two layers with one hand, and with the other turn its right layer a quarter turn until it clicks into line; then let go with both hands.",
+  "context": "Turning one layer of a puzzle cube while holding the rest is a quick everyday two-handed twist, the same move as turning a jar lid, a dial or a valve against its body: one hand holds the body so that the turn goes into the part it is meant for, not into the whole thing.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) A fixed grey ABS-plastic display stand 32 cm forward on the centre line: a base disc 7 cm across, a post 1.2 cm across and a pad 1.6 cm square on top, 10 cm above the table. (2) A loose solved 3x3 puzzle cube of ABS plastic with vinyl stickers, 6 cm and 90 g, sitting on the pad: white face up, green face toward the arms' bases, red on the right, orange on the left. Its right layer clicks into line every quarter turn. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Judged at the end of the trial. Turn: how far the right layer is turned against the rest of the cube, about the line through the cube's left and right faces; past 45 degrees the layer clicks into line at the next quarter turn. Let go: both grippers' fingertip centres (TCPs) at least 6 cm from the cube's centre. 1.0: a quarter turn (90 +- 10 degrees, either way) and let go; 0.5: a quarter turn; 0.25: turned at least 20 degrees at some point; else 0.0. The trial ends at the run limit, or once the full score has held with the cube still for 1 s.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "Turn the right layer back to solved and put the cube back on its stand, white face up and green face toward the arms.",
+  "fidelity": "Rigid-body simulation (Isaac Sim 6.1, PhysX, 20 Hz control). Simplified: the cube is two rigid bodies, its left two layers as one and its right layer, on a hinge, so only the right layer turns. The click is a spring the task file points at the nearest quarter turn each step (0.25 N m at 45 degrees). The stickers are flat colour, not solid; the stand is fixed. Cameras 1280 x 704 (Dream-1 sees 320 x 176).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-GRNHRF"
+}
