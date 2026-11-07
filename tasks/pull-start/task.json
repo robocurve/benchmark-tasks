@@ -1,0 +1,20 @@
+{
+  "title": "Hold down a small engine and pull its recoil starter fast over the full stroke",
+  "category": "Impact on jobs",
+  "keywords": [
+    "recoil starter",
+    "fast pull",
+    "bracing",
+    "two arms",
+    "small engine"
+  ],
+  "instruction": "Hold the engine down by its top pad with one arm, and with the other pull the yellow starter handle out fast over its full 30 cm, in under half a second. The engine must not shift more than 10 cm.",
+  "context": "Outdoor Power Equipment and Other Small Engine Mechanics (O*NET 49-3053) start small engines by hand. A slow or short pull does not start one, and a light engine drags across the bench unless the other hand holds it down, so one arm must brace while the other pulls at speed.",
+  "setup": "Two YAM arms at the near edge of a table; positions are (x forward from the arm bases, y left) in cm, heights above the table. A small engine on a grey plate, 20 x 40 cm, 0.5 kg in all, stands loose on the table, with the plate's middle at (35, 20). Its finned dark block has a black top pad, 6 cm square, at (35, 12), 14 high. A round red starter cover, 12 across, faces -y at (35, 3.5), with its middle 9 high. A yellow T-handle sits against the cover on a white cord: a crossbar 7.1 cm long along x, 1.9 thick and 2.4 high, centred at (35, -2.4), 9 high, with a thin neck and a socket toward the cover. The cord pulls back with 15 N at the full 30 cm, along y.",
+  "scoring": "Measured from a phone video at 120 fps, with a tape on the table and a mark at the top pad's middle. 1.0 when the handle comes out its full 30 cm (5 mm short still counts) within 0.5 s of starting to move, and the top pad's middle never moves more than 10 cm from where it started. A pull that falls short may be tried again once the handle is back home. 0 if no pull reaches 30 cm within 0.5 s, or the top pad's middle moves more than 10 cm at any moment.",
+  "run_limit": "300 steps (15 s at 20 Hz)",
+  "reset_notes": "Stand the plate back at its marks with the handle home. No seed changes the scene.",
+  "fidelity": "Rigid-body physics at 240 Hz on GPU. The plate slides on table friction. The handle runs on a straight sprung slide, which stands in for the cord, so an off-axis pull cannot happen. There is no engine or flywheel: a dummy block, and the starter counts as going on the full pull at speed. With nobody holding, a top-speed pull drags the unit 46 cm. The arm peaks at 1.2 m/s, untested on a real arm: build speed in steps from 0.3 m/s, behind a guard, with people clear.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-R4UM9D"
+}
