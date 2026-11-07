@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "yam-dream-current-adapter"
+version = "0.1.0"
+requires-python = ">=3.12"
+authors = [{name = "MJAK Labs - Akhilesh Chandra"}]
+dependencies = ["numpy"]
+
+[project.entry-points."inspect_robots.policies"]
+dream_current = "dream_current:dream_current"
+
+[tool.setuptools]
+py-modules = ["dream_current"]

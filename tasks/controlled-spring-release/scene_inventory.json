@@ -1,0 +1,275 @@
+{
+  "units": "metres and kilograms",
+  "coordinates": "x forward y left z up",
+  "table_height_m": 0.7475,
+  "objects": [
+    {
+      "name": "spring_fixture",
+      "pos": [
+        0.28,
+        0,
+        0.7475
+      ],
+      "color": [
+        0.1,
+        0.35,
+        0.85
+      ],
+      "mass": null,
+      "yaw": 0.0,
+      "size": [
+        0.12,
+        0.185,
+        0.1
+      ],
+      "parts": [
+        {
+          "pos": [
+            0,
+            0,
+            0.004
+          ],
+          "size": [
+            0.12,
+            0.14,
+            0.008
+          ]
+        },
+        {
+          "pos": [
+            -0.018,
+            -0.045,
+            0.03
+          ],
+          "size": [
+            0.014,
+            0.014,
+            0.06
+          ]
+        },
+        {
+          "pos": [
+            0.018,
+            -0.045,
+            0.03
+          ],
+          "size": [
+            0.014,
+            0.014,
+            0.06
+          ]
+        },
+        {
+          "pos": [
+            0,
+            -0.045,
+            0.065
+          ],
+          "size": [
+            0.05,
+            0.014,
+            0.014
+          ]
+        },
+        {
+          "pos": [
+            -0.018,
+            0.045,
+            0.03
+          ],
+          "size": [
+            0.014,
+            0.014,
+            0.06
+          ]
+        },
+        {
+          "pos": [
+            0.018,
+            0.045,
+            0.03
+          ],
+          "size": [
+            0.014,
+            0.014,
+            0.06
+          ]
+        },
+        {
+          "pos": [
+            0,
+            0.045,
+            0.065
+          ],
+          "size": [
+            0.05,
+            0.014,
+            0.014
+          ]
+        }
+      ],
+      "grasp_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "links": [
+        {
+          "name": "platform",
+          "mass": 0.04,
+          "pos": [
+            0,
+            0,
+            0
+          ],
+          "parts": [
+            {
+              "pos": [
+                0,
+                0,
+                0.04
+              ],
+              "size": [
+                0.08,
+                0.07,
+                0.012
+              ]
+            },
+            {
+              "pos": [
+                0,
+                0.075,
+                0.04
+              ],
+              "size": [
+                0.024,
+                0.08,
+                0.012
+              ]
+            }
+          ]
+        }
+      ],
+      "joints": [
+        {
+          "name": "platform_spring",
+          "body0": "root",
+          "body1": "platform",
+          "type": "prismatic",
+          "axis": "Z",
+          "lower": 0.0,
+          "upper": 0.06,
+          "target": 0.06,
+          "stiffness": 40.0,
+          "damping": 0.15,
+          "max_force": 3.0
+        }
+      ],
+      "fixed_base": true,
+      "geometry_type": "Articulated",
+      "nominal_local_bounds_m": [
+        [
+          -0.06,
+          -0.07,
+          0.0
+        ],
+        [
+          0.06,
+          0.11499999999999999,
+          0.07200000000000001
+        ]
+      ]
+    },
+    {
+      "name": "retaining_bar",
+      "pos": [
+        0.28,
+        0,
+        0.7985000000000001
+      ],
+      "color": [
+        0.95,
+        0.4,
+        0.08
+      ],
+      "mass": 0.03,
+      "yaw": 0.0,
+      "size": [
+        0.03,
+        0.15,
+        0.02
+      ],
+      "parts": [
+        {
+          "pos": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.014,
+            0.12,
+            0.01
+          ]
+        },
+        {
+          "pos": [
+            0,
+            -0.075,
+            0.005
+          ],
+          "size": [
+            0.03,
+            0.03,
+            0.02
+          ]
+        }
+      ],
+      "grasp_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "geometry_type": "Compound",
+      "nominal_local_bounds_m": [
+        [
+          -0.015,
+          -0.09,
+          -0.005
+        ],
+        [
+          0.015,
+          0.06,
+          0.015
+        ]
+      ]
+    },
+    {
+      "name": "return_pad",
+      "pos": [
+        0.18,
+        -0.19,
+        0.748
+      ],
+      "color": [
+        0.95,
+        0.95,
+        0.95
+      ],
+      "mass": null,
+      "yaw": 0.0,
+      "size": [
+        0.07,
+        0.18,
+        0.001
+      ],
+      "geometry_type": "Box"
+    }
+  ],
+  "revolute_limits_unit": "degrees",
+  "joint_observation_unit": "radians",
+  "collision_contact_offset_m": 0.001,
+  "collision_rest_offset_m": 0.0,
+  "nondeforming_geometry": true,
+  "physical_trial_completed": false
+}
