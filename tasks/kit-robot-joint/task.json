@@ -1,0 +1,19 @@
+{
+  "title": "Kit the parts of a robot joint into a shaped tray",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "robot assembly",
+    "kitting",
+    "shape matching",
+    "reorientation"
+  ],
+  "instruction": "Put each part of the robot joint into its matching pocket in the kit tray, standing the way it stands now.",
+  "context": "Before a robot joint is assembled, a kitter puts each part into its own cut-out in a kit tray, so the assembler gets every part, the right way round. Automating kitting is one step toward robots building robots. Done by: assemblers and fabricators, and production kitters.",
+  "setup": "Positions are in cm on the table, from the midpoint between the two arm bases: x forward (away from the arms), y to the robot's left. Parts, all 4 cm tall and 60 g (for example 3D-printed PLA blocks), standing in a row at x 15: an orange servo motor, 6 x 2.5 cm, at y 26 with its long side along x; a red bracket block, 4 x 4 cm, at y 17; a blue bearing block, 2.5 x 2.5 cm, at y 8. Kit tray, fixed to the table: a dark plate 10 x 27 cm, 5 mm thick, centred at x 28, y 17, with three pockets formed by 4 mm walls standing 8 mm above the plate; each pocket is 4 mm wider than its part on every side: the servo motor's pocket, 3.3 x 6.8 cm with its long side along y, at x 28, y 26; the bracket's, 4.8 x 4.8 cm, at x 28, y 17; the bearing block's, 3.3 x 3.3 cm, at x 28, y 8.",
+  "scoring": "At the end, with the grippers open. A part is in its pocket when it stands upright (its 4 cm height within 10 degrees of vertical, either way up; the bracket, a 4 cm cube, on any face) on the pocket floor (lowest corner within 4 mm of the plate's top) with all four bottom corners inside its own pocket's inner edges (or up to 0.5 mm into a wall it is pressed against). Score: one third for each part in its own pocket; 1.0 when all three are, held for 1 s with every part still. A part in another part's pocket earns nothing (the bearing block fits all three pockets), and so does the motor standing on its end in its own pocket. Possible scores: 0, 0.33, 0.67, 1.0. Check with a top-down photo.",
+  "run_limit": "3,600 steps (3 minutes at 20 Hz)",
+  "reset_notes": "Stand the three parts back in their row at x 15, the servo motor's long side along x.",
+  "fidelity": "The parts are plain blocks with the outline of a servo motor, a bracket and a bearing block, not their real shapes; every object has the same rubber-like friction (1.2 static, 1.0 dynamic). The tray and its walls are fixed. The sim cannot tell a gripped part from a released one; on a real table, open the grippers before the photo.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-UCQRHP"
+}
