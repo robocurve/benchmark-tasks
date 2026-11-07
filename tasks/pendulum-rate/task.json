@@ -1,0 +1,20 @@
+{
+  "title": "Regulate a pendulum: time it, move the bob, until a full swing takes one second",
+  "category": "Impact on jobs",
+  "keywords": [
+    "timing",
+    "measure and correct",
+    "pendulum",
+    "clock repair",
+    "one arm"
+  ],
+  "instruction": "Regulate the pendulum: move the bob until one full swing takes one second, then leave it swinging by itself.",
+  "context": "Watch and Clock Repairers (O*NET 49-9064) regulate a clock by timing its swing and moving the bob. Rods that look alike differ in mass, so the right place cannot be measured with a ruler: it must be found by timing, stopping the pendulum and timing it again.",
+  "setup": "Two YAM arms at the near edge of a table; positions are (x forward from the arm bases, y left) in cm, heights above the table. A black bench bracket, 48 high, stands on a 18 x 12 cm foot at (45, 20), with an arm reaching back to a knife-edge pivot at (30, 20), 46 high. From the pivot hangs a 30 cm rod, 12 mm across and painted grey, free to swing forward and back. A brass bob, 300 g, 4.4 cm across and 4 cm long, is held on the rod by a friction spring, 19 cm below the pivot at the start. The rod is pine or steel, painted alike: pine with no seed or an even reset seed, steel with an odd one. Both arms start at their ready pose, and the pendulum at rest.",
+  "scoring": "Timed with a stopwatch from a phone video, with a ruler for the swing and the fingers. A full swing is there and back. Time the last ten full swings with no fingertip within 3 cm of the rod or bob; a fingertip within 3 cm starts the count again. 1.0 when those ten take 9.9 to 10.1 s and the swing at the end of the run is at least 2 degrees, about 1 cm either way at the bob, held for 1 s. 0.5 when those ten take 9 to 9.9 s or 10.1 to 11 s and the swing at the end of the run is at least 2 degrees. 0 if fewer than ten free swings can be timed, those ten take under 9 s or over 11 s, the swing is under 2 degrees at the end of the run, or the bob ever reaches the rod's end.",
+  "run_limit": "1,400 steps (70 s at 20 Hz)",
+  "reset_notes": "Stop the pendulum and slide the bob back to 19 cm below the pivot. In a real trial, the seed is the choice of rod: pine with no seed or an even one, steel with an odd one.",
+  "fidelity": "Rigid-body physics at 240 Hz on GPU, with gravity swinging the rod and bob on their joints. The solver adds energy to a free swing, so the hinge has damping set for each rod: the swing falls from about 7 to 3 degrees in 10 s, faster than on a real knife edge. The friction spring is a stiff hold that slips above about 4 N. A real trial uses a pine rod and a steel rod painted alike. One arm does the task, so both arms are not forced.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-BE24XW"
+}
