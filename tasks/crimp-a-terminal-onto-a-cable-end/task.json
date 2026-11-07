@@ -1,0 +1,20 @@
+{
+  "title": "Hold a cable's stripped end in a crimper's terminal with one hand while the other presses the lever to crimp it",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "bimanual",
+    "electrical assembly",
+    "crimping",
+    "insertion",
+    "lever"
+  ],
+  "instruction": "Pick up the cable and push its bare end straight into the terminal's barrel in the crimper with one hand, and hold it there while the other presses the crimper's lever down until it closes; let the lever spring open, then pull the cable straight out with the terminal crimped on it, hold it up to show it, lay it back on its rest, and take both arms back to where they started.",
+  "context": "Crimping terminals onto cables is everyday work in wiring-harness and electronics assembly, including the power and network cabling of data centres. It is still done largely by hand: the cable has to be held straight in the terminal at the right depth while the tool closes, or the crimp is bad.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) A fixed steel bench crimper on the centre line, 30 cm forward. In its die sits a copper ring terminal whose barrel, 13 mm across inside and 16 mm long, points toward the arms, its axis 4.5 cm above the table, with a flared lead-in 2 cm across in front of its mouth. Its lever is hinged 6.5 cm left of the barrel and reaches right; its red rubber grip is 14.5 cm right of the centre line. A spring holds the lever 12 degrees open (the grip 4.4 cm above closed); holding it closed takes about 5 N on the grip. (2) A loose stiff PVC-insulated copper cable, 16 cm long, 8 mm across and 30 g, its last 12 mm stripped to bare copper 6 mm across. It lies on two fixed black ABS-plastic V-rests along the forward direction, 12 cm left of the centre line, its bare tip 26.5 cm forward and 4.5 cm above the table. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Judged at the end of the trial. The crimp: the moment the lever first closes (within 1.5 degrees). A good crimp: then the bare end 6 to 14 mm into the barrel (at least half its 12 mm of copper in, at most 2 mm of insulation) and the cable within 8 degrees of the barrel's axis. Released: the lever back open at least 10 degrees and both grippers' fingertip centres (TCPs) at least 4 cm from its grip. Taken out: after the crimp, the cable's tip at least 4 cm from where the barrel's mouth was, the terminal on it. On its rest: the cable's tip within 3 cm (across) and 1.5 cm (up or down) of where it lay, the cable within 20 degrees of lying along the rests. 1.0: a good crimp, released, taken out, laid back on its rest, and both arms back where they started (each fingertip centre within 5 cm of its start); 0.5: any crimp with the bare end in the barrel; 0.25: the bare end pushed at least 6 mm into the barrel at some point; else 0.0. The trial ends at the run limit, or once the full score has held for 1 s with the lever and the cable still.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "Fit a fresh terminal in the crimper's die and lay a fresh stripped cable on its rests.",
+  "fidelity": "Rigid-body simulation (Isaac Sim 6.1, PhysX, 20 Hz control). Simplified: the crimp is an event. When the lever closes, the task file reads where the cable's bare end is and, if it is in the barrel, swaps the terminal for a crimped one (its barrel drawn squeezed) that from then on goes where the cable goes. The cable is a stiff rod, and the lever a hinge with a return spring. Cameras 1280 x 704 (Dream-1 sees 320 x 176).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-CXUJRZ"
+}
