@@ -1,0 +1,23 @@
+{
+  "title": "Fold the glasses' temples and close the glasses in their hard case",
+  "category": "Societal relevance",
+  "keywords": [
+    "glasses",
+    "spectacles",
+    "folding",
+    "hinged temples",
+    "case",
+    "lid",
+    "put away",
+    "bimanual"
+  ],
+  "instruction": "Put the glasses away in their case and close it.",
+  "context": "Opticians (O*NET 29-2081.00), care workers and anyone tidying put glasses away in a hard case, which only shuts on folded glasses; open temples will not go in, and forcing the lid on them bends the hinges. The instruction does not say to fold them. Unlike TK-6X9K96 (rigid open glasses stood in a box) and our TK-MS2APD (one slide retracts a blade), this task folds an object's two hinged arms in turn to fit a close container, then closes a hinged lid over it.",
+  "setup": "Positions are from the midpoint between the two arm bases: 'in front' is away from the arms, 'left' is the robot's left; heights are above the table top. Glasses (loose, 40 g): a black plastic front 144 mm wide, 40 mm tall and 4 mm thick, with two light blue lenses 60 x 34 mm (centres 35 mm either side of the middle) under a 6 mm black brow bar; it stands upright on its bottom edge, facing the robot, its bottom middle 20.0 cm in front of the arm bases and 3.0 cm right of the midline. Two black temples, 130 mm long, 4 mm thick and 6 mm tall (18 to 24 mm high), each ending in an 18 mm downturned tip that rests on the table, point straight away from the robot from hinges at the front's two ends; the right temple's hinge is 10 mm behind the front face, the left's 16 mm, so folded the left temple lies behind the right one. Each temple folds through 90 deg to lie along the back of the front; open the glasses are 146 mm deep, folded 16 mm. Case (fixed, blue hard plastic): outside 58 mm front to back, 164 mm long and 48 mm high, inside 50 x 156 mm and 44 mm deep (4 mm walls and floor), long side across, centred 24.0 cm in front of the arm bases and 20.0 cm left of the midline. Its lid (20 g, 4 mm thick, 58 x 164 mm) is hinged along the top of the far wall and stands upright; a spring hinge holds it open until it is pushed past halfway closed, then pulls it shut. Nothing else is on the table.",
+  "scoring": "A temple is folded when it is within 15 deg of lying along the back of the front. The glasses are in the case when every part of them is within the case's inner walls seen from above and their lowest point is within 1 mm of the case floor, lying or standing. The lid is shut when within 3 deg of closed. 'Released and still' means no gripper within 5 mm of the glasses and the glasses not moving. Score 1.0: both temples folded, the glasses in the case, released and still, the lid shut. 0.5: the same with the lid not shut. 0.25: both temples folded, released and still, standing on the front's bottom edge (front within 20 deg of vertical) on the table or on the case floor with their centre over the case, but not wholly in the case. 0 otherwise, and 0 for the whole trial if the glasses are ever knocked over on the table (front more than 45 deg from vertical while down on the table outside the case). Scored at the last step, or 1.0 once held for 1 s.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Open both temples straight back and stand the glasses on their marks; open the case lid upright. The case is fixed. Nothing is consumed.",
+  "fidelity": "Approximate, near full size: rigid boxes with the simulator's default friction (1.2 static, 1.0 dynamic). The lenses are opaque boxes, the front is flat and has no nose pads. The temples stay 2 mm apart when folded instead of resting one on the other. Each temple hinge turns freely until within 8 deg of folded, then a light detent holds it folded until pushed back open past 20 deg; the lid's spring hinge is simulated the same way. The 40 g glasses are heavier than typical (25 to 35 g).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-LTYPEJ"
+}
