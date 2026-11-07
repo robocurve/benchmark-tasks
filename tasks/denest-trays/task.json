@@ -1,0 +1,13 @@
+{
+  "title": "Separate nested trays and park them for reuse",
+  "category": "Impact on jobs",
+  "instruction": "Separate the nested empty trays and park both upright in their outlined bays.\n\nThe blue outer tray starts beneath the orange inner tray. Grasp the raised tabs.\nLift the inner tray clear of the rim before moving sideways. Release both trays.",
+  "context": "Denesting reusable containers before a packing, laboratory or food-service operation.",
+  "setup": "Two empty rigid plastic trays nested at (0.25, 0) on the calibrated YAM table. Outer tray 160x180 mm, 160 g; inner tray 130x140 mm, 100 g. Raised grasp tabs on opposite sides. Bay centres (0.25, +0.23) and (0.25, -0.23) m. Full geometry and fixed starting poses are in task.py and README.md.",
+  "scoring": "0 for invalid, held, moving or nested state; 0.5 for both released and stable on the table with at least 10 mm horizontal separation; 1.0 additionally requires each tray body centre within 20 mm of its bay centre, maintained for 2 seconds. Tilt <8 degrees and yaw error <10 degrees. Detailed numeric tolerances in README.md.",
+  "run_limit": "800 control steps (40 simulated seconds at 20 Hz)",
+  "reset_notes": "Fixed poses, zero jitter. Reset both trays and both arms before every episode.",
+  "fidelity": "Rigid compound-box trays with physical gripper contact and friction. Loose clearance; no suction, elastic deformation, snap-fit or damage model. Real hardware not tested.",
+  "scores": "Dream-1 run: 0.0 after 273 control steps (13.65 simulated seconds); the run ended on API session expiry. Scripted demo: 1.0 in 2/2 episodes, 519 steps (25.95 simulated seconds) each.",
+  "media": "M-GRYYQ2"
+}
