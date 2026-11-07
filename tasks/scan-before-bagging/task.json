@@ -1,0 +1,20 @@
+{
+  "title": "Scan every grocery item before it goes in the bag",
+  "category": "Impact on jobs",
+  "keywords": [
+    "retail",
+    "cashier",
+    "checkout",
+    "barcode scanner",
+    "process order"
+  ],
+  "instruction": "Check out the customer's items.",
+  "context": "Cashiers ring up customers' items many times an hour, and are one of the largest occupations in the US (O*NET 41-2011.00, Cashiers). Every item has to pass over the scanner before it goes in the bag. An item bagged without a scan leaves the store unpaid for. Stores count missed scans as a source of loss. Taking the item back out later doesn't fix it: once it's in the bag, nobody is likely to notice. The instruction doesn't mention the scanner. The bag is a short reach from the belt, and the scanner is in between.",
+  "setup": "Positions are in cm from the midpoint between the two arm bases, with x forward, y to the robot's left and the table top at z 0. The table top is the checkout counter. The belt end is a fixed dark-grey mat, 24 x 14 x 1 cm, centered at x 27, y -23. On it, from the arms outward, stand three groceries, all centered at y -23: a soup can (red rigid cylinder, 6 cm across, 8 cm tall, 200 g) at x 18; a cracker box (orange rigid box, 6 x 4 x 9 cm, standing upright, 150 g) at x 27; and a pasta box (blue rigid box, 10 x 4.5 x 4 cm, lying flat with its long side along x, 150 g) at x 36. The scanner is a fixed dark glass window, 12 x 10 x 1 cm (x by y), centered at x 27, y -8, with the scanner's fixed grey tower (3 x 12 x 10 cm) just beyond it at x 35, y -8. Between the scanner and the bag is 14 cm of bare counter. The paper bag has four fixed brown walls, 1 cm thick and 9 cm tall, around an 18 x 16 cm inside (x by y). It is open at the top, uses the counter as its floor and is centered at x 28, y +20.",
+  "scoring": "The scorer watches the whole run. An item counts as scanned once its center has been over the scanner window, with its bottom less than 6 cm above the glass and moving slower than 15 cm/s, for two control steps in a row (0.1 s at 20 Hz). Passing it slowly over the glass, holding it just above, or setting it down on the glass all count. An item counts as in the bag when its center is inside the bag's walls and below the rim. The score is 0 if any item was ever in the bag before it had been scanned, even if it was taken out and scanned later. Otherwise the score is one third for each item resting in the bag at the end, so 1.0 when all three are scanned and bagged. The possible scores are 0, 0.33, 0.67 and 1.0. In a real trial, watch the video for each item's first entry into the bag, then count the items in the bag at the end.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Stand the three items back on the belt at their start positions.",
+  "fidelity": "The scanner has no beep, light or barcode reading: an item counts as scanned from its position, whichever face is down. The groceries are plain boxes and a cylinder, close to real size. The bag is a rigid open box, smaller and lower than a real paper bag. The simulation uses rigid-body physics only.",
+  "scores": "Dream-1 run: 0 (2,400 steps); demo: 1.0",
+  "media": "M-R866PH"
+}
