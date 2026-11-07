@@ -1,0 +1,22 @@
+{
+  "title": "Clamp two stacked boards with a one-hand bar clamp",
+  "category": "Impact on jobs",
+  "keywords": [
+    "woodworking",
+    "maker space",
+    "bar clamp",
+    "ratchet",
+    "bimanual",
+    "hold and act",
+    "fastening"
+  ],
+  "instruction": "Slide the red bar clamp's lower jaw under the two stacked pine boards, push its sliding jaw down until both jaws grip the boards, then let go so the clamp hangs on the boards by itself.",
+  "context": "Clamping a glue-up is a daily step in carpentry and maker spaces. One hand holds the clamp in place, its fixed jaw under the work, while the other closes the sliding jaw, and the stack must not shift while it is done.",
+  "setup": "Left and right are the robot's. Positions are centres in metres from the midpoint between the two arm bases: x forward, y to the robot's left, heights above the table. Work mat: dark grey rubber, 40 x 46 cm, 3 mm thick, fixed, centred at (0.33, -0.02). Spacers: two walnut blocks, 4 x 10 x 3 cm (10 cm along y), fixed on the mat at (0.285, -0.12) and (0.435, -0.12). Boards: two pine boards, 20 x 10 x 1.8 cm (20 cm along x), 180 g each, stacked face to face with their edges aligned on the spacers, centred at (0.36, -0.12), so their middle 11 cm overhangs a 3 cm gap above the mat. Bar clamp: a red mini one-hand bar clamp, 130 g, standing upright on its foot on the mat with its jaws pointing to the robot's right (-y), its steel bar (2 x 0.8 cm, 11 cm tall) at (0.36, 0.048): a red fixed jaw at the foot, 10.6 cm long and 2 cm thick with a black pad, its face 1 cm below the bottom board's underside, a red and black handle 10 cm long behind the bar, and a red sliding jaw (30 g, 11 cm long with its collar, 3.2 cm wide, 2 cm thick, black pad) on the bar, its face 6 cm above the fixed jaw's. The sliding jaw rides a one-way ratchet: pushed toward the fixed jaw it moves (about 0.6 N per 0.3 mm click) and holds, and it never moves back. The jaw tips start 2.2 cm from the boards' long edge. A yellow and black rubber mallet (39 cm) lies at (0.585, 0.33) along y and a steel speed square (29 x 22 cm) at (0.58, -0.40), both fixed. Nothing else is on the table.",
+  "scoring": "Each jaw's gap is the least distance from its pad (the pad's two ends and centre) to the board face it grips: the fixed jaw to the bottom board's underside, the sliding jaw to the top board's top. Round the stack: both pad centres 1 cm or more inside the boards' outline, the fixed jaw under the stack and the sliding jaw over it (neither more than 3 mm into its board). Gripping: round the stack with both gaps under 1 mm. 1.0 (success, held 1 s): gripping, the pads' centre within 3.3 cm of the boards' centre along their length (the middle third), the boards' matching corners within 3 mm of each other, no gripper finger within 1 cm of the clamp, the clamp hanging on the boards (its lowest point 1 mm or more above the mat) and still (under 1 cm/s and 0.5 rad/s). 0.5: gripping, but off the middle third, the boards misaligned by 3 mm or more, still held, resting on the mat or still moving. 0.25: round the stack, a gap 1 mm or more. 0 otherwise, and 0 if a board or the clamp falls off the table (centre more than 2 cm below the table top).",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Stand the clamp back on its foot at its start, open its sliding jaw back to 6 cm (press the ratchet's release), and re-stack the boards on the spacers with their edges aligned.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. The boards and spacers are boxes, the clamp one rigid body of four boxes (bar, fixed jaw, handle grip and foot), the sliding jaw a box on a prismatic joint. The ratchet is the joint's upper limit and a stiff spring, moved down after each 0.3 mm the jaw is pushed. Clamping force is not modelled: gaps are. Meshes are drawn only. Friction 0.3 on the jaws and foot, 1.0 elsewhere.",
+  "scores": "Dream-1 run: 0.0 (both arms move toward the clamp and the boards but never grip the clamp, which stays where it stands), demo: 1.0 (success at step 302)",
+  "media": "M-6SPF25"
+}
