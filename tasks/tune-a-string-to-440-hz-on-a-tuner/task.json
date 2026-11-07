@@ -1,0 +1,20 @@
+{
+  "title": "Turn a tuning key with one hand while the other plucks the string until a tuner reads 440 Hz",
+  "category": "Other",
+  "keywords": [
+    "bimanual",
+    "music",
+    "instrument tuning",
+    "feedback",
+    "hinge"
+  ],
+  "instruction": "Tune the string to 440 Hz: with one hand turn the tuning key clockwise, a little at a time, and with the other pluck the string again and again, watching the tuner; stop when its needle points straight up and its green light comes on, pluck once more while still holding the key, then let go of both.",
+  "context": "Tuning a stringed instrument (guitar, violin, zither, harp) with a clip-on tuner: the tuner shows the pitch only while the string sounds, so one hand plucks the string again and again while the other turns the peg, and the peg is let go only after a reading shows the string in tune.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) A fixed one-string zither: a spruce-wood box 3 cm tall, from 24 to 32 cm forward and from 21 cm right of the centre line to 13 cm left of it, with a steel string along it 28 cm forward, 4 cm above the table, from a maple bridge 10 cm left of the centre line to its steel tuning pin 17 cm right of the centre line. (2) A brass key on the tuning pin, its square head 1.6 cm across, its top 7 cm above the table. It turns stiffly about the upright and stays where it is left; each degree it is turned clockwise (seen from above) raises the string's pitch 0.2 Hz. The string starts flat, at 412 Hz. (3) A clip-on ABS-plastic tuner at the zither's right end, 19.5 cm right of the centre line: a white dial facing the arms, its middle 7.5 cm above the table, with marks at 440 Hz and 3 Hz either side. Its red needle shows the pitch at the last pluck (none until the first): straight up at 440 Hz, leaning 3 degrees per Hz to the right when sharp and to the left when flat (at most 60 degrees); a green light above the dial is on while that reading is within 3 Hz of 440. A pluck: a gripper's fingertip centre (TCP) comes within 1.6 cm of the string, anywhere from 10 cm right of the centre line to 6 cm left of it, after being at least 3 cm from it. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Judged at the end of the trial. In tune: the string's pitch within 3 Hz of 440. 1.0: in tune, with the tuner's last reading within 3 Hz of 440 (and still within 1.5 Hz of the string's pitch), that last pluck made while the other gripper's TCP was on the key (within 2.5 cm of its head's middle), and both TCPs at least 3 cm from the key and the string; 0.5: in tune otherwise; 0.25: within 10 Hz of 440; else 0.0. The trial ends at the run limit, or once the full score has held for 1 s with the key still.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "Turn the key back until the string sounds 412 Hz.",
+  "fidelity": "Rigid-body simulation (Isaac Sim 6.1, PhysX, 20 Hz control). Simplified: no sound or string vibration is simulated. The pitch follows how far the key has turned (0.2 Hz per degree); a pluck is a gripper coming within 1.6 cm of the string; the tuner's needle and light are moved by the task file to show the pitch at the last pluck. Cameras 1280 x 704 (Dream-1 sees 320 x 176).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-9MCNDF"
+}
