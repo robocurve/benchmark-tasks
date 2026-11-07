@@ -1,0 +1,21 @@
+{
+  "title": "Slide the right tile into a tight gap",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "abstract reasoning",
+    "connected regions",
+    "tight insertion",
+    "sliding",
+    "bimanual",
+    "handover"
+  ],
+  "instruction": "Slide one loose tile into the gap so that the largest single-colour region is as large as possible.",
+  "context": "Combines a counting puzzle with a tight insertion: the tile cannot be held while it goes into the gap, so it has to be lined up and slid in, as when fitting a part into a tight recess.",
+  "setup": "Coordinates: x forward from the line between the two arm bases, y to the left, from the midpoint between the bases. All tiles are painted wood, 3 cm thick, lying flat and axis-aligned. Grid: fifteen tiles, 6.1 x 6.1 x 3 cm, glued to the table, centres 6.3 cm apart (2 mm between neighbours): rows at x = 37, 30.7, 24.4, 18.1 cm (row 1 furthest from the arms), columns at y = 26, 19.7, 13.4, 7.1 cm (column 1 on the arms' left). Colours by row, columns 1 to 4: row 1 red, red, yellow, yellow; row 2 red, blue, blue, yellow; row 3 gap, blue, blue, blue; row 4 red, red, red, yellow. The gap (row 3, column 1) is open towards +y, 6.5 cm wide in x and 6.3 cm deep. Loose tiles, 6 x 6 x 3 cm, 65 g each, lying flat on the table: blue at (17, -25) cm, red at (26, -25) cm, yellow at (35, -25) cm.",
+  "scoring": "A loose tile is over the gap when its centre is within 3.15 cm of the gap's centre in x and y, at any height; it is seated when its centre is within 1 cm of the gap's centre horizontally, its bottom within 5 mm of the table, its height 3 cm within 5 mm, and it is at rest (under 1 cm/s and 0.5 rad/s). With exactly one loose tile over the gap and that tile seated: red 1.0 (largest single-colour region 7 tiles), blue 0.5 (6 tiles), yellow 0.25 (5 tiles). Anything else scores 0: the gap empty, a tile jammed, tilted, stacked or off-centre by 1 cm or more, or two loose tiles over the gap. Read at the end of the trial; the trial does not end early.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed; put the three loose tiles back at their starting positions.",
+  "fidelity": "Approximate: rigid boxes with default contact settings; the glued tiles are fixed bodies.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-2L8P3Y"
+}
