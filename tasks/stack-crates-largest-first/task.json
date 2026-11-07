@@ -1,0 +1,21 @@
+{
+  "title": "Stack three crates on the pallet mark with the biggest at the bottom",
+  "category": "Impact on jobs",
+  "context": "Automated warehouse order fulfillment and palletizing require robots to build stable stacks of mixed-size cartons. An autonomous dual-arm robot must sequence carton placement strictly from largest to smallest, centering each level within strict horizontal tolerances to prevent stack lean, asymmetry, and catastrophic toppling under gravity.",
+  "instruction": "Stack the three crates on the pallet mark with the biggest at the bottom and the smallest on top, without letting the stack lean or fall.",
+  "setup": "All positions are cm from the midpoint between arm bases (x forward, y left); table top is z = 0. Pallet marker: 11.0 x 11.0 cm flat white square at (26.0, 0.0). Three cuboid shipping crates: Large blue crate (8.0 x 8.0 x 4.0 cm, 0.06 kg) at (28.0, +28.0); Medium orange crate (6.0 x 6.0 x 4.0 cm, 0.05 kg) at (38.0, -28.0); Small yellow crate (4.5 x 4.5 x 4.0 cm, 0.04 kg) at (30.0, -22.0).",
+  "scoring": "Score: 0.25 when the large crate rests on the pallet mark within 1.5 cm; 0.50 when the medium crate rests on the large crate within 1.2 cm; 0.75 when the small crate rests on the medium crate within 1.2 cm; 1.00 when the complete stack is stable with all three offsets <= 1.2 cm from pallet center, crate tilt < 5 degrees, and arms clear for 40 control steps (2.0 s at 20 Hz). Zero-gate: any crate falling off the table drops score permanently to 0.0.",
+  "reset_notes": "Verify all three crates are placed at their designated start coordinates. Ensure pallet mark is clear and unoccluded.",
+  "run_limit": "2,500 steps (125 seconds at 20 Hz)",
+  "keywords": [
+    "bimanual",
+    "palletising",
+    "stacking",
+    "equilibrium",
+    "stability",
+    "warehouse automation"
+  ],
+  "fidelity": "Pallet marker is a thin planar visual target. All three crates are free rigid bodies simulated with realistic Coulomb friction (1.2) and low masses (0.04-0.06 kg) to capture stacking contact mechanics. Real-world build: warehouse palletizing station with industrial plastic totes and high-grip rubberized contact surfaces.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-N5XW38"
+}
