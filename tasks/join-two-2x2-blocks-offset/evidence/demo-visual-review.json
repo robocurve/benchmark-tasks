@@ -1,0 +1,79 @@
+{
+  "result": "Sampled visual evidence and measured geometry are consistent with the recorded full score.",
+  "method": "Native image inspection of extracted close-up frames/contact sheets and the composite at proof time, plus numerical review of all 401 measured samples. Not a frame-by-frame manual video review.",
+  "visual_review_times_s": [
+    0.0,
+    11.7,
+    14.55,
+    19.0,
+    20.0
+  ],
+  "visual_findings": {
+    "setup": "Two four-stud bricks start upright and separate.",
+    "join": "The final geometry visibly has approximately half-width overlap and a red overhang. Telemetry identifies exactly two stud/socket matches. One unused blue stud is directly visible; the red brick occludes the farther unused blue stud in this close-up.",
+    "lift": "The offset blue base visibly hangs beneath red without table or other-arm support. Hand envelopes remain more than 3.54 mm clear of blue throughout the qualifying interval.",
+    "finish": "The offset assembly remains upright with no visible sliding between the 19 and 20 second frames.",
+    "presentation_limitations": [
+      "The farther unused blue stud is occluded in the close-up and cannot be counted directly in the low-resolution policy views. The clear one-axis half-width overlap of the known 2x2 parts makes the two-stud connection inferable from geometry."
+    ]
+  },
+  "anonymity": "No team name, person name, username, institution, identifying file path or team branding appears in inspected images. Composite labels identify camera roles and simulation time only.",
+  "hard_penetration_review": "No gross body intersection is visible in inspected frames. Matched socket/body gaps remain positive during the qualifying lift. These robot traces contain no contact-penetration measurements, so hidden compliant-collider overlap is not independently quantified here.",
+  "limitations": [
+    "Exact gaps and clearances are measured telemetry values, not pixel measurements.",
+    "Contact compliance and friction remain uncalibrated to real printed parts.",
+    "Clearance was audited at the 20 Hz recorded state timestamps."
+  ],
+  "measurements": {
+    "sample_count": 401,
+    "first_time_s": 0.0,
+    "last_time_s": 20.00000000000015,
+    "model_masses_g": {
+      "upper": 12.11,
+      "lower": 12.11
+    },
+    "qualifying_lift": {
+      "first_time_s": 13.550000000000058,
+      "last_time_s": 16.750000000000103,
+      "continuous_sampled_duration_s": 3.2000000000000455,
+      "minimum_lower_height_mm": 21.16919383148952,
+      "maximum_lower_height_mm": 44.54056281609253,
+      "minimum_all_robot_surface_clearance_to_lower_mm": 3.546066582506245,
+      "maximum_socket_gap_mm": 0.16977890040528743,
+      "minimum_signed_socket_gap_mm": 0.06549315106386781,
+      "maximum_stud_lateral_error_mm": 0.06106201414796521,
+      "maximum_relative_tilt_deg": 1.1832830538787507,
+      "engaged_stud_counts": [
+        2
+      ]
+    },
+    "final_rest_19_to_20s": {
+      "duration_s": 1.0000000000000142,
+      "minimum_all_robot_surface_clearance_to_pair_mm": 6.164919984092486,
+      "maximum_lower_bottom_distance_to_table_mm": 0.010183420229181728,
+      "upper_max_translation_from_anchor_mm": 0.008496236515499841,
+      "lower_max_translation_from_anchor_mm": 0.00048106755189174195,
+      "upper_max_rotation_from_anchor_deg": 0.06019291934747507,
+      "lower_max_rotation_from_anchor_deg": 0.0017349096450062639
+    }
+  },
+  "source_sha256": {
+    "trajectory.jsonl": "577a21ed1757e4aa014cb08d10ce81b989544a3088f128120d1adb901e42e124",
+    "score-summary.json": "6ce7c00f987c6cd537d25e822f00b6f1047e0a6ef20d1eecb1b8609aab574fc5",
+    "complete.mp4": "8623a05c3361b37c1afd8db11215dec32942f65e8eb9574e7f8094ccd7083f49",
+    "review.mp4": "5ea490acd076f97cd36656e2d8a4cd40f70af41cdaf796c454a18e2f3ab8e08a"
+  },
+  "additional_policy_view_review": {
+    "time_s": 20.0,
+    "native_dimensions_px": [
+      320,
+      176
+    ],
+    "overhead": "Shows the released assembly and arm positions, but native resolution and viewing direction do not distinguish both unused blue studs.",
+    "left_wrist": "Shows the red upper footprint and a narrow blue edge; it does not reveal both unused blue studs.",
+    "right_wrist": "The assembly is outside this view; it does not add stud-count evidence.",
+    "inspection_method": "Native frames extracted and displayed at 4x nearest-neighbour scale; no new detail inferred from enlargement."
+  },
+  "manual_judging_assessment": "Additional GPU footage is not needed solely to reveal the hidden unused stud. The starting view establishes two 2x2 pieces. The final close-up shows aligned edges along one axis and approximately half-width displacement along the other; the specified 16 mm pitch and 31.8 mm body width establish one row of two overlapping studs. A reviewer can compare corresponding edges against the known brick dimensions in a paused image. This geometric inference is separate from directly counting two visible unused studs; telemetry independently measures a 16.092 mm centre displacement and exactly two matches.",
+  "source_hash_scope": "Hashes refer to original local run files; curated numeric traces are separately hashed in VALIDATION.json."
+}
