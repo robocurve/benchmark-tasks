@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robocurve-flange-assembly-prototype"
+version = "0.0.1"
+
+[project.entry-points."inspect_robots.embodiments"]
+yam_flange = "flange_assembly.embodiment:make_embodiment"
+
+[project.entry-points."inspect_robots.policies"]
+yam_flange_scripted = "flange_assembly.policy:make_policy"
+
+[tool.setuptools.packages.find]
+include = ["flange_assembly*"]
