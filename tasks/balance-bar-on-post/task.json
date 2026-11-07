@@ -1,0 +1,20 @@
+{
+  "title": "Balance a bar on a post and load both ends",
+  "category": "Other",
+  "keywords": [
+    "balance",
+    "centre of mass",
+    "symmetric loading",
+    "bimanual",
+    "synchronised placement"
+  ],
+  "instruction": "Balance the wooden bar across the top of the post, then put one metal block on each end of the bar so that the bar stays balanced on the post by itself.",
+  "context": "A beam on a narrow support can tip as loads are added. This task tests keeping the combined centre of mass over the support while placing a block at each end.",
+  "setup": "Positions are centres in metres: x forward from the line of the two arm bases, y to the left of the midline between them (bases at y = +0.305 and -0.305); heights are above the table top. (1) Post: square hardwood post 50 mm by 50 mm and 110 mm tall (cut from a 50 mm square hardwood turning blank), standing upright with its flat top level, centred at (0.25, 0.00), screwed or clamped to the table. (2) Bar: pine board 300 mm long, 64 mm wide and 19 mm thick (a 1x3 board cut to length, ends square), 165 g (any board from 140 to 200 g keeps the margins in the scoring), loose, lying flat on the table with its long side along y, centred at (0.14, 0.00). (3) Two blocks: solid aluminium cubes, 40 mm, 173 g each, loose, on the table at (0.25, +0.22) and (0.25, -0.22), one on each side of the post. The bar balances on the post only while the centre of mass of the bar and the blocks lies over the post top: empty, it stays level with its middle up to 25 mm off the post's axis; with one block on one end alone it tips onto that end; with a block on each end it stays level.",
+  "scoring": "Measure when the robot has stopped. The bar counts as balanced when it rests on the post top (its underside within 3 mm of the top face), its top face is within 5 degrees of level, its middle is within 10 mm of the post's axis along the bar and within 25 mm across it, and it is still (moving under 1 cm/s). A block is on an end when it rests directly on the bar's top face with its centre over the bar and within 50 mm of that end (its outer face no more than 30 mm in from the end), and is still. 1.0 (success, held for 1 s ends the trial): the bar balanced with one block on each end. 0.5: the bar balanced with blocks on it but not one on each end (one block anywhere on the bar, or one block on each half with at least one of them not on its end or not still). 0.3: the bar balanced with no block on it. 0: the bar not balanced (on the table, tipped onto an end, off-centre beyond the tolerances, or moving), both blocks on the same half of the bar (side by side or stacked), or any object on the floor. A block counts as on the bar when its centre is over the bar's top face, from resting on it up to one block height higher (stacked on the other block, or held just above the bar). Without success, the score is the one at the end of the run limit.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Put the bar back flat on the table and the two blocks back on their start spots.",
+  "fidelity": "Rigid boxes: the bar balances while the centre of mass of bar and load lies over the 50 mm post top; real rounded post edges narrow that by a millimetre or two. The 110 mm post makes a bar tipped by one block land at 47-73 degrees, too steep for a 40 mm cube to stay on. Friction is the simulator's 1.2/1.0, more than real aluminium on pine. The scorer sees only object states: a bar held level by a gripper reads as balanced; a real trial measures after both grippers have let go.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-K5RTFF"
+}
