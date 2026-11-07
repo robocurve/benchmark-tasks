@@ -1,0 +1,21 @@
+{
+  "title": "Hot-swap a failed drive sled in a rack without disturbing healthy bays",
+  "category": "Impact on AI timelines",
+  "context": "High-availability datacenter server maintenance requires replacing failed modular components without interrupting adjacent running nodes. An autonomous dual-arm robot must coordinate manipulators to depress and hold a mechanical retention latch, draw the failed drive sled clear of the chassis, relay it to disposal, and seat a keyed spare drive sled until the status indicator turns green, all while avoiding disturbance to adjacent healthy sleds.",
+  "instruction": "One bay has a red lamp: hold its latch button down, pull its sled out, and slide the spare with the blue handle all the way in until the lamp turns green, without moving the other two sleds.",
+  "setup": "All positions are cm from the midpoint between arm bases (x forward, y left); table top is z = 0. Server rack: 16.0 x 40.0 x 6.0 cm open-front chassis with a slot per bay at (41.0, 0.0) with front face at x = 33.0 cm and three drive bays along y at -12.0, 0.0, and +12.0 cm. Three 15.0 x 8.0 x 2.5 cm sleds rest seated in bays with 3.0 x 4.5 x 3.0 cm front handles. 4.0 x 4.0 x 1.2 cm latch buttons rest on the chassis top at x = 40.5 cm, 5.5 cm to the left of each bay's centre line. 2.5 cm indicator lamps mark bay status (Bay 0: green healthy, Bay 1: red failed, Bay 2: green healthy). Spare stand at (28.0, +30.0) holds a blue-handled keyed spare and an orange-handled keyed spare. Discard pad (13.0 x 13.0 x 1.0 cm) rests at (28.0, -30.0).",
+  "scoring": "Score: 0.25 when the failed sled is pulled out >= 6.0 cm with the latch held; 0.50 when the failed sled is clear of the rack and resting on the discard pad; 0.75 when the blue spare is seated >= 95% in the failed bay; 1.00 when the status lamp turns green (blue spare seated >= 95%, latch released, both arms clear, healthy sleds undisturbed) and holds for 20 control steps (1.0 s at 20 Hz). Zero-gates: pulling any sled > 3 mm in the 0-25 mm detent zone without latch held triggers a forced pull FAULT, latching score to 0.0; displacing any healthy sled > 5 mm latches score to 0.0.",
+  "reset_notes": "Verify all three chassis sleds are fully seated in their respective bays. Verify latch buttons return to rest height. Ensure Bay 1 status lamp is red and Bays 0 and 2 are green. Confirm blue and orange spares rest on the spare stand and discard pad is clear.",
+  "run_limit": "2,500 steps (125 seconds at 20 Hz)",
+  "keywords": [
+    "bimanual",
+    "datacenter",
+    "hot-swap",
+    "retention latch",
+    "drive sled",
+    "keying"
+  ],
+  "fidelity": "Server rack chassis is a heavy 10 kg fixture. Drive sleds are rigid physical bodies with 12 mm clearance per side in bay channels. Latch button is a 100 N/m spring slider with 8 mm travel and hard stop. Indicator lamps and electrical detent logic are simulated in Python and rendered via write_pose. Real-world build: enterprise storage server blade with hot-swappable SAS/NVMe drive caddies and spring-retention locking latches.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-JZW5WS"
+}
