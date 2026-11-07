@@ -1,0 +1,21 @@
+{
+  "title": "Move a vial through a hot-cell wall with a pivoting tong",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "tool use",
+    "mirrored motion",
+    "hot cell",
+    "remote handling",
+    "lever"
+  ],
+  "instruction": "Use the tong through the wall to move the vial from the blue rack into the grey holder, and leave it standing there with the jaws clear of it. Pull the red lever to close the jaws; they open when it is let go.",
+  "context": "Nuclear Technicians (O*NET 19-4051) can handle radioactive material from behind a shielded wall with remote tools. With a tong pivoting in the wall, every sideways and up-down motion at the jaws is the mirror of the motion at the handle, and the material must go into a tight holder without being dropped.",
+  "setup": "Two YAM arms at the near edge of a table; positions are (x forward from the arm bases, y left) in cm, heights above the table. A closed box of 12 mm plywood stands on the table, from x 40.5 to 87, y -28 to 28, 46 high. Its front wall is plywood up to 19 and clear acrylic above; its roof is clear acrylic, and lifts off for a tape or a reset. A 6 cm square port at (41, 0), 12 up, holds a gimbal with a steel flange. The tong is a 16 mm steel rod through the gimbal: it swings 32 degrees each way, tips 22 degrees each way, and slides from -3 to +10 cm, with its slide at 0 at the start. Outside, a 12 cm rubber handle stands 28 cm behind the gimbal. Inside, two steel jaws with rubber pads, 3 x 2.4 cm, stand 24 cm ahead of it, opening 6 cm wide, closing across the rod. A bicycle-style lever on a stand at (30, 30) has a red ball 15 up, on an 11.5 cm bar hinged 3.5 up, sprung at 2 N m per radian; a cable joins it to the jaws, which close fully at 24 degrees of pull towards the arms. Inside the box, a plain bench 6 high, x 50 to 85, y -25 to 25. On it, a blue plastic rack at (70, -9): a ring 1.5 high, bore 4.4 cm. A grey plastic holder at (70, 9): a ring 4 high, bore 4.8 cm, wall 1.8 cm. An amber plastic vial with a red cap, 3.8 cm across, 8.5 tall, 50 g, stands in the rack. The rack and holder are fixed to the bench.",
+  "scoring": "Measured with a tape with the roof off, a photo through the roof and a phone video. 1.0 when the vial stands in the holder with its base on the bench, tilted at most 5 degrees, so the cap's rim is level to about 3 mm, both jaws at least 3 cm from it, still for 1 s. 0.5 when it stands in the holder, base on the bench, tilted at most 5 degrees, but a jaw is closer than 3 cm or it is not yet still. 0.25 when, at the end, both jaws hold it with its base at least 3 cm above the bench. 0 if it ever tips past 45 degrees, falls off the bench or is dropped more than about 2 cm, and in any other end state.",
+  "run_limit": "1,400 steps (70 s at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Stand the vial back in the rack, and bring the rod back level and centred with the slide at its start mark.",
+  "fidelity": "Rigid-body physics at 240 Hz on GPU. The cable is modelled as a spring target on each jaw, read from the lever's angle each step, with at most 8 N a jaw. The rod has no weight: a real tong is counterweighted and held by friction in its gimbal. The box casts no shadow in sim, as a real cell has its own lamps. A real trial uses a 3D-printed gimbal and slide, a plastic vial of water and an acrylic window. It has not been built. In sim, a drop is 0.65 m/s downward.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-FDJKUW"
+}
