@@ -1,0 +1,38 @@
+"""Shared physical dimensions for asset authoring, scene, controller and scorer."""
+DRAWER_ORIGIN=(.50,.04,.8125)
+DRAWER_WIDTH=.40
+DRAWER_BOUND_DEPTH=.393
+DRAWER_CLOSED_BACK=.660
+DRAWER_BOTTOM=.7655
+TRAVEL=.20
+FULL_OPEN=.190
+FINISH_OPEN=.193
+HANDLE=(.28,.18,.8165)
+PARK=(.18,.30,.9075)
+FOLD_POS=(.486,-.080,.8495)
+FOLD_HIGH=(.022,.025,.013)
+PRESS_Y=-.075
+PRESS_OFFSET=.410
+JAM_LOW=.098
+JAM_HIGH=.120
+JAM_NOMINAL=.110
+CLEAR_SCORE=.172
+CLEAR_PULL=.176
+DRAWER_DAMPING=12.0
+PANELS={
+ 'cabinet_floor':((.514,.04,.7535),(.348,.446,.012)),
+ 'cabinet_left':((.514,.257,.8185),(.348,.012,.118)),
+ 'cabinet_right':((.514,-.177,.8185),(.348,.012,.118)),
+ 'cabinet_back':((.682,.04,.8185),(.012,.422,.118)),
+ 'cabinet_top':((.514,.04,.8715),(.348,.446,.012)),
+ 'cabinet_lip':((.347,-.080,.8665),(.014,.060,.030)),
+}
+DRAWER_PARTS={
+ 'Floor':((0,0,-.041),(.308,.40,.012)),
+ 'Front':((-.154,0,0),(.012,.40,.070)),
+ 'Back':((.154,0,0),(.012,.40,.070)),
+ 'Left':((0,.194,0),(.296,.012,.070)),
+ 'Right':((0,-.194,0),(.296,.012,.070)),
+ 'HandleStem':((-.185,.14,0),(.056,.012,.012)),
+ 'Handle':((-.22,.14,0),(.026,.032,.026)),
+}
