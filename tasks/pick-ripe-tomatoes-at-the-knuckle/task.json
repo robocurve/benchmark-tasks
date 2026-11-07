@@ -1,0 +1,20 @@
+{
+  "title": "Pick the ripe tomatoes off the truss at the knuckle",
+  "category": "Impact on jobs",
+  "keywords": [
+    "agriculture",
+    "greenhouse harvesting",
+    "selective picking",
+    "tomato",
+    "abscission joint"
+  ],
+  "instruction": "Pick the ripe tomatoes off the truss and put them in the tray.",
+  "context": "Greenhouse tomatoes are harvested by hand truss by truss, taking only the fruit that has turned red. The picker takes the fruit in the hand and bends it up and over toward the truss until the pedicel snaps at its knuckle (the abscission joint), which leaves the green calyx on the fruit; pulling instead does not part the knuckle, drags the truss and tears it or the stem, and green fruit is left on the truss to ripen. Hand harvesting is one of the largest labour costs in greenhouse vegetables and a main target of agricultural robotics. Done by: farmworkers and laborers, crop, nursery, and greenhouse (O*NET 45-2092.00).",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Positions are in cm from the midpoint between the two arm bases: x forward (away from the arms), y to the robot's left; heights are above the table top. Tomato plant (fixed): a green stem 1.8 cm thick standing at x 37, y -6, and one truss: a peduncle 5 mm thick that leaves the stem 16.5 cm up, comes forward to x 31 and runs along y to y 24, falling 2.5 cm along the way. A pedicel 5 mm thick hangs from it 3 cm down to each tomato's knuckle (a small swelling). Tomatoes: three, 4.8 cm across and 60 g, centred 8.5 cm up at x 31 and y 3, 12 (red, ripe) and 21 (green, unripe); each has a green five-sepal calyx on top and a 12 mm stub of pedicel up to its knuckle. Each knuckle lets its tomato swing up to 35 degrees in any direction; bent further, it snaps (about 0.12 N m). Pulled along its stem, it holds and the pedicel stretches (about 1 mm per newton). Harvest tray (black plastic, fixed): 13 x 26 cm inside and 2.5 cm deep, centred at x 29, y 10, under the truss. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "A tomato is off the truss when its knuckle has moved 4 mm or more sideways from the end of its pedicel, and in the tray when it is off and its centre lies inside the tray's walls and less than 4.9 cm above the table. 0 for the rest of the run if the green tomato comes off the truss, a tomato is pulled 6 mm or more along its stem (the truss torn), or a tomato falls onto the table outside the tray. Otherwise partial credit is the best stage reached: 0.25 for each red tomato off the truss and 0.25 more for each red tomato in the tray, at most 0.75. 1.0: both red tomatoes in the tray, the green one still on the truss, both grippers at least 5 cm from every tomato, still for 1 s. Doing nothing scores 0. On a real plant, a tomato off at the knuckle carries its calyx and a short stub; one torn off by pulling usually comes away without its calyx or brings the truss with it.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "On a real plant, use a fresh truss with two red and one green tomato. In the simulation a snapped knuckle stays snapped, so each trial starts the simulator afresh (each inspect-robots run does).",
+  "fidelity": "Rigid bodies in Isaac Sim 6.1 (PhysX), 20 Hz control. The plant, truss and tray are fixed. Each tomato hangs from its pedicel on a ball joint that swings freely within 35 degrees and breaks past it at 0.12 N m; pulled, it never breaks but slides along its stem on a 1,000 N/m spring (modelling choices, not measurements). Skin, bruising and rolling resistance are not simulated (spin is damped instead); a tomato touching the table outside the tray counts as dropped.",
+  "scores": "Dream-1 run: 0.0 (it never touched the tomatoes); demo: 1.0",
+  "media": "M-UFVBJU"
+}
