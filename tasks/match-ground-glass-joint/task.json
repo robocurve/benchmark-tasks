@@ -1,0 +1,21 @@
+{
+  "title": "Pick the adapter with a 24/29 cone and seat it in a 24/29 socket",
+  "category": "Impact on jobs",
+  "keywords": [
+    "laboratory",
+    "standard-taper joint",
+    "expansion adapter",
+    "part selection",
+    "joint size",
+    "insertion"
+  ],
+  "instruction": "pick the adapter with the 24/29 cone and seat it in the 24/29 socket",
+  "context": "Assembling lab apparatus means picking the adapter whose joint matches by size, from a rack of similar-looking ones. A smaller cone still drops into the socket but leaves a loose, leaking joint, so 'it goes in' is not enough. Done by: chemical technicians and laboratory chemists.",
+  "setup": "Positions in metres on the table from the midpoint between the two arm bases: x forward, y to the robot's left; the arm bases are at y = +0.305 and -0.305. Every adapter, including the fixed one, is white PTFE plastic. Fixed: a dark grey clamp block (painted aluminium or wood) 50 x 50 mm, 60 mm tall, centred at (0.30, 0.00), holding a plastic expansion adapter with its 24/29 socket facing up; in the simulation the socket is a square bore 27 mm across and 29 mm deep with 5 mm walls, its floor the block's top, its rim 89 mm above the table. Loose: four plastic expansion adapters in a row across the table at x = 0.17, each standing upright on its cone inside a fixed grey plastic collar (square, 4 mm wider inside than the cone, 4 mm walls, 20 mm tall). Each adapter is a cone at the bottom, an 18 mm by 15 mm neck, and a socket at the top (6 mm wider outside than its joint size): at y = 0.15 a 29/32 cone to 34/35 socket (60 g, 82 mm tall); at y = 0.05 a 14/23 cone to 19/26 socket (30 g, 64 mm tall); at y = -0.05 a 24/29 cone to 29/32 socket (45 g, 76 mm tall); at y = -0.15 a 19/26 cone to 29/32 socket (40 g, 73 mm tall). Joint sizes are moulded on each adapter, as on real ones. Only the adapter at y = -0.05 has a 24/29 cone, and every upper end is a socket. All parts share one friction (0.4). Both arms start at their ready poses.",
+  "scoring": "End state, judged after the arms let go, from a side photo and a ruler. Gate: 0 if any adapter other than the 24/29 one is down in the socket (the centre of its cone's lower end more than 2 mm below the rim and inside the bore seen from above); only the 14/23 and 19/26 cones can get there, and the 29/32 cone is too wide to enter. Otherwise: 1.0 if the 24/29 adapter is seated (the centre of its cone's lower end within 3 mm of the socket floor and within 3 mm of the socket's axis, and the adapter within 4 degrees of vertical), held for 1 s; 0.5 if its cone's lower end is at least 10 mm below the rim, inside the bore and within 20 degrees of vertical, but not seated; 0 otherwise. Possible scores: 0, 0.5, 1.0.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Stand the four adapters back in their collars in the same order. Run with -E object_jitter=0.",
+  "fidelity": "Approximate. Tapered cones are straight cylinders, and the round socket is a square bore with 1.5 mm of play, so the 14/23 and 19/26 cones drop to the floor of the socket where real ones would sit loose; they score 0 either way. Upper sockets are solid in the simulation. Moulded joint sizes are too small to read in the 320 x 176 simulated cameras, so in simulation the adapter has to be told by its size. Masses are set for solver stability and are close to solid PTFE parts. One friction (0.4) for every contact.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-RWH4MK"
+}
