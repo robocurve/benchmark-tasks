@@ -1,0 +1,20 @@
+{
+  "title": "Plug a keyed connector into a loose socket block",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "robot building",
+    "server assembly",
+    "bimanual",
+    "connector",
+    "bracing"
+  ],
+  "instruction": "Plug the connector into the socket on the loose block, then let go of both. Do not let the block slide.",
+  "context": "Connectors on robot controllers and server sub-assemblies are often seated while the part sits loose on the bench: one hand steadies the part so it does not skid, while the other lines up the key and pushes the connector home against a latch.",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left); the table top is z = 0. Loose block: 3D-printed PLA, 11 (x) x 7 (y) x 6 cm tall, 0.30 kg (infill chosen to reach that mass), lying unclamped on a smooth sheet on the table (friction about 0.25), centre x 28, y +8. On its face towards the arms (-x), centred 3 cm above the table, a socket is screwed flat: a 56 x 42 mm, 6 mm thick aluminium flange carrying a 38 x 30 mm dark ABS shell, 24 mm long, whose cavity is 30 x 18 mm (1.0 mm of play per side around the nose) with an 8 x 3 mm key slot in its top wall, 1 mm to the right of centre; the cavity opens towards the arms and its floor is the flange. In the cavity's left wall, 10 mm in from the mouth, a spring plunger with a round 4 mm tip (12 N per mm, 1.5 mm travel) stands 1.5 mm proud of the wall. Plug: dark ABS housing 45 x 18 x 28 mm (width, length, height) carrying a steel nose 28 x 16 mm and 18 mm long, with a 6 x 3 mm red key rib along the top of the nose, 1 mm to the right of centre, and a 5 mm wide, 1.5 mm deep groove across the nose's left face starting 7.5 mm from the housing; 49 g. The plug lies on its housing, key up, centre x 18, y -12, its nose pointing forward and to the right, 45 degrees off the socket axis. All parts match the setup screenshot.",
+  "scoring": "Measured at the end from the part poses (in a real trial, a top photo, a ruler and a mark on the nose 17 mm from its tip). 0 if the block was at any moment moved more than 30 mm or tilted more than 20 degrees, or the plug fell off the table. Otherwise: 1.0 if the nose is at least 17 mm inside the socket with the key in its slot (plug within 3 degrees of the socket axis and 1.5 mm of its centre line) and the plunger sprung out into the groove, the block is within 5 mm of where it started, both grippers are open, and the plug and block move under 5 mm/s, for 1 s; 0.75 if seated as above with the block within 5 mm but a gripper still holds or something is still moving; 0.5 if the nose is 6 to 17 mm inside (within 5 degrees and 3 mm of the axis), or the plug is fully seated but the block moved 5 to 30 mm; 0.25 if the plug was lifted 3 cm and ends with its origin within 10 cm of the socket mouth; otherwise 0.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Pull the plug out (the plunger springs back), set it on its marked outline on its housing, key up, nose pointing forward and to the right, 45 degrees off the socket axis, and set the block on its marked outline. Nothing is consumed.",
+  "fidelity": "Rigid bodies built from boxes and cylinders (no meshes): simplified box models of a keyed connector, 1.0 mm of play per side, no lead-in chamfer, no electrical function. The latch is a spring plunger (12 N per mm, 1.5 mm travel) with a round tip that clicks into a groove. Friction 0.25 (block), 0.8 (plug). No contact force cap. The scripted demo reaches 1.0 in 376 steps; with the left arm idle it scores 0.25 (plug ends tilted, not seated).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-L83CK5"
+}
