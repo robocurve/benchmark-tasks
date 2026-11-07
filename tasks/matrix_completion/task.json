@@ -1,0 +1,21 @@
+{
+  "title": "Complete a 3 x 3 pattern matrix",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "abstract reasoning",
+    "matrix completion",
+    "pattern inference",
+    "Raven's matrices",
+    "bimanual",
+    "handover"
+  ],
+  "instruction": "Complete the pattern: put the right pieces on the two empty squares.",
+  "context": "A physical matrix-completion item, as in non-verbal reasoning tests: the robot has to infer a rule from a grid of pieces and act on it, not just recognise objects.",
+  "setup": "Coordinates: x forward from the line between the two arm bases, y to the left, from the midpoint between the bases. All pieces are painted wood, 5 cm tall, upright: cube 5 x 5 cm, cylinder 5 cm across, bar 7 cm along x by 3 cm along y; colours red, blue, yellow. Nine grey painted wooden plates, 8 x 8 x 0.5 cm, taped to the table in a 3 x 3 grid with centres 9 cm apart: rows at x = 38, 29, 20 cm (row 1 furthest from the arms), columns at y = 32, 23, 14 cm (column 1 on the arms' left). Pieces glued to the centres of their plates: row 1: red cube, yellow cylinder, blue bar; row 2: blue cylinder, empty, empty; row 3: yellow bar, blue cube, red cylinder. Loose pieces, 60 g each, standing on the table: red cube at (17, -21) cm, red bar at (17, -30) cm, yellow cube at (26, -21) cm, yellow bar at (26, -30) cm.",
+  "scoring": "In every row and column of the grid each shape and each colour appears once, so the red bar belongs on row 2, column 2 and the yellow cube on row 2, column 3. A loose piece is on an empty cell when its centre is within 4 cm of the cell's centre in x and y, at any height. A cell is filled correctly when its answer piece is on it, upright on the plate (bottom within 1 cm of the plate top, height 5 cm within 1 cm), at rest (under 1 cm/s and 0.5 rad/s), and no other loose piece is on that cell. Score: 0.5 per correctly filled cell (0, 0.5 or 1.0), read at the end of the trial; the trial does not end early on a correct answer.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed; put the four loose pieces back at their starting positions.",
+  "fidelity": "Approximate: rigid boxes and cylinders with default contact settings; the plates and glued pieces are fixed bodies.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-DU2KUP"
+}
