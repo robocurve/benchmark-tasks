@@ -1,0 +1,21 @@
+{
+  "title": "Swap the failed I/O module in a full DIN rail",
+  "category": "Impact on jobs",
+  "keywords": [
+    "DIN rail",
+    "control cabinet",
+    "PLC",
+    "module replacement",
+    "maintenance",
+    "tight clearance"
+  ],
+  "instruction": "The red I/O module in the middle of the rail has failed. Take it off the rail and put it in the black return tray, then fit the blue spare into the same slot on the rail. Do not move the other four modules.",
+  "context": "Maintenance technicians swap failed PLC and I/O modules in live control cabinets, where the row is full and neighbouring modules must stay seated. Unlike mounting one module on an empty rail, the failed module has to come out of a packed row first and the spare must go back into a gap with 1.5 mm to spare on each side. Done by: industrial machinery mechanics and electrical repairers (O*NET 49-9041.00, 49-2094.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. Rail: a steel TS35 x 7.5 DIN rail lying flat, 3.5 cm wide, 29 cm long, 0.75 cm tall, running along y, centred at x 30, y 25, fixed. On it, five 45 mm DIN-rail I/O modules (ABS housings 8 cm across the rail, 4.5 cm along it, 6 cm tall, 150 g), standing on the rail's top face 1.5 mm apart, centred at x 30 and y 34.3, 29.65, 25.0, 20.35 and 15.7; the middle one (y 25.0) is red, the other four grey. Two fixed dark end clamps (4 x 1 x 3 cm) stand on the rail 1.5 mm outside the outer modules. Spare: a blue module of the same size and mass standing on the table at x 15, y 25, inside a fixed white open frame (pocket 11 x 7.5 cm inside, walls 0.6 cm thick and 1.5 cm tall). Return tray: the same frame in black, centred at x 42, y 25.",
+  "scoring": "From a top photo and a ruler, with the grippers open. 0 while the red module is still in its slot (its centre within 4.5 cm of the slot centre and its bottom within 2 cm of the rail top). 0.25 once it is out. 0.5 once it rests in the black return tray (centre inside the inner walls, bottom within 2 cm of the table). 0.75 if the blue spare then also stands on the rail in that slot (centre within 1 cm of the slot centre, bottom within 5 mm of the rail top); 1.0 when it is seated: centre within 3 mm of the slot centre along the rail and 4 mm across it, bottom within 2 mm of the rail top, square to the rail within 4 degrees, still. If any grey module ends more than 3 mm or 4 degrees from its start, the score is capped at 0.25.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Stand the red module back in the middle slot and the blue spare in its frame; the four grey modules, rail and clamps do not move.",
+  "fidelity": "Rigid boxes with one shared friction (1.2 static, 1.0 dynamic). The rail lies flat on the table instead of on an upright panel, and its top-hat profile is a solid bar. The modules' DIN clips and spring latches are not modelled: a module is held by gravity and friction, so it lifts straight off and sits down straight on, where a real module is hooked on and tilted off with a screwdriver on its latch. Module housings are plain boxes.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-3AMA7C"
+}
