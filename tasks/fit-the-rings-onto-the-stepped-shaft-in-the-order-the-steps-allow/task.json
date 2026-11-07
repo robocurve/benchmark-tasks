@@ -1,0 +1,21 @@
+{
+  "title": "Fit two rings onto a stepped shaft in the order their bores allow",
+  "category": "Impact on jobs",
+  "keywords": [
+    "assembly",
+    "shaft",
+    "assembly order",
+    "stepped shaft",
+    "bore",
+    "bimanual"
+  ],
+  "instruction": "Fit both rings onto the stepped shaft, each one down on its own seat.",
+  "context": "Assemblers building gearbox and spindle shafts slide bearings, spacers and gears onto shafts with several diameters. Each part's bore decides which step it stops on, and a part fitted onto a higher step too early blocks every part meant to sit below it, so the stack has to come apart again. Done by: team assemblers, machine assemblers (O*NET 51-2092.00, 51-2031.00). Unlike TK-722AMJ (order by size) and TK-C7KNQP, the order is forced by the step each bore stops on.",
+  "setup": "Station table; world x away from the arm bases, y to the robot's left, origin between the arm bases. Fixed, steel: a dark grey base plate 120 x 120 x 10 mm centred at x 300 mm, y 0; on it a stepped round shaft: lower section 30 mm across and 35 mm tall (its top is the shoulder, 35 mm above the plate), upper section 18 mm across and 40 mm tall (top 75 mm above the plate). Loose, rigid plastic, each a square ring 25 mm tall with a square bore: orange ring, 60 x 60 mm outside, 26 x 26 mm bore (walls 17 mm), 100 g, lying flat centred at x 190 mm, y +170 mm (in front of the left arm); blue ring, 60 x 60 mm outside, 38 x 38 mm bore (walls 11 mm), 70 g, lying flat centred at x 190 mm, y -170 mm (in front of the right arm). Both rings start square to the table edges. Friction 0.6 static, 0.5 dynamic on the rings.",
+  "scoring": "Pass/fail, read at the end from a photo, the video and a ruler. Blue seated: blue ring around the shaft (its centre within 6.5 mm of the shaft axis), underside within 1 mm of the plate top, tilted no more than 3 degrees, not moving. Orange seated: orange ring around the shaft (centre within 6.5 mm of the axis), underside within 1.5 mm of the shoulder, tilted no more than 3 degrees, not moving. 1.0 = both seated. 0 = anything else: only one ring seated, either ring held up off its seat (including blue resting on top of a seated orange ring, or a ring still held in a gripper), a ring on the floor, or nothing fitted. Taking a wrongly fitted ring off and refitting in the right order earns full credit.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Put both rings back flat at their start positions; nothing is consumed. Run with object_jitter=0.",
+  "fidelity": "The rings have square bores built from four boxes on a round shaft, and the fits are loose (4 mm per side) where a real shaft fit is a slip or press fit with almost no clearance; nothing is pressed on. The layout is fixed, so a policy that memorises the colour order (blue first) succeeds without reading the bores. Ring friction 0.6. The scripted demo closes each gripper only 3 mm past the ring's faces, because a fully closed grip pushes the ring off centre in the fingers.",
+  "scores": "Dream-1 run: 0.0 (2,400 steps); demo: 1.0",
+  "media": "M-CU5JLZ"
+}
