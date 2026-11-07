@@ -1,0 +1,25 @@
+{
+  "title": "Free a cable caught inside one of three junction boxes by opening only that box, then pull it out",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "deformable",
+    "cable pulling",
+    "building wiring",
+    "junction box",
+    "snag",
+    "hidden snag",
+    "hinged lid",
+    "extraction"
+  ],
+  "instruction": "The black cable is caught inside one of the three junction boxes. Free it by opening only that box, close its lid again, then pull the whole cable out of the boxes into the blue tray and let go.",
+  "context": "Cable pulling through pull boxes: when a pull binds, find the snag point instead of forcing it. OpenExamPrep (third-party study guide for the BICSI Installer 2 exam, not a BICSI document): \"Stop immediately if the cable binds.\"; \"pushing compounds tension at snag points.\" Here the closed boxes hide the snag; pulling shows where the cable stops straightening. O*NET 47-2111.00 Electricians: \"...pull insulated wires or cables through the conduit to complete circuits between boxes.\"",
+  "setup": "Station table; cm from the midpoint between the arm bases (x forward, y left), heights above the table. Three grey junction boxes, 10 x 10 cm, 5 cm tall, 5 mm walls, open bottom, fixed, centres x 34, y +33 (LEFT), +12 (MIDDLE), -9 (RIGHT). Each side wall has a 22 x 18 mm hole at its foot at x 33.5. Lids: light grey 10 x 10 x 0.5 cm, 40 g, hinged on the far top edge (opens to 100 deg, stays open past upright); a 3 cm tab at the front-left corner carries a 16 mm dark knob on a pin. Black 6 mm cable, 72 cm: tail end inside LEFT box, through all holes, 4 cm bows towards the robot between boxes, a third bow from RIGHT box to a 35 x 16 x 12 mm plug at x 33.5, y -29. Hidden in MIDDLE box: two 8 mm pins 16 mm tall (9 mm gap) at y 10.5 straddle the cable; a white 12 x 13 x 12 mm cable-tie head on the cable sits on their tail side. Blue tray, inner 16 x 18 cm, 2 cm rim, centre x 19, y -34.",
+  "scoring": "Measured at the end (tape, top photo). Score 0 if: at any time the LEFT or RIGHT lid opened more than 10 deg (so opening every lid scores 0); either gripper is within 3 cm of the cable, plug, tie head, any lid, tab or knob; or the tie head is not yet out past the RIGHT box (centre beyond its outer -y face, in no box). Otherwise 0.3 (tie freed and drawn out, some cable still in a box); 0.6 (no part of cable or plug above any box's footprint); 1.0 (also all of the cable and plug inside the tray's inner outline, no higher than 1 cm above its rim, and the MIDDLE lid closed within 5 deg). 1.0 must hold 1 s with the cable at rest.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Close all lids. Thread the cable back from the tray through the RIGHT box, MIDDLE box (between the pins, tie head on the LEFT side of the pins, about 5 mm from them) and LEFT box, tail end 1.5 cm short of the LEFT box's far side wall; lay the 4 cm bows between the boxes and in front of the RIGHT box from a printed template; plug at its tape mark.",
+  "fidelity": "Toy scale. Cable: 2 cm rigid segments with bending springs, no twist; it keeps the bows it was laid in (a set from storage) and straightens only under tension. Tie head is a rigid block on the cable; pins and boxes rigid. A hard pull against the jammed tie can blow up the sim; that is counted 0 (the cable would be overstressed). Hinges are frictionless with a 100 deg stop. Release is judged from gripper-to-part distance.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-6LXUPX"
+}
