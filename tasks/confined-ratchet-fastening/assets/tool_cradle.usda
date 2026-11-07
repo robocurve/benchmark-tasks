@@ -1,0 +1,201 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Asset"
+{
+    def Cube "Foot" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/Foot>
+        bool physics:collisionEnabled = 1
+        color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+        double size = 1
+        float3 xformOp:scale = (0.23, 0.065, 0.008)
+        double3 xformOp:translate = (0, 0, 0.004)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def "Materials"
+    {
+        def Material "Foot"
+        {
+            token outputs:surface.connect = </Asset/Materials/Foot/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.35
+                float inputs:roughness = 0.45
+                token outputs:surface
+            }
+        }
+
+        def Material "SupportN0D12N0D026"
+        {
+            token outputs:surface.connect = </Asset/Materials/SupportN0D12N0D026/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.35
+                float inputs:roughness = 0.45
+                token outputs:surface
+            }
+        }
+
+        def Material "SupportN0D120D026"
+        {
+            token outputs:surface.connect = </Asset/Materials/SupportN0D120D026/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.35
+                float inputs:roughness = 0.45
+                token outputs:surface
+            }
+        }
+
+        def Material "Support0N0D026"
+        {
+            token outputs:surface.connect = </Asset/Materials/Support0N0D026/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.35
+                float inputs:roughness = 0.45
+                token outputs:surface
+            }
+        }
+
+        def Material "Support00D026"
+        {
+            token outputs:surface.connect = </Asset/Materials/Support00D026/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.35
+                float inputs:roughness = 0.45
+                token outputs:surface
+            }
+        }
+
+        def Material "GripSaddle0"
+        {
+            token outputs:surface.connect = </Asset/Materials/GripSaddle0/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.35
+                float inputs:roughness = 0.45
+                token outputs:surface
+            }
+        }
+
+        def Material "GripSaddle1"
+        {
+            token outputs:surface.connect = </Asset/Materials/GripSaddle1/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.35
+                float inputs:roughness = 0.45
+                token outputs:surface
+            }
+        }
+    }
+
+    def Cube "SupportN0D12N0D026" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/SupportN0D12N0D026>
+        bool physics:collisionEnabled = 1
+        color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+        double size = 1
+        float3 xformOp:scale = (0.018, 0.012, 0.024)
+        double3 xformOp:translate = (-0.12, -0.026, 0.016)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "SupportN0D120D026" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/SupportN0D120D026>
+        bool physics:collisionEnabled = 1
+        color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+        double size = 1
+        float3 xformOp:scale = (0.018, 0.012, 0.024)
+        double3 xformOp:translate = (-0.12, 0.026, 0.016)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "Support0N0D026" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/Support0N0D026>
+        bool physics:collisionEnabled = 1
+        color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+        double size = 1
+        float3 xformOp:scale = (0.018, 0.012, 0.024)
+        double3 xformOp:translate = (0, -0.026, 0.016)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "Support00D026" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/Support00D026>
+        bool physics:collisionEnabled = 1
+        color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+        double size = 1
+        float3 xformOp:scale = (0.018, 0.012, 0.024)
+        double3 xformOp:translate = (0, 0.026, 0.016)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "GripSaddle0" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/GripSaddle0>
+        bool physics:collisionEnabled = 1
+        color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+        double size = 1
+        float3 xformOp:scale = (0.01, 0.04, 0.0292)
+        double3 xformOp:translate = (-0.07, 0, 0.0226)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "GripSaddle1" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/GripSaddle1>
+        bool physics:collisionEnabled = 1
+        color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+        double size = 1
+        float3 xformOp:scale = (0.01, 0.04, 0.0292)
+        double3 xformOp:translate = (-0.02, 0, 0.0226)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Fasten a bracket bolt with a ratchet in confined access",
+  "category": "Impact on jobs",
+  "keywords": [
+    "ratchet",
+    "tool use",
+    "confined access",
+    "fastening"
+  ],
+  "instruction": "Pick up the ratchet from its cradle, fit the socket onto the started bracket bolt, then tighten it with short back-and-forth strokes between the walls until the bolt is seated.",
+  "context": "Confined maintenance work requires repeated short drive and return strokes when surrounding structure prevents a full wrench turn.",
+  "setup": "Dual YAM station. Both arms start at their rest pose with open grippers. A 203 mm steel ratchet with a permanently fitted 13.4 mm AF socket rests on a painted-steel cradle. An M8x16 steel bolt (1.25 mm pitch, 14 g) is already threaded into a fixed steel receiver under a 3 mm bracket with a 2.5 mm gap. Two 162 mm high, 9 mm thick steel walls restrict swing to about ±16 degrees. Flat rubber grip pads provide purchase. The reference demo uses the right arm; the left stays at rest. Exact geometry and poses are in the source.",
+  "scoring": "Current-state score: 0.2 after 0.25 clockwise turns; 0.4 after 1 turn; 0.7 after at least 1.8 turns and an under-head gap within -0.3/+0.2 mm. Full credit requires that seated state with socket engagement for 0.5 s and at least 6 drive/return cycles with actual bolt advance. Initial setup earns zero. Integrity faults and >1 N m contact torque invalidate the trial.",
+  "run_limit": "4,000 actions (200 simulated seconds at 20 Hz)",
+  "reset_notes": "Reset restores both arms to READY with open fingers, the ratchet to its cradle and the started bolt to its receiver. Only the bolt uses a reset placement jig, which is removed before actions.",
+  "fidelity": "NVIDIA ratchet visuals plus original socket, bolt, grip pads, cradle and fixture. Physical contacts support pickup and transmit socket torque. A native one-way clutch and pitch joint drive rotation and axial travel. Thread ridges are visual; tooth impacts, deformation and fastener strength are omitted. Both arms start at rest and the tool is separate from the bolt. No hand/tool or socket/bolt attachments are used. Tightening is judged by seating and ratchet cycles.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-KGU6MH"
+}
