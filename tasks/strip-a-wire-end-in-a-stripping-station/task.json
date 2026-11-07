@@ -1,0 +1,20 @@
+{
+  "title": "Strip 10 mm off a cable in a benchtop stripper, one hand working the cable and the other holding the blades shut",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "bimanual",
+    "electrical assembly",
+    "wire stripping",
+    "insertion depth",
+    "lever"
+  ],
+  "instruction": "Take the cable by its plug and put its free end down into the stripping station's hole, 10 mm deep; with the other hand press the station's lever down and keep it down while the first hand pulls the cable straight back out; then let the lever up.",
+  "context": "Stripping cable ends to a set length is everyday work in electrical and electronics assembly, including the wiring of data centres and power equipment. Too short and the terminal does not seat; too long and bare copper shows. A benchtop stripper needs both hands: one sets and pulls the cable while the other keeps the blades closed.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) A fixed steel wire-stripping station, 5 x 5 cm and 4 cm tall, 24 cm forward and 12 cm left of the centre line, with a hole 16 mm across down into its top (a funnel 4.4 cm across round its mouth); its blades are at its top. Its lever is hinged on its right side and reaches right; the lever's red rubber grip is 11 cm right of the centre line. A spring holds the lever 12 degrees up (the grip 4 cm above where it closes); holding it down takes about 5 N. (2) A loose stiff PVC-insulated copper cable, 12 cm long, 12 mm across and 40 g, with a square grey ABS-plastic plug (16 mm, 3 cm tall) on one end; at its other end 24 mm of insulation covers a copper core 8 mm across. It stands upright, plug up, in a small plastic holder 30 cm forward and 21 cm left of the centre line. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Judged at the end of the trial. The cut: when the lever first closes (within 1.5 degrees) with the cable's end in the hole, the insulation between the end and the blades is cut, to the nearest 2 mm. Stripped: the cable then pulled out (its end 2 mm above the blades) while the lever is still down (within 4 degrees); if the lever comes up first, the cut insulation stays on the cable. Released: the lever back up at least 10 degrees and both grippers' fingertip centres (TCPs) at least 4 cm from its grip. 1.0: 8 to 12 mm stripped, released; 0.5: any strip, or a cut of 8 to 12 mm with the blades still closed on it; 0.25: the cable's end at least 5 mm into the hole at some point; else 0.0. The trial ends at the run limit, or once the full score has held with the lever and the cable still for 1 s.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "Empty the cut insulation out of the station, stand a fresh cable in the holder, plug up, and let the lever spring up.",
+  "fidelity": "Rigid-body simulation (Isaac Sim 6.1, PhysX, 20 Hz control). Simplified: the insulation over the cable's last 24 mm is 12 rings of 2 mm that are only shown (they do not collide); the cut is an event: when the lever closes, the rings below the blades are moved from the cable to the station (fixed joints), and back to the cable if the lever comes up before the cable is out. Cameras 1280 x 704 (Dream-1 sees 320 x 176).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-3GW9B9"
+}
