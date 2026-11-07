@@ -1,0 +1,20 @@
+{
+  "title": "Keep a cabinet key turned with one hand while the other pulls the drawer open",
+  "category": "Societal relevance",
+  "keywords": [
+    "bimanual",
+    "household",
+    "lock and key",
+    "drawer",
+    "spring hinge"
+  ],
+  "instruction": "Turn the key in the drawer's lock a quarter turn clockwise and keep it turned with one hand while the other pulls the drawer open by its handle; once the drawer is on its way out, let go of the key.",
+  "context": "Many cabinets, desks and lockers have spring-return locks: the key turns back as soon as it is let go and the bolt catches again, so the drawer has to be pulled while the key is held turned. Turning the key, letting go and then pulling does not open it.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) A fixed wooden cabinet, 34 cm wide, 20 cm deep and 20 cm tall, centred on the centre line, its front face 27 cm forward. (2) Its drawer, 0.5 kg, with a front 30 cm wide and 12 cm tall (from 5 to 17 cm above the table), slides straight out toward the arms, up to 14 cm, against a light drag. It starts shut and locked. (3) A brass key in the lock in the drawer front, 8 cm left of the centre line and 15.5 cm above the table, sticking out 3 cm, its bow (2.4 cm tall, 2 cm long and 7 mm thick) upright. It turns clockwise (seen from the front) up to a quarter turn; a spring turns it back upright when it is let go. Turned at least 60 degrees, it draws the bolt and the drawer slides freely; if it turns back below 60 degrees before the drawer is 8 mm out, or when the drawer is pushed back to within 3 mm of shut, the bolt catches and holds the drawer shut. (4) A steel pull on the drawer front 8 cm right of the centre line: a bar 1.2 cm square standing up from 7.5 to 14.5 cm above the table, on an arm 4.5 cm out from the front. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Judged at the end of the trial. 1.0: the drawer pulled out at least 5 cm and the key let go (turned back to within 10 degrees of upright); 0.5: the drawer out at least 1 cm; 0.25: the key turned far enough to draw the bolt (60 degrees) at some point; else 0.0. The trial ends at the run limit, or once the full score has held for 1 s with the drawer and the key still.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "Push the drawer shut and let the key turn back upright: the bolt catches.",
+  "fidelity": "Rigid-body simulation (Isaac Sim 6.1, PhysX, 20 Hz control). Simplified: the drawer slides on a slider joint with drag; the key turns on a sprung hinge. The bolt is a fixed joint the task file switches: off once the key is turned 60 degrees, on again if the key turns back before the drawer is 8 mm out, or when it is pushed back shut. Cameras 1280 x 704 (Dream-1 sees 320 x 176).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-3SVQ7G"
+}
