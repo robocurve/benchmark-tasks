@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robocurve-captive-crossbar-docking"
+version = "0.1.0"
+description = "Correct a passive captive crossbar and dock its carrier through a restrictive opening"
+requires-python = ">=3.12,<3.13"
+license = "MIT"
+dependencies = ["numpy>=1.26", "inspect-robots==0.60.0", "Pillow>=10"]
+
+[project.entry-points."inspect_robots.embodiments"]
+captive_crossbar_docking = "captive_crossbar_docking.runtime:make_embodiment"
+
+[project.entry-points."inspect_robots.policies"]
+captive_crossbar_docking_demo = "captive_crossbar_docking.feedback_policy:make_demo_policy"
+
+[tool.setuptools.packages.find]
+include = ["captive_crossbar_docking*"]
+
+[tool.setuptools.package-data]
+captive_crossbar_docking = ["assets/*.usda"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
