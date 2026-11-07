@@ -1,0 +1,348 @@
+{
+  "schema": "brick-batch-validation-v1",
+  "validation_complete": true,
+  "generated_at_utc": "2026-11-05T00:36:01.416856+00:00",
+  "visual_review_complete": true,
+  "submission_ready": true,
+  "scope": "Offline evidence consistency, sampled visual review and a full-score simulated demonstration. Media is uploaded; acceptance remains subject to competition review.",
+  "limitations": [
+    "One fixed-seed trial per policy does not establish reliability.",
+    "The contact model is not calibrated to physical printed bricks.",
+    "Audit success does not guarantee competition acceptance."
+  ],
+  "runs": {
+    "demo": {
+      "run_id": "brick-2x2-demo-004",
+      "score": 1.0,
+      "replay_score": 1.0,
+      "seed": 0,
+      "actions": 400,
+      "simulated_seconds": 20.00000000000015,
+      "elapsed_wall_seconds": 109.469,
+      "control_hz": 20,
+      "physics_hz": 240,
+      "physics_configuration": {
+        "hz": 240,
+        "constants_sha256": "8c44cc2e96ac491255211f2e0b807dda4c1f7547db5a6c62b809764ef69ca2c2",
+        "scene_sha256": "7c4081aa811b2839f908d533e12885dac7a0aaed62ff8da59e36995b50b87809",
+        "adapter_revision": "0059d02a1a91bc6834c1d0846022891df0c78730",
+        "source": "yam_arena.constants.PHYSICS_DT applied by yam_arena.scene.env_cfg_callback",
+        "basis": "Adapter source configuration exported on the trial VM; not per-run physics-step telemetry."
+      },
+      "environment": {
+        "platform": "Linux-6.8.0-1066-aws-x86_64-with-glibc2.35",
+        "gpu": "NVIDIA L40S",
+        "revisions": {
+          "yam-isaac-lab-arena": "0059d02a1a91bc6834c1d0846022891df0c78730",
+          "IsaacLab-Arena": "c7edf3a9d5d8276565208f72422f8f8a0806d6cf",
+          "IsaacLab": "37ddf626871758333d6ed89cf64ad702aef127d0"
+        },
+        "python": "3.12.16",
+        "packages": {
+          "numpy": "2.3.1",
+          "yam-arena": "0.1.0",
+          "inspect-robots": "0.60.0",
+          "inspect-robots-yam": "0.37.0",
+          "inspect-robots-dream": "0.1.0",
+          "dreamlabs-client": "1.0.14",
+          "isaaclab": "17.0.2",
+          "isaacsim": "6.1.0.0"
+        }
+      },
+      "environment_provenance": {
+        "platform": "supplemental VM environment export",
+        "gpu": "supplemental VM environment export",
+        "revisions": "supplemental VM environment export",
+        "python": "runtime.json; supplemental values only fill missing fields",
+        "packages": "runtime.json; supplemental values only fill missing fields"
+      },
+      "runtime_json_sha256": "783648900e36f7a73f9f84c18d4f9056dc8bf5da579f291e69a521b03f19347b",
+      "supplemental_environment_sha256": "af39bdc056af5da6d67479f672529fd7390a9a8012bfbfb9770a0482b9cef924",
+      "source_sha256": {
+        "config.py": "3caa233f379b1288e79c79d52e7a0f343cc815cecbd180d6a0f72d8ac479d7ee",
+        "task.py": "75f2baa2aa90dfce28899a12837b09f40243ec4eb0ec386609c70612c80ed8bb",
+        "scoring.py": "c70b0b389e9745f50551fe81c3c1f596fc9c59deeaa3b8cc23944bdbf89c13a8",
+        "geometry.py": "96eb00a4fba9fcdd0194b2bd02e70e7061e4693a62bfb90d76c5274218edcf45",
+        "hand_geometry.py": "5eb44a5b09551bb738a7a42aa0322566213b7170806290886c6e13b3ccf44a10",
+        "run.py": "e2a82a8d7021e96ddb41bc9c44f139bfa810218c1ee387791f3d78fa6161eb0e",
+        "demo_policy.py": "61ef29b12db42a4b3a6a812adc10d2d04d326ede81200359d7b9f55a9ebc2a62",
+        "telemetry.py": "e3382c64cbb8474a4f320c7f15dfa4f5ec0ff09d727d4ea514b50dbfefbd5231",
+        "visuals.py": "0cdebb6b3ad2509fc503f6e999fd7ddb2903a62631cda18b9993553f27f52f9d"
+      },
+      "evidence": {
+        "trajectory": "evidence/demo.jsonl.gz",
+        "audit": "evidence/demo-audit.json",
+        "schema": "allowlisted numeric measured states; public robot-link names only",
+        "observations": 401,
+        "decoded_sha256": "8b65955a0018f02e853f54bd3ae83997101dea48a8ae0c554ad2b690ffc44858",
+        "gzip_sha256": "e7e7c2ad2a00b0c2017f59357cd8e22471169059fef41b5ca12f45f5066d40cd",
+        "gzip_bytes": 589280,
+        "same_rescore_result": true,
+        "original_metrics_removed": true,
+        "note": "Curated numeric copy, not a byte-identical copy of the original trajectory.",
+        "audit_sha256": "95c8e83b19ba741cff0d02fd17ba43cd34b2011da007a507a5f35dcec923af4c"
+      },
+      "measured_metadata": {
+        "first_full_score_seconds": 20.00000000000015,
+        "final_scorer_state": {
+          "score": 1.0,
+          "invalid_reason": null,
+          "pickup_time": 5.14999999999999,
+          "seated_time": 11.350000000000026,
+          "proof_time": 14.550000000000072,
+          "rest_time": 20.00000000000015,
+          "geometry": {
+            "valid": true,
+            "engaged_studs": 4,
+            "matches": [
+              {
+                "socket": 0,
+                "stud": 0,
+                "lateral_error": 1.6865709840873928e-05,
+                "seat_gap": 9.462063448373303e-06
+              },
+              {
+                "socket": 1,
+                "stud": 1,
+                "lateral_error": 1.9058624931781548e-05,
+                "seat_gap": 9.581008025543597e-06
+              },
+              {
+                "socket": 2,
+                "stud": 2,
+                "lateral_error": 6.883847567055409e-06,
+                "seat_gap": 8.831424745862557e-06
+              },
+              {
+                "socket": 3,
+                "stud": 3,
+                "lateral_error": 1.123239935683616e-05,
+                "seat_gap": 8.950369323031115e-06
+              }
+            ],
+            "tilt_deg": 0.0022981255371947143,
+            "yaw_error_deg": 0.06304439311753528,
+            "relative_position": [
+              -1.8552050097949151e-06,
+              -6.804938452865443e-06,
+              0.019209206208663458
+            ]
+          },
+          "lower_finger_clearance": 0.07283613921314877,
+          "assembly_finger_clearance": 0.0536265961831305,
+          "finger_evidence_complete": true
+        },
+        "observations": 401,
+        "maximum_sample_gap_seconds": 0.05000000000000071,
+        "submission_video": {
+          "passed": true,
+          "fully_decoded": true,
+          "frames": 401,
+          "codec": "h264",
+          "pixel_format": "yuv420p",
+          "width": 2240,
+          "height": 1280,
+          "fps": 20.0,
+          "fast_start": true,
+          "bytes": 5600287,
+          "sha256": "e68e7df4d9c87f843c41641db14209c325a20c4d1ce7d4daf8ad56de21be20d9"
+        },
+        "setup_image": {
+          "passed": true,
+          "bytes": 171895,
+          "width": 640,
+          "height": 360,
+          "sha256": "a5535ae98fa7d62ee45c0f0e1a6ae66ffcab5f111480fee2d120ad62fca53f37",
+          "note": "Dimensions/signature/size only; visual correspondence still requires human review."
+        }
+      },
+      "sampled_visual_review": {
+        "file": "evidence/demo-visual-review.json",
+        "sha256": "3ceeb94359dae44e56f0efb205a798faff631c595e0ef5316b12f25d7a47236c",
+        "scope": "Keyframe inspection; not a frame-by-frame manual review."
+      },
+      "closeup_setup_image": {
+        "filename": "setup-closeup.png",
+        "sha256": "a2540a65eee95eb3518c472ef5e292dd88c7ee04b5de8808d27890f607ef506e",
+        "width": 1600,
+        "height": 1280,
+        "bytes": 686346,
+        "note": "Local full-resolution setup view for later upload; matches the initial close-up camera view."
+      }
+    },
+    "dream": {
+      "run_id": "brick-2x2-dream-001",
+      "score": 0.0,
+      "replay_score": 0.0,
+      "seed": 0,
+      "actions": 1200,
+      "simulated_seconds": 59.99999999999873,
+      "elapsed_wall_seconds": 266.701,
+      "control_hz": 20,
+      "physics_hz": 240,
+      "physics_configuration": {
+        "hz": 240,
+        "constants_sha256": "8c44cc2e96ac491255211f2e0b807dda4c1f7547db5a6c62b809764ef69ca2c2",
+        "scene_sha256": "7c4081aa811b2839f908d533e12885dac7a0aaed62ff8da59e36995b50b87809",
+        "adapter_revision": "0059d02a1a91bc6834c1d0846022891df0c78730",
+        "source": "yam_arena.constants.PHYSICS_DT applied by yam_arena.scene.env_cfg_callback",
+        "basis": "Adapter source configuration exported on the trial VM; not per-run physics-step telemetry."
+      },
+      "environment": {
+        "platform": "Linux-6.8.0-1066-aws-x86_64-with-glibc2.35",
+        "gpu": "NVIDIA L40S",
+        "revisions": {
+          "yam-isaac-lab-arena": "0059d02a1a91bc6834c1d0846022891df0c78730",
+          "IsaacLab-Arena": "c7edf3a9d5d8276565208f72422f8f8a0806d6cf",
+          "IsaacLab": "37ddf626871758333d6ed89cf64ad702aef127d0"
+        },
+        "python": "3.12.16",
+        "packages": {
+          "numpy": "2.3.1",
+          "yam-arena": "0.1.0",
+          "inspect-robots": "0.60.0",
+          "inspect-robots-yam": "0.37.0",
+          "inspect-robots-dream": "0.1.0",
+          "dreamlabs-client": "1.0.14",
+          "isaaclab": "17.0.2",
+          "isaacsim": "6.1.0.0"
+        }
+      },
+      "environment_provenance": {
+        "platform": "supplemental VM environment export",
+        "gpu": "supplemental VM environment export",
+        "revisions": "supplemental VM environment export",
+        "python": "runtime.json; supplemental values only fill missing fields",
+        "packages": "runtime.json; supplemental values only fill missing fields"
+      },
+      "runtime_json_sha256": "90e7f3e0a6cff0b6c59e5bce03fce98083ace02f883b32db61db3f10e7221a5c",
+      "supplemental_environment_sha256": "af39bdc056af5da6d67479f672529fd7390a9a8012bfbfb9770a0482b9cef924",
+      "source_sha256": {
+        "config.py": "3caa233f379b1288e79c79d52e7a0f343cc815cecbd180d6a0f72d8ac479d7ee",
+        "task.py": "75f2baa2aa90dfce28899a12837b09f40243ec4eb0ec386609c70612c80ed8bb",
+        "scoring.py": "c70b0b389e9745f50551fe81c3c1f596fc9c59deeaa3b8cc23944bdbf89c13a8",
+        "geometry.py": "96eb00a4fba9fcdd0194b2bd02e70e7061e4693a62bfb90d76c5274218edcf45",
+        "hand_geometry.py": "5eb44a5b09551bb738a7a42aa0322566213b7170806290886c6e13b3ccf44a10",
+        "run.py": "e2a82a8d7021e96ddb41bc9c44f139bfa810218c1ee387791f3d78fa6161eb0e",
+        "demo_policy.py": "61ef29b12db42a4b3a6a812adc10d2d04d326ede81200359d7b9f55a9ebc2a62",
+        "telemetry.py": "e3382c64cbb8474a4f320c7f15dfa4f5ec0ff09d727d4ea514b50dbfefbd5231",
+        "visuals.py": "0cdebb6b3ad2509fc503f6e999fd7ddb2903a62631cda18b9993553f27f52f9d"
+      },
+      "evidence": {
+        "trajectory": "evidence/dream.jsonl.gz",
+        "audit": "evidence/dream-audit.json",
+        "schema": "allowlisted numeric measured states; public robot-link names only",
+        "observations": 1201,
+        "decoded_sha256": "a41a87948dd71fa2d5bda65b4829063a3a58b69a64222a0754a19d0a3c2ee835",
+        "gzip_sha256": "3b45f9c47cdcef503622c3a5b4f6f63de306047217977a0d1b8e77adef59c1f7",
+        "gzip_bytes": 2724741,
+        "same_rescore_result": true,
+        "original_metrics_removed": true,
+        "note": "Curated numeric copy, not a byte-identical copy of the original trajectory.",
+        "audit_sha256": "f2834575123ba1265fa05655ea475f597f9675c700f207cf1fe9016368e1fdd9"
+      },
+      "measured_metadata": {
+        "first_full_score_seconds": null,
+        "final_scorer_state": {
+          "score": 0.0,
+          "invalid_reason": null,
+          "pickup_time": null,
+          "seated_time": null,
+          "proof_time": null,
+          "rest_time": null,
+          "geometry": {
+            "valid": false,
+            "engaged_studs": 0,
+            "matches": [],
+            "tilt_deg": 2.1275929630452318e-05,
+            "yaw_error_deg": 6.455889115743193e-05,
+            "relative_position": [
+              -0.059999872384032045,
+              0.10000007203921356,
+              -2.5487830062213807e-07
+            ]
+          },
+          "lower_finger_clearance": 0.04172793668188749,
+          "assembly_finger_clearance": 0.018149452542157156,
+          "finger_evidence_complete": true
+        },
+        "observations": 1201,
+        "maximum_sample_gap_seconds": 0.05000000000000071,
+        "submission_video": {
+          "passed": true,
+          "fully_decoded": true,
+          "frames": 1201,
+          "codec": "h264",
+          "pixel_format": "yuv420p",
+          "width": 2240,
+          "height": 1280,
+          "fps": 20.0,
+          "fast_start": true,
+          "bytes": 15413219,
+          "sha256": "e72d79d04a7599785dd9d550d79bb29922a38d9b4be54084ac6d28fde45ed6e7"
+        },
+        "setup_image": {
+          "passed": true,
+          "bytes": 171895,
+          "width": 640,
+          "height": 360,
+          "sha256": "a5535ae98fa7d62ee45c0f0e1a6ae66ffcab5f111480fee2d120ad62fca53f37",
+          "note": "Dimensions/signature/size only; visual correspondence still requires human review."
+        },
+        "dream_requests": {
+          "model": "dreamlabs/dream-1-beta",
+          "transport": "direct",
+          "requests": 25,
+          "attempts": 29,
+          "retries": 4,
+          "recovered_requests": 4,
+          "sessions": 5,
+          "requests_missing_session_evidence": 0,
+          "reported_model_inference_ms": 7831,
+          "returned_prediction_rows": 1200,
+          "returned_prediction_rows_beyond_limits": 0,
+          "note": "Aggregates only; session IDs and request content are omitted. Returned rows can include unused chunk rows. Inference time is not a billing total."
+        }
+      },
+      "sampled_visual_review": {
+        "file": "evidence/dream-visual-review.json",
+        "sha256": "f8d9669dfa21ad218680c0a51584da569c81a2a7e6e16acdebfead04067fc37e",
+        "scope": "Keyframe inspection; not a frame-by-frame manual review."
+      },
+      "closeup_setup_image": {
+        "filename": "setup-closeup.png",
+        "sha256": "a2540a65eee95eb3518c472ef5e292dd88c7ee04b5de8808d27890f607ef506e",
+        "width": 1600,
+        "height": 1280,
+        "bytes": 686346,
+        "note": "Local full-resolution setup view for later upload; matches the initial close-up camera view."
+      }
+    }
+  },
+  "superseded_pending_validation_sha256": "24aba01ecc22790e75ce36d6b0af005775addba6ad3bd0730808a60388e21a9d",
+  "scorer_version": "brick-join-v1",
+  "standalone_material_probe": {
+    "file": "evidence/material-probe.json",
+    "sha256": "bdf93f1feb512d7c2277b4a109a6995923477bf47ea8cb2cdba3c8534f435e32",
+    "not_a_task_demonstration": true
+  },
+  "visual_review_scope": "Sampled setup, seating, lift and finish keyframes for demos; six times across each Dream run. Exact submillimetre checks use recorded geometry/telemetry; this is not every-frame manual inspection.",
+  "submission_media": {
+    "id": "M-FFYNCV",
+    "uploaded_at_utc": "2026-11-05T00:58:04.239319+00:00",
+    "files": {
+      "video": {
+        "sha256": "e72d79d04a7599785dd9d550d79bb29922a38d9b4be54084ac6d28fde45ed6e7",
+        "bytes": 15413219
+      },
+      "demo": {
+        "sha256": "e68e7df4d9c87f843c41641db14209c325a20c4d1ce7d4daf8ad56de21be20d9",
+        "bytes": 5600287
+      },
+      "screenshot": {
+        "sha256": "a2540a65eee95eb3518c472ef5e292dd88c7ee04b5de8808d27890f607ef506e",
+        "bytes": 686346
+      }
+    }
+  }
+}
