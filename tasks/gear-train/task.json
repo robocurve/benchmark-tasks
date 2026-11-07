@@ -1,0 +1,20 @@
+{
+  "title": "Mesh a three-gear train, finding each gear's tooth phase by contact",
+  "category": "Impact on jobs",
+  "keywords": [
+    "gearbox assembly",
+    "gear meshing",
+    "tooth phase matching",
+    "search by contact",
+    "chained dependency"
+  ],
+  "instruction": "Assemble the gear train on the grey plate: put the large gear on the nearest shaft, the medium gear on the middle shaft and the small gear on the farthest shaft, each pushed all the way down so its teeth mesh with the gear next to it.",
+  "context": "Woods DS8.50 Operator's Manual, Dealer Service, spindle gearbox assembly, step 11: \"Place gear (1) through top of housing and align gear (1) and gear (5) so that gear teeth are a match.\" (a crown gear and its pinion there) https://www.manualslib.com/manual/1174793/Woods-Ds8-50.html?page=31 Done by: dealer service technicians (gearbox and drivetrain mechanics).",
+  "setup": "The two arm bases stand 61 cm apart on an oak table. A fixed grey gear plate, 150 x 75 mm, lies 15 cm right of the midline with its long side running out from the bases. Three upright shafts stand on its centre line, 28.0, 33.0 and 36.1 cm out from the bases, their tips 26 mm above the table. Three loose spur gears, each 25 mm thick, lie flat on the table: a large one (62 mm across, 60 g) 40 cm out and 32 cm right, a medium one (42 mm, 30 g) 24 cm out and 30 cm right, a small one (21.8 mm, 10 g) 20 cm out and 24 cm right. No gear starts nearest its own shaft.",
+  "scoring": "A gear is seated when its centre is within 2 mm of its own shaft's axis, its bottom within 1 mm of the seated height (6 mm above the table) and its axis within 3 degrees of vertical. A pair meshes when the large and medium, or the medium and small, gears are both seated. 1.0 when all three are seated and still for 1 s, which ends the trial. Otherwise 0.1 for each seated gear plus 0.3 for each meshed pair: 0.5 for one pair, 0.2 for the large and small gears seated without the medium (no mesh). A gear stopped on teeth, on the wrong shaft, on a shaft's tip or elsewhere scores nothing.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lift the gears off the shafts and lay them back where the setup puts them.",
+  "fidelity": "The plate and gears are the Isaac Lab Factory gear assets at full size, collided by their meshes, so teeth and bores touch as modeled. The plate is fixed. The gears are lighter than solid plastic parts of this size would be (solid acetal: about 106, 49 and 13 g). Every object has rubber-like friction (1.2 static, 1.0 dynamic), so teeth grip each other more than greased metal gears would.",
+  "scores": "Dream-1 run: 0 (2,400 steps); demo: 1.0 (success at 93.9 s)",
+  "media": "M-73YDYZ"
+}
