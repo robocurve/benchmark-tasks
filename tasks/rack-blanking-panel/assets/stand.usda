@@ -1,0 +1,106 @@
+#usda 1.0
+(
+    defaultPrim = "stand"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "stand" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI"]
+)
+{
+    def "Looks"
+    {
+        def Material "wood"
+        {
+            token outputs:surface.connect = </stand/Looks/wood/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.62, 0.47, 0.3)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.75
+                token outputs:surface
+            }
+        }
+    }
+
+    def Cube "board" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </stand/Looks/wood>
+        double size = 1
+        float3 xformOp:scale = (0.052, 0.41, 0.012)
+        double3 xformOp:translate = (0.297, 0, 0.006)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "left_base" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </stand/Looks/wood>
+        double size = 1
+        float3 xformOp:scale = (0.032, 0.04, 0.1215)
+        double3 xformOp:translate = (0.297, 0.17, 0.07275000000000001)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "left_front" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </stand/Looks/wood>
+        double size = 1
+        float3 xformOp:scale = (0.012, 0.04, 0.0265)
+        double3 xformOp:translate = (0.287, 0.17, 0.14675)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "left_back" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </stand/Looks/wood>
+        double size = 1
+        float3 xformOp:scale = (0.012, 0.04, 0.0265)
+        double3 xformOp:translate = (0.307, 0.17, 0.14675)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "right_base" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </stand/Looks/wood>
+        double size = 1
+        float3 xformOp:scale = (0.032, 0.04, 0.1215)
+        double3 xformOp:translate = (0.297, -0.17, 0.07275000000000001)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "right_front" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </stand/Looks/wood>
+        double size = 1
+        float3 xformOp:scale = (0.012, 0.04, 0.0265)
+        double3 xformOp:translate = (0.287, -0.17, 0.14675)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "right_back" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </stand/Looks/wood>
+        double size = 1
+        float3 xformOp:scale = (0.012, 0.04, 0.0265)
+        double3 xformOp:translate = (0.307, -0.17, 0.14675)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+}
+

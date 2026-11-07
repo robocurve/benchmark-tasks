@@ -1,0 +1,21 @@
+{
+  "title": "Fit a blanking panel at U6 of a server rack",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "data centre",
+    "server rack",
+    "rack units",
+    "counting",
+    "alignment",
+    "peg in hole"
+  ],
+  "instruction": "Fit the blanking panel at U6.",
+  "context": "Closing a rack's empty units with blanking panels is standard data-centre practice (else hot exhaust flows back into the cold aisle), and fitting equipment at the units a rack elevation names is a basic step in building one out. Each unit has three identical square holes, so a panel fitted one hole off straddles two units: a common mistake. The robot must find U6 on the posts, line both clips of a 48 cm panel up with its middle holes, push it home and let go.",
+  "setup": "Positions in cm from the midpoint between the arm bases: x forward, y to the robot's left; heights above the table top. A 19-inch two-post open-frame rack, 8U, dark grey steel, is clamped to the table, the front of its posts at x 42, centred on y 0. Each post (3.4 cm face, 4.6 cm deep) has EIA-310 square holes, 9.5 mm and 1.6 cm deep, three per unit: 15.9 mm apart within a unit, 12.7 mm across a boundary. Hole centres are 46.5 cm apart; a 2.5 cm bar joins the posts at the top; each post stands on a 30 x 4 x 2 cm foot; U1's bottom edge is 3 cm above the table. Each post carries the unit numbers 1 to 8 beside its holes (white, about 1 cm tall) and a white line at each unit boundary. Installed, each screwed into the middle hole of each of its units: a 2U server at U1-U2 (28 cm deep), a 1U switch at U3 (20 cm) and a 1U patch panel at U8 (6 cm), all with 48.3 cm fronts (dummy fronts will do); U4 to U7 are empty. A 1U blanking panel, black plastic, 48.3 x 4.3 cm, 6 mm thick, about 120 g, has a clip at each end: an 8 mm square peg 12 mm long at mid-height, chamfered to 5 mm, the two 46.5 cm apart, a slip fit in the holes (no snap). It stands face to the arms, its back at x 30, in an 8 mm, 2.65 cm deep slot in each of two wooden uprights (4 cm wide, 3.2 cm deep, 16 cm tall, centres at y +-17) on a 41 x 5.2 x 1.2 cm base board. Both arms start at the ready pose with open grippers.",
+  "scoring": "Judged at the end of the trial from a front photo of the rack and the video. The panel is at U6 (the 6th unit from the bottom) when its top and bottom edges are within 3 mm of U6's unit lines. 1.0 (success, ends the trial): at U6, both ends pushed home against the posts (a 2 mm shim will not fit behind), and the robot has let go for the last 1 s. 0.5: at U6 and pushed home but still held by the robot; or at U6 with only one end pushed home. 0: anything else, including another unit and one hole off (the panel straddling two units).",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lift the panel off its clips and stand it back in the stand, face to the arms.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. The rack and the stand are fixed. Each post's front has real square holes (strips and bridges with gaps, holes 16 mm deep, solid behind), so a clip goes in only at a hole. The panel is one rigid body with a chamfered rigid peg on each end, a slip fit (0.75 mm play), so a panel pushed home hangs on them. Each step task code reads the panel's pose for the holes and seating, and checks the arms' collision hulls, fingers included, are 1 cm clear of it.",
+  "scores": "Dream-1 run: 0.0 (both arms reached toward the stand, within about 1 cm of the panel, but the panel never moved); demo: 1.0",
+  "media": "M-XRFNCY"
+}
