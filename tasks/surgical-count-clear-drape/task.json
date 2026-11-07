@@ -1,0 +1,20 @@
+{
+  "title": "Return every instrument from the surgical drape to the tray so the count is complete",
+  "category": "Impact on jobs",
+  "keywords": [
+    "surgical count",
+    "retained instrument",
+    "operating room",
+    "scrub technician",
+    "pick and place"
+  ],
+  "instruction": "the procedure is finished: return all four instruments to the instrument tray so the count is complete",
+  "context": "Before a surgical wound is closed, every instrument is counted back onto the tray; an instrument left on the patient is a retained surgical item, a 'never event'. Two instruments are still on the drape, so the job is only done when the drape is clear.",
+  "setup": "Positions are measured on the table from the midpoint between the two arm bases: forward is away from the arms, left and right as seen from behind the arms. (1) Instrument tray: four steel-grey walls, each 1 cm thick and 1.5 cm tall, fixed to the table around an 18 cm (front to back) x 34 cm (left to right) space, with the table as its floor, centred 30 cm forward on the midline. (2) Drape: a green sheet, 18 cm front to back by 16 cm left to right and 0.8 mm thick, fixed flat, centred 19 cm forward and 27.5 cm right. (3) Instruments, all loose: on the drape, a pair of steel scissors (14 x 6.7 x 1.2 cm, 60 g) lying closed with their length front to back, centred 19 cm forward and 23.5 cm right, and a steel spring clamp (8 x 6.2 x 1.4 cm, 40 g) centred 19 cm forward and 32 cm right; on the tray, a steel clamp (7 x 10 x 2.4 cm, 80 g) centred 27 cm forward and 9 cm left, and a marker (2.2 x 12 x 2.1 cm, 20 g) lying left to right, centred 35 cm forward and 9 cm left. Nothing else is on the table.",
+  "scoring": "Scored once, after the episode ends. An instrument is on the drape when its centre is over the drape and its underside within 5 cm of it, and on the tray when it rests still with its centre inside the tray's walls and its underside within 3 cm of the table. 0.0 if any instrument is still on the drape (a retained instrument). Otherwise 1.0 with all four on the tray, 0.5 with three, 0.25 with two or fewer (some dropped elsewhere).",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Put the scissors and the spring clamp back on the drape and the clamp and the marker back on the tray, at their starting spots. The tray walls and the drape are fixed (tape) and stay in place.",
+  "fidelity": "Dream Labs' YAM station replica in Isaac Lab-Arena (Isaac Sim). The instruments are library models standing in for surgical ones (YCB scissors, clamp, spring clamp and marker, tinted steel grey), each colliding as a convex hull. The drape is a thin fixed sheet and there is no patient beneath it.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-LC7DJ8"
+}
