@@ -1,0 +1,20 @@
+{
+  "title": "Sort loose M8 and M4 bolts into a two-compartment organizer",
+  "category": "Impact on jobs",
+  "keywords": [
+    "small parts",
+    "sorting",
+    "hardware",
+    "fine grasp",
+    "size discrimination"
+  ],
+  "instruction": "Put the four large silver M8 bolts in the left compartment of the blue organizer and the four small black M4 bolts in the right compartment.",
+  "context": "Sorting loose fasteners back into a parts organizer is routine in workshops, maker spaces and assembly lines. Each bolt is a few millimetres thick, must be pinched from above with the fingertips, and goes to a bin chosen by its size.",
+  "setup": "Left and right are the robot's. Positions are centres in metres from the midpoint between the two arm bases: x forward, y to the robot's left. Cutting mat: green self-healing mat with a 1 cm grid, 22 x 30 x 0.2 cm, centred at (0.355, -0.20). On it lie eight ISO 4017 hex bolts, each on a flat of its head, angles in degrees from +x, counterclockwise, head to tip. Four M8 x 30 bolts, bright zinc plated (silver), 13 mm hex, 35 mm long overall, 15 g: at (0.29, -0.15) 30, (0.28, -0.27) 80, (0.36, -0.245) -35 and (0.41, -0.21) 50. Four M4 x 20 bolts, black oxide (black), 7 mm hex, 23 mm long overall, 3 g: at (0.30, -0.22) -60, (0.35, -0.17) 10, (0.40, -0.14) 70 and (0.34, -0.29) -15. Organizer: blue polypropylene, 9.8 x 19.2 x 3 cm outside, two 9 x 9 cm compartments side by side with light grey floors (4 mm walls and divider), centred at (0.18, -0.02) and fixed to the table: the left compartment's centre is at (0.18, 0.027), the right one's at (0.18, -0.067).",
+  "scoring": "At the end of the run, a bolt is in a compartment when its centre is over that compartment's 9 x 9 cm floor and less than 3 cm above the table (below the walls' top). Each M8 bolt in the left compartment and each M4 bolt in the right compartment, lying still (under 1 cm/s and 0.5 rad/s), adds 1/8. Each bolt in the other compartment takes 1/8 off. The score is never below 0. Success (1.0, held 1 s): all eight bolts still in their own compartments. 0 if any bolt has fallen off the table (centre more than 2 cm below the table top).",
+  "run_limit": "3,000 steps (2.5 minutes at 20 Hz)",
+  "reset_notes": "Lay each bolt back on its mark on the mat at its angle, head flat down, and empty the organizer.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. Each bolt is one rigid body of two box colliders (hex head as a square of its width across flats, round shank as a square of its diameter) under a render-only threaded mesh. It rests tilted on head and tip and cannot roll. Spin damped, rubber-like friction (1.2) so the pads hold. The organizer is fixed boxes under a moulded mesh. No thread contact.",
+  "scores": "Dream-1 run: 0.0 (the right arm reaches over the bolts on the mat and nudges them, but never picks one up or puts it in the organizer), demo: 1.0 (success at step 1091)",
+  "media": "M-K96MK9"
+}
