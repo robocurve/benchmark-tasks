@@ -1,0 +1,20 @@
+{
+  "title": "Flame the inoculating loop before and after streaking a plate",
+  "category": "Impact on jobs",
+  "keywords": [
+    "microbiology",
+    "aseptic technique",
+    "laboratory",
+    "inoculating loop",
+    "biological technician"
+  ],
+  "instruction": "Streak the sample onto the fresh plate.",
+  "context": "Biological and clinical laboratory technicians streak bacteria onto agar plates many times a day (O*NET 19-4021.00, Biological Technicians, and 29-2012.00, Medical and Clinical Laboratory Technicians). Standard aseptic technique, taught in every microbiology course, has the loop heated red-hot in the flame before it touches a culture, so it carries nothing foreign in. It is heated again after use, before it goes back in its holder, so live bacteria are not left in the rack or on the bench. A step skipped can't be undone afterwards: the culture or the bench is already contaminated. The instruction mentions neither flaming.",
+  "setup": "Positions are in cm from the midpoint between the two arm bases, with x forward, y to the robot's left and the table top at z 0. The table top is the lab bench. The loop holder is an open cup of four fixed grey walls, 1 cm thick and 5 cm tall, around a 4 x 4 cm inside, centered at x 20, y -20. The inoculating loop is a blue rigid rod, 2 x 2 x 10 cm and 30 g, standing upright in the holder. Its bottom end stands for the wire loop. The Bunsen burner is a fixed grey post, 3 cm across and 7 cm tall, on a fixed dark base 7 x 7 x 1 cm, centered at x 28, y -12. The top 2.5 cm of the post is orange and marks the flame. The source plate is a fixed petri dish of amber agar, 9 cm across and 1.2 cm tall, centered at x 36, y -22, with three white colonies (1 cm across) within 1.5 cm of its center. The fresh plate is the same kind of dish with no colonies, centered at x 30, y -1.",
+  "scoring": "The scorer follows the loop's tip (the middle of its lowest face) through the whole run. The loop is flamed when the tip stays within 2.5 cm of the burner's axis and up to 5 cm above its top for 10 control steps in a row (0.5 s at 20 Hz). The tip touches a plate when it is over the agar and within 4 mm of its surface. The loop picks up bacteria when the tip touches the source plate within 1.5 cm of a colony. The plate is streaked once the tip, carrying bacteria, has traveled 6 cm or more across the fresh agar while touching it. The loop is clean once it has been flamed, until its tip touches a plate. It carries bacteria from the moment it touches a colony until it is flamed again. At the start it is neither. A breach is any of three things: the tip touches either plate while the loop is neither clean nor carrying bacteria; the loop goes into its holder while carrying bacteria; or the tip comes down on the bench while carrying bacteria. The score is 0 after any breach, even if put right later. Otherwise the score is 1.0 when the plate was streaked, the loop was flamed again afterwards and it rests in its holder. It is 0.5 when the plate was streaked but the loop is not flamed and back in its holder at the end. It is 0 when the plate was not streaked. The possible scores are 0, 0.5 and 1.0. In a real trial, watch the video for the order of flame, colony, plate, flame and holder, and measure the streak on the plate.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Stand the loop back in its holder. In a real trial, use a fresh agar plate each time.",
+  "fidelity": "The loop is a plain rod held upright, and its bottom end stands for the wire loop. The flame is an orange band on the burner, and the zone just above it counts as the flame. Nothing is heated and no bacteria are simulated: the scorer tracks where the tip has been. The dishes have no lids. The burner and the loop are about half real size; the plates are real size. The simulation uses rigid-body physics only.",
+  "scores": "Dream-1 run: 0 (2,400 steps); demo: 1.0",
+  "media": "M-HAU53S"
+}
