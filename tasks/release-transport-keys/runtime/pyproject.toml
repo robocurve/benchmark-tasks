@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "yam-industrial-evals"
+version = "0.1.0"
+requires-python = ">=3.11"
+authors = [{name = "MJAK Labs - Akhilesh Chandra"}]
+dependencies = ["numpy"]
+
+[project.entry-points."inspect_robots.embodiments"]
+yam_industrial = "yam_industrial:embodiment"
+
+[tool.setuptools]
+py-modules = ["yam_industrial"]
