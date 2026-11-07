@@ -1,0 +1,125 @@
+{
+  "scope": "actual native PhysX robot execution",
+  "status": "completed",
+  "source_sha256": "aa9d95ced9ad4cf97955f03a4d36bb4b7d98ae7f27f50995dbc71093528e916c",
+  "policy": "demo",
+  "seed": 0,
+  "max_steps": 1450,
+  "control_hz": 20,
+  "physics_hz": 240,
+  "instruction": "Replace the used orange cartridge with the prepared blue cartridge. Leave the used cartridge in the collection tray and the dispenser resting in its cradle, with the replacement seated and the piston rod re-engaged. Release both hands.",
+  "versions": {
+    "isaacsim": "6.1.0.0",
+    "isaaclab": "17.0.2",
+    "isaaclab-arena": "0.3.0",
+    "yam-arena": "0.1.0",
+    "inspect-robots": "0.60.0"
+  },
+  "gpu": [
+    "0, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, 580.178.04",
+    "1, NVIDIA RTX A6000, 580.178.04"
+  ],
+  "dream_api_used": false,
+  "initial_metrics": {
+    "score": 0.0,
+    "success": false,
+    "violations": [],
+    "collected": false,
+    "seated": false,
+    "rod_ready": false,
+    "parked": true,
+    "hands_clear": true,
+    "robot_clearance_m": 0.09277789810514846,
+    "piston_gap_m": 0.13650203501580999,
+    "mechanism": {
+      "rod_slide": -2.1031216874689562e-06,
+      "pawl_angle": -0.039190616458654404,
+      "rod_rotation": -8.960457307694014e-06
+    },
+    "frame_position_m": [
+      0.31999996304512024,
+      -0.030000025406479836,
+      0.8799999356269836
+    ],
+    "used_position_m": [
+      0.3200008273124695,
+      0.0820000097155571,
+      0.8799997568130493
+    ],
+    "replacement_position_m": [
+      0.18000054359436035,
+      0.40000006556510925,
+      0.7719998359680176
+    ],
+    "physics_samples": 0
+  },
+  "final_metrics": {
+    "score": 1.0,
+    "success": true,
+    "violations": [],
+    "collected": true,
+    "seated": true,
+    "rod_ready": true,
+    "parked": true,
+    "hands_clear": true,
+    "robot_clearance_m": 0.08745502541384487,
+    "piston_gap_m": 0.0034236623375420994,
+    "mechanism": {
+      "rod_slide": -0.18444931507110596,
+      "pawl_angle": -0.0392637699842453,
+      "rod_rotation": 0.004717528820037842
+    },
+    "frame_position_m": [
+      0.3197401165962219,
+      -0.030309688299894333,
+      0.8799998760223389
+    ],
+    "used_position_m": [
+      0.4281885027885437,
+      0.39775925874710083,
+      0.7760000228881836
+    ],
+    "replacement_position_m": [
+      0.31791386008262634,
+      0.08216337114572525,
+      0.8799996972084045
+    ],
+    "physics_samples": 15900
+  },
+  "steps": 1325,
+  "simulated_s": 66.25,
+  "worst_ik_position_m": 8.525223453006501e-05,
+  "worst_ik_rotation_rad": 0.00032684213799937347,
+  "video_errors": {},
+  "elapsed_wall_s": 321.1984629330691,
+  "source_unchanged": true,
+  "artifacts": {
+    "setup-top_cam.png": {
+      "bytes": 57326,
+      "sha256": "9076809079a3de07aacceaaa4bf986f12d07a763f2ab8ebfaae097ceec696619"
+    },
+    "left_cam.mp4": {
+      "bytes": 791554,
+      "sha256": "39f773700911bc1b3afb81702d7b75dddf6e877afbe95a2f113f432e85e726a9"
+    },
+    "setup-left_cam.png": {
+      "bytes": 32488,
+      "sha256": "e0e8f529f418877d718cd2c8ebccefb970201541123c6016b9cc715fd5ba1101"
+    },
+    "top_cam.mp4": {
+      "bytes": 422454,
+      "sha256": "5efd4d5e973c207d5864e87bd87787da64363a3b4932e6649082d9cddfe81718"
+    },
+    "setup-right_cam.png": {
+      "bytes": 23412,
+      "sha256": "3aab07fab0997c2d00a5131dedb16d140042b27502c9ae5483f12c7cb1c7e35b"
+    },
+    "right_cam.mp4": {
+      "bytes": 277534,
+      "sha256": "b9be30c59d1c80512954403d3cdffe10b199622cb7ad1d17bd584c78ec58a2e4"
+    }
+  },
+  "execution_device": "cuda:0",
+  "native_receipt_sha256": "4ff961547a764f3cacecc68c41b576cc4dee8feedcde92c88772a0cf8f6b45f0",
+  "interpretation": "Full native scripted success for fixed outlet, plain cylindrical refills and tool-mounted refill supports."
+}

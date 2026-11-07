@@ -1,0 +1,123 @@
+{
+  "scope": "actual native PhysX robot execution",
+  "status": "completed",
+  "source_sha256": "9e3219d289edc484ca54d7ed213cc828e6b2eadb20ca87f1f9f2a77cc352efd5",
+  "policy": "demo",
+  "seed": 0,
+  "max_steps": 1400,
+  "control_hz": 20,
+  "physics_hz": 240,
+  "instruction": "Replace the used orange cartridge with the prepared blue cartridge. Leave the used cartridge in the collection tray and the dispenser resting in its cradle, with the replacement seated and the piston rod re-engaged. Release both hands.",
+  "versions": {
+    "isaacsim": "6.1.0.0",
+    "isaaclab": "17.0.2",
+    "isaaclab-arena": "0.3.0",
+    "yam-arena": "0.1.0",
+    "inspect-robots": "0.60.0"
+  },
+  "gpu": [
+    "0, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, 580.178.04",
+    "1, NVIDIA RTX A6000, 580.178.04"
+  ],
+  "dream_api_used": false,
+  "initial_metrics": {
+    "score": 0.0,
+    "success": false,
+    "violations": [],
+    "collected": false,
+    "seated": false,
+    "rod_ready": false,
+    "parked": true,
+    "hands_clear": true,
+    "robot_clearance_m": 0.09277791892270237,
+    "piston_gap_m": 0.13720694689057705,
+    "mechanism": {
+      "rod_slide": -0.000706947990693152,
+      "pawl_angle": -0.030426520854234695,
+      "rod_rotation": -0.0013496435713022947
+    },
+    "frame_position_m": [
+      0.31999996304512024,
+      -0.030000049620866776,
+      0.8799999952316284
+    ],
+    "used_position_m": [
+      0.3199836015701294,
+      0.08230380713939667,
+      0.8758982419967651
+    ],
+    "replacement_position_m": [
+      0.18000054359436035,
+      0.40000006556510925,
+      0.7719998359680176
+    ],
+    "physics_samples": 0
+  },
+  "final_metrics": {
+    "score": 0.25,
+    "success": false,
+    "violations": [],
+    "collected": true,
+    "seated": false,
+    "rod_ready": false,
+    "parked": true,
+    "hands_clear": true,
+    "robot_clearance_m": 0.04215056423340102,
+    "piston_gap_m": 0.0005190238938363734,
+    "mechanism": {
+      "rod_slide": -0.18263347446918488,
+      "pawl_angle": -0.03907124698162079,
+      "rod_rotation": -0.22568528354167938
+    },
+    "frame_position_m": [
+      0.3211807310581207,
+      -0.030824199318885803,
+      0.8786797523498535
+    ],
+    "used_position_m": [
+      0.4275292456150055,
+      0.3931320309638977,
+      0.7759999632835388
+    ],
+    "replacement_position_m": [
+      0.32029443979263306,
+      0.08008415997028351,
+      0.8969257473945618
+    ],
+    "physics_samples": 16116
+  },
+  "steps": 1343,
+  "simulated_s": 67.15,
+  "worst_ik_position_m": 9.592919737612201e-05,
+  "worst_ik_rotation_rad": 0.00032684213799937347,
+  "video_errors": {},
+  "elapsed_wall_s": 303.7658123760484,
+  "source_unchanged": true,
+  "artifacts": {
+    "setup-top_cam.png": {
+      "bytes": 57442,
+      "sha256": "39ba0905ce690030a6629ea72cfd14337eccf6c6d4d694fcaa7272e128c679a0"
+    },
+    "left_cam.mp4": {
+      "bytes": 823919,
+      "sha256": "c68a8531e568c560bbf65762e06713d9d61ea81862905b0955bf08a66fbc0310"
+    },
+    "setup-left_cam.png": {
+      "bytes": 32763,
+      "sha256": "878a66784e0091734830d69c7fb495b42ef2053091586717fe5fb26c9032154f"
+    },
+    "top_cam.mp4": {
+      "bytes": 427355,
+      "sha256": "8bbaf5179c23a256947660c36edbb462fadc7e7b0484ea67cc7261a068e3e056"
+    },
+    "setup-right_cam.png": {
+      "bytes": 23687,
+      "sha256": "08876c2fc019aad2e66741c25a7fbf53434a14a97b63790a9860b59d0d9aa680"
+    },
+    "right_cam.mp4": {
+      "bytes": 271810,
+      "sha256": "784769cc612045cc7bb6cc6ba6898f0eee1d3cd04cae2ebea4b7e3171fd64ed3"
+    }
+  },
+  "interpretation": "Geometry-only comparison: sideways nozzle snag removed, but replacement caught on incompletely retracted piston; final score 0.25, not successful exchange."
+}

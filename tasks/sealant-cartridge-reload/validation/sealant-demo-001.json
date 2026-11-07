@@ -1,0 +1,126 @@
+{
+  "scope": "actual native PhysX robot execution",
+  "status": "completed",
+  "source_sha256": "d3c244ec53cf71f33775cdb0b2b0776d30a7df2872dd28f24eda6961325b0743",
+  "policy": "demo",
+  "seed": 0,
+  "max_steps": 1350,
+  "control_hz": 20,
+  "physics_hz": 240,
+  "instruction": "Replace the used orange cartridge with the prepared blue cartridge. Leave the used cartridge in the collection tray and the dispenser resting in its cradle, with the replacement seated and the piston rod re-engaged. Release both hands.",
+  "versions": {
+    "isaacsim": "6.1.0.0",
+    "isaaclab": "17.0.2",
+    "isaaclab-arena": "0.3.0",
+    "yam-arena": "0.1.0",
+    "inspect-robots": "0.60.0"
+  },
+  "gpu": [
+    "0, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, 580.178.04",
+    "1, NVIDIA RTX A6000, 580.178.04"
+  ],
+  "dream_api_used": false,
+  "initial_metrics": {
+    "score": 0.0,
+    "success": false,
+    "violations": [],
+    "collected": false,
+    "seated": false,
+    "rod_ready": false,
+    "parked": true,
+    "hands_clear": true,
+    "robot_clearance_m": 0.10006683633831552,
+    "piston_gap_m": 0.13704672893118347,
+    "mechanism": {
+      "rod_slide": -0.0005467652808874846,
+      "pawl_angle": -0.0391923226416111,
+      "rod_rotation": -0.008286825381219387
+    },
+    "frame_position_m": [
+      0.31999996304512024,
+      -0.030000030994415283,
+      0.8799999356269836
+    ],
+    "used_position_m": [
+      0.31998783349990845,
+      0.08151879161596298,
+      0.8758804202079773
+    ],
+    "replacement_position_m": [
+      0.18000054359436035,
+      0.40000003576278687,
+      0.7719998359680176
+    ],
+    "physics_samples": 0
+  },
+  "final_metrics": {
+    "score": 0.0,
+    "success": false,
+    "violations": [
+      "part_left_work_area"
+    ],
+    "collected": false,
+    "seated": false,
+    "rod_ready": false,
+    "parked": false,
+    "hands_clear": false,
+    "robot_clearance_m": 0.0,
+    "piston_gap_m": -0.020173685705503958,
+    "mechanism": {
+      "rod_slide": -0.18487465381622314,
+      "pawl_angle": -0.012700828723609447,
+      "rod_rotation": 0.01832716166973114
+    },
+    "frame_position_m": [
+      0.34323081374168396,
+      0.0010420754551887512,
+      0.8749285340309143
+    ],
+    "used_position_m": [
+      0.13655675947666168,
+      3.024617910385132,
+      0.012000108137726784
+    ],
+    "replacement_position_m": [
+      0.17353732883930206,
+      0.12411462515592575,
+      0.7759998440742493
+    ],
+    "physics_samples": 15636
+  },
+  "steps": 1303,
+  "simulated_s": 65.15,
+  "worst_ik_position_m": 9.33466668766554e-05,
+  "worst_ik_rotation_rad": 0.00032684213799937347,
+  "video_errors": {},
+  "elapsed_wall_s": 622.4918858349556,
+  "source_unchanged": true,
+  "artifacts": {
+    "setup-top_cam.png": {
+      "bytes": 58006,
+      "sha256": "408a7e866bcae2e4a9a75388d3713704dc02fc80af195f45c33bb01dd65086a7"
+    },
+    "left_cam.mp4": {
+      "bytes": 917167,
+      "sha256": "fd4ccc3f3e894b1614a3d847f8694c58ce5ad3775347b0bb7ba4f59066957ef4"
+    },
+    "setup-left_cam.png": {
+      "bytes": 27088,
+      "sha256": "6b576d78b1223b39f1955a60b4b2c1a415c3e3b1eaf685d6661b3399ac795c48"
+    },
+    "top_cam.mp4": {
+      "bytes": 433445,
+      "sha256": "6d160a9c9867df2e0889ebecb2ec991b7fea38c0f95b2fe920ab588dbcb39fce"
+    },
+    "setup-right_cam.png": {
+      "bytes": 23674,
+      "sha256": "2e60e9fc2743a550c8b0abc388f47067ebd323d7d2c8fdfaa1990d27f6ced6e3"
+    },
+    "right_cam.mp4": {
+      "bytes": 278568,
+      "sha256": "4d175f60d9573eccc371e9ec69e0d94fab75d76dd2a6ba6079daaace1da9dc5d"
+    }
+  },
+  "native_receipt_sha256": "a5e1e6daa3ff2c3e3fdb4c808b567cc740deb3573422041274e852fb5f497c54",
+  "interpretation": "Incomplete native demonstration; not full-score feasibility evidence"
+}

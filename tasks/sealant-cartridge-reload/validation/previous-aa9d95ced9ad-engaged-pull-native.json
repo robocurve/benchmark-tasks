@@ -1,0 +1,129 @@
+{
+  "scope": "actual native PhysX robot execution",
+  "status": "completed",
+  "source_sha256": "aa9d95ced9ad4cf97955f03a4d36bb4b7d98ae7f27f50995dbc71093528e916c",
+  "policy": "engaged_pull",
+  "seed": 0,
+  "max_steps": 300,
+  "control_hz": 20,
+  "physics_hz": 240,
+  "instruction": "Replace the used orange cartridge with the prepared blue cartridge. Leave the used cartridge in the collection tray and the dispenser resting in its cradle, with the replacement seated and the piston rod re-engaged. Release both hands.",
+  "versions": {
+    "isaacsim": "6.1.0.0",
+    "isaaclab": "17.0.2",
+    "isaaclab-arena": "0.3.0",
+    "yam-arena": "0.1.0",
+    "inspect-robots": "0.60.0"
+  },
+  "gpu": [
+    "0, NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition, 580.178.04",
+    "1, NVIDIA RTX A6000, 580.178.04"
+  ],
+  "dream_api_used": false,
+  "initial_metrics": {
+    "score": 0.0,
+    "success": false,
+    "violations": [],
+    "collected": false,
+    "seated": false,
+    "rod_ready": false,
+    "parked": true,
+    "hands_clear": true,
+    "robot_clearance_m": 0.09277789810514846,
+    "piston_gap_m": 0.13650203501580999,
+    "mechanism": {
+      "rod_slide": -2.1031216874689562e-06,
+      "pawl_angle": -0.039190616458654404,
+      "rod_rotation": -8.960457307694014e-06
+    },
+    "frame_position_m": [
+      0.31999996304512024,
+      -0.030000025406479836,
+      0.8799999356269836
+    ],
+    "used_position_m": [
+      0.3200008273124695,
+      0.0820000097155571,
+      0.8799997568130493
+    ],
+    "replacement_position_m": [
+      0.18000054359436035,
+      0.40000006556510925,
+      0.7719998359680176
+    ],
+    "physics_samples": 0
+  },
+  "final_metrics": {
+    "score": 0.0,
+    "success": false,
+    "violations": [],
+    "collected": false,
+    "seated": false,
+    "rod_ready": false,
+    "parked": true,
+    "hands_clear": false,
+    "robot_clearance_m": 0.0,
+    "piston_gap_m": 0.13721181632619978,
+    "mechanism": {
+      "rod_slide": -0.0010025318479165435,
+      "pawl_angle": 3.1080490958679263e-10,
+      "rod_rotation": -0.002402610145509243
+    },
+    "frame_position_m": [
+      0.3201492428779602,
+      -0.030413124710321426,
+      0.8794994354248047
+    ],
+    "used_position_m": [
+      0.31885504722595215,
+      0.08157490938901901,
+      0.880711555480957
+    ],
+    "replacement_position_m": [
+      0.18000054359436035,
+      0.40000006556510925,
+      0.7719998359680176
+    ],
+    "physics_samples": 3372
+  },
+  "steps": 281,
+  "simulated_s": 14.05,
+  "worst_ik_position_m": 9.866978526637372e-05,
+  "worst_ik_rotation_rad": 0.00032684213799937347,
+  "video_errors": {},
+  "elapsed_wall_s": 74.18277353805024,
+  "source_unchanged": true,
+  "artifacts": {
+    "setup-top_cam.png": {
+      "bytes": 57326,
+      "sha256": "9076809079a3de07aacceaaa4bf986f12d07a763f2ab8ebfaae097ceec696619"
+    },
+    "left_cam.mp4": {
+      "bytes": 150081,
+      "sha256": "166809d1d791a52d87955405e6599a781056f1c82ce392bc30532247d4ad1929"
+    },
+    "setup-left_cam.png": {
+      "bytes": 32488,
+      "sha256": "e0e8f529f418877d718cd2c8ebccefb970201541123c6016b9cc715fd5ba1101"
+    },
+    "top_cam.mp4": {
+      "bytes": 85679,
+      "sha256": "00d0df83fbb90ca6732726e6b63822960bc1438d8534b5cf515588c14007a0f2"
+    },
+    "setup-right_cam.png": {
+      "bytes": 23412,
+      "sha256": "3aab07fab0997c2d00a5131dedb16d140042b27502c9ae5483f12c7cb1c7e35b"
+    },
+    "right_cam.mp4": {
+      "bytes": 85805,
+      "sha256": "a0a50271d0437843f5c778c5243151d502aa3cd46e1fcc7db4d4125dc468ad82"
+    }
+  },
+  "execution_device": "cuda:0",
+  "native_receipt_sha256": "df045c86f9f2d8cd69895cbf4ec2f848139bc956352e66af69ff2d0493c07f85",
+  "bounded_pull_slide_range_m": [
+    -0.0010026973905041814,
+    0.00033813773188740015
+  ],
+  "interpretation": "Without rotating the rod, a 6 mm commanded pull is physically retained at about 1 mm retraction. The full demo releases it and reaches the 189 mm physical stop."
+}

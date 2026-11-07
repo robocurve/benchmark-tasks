@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robocurve-sealant-reload"
+version = "0.1.0"
+description = "Native passive ratchet dispenser cartridge exchange on the bimanual YAM station"
+requires-python = ">=3.12,<3.13"
+dependencies = ["yam-arena @ git+https://github.com/kairosiann/yam-isaac-lab-arena.git@bd62771e60320433893bd1d2df0fc79b5ddcd6d1"]
+
+[project.entry-points."inspect_robots.embodiments"]
+sealant_reload = "sealant_reload.environment:sealant_reload_embodiment"
+
+[project.entry-points."inspect_robots.policies"]
+sealant_reload_scripted = "sealant_reload.controller:scripted_policy"
+
+[tool.setuptools.packages.find]
+include = ["sealant_reload*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"

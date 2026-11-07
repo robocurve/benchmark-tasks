@@ -1,0 +1,67 @@
+{
+  "scope": "Actual mathematical/scorer and offline URDF checks; not native feasibility proof",
+  "source_sha256": "f069c87d23b009ddfb724d52ce6680928a3dbc794bdbfecf9f88af3c0a46bae8",
+  "checks": [
+    {
+      "command": [
+        "python",
+        "-m",
+        "pytest",
+        "benchmark-tasks-sealant-dispenser/tasks/sealant-cartridge-reload/tests",
+        "-q"
+      ],
+      "exit_code": 0,
+      "elapsed_wall_s": 0.5972500629723072,
+      "stdout": "...........                                                              [100%]\n11 passed in 0.03s",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python",
+        "benchmark-tasks-sealant-dispenser/tasks/sealant-cartridge-reload/check_plan.py",
+        "--mode",
+        "hold"
+      ],
+      "exit_code": 0,
+      "elapsed_wall_s": 0.1662252980750054,
+      "stdout": "{\"scope\": \"offline IK only\", \"mode\": \"hold\", \"duration_s\": 5.0, \"worst_position_m\": 0.0, \"worst_rotation_rad\": 0.0}",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python",
+        "benchmark-tasks-sealant-dispenser/tasks/sealant-cartridge-reload/check_plan.py",
+        "--mode",
+        "engaged_pull"
+      ],
+      "exit_code": 0,
+      "elapsed_wall_s": 0.7704220290761441,
+      "stdout": "{\"scope\": \"offline IK only\", \"mode\": \"engaged_pull\", \"duration_s\": 14.0, \"worst_position_m\": 9.745312553999815e-05, \"worst_rotation_rad\": 0.00032684213799937347}",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python",
+        "benchmark-tasks-sealant-dispenser/tasks/sealant-cartridge-reload/check_plan.py",
+        "--mode",
+        "release"
+      ],
+      "exit_code": 0,
+      "elapsed_wall_s": 0.9991467129439116,
+      "stdout": "{\"scope\": \"offline IK only\", \"mode\": \"release\", \"duration_s\": 17.599999999999998, \"worst_position_m\": 8.880685328043328e-05, \"worst_rotation_rad\": 0.00032684213799937347}",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python",
+        "benchmark-tasks-sealant-dispenser/tasks/sealant-cartridge-reload/check_plan.py",
+        "--mode",
+        "demo"
+      ],
+      "exit_code": 0,
+      "elapsed_wall_s": 3.0812545890221372,
+      "stdout": "{\"scope\": \"offline IK only\", \"mode\": \"demo\", \"duration_s\": 67.1, \"worst_position_m\": 9.592919737612201e-05, \"worst_rotation_rad\": 0.00032684213799937347}",
+      "stderr": ""
+    }
+  ]
+}

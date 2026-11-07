@@ -1,0 +1,2677 @@
+{
+  "units": "metres, kilograms, radians; angular joint limits are degrees as in USD",
+  "material_note": "Nominal reconstruction materials, not calibrated elasticity or friction. Every task solid uses static friction 0.65, dynamic friction 0.5 and restitution 0.",
+  "records": [
+    {
+      "asset": "dispenser",
+      "body": "/Dispenser/Frame",
+      "mass_kg": 0.42,
+      "initial_local_position_m": [
+        0,
+        0,
+        0
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Frame/LeftRail",
+      "kind": "box",
+      "half_extents_m": [
+        0.004,
+        0.108,
+        0.004
+      ],
+      "center_m": [
+        -0.027,
+        0.108,
+        -0.026
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Frame/RightRail",
+      "kind": "box",
+      "half_extents_m": [
+        0.004,
+        0.108,
+        0.004
+      ],
+      "center_m": [
+        0.027,
+        0.108,
+        -0.026
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Frame/RearLower",
+      "kind": "box",
+      "half_extents_m": [
+        0.031,
+        0.006,
+        0.009
+      ],
+      "center_m": [
+        0,
+        -0.006,
+        -0.019
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Frame/RearLeft",
+      "kind": "box",
+      "half_extents_m": [
+        0.011,
+        0.006,
+        0.012
+      ],
+      "center_m": [
+        -0.02,
+        -0.006,
+        0.002
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Frame/RearRight",
+      "kind": "box",
+      "half_extents_m": [
+        0.011,
+        0.006,
+        0.012
+      ],
+      "center_m": [
+        0.02,
+        -0.006,
+        0.002
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Frame/RearTop",
+      "kind": "box",
+      "half_extents_m": [
+        0.031,
+        0.006,
+        0.004
+      ],
+      "center_m": [
+        0,
+        -0.006,
+        0.018
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Frame/FrontLeft",
+      "kind": "box",
+      "half_extents_m": [
+        0.011,
+        0.006,
+        0.026
+      ],
+      "center_m": [
+        -0.02,
+        0.22,
+        0
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Frame/FrontRight",
+      "kind": "box",
+      "half_extents_m": [
+        0.011,
+        0.006,
+        0.026
+      ],
+      "center_m": [
+        0.02,
+        0.22,
+        0
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Frame/FrontBottom",
+      "kind": "box",
+      "half_extents_m": [
+        0.031,
+        0.006,
+        0.006
+      ],
+      "center_m": [
+        0,
+        0.22,
+        -0.023
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Frame/HandleBridge",
+      "kind": "box",
+      "half_extents_m": [
+        0.013,
+        0.021,
+        0.012
+      ],
+      "center_m": [
+        0,
+        -0.015,
+        -0.034
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "rigid polymer grip"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Frame/StationaryHandle",
+      "kind": "box",
+      "half_extents_m": [
+        0.012,
+        0.015,
+        0.0425
+      ],
+      "center_m": [
+        0,
+        -0.025,
+        -0.0725
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "rigid polymer grip"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Frame/RefillSupport0",
+      "kind": "box",
+      "half_extents_m": [
+        0.025,
+        0.009,
+        0.00275
+      ],
+      "center_m": [
+        0,
+        0.055,
+        -0.02725
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "steel dispenser refill support"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Frame/RefillSupport1",
+      "kind": "box",
+      "half_extents_m": [
+        0.025,
+        0.009,
+        0.00275
+      ],
+      "center_m": [
+        0,
+        0.18,
+        -0.02725
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "steel dispenser refill support"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Frame/OutletBridge",
+      "kind": "box",
+      "half_extents_m": [
+        0.011,
+        0.006,
+        0.004
+      ],
+      "center_m": [
+        0,
+        0.22,
+        -0.012
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "steel dispenser outlet support"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Frame/OutletSeat",
+      "kind": "cylinder",
+      "radius_m": 0.008,
+      "length_m": 0.012,
+      "axis": "Y",
+      "center_m": [
+        0,
+        0.22,
+        0
+      ],
+      "nominal_material": "steel dispenser outlet support"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Frame/Nozzle",
+      "kind": "cylinder",
+      "radius_m": 0.006,
+      "length_m": 0.029,
+      "axis": "Y",
+      "center_m": [
+        0,
+        0.2405,
+        0
+      ],
+      "nominal_material": "rigid polymer dispenser outlet"
+    },
+    {
+      "asset": "dispenser",
+      "body": "/Dispenser/Carrier",
+      "mass_kg": 0.001,
+      "initial_local_position_m": [
+        0,
+        0,
+        0
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "joint": "rod_slide",
+      "parent": "/Dispenser/Frame",
+      "child": "/Dispenser/Carrier",
+      "parent_anchor_m": [
+        0,
+        0,
+        0
+      ],
+      "axis": "Y",
+      "limits": [
+        -0.21,
+        0.015
+      ],
+      "spring": null,
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "body": "/Dispenser/Rod",
+      "mass_kg": 0.065,
+      "initial_local_position_m": [
+        0,
+        0,
+        0
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Shaft",
+      "kind": "cylinder",
+      "radius_m": 0.004,
+      "length_m": 0.264,
+      "axis": "Y",
+      "center_m": [
+        0,
+        0.06,
+        0
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Piston",
+      "kind": "cylinder",
+      "radius_m": 0.019,
+      "length_m": 0.006,
+      "axis": "Y",
+      "center_m": [
+        0,
+        0.192,
+        0
+      ],
+      "nominal_material": "aluminium piston plate"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/THandle",
+      "kind": "box",
+      "half_extents_m": [
+        0.027,
+        0.008,
+        0.008
+      ],
+      "center_m": [
+        0,
+        -0.07,
+        0
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "rigid polymer handle"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth00",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          -0.058,
+          -0.004
+        ],
+        [
+          -0.003,
+          -0.058,
+          -0.008
+        ],
+        [
+          -0.003,
+          -0.052,
+          -0.004
+        ],
+        [
+          0.003,
+          -0.058,
+          -0.004
+        ],
+        [
+          0.003,
+          -0.058,
+          -0.008
+        ],
+        [
+          0.003,
+          -0.052,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth01",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          -0.05,
+          -0.004
+        ],
+        [
+          -0.003,
+          -0.05,
+          -0.008
+        ],
+        [
+          -0.003,
+          -0.044,
+          -0.004
+        ],
+        [
+          0.003,
+          -0.05,
+          -0.004
+        ],
+        [
+          0.003,
+          -0.05,
+          -0.008
+        ],
+        [
+          0.003,
+          -0.044,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth02",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          -0.042,
+          -0.004
+        ],
+        [
+          -0.003,
+          -0.042,
+          -0.008
+        ],
+        [
+          -0.003,
+          -0.036,
+          -0.004
+        ],
+        [
+          0.003,
+          -0.042,
+          -0.004
+        ],
+        [
+          0.003,
+          -0.042,
+          -0.008
+        ],
+        [
+          0.003,
+          -0.036,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth03",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          -0.034,
+          -0.004
+        ],
+        [
+          -0.003,
+          -0.034,
+          -0.008
+        ],
+        [
+          -0.003,
+          -0.028,
+          -0.004
+        ],
+        [
+          0.003,
+          -0.034,
+          -0.004
+        ],
+        [
+          0.003,
+          -0.034,
+          -0.008
+        ],
+        [
+          0.003,
+          -0.028,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth04",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          -0.026,
+          -0.004
+        ],
+        [
+          -0.003,
+          -0.026,
+          -0.008
+        ],
+        [
+          -0.003,
+          -0.02,
+          -0.004
+        ],
+        [
+          0.003,
+          -0.026,
+          -0.004
+        ],
+        [
+          0.003,
+          -0.026,
+          -0.008
+        ],
+        [
+          0.003,
+          -0.02,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth05",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          -0.018,
+          -0.004
+        ],
+        [
+          -0.003,
+          -0.018,
+          -0.008
+        ],
+        [
+          -0.003,
+          -0.012,
+          -0.004
+        ],
+        [
+          0.003,
+          -0.018,
+          -0.004
+        ],
+        [
+          0.003,
+          -0.018,
+          -0.008
+        ],
+        [
+          0.003,
+          -0.012,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth06",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          -0.009999999999999998,
+          -0.004
+        ],
+        [
+          -0.003,
+          -0.009999999999999998,
+          -0.008
+        ],
+        [
+          -0.003,
+          -0.003999999999999999,
+          -0.004
+        ],
+        [
+          0.003,
+          -0.009999999999999998,
+          -0.004
+        ],
+        [
+          0.003,
+          -0.009999999999999998,
+          -0.008
+        ],
+        [
+          0.003,
+          -0.003999999999999999,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth07",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          -0.001999999999999999,
+          -0.004
+        ],
+        [
+          -0.003,
+          -0.001999999999999999,
+          -0.008
+        ],
+        [
+          -0.003,
+          0.004000000000000001,
+          -0.004
+        ],
+        [
+          0.003,
+          -0.001999999999999999,
+          -0.004
+        ],
+        [
+          0.003,
+          -0.001999999999999999,
+          -0.008
+        ],
+        [
+          0.003,
+          0.004000000000000001,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth08",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          0.006000000000000001,
+          -0.004
+        ],
+        [
+          -0.003,
+          0.006000000000000001,
+          -0.008
+        ],
+        [
+          -0.003,
+          0.012,
+          -0.004
+        ],
+        [
+          0.003,
+          0.006000000000000001,
+          -0.004
+        ],
+        [
+          0.003,
+          0.006000000000000001,
+          -0.008
+        ],
+        [
+          0.003,
+          0.012,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth09",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          0.014000000000000009,
+          -0.004
+        ],
+        [
+          -0.003,
+          0.014000000000000009,
+          -0.008
+        ],
+        [
+          -0.003,
+          0.020000000000000007,
+          -0.004
+        ],
+        [
+          0.003,
+          0.014000000000000009,
+          -0.004
+        ],
+        [
+          0.003,
+          0.014000000000000009,
+          -0.008
+        ],
+        [
+          0.003,
+          0.020000000000000007,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth10",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          0.022000000000000002,
+          -0.004
+        ],
+        [
+          -0.003,
+          0.022000000000000002,
+          -0.008
+        ],
+        [
+          -0.003,
+          0.028,
+          -0.004
+        ],
+        [
+          0.003,
+          0.022000000000000002,
+          -0.004
+        ],
+        [
+          0.003,
+          0.022000000000000002,
+          -0.008
+        ],
+        [
+          0.003,
+          0.028,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth11",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          0.029999999999999995,
+          -0.004
+        ],
+        [
+          -0.003,
+          0.029999999999999995,
+          -0.008
+        ],
+        [
+          -0.003,
+          0.036,
+          -0.004
+        ],
+        [
+          0.003,
+          0.029999999999999995,
+          -0.004
+        ],
+        [
+          0.003,
+          0.029999999999999995,
+          -0.008
+        ],
+        [
+          0.003,
+          0.036,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth12",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          0.038,
+          -0.004
+        ],
+        [
+          -0.003,
+          0.038,
+          -0.008
+        ],
+        [
+          -0.003,
+          0.044000000000000004,
+          -0.004
+        ],
+        [
+          0.003,
+          0.038,
+          -0.004
+        ],
+        [
+          0.003,
+          0.038,
+          -0.008
+        ],
+        [
+          0.003,
+          0.044000000000000004,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth13",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          0.046000000000000006,
+          -0.004
+        ],
+        [
+          -0.003,
+          0.046000000000000006,
+          -0.008
+        ],
+        [
+          -0.003,
+          0.05200000000000001,
+          -0.004
+        ],
+        [
+          0.003,
+          0.046000000000000006,
+          -0.004
+        ],
+        [
+          0.003,
+          0.046000000000000006,
+          -0.008
+        ],
+        [
+          0.003,
+          0.05200000000000001,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth14",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          0.054,
+          -0.004
+        ],
+        [
+          -0.003,
+          0.054,
+          -0.008
+        ],
+        [
+          -0.003,
+          0.060000000000000005,
+          -0.004
+        ],
+        [
+          0.003,
+          0.054,
+          -0.004
+        ],
+        [
+          0.003,
+          0.054,
+          -0.008
+        ],
+        [
+          0.003,
+          0.060000000000000005,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth15",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          0.062,
+          -0.004
+        ],
+        [
+          -0.003,
+          0.062,
+          -0.008
+        ],
+        [
+          -0.003,
+          0.068,
+          -0.004
+        ],
+        [
+          0.003,
+          0.062,
+          -0.004
+        ],
+        [
+          0.003,
+          0.062,
+          -0.008
+        ],
+        [
+          0.003,
+          0.068,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth16",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          0.07,
+          -0.004
+        ],
+        [
+          -0.003,
+          0.07,
+          -0.008
+        ],
+        [
+          -0.003,
+          0.07600000000000001,
+          -0.004
+        ],
+        [
+          0.003,
+          0.07,
+          -0.004
+        ],
+        [
+          0.003,
+          0.07,
+          -0.008
+        ],
+        [
+          0.003,
+          0.07600000000000001,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth17",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          0.07800000000000001,
+          -0.004
+        ],
+        [
+          -0.003,
+          0.07800000000000001,
+          -0.008
+        ],
+        [
+          -0.003,
+          0.08400000000000002,
+          -0.004
+        ],
+        [
+          0.003,
+          0.07800000000000001,
+          -0.004
+        ],
+        [
+          0.003,
+          0.07800000000000001,
+          -0.008
+        ],
+        [
+          0.003,
+          0.08400000000000002,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth18",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          0.08600000000000002,
+          -0.004
+        ],
+        [
+          -0.003,
+          0.08600000000000002,
+          -0.008
+        ],
+        [
+          -0.003,
+          0.09200000000000003,
+          -0.004
+        ],
+        [
+          0.003,
+          0.08600000000000002,
+          -0.004
+        ],
+        [
+          0.003,
+          0.08600000000000002,
+          -0.008
+        ],
+        [
+          0.003,
+          0.09200000000000003,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth19",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          0.094,
+          -0.004
+        ],
+        [
+          -0.003,
+          0.094,
+          -0.008
+        ],
+        [
+          -0.003,
+          0.1,
+          -0.004
+        ],
+        [
+          0.003,
+          0.094,
+          -0.004
+        ],
+        [
+          0.003,
+          0.094,
+          -0.008
+        ],
+        [
+          0.003,
+          0.1,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth20",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          0.10200000000000001,
+          -0.004
+        ],
+        [
+          -0.003,
+          0.10200000000000001,
+          -0.008
+        ],
+        [
+          -0.003,
+          0.10800000000000001,
+          -0.004
+        ],
+        [
+          0.003,
+          0.10200000000000001,
+          -0.004
+        ],
+        [
+          0.003,
+          0.10200000000000001,
+          -0.008
+        ],
+        [
+          0.003,
+          0.10800000000000001,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth21",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          0.11000000000000001,
+          -0.004
+        ],
+        [
+          -0.003,
+          0.11000000000000001,
+          -0.008
+        ],
+        [
+          -0.003,
+          0.11600000000000002,
+          -0.004
+        ],
+        [
+          0.003,
+          0.11000000000000001,
+          -0.004
+        ],
+        [
+          0.003,
+          0.11000000000000001,
+          -0.008
+        ],
+        [
+          0.003,
+          0.11600000000000002,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth22",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          0.118,
+          -0.004
+        ],
+        [
+          -0.003,
+          0.118,
+          -0.008
+        ],
+        [
+          -0.003,
+          0.124,
+          -0.004
+        ],
+        [
+          0.003,
+          0.118,
+          -0.004
+        ],
+        [
+          0.003,
+          0.118,
+          -0.008
+        ],
+        [
+          0.003,
+          0.124,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth23",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          0.126,
+          -0.004
+        ],
+        [
+          -0.003,
+          0.126,
+          -0.008
+        ],
+        [
+          -0.003,
+          0.132,
+          -0.004
+        ],
+        [
+          0.003,
+          0.126,
+          -0.004
+        ],
+        [
+          0.003,
+          0.126,
+          -0.008
+        ],
+        [
+          0.003,
+          0.132,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth24",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          0.134,
+          -0.004
+        ],
+        [
+          -0.003,
+          0.134,
+          -0.008
+        ],
+        [
+          -0.003,
+          0.14,
+          -0.004
+        ],
+        [
+          0.003,
+          0.134,
+          -0.004
+        ],
+        [
+          0.003,
+          0.134,
+          -0.008
+        ],
+        [
+          0.003,
+          0.14,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth25",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          0.14200000000000002,
+          -0.004
+        ],
+        [
+          -0.003,
+          0.14200000000000002,
+          -0.008
+        ],
+        [
+          -0.003,
+          0.14800000000000002,
+          -0.004
+        ],
+        [
+          0.003,
+          0.14200000000000002,
+          -0.004
+        ],
+        [
+          0.003,
+          0.14200000000000002,
+          -0.008
+        ],
+        [
+          0.003,
+          0.14800000000000002,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth26",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          0.15000000000000002,
+          -0.004
+        ],
+        [
+          -0.003,
+          0.15000000000000002,
+          -0.008
+        ],
+        [
+          -0.003,
+          0.15600000000000003,
+          -0.004
+        ],
+        [
+          0.003,
+          0.15000000000000002,
+          -0.004
+        ],
+        [
+          0.003,
+          0.15000000000000002,
+          -0.008
+        ],
+        [
+          0.003,
+          0.15600000000000003,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth27",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          0.158,
+          -0.004
+        ],
+        [
+          -0.003,
+          0.158,
+          -0.008
+        ],
+        [
+          -0.003,
+          0.164,
+          -0.004
+        ],
+        [
+          0.003,
+          0.158,
+          -0.004
+        ],
+        [
+          0.003,
+          0.158,
+          -0.008
+        ],
+        [
+          0.003,
+          0.164,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth28",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          0.166,
+          -0.004
+        ],
+        [
+          -0.003,
+          0.166,
+          -0.008
+        ],
+        [
+          -0.003,
+          0.17200000000000001,
+          -0.004
+        ],
+        [
+          0.003,
+          0.166,
+          -0.004
+        ],
+        [
+          0.003,
+          0.166,
+          -0.008
+        ],
+        [
+          0.003,
+          0.17200000000000001,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth29",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          0.17400000000000002,
+          -0.004
+        ],
+        [
+          -0.003,
+          0.17400000000000002,
+          -0.008
+        ],
+        [
+          -0.003,
+          0.18000000000000002,
+          -0.004
+        ],
+        [
+          0.003,
+          0.17400000000000002,
+          -0.004
+        ],
+        [
+          0.003,
+          0.17400000000000002,
+          -0.008
+        ],
+        [
+          0.003,
+          0.18000000000000002,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Rod/Tooth30",
+      "kind": "convex_prism",
+      "vertices_m": [
+        [
+          -0.003,
+          0.182,
+          -0.004
+        ],
+        [
+          -0.003,
+          0.182,
+          -0.008
+        ],
+        [
+          -0.003,
+          0.188,
+          -0.004
+        ],
+        [
+          0.003,
+          0.182,
+          -0.004
+        ],
+        [
+          0.003,
+          0.182,
+          -0.008
+        ],
+        [
+          0.003,
+          0.188,
+          -0.004
+        ]
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "joint": "rod_rotation",
+      "parent": "/Dispenser/Carrier",
+      "child": "/Dispenser/Rod",
+      "parent_anchor_m": [
+        0,
+        0,
+        0
+      ],
+      "axis": "Y",
+      "limits": null,
+      "spring": null,
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "body": "/Dispenser/Pawl",
+      "mass_kg": 0.008,
+      "initial_local_position_m": [
+        0,
+        -0.035,
+        -0.016
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Pawl/Lever",
+      "kind": "box",
+      "half_extents_m": [
+        0.006,
+        0.0115,
+        0.002
+      ],
+      "center_m": [
+        0,
+        0.0115,
+        0.002
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "solid": "/Dispenser/Pawl/Toe",
+      "kind": "box",
+      "half_extents_m": [
+        0.006,
+        0.001,
+        0.002
+      ],
+      "center_m": [
+        0,
+        0.023,
+        0.008
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "dispenser",
+      "joint": "pawl_angle",
+      "parent": "/Dispenser/Frame",
+      "child": "/Dispenser/Pawl",
+      "parent_anchor_m": [
+        0,
+        -0.035,
+        -0.016
+      ],
+      "axis": "X",
+      "limits": [
+        -35,
+        0
+      ],
+      "spring": [
+        0.025,
+        0.002
+      ],
+      "nominal_material": "steel mechanism; aggregate body mass assigned independently"
+    },
+    {
+      "asset": "used",
+      "body": "/Cartridge/Body",
+      "mass_kg": 0.045,
+      "initial_local_position_m": [
+        0,
+        0,
+        0
+      ],
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "used",
+      "solid": "/Cartridge/Body/Wall00",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        0.023,
+        0,
+        0.0
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "used",
+      "solid": "/Cartridge/Body/Wall01",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        0.02187429987478853,
+        0,
+        0.00710739087062379
+      ],
+      "rotation_about_y_rad": -0.3141592653589793,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "used",
+      "solid": "/Cartridge/Body/Wall02",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        0.01860739087062379,
+        0,
+        0.013519060802726883
+      ],
+      "rotation_about_y_rad": -0.6283185307179586,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "used",
+      "solid": "/Cartridge/Body/Wall03",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        0.013519060802726883,
+        0,
+        0.01860739087062379
+      ],
+      "rotation_about_y_rad": -0.9424777960769379,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "used",
+      "solid": "/Cartridge/Body/Wall04",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        0.007107390870623791,
+        0,
+        0.02187429987478853
+      ],
+      "rotation_about_y_rad": -1.2566370614359172,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "used",
+      "solid": "/Cartridge/Body/Wall05",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        1.4083438190194562e-18,
+        0,
+        0.023
+      ],
+      "rotation_about_y_rad": -1.5707963267948966,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "used",
+      "solid": "/Cartridge/Body/Wall06",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        -0.007107390870623789,
+        0,
+        0.021874299874788533
+      ],
+      "rotation_about_y_rad": -1.8849555921538759,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "used",
+      "solid": "/Cartridge/Body/Wall07",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        -0.01351906080272688,
+        0,
+        0.01860739087062379
+      ],
+      "rotation_about_y_rad": -2.199114857512855,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "used",
+      "solid": "/Cartridge/Body/Wall08",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        -0.01860739087062379,
+        0,
+        0.013519060802726884
+      ],
+      "rotation_about_y_rad": -2.5132741228718345,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "used",
+      "solid": "/Cartridge/Body/Wall09",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        -0.02187429987478853,
+        0,
+        0.0071073908706237926
+      ],
+      "rotation_about_y_rad": -2.827433388230814,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "used",
+      "solid": "/Cartridge/Body/Wall10",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        -0.023,
+        0,
+        2.8166876380389123e-18
+      ],
+      "rotation_about_y_rad": -3.141592653589793,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "used",
+      "solid": "/Cartridge/Body/Wall11",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        -0.021874299874788537,
+        0,
+        -0.007107390870623779
+      ],
+      "rotation_about_y_rad": -3.455751918948772,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "used",
+      "solid": "/Cartridge/Body/Wall12",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        -0.018607390870623793,
+        0,
+        -0.01351906080272688
+      ],
+      "rotation_about_y_rad": -3.7699111843077517,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "used",
+      "solid": "/Cartridge/Body/Wall13",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        -0.013519060802726884,
+        0,
+        -0.01860739087062379
+      ],
+      "rotation_about_y_rad": -4.084070449666731,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "used",
+      "solid": "/Cartridge/Body/Wall14",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        -0.007107390870623793,
+        0,
+        -0.02187429987478853
+      ],
+      "rotation_about_y_rad": -4.39822971502571,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "used",
+      "solid": "/Cartridge/Body/Wall15",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        -4.2250314570583685e-18,
+        0,
+        -0.023
+      ],
+      "rotation_about_y_rad": -4.71238898038469,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "used",
+      "solid": "/Cartridge/Body/Wall16",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        0.0071073908706237865,
+        0,
+        -0.021874299874788533
+      ],
+      "rotation_about_y_rad": -5.026548245743669,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "used",
+      "solid": "/Cartridge/Body/Wall17",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        0.013519060802726877,
+        0,
+        -0.018607390870623793
+      ],
+      "rotation_about_y_rad": -5.340707511102648,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "used",
+      "solid": "/Cartridge/Body/Wall18",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        0.01860739087062379,
+        0,
+        -0.013519060802726888
+      ],
+      "rotation_about_y_rad": -5.654866776461628,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "used",
+      "solid": "/Cartridge/Body/Wall19",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        0.02187429987478853,
+        0,
+        -0.007107390870623795
+      ],
+      "rotation_about_y_rad": -5.969026041820607,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "used",
+      "solid": "/Cartridge/Body/Front",
+      "kind": "cylinder",
+      "radius_m": 0.024,
+      "length_m": 0.004,
+      "axis": "Y",
+      "center_m": [
+        0,
+        0.098,
+        0
+      ],
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "replacement",
+      "body": "/Cartridge/Body",
+      "mass_kg": 0.16,
+      "initial_local_position_m": [
+        0,
+        0,
+        0
+      ],
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "replacement",
+      "solid": "/Cartridge/Body/Wall00",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        0.023,
+        0,
+        0.0
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "replacement",
+      "solid": "/Cartridge/Body/Wall01",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        0.02187429987478853,
+        0,
+        0.00710739087062379
+      ],
+      "rotation_about_y_rad": -0.3141592653589793,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "replacement",
+      "solid": "/Cartridge/Body/Wall02",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        0.01860739087062379,
+        0,
+        0.013519060802726883
+      ],
+      "rotation_about_y_rad": -0.6283185307179586,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "replacement",
+      "solid": "/Cartridge/Body/Wall03",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        0.013519060802726883,
+        0,
+        0.01860739087062379
+      ],
+      "rotation_about_y_rad": -0.9424777960769379,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "replacement",
+      "solid": "/Cartridge/Body/Wall04",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        0.007107390870623791,
+        0,
+        0.02187429987478853
+      ],
+      "rotation_about_y_rad": -1.2566370614359172,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "replacement",
+      "solid": "/Cartridge/Body/Wall05",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        1.4083438190194562e-18,
+        0,
+        0.023
+      ],
+      "rotation_about_y_rad": -1.5707963267948966,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "replacement",
+      "solid": "/Cartridge/Body/Wall06",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        -0.007107390870623789,
+        0,
+        0.021874299874788533
+      ],
+      "rotation_about_y_rad": -1.8849555921538759,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "replacement",
+      "solid": "/Cartridge/Body/Wall07",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        -0.01351906080272688,
+        0,
+        0.01860739087062379
+      ],
+      "rotation_about_y_rad": -2.199114857512855,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "replacement",
+      "solid": "/Cartridge/Body/Wall08",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        -0.01860739087062379,
+        0,
+        0.013519060802726884
+      ],
+      "rotation_about_y_rad": -2.5132741228718345,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "replacement",
+      "solid": "/Cartridge/Body/Wall09",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        -0.02187429987478853,
+        0,
+        0.0071073908706237926
+      ],
+      "rotation_about_y_rad": -2.827433388230814,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "replacement",
+      "solid": "/Cartridge/Body/Wall10",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        -0.023,
+        0,
+        2.8166876380389123e-18
+      ],
+      "rotation_about_y_rad": -3.141592653589793,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "replacement",
+      "solid": "/Cartridge/Body/Wall11",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        -0.021874299874788537,
+        0,
+        -0.007107390870623779
+      ],
+      "rotation_about_y_rad": -3.455751918948772,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "replacement",
+      "solid": "/Cartridge/Body/Wall12",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        -0.018607390870623793,
+        0,
+        -0.01351906080272688
+      ],
+      "rotation_about_y_rad": -3.7699111843077517,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "replacement",
+      "solid": "/Cartridge/Body/Wall13",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        -0.013519060802726884,
+        0,
+        -0.01860739087062379
+      ],
+      "rotation_about_y_rad": -4.084070449666731,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "replacement",
+      "solid": "/Cartridge/Body/Wall14",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        -0.007107390870623793,
+        0,
+        -0.02187429987478853
+      ],
+      "rotation_about_y_rad": -4.39822971502571,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "replacement",
+      "solid": "/Cartridge/Body/Wall15",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        -4.2250314570583685e-18,
+        0,
+        -0.023
+      ],
+      "rotation_about_y_rad": -4.71238898038469,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "replacement",
+      "solid": "/Cartridge/Body/Wall16",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        0.0071073908706237865,
+        0,
+        -0.021874299874788533
+      ],
+      "rotation_about_y_rad": -5.026548245743669,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "replacement",
+      "solid": "/Cartridge/Body/Wall17",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        0.013519060802726877,
+        0,
+        -0.018607390870623793
+      ],
+      "rotation_about_y_rad": -5.340707511102648,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "replacement",
+      "solid": "/Cartridge/Body/Wall18",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        0.01860739087062379,
+        0,
+        -0.013519060802726888
+      ],
+      "rotation_about_y_rad": -5.654866776461628,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "replacement",
+      "solid": "/Cartridge/Body/Wall19",
+      "kind": "box",
+      "half_extents_m": [
+        0.0015,
+        0.1,
+        0.0037
+      ],
+      "center_m": [
+        0.02187429987478853,
+        0,
+        -0.007107390870623795
+      ],
+      "rotation_about_y_rad": -5.969026041820607,
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "replacement",
+      "solid": "/Cartridge/Body/Front",
+      "kind": "cylinder",
+      "radius_m": 0.024,
+      "length_m": 0.004,
+      "axis": "Y",
+      "center_m": [
+        0,
+        0.098,
+        0
+      ],
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "replacement",
+      "solid": "/Cartridge/Body/RearPiston",
+      "kind": "cylinder",
+      "radius_m": 0.0215,
+      "length_m": 0.003,
+      "axis": "Y",
+      "center_m": [
+        0,
+        -0.097,
+        0
+      ],
+      "nominal_material": "rigid polymer practice cartridge and nozzle"
+    },
+    {
+      "asset": "fixtures",
+      "solid": "/Fixtures/CradleBar0",
+      "kind": "box",
+      "half_extents_m": [
+        0.04,
+        0.009,
+        0.006
+      ],
+      "center_m": [
+        0.32,
+        0.025,
+        0.844
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "printed rigid polymer cradle, guides and tray"
+    },
+    {
+      "asset": "fixtures",
+      "solid": "/Fixtures/Post0_0",
+      "kind": "box",
+      "half_extents_m": [
+        0.006,
+        0.009,
+        0.04525
+      ],
+      "center_m": [
+        0.28600000000000003,
+        0.025,
+        0.7927500000000001
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "printed rigid polymer cradle, guides and tray"
+    },
+    {
+      "asset": "fixtures",
+      "solid": "/Fixtures/LocatingEdge0_0",
+      "kind": "box",
+      "half_extents_m": [
+        0.004,
+        0.012,
+        0.009
+      ],
+      "center_m": [
+        0.28400000000000003,
+        0.025,
+        0.853
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "printed rigid polymer cradle locating edge"
+    },
+    {
+      "asset": "fixtures",
+      "solid": "/Fixtures/Post0_2",
+      "kind": "box",
+      "half_extents_m": [
+        0.006,
+        0.009,
+        0.04525
+      ],
+      "center_m": [
+        0.354,
+        0.025,
+        0.7927500000000001
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "printed rigid polymer cradle, guides and tray"
+    },
+    {
+      "asset": "fixtures",
+      "solid": "/Fixtures/LocatingEdge0_2",
+      "kind": "box",
+      "half_extents_m": [
+        0.004,
+        0.012,
+        0.009
+      ],
+      "center_m": [
+        0.356,
+        0.025,
+        0.853
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "printed rigid polymer cradle locating edge"
+    },
+    {
+      "asset": "fixtures",
+      "solid": "/Fixtures/CradleBar1",
+      "kind": "box",
+      "half_extents_m": [
+        0.04,
+        0.009,
+        0.006
+      ],
+      "center_m": [
+        0.32,
+        0.15,
+        0.844
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "printed rigid polymer cradle, guides and tray"
+    },
+    {
+      "asset": "fixtures",
+      "solid": "/Fixtures/Post1_0",
+      "kind": "box",
+      "half_extents_m": [
+        0.006,
+        0.009,
+        0.04525
+      ],
+      "center_m": [
+        0.28600000000000003,
+        0.15,
+        0.7927500000000001
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "printed rigid polymer cradle, guides and tray"
+    },
+    {
+      "asset": "fixtures",
+      "solid": "/Fixtures/LocatingEdge1_0",
+      "kind": "box",
+      "half_extents_m": [
+        0.004,
+        0.012,
+        0.009
+      ],
+      "center_m": [
+        0.28400000000000003,
+        0.15,
+        0.853
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "printed rigid polymer cradle locating edge"
+    },
+    {
+      "asset": "fixtures",
+      "solid": "/Fixtures/Post1_2",
+      "kind": "box",
+      "half_extents_m": [
+        0.006,
+        0.009,
+        0.04525
+      ],
+      "center_m": [
+        0.354,
+        0.15,
+        0.7927500000000001
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "printed rigid polymer cradle, guides and tray"
+    },
+    {
+      "asset": "fixtures",
+      "solid": "/Fixtures/LocatingEdge1_2",
+      "kind": "box",
+      "half_extents_m": [
+        0.004,
+        0.012,
+        0.009
+      ],
+      "center_m": [
+        0.356,
+        0.15,
+        0.853
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "printed rigid polymer cradle locating edge"
+    },
+    {
+      "asset": "fixtures",
+      "solid": "/Fixtures/CradleFoot",
+      "kind": "box",
+      "half_extents_m": [
+        0.056,
+        0.105,
+        0.003
+      ],
+      "center_m": [
+        0.32,
+        0.0875,
+        0.7505000000000001
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "printed rigid polymer cradle, guides and tray"
+    },
+    {
+      "asset": "fixtures",
+      "solid": "/Fixtures/SpareGuide0",
+      "kind": "box",
+      "half_extents_m": [
+        0.004,
+        0.11,
+        0.006
+      ],
+      "center_m": [
+        0.15,
+        0.4,
+        0.7535000000000001
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "printed rigid polymer cradle, guides and tray"
+    },
+    {
+      "asset": "fixtures",
+      "solid": "/Fixtures/SpareGuide2",
+      "kind": "box",
+      "half_extents_m": [
+        0.004,
+        0.11,
+        0.006
+      ],
+      "center_m": [
+        0.21,
+        0.4,
+        0.7535000000000001
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "printed rigid polymer cradle, guides and tray"
+    },
+    {
+      "asset": "fixtures",
+      "solid": "/Fixtures/TrayFloor",
+      "kind": "box",
+      "half_extents_m": [
+        0.055,
+        0.14,
+        0.002
+      ],
+      "center_m": [
+        0.43,
+        0.4,
+        0.7495
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "printed rigid polymer cradle, guides and tray"
+    },
+    {
+      "asset": "fixtures",
+      "solid": "/Fixtures/TraySide0",
+      "kind": "box",
+      "half_extents_m": [
+        0.004,
+        0.14,
+        0.008
+      ],
+      "center_m": [
+        0.375,
+        0.4,
+        0.7595000000000001
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "printed rigid polymer cradle, guides and tray"
+    },
+    {
+      "asset": "fixtures",
+      "solid": "/Fixtures/TrayEnd0",
+      "kind": "box",
+      "half_extents_m": [
+        0.059,
+        0.004,
+        0.008
+      ],
+      "center_m": [
+        0.43,
+        0.26,
+        0.7595000000000001
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "printed rigid polymer cradle, guides and tray"
+    },
+    {
+      "asset": "fixtures",
+      "solid": "/Fixtures/TraySide2",
+      "kind": "box",
+      "half_extents_m": [
+        0.004,
+        0.14,
+        0.008
+      ],
+      "center_m": [
+        0.485,
+        0.4,
+        0.7595000000000001
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "printed rigid polymer cradle, guides and tray"
+    },
+    {
+      "asset": "fixtures",
+      "solid": "/Fixtures/TrayEnd2",
+      "kind": "box",
+      "half_extents_m": [
+        0.059,
+        0.004,
+        0.008
+      ],
+      "center_m": [
+        0.43,
+        0.54,
+        0.7595000000000001
+      ],
+      "rotation_about_y_rad": 0,
+      "nominal_material": "printed rigid polymer cradle, guides and tray"
+    }
+  ]
+}
