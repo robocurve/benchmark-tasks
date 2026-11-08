@@ -1,0 +1,18 @@
+{
+  "title": "Tie an overhand knot",
+  "category": "Societal relevance",
+  "keywords": [
+    "rope",
+    "knot tying",
+    "bimanual"
+  ],
+  "instruction": "Tie one overhand knot in the blue cord. Pull the ends apart to at least 117 cm for one second with the whole cord at least 1 cm above the table, then let go and leave the knot intact for five seconds.",
+  "context": "Tying drawstrings and everyday fastenings requires a robot to form a loop, thread a free end through it and pull without losing the knot.",
+  "setup": "One blue braided-polyester cord (131 cm long, 10 mm diameter, 97.1 g), with yellow and red terminal segments. It lies in a flat, uncrossed U: two 30 cm straight legs, 44.6 cm apart, joined by a semicircular bend. Two YAM arms with parallel grippers face a wooden 110×130×6 cm tabletop. The fixed layout is shown in the screenshot and dimensioned in README.md. A 28 cm ruler and 20 cm height guide are visual annotations, with 5 mm ticks and no physical contact.",
+  "scoring": "0.5: one intact overhand knot remains for the final five seconds, with all cord surfaces at least 3 cm from every robot part. 1.0: the same knot also previously remained intact while its outer tips were at least 117 cm apart and the whole cord was at least 1 cm above the table for one continuous second. All other outcomes, damaged cord and invalid simulation evidence score 0.",
+  "run_limit": "3,000 control steps (150 seconds at 20 Hz), including the five-second release check.",
+  "reset_notes": "Untie the reusable cord and restore the flat, uncrossed U.",
+  "fidelity": "104 joined capsules approximate braided polyester. Grasping and threading use physical contact; no fixtures or endpoint forces assist tying. Mass follows a commercial 10 mm cord; friction and bending are uncalibrated. Fibres, stretch and wear are omitted. The span check limits slack, not knot strength. Physics runs at 240 Hz for 78 s, then 960 Hz for every policy; control stays at 20 Hz.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0. Both independently replayed. Dream completed all 3,000 actions in one uninterrupted session.",
+  "media": "M-SYNKW3"
+}

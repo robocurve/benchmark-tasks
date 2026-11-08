@@ -1,0 +1,788 @@
+{
+  "schema": "overhand-final-runs-v1",
+  "scope": "Anonymous final-run summaries. Reproduce and rescore complete recordings using the README commands; summaries do not replace trajectories.",
+  "demo": {
+    "schema": "overhand-final-demo-evidence-v1",
+    "scope": "Successful table-method scripted demo only. Anonymous summaries support review; they are not a replacement for full recordings or a claim of real-cord calibration.",
+    "trial": "table-020",
+    "policy": "scripted joint/gripper commands",
+    "seed": 0,
+    "instruction": "Tie one overhand knot in the blue cord. Pull the ends apart to at least 117 cm for one second with the whole cord at least 1 cm above the table, then let go and leave the knot intact for five seconds.",
+    "instruction_matches_frozen_and_current_config_and_task_draft": true,
+    "result": {
+      "score": 1.0,
+      "independent_replay_score": 1.0,
+      "recorded_replay_agreement": true,
+      "score_version": "overhand-bimanual-v4",
+      "invalid": null,
+      "initial_uncrossed_unknot_validated": true,
+      "final_topology": "overhand_candidate",
+      "samples": 2767,
+      "actions": 2766,
+      "final_simulation_time_s": 138.3,
+      "action_limit": 3000,
+      "run_limit_s": 150.0,
+      "control_hz": 20,
+      "finalized": true,
+      "execution": "complete",
+      "wall_seconds": 1757.542
+    },
+    "qualification": {
+      "span": {
+        "start_s": 130.75,
+        "end_s": 131.75,
+        "seconds": 1.0,
+        "samples": 21,
+        "required_outer_tip_span_m": 1.17,
+        "minimum_gap_corrected_tip_span_m": 1.170074087,
+        "required_table_surface_clearance_m": 0.01,
+        "minimum_table_surface_clearance_m": 0.108722009
+      },
+      "release": {
+        "start_s": 133.3,
+        "end_s": 138.3,
+        "seconds": 5.0,
+        "samples": 101,
+        "required_robot_surface_clearance_m": 0.03,
+        "minimum_robot_surface_clearance_m": 0.037940798,
+        "same_overhand_retained": true
+      },
+      "recorded_grasp_witnesses_held_until_intentional_opening": true,
+      "evaluator_pull": false
+    },
+    "frozen_source": {
+      "archive_file": "table-020-source.tgz",
+      "archive_sha256": "52616cbbfe6ceda7b3de4a7fbde0cdbe9d8806f6e2646bb3163903b58a0a9536",
+      "snapshot_matches_all_22_runtime_module_hashes": true,
+      "source_sha256": {
+        "assay_physics.py": "4455f6ec6fe8c61ea7d1e66cdbc10a56ae928f91337bcaa23de630d391b008e1",
+        "bimanual_policy.py": "b374b20782717f0f15b9ff07bbcd6920542e7e9247703931400005f0350c8127",
+        "bimanual_scoring.py": "278b126c734b9867cacf3e5779aa210b0f7a1162f6a9e8cf4772020929269fb5",
+        "config.py": "d2c55f0162322740d2bac19dc12fe4709ab283e28364902e6c4065b5779555b0",
+        "demo_policy.py": "69edf1f5d0df691c499be324489cc6c677618dd8dec90e00dbb0118428fe9546",
+        "diagnostic_layouts.py": "b87524a85ecbeeb18c97d1170459338e9c9f05232e923eb8f29d68f577d93a06",
+        "fixed_policy_physics.py": "c60c6b55b758653ca3deb16a6fb6d8a879c7f0c33737314f35012b437a8c3c62",
+        "fixtures.py": "d30eb72c85d49cb91a01605e6bef26860c595d7d77aba79faeea1cd3924a3e60",
+        "hand_geometry.py": "5eb44a5b09551bb738a7a42aa0322566213b7170806290886c6e13b3ccf44a10",
+        "jig_layout.py": "8c6645f3c465e3f946336a8de2e51593a461d5fbefa5cf5cd8740b7520a7ee16",
+        "jig_policy.py": "ad22bd0c1559ad7b3a7b4401e297ad001cd50b4c16e7bc8f3ec24173a35b8311",
+        "proof_load.py": "0e7339480dbd059befcb1b57616991e6086aa2e9d02839b5259b8d87ac5b428b",
+        "render_review.py": "d87ff2e0215ac36c6298e23669ef49bfc90ed21996b897a26610703ac4cccaf6",
+        "replay.py": "beba1636888d382b4bb83b728d6f6dad1760e11f8579924e7ff311c4885558bc",
+        "rope.py": "4783ebd97f3f0afe9c70b3fbec2592bd0a7311e4f7e36c43353d0d81d19ab692",
+        "run.py": "6acee3f1110b766e6fadb58a703bfad78000eef631c4c92973cf428744105be5",
+        "scoring.py": "9a3519561f15b83880c138eb7beedf866d9de21db247205257cf7c895d5f5c78",
+        "table_policy.py": "0f33a9a3a1cf048bba9c7785301ec3b3a9b7bce3f10d884c836057c487c61ef9",
+        "task.py": "ac5174aa5eed3bf7cd0b7b1df9ebd1c647afa3f29a7a081b24dc06484c11e031",
+        "telemetry.py": "fb64df7679298e5bacaa27f69d25ecb0f59d07f6b95859799a164071518854fa",
+        "topology.py": "21057280e6d69123019e432d2b50934e97b5f5131349186541215755f99a5ff2",
+        "visuals.py": "a7e8b4b040c526093570b3a295e9eea28a7192dbd33ae0db6dd1f7293c4ac819"
+      },
+      "current_core_hash_agreement": {
+        "bimanual_policy.py": true,
+        "bimanual_scoring.py": true,
+        "config.py": true,
+        "demo_policy.py": true,
+        "fixed_policy_physics.py": true,
+        "assay_physics.py": true,
+        "hand_geometry.py": true,
+        "replay.py": true,
+        "rope.py": true,
+        "scoring.py": true,
+        "table_policy.py": true,
+        "task.py": true,
+        "topology.py": true,
+        "visuals.py": false
+      },
+      "agreement_scope": "Checks the listed controller, scene, geometry, scorer and physics modules. The runner hash is preserved in source_sha256; later Dream transport changes are outside this demo snapshot."
+    },
+    "media": {
+      "demo": {
+        "file": "review-labelled.mp4",
+        "sha256": "cbfca3a3d4766846f6140456615ab0d92f2fcb0ff743d1dae06dbf447ea431dd",
+        "bytes": 18218473,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "resolution": [
+          1600,
+          1280
+        ],
+        "fps": 20,
+        "decoded_frames": 2767,
+        "first_frame_time_s": 0.0,
+        "last_frame_time_s": 138.3,
+        "container_duration_s": 138.35,
+        "all_frame_timestamps_contiguous": true,
+        "fast_start": true,
+        "below_50000000_byte_limit": true,
+        "full_decode_success": true
+      },
+      "raw_demo": {
+        "file": "review.mp4",
+        "sha256": "8b75d9c6592bbf926455fd7045c6095e3d93615625ab6245848bd585b0aefe5e"
+      },
+      "frame_preservation": "Both raw and labelled videos decode to the same 2,767 frames with exact 20 Hz timestamps. Labelling adds time/phase text without trimming, interpolation or a score overlay.",
+      "duration_note": "The last recorded time is 138.30 s; the container lasts 138.35 s because it includes the initial frame.",
+      "setup": {
+        "file": "setup-closeup.png",
+        "sha256": "7aa548e5523ab1d8179ed7dbea46acd305f7ea3a110ff00049af53e5336b8bdc",
+        "bytes": 920482,
+        "format": "PNG",
+        "resolution": [
+          1600,
+          1280
+        ],
+        "source": "The frozen runner saves the first review-camera RGB image before encoding that same frame.",
+        "recorded_initial_time_s": 0.0,
+        "recorded_initial_xy_error_from_config_max_m": 1.0292838816557835e-05,
+        "initial_vertical_settling_m": 0.0005,
+        "decoded_first_frame_mean_absolute_rgb_difference": 0.8042763671875,
+        "decoded_first_frame_rgb_rmse": 1.7497332385966724,
+        "visual_review": "Uncrossed blue U with yellow/red ends, two ready open robot hands, table and metric annotations; no team names, account names, logos, paths or other identifying text visible."
+      }
+    },
+    "native_physics": {
+      "schedule": {
+        "initial_physics_hz": 240,
+        "target_physics_hz": 960,
+        "control_hz": 20,
+        "switch_after_completed_actions": 1560,
+        "switch_capture_time_s": 78.0
+      },
+      "schema": "fixed-policy-physics-v2",
+      "status": "complete",
+      "validated_post_switch_intervals": 1206,
+      "substeps_per_interval": 48,
+      "state_sha256_before": "5f418a29356753fd86a8fcfd397c76e3b259aa02665548ec4fb910e8da3bdec0",
+      "state_sha256_after": "5f418a29356753fd86a8fcfd397c76e3b259aa02665548ec4fb910e8da3bdec0",
+      "counters_before": {
+        "native": 18840,
+        "environment": 18840
+      },
+      "counters_after": {
+        "native": 18840,
+        "environment": 18840
+      },
+      "state_writes": false,
+      "counter_writes": false,
+      "policy_actions_modified": false,
+      "external_force_path_called": false,
+      "callback_removed": true,
+      "closure": {
+        "schema": "native-counter-closure-v1",
+        "complete": true,
+        "callback_error": null,
+        "expected_counters": {
+          "native": 76728,
+          "environment": 76728
+        },
+        "observed_counters": {
+          "native": 76728,
+          "environment": 76728
+        }
+      }
+    },
+    "sampled_geometry": {
+      "samples": 2767,
+      "capture_hz": 20,
+      "rope": {
+        "minimum_nonlocal_axis_distance_m": 0.009509743,
+        "required_axis_distance_m": 0.0095,
+        "maximum_joint_gap_m": 0.000138649,
+        "maximum_allowed_joint_gap_m": 0.002,
+        "invalid_frames": 0
+      },
+      "robot": {
+        "interarm_minimum_separation_lower_m": 0.004392774993205753,
+        "table_minimum_vertex_clearance_m": 0.00048801392716635306,
+        "own_arm_minimum_separation_lower_m": 0.005000767382417726,
+        "intersections": 0,
+        "own_arm_tested_link_pairs_per_arm": 27,
+        "excluded_own_arm_direct_joint_pairs": [
+          [
+            "base",
+            "link1"
+          ],
+          [
+            "gripper",
+            "link5"
+          ],
+          [
+            "gripper",
+            "tip_left"
+          ],
+          [
+            "gripper",
+            "tip_right"
+          ],
+          [
+            "link1",
+            "link2"
+          ],
+          [
+            "link2",
+            "link3"
+          ],
+          [
+            "link3",
+            "link4"
+          ],
+          [
+            "link4",
+            "link5"
+          ]
+        ],
+        "additional_excluded_own_arm_pair": [
+          "tip_left",
+          "tip_right"
+        ],
+        "geometry_provenance": {
+          "urdf_sha256": "d6cc3fca8d6848aad36c0d2bb8798de391fcf5ef8f41180fe7618eda141f0bef",
+          "collision_meshes_sha256": "d1a445176b9a35a200a6cc3e28687180e831a6b0932efff85e355221dae823c5",
+          "asset_source_commit": "120c3c81400171174604e503943f8d1ebc891058"
+        },
+        "limits": "Native recorded link frames and authored per-STL convex hulls before PhysX cooking. Adjacent joint meshes and internal finger/housing overlap are excluded; bases are excluded only from the table-plane test. Positive values are conservative lower bounds."
+      }
+    },
+    "artifact_sha256": {
+      "trajectory.jsonl": "e9d11abb3050151bf4ec7fc80ff4bf9ae6c1b7a89f4bb1144457290e9e760aca",
+      "runtime.json": "d7b3ffa9629e9177a1362b2caf4548e8f7d95a08da81eb327c20e08319827f01",
+      "score-summary.json": "f4ac9e9943aad3b286f547a32d40e07686a3c792fdf315582393da72c8b9ee24",
+      "replay-summary.json": "ed144f1719d60255ab844091149e5cf3d3ae858a9cb05fd6a75388ae47a94c73",
+      "policy-physics-transition.json": "4923b2282038f6adc5198074563faf64976deb47cbe17fc244553f8741844b6c",
+      "actual-robot-clearance-full.json": "143f5e8563fa16e5e0f6289224c1794757f39d901f83004ddbee4c467c69e36a",
+      "actual-own-arm-clearance-full.json": "8b29df032b33c38f821c5c639c944f8b8d6247d0a56a84978b8712b66165bc7d",
+      "review-labelled.json": "9490cd1dcc77a74d6e770ce13d478669e86fc6d1f398dd12388c028529c91f00"
+    },
+    "limitations": [
+      "One fixed-seed successful simulation does not establish repeatability.",
+      "Friction and bending are uncalibrated; no real-cord trial has been performed.",
+      "Geometry is checked at 20 Hz, not every physics substep. The 9.509743 mm rope separation has only 9.743 micrometres margin above the validity threshold.",
+      "Topology is a conservative finite closure/view certificate supplemented by visual review; this is not a force or strength test."
+    ],
+    "final_submission_rescore": {
+      "score": 1.0,
+      "samples": 2767,
+      "time_s": 138.2999999999972,
+      "policy_physics_certification": {
+        "required": true,
+        "status": "complete",
+        "errors": [],
+        "schema": "fixed-policy-physics-v2",
+        "native_closure_status": "verified"
+      },
+      "execution_status": "complete",
+      "sha256": "ed144f1719d60255ab844091149e5cf3d3ae858a9cb05fd6a75388ae47a94c73",
+      "scorer_sha256": "278b126c734b9867cacf3e5779aa210b0f7a1162f6a9e8cf4772020929269fb5",
+      "replay_sha256": "beba1636888d382b4bb83b728d6f6dad1760e11f8579924e7ff311c4885558bc"
+    }
+  },
+  "dream": {
+    "schema": "overhand-final-dream-evidence-v1",
+    "trial": "table-022",
+    "scope": "Final direct Dream-1 evaluation with continuous server session; summary does not replace recordings.",
+    "seed": 0,
+    "instruction": "Tie one overhand knot in the blue cord. Pull the ends apart to at least 117 cm for one second with the whole cord at least 1 cm above the table, then let go and leave the knot intact for five seconds.",
+    "result": {
+      "score": 0.0,
+      "independent_frozen_replay": 0.0,
+      "independent_current_replay": 0.0,
+      "recorded_replay_agreement": true,
+      "score_version": "overhand-bimanual-v4",
+      "invalid": null,
+      "initial_uncrossed_unknot_validated": true,
+      "final_topology": "unknot",
+      "samples": 3001,
+      "actions": 3000,
+      "final_simulation_time_s": 149.99999999999986,
+      "action_limit": 3000,
+      "run_limit_s": 150.0,
+      "control_hz": 20,
+      "finalized": true,
+      "execution": "complete",
+      "wall_seconds": 1626.185,
+      "wall_seconds_basis": "Simulator runner elapsed time; excludes outer process setup and teardown.",
+      "outer_execution_wall_seconds": 1628.318834819
+    },
+    "matching_demo": {
+      "trial": "table-020",
+      "source_changes": [
+        "run.py",
+        "visuals.py"
+      ],
+      "scene_config_seed_cameras_action_limits_and_scorer_match": true,
+      "demo_runner_ast_compatible": true,
+      "visuals_change_is_comment_only": true
+    },
+    "transport": {
+      "model": "dreamlabs/dream-1-beta",
+      "transport": "direct",
+      "dry_run": false,
+      "runtime_policy": "dream",
+      "inspect_policy_name": "dream",
+      "recorded_policy_name": "dream",
+      "rows_per_request": 8,
+      "preroll_steps": 32,
+      "requests": 371,
+      "attempts": 371,
+      "retries": 0,
+      "distinct_sessions": 1,
+      "successful_request_events": 371,
+      "session_replacement_events": 0,
+      "uninterrupted_session": true,
+      "maximum_idle_wall_seconds": 8.554643490999979,
+      "mean_idle_wall_seconds": 3.8719543659459448,
+      "maximum_request_wall_seconds": 3.7297914799999887,
+      "prediction_rows": 17808,
+      "prediction_rows_beyond_limits": 37,
+      "scope": "SDK transcript and independent client-call telemetry agree. Predictions include unused rows; the beyond-limits count covers selected raw rows, while executed action bounds are checked separately. No session identifiers or credentials reproduced."
+    },
+    "native_physics": {
+      "schema": "fixed-policy-physics-v2",
+      "status": "complete",
+      "schedule": {
+        "initial_physics_hz": 240,
+        "target_physics_hz": 960,
+        "control_hz": 20,
+        "switch_after_completed_actions": 1560,
+        "switch_capture_time_s": 78.0
+      },
+      "validated_post_switch_intervals": 1440,
+      "substeps_per_interval": 48,
+      "switch_state_and_counters_unchanged": true,
+      "state_writes": false,
+      "counter_writes": false,
+      "policy_actions_modified": false,
+      "external_force_path_called": false,
+      "callback_removed": true,
+      "closure": {
+        "schema": "native-counter-closure-v1",
+        "complete": true,
+        "callback_error": null,
+        "expected_counters": {
+          "native": 87960,
+          "environment": 87960
+        },
+        "observed_counters": {
+          "native": 87960,
+          "environment": 87960
+        }
+      }
+    },
+    "executed_action_checks": {
+      "executed_actions": 3000,
+      "finite": true,
+      "range_violations": 0,
+      "step_limit_violations": 0,
+      "action_file_sha256": "eb354f34739760a25d6178437ad2458a96e4702177e12983bc2d829fde1ea249"
+    },
+    "outcome": {
+      "recorded_topology_frame_counts": {
+        "unknot": 3001
+      },
+      "span_certificate": null,
+      "release_seconds": 0.0,
+      "material_motion": {
+        "maximum_material_centre_displacement_m": 0.3014485353850938,
+        "material_index": 103,
+        "time_s": 82.94999999999743,
+        "maximum_centre_vertical_change_m": 0.09673184156417847,
+        "scope": "Corresponding capsule centres across recorded 20 Hz samples; includes settling."
+      }
+    },
+    "frozen_source": {
+      "archive_file": "table-022-source.tgz",
+      "archive_sha256": "c4ebc1c067aaa3b3906dcc4a7bc2c2be8ab7360ece559778db85cc63e31c2587",
+      "snapshot_matches_all_runtime_module_hashes": true,
+      "source_sha256": {
+        "bimanual_scoring.py": "278b126c734b9867cacf3e5779aa210b0f7a1162f6a9e8cf4772020929269fb5",
+        "table_policy.py": "0f33a9a3a1cf048bba9c7785301ec3b3a9b7bce3f10d884c836057c487c61ef9",
+        "task.py": "ac5174aa5eed3bf7cd0b7b1df9ebd1c647afa3f29a7a081b24dc06484c11e031",
+        "run.py": "6a4f0d707e419ee3cf55a8c9b80f16712ca658451d6c28a2ff0692d8e7d3f248",
+        "config.py": "d2c55f0162322740d2bac19dc12fe4709ab283e28364902e6c4065b5779555b0",
+        "fixed_policy_physics.py": "c60c6b55b758653ca3deb16a6fb6d8a879c7f0c33737314f35012b437a8c3c62",
+        "scoring.py": "9a3519561f15b83880c138eb7beedf866d9de21db247205257cf7c895d5f5c78",
+        "render_review.py": "d87ff2e0215ac36c6298e23669ef49bfc90ed21996b897a26610703ac4cccaf6",
+        "telemetry.py": "fb64df7679298e5bacaa27f69d25ecb0f59d07f6b95859799a164071518854fa",
+        "jig_policy.py": "ad22bd0c1559ad7b3a7b4401e297ad001cd50b4c16e7bc8f3ec24173a35b8311",
+        "replay.py": "beba1636888d382b4bb83b728d6f6dad1760e11f8579924e7ff311c4885558bc",
+        "diagnostic_layouts.py": "b87524a85ecbeeb18c97d1170459338e9c9f05232e923eb8f29d68f577d93a06",
+        "rope.py": "4783ebd97f3f0afe9c70b3fbec2592bd0a7311e4f7e36c43353d0d81d19ab692",
+        "hand_geometry.py": "5eb44a5b09551bb738a7a42aa0322566213b7170806290886c6e13b3ccf44a10",
+        "topology.py": "21057280e6d69123019e432d2b50934e97b5f5131349186541215755f99a5ff2",
+        "demo_policy.py": "69edf1f5d0df691c499be324489cc6c677618dd8dec90e00dbb0118428fe9546",
+        "jig_layout.py": "8c6645f3c465e3f946336a8de2e51593a461d5fbefa5cf5cd8740b7520a7ee16",
+        "visuals.py": "cadb779772c1e6ca946113be7be99715d6ab27e41b4dc6383fcc9a29611eb5bd",
+        "assay_physics.py": "4455f6ec6fe8c61ea7d1e66cdbc10a56ae928f91337bcaa23de630d391b008e1",
+        "bimanual_policy.py": "b374b20782717f0f15b9ff07bbcd6920542e7e9247703931400005f0350c8127",
+        "fixtures.py": "d30eb72c85d49cb91a01605e6bef26860c595d7d77aba79faeea1cd3924a3e60",
+        "proof_load.py": "0e7339480dbd059befcb1b57616991e6086aa2e9d02839b5259b8d87ac5b428b"
+      }
+    },
+    "media": {
+      "raw_dream": {
+        "file": "review.mp4",
+        "sha256": "31b79506b84c7a42042f16b54d0bb005a9a901e46517578fec002899ee6dd31b"
+      },
+      "frames": 3001,
+      "fps": 20,
+      "frame_count_matches_trajectory": true,
+      "labelled_dream": {
+        "file": "review-labelled.mp4",
+        "sha256": "58f7597fa37dc2b5ff8e60a0f6f92bf92b506bdafd5a6e57fc5c9df261e3228c",
+        "bytes": 20628719,
+        "manifest_file": "review-labelled.json",
+        "manifest_sha256": "377bbc3eef7f069f0aeb6d794a5238de50fc502fc8c9dafdd163350b8264eb97",
+        "frames": 3001,
+        "fps": 20,
+        "timestamps_preserved": true,
+        "interpolated_frames": false,
+        "score_displayed": false,
+        "overlay": "Recorded elapsed simulation time and policy phase."
+      }
+    },
+    "sampled_robot_geometry": {
+      "sample_count": 3001,
+      "start_s": 0.0,
+      "end_s": 149.99999999999986,
+      "minimum_arm": {
+        "time_s": 108.29999999999599,
+        "arm_separation_lower_m": 0.07982256696107054,
+        "arm_closest": [
+          "link4",
+          "link4",
+          "native complete-link OBB"
+        ],
+        "nonbase_table_min_vertex_height_m": 0.0607582575583967,
+        "table_closest": [
+          0,
+          "tip_right",
+          "collision/tip_right/tip_right_005.stl"
+        ]
+      },
+      "minimum_table": {
+        "time_s": 42.299999999999734,
+        "arm_separation_lower_m": 0.4077996622733657,
+        "arm_closest": [
+          "base",
+          "base",
+          "native complete-link OBB"
+        ],
+        "nonbase_table_min_vertex_height_m": -0.00029368879545865756,
+        "table_closest": [
+          1,
+          "tip_left",
+          "collision/tip_left/tip_left_014.stl"
+        ]
+      },
+      "limitations": [
+        "Sampled20Hz native link-frame poses; no claim about motion between captures.",
+        "Authored per-STL convex hulls before PhysX cooking/contact margins.",
+        "Positive separation values are conservative lower bounds, not necessarily exact nearest distance.",
+        "Base omitted from table-plane test because it is intentionally bolted to table; arm-to-arm includes base.",
+        "Other objects/rope contacts and self-collision within one arm are outside this audit."
+      ],
+      "file": "actual-robot-clearance-full.json",
+      "sha256": "b6cd7c3f4f5cc1fff75efd12e32da5b1b8b593390f21c9b8c8d5d1ecd06025f0",
+      "intersection_count": 16,
+      "intersection_counts_by_kind": {
+        "nonbase mesh below table plane": 16
+      },
+      "first_contact_s": 42.24999999999974,
+      "last_contact_s": 71.49999999999808,
+      "deepest_contact": {
+        "time_s": 42.299999999999734,
+        "kind": "nonbase mesh below table plane",
+        "minimum_m": -0.00029368879545865756,
+        "closest": [
+          1,
+          "tip_left",
+          "collision/tip_left/tip_left_014.stl"
+        ]
+      },
+      "table_contact_footprint": {
+        "scope": "Confirms below-plane native authored-mesh vertices fall within the physical standard tabletop XY footprint. Same recorded20Hz limitation as the full audit.",
+        "table_center_m": [
+          0.36,
+          0.0,
+          0.7174999999999999
+        ],
+        "table_size_m": [
+          1.1,
+          1.3,
+          0.06
+        ],
+        "all_detected_contacts_within_tabletop": true,
+        "file": "actual-table-contact-footprint.json",
+        "sha256": "ea51bc4e1c63ee97ffc1e24f458cd82f82c59d04e74dcca2748b2310fb2883db"
+      }
+    },
+    "sampled_own_arm_geometry": {
+      "sample_count": 3001,
+      "start_s": 0.0,
+      "end_s": 149.99999999999986,
+      "minimum": {
+        "time_s": 72.44999999999803,
+        "side": "left",
+        "links": [
+          "link3",
+          "link5"
+        ],
+        "separation_lower_m": 0.005000095409521954,
+        "closest": [
+          "collision/link3/link3_001.stl",
+          "collision/link5/link5_004.stl",
+          "authored-mesh AABB"
+        ]
+      },
+      "excluded_adjacent_pairs": [
+        [
+          "base",
+          "link1"
+        ],
+        [
+          "gripper",
+          "link5"
+        ],
+        [
+          "gripper",
+          "tip_left"
+        ],
+        [
+          "gripper",
+          "tip_right"
+        ],
+        [
+          "link1",
+          "link2"
+        ],
+        [
+          "link2",
+          "link3"
+        ],
+        [
+          "link3",
+          "link4"
+        ],
+        [
+          "link4",
+          "link5"
+        ]
+      ],
+      "excluded_gripper_assembly_pairs": [
+        [
+          "gripper",
+          "tip_left"
+        ],
+        [
+          "gripper",
+          "tip_right"
+        ],
+        [
+          "tip_left",
+          "tip_right"
+        ]
+      ],
+      "limitations": [
+        "Captured native link poses only; no between-frame collision guarantee.",
+        "Per-STL convex hulls before native PhysX cooking or contact offsets.",
+        "Positive separation values are conservative lower bounds rather than necessarily exact Euclidean distances.",
+        "All explicitly excluded adjacent and internal gripper-assembly pairs are outside this result; finger links against every nonadjacent external arm link remain tested.",
+        "This audit covers own-arm geometry only. Separate audit covers other-arm and table."
+      ],
+      "file": "actual-own-arm-clearance-full.json",
+      "sha256": "435904b063d5be668729344e50b87125d19dbaa278aa57892e7fc795fd8a0a67",
+      "intersection_count": 0,
+      "intersection_counts_by_kind": {}
+    },
+    "visual_review": {
+      "complete": true,
+      "scope": "Six chronological frames visually inspected at 0, 30, 60, 90, 120 and 150 seconds; full video decoded without errors. Not continuous human frame-by-frame review.",
+      "observations": [
+        "Anonymous fixed scene and readable elapsed-time overlay.",
+        "Cord remains visibly unknotted, matching zero score.",
+        "The robot contacts and displaces the red end; no completed tying sequence is visible."
+      ],
+      "reviewed_media": "review-labelled.mp4",
+      "media_sha256": "58f7597fa37dc2b5ff8e60a0f6f92bf92b506bdafd5a6e57fc5c9df261e3228c",
+      "contact_sheet_sha256": "b494351c4f90802639d82496dd8ed21a713845080df2eab1f761799c133005f9",
+      "h264": true,
+      "pixel_format": "yuv420p",
+      "fps": 20,
+      "fast_start": true,
+      "full_decode_pass": true,
+      "bytes": 20628719
+    },
+    "artifact_sha256": {
+      "trajectory.jsonl": "98a2439c677bd0ca06c0d1428077fb987a1d9fc6797029d8bacf166185eb44ea",
+      "runtime.json": "eca66b2fd73bd9d6ac1c75228e6fe49e08c656efebffebf9ed36055bcdbfa07a",
+      "score-summary.json": "0e046b683853ccf66586f9fb28224669bf24278f347804da380c1cef4c138aea",
+      "replay-summary.json": "64da30f4fdc7d2ce6c3475760c4031e46e8f14f481c3620792abbc3e1365a168",
+      "replay-current-summary.json": "64da30f4fdc7d2ce6c3475760c4031e46e8f14f481c3620792abbc3e1365a168",
+      "policy-physics-transition.json": "f6a5d794c7221bb8723d331568cbe1d716c6b71b8b659497fdabc474215c400e",
+      "review.mp4": "31b79506b84c7a42042f16b54d0bb005a9a901e46517578fec002899ee6dd31b",
+      "matching-dream-audit.json": "68a29890a7ce8d8b3aa0f3f6f25be9eaf41f4d3aa7f360c143b3c9582f1867fd"
+    },
+    "limitations": [
+      "One fixed-seed evaluation, not a statistical performance estimate.",
+      "Friction and bending remain uncalibrated; robot geometry is audited at 20 Hz, not between captures.",
+      "The Dream run has 16 sampled finger/table penetrations, at most 0.294 mm; rope geometry and score remain valid."
+    ]
+  },
+  "demo_source_compatibility": {
+    "scope": "Source-only compatibility audit; no new simulation. Frozen demo 020 remains unchanged.",
+    "demo_run_body_ast_matches_after_removing_dream_only_additions": true,
+    "added_run_behavior": [
+      "Dream-only chunk-size option, default 8; SDK-supported session/client factory.",
+      "Dream-only fail-fast session continuity and request timing metadata.",
+      "Unused local empty request-audit list on scripted paths."
+    ],
+    "source_files": [
+      {
+        "file": "bimanual_scoring.py",
+        "frozen_sha256": "278b126c734b9867cacf3e5779aa210b0f7a1162f6a9e8cf4772020929269fb5",
+        "current_sha256": "278b126c734b9867cacf3e5779aa210b0f7a1162f6a9e8cf4772020929269fb5",
+        "byte_equal": true
+      },
+      {
+        "file": "table_policy.py",
+        "frozen_sha256": "0f33a9a3a1cf048bba9c7785301ec3b3a9b7bce3f10d884c836057c487c61ef9",
+        "current_sha256": "0f33a9a3a1cf048bba9c7785301ec3b3a9b7bce3f10d884c836057c487c61ef9",
+        "byte_equal": true
+      },
+      {
+        "file": "task.py",
+        "frozen_sha256": "ac5174aa5eed3bf7cd0b7b1df9ebd1c647afa3f29a7a081b24dc06484c11e031",
+        "current_sha256": "ac5174aa5eed3bf7cd0b7b1df9ebd1c647afa3f29a7a081b24dc06484c11e031",
+        "byte_equal": true
+      },
+      {
+        "file": "run.py",
+        "frozen_sha256": "6acee3f1110b766e6fadb58a703bfad78000eef631c4c92973cf428744105be5",
+        "current_sha256": "6a4f0d707e419ee3cf55a8c9b80f16712ca658451d6c28a2ff0692d8e7d3f248",
+        "byte_equal": false,
+        "python_ast_equal": false
+      },
+      {
+        "file": "config.py",
+        "frozen_sha256": "d2c55f0162322740d2bac19dc12fe4709ab283e28364902e6c4065b5779555b0",
+        "current_sha256": "d2c55f0162322740d2bac19dc12fe4709ab283e28364902e6c4065b5779555b0",
+        "byte_equal": true
+      },
+      {
+        "file": "fixed_policy_physics.py",
+        "frozen_sha256": "c60c6b55b758653ca3deb16a6fb6d8a879c7f0c33737314f35012b437a8c3c62",
+        "current_sha256": "c60c6b55b758653ca3deb16a6fb6d8a879c7f0c33737314f35012b437a8c3c62",
+        "byte_equal": true
+      },
+      {
+        "file": "scoring.py",
+        "frozen_sha256": "9a3519561f15b83880c138eb7beedf866d9de21db247205257cf7c895d5f5c78",
+        "current_sha256": "9a3519561f15b83880c138eb7beedf866d9de21db247205257cf7c895d5f5c78",
+        "byte_equal": true
+      },
+      {
+        "file": "render_review.py",
+        "frozen_sha256": "d87ff2e0215ac36c6298e23669ef49bfc90ed21996b897a26610703ac4cccaf6",
+        "current_sha256": "d87ff2e0215ac36c6298e23669ef49bfc90ed21996b897a26610703ac4cccaf6",
+        "byte_equal": true
+      },
+      {
+        "file": "telemetry.py",
+        "frozen_sha256": "fb64df7679298e5bacaa27f69d25ecb0f59d07f6b95859799a164071518854fa",
+        "current_sha256": "fb64df7679298e5bacaa27f69d25ecb0f59d07f6b95859799a164071518854fa",
+        "byte_equal": true
+      },
+      {
+        "file": "jig_policy.py",
+        "frozen_sha256": "ad22bd0c1559ad7b3a7b4401e297ad001cd50b4c16e7bc8f3ec24173a35b8311",
+        "current_sha256": "ad22bd0c1559ad7b3a7b4401e297ad001cd50b4c16e7bc8f3ec24173a35b8311",
+        "byte_equal": true
+      },
+      {
+        "file": "replay.py",
+        "frozen_sha256": "beba1636888d382b4bb83b728d6f6dad1760e11f8579924e7ff311c4885558bc",
+        "current_sha256": "beba1636888d382b4bb83b728d6f6dad1760e11f8579924e7ff311c4885558bc",
+        "byte_equal": true
+      },
+      {
+        "file": "diagnostic_layouts.py",
+        "frozen_sha256": "b87524a85ecbeeb18c97d1170459338e9c9f05232e923eb8f29d68f577d93a06",
+        "current_sha256": "b87524a85ecbeeb18c97d1170459338e9c9f05232e923eb8f29d68f577d93a06",
+        "byte_equal": true
+      },
+      {
+        "file": "rope.py",
+        "frozen_sha256": "4783ebd97f3f0afe9c70b3fbec2592bd0a7311e4f7e36c43353d0d81d19ab692",
+        "current_sha256": "4783ebd97f3f0afe9c70b3fbec2592bd0a7311e4f7e36c43353d0d81d19ab692",
+        "byte_equal": true
+      },
+      {
+        "file": "hand_geometry.py",
+        "frozen_sha256": "5eb44a5b09551bb738a7a42aa0322566213b7170806290886c6e13b3ccf44a10",
+        "current_sha256": "5eb44a5b09551bb738a7a42aa0322566213b7170806290886c6e13b3ccf44a10",
+        "byte_equal": true
+      },
+      {
+        "file": "topology.py",
+        "frozen_sha256": "21057280e6d69123019e432d2b50934e97b5f5131349186541215755f99a5ff2",
+        "current_sha256": "21057280e6d69123019e432d2b50934e97b5f5131349186541215755f99a5ff2",
+        "byte_equal": true
+      },
+      {
+        "file": "demo_policy.py",
+        "frozen_sha256": "69edf1f5d0df691c499be324489cc6c677618dd8dec90e00dbb0118428fe9546",
+        "current_sha256": "69edf1f5d0df691c499be324489cc6c677618dd8dec90e00dbb0118428fe9546",
+        "byte_equal": true
+      },
+      {
+        "file": "jig_layout.py",
+        "frozen_sha256": "8c6645f3c465e3f946336a8de2e51593a461d5fbefa5cf5cd8740b7520a7ee16",
+        "current_sha256": "8c6645f3c465e3f946336a8de2e51593a461d5fbefa5cf5cd8740b7520a7ee16",
+        "byte_equal": true
+      },
+      {
+        "file": "visuals.py",
+        "frozen_sha256": "a7e8b4b040c526093570b3a295e9eea28a7192dbd33ae0db6dd1f7293c4ac819",
+        "current_sha256": "cadb779772c1e6ca946113be7be99715d6ab27e41b4dc6383fcc9a29611eb5bd",
+        "byte_equal": false,
+        "python_ast_equal": true
+      },
+      {
+        "file": "assay_physics.py",
+        "frozen_sha256": "4455f6ec6fe8c61ea7d1e66cdbc10a56ae928f91337bcaa23de630d391b008e1",
+        "current_sha256": "4455f6ec6fe8c61ea7d1e66cdbc10a56ae928f91337bcaa23de630d391b008e1",
+        "byte_equal": true
+      },
+      {
+        "file": "bimanual_policy.py",
+        "frozen_sha256": "b374b20782717f0f15b9ff07bbcd6920542e7e9247703931400005f0350c8127",
+        "current_sha256": "b374b20782717f0f15b9ff07bbcd6920542e7e9247703931400005f0350c8127",
+        "byte_equal": true
+      },
+      {
+        "file": "fixtures.py",
+        "frozen_sha256": "d30eb72c85d49cb91a01605e6bef26860c595d7d77aba79faeea1cd3924a3e60",
+        "current_sha256": "d30eb72c85d49cb91a01605e6bef26860c595d7d77aba79faeea1cd3924a3e60",
+        "byte_equal": true
+      },
+      {
+        "file": "proof_load.py",
+        "frozen_sha256": "0e7339480dbd059befcb1b57616991e6086aa2e9d02839b5259b8d87ac5b428b",
+        "current_sha256": "0e7339480dbd059befcb1b57616991e6086aa2e9d02839b5259b8d87ac5b428b",
+        "byte_equal": true
+      }
+    ],
+    "unchanged_task_properties": [
+      "CONFIG and instruction",
+      "scene and cord geometry",
+      "robot and camera configuration",
+      "20 Hz control and 3,000-action limit",
+      "fixed 240-to-960 Hz physics schedule",
+      "controller",
+      "topology/scorer/replay",
+      "telemetry and recording behavior for demo"
+    ],
+    "visuals_comment_only": "Current visuals.py corrects red reference description from 3 cm to actual 2 cm; AST unchanged."
+  }
+}

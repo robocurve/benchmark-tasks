@@ -1,0 +1,41 @@
+{
+  "schema": "overhand-validation-v1",
+  "status": "Final demo and uninterrupted Dream evaluation audited; submission checks complete.",
+  "submission_ready": true,
+  "score_version": "overhand-bimanual-v4",
+  "unit_checks": {
+    "command": "python -m unittest discover -s . -p 'test_*.py'",
+    "passed": 147,
+    "elapsed_s": 26.894
+  },
+  "demo": {
+    "trial": "table-020",
+    "score": 1.0,
+    "independent_replay": 1.0,
+    "seconds": 138.3,
+    "actions": 2766,
+    "finalization_complete": true
+  },
+  "dream": {
+    "trial": "table-022",
+    "audited": true,
+    "score": 0.0,
+    "independent_frozen_replay": 0.0,
+    "independent_current_replay": 0.0,
+    "seconds": 150.0,
+    "actions": 3000,
+    "requests": 371,
+    "sessions": 1,
+    "retries": 0,
+    "finalization_complete": true
+  },
+  "evidence": "evidence/final-runs.json",
+  "judging": "JUDGING.md",
+  "limitations": [
+    "One fixed-seed scripted success; repeatability and real-cord calibration are unproven.",
+    "Geometry audits use recorded 20 Hz frames and do not establish motion between captures.",
+    "The demo has a narrow observed rope-contact validity margin.",
+    "The zero-score Dream run has 16 sampled fingertip/table penetrations, at most 0.294 mm."
+  ],
+  "checks_complete": true
+}
