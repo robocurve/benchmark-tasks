@@ -1,0 +1,149 @@
+#usda 1.0
+(
+    defaultPrim = "BathThermometer"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "BathThermometer" (
+    customData = {
+        string displayMeaning = "Static immersion thermometer reading for the pre-warmed bath; the stove is off."
+    }
+)
+{
+    def "Looks"
+    {
+        def Material "Black"
+        {
+            token outputs:surface.connect = </BathThermometer/Looks/Black/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.0054228688, 0.007850573, 0.008540382)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.4
+                token outputs:surface
+            }
+        }
+
+        def Material "Trim"
+        {
+            token outputs:surface.connect = </BathThermometer/Looks/Trim/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.31854677, 0.36724648, 0.39312312)
+                float inputs:metallic = 0.9
+                float inputs:roughness = 0.25
+                token outputs:surface
+            }
+        }
+
+        def Material "Screen"
+        {
+            token outputs:surface.connect = </BathThermometer/Looks/Screen/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (1, 1, 1)
+                color3f inputs:diffuseColor.connect = </BathThermometer/Looks/Screen/Texture.outputs:rgb>
+                float inputs:metallic = 0
+                float inputs:roughness = 0.48
+                token outputs:surface
+            }
+
+            def Shader "UV"
+            {
+                uniform token info:id = "UsdPrimvarReader_float2"
+                token inputs:varname = "st"
+                float2 outputs:result
+            }
+
+            def Shader "Texture"
+            {
+                uniform token info:id = "UsdUVTexture"
+                asset inputs:file = @textures/bath_temperature.png@
+                token inputs:sourceColorSpace = "sRGB"
+                float2 inputs:st.connect = </BathThermometer/Looks/Screen/UV.outputs:result>
+                token inputs:wrapS = "repeat"
+                token inputs:wrapT = "repeat"
+                float3 outputs:rgb
+            }
+        }
+    }
+
+    def Mesh "Housing" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+    )
+    {
+        uniform bool doubleSided = 0
+        float3[] extent = [(-0.008, -0.05, -0.0275), (0.008, 0.05, 0.0275)]
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+        rel material:binding = </BathThermometer/Looks/Black> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        uniform token physics:approximation = "convexHull"
+        bool physics:collisionEnabled = 1
+        custom float physxCollision:contactOffset = 0.0008
+        custom float physxCollision:restOffset = 0
+        point3f[] points = [(-0.008, -0.05, -0.0275), (-0.008, -0.05, 0.0275), (-0.008, 0.05, 0.0275), (-0.008, 0.05, -0.0275), (0.008, -0.05, -0.0275), (0.008, 0.05, -0.0275), (0.008, 0.05, 0.0275), (0.008, -0.05, 0.0275), (-0.008, -0.05, -0.0275), (0.008, -0.05, -0.0275), (0.008, -0.05, 0.0275), (-0.008, -0.05, 0.0275), (-0.008, 0.05, -0.0275), (-0.008, 0.05, 0.0275), (0.008, 0.05, 0.0275), (0.008, 0.05, -0.0275), (-0.008, -0.05, -0.0275), (-0.008, 0.05, -0.0275), (0.008, 0.05, -0.0275), (0.008, -0.05, -0.0275), (-0.008, -0.05, 0.0275), (0.008, -0.05, 0.0275), (0.008, 0.05, 0.0275), (-0.008, 0.05, 0.0275)]
+        texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1)] (
+            interpolation = "vertex"
+        )
+        uniform token subdivisionScheme = "none"
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Mesh "Readout" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        float3[] extent = [(-0.0085, -0.0455, -0.023), (-0.0085, 0.0455, 0.023)]
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </BathThermometer/Looks/Screen> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        point3f[] points = [(-0.0085, 0.0455, -0.023), (-0.0085, -0.0455, -0.023), (-0.0085, -0.0455, 0.023), (-0.0085, 0.0455, 0.023)]
+        texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1)] (
+            interpolation = "vertex"
+        )
+        uniform token subdivisionScheme = "none"
+    }
+
+    def BasisCurves "ProbeWire" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        int[] curveVertexCounts = [5]
+        rel material:binding = </BathThermometer/Looks/Black> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        point3f[] points = [(0.008, 0, 0.013), (0.029, 0, 0.038), (0.06, 0, 0.04), (0.08, 0, 0.03), (0.08, 0, -0.025)]
+        uniform token type = "linear"
+        float[] widths = [0.0015] (
+            interpolation = "constant"
+        )
+    }
+
+    def Cylinder "Probe" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.038
+        rel material:binding = </BathThermometer/Looks/Trim> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        double radius = 0.002
+        double3 xformOp:translate = (0.08, 0, -0.043)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+}
+

@@ -1,0 +1,178 @@
+#usda 1.0
+(
+    defaultPrim = "StartButton"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "StartButton" (
+    customData = {
+        string interactionState = "8 mm spring-return START button with door interlock in the shared task runtime."
+    }
+)
+{
+    def "Looks"
+    {
+        def Material "Rim"
+        {
+            token outputs:surface.connect = </StartButton/Looks/Rim/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.0030959751, 0.003501016, 0.0035856294)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.48
+                token outputs:surface
+            }
+        }
+
+        def Material "Green"
+        {
+            token outputs:surface.connect = </StartButton/Looks/Green/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.007194409, 0.15487249, 0.033104766)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.33
+                token outputs:surface
+            }
+        }
+
+        def Material "Label"
+        {
+            token outputs:surface.connect = </StartButton/Looks/Label/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (1, 1, 1)
+                color3f inputs:diffuseColor.connect = </StartButton/Looks/Label/Texture.outputs:rgb>
+                float inputs:metallic = 0
+                float inputs:roughness = 0.5
+                token outputs:surface
+            }
+
+            def Shader "UV"
+            {
+                uniform token info:id = "UsdPrimvarReader_float2"
+                token inputs:varname = "st"
+                float2 outputs:result
+            }
+
+            def Shader "Texture"
+            {
+                uniform token info:id = "UsdUVTexture"
+                asset inputs:file = @textures/start.png@
+                token inputs:sourceColorSpace = "sRGB"
+                float2 inputs:st.connect = </StartButton/Looks/Label/UV.outputs:result>
+                token inputs:wrapS = "repeat"
+                token inputs:wrapT = "repeat"
+                float3 outputs:rgb
+            }
+        }
+    }
+
+    def Xform "Base" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI"]
+    )
+    {
+        bool physics:kinematicEnabled = 1
+
+        def Mesh "Rim" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform bool doubleSided = 0
+            float3[] extent = [(-0.003, -0.03, -0.014), (0.003, 0.03, 0.014)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+            rel material:binding = </StartButton/Looks/Rim> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            point3f[] points = [(-0.003, -0.03, -0.014), (-0.003, -0.03, 0.014), (-0.003, 0.03, 0.014), (-0.003, 0.03, -0.014), (0.003, -0.03, -0.014), (0.003, 0.03, -0.014), (0.003, 0.03, 0.014), (0.003, -0.03, 0.014), (-0.003, -0.03, -0.014), (0.003, -0.03, -0.014), (0.003, -0.03, 0.014), (-0.003, -0.03, 0.014), (-0.003, 0.03, -0.014), (-0.003, 0.03, 0.014), (0.003, 0.03, 0.014), (0.003, 0.03, -0.014), (-0.003, -0.03, -0.014), (-0.003, 0.03, -0.014), (0.003, 0.03, -0.014), (0.003, -0.03, -0.014), (-0.003, -0.03, 0.014), (0.003, -0.03, 0.014), (0.003, 0.03, 0.014), (-0.003, 0.03, 0.014)]
+            texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1)] (
+                interpolation = "vertex"
+            )
+            uniform token subdivisionScheme = "none"
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "Moving" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (-0.005, 0, 0)
+        float physics:mass = 0.035
+        bool physics:rigidBodyEnabled = 1
+        custom bool physxRigidBody:disableGravity = 1
+        custom int physxRigidBody:solverPositionIterationCount = 16
+        custom int physxRigidBody:solverVelocityIterationCount = 4
+
+        def Mesh "Cap" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            uniform bool doubleSided = 0
+            float3[] extent = [(-0.0045, -0.0275, -0.0115), (0.0045, 0.0275, 0.0115)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+            rel material:binding = </StartButton/Looks/Green> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(-0.0045, -0.0275, -0.0115), (-0.0045, -0.0275, 0.0115), (-0.0045, 0.0275, 0.0115), (-0.0045, 0.0275, -0.0115), (0.0045, -0.0275, -0.0115), (0.0045, 0.0275, -0.0115), (0.0045, 0.0275, 0.0115), (0.0045, -0.0275, 0.0115), (-0.0045, -0.0275, -0.0115), (0.0045, -0.0275, -0.0115), (0.0045, -0.0275, 0.0115), (-0.0045, -0.0275, 0.0115), (-0.0045, 0.0275, -0.0115), (-0.0045, 0.0275, 0.0115), (0.0045, 0.0275, 0.0115), (0.0045, 0.0275, -0.0115), (-0.0045, -0.0275, -0.0115), (-0.0045, 0.0275, -0.0115), (0.0045, 0.0275, -0.0115), (0.0045, -0.0275, -0.0115), (-0.0045, -0.0275, 0.0115), (0.0045, -0.0275, 0.0115), (0.0045, 0.0275, 0.0115), (-0.0045, 0.0275, 0.0115)]
+            texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1), (0, 0), (1, 0), (1, 1), (0, 1)] (
+                interpolation = "vertex"
+            )
+            uniform token subdivisionScheme = "none"
+            double3 xformOp:translate = (-0.005, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Mesh "Label" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform bool doubleSided = 1
+            float3[] extent = [(-0.01, -0.0255, -0.009), (-0.01, 0.0255, 0.009)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            rel material:binding = </StartButton/Looks/Label> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            point3f[] points = [(-0.01, 0.0255, -0.009), (-0.01, -0.0255, -0.009), (-0.01, -0.0255, 0.009), (-0.01, 0.0255, 0.009)]
+            texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1)] (
+                interpolation = "vertex"
+            )
+            uniform token subdivisionScheme = "none"
+        }
+    }
+
+    def PhysicsPrismaticJoint "Joint" (
+        prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+    )
+    {
+        float drive:linear:physics:damping = 2
+        float drive:linear:physics:maxForce = 5
+        float drive:linear:physics:stiffness = 200
+        float drive:linear:physics:targetPosition = 0
+        uniform token drive:linear:physics:type = "force"
+        uniform token physics:axis = "X"
+        rel physics:body0 = </StartButton/Base>
+        rel physics:body1 = </StartButton/Moving>
+        bool physics:collisionEnabled = 0
+        point3f physics:localPos0 = (0, 0, 0)
+        point3f physics:localPos1 = (0, 0, 0)
+        float physics:lowerLimit = 0
+        float physics:upperLimit = 0.008
+    }
+}
+

@@ -1,0 +1,79 @@
+#usda 1.0
+(
+    defaultPrim = "Environment"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Environment" (
+    customData = {
+        string instruction = "Please warm the baby's bottle for me."
+    }
+)
+{
+    def Xform "Microwave" (
+        prepend references = @assets/microwave.usda@
+    )
+    {
+        double3 xformOp:translate = (0.5, 0.245, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Xform "Door" (
+        prepend references = @assets/door.usda@
+    )
+    {
+        float xformOp:rotateZ = -35
+        double3 xformOp:translate = (0.481, 0.4371276595744681, 0.8095000000000001)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+    }
+
+    def Xform "StartButton" (
+        prepend references = @assets/start_button.usda@
+    )
+    {
+        double3 xformOp:translate = (0.487, 0.07119148936170211, 0.8795000000000001)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Xform "SingleBurnerStove" (
+        prepend references = @assets/single_burner_stove.usda@
+    )
+    {
+        double3 xformOp:translate = (0.48, -0.26, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Xform "WaterBath" (
+        prepend references = @assets/water_bath.usda@
+    )
+    {
+        double3 xformOp:translate = (0.48, -0.26, 0.8125)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Xform "BathThermometer" (
+        prepend references = @assets/bath_thermometer.usda@
+    )
+    {
+        double3 xformOp:translate = (0.363, -0.26, 0.8995)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Xform "BottlePad" (
+        prepend references = @assets/bottle_pad.usda@
+    )
+    {
+        double3 xformOp:translate = (0.265, -0.005, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Xform "BabyBottle" (
+        prepend references = @assets/baby_bottle.usda@
+    )
+    {
+        double3 xformOp:translate = (0.265, -0.005, 0.7565000000000001)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+}
+
