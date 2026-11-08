@@ -1,0 +1,27 @@
+{
+  "title": "Crank a hose reel with one hand while the other lays the turns side by side",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "hose",
+    "deformable",
+    "winding",
+    "hose reel",
+    "crank",
+    "level winding",
+    "coordination",
+    "garden",
+    "groundskeeping",
+    "ratchet"
+  ],
+  "instruction": "Wind the green hose onto the reel neatly, then let go.",
+  "context": "Groundskeepers \"Water lawns, trees, or plants, using portable sprinkler systems, hoses, or watering cans.\" (O*NET 37-3011.00). A crank hose reel's manual (Yardworks 059-0819-6) says: \"Distribute the hose evenly over the surface of the drum assembly.\" A hose reel maker's support page: \"Use the crank handle to wind the hose into the box evenly.\" Done by hand, one hand turns the crank while the other feeds the hose across the drum.",
+  "setup": "Station table, cm from the midpoint between the arm bases (x forward, y left). Reel: grey PVC drum 6 cm dia x 14 cm (y 7-21), red 12 cm dia x 6 mm flanges, axle along y at x 34, 7.5 cm up, on two dark 16 x 6 mm uprights; dark crank arm at y 4.7 through the axle, 20 g counterweight on one end, 2.4 cm black ball handle on a pin on an 8.4 cm stem at the other, 5 cm from the axle at y -5, starting straight up. Green 10 mm PVC hose, 60 cm, 60 g, end clamped to the drum bottom at y 7.8; it runs 16 cm toward the robot, bends left (10 cm radius) and runs back out to a black 40 x 16 x 16 mm nozzle at x 31.9, y 27.8. A pawl on the axle lets the drum turn freely to wind but not back.",
+  "scoring": "Score 0 if: the drum turns more than 0.3 rad in all, either way, while its handle is not gripped; at the end a gripper is within 3 cm of the hose, nozzle or handle; or the hose on the drum is not neat: any wound part over 4 mm above the first layer, any turn not 8-17 mm across the drum from the one before (always the same way), or hose bunched loose between the flanges. Wound = most hose on the drum while a hand was within 3 cm of hose, nozzle or handle, if the drum holds all but 6 cm of it at the end. 0.3: 27-33 cm wound; 0.6: 34-36 cm; 1.0: 37 cm or more.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "Lift the pawl, unwind the reel by its handle until the handle is straight up, lay the hose in the U shown (16 cm straight off the drum bottom toward the robot, 10 cm radius bend to the left, back out to the nozzle at x 31.9, y 27.8). Nothing is randomised.",
+  "fidelity": "The 10 mm hose is 2 cm rigid segments with bending springs, no twist, no water; a scaled reel (60 cm, about two turns). Hose on the drum takes the drum's curve (coil set) so it cannot spring the drum back. The handle turns on a pin so a fixed grip can follow the crank. The drum has light axle drag and a one-way pawl: free to wind; a stiff catch against unwinding, slipping above 0.15 N m. A gripper squeezing the hose stalls the crank. When the guide opens, the last 2-6 cm can lift off.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-Q43X65"
+}
