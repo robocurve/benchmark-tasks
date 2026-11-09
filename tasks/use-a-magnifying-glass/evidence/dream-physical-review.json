@@ -1,0 +1,33 @@
+{
+  "schema": "magnifier-physical-review-v1",
+  "reviewer": "Repository submission reviewer",
+  "reviewed_full_trial": true,
+  "video_file": "dream.mp4",
+  "source_sha256": {
+    "trace": "4f405f903d00980daad30763118305e26a3dd1ff82025a374ca51683c59ad501",
+    "run_record": "a8b84212c7641073c168fc7addf604b8a0f1dae810d27911fdd513b9b50e61c6",
+    "target_json": "a71d3ad4960ff85efdcdcf7a242594f7616be5c5b8c1fc9f36b76ba2bc6965a1",
+    "video": "7bc74de7f3add94c786d524c62d35a8d3863bea4cd59bc9145b89f4503397e27"
+  },
+  "interval_steps": [
+    1140,
+    1200
+  ],
+  "observations": {
+    "prescribed_initial_layout": true,
+    "picked_up_by_handle": false,
+    "held_only_by_gripper": false,
+    "tool_and_target_intact": true,
+    "ordinary_physics_and_camera": true,
+    "continuous_hold_visible": false
+  },
+  "claim_definitions": {
+    "prescribed_initial_layout": "The complete video begins in the prescribed reset layout, with the magnifier resting on the table.",
+    "picked_up_by_handle": "The robot picks the magnifier up by its handle using an ordinary gripper grasp.",
+    "held_only_by_gripper": "Throughout the scored interval, only the gripper supports the tool at its handle; the glass/frame are not propped against a camera, robot link, table or other object.",
+    "tool_and_target_intact": "The tool and printed target remain intact and unmodified, and the target stays fixed throughout the trial.",
+    "ordinary_physics_and_camera": "The recorded trial uses ordinary robot contact, no object attachment/teleport/applied object force, and unchanged native camera settings without digital crop, zoom or image replacement.",
+    "continuous_hold_visible": "The video shows an uninterrupted handle grasp and at least 20 mm whole-tool table clearance throughout the scored three-second interval, with no visible interruption."
+  },
+  "notes": "Reviewed full60-second video timeline, grasp-attempt closeups, final review/wrist images and ordinary-contact source. Dream repeatedly approaches and nudges the magnifier but never lifts the whole tool off the table; the maximum sampled clearance across1201 states is below zero by less than1 micrometre, consistent with resting contact. No handle-held, unsupported final hold occurs; the chart is absent from the final left-wrist view. Tool and fixed target remain intact. All146 requests succeed within one uninterrupted normal-adapter session. The observed failure earns0, independently of the missing optical alignment.20Hz evidence is sampled, not a substep safety certificate."
+}

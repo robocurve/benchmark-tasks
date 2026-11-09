@@ -1,0 +1,39 @@
+{
+  "schema": "magnifier-physical-review-v1",
+  "reviewer": "Repository submission reviewer",
+  "reviewed_full_trial": true,
+  "video_file": "demo.mp4",
+  "source_sha256": {
+    "trace": "2e5617d9ed21034afd8e333d51bd88e59b1920bb50df9672e63113ea3aff73ce",
+    "run_record": "f5ffd889f3f22fe16d939662502bb03619d86b461b49763bf38c70aaecb88dfa",
+    "target_json": "a71d3ad4960ff85efdcdcf7a242594f7616be5c5b8c1fc9f36b76ba2bc6965a1",
+    "video": "6b18b495df72df4e5d3dec7ee6a1d08c06bd1d91290dedec83818c8504620f6b"
+  },
+  "interval_steps": [
+    470,
+    530
+  ],
+  "observations": {
+    "prescribed_initial_layout": true,
+    "picked_up_by_handle": true,
+    "held_only_by_gripper": true,
+    "tool_and_target_intact": true,
+    "ordinary_physics_and_camera": true,
+    "continuous_hold_visible": true
+  },
+  "claim_definitions": {
+    "prescribed_initial_layout": "The complete video begins in the prescribed reset layout, with the magnifier resting on the table.",
+    "picked_up_by_handle": "The robot picks the magnifier up by its handle using an ordinary gripper grasp.",
+    "held_only_by_gripper": "Throughout the scored interval, only the gripper supports the tool at its handle; the glass/frame are not propped against a camera, robot link, table or other object.",
+    "tool_and_target_intact": "The tool and printed target remain intact and unmodified, and the target stays fixed throughout the trial.",
+    "ordinary_physics_and_camera": "The recorded trial uses ordinary robot contact, no object attachment/teleport/applied object force, and unchanged native camera settings without digital crop, zoom or image replacement.",
+    "continuous_hold_visible": "The video shows an uninterrupted handle grasp and at least 20 mm whole-tool table clearance throughout the scored three-second interval, with no visible interruption."
+  },
+  "notes": "Reviewed full-trial timeline, pickup/lift and final held view, actual wrist/reference images and ordinary-contact source. Both complete video streams and final/reference policy images are byte-identical to the previously reviewed pickup-005. Independent native-link audit checks all531 actual states; all commands, measured joints and tool poses match that prototype. No tested conservative-box overlaps; final61 samples have at least74.3795mm whole-tool clearance. No visible support other than the right gripper at the handle. Native joint commands alone move the tool; no attachment, object force or image replacement. The20Hz evidence does not prove between-sample clearance or exhaustive self-collision safety.",
+  "equivalence_to_reviewed_prototype": {
+    "demo.mp4": true,
+    "wrist.mp4": true,
+    "final-policy.png": true,
+    "baseline-policy.png": true
+  }
+}

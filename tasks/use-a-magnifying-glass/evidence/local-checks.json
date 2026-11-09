@@ -1,0 +1,56 @@
+{
+  "checked_at_utc": "2026-11-09T07:11:18.577336+00:00",
+  "passed": true,
+  "checks": [
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tasks/use-a-magnifying-glass",
+        "-p",
+        "test_*.py"
+      ],
+      "exit_code": 0,
+      "output": "...................\n----------------------------------------------------------------------\nRan 19 tests in 2.512s\n\nOK\n"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "tasks/use-a-magnifying-glass/inspection_measure.py",
+        "--self-test"
+      ],
+      "exit_code": 0,
+      "output": "{\n  \"passed\": true,\n  \"cases\": 14,\n  \"synthetic_only\": true,\n  \"positive_minimum_gain\": 1.878558019592128,\n  \"positive_new_groups\": [\n    \"vertical\"\n  ],\n  \"local_gradient_marker_error_px\": 0.004484290144800738,\n  \"interpretation\": \"Synthetic image-counting checks, not rendered optical validation.\"\n}\n"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "tasks/use-a-magnifying-glass/score_hold.py",
+        "--self-test"
+      ],
+      "exit_code": 0,
+      "output": "{\n  \"passed\": true,\n  \"cases\": 7,\n  \"scope\": \"Trace timing, missing states/files, camera-drift diagnostics and recoverable incomplete-artifact handling. Actual camera/target registration is gated by measured pixels in inspection_measure, not by exact pose equality.\"\n}\n"
+    }
+  ],
+  "source_sha256": {
+    "measure.py": "1e489c9cdfbbab9da1e0d27fba24719cac212f065385c9f65c09e2c6eeff31bc",
+    "run.py": "bf7631ae4bf5fcb5b9aa9378dd2c52c50f35fca0e1d4a6c04cb9b3ac1ba719f4",
+    "lens.py": "b9e78d799e0da701047902735c7f75f293311928383686158a743890e53ace15",
+    "test_lens.py": "e356d4d267e2c84ef7b67fd0d33db6e7c0f0d3d321bef8193065c7121fa7667e",
+    "align.py": "c35942e32997e004430cc5b85e061cf239335b2e64ae9ff3078428f26bb673aa",
+    "pickup_scene.py": "59bf1d1973daccd0201341e0b75719eb63cb70f9b4f73176197724132efdacb1",
+    "scoring.py": "f49c752ba44e47da3870bcf44f9261bc1e2ac05e1df2b6c221f739b69e873044",
+    "test_scoring.py": "11ecd3428365594c036b9ac04f5fea12477a12b6eb4b2c135360a6fec9d2a7f4",
+    "inspection_target.py": "7cbc98bccf0bec1eb421c8fa480d2949d7574469e33da8c85485c3bd650e464c",
+    "common.py": "e2b646bf8ad20f48aab6cc9d2d6bf7d01592692f41761c68cbc187de9fbe1b6a",
+    "test_runner.py": "dbd5a4da0c8bc09fe293cc1cc4e0b3fa18637baa0d27dad055d6a96833b94715",
+    "dream_policy.py": "ad92ac9ddcf4c1d48c9985fcd0a0fc116144a995d8d4b0368e476b3f432b611b",
+    "target.py": "e3d3361c70352c1ef27c7402a2e8b5f11885951afcbde6aa02896bcacbfe6253",
+    "score_hold.py": "3fbf08bf27cf228859d60bf3be49467fecd032c21ff1d1e61d5c8dd1f13381ef",
+    "inspection_measure.py": "95089865eed76e08404a5dc76c69d1a461fbfe71afa47bbb2158d5d3265b3ee3",
+    "tool.py": "56861f697bffb27c1264cf5afdf936f7ed7c66f3f6ee7ceccb96a85fc6aeb663"
+  }
+}

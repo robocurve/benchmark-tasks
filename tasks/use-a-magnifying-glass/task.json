@@ -1,0 +1,18 @@
+{
+  "title": "Use a magnifying glass to inspect a target",
+  "category": "Impact on jobs",
+  "keywords": [
+    "optical tool use",
+    "bimanual",
+    "visual inspection"
+  ],
+  "instruction": "Pick up the magnifying glass by its handle. Position and orient it relative to the left wrist camera and the printed target until both groups of five bars are enlarged and clearly separated. Finish by holding that view for three seconds.",
+  "context": "Using a handheld magnifier for close inspection requires aligning the lens with the camera and the target to reveal fine detail.",
+  "setup": "Two YAM arms start ready with open grippers on the standard wooden 110×130 cm tabletop (top z=0.7475 m). One 120 g magnifier lies flat: plastic 80×20×18 mm handle, plastic 68 mm frame with a 60 mm glass lens and 18 mm thickness. The biconvex lens has 100 mm curvature radii, 1 mm edge thickness and refractive index 1.5. Lens centre starts at (0.20,−0.20,0.757) m; handle points toward −y. A fixed white plastic 120×100×7.5 mm target plate is centred at (0.35,0.05,0.75125) m. Its matte print has a 19 mm square of coloured marks, two perpendicular groups of five bars (1.2 mm bars and gaps), contrast swatches and four outer reference marks. Use the supplied chart at 120×100 mm, rotated 180° about z. Coordinates: x forward from arm bases, y left, z up. README and generated chart specify the complete fixed layout.",
+  "scoring": "Score the final three seconds. The intact magnifier must be grasped only by its handle, unsupported by other objects and at least 20 mm above the table; the target stays fixed and unmodified. Compare with a lens-free view at the same camera pose and settings; all four outer marks must register within one native pixel. Score 0.5 if every coloured-square edge is enlarged by at least 1.25× in both native and policy images, and at least one previously unreadable five-bar group becomes readable. Score 1.0 if every edge reaches 1.5× and both groups are readable, with at least one newly readable. Readable means five separate dark bars and four bright gaps across their central half, each containing an original pixel with the contrast margins in JUDGING.md. All conditions must hold throughout the interval; all other outcomes score 0.",
+  "run_limit": "1,200 control steps (60 seconds at 20 Hz).",
+  "reset_notes": "Return the magnifier and arms to their starting poses. The fixed printed target is reusable.",
+  "fidelity": "A curved glass mesh produces native RTX refraction; the camera intrinsics and image pipeline are unchanged. One dynamic rigid tool is held through ordinary contact, without attachments or applied object forces. Friction is assumed rather than calibrated; glass is unbreakable. Ideal pinhole cameras omit physical focus, sensor noise and lens defects. The scripted demo uses measured tool pose for final centring; Dream receives the standard camera images and joint state.",
+  "scores": "Dream-1: 0.0 (1,200 actions, 60 seconds). Scripted demo: 1.0 (530 actions, 26.5 seconds); approximately 1.88× enlargement throughout the final three-second hold.",
+  "media": "M-GCKMBY"
+}
