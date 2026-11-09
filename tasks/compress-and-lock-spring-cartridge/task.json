@@ -1,0 +1,21 @@
+{
+  "title": "Compress spring plunger and slide lock bar across to latch cartridge",
+  "category": "Impact on jobs",
+  "context": "Automated packaging, ammunition feeding, and battery module installation often require spring cartridges to be compressed and mechanically latched into locked configurations. An autonomous dual-arm robot must coordinate manipulators to push a heavy spring plunger against return forces with one arm while simultaneously sliding an orthogonal locking bar into a retaining notch with the other arm before releasing hold.",
+  "instruction": "Compress the spring plunger all the way in with one hand and slide the lock bar across with the other, then let go so the cartridge stays compressed.",
+  "setup": "All positions are cm from the midpoint between arm bases (x forward, y left); table top is z = 0. Fixture: 24.0 x 46.0 x 2.0 cm base plate at (34.0, +4.0). Plunger slider at (34.0, +18.0) with orange knob (3.0 x 4.5 x 3.5 cm), travel 4.5 cm along +x against 50 N/m return spring (2.25 N at full travel). Lock bar slider at (34.0, -10.0) with blue handle (4.5 x 3.0 x 3.5 cm), travel 7.0 cm along +y with friction hold, blocked at 1.5 cm travel unless plunger compressed >= 3.8 cm. Green status lamp (2.5 cm disc) on cartridge housing.",
+  "scoring": "Score: 0.25 when plunger is compressed >= 3.8 cm for >= 1.0 s; 0.50 when lock bar slides across >= 5.5 cm while plunger compressed (latched); 0.75 when plunger is released (no arm contact) and stays compressed >= 3.8 cm for >= 2.0 s; 1.00 when both arms clear and lamp green held for 20 control steps (1.0 s at 20 Hz). Zero-gate: none (physical stop box blocks lock bar early push).",
+  "reset_notes": "Verify plunger has returned to rest at x = 0 cm. Verify lock bar has returned to rest at y = 0 cm. Ensure status lamp is off and arms are parked.",
+  "run_limit": "2,500 steps (125 seconds at 20 Hz)",
+  "keywords": [
+    "bimanual",
+    "spring cartridge",
+    "plunger",
+    "lock bar",
+    "mechanical latch",
+    "assembly"
+  ],
+  "fidelity": "Sliders are physical prismatic joints: plunger with 50 N/m spring return, lock bar with friction hold. Plunger stop box and notch are modeled as physical boxes with stop logic in Python. Status lamp is rendered via write_pose. Real build: spring-loaded tray fixture with sliding retainer bar.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-Z6L6SU"
+}
