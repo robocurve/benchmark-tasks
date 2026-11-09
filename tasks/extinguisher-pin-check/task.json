@@ -1,0 +1,20 @@
+{
+  "title": "Check a fire extinguisher: pull the retaining pin and file the gauge reading",
+  "category": "Societal relevance",
+  "keywords": [
+    "fire safety",
+    "extinguisher",
+    "housing inspection",
+    "manipulation",
+    "gauge reading"
+  ],
+  "instruction": "Pull the extinguisher's retaining pin, check the gauge and file the report.",
+  "context": "A fire extinguisher that has lost its retaining pin or sits out of charge will not work when it is needed; NSPIRE checks both at every inspected unit, and both defects are common. A robot doing a housing walk-through has to manipulate the fixture (the pin is a physical tamper seal) and read an analog gauge, then commit to a filed finding - not just photograph it.",
+  "setup": "Station scene, fixed layout (see setup.png). A red extinguisher body (cylinder, r=5 cm, h=10 cm) stands at (0.28, -0.08) with a grey carry bar (9x1.5x1.2 cm) on its top and a white pressure-gauge dial (4x4 cm) on its front face; the dial shows a green zone (0.8x1.2 cm), a red zone (0.8x1.2 cm) and a dark needle - the needle's position is the gauge's state. A grey riser (2.4x3x5 cm) on the body's top carries a grey plate (10x14x0.5 cm) with two steel guide rails (4 mm wide, 12 cm long, 2.2 cm apart); a steel retaining pin (1.6x7x1.1 cm, ~60 g) sits in the rails at the plate's back edge, its tail facing the right arm. In front at x=0.14 m, two flat report pads 7x7.5x1.2 cm: green at y=+5 cm (gauge in the green), red at y=-5 cm (gauge out of range). A loose white report tag, 3 cm cube, ~60 g, starts at (0.20, -0.10). Per-trial gauge state via the FAULT_MODE environment variable: 'charged' (needle in the green zone) or 'undercharged' (needle in the red zone). The state is not announced to the policy.",
+  "scoring": "task_score: 0.5 for the retaining pin pulled at least 2 cm out of its seat toward the front and at rest; +0.5 for the white tag filed on the pad matching the gauge's actual state (tag centre within 2.5 cm of the pad centre). 1.0 for the complete check; 0.0 for do-nothing.",
+  "run_limit": "900 steps (45 seconds at 20 Hz)",
+  "reset_notes": "With -E object_jitter=0 every trial starts from the exact layout in setup.png for its FAULT_MODE; only the needle's position differs by mode. Trials use scene=station.",
+  "fidelity": "Rigid-body fixture from boxes and cylinders; no fire, smoke or agent discharge is simulated. The gauge is a physical colored-zone plate with a movable needle, readable in the overhead camera. The pin is a physical slide in a rail bracket - pulling it is a real manipulation, not a button press. The report is a tag on a labelled pad, readable from a photo. The two gauge states are mutually exclusive and exhaustive; guessing scores 0.5 in expectation, so the report discriminates real gauge reading.",
+  "scores": "Dream-1 run: 0.0; scripted demo: 1.0 (both modes)",
+  "media": ""
+}
