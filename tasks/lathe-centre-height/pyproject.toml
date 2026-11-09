@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lathe-centre-height"
+version = "0.1.0"
+description = "Set a lathe tool to centre height with a pinched steel rule (cross-feed and height cranks), YAM arms"
+requires-python = ">=3.11"
+dependencies = ["numpy", "yam-arena"]
+
+[project.entry-points."inspect_robots.embodiments"]
+yam_lathe_centre_height = "lathe_centre_height.embodiment:LatheCentreHeightEmbodiment"
+
+[project.entry-points."inspect_robots.policies"]
+lathe_centre_height_scripted = "lathe_centre_height.policy:LatheCentreHeightScriptedPolicy"
+
+[tool.setuptools.packages.find]
+include = ["lathe_centre_height*"]
