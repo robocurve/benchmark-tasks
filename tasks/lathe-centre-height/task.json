@@ -1,7 +1,16 @@
 {
   "title": "Set a lathe tool to centre height with a pinched steel rule",
   "category": "Impact on jobs",
-  "keywords": ["machining", "lathe", "tool setting", "centre height", "steel rule", "precision", "measuring aid", "cranks"],
+  "keywords": [
+    "machining",
+    "lathe",
+    "tool setting",
+    "centre height",
+    "steel rule",
+    "precision",
+    "measuring aid",
+    "cranks"
+  ],
   "instruction": "Set the lathe tool's cutting edge to the height of the spindle centre. Take the steel rule from its stand and hold it upright between the tool and the bar in the chuck. Turn the cross-feed crank (yellow knob, front left) clockwise to bring the tool in until it traps the rule lightly against the bar, then let go of the rule. Turn the height crank on top of the tool holder until the rule stands vertical: it leans away from you when the edge is high and toward you when it is low. Then let go of everything and move both grippers away.",
   "context": "Lathe set-up: \"Set the tool bit exactly on center to avoid leaving a center nub on the workpiece\" (US Army TC 9-524, Fundamentals of Machine Tools, ch. 7, facing; https://archive.org/download/MManuals/UsArmyMachinistFundamentals-machineTools1996.pdf). The steel-rule check is standard shop practice: a rule trapped lightly between the tool and the work stands vertical when the tool is on centre, leans one way when it is high and the other when it is low. Done by: lathe setters and operators (O*NET 51-4034).",
   "setup": "Station table; x forward from the line between the arm bases, y left, heights above the table top. Lathe: grey cast bed 15 x 28 cm, 3 cm tall (x 22 to 37 cm, y -15 to +13 cm); grey headstock 10 x 8.5 cm, 15.5 cm tall (x 25 to 35 cm, y 4.5 to 13 cm); dark chuck 8 cm across facing right; a steel bar 8 mm across, axis along y at x 30 cm, 10 cm high, from y +1 cm to its free end at y -4 cm. Tool: an 8 mm square steel bit in a black holder, its cutting edge at x 28.8 cm (8 mm from the bar's surface), y -2.5 cm, 0.75 mm above the bar's centre line. Cross-feed crank: yellow knob 16 mm across, 30 mm tall, on a 24 mm orange arm turning about a grey pedestal at (20, 23) cm, 6 cm high; 2.54 mm of tool travel toward the bar per clockwise turn. Height crank: the same knob and arm on top of the tool holder (axis at (23.8, -2.5) cm, 12 cm high); 1.06 mm of tool drop per clockwise turn (24 threads per inch). Steel rule: 150 x 13 x 1 mm, satin steel with black 10 mm marks and a red top end, standing upright in a 1.3 mm slot in a blue block (3 x 4 x 3.5 cm) at (17, -12) cm. Both grippers open at the ready pose. One fixed layout.",
@@ -9,5 +18,6 @@
   "run_limit": "4,800 steps (4 minutes at 20 Hz)",
   "reset_notes": "Nothing is consumed. To reset: back the cross slide off 7.8 mm (about 3 turns counter-clockwise), set the edge back to 0.75 mm above centre (height crank 0.71 turn counter-clockwise), and stand the rule back in its slot. In simulation every part's start pose is rewritten and the joints re-enabled after each reset.",
   "fidelity": "Slides follow the cranks' measured turns (one way); the cross slide is spring-loaded (about 0.8 N on the rule). Both cranks turn about vertical axes for the overhead camera. Rigid 1 mm rule; pad contact patch modelled with torsional friction. In sim the rule stands vertical at about +0.1 to +0.2 mm and leans 30 to 40 degrees per mm, so the 0.25 mm band is about 8 degrees of lean. No cutting.",
-  "scores": "Dream-1 run: 0.0; demo: 1.0"
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-CZD6JS"
 }
