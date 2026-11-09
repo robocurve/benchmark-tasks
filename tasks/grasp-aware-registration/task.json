@@ -1,0 +1,18 @@
+{
+  "title": "Register a windowed plate behind an inspection screen",
+  "category": "Other",
+  "keywords": [
+    "active perception",
+    "grasp planning",
+    "precision registration"
+  ],
+  "instruction": "Place the registration plate flat on the white board so that each illuminated cyan cross is centred in its matching pink-cornered window. Release the plate and leave it still for at least one second. Keep the boards and screen in place.",
+  "context": "A grasp can hide the alignment features needed later. This fixed scene tests preserving or recovering visual feedback during precision placement; any grasp, camera route, memory-based strategy or supported regrasp receives the same outcome score.",
+  "setup": "Original calibrated dual-YAM station with its three original RGB cameras. A passive120g rigid plate has two30x10mm windows, eight pink corner references and two identical34x28x20mm raised handles. It starts flat on a270x170x20mm blue board. A270x200x20mm white board has two continuously backlit cyan crosses66mm apart, offset(-10,-15)mm from its centre. A fixed18x260x90mm opaque screen on two posts obscures the original overview. No locator or attachment. All component dimensions, colours and exact fixed poses are in scene.json; physical materials and approximations are described in README.",
+  "scoring": "Final complete1s:1.0 if both bottom-window centres stay within3mm of the two interchangeable cross centres;0.5 within12mm;otherwise0. Both nonzero scores require face-up tilt<=2deg, each bottom-window centre within2mm of the board plane, continuous board support and no robot/plate contact. Over21poses at20Hz, maximum pairwise centre displacement<=1mm and rotation<=1deg. Ending-window score, not best earlier score. No grasp or camera requirement.",
+  "run_limit": "2,400 control steps (120 seconds at20Hz)",
+  "reset_notes": "One deterministic fixed layout; reload/reset the scene between trials. No object jitter or consumed materials.",
+  "fidelity": "Rigid-body PhysX plate and fixed boards/screen on the original calibrated YAM rig. Cyan crosses idealize a continuously powered backlit panel using emissive surfaces; brightness/glare are not calibrated. Uniform rigid materials and friction approximate a fabricated fixture. No compliance, damage, transfer coating or electronic sensor is simulated. Scoring uses private poses/contacts as measurement instruments; the policy receives only original RGB and robot state.",
+  "scores": "Dream-1: 0.0; full-score demo: 1.0",
+  "media": "M-7YKPFG"
+}
