@@ -1,0 +1,19 @@
+{
+  "title": "Move three-block tower from left mark to right mark without placing bigger on smaller",
+  "category": "Impact on jobs",
+  "instruction": "Move the three-block tower from the left mark to the right mark, keeping the biggest at the bottom, and never set a bigger block on a smaller one.",
+  "setup": "Three visual target marks (LEFT at (0.240, +0.090), MIDDLE at (0.320, 0.000), RIGHT at (0.240, -0.090), size 100x100x2 mm) on the table. Three stackable blocks: Large blue (80x80x25 mm, 0.06 kg), Medium orange (60x60x25 mm, 0.05 kg), Small yellow (45x45x25 mm, 0.04 kg) initially stacked on the LEFT mark in descending size order.",
+  "context": "Industrial automated kit staging and structured assembly queuing require sequential component relocation through intermediate buffer stations without resting heavier primary components on delicate subassemblies.",
+  "scoring": "Ladder: 0.25 for Small block resting on MIDDLE or RIGHT mark; 0.50 for Large block off LEFT and resting on the table at MIDDLE or RIGHT; 0.75 for Large block on RIGHT with a smaller block on it or both on MIDDLE; 1.00 for all three blocks stacked on RIGHT in proper order (Large bottom, Medium middle, Small top), offsets <= 12 mm from mark centre, tilt < 5 deg, arms clear (> 60 mm), held stable for 2.0 s (40 steps). Zero-gate: resting a larger block on a smaller block (centre within 40 mm in xy and higher by >= 20 mm while resting < 5 mm/s for 0.3 s) permanently latches rule_broken = score 0.0. Floor fault latches 0.0.",
+  "run_limit": "1600 steps",
+  "fidelity": "Rigid body PhysX dynamics with realistic friction (1.2), compliant parallel-jaw grasping, exact physical dimensions, and bimanual arm reach envelopes without simulated sensory shortcuts.",
+  "reset_notes": "Blocks reset to initial positions stacked on LEFT mark, grippers open at home stance.",
+  "keywords": [
+    "tower of hanoi",
+    "bimanual relay",
+    "stacking rule",
+    "assembly queuing"
+  ],
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-BK237H"
+}
