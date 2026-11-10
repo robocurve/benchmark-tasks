@@ -1,0 +1,175 @@
+#usda 1.0
+(
+    defaultPrim = "CookButton"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "CookButton" (
+    customData = {
+        string assetDescription = "Separate spring-return COOK plunger; 8 mm passive mechanical travel. Activation logic is not yet implemented."
+    }
+)
+{
+    def "Looks"
+    {
+        def Material "Green"
+        {
+            token outputs:surface.connect = </CookButton/Looks/Green/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.017389102, 0.16264719, 0.088981524)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.38
+                token outputs:surface
+            }
+        }
+
+        def Material "Bezel"
+        {
+            token outputs:surface.connect = </CookButton/Looks/Bezel/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.33034372, 0.39312312, 0.31854677)
+                float inputs:metallic = 0.55
+                float inputs:roughness = 0.32
+                token outputs:surface
+            }
+        }
+
+        def Material "Label"
+        {
+            token outputs:surface.connect = </CookButton/Looks/Label/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (1, 1, 1)
+                color3f inputs:diffuseColor.connect = </CookButton/Looks/Label/Texture.outputs:rgb>
+                float inputs:metallic = 0
+                float inputs:roughness = 0.62
+                token outputs:surface
+            }
+
+            def Shader "UV"
+            {
+                uniform token info:id = "UsdPrimvarReader_float2"
+                token inputs:varname = "st"
+                float2 outputs:result
+            }
+
+            def Shader "Texture"
+            {
+                uniform token info:id = "UsdUVTexture"
+                asset inputs:file = @textures/cook.png@
+                token inputs:sourceColorSpace = "sRGB"
+                float2 inputs:st.connect = </CookButton/Looks/Label/UV.outputs:result>
+                token inputs:wrapS = "repeat"
+                token inputs:wrapT = "repeat"
+                float3 outputs:rgb
+            }
+        }
+    }
+
+    def Xform "Base" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI"]
+    )
+    {
+        bool physics:kinematicEnabled = 1
+
+        def Cylinder "Bezel" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.004
+            rel material:binding = </CookButton/Looks/Bezel> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            double radius = 0.027
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "Moving" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </CookButton/PhysicsMaterial>
+        point3f physics:centerOfMass = (0, 0, 0)
+        float physics:mass = 0.035
+        bool physics:rigidBodyEnabled = 1
+        custom bool physxRigidBody:disableGravity = 1
+        custom int physxRigidBody:solverPositionIterationCount = 16
+        custom int physxRigidBody:solverVelocityIterationCount = 4
+
+        def Cylinder "Cap" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.007
+            rel material:binding = </CookButton/Looks/Green> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            bool physics:collisionEnabled = 1
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.0235
+            double3 xformOp:translate = (-0.0055, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Mesh "Label" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform bool doubleSided = 1
+            float3[] extent = [(-0.0092, -0.0195, -0.0085), (-0.0092, 0.0195, 0.0085)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            rel material:binding = </CookButton/Looks/Label> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            point3f[] points = [(-0.0092, 0.0195, -0.0085), (-0.0092, -0.0195, -0.0085), (-0.0092, -0.0195, 0.0085), (-0.0092, 0.0195, 0.0085)]
+            texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1)] (
+                interpolation = "vertex"
+            )
+            uniform token subdivisionScheme = "none"
+        }
+    }
+
+    def Material "PhysicsMaterial" (
+        prepend apiSchemas = ["PhysicsMaterialAPI"]
+    )
+    {
+        float physics:dynamicFriction = 0.8
+        float physics:restitution = 0
+        float physics:staticFriction = 1
+    }
+
+    def PhysicsPrismaticJoint "Joint" (
+        prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+    )
+    {
+        float drive:linear:physics:damping = 2
+        float drive:linear:physics:maxForce = 4
+        float drive:linear:physics:stiffness = 180
+        float drive:linear:physics:targetPosition = 0
+        uniform token drive:linear:physics:type = "force"
+        uniform token physics:axis = "X"
+        rel physics:body0 = </CookButton/Base>
+        rel physics:body1 = </CookButton/Moving>
+        bool physics:collisionEnabled = 0
+        point3f physics:localPos0 = (0, 0, 0)
+        point3f physics:localPos1 = (0, 0, 0)
+        float physics:lowerLimit = 0
+        float physics:upperLimit = 0.008
+    }
+}
+

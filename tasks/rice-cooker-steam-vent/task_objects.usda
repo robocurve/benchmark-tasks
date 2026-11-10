@@ -1,0 +1,47 @@
+#usda 1.0
+(
+    defaultPrim = "Environment"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Environment" (
+    customData = {
+        string instruction = "Please start the rice cooker."
+    }
+)
+{
+    def Xform "RiceCooker" (
+        prepend references = @assets/rice_cooker.usda@
+    )
+    {
+        double3 xformOp:translate = (0.43, 0.035, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Xform "FoldedTowel" (
+        prepend references = @assets/folded_towel.usda@
+    )
+    {
+        double3 xformOp:translate = (0.395, 0.035, 0.9443)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Xform "TowelTray" (
+        prepend references = @assets/towel_tray.usda@
+    )
+    {
+        double3 xformOp:translate = (0.355, -0.245, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Xform "CookButton" (
+        prepend references = @assets/cook_button.usda@
+    )
+    {
+        float xformOp:rotateY = 32
+        double3 xformOp:translate = (0.263, 0.092, 0.8515)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateY"]
+    }
+}
+
