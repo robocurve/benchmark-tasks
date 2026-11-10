@@ -1,0 +1,47 @@
+#usda 1.0
+(
+    defaultPrim = "Environment"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Environment" (
+    customData = {
+        string instruction = "Please put the pot on the trivet."
+    }
+)
+{
+    def Xform "Pot" (
+        prepend references = @assets/pot.usda@
+    )
+    {
+        double3 xformOp:translate = (0.425, 0.225, 0.7485)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Xform "Trivet" (
+        prepend references = @assets/trivet.usda@
+    )
+    {
+        double3 xformOp:translate = (0.395, -0.025, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Xform "Egg" (
+        prepend references = @assets/egg.usda@
+    )
+    {
+        float xformOp:rotateZ = 55
+        double3 xformOp:translate = (0.395, -0.025, 0.766)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+    }
+
+    def Xform "EggCup" (
+        prepend references = @assets/egg_cup.usda@
+    )
+    {
+        double3 xformOp:translate = (0.3, -0.255, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+}
+
