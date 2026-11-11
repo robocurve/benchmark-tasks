@@ -1,0 +1,20 @@
+{
+  "title": "Stand last slab into gap between standing slabs without knocking either neighbour",
+  "category": "Safety and alignment",
+  "instruction": "Stand the last slab into the one gap between the standing slabs without knocking either neighbour.",
+  "setup": "Four standing slabs (12 x 60 x 80 mm, mass 0.03 kg, friction 1.0, grey) along y = 0.04 m on a white strip at x = 0.190, 0.235, 0.300 and 0.350 m; the empty slot at x = 0.325 m is 38 mm clear between its neighbours. The fifth slab (12 x 60 x 80 mm, blue) stands on its edge at (0.190, +0.220) m. The left arm grips it across its 60 mm width, carries it above the slot, lowers it between the neighbours without contact and releases it.",
+  "context": "High-density wafer/pack insertion, fragile component assembly, collision-sensitive slot insertion between delicate neighbors.",
+  "scoring": "Ladder: 0.25 fifth slab standing on strip; 0.50 in gap but leaning; 0.75 in gap with tilt < 6 deg; 1.00 standing in gap, tilt < 4 deg, neighbours undisturbed (< 4 mm, tilt < 5 deg), arms clear, held 2 s. Zero-gate: knocking any neighbour (tilt > 10 deg or displacement > 8 mm) caps score at 0.50.",
+  "run_limit": "1500 steps",
+  "fidelity": "Rigid body PhysX simulation with Coulomb friction (1.0), true mass distribution (0.03 kg per slab), exact thin-slab contact dynamics, compliant gripper contacts, and realistic arm compliance. Standing stability and tipping cascades are resolved purely through multi-body contact forces without kinematic pinning.",
+  "reset_notes": "Four standing slabs at rest along the strip, fifth slab standing on its edge at the left, grippers open in the home ready pose.",
+  "keywords": [
+    "slab insertion",
+    "fragile assembly",
+    "gap insertion",
+    "domino",
+    "collision avoidance"
+  ],
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-A7YD5U"
+}
