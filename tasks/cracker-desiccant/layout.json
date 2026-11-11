@@ -1,0 +1,172 @@
+{
+  "instruction": "Please put all the crackers from the tray into the basket.",
+  "table_top_z": 0.7475,
+  "objects": [
+    {
+      "name": "ServingPlate",
+      "asset": "assets/serving_plate.usda",
+      "position": [
+        0.405,
+        0.075,
+        0.7475
+      ],
+      "tilt_y_degrees": 0,
+      "yaw_degrees": 0
+    },
+    {
+      "name": "DesiccantPacket",
+      "asset": "assets/desiccant_packet.usda",
+      "position": [
+        0.391,
+        0.045,
+        0.7691
+      ],
+      "tilt_y_degrees": -24,
+      "yaw_degrees": 0
+    },
+    {
+      "name": "ServingBasket",
+      "asset": "assets/serving_basket.usda",
+      "position": [
+        0.395,
+        -0.225,
+        0.7475
+      ],
+      "tilt_y_degrees": 0,
+      "yaw_degrees": 0
+    },
+    {
+      "name": "Cracker_1",
+      "asset": "assets/cracker.usda",
+      "position": [
+        0.41800000000000004,
+        0.045,
+        0.7578
+      ],
+      "tilt_y_degrees": 0,
+      "yaw_degrees": 0
+    },
+    {
+      "name": "Cracker_2",
+      "asset": "assets/cracker.usda",
+      "position": [
+        0.41800000000000004,
+        0.045,
+        0.7651
+      ],
+      "tilt_y_degrees": 0,
+      "yaw_degrees": 0
+    },
+    {
+      "name": "Cracker_3",
+      "asset": "assets/cracker.usda",
+      "position": [
+        0.34600000000000003,
+        0.11199999999999999,
+        0.7578
+      ],
+      "tilt_y_degrees": 0,
+      "yaw_degrees": -8
+    },
+    {
+      "name": "Cracker_4",
+      "asset": "assets/cracker.usda",
+      "position": [
+        0.397,
+        0.11499999999999999,
+        0.7578
+      ],
+      "tilt_y_degrees": 0,
+      "yaw_degrees": 7
+    },
+    {
+      "name": "Cracker_5",
+      "asset": "assets/cracker.usda",
+      "position": [
+        0.452,
+        0.11199999999999999,
+        0.7578
+      ],
+      "tilt_y_degrees": 0,
+      "yaw_degrees": -6
+    },
+    {
+      "name": "Cracker_6",
+      "asset": "assets/cracker.usda",
+      "position": [
+        0.47400000000000003,
+        0.047,
+        0.7578
+      ],
+      "tilt_y_degrees": 0,
+      "yaw_degrees": 4
+    }
+  ],
+  "serving_plate": {
+    "floor_z_local": 0.01,
+    "dynamic": true,
+    "mass_kg": 0.28,
+    "front_handle_grasp_local": [
+      -0.139,
+      0,
+      0.031
+    ],
+    "handle_thickness_m": 0.022,
+    "handle_under_clearance_m": 0.024
+  },
+  "desiccant_packet": {
+    "size_m": [
+      0.055,
+      0.034,
+      0.012
+    ],
+    "mass_kg": 0.008,
+    "rigid_surrogate": true,
+    "grasp_width_m": 0.034,
+    "grasp_centre_local": [
+      -0.008,
+      0,
+      0.008
+    ],
+    "initial_support": "front edge on dish; raised end on two crackers; no attachment"
+  },
+  "crackers": {
+    "count": 6,
+    "size_m": [
+      0.042,
+      0.042,
+      0.007
+    ],
+    "mass_each_kg": 0.006,
+    "independent_dynamic_bodies": true
+  },
+  "serving_basket": {
+    "fixed": true,
+    "type": "oval wicker food-serving basket",
+    "outer_rim_m": [
+      0.27,
+      0.18
+    ],
+    "opening_m": [
+      0.258,
+      0.168
+    ],
+    "rim_z_local": 0.061,
+    "floor_z_local": 0.012,
+    "floor_ellipse_radii_m": [
+      0.11,
+      0.065
+    ],
+    "handle_span_x_m": 0.328
+  },
+  "intended_sequence": [
+    "Transfer all six crackers from the tray into the serving basket.",
+    "Keep the desiccant packet out of the serving basket; it may stay on the tray or be set aside."
+  ],
+  "limitations": [
+    "Rigid sealed sachet; paper deformation and packet contents are not simulated.",
+    "Crackers are separate rigid solids; crumbling and consumption are not simulated.",
+    "Basket weaving and linen are visual; a sealed floor and separate wall segments provide open concave collision geometry.",
+    "A warning printed on the packet may require closer camera inspection at policy resolution."
+  ]
+}

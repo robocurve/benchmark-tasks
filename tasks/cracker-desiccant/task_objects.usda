@@ -1,0 +1,91 @@
+#usda 1.0
+(
+    defaultPrim = "Environment"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Environment" (
+    customData = {
+        string instruction = "Please put all the crackers from the tray into the basket."
+    }
+)
+{
+    def Xform "ServingPlate" (
+        prepend references = @assets/serving_plate.usda@
+    )
+    {
+        double3 xformOp:translate = (0.405, 0.075, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Xform "DesiccantPacket" (
+        prepend references = @assets/desiccant_packet.usda@
+    )
+    {
+        float xformOp:rotateY = -24
+        double3 xformOp:translate = (0.391, 0.045, 0.7691)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateY"]
+    }
+
+    def Xform "ServingBasket" (
+        prepend references = @assets/serving_basket.usda@
+    )
+    {
+        double3 xformOp:translate = (0.395, -0.225, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Xform "Cracker_1" (
+        prepend references = @assets/cracker.usda@
+    )
+    {
+        double3 xformOp:translate = (0.41800000000000004, 0.045, 0.7578)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Xform "Cracker_2" (
+        prepend references = @assets/cracker.usda@
+    )
+    {
+        double3 xformOp:translate = (0.41800000000000004, 0.045, 0.7651)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Xform "Cracker_3" (
+        prepend references = @assets/cracker.usda@
+    )
+    {
+        float xformOp:rotateZ = -8
+        double3 xformOp:translate = (0.34600000000000003, 0.11199999999999999, 0.7578)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+    }
+
+    def Xform "Cracker_4" (
+        prepend references = @assets/cracker.usda@
+    )
+    {
+        float xformOp:rotateZ = 7
+        double3 xformOp:translate = (0.397, 0.11499999999999999, 0.7578)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+    }
+
+    def Xform "Cracker_5" (
+        prepend references = @assets/cracker.usda@
+    )
+    {
+        float xformOp:rotateZ = -6
+        double3 xformOp:translate = (0.452, 0.11199999999999999, 0.7578)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+    }
+
+    def Xform "Cracker_6" (
+        prepend references = @assets/cracker.usda@
+    )
+    {
+        float xformOp:rotateZ = 4
+        double3 xformOp:translate = (0.47400000000000003, 0.047, 0.7578)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+    }
+}
+
