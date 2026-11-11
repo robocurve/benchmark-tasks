@@ -1,0 +1,20 @@
+{
+  "title": "Slide three tiles in frame into card order without lifting out of frame",
+  "category": "Impact on jobs",
+  "instruction": "Slide the three tiles in the frame into the order shown on the card using the empty cell, without lifting a tile out of the frame.",
+  "setup": "Fixed 2x2 cell rimmed frame (outer 164 x 164 mm, rim 4 mm tall) at (0.28, 0.0). Three free tiles (64 x 64 x 15 mm, mass 0.04 kg, friction 0.5): Blue, Orange, Yellow. Start configuration: Yellow in cell 0, Empty in cell 1, Orange in cell 2, Blue in cell 3. Goal card at (0.28, -0.15) displays goal: Blue in 0, Orange in 1, Yellow in 2, Empty in 3.",
+  "context": "Non-prehensile planar rearrangement, constrained sliding-puzzle assembly, collision-guided multi-step contact pushing.",
+  "scoring": "Ladder: 0.25 one tile in goal cell; 0.50 two tiles; 0.75 all three in goal cells; 1.00 all three in goal cells, empty cell at goal, tilt < 5 deg, resting, arms clear, held 2 s. Zero-gate: any tile lifted > 12 mm above table or escaping frame scores 0.",
+  "run_limit": "1500 steps",
+  "fidelity": "Rigid body PhysX simulation with Coulomb friction (0.5), accurate mass (0.04 kg per tile), low rim containment geometry (4 mm outer rim), and compliant arm dynamics. Pushing and tile-to-tile sliding contacts are resolved through physical contact without artificial magnetic snapping.",
+  "reset_notes": "Frame and card fixed on table, three tiles resting flat inside frame cells, arms parked at home ready pose.",
+  "keywords": [
+    "sliding tile",
+    "planar pushing",
+    "puzzle",
+    "contact rearrangement",
+    "in-hand manipulation"
+  ],
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-NLKJXD"
+}
