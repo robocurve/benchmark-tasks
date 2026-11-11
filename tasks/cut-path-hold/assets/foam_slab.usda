@@ -1,0 +1,44 @@
+#usda 1.0
+(
+    defaultPrim = "Slab"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Slab" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+)
+{
+    float physics:mass = 0.15
+
+    def Cube "body" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        double size = 1
+        color3f[] primvars:displayColor = [(0.93, 0.93, 0.90)]
+        float3 xformOp:translate = (0, -0.03, 0.015)
+        float3 xformOp:scale = (0.10, 0.18, 0.03)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "handle_tab" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        double size = 1
+        color3f[] primvars:displayColor = [(0.15, 0.65, 0.25)]
+        float3 xformOp:translate = (0, 0.09, 0.012)
+        float3 xformOp:scale = (0.04, 0.06, 0.024)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "cut_line"
+    {
+        double size = 1
+        color3f[] primvars:displayColor = [(0.90, 0.10, 0.10)]
+        float3 xformOp:translate = (0, -0.05, 0.0305)
+        float3 xformOp:scale = (0.10, 0.02, 0.001)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+}
