@@ -1,27 +1,42 @@
 {
   "status": "passed",
-  "scope": "Native execution of the bundled task, scorer, demo runner and calibrated camera; subsequent changes only update evidence, media and documentation.",
-  "native_executed_revision": "6d5f35a2a1c792cc6f1b8b6885fcf82e292c0e6f",
-  "task_fingerprint_at_execution": "c41cbdb454539249c11504866d01b4965dba26a25315f7976495254b1b620448",
+  "scope": "Fresh native left-hand recovery and Dream evaluation with revised contact scoring; physical right-hand control retains partial credit. No physical robot trials.",
+  "hostname": "visnu",
+  "native_devices": {
+    "requested": "cuda:1",
+    "environment": "cuda:1",
+    "simulation_config": "cuda:1",
+    "physics_manager": "cuda:1",
+    "robot_tensors": {
+      "left": "cuda:1",
+      "right": "cuda:1"
+    }
+  },
+  "native_executed_revision": "9e3e35720302cb3d0ff559798d8dcb443d5ad50d",
+  "counterexample_revision": "455913d39db52378eaed6f66d7016bbe05bd9431",
+  "task_fingerprint_at_execution": "77d57c760b68a727e5d027392e77186d0d3b73939493e37773e86967a429914d",
   "seed": 0,
   "steps": 296,
   "score": 1.0,
   "simulated_time_s": 14.8,
-  "wall_time_s": 124.07250130898319,
+  "wall_time_s": 113.76729645207524,
   "source_unchanged_during_execution": true,
   "validated_code_sha256": {
     "geometry.json": "7ba79c0f6303d969361c3e8e8501ddac5f25f091ed863493d9ae5e2778d17c5d",
-    "trajectory.json": "5e8c854171e042b9dd5a21e2dedf9b4e0808ecfe75b7d9edf21a223bbb44ee2a",
-    "run_demo.py": "8cf83d14245ca2b578630d87c14296a6d5d86c1667571595dfac4812ab469ced",
-    "task.py": "a6b2aea80ef58aa5e7ee5dd39e11af93e84bd49340100da4646b5e04779b5070",
+    "trajectory.json": "ed756276b8b7cf9bd7026de0f5804234b5e310baf7826cbf7b6aeb657392e954",
+    "task.py": "c7d29420379840e4a8b3a0d0da1f5ff65ac3851c023e759dce05bcf6b09f1715",
     "pilot.json": "69a2b0ee7b916ba251dcdc885ff3b25b83ba7a63308b4e347bd6560b343bb77b",
     "runtime/resist_isaac/usd_assets.py": "7d6edc7ae31d6fac1bc3450d6bb4a280a872f8beba70f8b3a08eab64fb9d281e",
     "runtime/resist_isaac/recovery.py": "edfc017a89974eb5df1e58b57b5e9ebfa5ad925010f952620f69fa2babc55bde",
     "runtime/resist_isaac/storage_tasks.py": "14b6846c0e07556c1d5e0d1e80fb472f9cf41a4d9e9b1cd3442f7de1e9f09203",
     "runtime/resist_isaac/__init__.py": "ed18fdcd2a9d169b9c4a2739ba20805f3a2838cd222fc22c0d61c7bb63ef2e84",
     "runtime/resist_isaac/connector_tasks.py": "7757cf792c41c40c9c595a9d38d19a8bf1bb39dc54e938771c9e6bf7ca0f2c34",
-    "runtime/resist_isaac/runtime.py": "a733dfaf36cdf3bded8821edce4b185462ff372a6941242e4a790cf3b9e61919",
+    "runtime/resist_isaac/runtime.py": "cd046e6659c84ef078d3350da7c6064a8d428748fba764154755063d46570d69",
     "runtime/resist_isaac/state.py": "9ebf40d1469ca02ff354400dacebe6b20d17d4ff411605bac479c677c65bd384",
-    "runtime/resist_isaac/clearance_recovery.py": "a4cb37d69f428961c87c01b18952c5a67cedae94b7a1e03a0d614d7188bb815e"
-  }
+    "runtime/resist_isaac/clearance_recovery.py": "077eee9d37ecdd6a4fe580df3a46a840cdbd94c8ec2fcabc463df0a9d8cd396c",
+    "grasp.py": "ffed073bd8962171a41b5d964e80f18fbd7582d2a68309e93ad96c57b32713c1",
+    "run_demo.py": "d16fd10649fe5a787ca3bd65eadc69e9f3d3e5e612f3f213edfe5991abffb205"
+  },
+  "revision_scope": "Recovery/Dream used 9e3e357; 455913d changes only the right_hand_decoy trajectory, validated separately. Later changes update documentation, evidence and media only.",
+  "counterexample_limit": "Right-only contact rejection and partial credit demonstrated. The old endpoint held for at most one control, not the required 20-control interval."
 }

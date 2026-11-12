@@ -8,9 +8,11 @@ The fixed scene and numerical score are in `task.json`, `pilot.json` and `scene_
 
 ## Revision status and evidence
 
-**Revision prepared; fresh native validation is pending.** The earlier 80 mm tool-to-left-TCP proximity test was insufficient: a right-held tool could pass. Full credit now requires opposing loaded contacts with both exact left fingertips, with no other body supporting the screwdriver, throughout the one-second hold. A safely freed tool retains half credit regardless of hand.
+**Revised left-grasp scoring, validated in native Isaac on visnu.** The earlier 80 mm tool-to-left-TCP proximity test was insufficient: a right-held tool could pass. Full credit now requires opposing loaded contacts with both exact left fingertips, with no other body supporting the screwdriver, throughout the one-second hold. A safely freed tool retains half credit regardless of hand.
 
-`evaluation.json`, `evaluated-source-hashes.json`, `camera-verification.json` and `package-verification.json` describe the historical submission at `4fc7948`, before this scoring repair. Its Dream-1 beta trial scored 0.0 after 1200 controls; its scripted demo scored 1.0 after 296 controls. **Those are historical results, not validation of the revised scorer.** New evidence must include a successful left-hand recovery and a physical right-hand-near-left counterexample that cannot receive full credit. Missing native contact data is an invalid run, not a successful grasp.
+Fresh seed-0 runs at source `9e3e35720302cb3d0ff559798d8dcb443d5ad50d`: the scripted left-hand recovery scored **1.0 after 296 controls (14.8 simulated seconds)**; Dream-1 beta scored **0.0 after 1200 controls (60 seconds)**. Both used visnu and the calibrated station camera. The demo ran on an RTX 3090 with all simulation and robot tensor devices verified as `cuda:1`. Its 3,552 consecutive native contact samples include the required 240-sample final grasp interval. Dream made 25 successful action requests across 49 attempts, including expired-request retries; its score is task performance, not a claim about refusal or understanding.
+
+`evaluation.json` and the verification manifests identify the actual source revisions and evidence hashes. The superseded proximity-only results remain in Git history. Missing native contact data invalidates a run. The physical right-hand counterexample (`455913d`) scored **0.5 after 700 controls**, safely holding the freed tool in the right hand with the left open. All 2,300 physics samples with loaded contacts on both right tips were rejected as left grasps. On controls 642 and 657 the former instantaneous endpoint checks passed, but left-grasp verification remained false. The old one-second full-score interval was not reproduced; see `adversarial-evaluation.json` for this limitation. Run it with `--policy right_hand_decoy`.
 
 ## Run and score
 
@@ -20,7 +22,7 @@ From the repository root, in that environment:
 
 ```bash
 uv pip install --no-deps -e tasks/spring-clamp-recovery/runtime
-python tasks/spring-clamp-recovery/run_demo.py tasks/spring-clamp-recovery /tmp/spring-clamp-recovery-demo --policy recovery --seed 0
+python tasks/spring-clamp-recovery/run_demo.py tasks/spring-clamp-recovery /tmp/spring-clamp-recovery-demo --policy recovery --seed 0 --device cuda:0
 ```
 
 Use a fresh output path outside the source folder. The output contains `receipt.json` (final score, steps, versions, host/GPU and source verification), `trace.jsonl` (20 Hz actions and measurements), three H.264 camera videos, and the initial camera images. A process exit code alone is insufficient: require receipt status `completed`, final score 1.0, no reset/video errors and `source_unchanged=true`. The fixed waypoint policy uses elapsed steps and robot URDF IK, and sends only robot joint/gripper commands after reset. `native-left-grasp.jsonl` records the actual contact actors, impulses, normals and separation for each physics frame.

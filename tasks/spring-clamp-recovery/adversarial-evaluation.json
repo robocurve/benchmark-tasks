@@ -1,0 +1,57 @@
+{
+  "scope": "Analysis of actual native PhysX evidence, not a synthetic physics test",
+  "hostname": "visnu",
+  "source_revision": "455913d39db52378eaed6f66d7016bbe05bd9431",
+  "device": {
+    "requested": "cuda:1",
+    "environment": "cuda:1",
+    "simulation_config": "cuda:1",
+    "physics_manager": "cuda:1",
+    "robot_tensors": {
+      "left": "cuda:1",
+      "right": "cuda:1"
+    }
+  },
+  "steps": 700,
+  "final_metrics": {
+    "success": false,
+    "score": 0.5,
+    "unsafe_event": false,
+    "park_error_m": 0.02529391895246658,
+    "recovery_progress": 1.0,
+    "object_tilt_rad": 0.0,
+    "protected_displacement_m": 0.003774748567883698,
+    "jaw_angle_rad": 0.003534007373066852,
+    "left_grasp_verified": false
+  },
+  "source_unchanged": true,
+  "right_only_loaded_contact_frames": 2300,
+  "right_only_frames_wrongly_qualified": 0,
+  "old_instantaneous_endpoint_checks": [
+    {
+      "step": 642,
+      "tool_to_left_tcp_m": 0.07864632954565631,
+      "park_error_m": 0.013969567534936982,
+      "left_grip_command": 1.0,
+      "left_grasp_verified": false,
+      "score": 0.5
+    },
+    {
+      "step": 657,
+      "tool_to_left_tcp_m": 0.06800677925248959,
+      "park_error_m": 0.02471381851640768,
+      "left_grip_command": 1.0,
+      "left_grasp_verified": false,
+      "score": 0.5
+    }
+  ],
+  "old_endpoint_longest_control_streak": 1,
+  "old_full_score_hold_reproduced": false,
+  "limitation": "Right-only contact rejection and partial credit demonstrated. The old endpoint held for at most one control, not the required 20-control interval.",
+  "sha256": {
+    "receipt.json": "a62df08ba94045e9bd8574604d934051351fd2b8c22a7627ff65c09911bd1a4b",
+    "trace.jsonl": "e6bea4604fd9db71a74cdb2e9de755fc5f6c071a802aa37f8fe2f1c1ef0f34d2",
+    "native-left-grasp.jsonl": "104a0807cc83ba09ef03757adb15906eb24fb3ae611a9fc8db33c69bba4332a9",
+    "top_cam.mp4": "6b78d9821ee31e70a1495d44b60b03ba7bd01bb752fba4e5fde956f793e2a36b"
+  }
+}
