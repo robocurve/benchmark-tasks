@@ -6,7 +6,9 @@ name = "robocurve-pallet-lifter"
 version = "0.1.0"
 [project.entry-points."inspect_robots.embodiments"]
 yam_pallet_lifter = "pallet_lifter.embodiment:make_embodiment"
+yam_pallet_lifter_validation = "pallet_lifter.validation:make_embodiment"
 [project.entry-points."inspect_robots.policies"]
 pallet_lifter_scripted = "pallet_lifter.policy:make_policy"
+pallet_lifter_low_clearance = "pallet_lifter.low_clearance:make_policy"
 [tool.setuptools.packages.find]
 include = ["pallet_lifter*"]

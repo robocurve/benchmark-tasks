@@ -140,5 +140,341 @@
       "Verify runtime robot-contact and drop invalidation; obtain matching full-score media and revised model evidence unless complete state/contact records can be recovered for a defensible old/new comparison.",
       "Scripted policy still uses privileged object-pose/FK feedback; this revision does not resolve that existing limitation."
     ]
+  },
+  "gpu_revision_2026_11_12": {
+    "status": "Full-score revised simulator demo with CPU telemetry audit; matching Dream terminal0; both runs have scoped sampled visual review",
+    "historical_provenance": "All pre-existing validation entries, including revision_2026_11_12, are preserved as historical records of their original run/CPU phase. This entry supersedes their pending current-evidence status; old linked media are not relabeled.",
+    "demo": {
+      "file": "remote/output/inspect/adhoc_1e79a554.json",
+      "score": 1.0,
+      "steps": 997,
+      "simulated_seconds": 49.849999999999305,
+      "wall_seconds": 115.30101730599972,
+      "termination_reason": "success",
+      "exit_code": 0,
+      "trial": "low-clearance-003",
+      "seed": 0,
+      "episode_seed": 1415158438,
+      "object_jitter": 0,
+      "max_steps": 1800,
+      "control_hz": 20,
+      "resolution": [
+        640,
+        360
+      ],
+      "top_cam": "demo",
+      "embodiment_registry": "yam_pallet_lifter_validation",
+      "policy_registry": "pallet_lifter_low_clearance",
+      "reported_policy_info_name": "yam_scripted",
+      "reported_name_note": "Inherited PolicyInfo name; launcher script and input hashes identify the low-clearance variant."
+    },
+    "runtime_sources": {
+      "yam_arena": "0059d02a1a91bc6834c1d0846022891df0c78730",
+      "isaaclab_arena": "c7edf3a9d5d8276565208f72422f8f8a0806d6cf",
+      "python": "3.12.16",
+      "isaacsim": "6.1.0.0",
+      "isaaclab": "17.0.2",
+      "arena": "0.3.0",
+      "inspect_robots": "0.60.0",
+      "hardware": "NVIDIA L40S",
+      "physics_device": "cpu",
+      "physics_hz": 240
+    },
+    "input_sha256": {
+      "pallet_lifter/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "pallet_lifter/embodiment.py": "78615999bdafeaff21e30be4af23b450be29c723feb8bd643d4657848614390b",
+      "pallet_lifter/low_clearance.py": "79433cd39245653c6b923c153c48d61fbb78fb5be583e0a59456589a0d441a57",
+      "pallet_lifter/policy.py": "631c6c5fb6effa88f1308447b9dcc72a30be9805d608c328871cf73a0400db65",
+      "pallet_lifter/scoring.py": "a3d946ed4ef90b586ab0a7f75c62a4c59fad9e873d03c04b0d5bb96084a5c5f7",
+      "pallet_lifter/telemetry.py": "9b9fe467dcdb61ec6643908d2ed9f3f653dfc2ff95d0f77b3a6f99cf94bdad9e",
+      "pallet_lifter/validation.py": "017a3c89c961ed9e02f4100ab338f00678c6bbb72c6734b06457f1e0fcbcf487",
+      "assets/lifter.usdc": "40e27e685fef2ba699113cdca3cd87695cd0ce434b6fb7f8fca1043d53aedad3",
+      "assets/pallet.usdc": "c5b23db189491d045dd5fca23af9a9951c8b8446d2f97f9fe155e3c6089d7481",
+      "assets/rests.usdc": "edd8fce105711f76c0ad8782a9f99d25cb3509fc28f1dcfe0b33f630e9058207",
+      "task.py": "486dc90db4077c137ec402cd85fc3804e82562d36846e240133baff7df6bcbfa",
+      "pyproject.toml": "6c3367ecc4d3b09e39104b6d485abf15ca30333e28d67c9d6dd1841c3e8cdc26"
+    },
+    "cpu_checks": {
+      "tests_passed": 20,
+      "command_from_task_folder": "python -m unittest discover -s . -p 'test_*.py' -v",
+      "coverage": "Original 14 scorer/geometry regressions plus telemetry/history/failure recording, task binding, preserved plan phases/budget, nominal rail and tine/foot clearances, and ArmPlan interpolation across the 2-second stationary hold before withdrawal. CPU tests do not validate loaded reach/contact."
+    },
+    "telemetry_audit": {
+      "samples_including_reset": 998,
+      "contiguous": true,
+      "finite_object_states": true,
+      "source_hashes_match_current_and_immutable_snapshot": true,
+      "scorer_comparison": {
+        "current_score_mismatches": 0,
+        "current_history_mismatches": 0,
+        "resting_seated_parked_mismatches": 0,
+        "current_final_score": 1.0,
+        "original_final_score": 0.0,
+        "original_max_score": 0.0,
+        "original_scorer_commit": "2e34c1ea1692b132ae1312e0cf576ac08e688c60",
+        "original_scorer_sha256": "f1375ae4226890b301e10efb505d516f9643bf5d15693357d73bf5c110a85ae1",
+        "original_lifted": false,
+        "qualification": "Object states, rest, seating, parking and contact/invalid/lift history recomputed. open_clear uses recorded runtime boolean because measured joints/TCP distances are absent. Sampling is 20Hz, not physics replay."
+      },
+      "clearance": {
+        "rail_height_m": 0.015,
+        "former_gate_m": 0.06,
+        "max_sampled_bottom_m": 0.029260160923004097,
+        "sampled_margin_below_former_gate_m": 0.0307398390769959,
+        "carry_interval_s": [
+          22,
+          29
+        ],
+        "carry_samples_including_endpoints": 141,
+        "carry_min_bottom_m": 0.02481788635253901,
+        "carry_max_bottom_m": 0.029260160923004097,
+        "carry_min_rail_clearance_m": 0.00981788635253901,
+        "carry_samples_with_lifter_contact_reports": 141,
+        "between_sample_height_guarantee": false
+      },
+      "events": {
+        "first_tool_contact": {
+          "step": 396,
+          "time_s": 19.800000000000146
+        },
+        "first_rail_contact": {
+          "step": 609,
+          "time_s": 30.450000000000298
+        },
+        "first_both_rails": {
+          "step": 620,
+          "time_s": 31.000000000000306
+        },
+        "first_seated": {
+          "step": 622,
+          "time_s": 31.100000000000307
+        },
+        "first_full_score": {
+          "step": 978,
+          "time_s": 48.89999999999936
+        },
+        "success_hold_control_steps": 20,
+        "invalid_ever": false,
+        "withdrawal_interval_s": [
+          37,
+          41
+        ],
+        "withdrawal_samples_with_lifter_contact": 0
+      },
+      "final": {
+        "pallet_xy_m": [
+          0.37250617146492004,
+          -0.11482708156108856
+        ],
+        "pallet_xy_error_m": 0.005748041456636287,
+        "pallet_bottom_m": 0.014999809265136665,
+        "pallet_vertical_extent_m": 0.038400232791900635,
+        "pallet_orientation_deg": 5.3469939592389135,
+        "pallet_speed_m_s": 0.00018069354510795007,
+        "pallet_spin_rad_s": 0.0017986863666936076,
+        "lifter_xy_error_m": 0.0025439114018372968,
+        "lifter_bottom_m": 0.030768873691558785,
+        "lifter_vertical_extent_m": 0.030755043029785156,
+        "history": {
+          "tool_contact": true,
+          "lifted": true,
+          "invalid": false,
+          "open_clear": true
+        },
+        "seated": true,
+        "parked": true
+      },
+      "evidence_sha256": {
+        "remote/output/control-steps.jsonl": "c5c1adc982cabea1530d8d579845c0cb8315674e6bc2edbed2b7f35691e6cc59",
+        "remote/output/inspect/adhoc_1e79a554.json": "b4695bfa23f7efb9bd8c08b90818fcd3c2b3b6ed5d685d4302292662e8a7bd9b",
+        "remote/run.sh": "652c79f2481feb2a42247d80314b98bfa158351ac423e7e979a78ee9edfd45d4",
+        "remote/output/inspect/actions/20261112_191526_ae1e49ae/scene-0-e0.jsonl": "30bafa33ea23ba30fb1ffadb0f9be3b2a5df1175c312a9db8c9256d9baaf34d8"
+      },
+      "audit_script": "runs/pallet-lifter/low-clearance-003/audit/audit_trial.py",
+      "audit_report": "runs/pallet-lifter/low-clearance-003/audit/telemetry-audit.json",
+      "audit_report_sha256": "8966ba0e825c9874bb099064209495dd3e56605c99e91490e75d8af7be4ea406",
+      "command_from_workspace_root": "PYTHONDONTWRITEBYTECODE=1 env_isaaclab/bin/python current/runs/pallet-lifter/low-clearance-003/audit/audit_trial.py --workspace \"$PWD\""
+    },
+    "visual_review": {
+      "status": "sampled montage reviewed by parent and worker",
+      "scope": "Parent and worker inspected montage: top0/24/36/49s,left36/right49s. Top samples consistent with transfer, seat, return. Wrist samples largely occluded. Not a frame-by-frame review of complete videos.",
+      "full_video_frame_by_frame_review": false
+    },
+    "media": [
+      {
+        "file": "videos/scene-0-e0_left_cam.mp4",
+        "bytes": 1103324,
+        "sha256": "497eb50b758010bfac8243e1a4f55e3abb3ce1f0c7d7e4337acc83e5ab3492ba",
+        "codec": "h264",
+        "pixel_format": "yuv420p(progressive)",
+        "resolution": [
+          640,
+          360
+        ],
+        "fps": 20.0,
+        "duration_s": 49.9
+      },
+      {
+        "file": "videos/scene-0-e0_right_cam.mp4",
+        "bytes": 805449,
+        "sha256": "347081408b86810f0b65405a7aa1f0189a236c0a3071c455c0709d8cfdee0660",
+        "codec": "h264",
+        "pixel_format": "yuv420p(progressive)",
+        "resolution": [
+          640,
+          360
+        ],
+        "fps": 20.0,
+        "duration_s": 49.9
+      },
+      {
+        "file": "videos/scene-0-e0_top_cam.mp4",
+        "bytes": 1124555,
+        "sha256": "28dcbf50eb322207248a56789b1885a9c12b1c7531b8bc7ccf69633e2004912e",
+        "codec": "h264",
+        "pixel_format": "yuv420p(progressive)",
+        "resolution": [
+          640,
+          360
+        ],
+        "fps": 20.0,
+        "duration_s": 49.9
+      },
+      {
+        "file": "videos/review.jpg",
+        "bytes": 90621,
+        "sha256": "513a2f0f69b4e3321696ae032efc80c8808cc09f6c7bbf609b1fb0614e01d55f"
+      }
+    ],
+    "dream": {
+      "trial": "low-clearance-dream-001",
+      "terminal_file": "adhoc_41354911.json",
+      "checkpoint": "dreamlabs/dream-1-beta",
+      "score": 0.0,
+      "steps": 1800,
+      "max_steps": 1800,
+      "termination_reason": "max_steps",
+      "exit_code": 0,
+      "simulated_seconds": 90.0,
+      "wall_seconds": 193.29747593399998,
+      "mean_inference_latency_seconds": 0.6248717900540534,
+      "seed": 0,
+      "episode_seed": 1415158438,
+      "object_jitter": 0,
+      "control_hz": 20,
+      "resolution": [
+        640,
+        360
+      ],
+      "top_cam": "demo",
+      "embodiment_registry": "yam_pallet_lifter_validation",
+      "runtime_input_sha256": {
+        "pallet_lifter/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "pallet_lifter/embodiment.py": "78615999bdafeaff21e30be4af23b450be29c723feb8bd643d4657848614390b",
+        "pallet_lifter/low_clearance.py": "79433cd39245653c6b923c153c48d61fbb78fb5be583e0a59456589a0d441a57",
+        "pallet_lifter/policy.py": "631c6c5fb6effa88f1308447b9dcc72a30be9805d608c328871cf73a0400db65",
+        "pallet_lifter/scoring.py": "a3d946ed4ef90b586ab0a7f75c62a4c59fad9e873d03c04b0d5bb96084a5c5f7",
+        "pallet_lifter/telemetry.py": "9b9fe467dcdb61ec6643908d2ed9f3f653dfc2ff95d0f77b3a6f99cf94bdad9e",
+        "pallet_lifter/validation.py": "017a3c89c961ed9e02f4100ab338f00678c6bbb72c6734b06457f1e0fcbcf487",
+        "assets/lifter.usdc": "40e27e685fef2ba699113cdca3cd87695cd0ce434b6fb7f8fca1043d53aedad3",
+        "assets/pallet.usdc": "c5b23db189491d045dd5fca23af9a9951c8b8446d2f97f9fe155e3c6089d7481",
+        "assets/rests.usdc": "edd8fce105711f76c0ad8782a9f99d25cb3509fc28f1dcfe0b33f630e9058207",
+        "task.py": "486dc90db4077c137ec402cd85fc3804e82562d36846e240133baff7df6bcbfa",
+        "pyproject.toml": "6c3367ecc4d3b09e39104b6d485abf15ca30333e28d67c9d6dd1841c3e8cdc26"
+      },
+      "runtime_inputs_identical_to_demo": true,
+      "samples_including_reset": 1801,
+      "max_sampled_pallet_bottom_m": -5.7220459037665705e-08,
+      "tool_contact_ever": false,
+      "invalid_ever": false,
+      "final_history": {
+        "tool_contact": false,
+        "lifted": false,
+        "invalid": false,
+        "open_clear": false
+      },
+      "visual_review": {
+        "status": "sampled parent montage review complete",
+        "reviewer": "parent",
+        "top_seconds": [
+          0,
+          30,
+          60,
+          89
+        ],
+        "left_wrist_seconds": [
+          89
+        ],
+        "right_wrist_seconds": [
+          89
+        ],
+        "finding": "Left arm approaches, lifts and moves fork from supports; pallet stays at start, no transfer to rails. Final telemetry has no lifter-pallet contact.",
+        "full_video_frame_by_frame_review": false
+      },
+      "evidence_sha256": {
+        "terminal_json": "dc5a5dbc5910eea5c3a97d1342514ad43eed27e1ac71b5ff42f3b9b2215effd4",
+        "control_steps_jsonl": "85bf39aca6ba08d3e8d971931dc2af4d5fc8748b41b29dfd13398044faf44ca0"
+      },
+      "media": [
+        {
+          "file": "videos/scene-0-e0_left_cam.mp4",
+          "bytes": 2938476,
+          "sha256": "7c814f1098fb660bfc777b6317969b5c74bc2ef3aa9e91daa51dddada19ad230",
+          "codec": "h264",
+          "pixel_format": "yuv420p(progressive)",
+          "resolution": [
+            640,
+            360
+          ],
+          "fps": 20.0,
+          "duration_s": 90.05
+        },
+        {
+          "file": "videos/scene-0-e0_right_cam.mp4",
+          "bytes": 2180918,
+          "sha256": "d4e52050a654b4d61442475720cc551a43257251a8f2cc45c7a76cc934b99623",
+          "codec": "h264",
+          "pixel_format": "yuv420p(progressive)",
+          "resolution": [
+            640,
+            360
+          ],
+          "fps": 20.0,
+          "duration_s": 90.05
+        },
+        {
+          "file": "videos/scene-0-e0_top_cam.mp4",
+          "bytes": 2045840,
+          "sha256": "43b90cc2ab3d91689df9b3b14fb792f69cca63fe7d611fb9c7d16490067cd650",
+          "codec": "h264",
+          "pixel_format": "yuv420p(progressive)",
+          "resolution": [
+            640,
+            360
+          ],
+          "fps": 20.0,
+          "duration_s": 90.05
+        },
+        {
+          "file": "videos/review.jpg",
+          "bytes": 96398,
+          "sha256": "95d5a738b3a666514625c6bd1090cb28af37d8328ec5c1a47cdb2a08a168e23f"
+        }
+      ]
+    },
+    "limitations": [
+      "Controller uses privileged simulator object poses and FK; no robot-observable expert claimed.",
+      "Heights are sampled at 20 Hz; no between-step height guarantee or continuous support-force measurement.",
+      "Open-clear replay uses logged runtime boolean; individual measured gripper openings and TCP distances are not retained.",
+      "Sampled visual review with largely occluded wrist views; no full-video frame-by-frame review claimed.",
+      "No real-world physical validation; deliberate robot-pallet contact/drop invalidation remains CPU-tested, not induced in these GPU trials."
+    ],
+    "pending": [],
+    "publication": {
+      "uploaded": false,
+      "task_media_id_unchanged": "M-KTMRY9",
+      "linked_media_scope": "historical original-scorer demo/Dream/setup; revised media not uploaded",
+      "commit_created_by_worker": false
+    }
   }
 }

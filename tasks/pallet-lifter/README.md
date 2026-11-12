@@ -5,15 +5,28 @@ it to two inspection rests, lower it, withdraw the fork and return the tool. The
 remains a separate free rigid body supported by contact and friction throughout the carry.
 The loaded blank is a rigid part of the pallet; this task does not assemble or machine it.
 
-The historical scripted physics demonstration scored **1.0** in **957 steps** (47.85 simulated
-seconds), terminated with **success**, and took **103.52 seconds wall time** on an L40S.
-All three complete H.264 videos were downloaded. The top sequence and final placement
-were visually inspected: the loaded pallet rests on the green rails, the fork is withdrawn
-and returned, and both hands are clear. These results and the linked media use the
-original scorer with its 60 mm lift prerequisite. The revised scorer is validated
-offline only: 14 CPU tests pass, including actual PhysX robot prim paths and USD
-collision geometry. No GPU simulation, trajectory rescore or Dream rerun has been
-performed for this revision. The historical Dream-1 trial is recorded below.
+The revised low-clearance simulator demonstration, `low-clearance-003`, scored
+**1.0 in 997 actions** (49.85 simulated seconds), terminated with **success**,
+and took **115.30 seconds wall time** on an L40S. Its maximum sampled pallet
+bottom was **29.26 mm** above the table. During the 22–29 s carry, the sampled
+bottom was 24.82–29.26 mm, at least **9.82 mm above the 15 mm rails**. The pallet
+remained seated through fork withdrawal and tool return, with a 20-step success
+hold. The 20 Hz samples do not exclude height excursions between samples.
+
+All 998 reset/control records reproduce the current scorer with no mismatch;
+the original scorer returns 0 throughout the same recording. Three native
+H.264 camera videos are retained. The reviewed montage contains top views at
+0/24/36/49 s and wrist views at left36/right49 s; the top samples are consistent
+with transfer, placement and return, while the wrist samples are largely
+occluded. This is sampled visual review, not a frame-by-frame video review or
+real-world physical validation. The controller still uses privileged poses/FK.
+
+The matching fresh Dream-1 run scored **0 in 1,800 actions** (`max_steps`), with
+identical runtime/asset hashes. Its three videos have scoped parent montage
+review, described below. The original
+957-step demo and original Dream run remain historical; the unchanged linked
+media use the original scorer. `validation.json` preserves those records and
+adds separate revised evidence. All 20 CPU tests pass.
 
 
 ## Reproduce
@@ -22,21 +35,26 @@ From this folder in the configured YAM Arena RTX environment:
 
 ```bash
 uv pip install -e . --no-deps
-python -m unittest discover -s . -p test_score.py
-inspect-robots run --embodiment yam_pallet_lifter --policy pallet_lifter_scripted \
-  -E task="$PWD/task.py" -E object_jitter=0 -E device=cpu -E top_cam=demo \
+python -m unittest discover -s . -p 'test_*.py'
+export TRIAL_OUTPUT=/path/outside/repository/pallet-low-clearance-demo
+inspect-robots run --embodiment yam_pallet_lifter_validation --policy pallet_lifter_low_clearance \
+  -E task="$PWD/task.py" -E telemetry_path="$TRIAL_OUTPUT/control-steps.jsonl" \
+  -E object_jitter=0 -E device=cpu -E top_cam=demo \
   -E control_hz=20 -E cam_width=640 -E cam_height=360 \
   --instruction 'Use the forked lifter to move the loaded pallet onto the two green inspection rests. Withdraw and return the lifter to its supports, then open both grippers.' \
   --scorer task_score --max-steps 1800 --seed 0 --store-frames \
-  --log-dir /path/outside/repository/pallet-demo
+  --log-dir "$TRIAL_OUTPUT/inspect" --no-prompt --grader none --no-rerun
 ```
 
-Use `$SIM_ROOT/cluster/run-arena.sh` inside the L40S allocation. Render the terminal
-JSON with `inspect-robots video <run.json>`. The model trial uses the same embodiment,
-scene, seed and limit with `--policy dream -P model=dreamlabs/dream-1-beta`.
+Activate the configured Arena environment before installation. On Brev this is
+`source ~/IsaacLab-Arena/yam.env`; CARC uses its documented allocation launcher.
+Render the terminal JSON with `inspect-robots video <run.json>`. The model trial
+uses the same validation embodiment, task, scene, seed, cameras and limit with
+`--policy dream -P model=dreamlabs/dream-1-beta`, and a fresh `TRIAL_OUTPUT`.
 The offline suite needs NumPy and `usd-core` (the `pxr` module), but does not launch
-Isaac Sim or use a GPU. The run commands above are reproduction instructions,
-not evidence that this revision has been run.
+Isaac Sim or use a GPU. The original `yam_pallet_lifter` and
+`pallet_lifter_scripted` entry points remain available for the historical
+controller; revised results use the command above.
 
 ## Fixed setup and reset
 
@@ -106,7 +124,10 @@ flexes. There are no attachments, welds, pose writes or scripted payload motion.
 
 The demonstration uses privileged object poses and FK for grasp and payload feedback.
 Measured payload slip corrects subsequent robot placement commands; lowering and fork
-withdrawal preserve that correction. A fixed +8 mm x/−10 mm y waypoint adjustment compensates for the measured placement shift under changing load; scoring targets remain fixed. The policy sends robot joint targets only. The
+withdrawal preserve that correction. The historical controller uses fixed
++8 mm x/−10 mm y placement compensation. The low-clearance variant retains
+the +8 mm x adjustment and removes the −10 mm y adjustment; scoring targets
+remain fixed. The policy sends robot joint targets only. The
 model receives ordinary images and joint state through the same contact-enabled embodiment.
 
 YAM source `0059d02a1a91bc6834c1d0846022891df0c78730`, Arena source
@@ -114,25 +135,121 @@ YAM source `0059d02a1a91bc6834c1d0846022891df0c78730`, Arena source
 Isaac Lab 17.0.2, Arena 0.3.0, Inspect Robots 0.60.0, NumPy 2.3.1, Torch 2.11.0+cu128,
 NVIDIA L40S. These are the historical run versions. Their source hashes and media
 validation remain unchanged in `validation.json`; the separate revision entry
-records current scorer/test hashes, offline checks and pending physical evidence.
+records the initial offline phase. `gpu_revision_2026_11_12` adds the revised
+demo, scorer comparison and matching Dream result, preserving all older entries.
+The revised Brev runtime uses Python 3.12.16, Isaac Sim 6.1.0.0, Isaac Lab
+17.0.2, Arena 0.3.0 and Inspect Robots 0.60.0, with the same YAM/Arena source
+commits listed above. Full task runtime/asset hashes match between the new demo
+and Dream; metadata edits do not change the frozen runtime.
 
-## Revision evidence still required
+## Low-clearance demonstration and evidence scope
 
-The 2026-11-12 scorer correction is **offline-validated only**. Before claiming
-physical validation, demonstrate a contact-supported transfer clearing the rails
-while remaining below the former 60 mm threshold, then seating, fork withdrawal,
-tool parking and a one-second full-score hold within 1,800 actions. Record bottom
-height, contact/failure history and final seating/rest/open-clear conditions.
-Check that invalid robot contact and drops still invalidate in the runtime.
+### Separate low-clearance controller
 
-The retained terminal JSON files contain aggregate scores and action-file
+`pallet_lifter_low_clearance` retains the existing privileged simulator-pose/FK
+feedback and changes only the two lift/carry TCP waypoint heights from 106 to
+71 mm above the table. Level contact geometry predicts a 40 mm pallet bottom,
+25 mm above the rails. These are nominal targets, not measured results.
+Pickup, insertion, return and release waypoints are preserved. Following the
+second diagnostic, destination y is shifted from -130 to -120 mm throughout
+carry/lowering/withdrawal, and the fork-clear and withdrawal TCP targets are
+23 mm instead of 31 mm. An additional 2-second stationary hold follows fork
+lowering before horizontal withdrawal. Level tines nominally top out at 12 mm,
+3 mm below the seated feet; actual loaded geometry can differ.
+The separate `yam_pallet_lifter_validation` embodiment inherits the current
+physics and scorer. The original policy and embodiment entry points still exist.
+The module's prevalidation docstring and comments remain unchanged to preserve
+the exact runtime bytes used in both completed runs. This README and the new
+validation entry record the completed evidence and its limits.
+
+CPU preparation: all 20 tests pass (14 existing scorer/geometry checks plus
+six validation checks). Plan tests check the stationary low hold before
+withdrawal, nominal tine/foot clearance, consistent destination y, preserved
+pickup/insertion/return and the action budget. Synthetic states test telemetry,
+contact history, score agreement, height excursions and incomplete records;
+they do not validate physical behavior. Runtime code remains frozen; only
+documentation/validation metadata is being updated.
+The first parent-run GPU diagnostic used an earlier 56 mm TCP target and
+failed: sampled pallet bottom at lift end was 14.08 mm, then it contacted a
+15 mm rail at 24.30 s and tipped. The second diagnostic (71 mm carry) reached a maximum
+sampled pallet bottom of 29.26 mm and briefly scored 0.75, then failed during
+withdrawal. It ended at score 0 in 1,041 actions with `policy_stop`; tool parking
+and open-clear passed, but the pallet was not seated. Rail support first
+appeared at 33.75 s, and withdrawal began at 35 s with persistent lifter contact
+and the tool centre 15.4 mm above its target. Contact during withdrawal displaced
+and rotated the pallet off the rails. These observations motivate the y shift,
+lower clearance target and hold. The third run is the qualified simulator
+demonstration summarized above: first rail contact at 30.45 s, both rail
+reports at 31.00 s, first seated score at 31.10 s, first full score at 48.90 s,
+and success after 20 full-score actions at 49.85 s. All 141 carry samples
+include lifter–pallet reports. None of the 81 withdrawal samples (37–41 s)
+includes lifter–pallet reports. Final pallet xy error is 5.748 mm, bottom
+15.000 mm, vertical extent 38.400 mm, orientation error 5.347°, linear speed
+0.181 mm/s and angular speed 0.00180 rad/s; all meet the current seating checks.
+Tool parking and runtime open-clear also pass, with no invalid history.
+
+For a scheduled reproduction, use the command above from an installed immutable
+task snapshot with a unique `TRIAL_OUTPUT`. After terminal completion, summarize
+the sampled telemetry:
+
+```bash
+python -m pallet_lifter.telemetry "$TRIAL_OUTPUT/control-steps.jsonl" \
+  > "$TRIAL_OUTPUT/telemetry-summary.json"
+```
+
+Use one process/episode and a new telemetry path for every trial; an existing
+path is rejected. `device=cpu` preserves the existing PhysX configuration;
+Isaac Sim cameras still require the scheduled RTX GPU. The parent launcher
+handles installation and log capture; do not launch a second process independently.
+
+The JSONL begins with input hashes and settings, then records reset and every
+control step: object world bounds, bottom height, pose, velocities and rest;
+pallet contact actor paths and report sizes received since the previous sample;
+sticky history flags; current score and independent current-scorer evaluation;
+seating, tool parking, gripper/TCP clearance history, success-hold count and
+termination. CPU audit reconstructed contact/invalid/lift history and object
+predicates from the recording, with zero score/history/rest/seating/parking
+mismatches across 998 samples. Open-clear was taken from the recorded runtime
+boolean because individual measured gripper openings and TCP distances are
+not retained; those thresholds cannot be independently recomputed from this
+recording. Contact reports are events, not a continuous support-force trace.
+Heights are sampled at 20 Hz, not at each 240 Hz physics substep. A sampled
+maximum below 60 mm cannot exclude an excursion between control samples.
+The summary describes sampled evidence; it is not a physical-success verdict.
+Review the matching terminal JSON, telemetry and videos together, including
+actual rail clearance, contact-supported carry, stable seating, tool return
+and release. Do not equate a score with proof of physical feasibility.
+
+The recorded third-run states and contact events, recomputed through the original
+submitted scorer, score zero at every sample because its 60 mm lift gate never
+opens. This comparison uses the new low-clearance recording; it is not a rescore
+of the historical videos. The current scorer returns the recorded final 1.0.
+Runtime robot-contact and drop invalidation have CPU regressions, but were not
+deliberately induced in these GPU trials. Contact actor identities and sampled
+visual evidence do not establish continuous support forces or real-world safety.
+
+The historical terminal JSON files contain aggregate scores and action-file
 references, not per-step object bounds and contact events. They cannot be rescored
 directly. Compare old/new scores if a complete state/contact recording can be
-recovered; otherwise obtain a fresh matching demonstration and model evidence
-under separate authorization. No revised-scoring score is claimed for old media.
+recovered. The comparison above uses the fresh low-clearance trajectory.
+No revised-scoring score is claimed for old media.
 The scripted policy still uses the privileged feedback described above.
 
 ## Dream-1 evaluation
+
+The matching fresh `low-clearance-dream-001` used the same validation embodiment,
+task runtime/assets, instruction, cameras, seed and limit as the new demo.
+`dreamlabs/dream-1-beta` finished at score **0** after **1,800 actions**
+(`max_steps`, 90 simulated seconds, **193.30 s wall time**). All 12 recorded
+runtime input hashes match the demo. Its 1,801 reset/control records show no
+lifter–pallet contact or invalid history; the pallet remains at its source.
+Three native H.264/yuv420p, 640×360, 20 Hz videos, each 90.05 s long, are retained
+with exact file hashes in `validation.json`. The parent reviewed top views at
+0/30/60/89 s and both final wrist views at 89 s: the left arm approaches,
+lifts and moves the fork from its supports, while the pallet stays at its
+source and no transfer to the rails occurs. This is sampled montage review;
+no frame-by-frame review of all video frames is claimed.
+The scripted controller's privileged pose feedback is not an input to Dream.
 
 Historically, `dreamlabs/dream-1-beta` completed with a final score of **0** in **1,800 steps**,
 terminating with `max_steps`. Wall time including initialization and inference
@@ -145,4 +262,4 @@ The reviewed sequence shows the left arm reaching around the fork and loaded pal
 
 `validation.json` preserves the completed original result, runtime revision and
 video hashes. The historical Dream video, demo and setup image remain linked
-through the unchanged media ID in `task.json`.
+through the unchanged media ID in `task.json`; the new runs have not been uploaded.
