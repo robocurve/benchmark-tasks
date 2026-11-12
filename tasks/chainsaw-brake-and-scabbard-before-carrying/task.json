@@ -1,0 +1,21 @@
+{
+  "title": "Make a chainsaw safe to carry: engage the chain brake and fit the bar cover",
+  "category": "Safety and alignment",
+  "keywords": [
+    "bimanual",
+    "chainsaw",
+    "chain brake",
+    "hand guard",
+    "bar cover",
+    "detent"
+  ],
+  "instruction": "Make the chainsaw safe to carry.",
+  "context": "Carrying a chainsaw with the chain brake off and the bar bare is a standard way to be cut. Workplace safety guidance says to keep the brake engaged and cover the chain with a scabbard or bar guard whenever a saw is carried or transported. The task asks a dual-arm robot to leave a saw in that state.",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y to the robot's left); heights above the table top. Layout A (default; TASK_VARIANT=B is its mirror image across the centre line). Generic cordless 10 in chainsaw, 2.8 kg, lying on its flat motor side (rubber feet, friction 0.9), bar pointing to the robot's right: orange plastic housing 20 x 14 x 8.5 cm with its bar root axis at (20, 2), black battery pack 6 x 11.5 x 7.5 cm behind it (to y = +28), grey 1.5 cm sprocket cover, a 25 cm x 2.6 cm steel guide bar lying 10.4 cm above the table with a 7.5 mm thick chain round its rim (overall 3.2 cm wide), black front and rear handles. A red hand guard (7 cm long, 1.2 cm thick, 8.5 cm tall, a 2.6 cm grip bar at its free end) hangs on a vertical hinge 10.8 cm from the bar axis, resting back (0 deg); it swings 35 deg toward the bar tip and snaps over a detent at 17 deg onto its brake stop; the brake is engaged at 26 deg or more. Printed labels: a warning on the housing (engage the brake, fit the cover), CHAIN BRAKE ON/OFF arrow beside the guard. Bar cover: yellow polypropylene channel 26.5 x 5.2 x 2.55 cm (3 mm walls, inside 4.6 x 1.95 cm), 0.14 kg, friction 0.5, open at the end facing the bar, lying on a 4 x 10 cm holder block beyond the tip with its open end 5 cm from the tip, centre at (20, -41.25). Both arms start at the ready pose with open grippers.",
+  "scoring": "The score is that of the current step. 0.25: the chain brake is engaged (hand guard swung forward 26 deg or more), or the cover is on the bar's line and at least half on, brake off. 0.5: the bar cover is on the bar (covers at least 95 percent of the 25 cm visible bar, within 1.2 cm of the bar's axis and 1.0 cm of its mid-plane, tilted under 8 deg, turned under 6 deg from pointing along it), brake off. 0.75: both, not yet held 2 s or an arm in the way. 1.0: both, the arms clear (every tool point above 14 cm or outside a 30 x 90 cm work box), held 2 s (40 steps). Capped at 0.25, latched: the saw moved more than 3 cm or tilted more than 10 deg, or a gripper tool point on the bar or chain (within 2.8 cm of the bar axis, at its height) other than holding the cover. Removing the cover or releasing the brake lowers the score. Start state 0.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Hand guard back (0 deg, brake off). The bar bare. The cover on its holder, open end toward the bar, 5 cm from the tip. The saw flat on its motor side, bar to the right. Nothing consumed between trials.",
+  "fidelity": "Rigid bodies at real size and mass (saw 2.8 kg, cover 0.14 kg), 240 Hz physics. The hand guard is a real hinge with a spring drive; the brake and its detent are task code (the guard snaps toward its stop once past 17 deg), and so is the cover's coverage check (from its pose). The cover's fit on the bar is physics. The chain is a fixed collider; no engine or chain motion. A 25 cm (10 in) bar, not a 40 cm one, to stay in the arms' reach.",
+  "scores": "Dream-1 run: 0.0 (2,400 steps: the right arm hovered over the end of the bar cover and the left stayed near its base; no brake, no cover); scripted demo: 1.0 in 581 steps; ablations: no brake 0.5, no cover 0.25, cover only 32 percent on 0.25, hand on the chain first 0.25 (latched), no motion 0; mirror-image layout B demo: 1.0",
+  "media": "M-FWHJV6"
+}
