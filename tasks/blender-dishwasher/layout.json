@@ -1,0 +1,122 @@
+{
+  "instruction": "Please put the dirty blender parts in the dishwasher.",
+  "table_top_z": 0.7475,
+  "objects": [
+    {
+      "name": "Dishwasher",
+      "asset": "assets/dishwasher.usda",
+      "position": [
+        0.65,
+        -0.245,
+        0.7475
+      ]
+    },
+    {
+      "name": "DishwasherRack",
+      "asset": "assets/dishwasher_rack.usda",
+      "position": [
+        0.403,
+        -0.245,
+        0.8135000000000001
+      ]
+    },
+    {
+      "name": "BlenderJug",
+      "asset": "assets/blender_jug.usda",
+      "position": [
+        0.385,
+        0.19,
+        0.748
+      ]
+    },
+    {
+      "name": "BlenderLid",
+      "asset": "assets/blender_lid.usda",
+      "position": [
+        0.265,
+        0.025,
+        0.748
+      ]
+    },
+    {
+      "name": "MotorBase",
+      "asset": "assets/motor_base.usda",
+      "position": [
+        0.205,
+        0.18,
+        0.748
+      ]
+    }
+  ],
+  "blender_jug": {
+    "mass_kg": 0.18,
+    "height_m": 0.179,
+    "opening_diameter_m": 0.104,
+    "handle_grasp_local": [
+      0,
+      0.095,
+      0.093
+    ],
+    "handle_pinch_width_m": 0.018,
+    "handle_clearance_m": 0.03,
+    "independent_dynamic": true,
+    "washable": true
+  },
+  "blender_lid": {
+    "mass_kg": 0.045,
+    "diameter_m": 0.118,
+    "grip_width_m": 0.018,
+    "grasp_local": [
+      0,
+      0,
+      0.031
+    ],
+    "independent_dynamic": true,
+    "washable": true
+  },
+  "motor_base": {
+    "mass_kg": 0.42,
+    "body_size_m": [
+      0.108,
+      0.1,
+      0.169
+    ],
+    "independent_dynamic": true,
+    "washable": false,
+    "unplugged": true
+  },
+  "dishwasher": {
+    "body_size_m": [
+      0.266,
+      0.362,
+      0.327
+    ],
+    "fixed": true,
+    "door": "already open; fixed in this prototype"
+  },
+  "dishwasher_rack": {
+    "outer_size_m": [
+      0.292,
+      0.324,
+      0.058
+    ],
+    "interior_size_m": [
+      0.28,
+      0.312
+    ],
+    "fixed": true,
+    "extended": true,
+    "floor_z_local": 0.0083
+  },
+  "intended_behavior": [
+    "Load the detached jug and lid in the dishwasher rack.",
+    "Leave the electrical motor base outside the dishwasher."
+  ],
+  "limitations": [
+    "Miniature countertop appliance sized for the YAM station.",
+    "No wash cycle, water, electricity, damage or cleaning simulation.",
+    "Door and extended rack fixed for this loading task.",
+    "Motor cord is visual rigid geometry attached to the base, not a flexible cable.",
+    "Jug wall colliders are a compound approximation; visual food residue is static."
+  ]
+}

@@ -1,0 +1,54 @@
+#usda 1.0
+(
+    defaultPrim = "Environment"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Environment" (
+    customData = {
+        string instruction = "Please put the dirty blender parts in the dishwasher."
+    }
+)
+{
+    def Xform "Dishwasher" (
+        prepend references = @assets/dishwasher.usda@
+    )
+    {
+        double3 xformOp:translate = (0.65, -0.245, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Xform "DishwasherRack" (
+        prepend references = @assets/dishwasher_rack.usda@
+    )
+    {
+        double3 xformOp:translate = (0.403, -0.245, 0.8135000000000001)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Xform "BlenderJug" (
+        prepend references = @assets/blender_jug.usda@
+    )
+    {
+        double3 xformOp:translate = (0.385, 0.19, 0.748)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Xform "BlenderLid" (
+        prepend references = @assets/blender_lid.usda@
+    )
+    {
+        double3 xformOp:translate = (0.265, 0.025, 0.748)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Xform "MotorBase" (
+        prepend references = @assets/motor_base.usda@
+    )
+    {
+        double3 xformOp:translate = (0.205, 0.18, 0.748)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+}
+
