@@ -85,7 +85,7 @@ def execute(args):
         obs=emb.reset(Scene(id=task.name,instruction=cfg['instruction']),seed=args.seed)
         receipt['native_devices']={'requested':args.device,'environment':str(emb._base.device),
             'simulation_config':str(emb._base.sim.cfg.device),
-            'physics_manager':str(emb._base.sim.physics_manager.device),
+            'physics_manager':str(emb._base.sim.physics_manager.get_device()),
             'robot_tensors':{side:str(emb._base.scene[side+'_robot'].data.joint_pos.device) for side in ('left','right')}}
         actual=[receipt['native_devices'][name] for name in ('environment','simulation_config','physics_manager')]
         actual.extend(receipt['native_devices']['robot_tensors'].values())
