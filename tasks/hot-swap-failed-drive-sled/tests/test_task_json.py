@@ -22,7 +22,7 @@ class TaskJson(unittest.TestCase):
         for field in REQUIRED:
             self.assertIn(field, spec, f"missing required field {field!r}")
         self.assertIn(spec["category"], CATEGORIES)
-        self.assertEqual(spec["category"], "Impact on AI timelines")
+        self.assertEqual(spec["category"], "Impact on jobs")
         self.assertLessEqual(len(spec["fidelity"]), 500, "fidelity field must be <= 500 characters")
 
         self.assertIsInstance(spec["run_limit"], str, "run_limit must be a string")

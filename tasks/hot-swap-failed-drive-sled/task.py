@@ -30,7 +30,7 @@ SCENE = "station"
 SCORE_OVER = "end"
 SUCCESS_HOLD_S = 1.0
 
-INSTRUCTION = "One bay has a red lamp: hold its latch button down, pull its sled out, and slide the spare with the blue handle all the way in until the lamp turns green, without moving the other two sleds."
+INSTRUCTION = "One bay has a red lamp. Replace its drive sled with the spare that matches the bay's key tab, and put the removed sled on the discard pad, without moving the other two sleds."
 
 # 1. Rack fixture with 3 latch button sliders on top
 LATCH_SLIDERS = []

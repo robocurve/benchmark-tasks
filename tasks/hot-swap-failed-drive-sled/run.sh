@@ -15,7 +15,7 @@ cd "$(dirname "$0")"
 
 MODE="${1:-demo}"
 OUT="${OUT:-$HOME/yam-eval}"
-INSTRUCTION="One bay has a red lamp: hold its latch button down, pull its sled out, and slide the spare with the blue handle all the way in until the lamp turns green, without moving the other two sleds."
+INSTRUCTION="One bay has a red lamp. Replace its drive sled with the spare that matches the bay's key tab, and put the removed sled on the discard pad, without moving the other two sleds."
 
 if ! command -v inspect-robots >/dev/null 2>&1; then
   # shellcheck disable=SC1090

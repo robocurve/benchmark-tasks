@@ -5,7 +5,7 @@ Tracks:
 - Latch button compression.
 - Detent zone (0-25 mm): forced pull fault if pulled > 3 mm while latch not pressed (disp > -6.4 mm).
 - Healthy bay sleds disturbance (> 5 mm movement = fault).
-- Discard pad status (old sled parked on pad).
+- Discard pad status (old sled resting on the pad, current state, centre within 40 mm in x and y, z within 10 mm).
 - Spare insertion status in failed bay (>= 95% = >= 142 mm of 150 mm).
 - Keying check: blue spare turns lamp green; orange spare stays red (wrong keying).
 - FAULT latch (zero-gate).
@@ -50,6 +50,13 @@ class HotSwapLogic:
         if st.fault:
             return st
 
+        # End-state scoring: these flags describe the current step, so undoing a goal lowers the score again.
+        # Only faults (violations) and the "pulled out 60 mm with the latch held" event stay latched.
+        st.old_sled_on_discard = False
+        st.spare_inserted_95pct = False
+        st.blue_spare_used = False
+        st.orange_spare_used = False
+
         # 1. Check healthy sleds disturbance (> 5 mm movement from seated = FAULT)
         for bay in ("bay_0", "bay_2"):
             p = sled_positions.get(bay)
@@ -86,7 +93,7 @@ class HotSwapLogic:
             dx_disc = abs(p_failed[0] - g.DISCARD_SPOT[0])
             dy_disc = abs(p_failed[1] - g.DISCARD_SPOT[1])
             dz_disc = abs(p_failed[2] - g.DISCARD_SPOT[2])
-            if dx_disc <= g.DISCARD_PAD_SIZE[0] / 2 and dy_disc <= g.DISCARD_PAD_SIZE[1] / 2 and dz_disc <= 0.020:
+            if dx_disc <= g.DISCARD_XY_TOL and dy_disc <= g.DISCARD_XY_TOL and dz_disc <= g.DISCARD_Z_TOL:
                 st.old_sled_on_discard = True
 
         # 3. Check spare insertion in failed bay (Bay 1 at y = 0.000)

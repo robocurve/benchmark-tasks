@@ -45,7 +45,7 @@ class Scorer:
     def reset(self) -> None:
         self.logic = logic.HotSwapLogic()
         self.consecutive_success_steps = 0
-        self.best_score = 0.0
+        self.last_score = 0.0
         self.latched_fault = False
 
     def update(
@@ -113,10 +113,11 @@ class Scorer:
         else:
             self.consecutive_success_steps = 0
 
-        self.best_score = max(self.best_score, score)
+        # End-state scoring: the score is that of the current step (faults stay latched; goals must still hold).
+        self.last_score = score
 
         return ScoreResult(
-            score=self.best_score,
+            score=self.last_score,
             success=success,
             details={
                 "pulled_60mm": st.pulled_60mm,

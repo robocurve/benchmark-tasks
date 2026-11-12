@@ -15,7 +15,9 @@ class TestTaskGlue(unittest.TestCase):
         self.assertEqual(T.SCORE_OVER, "end")
         self.assertEqual(T.SUCCESS_HOLD_S, 1.0)
         self.assertGreater(len(T.INSTRUCTION), 20)
-        self.assertIn("hold its latch button down", T.INSTRUCTION)
+        self.assertIn("key tab", T.INSTRUCTION)
+        self.assertIn("discard pad", T.INSTRUCTION)
+        self.assertNotIn("latch", T.INSTRUCTION)  # goal only: the method is not given away
 
     def test_objects_list(self):
         self.assertIn(T.RACK_FIXTURE, T.OBJECTS)

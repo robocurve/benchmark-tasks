@@ -109,6 +109,17 @@ HOVER_Z = TOP + 0.100                                  # ~0.8475 m
 GRASP_Z = SLED_REST_Z                                  # ~0.775 m
 LATCH_PRESS_Z = BUTTON_CAP_TOP_REST_Z - 0.014 + 0.013  # fingertip 14 mm below the rest cap top (PAD_TO_TCP = 0.013)
 
+# Key tabs: a 20 x 20 x 3 mm coloured tab on the rack top plate in front of each bay's latch button. A spare fits a bay only
+# when its handle colour matches the bay's tab colour (blue tab = blue-handled spare).
+KEY_TAB_SIZE = (0.020, 0.020, 0.003)
+KEY_TAB_X = 0.372
+KEY_TAB_COLORS = {"bay_0": HANDLE_ORANGE, "bay_1": HANDLE_BLUE, "bay_2": HANDLE_ORANGE}
+
+# The removed sled counts as "on the discard pad" when its centre is within DISCARD_XY_TOL of the pad centre in x and y
+# and within DISCARD_Z_TOL of the resting height of a sled lying on the pad.
+DISCARD_XY_TOL = 0.040
+DISCARD_Z_TOL = 0.010
+
 PAD_TO_TCP = 0.013
 MAX_ARM_REACH = 0.50
 LEFT_BASE = (0.0, +0.305)
@@ -141,4 +152,6 @@ def rack_world_boxes() -> list[tuple]:
     for sign in (+1, -1):
         boxes.append(((wall_xc, sign * (slot_half + div_w / 2), wall_zc), (wall_len, div_w, wall_h), RACK_GREY))
         boxes.append(((wall_xc, sign * (BAY_Y["bay_0"] + slot_half + out_w / 2), wall_zc), (wall_len, out_w, wall_h), RACK_GREY))
+    for bay, colour in KEY_TAB_COLORS.items():
+        boxes.append(((KEY_TAB_X, BAY_Y[bay], RACK_TOP_Z + KEY_TAB_SIZE[2] / 2), KEY_TAB_SIZE, colour))
     return boxes
