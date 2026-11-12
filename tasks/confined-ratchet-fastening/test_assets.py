@@ -9,7 +9,7 @@ import unittest
 import numpy as np
 from pxr import Gf, Sdf, Usd, UsdGeom, UsdPhysics, UsdShade
 
-from ratchet_task.config import BOLT_LENGTH, HEAD_AF, HEAD_HEIGHT
+from ratchet_task.config import BOLT_LENGTH, HEAD_AF, HEAD_HEIGHT, BRACKET_TOP, BRACKET_SECTORS
 
 ASSETS = Path(__file__).resolve().parent / "assets"
 
@@ -98,6 +98,18 @@ class AssetGeometryTests(unittest.TestCase):
             projected = points[:, :2] @ direction
             self.assertAlmostEqual(projected.max() - projected.min(), HEAD_AF, places=8)
         self.assertAlmostEqual(points[:, 2].max(), HEAD_HEIGHT, places=8)
+
+    def test_scored_seating_shapes_match_authored_planes(self):
+        bolt=open_asset('bolt');fixture=open_asset('fixture')
+        head=bolt.GetPrimAtPath('/Asset/HeadContact')
+        self.assertTrue(head.HasAPI(UsdPhysics.CollisionAPI))
+        points=np.asarray(UsdGeom.Mesh(head).GetPointsAttr().Get())
+        self.assertEqual(float(points[:,2].min()),0.)
+        for i in range(BRACKET_SECTORS):
+            prim=fixture.GetPrimAtPath(f'/Asset/Bracket/Sector{i:02}')
+            self.assertTrue(prim.HasAPI(UsdPhysics.CollisionAPI))
+            points=np.asarray(UsdGeom.Mesh(prim).GetPointsAttr().Get())
+            self.assertAlmostEqual(float(points[:,2].max()),BRACKET_TOP,places=8)
 
     def test_real_socket_cavity_has_clearance_and_rejects_oversize(self):
         solids = colliders(open_asset("socket"))

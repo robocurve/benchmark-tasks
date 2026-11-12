@@ -59,6 +59,15 @@ class RatchetEmbodiment(YamArenaEmbodiment):
         scene.task_object,scene.env_cfg_callback,robots.BimanualYamEmbodiment=spawn,callback,NativeResolutionRobot
         try:super()._ensure_sim(goal)
         finally:scene.task_object,scene.env_cfg_callback,robots.BimanualYamEmbodiment=old_object,old_callback,old_robot
+        # Only the scored seating pair uses a 10 um candidate-contact offset.
+        # Rest offset remains zero: the physical seat is the authored surface.
+        from pxr import PhysxSchema
+        for path in ['/World/envs/env_0/bolt/HeadContact']+[
+                f'/World/envs/env_0/fixture/Bracket/Sector{i:02}' for i in range(BRACKET_SECTORS)]:
+            prim=self._base.sim.stage.GetPrimAtPath(path)
+            if not prim:raise RuntimeError('Missing seating collider '+path)
+            props=PhysxSchema.PhysxCollisionAPI.Apply(prim)
+            props.CreateContactOffsetAttr(SEAT_CONTACT_OFFSET);props.CreateRestOffsetAttr(0.)
         import carb
         carb.settings.get_settings().set_bool('/physics/disableContactProcessing',False)
         from pxr import UsdPhysics,Sdf
@@ -136,7 +145,9 @@ class RatchetEmbodiment(YamArenaEmbodiment):
             f=self.hardware.telemetry;f.update(self.hardware.contact_summary());f['interface_torque']=f['socket_torque_nm'] if f['socket_engaged'] else 0.;FEEDBACK['hardware']=f
             fixture=float(np.linalg.norm(FEEDBACK['poses']['fixture']-[AXIS[0],AXIS[1],TABLE]))
             valid=bool(f['valid']) and abs(f.get('pitch_error_m',0.))<=.0002
-            state=State(captured=f['captured'],valid=valid,turns=f['turns'],gap=f['gap'],interface_torque=f['interface_torque'],socket_engaged=f['socket_engaged'],ratchet_cycles=f['ratchet_cycles'],fixture_displacement=fixture)
+            state=State(captured=f['captured'],valid=valid,turns=f['turns'],gap=f.get('seat_gap_m',f['gap']),interface_torque=f['interface_torque'],socket_engaged=f['socket_engaged'],ratchet_cycles=f['ratchet_cycles'],fixture_displacement=fixture,
+                        seat_contact=f['seat_contact'],seat_contact_fraction=f['seat_contact_fraction'],seat_force_n=f['seat_force_mean_n'],
+                        seat_gap_min_m=f.get('seat_gap_min_m',1.),seat_gap_max_m=f.get('seat_gap_max_m',1.))
             self.history.update(state,1/self.info.control_hz);FEEDBACK.update(score=self.history.score,tightened=self.history.tightened,proof=self.history.proof)
         return super()._task_step()
 def make_embodiment(**kwargs):

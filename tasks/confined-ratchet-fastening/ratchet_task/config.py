@@ -24,6 +24,20 @@ SOLVER_VELOCITY = 16
 PHYSICS_HZ = 480
 CONTROL_HZ = 20
 MAX_STEPS = 4000
+# Seating uses the actual HeadContact/Bracket collision surfaces. Offsets only
+# create candidate contacts; positive speculative contacts do not prove seating.
+BRACKET_TOP = .093
+BRACKET_BORE_RADIUS = .0046
+BRACKET_SECTORS = 48
+SEAT_CONTACT_OFFSET = .00001
+SEAT_ROUNDOFF = .000002
+SEAT_MAX_PENETRATION = .00005
+SEAT_MAX_EDGE_GAP = .00002
+SEAT_MIN_FORCE = .001
+SEAT_CONTACT_FRACTION = .9
+# Backup angular limit sits behind the physical seat, so it cannot support a
+# separated head. This is an integrity backstop, not the scored seating surface.
+SEAT_STOP_GAP = -.0001
 BOLT_START = AXIS + np.array([0.,0.,.0025])
 TOOL_PARK = np.array([.30,-.21,TABLE+.036])
 TOOL_WORK_START = BOLT_START + np.array([0.,0.,.0285])

@@ -61,5 +61,331 @@
   "initial_condition": "Both arms READY/open; ratchet in physical cradle, separate from started bolt with 2.5 mm under-head gap.",
   "fidelity": "NVIDIA ratchet visuals plus original socket, bolt, grip pads, cradle and fixture. Physical contacts support pickup and transmit socket torque. A native one-way clutch and pitch joint drive rotation and axial travel. Thread ridges are visual; tooth impacts, deformation and fastener strength are omitted. Both arms start at rest and the tool is separate from the bolt. No hand/tool or socket/bolt attachments are used. Tightening is judged by seating and ratchet cycles.",
   "private_credentials_removed": true,
-  "dream_video_review": true
+  "dream_video_review": true,
+  "validation_schema_notes": "Original top-level fields are the unchanged historical submitted validation. Current evidence is under seated_contact_revision; the historical Dream result and media do not validate the changed runtime.",
+  "current_revision": "seated_contact_revision",
+  "seated_contact_revision": {
+    "status": "demo_and_matching_dream_complete; sampled_native_views_reviewed; pending_local_commit_review",
+    "date": "2026-11-12",
+    "environment_revision": "dc35653bad5063a15ebb4f46ad30bb1ce66f23f62e4bf2580e5f627246bfdf37",
+    "offline_tests": 41,
+    "baseline_validation_preserved": true,
+    "demo": {
+      "run": "seated-contact-001",
+      "completed": true,
+      "error": null,
+      "score": 1.0,
+      "steps": 2458,
+      "max_steps": 4000,
+      "simulated_seconds": 122.9,
+      "wall_seconds": 511.448862005,
+      "seed": 17,
+      "start_from_rest": true,
+      "tool_starts_in_cradle": true,
+      "pickup_verified": true,
+      "socket_fit_verified": true,
+      "clockwise_turns": 2.0147247693781574,
+      "ratchet_cycles": 36,
+      "final_head_centre_gap_m": -3.62873077391912e-07,
+      "final_underside_gap_min_m": -7.588418170778599e-07,
+      "final_underside_gap_max_m": 3.309566229403593e-08,
+      "final_seat_force_mean_n": 12.5220156507703,
+      "bracket_contact_hold_verified": true,
+      "hold_seconds": 0.5,
+      "hold_contact_fraction": 0.9875,
+      "hold_ranges": {
+        "seat_contact_fraction": {
+          "min": 0.9166666666666666,
+          "max": 1.0
+        },
+        "seat_force_mean_n": {
+          "min": 9.157424333789095,
+          "max": 13.389366002325005
+        },
+        "seat_gap_m": {
+          "min": -3.62873077391912e-07,
+          "max": 1.7828941345221505e-06
+        },
+        "seat_gap_min_m": {
+          "min": -7.588418170778599e-07,
+          "max": 1.5181037668621222e-07
+        },
+        "seat_gap_max_m": {
+          "min": 2.3901979145923846e-08,
+          "max": 3.4716278316249127e-06
+        },
+        "seat_separation_min_m": {
+          "min": -1.0967287380481139e-06,
+          "max": 2.932005713773833e-07
+        },
+        "seat_separation_max_m": {
+          "min": -5.2114437210093456e-08,
+          "max": 1.9697331481438596e-06
+        }
+      },
+      "maximum_pitch_error_m": 2.2023684435379387e-05,
+      "maximum_mean_socket_torque_nm": 0.03149019504941719,
+      "maximum_peak_socket_torque_nm": 0.039881050961457706,
+      "final_backup_limit_remaining_angle_deg": 23.49757240373407,
+      "any_integrity_failure": false
+    },
+    "contact_report_schema": {
+      "header_fields": {
+        "collider0": true,
+        "collider1": true,
+        "contact_data_offset": true,
+        "num_contact_data": true
+      },
+      "contact_fields": {
+        "position": true,
+        "normal": true,
+        "impulse": true,
+        "separation": true
+      }
+    },
+    "independent_audit": {
+      "status": "pass",
+      "checks": {
+        "terminal_success": true,
+        "action_limit": true,
+        "rest_pickup_socket": true,
+        "runtime_schema": true,
+        "exact_shape_pair_seen": true,
+        "recorded_scores_replay_exactly": true,
+        "independent_full_score_step": true,
+        "fresh_240_physics_samples_in_hold": true,
+        "hold_contact_points_and_separations": true,
+        "underside_geometry_independently_matches": true,
+        "counterfactuals_cannot_get_seating_credit": true,
+        "backup_angular_stop_not_reached": true,
+        "runtime_inputs_match_trial_snapshot": true
+      },
+      "maximum_geometry_reconstruction_error_m": 1.0073497591633895e-11,
+      "counterfactuals": {
+        "no_surface_contact": {
+          "score": 0.4,
+          "invalid": false
+        },
+        "zero_normal_force": {
+          "score": 0.4,
+          "invalid": false
+        },
+        "old_positive_196um_gap": {
+          "score": 0.4,
+          "invalid": false
+        },
+        "deep_penetration": {
+          "score": 0.0,
+          "invalid": true
+        },
+        "intermittent_contact": {
+          "score": 0.4,
+          "invalid": false
+        }
+      },
+      "limitations": [
+        "Saved trace contains per-control summaries, not raw per-substep contact manifolds.",
+        "Small positive separations up to 2 um are allowed only with a measured seating impulse and geometry checks.",
+        "Images reviewed show rest, pickup, placement and hold; the socket occludes the seating interface.",
+        "The policy uses simulator pose feedback; the matching Dream run is recorded separately and no robot-only perception claim is made."
+      ]
+    },
+    "dream": {
+      "run": "seated-dream-001",
+      "result_file": "adhoc_436387f8.json",
+      "result_sha256": "1e4907447d46df0ec9706cf819449cec26eb9b293aeed584ecb3cdc4915c21de",
+      "status": "success",
+      "error": null,
+      "score": 0.0,
+      "steps": 4000,
+      "max_steps": 4000,
+      "seed": 17,
+      "environment_revision": "dc35653bad5063a15ebb4f46ad30bb1ce66f23f62e4bf2580e5f627246bfdf37",
+      "model": "dreamlabs/dream-1-beta",
+      "wall_seconds": 673.016896888,
+      "mean_inference_latency_s": 0.5656681622530145,
+      "completed_at": "2026-11-12T19:14:55.384248+00:00",
+      "errored_trials": 0,
+      "termination_reasons": [
+        "max_steps"
+      ],
+      "simulated_seconds": 200.0,
+      "matches_current_demo_environment": true,
+      "historical_submitted_result_remains_in_original_top_level_fields": true,
+      "credential_cleanup": "managed_by_parent; not_inspected_by_worker",
+      "media_review": "sampled_native_views_reviewed_by_parent; not_exhaustive",
+      "observed_outcome": "The ratchet is moved out of its cradle and lies on the table by the final sampled views. No completed seating is shown."
+    },
+    "media": {
+      "new_upload": false,
+      "existing_id": "M-KGU6MH",
+      "existing_id_is_historical": true,
+      "selected_frame_review": true,
+      "full_video_review": "not_exhaustive; sampled_native_views_reviewed",
+      "sampled_native_view_review": {
+        "reviewer": "parent",
+        "top_camera_seconds": [
+          0,
+          18,
+          40,
+          122
+        ],
+        "final_wrist_views": [
+          "left_cam",
+          "right_cam"
+        ],
+        "finding": "Pickup, socket placement and hold consistent with trace. Exact micrometre seating established by telemetry; not visually resolvable.",
+        "scope": "Sampled native frames, not every video frame."
+      },
+      "current_artifacts": {
+        "seated-contact-001/remote/output/demo/top_cam.mp4": {
+          "workspace_path": "current/runs/confined-ratchet-fastening/seated-contact-001/remote/output/demo/top_cam.mp4",
+          "sha256": "14b8416c9ef9ad7736e9302327e46c3d80d5ecfe8fb474bc163d69fe9c960113",
+          "bytes": 2119357
+        },
+        "seated-contact-001/remote/output/demo/left_cam.mp4": {
+          "workspace_path": "current/runs/confined-ratchet-fastening/seated-contact-001/remote/output/demo/left_cam.mp4",
+          "sha256": "252f29908283b606c70425ae93c3cfa1ac09c2f0aa48dbdb9aca76a6fdf8e542",
+          "bytes": 470138
+        },
+        "seated-contact-001/remote/output/demo/right_cam.mp4": {
+          "workspace_path": "current/runs/confined-ratchet-fastening/seated-contact-001/remote/output/demo/right_cam.mp4",
+          "sha256": "7fda1c855494b176b7fad600b5fbb5cbf97307e41699dc8f7005f1cd5011d462",
+          "bytes": 4420506
+        },
+        "seated-contact-001/remote/output/demo/initial-top_cam.png": {
+          "workspace_path": "current/runs/confined-ratchet-fastening/seated-contact-001/remote/output/demo/initial-top_cam.png",
+          "sha256": "f57f2b46aaba3942242b9d9997c360271b4fb133a2db70d9a76eb54d9ee3708b",
+          "bytes": 158095
+        },
+        "seated-contact-001/remote/output/visual-review/review.jpg": {
+          "workspace_path": "current/runs/confined-ratchet-fastening/seated-contact-001/remote/output/visual-review/review.jpg",
+          "sha256": "473780e366c64418a0cc13a53719ebb9f02b23bee2f884c1b1d3f2872eb04ef3",
+          "bytes": 89949
+        },
+        "seated-dream-001/videos/scene-0-e0_top_cam.mp4": {
+          "workspace_path": "current/runs/confined-ratchet-fastening/seated-dream-001/videos/scene-0-e0_top_cam.mp4",
+          "sha256": "508713f1675dce950a6b89c72edf635b7249164308d3b8992ba01620ffccf02e",
+          "bytes": 4329106
+        },
+        "seated-dream-001/videos/scene-0-e0_left_cam.mp4": {
+          "workspace_path": "current/runs/confined-ratchet-fastening/seated-dream-001/videos/scene-0-e0_left_cam.mp4",
+          "sha256": "6ec5842bed8f08354ae9764d8463e2bd9197da2f63868c61b5650e9292d38646",
+          "bytes": 3058357
+        },
+        "seated-dream-001/videos/scene-0-e0_right_cam.mp4": {
+          "workspace_path": "current/runs/confined-ratchet-fastening/seated-dream-001/videos/scene-0-e0_right_cam.mp4",
+          "sha256": "213125424f51e4847bac005e5880f5b81f456024d0abaa2f8085d041d545c3c9",
+          "bytes": 6313628
+        },
+        "seated-dream-001/videos/review.jpg": {
+          "workspace_path": "current/runs/confined-ratchet-fastening/seated-dream-001/videos/review.jpg",
+          "sha256": "32dcc0f5c20dd5cc67259817603899a8b0dc4819c7a091cec7ea8ee4b1302b9b",
+          "bytes": 85723
+        }
+      },
+      "upload_status": "not_uploaded; existing media ID M-KGU6MH is historical; replacement requires explicit authorization",
+      "dream_sampled_native_view_review": {
+        "reviewer": "parent",
+        "top_camera_seconds": [
+          0,
+          50,
+          100,
+          199
+        ],
+        "final_wrist_views": [
+          "left_cam",
+          "right_cam"
+        ],
+        "finding": "The ratchet is moved out of its cradle and lies on the table by the final sampled views. No completed seating is shown.",
+        "scope": "Sampled native frames, not every video frame.",
+        "montage_workspace_path": "current/runs/confined-ratchet-fastening/seated-dream-001/videos/review.jpg"
+      }
+    },
+    "runtime": {
+      "gpu": "NVIDIA L40S",
+      "driver": "565.57.01",
+      "python_version": "3.12.16",
+      "isaacsim": "6.1.0.0",
+      "isaaclab": "17.0.2",
+      "arena": "0.3.0",
+      "inspect_robots": "0.60.0",
+      "yam_commit": "0059d02a1a91bc6834c1d0846022891df0c78730",
+      "arena_commit": "c7edf3a9d5d8276565208f72422f8f8a0806d6cf"
+    },
+    "evidence_sha256": {
+      "demo-result.json": "26d3e9397acb6249bbb413e8710721c74b2d49e0b4b36d4fee4c0e692077d98e",
+      "demo-trace.json": "ea790d69efb0dafedcc22e6490832b7ff5e0180ac85af3ff8cb2cef36a1fdb81",
+      "left_cam.mp4": "252f29908283b606c70425ae93c3cfa1ac09c2f0aa48dbdb9aca76a6fdf8e542",
+      "right_cam.mp4": "7fda1c855494b176b7fad600b5fbb5cbf97307e41699dc8f7005f1cd5011d462",
+      "top_cam.mp4": "14b8416c9ef9ad7736e9302327e46c3d80d5ecfe8fb474bc163d69fe9c960113"
+    },
+    "tested_runtime_source_sha256": {
+      "pyproject.toml": "6ccd39625e48a81c3ead46d0e22f2ac71b2876bf57d29af686353c3d422fcab9",
+      "build_assets.py": "83a9b0732edc055157c82d7eb818ae137a7846dade8e79ab16a1840179b41dec",
+      "test_scoring.py": "e7035bbab343ca54eff517231cae0ba8f4816bc49993dee494c36d4ebfd5feab",
+      "fetch_assets.py": "4c94c2e5b9b721bb7e6f3e0e9e0c52edc03f3e814e09d540fa0cd3259fedd77f",
+      ".gitignore": "7afd05ebc74f68982bcda4eb4ee44b5b61493e063ec2002d6e0b4dcddca1824d",
+      "test_assets.py": "75a63ddb39df5569cca36b3f1d3fb3f182eb9521d5568b2a6734873e21f1ec54",
+      "task.py": "3d7a80bf6150fd540feb6a7fb54c6230e8c27088716a4ffc310ca954b8087f09",
+      "test_mechanics.py": "1d72b13c4a909778df3ba068b5c647a04af2dd53a410f64710dfd4c6bbb50bdb",
+      "test_seating.py": "40b8a7c32cfbd9e80cbe02a9c70b74c1038ca75d52318e194fa189d9491c6716",
+      "asset_geometry.py": "ec43304955f99a12a7e92cd1411e025e1bdc5c0c4908459dc1008347f8b48572",
+      "assets/handle.usda": "dd17af0c87199ba35eec477d76016b880d67ddfb4e06f8b79c9d6d515ccad2a4",
+      "assets/provenance_sources.json": "b854a7b27b2149528f8d453981202be650e3526e3b1ff53293da1bc46812f6be",
+      "assets/drive.usda": "82a5bb2b1fd5ff33d7b9887af5b148497d1de0ab3b4cd60f8a532330148d30ef",
+      "assets/socket.usda": "054321f4f2fee4fdaae4e6d96d97dfd5a97d7ae1fc036becb796c5556c51beaf",
+      "assets/generated-provenance.json": "cc60781766efd41f24d1389aae74c5f75a351371a10c0b7464c4b3f25f333aa7",
+      "assets/entry_stop.usda": "ecfffe5ca0989422be8b0c52718c68ab251c3678a2d3c5e52753fd3cdbaf9195",
+      "assets/bolt.usda": "19bb279bbf58b607adb8eb9ec585221e4f2f8924b3758714c76db176fdff58ff",
+      "assets/handle-collision-provenance.json": "cdb8237a613e767bd83c65e7c515f3c7aca6dd8783f86ffd4024a9707def6127",
+      "assets/socket_visual.usda": "3a5dd09812af7b37f1917b593fb3bdea9c7c9c78c9737cdc97f524966436d768",
+      "assets/bolt_holder.usda": "4a2bbf6e5584cb736e03423bd45cbd119eb93b3b312d71ba960bf8d0686b1e1a",
+      "assets/wall-clearance-qa.json": "e9cd7ccb426ec1ee0eed11b180e084e02654a615bcf64e76a0d443f39384df78",
+      "assets/generated-hashes.json": "444ee76099c33b908f77c59d667d2c4489731700859569dbdfd9af5e6565d8ff",
+      "assets/handle-surface-qa.json": "d4187f0c771d06b70378903ae19194a98f177a960766e3fc1f00f53d9b4d46b2",
+      "assets/walls.usda": "02030047f2374b619b0ce6a1d1a35a29e49aab6c6e55ea67e9f0f99f8f6da871",
+      "assets/fixture.usda": "ac8653c573a34c1031e944a29f1985b989aeae864e9a01faf2e067ca1e3d3d03",
+      "assets/provenance_visuals.json": "5d38b90937a5ae938b811b73b4c45ad67ed5d23bea7cf7b5a39c2ec68d60a4ac",
+      "assets/ratchet_visual.usda": "615e3a12864fb0e0146a53a48c2db820330f5cd2c8653cca66f579dea5bb857d",
+      "assets/provenance_inspection.json": "976bc55fa167a287a064480dd97c44192b94a535d1fb9872ba464ac4049ba25a",
+      "assets/bolt-hand-wall-qa.json": "7322378e4acc690e94875b0ee2311d20892367fbb65beb0bc6acf3bf4135d874",
+      "assets/tool_cradle.usda": "e8d860a1c0a692bec729d73758ad066aadee076f6b6e882d6dfdf8ee7cdf712e",
+      "assets/pawl.usda": "6ea5baf86dc6d5618b75453148909421bdb705c85b4085f972d8a571a986ba4c",
+      "diagnostics/thread_load.py": "24c8377b65a99eabb1218e2abc5c3c18557d57c63613e45bbea58ec3f6e906ff",
+      "diagnostics/demo.py": "08e377a61ebf801bc1f6a110ad86991612b3bd07e70a22104bbfd6ed944e13c3",
+      "diagnostics/coupled.py": "0e05c81fdd8501ff458eb09d93428588096d578bede6858d3cba7ca488eb6e2d",
+      "diagnostics/qualification.py": "b7764b85892089a8e86355c6acedda13d15054d213b8f38691f65bd93a631292",
+      "diagnostics/torque_meter.py": "54b3f309b3d7980f9e4c750303432abfa5b735fcfc8c0ba0e8574ce9a75f3d0b",
+      "diagnostics/thread.py": "cda9f79188e74ab5e3e4331687af476aa0cf8eda54caeb857a8c5fb8e72db04b",
+      "diagnostics/mechanism.py": "8d878645fbec31729516550128d537add888eb819611f0f0cbf2dacb4156ce14",
+      "diagnostics/assets.py": "91deeea261bce30573dd10c794e8dcb2a29a27c36f487d9ee64119c05f7f788c",
+      "ratchet_task/seating.py": "39a8dbea99f512b0ff7683ea55d593aa77bd0a43d5ac0df05fa202e8f6bed28f",
+      "ratchet_task/policy.py": "bfe0e42ca885dc70ef746aa81159993193aa1e6615b87b64b6b68b1d0ac733ee",
+      "ratchet_task/scoring.py": "f24b5dfbaf410f80b0c739acf7487674a87fb890a6065a49ae2d79c727ce58a4",
+      "ratchet_task/__init__.py": "a30e24728354d911c34eef677aaf6a675c35fa5734432c8dc0b125097e108a18",
+      "ratchet_task/physics.py": "40c600588463e99b12aa32d307c2b2ba74f57ea8ad4c70ea52f1d638bc3fda19",
+      "ratchet_task/sensors.py": "c0a62a3b87121d604bf7f49d4fc9a884f08be6a00ee1310f24699a99097730a7",
+      "ratchet_task/config.py": "7d6429d247e7898fc11388d8018376301ef070fe174c59cc3ba135c1931e3095",
+      "ratchet_task/motion.py": "c5618d121e5bb77e1c8644f34a42af22cde43dde63af8f0e51c73645196c21b6",
+      "ratchet_task/mechanics.py": "eaa746891a04d1f9c79c895d6d4d38c2aee52e1365f2a6752fa1806673f8fb59",
+      "ratchet_task/native_clutch.py": "40ec5a377bf8ad36865e2e34ded004ba7317732f6ab847d2003e7a634f6a6f0c",
+      "ratchet_task/embodiment.py": "b11a75e84c68cbce1092c88c168199c138f842d380e8a6de6edee13281a67f27",
+      "assets/licenses/NVIDIA-socket-CC-BY-4.0.txt": "9e5f1b3c610b9c2da5c313bf81d577a7d1acec686bdb0384edefa6df0f90cd94",
+      "assets/licenses/NVIDIA-ratchet-CC-BY-4.0.txt": "9e5f1b3c610b9c2da5c313bf81d577a7d1acec686bdb0384edefa6df0f90cd94",
+      "assets/vendor/derived_textures/handTool_socket_1_2in_b01/t_handTool_socket_a01_nor.png": "f687082111ea8ea29dd14d0bcd5f5e9cf04c101a2e69c915453da43210f47377",
+      "assets/vendor/derived_textures/handTool_socket_1_2in_b01/t_handTool_socket_a01_alb.png": "de8bece06ee56a7b8945abb2a9741522a71c3728251a21c63508f40a013ba32a",
+      "assets/vendor/derived_textures/handTool_socket_1_2in_b01/t_handTool_socket_a01_orm.png": "d1b7f8139cacfe72d50f1b19ec9227ae53f0eb704302cbd5442d87c34b0e53f0",
+      "assets/vendor/derived_textures/handTool_ratchet_b01/t_handTool_socket_a01_nor.png": "b51cfb6835d93dda359fd7197e9eae03a53f9eb6b5b8d2a04ea41a15286d6bf6",
+      "assets/vendor/derived_textures/handTool_ratchet_b01/t_handTool_socket_a01_alb.png": "329677a0453fd723ca6034063698bc3a78c5898ceb850b245b2ba216e861af0f",
+      "assets/vendor/derived_textures/handTool_ratchet_b01/t_handTool_socket_a01_orm.png": "3faddf68a21d795fc936b70d07572b5669f16c486e1a5b0472ffb45a6fd83588"
+    },
+    "pushed": false,
+    "uploaded": false,
+    "parent_verification": {
+      "offline_tests": 41,
+      "offline_result": "PASS; independently rerun by parent",
+      "code_review": "Parent reviewed complete diff and scorer; local commit review follows metadata freeze."
+    }
+  }
 }

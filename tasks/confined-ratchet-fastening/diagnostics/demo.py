@@ -1,5 +1,5 @@
 """Record the complete rest/pickup/placement/ratcheting demonstration."""
-import sys,json,traceback,time,subprocess
+import sys,json,traceback,time,subprocess,os
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 import numpy as np
@@ -9,7 +9,9 @@ from ratchet_task.embodiment import make_embodiment,FEEDBACK,ROOT
 from ratchet_task.policy import FastenPolicy
 from ratchet_task.config import INSTRUCTION,MAX_STEPS,TOOL_PARK
 from inspect_robots import Scene
-out=Path(sys.argv[1]);out.mkdir(parents=True,exist_ok=True)
+out=Path(sys.argv[1] if len(sys.argv)>1 else os.environ['TRIAL_OUTPUT'])
+# Never overwrite prior evidence, including a run whose process is still live.
+out.mkdir(parents=True,exist_ok=False)
 def serial(v):
  if isinstance(v,np.ndarray):return v.tolist()
  if isinstance(v,np.generic):return v.item()
@@ -46,7 +48,11 @@ except Exception as e:
  error=type(e).__name__+': '+str(e);traceback.print_exc()
 finally:
  for writer in writers.values():writer.stdin.close();writer.wait(timeout=30)
- result=dict(full_task_demo=True,walls=emb.walls,mechanisms=emb.mechanisms,start_from_rest=rest_verified,tool_starts_in_cradle=cradle_verified,pickup_verified=policy.pickup_verified,socket_fit_verified=policy.socket_fit_verified,max_steps=MAX_STEPS,seed=17,completed=bool(error is None and emb.history.score==1. and policy.pickup_verified and policy.socket_fit_verified),error=error,score=getattr(getattr(emb,'history',None),'score',0.),elapsed_seconds=time.monotonic()-started,steps=len(rows),revision=emb.info.environment_revision,initial=initial,last=rows[-1] if rows else None)
+ contact_hold=rows[-10:] if len(rows)>=10 else []
+ physical_hold=bool(contact_hold and all(r['feedback'].get('hardware',{}).get('seat_contact',False) and r['feedback']['hardware'].get('seat_contact_fraction',0.)>=.9 for r in contact_hold))
+ hardware=emb.hardware
+ result=dict(full_task_demo=True,walls=emb.walls,mechanisms=emb.mechanisms,start_from_rest=rest_verified,tool_starts_in_cradle=cradle_verified,pickup_verified=policy.pickup_verified,socket_fit_verified=policy.socket_fit_verified,max_steps=MAX_STEPS,seed=17,completed=bool(error is None and emb.history.score==1. and policy.pickup_verified and policy.socket_fit_verified and physical_hold),error=error,score=getattr(getattr(emb,'history',None),'score',0.),elapsed_seconds=time.monotonic()-started,steps=len(rows),revision=emb.info.environment_revision,initial=initial,last=rows[-1] if rows else None,
+             bracket_contact_hold_verified=physical_hold,contact_report_schema=getattr(hardware,'contact_schema',{}),observed_contact_pairs=sorted(getattr(hardware,'observed_contact_pairs',[])))
  result=serial(result)
  print('RATCHET_DEMO_COMPLETE',json.dumps(result),flush=True)
  (out/'demo-trace.json').write_text(json.dumps(rows))

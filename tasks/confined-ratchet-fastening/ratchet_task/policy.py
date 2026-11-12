@@ -158,9 +158,16 @@ class FastenPolicy(YamScriptedPolicy):
                     raise RuntimeError('Socket placement did not establish stable hex engagement')
                 return self.pack(self.servo_body(root, rz(theta), f), 'lower and rock socket onto bolt', observation)
         if self.phase in ['ratchet','hold']:
-            seated = -.0003 <= hw['gap'] <= .0002 and hw['turns'] >= REQUIRED_TURNS
+            from ratchet_task.scoring import State, seat_confirmed
+            seated = seat_confirmed(State(gap=hw.get('seat_gap_m',1.),
+                seat_contact=hw.get('seat_contact',False),seat_contact_fraction=hw.get('seat_contact_fraction',0.),
+                seat_force_n=hw.get('seat_force_mean_n',0.),seat_gap_min_m=hw.get('seat_gap_min_m',1.),
+                seat_gap_max_m=hw.get('seat_gap_max_m',1.))) and hw['turns'] >= REQUIRED_TURNS
             if seated and self.phase == 'ratchet':
                 self.phase, self.hold_angle = 'hold', float(hw['angles']['handle'])
+            if self.phase == 'hold' and not seated:
+                self.phase='ratchet';self.stroke_start=t
+                self.stroke_from=float(hw['angles']['handle']);self.stroke_to=-np.deg2rad(14);self.stroke_duration=2.
             if self.phase == 'hold':
                 theta = self.hold_angle
             else:

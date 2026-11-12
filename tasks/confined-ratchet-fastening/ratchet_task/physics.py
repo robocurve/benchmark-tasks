@@ -20,6 +20,14 @@ class Hardware:
         from pxr import PhysxSchema
         PhysxSchema.PhysxContactReportAPI.Apply(stage.GetPrimAtPath('/World/envs/env_0/bolt')).CreateThresholdAttr(0.)
         self.contact_subscription=self.sim.subscribe_full_contact_report_events(lambda *args:None)
+        from ratchet_task.seating import SeatWindow
+        self.seat_window=SeatWindow()
+        self.contact_schema={};self.observed_contact_pairs=set()
+        base='/World/envs/env_0/'
+        self.head_id=PhysicsSchemaTools.sdfPathToInt(base+'bolt/HeadContact')
+        self.bracket_ids={PhysicsSchemaTools.sdfPathToInt(base+f'fixture/Bracket/Sector{i:02}'):base+f'fixture/Bracket/Sector{i:02}' for i in range(BRACKET_SECTORS)}
+        for path in [base+'bolt/HeadContact',*self.bracket_ids.values()]:
+            if not stage.GetPrimAtPath(path):raise RuntimeError('Missing seating collider '+path)
     def _contact_report(self,headers,contacts,anchors):
         self.contact_header_count+=len(headers)
         impulse=0.
@@ -37,15 +45,42 @@ class Hardware:
         self.telemetry['socket_torque_nm']=float(torque)
     def contact_summary(self,clear=True):
         out=dict(socket_torque_nm=float(np.mean(self.contact_samples)) if self.contact_samples else 0.,socket_torque_peak_nm=self.contact_peak,samples=len(self.contact_samples),contact_headers=self.contact_header_count)
+        out.update(self.seat_window.summary(clear=clear))
         if clear:self.contact_samples.clear();self.contact_peak=0.;self.contact_header_count=0
         return out
     def after_step(self):
-        self._contact_report(*self.sim.get_full_contact_report())
+        report=self.sim.get_full_contact_report()
+        if report[0]:
+            from pxr import PhysicsSchemaTools
+            if not self.contact_schema:
+                header_fields=['collider0','collider1','contact_data_offset','num_contact_data']
+                self.contact_schema['header_fields']={name:hasattr(report[0][0],name) for name in header_fields}
+            for header in report[0]:
+                self.observed_contact_pairs.add(tuple(str(PhysicsSchemaTools.intToSdfPath(int(v))) for v in [header.collider0,header.collider1]))
+        if report[1] and 'contact_fields' not in self.contact_schema:
+            self.contact_schema['contact_fields']={name:hasattr(report[1][0],name) for name in ['position','normal','impulse','separation']}
+        self._contact_report(*report)
+        # Read post-solver poses without changing the screw's angular unwrap.
+        from yam_arena.urdf import quat_xyzw_to_matrix
+        from pxr import UsdGeom
+        from ratchet_task.seating import measure_seat
+        v=self.native.get_rigidbody_transformation('/World/envs/env_0/bolt')
+        if not v.get('ret_val'):raise RuntimeError('Missing live seating body bolt')
+        # Fixture is a static BASE asset, not a native dynamic rigid body. Its
+        # authored world transform is the fixed collision transform in PhysX.
+        transform=np.asarray(UsdGeom.XformCache().GetLocalToWorldTransform(
+            self.stage.GetPrimAtPath('/World/envs/env_0/fixture')))
+        sample=measure_seat(report[0],report[1],head_id=self.head_id,bracket_ids=self.bracket_ids,
+                            bolt=np.asarray(v['position']),bolt_rotation=quat_xyzw_to_matrix(v['rotation']),
+                            fixture=transform[3,:3],fixture_rotation=transform[:3,:3].T,dt=self.dt)
+        self.seat_window.add(sample)
+        self.telemetry.update(sample)
     def install_seat_stop(self,theta,q):
-        """Ideal hard seat, expressed as a native angular terminal limit.
+        """Backup angular limit behind the physical bracket seating plane.
 
         Rephase only the FREE angular coordinate; body poses stay untouched.
-        This end stop carries seating torque; it does not estimate clamp preload.
+        Head/bracket contact carries seating load first. This backup prevents
+        runaway rotation if that contact fails; it never proves seating.
         """
         from pxr import Gf,UsdPhysics,Sdf
         j=UsdPhysics.Joint.Define(self.stage,'/World/envs/env_0/SeatStop')
@@ -54,7 +89,7 @@ class Hardware:
         j.CreateBody1Rel().SetTargets([Sdf.Path('/World/envs/env_0/bolt')])
         j.CreateLocalRot0Attr(frame);j.CreateLocalRot1Attr(body.GetConjugate()*frame)
         j.CreateExcludeFromArticulationAttr(True)
-        seat_theta=self.screw.angle0+(AXIS[2]-self.screw.z0)*2*math.pi/PITCH
+        seat_theta=self.screw.angle0+(AXIS[2]+SEAT_STOP_GAP-self.screw.z0)*2*math.pi/PITCH
         limit=UsdPhysics.LimitAPI.Apply(j.GetPrim(),'rotX')
         limit.CreateLowAttr(math.degrees(seat_theta-theta));limit.CreateHighAttr(179.)
         self.seated_stop=True
