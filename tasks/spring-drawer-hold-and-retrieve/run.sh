@@ -14,7 +14,7 @@ cd "$(dirname "$0")"
 
 MODE="${1:-demo}"
 OUT="${OUT:-$HOME/yam-eval}"
-INSTRUCTION="Pull the drawer fully open and keep it open while you take the white block out and put it on the green shelf, then let the drawer close."
+INSTRUCTION="Take the white block out of the cabinet and put it on the green shelf, without letting the drawer close on anything, then leave the drawer closed."
 
 if ! command -v inspect-robots >/dev/null 2>&1; then
   # shellcheck disable=SC1090

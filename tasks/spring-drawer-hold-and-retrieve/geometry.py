@@ -10,7 +10,7 @@ Contents:
   Front face at x = 0.305 m.
   Open-front shell: floor, back wall, two side walls and a cover plate over the back (x >= 0.380 m).
 - Spring-return drawer:
-  190 (x) x 120 (y) x 30 (z) mm open-top box with 15 mm walls.
+  190 (x) x 120 (y) x 30 (z) mm open-top box with 10 mm walls and a 6 mm floor.
   Slides along X toward robot (-X direction), travel 140 mm (0.140 m).
   Spring rate: 18 N/m (max force <= 2.5 N at 140 mm).
   Front handle: 25 (x) x 60 (y) x 35 (z) mm on drawer front face.
@@ -19,7 +19,7 @@ Contents:
   Only reachable when drawer is out >= 90 mm.
 - Green shelf on right at (0.300, -0.280):
   130 x 130 x 10 mm.
-- Open-position cyan lamp on top of cabinet (25 mm diameter marker) at (0.350, 0.000).
+- Open-position cyan lamp: 25 mm marker on the cover plate at (0.450, 0.000).
   Lights when drawer displacement >= 90 mm.
 """
 

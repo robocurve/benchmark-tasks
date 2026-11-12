@@ -29,7 +29,7 @@ SCENE = "station"
 SCORE_OVER = "end"
 SUCCESS_HOLD_S = 1.0
 
-INSTRUCTION = "Pull the drawer fully open and keep it open while you take the white block out and put it on the green shelf, then let the drawer close."
+INSTRUCTION = "Take the white block out of the cabinet and put it on the green shelf, without letting the drawer close on anything, then leave the drawer closed."
 
 # 1. Cabinet fixture with spring-loaded drawer slider
 DRAWER_LOCAL_REST = (g.DRAWER_REST_X - g.CABINET_POS[0], 0.0, g.DRAWER_REST_Z - g.CABINET_POS[2])

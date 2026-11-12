@@ -15,7 +15,7 @@ class TestTaskGlue(unittest.TestCase):
         self.assertEqual(T.SCORE_OVER, "end")
         self.assertEqual(T.SUCCESS_HOLD_S, 1.0)
         self.assertGreater(len(T.INSTRUCTION), 20)
-        self.assertIn("Pull the drawer fully open", T.INSTRUCTION)
+        self.assertIn("without letting the drawer close", T.INSTRUCTION)
 
     def test_objects_list(self):
         self.assertIn(T.CABINET_FIXTURE, T.OBJECTS)

@@ -6,7 +6,7 @@ Tracks:
 - Block elevation (lifted >= 30 mm clear of drawer floor).
 - Block resting on green shelf.
 - Drawer closed (< 5 mm) at end.
-- Pinching zero-gate: if drawer is closing (< 20 mm out) while block is within 20 mm of drawer front lip (X).
+- Pinching zero-gate (latched): drawer less than 30 mm out while the block is still within 60 mm behind the cabinet front face.
 - Dropped block zero-gate.
 """
 
@@ -64,7 +64,6 @@ class DrawerLogic:
             st.block_lifted_30mm = True
 
         # Check pinch condition:
-        # If drawer is closing (< 20 mm out) while block is within 20 mm of drawer lip (x) inside drawer channel
         # (the block is still in the cabinet mouth zone, i.e. within 60 mm behind the cabinet front face, when the drawer
         # front wall comes within 30 mm of closed: the block is caught between the closing drawer and the cabinet).
         if drawer_disp < g.PINCH_TRAVEL_THRESHOLD:
@@ -72,7 +71,8 @@ class DrawerLogic:
                     and block_pos[2] <= g.CABINET_TOP_Z):
                 st.pinch = True
 
-        # Check block on green shelf
+        # Check block on green shelf (current state: a block lifted off the shelf again no longer counts)
+        st.block_on_shelf = False
         dx_sh = abs(block_pos[0] - g.SHELF_POS[0])
         dy_sh = abs(block_pos[1] - g.SHELF_POS[1])
         dz_sh = abs(block_pos[2] - g.SHELF_SPOT[2])

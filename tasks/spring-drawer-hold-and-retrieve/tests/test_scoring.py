@@ -51,6 +51,43 @@ class TestScoring(unittest.TestCase):
         res = s.update(0.010, (lip_x, 0.0, g.BLOCK_REST_Z), True)
         self.assertEqual(res.score, 0.0)
 
+    def test_undoing_a_goal_lowers_the_score(self):
+        # end-state scoring: a block taken off the shelf again loses the 0.75
+        s = scoring.Scorer()
+        for _ in range(21):
+            s.update(0.100, g.BLOCK_START_POS, True)
+        s.update(0.100, (0.310, 0.0, g.BLOCK_REST_Z + 0.040), False)
+        res = s.update(0.100, g.SHELF_SPOT, True)
+        self.assertEqual(res.score, 0.75)
+        res = s.update(0.100, (0.200, -0.280, g.BLOCK_REST_Z + 0.040), False)
+        self.assertEqual(res.score, 0.50)
+
+    def test_hold_boundary_before_100(self):
+        s = scoring.Scorer()
+        for _ in range(21):
+            s.update(0.100, g.BLOCK_START_POS, True)
+        s.update(0.100, (0.310, 0.0, g.BLOCK_REST_Z + 0.040), False)
+        zero_vel = (np.zeros(3), np.zeros(3))
+        arm_vels = {"left": zero_vel, "right": zero_vel}
+        arm_tcps = {"left": (0.2, 0.28, 0.8), "right": (0.2, -0.28, 0.8)}
+        for _ in range(19):
+            res = s.update(0.002, g.SHELF_SPOT, True, arm_tcps=arm_tcps, arm_velocities=arm_vels)
+        self.assertLess(res.score, 1.0)
+        res = s.update(0.002, g.SHELF_SPOT, True, arm_tcps=arm_tcps, arm_velocities=arm_vels)
+        self.assertEqual(res.score, 1.0)
+
+    def test_start_state_scores_zero(self):
+        s = scoring.Scorer()
+        for _ in range(40):
+            res = s.update(0.0, g.BLOCK_START_POS, True)
+        self.assertEqual(res.score, 0.0)
+        self.assertFalse(res.success)
+
+    def test_instruction_gives_goal_not_method(self):
+        import task as T
+        self.assertNotIn("hold", T.INSTRUCTION.lower().replace("without letting", ""))
+        self.assertIn("leave the drawer closed", T.INSTRUCTION)
+
 
 if __name__ == "__main__":
     unittest.main()
