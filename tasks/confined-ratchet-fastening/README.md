@@ -99,6 +99,16 @@ thread-constraint failure, fixture displacement above 2 mm and contact torque ab
 Contact torque is recorded from physical contact impulses; a calibrated torque
 target is not required.
 
+For a physical trial, mark the starting bolt angle and count drive/return
+strokes from video; the known 1.25 mm pitch relates turns to axial travel.
+Inspect the head/bracket interface from the side after withdrawing the socket
+if it obscures the view. The required outcome is the head bearing on the
+bracket, not a small visible clearance. A thin feeler gauge can reveal a
+remaining gap; an obscured camera view alone does not prove contact. The
+micrometre bounds and impulse thresholds above are simulator checks for this
+physical condition, not a requirement to instrument a real trial at 480 Hz.
+The task seats a started bolt; it does not certify fastening torque or preload.
+
 ## Assets
 
 The ratchet visual is derived from NVIDIA SimReady, NVIDIA, CC-BY-4.0,
