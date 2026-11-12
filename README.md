@@ -39,7 +39,7 @@ ID) and is waiting for review, or what to fix. Push to the same branch to try ag
 
     {
       "title": "Extend a telescoping lamp",
-      "category": "Societal relevance",
+      "category": "Societal relatability",
       "keywords": ["bimanual", "telescoping"],
       "instruction": "Extend the lamp to its full height.",
       "context": "Optional: 1-2 lines on why the task matters, beyond the instruction.",
@@ -56,7 +56,7 @@ ID) and is waiting for review, or what to fix. Push to the same branch to try ag
 tagged with the task's folder name.)
 
 - **Required:** title, category, instruction, setup, scoring, run_limit, fidelity, scores and media.
-- **category:** `Impact on jobs`, `Impact on AI timelines`, `Safety and alignment`, `Societal relevance` or `Other`.
+- **category:** `Impact on jobs`, `Impact on AI timelines`, `Safety and alignment`, `Societal relatability` or `Other`.
 - **run_limit:** the most actions a model gets: control steps for action policies like Dream-1 (20 a second),
   or model calls for language-model agents. Choose what the task reasonably needs.
 - **scores:** the score each video reached, as your scorer reported it.
