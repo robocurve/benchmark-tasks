@@ -24,9 +24,9 @@ real-world physical validation. The controller still uses privileged poses/FK.
 The matching fresh Dream-1 run scored **0 in 1,800 actions** (`max_steps`), with
 identical runtime/asset hashes. Its three videos have scoped parent montage
 review, described below. The original
-957-step demo and original Dream run remain historical; the unchanged linked
-media use the original scorer. `validation.json` preserves those records and
-adds separate revised evidence. All 20 CPU tests pass.
+957-step demo and original Dream run remain historical. Media `M-A7W6Y9`
+links the revised 997-action demo, matching 1,800-action Dream run and setup image.
+`validation.json` preserves those records and adds separate revised evidence. All 20 CPU tests pass.
 
 
 ## Reproduce
@@ -275,5 +275,5 @@ and joint state. All three complete camera videos were downloaded and visually r
 The reviewed sequence shows the left arm reaching around the fork and loaded pallet, while the lifter remains on its supports and the pallet stays in its starting position. No contact-verified lift or transfer is completed. Final history has no lifter-pallet contact and no verified lift. The top sequence, final frame and both wrist views were inspected.
 
 `validation.json` preserves the completed original result, runtime revision and
-video hashes. The historical Dream video, demo and setup image remain linked
-through the unchanged media ID in `task.json`; the new runs have not been uploaded.
+video hashes. The historical media ID `M-KTMRY9` is retained only as provenance.
+`task.json` now links `M-A7W6Y9`, containing the revised demo, Dream run and setup image.
