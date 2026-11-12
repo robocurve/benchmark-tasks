@@ -1,13 +1,19 @@
 """Physical insertion history and released, resting color-correct assemblies."""
 import math
 import numpy as np
-SEATED_X=-.0821
+from pen_capping.retention import SEATED_X, engagement
 class Insertion:
- def __init__(self):self.approach=False;self.count=0
- def update(self,relative,alignment):
-  x,y,z=relative;aligned=alignment>math.cos(math.radians(5));centered=math.hypot(y,z)<.0015
+ def __init__(self):self.approach=False;self.count=0;self.metrics={}
+ def update(self,relative,alignment,cap_rotation=None):
+  x,y,z=relative
   if x<-.115 and math.hypot(y,z)<.003 and alignment>math.cos(math.radians(10)):self.approach=True
-  if self.approach and aligned and centered and abs(x-SEATED_X)<.0015:self.count+=1
+  # Full orientation is required in the simulator; the scalar form supports
+  # coaxial callers/tests and conservatively represents tilt in one plane.
+  if cap_rotation is None:
+   angle=math.acos(float(np.clip(alignment,-1,1)));c,s=math.cos(angle),math.sin(angle)
+   cap_rotation=np.array([[c,-s,0],[s,c,0],[0,0,1.]])
+  self.metrics=engagement(relative,cap_rotation)
+  if self.approach and self.metrics['eligible']:self.count+=1
   else:self.count=0
   return self.count>=4
 class History:
@@ -41,3 +47,20 @@ def hands_clear(tcps,position,axis,cap_position=None):
         if np.linalg.norm(tcp-(position+along*axis))<=.060:return False
         if cap_position is not None and np.linalg.norm(tcp-np.asarray(cap_position))<=.060:return False
     return True
+
+
+class RestMotion:
+ """Measure resolved rigid-body motion over a control interval.
+
+ A last-substep solver velocity can spike while a supported body's pose is
+ stationary. Full orientation differences still reject spin about the pen axis.
+ """
+ def __init__(self):self.previous={}
+ def speed(self,name,position,rotation,dt):
+  position=np.asarray(position,dtype=float);rotation=np.asarray(rotation,dtype=float)
+  previous=self.previous.get(name);self.previous[name]=(position.copy(),rotation.copy())
+  if previous is None or dt<=0:return math.inf
+  old_position,old_rotation=previous;delta=rotation@old_rotation.T
+  skew=np.array([delta[2,1]-delta[1,2],delta[0,2]-delta[2,0],delta[1,0]-delta[0,1]])*.5
+  angle=math.atan2(float(np.linalg.norm(skew)),float(np.clip((np.trace(delta)-1)*.5,-1,1)))
+  return float((np.linalg.norm(position-old_position)+.06*angle)/dt)

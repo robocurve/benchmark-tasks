@@ -2,5 +2,20 @@
   "source_url": "https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.2/Isaac/Props/YCB/Axis_Aligned/040_large_marker.usd",
   "source_sha256": "75673b47d4fcddfc2d7d5e825cf43b071f5e385c9f237126f8fe95abfc82df07",
   "terms_url": "https://www.nvidia.com/en-us/agreements/enterprise-software/isaac-sim-additional-software-and-materials-license/",
-  "changes": "Reuse central catalog barrel mesh, trim scan ends and replace materials with red/blue. Add analytic uncapped pen ends/colliders,35g mass; axial scale1.4 to165.2mm overall length. Separate8g caps have sixteen convex wall segments and one closed end,35mm length and12.5mm inner apothem; the opening has no collision face. Physics retention uses a fixed joint created only after measured aligned insertion and seating, preserving the measured relative pose."
+  "changes": "Central catalog barrel adaptation unchanged. Caps now include recessed liner seats, visible silicone grip/lead-in and rigid outer backing; see retention_revision for dimensions and approximation.",
+  "retention_revision": {
+    "liner_free_id_m": 0.019,
+    "liner_outer_across_flats_m": 0.0258,
+    "grip_interval_m": [
+      0.01,
+      0.016
+    ],
+    "lead_in_interval_m": [
+      0.016,
+      0.0175
+    ],
+    "lead_in_id_m": 0.021,
+    "backing_clearance_across_flats_m": 0.0212,
+    "approximation": "Visible silicone inner zone has no collision; outer backing is rigid. Geometry-gated fixed joint, uncalibrated compliance/forces."
+  }
 }

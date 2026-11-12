@@ -13,12 +13,14 @@ Activate the installed Arena/YAM environment, from the benchmark repository:
 
 ```sh
 export TASKDIR="$PWD/tasks/pen-capping"
+export PYTHONPATH="$TASKDIR${PYTHONPATH:+:$PYTHONPATH}"
+export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1
 uv pip install --no-deps -e "$TASKDIR"
 inspect-robots run --embodiment yam_pen_capping --policy pen_capping_scripted \
   -E task="$TASKDIR/task.py" -E object_jitter=0 -E device=cpu \
   -E top_cam=demo -E control_hz=20 -E cam_width=640 -E cam_height=360 \
   --instruction "Fit each pen with a cap of the same color. Put the two red pens on the left and the two blue pens on the right." \
-  --scorer task_score --max-steps 4400 --seed 0 --store-frames --log-dir pen-demo
+  --scorer task_score --max-steps 6000 --seed 0 --store-frames --log-dir pen-demo
 ```
 
 For Dream replace `--policy pen_capping_scripted` with
@@ -50,9 +52,9 @@ Analytic barrel, shoulder, nib and tail collisions give a 165.2 mm overall pen,
 19.4 mm barrel diameter and 35 g mass. Caps are separate rigid bodies, 35 mm
 long, approximately 32.6 mm diameter, 8 g. Sixteen individual convex wall boxes
 surround an open bore with 12.5 mm inner apothem. One 3 mm thick disk closes
-the far end. There is no solid collider across the mouth or inside the bore.
-The enlarged rigid bore gives insertion clearance; no cap-wall deformation
-or frictional snap-fit is simulated.
+the far end. The shell bore is 25 mm across flats except for a 25.8 mm recessed liner
+seat over cap local x=10 to 17.5 mm. The silicone liner specified below
+bridges this clearance; there is no solid collider across the mouth.
 
 For a physical reproduction, specify pigmented polypropylene (PP) for the pen
 barrel, shoulder, tail and cap shell, a polyester felt nib, and printed paper
@@ -61,14 +63,19 @@ materials, not verified material identities of the catalog scan or a tested
 physical assembly. The simulation represents all pen and cap parts as rigid;
 its red/blue surface shaders specify appearance, not PP elasticity or felt
 compliance. The destination markers are textures, with no paper mechanics.
-This material specification alone does not provide cap retention; the missing
-engagement geometry and its compliant material remain pending below.
+The retention insert is specified as silicone rubber, nominal Shore A 40,
+primer-bonded into the recessed PP seat. This is a proposed material hardness
+and attachment, not a verified commercial silicone grade, adhesive system or
+tested assembly. Bond compatibility, manufacturing tolerances, insertion force
+and pull-off force must be established on physical specimens.
 
 CPU PhysX 240 Hz, control 20 Hz, observations 640×360. Static/dynamic friction
 is 1.2/1.0; task contact/rest offsets are 0.2/0 mm. Top camera is the existing
 station demo sensor with native pose and intrinsics, without crop or zoom.
 Calibrated wrist cameras are unchanged. Regenerate with
 `python build_assets.py CATALOG_MARKER_USD` using the recorded source.
+`python build_assets.py --caps-only` rebuilds just the revised caps offline
+without downloading or changing the historical catalog barrel meshes.
 
 ## Asset attribution and license
 
@@ -94,53 +101,102 @@ geometry whose rights are established. No permissive asset license is asserted.
 Source verification and provenance details are in `assets/SOURCE.txt` and
 `assets/provenance.json`.
 
-## Insertion and synthetic retention
+## Liner dimensions and retention approximation
 
-Pen local −x points toward the nib; cap local +x is its open mouth. Before a
-cap may retain, the embodiment must observe an aligned approach with cap
-root local x<−115 mm, lateral error<3 mm and axis alignment within 10°.
-Seating requires cap root at x=−82.1±1.5 mm, lateral error<1.5 mm and axes
-within 5° for four consecutive control steps (0.2 s). This covers the nib
-and overlaps the barrel by approximately 5.4 mm through the hollow opening.
+The chosen insert is a short silicone sleeve in the existing PP cap shell.
+The physical nominal dimensions below are design specifications, not measured
+properties of an existing pen/cap product. All axial coordinates are cap-local:
 
-Only then a fixed retention joint is created at the actual reached relative
-pose and orientation. Neither object is moved to a prescribed pose. This
-joint substitutes for cap retention; it is not an arm attachment and does not
-demonstrate a physical snap-fit or friction fit.
-If the measured pair later differs from the nominal seated displacement by
-more than 6 mm or its axes differ by over 8°, retention is invalidated and the
-joint is removed. Retention is otherwise non-removable until reset.
-Wrong-color caps may physically fit but earn no credit.
+| Feature | Dimension |
+| --- | --- |
+| Pen barrel diameter / front edge | 19.4 mm / pen x=−70 mm |
+| Original shell bore | 25 mm across flats |
+| Recessed liner seat / liner outside | 25.8 mm across flats, x=10 to 17.5 mm |
+| Straight liner free bore | 19.0 mm diameter, x=10 to 16 mm |
+| Entrance taper | ID 19 to 21 mm, x=16 to 17.5 mm |
+| Nominal sleeve radial thickness at a shell flat | 3.4 mm |
+| Nominal barrel radial interference | 0.2 mm (about 5.9% of that thickness) |
+| Rigid simulation backing aperture | 21.2 mm across flats |
 
-**Physical retention remains unresolved.** The 25 mm bore across flats exceeds
-the 19.4 mm barrel diameter by 5.6 mm, leaving at least 2.8 mm radial clearance
-in the coaxial configuration. Neither the analytic pen colliders nor the cap
-walls include an engaging lip, liner or detent. Increasing friction cannot
-bridge this clearance without contact pressure. The fixed joint supplies the
-holding constraint in the current runs; it has no calibrated pull-off force.
-Naming PP as a shell material does not repair that discrepancy.
+The silicone outside follows the shell's 16-sided seat. Its visible bore uses
+64 segments. The 0.4 mm recessed seat provides a bonding location. A PP/silicone-compatible
+primer and adhesive system still needs to be selected and verified by bond
+testing. No pull-off force follows from the dimensions
+or Shore hardness alone. The insert occupies space that was previously empty;
+the shell dimensions, nominal assembly target and initial object layout stay
+the same. The chosen total cap mass remains 8 g, a simulation design parameter.
 
-Later physics revision, requiring separate simulation authorization:
+Pen local −x points toward the nib; cap local +x is its mouth. At the nominal
+cap root x=−82.1 mm in pen coordinates, the barrel front lies at cap x=12.1 mm.
+It therefore engages 3.9 mm of the 6 mm straight liner, with 4.2 mm nib-to-end
+clearance. The entrance has 0.8 mm nominal radial clearance around the barrel.
 
-1. Design a compatible physical engagement, for example a compliant annular
-   liner inside the PP shell. This is a candidate, absent from the current
-   assets. Dimension its attachment, free inner diameter, interference,
-   lead-in and axial overlap against the 19.4 mm barrel and nominal 5.4 mm
-   overlap; it must bridge the 2.8 mm radial gap. Select a specific elastomer
-   grade and tolerances from insertion/pull-off measurements.
-2. Implement matching visible and collision geometry in `build_assets.py`
-   and material/compliance behavior in `pen_capping/embodiment.py`. Validate
-   actual contact retention with the synthetic joint disabled first. If a
-   joint approximation is still necessary, gate it on the implemented
-   engagement and calibrate its failure force to the physical design.
-3. On a newly verified authorized allocation, check insertion force, contact
-   penetration, off-axis rejection, withdrawal, release, reset and retention
-   under gravity. Include an axial proof load of at least 0.35 N for one second
-   (enough to support the 35 g pen), plus the task's transfer motions. Recheck
-   scoring against missed engagement, wrong colors and released placements.
-4. Obtain a new full-score demonstration and, when authorized, matching model
-   evidence under the revised geometry and physics. Record new hashes, forces,
-   result logs and media; the existing runs cannot validate that future design.
+The geometric insertion gate uses the full relative orientation and intersects
+the finite 19.4 mm barrel with x=10 to 16 mm of the straight liner. It trims
+the axial overlap for tilt at the barrel rim. It requires at least 3 mm of
+full-section overlap, at most 0.3 mm axis eccentricity throughout that overlap,
+at most 0.55 mm maximum radial compression demand, and at least 0.4 mm nib
+clearance from the closed end. A 2° axis limit also rejects gross misalignment;
+the eccentricity test is tighter for a cap tilted about its root. These are
+chosen simulation acceptance limits, not experimentally established silicone
+tolerances. A preceding aligned approach at cap root x<−115 mm, lateral
+error<3 mm and angle<10° is required, followed by four eligible control steps
+(0.2 s). Merely crossing the old nominal root-position window is insufficient.
+
+**The inner silicone zone is visible geometry without a rigid collider.**
+Only the outer annular backing is represented by 16 convex rigid colliders,
+with a 21.2 mm aperture that leaves 0.9 mm radial clearance around the barrel.
+This prevents a rigid 19.0 mm bore from making the specified interference
+impossible to insert. It does not simulate compression, contact pressure,
+frictional holding or contact-only retention. The rigid backing and shell may
+produce contact; such contact must not be reported as elastic liner retention.
+
+After geometric engagement, a fixed joint preserves the reached pose without
+moving either object. It approximates the unresolved compliance and holding
+behavior, has no calibrated break force or pull-off curve, and stays attached
+until reset or geometric invalidation. The same engagement test invalidates
+a separated, excessively eccentric or penetrating pair. It cannot validate
+physical pull-off strength. Wrong-color caps fit but receive no credit.
+
+Offline checks: `python -m pytest -q test_scoring.py test_retention.py test_alignment.py`.
+Runtime geometry, reset and normal-camera trials are complete on the same
+frozen source. The scripted demo scores 1.0 and Dream-1 beta scores 0.0.
+Measured engagement and retention through support release accompany the
+recorded views; all four scripted placements hold full credit at the end.
+These checks validate the simulation approximation, not real silicone holding
+force or the proposed adhesive bond. Exact results and source hashes are in
+`validation.json`, with a summary in `GPU_VALIDATION.md`.
+
+## Controller and current validation
+
+The scripted controller uses privileged object pose feedback only to command
+robot joints. It aligns axes, compensates rotation about the held cap root,
+limits near-mouth advance to 3 mm/s with at most 2.5 mm lead over the measured
+root, smooths near-mouth TCP commands over 150 ms, and waits for actual engagement before releasing the supporting hand.
+The cap is grasped 8 mm behind its root to clear the opposing wrist housing.
+The alignment reference smoothly removes its initial transverse offset while
+the pen moves into position. A single bounded withdrawal/recentering retry handles reported backing-contact
+stalls. After engagement it preserves the last actuator command during handover.
+The controller never moves task objects directly or changes fit criteria.
+
+The maximum four-pair plan is 256 seconds, plus a 5-second final hold and at most
+24 seconds of retention waits. Unused insertion/seating time is skipped after
+0.5 seconds of observed retention. Recovery permits five seconds to center and
+eight seconds for a 3 mm/s reinsertion. The common demo/model budget is 6,000 actions
+(300 seconds at 20 Hz). This replaces the historical 4,400-action budget to
+allow a slower contact approach. Numerical diagnostics without camera updates
+are development evidence only; final demo and Dream use the normal cameras.
+
+The revised scripted demo completed with score **1.0**, 4,910 actions and
+245.5 simulated seconds (613.21 seconds wall time) under the 6,000-action cap.
+All four caps remained attached and all four released placements held full
+credit through the final hold. Dream-1 beta completed 6,000 actions and
+300 simulated seconds with score **0.0** in 746.78 seconds wall time, with no
+trial errors. Both runs use identical frozen sources and settings.
+The runtime geometry/reset audit passed, including contact and motion-history
+cleanup; 77 task tests and one external approach regression passed.
+See `validation.json` for exact source hashes and records, and
+`GPU_VALIDATION.md` for the current evidence summary.
 
 ## Score and reset
 
@@ -154,7 +210,11 @@ credit is lost if it is moved out or held again.
 Release requires each TCP more than 60 mm from the full pen centerline segment
 (local x −100 to +73 mm) and from its cap root. Rest requires pen root 6–25 mm
 above the table, axis within 8° of horizontal and
-`norm(linear_velocity)+0.06*norm(angular_velocity)<0.015 m/s`.
+`(root displacement + 0.06 × full orientation change in radians) / 0.05 s
+< 0.015 m/s` at each 20 Hz control interval. Full orientation change includes
+spin about the pen axis. This measures resolved motion rather than a noisy
+last-substep solver velocity; translation, rotation and interval-to-interval
+oscillation still reset the one-second rest counter.
 The declared projected pen/cap envelope must fit inside the destination
 rectangle with 1 mm inset. Full completion means all four retained caps and
 all four released, resting, correct placements.
@@ -165,7 +225,11 @@ camera observations after temporal-history flushing. Scorer tests cover
 partial and full outcomes, wrong colors, uncapped placement, missed insertion,
 side/angle errors, held/moving objects, destination errors and release duration.
 
-## Recorded runs
+## Historical recorded runs (original unlined caps)
+
+These records and `historical-validation.json` are preserved from the submitted
+revision. They do not validate the liner geometry or revised insertion gate.
+These historical records are separate from the revised results above.
 
 Runtime revision: `2425d4f3d93b1a1e701c9ccc8df52523d2a369f5066168d618d4e5acc2fa4e58`.
 
@@ -182,10 +246,9 @@ media `M-MYJ9A2` in `task.json`; synchronized wrist views are retained locally.
 The native top-camera pose is approximately `(-0.166495,-0.009000,1.541821)` m,
 quaternion xyzw `(0.212629,-0.212629,-0.674380,0.674380)`, OpenGL convention.
 At 640×360 its intrinsics are fx=392.195618, fy=391.722351,
-cx=318.389435, cy=177.876312. The exact calibration and result records are in
-`validation.json`. Physics and reset checks were performed before the camera
-revision; their physics inputs are unchanged. The recorded demos demonstrate
-full scores under the final camera configuration.
+cx=318.389435, cy=177.876312. The historical calibration and result records are in
+`historical-validation.json`. Physics and reset checks in that record predate this liner revision.
+The recorded full score applies to its original synthetic-retention setup.
 
 The one-pen milestone demonstrated insertion and synthetic joint retention
 after release, without validating a physical retention feature.
