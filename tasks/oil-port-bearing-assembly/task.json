@@ -1,0 +1,20 @@
+{
+  "title": "Seat an oil-feed sleeve with its radial passage registered",
+  "category": "Impact on jobs",
+  "keywords": [
+    "assembly",
+    "sleeve",
+    "oil passage",
+    "angular registration",
+    "grasp occlusion"
+  ],
+  "instruction": "Insert the sleeve fully into the housing, with its radial oil hole aligned to the housing oil passage. Release it and leave it seated and still for at least one second. Gravity seating is allowed. This operation ends before a separate locking operation.",
+  "context": "Without an outside circumferential groove, a sleeve can reach its axial seat while its wall still blocks a radial oil feed. This task evaluates registration of a replaceable sleeve in a lubricated guide housing before a separate retaining operation. The actual port can be obscured by a grasp, and its orientation must survive insertion and release.",
+  "setup": "Original calibrated dual-YAM station and three RGB cameras. One free 270 g sleeve (52 mm OD, 38 mm ID, 32 mm high; 12 mm radial hole; bronze exterior and silver-white bore) rests on a fixed 80 x 80 x 8 mm pad. A fixed housing has a 53.6 mm bore, 110 mm OD, 38 mm shell height, 10 mm radial feed hole, annular seat and 135 x 125 x 14 mm base. Radial clearance is 0.8 mm; the fully seated sleeve top is 3 mm below the housing rim. Fixed initial poses and materials are in scene.json; no jitter or additional sensors.",
+  "scoring": "Ending state only: 0.5 for released, supported seating held for 1.0 s; 1.0 if the full 10 mm housing-port gauge envelope also remains unobstructed to the central bore throughout that second; otherwise 0. Seating: center error <=0.8 mm horizontally and <=0.5 mm vertically, tilt <=1 degree. Every physics substep must show seat support and no robot-sleeve contact. At 20 Hz, speed <=3 mm/s and angular speed <=0.05 rad/s; over 21 consecutive samples, drift <=0.5 mm and rotation <=1 degree. The gauge runs along the housing port axis from 7 mm outside the housing to 5 mm inside the sleeve bore. Geometry is evaluated at actual live poses; numerical tangency allowance 10 nm. No prescribed grasp, arm, camera motion or insertion strategy. Full rubric: SCORING.md.",
+  "run_limit": "2,400 actions / 120 simulated seconds at 20 Hz.",
+  "reset_notes": "Start a fresh simulator process per trial. Fixed staging pose and 45-degree sleeve yaw; both original arms ready, grippers open. All parts intact and sleeve ungrasped. No randomized drift or consumable object.",
+  "fidelity": "Rigid-body clearance fit with 0.8 mm radial play, not press fitting. Polygonal holes; no oil flow, sealing, wear, deformation or retaining mechanism. Ends at released registration before separate locking. Silver bore is a static visual material, without coating thickness. Contact forces and manufactured fits are uncalibrated; scoring uses live geometry, release/support and stillness.",
+  "scores": "Dream-1: 0.0, 2,400 actions / 120 s; scripted known-layout demo: 1.0, 450 actions / 22.5 s.",
+  "media": "M-LM9B8D"
+}

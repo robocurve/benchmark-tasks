@@ -1,0 +1,231 @@
+{
+  "scene_revision": "oil-port-true-diameter-v6",
+  "visual_revision": "silver-inner-bore-v1",
+  "scoring_revision": "released-seated-full-10mm-port-v3",
+  "simulator": "Official pinned IsaacLab-Arena / yam_arena",
+  "scene": "station",
+  "calibration": "original calibrated rig",
+  "control_hz": 20,
+  "physics_hz": 240,
+  "cameras": [
+    "top_cam",
+    "left_cam",
+    "right_cam"
+  ],
+  "rgb_resolution": [
+    320,
+    176
+  ],
+  "proprioception": "original 14D joint_pos",
+  "policy_action": "original 14D absolute arm/gripper targets",
+  "object_jitter": 0,
+  "table_top_m": 0.7475,
+  "canonical_objects": [
+    {
+      "name": "housing",
+      "position_m": [
+        0.32,
+        0.025,
+        0.7815000000000001
+      ],
+      "yaw_rad": 0.0,
+      "mass_kg": null
+    },
+    {
+      "name": "staging",
+      "position_m": [
+        0.2,
+        -0.16,
+        0.7515000000000001
+      ],
+      "yaw_rad": 0.0,
+      "mass_kg": null
+    },
+    {
+      "name": "sleeve",
+      "position_m": [
+        0.2,
+        -0.16,
+        0.7715000000000001
+      ],
+      "yaw_rad": 0.7853981633974483,
+      "mass_kg": 0.27
+    }
+  ],
+  "sleeve_ring": {
+    "inner": 0.019,
+    "outer": 0.026,
+    "height": 0.032,
+    "port_radius": 0.006,
+    "port_angle": 0.0,
+    "color": [
+      0.76,
+      0.55,
+      0.26
+    ]
+  },
+  "housing_ring": {
+    "inner": 0.0268,
+    "outer": 0.055,
+    "height": 0.038,
+    "port_radius": 0.005,
+    "port_angle": 1.5707963267948966,
+    "color": [
+      0.35,
+      0.41,
+      0.44
+    ]
+  },
+  "housing_base_parts": [
+    [
+      "base_front",
+      [
+        0.0,
+        0.04125,
+        -0.027
+      ],
+      [
+        0.135,
+        0.0425,
+        0.014
+      ],
+      [
+        0.35,
+        0.41,
+        0.44
+      ]
+    ],
+    [
+      "base_back",
+      [
+        0.0,
+        -0.04125,
+        -0.027
+      ],
+      [
+        0.135,
+        0.0425,
+        0.014
+      ],
+      [
+        0.35,
+        0.41,
+        0.44
+      ]
+    ],
+    [
+      "base_left",
+      [
+        -0.04375,
+        0.0,
+        -0.027
+      ],
+      [
+        0.0475,
+        0.04,
+        0.014
+      ],
+      [
+        0.35,
+        0.41,
+        0.44
+      ]
+    ],
+    [
+      "base_right",
+      [
+        0.04375,
+        0.0,
+        -0.027
+      ],
+      [
+        0.0475,
+        0.04,
+        0.014
+      ],
+      [
+        0.35,
+        0.41,
+        0.44
+      ]
+    ]
+  ],
+  "staging_parts": [
+    [
+      "pad",
+      [
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.08,
+        0.08,
+        0.008
+      ],
+      [
+        0.28,
+        0.31,
+        0.34
+      ]
+    ]
+  ],
+  "seat_rings": [
+    [
+      "seat",
+      {
+        "inner": 0.0207,
+        "outer": 0.0268,
+        "height": 0.004,
+        "port_radius": 0.0,
+        "port_angle": 0.0,
+        "segments": 8,
+        "color": [
+          0.35,
+          0.41,
+          0.44
+        ]
+      },
+      -0.018
+    ]
+  ],
+  "annular_segments": 192,
+  "drill_polygon_sides": 64,
+  "radial_clearance_m": 0.0008,
+  "target_center_m": [
+    0.32,
+    0.025,
+    0.7815000000000001
+  ],
+  "sleeve_physics": {
+    "friction_static": 0.8,
+    "friction_dynamic": 0.6,
+    "restitution": 0,
+    "contact_offset_m": 0.0002,
+    "rest_offset_m": 0,
+    "solver_position_iterations": 32,
+    "solver_velocity_iterations": 16
+  },
+  "appearance": {
+    "silver_bore_srgb": [
+      0.9,
+      0.91,
+      0.93
+    ],
+    "roughness": 0.45,
+    "metallic": 0.25,
+    "static_from_reset": true,
+    "affects_scoring": false
+  },
+  "score": {
+    "horizontal_tolerance_m": 0.0008,
+    "vertical_tolerance_m": 0.0005,
+    "tilt_deg": 1,
+    "hold_s": 1,
+    "hold_samples": 21,
+    "gauge_diameter_m": 0.01,
+    "numerical_tangency_allowance_m": 1e-08
+  },
+  "formal_budget_actions": 2400,
+  "source_authority": "prototype/layout.py and prototype/geometry.py; no external custom assets"
+}
