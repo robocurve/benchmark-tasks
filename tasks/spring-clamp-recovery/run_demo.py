@@ -79,10 +79,18 @@ def execute(args):
         from inspect_robots import Scene
         from inspect_robots.types import Action
         import cv2
-        emb=ResistanceEmbodiment(task=str(task),condition='recoverable',top_cam='calibrated',control_hz=20,cam_width=640,cam_height=360)
+        emb=ResistanceEmbodiment(task=str(task),condition='recoverable',top_cam='calibrated',control_hz=20,cam_width=640,cam_height=360,device=args.device)
         if callable(getattr(emb._mechanism, 'set_evidence_directory', None)):
             emb._mechanism.set_evidence_directory(output)
         obs=emb.reset(Scene(id=task.name,instruction=cfg['instruction']),seed=args.seed)
+        receipt['native_devices']={'requested':args.device,'environment':str(emb._base.device),
+            'simulation_config':str(emb._base.sim.cfg.device),
+            'physics_manager':str(emb._base.sim.physics_manager.device),
+            'robot_tensors':{side:str(emb._base.scene[side+'_robot'].data.joint_pos.device) for side in ('left','right')}}
+        actual=[receipt['native_devices'][name] for name in ('environment','simulation_config','physics_manager')]
+        actual.extend(receipt['native_devices']['robot_tensors'].values())
+        if any(device!=args.device for device in actual):
+            raise RuntimeError(f'Requested and actual devices differ: {receipt["native_devices"]}')
         receipt['physics_dt_s']=emb._base.physics_dt
         receipt['control_dt_s']=emb._base.step_dt
         for name,frame in obs.images.items():
@@ -155,6 +163,7 @@ if __name__=='__main__':
     parser.add_argument('output',type=Path)
     parser.add_argument('--policy',choices=['recovery','direct','hold'],default='recovery')
     parser.add_argument('--seed',type=int,default=0)
+    parser.add_argument('--device',default='cuda:0')
     parser.add_argument('--diagnostic',action='store_true',help='Record a failed reset as diagnostic evidence; hold policy only')
     args=parser.parse_args()
     if args.diagnostic and args.policy!='hold': parser.error('--diagnostic requires --policy hold')
