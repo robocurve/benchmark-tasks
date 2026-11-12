@@ -9,7 +9,7 @@ def bilateral_grasp(rows, fingertips):
     """Require opposing loaded contacts on both exact LEFT tips and no other support.
 
     Rows are fresh native normal-contact records, not geometric proximity. Unknown
-    actors, speculative support contacts and missing positive contacts fail closed.
+    actors, speculative support contacts and missing loaded contacts fail closed.
     This predicate does not calibrate contact forces or establish native delivery.
     """
     if len(fingertips) != 2 or len(set(fingertips)) != 2:
@@ -26,8 +26,8 @@ def bilateral_grasp(rows, fingertips):
         length = np.linalg.norm(normal)
         if not .99 <= length <= 1.01:
             raise ValueError('Invalid contact normal')
-        # Native raw impulses are signed in the contact frame.
-        if abs(values[0]) > 1e-9 and values[1] <= 0:
+        # Native impulses are signed; allow 10 micrometres of solver contact gap.
+        if abs(values[0]) > 1e-9 and values[1] <= 1e-5:
             normals[path].append(normal / length)
     a, b = (normals[path] for path in fingertips)
     return bool(a and b and any(np.dot(x, y) <= -.5 for x in a for y in b))

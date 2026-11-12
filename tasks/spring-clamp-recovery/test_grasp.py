@@ -20,6 +20,12 @@ class SpringClampGrasp(unittest.TestCase):
     def setUp(self):
         self.bilateral = [contact(TIPS[0]), contact(TIPS[1], (-1., 0., 0.))]
 
+    def test_solver_contact_gap_boundary(self):
+        rows = [contact(TIPS[0], separation=1e-5), self.bilateral[1]]
+        self.assertTrue(grasp.bilateral_grasp(rows, TIPS))
+        rows[0]['separation_m'] = 1.01e-5
+        self.assertFalse(grasp.bilateral_grasp(rows, TIPS))
+
     def test_bilateral_isolated_pinch(self):
         self.assertTrue(grasp.bilateral_grasp(self.bilateral, TIPS))
 
