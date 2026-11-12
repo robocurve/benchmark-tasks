@@ -1,0 +1,21 @@
+{
+  "title": "Swap a cordless drill's flat battery for the charged one",
+  "category": "Impact on jobs",
+  "keywords": [
+    "power tools",
+    "battery swap",
+    "slide rail",
+    "spring catch",
+    "squeeze to release",
+    "construction"
+  ],
+  "instruction": "Swap the drill's battery for the charged one.",
+  "context": "Construction laborers and carpenters (about 1 million and 0.9 million US workers) swap cordless-tool batteries many times a shift. The pack is locked by a spring catch: the release button has to be held in while the pack slides off its rail, and the fresh pack has to go on square and all the way home until the catch clicks, or it drops out in use.",
+  "setup": "Positions in cm from the midpoint between the arm bases: x forward, y to the robot's left, heights above the table. An 18 V cordless drill-driver (black and orange ABS, 1.3 kg bare, 27 cm from its battery foot to the top of its motor housing, 7.6 cm thick) lies flat on its left side, its battery end nearest the robot and its chuck pointing to the robot's right. Its flat battery pack (a slim 18 V 1.5 Ah slide pack: black ABS case 11.5 cm long, 5 cm high and 7.6 cm wide with an orange band, 0.33 kg, one red fuel-gauge bar lit) is home on the drill's foot, its centre at (26, 0), its catch locked. The pack slides along the foot's T-rail (6 cm long, toward the robot's right to come off) and locks with a spring catch; the catch's orange release button (2 x 2.6 cm, 6 mm proud, about 2.8 N to press flush) is on the pack's top face, ahead of the tool's foot, 4.5 cm from the pack's centre toward its front end. A charged pack of the same kind (four green bars lit) lies on its side in line with the rail, centre at (26, -26), its back end (the end that goes onto the rail first) facing the drill. Both arms start at the ready pose with open grippers.",
+  "scoring": "Measured along the drill's rail with a ruler at the end of the run. Off the rail: a pack whose centre is at least 6.5 cm forward of its home position (clear of the 6 cm rail) or more than 2 cm to the side of the rail's line. On the rail by 3 cm: within 5 mm of the rail's line, twisted under 5 degrees, and no more than 3 cm forward of home. Home: within 2 mm of the stop. 1.0: the flat pack is off the rail and the charged pack is home with its catch up (latched in the notch), no gripper within 1 cm of the charged pack, and the drill and both packs still for 1 s. 0.5: the flat pack is off the rail and the charged pack is on the rail by at least 3 cm, but not home and latched and let go. 0.25: the flat pack is off the rail and the charged pack isn't on it by 3 cm. 0: the flat pack is still on the rail.",
+  "run_limit": "1,600 steps (80 s at 20 Hz)",
+  "reset_notes": "Slide the flat pack onto the drill until the catch clicks, lay the drill back in place, and lay the charged pack on its side 26 cm ahead, in line with the rail.",
+  "fidelity": "Isaac Lab-Arena YAM station. The drill is one rigid body built from boxes (no motor, trigger or chuck function); each pack is a box case with two rail walls and lips, and a catch: one sprung slider carrying a square-faced tooth (with a 45-degree ramp behind it) and the button, 2.8 N to press flush. The rail has 2 mm of play (real packs have under 1 mm) and no electrical contacts. The packs ride on the table as they slide, as they do with a drill lying on its side. Friction: drill 0.8 static / 0.7 dynamic (rubber overmould), packs 0.5 / 0.4.",
+  "scores": "Dream-1 run: TODO; demo: 1.0",
+  "media": ""
+}

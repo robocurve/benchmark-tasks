@@ -10,7 +10,7 @@
 The drill stays put by its own weight and grip on the table (measured: no movement while the packs slide; the
 packs ride on the table, not on the rail). ``--hold`` also has the left arm pinch the drill's handle (measured: the
 pinch's first finger to touch shoves the drill a few mm, which made the rest miss).
-``--no-button`` pinches the flat pack behind the button instead (the catch stays up): the pack must not come off.
+``--no-button`` pinches the flat pack by its back half instead (the catch stays up): the pack must not come off.
 """
 
 from __future__ import annotations
@@ -58,12 +58,15 @@ def let_go(ctx, arm):
 
 
 def pinch_front(arm, pack_y: float, button: bool = True):
-    """Pads closing along x across the pack's height at its front end (on the button), or just behind the button."""
+    """Pads closing along x across the pack's height at its front end (on the button), or (``button=False``) by its
+    back half, over the rail walls, well clear of the button. (Measured: a pinch 2 cm behind the button's centre
+    still caught its edge and released the catch.)"""
     from yam_arena.demo import grip_rotation
 
     rot = grip_rotation(math.pi / 2)                # pads close along x
-    y = pack_y + (g.BUTTON_Y if button else g.BUTTON_Y + g.BUTTON[1] / 2 + 0.010)
-    tip = np.array([FRONT_CX, y, PINCH_Z])
+    y = pack_y + (g.BUTTON_Y if button else 0.030)
+    cx = FRONT_CX if button else g.SEAT[0] + g.WALL_H / 2
+    tip = np.array([cx, y, PINCH_Z])
     yield from arm.move(tool_for_tip(tip + [0, 0, 0.08], rot), rot, 2.5, grip=1.0)
     yield from arm.move(tool_for_tip(tip, rot), None, 1.5)
     yield from arm.set_grip(0.0, 1.2)
