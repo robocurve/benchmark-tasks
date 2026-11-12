@@ -56,7 +56,17 @@ Contact reports are a simulation measurement. A real-world version can be checke
 
 `assets/spatula.usdc` uses the existing Arena spatula mesh, flattened into a self-contained USD with solid display colours. `build_tool.py` records its original NVIDIA asset URL and regenerates it with `usd-core`. Original mesh geometry is retained; the handle and blade each use one convex hull, so small visual slots are filled for collision. The added grip sleeve is a visible rigid box on the same rigid body. The fixed hood uses authored meshes with panel box collision envelopes and external mounting lugs. Supports, tray and target are primitive rigid geometry.
 
-The part represents a lightweight training component, the guard rigid plastic, the tray plastic and the sleeve rubber. Materials, friction, mass distribution and compliance are approximate and have not been calibrated to physical hardware. Loose objects use the station's 1.2 static/1.0 dynamic friction, 5 mm contact offset and zero rest offset. The sleeve does not deform. No magnetism, adhesion, suction, breakaway joints or object attachments are used.
+Intended physical materials are painted aluminium for the blue training part,
+painted ABS for the guard panels, supports and tray, steel for the guard's
+mounting lugs and fasteners, stainless steel for the spatula blade, rigid nylon
+for its handle, and rubber for its grip sleeve. These are reproduction
+specifications, not material identities recovered from the catalog mesh.
+The simulated powder-coated appearance does not make the guard a metal panel.
+Assigned masses, friction, mass distribution and compliance are approximate
+and have not been calibrated to physical hardware or derived from these
+material densities. Loose objects use the station's 1.2 static/1.0 dynamic
+friction, 5 mm contact offset and zero rest offset. The sleeve does not deform.
+No magnetism, adhesion, suction, breakaway joints or object attachments are used.
 
 ### Spatula attribution and redistribution
 
