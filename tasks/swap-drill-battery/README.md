@@ -51,12 +51,14 @@ All measured in the drill's frame (so a drill nudged on the table doesn't matter
 - Demo: squeeze the button and slide the flat pack off, push it aside, then slide the charged pack 26 cm onto the
   rail (commanded 15 mm past home; the arm lags about 8 mm and the stop takes the rest): 1.0 in 565 steps, 3 of 3
   runs.
+- Dream-1 (1,600 steps): reached toward the drill and the charged pack but moved neither: 0.
 - `--no-button` (squeeze the flat pack by its back half, over the rail walls): the catch holds, the pads slip, the
   pack and drill stay put: 0.
 
 ## Runtime, seeds and reset
 
-Run limit 1,600 steps (80 s); the scripted demo takes 565 steps (28 s). Fixed layout, no seed. Reset per
+Run limit 1,600 steps (80 s); the scripted demo takes 565 steps (28 s). On an L40S, with Isaac Sim's start-up,
+the demo takes about 100 s and the Dream-1 run about 210 s. Fixed layout, no seed. Reset per
 `reset_notes`.
 
 ## Third-party assets and licences
