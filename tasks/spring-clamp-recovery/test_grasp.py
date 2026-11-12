@@ -36,11 +36,15 @@ class SpringClampGrasp(unittest.TestCase):
             with self.subTest(actor=actor):
                 self.assertFalse(grasp.bilateral_grasp(self.bilateral + [contact(actor, impulse=0.)], TIPS))
 
-    def test_proximity_and_unloaded_or_wrong_signed_contact_cannot_score(self):
-        for impulse, separation in ((0., 0.), (-.001, 0.), (.001, .0001)):
+    def test_proximity_and_unloaded_contact_cannot_score(self):
+        for impulse, separation in ((0., 0.), (.001, .0001)):
             with self.subTest(impulse=impulse, separation=separation):
                 rows = [contact(TIPS[0], impulse=impulse, separation=separation), self.bilateral[1]]
                 self.assertFalse(grasp.bilateral_grasp(rows, TIPS))
+
+    def test_signed_native_impulses_use_magnitude(self):
+        rows = [contact(TIPS[0], impulse=-.001), contact(TIPS[1], (-1., 0., 0.), impulse=-.001)]
+        self.assertTrue(grasp.bilateral_grasp(rows, TIPS))
 
     def test_normals_must_oppose(self):
         self.assertFalse(grasp.bilateral_grasp([contact(tip) for tip in TIPS], TIPS))

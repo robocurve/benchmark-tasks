@@ -26,7 +26,8 @@ def bilateral_grasp(rows, fingertips):
         length = np.linalg.norm(normal)
         if not .99 <= length <= 1.01:
             raise ValueError('Invalid contact normal')
-        if values[0] > 1e-9 and values[1] <= 0:
+        # Native raw impulses are signed in the contact frame.
+        if abs(values[0]) > 1e-9 and values[1] <= 0:
             normals[path].append(normal / length)
     a, b = (normals[path] for path in fingertips)
     return bool(a and b and any(np.dot(x, y) <= -.5 for x in a for y in b))

@@ -161,7 +161,7 @@ if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('task',type=Path)
     parser.add_argument('output',type=Path)
-    parser.add_argument('--policy',choices=['recovery','direct','hold'],default='recovery')
+    parser.add_argument('--policy',choices=['recovery','direct','hold','right_hand_decoy'],default='recovery')
     parser.add_argument('--seed',type=int,default=0)
     parser.add_argument('--device',default='cuda:0')
     parser.add_argument('--diagnostic',action='store_true',help='Record a failed reset as diagnostic evidence; hold policy only')
