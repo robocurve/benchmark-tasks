@@ -58,6 +58,36 @@ Contact reports are a simulation measurement. A real-world version can be checke
 
 The part represents a lightweight training component, the guard rigid plastic, the tray plastic and the sleeve rubber. Materials, friction, mass distribution and compliance are approximate and have not been calibrated to physical hardware. Loose objects use the station's 1.2 static/1.0 dynamic friction, 5 mm contact offset and zero rest offset. The sleeve does not deform. No magnetism, adhesion, suction, breakaway joints or object attachments are used.
 
+### Spatula attribution and redistribution
+
+The original blade and handle geometry is NVIDIA's `spatula_15`, from the
+RoboLab VoMP object collection, registered in Arena as
+`spatula_15_vomp_robolab`. `build_tool.py` obtained it from the
+[NVIDIA Isaac 6.1 Arena asset](https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.1/Isaac/IsaacLab/Arena/assets/object_library/srl_robolab_assets/objects/vomp/spatula_15/spatula_15.usd).
+The same geometry is published in
+[RoboLab's source asset](https://github.com/NVlabs/RoboLab/blob/9cce00cadd5dc575fd2b8ea3836f5bdcde574229/assets/objects/vomp/spatula_15/spatula_15.usd).
+RoboLab's [asset-specific third-party notice](https://github.com/NVlabs/RoboLab/blob/9cce00cadd5dc575fd2b8ea3836f5bdcde574229/THIRD_PARTY_NOTICES.md#object-datasets-assetsobjects)
+licenses `assets/objects/vomp/` under **Creative Commons Attribution 4.0
+International (CC BY 4.0), © 2026 NVIDIA Corporation**. This is the license
+basis for the retained mesh geometry, independently of the framework's code
+license. An offline comparison verified identical vertices and face topology
+in both upstream assets and the included blade and handle.
+
+This task flattens the source transforms, replaces textured materials with
+display colours, assigns rigid-body mass and convex-hull collisions, and adds
+the grip sleeve described above. Original textures and MDL material files are
+not included. CC BY 4.0 permits copying, adaptation and redistribution,
+including commercial use, subject to retaining supplied attribution,
+copyright, license and disclaimer notices, linking the source and license,
+and identifying modifications. Do not impose additional restrictions or
+effective technological measures that restrict the licensed rights, or imply
+NVIDIA endorsement. The material is supplied without warranties; see the
+[full license](assets/CC-BY-4.0.txt).
+
+Keep [the asset notice](assets/spatula.NOTICE.md) and the license with
+redistributed copies of `assets/spatula.usdc`; the notice records the exact
+sources, modification history and geometry verification.
+
 ## Validation and review state
 
 The refined mesh-housing demo scored **1.0** in **823 steps**, terminated with
