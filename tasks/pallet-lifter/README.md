@@ -5,12 +5,15 @@ it to two inspection rests, lower it, withdraw the fork and return the tool. The
 remains a separate free rigid body supported by contact and friction throughout the carry.
 The loaded blank is a rigid part of the pallet; this task does not assemble or machine it.
 
-The scripted physics demonstration scored **1.0** in **957 steps** (47.85 simulated
+The historical scripted physics demonstration scored **1.0** in **957 steps** (47.85 simulated
 seconds), terminated with **success**, and took **103.52 seconds wall time** on an L40S.
 All three complete H.264 videos were downloaded. The top sequence and final placement
 were visually inspected: the loaded pallet rests on the green rails, the fork is withdrawn
-and returned, and both hands are clear. Seven offline scorer checks pass, including
-actual PhysX robot prim paths. The completed Dream-1 trial is recorded below.
+and returned, and both hands are clear. These results and the linked media use the
+original scorer with its 60 mm lift prerequisite. The revised scorer is validated
+offline only: 14 CPU tests pass, including actual PhysX robot prim paths and USD
+collision geometry. No GPU simulation, trajectory rescore or Dream rerun has been
+performed for this revision. The historical Dream-1 trial is recorded below.
 
 
 ## Reproduce
@@ -31,6 +34,9 @@ inspect-robots run --embodiment yam_pallet_lifter --policy pallet_lifter_scripte
 Use `$SIM_ROOT/cluster/run-arena.sh` inside the L40S allocation. Render the terminal
 JSON with `inspect-robots video <run.json>`. The model trial uses the same embodiment,
 scene, seed and limit with `--policy dream -P model=dreamlabs/dream-1-beta`.
+The offline suite needs NumPy and `usd-core` (the `pxr` module), but does not launch
+Isaac Sim or use a GPU. The run commands above are reproduction instructions,
+not evidence that this revision has been run.
 
 ## Fixed setup and reset
 
@@ -57,17 +63,30 @@ Nothing is consumed. Masses and materials represent lightweight training fixture
 
 ## Numeric scoring
 
-Use the final score. PhysX must report lifter–pallet contact, then the pallet's entire
-world AABB must lift above tabletop+60 mm at least once. Without that verified lift,
-score zero. A verified pallet currently held above that clearance earns 0.25 if not seated.
+Use the final score. PhysX must report lifter–pallet contact; without that contact,
+score zero. There is no minimum historical lift height for a valid seated outcome.
+The `History.lifted` flag now reports observed rail clearance for diagnostics only;
+it is not a prerequisite for seating or scoring.
 
-A verified pallet earns 0.75 when its reference xy is within 12 mm Euclidean distance of
+A contact-verified pallet earns 0.75 when its reference xy is within 12 mm Euclidean distance of
 (0.37,−0.12) m, its bottom is within 4 mm of tabletop+15 mm, full 3-D orientation is within
 8° of identity, vertical extent is below 42 mm, and it rests (linear speed under 10 mm/s,
-angular speed under 0.5 rad/s). Otherwise it earns 0.25 only while fully above the lift
-clearance, and zero elsewhere. This makes a misplaced or flipped pallet earn zero at rest.
+angular speed under 0.5 rad/s). Otherwise it earns 0.25 only while its entire world
+AABB is strictly above tabletop+15 mm, and zero elsewhere. This partial-credit
+clearance is the actual collision rail height, not an added lift requirement for
+seating. A misplaced or flipped pallet at or below that height earns zero;
+above it, only 0.25 is available unless all seating conditions hold.
 
-Full score additionally requires the lifter returned, both grippers at least 75% open,
+The collision rails span local z=0 to 15 mm. Their visual marks and fasteners
+reach 16.6 mm but have no colliders. Pallet feet extend to local z=−23 mm and
+align with the rails at y=±70 mm; the plate underside is at z=−3 mm. A level carry
+with feet 20 mm above the table therefore clears the rails by 5 mm, and the
+5 mm tines fit the 20 mm underside channel. The CPU suite reads the checked-in
+USD colliders and exercises low-clearance transfer/contact history, rail-height
+seating with no recorded clearance peak, both sides of the seating tolerance,
+the old high-lift outcome, and permanent invalid-contact/drop histories.
+
+Full score additionally requires the lifter returned, both grippers over 75% open,
 and both TCPs over 90 mm from both lifter and pallet reference centers. Parking means
 lifter xy within 25 mm of (0.2575,0.28) m, bottom within 6 mm of tabletop+35 mm, vertical
 extent below 35 mm and rest. Holding 1.0 for one second terminates successfully.
@@ -93,11 +112,29 @@ model receives ordinary images and joint state through the same contact-enabled 
 YAM source `0059d02a1a91bc6834c1d0846022891df0c78730`, Arena source
 `c7edf3a9d5d8276565208f72422f8f8a0806d6cf`; Python 3.12.12, Isaac Sim 6.1.0.0,
 Isaac Lab 17.0.2, Arena 0.3.0, Inspect Robots 0.60.0, NumPy 2.3.1, Torch 2.11.0+cu128,
-NVIDIA L40S. Source hashes and media validation are recorded in `validation.json`.
+NVIDIA L40S. These are the historical run versions. Their source hashes and media
+validation remain unchanged in `validation.json`; the separate revision entry
+records current scorer/test hashes, offline checks and pending physical evidence.
+
+## Revision evidence still required
+
+The 2026-11-12 scorer correction is **offline-validated only**. Before claiming
+physical validation, demonstrate a contact-supported transfer clearing the rails
+while remaining below the former 60 mm threshold, then seating, fork withdrawal,
+tool parking and a one-second full-score hold within 1,800 actions. Record bottom
+height, contact/failure history and final seating/rest/open-clear conditions.
+Check that invalid robot contact and drops still invalidate in the runtime.
+
+The retained terminal JSON files contain aggregate scores and action-file
+references, not per-step object bounds and contact events. They cannot be rescored
+directly. Compare old/new scores if a complete state/contact recording can be
+recovered; otherwise obtain a fresh matching demonstration and model evidence
+under separate authorization. No revised-scoring score is claimed for old media.
+The scripted policy still uses the privileged feedback described above.
 
 ## Dream-1 evaluation
 
-`dreamlabs/dream-1-beta` completed with a final score of **0** in **1,800 steps**,
+Historically, `dreamlabs/dream-1-beta` completed with a final score of **0** in **1,800 steps**,
 terminating with `max_steps`. Wall time including initialization and inference
 was **204.61 seconds**. The run used seed 0, zero jitter, 20 Hz control, 640 × 360
 saved camera frames, the `demo` top-camera configuration and the same runtime source
@@ -106,5 +143,6 @@ and joint state. All three complete camera videos were downloaded and visually r
 
 The reviewed sequence shows the left arm reaching around the fork and loaded pallet, while the lifter remains on its supports and the pallet stays in its starting position. No contact-verified lift or transfer is completed. Final history has no lifter-pallet contact and no verified lift. The top sequence, final frame and both wrist views were inspected.
 
-`validation.json` records the completed result, runtime revision and video hashes.
-The Dream video, full-score demo and setup image are linked through the media ID in `task.json`.
+`validation.json` preserves the completed original result, runtime revision and
+video hashes. The historical Dream video, demo and setup image remain linked
+through the unchanged media ID in `task.json`.

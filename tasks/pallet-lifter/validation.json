@@ -85,5 +85,60 @@
       "bytes": 1634407,
       "encoding": "H.264/yuv420p, stream-copy remux with faststart; frames unchanged"
     }
+  },
+  "revision_2026_11_12": {
+    "status": "offline-validated only; no GPU simulation, Dream rerun or trajectory rescore",
+    "base_commit": "2e34c1ea1692b132ae1312e0cf576ac08e688c60",
+    "historical_provenance": "All pre-existing top-level entries, including demo, dream, runtime_sources, input_sha256 and pending, describe the original scorer and are preserved unchanged. The old score/media records do not validate this revision.",
+    "scoring_change": "Require actual lifter-pallet contact and no invalid history. Accept valid seating without a historical height gate. Nonseated partial credit requires the current whole-pallet AABB strictly above the 15 mm collision rail height. Preserve seating, parking and permanent failure checks; lifted is a rail-clearance diagnostic only.",
+    "cpu_checks": {
+      "command_from_task_folder": "python -m unittest discover -s . -p test_score.py -v",
+      "workspace_helper_interpreter": "env_isaaclab/bin/python",
+      "python": "3.11.15",
+      "numpy": "1.26.0",
+      "usd_core": "0.26.11",
+      "tests_passed": 14,
+      "coverage": "20 mm transfer sequence through contact/update; sampled rail-height seating without a historical peak; seating tolerance on both sides; existing 80 mm lift; absent contact and contact without transfer; rail-height partial-credit boundary; incorrect seating/parking/open-clear; permanent robot contact/drop/nonfinite/workspace invalidation; USD collision geometry.",
+      "original_scorer_regression": "Original scorer returns 0 instead of 0.75 for the 20 mm transfer and all three seating-history tolerance subcases (bottom 11.1, 15 and 18.9 mm). Checked by loading original HEAD scorer in memory; no simulation.",
+      "geometry": "USD colliders: two rails top at 15 mm; 16.6 mm marks/fasteners visual only; four pallet feet bottom at local -23 mm.",
+      "other_checks": [
+        "git diff --check",
+        "JSON parse",
+        "historical validation entries unchanged",
+        "all original physics/asset/policy hashes unchanged"
+      ]
+    },
+    "input_sha256": {
+      "task.py": "486dc90db4077c137ec402cd85fc3804e82562d36846e240133baff7df6bcbfa",
+      "pallet_lifter/embodiment.py": "78615999bdafeaff21e30be4af23b450be29c723feb8bd643d4657848614390b",
+      "pallet_lifter/policy.py": "631c6c5fb6effa88f1308447b9dcc72a30be9805d608c328871cf73a0400db65",
+      "pallet_lifter/scoring.py": "a3d946ed4ef90b586ab0a7f75c62a4c59fad9e873d03c04b0d5bb96084a5c5f7",
+      "build_assets.py": "2f44106d85cc5061435ec454ab37f1854a6d42674bb5c615f8f2c028e68541ca",
+      "pyproject.toml": "e9a256f1265469b5ceca5124c0a7d3db980dc44a4b9bd2b468698f6261b7121c",
+      "assets/lifter.usdc": "40e27e685fef2ba699113cdca3cd87695cd0ce434b6fb7f8fca1043d53aedad3",
+      "assets/pallet.usdc": "c5b23db189491d045dd5fca23af9a9951c8b8446d2f97f9fe155e3c6089d7481",
+      "assets/rests.usdc": "edd8fce105711f76c0ad8782a9f99d25cb3509fc28f1dcfe0b33f630e9058207",
+      "test_score.py": "dfb0e542d74a3b69dfbb916f2bf656fd139d5963b2498ccda76eb00e3d728d19",
+      "README.md": "a7615d8857e66e0c1f7456e467eecd08b61f1f98effadc08bad718d79509368d",
+      "task.json": "c8263be20c585e0550a9d6c5532f472d2d3b73e26e3bdaa846bc9d7b1892e945"
+    },
+    "primary_sources_checked": [
+      {
+        "url": "https://github.com/robocurve/benchmark-tasks/pull/293#issuecomment-6820825702",
+        "checked_on": "2026-11-12",
+        "finding": "Review requests removal of 60 mm rejection for low-clearance transfers."
+      },
+      {
+        "url": "https://raw.githubusercontent.com/robocurve/benchmark-tasks/main/AGENTS.md",
+        "checked_on": "2026-11-12",
+        "finding": "Required task metadata and current Impact on jobs category verified; server-side validation not claimed."
+      }
+    ],
+    "replay_limit": "Retained local pallet-lifter-06 and pallet-lifter-dream-01 terminal JSONs store aggregate scores and action-file references, not per-step object bounds/contact events. They are insufficient for direct offline rescoring. Synthetic CPU sequences are not physical trajectory replay.",
+    "pending": [
+      "Under later authorization, demonstrate contact-supported low-clearance transfer below 60 mm, correct seating, fork withdrawal/parking and 1 second full-score hold within 1800 actions; retain height/contact/seating/rest/open-clear evidence.",
+      "Verify runtime robot-contact and drop invalidation; obtain matching full-score media and revised model evidence unless complete state/contact records can be recovered for a defensible old/new comparison.",
+      "Scripted policy still uses privileged object-pose/FK feedback; this revision does not resolve that existing limitation."
+    ]
   }
 }
