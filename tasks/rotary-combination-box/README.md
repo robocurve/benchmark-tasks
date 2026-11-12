@@ -1,8 +1,9 @@
 # Open a box with a three-wheel combination lock
 
 Set the three numbered wheels to 3–1–7, then open the lid. Each large wheel
-turns independently on a physical axle and has an orange fixed index. The lid
-has a real hinge and raised handle. All wheels start at incorrect digits.
+turns independently on a simulated axle and has an orange fixed index. The lid
+has a simulated revolute hinge and raised handle. All wheels start at incorrect
+digits.
 
 ## Reproduce
 
@@ -47,17 +48,75 @@ source hashes and asset-use terms are in `assets/provenance.json` and
 `assets/SOURCE.txt`. Build with `python build_assets.py WHEEL_USD BIN_VISUAL_USD`
 using the recorded source downloads; generated assets are self-contained.
 
+### Intended real-world materials
+
+The physical fixture specification below uses the dimensions and layout above.
+These are intended fabrication materials, not measured properties of a built
+fixture or material identities recovered from the NVIDIA meshes.
+
+| Part | Intended physical material and finish | Dimensions |
+| --- | --- | --- |
+| Box body, floor and walls | Blue, unfilled polypropylene homopolymer (PP), smooth surface | 140×400×60 mm outside; 8 mm floor and 6 mm walls |
+| Wheel ledge | Bare, machined 6061-T6 aluminum | 120×400×10 mm |
+| Three numbered wheel hubs | Unfilled acetal copolymer (POM-C), machined surface; white printed digits on a dark face | 70 mm diameter, 26.5 mm hub thickness |
+| Three wheel gripping bars | Thermoplastic polyurethane (TPU), Shore A 95, with a matte gripping surface | 45×18×12 mm each |
+| Lid panel | Blue, unfilled polypropylene homopolymer (PP), smooth surface | 140×400×8 mm |
+| Lid handle bar and its two posts | Thermoplastic polyurethane (TPU), Shore A 95, with a matte gripping surface | 55×18×12 mm bar; two 8×18×20 mm posts |
+| Fixed axle stubs and hinge hardware | 304 stainless steel | Axle stubs 12 mm diameter, 16 mm long; hinge axis as specified above |
+| Fixed index posts and orange indicators | 6061-T6 aluminum posts with orange painted index triangles | Posts 12×18×50 mm; triangle geometry as in `build_assets.py` |
+
+The simulation treats all these parts as rigid. `build_assets.py` assigns
+`UsdPreviewSurface` colors, roughness 0.65 and IOR 1.1; these are appearance
+settings, not calibrated PP, POM-C, TPU, aluminum or steel properties. In
+particular, TPU deformation, material-specific friction, bearing friction,
+hinge construction and mechanical latch internals are not resolved. The 80 g
+wheel and 120 g lid masses are prescribed simulation values, not masses derived
+from the listed materials and volumes; a fabricated solid PP lid need not
+weigh 120 g. The real fixture's masses, compliance, friction and detent/latch
+forces have not been measured or matched to the simulation. The recorded runs
+therefore demonstrate the simulated task, not calibrated physical performance.
+
 CPU PhysX runs at 240 Hz, control at 20 Hz; seed 0, zero jitter. Uniform
 static/dynamic friction is 1.2/1.0; task collider contact/rest offsets are
 0.3/0 mm. Observations are 640×360. The existing top demo camera uses its native
 pose and intrinsics without crop or zoom; wrist calibrations are unchanged.
+
+### Reused NVIDIA assets and license
+
+The two geometry sources are individually identified below. Both are NVIDIA
+Isaac Sim catalog assets under the
+[NVIDIA Isaac Sim Additional Software and Materials License](https://www.nvidia.com/en-us/agreements/enterprise-software/isaac-sim-additional-software-and-materials-license/)
+(last modified June 9, 2025), as described in NVIDIA's
+[asset licensing FAQ](https://docs.isaacsim.omniverse.nvidia.com/latest/common/license-faq.html).
+Isaac Sim's Apache-2.0 source-code license does not cover these catalog models.
+
+| Source asset | Reuse in this task | Applicable license |
+| --- | --- | --- |
+| [`carter_wheel_center.usd`](https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.2/Isaac/Robots/NVIDIA/Carter/Props/carter_wheel_center.usd), Carter wheel hub | Complete hub mesh scaled to 70 mm diameter in `assets/wheel.usdc`; original materials replaced; numbering, grip bar and analytic collider added | NVIDIA Isaac Sim Additional Software and Materials License |
+| [`small_KLT_visual.usd`](https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.2/Isaac/Props/KLT_Bin/small_KLT_visual.usd), KLT storage bin | Bin body resized to 140×400×60 mm in `assets/box.usdc`; catalog labels omitted and materials replaced; analytic floor/walls and ledge added | NVIDIA Isaac Sim Additional Software and Materials License |
+
+Live downloads on 2026-11-12 matched the original SHA-256 records in
+`assets/provenance.json`: wheel hub
+`51b8018e7ef5c0bd5fdbcd254ddf3bb3d0a31be6196b0a8782a0cf03ac24fb63`;
+storage bin
+`65ca828d1e0f425747605e10a328b72a00c4833671c0e9a9804d2a26f69b05a4`.
+The source catalog version is 6.2; the recorded simulation version is 6.1.0.0.
+
+License applicability does not establish redistribution permission. Sections
+2.2, 2.4 and 2.5 restrict distribution, derivative works and removal of
+proprietary notices; section 6 addresses components with separate terms.
+No asset-specific exception or separate permission for public redistribution
+of these modified meshes has been verified. That permission remains unresolved
+for `assets/wheel.usdc` and `assets/box.usdc`; attribution alone does not resolve
+it. The local files are retained unchanged for review. This documentation
+grants no additional rights to the NVIDIA geometry.
 
 ## Mechanism and score
 
 Each wheel has a world-anchored revolute z joint. Equal soft detents apply
 `−0.0005*sin(10*angle) − 0.0005*angular_velocity` Nm about z. Every digit is
 stable; torque never uses the secret code. A simplified latch holds the lid's
-real y revolute joint at 0°. Only when all measured wheel angles are within
+simulated y revolute joint at 0°. Only when all measured wheel angles are within
 5° of 3–1–7 does its lower angular limit change to −110°. The latch then
 stays retracted until reset. Gravity and robot contact move the lid; there is
 no opening actuator or object pose command. This approximates the latch,
@@ -79,6 +138,10 @@ scores, wraparound, tolerance, release, spin, lost settings and forced opening.
 ## Recorded runs
 
 Runtime revision: `a3cbf1145df54a0676f433ca2543ec22762c4916cc086e3cfca8c95269cc3660`.
+
+The 2026-11-12 documentation and category revision preserves all runtime input
+hashes in `validation.json`. The results below are the existing simulation
+evidence; no new trial or physical-material calibration was performed.
 
 | Policy | Score | Steps | Video time | Wall time |
 | --- | ---: | ---: | ---: | ---: |
