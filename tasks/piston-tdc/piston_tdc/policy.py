@@ -1,4 +1,7 @@
-"""Policy ``piston_tdc_scripted``: a privileged scripted demonstration (reads the trainer's measured crank angle).
+"""Policy ``piston_tdc_scripted``: a scripted demonstration that uses only the robot's own joint angles.
+
+The crank angle comes from the left gripper's position while it holds the handle (forward kinematics of the
+measured arm joints). Before the first grip it uses the disclosed start angle. It never reads simulator state.
 
 Left gripper: the orange handle sleeve (straight-down grip; the sleeve spins on its pin, so the gripper keeps its
 yaw while it circles the crank axis). Right gripper: the red stop's grip block. The procedure is the degree-wheel
@@ -11,6 +14,8 @@ Outputs ordinary 14-D joint targets through the stock IK; it never sets a part's
 
 ``-P mode=demo`` (default) is the demonstration. Failure paths (for the README's scoring checks):
 ``-P mode=guess``   pulls the stop first, then turns the handle to point at the stop (a guess by eye) and releases;
+``-P mode=directtdc`` removes the stop first and turns directly to the known TDC angle without either contact;
+``-P mode=oneside`` measures one contact, removes the stop, and turns directly to the known TDC angle;
 ``-P mode=wrongmid`` measures both sides, then stops at the midpoint of the arc it swept (bottom dead centre);
 ``-P mode=idle``    keeps both arms at the ready pose.
 """
@@ -39,7 +44,7 @@ SEEK_FAST_DPS, SEEK_SLOW_DPS, MOVE_DPS = 30.0, 10.0, 15.0
 FAST_SPAN_DEG = 220.0  # on the long sweep, slow down after this much travel
 STALL_DEG = 6.0  # commanded ahead of measured by this much: the crank is blocked (backup to the speed test)
 PRESS_DEG = 0.8  # held this far past the stall reading while marking
-UNLOAD_DEG = 3.0  # backed off the stop by this much before letting go
+UNLOAD_DEG = 10.0  # backed off the stop by this much before letting go, so pulling the stop cannot drag the piston
 SETTLE_TOL_DEG = 0.3
 STOP_YAW = math.pi / 2  # fingers close along x across the 20 mm grip block
 HANDLE_YAW = 0.0  # fingers close along y
@@ -60,7 +65,7 @@ class PistonTdcScriptedPolicy(YamScriptedPolicy):
         except Exception:  # noqa: BLE001 - the name is cosmetic
             pass
         self.mode = str(mode)
-        assert self.mode in ("demo", "guess", "wrongmid", "idle"), self.mode
+        assert self.mode in ("demo", "guess", "directtdc", "oneside", "wrongmid", "idle"), self.mode
 
     # -- plan ------------------------------------------------------------------------------
     def reset(self, scene):
@@ -71,20 +76,27 @@ class PistonTdcScriptedPolicy(YamScriptedPolicy):
         self._log: list[str] = []
         self._end = None
 
-    def _build(self, sim):
+    def _build(self):
         self._built = True
         self.arms = {a: Arm(self._bases[a]) for a in ("left", "right")}
         self.servo = AngleServo()
-        self.theta_d = sim.state()["theta_unwrapped_deg"]
+        self._sensed = {"theta_unwrapped_deg": float(d.THETA_START_DEG), "omega_dps": 0.0}
+        self.theta_d = self._sensed["theta_unwrapped_deg"]
         self.crank_on = False
         self.park = {a: ik.tcp_pose(np.array(READY, float), np.asarray(self._bases[a], float)) for a in self.arms}
         S = []
         if self.mode == "idle":
             self._steps = []
             return
-        if self.mode == "guess":
+        if self.mode in ("guess", "directtdc"):
             S += [("arm", "right", self._pull_stop_moves()), ("wait_idle", "right")]
-            S += [("grip_crank",), ("crank_to", lambda: self._handle_points_at_stop()), ("unload_release",)]
+            target = self._handle_points_at_stop if self.mode == "guess" else self._known_tdc
+            S += [("grip_crank",), ("crank_to", target), ("unload_release",)]
+        elif self.mode == "oneside":
+            S += [("grip_crank",), ("seek", -1, None), ("mark",),
+                  ("crank_to", lambda: self._marks[-1] + UNLOAD_DEG), ("release_crank",),
+                  ("arm", "right", self._pull_stop_moves()), ("wait_idle", "right"),
+                  ("grip_crank",), ("crank_to", self._known_tdc), ("unload_release",)]
         else:
             S += [("grip_crank",), ("seek", -1, None), ("mark",), ("crank_to", lambda: self._marks[-1] + UNLOAD_DEG)]
             S += [("seek", +1, FAST_SPAN_DEG), ("mark",), ("crank_to", lambda: self._marks[-1] - UNLOAD_DEG)]
@@ -110,6 +122,10 @@ class PistonTdcScriptedPolicy(YamScriptedPolicy):
         now = self.theta_d
         return now + d.wrap_deg(theta - d.wrap_deg(now))
 
+    def _known_tdc(self) -> float:
+        """Use the disclosed TDC angle to test the measurement bypass. The demo never calls this."""
+        return self.theta_d + d.wrap_deg(-d.wrap_deg(self.theta_d))
+
     def _pull_stop_moves(self):
         seat = d.stop_seated_pos()
         grip_z = d.TOP + d.STOP_SHANK_Z[1] + d.STOP_PLATE[2] + d.STOP_GRIP[2] / 2
@@ -132,8 +148,24 @@ class PistonTdcScriptedPolicy(YamScriptedPolicy):
                 Move(2.0, lambda sim: park, FINGER_OPEN, "right park")]
 
     # -- crank control ------------------------------------------------------------------------------
+    def _sense(self, observation):
+        """Crank angle and speed from the left gripper's measured pose, while it holds the handle sleeve."""
+        state = observation.state.get("joint_pos")
+        if state is None or not self.crank_on:
+            self._sensed["omega_dps"] = 0.0
+            return
+        q_left = np.asarray(state, float)[:6]
+        pos, _ = ik.tcp_pose(q_left, np.asarray(self._bases["left"], float))
+        a = math.degrees(math.atan2(pos[1] - d.CRANK_XY[1], pos[0] - d.CRANK_XY[0]))
+        raw = a - math.degrees(d.PHI_TDC) - d.HANDLE_OFFSET_DEG
+        last = self._sensed["theta_unwrapped_deg"]
+        theta = last + d.wrap_deg(raw - last)
+        omega = (theta - last) / self._dt
+        self._sensed["omega_dps"] = 0.5 * self._sensed["omega_dps"] + 0.5 * omega
+        self._sensed["theta_unwrapped_deg"] = theta
+
     def _crank_target(self, sim):
-        s = sim.state()
+        s = self._sensed
         cmd = self.servo.command(self.theta_d, s["theta_unwrapped_deg"], self._dt, active=self._servo_active)
         return _handle_pose(cmd)
 
@@ -143,14 +175,14 @@ class PistonTdcScriptedPolicy(YamScriptedPolicy):
         self.arms["left"].push(Move(1e9, self._crank_target, SLEEVE_SQUEEZE, "crank", track=True))
         self.crank_on = True
 
-    def _run(self, sim, t):
+    def _run(self, t):
         """Advance the step list by one control step."""
         if not self._steps:
             return
         step = self._steps[0]
         kind = step[0]
         st = self._state_of_step
-        s = sim.state()
+        s = self._sensed
         th = s["theta_unwrapped_deg"]
         if kind == "grip_crank":
             if st.get("started") is None:
@@ -237,17 +269,16 @@ class PistonTdcScriptedPolicy(YamScriptedPolicy):
         self._state_of_step = {}
 
     def act(self, observation):
-        from . import mechanism
-
-        sim = mechanism.ACTIVE
+        sim = None  # the demo reads no simulator state
         t = float(observation.state_time) + self._dt
         self._now = t
         if not self._built:
             self._state_of_step = {}
             self._servo_active = True
-            self._build(sim)
+            self._build()
         if self.mode != "idle":
-            self._run(sim, t)
+            self._sense(observation)
+            self._run(t)
             out = [self.arms[a].act(sim, t) for a in ("left", "right")]
         else:
             out = [np.r_[READY, 1.0], np.r_[READY, 1.0]]

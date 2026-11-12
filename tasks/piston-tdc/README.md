@@ -18,14 +18,14 @@ Here the engine is a single-cylinder trainer with a vertical crankshaft and a ho
 small vertical-shaft engine, at that engine's size (60 mm stroke). One gripper turns the crank handle and feels for
 the stop from each side. The other pulls the stop out of its slot and sets it in a tray. The first turns the crank to
 the midpoint and lets go. The throw, rod and piston are hidden in the housing. The handle is set 37 degrees from the
-throw, and the degree wheel's zero is 23 degrees from TDC, so TDC can't be read by eye; it has to be measured.
+throw, and the degree wheel's zero tick is 113 degrees from the throw (23 degrees from the pointer at TDC), so TDC can't be read by eye; it has to be measured.
 
 The task is a task-local plugin for the stock `yam_arena` adapter (Isaac Lab-Arena 0.3.1, Isaac Lab 3.0, Isaac
 Sim 6.1, the calibrated `station` scene). It registers:
 
 - the embodiment `yam_piston_tdc`: the stock robot, cameras and 14-D joint action and observation, unchanged, plus
   the trainer's bodies and joints, scored from the measured part poses;
-- the policy `piston_tdc_scripted`: a privileged scripted demonstration, plus the failure paths below.
+- the policy `piston_tdc_scripted`: a scripted demonstration that uses only the robot's own joint angles, plus the failure paths below.
 
 ## Setup
 Coordinates: x forward from the line between the arm bases, y left from their midpoint; heights above the table top.
@@ -35,7 +35,7 @@ Coordinates: x forward from the line between the arm bases, y left from their mi
 | base plate | dark steel, 13 x 23.4 x 0.6 cm, under the housing | fixed to the table |
 | housing | closed box of dark-blue painted 6 mm steel, 11.2 x 21.6 x 7.2 cm; hides the crank throw, rod and piston | crank axis at (25, 14) cm; housing from y +19.6 to -2.0 cm |
 | crankshaft | vertical; 30 mm throw (60 mm stroke), 95 mm connecting rod, 4 x 3 x 3 cm steel piston | hidden |
-| degree wheel | yellow-painted aluminium disc, 17 cm across, 4 mm thick; black tick every 10 degrees, blue every 90, red zero tick 23 degrees from TDC | on the crankshaft, top 7.8 cm high |
+| degree wheel | yellow-painted aluminium disc, 17 cm across, 4 mm thick; black tick every 10 degrees, blue every 90, red zero tick 113 degrees from the crank throw (23 degrees from the pointer at TDC), counter-clockwise seen from above | on the crankshaft, top 7.8 cm high |
 | handle | dark steel arm (9.6 x 1.6 x 0.6 cm) and an orange nylon sleeve (20 mm across, 40 mm tall) spinning on its steel pin, 7 cm from the axis, 37 degrees from the throw | sleeve 8.8-12.8 cm high |
 | pointer | dark steel post (1 x 1 x 7.8 cm) with a green-painted steel needle (triangle 18 mm long, 12 mm wide, 3 mm thick), tip 2 mm outside the rim | (34.9, 14) cm |
 | piston stop | red steel T (80 g): 36 x 10 x 60 mm shank in a slot in the lid, 50 x 30 x 8 mm plate on the lid, 20 x 30 x 35 mm grip block | (25, -0.5) cm, top 11.5 cm high |
@@ -56,20 +56,20 @@ wheel, or photograph from below). The sim scores from the crank's measured pose.
 | Score | Condition | How to check on a real table |
 |---|---|---|
 | 0.25 per side, latched | the piston is in contact with the seated stop on that side (piston-to-stop gap under 0.3 mm), with the crank at rest (under 2 degrees/s) within 1 degree of the contact angle (28.5 degrees before or after TDC) | feeler gauge or the crank stalling; photo of the wheel at each stall, read against the hidden TDC mark after the trial |
-| 1.0, success, the trial ends | the crank within 2 degrees of TDC, the stop resting in the tray, both grippers at least 80% open with their tool points at least 5 cm from the handle sleeve, the crank slower than 1 degree/s, all for 1 s | photo of the wheel against the TDC mark; the tray; the grippers open and away |
+| 1.0, success, the trial ends | both contact sides credited, then the crank within 2 degrees of TDC, the stop resting in the tray, both grippers at least 80% open with their tool points at least 5 cm from the handle sleeve, the crank slower than 1 degree/s, all for 1 s | photo of the wheel against the TDC mark; the tray; the grippers open and away |
 | 0, latched | the crank more than 3 degrees past a contact angle (toward TDC) while the stop is seated: forced through the stop (on a real engine, a bent rod or a damaged piston) | the wheel reads inside the blocked arc while the stop is in |
 | otherwise | the best partial score so far | |
 
-- **Every outcome:** nothing done, 0; one side, 0.25; both sides, 0.5; the final condition, 1.0 (with or without the
-  sides: the result is what counts). A crank released 3 degrees off TDC keeps only its side credit.
-- **Seated** means the stop's pose within 2 mm and 3 degrees of its seated pose. **In the tray** means its centre
+- **Every outcome:** no contact, 0.0. One contact side, 0.25. Both contact sides, 0.5.
+- **Full credit:** both contacts, then the final condition for one second. A direct turn to TDC earns 0.0.
+- A crank left more than 2 degrees from TDC keeps only its contact credit.
+- **Seated** means the stop's centre within 2 mm of its seated position and tilted less than 3 degrees. **In the tray** means its centre
   inside the tray's inner footprint, less than 8 cm above the tray floor, and moving slower than 5 cm/s.
 - **No credit for touching:** a side counts only when the piston is measured touching the seated stop (gap under
   0.3 mm) and the crank is at rest there. Touching the stop or the handle, or a shove that stops short of the stop,
   earns nothing.
-- **Unintended strategies:** pulling the stop first and guessing earns nothing unless the guess is within 2 degrees
-  (the handle and the wheel's zero are both off TDC, so the obvious guesses are 23 or 37 degrees out); the `guess` run
-  shows it. Forcing the crank through the stop scores 0. That rule is a guard, geometrically unreachable with the
+- **Direct guess:** remove the stop and turn directly to TDC. This earns 0.0, even within 2 degrees.
+  The scorer requires contact credit from both sides. Forcing the crank through the stop scores 0. That rule is a guard, geometrically unreachable with the
   rigid stop: in the probe the piston sank into it by at most 0.05 mm, while 3 degrees past contact would take about
   1 mm.
   A stop dropped anywhere but in the tray, or knocked off the table, never reaches
@@ -113,6 +113,8 @@ inspect-robots run "${COMMON[@]}" --policy dream --log-dir runs/dream
 # Failure paths
 inspect-robots run "${COMMON[@]}" --policy piston_tdc_scripted -P mode=wrongmid --log-dir runs/wrongmid
 inspect-robots run "${COMMON[@]}" --policy piston_tdc_scripted -P mode=guess --log-dir runs/guess
+inspect-robots run "${COMMON[@]}" --policy piston_tdc_scripted -P mode=directtdc --log-dir runs/directtdc
+inspect-robots run "${COMMON[@]}" --policy piston_tdc_scripted -P mode=oneside --log-dir runs/oneside
 
 # One MP4 per camera, next to each run's frames
 for log in runs/*/*.json; do inspect-robots video "$log"; done
@@ -126,7 +128,26 @@ for log in runs/*/*.json; do inspect-robots video "$log"; done
   centre); `-P mode=guess` pulls the stop first, then turns the handle to point at the stop and lets go; `-P mode=idle`
   holds both arms still.
 
-## Results
+## Results (November 12, 2026)
+
+Measured on one L40S shared with other simulations, with the settings above (one episode each). Failure paths added
+in this revision: `-P mode=directtdc` pulls the stop first and turns straight to TDC without either contact;
+`-P mode=oneside` measures one contact, pulls the stop and turns straight to TDC.
+
+| Run | Score | Contacts credited | Final crank angle from TDC | Simulation time | Wall time |
+|---|---|---|---|---|---|
+| Scripted demo | 1.0 | both | -0.33 degrees | 60.7 s | 580 s |
+| `wrongmid` (both contacts, then bottom dead centre) | 0.5 | both | 179.7 degrees | 75.2 s | 698 s |
+| `directtdc` (straight to TDC, no contact) | 0.0 | none | +0.04 degrees | 31.0 s | 255 s |
+| `oneside` (one contact, then straight to TDC) | 0.25 | one | +0.09 degrees | 45.3 s | 335 s |
+
+- Turning straight to TDC earns nothing, even within 0.1 degree: full credit needs both measured contacts.
+- **The demo reads no simulator state.** It knows the crank angle only from where its own gripper is while it holds
+  the handle (forward kinematics of the robot's joint angles), and the start angle given in the setup. Its two marks
+  were +28.31 and -28.98 degrees (true contacts at +-28.47); it released the crank 0.33 degrees from TDC.
+- Dream-1 (November 6, same instruction): 0.0. The stricter scorer cannot raise it.
+
+## Earlier results (November 5-6, before this revision)
 Measured on 2026-11-05, one L40S, the settings above (one episode each). Re-run on 2026-11-06 with the contact-gap
 rule, on the pinned adapter commit (0059d02): the demo, `wrongmid` and `guess` gave the same scores and steps, and a
 byte-identical demo video; each side was credited with the piston touching the stop (gap -0.01 mm). Dream-1 was not
@@ -153,13 +174,13 @@ re-run (same instruction).
 ## Simulation notes and limits
 - **Joints:** the crank (revolute, with a declared bearing drag of 0.02 N m s/rad), the rod's big end (revolute), the
   wrist pin (spherical, which removes the loop's redundant constraints), the bore (prismatic) and the handle sleeve
-  (revolute) are native PhysX joints outside the robot's articulation. They are disabled while a reset writes the
-  start layout and enabled afterwards.
+  (revolute) are native PhysX joints outside the robot's articulation. They are disabled while the stock reset runs,
+  then enabled, and the start layout is written and settled (joint-anchor error at most 0.07 mm in the demo).
 - **Contact only:** the piston meets the stop only through contact, and the cylinder head wall behind the stop takes
   the load. Nothing is teleported or locked in software.
-- **The demonstration is privileged:** it reads the crank's measured angle, the way a mechanic reads the wheel, and
-  never the true TDC. It finds each contact when the crank stops following the handle, and bisects its own two
-  readings. The YAM arm is compliant under the stock gains, so while it turns the crank the demo corrects its
+- **The demonstration reads no simulator state:** it knows the crank angle only from where its own gripper is while
+  it holds the handle (forward kinematics of the measured arm joints), and the disclosed start angle before the first
+  grip. It finds each contact when the handle stops following the gripper, and bisects its own two readings. The YAM arm is compliant under the stock gains, so while it turns the crank the demo corrects its
   commanded angle by integrating the measured error (rate-limited and capped, and frozen against the stop).
 - **Simplified:** rigid primitives, nominal masses and friction, no compression, oil film or wear. Physics at 240 Hz,
   control and scoring at 20 Hz.

@@ -30,7 +30,7 @@ from yam_arena.inspect_embodiment import ARMS, YamArenaEmbodiment
 
 from .joints import JointSet
 
-ACTIVE = None  # the live embodiment, read only by declared privileged demo policies
+ACTIVE = None  # the live embodiment; the demo policies do not read it (they use only joint angles)
 
 
 class MechanismEmbodiment(YamArenaEmbodiment):

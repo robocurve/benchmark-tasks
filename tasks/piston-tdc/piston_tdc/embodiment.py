@@ -64,7 +64,7 @@ class PistonTdcEmbodiment(MechanismEmbodiment):
 
     # -- measured state -------------------------------------------------------------------------
     def state(self, p=None) -> dict:
-        """Measured trainer state (scorer, telemetry and the privileged demo)."""
+        """Measured trainer state (scorer and telemetry; the demo policy does not read it)."""
         p = self.poses() if p is None else p
         theta = math.degrees(d.theta_of_phi(d.yaw_of(p["rotor"][3:])))
         if self._unwrapped is None:

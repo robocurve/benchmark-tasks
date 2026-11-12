@@ -1,4 +1,4 @@
-"""Reactive Cartesian motion for privileged scripted demos (reusable kit module). NumPy only.
+"""Reactive Cartesian motion for scripted demos (reusable kit module). NumPy only.
 
 :class:`Arm` plays a queue of :class:`Move` s for one YAM arm through the stock adapter's IK and returns ordinary
 14-D-action halves (6 joints + normalized gripper). Moves can be appended at any time, so a demo can react to the
