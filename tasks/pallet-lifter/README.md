@@ -47,7 +47,7 @@ inspect-robots run --embodiment yam_pallet_lifter_validation --policy pallet_lif
 ```
 
 Activate the configured Arena environment before installation. On Brev this is
-`source ~/IsaacLab-Arena/yam.env`; CARC uses its documented allocation launcher.
+`source ~/IsaacLab-Arena/yam.env`; on other systems use the configured Arena launcher.
 Render the terminal JSON with `inspect-robots video <run.json>`. The model trial
 uses the same validation embodiment, task, scene, seed, cameras and limit with
 `--policy dream -P model=dreamlabs/dream-1-beta`, and a fresh `TRIAL_OUTPUT`.
@@ -78,6 +78,20 @@ World x points forward, y left, z up. Tabletop z=0.7475 m. `task.py` lists start
 Reset restores the pallet, lifter and both arms, clears contact/failure history and
 settles physics. Seed 0 and zero jitter reproduce the demonstrated arrangement.
 Nothing is consumed. Masses and materials represent lightweight training fixtures.
+
+For physical reproduction, specify steel for the pallet plate, feet, fasteners
+and lifter structure; aluminium for the round blank and inspection rails;
+rubber for the grip sleeve; and rigid acetal plastic for both tool supports.
+The coloured seat and tine marks are paint. These are intended fabrication
+materials, not identities established by a shader. The simulation prescribes
+120 g and 80 g for the two loose assemblies independently of material density;
+solid metal versions at these dimensions will be heavier. The benchmark tests
+contact-supported handling of a small fixture, not industrial payload capacity.
+
+Positioning components for testing is part of the work of
+[inspectors, testers, sorters, samplers and weighers](https://www.onetonline.org/link/summary/51-9061.00).
+Here the physical skill is transferring a small fixture while keeping the tool
+under its load, then seating it and withdrawing the tool without disturbing it.
 
 ## Numeric scoring
 
