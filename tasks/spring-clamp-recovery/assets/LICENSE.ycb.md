@@ -8,4 +8,4 @@ Primary dataset index and license notice: https://ycb-benchmarks.s3.amazonaws.co
 License: https://creativecommons.org/licenses/by/4.0/
 Archive: https://ycb-benchmarks.s3.amazonaws.com/data/google/044_flat_screwdriver_google_16k.tgz
 
-Original mesh, material and texture are retained in ycb044/. The derived appearance retains only the scanned handle, transforms its coordinates, and removes the original wide blade. The simulated narrow blade and its collision proxies are authored nominal geometry suitable for the terminal tool port. They do not identify the original YCB screwdriver as an unmodified compatible tool.
+Included here: `ycb044_handle.obj` is derived from the scanned YCB 044 mesh; `texture_map.png` is the original texture. The original complete mesh/material archive is not bundled. The wide original blade was removed, handle coordinates and normals transformed, and texture coordinates retained. The simulated shaft and narrow replacement blade are authored nominal geometry. This is not an unmodified commercial YCB screwdriver model.

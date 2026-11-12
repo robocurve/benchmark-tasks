@@ -80,6 +80,8 @@ def execute(args):
         from inspect_robots.types import Action
         import cv2
         emb=ResistanceEmbodiment(task=str(task),condition='recoverable',top_cam='calibrated',control_hz=20,cam_width=640,cam_height=360)
+        if callable(getattr(emb._mechanism, 'set_evidence_directory', None)):
+            emb._mechanism.set_evidence_directory(output)
         obs=emb.reset(Scene(id=task.name,instruction=cfg['instruction']),seed=args.seed)
         receipt['physics_dt_s']=emb._base.physics_dt
         receipt['control_dt_s']=emb._base.step_dt

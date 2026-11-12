@@ -154,9 +154,10 @@ class ClearanceRecovery(RecoveryPilot):
             corners=np.array([[x,y,z] for x in (-.068,.140) for y in (-.018,.018) for z in (-.018,.018)])@r.T+p
             local=(corners-bp)@br
             cleared=local[:,0].max()<-.065 or local[:,1].min()>.05 or local[:,1].max()<-.05
-            retained=np.linalg.norm(p-left)<.08
-            progress=float(cleared and retained)
-            endpoint=cleared and retained and np.linalg.norm(v[:3])<.02
+            progress=float(cleared)
+            grasp=self.left_grasp_verified(base)
+            diagnostics['left_grasp_verified']=bool(grasp)
+            endpoint=cleared and grasp and np.linalg.norm(v[:3])<.02
         else:
             raise ValueError(f'Unimplemented recovery mode: {mode}')
         self._unsafe |= bool(violation)

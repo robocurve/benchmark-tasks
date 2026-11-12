@@ -197,6 +197,8 @@ class ResistanceEmbodiment(YamArenaEmbodiment):
             self._env.step(settle_action)
         for _ in range(4):
             self._base.sim.render()
+        if callable(getattr(self._mechanism, "begin_episode", None)):
+            self._mechanism.begin_episode(self._base)
         self._t = 0.0
         return self._observation()
 
@@ -242,5 +244,9 @@ class ResistanceEmbodiment(YamArenaEmbodiment):
     def close(self):
         """Release the environment; keep Kit alive until the process has printed its scores."""
         if self._env is not None:
-            self._env.close()
-            self._env = self._base = None
+            try:
+                if callable(getattr(self._mechanism, "close", None)):
+                    self._mechanism.close()
+            finally:
+                self._env.close()
+                self._env = self._base = None
