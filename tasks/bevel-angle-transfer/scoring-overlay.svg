@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="140mm" height="180mm" viewBox="0 0 140 180" role="img" aria-labelledby="title description">
+  <title id="title">Bevel angle transfer judging overlay</title>
+  <desc id="description">Actual-size 140 by 180 millimetre board. The stock seats along the left edge. The line through the tick descends toward the far edge. The outer and inner dashed boundaries are 5 and 3 millimetres perpendicular to the target.</desc>
+  <defs>
+    <clipPath id="board"><rect width="140" height="180"/></clipPath>
+    <pattern id="millimetres" x="0" y="0" width="1" height="2" patternUnits="userSpaceOnUse">
+      <path d="M0 0V2" fill="none" stroke="#222" stroke-width=".16"/>
+    </pattern>
+    <pattern id="centimetres" x="0" y="0" width="10" height="4" patternUnits="userSpaceOnUse">
+      <path d="M0 0V4" fill="none" stroke="#222" stroke-width=".32"/>
+    </pattern>
+  </defs>
+  <g clip-path="url(#board)" font-family="sans-serif" fill="#222">
+    <rect x=".15" y=".15" width="139.7" height="179.7" fill="none" stroke="#222" stroke-width=".3"/>
+    <text x="70" y="11" text-anchor="middle" font-size="4.4">Bevel angle transfer judging overlay</text>
+    <text x="70" y="18" text-anchor="middle" font-size="3.3">Print at 100%. Use after the trial.</text>
+    <path d="M20 32H120 M20 30V34 M120 30V34 M132 1V101 M130 1H134 M130 101H134"
+          fill="none" stroke="#222" stroke-width=".3"/>
+    <text x="70" y="29" text-anchor="middle" font-size="3">100 mm print check</text>
+    <text x="129" y="51" text-anchor="middle" transform="rotate(-90 129 51)" font-size="3">100 mm print check</text>
+    <text x="4" y="48" font-size="3.5">Near edge · stock seats here</text>
+    <text x="137" y="51" text-anchor="middle" transform="rotate(90 137 51)" font-size="3.5">Far edge</text>
+    <path d="M4 51H.6L2 50 M.6 51L2 52" fill="none" stroke="#222" stroke-width=".25"/>
+
+    <g fill="none" stroke="#222" stroke-width=".25">
+      <path d="M0 80H70 M0 78V82 M70 78V82"/>
+      <path d="M0 91H126 M0 89V93 M126 89V93"/>
+      <path d="M0 101H140"/>
+    </g>
+    <text x="35" y="77" text-anchor="middle" font-size="3">70 mm projected coverage</text>
+    <text x="63" y="88" text-anchor="middle" font-size="3">126 mm projected coverage</text>
+    <rect x="0" y="101" width="140" height="2" fill="url(#millimetres)"/>
+    <rect x="0" y="101" width="140" height="4" fill="url(#centimetres)"/>
+    <g font-size="2.8" text-anchor="middle">
+      <text x="2" y="109">0</text><text x="20" y="109">20</text><text x="40" y="109">40</text>
+      <text x="60" y="109">60</text><text x="80" y="109">80</text><text x="100" y="109">100</text>
+      <text x="120" y="109">120</text><text x="136.5" y="109">140</text>
+    </g>
+
+    <g fill="none" stroke-width=".24">
+      <path d="M0 114.6791L140 165.6349 M0 125.3209L140 176.2767" stroke="#785116" stroke-dasharray="2 1.25"/>
+      <path d="M0 116.8075L140 167.7633 M0 123.1925L140 174.1484" stroke="#196053" stroke-dasharray=".75 .75"/>
+      <path d="M0 120L140 170.9558" stroke="#222"/>
+      <path d="M15 162H29" stroke="#785116" stroke-dasharray="2 1.25"/>
+      <path d="M15 167H29" stroke="#196053" stroke-dasharray=".75 .75"/>
+      <path d="M15 172H29" stroke="#222"/>
+    </g>
+    <rect x="0" y="119" width="4" height="2" fill="none" stroke="#a22129" stroke-width=".22"/>
+    <circle cx="2" cy="120" r=".25" fill="#a22129"/>
+    <text x="6" y="138" font-size="3">Red tick</text>
+    <text x="31" y="163" font-size="3">±5 mm band</text>
+    <text x="31" y="168" font-size="3">±3 mm band</text>
+    <text x="31" y="173" font-size="3">Target · −20° in world coordinates</text>
+  </g>
+</svg>

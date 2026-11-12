@@ -26,30 +26,25 @@ Friction and damping are constant throughout the episode. Sufficient applied tor
 
 ## Score
 
-The scorer reconstructs each stage from measured poses and filtered contacts.
+Score the transfer from one continuous video and the finished line from one overhead photo or the board itself. The [physical judging guide](PHYSICAL_SCORING.md) includes an actual-size overlay. The simulator applies the same rubric using measured poses, gripper state and the visible ink footprint.
 
 | Score | Conditions |
 | --- | --- |
-| 0 | No valid retained transfer at the end of the episode. |
-| 0.25 | Complete reference capture, blade release, airborne carry and board seating in order. Preserve the captured relative blade angle within 2° through the end. |
-| 0.5 | Also cover at least 50% of the target within 5 mm, with internal gaps at most 5 mm, angle error at most 5°, stray ink at most 10 mm-equivalent, transverse RMS error at most 3 mm and at least 50% guided ink. |
-| 1.0 | Cover at least 90% within 3 mm, with gaps at most 3 mm, angle error at most 2°, stray ink at most 5 mm-equivalent, transverse RMS error at most 1.5 mm and at least 90% guided ink. Then hold the nib at least 5 mm above the board for 0.5 s without new ink. |
+| 0 | The transfer is invalid or incomplete. |
+| 0.25 | Fit the stock and blade to both reference faces with at most 3 mm of gap at each end of each mating span. The blade gripper visibly opens and clears the blade before the gauge leaves the fixture. Carry the gauge by the stock without dragging, setting it down, regrasping or readjusting. Seat the stock within 3 mm of the board edge, with the blade flat on the board (at most 3 mm of visible gap). The stock-to-blade angles at capture and board placement differ by at most 2°. |
+| 0.5 | Complete the transfer and use the seated blade to guide the marker. The line comes within 5 mm of the red tick centre, covers at least 70 mm projected across the 140 mm board width, stays within 5 mm perpendicular to the target centreline and has internal gaps of at most 5 mm. |
+| 1.0 | Complete the transfer and use the seated blade to guide the marker. The line comes within 3 mm of the tick centre, covers at least 126 mm across the board width, stays within 3 mm of the target centreline and has internal gaps of at most 3 mm. Finish with at least 5 mm of clearance from the nib tip to the board surface. |
 
-**Capture and release.** Both reference side contacts must exceed 5 mN and fit within 2° and 3 mm for 0.3 s. The blade must have moved at least 10° from its measured starting relative angle, which must be at least 15° away from the reference. During the capture window the relative-angle span must be at most 0.25° and the diagonal of the stock-position envelope at most 0.5 mm. To release, both right-finger forces on the blade must stay at or below 5 mN and the right TCP must stay at least 18 mm from both the blade body and tab for 0.1 s. During this release hold, both reference contacts must still qualify or the stock must be within 5 mm of its capture position. Subsequent finger contact above the threshold or loss of clearance invalidates the capture.
+Both line grades allow one line at most 4 mm wide with no separate specks or second line. Coverage sums distinct marked intervals across the board width. Internal gaps are measured between those intervals. All visible marker ink counts. Award the highest score whose conditions pass.
 
-**Carry and seating.** Lift the stock at least 20 mm from capture height, then move it at least 80 mm horizontally while remaining at least 10 mm above capture height. Complete the transfer by seating the stock against the board after leaving the reference fit. The seating and blade placement tests below also apply at this stage.
-
-**Ink and guidance.** Ink requires marker-board contact above 5 mN within 4 mm of the nib centre and 1 mm of the board top, with the nib bottom within 2 mm of the surface, tilt at most 25°, and the contact point inside the board. Contact loss or jumps over 10 mm break strokes. Guidance requires stock-board normal force above 5 mN, stock seating within 3 mm, stock yaw and blade yaw/tilt within 2°, blade edge height within 2 mm, blade edge offset 0.5–4.5 mm from the target (2.5 mm nominal) and the nib within 3.5 mm transversely of the blade edge and at most 2 mm beyond either endpoint. Marker-blade force is recorded as a diagnostic.
-
-The visible ink and the guided subset must each meet the geometry thresholds for the grade. Both line grades limit total ink-equivalent length to 150% of the target. Stray ink is measured outside the finite 5 mm target corridor. The scorer grades the union of the visible 2 mm-wide strokes on a 0.25 mm raster. Earlier marks, including marks before capture or from an invalidated transfer, remain visible and count toward stray ink. Only ink guided by the current retained transfer can supply guided coverage.
+For simulator replay, each continuous pen-down stroke needs evidence that the marker followed the seated blade. A freehand stroke or stamp, ink made before transfer, or a consecutive unguided portion spanning at least one ink width (2 mm) along or across the target loses line credit. The spatial span uses the outermost positions, so dwelling or retracing within a smaller area adds no span.
 
 ## Install and run
 
-Use the Robocurve YAM/Isaac environment with Isaac Sim 6.1.0.0, Inspect Robots 0.60.0, inspect-robots-dream 0.1.0 and dreamlabs-client 1.0.14. The simulation walkthrough is on the [Robocurve task board](https://tasks.robocurve.org/). The task verifies PhysX PGS with minimum position and velocity iteration counts of 64 and 16 at startup. Both commands below use seed 0, zero layout jitter and a 2,400-step limit at 20 Hz (120 s of simulated control time).
+Use the Robocurve YAM/Isaac environment with Python 3.12.16, Isaac Sim 6.1.0.0, Inspect Robots 0.60.0, inspect-robots-yam 0.37.0, inspect-robots-dream 0.1.0, dreamlabs-client 1.0.14 and NumPy 2.3.1. The simulation walkthrough is on the [Robocurve task board](https://tasks.robocurve.org/). The task verifies PhysX PGS with minimum position and velocity iteration counts of 64 and 16 at startup. Both commands below use seed 0, zero layout jitter and a 2,400-step limit at 20 Hz (120 s of simulated control time).
 
 | Dependency checkout | Validated commit |
 | --- | --- |
-| YAM-inspect-Isaac | `d825f0c51724f750f26e8c3f5620a14b5b0261b0` |
 | yam-isaac-lab-arena | `0059d02a1a91bc6834c1d0846022891df0c78730` |
 | IsaacLab-Arena | `c7edf3a9d5d8276565208f72422f8f8a0806d6cf` |
 | IsaacLab submodule | `91a0906f93802eb859192dcb0bca879f891e92d6` |
@@ -59,14 +54,14 @@ source /data/IsaacLab-Arena/yam.env
 "$HOME/.local/bin/uv" pip install --no-deps -e /path/to/bevel-angle-transfer
 TASK_TEXT=$(python -c 'from bevel_angle_transfer.task_spec import INSTRUCTION; print(INSTRUCTION)')
 inspect-robots run --embodiment bevel_angle_transfer --policy bevel_angle_transfer_demo \
-  -P mode=demo -E demo_observations=true -E terminate_on_success=true \
+  -E demo_observations=false -E terminate_on_success=false \
   -E object_jitter=0 -E control_hz=20 -E cam_width=320 -E cam_height=176 \
   -E output_dir=outputs/demo/traces --instruction "$TASK_TEXT" \
   --scorer task_score --max-steps 2400 --epochs 1 --seed 0 --store-frames \
   --grader none --no-prompt --no-rerun --no-rerun-save --log-dir outputs/demo/logs
 ```
 
-Use `-P mode=mechanism` for transfer only or `-P mode=hover` for marking motions with the nib 15 mm above the surface. Hover can earn 0.25 for a retained transfer and must produce zero ink.
+The demonstration replays a fixed 1,897-step, 20 Hz joint/gripper program without reading observations, tool poses, contact forces or scorer flags. Its actions were calibrated in the 2026-11-12 development run; their provenance and checksum are packaged with the program. A fresh run with `demo_observations=false` reached 1.0 under the revised scorer. The historical feedback controller is separately registered as `bevel_angle_transfer_feedback` for development only, with `-P mode=demo|mechanism|hover -E demo_observations=true`. A valid transfer with hovering may earn 0.25 but must produce no ink.
 
 For Dream-1, configure the Dream Labs API credential privately, then run the following in the same environment. The recorded evaluation wrapped this command with a persistent API request budget.
 
@@ -86,9 +81,34 @@ python -m bevel_angle_transfer.regrade outputs/demo/traces/trial-0000
 inspect-robots video outputs/demo/logs/RUN.json
 ```
 
-The regrader reconstructs capture, retention and ink from raw physics traces, checks the source and configuration, and compares the exported metrics and ink. Keep a frozen source snapshot with each recorded run. Changes to task Python or USD assets change the implementation revision.
+The regrader reconstructs the transfer and ink from raw physics traces, checks the source and configuration, and compares the exported metrics and ink. The v2 trace records measured jaw opening and finger link poses. It cannot certify old traces that lack those measurements: use the preserved v1 source to reproduce historical grades. Keep a frozen source snapshot with each recorded run. Task Python, USD assets, finger envelopes and the fixed action program are included in the implementation hash.
 
-## Recorded results
+The native top camera renders at twice the adapter's default width and height, with its calibrated intrinsics rebuilt at that size. This supplies a clearer final board photo. Policy images remain at the requested 320 x 176 resolution; wrist camera settings and all camera poses are unchanged. Actual image sizes are recorded in `run_config.json`.
+
+## Validation status
+
+Verified on 2026-11-12, fixed layout, seed 0:
+
+| Evaluation | Score | Control steps | Simulated control time | Wrapper wall time |
+| --- | ---: | ---: | ---: | ---: |
+| Fixed joint-action demonstration, no simulator feedback | 1.0 | 1,897 | 94.85 s | 930 s |
+| Dream-1 beta | 0.0 | 2,400 | 120 s | 1,158 s |
+
+Both runs used `demo_observations=false`. They ran concurrently on one L40S; wall times include startup and shared-resource execution. The demo marked 136.97 mm of the 140 mm width, reached the tick, had no internal gap, a maximum template offset of 2.52 mm and maximum line width of 2.34 mm. It finished with the marker clear and zero transfer invalidations. Dream made no ink and completed no valid transfer. Its 95 SDK calls included 45 handled expiry notices; the evaluation completed normally.
+
+Both complete measurement traces independently regraded to exactly the exported scores and ink histories on the VM and on a separate Windows CPU. All 63 automated tests passed. They cover the physical scoring boundaries, invalid captures/carries, freehand marks, small contact-boundary noise, replay integrity, robot geometry, and a fixed demo that cannot read observations.
+
+```bash
+python -m pytest -q
+```
+
+Implementation revision: `b257d06a6571d68b156ea146279366b39229cf9b0f5197700e4538cb1028decc`.
+
+This establishes fixed-layout simulated feasibility. The physical judging procedure has not been tested on hardware. This revision's media has not been uploaded; `task.json.media` remains empty until the new recordings are uploaded.
+
+### Historical results
+
+These seed-0 trials used the previous scorer and frozen task source. Media ID `M-6KCFQS` belongs to those trials.
 
 | Trial at seed 0 | Score | Control steps | Wall time on the validation VM |
 | --- | ---: | ---: | ---: |
@@ -97,14 +117,14 @@ The regrader reconstructs capture, retention and ink from raw physics traces, ch
 
 Both raw contact traces reproduced their exported scores and ink histories on the validation VM and a separate CPU environment. All 44 automated tests passed. These results cover one trial per policy. The optional hover and Dream smoke trials were skipped.
 
-Implementation revision `a526f28723c87d20f092a066966df3ec6902bec5b4022caa0449a6a3f49cdc23`.
+Historical implementation revision `a526f28723c87d20f092a066966df3ec6902bec5b4022caa0449a6a3f49cdc23`.
 
 ## Fidelity and reset
 
-The scripted controller uses measured simulator tool poses and ordinary joint and gripper targets. It draws along the measured retained blade edge. Dream uses camera and joint observations. Both policies act on free tools. Initial tool pose and hinge-angle writes occur at reset.
+The fixed demonstration executes calibrated joint and gripper targets without reading object poses, forces or scorer flags. The separately registered development controller uses simulator feedback to prepare those targets. Dream uses camera and joint observations. All controllers act on free tools. Initial tool pose and hinge-angle writes occur at reset.
 
 The simulation uses rigid contact, a passive hinge and geometric ink generated by nib contact. It simplifies the marker's fluid flow, nib wear and compliance, wood deformation and surface roughness. The fixed layout tests simulated feasibility at one angle.
 
 Reset clears the ink and temporal scoring state and restores the fixed layout, loose tool poses and initial +10° blade angle. For physical reproduction, clean or replace the board and restore the fixtures and tools. Use blunt, lightweight, unpowered tools.
 
-The included task code and assets are original MIT-licensed work. External dependencies retain their own licences.
+The task code and authored gauge, board and marker assets are MIT licensed. Finger-envelope dimensions are derived from the pinned YAM collision geometry; their JSON records the source URDF and mesh checksums. External robot and simulator dependencies retain their own licences.

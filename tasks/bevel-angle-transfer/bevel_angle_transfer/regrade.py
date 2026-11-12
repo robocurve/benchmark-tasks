@@ -35,7 +35,7 @@ def reconstruct(records, config=DEFAULT_CONFIG, *, tolerance=1e-8):
                 same_point = np.asarray(saved).shape == (2,) and np.allclose(actual, saved, atol=tolerance, rtol=0)
             if not same_point:
                 differences.append(f"sample {tracker.tick}: saved ink coordinate differs")
-    return dict(metrics=tracker.metrics(), strokes=tracker.strokes, guided_strokes=tracker.guided_strokes,
+    return dict(metrics=tracker.metrics(), strokes=tracker.strokes,
                 target_start=tracker.target_start, target_end=tracker.target_end, differences=differences)
 
 
@@ -62,9 +62,13 @@ def regrade_trial(folder, *, check_ink=True, tolerance=1e-8):
         raise ValueError("Tolerance must be finite and nonnegative")
     folder = Path(folder)
     ink = json.loads((folder/"ink.json").read_text(encoding="utf-8"))
+    if ink.get("schema") != "bevel-angle-transfer-contact-ink-v2":
+        raise ValueError("This scorer requires v2 observations with measured gripper geometry; use the frozen v1 source for historical trials")
     saved = json.loads((folder/"metrics.json").read_text(encoding="utf-8"))
     with (folder/"contacts.jsonl").open(encoding="utf-8") as stream:
         records = [json.loads(line) for line in stream if line.strip()]
+    if not records or any(record.get("trace_schema") != "bevel-visible-v2" for record in records):
+        raise ValueError("Missing or incompatible bevel-visible-v2 measurement trace")
     result = reconstruct(records, tolerance=tolerance)
     differences = result["differences"]
     manifest_path = folder/"source_manifest.json"
@@ -85,7 +89,7 @@ def regrade_trial(folder, *, check_ink=True, tolerance=1e-8):
         if name not in ink or not np.allclose(result[name], ink[name], atol=tolerance, rtol=0):
             differences.append(f"exported {name} differs from task target")
     if check_ink:
-        for name in ("strokes", "guided_strokes"):
+        for name in ("strokes",):
             if not _same_strokes(result[name], ink.get(name), tolerance):
                 differences.append(f"exported {name} differs from reconstructed contacts")
     return dict(match=not differences, metrics=result["metrics"], differences=differences,

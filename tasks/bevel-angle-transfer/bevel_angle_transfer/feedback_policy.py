@@ -35,9 +35,13 @@ STOCK_WITHDRAW_CLEARANCE = np.array([-.006, .006, 0.])
 STOCK_FLOOR_PRELOAD = np.array([0., 0., -.0005])
 REFERENCE_PRELOAD = np.array([.0002, 0., -.0005])
 BOARD_PRELOAD = np.array([.0006, 0., -.0005])
+STOCK_PICKUP_TILT = math.radians(-22.)
 MARKER_HOVER_Z = .840
-CONTACT_FORCE = .30
-STROKE_S = 8.
+MARKER_CLEAR_GOAL = np.array([.18, -.19, .90])
+MARKER_CLEAR_TILT = axis_angle_matrix(np.array([0., 1., 0.]), math.radians(-10.))
+FINAL_TRAVEL_SPEED = .045
+CONTACT_FORCE = .10
+STROKE_S = 10.
 MAX_POSITION_LEAD = .030
 MAX_ROTATION_LEAD = math.radians(18.)
 MAX_RUN_S = 115.
@@ -48,6 +52,7 @@ PHASE_LIMITS = {
     "unseat_reference": 12., "lift_stock": 12.,
     "transfer_stock": 22., "lower_board": 12., "seat_board": 12., "pick_marker": 8.,
     "carry_marker": 20., "touch_board": 8., "draw": 15., "finish": 6., "lift": 7.,
+    "clear_marker": 9.,
 }
 
 
@@ -61,6 +66,15 @@ def _tab_grasp(blade, blade_rot):
     rotation = axis_angle_matrix(blade_rot[:, 0], math.radians(40.)) @ grip_rotation(yaw + math.pi / 2)
     tab = blade[:3] + blade_rot @ np.asarray(spec.BLADE_GRASP_LOCAL)
     return tab - .016 * rotation[:, 2], rotation
+
+
+class _TiltedStockPickup(ArmPlan):
+    """Lean the left wrist away from the marking arm around the jaw closing axis."""
+
+    def target(self, t):
+        position, rotation, finger, label = super().target(t)
+        tilt = STOCK_PICKUP_TILT * ik.smoothstep(t / self.waypoints[0].duration)
+        return position, axis_angle_matrix(np.array([1., 0., 0.]), tilt) @ rotation, finger, label
 
 
 def _draw_endpoints(blade, blade_rot, board, board_rot):
@@ -136,7 +150,7 @@ class BevelAngleTransferDemo(PolicyBase):
 
     def reset(self, scene) -> None:
         pickup = spec.pickup_waypoints()
-        self._left_pick = ArmPlan(pickup["left"], self._bases["left"])
+        self._left_pick = _TiltedStockPickup(pickup["left"], self._bases["left"])
         self._right_pick = None
         self._right_waypoints = pickup["right"]
         self._last = (np.r_[READY, 1.], np.r_[READY, 1.])
@@ -146,6 +160,7 @@ class BevelAngleTransferDemo(PolicyBase):
         self._marker_rot = np.eye(3)
         self._pressure_bias = self._force_filtered = 0.
         self._servo: dict[str, _ServoState] = {}
+        self._reference_hold = None
         self._debug_observation = {}
 
     def _unload_tab(self, pivot, force, dt, meta):
@@ -180,7 +195,7 @@ class BevelAngleTransferDemo(PolicyBase):
         return self._hold >= duration - 1e-9
 
     def _track(self, arm, q, tool_pose, tool_rot, goal_pos, goal_rot, dt, meta, *,
-               press=False, feedforward=None):
+               press=False, feedforward=None, max_speed=.020):
         base = self._bases[arm]
         tcp_pos, tcp_rot = ik.tcp_pose(q, base)
         grasp_pos = tcp_rot.T @ (tool_pose[:3] - tcp_pos)
@@ -198,7 +213,7 @@ class BevelAngleTransferDemo(PolicyBase):
         rot_error = goal_rot @ tool_rot.T
         error_angle = _rotation_angle(rot_error)
         correction = error if feedforward is None else error + feedforward
-        velocity = _bounded(correction, .020)
+        velocity = _bounded(correction, max_speed)
         if press:
             velocity[2] = np.clip(velocity[2], -.010, .010)
         fraction = min(.5 * dt, math.radians(10.) * dt / max(error_angle, 1e-12))
@@ -316,35 +331,46 @@ class BevelAngleTransferDemo(PolicyBase):
             return self._stop("demo_timeout_" + phase, meta)
 
         command_left, command_right = self._last
+        withdrawing_tab = phase in ("release_tab", "retract_tab", "park_right")
+        if withdrawing_tab and released and self._reference_hold is None:
+            # Once the blade has been released, stop integrating stock preload
+            # against the reference while the right hand withdraws and parks.
+            self._reference_hold = np.r_[left[:6], 0.]
         if phase == "pick_stock":
             command_left, meta["waypoint"] = self._left_pick.action7(elapsed + self._dt)
             if elapsed >= self._left_pick.duration and stock[2] > .790:
                 self._transition("carry_to_reference", now)
+        elif withdrawing_tab and self._reference_hold is not None:
+            command_left = self._reference_hold
         else:
             stock_goal = {
                 "carry_to_reference": CAPTURE + STOCK_TRAVEL + STOCK_DESCENT_CLEARANCE,
                 "lift_stock": CAPTURE + STOCK_TRAVEL + STOCK_WITHDRAW_CLEARANCE,
                 "transfer_stock": TRANSFER + STOCK_TRAVEL + STOCK_DESCENT_CLEARANCE,
             }.get(phase)
+            stock_goal_rot = STOCK_ROTATION
+            if phase == "unseat_reference":
+                stock_goal = self._reference_lift_goal
+                stock_goal_rot = self._reference_lift_rot
             pressing = stock_goal is None
             if pressing:
                 at_reference = phase in ("lower_reference", "seat_reference", "approach_tab", "close_tab", "fit_reference", "unload_tab",
-                                         "release_tab", "retract_tab", "park_right", "unseat_reference")
+                                         "release_tab", "retract_tab", "park_right")
                 stock_goal = CAPTURE + REFERENCE_PRELOAD if at_reference else TRANSFER + BOARD_PRELOAD
                 if phase in ("lower_reference", "lower_board"):
-                    # Clear the fixture top before pressing the stock into its side.
+                    # Reference fitting may slide into place before capture. At
+                    # the board descend directly into seating, without dragging
+                    # the captured gauge sideways after touching the table.
                     datum = CAPTURE if at_reference else TRANSFER
-                    stock_goal = datum + STOCK_DESCENT_CLEARANCE + STOCK_FLOOR_PRELOAD
-                elif phase == "unseat_reference":
-                    # Move away from both fence normals before lifting.
-                    stock_goal = CAPTURE + STOCK_WITHDRAW_CLEARANCE + STOCK_FLOOR_PRELOAD
+                    inset = STOCK_DESCENT_CLEARANCE if at_reference else np.zeros(3)
+                    stock_goal = datum + inset + STOCK_FLOOR_PRELOAD
             command_left = self._track(
-                "left", left[:6], stock, stock_rot, stock_goal, STOCK_ROTATION, dt, meta, press=pressing,
+                "left", left[:6], stock, stock_rot, stock_goal, stock_goal_rot, dt, meta, press=pressing,
             )
             if "feedback_fault" in meta:
                 return self._stop(meta["feedback_fault"], meta)
             stock_error = float(np.linalg.norm(stock[:3] - stock_goal))
-            stock_angle = _rotation_angle(STOCK_ROTATION @ stock_rot.T)
+            stock_angle = _rotation_angle(stock_goal_rot @ stock_rot.T)
             aligned = stock_angle <= math.radians(1.)
             meta["stock_error_mm"] = stock_error * 1000.
             meta["stock_angle_deg"] = math.degrees(stock_angle)
@@ -366,7 +392,7 @@ class BevelAngleTransferDemo(PolicyBase):
                 self._transition("lower_board", now)
             elif phase == "lower_board" and self._stable(stock_error < .002 and aligned, .15, dt):
                 self._transition("seat_board", now)
-            elif phase == "seat_board" and self._stable(transferred and stock_error < .002 and aligned, .30, dt):
+            elif phase == "seat_board" and self._stable(stock_error < .002 and aligned, .30, dt):
                 if self.mode == "mechanism":
                     self._last = command_left, command_right
                     return self._stop("demo_transfer_complete", meta)
@@ -445,6 +471,10 @@ class BevelAngleTransferDemo(PolicyBase):
             command_right, meta["waypoint"] = self._right_park.action7(elapsed + self._dt)
             park_error = float(np.max(np.abs(command_right[:6] - right[:6])))
             if elapsed >= self._right_park.duration and park_error < math.radians(3.) and released:
+                self._reference_lift_goal = stock[:3] + STOCK_TRAVEL
+                self._reference_lift_rot = stock_rot
+                self._servo.pop("left", None)
+                command_left = np.r_[left[:6], 0.]
                 self._transition("unseat_reference", now)
 
         if phase == "pick_marker":
@@ -473,13 +503,13 @@ class BevelAngleTransferDemo(PolicyBase):
             # force error. Never run this controller in the hover control.
             if touching_phase:
                 self._pressure_bias = float(np.clip(
-                    self._pressure_bias + dt * .001 * (self._force_filtered - CONTACT_FORCE),
-                    -.002, .001,
+                    self._pressure_bias + dt * .0005 * (self._force_filtered - CONTACT_FORCE),
+                    -.00075, .00075,
                 ))
             offset = self._marker_rot @ np.asarray(spec.MARKER_NIB_LOCAL)
             surface_z = board[2] + spec.BOARD_SIZE[2] / (2. * board_normal[2])
             contact_z = surface_z + spec.MARKER_NIB_RADIUS - offset[2]
-            z = (contact_z - .0005 + self._pressure_bias if touching_phase else
+            z = (contact_z - .0002 + self._pressure_bias if touching_phase else
                  contact_z + .015 if self.mode == "hover" and phase in ("touch_board", "draw", "finish") else
                  MARKER_HOVER_Z)
             xy = self._draw_start
@@ -520,6 +550,21 @@ class BevelAngleTransferDemo(PolicyBase):
             elif phase == "finish" and self._stable(at_xy and (nib_contact or self.mode == "hover"), .15, dt):
                 self._transition("lift", now)
             elif phase == "lift" and self._stable(not nib_contact and clearance >= .005, .65, dt):
+                self._transition("clear_marker", now)
+        elif phase == "clear_marker":
+            # The pitch adjustment adds wrist travel at the holder hover.
+            marker_goal_rot = MARKER_CLEAR_TILT @ self._marker_rot
+            command_right = self._track(
+                "right", right[:6], marker, marker_rot, MARKER_CLEAR_GOAL, marker_goal_rot, dt, meta,
+                max_speed=FINAL_TRAVEL_SPEED,
+            )
+            if "feedback_fault" in meta:
+                return self._stop(meta["feedback_fault"], meta)
+            marker_error = float(np.linalg.norm(marker[:3] - MARKER_CLEAR_GOAL))
+            marker_angle = _rotation_angle(marker_goal_rot @ marker_rot.T)
+            marker_clear = not nib_contact and marker_error < .004 and marker_angle < math.radians(2.)
+            meta["marker_error_mm"] = marker_error * 1000.
+            if self._stable(marker_clear and stock_error < .004 and aligned, .35, dt):
                 self._last = command_left, command_right
                 return self._stop("demo_motion_complete", meta)
 

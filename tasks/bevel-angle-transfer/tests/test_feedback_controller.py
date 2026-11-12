@@ -3,6 +3,7 @@
 import ast
 import math
 from pathlib import Path
+from types import SimpleNamespace
 
 import numpy as np
 import pytest
@@ -150,12 +151,12 @@ def test_reference_release_requires_stable_physical_capture(
 
 def test_left_stock_path_reserves_wrist_margin(policy):
     from yam_arena import ik, station
-    from yam_arena.demo import ArmPlan, grip_rotation
+    from yam_arena.demo import grip_rotation
 
     spec = policy.spec
     base = station.BASES["left"]
     pickup = spec.pickup_waypoints()["left"]
-    plan = ArmPlan(pickup, base)
+    plan = policy._TiltedStockPickup(pickup, base)
     for t in np.linspace(0., plan.duration, 70):
         plan.action7(t)
     assert plan.worst_ik_mm < 1.
@@ -168,17 +169,18 @@ def test_left_stock_path_reserves_wrist_margin(policy):
         capture + high + inset,
         capture + floor + inset,
         capture + policy.REFERENCE_PRELOAD,
-        capture + floor + withdraw,
+        capture + high,
         capture + high + withdraw,
         transfer + high + inset,
-        transfer + floor + inset,
+        transfer + floor,
         transfer + policy.BOARD_PRELOAD,
     )
     q = plan.q
     prev_pos = np.asarray(pickup[-1].pos)
     # Exercise 5° of tool yaw correction, comparable with the measured servo
     # lead during reference seating. Preserve at least 5° of further wrist travel.
-    rotation = ik.matrix_to_quat_xyzw(grip_rotation(pickup[1].yaw - math.radians(5.)))
+    tilt = policy.axis_angle_matrix(np.array([1., 0., 0.]), policy.STOCK_PICKUP_TILT)
+    rotation = ik.matrix_to_quat_xyzw(policy._yaw_rotation(math.radians(-5.)) @ tilt @ grip_rotation(pickup[1].yaw))
     for stock_pos in stock_path:
         goal = stock_pos + grasp_offset
         for fraction in np.linspace(0., 1., 21):
@@ -223,15 +225,109 @@ def test_withdrawal_requires_fixture_clearance_before_lifting(policy):
     assert not policy._withdrawn(.0018, math.radians(2.1), clear)
 
 
+def test_released_stock_holds_measured_joints_then_lifts_vertically(policy, monkeypatch):
+    from inspect_robots.types import Observation
+    from inspect_robots_yam.packing import STATE_KEY, pack
 
-def test_marker_uses_refreshed_path_and_stops_only_after_clear_lift(policy, monkeypatch):
+    controller = policy.make_demo_policy()
+    controller.reset(None)
+    controller._transition("release_tab", 0.)
+    controller._servo["left"] = object()
+    tracked = []
+
+    def track(arm, q, tool, rotation, goal, goal_rot, dt, meta, **kwargs):
+        tracked.append((arm, goal.copy(), goal_rot.copy(), kwargs["press"]))
+        return np.r_[q, 0.]
+
+    monkeypatch.setattr(controller, "_track", track)
+    spec = policy.spec
+    stock = np.asarray(spec.GAUGE_CAPTURE_POS) + [.0003, .002, .0001]
+    stock_rot = policy._yaw_rotation(math.radians(.8))
+    identity = [0., 0., 0., 1.]
+    tools = {
+        "stock_pose": [*stock, *policy.ik.matrix_to_quat_xyzw(stock_rot)],
+        "blade_pose": [*spec.REFERENCE_PIVOT, *identity],
+        "marker_pose": [.18, -.19, .8175, *identity],
+        "board_pose": [*spec.BOARD_CENTER, *identity],
+        "marker_board_force": [0., 0., 0.],
+        "reference_stock_force": [0., 0., 0.],
+        "reference_blade_force": [0., 0., 0.],
+        "stock_board_force": [0., 0., 0.],
+        "gauge_angle": spec.REFERENCE_ANGLE,
+        "gauge_velocity": 0.,
+        "nib_contact": False,
+        "capture_valid": True,
+        "released": True,
+        "transfer_valid": False,
+    }
+    measured_left = np.r_[np.asarray(policy.READY) + .01, .25]
+    right = np.r_[policy.READY, 1.]
+
+    def observe(t):
+        state = {STATE_KEY: pack(measured_left, right)}
+        obs = Observation(state=state, state_time=t, extra={"demo_tools": tools})
+        return controller.act(obs).actions[0].data[:7]
+
+    held = observe(0.)
+    np.testing.assert_array_equal(held, np.r_[measured_left[:6], 0.])
+    measured_left[0] += .005
+    tools["released"] = False
+    np.testing.assert_array_equal(observe(.05), held)
+    assert not tracked
+
+    tools["released"] = True
+    controller._transition("park_right", .05)
+    controller._right_park = SimpleNamespace(duration=0., action7=lambda t: (right, "park"))
+    np.testing.assert_array_equal(observe(.10), np.r_[measured_left[:6], 0.])
+    assert controller._phase == "unseat_reference"
+    assert "left" not in controller._servo
+
+    observe(.15)
+    ((arm, goal, goal_rot, pressing),) = tracked
+    assert arm == "left" and pressing is False
+    np.testing.assert_allclose(goal, stock + [0., 0., .05])
+    np.testing.assert_allclose(goal_rot, stock_rot)
+
+
+
+def test_left_pickup_tilts_during_hover_and_keeps_balanced_waypoints(policy):
+    from yam_arena.demo import ArmPlan
+    from yam_arena.urdf import rotation_angle_deg
+
+    controller = policy.make_demo_policy()
+    controller.reset(None)
+    plan = controller._left_pick
+    baseline = ArmPlan(plan.waypoints, plan.base_pos)
+    hover = plan.waypoints[0].duration
+    for t, tilt in ((0., 0.), (.5 * hover, 11.), (hover, 22.), (plan.duration, 22.)):
+        position, rotation, finger, label = plan.target(t)
+        flat_position, flat_rotation, flat_finger, flat_label = baseline.target(t)
+        np.testing.assert_array_equal(position, flat_position)
+        assert (finger, label) == (flat_finger, flat_label)
+        assert rotation_angle_deg(rotation, flat_rotation) == pytest.approx(tilt, abs=1e-5)
+        np.testing.assert_allclose(rotation @ flat_rotation.T @ [1., 0., 0.], [1., 0., 0.], atol=1e-12)
+
+    position, rotation, _, _ = plan.target(hover)
+    assert position[1] == pytest.approx(.27)
+    assert rotation[1, 2] < 0.  # The wrist leans toward +Y, away from the marking arm.
+    grasp, _, _, _ = plan.target(hover + plan.waypoints[1].duration)
+    np.testing.assert_allclose(grasp, [.18, .27, .7825])
+
+
+def test_marker_uses_refreshed_path_and_stops_after_clear_retraction(policy, monkeypatch):
     from inspect_robots.types import Observation
     from inspect_robots_yam.packing import STATE_KEY, pack
 
     spec = policy.spec
     controller = policy.make_demo_policy()
     controller.reset(None)
-    monkeypatch.setattr(controller, "_track", lambda *args, **kwargs: np.r_[np.zeros(6), 0.])
+    goals = {}
+
+    def track(arm, q, tool, rotation, goal, *args, **kwargs):
+        goals[arm] = goal.copy()
+        return np.r_[np.zeros(6), 0.]
+
+    monkeypatch.setattr(controller, "_track", track)
     pivot = np.asarray(spec.GAUGE_TRANSFER_POS) + spec.GAUGE_PIVOT_LOCAL
     angle = spec.REFERENCE_ANGLE
     tools = {
@@ -252,9 +348,13 @@ def test_marker_uses_refreshed_path_and_stops_only_after_clear_lift(policy, monk
     }
     joints = pack(*controller._last)
 
+    def observe(t):
+        observation = Observation(state={STATE_KEY: joints}, state_time=t, extra={"demo_tools": tools})
+        return controller.act(observation).actions[0]
+
     def act(phase, t):
         controller._transition(phase, t)
-        controller.act(Observation(state={STATE_KEY: joints}, state_time=t, extra={"demo_tools": tools}))
+        observe(t)
         return np.array([controller._draw_start, controller._draw_end])
 
     approach = act("carry_marker", 0.)
@@ -269,16 +369,47 @@ def test_marker_uses_refreshed_path_and_stops_only_after_clear_lift(policy, monk
     tools["nib_contact"] = True
     tools["marker_board_force"] = [0., 0., .3]
     for step in range(3, 6):
-        controller.act(Observation(state={STATE_KEY: joints}, state_time=.05 * step,
-                                   extra={"demo_tools": tools}))
+        observe(.05 * step)
     assert controller._phase == "lift"
 
     tools["marker_pose"][2] += .010
     tools["nib_contact"] = False
     tools["marker_board_force"] = [0., 0., 0.]
     for step in range(6, 19):
-        action = controller.act(Observation(state={STATE_KEY: joints}, state_time=.05 * step,
-                                            extra={"demo_tools": tools})).actions[0]
-        if step < 18:
-            assert not action.meta.get("request_stop")
+        assert not observe(.05 * step).meta.get("request_stop")
+    assert controller._phase == "clear_marker"
+    assert not observe(.95).meta.get("request_stop")
+    np.testing.assert_array_equal(goals["right"], policy.MARKER_CLEAR_GOAL)
+    np.testing.assert_array_equal(goals["left"], policy.TRANSFER + policy.BOARD_PRELOAD)
+
+    tools["marker_pose"][:3] = policy.MARKER_CLEAR_GOAL
+    tools["marker_pose"][3:] = policy.ik.matrix_to_quat_xyzw(policy.MARKER_CLEAR_TILT)
+    for step in range(20, 26):
+        assert not observe(.05 * step).meta.get("request_stop")
+    action = observe(1.30)
     assert action.meta["stop_reason"] == "demo_motion_complete"
+    np.testing.assert_array_equal(goals["left"], policy.TRANSFER + policy.BOARD_PRELOAD)
+
+
+def test_right_marker_withdrawal_has_continuous_ik_and_joint_margin(policy):
+    from yam_arena import ik, station
+
+    # Joint and tool poses measured after lifting the marker in the frozen demo.
+    q = np.array([.836577, 2.036352, 1.756924, -1.417658, -.178991, .807640])
+    marker = np.array([.221984, -.026075, .829428])
+    marker_rot = policy.rotation_xyzw([.01362729, .00084997, .00501151, .99989414])
+    base = station.BASES["right"]
+    tcp_pos, tcp_rot = ik.tcp_pose(q, base)
+    grasp_pos = marker_rot.T @ (tcp_pos - marker)
+    grasp_rot = marker_rot.T @ tcp_rot
+    yaw = math.atan2(marker_rot[1, 0], marker_rot[0, 0])
+    final_marker_rot = policy.MARKER_CLEAR_TILT @ policy._yaw_rotation(yaw)
+    motion = policy.MARKER_CLEAR_GOAL - marker
+    for fraction in np.linspace(0., 1., 31):
+        rotation = ik.slerp_matrix(marker_rot, final_marker_rot, fraction)
+        target_pos = marker + fraction * motion + rotation @ grasp_pos
+        target_rot = ik.matrix_to_quat_xyzw(rotation @ grasp_rot)
+        q, position_error, angle_error = ik.solve(target_pos, target_rot, q, base_pos=base, iters=40)
+        assert position_error < .001
+        assert angle_error < math.radians(1.)
+        assert np.min(np.minimum(ik.UPPER - q, q - ik.LOWER)) > math.radians(5.)

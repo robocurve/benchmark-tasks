@@ -10,7 +10,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 import numpy as np
-from yam_arena.constants import TCP_OFFSET
+from yam_arena.constants import FINGER_OPEN, TCP_OFFSET
 from yam_arena.inspect_embodiment import RESET_RENDERS, SETTLE_S, YamArenaEmbodiment
 
 from . import task_spec as spec
@@ -35,6 +35,14 @@ _MIN_VELOCITY_ITERATIONS = 16
 def _numpy(value):
     value = value.torch if hasattr(value, "torch") else value
     return value.detach().cpu().numpy().copy()
+
+
+def _review_resolution(embodiment):
+    """Double only the native top image, rebuilding its calibrated intrinsics."""
+    top = embodiment.camera_config.top_cam
+    high_resolution = embodiment._camera_cfg(top.height * 2, top.width * 2, False)
+    embodiment.camera_config.top_cam = high_resolution.top_cam
+    return embodiment
 
 
 def _reset_gauge(env, env_ids):
@@ -89,6 +97,7 @@ class BevelAngleTransferEmbodiment(YamArenaEmbodiment):
             atexit.register(upstream._close_app_at_exit)
 
         import isaaclab.sim as sim_utils
+        import yam_arena.embodiment as embodiment_module
         import yam_arena.scene as scene_module
         from isaaclab.assets import ArticulationCfg
         from isaaclab.managers import EventTermCfg
@@ -101,10 +110,15 @@ class BevelAngleTransferEmbodiment(YamArenaEmbodiment):
 
         original_object = scene_module.task_object
         original_callback = scene_module.env_cfg_callback
+        original_embodiment = embodiment_module.BimanualYamEmbodiment
+
+        def review_embodiment(**options):
+            return _review_resolution(original_embodiment(**options))
         link_paths = asset_link_paths()
-        pair_paths = dict(_PAIR_PATHS)
-        for name in _FINGER_NAMES:
-            pair_paths[f"blade_{name}"] = ("gauge/blade", "RightArm" + link_paths[name])
+        pair_paths = dict(_PAIR_PATHS) if self.demo_observations else {"marker_board": _PAIR_PATHS["marker_board"]}
+        if self.demo_observations:
+            for name in _FINGER_NAMES:
+                pair_paths[f"blade_{name}"] = ("gauge/blade", "RightArm" + link_paths[name])
 
         def task_object(obj):
             rotation = (0.0, 0.0, math.sin(obj.yaw / 2), math.cos(obj.yaw / 2))
@@ -176,7 +190,9 @@ class BevelAngleTransferEmbodiment(YamArenaEmbodiment):
 
             return configure
 
-        with patch.object(scene_module, "task_object", task_object), patch.object(scene_module, "env_cfg_callback", callback):
+        with (patch.object(scene_module, "task_object", task_object),
+              patch.object(scene_module, "env_cfg_callback", callback),
+              patch.object(embodiment_module, "BimanualYamEmbodiment", review_embodiment)):
             super()._ensure_sim(goal)
         physics = self._base.sim.stage.GetPrimAtPath(self._base.cfg.sim.physics_prim_path)
         self._physics_solver = physics.GetAttribute("physxScene:solverType").Get()
@@ -218,6 +234,8 @@ class BevelAngleTransferEmbodiment(YamArenaEmbodiment):
                 raise RuntimeError(f"PhysX parsed hinge {name}={value}, expected {expected}")
         self._right = scene["right_robot"]
         self._right_ids = self._right.find_bodies(["gripper", *_FINGER_NAMES], preserve_order=True)[0]
+        self._left = scene["left_robot"]
+        self._left_ids = self._left.find_bodies(["gripper", *_FINGER_NAMES], preserve_order=True)[0]
 
         self._create_ink_mesh()
         # Sample contact and pose buffers from the same physics substep.
@@ -237,34 +255,62 @@ class BevelAngleTransferEmbodiment(YamArenaEmbodiment):
         poses = {name + "_pose": self._root_pose(name).tolist() for name in _TOOL_POSES}
         links = _numpy(self._gauge.data.body_link_pose_w)[0]
         right_gripper, *right_fingers = _numpy(self._right.data.body_link_pose_w)[0, self._right_ids]
+        left_gripper, *left_fingers = _numpy(self._left.data.body_link_pose_w)[0, self._left_ids]
+        openings = {}
+        for name, arm in (("right", self._right), ("left", self._left)):
+            finger_ids = self._ids[name + "_robot"][1]
+            positions = _numpy(arm.data.joint_pos)[0, finger_ids]
+            if not np.isfinite(positions).all():
+                raise RuntimeError(f"Nonfinite {name} gripper measurement")
+            opening = float(np.clip(positions.mean() / FINGER_OPEN, 0., 1.))
+            openings[name + "_gripper_opening"] = opening
+            openings[name + "_gripper_open"] = opening >= .75
         return dict(
-            poses, stock_pose=links[self._stock_id].tolist(), blade_pose=links[self._blade_id].tolist(),
+            poses, **openings, stock_pose=links[self._stock_id].tolist(), blade_pose=links[self._blade_id].tolist(),
             gauge_angle=float(_numpy(self._gauge.data.joint_pos)[0, self._hinge_id]),
             gauge_angle_velocity=float(_numpy(self._gauge.data.joint_vel)[0, self._hinge_id]),
             right_gripper_pose=right_gripper.tolist(),
             right_finger_poses=[finger.tolist() for finger in right_fingers],
             right_tcp_position=(right_gripper[:3] + rotation_xyzw(right_gripper[3:]) @ TCP_OFFSET).tolist(),
+            left_gripper_pose=left_gripper.tolist(),
+            left_finger_poses=[finger.tolist() for finger in left_fingers],
+            left_tcp_position=(left_gripper[:3] + rotation_xyzw(left_gripper[3:]) @ TCP_OFFSET).tolist(),
         )
 
-    def _pair(self, name):
-        data = self._sensors[name].data
+    def _pair(self, name, *, required=False):
+        sensor = self._sensors.get(name)
+        if sensor is None:
+            if required:
+                raise RuntimeError(f"{name} physical contact channel unavailable")
+            return [None] * 3, [None] * 3
+        data = sensor.data
         force = getattr(data, "normal_force_matrix_w", None)
         if force is None:
-            force = data.force_matrix_w
-        if force is None or data.contact_pos_w is None:
-            raise RuntimeError(f"{name} filtered physical force or contact point unavailable")
-        force = _numpy(force)
-        if force.shape != (1, 1, 1, 3):
-            raise RuntimeError(f"Unexpected {name} contact shape: {force.shape}")
-        return force[0, 0, 0].tolist(), _numpy(data.contact_pos_w)[0, 0, 0].tolist()
+            force = getattr(data, "force_matrix_w", None)
+        points = getattr(data, "contact_pos_w", None)
+        if points is None:
+            if required:
+                raise RuntimeError(f"{name} physical contact point unavailable")
+            return [None] * 3, [None] * 3
+        points = _numpy(points)
+        if points.shape != (1, 1, 1, 3):
+            if required:
+                raise RuntimeError(f"Unexpected {name} contact-point shape: {points.shape}")
+            return [None] * 3, [None] * 3
+        if force is None:
+            force_value = [None] * 3
+        else:
+            force = _numpy(force)
+            force_value = force[0, 0, 0].tolist() if force.shape == (1, 1, 1, 3) else [None] * 3
+        return force_value, points[0, 0, 0].tolist()
 
     def _sample_contact(self, dt):
         self._physics_tick += 1
-        force, point = self._pair("marker_board")
+        force, point = self._pair("marker_board", required=True)
         ref_stock_force, ref_stock_point = self._pair("stock_reference")
         ref_blade_force, ref_blade_point = self._pair("blade_reference")
         raw = dict(
-            self._poses(), tick=self._physics_tick, dt=float(dt),
+            self._poses(), trace_schema="bevel-visible-v2", tick=self._physics_tick, dt=float(dt),
             pair_force=force, pair_point=point,
             guide_pair_force=self._pair("marker_blade")[0],
             stock_board_force=self._pair("stock_board")[0],
@@ -438,9 +484,12 @@ class BevelAngleTransferEmbodiment(YamArenaEmbodiment):
         self._flush()
         self._write_json("metrics.json", self.metrics())
         self._write_json("run_config.json", {
+            "trace_schema": "bevel-visible-v2",
             "demo_observations": self.demo_observations,
             "terminate_on_success": self.terminate_on_success,
             "control_hz": self.info.control_hz,
+            "policy_image_size": [self.cam_width, self.cam_height],
+            "native_top_image_size": [self._base.scene["top_cam"].cfg.width, self._base.scene["top_cam"].cfg.height],
             "physics_solver": self._physics_solver,
             "physics_iterations": self._physics_iterations,
             "environment_revision": self.info.environment_revision,
@@ -454,8 +503,8 @@ class BevelAngleTransferEmbodiment(YamArenaEmbodiment):
                 Image.fromarray(rgb.astype(np.uint8)).save(self._trial_path(f"{label}_{name}.png"))
         self._write_json("source_manifest.json", self._source_manifest)
         self._write_json("ink.json", dict(
-            schema="bevel-angle-transfer-contact-ink-v1",
-            strokes=self._tracker.strokes, guided_strokes=self._tracker.guided_strokes,
+            schema="bevel-angle-transfer-contact-ink-v2",
+            strokes=self._tracker.strokes,
             target_start=self._tracker.target_start, target_end=self._tracker.target_end,
             contact_config=config_dict(spec), environment_revision=self.info.environment_revision,
             source="filtered physical marker-board contacts",
