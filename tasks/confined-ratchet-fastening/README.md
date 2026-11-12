@@ -227,8 +227,9 @@ The earlier version started with the ratchet already held and fitted. Its
 sources and results are preserved as an earlier revision; they do not qualify
 the pickup-and-placement sequence documented here.
 
-Historical submission media are attached as `M-KGU6MH`: the native top-camera
-Dream run, full scripted demo and setup screenshot. Sources and detailed
-evaluation evidence are retained locally. The original fields in
+Media `M-KHDNNB` links the revised native top-camera Dream run (4,000 actions,
+score 0), seated-contact scripted demo (2,458 actions, score 1) and setup
+screenshot. Historical media `M-KGU6MH` remains recorded only as provenance.
+Sources and detailed evaluation evidence are retained locally. The original fields in
 `validation.json` preserve the historical validation unchanged; its appended
 `seated_contact_revision` records the corrected demo and matching revised Dream.
