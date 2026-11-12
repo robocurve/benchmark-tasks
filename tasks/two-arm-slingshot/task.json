@@ -1,0 +1,19 @@
+{
+  "title": "Two arms playing Angry Birds",
+  "category": "Other",
+  "keywords": [
+    "bimanual",
+    "slingshot",
+    "elastic energy",
+    "ballistic manipulation"
+  ],
+  "instruction": "In this simulated tabletop toy game, use the left arm to hold the toy slingshot frame and the right arm to pull back and release the preloaded foam ball toward the two toy block towers in the catch tray. Knock down both towers. Keep both arms behind the launch line.",
+  "context": "A tabletop game testing simultaneous counterholding, spring loading and controlled projectile release.",
+  "setup": "Fixed seed-0 dual-YAM station with one free guided slingshot, one preloaded 50 mm ball, two three-block towers and a bounded catch tray. README.md, pilot.json and geometry.json specify all dimensions, masses and starting poses.",
+  "scoring": "0.5 for each tower whose original top block settles below 65 mm above the tabletop after a valid braced draw and released shot; safety violations latch zero. Full numeric criteria are in README.md and scoring.py.",
+  "run_limit": "1,200 control steps (60 seconds at 20 Hz); one ball, one shot.",
+  "reset_notes": "Reset all native bodies and robot joints and reload the single ball; use a fresh process per validation trial.",
+  "fidelity": "Native Isaac/PhysX rigid bodies and passive prismatic spring. The horizontal pouch guide approximates two elastic bands; rendered band curves are visual only. Nominal rigid toy materials, no deformation or fracture.",
+  "scores": "Dream-1: 0.0 in 1,200 control steps; scripted demonstration: 1.0 in 341 control steps.",
+  "media": "M-XKWKRT"
+}
