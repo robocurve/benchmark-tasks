@@ -1,0 +1,22 @@
+{
+  "title": "Peel the cucumber, leaving the ends",
+  "category": "Impact on jobs",
+  "keywords": [
+    "peeling",
+    "Y-peeler",
+    "swivel blade",
+    "contact force",
+    "food preparation",
+    "bimanual",
+    "kitchen"
+  ],
+  "instruction": "Peel the cucumber, leaving the ends.",
+  "context": "Restaurant cooks (about 1.4 million in the US) and food preparation workers (about 0.9 million) peel vegetables every shift. A swivel Y-peeler's sharp lip is drawn along the round body in light, steady contact, and the body is turned between strokes until no skin is left; the ends are left for trimming off afterwards. Unlike slicing, the blade moves over the food's surface; unlike a grater, the tool moves, not the food.",
+  "setup": "Positions from the robot's view: 'in front' is the distance ahead of the line through the two arm bases, 'left' is toward the left arm from the midline, heights above the table top. Board (fixed): wood, 35 x 25 x 2 cm, centred 33.0 cm in front on the midline. Cucumber (loose, 300 g): dark-green skin over pale flesh, 21.2 cm tip to tip, 4.2 cm across for its middle 17 cm, with rounded ends; lying on the board, its middle 31.5 cm in front and 7.5 cm left, its length pointing straight ahead. Y-peeler (loose, 50 g, 15 cm): black rubber handle 10.5 x 2.4 x 2.0 cm; a steel Y with 4.5 cm arms holding a slotted blade on pins at its ends; the blade swivels +-34 degrees with a light centring spring; the handle-side lip of the slot is the sharp edge (4.5 cm long), the other lip the guard. It lies flat on the table, blade 33.0 cm in front and 17.0 cm right, handle pointing straight ahead. Lot B: cucumber middle 28.5 cm in front and 9.0 cm left, still pointing straight ahead. Lot C: 30.0 cm in front and 6.0 cm left, turned 11.5 degrees to the right. Which strip of skin is on top differs by lot and does not matter. Trials are run on lots A, B and C and averaged; the screenshot shows lot A.",
+  "scoring": "Skin: the middle 12 cm of the cucumber is a grid of 8 strips round it by 6 bands along it (48 patches). A patch is peeled when at least 80% of its skin is off and it is not gouged. Skin comes off only where the blade's sharp edge passes along the cucumber, edge first, at 1 cm/s or more, pressing with 1 to 10 N; each pass takes a strip 16 mm wide. More than 10 N gouges the skin there. Judged at the end, with both grippers more than 5 mm from the cucumber and the peeler, the cucumber and peeler both still, and the cucumber lying on the board: 1.0 for at least 44 patches peeled and none gouged, with all of this held for 1 s; 0.5 for at least 32 peeled and at most 2 gouged; 0.25 for at least 12 peeled; 0 otherwise. Over the whole trial, the score is 0 if any skin is cut from the last 2.6 cm at either end, if the blade touches a gripper, or if the cucumber falls off the board. Trials are run on each of lots A, B and C and averaged.",
+  "run_limit": "4,000 steps (200 seconds at 20 Hz)",
+  "reset_notes": "1. Replace the cucumber with a whole unpeeled one of the same size (peel is consumed). 2. Lay it on the board at the lot's position and heading (A, B or C in the setup), any side up (the strips are not marked). 3. Lay the peeler flat on the table, blade 33.0 cm in front and 17.0 cm right, handle pointing straight ahead. 4. Arms in their ready pose.",
+  "fidelity": "True size. The cucumber is rigid and keeps its size (real peel takes about 1 mm); its round body collides as a 24-sided prism so it lies still, with light rolling damping, since a real cucumber is not perfectly round and does not roll on by itself. Peeling is a patch state changed only by the edge contact the simulator reports (force, place, direction). No peel ribbons. Lots stop one fixed habit, not a memorised replay of all three.",
+  "scores": "Dream-1 run: 0.0 (mean of lots A, B, C; the arms moved but never took the peeler, and no skin came off); demo: 1.0 in each of lots A, B and C",
+  "media": "M-43MN42"
+}
