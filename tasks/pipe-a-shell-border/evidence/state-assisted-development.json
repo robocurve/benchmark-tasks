@@ -1,0 +1,51 @@
+{
+  "date": "2026-11-13",
+  "status": "development_only_not_submission_evidence",
+  "scripted_assistance": "Measured native barrel/plunger poses guide ordinary bounded joint targets; no object-state writes or force/actuator changes; Dream unchanged.",
+  "ideal_input_probe": {
+    "robot_demo": false,
+    "recipe": "scripted_plan.py, build(shells=6)",
+    "head_pressure_target_n": 7,
+    "final_tail_pressure_target_n": 3.3,
+    "valid_shells": 6,
+    "decorated_length_mm": 83,
+    "score_shape_diagnostic": 1.0,
+    "scoring_correction": "Farthest connected qualifying tail section, preserving all geometry thresholds and rejecting disconnected mounds."
+  },
+  "native055_once_per_step": {
+    "status": "failed",
+    "control_steps": 420,
+    "failure": "Barrel rotated in the grasp before pressure; measured-grasp compensation was unreachable. No task score.",
+    "integration_setting": "enableExternalForcesEveryIteration=false; not promoted"
+  },
+  "native_default_repeat": {
+    "status": "failed",
+    "last_recorded_step": 476,
+    "failure": "Coupled instantaneous tool/pusher corrections destabilized the grasp during pressure. A filtered grasp estimate and independent axial piston correction are now under test.",
+    "physics_state_writes": false
+  },
+  "source_sha256": {
+    "scripted_plan.py": "27a6c93162569cc520c8949fe67780e8a77afdcdb82f224bdda249ec47300b32",
+    "scripted_servo.py": "4252f8d80bb5271972a0346ebd4149ff814f1dc2a61f50e0b43e88723e251f7b",
+    "scoring.py": "96408e0ee9e663fb799c6f91572f900794aa4f304d505ccbb9c778524b658073",
+    "material.py": "a82fb1cb242a02990707a3c08a6466f304cf757541a663a974765eebb984d525",
+    "native.py": "bd7399d45e89f4955aaa0d945b518f98f81e4ac31eafb618cdc615e909b95fef"
+  },
+  "grid_sensitivity": {
+    "coarse_cell_mm": 0.5,
+    "fine_cell_mm": 0.25,
+    "coarse_qualified_length_mm": 83.0,
+    "fine_qualified_length_mm": 82.5,
+    "coarse_max_head_height_mm": 6.185,
+    "fine_max_head_height_mm": 7.554,
+    "both_diagnostic_shape_scores": 1.0,
+    "limitation": "Qualifying shapes persist; exact heights are not grid-converged. These are prescribed-input constitutive probes, not robot evidence."
+  },
+  "native058_062": {
+    "control_steps": 838,
+    "status": "complete",
+    "released_clear": true,
+    "score": 0.0,
+    "failure": "Rounded deposits; measured piston compression falls while nozzle traverses despite stable height. Stronger axial feedback alone does not preserve tail flow."
+  }
+}
