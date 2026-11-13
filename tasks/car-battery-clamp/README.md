@@ -13,7 +13,7 @@ enforces it:
 - Once the nut has turned 20 degrees the clamp is pinched where it is: tightened while it rides high (or crooked), it
   stays high and loose (score 0).
 - The nut turns only with the wrench on it. The wrench has to come off the nut and away from the battery for full
-  credit.
+  credit: a steel wrench left on a battery can bridge its posts.
 
 Each trial starts differently: the seed moves the battery (up to 12 mm front to back and 15 mm side to side), tips the
 clamp a different way as it sits 6 mm up on the post (up to 2.5 degrees, and turns it up to 4 degrees), and moves the wrench stand (up to
@@ -99,6 +99,12 @@ the setup screenshot and the demo video show seed 0.
   setup, colour and edge detection), and plans from those estimates. It also corrects its arms' sag from its own joint
   readings. While it runs it reads no simulator state. Two constant offsets in its edge finder (about 1 to 2 mm, the
   render's soft edges) were calibrated once against known start layouts, as a camera calibration would be.
+- **How it differs from the accepted M12 sensor-cable task (TK-3SHVWE).** There, the loose part would spin with the
+  coupling, so one hand stops it turning while the other hand turns a knurled ring by hand. Here, a spring (the stiff
+  cable) pushes the part off its seat, so one hand holds it down against that push; the other hand fits a tool on a
+  nut's flats, turns it in strokes, re-fits it every stroke and takes it away. The failure is also different: a clamp
+  tightened high looks connected but is pinched loose, so the end state, not the motion, shows whether the job was
+  understood.
 - **Cheats score 0:** pushing the battery (over 5 mm), tightening the clamp where it rides, seating it and letting go
   before tightening, moving it to the negative post, doing nothing.
 
