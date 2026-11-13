@@ -1,0 +1,23 @@
+{
+  "title": "Clear a desk for cleaning, leaving the one cup that is stuck down",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cleaning",
+    "desk",
+    "hidden property",
+    "stuck object",
+    "negation",
+    "gentle force",
+    "damage avoidance"
+  ],
+  "instruction": "Clear the desk for cleaning: put everything that isn't stuck down into the tray.",
+  "context": "Office cleaners (janitors and cleaners, O*NET 37-2011, about 2 million US workers) clear desks before wiping them, and some desk items are fixed down with adhesive pads. Three pen cups look the same; which one is stuck changes every trial, so only trying to lift each one tells. A gentle lift lets the stuck cup slip out of the fingers; pulling hard tears it off and damages the desk. The robot must move the loose cups and leave the stuck one.",
+  "setup": "Positions in cm from the midpoint between the two arm bases, on the table top (x forward, y left, z up); the table is the desk. Arms start in the ready pose. Three identical white glazed-ceramic pen cups, 8 cm across, 10 cm tall, 4 mm walls, 280 g each, stand at x 32, y 14, 0 and -14. One, picked by a die each trial (1-2 left, 3-4 middle, 5-6 right), is stuck down: a steel disc in its base sits on a magnet under the desk top with a 60 N pull-off force (check with a luggage scale before each trial). A grey polypropylene desk tray, 12 x 33 cm inside, 4 cm walls 6 mm thick, 4 mm floor, stands centred at x 19, y 0, long side along y, in a taped outline and fixed with double-sided tape. Nothing else on the desk.",
+  "scoring": "From a photo, a ruler and the video. 0 if the stuck cup was ever moved more than 3 mm from its spot (torn off its magnet), or any cup tipped over (more than 45 degrees) or fell off the desk. Otherwise 0.5 for each loose cup standing upright (under 15 degrees) on the tray's floor with its centre inside the tray, at least 1 cm from the walls: 0, 0.5, or 1.0 with both loose cups in the tray (success, held 1 s).",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Roll the die and put the steel-disc cup on the magnet at the drawn spot, the other two at the other spots; take the cups out of the tray. Check the magnet's pull-off with a luggage scale.",
+  "fidelity": "Approximate. Cups are rigid 16-sided prisms; the tray is fixed. The adhesive is a PhysX fixed joint from the stuck cup to the world that breaks above 60 N (3 N m); which cup is stuck is drawn at each reset (GLUED=0/1/2 fixes it). Grip force is set by how far the finger target is inside the cup. Details in README.",
+  "scores": "Dream-1 run: 0.0; scripted demo: 1.0",
+  "media": "M-BLE338"
+}
