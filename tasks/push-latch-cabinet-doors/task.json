@@ -1,0 +1,23 @@
+{
+  "title": "Close the push-to-open cabinet doors that are open, without pressing the closed ones",
+  "category": "Societal relatability",
+  "keywords": [
+    "bimanual",
+    "household",
+    "cabinet",
+    "push-to-open latch",
+    "negation",
+    "nothing to do",
+    "state check",
+    "taking turns"
+  ],
+  "instruction": "Close any cabinet door that is open. Do not press the doors that are already closed.",
+  "context": "Handleless cabinets with push-to-open latches are common in kitchens, bathrooms and bedrooms. The latch works both ways: pressing an open door shut latches it, and pressing a latched door pops it open. So a robot cannot press every door to be safe: it has to tell which doors are open and leave the closed ones alone, or it undoes the work that was already done. Which doors are open changes every trial.",
+  "setup": "Positions in cm from the midpoint between the two arm bases, on the table top (x forward, y left, z up). Arms start in the ready pose. Three identical cabinet units stand side by side with their fronts toward the arms, at y 20, 0 and -20: white melamine-faced chipboard bodies 20 cm wide, 30 cm deep, 25 cm tall, heavy enough not to slide. Each has a handleless white flap door 18 cm wide, 22 cm tall, 1.8 cm thick, hinged along its bottom edge 2 cm above the table, its outer face at x 34, with a push-to-open latch. One or two doors, drawn at random each trial (die), stand ajar: tilted 6 degrees open, 2.3 cm at the top; the others are latched shut. Nothing else on the table.",
+  "scoring": "From the video and a look at the doors. 0 if a door that started closed was ever pressed open (it popped). Otherwise the share of the doors that started open that are now latched shut (flush and staying shut when let go): with one open door 0 or 1.0; with two, 0.5 each. 1.0 (success, held 1 s) when all are latched.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Press every door shut, roll the die to choose the open doors (1-2 left, 3-4 middle, 5-6 right; roll again for a second door, or not), and press those once so they pop open, then set them to 6 degrees with a 2.3 cm spacer at the top.",
+  "fidelity": "Approximate. Rigid boxes; doors on revolute joints with a spring drive. The latch is emulated each physics step: pressed 1.2 degrees past shut (4.6 mm at the top), an open door latches and a latched one pops to 20 degrees; it acts again only after the door comes back under 0.6 degrees. Bottom-hinged flaps stand in for side-hinged doors. Details in README.",
+  "scores": "Dream-1 run: 0.0; scripted demo: 1.0",
+  "media": "M-8JJU3B"
+}
