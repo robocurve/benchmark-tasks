@@ -8,6 +8,8 @@ cleared re-latches it. The instruction names the panel, the plunger's red knob a
 hand must keep the knob back while the other swings the panel open, and when to let go, are for the policy to work
 out.
 
+Category: **Societal relatability**. This tabletop panel is an analogue of a spring-latched cupboard door or access gate: the familiar operation is holding a spring-return bolt clear while swinging the door past it. The goal is opening the door, with no maintenance operation claimed.
+
 The task runs on Dream's YAM station in Isaac Lab-Arena (`yam_arena`), the simulation of the program's walkthrough.
 
 ## Files

@@ -114,5 +114,5 @@ def test_task_json():
     # the submission bot's limits (it rejected other pull requests over each of them)
     assert len(meta["fidelity"]) <= 500 and len(meta["scores"]) <= 300 and len(meta.get("context", "")) <= 500
     assert meta["category"] in ("Impact on jobs", "Impact on AI timelines", "Safety and alignment",
-                                "Societal relevance", "Other")
+                                "Societal relatability", "Societal relevance", "Other")
     assert meta["run_limit"].startswith("600 steps")
