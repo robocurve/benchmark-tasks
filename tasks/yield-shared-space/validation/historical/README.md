@@ -1,0 +1,1 @@
+These records belong to the superseded fixed-schedule task at commit `efbffdbeecea4e8277a318ef242830777df6e8a6`. They do not validate the revised task. The old media ID was `M-2SJPXK`. In particular, `dream.json` is historical; no Dream-1 trial has been run for the revision.

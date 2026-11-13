@@ -1,0 +1,31 @@
+{
+  "task": "TK-8RSRYT",
+  "pr": 561,
+  "source_sha256": "77fde873e005e6e856351c350bbbb1f73a25e4da36bda2717fed77e61a0b4f3d",
+  "checked_at_utc": "2026-11-13T09:54:14.826002+00:00",
+  "feedback_url": "https://github.com/robocurve/benchmark-tasks/pull/561#issuecomment-6819631099",
+  "criteria": {
+    "activity_trigger": "First moving gripper entry; delayed 60-second entry triggers at 61.429 seconds, not during idle waiting.",
+    "complete_visit_required": "All credit gated on measured full extension and completed return; full-score demo runs until 41.55 seconds, beyond completion at 17.9 seconds.",
+    "all_trial_contact": "All robot collision links monitored at every 240 Hz physics step; swept envelopes and 2 mm guard; violations latch through trial end. Actual revised model trial latches contact failure even without a triggered visit.",
+    "whole_gripper_clearance": "Housing plus both moving fingers; 10 cm minimum and full bin exclusion while fingertips past marked line.",
+    "updated_demo": "Fresh Shiva A6000 reference: 1.0 in 831 actions, 9,972 physics samples, minimum whole-gripper clearance 21.73 cm.",
+    "real_world_speed": "Same 30 cm, 6-second smoothstep reach/retreat with 4-second dwell; mean 5 cm/s and peak commanded 7.5 cm/s."
+  },
+  "verification": {
+    "offline_tests_passed": 26,
+    "saved_native_assertions_passed": 18,
+    "original_native_plans_verified": 7,
+    "fresh_shiva_reference_score": 1.0,
+    "fresh_model_score": 0.0,
+    "fresh_model_steps": 2400,
+    "fresh_model_physics_samples": 28800,
+    "paid_episodes_this_revision": 1,
+    "all_videos_full_decoded": true,
+    "all_three_actual_policy_cameras_checked": true
+  },
+  "guide_source": "https://tasks.robocurve.org/",
+  "guide_checked_at_utc": "2026-11-13T09:24:45Z",
+  "status": "Ready locally for owner push to existing PR #561; not resubmitted.",
+  "media": "M-THDNNZ"
+}

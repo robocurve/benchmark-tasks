@@ -365,6 +365,7 @@ def _rest(environment, spec: Mechanism) -> None:
 
 _RESET: list = []
 _STEP: list = []
+_PHYSICS: list = []
 ROBOT = {"t": 0.0, "tcp": {}}  # the time and both TCPs (world, m) before the current control step
 
 
@@ -391,14 +392,30 @@ def set_targets(embodiment, mechanism_name: str, values: dict) -> None:
 
 
 def _robot_state(embodiment, module) -> None:
-    """Both arms' TCPs from their measured joints (forward kinematics on the arm's URDF)."""
-    from yam_arena import ik, station
+    """Measured link poses, including both moving fingers, at the current physics tick."""
+    from safety import world_boxes
+    from yam_arena.constants import TCP_OFFSET
+    from yam_arena.urdf import quat_xyzw_to_matrix
 
+    robot_boxes, grippers = [], []
     for name, side in zip(module.ARMS, ("left", "right")):
-        arm_ids, _ = embodiment._ids[name]
-        q = _torch(embodiment._base.scene[name].data.joint_pos)[0][arm_ids].cpu().numpy().astype(float)
-        ROBOT["tcp"][side] = ik.tcp_pose(q, np.asarray(station.BASES[side]))[0]
-    ROBOT["t"] = float(embodiment._t)
+        asset = embodiment._base.scene[name]
+        poses = _numpy(asset.data.body_link_pose_w)[0].copy()
+        poses[:, :3] -= _numpy(embodiment._base.scene.env_origins[0])
+        lo, hi, mask = world_boxes(list(asset.body_names), poses)
+        robot_boxes.append((lo, hi))
+        grippers.append((lo[mask], hi[mask]))
+        p = poses[list(asset.body_names).index("gripper")]
+        ROBOT["tcp"][side] = p[:3] + quat_xyzw_to_matrix(p[3:7]) @ np.asarray(TCP_OFFSET)
+    ROBOT["boxes"] = tuple(np.concatenate([b[i] for b in robot_boxes]) for i in (0, 1))
+    ROBOT["grippers"] = tuple(np.concatenate([b[i] for b in grippers]) for i in (0, 1))
+    ROBOT["grippers_by_side"] = dict(zip(("left", "right"), grippers))
+
+
+def on_physics(fn):
+    """Run after scene buffers are updated at EVERY physics substep, not just 20 Hz."""
+    _PHYSICS.append(fn)
+    return fn
 
 
 def on_reset(fn):
@@ -489,8 +506,10 @@ def _patch_embodiment(module) -> None:
     if getattr(cls, "_mechanism_patched", False):
         return
     reset, step, close = cls.reset, cls.step, cls.close
+    task_step = cls._task_step
 
     def patched_reset(self, scene, *, seed=None):
+        self._safety_running = False
         observation = reset(self, scene, seed=seed)
         specs = [o for o in (self.task.objects if self.task is not None else ()) if isinstance(o, Mechanism)]
         if specs:
@@ -505,6 +524,19 @@ def _patch_embodiment(module) -> None:
             for fn in _RESET:
                 fn()
             observation = self._observation()
+        ROBOT["t"] = 0.0
+        _robot_state(self, module)
+        if not getattr(self, "_safety_hooked", False):
+            update_scene = self._base.scene.update
+            def updated_scene(dt):
+                update_scene(dt)
+                if self._safety_running:
+                    ROBOT["t"] += float(dt)
+                    _robot_state(self, module)
+                    for fn in _PHYSICS:
+                        fn(self, ROBOT["t"])
+            self._base.scene.update = updated_scene
+            self._safety_hooked = True
         _RECORDER.start(self)
         return observation
 
@@ -513,15 +545,25 @@ def _patch_embodiment(module) -> None:
             _robot_state(self, module)
             for fn in _STEP:
                 fn(self, float(self._t))
-        result = step(self, action)
+        self._safety_running = True
+        try:
+            result = step(self, action)
+        finally:
+            self._safety_running = False
         _RECORDER.add(self)
         return result
+
+    def patched_task_step(self):
+        _robot_state(self, module)
+        ROBOT["t"] = float(self._t)
+        return task_step(self)
 
     def patched_close(self):
         _RECORDER.close()
         return close(self)
 
     cls.reset, cls.step, cls.close = patched_reset, patched_step, patched_close
+    cls._task_step = patched_task_step
     cls._mechanism_patched = True
 
 

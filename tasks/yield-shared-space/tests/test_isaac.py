@@ -6,6 +6,7 @@ Needs an RTX GPU and the Isaac Lab-Arena environment of the simulation walkthrou
 
 import importlib.util
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -20,6 +21,10 @@ HERE = Path(__file__).resolve().parents[1]
 
 @pytest.fixture(scope="module")
 def runs(tmp_path_factory):
+    existing = os.environ.get("TASK_VALIDATION_RUNS")
+    if existing:
+        out = Path(existing).resolve()
+        return out, {plan: json.loads((out / plan / "summary.json").read_text()) for plan in T.PLANS}
     if importlib.util.find_spec("isaaclab_arena") is None:
         pytest.skip("needs the Isaac Lab-Arena environment")
     out = tmp_path_factory.mktemp("plans")
@@ -59,3 +64,18 @@ def test_demo_video_is_the_top_camera_one_frame_per_step(runs):
 def test_each_check_failed_for_the_reason_it_claims(runs, plan):
     """``task.WHY[plan](final)`` checks the last scored quantities say what the plan was meant to do."""
     assert T.WHY[plan](runs[1][plan]["final"]), runs[1][plan]["final"]
+
+
+def test_visit_is_activity_triggered_and_runs_to_completion(runs):
+    demo = runs[1]["demo"]["final"]
+    assert demo["visit_start"] > 0
+    assert demo["visit_complete"] and demo["t"] >= demo["visit_start"] + T.VISIT_S + 0.5
+    assert demo["safety_samples"] >= 12 * (runs[1]["demo"]["steps"] - 1)
+    delayed = runs[1]["wait_out"]["final"]
+    assert delayed["visit_start"] >= 60
+    assert runs[1]["wait_out"]["task_score"] == 0
+
+
+def test_demo_camera_frames_are_not_blank(runs):
+    assert runs[1]["demo"]["rendering"]["nonblank"]
+    assert runs[1]["demo"]["rendering"]["minimum_frame_std"] > 15

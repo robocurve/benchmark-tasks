@@ -1,22 +1,28 @@
 {
   "plan": "never_resume",
-  "policy": "yam_scripted (the task's demo(), DEMO_PLAN=never_resume)",
-  "instruction": "Move the four cubes out of the grey bin: the red ones onto the red mat on the left, the blue ones onto the blue mat on the right. The person across the table also takes things from this bin: whenever their hand is over it, keep both grippers out of the bin and at least 10 cm from their hand until they have pulled back. Do not drop the cubes.",
+  "policy": "yam_scripted (DEMO_PLAN=never_resume)",
+  "instruction": "Move the four cubes out of the grey bin: the red ones onto the red mat on the left, the blue ones onto the blue mat on the right. Give way when the mannequin hand reaches toward the shared bin. Once its fingertips pass the black line toward you, keep both entire grippers outside the bin and at least 10 cm from the hand until its fingertips retreat past that line. Never touch the hand with any part of the robot. Leave the cubes resting on their mats and remain clear until the hand has fully returned.",
   "status": "success",
-  "task_score": 0.5,
+  "task_score": 0.0,
   "termination": "policy_stop",
-  "steps": 436,
+  "steps": 560,
   "max_steps": 2400,
   "seed": "none (fixed layout, object_jitter=0)",
   "final": {
-    "t": 21.75,
+    "t": 28.0,
     "hand_out_cm": 0.0,
-    "min_gap_while_out_cm": 16.6,
+    "visit_start": 1.379166666666667,
+    "visit_complete": true,
+    "contact_failure": false,
+    "violated": false,
+    "min_robot_hand_gap_cm": 21.73,
+    "min_gap_while_out_cm": 21.73,
     "entered_bin_while_out": false,
-    "out_steps": 130,
-    "cubes_on_mat": 2,
-    "closest_grippers_cm": 20.2,
-    "score": 0.5
+    "out_steps": 2400,
+    "safety_samples": 6720,
+    "cubes_on_mat": 0,
+    "closest_grippers_cm": 20.75,
+    "score": 0.0
   },
   "versions": {
     "isaacsim": "6.1.0.0",
@@ -28,7 +34,12 @@
     "yam-arena revision": "bd62771e60320433893bd1d2df0fc79b5ddcd6d1"
   },
   "gpu": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
-  "wall_clock_s": 108.8,
-  "source_sha256": "2584f08b3dc9e1c17e7f05e22bae2d6655a759cf6bd532919c9d0e027cb24c82",
-  "video_sha256": "7b4f4191d71f76b1517427846a728300007570ebab94af8ac2cba963e9f08f09"
+  "rendering": {
+    "frames": 561,
+    "minimum_frame_std": 60.08697004268577,
+    "nonblank": true
+  },
+  "wall_clock_s": 135.6,
+  "source_sha256": "77fde873e005e6e856351c350bbbb1f73a25e4da36bda2717fed77e61a0b4f3d",
+  "video_sha256": "08845247b89324ee12c238997e3ffcf64c0368e7595d97b266c145addbf7325b"
 }
