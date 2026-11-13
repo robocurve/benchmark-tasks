@@ -1,0 +1,27 @@
+{
+  "title": "Secure a lab gas cylinder upright in its bench clamp before using it",
+  "category": "Safety and alignment",
+  "keywords": [
+    "bimanual",
+    "stabilise while latching",
+    "lecture bottle",
+    "gas cylinder safety",
+    "bench clamp",
+    "bottle cradle",
+    "slide bolt",
+    "cam lever",
+    "over-centre",
+    "round-footed cylinder",
+    "laboratory safety",
+    "linkkit"
+  ],
+  "instruction": "Secure the green lecture bottle upright in the bench clamp, then let go.",
+  "context": "OSHA 29 CFR 1910.101(b) and the CGA P-1 handling standard require a compressed gas cylinder to be secured upright before use. A laboratory technician (chemical, biological or materials lab) stands a lecture bottle in its bench clamp, holds it upright between the cheeks and closes the cross bolt and cam lever before opening the valve. The bottle's rounded foot cannot stand alone, so one hand holds it while the other closes the clamp; letting go early tips it over.",
+  "setup": "Station table; positions in metres, x forward from the arm bases (the arms stand at y +-0.305), y to the robot's left; heights are above the table top (z 0.7475). (1) Lecture bottle: a 2 in x 12 in aluminium bottle, green paint sRGB (0.10, 0.45, 0.25), 0.6 kg, friction 0.4 / 0.3: a 50 mm diameter body with a domed foot, 310 mm long, and a brass valve stub (sRGB (0.78, 0.60, 0.25)) 22 mm in diameter and 40 mm long on top, 345 mm tall in all. It rests on its foot (sphere centre (0.1584, 0, 0.025)) leaning back 7.5 deg, its domed shoulder touching the back plate; the rounded foot has no stable upright pose, so an upright bottle that is let go falls forward or back to the plate (5 deg lean). (2) Back plate: mild steel, grey sRGB (0.55, 0.57, 0.60), bolted down, 20 x 200 x 300 mm, centre (0.2278, 0, 0.150); its face is 47.8 mm behind the bottle's upright axis (x 0.170). (3) Side cheeks: two steel rods 24 mm in diameter and 90 mm long, vertical, centres (0.170, +-0.0385), spanning 0.11 to 0.20, each tied back to the plate by a 47.8 x 12 x 12 mm arm (centre (0.194, +-0.0385, 0.206)); they leave 1.5 mm clear on each side of the bottle. (4) Bolt guide bridge: steel, fixed, 88 x 36 x 15 mm, centre (0.174, 0.054, 0.2795), over the bolt on the left. (5) Keeper: steel, fixed, an arm 87.5 x 15 x 15 mm, centre (0.1738, -0.0615, 0.2795), with a 12 x 15 x 40 mm block under its front end, centre (0.1375, -0.0615, 0.263). (6) Cross bolt: a 10 x 120 x 12 mm steel bar, 60 g, centre (0.1375, 0.095, 0.260) when retracted, with a red 16 x 16 x 20 mm knob at its left end; it slides 85 mm toward the right along y (joint friction 0.6 N, damped), so home puts its tip 2.5 mm in front of an upright bottle's body near its shoulder (254-266 mm up) and 4 mm short of the keeper block. Retracted, its tip is 10 mm clear of the bottle. (7) Cam lever: an 8 x 12 x 50 mm blue arm, sRGB (0.15, 0.30, 0.75), 20 g, with a red 12 x 16 x 12 mm tip, hinged on the guide bridge's front on a horizontal pin along y at (0.136, 0.054, 0.2945); it stands up at 0 deg and snaps over centre to 95 deg (lying back toward the plate); when it passes 80 deg with the bolt home its pad locks the bolt. Arm bases and the table are the standard rig; object_jitter 0.",
+  "scoring": "Measured every control step from reset with a whole-run record (a linkkit History cleared only by the simulator reset). Tilt = the bottle's axis from vertical; axis offset = where its axis crosses the 0.20 height from the cradle centre line (x 0.170, y 0); bolt = travel from retracted; lever = cam angle. Upright: tilt at most 3.0 deg and axis offset at most 4 mm. Bolt home: at least 80 mm. Lever closed: at least 85 deg with the lock set. Gate, any time in the run, gives 0: the bottle's tilt reached 40 deg (it toppled); the start lean of 7.5 deg is no gate. Ladder: 0.25 = upright with the bolt home at some time; 0.5 = upright, bolt home, lever closed and locked at some time; 0.75 = that state at the end; 1.0 = that state at the end, the bottle still (under 3 mm/s and 3 deg/s) for the last 2 s, and the release gate: every pad point of both grippers at least 30 mm from the bottle and clamp and both grippers under 5 mm/s for the last 1 s. Success (1.0) must hold 1 s. Only the simulator reset clears the record. Real trial: a plumb line or 300 mm spirit level along the bottle (3 deg is 16 mm over 300 mm) and a ruler from the V centre line for the axis offset; the bolt travel marked on its side (home at 80 mm or more, scale); a protractor on the lever; a spring scale pulling the knob 10 N moves a locked bolt under 1 mm; a ruler for the 30 mm hand gap; 60 fps video for stillness (3 mm/s is 0.05 mm per frame).",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Raise the cam lever to 0 deg (the bolt is then free), slide the bolt back to its retracted stop, and stand the bottle on its foot leaning back 7.5 deg with its domed shoulder on the back plate (foot centre 0.1584 m from the arm bases, on a taped mark). The plate, rods, guide and keeper are bolted down and need no reset.",
+  "fidelity": "Rigid bottle (the valve is a stub; a real lecture bottle is 0.5 to 1.4 kg, here 0.6 kg). The clamp is a cross bolt and cam lever, not a strap; the lock is a friction brake that switches on when the lever passes 80 deg with the bolt home. The foot has no base cup, so it slides on the table (friction 0.4); the cheeks and plate are the whole cradle.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-P3FV8R"
+}
