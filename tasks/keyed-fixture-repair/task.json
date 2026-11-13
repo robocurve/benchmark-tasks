@@ -1,0 +1,20 @@
+{
+  "title": "Replace and pin a fixture guide that lets a part seat backward",
+  "category": "Impact on jobs",
+  "keywords": [
+    "assembly",
+    "fault diagnosis",
+    "fastening",
+    "part identification",
+    "functional verification"
+  ],
+  "instruction": "Show that the test part seats in the installed guide with the arrows opposed. Pull the lock pin, slide the faulty guide out and put it in the red tray. Install the spare whose part number matches the fixture's data plate: slide it in to the stop and lock it with the pin. Show that the part seats with the arrows aligned and stops short with the arrows opposed, letting go each time. Return the test part to its cradle.",
+  "context": "Keyed guides stop reversed parts entering production. When a key breaks, the guide is replaced during changeover or preventive maintenance: show the fault, fit the spare whose part number matches the fixture (left- and right-hand guides look alike), lock it in and re-verify. Done by industrial machinery mechanics, maintenance workers and line setup technicians.",
+  "setup": "Unpowered 120 x 88 x 10 mm aluminium fixture, guide centre X/Y 335/-195 mm, with lip rails, stop, pin slot, parking bore at 345/-255 and data plate \"427\". Grey 60 x 53 x 36 mm polymer guides with side lugs and a stamped tab: original 427 (key broken) installed, locked by a 6 mm steel pin; spare 427 at 370/-335; spare 428 (mirrored key) at 465/-210. Blue 34 x 26 x 70 mm test part backward in a cradle at 225/-110; red 150 x 90 mm tray at 226/-302. Details in README.",
+  "scoring": "Sequential quarters: (1) backward part seats in the original; (2) original in tray, 427 spare slid to the stop and pinned; (3) same spare shows aligned seat and opposed block; (4) spare stays pinned, part in cradle, hands clear 1 s. Seat: part bottom within 1 mm of guide floor; block 11-13 mm above; upright within 3 deg, centred, released 1 s. Putting the 428 spare in the slot caps the score at 0.25. Blind swap or fallen object: 0. Tolerances in README.",
+  "run_limit": "4,000 steps (200 seconds at 20 Hz)",
+  "reset_notes": "Original guide slid in and pinned, spares and test part at their start positions, tray empty, recorded checks cleared. Fixed layout, seed 0, no jitter.",
+  "fidelity": "Rigid compound colliders under gravity set every stop: lips retain the lugs, the pin blocks the slide, keys block the part. The pin's spring detent is omitted (gravity holds it). Its holes are slotted 12 mm along the slide because the simulated jaws sweep sideways when closing; the stop and rails locate the guide. Square-edged geometry; no wear.",
+  "scores": "Dream-1 run: 0.0 (4,000 actions); scripted demo: 1.0 (2,034 actions).",
+  "media": "M-8Q9NDH"
+}
