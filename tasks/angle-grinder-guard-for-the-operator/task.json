@@ -16,6 +16,6 @@
   "run_limit": "2,400 steps (2 minutes at 20 Hz)",
   "reset_notes": "Clamp lever flat (shut), guard with its closed side towards +x (layout A), grinder on the table with its motor along -y and the disc up, OPERATOR mat in front of it (towards the robot). Nothing is consumed.",
   "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. The grinder is one articulation: the guard turns on a revolute joint about the spindle, the lever on a hinge. Task code does the clamp (the guard is held while the lever is flat), the lever's over-centre snap (45 degrees open, 40 shut) and the bearing and violation checks. The disc is inert; nothing is ground. Real parts: 115 mm grinder 1.55 kg, 115 x 6 mm disc; same size and mass here.",
-  "scores": "Dream-1: refused by the Dream service at its first request (DA-4000, unsafe instruction in this scene); no action, nothing scored. Scripted demo: 1.0 in 1,159 steps. Ablations: no motion 0, no unlock 0, guard turned two thirds 0.50, turned the wrong way 0.25.",
+  "scores": "Dream-1: 176 steps, arms moved up to 101 mm touching nothing, then the Dream service refused (DA-4000, unsafe instruction) and the run errored; state unchanged, score 0. Demo: 1.0 in 1,159 steps. Ablations: no motion 0, no unlock 0, two-thirds turn 0.50, wrong way 0.25.",
   "media": "M-EQBG5U"
 }
