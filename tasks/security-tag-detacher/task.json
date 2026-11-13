@@ -1,0 +1,22 @@
+{
+  "title": "Unpin an anti-theft hard tag from a jacket sleeve cuff with a magnetic detacher",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "retail cashier",
+    "anti-theft tag",
+    "magnetic detacher",
+    "clutch release",
+    "seat then pull",
+    "linkkit"
+  ],
+  "instruction": "Unpin the anti-theft tag on the navy jacket cuff with the orange detacher, then let go.",
+  "context": "Retail cashiers and retail salespersons (O*NET 41-2011.00, 41-2031.00, each over 3 million US workers) take a hard anti-theft tag off every jacket they sell. The tag's pin only slides out while a magnetic detacher sits on the tag's lock dome; pulling the pin or the garment any other way just drags the tag along. Here the tag is pinned through a quilted sleeve cuff: one hand holds the detacher on the dome while the other pulls the pin.",
+  "setup": "Station table; positions in metres, x forward from the arm bases, y to the robot's left, z up; table top z 0.7475. (1) Hard tag housing: ivory ABS box 56 x 46 x 22 mm, 30 g, sRGB (0.92, 0.90, 0.84), on the table centred at (0.190, -0.030), with a silver round lock dome 14 mm across, 3 mm proud, on its +y face at 10 mm height. (2) Tag pin: grey steel 3 mm shaft through the cuff's hem tab into the housing, with a 14 mm diameter x 14 mm knob on top of the tab (centre 33.5 mm above the table), 12 g, sRGB (0.50, 0.50, 0.55); a clutch holds it (60 N) until released; stroke 30 mm. (3) Sleeve cuff: quilted navy nylon, folded flat, 90 mm wide, 23 mm thick, 0.18 kg, sRGB (0.12, 0.18, 0.42); the body lies from y -0.230 to -0.055 around the tag centre line x 0.190; two 15 mm arms run along the tag's long sides to y 0.0 and leave a 60 x 55 mm notch, open toward +y, that holds the housing with 2 mm gaps; a 3 mm hem tab (90 x 115 mm, 23 to 26 mm above the table) laps over the notch with a 4 mm square hole for the pin. Friction 0.6. (4) Magnetic hand detacher: orange ABS, 55 x 85 x 20 mm, 0.12 kg, sRGB (0.95, 0.45, 0.10), lying on the table nose toward the tag, nose rim centre at (0.190, 0.130), with an 18 x 16 mm pocket 4 mm deep in its nose (dome clearance 2 mm sideways, 1 mm vertically); friction 0.5.",
+  "scoring": "Whole-run record (a linkkit History updated every control step, cleared only by the simulator reset). Seated: the detacher's pocket centre within 3 mm sideways and 2 mm in height of the dome, its rim within -0.5 to +1.5 mm of the tag's +y face, nose within 6 deg of square; seated for 0.3 s releases the clutch for the rest of the run. Gate, any time, gives 0: the pin up 3.0 mm or more while the clutch is still locked. Ladder: 0.25 = clutch released; 0.5 = pin pulled 5 mm at some time; 0.75 = pin out 15 mm or more at the end; 1.0 = 0.75 plus both grippers' pads at least 30 mm from the detacher, tag and pin and moving under 5 mm/s for 1 s. Real trial: a top photo with a 1 mm scale and a 1.5 mm feeler gauge for the detacher's rim against the tag face and its pocket centre on the dome, timed on video; a ruler and a 3 mm shim beside the knob for the 3, 5 and 15 mm pin heights; a 30 mm spacer gauge and the video for the release gate.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Push the pin back into the tag until the clutch clicks and the knob rests on the hem tab. Slide the tag into the cuff notch under the tab, lock dome toward +y, pin through the tab's hole. Place the detacher on the table with its nose rim centred at (0.190, 0.130) and its handle end toward +y, using taped corner marks. Check the tag with the detacher on the dome: the pin must be free; without it, it must hold 60 N.",
+  "fidelity": "Rigid bodies: the quilted cuff is one stiff piece (real fabric yields), the pin shaft hole is a square hole in a rigid tab, and the detacher's magnet is not modelled; the clutch is a locked slider that the scorer frees when the pocket is seated on the dome for 0.3 s. A palm-size hand detacher stands in for the larger counter unit. Dimensions of the tag and detacher are typical retail sizes.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-NSG8F5"
+}
