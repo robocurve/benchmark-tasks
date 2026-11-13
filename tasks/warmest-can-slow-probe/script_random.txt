@@ -1,0 +1,18 @@
+# Baseline: random joint targets. Every 0.5-2 s each arm gets a new target: READY plus uniform noise of up to
+# 0.6 rad per joint, and a random gripper opening; moves are interpolated over that interval. Seed: BASELINE_SEED.
+def script(task, ctx):
+    import os
+    from yam_arena.constants import READY
+    rng = np.random.default_rng(int(os.environ.get("BASELINE_SEED", "0")))
+    arms = (ctx.left, ctx.right)
+    q0 = [np.array(a.q) for a in arms]
+    while True:
+        n = int(rng.integers(10, 41))
+        tgt = [np.array(READY, float) + rng.uniform(-0.6, 0.6, 6) for _ in arms]
+        g = [float(rng.uniform(0, 1)) for _ in arms]
+        start = [np.array(a.cmd) for a in arms]
+        for k in range(1, n + 1):
+            s = k / n
+            for a, st, tq, gg in zip(arms, start, tgt, g):
+                a.cmd = np.r_[st[:6] + s * (tq - st[:6]), st[6] + s * (gg - st[6])]
+            yield

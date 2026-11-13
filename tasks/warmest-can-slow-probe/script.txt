@@ -1,0 +1,236 @@
+# Scripted demo for the cold-chain receiving check (warmcup/task.py). Run by demo.py, which supplies Arm, wait,
+# both, reachable_yaw, np, math.
+#
+# What the demo may use: the cans' poses (visible in the cameras), its own joint positions, its own clock, and the
+# number on the thermometer display, decoded from which LED segments are lit (task.DISP.read: the same segments the
+# cameras render). It never reads the hidden temperatures, the sensor model, the scorer's reading log or its state
+# (checks.md greps this file for that). Its decisions use only the display readings it watched and the scorer's
+# public rules (settled_from, winner_z), which are plain functions of a list of readings.
+
+import os
+
+
+def _actual_tcp(ctx, arm):
+    from yam_arena import ik
+
+    rob = ctx.emb._env.unwrapped.scene[f"{arm.name}_robot"]
+    qa = np.asarray(getattr(rob.data.joint_pos, "torch", rob.data.joint_pos)[0].detach().cpu())[:6]
+    return ik.tcp_pose(qa, arm.base)[0]
+
+
+def goto(ctx, arm, goal, rot, duration, rounds=4):
+    """Move to ``goal`` in free air, then re-aim from the measured TCP until within 1.5 mm (the joints sag under
+    load); the final shift is kept in ``arm.offset`` for the short moves that follow."""
+    goal = np.asarray(goal, float)
+    yield from arm.move(goal + arm.offset, rot, duration)
+    cmd = goal + arm.offset
+    for _ in range(rounds):
+        yield from wait(0.3)
+        err = _actual_tcp(ctx, arm) - goal
+        if np.linalg.norm(err) < 0.0015:
+            break
+        cmd = cmd - err
+        yield from arm.move(cmd, rot, 0.4)
+    arm.offset = cmd - goal
+
+
+class Eye:
+    """The demo's view of the display: one reading per 0.5 s of its own clock, decoded from the lit segments."""
+
+    def __init__(self, task):
+        self.task, self.t, self.log = task, 0.0, []
+
+    def value(self):
+        txt = self.task.DISP.read("display")
+        return None if "?" in txt else float(txt.replace(" ", "0")) / 10.0
+
+    def tick(self):
+        """Advance one control step; on each 0.5 s mark of the clock, note the displayed value."""
+        self.t = round(self.t + 0.05, 3)
+        if abs(self.t / 0.5 - round(self.t / 0.5)) < 1e-6:
+            v = self.value()
+            if v is not None:
+                self.log.append((self.t, v))
+
+
+def script(task, ctx):
+    from yam_arena.demo import grip_rotation
+
+    L, R = ctx.left, ctx.right
+    L.offset = R.offset = np.zeros(3)
+    eye = Eye(task)
+    cans = list(task.CANS)
+    home = {c: np.array(task.HOME[c]) for c in cans}
+    plate, mat = np.array(task.PAD_XY), np.array(task.MAT_XY)
+    grasp_dz = task.CAN_H - 0.03          # TCP height above the can's base when gripping (fingers on its top 3 cm)
+    carry_z = task.TOP + task.CAN_H + 0.07 + grasp_dz
+
+    def step_gen(gen):
+        """Run a motion generator while the eye keeps its clock."""
+        for _ in gen:
+            eye.tick()
+            yield
+
+    def pause(s):
+        yield from step_gen(wait(s))
+
+
+    def arm_for(a, b):
+        """Each arm keeps to its own side: the right arm only for moves to or from the mat on the robots' right."""
+        return R if min(a[1], b[1]) < -0.05 else L
+
+    def carry(name, dest_xy, dest_z):
+        """Pick can ``name`` from where it stands and set it down with its base at ``dest_z`` over ``dest_xy``."""
+        st = ctx.states()[name]
+        src = st.pos[:2].copy()
+        arm = arm_for(src, dest_xy)
+        yaw = reachable_yaw(arm, np.array([src[0], src[1], st.pos[2] + grasp_dz]), 0.0)
+        rot = grip_rotation(yaw)
+        g = np.array([src[0], src[1], st.pos[2] + grasp_dz])
+        yield from step_gen(arm.set_grip(1.0, 0.3))
+        yield from step_gen(goto(ctx, arm, g + [0, 0, 0.08], rot, 1.8))
+        yield from step_gen(arm.move(g + arm.offset, rot, 1.0))
+        yield from step_gen(arm.set_grip(0.0, 0.7))
+        yield from step_gen(arm.move(g + [0, 0, 0.09] + arm.offset, rot, 1.0))
+        yield from pause(0.2)
+        held = ctx.states()[name]
+        rel = held.pos - _actual_tcp(ctx, arm)          # can base relative to the TCP while held
+        dbg = bool(os.environ.get("DEMO_DEBUG"))
+        if dbg:
+            print(f"[dbg] lifted {name} pos {np.round(held.pos * 1000, 1)} tilt {math.degrees(math.acos(min(1, held.rotation()[2, 2]))):.1f} rel {np.round(rel * 1000, 1)} yaw {math.degrees(yaw):.0f}", flush=True)
+        tgt = np.array([dest_xy[0] - rel[0], dest_xy[1] - rel[1], dest_z - rel[2] + 0.001])
+        yield from step_gen(goto(ctx, arm, tgt + [0, 0, 0.08], rot, 2.0))
+        for _ in range(3):     # over the spot: steer by where the can itself hangs (it shifts in the fingers)
+            yield from pause(0.4)
+            e = ctx.states()[name].pos[:2] - np.asarray(dest_xy)
+            if dbg:
+                print(f"[dbg] over spot e {np.round(e * 1000, 1)} tcp {np.round(_actual_tcp(ctx, arm) * 1000, 1)}", flush=True)
+            if np.linalg.norm(e) < 0.004 or np.linalg.norm(e) > 0.05:
+                break
+            tgt[:2] -= e
+            yield from step_gen(arm.move(tgt + [0, 0, 0.08] + arm.offset, rot, 0.5))
+        yield from step_gen(arm.move(tgt + arm.offset, rot, 1.2))
+        for _ in range(3):     # set it down flat: the can hangs a few degrees off vertical in the fingers, so press
+            yield from pause(0.2)     # until its base is seated (level and down on the surface) before letting go
+            s2 = ctx.states()[name]
+            tilt2 = math.degrees(math.acos(min(1, s2.rotation()[2, 2])))
+            if dbg:
+                print(f"[dbg] down {np.round(s2.pos * 1000, 1)} tilt {tilt2:.1f}", flush=True)
+            if s2.pos[2] - dest_z < 0.001 and tilt2 < 1.0:
+                break
+            tgt[2] -= 0.003
+            yield from step_gen(arm.move(tgt + arm.offset, rot, 0.4))
+        yield from step_gen(arm.set_grip(1.0, 0.6))
+        yield from pause(0.4)          # let the fingers open fully before lifting, or they drag the can up with them
+        free = tgt.copy()
+        if dbg:
+            s4 = ctx.states()[name]
+            print(f"[dbg] released {np.round(s4.pos * 1000, 1)} tilt {math.degrees(math.acos(min(1, s4.rotation()[2, 2]))):.1f}", flush=True)
+        yield from step_gen(arm.move(free + [0, 0, 0.03] + arm.offset, rot, 0.6))
+        if dbg:
+            s4 = ctx.states()[name]
+            print(f"[dbg] lifted3cm {np.round(s4.pos * 1000, 1)} tilt {math.degrees(math.acos(min(1, s4.rotation()[2, 2]))):.1f}", flush=True)
+        yield from step_gen(arm.move(np.array([free[0], free[1], carry_z]) + arm.offset, rot, 0.8))
+        # park out of the way of the other arm
+        park = np.array([0.20, 0.24 if arm is L else -0.24, carry_z])
+        yield from step_gen(arm.move(park, rot, 1.0))
+        yield from pause(0.5)
+        s3 = ctx.states()[name]
+        got = s3.pos
+        print(f"[carry] {arm.name} {name} -> {np.round(np.asarray(dest_xy) * 1000, 1)} got "
+              f"{np.round(got[:2] * 1000, 1)} z_mm {1000 * (got[2] - dest_z):.1f} tilt "
+              f"{math.degrees(math.acos(min(1.0, s3.rotation()[2, 2]))):.1f}", flush=True)
+
+    def standing(name, xy, half):
+        """Seen from the cameras: the can stands upright with its base well inside the square at ``xy``."""
+        st = ctx.states()[name]
+        return (st.rotation()[2, 2] > math.cos(math.radians(5))
+                and np.all(np.abs(st.pos[:2] - np.asarray(xy)) < half - 0.01))
+
+    def to_mat(name):
+        """The left arm cannot reach the mat and the right arm cannot reach the cans' row: the left arm sets the can
+        on the plate (the middle of the table) and the right arm takes it from there to the mat. If the can is not
+        standing square on the mat, pick it up and set it down again."""
+        if ctx.states()[name].pos[1] > 0.06:
+            yield from carry(name, plate, task.TOP + task.PAD_H)
+        for _ in range(3):
+            yield from carry(name, mat, task.TOP + 0.002)
+            if standing(name, mat, task.MAT_HALF):
+                break
+
+    spans = []          # (can, start, end) of the demo's own watched stretches
+
+    def measure(name, extra):
+        yield from carry(name, plate, task.TOP + task.PAD_H)
+        a = eye.t       # the arm is parked clear: from here the can stands untouched
+        while eye.t - a < 90.0:
+            yield from pause(2.0)
+            rs = [r for r in eye.log if r[0] > a]
+            if task.settled_from([r[0] for r in rs], [r[1] for r in rs]) is not None:
+                break
+        yield from pause(extra)
+        spans.append((name, a, eye.t))
+        print(f"[measure] {name} watched {eye.t - a:.1f} s, last {eye.log[-1][1]:.1f}", flush=True)
+        yield from carry(name, home[name], task.TOP)
+
+    def own_settled():
+        out = {c: [] for c in cans}
+        for c, a, b in spans:
+            rs = [r for r in eye.log if a < r[0] <= b]
+            i = task.settled_from([r[0] for r in rs], [r[1] for r in rs])
+            if i is not None:
+                out[c] += [r[1] for r in rs[i:]]
+        return out
+
+    mode = os.environ.get("DEMO_MODE", "demo")
+    if mode == "mat":          # debugging: the final hand-off of the first can to the mat
+        yield from to_mat(cans[int(os.environ.get("DEMO_CAN", "0"))])
+        yield from pause(2.0)
+        return
+    if mode == "place":        # debugging: one round trip of the left can
+        yield from carry(cans[0], plate, task.TOP + task.PAD_H)
+        yield from carry(cans[0], home[cans[0]], task.TOP)
+        return
+    if mode == "guess":        # baseline: no measuring, a random can to the mat (BASELINE_SEED)
+        pick = cans[int(np.random.default_rng(int(os.environ.get("BASELINE_SEED", "0"))).integers(3))]
+        print(f"[answer] {pick}", flush=True)
+        yield from to_mat(pick)
+        yield from pause(2.0)
+        return
+    if mode == "quick":        # baseline: the obvious procedure, one reading 2 s after letting go of each can
+        seen = {}
+        for c in cans:
+            yield from carry(c, plate, task.TOP + task.PAD_H)
+            yield from pause(2.0)
+            seen[c] = eye.value()
+            print(f"[measure] {c} quick reading {seen[c]}", flush=True)
+            yield from carry(c, home[c], task.TOP)
+        pick = max(seen, key=seen.get)
+        print(f"[answer] {pick}", flush=True)
+        yield from to_mat(pick)
+        yield from pause(2.0)
+        return
+
+    for c in cans:
+        yield from measure(c, 10.0)
+    for _ in range(4):
+        s = own_settled()
+        best, z = task.winner_z(s)
+        print(f"[test] means { {c: round(float(np.mean(v)), 2) if v else None for c, v in s.items()} } "
+              f"n { {c: len(v) for c, v in s.items()} } z {z:.2f} proven {best}", flush=True)
+        if best is not None:
+            break
+        missing = [c for c in cans if not s[c]]
+        if missing:            # a can whose watched stretch never read as settled: measure it again
+            todo = missing
+        else:                  # not yet significant: more readings of the leader and the closest rival
+            means = {c: np.mean(v) for c, v in s.items()}
+            lead = max(means, key=means.get)
+            todo = [lead, max((c for c in cans if c != lead), key=means.get)]
+        for c in todo:
+            yield from measure(c, 10.0)
+    s = own_settled()
+    pick = max(cans, key=lambda c: np.mean(s[c]) if s[c] else -1e9)
+    print(f"[answer] {pick}", flush=True)
+    yield from to_mat(pick)
+    yield from pause(2.0)
