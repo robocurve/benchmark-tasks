@@ -1,0 +1,171 @@
+{
+  "passed": true,
+  "checks": {
+    "completed_without_error": true,
+    "expected_score": true,
+    "independent_replay_matches": true,
+    "trace_length": true,
+    "control_timestamps": true,
+    "no_invalid_outcomes": true,
+    "current_runtime_source_matches": true,
+    "action_count": true,
+    "action_bounds": true,
+    "command_rate_limits": true,
+    "no_failed_controller_event": true,
+    "no_controller_failure": true,
+    "complete_camera_videos": true,
+    "policy_is_dream": true,
+    "unprivileged_full_task": true,
+    "complete_action_budget": true,
+    "setup_matches_demo": true
+  },
+  "score": 0.0,
+  "control_steps": 3600,
+  "simulated_seconds": 180.00000000000668,
+  "wall_seconds": 486.951124156,
+  "final_flap_angles": [
+    -0.03529174061244978,
+    -0.03669732888413929
+  ],
+  "final_item": {
+    "pos": [
+      0.2699999511241913,
+      -1.2809132954316738e-07,
+      0.7704999446868896
+    ],
+    "quat": [
+      3.0244957542890916e-06,
+      -1.261144689124194e-06,
+      1.6197200025658276e-08,
+      1.0
+    ],
+    "speed": 0.0001736584151085446
+  },
+  "final_cutter": {
+    "pos": [
+      0.1348925530910492,
+      0.1876700520515442,
+      0.7694999575614929
+    ],
+    "quat": [
+      4.077957328263437e-06,
+      -4.315421904266259e-07,
+      -0.011631939560174942,
+      0.9999323487281799
+    ],
+    "speed": 7.127901884428339e-05
+  },
+  "maximum_ik_residual_m": null,
+  "video_frames": {
+    "~f1~scene-0-e0~left_cam.mp4": 3601,
+    "~f1~scene-0-e0~right_cam.mp4": 3601,
+    "~f1~scene-0-e0~top_cam.mp4": 3601
+  },
+  "action_audit": {
+    "maximum_command_steps": [
+      0.02630343831021191,
+      0.022310313367065904,
+      0.024286551075381912,
+      0.036225826392340954,
+      0.02094323973069384,
+      0.023219365617889898,
+      0.050000000000000044,
+      0.013954513556473813,
+      0.03864556342571812,
+      0.03269993147372083,
+      0.01652151943642488,
+      0.01690419264884538,
+      0.035215345573870016,
+      0.050000000000000044
+    ],
+    "limits": {
+      "low": [
+        -2.61799,
+        -8.88178e-16,
+        0.0,
+        -1.69297,
+        -1.5708,
+        -2.0944,
+        0.0,
+        -2.61799,
+        -8.88178e-16,
+        0.0,
+        -1.69297,
+        -1.5708,
+        -2.0944,
+        0.0
+      ],
+      "high": [
+        3.14159,
+        3.66519,
+        3.14159,
+        1.5708,
+        1.5708,
+        2.0944,
+        1.0,
+        3.14159,
+        3.66519,
+        3.14159,
+        1.5708,
+        1.5708,
+        2.0944,
+        1.0
+      ],
+      "max_step_at_20_hz": [
+        0.275,
+        0.275,
+        0.275,
+        1.0,
+        1.0,
+        1.0,
+        0.1556109919714454,
+        0.275,
+        0.275,
+        0.275,
+        1.0,
+        1.0,
+        1.0,
+        0.1556109919714454
+      ],
+      "configured_action_max_step": null,
+      "rate_check_basis": "Independent check against configured actuator velocity at 20 Hz"
+    }
+  },
+  "source_sha256": {
+    "config.py": "33e7be859bb6ddc7fae40039e93c42160ac0f8016b79c3c4162bccc808806cc0",
+    "mechanics.py": "35e76b348a864fef4b451c63165686163f07bb8a9a4514e0b9851c83d2058ca0",
+    "task.py": "5d6b25e2bfba3ef098cad26ee07eaae9ecd418009541b2bca1f3d4f5fe3d9e35",
+    "scoring.py": "c3241ced0cba4cb676878242241e7d94220e9ffcaed24f60bcbbf88ad1c05122",
+    "run.py": "d3a310c7c701ad9a0d87a7ac1665bccad124952fedaedcdfaa32c45cb2fcc10a",
+    "demo_policy.py": "b4fc2b13e4a09cbddbdd503569cbd0badb20bdc5e31ed58e36ec454dff9d5e9b",
+    "telemetry.py": "574f9949ddb5492f0f913403555bc32e2f6fdfac4ad215609e597a61f92b52b5",
+    "replay.py": "c42f6e340eb96f56f8d12a9ba040e984b3cdd17fba2fab822bc7c3b1215d0131"
+  },
+  "policy_evidence": {
+    "model": "dreamlabs/dream-1-beta",
+    "requests": 75,
+    "attempts": 75,
+    "sessions": 1,
+    "retries": 0,
+    "raw_response_rows_beyond_limits": 2078,
+    "note": "Raw response counts include unused predicted rows. All executed actions pass bounds and independent command-rate checks."
+  },
+  "termination_reasons": [
+    "max_steps"
+  ],
+  "maximum_cutter_rise_m": 0.003214597702026367,
+  "final_cut_groups": {
+    "seam": {
+      "cut": 0,
+      "total": 22
+    },
+    "front_fold": {
+      "cut": 0,
+      "total": 4
+    },
+    "back_fold": {
+      "cut": 0,
+      "total": 4
+    }
+  }
+}

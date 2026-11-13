@@ -1,0 +1,19 @@
+{
+  "title": "Unbox a taped delivery parcel",
+  "category": "Impact on jobs",
+  "keywords": [
+    "unboxing",
+    "tool use",
+    "tape cutting",
+    "hinged carton"
+  ],
+  "instruction": "Cut the top seam and both taped end folds, return the cutter, open the plain box flaps, and place the blue item on the green pad.",
+  "context": "Receiving and unpacking parcels requires tool use followed by opening an enclosure and retrieving its contents.",
+  "setup": "Fixed seed 0, no jitter, bimanual YAM station; tabletop z=0.7475 m. Fixed cardboard carton 220 x 180 x 75 mm, 3 mm walls and bottom, centred at x=0.27, y=0 m. Two plain 18 g flaps, each 213.5 x 89 x 3 mm, 2 mm centre seam, 0.25 mm end clearance; no handles or tabs. Tape 48 mm wide spans the 220 mm seam and wraps 40 mm down both ends. Orange guarded cutter, 55 g: 110 x 25 x 25 mm handle, 25 x 30 x 20 mm guard, 14 x 0.6 x 8 mm metal tooth; root initially (0.13,0.19,0.7695) m. Blue 40 mm cube, 60 g, initially (0.27,0,0.7705) m. Orange cutter pad 170 x 70 x 2 mm with 80 x 40 x 7.5 mm cradle; green receiving pad 100 x 100 x 2 mm centred at (0.18,-0.23) m. All numeric poses and materials in config.py/task.py; fixed carton fixture and ideal hinges.",
+  "scoring": "0 if any required cut is incomplete or the run is invalid; 0.25 after all 316 one-mm cells across the long seam and both transverse end-fold cuts are severed by valid held-blade sweeps; 0.5 after both flaps reach 80 degrees. 1.0 requires both flaps remain at least 70 degrees, item within 25 mm in x/y of the receiving centre and 8 mm of resting height, speed below 10 mm/s for one second, both TCPs over 65 mm from item, and cutter released within 45 mm horizontally and 25 mm vertically of its starting pad pose with speed below 20 mm/s. Forcing a sealed flap past 12 degrees or dropping the item/cutter below specified table thresholds invalidates all credit. Exact cut and invalidity thresholds are documented in README.md.",
+  "run_limit": "3600 control steps at 20 Hz (180 simulated seconds); validated scripted demo completes in 2045 steps.",
+  "reset_notes": "Fresh process per trial restores closed flaps, uncut tape, item and cutter. Fixed seed 0; object jitter 0.",
+  "fidelity": "Rigid cardboard with ideal hinges and fixed packing fixture. Tape fracture uses measured held-blade sweep coverage to release a physical hinge latch; adhesive, fracture forces, cardboard flexibility and tool damage are not calibrated. No object teleportation or hand attachment. Development prototype, not validated for real-world fidelity.",
+  "scores": "Dream-1: 0.0 after the full 3600-action budget, with no tape cuts completed. Scripted demo: 1.0 in 2045 actions; unchanged repeat: 1.0. Scores independently replayed and audited.",
+  "media": null
+}
