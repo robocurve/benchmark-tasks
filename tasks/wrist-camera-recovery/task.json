@@ -1,0 +1,17 @@
+{
+  "title": "Reattach your detached wrist camera",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "bimanual",
+    "self-recovery"
+  ],
+  "instruction": "Reattach the loose camera to its mount on your left wrist. Release it once it is secured.",
+  "setup": "Fixed bimanual YAM station: rigid metal arms with parallel grippers, bases (0,+0.305,0.750) and (0,-0.305,0.750) m, initial joints [0,1,1,-0.6,0,0] rad and open grippers. Wooden tabletop 1.10x1.30x0.06 m, centre (0.36,0,0.7175) m, top z=0.7475 m. Rigid polymer camera housing 40x36x28 mm,55 g, spawned at (0.36,-0.19,0.7725) m with identity body rotation and allowed to settle; front lens on +Y. Rear polymer shoe nominally20x4x24 mm; aluminium channel with22 mm internal width, retaining lips, stop, two7 mm-square supports, and a spring-steel retaining leaf/tooth representation. Exact part dimensions in mechanism_dimensions.json; original optical target in native_camera_target.json. Apple66 mm/120 g at XY(0.30,0.28), orange64 mm/110 g at XY(0.40,0.26); natural fruit mesh appearance, rigid contact, mesh bottoms placed on table. Station floor, lighting and metal top-camera stand:110x110x16 mm foot,12 mm radius mast,9 mm radius arm,50x42x22 mm camera housing; calibrated transforms and lengths in the pinned environment. Top and right wrist feeds remain available; left feed follows detached housing. Fruit is context only. All materials describe physical counterparts; no elastic fruit/cable simulation.",
+  "scoring": "0.25: entire camera envelope >20 mm above table for1 s, closing gripper command and TCP within50 mm of envelope; pickup credit persists unless invalidated. 0.5: optical position error <=5 mm and rotation error <=5 degrees for1 s while held or latched. 0.75: verified entry through channel, seating and latch engagement with alignment maintained. 1.0: aligned latched camera and live frame delivery persist2 s after other TCP is >80 mm from envelope. Alignment/release intervals reset when interrupted. Below-table drop (body z < tabletop-50 mm) invalidates all credit. No READY-return condition. Sensor/housing consistency is diagnostic, not scored.",
+  "run_limit": "1800 control steps at 20 Hz (90 seconds).",
+  "fidelity": "Housing, shoe, channel, stop and supports use rigid collision geometry. Following channel entry and seating, the retaining tooth engages; a fixed joint at the seated pose represents retention. The live camera follows the housing throughout. Cable forces and electrical reconnection are outside the task.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0. Revised mechanism; 1800 model actions in one continuous session.",
+  "media": "M-NL3WSS",
+  "context": "Automating installation and restoration of a robot’s own sensing hardware can reduce manual intervention in robot setup and maintenance. This task requires inserting and retaining a live camera on the robot’s moving wrist, with the receiving arm positioning its mount for the other arm; the camera must remain secured after release.",
+  "reset_notes": "Fresh process recreates fixed joint poses, object poses and unlatched camera. No object jitter. Do not reset a latched live instance without deleting its latch and resetting scorer state."
+}
