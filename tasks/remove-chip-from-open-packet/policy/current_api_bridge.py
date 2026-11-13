@@ -1,0 +1,118 @@
+"""Loopback bridge using the documented Dream observation names and client IK."""
+import json,threading,time,uuid,os
+from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
+import numpy as np
+import dream
+
+sessions={};sessions_lock=threading.Lock()
+def start(body):
+    client=dream.DreamClient()
+    client.policy({'checkpoint':body['model'],'ik':{'arm':'yam','head':'joint'},
+                   'action_hz':.001,'obs_window':9,'obs_fps':5,'timeout_ms':45000})
+    key=uuid.uuid4().hex
+    with sessions_lock:sessions[key]={'client':client,'lock':threading.Lock(),'last_seen':time.monotonic(),'timeout':body.get('timeout_s',300.),'checkpoint':body['model'],'started_at':time.time(),'action_requests':0,'session_ids':[],'session_resets':[]}
+    return {'episode':key}
+
+def route(path,body):
+    if path=='/check':
+        with dream.DreamClient() as client:
+            available={model.id for model in client.get_models() if model.servable}
+        if body['model'] not in available:raise ValueError('Checkpoint is not available')
+        return {}
+    if path=='/start':return start(body)
+    key=body.get('episode')
+    with sessions_lock:session=sessions.get(key)
+    if session is None:raise ValueError('Unknown bridge episode')
+    with session['lock']:
+        session['last_seen']=time.monotonic();client=session['client']
+        if path=='/summary':
+            return {name:session[name] for name in ('checkpoint','started_at','action_requests','session_ids','session_resets')}|{'protocol':'sdk_expiry_recovery_v1','finished_at':time.time(),'max_session_resets':2,'simulation_paused_during_recovery':True}
+        if path=='/close':
+            client.close()
+            with sessions_lock:sessions.pop(key,None)
+            return {}
+        if path=='/observe':
+            q=np.asarray(body['state'],dtype=float)
+            if q.shape!=(14,) or not np.isfinite(q).all():raise ValueError('Invalid joint state')
+            frames={new:body['frames'][old] for new,old in [('video.overhead','top_cam'),('video.wrist_l','left_cam'),('video.wrist_r','right_cam')]}
+            state={'prompt':body['prompt'],'state.left_arm':q[:6].tolist(),'state.left_gripper':q[6:7].tolist(),
+                   'state.right_arm':q[7:13].tolist(),'state.right_gripper':q[13:14].tolist()}
+            client.set_observation(frames,state,timestamp=float(body['timestamp']))
+            return {}
+        if path=='/act':
+            session['action_requests']+=1
+            last=body.get('commanded');commanded=None
+            if last is not None:
+                last=np.asarray(last,dtype=float)
+                if last.shape!=(14,) or not np.isfinite(last).all():raise ValueError('Invalid commanded state')
+                commanded={'q_l_chunk':last[:7],'q_r_chunk':last[7:]}
+            began=time.monotonic();deadline=began+session['timeout'];refused=0
+            for attempt in range(1,25):
+                try:reply=client.get_action(commanded=commanded);break
+                except dream.DreamSessionExpired as error:
+                    # SDK 1.0.37 has already adopted the replacement session. Its
+                    # documented contract permits another get_action call. The
+                    # simulator is paused here and receives no fallback action.
+                    event={'at':time.time(),'reason':getattr(error,'reason',None),'new_session_id':str(client.session_id),'action_request':session['action_requests']}
+                    session['session_resets'].append(event)
+                    print(json.dumps({'event':'model_memory_reset','episode':key,**event,'count':len(session['session_resets'])}),flush=True)
+                    if len(session['session_resets'])>2 or time.monotonic()>deadline:raise
+                    continue
+                except dream.DreamTimeout as error:
+                    if time.monotonic()>deadline:raise
+                    print('Retrying',type(error).__name__,flush=True)
+                    continue
+                except dream.DreamProtocolError:
+                    if time.monotonic()+1.>deadline:raise
+                    time.sleep(1.)
+                    continue
+                except dream.DreamServerError as error:
+                    refused=refused+1 if error.reason=='error' else 0
+                    wait=error.retry_after_s or 1.
+                    if not error.retryable or refused>=3 or time.monotonic()+wait>deadline:raise
+                    time.sleep(wait)
+            else:raise RuntimeError('API retry budget exhausted')
+            left=np.array(reply['q_l_chunk'],dtype=float);right=np.array(reply['q_r_chunk'],dtype=float)
+            if left.ndim!=2 or left.shape!=right.shape or left.shape[1]!=7 or not 1<=len(left)<=48:raise ValueError('Invalid action chunk shape')
+            rows=np.hstack([left,right])
+            if not np.isfinite(rows).all():raise ValueError('Nonfinite action')
+            if np.any(rows[:,[6,13]]<-.05) or np.any(rows[:,[6,13]]>1.05):raise ValueError('Invalid gripper convention')
+            rows[:,[6,13]]=np.clip(rows[:,[6,13]],0.,1.)
+            session_id=str(client.session_id)
+            if session_id not in session['session_ids']:session['session_ids'].append(session_id)
+            result={'rows':rows.tolist(),'rtt_s':time.monotonic()-began,'attempts':attempt,
+                    'infer_ms':(client.last_timing or {}).get('serve_infer_ms'),'session_id':session_id,'session_reset_count':len(session['session_resets'])}
+            print(json.dumps({'event':'model_action','episode':key,'session_id':client.session_id,
+                              'rows':len(rows),'attempts':attempt,'infer_ms':result['infer_ms']}),flush=True)
+            return result
+        raise ValueError('Unknown route')
+
+class Handler(BaseHTTPRequestHandler):
+    def reply(self,status,body):
+        data=json.dumps(body).encode();self.send_response(status)
+        self.send_header('Content-Type','application/json');self.send_header('Content-Length',str(len(data)))
+        self.end_headers();self.wfile.write(data)
+    def do_GET(self):self.reply(200 if self.path=='/health' else 404,{'ok':self.path=='/health'})
+    def do_POST(self):
+        try:
+            length=int(self.headers.get('Content-Length',0))
+            if not 0<length<8_000_000:raise ValueError('Invalid request size')
+            body=json.loads(self.rfile.read(length))
+            self.reply(200,route(self.path,body))
+        except Exception as error:
+            key=body.get('episode') if 'body' in locals() else None
+            if self.path=='/act' and key:
+                with sessions_lock:failed=sessions.pop(key,None)
+                if failed:
+                    try:failed['client'].close()
+                    except Exception:pass
+            validation=str(error) if isinstance(error,ValueError) and str(error) in {'Invalid action chunk shape','Nonfinite action','Invalid gripper convention','Invalid commanded state','Invalid joint state'} else None
+            print(json.dumps({'event':'bridge_error','episode':key,'type':type(error).__name__,
+                              'reason':getattr(error,'reason',None),'validation':validation}),flush=True)
+            self.reply(500,{'error':type(error).__name__,'message':getattr(error,'reason',None) or 'Bridge request failed'})
+    def log_message(self,*args):pass
+
+if __name__=='__main__':
+    port=int(os.environ.get('DREAM_BRIDGE_PORT','8241'))
+    print('Current SDK bridge listening on loopback port',port,flush=True)
+    ThreadingHTTPServer(('127.0.0.1',port),Handler).serve_forever()

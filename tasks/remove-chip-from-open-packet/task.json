@@ -1,0 +1,18 @@
+{
+  "title": "Take one chip out of an open packet while leaving the others inside",
+  "category": "Societal relatability",
+  "instruction": "Take one chip out of the open packet and put it on the plate. Leave the other two chips inside the packet and both hands clear.",
+  "context": "Taking one snack from an open packet without spilling the remaining contents is a familiar household action. This task tests confined retrieval from a lightweight movable container. It does not test opening a seal or food safety.",
+  "setup": "Official bimanual YAM station with two parallel grippers and three cameras. Coordinates are metres forward and left from the midpoint between the arm bases. Table surface z = 0.7475 m. The open metallized-polypropylene pouch surrogate starts with its root at (0.285, 0.015, 0.7495) m. The 12 g lower shell has a 90 by 70 by 1 mm floor and 28 mm walls. Two 2 g upper sheet panels are 90 by 30 by 0.8 mm, hinged about X at local (0, +/-35, 28) mm, initially 12 degrees outward with +/-35 degree limits. A 30 by 50 by 1 mm upright side seam is centered at local (-60, 15, 28) mm. Each of three 1.2 g rigid chip surrogates spans approximately 32 by 40 mm and is formed by seven 2 mm thick strips with up to 4 mm rise. Their local initial origins are (8, -6, 28), (0, 0, 18) and (-8, 6, 8) mm. Gravity settles the chips. A fixed polymer plate with a 100 by 100 mm footprint, 4 mm floor and 12 mm rim is centered at (0.370, -0.145, 0.7475) m. No branding, tools or seals are present. The setup screenshot shows this fixed seed 0 layout.",
+  "scoring": "0.5 after any chip wholly clears the pouch top rim by 5 mm while the other two chips remain inside. 1.0 after that chip rests completely on the plate, its lowest point 3 to 6 mm above the table, translational speed at most 5 mm/s and angular speed at most 0.1 rad/s, with both gripper-tip midpoints at least 60 mm from all chips and the packet for one second. Packet displacement over 30 mm, tilt over 15 degrees, any chip dropped below the table or invalid telemetry permanently score zero. Other unsuccessful outcomes score zero or applicable partial credit. If more than one chip leaves the packet containment region at any time, the trial permanently scores zero, even if a chip is returned. Packet containment means every chip corner is within local X +/-44 mm and Y +/-34 mm and between -2 and 65 mm vertically. Extraction is recorded only after clearing the entire top envelope before sideways transfer. Invalid or noncontiguous 20 Hz telemetry scores zero.",
+  "run_limit": "2400 control steps at 20 Hz",
+  "fidelity": "Official bimanual YAM station in Isaac Lab Arena 0.3.1 through Inspect Robots 1.0.0 at 20 Hz. The pouch has a rigid lower shell and passive hinged upper sheets. It approximates mouth motion without film crumpling or tearing. Chips are rigid and cannot fracture. This task does not measure crushing avoidance, chip integrity, hygiene or food safety. Both arms are available; the demo parks the left arm clear. Objects move through physical robot contact.",
+  "scores": "Dream-1 beta run: 0.0 in 2400 steps; scripted demo: 1.0 in 531 steps. Both at 20 Hz.",
+  "media": "M-D5M878",
+  "keywords": [
+    "household",
+    "selective retrieval",
+    "open pouch",
+    "retaining contents"
+  ]
+}
