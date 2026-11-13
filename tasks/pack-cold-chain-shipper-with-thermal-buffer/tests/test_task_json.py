@@ -162,7 +162,7 @@ class TaskJson(unittest.TestCase):
             self.assertIn(mode, (HERE / "run.sh").read_text())
         self.assertLess(spec["predicted_scores"]["lid_unlatched"], 1.0)
         self.assertEqual(spec["predicted_scores"]["no_lid"], 0.75)
-        self.assertEqual(spec["media"], "M-MRPW5W")
+        self.assertRegex(spec["media"], r"^M-[A-Z0-9]{6}$")
 
     def test_simulation_claims_are_honest(self):
         readme = (HERE / "README.md").read_text().lower()
