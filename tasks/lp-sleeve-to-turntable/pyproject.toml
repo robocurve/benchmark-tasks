@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lp-turntable-task"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = ["yam-arena @ git+https://github.com/kairosiann/yam-isaac-lab-arena.git@bd62771e60320433893bd1d2df0fc79b5ddcd6d1"]
+
+[project.entry-points."inspect_robots.embodiments"]
+lp_turntable = "resist_isaac:embodiment"
+
+[tool.setuptools.packages.find]
+where = ["runtime"]
+include = ["resist_isaac*"]
