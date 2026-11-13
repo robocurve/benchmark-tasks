@@ -1,0 +1,20 @@
+{
+  "title": "Wring a strep-test swab in its tube: squeeze the tube on the head, turn the swab 5 times, draw it out still squeezed",
+  "category": "Impact on jobs",
+  "keywords": [
+    "rapid strep test",
+    "point-of-care testing",
+    "throat swab",
+    "extraction tube",
+    "medical assistant"
+  ],
+  "instruction": "Do the strep test's swab step: put the swab head down to the bottom of the tube, squeeze the tube on the head and turn the swab 5 times, then take the swab out while squeezing and turning, drop it in the bin, let go of the tube and move both hands away.",
+  "context": "Medical assistants (O*NET 31-9092.00) list as a Core task 'Perform routine laboratory tests and sample analyses.' A CLIA-waived rapid strep A test is one, run in clinics many times a day. Its insert (ACON Flowflex Plus Strep A, FDA CLIA waiver CW250006) gives the swab step: 'Rotate swab 5 times while squeezing, keep swab in test tube for 1 minute, and remove swab while rotating and squeezing the tube before testing extracted material.' The squeeze wrings the sample out of the swab head into the buffer. The count of five is given and trivial: the difficulty is in the hands. One hand keeps the soft tube squeezed on the head at the tube's bottom, hard enough to bear on it, while the other turns the 3 mm swab against the pinched walls, letting go and taking it again for each stroke without pulling it out, and then draws the head up and out with the squeeze kept on, turning. In the demo, the left hand works the swab and the right hand squeezes the tube.",
+  "setup": "Two YAM arms at the near edge of a table; positions are (x forward from the arm bases, y left) in cm, heights above the table. Tube stand (steel, painted): a foot 5 x 5 x 0.8 cm at (31.5, 8), a post 1 x 1 x 10 cm at (30.5, 8), and a clip at 6.9 to 8.5 cm high holding the tube by its upper half. Extraction tube: polyethylene, 75 mm long, 13 mm across, 10 mm bore, standing upright at (28, 8) with its bottom 1.5 cm above the table, so its lower half is free to squeeze; its walls give 1 N per mm squeezed, up to 4.5 mm on each side. Throat swab: 15 cm long, a 3 mm polystyrene shaft with a blue tab on one side 3 cm from its end, and a flocked head 5 mm across and 20 mm long; 8 g. It lies on the test kit's box along y, its head tip at (20, 25), its handle 5 cm over the box's edge. Kit box: card, 10 x 10 x 5 cm, centred at (20, 20). Waste bin: an open polypropylene box 12 x 12 x 8 cm, centred at (7, 20). Friction: wet swab on wet tube about 0.1 to 0.3; gripper pads on the swab about 0.3.",
+  "scoring": "Read from video. A turn counts while the tube is squeezed onto the swab head with the head's tip within 10 mm of the tube's bottom (both walls pressed in 2.3 to 3.4 mm, the head at least 5 mm into the walls); turns back count against it. 0.12 per full turn, 0.6 at 5 turns. 0.8 when, after 5 turns, the head is drawn from the bottom up and out of the tube with the squeeze on the whole way, turning at least 0.15 turn as it rises. 1.0 when, after that, the swab is in the bin with every fingertip at least 5 cm from the tube and from the whole swab, held 1 s. 0 if the swab falls off the table. Real trial: turns counted from the blue tab on video; the squeeze checked on a side camera, the tube walls touching the head.",
+  "run_limit": "4,000 steps (200 s at 20 Hz)",
+  "reset_notes": "Put a fresh tube with buffer in the clip and a fresh swab on the box in the start pose; empty the bin. The swab and the buffer are used up each trial.",
+  "fidelity": "Rigid bodies at 240 Hz on GPU. The tube is fixed in its clip; its soft walls are two sprung pads, floor to rim (1 N/mm, 4.5 mm travel), pressed as a whole: where along the tube the hand squeezes is not modelled. The buffer and sample are not simulated; a turn counts while both pads bear on the head. The insert's 1-minute wait is left out. The swab weighs 8 g, not 1 to 2 g, for steady contact.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-JQ8QZ6"
+}
