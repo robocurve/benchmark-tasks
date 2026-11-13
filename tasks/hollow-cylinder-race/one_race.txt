@@ -1,0 +1,22 @@
+# Baseline (not a demo): the naive procedure. One race (red vs green), then bin the slower one without a second
+# comparison. Even when that one is the thin-walled tube, the runs do not show it slower than blue. Uses --base.
+def script(task, ctx):
+    L, R = ctx.left, ctx.right
+    L.offset = R.offset = np.zeros(3)
+    ctx.notes = []
+    h = yield from pick(task, ctx, L, "red")
+    yield from place(task, ctx, L, "red", h, lane_start(task, 0))
+    yield from settle_at_gate(task, ctx, L, "red", 0)
+    h = yield from pick(task, ctx, L, "green")
+    yield from place(task, ctx, L, "green", h, lane_start(task, 1))
+    yield from settle_at_gate(task, ctx, L, "green", 1)
+    yield from wait(0.8)
+    yield from press_down(task, ctx, L)
+    order, _ = yield from watch_race(task, ctx, ("red", "green"), also=iter(press_up(task, ctx, L)))
+    ctx.notes.append({"race": 1, "order": order})
+    yield from park_left(ctx)
+    loser = order[-1]
+    h = yield from pick(task, ctx, R, loser)
+    yield from place(task, ctx, R, loser, h, np.array([*ctx.states()["bin"].pos[:2], task.TOP + 0.004 + task.R]), drop=0.04)
+    yield from R.move(np.array([0.12, -0.30, 0.90]), _rot(), 1.5)
+    yield from wait(1.5)

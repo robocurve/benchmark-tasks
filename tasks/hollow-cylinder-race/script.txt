@@ -1,0 +1,222 @@
+# Scripted reference demo for the roll race. It uses only what the cameras show: where each cylinder is (to grasp it,
+# and which one crosses the finish line first) and the button. It never reads which cylinder is which.
+#
+# Race 1: red (near lane) vs green (far lane). The loser L is the slower of the two.
+# Race 2: L (near lane) vs blue (far lane). If L loses again it is slower than both; if blue loses, blue is slower
+# than L, which is slower than the race-1 winner, so blue is slower than both. The slowest one goes in the bin.
+
+FINGER_TIP = 0.013   # pad tips below the TCP
+
+
+def goto(ctx, arm, goal, rot, duration, rounds=4):
+    goal = np.asarray(goal, float)
+    yield from arm.move(goal + arm.offset, rot, duration)
+    cmd = goal + arm.offset
+    for _ in range(rounds):
+        yield from wait(0.3)
+        err = _actual_tcp(ctx, arm) - goal
+        if np.linalg.norm(err) < 0.0015:
+            break
+        cmd = cmd - err
+        yield from arm.move(cmd, rot, 0.4)
+    arm.offset = cmd - goal
+
+
+def _rot(yaw=0.0):
+    from yam_arena.demo import grip_rotation
+
+    # pointing down; yaw 0 closes the fingers along world y (across the cylinder, whose axis is along x),
+    # yaw 90 closes them along x (on the two end caps)
+    return grip_rotation(yaw)
+
+
+def pick(task, ctx, arm, name):
+    """Top-down pinch, then lift 8 cm. Returns (offset of the cylinder from the TCP, grip yaw). Across the curved
+    side where the lane walls are (cradles, lanes); on the end caps in the catch pit, against whose far wall the
+    cylinder may rest."""
+    st = ctx.states()[task.body_name(name)]
+    in_pit = st.pos[1] < task.PIT_Y + 0.01
+    yaw = math.pi / 2 if in_pit else 0.0
+    c = st.pos.copy() + [0, 0, 0.0 if in_pit else 0.004]
+    rot = _rot(yaw)
+    yield from arm.set_grip(1.0, 0.4)
+    yield from goto(ctx, arm, c + [0, 0, 0.08], rot, 1.8)
+    yield from goto(ctx, arm, c, rot, 1.0)          # closed loop down to the grasp: the arm sags on the way down
+    yield from arm.set_grip(0.0, 0.7)
+    yield from arm.move(c + [0, 0, 0.08] + arm.offset, rot, 1.0)
+    yield from wait(0.3)
+    # how the cylinder sits in the hand (seen by the cameras): its centre relative to the TCP in the grip frame,
+    # and its axis direction relative to the grip yaw
+    st = ctx.states()[task.body_name(name)]
+    rel = st.pos - _actual_tcp(ctx, arm)
+    c0, s0 = math.cos(-yaw), math.sin(-yaw)
+    local = np.array([c0 * rel[0] - s0 * rel[1], s0 * rel[0] + c0 * rel[1], rel[2]])
+    a_rel = task.axis_yaw(st) - yaw
+    return local, yaw, a_rel
+
+
+def place(task, ctx, arm, name, hy, target, drop=0.006):
+    """Carry so the cylinder.s centre is ``drop`` above ``target``, let go, back off upward."""
+    local, yaw0, a_rel = hy
+    # turn the grip so the cylinder.s axis ends square to the lane (axis yaw 0); of the equivalent grip yaws, keep
+    # the one nearest the pick yaw
+    base = -a_rel
+    yaw = min((base + k * math.pi for k in (-2, -1, 0, 1, 2)), key=lambda y: abs(y - yaw0))
+    rot = _rot(yaw)
+    c1, s1 = math.cos(yaw), math.sin(yaw)
+    held = np.array([c1 * local[0] - s1 * local[1], s1 * local[0] + c1 * local[1], local[2]])
+    tcp = np.asarray(target, float) - held + [0, 0, drop]
+    yield from goto(ctx, arm, tcp + [0, 0, 0.08], rot, 2.0)
+    yield from goto(ctx, arm, tcp, rot, 1.0)        # closed loop to the release pose (a few mm matter in a lane)
+    yield from arm.set_grip(0.7, 1.0)               # open slowly, about 1 cm each side, then lift clear
+    yield from wait(0.4)
+    yield from arm.move(tcp + [0, 0, 0.08] + arm.offset, rot, 1.2)
+    st = ctx.states()[task.body_name(name)]
+    print(f"[place] {arm.name} {name} want={np.round(np.asarray(target) * 1000, 1)} got={np.round(st.pos * 1000, 1)} "
+          f"yaw={math.degrees(task.axis_yaw(st)):.1f}", flush=True)
+
+
+def settle_at_gate(task, ctx, arm, name, lane):
+    """If a released cylinder did not come to rest against the closed gate (it can catch on a finger as the hand
+    opens), push it gently down the lane from its uphill side with the closed fingertips, then back off."""
+    st = ctx.states()[task.body_name(name)]
+    rest_y = task.Y_GATE + 0.003 + task.R * math.cos(task.THETA) - 0.0015   # centre when touching the gate
+    if st.pos[1] < rest_y + 0.004:
+        return
+    rot = _rot(0.0)
+    c = st.pos
+    yield from arm.set_grip(0.0, 0.5)
+    behind = np.array([c[0], c[1] + task.R + 0.022, c[2] + 0.010])     # fingertips 3 mm below the axis
+    yield from goto(ctx, arm, behind + [0, 0, 0.06], rot, 1.2)
+    yield from goto(ctx, arm, behind, rot, 0.8)
+    yield from arm.move(behind - [0, 0.035, 0.009] + arm.offset, rot, 1.0)
+    yield from arm.move(behind + [0, 0.02, 0.08] + arm.offset, rot, 0.8)
+    yield from wait(0.5)
+    st = ctx.states()[task.body_name(name)]
+    print(f"[settle] {name} y={st.pos[1] * 1000:.1f} yaw={math.degrees(task.axis_yaw(st)):.1f}", flush=True)
+
+
+def lane_start(task, lane):
+    y = task.Y_GATE + 0.003 + task.R + 0.001   # 4 mm uphill of where it rests against the closed gate
+    return np.array([task.LANE_X[lane], y, task.TOP + task.surface(y) + task.R / math.cos(task.THETA)])
+
+
+def cradle(task, key):
+    return np.array([task.RACK_X, task.CRADLE_Y[key], task.TOP + 0.012 + math.sqrt(task.R ** 2 - 0.017 ** 2) + 0.001])
+
+
+def press(task, ctx, arm):
+    """Press the gate button once with the closed fingertips."""
+    yield from press_down(task, ctx, arm)
+    yield from press_up(task, ctx, arm)
+
+
+def press_down(task, ctx, arm):
+    rot = _rot()
+    top = np.array([*task.BUTTON_XY, task.TOP + 0.050 + FINGER_TIP])
+    yield from arm.set_grip(0.0, 0.4)
+    yield from goto(ctx, arm, top + [0, 0, 0.04], rot, 1.5)
+    yield from arm.move(top - [0, 0, 0.007] + arm.offset, rot, 0.6)
+
+
+def press_up(task, ctx, arm):
+    top = np.array([*task.BUTTON_XY, task.TOP + 0.050 + FINGER_TIP])
+    yield from arm.move(top + [0, 0, 0.04] + arm.offset, _rot(), 0.6)
+
+
+def watch_race(task, ctx, names, seconds=3.0, also=None):
+    """Watch the two lanes from the moment the gate opens. Returns the cylinders in finishing order and each one's
+    time to the finish line, read off the frames (the crossing interpolated between two frames, as one would from a
+    video), or fewer entries if one did not finish."""
+    times, prev = {}, {}
+    for k in range(round(seconds * CONTROL_HZ)):
+        if also is not None:            # keep moving the arm (lifting off the button) while watching
+            next(also, None)
+        yield
+        st = ctx.states()
+        for n in names:
+            y = st[task.body_name(n)].pos[1]
+            if n not in times and n in prev and prev[n] >= task.FINISH_Y > y:
+                times[n] = (k - 1 + (prev[n] - task.FINISH_Y) / max(1e-9, prev[n] - y)) / CONTROL_HZ
+            prev[n] = y
+    order = sorted(times, key=times.get)
+    return order, times
+
+
+def park_left(ctx):
+    L = ctx.left
+    yield from L.move(np.array([0.12, 0.30, L.pos[2] if L.pos[2] > 0.85 else 0.90]), _rot(), 1.2)
+
+
+def park_right(ctx):
+    R = ctx.right
+    yield from R.move(np.array([0.12, -0.30, 0.90]), _rot(), 1.2)
+
+
+def squared(task, ctx, name, lane):
+    """A fair start as the cameras show it: resting at the gate, near the lane centre, axis square to the lane."""
+    st = ctx.states()[task.body_name(name)]
+    return (abs(st.pos[0] - task.LANE_X[lane]) < 0.012 and st.pos[1] < task.Y_GATE + 0.04
+            and abs(math.degrees(task.axis_yaw(st))) < 2.0)
+
+
+def to_lane(task, ctx, name, lane):
+    """Bring a cylinder from wherever it lies (a cradle, the catch pit or the lane) to the start of a lane, squared.
+    From the pit it goes through the middle cradle, the one spot both arms reach."""
+    L, R = ctx.left, ctx.right
+    for attempt in range(3):
+        st = ctx.states()[task.body_name(name)]
+        if st.pos[1] < task.PIT_Y + 0.01:                      # in the catch pit: right arm to the middle cradle
+            h = yield from pick(task, ctx, R, name)
+            yield from place(task, ctx, R, name, h, cradle(task, "green"))
+            yield from park_right(ctx)
+        h = yield from pick(task, ctx, L, name)
+        yield from place(task, ctx, L, name, h, lane_start(task, lane))
+        yield from settle_at_gate(task, ctx, L, name, lane)
+        if squared(task, ctx, name, lane):
+            return
+        print(f"[restart] {name} not squared in lane {lane}, placing it again", flush=True)
+
+
+def race(task, ctx, a, b, tries=3):
+    """Race a (near lane) against b (far lane) until the finish-time gap is clear (over 25 ms, above the 20 ms that
+    identical cylinders never reach); re-run it otherwise. Returns (slower, faster) or None."""
+    L = ctx.left
+    for attempt in range(tries):
+        yield from to_lane(task, ctx, a, 0)
+        yield from to_lane(task, ctx, b, 1)
+        yield from park_left(ctx)
+        yield from wait(0.8)
+        yield from press_down(task, ctx, L)                     # the gate opens on the way down
+        order, times = yield from watch_race(task, ctx, (a, b), also=iter(press_up(task, ctx, L)))
+        yield from press(task, ctx, L)                          # gate closes for the next start
+        yield from park_left(ctx)
+        gap = abs(times[a] - times[b]) if len(times) == 2 else None
+        ctx.notes.append({"race": [a, b], "times": times, "gap": gap})
+        print(f"[race] {a} vs {b}: times={ {k: round(v, 4) for k, v in times.items()} } gap={gap}", flush=True)
+        if gap is not None and gap > 0.025:
+            return order[1], order[0]
+        print(f"[rerun] {a} vs {b}: no clear result", flush=True)
+    return None
+
+
+def script(task, ctx):
+    L, R = ctx.left, ctx.right
+    L.offset = R.offset = np.zeros(3)
+    ctx.notes = []
+    r1 = yield from race(task, ctx, "red", "green")
+    if r1 is None:
+        return                                                  # no proof: bin nothing
+    loser = r1[0]
+    if __import__("os").environ.get("STOP_AFTER") == "race1":  # debugging runs only
+        return
+    r2 = yield from race(task, ctx, loser, "blue")
+    if r2 is None:
+        return
+    slowest = r2[0]          # lost twice, or blue lost to race 1's loser, which lost to race 1's winner
+    ctx.notes.append({"slowest": slowest})
+    h = yield from pick(task, ctx, R, slowest)
+    yield from place(task, ctx, R, slowest, h, np.array([*ctx.states()["bin"].pos[:2], task.TOP + 0.004 + task.R]),
+                     drop=0.04)
+    yield from park_right(ctx)
+    yield from wait(1.5)

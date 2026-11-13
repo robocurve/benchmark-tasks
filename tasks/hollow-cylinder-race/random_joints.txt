@@ -1,0 +1,17 @@
+# Baseline (not a demo): random joint targets around the ready pose and a random gripper, a new target every 0.5-1.5 s,
+# both arms, for the whole run limit.
+import os as _os
+
+
+def script(task, ctx):
+    from yam_arena.constants import READY
+
+    rng = np.random.default_rng(1000 + ctx.seed)
+    ready = np.array(READY, float)
+    while True:
+        dur = rng.uniform(0.5, 1.5)
+        for arm in (ctx.left, ctx.right):
+            arm.q = ready + rng.uniform(-0.8, 0.8, 6)
+            arm.grip = float(rng.uniform(0, 1))
+            arm.cmd = np.r_[arm.q, arm.grip]
+        yield from wait(dur)

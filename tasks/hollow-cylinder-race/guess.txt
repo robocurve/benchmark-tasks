@@ -1,0 +1,11 @@
+# Baseline (not a demo): bin one cylinder without any timed run (green on even seeds, blue on odd seeds; across seeds
+# the binned one is the thin-walled tube about a third of the time). Uses the helpers of script.txt (--base).
+def script(task, ctx):
+    R = ctx.right
+    ctx.left.offset = R.offset = np.zeros(3)
+    ctx.notes = []
+    name = "green" if ctx.seed % 2 == 0 else "blue"
+    h = yield from pick(task, ctx, R, name)
+    yield from place(task, ctx, R, name, h, np.array([*ctx.states()["bin"].pos[:2], task.TOP + 0.004 + task.R]), drop=0.04)
+    yield from R.move(np.array([0.12, -0.30, 0.90]), _rot(), 1.5)
+    yield from wait(1.5)

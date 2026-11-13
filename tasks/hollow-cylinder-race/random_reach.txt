@@ -1,0 +1,16 @@
+# Baseline (not a demo): random fingertip targets over the work area (x 0.12-0.48, y -0.36-0.36), 40% of them dips
+# to 1 cm above the table, random gripper opening, random holds; both arms, for the whole run limit.
+def script(task, ctx):
+    rng = np.random.default_rng(2000 + ctx.seed)
+
+    def wander(arm, side):
+        while True:
+            x = rng.uniform(0.12, 0.48)
+            y = rng.uniform(-0.36, 0.36) if rng.random() < 0.3 else (rng.uniform(-0.05, 0.36) if side == "left" else rng.uniform(-0.36, 0.05))
+            z = task.TOP + (0.01 if rng.random() < 0.4 else rng.uniform(0.03, 0.20))
+            yaw = rng.uniform(-math.pi, math.pi)
+            from yam_arena.demo import grip_rotation
+            yield from arm.move(np.array([x, y, z]), grip_rotation(yaw), rng.uniform(0.6, 1.6), grip=float(rng.uniform(0, 1)))
+            yield from wait(rng.uniform(0.0, 0.8))
+
+    yield from both(wander(ctx.left, "left"), wander(ctx.right, "right"))
