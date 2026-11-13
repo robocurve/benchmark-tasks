@@ -1,56 +1,94 @@
-# Calibrate a tool tip by touching one point from four angles
+# Calibrate a fixed pointed tool
 
-A steel pin stands in a holder in front of the left arm. Nearby is a fixed post with an 18 mm square pocket on top. The
-robot takes the pin, puts its lower end in the pocket, and holds it still in four poses with its end on the same spot, leaning 10 to 35 degrees from
-vertical, the pin's axis in each pose at least 15 degrees from every other. This is the motion a
-technician uses to teach a robot where its tool tip is: the tip stays on one point while the wrist turns. Each
-credited pose earns 0.25.
+| Item | Rule |
+|---|---|
+| Tool | A pointed steel shaft stays fixed to the left gripper. |
+| Reference | An exposed silver contact, 2 mm across, at x 27, y 22 cm (from the midpoint between the arm bases), 5.1 cm above the table. |
+| Pose credit | 0.25 after one second of valid contact. Four poses earn 1.0. |
+| Contact | Physical touch. Simulation: contact force at least 0.02 N. Real trial: a continuity tester beeps. |
+| Tip position | Within 1 mm horizontally and 0.25 mm vertically of the reference center. |
+| Stillness | Tip drift at most 0.5 mm. Axis drift at most 2 degrees during the one-second hold. |
+| Tool axis | Tilt 10–35 degrees. Each axis differs from every earlier axis by at least 15 degrees. |
+| Fixed mount | Translation error at most 0.5 mm. Rotation error at most 0.5 degree. |
+| Time limit | 2,400 control steps at 20 Hz: 120 seconds. |
 
 ## Run a trial
-On a machine set up with the official simulator (the Robocurve Brev launchable, or `yam-isaac-lab-arena`'s
-`setup.sh`), with a Dream API key in `~/.dreamlabs/credentials`:
+
+Use the official Robocurve launchable. Validated with the YAM adapter commit `0059d02` that it installs.
+
+1. Install this package into the simulator's environment. On the Robocurve launchable, from the repository root:
 
 ```bash
-cd tasks/tool-tip-calibration   # the task= path below is relative to this folder
-INSTR="Calibrate the steel pin's tip on the reference post. Take the pin from its holder, put its lower end in the square pocket on top of the orange-framed post, and hold the pin still there in four different poses, at least 1 second each, keeping its lower end on the same spot. In every pose the pin must lean between 10 and 35 degrees from vertical, and its axis must be at least 15 degrees from its axis in every other pose."
-
-# Dream-1
-inspect-robots run --embodiment yam_arena --policy dream \
-  -E task=tool_tip_calibration.py -E object_jitter=0 -E control_hz=20 -E cam_width=320 -E cam_height=176 \
-  --instruction "$INSTR" --scorer task_score --max-steps 2400 --store-frames --log-dir ~/yam-eval/tool-tip-dream
-
-# The scripted demo, which reaches full score
-inspect-robots run --embodiment yam_arena --policy yam_scripted \
-  -E task=tool_tip_calibration.py -E object_jitter=0 -E control_hz=20 -E cam_width=320 -E cam_height=176 \
-  --instruction "$INSTR" --scorer task_score --max-steps 2400 --store-frames --log-dir ~/yam-eval/tool-tip-demo
-
-# One MP4 per camera, next to each run's frames
-for log in ~/yam-eval/tool-tip-dream/*.json ~/yam-eval/tool-tip-demo/*.json; do inspect-robots video "$log"; done
+source /data/IsaacLab-Arena/yam.env
+uv pip install --python /data/IsaacLab-Arena/.venv/bin/python --no-deps -e tasks/tool-tip-calibration
 ```
 
-The run prints `task_score` at the end. The trial ends with 1.0 when `success()` has held for 1 s; otherwise it scores
-`score()` at the last step. Use `-E control_hz=20`: a pose's 1 s hold is counted as 20 control steps.
+It registers the embodiment `yam_tool_calibration` (the stock robot plus the bolted tool, the post and the contact
+sensor) and the policy `tool_calibration_scripted` (the demo and the two failure checks).
 
-### The demo tilts the gripper
-The stock demo waypoints grip straight down, turned only about the vertical. This task needs a tilted grip, so the
-task file adds one small extension: a waypoint's `yaw` may be a `TiltedYaw`, a float equal to 0.0 that also carries a
-full gripper rotation. When the task file loads, it wraps `yam_arena.demo.grip_rotation` so that it returns that
-rotation, and it behaves exactly as before for every ordinary yaw. Nothing else changes; the stock `yam_scripted`
-policy plays the demo. Only the demo uses this. Scoring doesn't depend on it.
+2. For scoring tests without Isaac Sim, run:
 
-## Scoring
-| Score | Condition | Check on a real table |
-|---|---|---|
-| +0.25 per pose, up to 1.0 | for 20 control steps (1 s) in a row: the centre of the pin's lower end inside the pocket (within 9 mm of its centre along each table axis, between 1 mm below the floor and the frame's 7 mm top), the pin leaning between 10 and 35 degrees, and still (through the second, its end stays within 2 mm and its axis within 2 degrees of where they started); its axis at least 15 degrees from its axis in every pose credited before, and its lower end within 4 mm of its spot in the first credited pose | the video shows the pin's end in the pocket; a phone level or protractor along the pin gives its lean |
-| 1.0 | 4 poses credited; the trial ends 1 s later | |
-| 0 | no pose credited | |
+```bash
+python -m pytest -q tasks/tool-tip-calibration/test_scoring.py
+```
 
-Possible scores: 0, 0.25, 0.5, 0.75, 1.0; the best score reached counts (`SCORE_OVER = "best"`). Holding one angle longer, or returning to an angle already credited, adds
-nothing. A released pin can't score: it can't stay leaning 10 degrees or more in the pocket, since nothing near the post can hold it up, and a pin standing upright by itself leans under 10 degrees.
+3. For a demo on the official simulator, run from the repository root:
 
-## Runtime and seeds
-- The scripted demo ends with success at step 498 (24.9 s of simulated time): four poses, the last credited at 24.0 s,
-  then the 1 s success hold. On an L40S the whole demo run, including starting Isaac Sim, took about 110 s on a warm
-  machine; a full 2,400-step trial with Dream-1 took about 4.6 minutes (it scored 0.0). Isaac Sim's first start on a
-  machine takes about 6 minutes.
-- One fixed layout: `-E object_jitter=0`, so the seed doesn't change the start.
+```bash
+INSTR="$(python -c 'import json; from pathlib import Path; print(json.loads(Path("tasks/tool-tip-calibration/task.json").read_text())["instruction"])')"
+inspect-robots run --embodiment yam_tool_calibration --policy tool_calibration_scripted \
+  -E control_hz=20 -E cam_width=320 -E cam_height=176 \
+  -E telemetry=runs/tool-calibration-demo/telemetry.jsonl \
+  --instruction "$INSTR" --scorer task_score --max-steps 2400 --store-frames \
+  --log-dir runs/tool-calibration-demo/inspect
+```
+
+4. For a model trial, replace the policy with `--policy dream`. Use the complete instruction from `task.json`.
+5. For a hover check, use `--policy tool_calibration_scripted -P mode=hover`. Expected score: 0.0.
+6. For a repeated-pose check, use `--policy tool_calibration_scripted -P mode=onepose`. Expected score: 0.25.
+
+## Check a real trial
+
+Only simple tools: a continuity tester, a protractor, calipers, a scribe and two fixed cameras. Nobody
+reaches in while the arm moves; every reading comes from photos, video or the robot's joint log.
+
+1. Bolt the pointed tool to the gripper. Measure the tip offset with calipers (88 mm from the tool point).
+2. Wire a low-voltage continuity tester (buzzer) between the tool and the silver contact.
+3. Scribe a witness line across the mount and the gripper, and photograph it.
+4. Film the trial with two fixed cameras at post height, one looking along y and one along x.
+5. **Contact:** the tester beeps. The contact is only 2 mm across, so the tip is within 1 mm of its centre. A close-up
+   photo shows that the point, not the side of the shaft, is on top.
+6. **Hold:** each pose keeps the beep for at least 1 s (video timestamps). A steady beep on the 2 mm contact keeps the
+   tip within it; the 0.5 mm stillness limit is checked in simulation, and on a real table the beep and the video are the check.
+7. **Lean:** in each camera's photo, read the tool's angle from vertical with a protractor: `a` from the camera looking along
+   y (tilt toward x), `b` from the camera looking along x (tilt toward y). Take `a` positive when the tool's top
+   leans toward +x and `b` positive toward +y; otherwise the direction can come out 90 or 180 degrees off. Then `lean = atan(sqrt(tan(a)^2 + tan(b)^2))`, which must be 10 to 35 degrees, and
+   `direction = atan2(tan(b), tan(a))`. A single side photo is not enough: a lean toward the camera looks vertical.
+8. **Spread:** the angle between two poses is
+   `acos(cos(lean1) cos(lean2) + sin(lean1) sin(lean2) cos(direction1 - direction2))`. It must be at least 15 degrees
+   for every pair.
+9. **Mount:** measure the tip offset again with calipers after the trial. It must still be 88 mm (within 0.5 mm), and
+   the witness line must show no shift. The exact 0.5 degree mount limit is checked in simulation.
+
+The robot's joint log gives the same lean and direction through forward kinematics, as a cross-check.
+
+## Results (November 12, 2026)
+
+Measured on one L40S shared with other simulations, with the commands above (one episode each).
+
+| Run | Score | Credited poses | Simulation time | Wall time |
+|---|---|---|---|---|
+| Scripted demo | 1.0 | 4 (at 14.4, 29.4, 46.0 and 73.4 s) | 73.4 s | 554 s |
+| Hover 6 mm above the contact (`-P mode=hover`) | 0.0 | 0 | 120 s (the limit) | 934 s |
+| One pose only (`-P mode=onepose`) | 0.25 | 1 | 19.3 s | 134 s |
+| Dream-1 | 0.0 | 0 | 120 s (the limit) | 829 s |
+
+- **The demo reads no simulator state.** It knows the tool pose only from the robot's own joint angles (forward
+  kinematics; the tool is bolted at the stock tool point) and the reference position given in the setup. It computes
+  the tip from the joint angles and treats the tip within 0.04 mm of the contact's known height as touching; it
+  commands at most 3 mm past first touch, and the contact stops the tip. Peak contact force: 2.8 N.
+- The smallest angle between two credited tool axes was 23.8 degrees.
+- Every credited second was re-checked from the logged samples: contact force, tip position, stillness, lean,
+  mount and axis spread all within the limits above.
+- Runtime per trial: about 75 s of simulated time for the demo, 120 s for a full 2,400-step run.
+- Seeds: one fixed layout; the seed changes nothing.

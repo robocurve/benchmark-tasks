@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tool-tip-calibration"
+version = "0.2.0"
+description = "Touch one reference point from four tool orientations"
+requires-python = ">=3.11"
+dependencies = ["numpy", "yam-arena"]
+
+[project.entry-points."inspect_robots.embodiments"]
+yam_tool_calibration = "calibration_tool.embodiment:CalibrationEmbodiment"
+
+[project.entry-points."inspect_robots.policies"]
+tool_calibration_scripted = "calibration_tool.policy:CalibrationPolicy"
+
+[tool.setuptools.packages.find]
+include = ["calibration_tool*"]
+
+[tool.setuptools.package-data]
+calibration_tool = ["THIRD_PARTY_NOTICES.txt"]
