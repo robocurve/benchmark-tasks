@@ -10,7 +10,8 @@ For each syringe, nearest the arms first:
 3. It turns its wrist 203 degrees, anticlockwise seen from the needle's tip: the cap is keyed to the
    hub, so the needle unscrews from the Luer-lock collar. It then lets go, winds its wrist back 110 degrees, takes the
    cap again and turns it 110 degrees more, since the cap slips a little in the fingers.
-4. It draws the needle 2 cm straight off the collar, still capped, lets go and backs away.
+4. It draws the needle 2 cm straight off the collar, still capped, carries it over the sharps tray beyond the tips,
+   lowers it and lets it drop in.
 
 ``--mode pull`` is a control: the right hand pulls the first cap straight off without turning it. ``--mode onehand``
 is another: the same turn with the left hand kept away, so nothing holds the syringe.
@@ -39,6 +40,8 @@ HOLD_OPEN, HOLD_GRIP = 0.025, 0.002   # finger gap around the 10.5 mm barrel / c
 OPEN, GRIP = 0.030, 0.002          # finger gap around the 8 mm cap / commanded on it
 TWIST = math.pi + 0.40             # 203 degrees: half a turn and some, for the cap slipping a little in the fingers
 PULL = 0.020                       # how far the needle is drawn off
+DROP_Y = -0.065                    # the hand over the sharps tray (the needle's middle over the tray's middle) ...
+DROP_Z = 0.075                     # ... this high above the table when it lets go
 REGRIP = math.radians(110.0)       # the second turn
 
 
@@ -220,8 +223,11 @@ def one(T, left, right, i: int, mode: str):
     q[5] += sign * REGRIP
     yield from chain(right.move_joints(q, 1.2), wait(0.2))
     yield from right.move(right.pos + [0.0, -PULL, 0.0], 0.8)              # draw it off the collar
-    yield from chain(right.set_grip(1.0, 0.4), wait(0.3))                # let go: fingers fully open
-    yield from right.move(right.pos + [0.0, -0.08, 0.0], 1.0)              # well clear of the needle before moving on
+    over = np.array([right.pos[0], DROP_Y, T.TOP + DROP_Z])
+    yield from right.move(np.array([right.pos[0], DROP_Y, right.pos[2]]), 1.2)   # carry it over the sharps tray
+    yield from right.move(over, 0.6)
+    yield from chain(right.set_grip(1.0, 0.4), wait(0.4))                # let it go into the tray
+    yield from right.move(right.pos + [0.0, 0.0, 0.03], 0.6)               # up, clear of the needle
     q = right.q.copy()
     q[5] -= sign * TWIST
     yield from right.move_joints(q, 1.2)                                  # turn the wrist back for the next one
@@ -313,7 +319,7 @@ def run(task_path: str, out_dir: str, max_steps: int = 2400, record: bool = True
                           "want_cm": {h.name: [round(100 * float(v), 2) for v in h.pos] for h in (left, right)}})
         if steps % 40 == 0 and trace:
             t = trace[-1]
-            brief = {n: (v["unscrewed_deg"], v["lift_mm"], v["cap_mm"], v["moved_cm"]) for n, v in t["syringes"].items()}
+            brief = {n: (v["unscrewed_deg"], v["lift_mm"], v["cap_mm"], v["moved_cm"], int(v["off"]), int(v["in_tray"])) for n, v in t["syringes"].items()}
             print(f"step {steps} score {t['score']} {brief}", flush=True)
         if res.terminated:
             success = res.termination_reason == "success"

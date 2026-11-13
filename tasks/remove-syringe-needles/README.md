@@ -1,9 +1,10 @@
 # Take the capped needles off three Luer-lock syringes
 
 Three filled 3 mL Luer-lock syringes lie side by side on a stand, each with a capped 21 G x 1 in needle pointing to
-the right. The robot has to take the needles off.
+the right, and a yellow sharps tray lies beyond the needles' tips. The robot has to take the needles off and put them,
+still capped, in the tray.
 
-**Instruction:** "Take the needles off the three syringes on the stand."
+**Instruction:** "Take the needles off the three syringes on the stand and put them in the sharps tray."
 
 A Luer-lock needle is screwed onto the syringe's collar. It comes off only after it has been turned half a turn
 anticlockwise (seen from its tip), and the way to turn it is by its cap, which is keyed to the hub by ribs. The cap
@@ -55,8 +56,8 @@ to keep a needle capped (or in a safety device) whenever it is not in use.
 
 | File | What it is |
 |---|---|
-| `task.py` | The task file: scene, the Luer lock and cap fit, scoring, the instruction |
-| `syringekit.py` | Builds each syringe as an articulation: syringe, needle on a turn joint and a lift joint, cap on a slide joint with a spring for its fit; fixed stand parts with their own friction |
+| `task.py` | The task file: scene, the Luer lock and cap fit, the needle coming free, the sharps tray, scoring, the instruction |
+| `syringekit.py` | Builds each syringe as an articulation: syringe, needle on a turn joint and a lift joint, cap on a slide joint with a spring for its fit; the loose capped needles; fixed stand and tray parts with their own friction |
 | `demo.py` | The scripted demo, and two control runs (pull without turning, turn without holding) |
 | `test_scoring.py` | Offline tests of the scoring rule (no simulator) |
 | `task.json` | The submission's details |
@@ -71,7 +72,7 @@ needed). `test_scoring.py` needs only Python with numpy, pytest and the `yam_are
 ```bash
 inspect-robots run --embodiment yam_arena --policy dream \
   -E task=task.py -E object_jitter=0 -E control_hz=20 -E cam_width=320 -E cam_height=176 \
-  --instruction "Take the needles off the three syringes on the stand." \
+  --instruction "Take the needles off the three syringes on the stand and put them in the sharps tray." \
   --scorer task_score --max-steps 2400
 ```
 
@@ -93,7 +94,8 @@ For each syringe, nearest the arms first:
 3. It turns its wrist 203 degrees, anticlockwise seen from the needle's tip. The cap is keyed to the hub, so the
    needle unscrews. It then lets go, winds its wrist back 110 degrees, takes the cap again and turns it 110 degrees
    more, since the cap slips a little in the fingers.
-4. It draws the needle 2 cm straight off the collar, still capped, lets go and backs away.
+4. It draws the needle 2 cm straight off the collar, still capped, carries it over the sharps tray, lowers it and lets
+   it drop in.
 
 The script is open loop: every pose comes from the layout constants in `task.py`, and object states are read only for
 the result file.
@@ -105,23 +107,27 @@ Tools: the trial video and a ruler.
 - **0 for the whole trial** if at any time any cap slides 8 mm or more along its needle, off the hub, leaving the
   needle bare.
 - Otherwise each syringe scores:
-  - 1 when its needle is off: unscrewed half a turn and drawn 1 cm clear of the collar, still capped (held or let go);
-  - 0.5 when it is unscrewed but still on the collar;
+  - 1 when its needle is off (unscrewed half a turn and drawn 1 cm clear of the collar) and lies, still capped, in
+    the sharps tray: its middle over the tray's floor and inside its walls, still (moving under 1 cm/s), and let go
+    (both grippers more than 4 cm from it);
+  - 0.5 when it is unscrewed but not in the tray (still on the collar, or off and somewhere else);
   - 0 if neither, or if the syringe was knocked more than 3 cm from its place.
 - Score = the mean over the three syringes, read at the end of the run: 1.0 for three needles off, 0.67 for two,
   0.33 for one.
 
 In code: `_watch()` (what happened during the trial) and `score()` in `task.py`. "Unscrewed" counts the needle's turn
-relative to its syringe; turning it back the other way screws it back on.
+relative to its syringe; turning it back the other way screws it back on. Once a needle is drawn 1 cm clear of the
+collar it is a free body: the simulator puts a separate loose capped needle in its place, at the same pose and in
+the same grip, and hides the syringe's own needle inside the barrel (it is part of the syringe's articulation).
 
 ## Verification
 
 | Run | Score | Notes |
 |---|---|---|
-| Scripted demo, layout A | 1.0 | All three needles off and capped at step 1,065 (53 s) |
-| Scripted demo, layout B | 1.0 | All three needles off and capped at step 1,064 |
-| Dream-1, 2,400 steps | 0.0 | The right gripper hovered by the caps and the left by the stand; no needle came off |
-| `pytest test_scoring.py` | 7 passed | Nothing done, all off, one off, unscrewed only, a bared needle, a knocked syringe, constants |
+| Scripted demo, layout A | 1.0 | All three needles off and lying capped in the tray at step 1,177 (59 s); each syringe within 2 mm of its place |
+| Scripted demo, layout B | 1.0 | Same script; step 1,179 |
+| Dream-1, 2,400 steps | 0.0 | The right gripper reached over the tray toward the caps several times; the left arm stayed back; no needle came off |
+| `pytest test_scoring.py` | 9 passed | Nothing done, all in the tray, one in the tray, off but not in the tray, unscrewed only, a bared needle, a knocked syringe, the tray, constants |
 
 From development runs with earlier versions of the demo:
 
@@ -140,8 +146,9 @@ About 3.5 minutes per demo run and 8 minutes per Dream-1 run on one L40S, includ
   needle. The syringe's plunger is part of the syringe body.
 - The Luer lock's thread is modelled as a turn joint with drag (0.008 N m s/rad) that releases the needle after half
   a turn. The needle does not travel along the axis as it unscrews.
-- Once off, a needle stays on a 2.5 cm rail along its syringe's axis instead of falling free. Taking it away to a
-  sharps container is not part of the task.
+- Once a needle has been drawn 1 cm clear of the collar it is a loose rigid body (needle, hub and ribbed cap as one
+  part, 1.4 g), free to be carried, dropped or knocked anywhere. Before that, an unscrewed needle slides only along
+  the collar's taper.
 - The cap's friction fit is a 4 N spring that lets go after the cap has slid 2 mm.
 - Grip force is not judged.
 
@@ -149,7 +156,8 @@ About 3.5 minutes per demo run and 8 minutes per Dream-1 run on one L40S, includ
 
 Three 3 mL Luer-lock training syringes with capped 21 G needles (blunt training needles for safety), filled with 1.5 mL
 of tinted water, needles screwed on hand-tight. A stand of two cradles with 12 mm notches, 9.9 cm tall, 8 mm deep, with
-a 32 mm gap between them along the barrels. Check after each trial with a ruler whether any cap has moved 8 mm off its
+a 32 mm gap between them along the barrels. A yellow plastic sharps tray (18 x 10.5 cm inside, 2.5 cm deep) on the
+table beyond the needles' tips. Check after each trial with a ruler whether any cap has moved 8 mm off its
 hub.
 
 ## Third-party assets

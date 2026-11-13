@@ -37,8 +37,9 @@ from dataclasses import dataclass, field
 import numpy as np
 from yam_arena.task_file import Box, ObjectState
 
-__all__ = ["Fixed", "JOINTS", "Syringe", "SyringeState", "env", "finger_points", "install", "on_reset", "on_step",
-           "write_joint"]
+__all__ = ["Fixed", "FreeNeedle", "JOINTS", "Syringe", "SyringeState", "body_pose", "body_speed", "env",
+           "finger_points", "hold_root", "install", "needle_pose", "on_reset", "on_step", "show_needle", "write_joint",
+           "write_pose"]
 
 JOINTS = ("lift", "spin", "cap")
 
@@ -103,6 +104,18 @@ class SyringeState(ObjectState):
         return _rotation(self.quat_xyzw)
 
 
+@dataclass(frozen=True)
+class FreeNeedle(Box):
+    """A capped needle on its own: the hub, the needle and its cap as one loose body, laid out as they are on a
+    syringe (its frame is the syringe's needle body frame: the axis along +z, the origin at the hub's base). The task
+    file swaps one in for a syringe's needle once that needle has come off its collar."""
+
+    quat: tuple = (0.0, 0.0, 0.0, 1.0)
+    hub_color: tuple = (0.20, 0.62, 0.30)
+    cap_friction: tuple = (0.9, 0.8)
+    meta: dict = field(default_factory=dict, compare=False, hash=False)
+
+
 def _rotation(q) -> np.ndarray:
     x, y, z, w = (float(v) for v in q)
     return np.array([[1 - 2 * (y * y + z * z), 2 * (x * y - w * z), 2 * (x * z + w * y)],
@@ -120,6 +133,8 @@ def _material(sim_utils, sf, df, combine):
 # -- spawning ---------------------------------------------------------------------------------------------------------
 
 _SYRINGES: dict[str, Syringe] = {}
+_PRIMS: dict[str, str] = {}
+_FREE: dict[str, FreeNeedle] = {}
 
 
 def _fixed_object(scene, spec: Fixed):
@@ -144,6 +159,7 @@ def _spawn_syringe(prim_path: str, cfg, translation=None, orientation=None, **kw
     from yam_arena.station import linear_rgb
 
     spec: Syringe = _SYRINGES[cfg.syringe_name]
+    _PRIMS[cfg.syringe_name] = prim_path
     stage = get_current_stage()
     double = UsdGeom.XformOp.PrecisionDouble
     root = UsdGeom.Xform.Define(stage, prim_path)
@@ -284,6 +300,99 @@ def _spawn_syringe(prim_path: str, cfg, translation=None, orientation=None, **kw
     return root.GetPrim()
 
 
+def _spawn_free_needle(prim_path: str, cfg, translation=None, orientation=None, **kwargs):
+    """A loose capped needle (pxr only), shaped like a syringe's needle and cap at rest."""
+    import isaaclab.sim as sim_utils
+    from isaaclab.sim.utils import bind_physics_material, bind_visual_material
+    from isaaclab.sim.utils.stage import get_current_stage
+    from pxr import Gf, PhysxSchema, UsdGeom, UsdPhysics
+
+    from yam_arena.station import linear_rgb
+
+    spec: FreeNeedle = _FREE[cfg.needle_name]
+    stage = get_current_stage()
+    double = UsdGeom.XformOp.PrecisionDouble
+    root = UsdGeom.Xform.Define(stage, prim_path)
+    root.AddTranslateOp(precision=double).Set(Gf.Vec3d(*(translation or (0.0, 0.0, 0.0))))
+    x, y, z, w = orientation if orientation is not None else (0.0, 0.0, 0.0, 1.0)
+    root.AddOrientOp(precision=double).Set(Gf.Quatd(w, x, y, z))
+    prim = root.GetPrim()
+    UsdPhysics.RigidBodyAPI.Apply(prim)
+    UsdPhysics.MassAPI.Apply(prim).CreateMassAttr(float(spec.mass))
+    rb = PhysxSchema.PhysxRigidBodyAPI.Apply(prim)
+    rb.CreateMaxDepenetrationVelocityAttr(0.5)
+    rb.CreateAngularDampingAttr(0.5)
+    mat = f"{prim_path}/Looks/phys_cap"
+    pm = _material(sim_utils, *spec.cap_friction, "max")
+    pm.func(mat, pm)
+    looks = {}
+
+    def look(color, opacity=1.0, rough=0.4, metal=0.0):
+        key = (color, opacity, rough, metal)
+        if key not in looks:
+            path = f"{prim_path}/Looks/v{len(looks)}"
+            vis = sim_utils.PreviewSurfaceCfg(diffuse_color=linear_rgb(color), roughness=rough, metallic=metal,
+                                              opacity=opacity)
+            vis.func(path, vis)
+            looks[key] = path
+        return looks[key]
+
+    def cyl(name, r, z0, z1, lk, collide=False):
+        c = UsdGeom.Cylinder.Define(stage, f"{prim_path}/{name}")
+        c.CreateAxisAttr("Z")
+        c.CreateRadiusAttr(r)
+        c.CreateHeightAttr(z1 - z0)
+        c.AddTranslateOp().Set(Gf.Vec3d(0.0, 0.0, (z0 + z1) / 2 - LIFT_PIVOT))
+        bind_visual_material(str(c.GetPath()), lk, stage=stage)
+        if collide:
+            cap = UsdGeom.Capsule.Define(stage, f"{prim_path}/{name}_col")
+            cap.CreateAxisAttr("Z")
+            cap.CreateRadiusAttr(r)
+            cap.CreateHeightAttr(max(0.0005, (z1 - z0) - 2 * r))
+            cap.AddTranslateOp().Set(Gf.Vec3d(0.0, 0.0, (z0 + z1) / 2 - LIFT_PIVOT))
+            UsdGeom.Imageable(cap.GetPrim()).MakeInvisible()
+            UsdPhysics.CollisionAPI.Apply(cap.GetPrim())
+            cp = PhysxSchema.PhysxCollisionAPI.Apply(cap.GetPrim())
+            cp.CreateContactOffsetAttr(0.001)
+            cp.CreateRestOffsetAttr(0.0)
+            bind_physics_material(str(cap.GetPath()), mat, stage=stage)
+
+    cyl("hub", HUB_R, *HUB_Z, look(spec.hub_color, 0.9), collide=True)
+    cyl("sheath", CAP_R, *CAP_Z, look(spec.hub_color, 0.75), collide=True)
+    for i in range(4):                                                     # the cap's grip ribs, drawn
+        a = i * math.pi / 2
+        b = UsdGeom.Cube.Define(stage, f"{prim_path}/rib_{i}")
+        b.CreateSizeAttr(1.0)
+        b.AddTranslateOp().Set(Gf.Vec3d(CAP_R * math.cos(a), CAP_R * math.sin(a), CAP_Z[0] + 0.009 - LIFT_PIVOT))
+        b.AddScaleOp().Set(Gf.Vec3f(0.0012, 0.0012, 0.014))
+        bind_visual_material(str(b.GetPath()), look(spec.hub_color), stage=stage)
+        UsdPhysics.CollisionAPI.Apply(b.GetPrim())                         # the ribs stop a dropped cap rolling
+        cp = PhysxSchema.PhysxCollisionAPI.Apply(b.GetPrim())
+        cp.CreateContactOffsetAttr(0.001)
+        cp.CreateRestOffsetAttr(0.0)
+        bind_physics_material(str(b.GetPath()), mat, stage=stage)
+    return prim
+
+
+def _free_needle_object(spec: FreeNeedle):
+    from isaaclab.sim.spawners.spawner_cfg import RigidObjectSpawnerCfg
+    from isaaclab.sim.utils import clone
+    from isaaclab.utils import configclass
+    from isaaclab_arena.assets.object import Object
+    from isaaclab_arena.assets.object_type import ObjectType
+    from isaaclab_arena.utils.pose import Pose
+
+    @configclass
+    class FreeNeedleSpawnerCfg(RigidObjectSpawnerCfg):
+        func: object = clone(_spawn_free_needle)
+        needle_name: str = ""
+
+    _FREE[spec.name] = spec
+    return Object(name=spec.name, object_type=ObjectType.RIGID, spawner_cfg=FreeNeedleSpawnerCfg(needle_name=spec.name),
+                  initial_pose=Pose(position_xyz=tuple(float(v) for v in spec.pos),
+                                    rotation_xyzw=tuple(float(v) for v in spec.quat)))
+
+
 def _syringe_object(spec: Syringe):
     from isaaclab.actuators import ImplicitActuatorCfg
     from isaaclab.assets import ArticulationCfg
@@ -367,6 +476,81 @@ def write_joint(environment, name: str, joint: str, *, limits=None, stiffness=No
         call("write_joint_state_to_sim", position=pos, velocity=torch.zeros_like(pos), joint_ids=ids, env_ids=[0])
 
 
+def needle_pose(environment, name: str):
+    """The pose of syringe ``name``'s needle body (relative to the env origin): position and quaternion (xyzw)."""
+    base = environment.unwrapped
+    asset = base.scene[name]
+    origin = _np(base.scene.env_origins[0])
+    pose = _np(asset.data.body_link_pose_w)[0][list(asset.body_names).index("needle")]
+    return pose[:3] - origin, pose[3:7]
+
+
+def body_pose(environment, name: str):
+    """A loose object's root pose: position (relative to the env origin) and quaternion (xyzw)."""
+    base = environment.unwrapped
+    origin = _np(base.scene.env_origins[0])
+    pose = _np(base.scene[name].data.root_link_pose_w)[0]
+    return pose[:3] - origin, pose[3:7]
+
+
+def body_speed(environment, name: str) -> float:
+    vel = _np(environment.unwrapped.scene[name].data.root_vel_w)[0]
+    return float(np.linalg.norm(vel[:3]))
+
+
+def write_pose(environment, name: str, pos, quat_xyzw) -> None:
+    """Put a loose object at ``pos`` (relative to the env origin), ``quat_xyzw``, at rest."""
+    import torch
+
+    base = environment.unwrapped
+    asset = base.scene[name]
+    origin = _np(base.scene.env_origins[0])
+    dev = _t(asset.data.root_link_pose_w).device
+    pose = torch.tensor([[*(np.asarray(pos, float) + origin), *quat_xyzw]], dtype=torch.float32, device=dev)
+    vel = torch.zeros((1, 6), dtype=torch.float32, device=dev)
+    for stem, kw in (("write_root_pose_to_sim", {"root_pose": pose}),
+                     ("write_root_velocity_to_sim", {"root_velocity": vel})):
+        fn = getattr(asset, f"{stem}_index", None)
+        if fn is not None:
+            fn(env_ids=[0], **kw)
+        else:
+            getattr(asset, stem)(*kw.values())
+
+
+def hold_root(environment, name: str):
+    """Read syringe ``name``'s root pose; returns a function that writes it back (at rest). Moving a joint by hand
+    shifts an articulation's root to keep its centre of mass; this undoes that."""
+    import torch
+
+    asset = environment.unwrapped.scene[name]
+    pose = _t(asset.data.root_link_pose_w).clone()
+
+    def restore() -> None:
+        vel = torch.zeros((1, 6), dtype=pose.dtype, device=pose.device)
+        for stem, kw in (("write_root_link_pose_to_sim", {"root_pose": pose}),
+                         ("write_root_velocity_to_sim", {"root_velocity": vel})):
+            fn = getattr(asset, f"{stem}_index", None)
+            if fn is not None:
+                fn(env_ids=[0], **kw)
+            else:
+                getattr(asset, stem)(*kw.values())
+
+    return restore
+
+
+def show_needle(name: str, visible: bool) -> None:
+    """Show or hide syringe ``name``'s own needle and cap (hidden once a loose needle has taken their place)."""
+    from isaaclab.sim.utils.stage import get_current_stage
+    from pxr import UsdGeom
+
+    stage = get_current_stage()
+    for part in ("needle", "cap"):
+        prim = stage.GetPrimAtPath(f"{_PRIMS[name]}/{part}")
+        if prim.IsValid():
+            img = UsdGeom.Imageable(prim)
+            img.MakeVisible() if visible else img.MakeInvisible()
+
+
 def finger_points(environment) -> list:
     """The grasp point of each gripper (world, relative to the env origin)."""
     from yam_arena.constants import TCP_OFFSET
@@ -411,6 +595,8 @@ def _patch_scene(scene) -> None:
         if isinstance(spec, Syringe):
             _SYRINGES[spec.name] = spec
             return _syringe_object(spec)
+        if isinstance(spec, FreeNeedle):
+            return _free_needle_object(spec)
         if isinstance(spec, Fixed):
             return _fixed_object(scene, spec)
         return stock_object(spec)
