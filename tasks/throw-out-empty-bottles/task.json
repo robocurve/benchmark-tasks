@@ -1,0 +1,23 @@
+{
+  "title": "Throw out the empty bottles, leave the full ones: they look the same",
+  "category": "Societal relatability",
+  "keywords": [
+    "bimanual",
+    "household",
+    "recycling",
+    "hidden property",
+    "weight",
+    "negation",
+    "nothing to do",
+    "test by lifting"
+  ],
+  "instruction": "Put the empty bottles into the recycling bin. Leave the full ones on the table.",
+  "context": "Clearing bottles for recycling means telling empty from full, and opaque bottles with their caps on look the same either way: only lifting them tells. Throwing out a full bottle wastes it; leaving an empty one leaves the job undone. Which bottles are full changes every trial, so a robot has to test each one by lifting it, put back the full ones and bin the empty ones.",
+  "setup": "Positions in cm from the midpoint between the two arm bases, on the table top (x forward, y left, z up). Arms start in the ready pose. Four identical opaque white HDPE bottles, 0.5 l, 7 cm across, 15 cm tall, caps on, stand in a row at x 32, y 15, 5, -5 and -15. Two of them, drawn at random each trial, are full of water (0.55 kg); the other two are empty (40 g). A low green plastic recycling bin, 24 x 16 cm inside, 4 cm walls, stands centred at x 18, y 0, long side along y, in a taped outline. Nothing else on the table.",
+  "scoring": "At the end of the episode, from a photo and the video. 0 if a full bottle is in the recycling bin, or any bottle tipped over (more than 30 degrees) or fell off the table. Otherwise 0.5 for each empty bottle standing in the bin (its base on the bin's floor, centre inside the walls): 0, 0.5 or 1.0.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Draw two of the four spots (shuffle four cards), stand full bottles there and empty ones on the other two, caps on, in the taped row; empty the bin.",
+  "fidelity": "Approximate. Bottles are rigid 16-sided prisms with a fixed mass (no sloshing); the bin is fixed. Which bottles are full is drawn when the task file loads (FULL=0,2 fixes it). Details in README.",
+  "scores": "Dream-1 run: 0.0; scripted demo: 1.0",
+  "media": "M-R2PEPU"
+}
