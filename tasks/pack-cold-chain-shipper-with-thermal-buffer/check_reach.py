@@ -14,7 +14,7 @@ elif os.path.exists(os.path.expanduser("~/Projects/Robocurve/work/refs/yam-isaac
     sys.path.insert(0, os.path.expanduser("~/Projects/Robocurve/work/refs/yam-isaac-lab-arena"))
 
 POS_TOL_MM, ROT_TOL_DEG, LIMIT_MARGIN_RAD = 3.0, 3.0, 0.05
-MODES = ("demo", "no_buffer_violation", "brick_only", "buffer_without_carton", "settle")
+MODES = ("demo", "no_buffer_violation", "brick_only", "buffer_without_carton", "lid_unlatched", "no_lid", "settle")
 
 
 def run(plan_for_arm, base, dt=0.05):

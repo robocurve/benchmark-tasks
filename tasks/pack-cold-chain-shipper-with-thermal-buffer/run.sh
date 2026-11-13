@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 # Runs one trial of the pack-cold-chain-shipper-with-thermal-buffer task in the simulator.
 #
-#   ./run.sh demo                   scripted demo (full pack)
+#   ./run.sh demo                   scripted demo (full pack, then the lid pressed shut on both latches)
 #   ./run.sh no_buffer_violation    ablation: gel brick without the buffer layer
 #   ./run.sh brick_only             ablation: only the gel brick is packed
 #   ./run.sh buffer_without_carton  ablation: buffer placed without the carton
+#   ./run.sh lid_unlatched          ablation: all layers, lid laid on the latch heads but not pressed, predicted 0.75
+#   ./run.sh no_lid                 ablation: all layers packed, lid left on its plate, predicted 0.75
 #   ./run.sh settle                 parts rest, arms hold at home 8 s, predicted 0.00
 #   ./run.sh dream                  Dream-1 baseline policy, predicted 0.00
 # Set TASK_VARIANT=A|B for the other layout. Output goes to $OUT/<mode> (default ~/yam-eval).
@@ -25,9 +27,11 @@ case "$MODE" in
   no_buffer_violation) export DEMO_NO_BUFFER_VIOLATION=1; POLICY=(--policy yam_scripted); STEPS=2600 ;;
   brick_only) export DEMO_BRICK_ONLY=1; POLICY=(--policy yam_scripted); STEPS=2600 ;;
   buffer_without_carton) export DEMO_BUFFER_WITHOUT_CARTON=1; POLICY=(--policy yam_scripted); STEPS=2600 ;;
+  lid_unlatched) export DEMO_LID_UNLATCHED=1; POLICY=(--policy yam_scripted); STEPS=2600 ;;
+  no_lid) export DEMO_NO_LID=1; POLICY=(--policy yam_scripted); STEPS=2600 ;;
   settle) export DEMO_SETTLE_ONLY=1; POLICY=(--policy yam_scripted -P hold_s=8); STEPS=400 ;;
-  dream) POLICY=(--policy dream); STEPS=2500 ;;
-  *) echo "usage: $0 demo|no_buffer_violation|brick_only|buffer_without_carton|settle|dream" >&2; exit 2 ;;
+  dream) POLICY=(--policy dream); STEPS=2600 ;;
+  *) echo "usage: $0 demo|no_buffer_violation|brick_only|buffer_without_carton|lid_unlatched|no_lid|settle|dream" >&2; exit 2 ;;
 esac
 
 mkdir -p "$OUT/$MODE"

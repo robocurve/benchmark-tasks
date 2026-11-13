@@ -38,8 +38,17 @@ SEAT_BOTTOM = {
     ("demo", "carton"): g.BUFFER_TOP_SEATED_Z,
     ("no_buffer_violation", "brick"): g.CAVITY_FLOOR_Z,
     ("no_buffer_violation", "carton"): g.BRICK_TOP_SEATED_Z,
+    ("lid_unlatched", "brick"): g.CAVITY_FLOOR_Z,
+    ("lid_unlatched", "buffer"): g.BRICK_TOP_SEATED_Z,
+    ("lid_unlatched", "carton"): g.BUFFER_TOP_SEATED_Z,
+    ("no_lid", "brick"): g.CAVITY_FLOOR_Z,
+    ("no_lid", "buffer"): g.BRICK_TOP_SEATED_Z,
+    ("no_lid", "carton"): g.BUFFER_TOP_SEATED_Z,
 }
-PICK_MODES = ("demo", "no_buffer_violation", "brick_only", "buffer_without_carton")
+PICK_MODES = ("demo", "no_buffer_violation", "brick_only", "buffer_without_carton", "lid_unlatched", "no_lid")
+PLACE_MODES = ("demo", "no_buffer_violation", "lid_unlatched", "no_lid")
+LID_SIZE = (g.LID_WIDTH_X, g.LID_LENGTH_Y, g.LID_THICK_Z)
+TAB_SIZE = (g.LID_TAB_X, g.LID_TAB_Y, g.LID_TAB_Z)
 
 
 def _pinched_width(name: str, yaw: float) -> float:
@@ -78,6 +87,19 @@ class TestGrasp(unittest.TestCase):
                     # pad tips are 13 mm below the TCP and must lie within the part's side height
                     tip = tcp_z - yc.PAD_TIP_PAST_TCP
                     bottom = g.PAD_SURFACE_Z + g.SPAWN_GAP
+                    if name == "lid":
+                        # the lid is pinched by its grip tab: pad tips 5 mm above the slab's top face, 17 mm up the tab
+                        self.assertAlmostEqual(tip, bottom + g.LID_THICK_Z + g.LID_PAD_GAP, places=6)
+                        self.assertGreaterEqual(tip - (bottom + g.LID_THICK_Z), 0.004, "pad tips must clear the lid slab by 4 mm")
+                        self.assertGreaterEqual(bottom + g.LID_THICK_Z + g.LID_TAB_Z - tip, g.MIN_ENGAGE)
+                        width = g.LID_TAB_X
+                        self.assertLessEqual(width, 0.080 + 1e-9)
+                        self.assertGreaterEqual((g.GRIPPER_MAX_OPEN - width) / 2.0, 0.007 - 1e-9)
+                        self.assertLess(-2.0 * w.finger, width)
+                        # fingers close along world X, across the tab's 40 mm
+                        self.assertAlmostEqual(abs(grip_rotation(w.yaw)[0, 0]), 1.0, places=4)
+                        checked += 1
+                        continue
                     height = SIZES[name][2]
                     self.assertGreater(tip, bottom, f"{variant}/{mode}/{w.label}: pad tip below the part bottom")
                     self.assertLess(tip, bottom + height, f"{variant}/{mode}/{w.label}: pad tip above the part top")
@@ -91,17 +113,29 @@ class TestGrasp(unittest.TestCase):
                     # the commanded pad gap squeezes the part
                     self.assertLess(-2.0 * w.finger, width)
                     checked += 1
-        self.assertEqual(checked, 2 * (3 + 2 + 1 + 2))  # per variant: demo 3, no_buffer 2, brick_only 1, buffer_without_carton 2
+        # per variant: demo 4, no_buffer 2, brick_only 1, buffer_without_carton 2, lid_unlatched 4, no_lid 3
+        self.assertEqual(checked, 2 * (4 + 2 + 1 + 2 + 4 + 3))
 
     def test_every_place_waypoint_keeps_the_pinch_and_frees_the_fingers(self):
         checked = 0
-        for variant, mode in itertools.product(("A", "B"), ("demo", "no_buffer_violation")):
+        for variant, mode in itertools.product(("A", "B"), PLACE_MODES):
             plans = demo_plan.plans(mode, variant=variant)
             for wps in plans.values():
                 for w in wps:
                     if not w.label.startswith("release_"):
                         continue
                     name = demo_plan.part_of(w.label)
+                    if name == "lid":
+                        # released with the pad tips 5 mm over the lid's top face, wherever the lid rests
+                        rest_bottom = g.LID_SEAT_BOTTOM_Z if mode == "demo" else g.LID_ON_LATCH_BOTTOM_Z
+                        tip = w.pos[2] - yc.PAD_TIP_PAST_TCP
+                        self.assertAlmostEqual(tip, rest_bottom + g.LID_THICK_Z + g.LID_PAD_GAP, places=4)
+                        self.assertGreaterEqual(rest_bottom + g.LID_THICK_Z + g.LID_TAB_Z - tip, g.MIN_ENGAGE)
+                        # opening on release leaves >= 7 mm of daylight per side around the 40 mm tab
+                        self.assertGreaterEqual((-2.0 * w.finger - g.LID_TAB_X) / 2.0, 0.007 - 1e-9)
+                        self.assertLessEqual(-2.0 * w.finger, g.GRIPPER_MAX_OPEN + 1e-9)
+                        checked += 1
+                        continue
                     seat = SEAT_BOTTOM[(mode, name)]
                     height = SIZES[name][2]
                     # released 2 mm above its seat, pad tips inside the part's side height and clear of the layer below
@@ -115,7 +149,8 @@ class TestGrasp(unittest.TestCase):
                     self.assertGreaterEqual((-2.0 * w.finger - width) / 2.0, 0.007 - 1e-9)
                     self.assertLessEqual(-2.0 * w.finger, g.GRIPPER_MAX_OPEN + 1e-9)
                     checked += 1
-        self.assertEqual(checked, 2 * (3 + 2))
+        # per variant: demo 4, no_buffer 2, lid_unlatched 4, no_lid 3
+        self.assertEqual(checked, 2 * (4 + 2 + 4 + 3))
 
     def test_place_is_over_the_cavity_centre_with_free_space_each_side(self):
         for name, (sx, sy, _) in SIZES.items():
@@ -148,17 +183,32 @@ class TestGrasp(unittest.TestCase):
         # a carried part rides with its bottom at TRANSIT_Z - GRIP_DZ; it must clear the shipper rim by 15 mm or more
         self.assertGreaterEqual(g.TRANSIT_Z - g.GRIP_DZ - g.CAVITY_RIM_Z, 0.015)
 
+    def test_carried_part_clears_the_latch_heads(self):
+        # the latch heads stand 23.5 mm above the rim; a carried layer must clear them by 15 mm or more (a loaded arm
+        # tracks about 10 mm below a commanded height), and so must the empty fingers lifting away after a release
+        self.assertGreaterEqual(g.TRANSIT_Z - g.GRIP_DZ - g.LATCH_HEAD_TOP_Z, 0.015)
+        self.assertGreaterEqual(g.RETURN_Z - g.PAD_TIP_PAST_TCP - g.LATCH_HEAD_TOP_Z, 0.015)
+
     def test_spawned_parts_overlap_nothing(self):
         for variant in ("A", "B"):
             brick, buffer_pad, carton = task._build_objects_for_variant(variant)
-            objs = [task.SHIPPER_BASE, task.PAD_LEFT, task.PAD_RIGHT, task.PAD_FRONT, brick, buffer_pad, carton]
+            lid, pad_lid = task._build_lid(variant), task._build_lid_pad(variant)
+            objs = [task.SHIPPER_BASE, task.PAD_LEFT, task.PAD_RIGHT, task.PAD_FRONT, pad_lid, brick, buffer_pad, carton, lid]
             shapes = []
             for o in objs:
                 for centre, size, _col in o.boxes:
                     c = np.asarray(o.pos) + np.asarray(centre)
                     shapes.append((o.name, c - np.asarray(size) / 2.0, c + np.asarray(size) / 2.0))
+                for s_ in getattr(o, "sliders", ()):
+                    for centre, size, _col in s_.boxes:
+                        c = np.asarray(o.pos) + np.asarray(centre)
+                        shapes.append((o.name + "/" + s_.name, c - np.asarray(size) / 2.0, c + np.asarray(size) / 2.0))
+                    for centre, radius, height, _col, axis in s_.cylinders:
+                        half = np.array([height / 2.0, radius, radius])  # a rod along X
+                        c = np.asarray(o.pos) + np.asarray(centre)
+                        shapes.append((o.name + "/" + s_.name, c - half, c + half))
             for (na, lo_a, hi_a), (nb, lo_b, hi_b) in itertools.combinations(shapes, 2):
-                if na == nb:
+                if na.split("/")[0] == nb.split("/")[0]:
                     continue
                 overlap = np.all(np.minimum(hi_a, hi_b) - np.maximum(lo_a, lo_b) > 1e-9)
                 self.assertFalse(overlap, f"variant {variant}: {na} overlaps {nb} at spawn")
@@ -179,12 +229,56 @@ class TestGrasp(unittest.TestCase):
         b = task._build_objects_for_variant("B")
         lay_a, lay_b = demo_plan.layout("A"), demo_plan.layout("B")
         self.assertNotEqual(lay_a["staging"]["brick"], lay_b["staging"]["brick"])
+        self.assertNotEqual(lay_a["staging"]["lid"], lay_b["staging"]["lid"])  # the lid is on the other side
+        self.assertEqual(lay_a["staging"]["lid"][1], -lay_b["staging"]["lid"][1])
         self.assertNotEqual(a[2].boxes, b[2].boxes)  # carton label colour and icon
         for name, obj_a, obj_b in zip(demo_plan.PART_NAMES, a, b):
             self.assertAlmostEqual(obj_a.pos[0], lay_a["staging"][name][0], places=6)
             self.assertAlmostEqual(obj_a.pos[1], lay_a["staging"][name][1], places=6)
             self.assertAlmostEqual(obj_b.pos[0], lay_b["staging"][name][0], places=6)
             self.assertAlmostEqual(obj_b.pos[1], lay_b["staging"][name][1], places=6)
+
+    def test_lid_tab_grasp_rules(self):
+        # the tab is the only thing pinched: 40 mm across (<= 80 mm), 22 mm tall, wider along Y than the 24 mm finger pad
+        self.assertAlmostEqual(g.LID_TAB_X, 0.040, places=6)
+        self.assertGreaterEqual(g.LID_TAB_Z, 0.020)
+        self.assertLessEqual(g.LID_TAB_Z, 0.025)
+        self.assertGreaterEqual(g.LID_TAB_Y, g.FINGER_WIDTH)
+        # the commanded pad gap squeezes the tab; the released gap leaves >= 7 mm per side (25 mm here)
+        self.assertLess(-2.0 * g.FINGER_GRIP_TAB, g.LID_TAB_X)
+        self.assertGreaterEqual((-2.0 * g.FINGER_RELEASE - g.LID_TAB_X) / 2.0, 0.007)
+        # pad tips ride 5 mm over the slab's top face (>= 4 mm clear) and engage 17 mm of the 22 mm tab
+        self.assertAlmostEqual(g.LID_PICK_TCP_Z - yc.PAD_TIP_PAST_TCP - g.LID_TOP_STAGED_Z, 0.005, places=6)
+        self.assertAlmostEqual(g.LID_TOP_STAGED_Z + g.LID_TAB_Z - (g.LID_PICK_TCP_Z - yc.PAD_TIP_PAST_TCP), 0.017, places=6)
+        # finger bodies (12 mm thick, centred half the pad gap + 6 mm out) stay 15 mm or more clear of the cavity-free
+        # lid slab edge along X: the tab sits mid-lid, so the outer finger face is far inside the slab's 85 mm half width
+        outer = g.LID_TAB_X / 2.0 + g.FINGER_THICK
+        self.assertLess(outer, g.LID_WIDTH_X / 2.0)
+        # staged lid and its plate clear the lateral pads by >= 4 mm and the table's far edge
+        for y_lid in (g.LID_PAD_Y_A, g.LID_PAD_Y_B):
+            lateral_edge = abs(g.PAD_LEFT_Y) + g.PAD_SIZE_Y / 2.0
+            self.assertGreaterEqual(abs(y_lid) - g.LID_PAD_SIZE_Y / 2.0 - lateral_edge, 0.004)
+            self.assertLess(abs(y_lid) + g.LID_PAD_SIZE_Y / 2.0, 0.65)
+        # the lid is carried 15 mm or more above the latch heads: lid underside = TCP - 18 mm - 8 mm
+        carried_bottom = g.LID_TRANSIT_Z - g.LID_GRIP_DZ - g.LID_THICK_Z
+        self.assertGreaterEqual(carried_bottom - g.LATCH_HEAD_TOP_Z, 0.015)
+
+    def test_lid_waypoints_follow_the_pattern(self):
+        for variant in ("A", "B"):
+            lay = demo_plan.layout(variant)
+            arm = lay["arms"]["lid"]
+            for mode in ("demo", "lid_unlatched"):
+                wps = demo_plan.plans(mode, variant=variant)[arm]
+                labels = [w.label for w in wps]
+                i = labels.index("descend_lid")
+                self.assertEqual(labels[i - 1], "pause_hover_pick_lid")
+                self.assertGreaterEqual(wps[i - 1].duration, 0.6)
+                j = labels.index("lower_lid")
+                self.assertEqual(labels[j - 1], "pause_above_shipper_lid")
+                self.assertGreaterEqual(wps[j - 1].duration, 0.6)
+                # the arm never swaps yaw: left -90 deg, right +90 deg
+                for w in wps:
+                    self.assertAlmostEqual(w.yaw, g.GRIP_YAW_LEFT if arm == "left" else g.GRIP_YAW_RIGHT)
 
 
 if __name__ == "__main__":

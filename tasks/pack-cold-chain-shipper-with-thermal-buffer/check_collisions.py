@@ -1,9 +1,10 @@
 """Offline collision, finger-body, and fixture clearance audit for pack-cold-chain-shipper-with-thermal-buffer.
 
 Every obstacle is built in WORLD coordinates (table top at z = 0.7475 m) from geometry.py:
-- static: table, shipper floor and four walls, three staging pads;
-- parts: gel brick, buffer pad, medication carton, each at its staging pad until the arm grasps it, carried
-  (box under the TCP) until the release starts, then seated in the shipper.
+- static: table, shipper floor and four walls, the two latch posts and heads (at rest), four staging pads;
+- parts: gel brick, buffer pad, medication carton and the shipper lid (slab plus grip tab), each at its staging pad
+  until the arm grasps it, carried (box under the TCP) until the release starts, then seated in the shipper (the lid
+  on the rim, or on the latch heads in the lid_unlatched mode).
 
 Two audits run for every arm and every demo label:
 1. Gripper links (URDF convex hulls) against static obstacles and against every part that is not being carried
@@ -12,7 +13,10 @@ Two audits run for every arm and every demo label:
    +/- (half the pad gap + 6 mm) from the TCP along the closing axis, against the shipper walls, pads and every
    part that is not being carried. While a part is held, or being released, the pad gap is at least the part
    width (the fingers cannot close through it).
-Carried parts are also checked against the four shipper walls.
+Carried parts are also checked against the four shipper walls and the latch posts and heads. The lid is exempt from
+both only at the labels place_lid, pause_place_lid, unload_lid and pause_unload_lid: there it rests on the rim and the
+latch heads overlap its edge by design. The press is commanded 20 mm below the seat (the soft arm gives); the offline
+audit lifts that pose to the seated height, because the lid and rim stop the pad tips.
 
 Minimum clearance for everything: 4 mm. Arm-to-arm link distance must exceed 50 mm.
 """
@@ -39,18 +43,68 @@ EYE = np.eye(3)
 WALLS = ("shipper_front", "shipper_rear", "shipper_left", "shipper_right")
 
 
+LID_EXEMPT_LABELS = ("place_lid", "pause_place_lid", "unload_lid", "pause_unload_lid")
+LID_PRESS_LABELS = ("place_lid", "pause_place_lid", "unload_lid")
+
+
 def part_sizes() -> dict[str, np.ndarray]:
-    """Part box sizes (X, Y, Z) in metres."""
+    """Part box sizes (X, Y, Z) in metres (the lid's is its slab; its grip tab is a second shape)."""
     import geometry as g
 
     return {
         "brick": np.array([g.BRICK_WIDTH_X, g.BRICK_LENGTH_Y, g.BRICK_HEIGHT_Z]),
         "buffer": np.array([g.BUFFER_WIDTH_X, g.BUFFER_LENGTH_Y, g.BUFFER_HEIGHT_Z]),
         "carton": np.array([g.CARTON_WIDTH_X, g.CARTON_LENGTH_Y, g.CARTON_HEIGHT_Z]),
+        "lid": np.array([g.LID_WIDTH_X, g.LID_LENGTH_Y, g.LID_THICK_Z]),
     }
 
 
-def static_obstacles():
+def pinch_widths() -> dict[str, float]:
+    """The width each part is pinched across (along the closing axis), in metres."""
+    import geometry as g
+
+    s = part_sizes()
+    return {"brick": s["brick"][0], "buffer": s["buffer"][0], "carton": s["carton"][0], "lid": g.LID_TAB_X}
+
+
+def bottom_below_tcp(name: str) -> float:
+    """How far a pinched part's underside is below the commanded TCP (m)."""
+    import geometry as g
+
+    return g.LID_GRIP_DZ + g.LID_THICK_Z if name == "lid" else g.GRIP_DZ
+
+
+def shapes_at(name: str, x: float, y: float, bottom: float):
+    """The boxes (centre, size) of a part whose underside centre is at (x, y, bottom)."""
+    import geometry as g
+
+    size = part_sizes()[name]
+    out = [(np.array([x, y, bottom + size[2] / 2.0]), size)]
+    if name == "lid":
+        out.append((np.array([x, y, bottom + g.LID_THICK_Z + g.LID_TAB_Z / 2.0]), np.array([g.LID_TAB_X, g.LID_TAB_Y, g.LID_TAB_Z])))
+    return out
+
+
+def latch_boxes():
+    """The two latches at rest as boxes in world coordinates: post plus the head rod's bounding box."""
+    import geometry as g
+
+    out = {}
+    for sign, tag in ((1.0, "pos"), (-1.0, "neg")):
+        top = g.LATCH_CENTRE_Z + g.LATCH_RADIUS
+        post_h = top - g.LATCH_POST_Z0
+        out[f"latch_post_{tag}"] = (
+            np.array([g.SHIPPER_X, g.SHIPPER_Y + sign * (g.LATCH_POST_Y0 + g.LATCH_POST_Y1) / 2.0, g.TABLE_Z + g.LATCH_POST_Z0 + post_h / 2.0]),
+            np.array([g.LATCH_WIDTH_X, g.LATCH_POST_Y1 - g.LATCH_POST_Y0, post_h]),
+        )
+        out[f"latch_head_{tag}"] = (
+            np.array([g.SHIPPER_X, g.SHIPPER_Y + sign * g.LATCH_CENTRE_Y, g.TABLE_Z + g.LATCH_CENTRE_Z]),
+            np.array([g.LATCH_WIDTH_X, 2.0 * g.LATCH_RADIUS, 2.0 * g.LATCH_RADIUS]),
+        )
+    return out
+
+
+def static_obstacles(variant: str = "A"):
     """Return dict of static boxes (centre, size) in world coordinates, built from geometry.py."""
     import geometry as g
 
@@ -84,6 +138,12 @@ def static_obstacles():
         ("pad_front", (g.PAD_FRONT_X, g.PAD_FRONT_Y, g.PAD_FRONT_Z)),
     ):
         boxes[name] = (np.array([x, y, z]), np.array([g.PAD_SIZE_X, g.PAD_SIZE_Y, g.PAD_THICKNESS]))
+    lid_y = g.LID_PAD_Y_A if variant.upper() != "B" else g.LID_PAD_Y_B
+    boxes["pad_lid"] = (
+        np.array([g.LID_PAD_X, lid_y, g.TABLE_Z + g.PAD_THICKNESS / 2.0]),
+        np.array([g.LID_PAD_SIZE_X, g.LID_PAD_SIZE_Y, g.PAD_THICKNESS]),
+    )
+    boxes.update(latch_boxes())
     cyls = {}
     return boxes, cyls
 
@@ -114,7 +174,7 @@ def part_schedule(plans, variant: str):
     lay = demo_plan.layout(variant)
     tl = timelines(plans)
     sched = {}
-    for name in demo_plan.PART_NAMES:
+    for name in demo_plan.ALL_PART_NAMES:
         arm = lay["arms"][name]
         row = {"arm": arm, "xy": lay["staging"][name], "t_grasp": None, "t_release": None, "t_release_end": None, "seat_bottom": None}
         for label, t0, t1 in tl[arm]:
@@ -124,33 +184,36 @@ def part_schedule(plans, variant: str):
                 row["t_release"], row["t_release_end"] = t0, t1
         if row["t_release"] is not None:
             wp = next(w for w in plans[arm] if w.label == f"release_{name}")
-            row["seat_bottom"] = wp.pos[2] - g.GRIP_DZ - g.PLACE_DROP
+            if name == "lid":
+                # released at the seated height after a press, or where it rests on the latch heads without one
+                pressed = abs(wp.pos[2] - g.LID_SEAT_TCP_Z) < 1e-6
+                row["seat_bottom"] = g.LID_SEAT_BOTTOM_Z if pressed else g.LID_ON_LATCH_BOTTOM_Z
+            else:
+                row["seat_bottom"] = wp.pos[2] - g.GRIP_DZ - g.PLACE_DROP
             row["seat_xy"] = (wp.pos[0], wp.pos[1])
         sched[name] = row
     return sched
 
 
 def part_boxes(sched, t: float, tcps: dict):
-    """{name: (centre, size, state)} at time ``t``; state is staged, carried or seated."""
+    """{name: (shapes, state)} at time ``t``; shapes is a list of (centre, size); state is staged, carried or seated."""
     import geometry as g
 
-    sizes = part_sizes()
     out = {}
     for name, row in sched.items():
-        size = sizes[name]
         if row["t_grasp"] is None or t < row["t_grasp"]:
             x, y = row["xy"]
             bottom = g.PAD_SURFACE_Z + g.SPAWN_GAP
             state = "staged"
         elif t < row["t_release"]:
             tcp = tcps[row["arm"]]
-            x, y, bottom = float(tcp[0]), float(tcp[1]), float(tcp[2]) - g.GRIP_DZ
+            x, y, bottom = float(tcp[0]), float(tcp[1]), float(tcp[2]) - bottom_below_tcp(name)
             state = "carried"
         else:
             x, y = row["seat_xy"]
             bottom = row["seat_bottom"]  # the 2 mm drop at release is ignored: the part is treated as seated
             state = "seated"
-        out[name] = (np.array([x, y, bottom + size[2] / 2.0]), size, state)
+        out[name] = (shapes_at(name, x, y, bottom), state)
     return out
 
 
@@ -216,12 +279,12 @@ def trace_arm(arm: str, mode: str = "demo", variant: str = "A", plans=None):
     return out
 
 
-def analyse(arm: str, samples, sched, other_tcps):
+def analyse(arm: str, samples, sched, other_tcps, variant: str = "A"):
     """Per-label worst clearances for one arm; ``other_tcps`` gives the other arm's TCP at each sample index."""
     import geometry as g
 
-    boxes, _cyls = static_obstacles()
-    sizes = part_sizes()
+    boxes, _cyls = static_obstacles(variant)
+    pinch = pinch_widths()
     rep: dict[str, dict] = {}
     bad: list[str] = []
 
@@ -233,13 +296,19 @@ def analyse(arm: str, samples, sched, other_tcps):
         )
         r["pe"], r["re"], r["margin"] = max(r["pe"], s["pe"]), max(r["re"], s["re"]), min(r["margin"], s["margin"])
 
+        # The press is commanded below the seat; the lid and rim stop the arm at the seated pose, so audit that pose.
+        lift = 0.0
+        if label in LID_PRESS_LABELS and sched["lid"]["arm"] == arm:
+            lift = max(0.0, g.LID_SEAT_TCP_Z - float(s["tcp"][2]))
+        s = dict(s, tcp=s["tcp"] + np.array([0.0, 0.0, lift]), pts=s["pts"] + np.array([0.0, 0.0, lift]))
+
         tcps = {arm: s["tcp"], ("right" if arm == "left" else "left"): other_tcps[i]}
         parts = part_boxes(sched, t, tcps)
 
         # obstacles this arm may NOT touch: statics plus every part that this arm is not holding or releasing
         obstacles = dict(boxes)
         holding = None
-        for name, (c, size, state) in parts.items():
+        for name, (shapes, state) in parts.items():
             row = sched[name]
             in_hold_window = (
                 row["arm"] == arm
@@ -249,7 +318,8 @@ def analyse(arm: str, samples, sched, other_tcps):
             if in_hold_window:
                 holding = name
                 continue
-            obstacles[f"part_{name}"] = (c, size)
+            for k, (c, size) in enumerate(shapes):
+                obstacles[f"part_{name}_{k}"] = (c, size)
 
         # (1) gripper link hulls
         pts, who = s["pts"], s["who"]
@@ -266,7 +336,7 @@ def analyse(arm: str, samples, sched, other_tcps):
         # (2) finger bodies
         gap = -2.0 * s["finger"]
         if holding is not None:
-            gap = max(gap, float(sizes[holding][0]))
+            gap = max(gap, float(pinch[holding]))
         fpts = finger_points(s["tcp"], s["rot"], gap)
         for obj, (c, size) in obstacles.items():
             d_mm = float(box_dist(fpts, c, size).min() * 1000)
@@ -274,14 +344,18 @@ def analyse(arm: str, samples, sched, other_tcps):
                 r["finger"] = (d_mm, f"finger vs {obj}")
 
         # (3) the part this arm is carrying against the shipper walls
-        if holding is not None and parts[holding][2] == "carried":
-            c, size, _ = parts[holding]
-            corners = np.array([[sx, sy, sz] for sx in (-1, 1) for sy in (-1, 1) for sz in (-1, 1)]) * (size / 2.0) + c
-            for wall in WALLS:
-                wc, wsize = boxes[wall]
-                d_mm = float(box_dist(corners, wc, wsize).min() * 1000)
-                if d_mm < r["carried"][0]:
-                    r["carried"] = (d_mm, f"carried {holding} vs {wall}")
+        if holding is not None and parts[holding][1] == "carried":
+            latches = [k for k in boxes if k.startswith("latch_")]
+            targets = list(WALLS) + latches
+            if holding == "lid" and label in LID_EXEMPT_LABELS:
+                targets = []  # on the rim and under the latch heads by design while it is seated
+            for c, size in parts[holding][0]:
+                corners = np.array([[sx, sy, sz] for sx in (-1, 1) for sy in (-1, 1) for sz in (-1, 1)]) * (size / 2.0) + c
+                for wall in targets:
+                    wc, wsize = boxes[wall]
+                    d_mm = float(box_dist(corners, wc, wsize).min() * 1000)
+                    if d_mm < r["carried"][0]:
+                        r["carried"] = (d_mm, f"carried {holding} vs {wall}")
 
         r["t"] = t
 
@@ -356,9 +430,9 @@ def main() -> int:
     r_samples = trace_arm("right", mode=args.mode, variant=args.variant, plans=plans)
 
     print("Auditing left arm scene clearances (links, finger bodies, carried part)...")
-    l_rep, l_bad = analyse("left", l_samples, sched, [s["tcp"] for s in r_samples])
+    l_rep, l_bad = analyse("left", l_samples, sched, [s["tcp"] for s in r_samples], args.variant)
     print("Auditing right arm scene clearances (links, finger bodies, carried part)...")
-    r_rep, r_bad = analyse("right", r_samples, sched, [s["tcp"] for s in l_samples])
+    r_rep, r_bad = analyse("right", r_samples, sched, [s["tcp"] for s in l_samples], args.variant)
 
     print("Auditing bimanual arm-arm clearance...")
     arm_arm_min, arm_arm_t, arm_arm_pair = check_arm_arm(l_samples, r_samples)

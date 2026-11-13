@@ -13,6 +13,8 @@ class TestPredictions(unittest.TestCase):
             "no_buffer_violation",
             "brick_only",
             "buffer_without_carton",
+            "lid_unlatched",
+            "no_lid",
             "settle",
             "dream",
         }
@@ -30,6 +32,11 @@ class TestPredictions(unittest.TestCase):
 
     def test_buffer_without_carton_predicted_half(self):
         self.assertEqual(predict_scores.predict("buffer_without_carton"), 0.50)
+
+    def test_lid_ablations_predicted_below_full_score(self):
+        self.assertLess(predict_scores.predict("lid_unlatched"), 1.0)
+        self.assertEqual(predict_scores.predict("lid_unlatched"), 0.75)
+        self.assertEqual(predict_scores.predict("no_lid"), 0.75)
 
     def test_idle_modes_predicted_zero(self):
         self.assertEqual(predict_scores.predict("settle"), 0.00)

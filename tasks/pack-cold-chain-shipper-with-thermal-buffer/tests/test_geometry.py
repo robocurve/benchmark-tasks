@@ -131,6 +131,44 @@ class TestGeometry(unittest.TestCase):
         self.assertAlmostEqual(unsafe_sep, 0.0250, places=4)
         self.assertLess(unsafe_sep, g.CONTACT_FREEZE_DIST_Z)
 
+    def test_lid_and_latch_dimensions(self):
+        # the lid is the shipper's outer footprint, 8 mm thick, with a 40 x 30 x 22 mm grip tab
+        self.assertAlmostEqual(g.LID_WIDTH_X, 0.170, places=4)
+        self.assertAlmostEqual(g.LID_LENGTH_Y, 0.192, places=4)
+        self.assertAlmostEqual(g.LID_THICK_Z, 0.008, places=4)
+        self.assertAlmostEqual(g.LID_MASS, 0.12, places=3)
+        self.assertAlmostEqual(g.LID_TAB_X, 0.040, places=4)
+        self.assertGreaterEqual(g.LID_TAB_Z, 0.020)
+        self.assertLessEqual(g.LID_TAB_Z, 0.025)
+        # it rests on the rim, 5 mm above the carton (no contact with the layers)
+        self.assertAlmostEqual(g.LID_SEAT_BOTTOM_Z, g.CAVITY_RIM_Z, places=6)
+        self.assertAlmostEqual(g.LID_SEAT_BOTTOM_Z - g.CARTON_TOP_SEATED_Z, 0.005, places=4)
+        # latches: 0.5 N/mm, 8 mm travel, head 4 mm over the lid edge, 1.5 mm above a seated lid
+        self.assertAlmostEqual(g.LATCH_RATE, 500.0)
+        self.assertAlmostEqual(g.LATCH_TRAVEL, 0.008)
+        self.assertAlmostEqual(g.LATCH_OVERLAP, 0.004)
+        head_bottom = g.TABLE_Z + g.LATCH_CENTRE_Z - g.LATCH_RADIUS
+        self.assertAlmostEqual(head_bottom - g.LID_TOP_SEATED_Z, g.LATCH_GAP_ABOVE_LID, places=6)
+        self.assertGreater(g.LATCH_TRAVEL, g.LATCH_OVERLAP)
+        # the head's rod must let the lid's lower end edge slide past it without wedging: the edge meets the circle at
+        # an angle whose tangent exceeds the combined friction (shipper and lid friction average)
+        d = g.LATCH_RADIUS - g.LATCH_OVERLAP
+        tan_contact = d / (g.LATCH_RADIUS**2 - d**2) ** 0.5
+        self.assertGreater(tan_contact, 0.5 * (g.SHIPPER_FRICTION + g.LID_FRICTION))
+        # the lid on the heads rests well above the rim (that is the ablation pose)
+        self.assertGreater(g.LID_ON_LATCH_BOTTOM_Z - g.LID_SEAT_BOTTOM_Z, 0.015)
+        # the post stands outside the end wall (no overlap with the shipper), the head over the lid
+        self.assertGreater(g.LATCH_POST_Y0, g.SHIPPER_EXT_Y / 2.0)
+        self.assertLess(g.LATCH_TIP_Y, g.LID_LENGTH_Y / 2.0)
+
+    def test_lid_staging_clears_everything(self):
+        for y in (g.LID_PAD_Y_A, g.LID_PAD_Y_B):
+            gap = abs(y) - g.LID_PAD_SIZE_Y / 2.0 - (abs(g.PAD_LEFT_Y) + g.PAD_SIZE_Y / 2.0)
+            self.assertGreaterEqual(gap, 0.004)
+            self.assertGreater(g.LID_PAD_SIZE_X, g.LID_WIDTH_X)
+            self.assertGreater(g.LID_PAD_SIZE_Y, g.LID_LENGTH_Y)
+        self.assertAlmostEqual(g.LID_STAGING_Z - g.LID_THICK_Z / 2.0, g.PAD_SURFACE_Z + g.SPAWN_GAP, places=6)
+
     def test_tolerances(self):
         self.assertAlmostEqual(g.HOLD_DWELL_S, 3.0, places=1)
         self.assertEqual(g.HOLD_STEPS, 60)

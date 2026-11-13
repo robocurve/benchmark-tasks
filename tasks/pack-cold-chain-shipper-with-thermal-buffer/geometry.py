@@ -11,6 +11,9 @@ Contents:
 - Thermal Buffer Barrier Pad: corrugated pad, 150 mm (Y) x 74 mm (X) x 15 mm (Z), mass 0.04 kg.
 - Medication Payload Carton: freeze-sensitive drug pack, 130 mm (Y) x 70 mm (X) x 25 mm (Z), mass 0.18 kg.
 - Staging Pads: Left pad at (0.220, +0.220), Right pad at (0.220, -0.220), Front pad at (0.115, 0.000).
+- Shipper Lid: rigid foam-style slab 170 mm (X) x 192 mm (Y) x 8 mm with a 40 x 30 x 22 mm grip tab, mass 0.12 kg. It
+  rests on the shipper rim and is held down by two spring slide latches, one on each Y end of the shipper. Layout A
+  stages the lid beside the left pad (y = +0.420), layout B beside the right pad (y = -0.420).
 
 Grasping: every part is pinched across its SHORT side (X, at most 76 mm) with the gripper yawed so the
 fingers close along world X (GRIP_YAW_LEFT = -pi/2, GRIP_YAW_RIGHT = +pi/2). The pad tips sit 13 mm below
@@ -48,6 +51,7 @@ FINGER_OPEN = -0.04695
 FINGER_CLOSED = 0.0
 FINGER_GRIP = -0.020       # commanded 40 mm pad gap: well below every part width, so the pads squeeze the part
 FINGER_RELEASE = -0.045    # commanded 90 mm pad gap: at least 7 mm of daylight per side around every part
+FINGER_GRIP_TAB = -0.004   # commanded 8 mm pad gap for the 40 mm lid tab (the same 30+ mm of squeeze as the other parts)
 
 GRIPPER_MAX_OPEN = 0.094        # m, pad gap with the fingers fully open
 MAX_PINCH_WIDTH = 0.080         # m, widest part we pinch (>= 7 mm per side: arms land 3 to 6 mm off)
@@ -70,7 +74,9 @@ GRIP_YAW_RIGHT = math.pi / 2.0
 HOME_L = (0.180, 0.220, 0.855)
 HOME_R = (0.180, -0.220, 0.855)
 HOVER_Z = 0.855
-TRANSIT_Z = 0.870   # carried parts ride about 25 mm above the shipper rim
+TRANSIT_Z = 0.905   # carried parts ride 15 mm or more above the shipper rim and the latch heads (a loaded arm sags about 10 mm)
+LID_TRANSIT_Z = 0.910   # the carried lid rides 15 mm or more above the latch heads
+RETURN_Z = 0.905        # after a release the empty gripper lifts here, so its fingers clear the latch posts on the way home
 
 
 def grip_tcp_z(rest_z: float) -> float:
@@ -124,6 +130,7 @@ SHIPPER_EXT_X = CAVITY_WIDTH_X + 2.0 * SHIPPER_WALL_THICKNESS   # 0.170 m
 SHIPPER_EXT_Y = CAVITY_LENGTH_Y + 2.0 * SHIPPER_WALL_THICKNESS  # 0.192 m
 SHIPPER_TOTAL_HEIGHT = SHIPPER_FLOOR_THICKNESS + CAVITY_DEPTH_Z  # 0.080 m
 SHIPPER_MASS = 2.5                                               # kg
+SHIPPER_FRICTION = 0.3   # low enough that a lid's end edge slides over the round latch head instead of sticking to it
 
 # Gel brick: hard-shell refrigerant brick, about 6 x 3 x 1 in
 BRICK_LENGTH_Y = 0.152  # 152 mm long side (along Y)
@@ -206,6 +213,73 @@ BUFFER_PLACE_TCP_Z = grip_tcp_z(BRICK_TOP_SEATED_Z) + PLACE_DROP   # on top of t
 CARTON_PLACE_TCP_Z = grip_tcp_z(BUFFER_TOP_SEATED_Z) + PLACE_DROP  # on top of the buffer
 CARTON_DIRECT_PLACE_TCP_Z = grip_tcp_z(BRICK_TOP_SEATED_Z) + PLACE_DROP  # ablation: straight onto the brick
 
+# ---------------------------------------------------------------------------------------------
+# Shipper lid and the two spring slide latches (the closing mechanism)
+# ---------------------------------------------------------------------------------------------
+# The lid is one rigid slab the size of the shipper's outer footprint, so it sits on the 10 mm rim all round. A grip
+# tab stands on its top face. Two latches sit outside the shipper's two Y ends. Each is a rigid slider on a prismatic
+# joint pushed back by a spring: a vertical post outside the end wall carries a round head (a rod along X) that hangs
+# over the lid's end edge when the lid is seated. Pressing the lid down, its lower end edge rides over the round head
+# and pushes the slider outward; once the lid is seated the spring returns the head over the lid's top face.
+LID_LENGTH_Y = SHIPPER_EXT_Y   # 0.192 m
+LID_WIDTH_X = SHIPPER_EXT_X    # 0.170 m
+LID_THICK_Z = 0.008            # 8 mm slab
+LID_MASS = 0.12                # kg
+LID_FRICTION = 0.3
+LID_TAB_X = 0.040              # 40 mm: the pinched width, along the closing axis
+LID_TAB_Y = 0.030              # 30 mm: wider than the 24 mm finger pad
+LID_TAB_Z = 0.022              # 22 mm tall
+LID_PAD_GAP = 0.005            # m, pad tips ride this far above the lid's top face when it is pinched by the tab
+LID_GRIP_DZ = PAD_TIP_PAST_TCP + LID_PAD_GAP   # 0.018 m: commanded TCP height above the top face of the lid
+
+LID_SEAT_BOTTOM_Z = CAVITY_RIM_Z                       # 0.8275 m: the lid's underside rests on the rim
+LID_SEATED_Z = LID_SEAT_BOTTOM_Z + LID_THICK_Z / 2.0   # 0.8315 m, lid centre when seated
+LID_TOP_SEATED_Z = LID_SEAT_BOTTOM_Z + LID_THICK_Z     # 0.8355 m
+LID_TAB_TOP_SEATED_Z = LID_TOP_SEATED_Z + LID_TAB_Z    # 0.8575 m
+
+# Latch geometry, given in the shipper's frame (origin at the shipper centre on the table, z up from the table)
+LATCH_RADIUS = 0.007           # m, the round head is a 14 mm rod along X
+LATCH_OVERLAP = 0.004          # m, the head hangs this far over the lid's end edge when the lid is seated
+LATCH_GAP_ABOVE_LID = 0.0015   # m, a seated lid's top face is this far under the head
+LATCH_WIDTH_X = 0.030          # m, the head rod and post are 30 mm wide (X)
+LATCH_TRAVEL = 0.008           # m, the slider moves up to 8 mm outward
+LATCH_RATE = 500.0             # N/m (0.5 N/mm): the spring that pushes the head back over the lid
+LATCH_DAMPING = 5.0            # N s/m
+LATCH_MASS = 0.01              # kg per slider
+LATCH_TIP_Y = LID_LENGTH_Y / 2.0 - LATCH_OVERLAP         # 0.092 m: inner point of a head at rest (distance from the centreline)
+LATCH_CENTRE_Y = LATCH_TIP_Y + LATCH_RADIUS              # 0.099 m: head rod axis
+LATCH_CENTRE_Z = (LID_SEAT_BOTTOM_Z - TABLE_Z) + LID_THICK_Z + LATCH_GAP_ABOVE_LID + LATCH_RADIUS  # 0.0965 m above the table
+LATCH_POST_Y0 = LID_LENGTH_Y / 2.0 + 0.004               # post starts 4 mm outside the shipper's end face
+LATCH_POST_Y1 = LATCH_CENTRE_Y + LATCH_RADIUS            # and ends level with the head's outer side
+LATCH_POST_Z0 = 0.060                                    # m above the table (the post reaches down beside the end wall)
+LATCH_HEAD_TOP_Z = TABLE_Z + LATCH_CENTRE_Z + LATCH_RADIUS   # 0.851 m world height of the head tops
+# Where the lid's lower end edge rests on a round head when the lid is laid on the latches without pressing: the edge is
+# LATCH_RADIUS - LATCH_OVERLAP = 3 mm outside the head axis, so it sits on the rod's circle sqrt(r^2 - d^2) above the axis
+LID_ON_LATCH_BOTTOM_Z = TABLE_Z + LATCH_CENTRE_Z + math.sqrt(LATCH_RADIUS**2 - (LATCH_RADIUS - LATCH_OVERLAP) ** 2)
+LID_ON_LATCH_TOP_Z = LID_ON_LATCH_BOTTOM_Z + LID_THICK_Z
+
+# Lid scoring tolerances
+LID_SEAT_TOL_Z = 0.0025        # lid centre at most 2.5 mm above its seat (the latch head leaves 1.5 mm of play)
+LID_SEAT_TOL_XY = 0.012        # lid centred on the shipper within 12 mm
+LID_TILT_TOL_DEG = 3.0
+LATCH_MIN_OVERLAP = 0.0005     # a latch is engaged once its head hangs at least 0.5 mm over the lid's end edge
+
+# Lid staging: a plate beside the carton's pad (layout A, left) or the brick's pad (layout B, right)
+LID_PAD_X = 0.300
+LID_PAD_Y_A = 0.420
+LID_PAD_Y_B = -0.420
+LID_PAD_SIZE_X = LID_WIDTH_X + 0.006
+LID_PAD_SIZE_Y = LID_LENGTH_Y + 0.006
+LID_STAGING_Z = PAD_SURFACE_Z + SPAWN_GAP + LID_THICK_Z / 2.0   # 0.7560 m (lid centre on its plate)
+LID_TOP_STAGED_Z = PAD_SURFACE_Z + SPAWN_GAP + LID_THICK_Z      # 0.7600 m
+
+# Lid commanded TCP heights (the pad tips ride 5 mm above the lid's top face)
+LID_PICK_TCP_Z = LID_TOP_STAGED_Z + LID_GRIP_DZ                 # 0.778 m
+LID_SEAT_TCP_Z = LID_TOP_SEATED_Z + LID_GRIP_DZ                 # 0.8535 m: lid on the rim
+LID_ON_LATCH_TCP_Z = LID_ON_LATCH_TOP_Z + LID_GRIP_DZ           # 0.876 m: lid resting on the latch heads
+LID_PRESS_OVERSHOOT = 0.020                                     # m, commanded below the seat: the soft arm gives and the rim stops the lid
+LID_PRESS_TCP_Z = LID_SEAT_TCP_Z - LID_PRESS_OVERSHOOT
+
 # Visual colors (sRGB 0..1)
 COLOR_SHIPPER = (0.92, 0.92, 0.94)        # Insulated white cooler box
 COLOR_PAD = (0.28, 0.32, 0.38)            # Dark slate staging pad
@@ -216,3 +290,5 @@ COLOR_LABEL_INSULIN = (0.12, 0.32, 0.85)  # Insulin blue freeze-sensitive stripe
 COLOR_LABEL_HEPARIN = (0.95, 0.58, 0.10)  # Heparin amber thermal warning stripe
 COLOR_ICON_WHITE = (0.92, 0.95, 1.00)     # Pictogram white
 COLOR_ICON_DARK = (0.20, 0.18, 0.16)      # Hazard dark icon
+COLOR_LID = (0.80, 0.85, 0.90)            # Foam shipper lid
+COLOR_LATCH = (1.00, 0.50, 0.00)          # Orange spring latches and lid grip tab

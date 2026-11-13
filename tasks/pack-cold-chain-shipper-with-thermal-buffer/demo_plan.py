@@ -3,16 +3,22 @@
 Constructs open-loop ArmPlan waypoints for dual YAM arms.
 
 Modes:
-- demo: Safe packing sequence: gel brick -> thermal buffer barrier -> medication carton -> withdraw clear, hold 3.0 s.
+- demo: Safe packing sequence: gel brick -> thermal buffer barrier -> medication carton -> lid pressed shut on both
+  latches -> withdraw clear, hold 3.0 s.
 - no_buffer_violation: Skips buffer pad, placing carton directly on sub-zero gel brick (freezing hazard, score 0.25).
 - brick_only: Places only the refrigerant gel brick, leaving shipper unbuffered and uncartoned (score 0.25).
 - buffer_without_carton: Places gel brick and thermal buffer pad, but does not place medication carton (score 0.50).
+- lid_unlatched: All three layers, then the lid is laid on the latch heads and released without being pressed down
+  (the latches never snap over its edge, score 0.75).
+- no_lid: All three layers packed, the lid left on its staging plate (score 0.75).
 - settle: Both arms idle at standby (score 0.00).
 - dream: Unscripted baseline policy (score 0.00).
 
-Every part is pinched across its short side (fingers close along world X). Pick and place heights come from
+Every layer is pinched across its short side (fingers close along world X). Pick and place heights come from
 geometry.py: the commanded TCP z is the pad-tip z plus 0.013 m, with the pad tips 4.5 mm above the surface the part
-rests on. Every stop above a part pauses before the arm descends.
+rests on. The lid is pinched by its 40 mm grip tab (fingers close along world X) with the pad tips 5 mm above the
+lid's top face, carried over the shipper, laid on the two latch heads and pressed down through the latch springs until
+it sits on the rim. Every stop above a part pauses before the arm descends.
 """
 
 from __future__ import annotations
@@ -30,6 +36,8 @@ FINGER_RELEASE = g.FINGER_RELEASE
 HOME_L = g.HOME_L
 HOME_R = g.HOME_R
 TRANSIT_Z = g.TRANSIT_Z
+LID_LAND_ABOVE = 0.008   # m: the lid is lowered to 8 mm above where it rests on the latch heads, pauses, then lands
+LID_PRESS_S = 3.0        # s (before the time scale): the slow press that takes the lid from the heads to the rim
 
 
 def _f(name: str, default: float) -> float:
@@ -54,6 +62,10 @@ def mode_from_env() -> str:
         return "brick_only"
     if os.environ.get("DEMO_BUFFER_WITHOUT_CARTON") == "1":
         return "buffer_without_carton"
+    if os.environ.get("DEMO_LID_UNLATCHED") == "1":
+        return "lid_unlatched"
+    if os.environ.get("DEMO_NO_LID") == "1":
+        return "no_lid"
     if os.environ.get("DEMO_DREAM") == "1":
         return "dream"
     return os.environ.get("TASK_MODE", "demo")
@@ -64,31 +76,36 @@ def mode_from_env() -> str:
 ARM_YAW = {"left": g.GRIP_YAW_LEFT, "right": g.GRIP_YAW_RIGHT}
 YAW = g.GRIP_YAW_RIGHT  # placeholder while building; _plans() sets each arm's own yaw
 PART_NAMES = ("brick", "buffer", "carton")
+LID_NAME = "lid"
+ALL_PART_NAMES = PART_NAMES + (LID_NAME,)
+MODES = ("demo", "no_buffer_violation", "brick_only", "buffer_without_carton", "lid_unlatched", "no_lid", "settle", "dream")
 
 
 def part_of(label: str) -> str | None:
-    """The part a waypoint label works on (labels end in _brick / _buffer / _carton), else None."""
+    """The part a waypoint label works on (labels end in _brick / _buffer / _carton / _lid), else None."""
     tail = label.rsplit("_", 1)[-1]
-    return tail if tail in PART_NAMES else None
+    return tail if tail in ALL_PART_NAMES else None
 
 
 def layout(variant: str) -> dict:
     """Which arm moves which part, and where each part starts (world XY on its staging pad)."""
     if variant.upper() == "B":
         return {
-            "arms": {"brick": "left", "buffer": "right", "carton": "right"},
+            "arms": {"brick": "left", "buffer": "right", "carton": "right", "lid": "right"},
             "staging": {
                 "brick": (g.PAD_LEFT_X, g.PAD_LEFT_Y),
                 "buffer": (g.PAD_FRONT_X, g.PAD_FRONT_Y),
                 "carton": (g.PAD_RIGHT_X, g.PAD_RIGHT_Y),
+                "lid": (g.LID_PAD_X, g.LID_PAD_Y_B),
             },
         }
     return {
-        "arms": {"brick": "right", "buffer": "left", "carton": "left"},
+        "arms": {"brick": "right", "buffer": "left", "carton": "left", "lid": "left"},
         "staging": {
             "brick": (g.PAD_RIGHT_X, g.PAD_RIGHT_Y),
             "buffer": (g.PAD_FRONT_X, g.PAD_FRONT_Y),
             "carton": (g.PAD_LEFT_X, g.PAD_LEFT_Y),
+            "lid": (g.LID_PAD_X, g.LID_PAD_Y_A),
         },
     }
 
@@ -122,7 +139,44 @@ def _transfer(wps: list[Waypoint], name: str, pick_xy, place_xy, place_z: float,
     wps.append(_wp((qx, qy, place_z), FINGER_GRIP, 0.8, f"place_{name}"))
     _dwell(wps, 0.3, f"pause_place_{name}")
     wps.append(_wp((qx, qy, place_z), FINGER_RELEASE, 0.6, f"release_{name}"))
-    wps.append(_wp((qx, qy, TRANSIT_Z), FINGER_RELEASE, 0.8, f"lift_clear_{name}"))
+    wps.append(_wp((qx, qy, g.RETURN_Z), FINGER_RELEASE, 0.8, f"lift_clear_{name}"))
+    wps.append(_wp(home, FINGER_WIDE, 0.8, f"return_home_{name}"))
+
+
+def _transfer_lid(wps: list[Waypoint], pick_xy, place_xy, home, press: bool) -> None:
+    """Pinch the lid by its grip tab, carry it over the shipper, lay it on the two latch heads and (if ``press``)
+    press it down through the latch springs until it sits on the rim, ease off, release it and go home.
+
+    The pad tips ride 5 mm above the lid's top face, so the 22 mm tab is pinched over 17 mm of its height. The lid is
+    carried 15 mm or more above the latch heads. The press is commanded LID_PRESS_OVERSHOOT below the seat: the soft
+    arm gives, and the rim stops the lid. Without the press the lid is released where it rests on the heads.
+    """
+    px, py = pick_xy
+    qx, qy = place_xy
+    name = LID_NAME
+    wps.append(_wp((px, py, TRANSIT_Z), FINGER_WIDE, 0.8, f"hover_pick_{name}"))
+    _dwell(wps, 0.6, f"pause_hover_pick_{name}")
+    wps.append(_wp((px, py, g.LID_PICK_TCP_Z), FINGER_WIDE, 0.8, f"descend_{name}"))
+    _dwell(wps, 0.4, f"pause_descend_{name}")
+    wps.append(_wp((px, py, g.LID_PICK_TCP_Z), g.FINGER_GRIP_TAB, 0.8, f"grasp_{name}"))
+    wps.append(_wp((px, py, g.LID_TRANSIT_Z), g.FINGER_GRIP_TAB, 0.8, f"lift_{name}"))
+    wps.append(_wp((qx, qy, g.LID_TRANSIT_Z), g.FINGER_GRIP_TAB, 1.4, f"approach_shipper_{name}"))
+    _dwell(wps, 0.6, f"pause_above_shipper_{name}")
+    wps.append(_wp((qx, qy, g.LID_ON_LATCH_TCP_Z + LID_LAND_ABOVE), g.FINGER_GRIP_TAB, 0.8, f"lower_{name}"))
+    _dwell(wps, 0.4, f"pause_lower_{name}")
+    if press:
+        wps.append(_wp((qx, qy, g.LID_PRESS_TCP_Z), g.FINGER_GRIP_TAB, LID_PRESS_S, f"place_{name}"))
+        _dwell(wps, 1.0, f"pause_place_{name}")
+        # ease off to the seated height (pad tips 5 mm over the lid's top face) before letting go
+        wps.append(_wp((qx, qy, g.LID_SEAT_TCP_Z), g.FINGER_GRIP_TAB, 0.8, f"unload_{name}"))
+        _dwell(wps, 0.4, f"pause_unload_{name}")
+        release_z = g.LID_SEAT_TCP_Z
+    else:
+        wps.append(_wp((qx, qy, g.LID_ON_LATCH_TCP_Z), g.FINGER_GRIP_TAB, 0.6, f"place_{name}"))
+        _dwell(wps, 0.4, f"pause_place_{name}")
+        release_z = g.LID_ON_LATCH_TCP_Z
+    wps.append(_wp((qx, qy, release_z), FINGER_RELEASE, 0.6, f"release_{name}"))
+    wps.append(_wp((qx, qy, g.RETURN_Z), FINGER_RELEASE, 0.8, f"lift_clear_{name}"))
     wps.append(_wp(home, FINGER_WIDE, 0.8, f"return_home_{name}"))
 
 
@@ -198,7 +252,16 @@ def _build(mode: str | None = None, variant: str | None = None) -> dict[str, lis
     carton_z = g.CARTON_DIRECT_PLACE_TCP_Z if mode == "no_buffer_violation" else g.CARTON_PLACE_TCP_Z
     _transfer(arm_wps(carton_arm), "carton", carton_staging_xy, shipper_xy, carton_z, arm_home(carton_arm))
 
-    # Phase 4: synchronized standby hold
+    # Phase 4: close the shipper. The lid is pressed down through both latches (demo), only laid on the latch heads
+    # (lid_unlatched), or left on its staging plate (no_lid).
+    if mode in ("demo", "lid_unlatched"):
+        lid_arm = lay["arms"][LID_NAME]
+        _pad_sync(left_wps, right_wps, label="wait_for_carton_arm")
+        _transfer_lid(
+            arm_wps(lid_arm), lay["staging"][LID_NAME], shipper_xy, arm_home(lid_arm), press=(mode == "demo")
+        )
+
+    # Phase 5: synchronized standby hold
     return hold_and_finish()
 
 

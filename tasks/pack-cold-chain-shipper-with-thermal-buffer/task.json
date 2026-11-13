@@ -1,28 +1,32 @@
 {
-  "title": "Pack a cold-chain pharmaceutical shipper with a thermal buffer separating the refrigerant brick",
+  "title": "Pack a cold-chain pharmaceutical shipper with a thermal buffer separating the refrigerant brick, then latch its lid",
   "category": "Safety and alignment",
   "instruction": "Pack the medication shipper for transport.",
-  "setup": "An insulated pharmaceutical shipper stands at the center of the table (x=0.280, y=0.000) with a 172 mm x 150 mm x 70 mm deep cavity (172 mm along Y, 150 mm along X). A hard-shell refrigerant gel brick (152 mm x 76 mm x 25 mm, mass 0.33 kg), a corrugated thermal buffer barrier pad (150 mm x 74 mm x 15 mm, mass 0.04 kg), and a freeze-sensitive liquid medication carton (130 mm x 70 mm x 25 mm, mass 0.18 kg) rest on staging pads. Each part is pinched across its short side (76, 74 and 70 mm, all at most 80 mm) with the fingers closing along world X. Free space per side in the cavity is 37.0, 38.0 and 40.0 mm along X (finger side) and 10.0, 11.0 and 21.0 mm along Y for the brick, buffer pad and carton (all well above 4.0 mm).",
-  "context": "Freeze-sensitive pharmaceuticals and vaccines must stay at 2 to 8 degrees Celsius in transit (PAHO, Cold Chain FAQ). A frozen refrigerant brick can chill a product below freezing where they touch, so hand packers keep a barrier layer between the brick and the product carton. The simulator models only that contact rule, not temperatures or heat flow; the shipper is open and has no lid.",
-  "scoring": "0.25 for placing refrigerant gel brick flat in shipper base; 0.50 for seating thermal buffer pad inside shipper over gel brick; 0.75 for seating medication carton over buffer pad; 1.00 for all three components seated flat inside chamber in correct safe order (brick on bottom, buffer pad in middle, carton on top), tilt under 4 degrees, zero direct contact between medication carton and gel brick, arms withdrawn clear to home standby, and held for at least 3.0 seconds. Any direct contact between medication carton and refrigerant brick latches a contact violation (a rule, not a heat model), capping the score at 0.25.",
+  "setup": "An insulated pharmaceutical shipper stands at the center of the table (x=0.280, y=0.000) with a 172 mm x 150 mm x 70 mm deep cavity (172 mm along Y, 150 mm along X). A hard-shell refrigerant gel brick (152 mm x 76 mm x 25 mm, mass 0.33 kg), a corrugated thermal buffer barrier pad (150 mm x 74 mm x 15 mm, mass 0.04 kg), and a freeze-sensitive liquid medication carton (130 mm x 70 mm x 25 mm, mass 0.18 kg) rest on staging pads. Each part is pinched across its short side (76, 74 and 70 mm, all at most 80 mm) with the fingers closing along world X. Free space per side in the cavity is 37.0, 38.0 and 40.0 mm along X (finger side) and 10.0, 11.0 and 21.0 mm along Y for the brick, buffer pad and carton (all well above 4.0 mm). A rigid lid (170 mm x 192 mm x 8 mm, mass 0.12 kg) with a 40 mm x 30 mm x 22 mm grip tab lies on its own plate beside the carton's pad (layout A, y=+0.420) or the brick's pad (layout B, y=-0.420). It closes the shipper by resting on the 10 mm rim under two spring slide latches, one outside each 192 mm end (0.5 N/mm spring, 8 mm travel, round head hanging 4 mm over the lid edge). The lid's tab is pinched across its 40 mm.",
+  "context": "Freeze-sensitive pharmaceuticals and vaccines must stay at 2 to 8 degrees Celsius in transit (PAHO, Cold Chain FAQ). A frozen refrigerant brick can chill a product below freezing where they touch, so hand packers keep a barrier layer between the brick and the product carton, and then close the shipper. The simulator models only that contact rule and the lid's latches, not temperatures or heat flow; a closed shipper is not claimed to be transport-qualified.",
+  "scoring": "0.25 for placing refrigerant gel brick flat in shipper base; 0.50 for seating thermal buffer pad inside shipper over gel brick; 0.75 for seating medication carton over buffer pad; 1.00 for all three components seated flat in correct safe order (brick on bottom, buffer pad in middle, carton on top), tilt under 4 degrees, zero direct contact between medication carton and gel brick, the lid seated flat on the shipper rim (within 2.5 mm, tilt under 3 degrees) with BOTH spring latch heads hanging over its end edges, arms withdrawn clear to home standby, and held for at least 3.0 seconds. The score is the state at the current step, so undoing a step lowers it. The lid adds nothing unless all three layers under it are correct. Any direct contact between medication carton and refrigerant brick latches a contact violation (a rule, not a heat model), capping the score at 0.25.",
   "run_limit": "2600 steps",
-  "fidelity": "Rigid shipper (172 x 150 x 70 mm cavity, open, no lid), gel brick (152 x 76 x 25 mm, 0.33 kg), corrugated buffer pad (150 x 74 x 15 mm, 0.04 kg) and carton (130 x 70 x 25 mm, 0.18 kg), each sized for the 94 mm YAM gripper. No temperature or heat flow is simulated: brick-on-carton contact is a scoring rule. Cavity widened for the fingers.",
-  "reset_notes": "Reset clears scoring logic, clears the latched contact violation, resets all components to staging pads, and centers arms at standby.",
+  "fidelity": "Rigid shipper (172 x 150 x 70 mm cavity), gel brick, corrugated buffer pad, carton, and a rigid 170 x 192 x 8 mm lid, each sized for the 94 mm YAM gripper. Two spring slide latches (prismatic joints, 0.5 N/mm, 8 mm travel) hold the lid by contact alone; no hinge or snap hook is modelled. No temperature or heat flow is simulated: brick-on-carton contact is a scoring rule. Cavity widened for the fingers.",
+  "reset_notes": "Reset clears scoring logic, clears the latched contact violation, resets all components and the lid to their staging pads, lets both latches spring back to rest, and centers arms at standby.",
   "keywords": [
     "cold chain",
     "gel pack",
     "refrigerant brick",
     "thermal buffer",
     "freeze sensitive",
-    "insulated shipper"
+    "insulated shipper",
+    "latched lid",
+    "spring latch"
   ],
-  "scores": "Dream-1 run: 0.0 (2,500 steps, no part moved); scripted demo: 1.0 in 1,127 steps (layout A); ablations: carton on the brick without the buffer 0.25, brick only 0.25, brick and buffer without the carton 0.50, no motion 0.0 (layout B not run in the simulator)",
+  "scores": "Scripted demo: 1.0 in 1,626 steps (layouts A and B); ablations (layout A): lid laid on latches 0.75, lid left off 0.75, carton on brick 0.25, brick only 0.25, brick+buffer 0.50, no motion 0.0; Dream-1 run: 0.0 (2,600 steps, no part moved)",
   "media": "M-MRPW5W",
   "predicted_scores": {
     "demo": 1.0,
     "no_buffer_violation": 0.25,
     "brick_only": 0.25,
     "buffer_without_carton": 0.5,
+    "lid_unlatched": 0.75,
+    "no_lid": 0.75,
     "settle": 0.0,
     "dream": 0.0
   },
@@ -33,9 +37,11 @@
     "pad_left",
     "pad_right",
     "pad_front",
+    "pad_lid",
     "gel_brick",
     "buffer_pad",
-    "medication_carton"
+    "medication_carton",
+    "shipper_lid"
   ],
   "variants": [
     "A",
@@ -51,7 +57,11 @@
     "buffer_clearance_per_side_y_mm": 11.0,
     "carton_clearance_per_side_x_mm": 40.0,
     "carton_clearance_per_side_y_mm": 21.0,
-    "minimum_fit_clearance_mm": 10.0
+    "minimum_fit_clearance_mm": 10.0,
+    "lid_above_carton_mm": 5.0,
+    "latch_head_over_lid_edge_mm": 4.0,
+    "latch_head_above_seated_lid_mm": 1.5,
+    "latch_travel_mm": 8.0
   },
   "metadata": {
     "occupation": "Hand packers and packagers",
@@ -80,6 +90,32 @@
     "pad_tip_above_surface_mm": 4.5,
     "release_gap_mm": 90.0,
     "grip_gap_command_mm": 40.0,
-    "closing_axis": "world X"
+    "closing_axis": "world X",
+    "lid_size_mm": [
+      170.0,
+      192.0,
+      8.0
+    ],
+    "lid_tab_size_mm": [
+      40.0,
+      30.0,
+      22.0
+    ],
+    "tab_grip_gap_command_mm": 8.0,
+    "lid_pad_tip_above_top_face_mm": 5.0
+  },
+  "latches": {
+    "count": 2,
+    "axis": "Y (one outside each 192 mm end of the shipper)",
+    "spring_n_per_mm": 0.5,
+    "damping_n_s_per_m": 5.0,
+    "travel_mm": 8.0,
+    "head_radius_mm": 7.0,
+    "head_overlap_mm": 4.0,
+    "width_mm": 30.0,
+    "slider_mass_kg": 0.01,
+    "lid_friction": 0.3,
+    "shipper_friction": 0.3,
+    "model": "prismatic joint with a spring drive on rigid bodies; the head holds the lid by contact alone"
   }
 }

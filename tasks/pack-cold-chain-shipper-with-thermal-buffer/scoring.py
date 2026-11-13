@@ -4,6 +4,8 @@ Manages:
 - Instantaneous state evaluation via logic.py
 - Continuous 3.0 s stability hold accumulator
 - Latched contact freezing hazard enforcement (caps score at 0.25)
+- The closing step: lid seated flat on the rim with both latches engaged (needed, with the correct stack, for 1.00)
+The score is the state at the current step, never a best score: undoing any step lowers it.
 """
 
 
@@ -47,6 +49,12 @@ class Scorer:
         carton_quat=None,
         carton_vel=None,
         arm_tcps=None,
+        lid_pos=None,
+        lid_rot=None,
+        lid_quat=None,
+        lid_vel=None,
+        latch_press=None,
+        shipper_pos=None,
     ) -> ScoreResult:
         st, self.latched_violation = logic.evaluate_step(
             brick_pos=brick_pos,
@@ -63,6 +71,12 @@ class Scorer:
             carton_vel=carton_vel,
             arm_tcps=arm_tcps,
             latched_violation=self.latched_violation,
+            lid_pos=lid_pos,
+            lid_rot=lid_rot,
+            lid_quat=lid_quat,
+            lid_vel=lid_vel,
+            latch_press=latch_press,
+            shipper_pos=shipper_pos,
         )
         self.last_state = st
 
@@ -78,6 +92,8 @@ class Scorer:
                     "buffer_placed": False,
                     "carton_placed": False,
                     "safe_order": False,
+                    "lid_seated": st.lid_seated,
+                    "lid_closed": False,
                     "latched_violation": True,
                     "reason": "direct_freeze_contact_violation",
                     "dwell_s": 0.0,
@@ -92,11 +108,13 @@ class Scorer:
         # 5. All tilts < 4 deg
         # 6. Arms withdrawn clear to standby
         # 7. No direct contact violation
+        # 8. Lid seated flat on the rim with both latches engaged over its end edges
         ready_for_hold = bool(
             st.brick_placed
             and st.buffer_placed
             and st.carton_placed
             and st.safe_order
+            and st.lid_closed
             and st.tilt_ok
             and st.arms_clear
             and not self.latched_violation
@@ -131,6 +149,10 @@ class Scorer:
                 "buffer_placed": st.buffer_placed,
                 "carton_placed": st.carton_placed,
                 "safe_order": st.safe_order,
+                "lid_seated": st.lid_seated,
+                "latch_pos_engaged": st.latch_pos_engaged,
+                "latch_neg_engaged": st.latch_neg_engaged,
+                "lid_closed": st.lid_closed,
                 "tilt_ok": st.tilt_ok,
                 "arms_clear": st.arms_clear,
                 "latched_violation": self.latched_violation,

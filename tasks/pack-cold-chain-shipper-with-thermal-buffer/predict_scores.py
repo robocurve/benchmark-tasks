@@ -7,6 +7,8 @@ PREDICTIONS = {
     "no_buffer_violation": 0.25,
     "brick_only": 0.25,
     "buffer_without_carton": 0.50,
+    "lid_unlatched": 0.75,
+    "no_lid": 0.75,
     "settle": 0.00,
     "dream": 0.00,
 }

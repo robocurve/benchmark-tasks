@@ -5,7 +5,11 @@ Tracks:
 2. Thermal buffer barrier pad placement over gel brick (Layer 2).
 3. Medication payload carton placement over buffer pad (Layer 3).
 4. Direct contact freezing hazard detection (latched violation).
-5. Arm clearance and dwell hold verification for 1.00 full success.
+5. Shipper lid seated flat on the rim with both spring latches hanging over its end edges (the closing step).
+6. Arm clearance and dwell hold verification for 1.00 full success.
+
+The lid never adds credit by itself: it counts only when the three layers under it are placed in the right order and
+no contact violation has latched. A lid on a stack with a layer missing scores what the layers present score.
 """
 
 
@@ -36,12 +40,57 @@ def _vel_norm(vel) -> float:
     return float(np.linalg.norm(vel))
 
 
+LATCH_NAMES = ("latch_pos_y", "latch_neg_y")   # the slider on the +Y end and the one on the -Y end of the shipper
+
+
+def latch_overlaps(lid_y_rel: float, latch_press) -> tuple[float, float]:
+    """How far each latch head hangs over the lid's end edge (m; positive = over the lid).
+
+    ``lid_y_rel`` is the lid centre's Y offset from the shipper centre; ``latch_press`` maps each latch name to how far
+    its slider is pushed outward (m, 0 at rest). A head at rest has its inner point LATCH_TIP_Y from the centreline;
+    pushed out it sits LATCH_TIP_Y + press from it.
+    """
+    press = latch_press or {}
+    tip_pos = g.LATCH_TIP_Y + abs(float(press.get(LATCH_NAMES[0], 0.0)))
+    tip_neg = g.LATCH_TIP_Y + abs(float(press.get(LATCH_NAMES[1], 0.0)))
+    over_pos = (lid_y_rel + g.LID_LENGTH_Y / 2.0) - tip_pos
+    over_neg = (g.LID_LENGTH_Y / 2.0 - lid_y_rel) - tip_neg
+    return float(over_pos), float(over_neg)
+
+
+def evaluate_lid(lid_pos, lid_rot=None, lid_quat=None, lid_vel=None, latch_press=None, shipper_pos=None):
+    """Lid seated flat on the rim and each latch engaged over its end edge. Returns (seated, (pos engaged, neg engaged))."""
+    if lid_pos is None:
+        return False, (False, False)
+    p = np.asarray(lid_pos, dtype=float)
+    off = np.zeros(2)
+    if shipper_pos is not None:
+        off = np.asarray(shipper_pos, dtype=float)[:2] - np.array([g.SHIPPER_X, g.SHIPPER_Y])
+    dx, dy = float(p[0] - g.SHIPPER_X - off[0]), float(p[1] - g.SHIPPER_Y - off[1])
+    z_ok = (g.LID_SEATED_Z - 0.001) <= float(p[2]) <= (g.LID_SEATED_Z + g.LID_SEAT_TOL_Z)
+    seated = bool(
+        abs(dx) <= g.LID_SEAT_TOL_XY
+        and abs(dy) <= g.LID_SEAT_TOL_XY
+        and z_ok
+        and _tilt_deg(lid_rot, lid_quat) <= g.LID_TILT_TOL_DEG
+        and _vel_norm(lid_vel) <= g.VEL_TOL
+    )
+    if latch_press is None:
+        return seated, (False, False)
+    over_pos, over_neg = latch_overlaps(dy, latch_press)
+    return seated, (bool(seated and over_pos >= g.LATCH_MIN_OVERLAP), bool(seated and over_neg >= g.LATCH_MIN_OVERLAP))
+
+
 @dataclass
 class State:
     brick_placed: bool = False
     buffer_placed: bool = False
     carton_placed: bool = False
     safe_order: bool = False
+    lid_seated: bool = False
+    latch_pos_engaged: bool = False
+    latch_neg_engaged: bool = False
+    lid_closed: bool = False
     tilt_ok: bool = True
     arms_clear: bool = True
     direct_contact_violation: bool = False
@@ -82,6 +131,12 @@ def evaluate_step(
     carton_vel=None,
     arm_tcps=None,
     latched_violation: bool = False,
+    lid_pos=None,
+    lid_rot=None,
+    lid_quat=None,
+    lid_vel=None,
+    latch_press=None,
+    shipper_pos=None,
 ) -> tuple[State, bool]:
     """Evaluate current step geometry, detecting contacts and seated states."""
     st = State()
@@ -193,6 +248,21 @@ def evaluate_step(
         and (carton_tilt_ok if p_carton is not None else True)
     )
     st.arms_clear = check_arms_clear(arm_tcps)
+
+    # 5. Lid seated flat on the rim with both latch heads over its end edges. It counts only on a correct stack:
+    # all three layers placed in order and no contact violation. Otherwise the lid adds nothing.
+    seated, (eng_pos, eng_neg) = evaluate_lid(lid_pos, lid_rot, lid_quat, lid_vel, latch_press, shipper_pos)
+    st.lid_seated, st.latch_pos_engaged, st.latch_neg_engaged = seated, eng_pos, eng_neg
+    st.lid_closed = bool(
+        seated
+        and eng_pos
+        and eng_neg
+        and st.brick_placed
+        and st.buffer_placed
+        and st.carton_placed
+        and st.safe_order
+        and not st.direct_contact_violation
+    )
 
     # Base instantaneous score calculation
     if st.direct_contact_violation:
