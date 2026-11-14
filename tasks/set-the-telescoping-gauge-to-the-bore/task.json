@@ -1,0 +1,22 @@
+{
+  "title": "Set a telescoping gauge to a bearing housing's bore diameter and leave it on its stand",
+  "category": "Impact on jobs",
+  "keywords": [
+    "inspection",
+    "metrology",
+    "telescoping gauge",
+    "bore",
+    "machining",
+    "friction lock",
+    "contact sweep"
+  ],
+  "instruction": "Set the telescoping gauge to the diameter of the bore it is in, and leave it on its stand.",
+  "context": "Inspectors, testers, sorters, samplers and weighers (about 597,000 US workers) check machined parts, and checking a bore with a telescoping gauge is regular core work for them and for machinists. This is the setting step the reading depends on: the span is then read on a micrometer, so a gauge taken out tilted or swept off the centre line passes a bad part or scraps a good one. The size comes only from the bore's walls pushing the plungers in (TK-GLAAJZ closes a caliper on a pin).",
+  "setup": "Distances from the robot: x away from the arm bases, y to the left (+) or right (-), heights above the table top; the left arm base is at y = +0.305 m. Bearing housing (loose, aluminium, 0.74 kg): a block 40 mm deep (x), 90 mm wide and 90 mm tall standing on the table, centred at x 0.355 m, y 0.200 m (front face at x 0.335), with a round through-bore 40.00 mm across along x, its axis 55 mm above the table; the bore is 72 flat 5-degree faces, 40.00 mm across flats, with flats at its top and bottom. Telescoping gauge (loose, steel, 80 g, orange handle and knob, yellow head and plungers, range 32 to 54 mm): a head 9 mm across and 32 mm long carrying two plungers 5 mm across with rounded tips, one up and one down, each on a 120 N/m outward spring and held by a lock pad pressing it with about 4 N (about 2 N of friction); a neck 6 mm across, a knurled handle 9.5 mm across from 25 to 115 mm from the head, and a lock knob 12 mm across and 12 mm long at its end. It starts in the bore: head at the bore's centre, handle pointing out toward the robot and sloping down 21.4 degrees, resting 105 mm from the head on a yellow V-rest, a holding fixture (fixed, 90-degree V, 4 mm long, at x 0.257, y 0.200, its bottom line 8.8 mm up), tips touching the top and bottom of the bore, so the span reads 42.6 mm. Gauge stand (fixed, black): two posts at x 0.270 and 0.200, y 0.080, each with a 12 mm wide slot whose floor is 40.25 mm up, on a 110 x 34 x 6 mm base. Two more housings, the same size, bores 44.00 and 48.00 mm: at (0.380, -0.040) and (0.380, -0.160). Lot B swaps in the 44.00 mm housing at the work position (48.00 at -0.040, 40.00 at -0.160) and the gauge starts reading 46.9 mm; lot C puts the 48.00 mm housing there (40.00 at -0.040, 44.00 at -0.160), gauge reading 51.2 mm. Trials are run on lots A, B and C and averaged; the screenshot shows lot A.",
+  "scoring": "Measured once the gauge is let go and still. The span is tip to tip across the two plungers. Score 1.0: the span is within 0.10 mm of the diameter of the bore the gauge started in, the gauge lies on its stand, either way round (the handle in both slots, level within 10 degrees, resting on the slot floors), and no finger or gripper is within 5 mm of it. Score 0.5: the span is within 0.10 mm, the gauge is out of every housing and let go and still, but not on the stand. The tips must touch nothing (1 mm clear), so the lock alone holds the span. Score 0 otherwise: a span more than 0.10 mm over (taken out tilted) or under (swept off centre), the gauge still in a housing or held. Trials are run on each of lots A, B and C and averaged.",
+  "run_limit": "600 steps (30 seconds at 20 Hz)",
+  "reset_notes": "1. For lots B and C, first swap the housings as listed in the setup. 2. Release the gauge's lock and slide it into the bore of the housing at the work position, head at the bore's centre, plungers up and down. 3. Rest the handle on the V-rest, sloping down toward the robot. 4. Let the plungers spring out against the bore, then lock lightly.",
+  "fidelity": "Rigid parts in PhysX at 240 Hz; true-size gauge and housings. The yellow V-rest is a holding fixture added so the gauge rests in the bore. The lock is a sprung pad on each plunger (slips above about 2 N). The bore has 72 faces (corners about 0.1% wide). The 0.10 mm band, coarser than shop practice (about 0.01 mm), allows for contact stopping slightly short. The micrometer reading is left out. Helper kit copies patch the arena and double the solver iterations.",
+  "scores": "Dream-1 run: 0.0 (mean of lots A, B, C); demo: 1.0 in each lot",
+  "media": "M-LAQET5"
+}
