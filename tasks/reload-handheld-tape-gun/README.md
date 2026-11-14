@@ -56,9 +56,10 @@ Degenerate checks (same command, `DEMO_VARIANT` in the environment):
   be opened again and the leader rerouted.
 - `tipped`: lifts the gun's handle end, drops it and leaves: 0 (nothing loaded; knocking the gun over on the bench is
   not itself a failure, only something dropping off the bench is).
-- `wound_pushed`: seats the roll, leaves the leader wound on it, turns the roll on its hub until the wound leader
-  faces the roller, then pushes the roller's arm in onto it and holds it there to the end: 0.3 (seated only). The
-  wound leader touches the roller's outer side, but it is still on the roll and does not go round the roller.
+- `wound_pushed`: turns the roll in the hand so that, once seated, its still-wound leader faces the roller; seats it,
+  never peels the leader, then pushes the roller's arm in (to its 25 deg stop) onto the wound leader and holds it
+  there to the end: 0.3 (seated only). The wound leader touches the roller's outer side, but it is still on the roll
+  and does not go round the roller.
 
 ## Run limit, runtime and seeds
 

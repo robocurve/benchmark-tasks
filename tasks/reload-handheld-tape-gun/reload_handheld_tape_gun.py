@@ -329,7 +329,7 @@ def _rules(objects):
               f"collar={kit.q(objects, 'collar_slide'):.4f} guard={q:.1f} roller={kit.q_deg(objects, 'roller_arm'):.1f} "
               f"tab={f(kit.point(objects, 'lk8', TAB_LOCAL))} tip={f(pts[-1])} gun={f(kit.point(objects, 'gun', (0, 0, 0)))} "
               f"tilt={gun_tilt(objects):.1f} gyaw={math.degrees(math.atan2(_gun_T(objects)[1, 0], _gun_T(objects)[0, 0])):.2f} "
-              f"touch={roller_touch(objects)} wrap={roller_wrap(objects):.1f} "
+              f"touch={roller_touch(objects)} wrap={roller_wrap(objects):.1f} tcps={[f(t) for t in mk.tcps()]} "
               f"under={under_roller(objects)} adh={adhesive_out(objects)} "
               f"past={end_past_blade(objects):.4f} mem={ {k: v for k, v in m.items() if isinstance(k, str) and k != 'n'} } "
               f"score={score(objects)}", flush=True)
@@ -463,15 +463,20 @@ def _plans(variant=""):
         R.go(1.0, (0.20, -0.30, TRAVEL), 0.0, "park")
         R.until(L.t)
         return {"left": L.w, "right": R.w}
-    # R: pick the roll by its core
+    # R: pick the roll by its core (wound_pushed: picked at +1.2 rad and turned to -1.2 in the hand, so the seated
+    # roll's wound leader faces the roller)
+    y_pick, cy = (1.2, -1.2) if variant == "wound_pushed" else (CORE_YAW, CORE_YAW)
     x0, y0, z0 = ROLL0
     zc = z0 + R_H / 2 - CORE_DEPTH + TIP
-    R.go(2.0, (x0, y0, zc + 0.08), F_IN, "over the roll", CORE_YAW)
-    R.go(1.5, (x0, y0, zc), F_IN, "fingers into the core", CORE_YAW)
-    R.go(1.0, (x0, y0, zc), F_GRIP, "open against the core", CORE_YAW)
-    R.go(0.5, (x0, y0, zc), F_GRIP, "settle", CORE_YAW)
+    R.go(2.0, (x0, y0, zc + 0.08), F_IN, "over the roll", y_pick)
+    R.go(1.5, (x0, y0, zc), F_IN, "fingers into the core", y_pick)
+    R.go(1.0, (x0, y0, zc), F_GRIP, "open against the core", y_pick)
+    R.go(0.5, (x0, y0, zc), F_GRIP, "settle", y_pick)
     carry = ZP + HUB_H + 0.015 + R_H - CORE_DEPTH + TIP  # roll bottom 15 mm over the hub top
-    R.go(1.5, (x0, y0, carry), F_GRIP, "lift", CORE_YAW)
+    R.go(1.5, (x0, y0, carry), F_GRIP, "lift", y_pick)
+    if variant == "wound_pushed":
+        for k in range(1, 7):
+            R.go(0.5, (x0, y0, carry), F_GRIP, "turn the roll in the hand", y_pick + (cy - y_pick) * k / 6)
     if variant == "beside":
         bx, by = 0.135, -0.110
         R.go(2.5, (bx, by, carry), F_GRIP, "over the bench beside the gun", CORE_YAW)
@@ -485,32 +490,29 @@ def _plans(variant=""):
         R.until(L.t + 2.0)
         return {"left": L.w, "right": R.w}
     ax, ay = HUB[0] + AIM[0], HUB[1] + AIM[1]  # the roll hangs a little behind the hand
-    R.go(2.5, (ax, ay, carry), F_GRIP, "over the hub", CORE_YAW)
-    R.go(1.0, (ax, ay, carry), F_GRIP, "settle over it", CORE_YAW)
+    R.go(2.5, (ax, ay, carry), F_GRIP, "over the hub", cy)
+    R.go(1.0, (ax, ay, carry), F_GRIP, "settle over it", cy)
     z_rest = ZP + COL_TOP0 + R_H - CORE_DEPTH + TIP  # roll bottom on the collar
-    R.go(1.5, (ax, ay, z_rest + 0.002), F_GRIP, "onto the hub, down to the detent", CORE_YAW)
-    R.go(0.8, (ax, ay, z_rest + 0.002), F_IN, "let go, the roll resting on the detent", CORE_YAW)
-    R.go(1.0, (ax, ay, z_rest + 0.040), F_IN, "up out of the core", CORE_YAW)
+    R.go(1.5, (ax, ay, z_rest + 0.002), F_GRIP, "onto the hub, down to the detent", cy)
+    R.go(0.8, (ax, ay, z_rest + 0.002), F_IN, "let go, the roll resting on the detent", cy)
+    R.go(1.0, (ax, ay, z_rest + 0.040), F_IN, "up out of the core", cy)
     top = ZP + COL_TOP0 + R_H  # the roll's top face while it rests on the detent
-    R.go(1.0, (HUB[0], HUB[1], top + 0.010 + TIP), F_PRESS, "pads over the tape face, either side", CORE_YAW)
-    R.go(1.0, (HUB[0], HUB[1], top + 0.001 + TIP), F_PRESS, "on the roll's face", CORE_YAW)
-    R.go(1.5, (HUB[0], HUB[1], top - 0.018 + TIP), F_PRESS, "push it past the detent ball", CORE_YAW)
-    R.go(1.0, (HUB[0], HUB[1], top - 0.018 + TIP), F_PRESS, "hold it down", CORE_YAW)
-    R.go(1.0, (ax, ay, TRAVEL), F_IN, "up", CORE_YAW)
+    R.go(1.0, (HUB[0], HUB[1], top + 0.010 + TIP), F_PRESS, "pads over the tape face, either side", cy)
+    R.go(1.0, (HUB[0], HUB[1], top + 0.001 + TIP), F_PRESS, "on the roll's face", cy)
+    R.go(1.5, (HUB[0], HUB[1], top - 0.018 + TIP), F_PRESS, "push it past the detent ball", cy)
+    R.go(1.0, (HUB[0], HUB[1], top - 0.018 + TIP), F_PRESS, "hold it down", cy)
+    R.go(1.0, (ax, ay, TRAVEL), F_IN, "up", cy)
     if variant == "wound_pushed":
-        # leader left wound on the roll: turn the seated roll (two strokes of the pads on its face) until the wound
-        # leader faces the roller, then push the roller's arm in onto it and hold it there to the end
-        face = SEAT_Z + R_H / 2 - 0.002 + TIP
-        for _ in range(2):
-            R.go(1.5, (HUB[0], HUB[1], face + 0.020), F_PRESS, "over the roll's face", 0.6)
-            R.go(1.0, (HUB[0], HUB[1], face), F_PRESS, "pads on the face", 0.6)
-            for k in range(1, 8):
-                R.go(0.4, (HUB[0], HUB[1], face), F_PRESS, "turn the roll on its hub", 0.6 - 1.2 * k / 7)
-            R.go(1.0, (HUB[0], HUB[1], face + 0.020), F_PRESS, "up off it", -0.6)
-        px, py, pz = ROLLER[0] - 0.030, ROLLER[1] + 0.002, ZP + 0.016 + TIP
-        R.go(2.0, (px, py, TRAVEL), 0.0, "over the roller's outside")
-        R.go(1.5, (px, py, pz), 0.0, "down beside it")
-        R.go(2.0, (ROLLER[0] - 0.009, py, pz), 0.0, "push the roller arm in onto the wound leader")
+        # leader left wound on the roll (which was seated turned so the wound leader faces the roller): push the
+        # roller's arm in onto it and hold it there to the end
+        # pushed along the roller's arc (unit tangent t), the closed fingers' flat back face first; commanded well
+        # past the roller, since the hand stalls against the arm's 6-15 N spring short of the target
+        t = np.array([_ay, -_ax]) / _arm_len
+        yaw_t = math.atan2(t[1], t[0]) - math.pi / 2
+        p0, p1, pz = np.array(ROLLER) - 0.032 * t, np.array(ROLLER) + 0.050 * t, ZP + 0.020 + TIP
+        R.go(2.0, (p0[0], p0[1], TRAVEL), 0.0, "over the roller's outside", yaw_t)
+        R.go(1.5, (p0[0], p0[1], pz), 0.0, "down beside it", yaw_t)
+        R.go(2.0, (p1[0], p1[1], pz), 0.0, "push the roller arm in onto the wound leader", yaw_t)
         R.until(79.0, "hold it there")
         L.until(79.0, "hold the gun")
         return {"left": L.w, "right": R.w}
