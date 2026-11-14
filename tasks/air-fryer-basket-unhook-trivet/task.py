@@ -75,7 +75,7 @@ HOUSING = Mech(
     joints=[drawer_joint],
 )
 
-# 2. Basket (loose 350 g body) carrying the release button on a prismatic slide
+# 2. Basket (loose 300 g body) carrying the release button on a prismatic slide
 basket_shapes = (
     [box(c, s, COLOR_BASKET) for c, s, _ in BASKET_BODY_BOXES]
     + [box(c, s, COLOR_HANDLE) for c, s, _ in BASKET_HANDLE_BOXES]

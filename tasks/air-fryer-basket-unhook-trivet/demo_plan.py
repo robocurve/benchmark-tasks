@@ -26,7 +26,7 @@ from geometry import (
 
 # yam_arena: yaw 0 closes the fingers along world y. Finger commands open NEGATIVE (FINGER_OPEN = -0.04695 m per finger).
 POST_OPEN = -0.020    # left hand: fingers 20 mm out each side along y, around the 14 mm wide post
-CARRY_OPEN = -0.012   # to let go of the post: a 24 mm span (GPU r90: at 40 mm the outer pad touched the basket's left wall as the hand rose)
+CARRY_OPEN = -0.012   # to let go of the post: a 24 mm span (measured on the GPU: at 40 mm the outer pad touched the basket's left wall as the hand rose)
 
 BX, BY = BASKET_START_POS[0], BASKET_START_POS[1]
 POST_Y = BY + BASKET_HANDLE_BOXES[0][0][1]                 # left post centre (world y)
@@ -86,7 +86,7 @@ def plans() -> dict[str, list[Waypoint]]:
     else:
         rx = CAP_FACE_X - PAD_HALF_X + RIGHT_DX               # tool point when the pad face touches the button
         ry = BUTTON_Y + RIGHT_DY
-        stop_x = rx + BUTTON_TRAVEL_M + 0.006                 # 14 mm stroke, commanded 6 mm past the stop (GPU r93: 12 mm shoved the basket back 15 mm)
+        stop_x = rx + BUTTON_TRAVEL_M + 0.006                 # 14 mm stroke, commanded 6 mm past the stop (measured on the GPU: 12 mm shoved the basket back 15 mm)
         right = [
             # Closed fingers (pads side by side across the 25 mm button), hover in front of the button, then down
             Waypoint(3.0, (rx - 0.030, ry, top + 0.130), FINGER_CLOSED, "over button", 0.0),

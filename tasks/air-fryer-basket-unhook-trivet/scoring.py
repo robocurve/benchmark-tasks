@@ -20,6 +20,7 @@ from geometry import (
     TABLE_TOP,
     TCP_BELOW_LINK_M,
 )
+import logic
 from logic import (
     evaluate_state,
     hot_contact,
@@ -68,6 +69,7 @@ def _org(st):
     return st.pos if o is None or not np.any(np.asarray(o, dtype=float)) else o  # unset (zero) origin: fall back to pos
 
 _TILT = {"left": None, "right": None}  # hand tilt from vertical (deg), logged with the pads
+_RAW = {"left": None, "right": None}  # raw gripper quaternion (x, y, z, w as Isaac Lab 3 reports it) and body position, logged with the pads
 _ENV = [None]  # the simulator environment, captured at reset (score() is called without it)
 
 
@@ -183,13 +185,8 @@ def _hand_data2(environment):
             bp = _to_numpy(robot.data.body_pos_w)[0]
             idx = names.index("gripper") if "gripper" in names else len(names) - 1
             x, y, z, w = (float(v) for v in _to_numpy(robot.data.body_quat_w)[0][idx])  # (x, y, z, w)
-            n = math.sqrt(x * x + y * y + z * z + w * w) or 1.0
-            x, y, z, w = x / n, y / n, z / n, w / n
-            rot = np.array([[1 - 2 * (y * y + z * z), 2 * (x * y - w * z), 2 * (x * z + w * y)],
-                            [2 * (x * y + w * z), 1 - 2 * (x * x + z * z), 2 * (y * z - w * x)],
-                            [2 * (x * z - w * y), 2 * (y * z + w * x), 1 - 2 * (x * x + y * y)]])
-            tcp = np.asarray(bp[idx] - origin, dtype=float) + rot @ np.array([0.0, 0.0, TCP_BELOW_LINK_M])
-            tcps.append(tcp)
+            _RAW[arm] = {"q": [round(x, 5), round(y, 5), round(z, 5), round(w, 5)], "bp": [round(float(v), 4) for v in (bp[idx] - origin)]}
+            body_rel = np.asarray(bp[idx] - origin, dtype=float)
             q = [0.02, 0.02]
             try:
                 jn = list(robot.joint_names)
@@ -198,12 +195,11 @@ def _hand_data2(environment):
             except Exception:
                 pass
             half_gap = max(q)
-            # As in the accepted tasks: the fingers close along the gripper's own x axis. Four 12 mm boxes per finger (see above).
-            for along in (0.0, 0.007, -0.030, -0.060):
-                centre = tcp + rot @ np.array([0.0, 0.0, along])
-                for side in (1.0, -1.0):
-                    pads.append(centre + rot[:, 0] * side * (half_gap + 0.006))
-            _TILT[arm] = round(math.degrees(math.acos(max(-1.0, min(1.0, -float(rot[2, 2]))))), 1)
+            # As in the accepted tasks: the fingers close along the gripper's own x axis. Four 12 mm boxes per finger (logic.hand_pose_boxes).
+            tcp, hand_pads, tilt = logic.hand_pose_boxes(body_rel, (x, y, z, w), half_gap)
+            tcps.append(tcp)
+            pads.extend(hand_pads)
+            _TILT[arm] = round(tilt, 1)
         return tcps, pads
     except Exception:
         _RUN["hand_fail"] = True
@@ -231,7 +227,7 @@ def score(objects: dict[str, Any], environment: Any = None) -> float:
         _tp = os.environ.get("TASK_TRACE")
         if _tp and pads:
             with open(_tp + ".pads.jsonl", "a", encoding="utf-8") as _fh:
-                _fh.write(json.dumps({"p": [[round(float(v), 3) for v in q] for q in pads], "t": [[round(float(v), 3) for v in q] for q in tcps], "tilt": dict(_TILT)}) + "\n")
+                _fh.write(json.dumps({"p": [[round(float(v), 3) for v in q] for q in pads], "t": [[round(float(v), 3) for v in q] for q in tcps], "tilt": dict(_TILT), "raw": dict(_RAW)}) + "\n")
     except Exception:
         pass
     advance(b_pos, b_quat, button_disp, tcps, pads, drawer_slide)

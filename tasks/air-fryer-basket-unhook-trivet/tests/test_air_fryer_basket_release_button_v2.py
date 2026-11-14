@@ -403,5 +403,61 @@ class TestReleasedUsesFingerPads(unittest.TestCase):
         self.assertFalse(l.released([far_centre, pad_on_basket], pos, (0, 0, 0, 1)))
 
 
+
+# --- gripper orientation convention: (x, y, z, w) as Isaac Lab 3 reports body_quat_w -----------------------------------
+# Captured from a real demo run: left gripper at the grip step, body position (0.271, 0.045, 0.9643) m, raw quaternion
+# below. The commanded tool point there was (0.271, 0.045, 0.830) m (grip height 8.25 cm above the bench top).
+CAPTURED_Q_XYZW = (0.70735, -0.70686, -0.00001, -0.00098)
+CAPTURED_BODY = (0.271, 0.0449, 0.9643)
+COMMANDED_TCP = (0.271, 0.045, 0.830)
+
+
+def _quat_about_z(angle):
+    return (0.0, 0.0, math.sin(angle / 2), math.cos(angle / 2))
+
+
+def _qmul(a, b):
+    ax, ay, az, aw = a
+    bx, by, bz, bw = b
+    return (aw * bx + ax * bw + ay * bz - az * by, aw * by - ax * bz + ay * bw + az * bx,
+            aw * bz + ax * by - ay * bx + az * bw, aw * bw - ax * bx - ay * by - az * bz)
+
+
+def test_captured_quaternion_reproduces_commanded_tool_point():
+    tcp, pads, tilt = l.hand_pose_boxes(CAPTURED_BODY, CAPTURED_Q_XYZW, 0.02)
+    assert np.allclose(tcp, COMMANDED_TCP, atol=0.002)
+    assert tilt < 1.0
+    assert len(pads) == 8
+
+
+def test_wxyz_reading_of_captured_quaternion_would_misplace_the_hand():
+    x, y, z, w = CAPTURED_Q_XYZW
+    tcp_wrong, _, tilt_wrong = l.hand_pose_boxes(CAPTURED_BODY, (y, z, w, x), 0.02)
+    assert np.linalg.norm(tcp_wrong - np.array(COMMANDED_TCP)) > 0.10
+    assert tilt_wrong > 45.0
+
+
+def test_pad_boxes_follow_a_rotated_gripper():
+    # Yaw 0: the closing axis is world y (pads either side in y); yaw +90 degrees: along world x.
+    _, pads0, _ = l.hand_pose_boxes(CAPTURED_BODY, CAPTURED_Q_XYZW, 0.02)
+    quat90 = _qmul(_quat_about_z(math.pi / 2), CAPTURED_Q_XYZW)
+    _, pads90, _ = l.hand_pose_boxes(CAPTURED_BODY, quat90, 0.02)
+    d0 = np.array(pads0[0]) - np.array(pads0[1])
+    d90 = np.array(pads90[0]) - np.array(pads90[1])
+    assert abs(d0[1]) > 0.04 and abs(d0[0]) < 1e-3
+    assert abs(d90[0]) > 0.04 and abs(d90[1]) < 1e-3
+
+
+def test_hot_contact_detected_with_rotated_gripper():
+    # A hot box (the drawer floor) at the left finger of a yaw-90 hand is hit; moving the hand 10 cm away clears it.
+    quat90 = _qmul(_quat_about_z(math.pi / 2), CAPTURED_Q_XYZW)
+    hot_xy = np.array([0.271 + 0.026, 0.0449])
+    body = np.array(CAPTURED_BODY)
+    _, pads, _ = l.hand_pose_boxes(body, quat90, 0.02)
+    nearest = min(np.linalg.norm(np.array(p)[:2] - hot_xy) for p in pads)
+    assert nearest < 0.02
+    _, pads_far, _ = l.hand_pose_boxes(body + np.array([0.0, 0.10, 0.0]), quat90, 0.02)
+    assert min(np.linalg.norm(np.array(p)[:2] - hot_xy) for p in pads_far) > 0.05
+
 if __name__ == "__main__":
     unittest.main()

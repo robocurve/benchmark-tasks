@@ -20,6 +20,7 @@ from geometry import (
     BUTTON_CLEARANCE_DISPLACEMENT_M,
     BUTTON_OUT_THRESHOLD_M,
     DRAWER_AT,
+    TCP_BELOW_LINK_M,
     DRAWER_BOXES,
     HOT_INFLATION_M,
     HOUSING_BOXES,
@@ -49,6 +50,24 @@ def rotation_from_quat(q: Sequence[float]) -> np.ndarray:
         [2.0 * (x * y + w * z), 1.0 - 2.0 * (x * x + z * z), 2.0 * (y * z - w * x)],
         [2.0 * (x * z - w * y), 2.0 * (y * z + w * x), 1.0 - 2.0 * (x * x + y * y)],
     ], dtype=float)
+
+
+def hand_pose_boxes(body_pos: Sequence[float], quat_xyzw: Sequence[float], half_gap: float):
+    """Tool point, eight pad-box centres and tilt of one gripper from its body position and its orientation.
+
+    The orientation is (x, y, z, w), the order Isaac Lab 3 reports body_quat_w in. TCP = body position + rotation applied to
+    (0, 0, TCP_BELOW_LINK_M). Pads sit on the gripper x axis (the closing axis) at half_gap + 6 mm either side of the finger
+    line; four 12 mm boxes per finger at 0, 7 mm below, 3 cm above and 6 cm above the tool point. Returns (tcp, pads, tilt_deg).
+    """
+    rot = rotation_from_quat(quat_xyzw)
+    tcp = np.asarray(body_pos, dtype=float) + rot @ np.array([0.0, 0.0, TCP_BELOW_LINK_M])
+    pads = []
+    for along in (0.0, 0.007, -0.030, -0.060):
+        centre = tcp + rot @ np.array([0.0, 0.0, along])
+        for side in (1.0, -1.0):
+            pads.append(centre + rot[:, 0] * side * (half_gap + 0.006))
+    tilt = math.degrees(math.acos(max(-1.0, min(1.0, -float(rot[2, 2])))))
+    return tcp, pads, tilt
 
 
 def tilt_deg(q: Sequence[float]) -> float:

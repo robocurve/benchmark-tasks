@@ -69,14 +69,14 @@ DRAWER_BOXES = [
 # Basket definition (loose Mech)
 BASKET_START_POS = (0.414, -0.020, TABLE_TOP + 0.047)
 BASKET_MASS = 0.30       # an empty steel basket with a rubber-coated handle (real 0.25 to 0.45 kg)
-BASKET_FRICTION = 1.2    # rubber-coated handle grips the pads (GPU r96: at 0.4 the basket slipped in the pinch and fell 11 cm onto the mat)
+BASKET_FRICTION = 1.2    # one value for the whole basket: stands for the rubber-coated handle (rubber on a gripper finger is about 1.0 to 1.5)
 
 # 5 Basket body collision boxes (all hot: true) - relative to basket origin
 BASKET_BODY_BOXES = [
     ((-0.024, 0.000, 0.000), (0.178, 0.204, 0.010), True),   # floor (with 5 mm feet stand-in); x -0.113 to 0.065
     ((-0.024, 0.100, 0.035), (0.178, 0.004, 0.060), True),   # left wall
     ((-0.024, -0.100, 0.035), (0.178, 0.004, 0.060), True),  # right wall
-    ((0.063, 0.000, 0.035), (0.004, 0.204, 0.060), True),    # back wall: 49 mm play to the drawer's back wall so the basket can pitch as it is lifted by its front handle (GPU r79: 17 mm jammed it at 11 deg)
+    ((0.063, 0.000, 0.035), (0.004, 0.204, 0.060), True),    # back wall: 49 mm play to the drawer's back wall so the basket can pitch as it is lifted by its front handle (measured on the GPU: 17 mm jammed it at 11 deg)
     ((-0.111, 0.000, 0.035), (0.004, 0.155, 0.060), True),   # front wall with a 20 mm slot at each side for the catch lugs
 ]
 
@@ -100,7 +100,7 @@ BUTTON_TRAVEL_M = 0.014
 BUTTON_RATE_N_M = 8.0
 BUTTON_DAMPING_NS_M = 5.0
 BUTTON_CLEARANCE_DISPLACEMENT_M = 0.008 # the lugs clear the ledges' rear edge after 7 mm of travel; 8 mm is the scoring threshold
-BYPASS_BAND_BUTTON_M = 0.004            # while the basket passes the ledges (lift 8 to 14 mm) the button must be at least this far in (a deliberate press, 30 % of the stroke; GPU r95: a held press reads 5.6 to 14 mm during the lift)
+BYPASS_BAND_BUTTON_M = 0.004            # while the basket passes the ledges (lift 8 to 14 mm) the button must be at least this far in (a deliberate press, 30 % of the stroke; measured on the GPU: a held press reads 5.6 to 14 mm during the lift)
 BUTTON_OUT_THRESHOLD_M = 0.0014         # >= 90% extended (<= 1.4 mm displaced of the 14 mm stroke)
 
 # 3 Button collision boxes (touchable, hot: false) - relative to button joint origin
