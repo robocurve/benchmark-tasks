@@ -1,0 +1,20 @@
+{
+  "title": "Prepare a three-step serial dilution on a powered magnetic stirrer",
+  "category": "Impact on jobs",
+  "keywords": [
+    "laboratory",
+    "pipetting",
+    "dilution",
+    "following steps in order",
+    "liquid handling"
+  ],
+  "instruction": "With the four-position magnetic stirrer already running, use the transfer pipette to dilute the dark stock by half in each cup. Move one pipetteful from the stock into cup 1, allow it to mix, then one from cup 1 into cup 2, allow it to mix, then one from cup 2 into cup 3 and allow it to mix. Stand the empty pipette back in its holder and let go.",
+  "context": "Diluting a liquid step by step is how labs make standards, dose ranges and countable samples, and is among the first bench skills technicians learn. Order matters: each cup is made from the one before, and putting a used pipette back into an earlier cup contaminates it. Done by: biological technicians; medical and clinical laboratory technicians.",
+  "setup": "Coordinates are centimetres from the midpoint between the arm bases: x forward, y left; tabletop z is 74.75. A powered four-position magnetic-stirrer deck is centred at x 23.75, y 12, measures 18 x 7 x 1.2, and is taped to the table with its long axis along x. Its four 3.4 x 3.4 cm stations are centred at x 17, 21.5, 26 and 30.5. The green power indicator faces the arms. Before the trial set all four stations to 600 rpm and leave them ON continuously. On each station, tape one clear acrylic cup (3 mm walls, 3.0 x 3.0 cm inner opening, 4 cm tall) and place one PTFE magnetic stir bar measuring 14 x 3 x 2 mm flat in the cup. The front-to-back cups are stock, cup 1, cup 2 and cup 3. Stock holds 10 mL dark blue dye solution; cups 1-3 hold 5 mL water. Verify a stable vortex without splashing in every cup before starting. A 2.2 cm inner-width, 5 cm tall pipette holder is taped at x 24, y 18. A 40 g squeeze-bulb transfer pipette stands tip-down in it. One pipetteful is 5 mL.",
+  "scoring": "Scored at the end. Each destination must remain on its powered 600 rpm station for at least 1.0 s after receiving liquid before it is sampled; aspirating earlier scores 0. A cup is right only after that mixing dwell, when it holds 5-10 mL and its strength is its target: cup 1 half the stock, cup 2 one quarter, cup 3 one eighth. Match a top photo against hand-made 1:2, 1:4, 1:8 and 1:16 references at the same fill (sim: dye fraction within a factor of 1.41). Ordered credit is 0.3, 0.6 and 0.9 for cups 1, 1-2 and 1-3. Score 1.0 when all three are right and the empty pipette stands in its holder, tip below 2 cm above the table and tilt below 20 degrees, after release. More than one stock draw, upstream re-entry/carryback, or an incompletely mixed draw scores 0. A spill outside a cup or more than 3 cm above it caps the score at 0.5. All other outcomes score 0.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Turn the four-position stirrer OFF. Empty and rinse all cups and stir bars. Return one 14 x 3 x 2 mm bar flat to each cup. Refill stock with 10 mL dye solution and cups 1-3 with 5 mL water. Empty and park the pipette with squeeze faces left-right. Set every station to 600 rpm, turn all four ON, verify stable mixing without splashing, then start. Use object_jitter=0.",
+  "fidelity": "Approximate. Four fixed stations and visible stir bars represent a powered 600 rpm mixer. The liquid ledger requires a 1.0 s powered mixing dwell after every dispense; it does not simulate vortices or fluid layers. Volumes and dye mass are conserved in Python, and one full squeeze transfers 5 mL. Spring sliders measure bulb squeeze and release. Cup colour visualizes concentration. Dimensions, operating state and reset match the real setup.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-MXU7E3"
+}
