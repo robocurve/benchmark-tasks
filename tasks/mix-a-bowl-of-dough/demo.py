@@ -1,6 +1,6 @@
 """Demo for the dough-mixing task, run in the yam_arena embodiment.
 
-    python demo.py task.py out_dir [--window] [--max-steps 2400] [--no-record] [--mode stir|onehand|still]
+    python demo.py task.py out_dir [--window] [--max-steps 2400] [--no-record] [--mode stir|onehand|still|brief|half]
 
 1. The left hand comes straight down on the bowl's grip tab and takes it between its fingers, so the bowl cannot
    turn or slide.
@@ -12,7 +12,8 @@
 4. It puts the spoon back in its clip and lets go, and both hands rise clear.
 
 ``--mode onehand`` is a control: the same stirring with the left hand kept away, so nothing steadies the bowl.
-``--mode still`` keeps both arms still (a scene check).
+``--mode still`` keeps both arms still (a scene check). ``--mode brief`` (one circle each way) and ``--mode half`` (the
+small circles only) stop the stirring early, giving controlled partial mixes.
 
 Open loop: every pose comes from the layout constants in the task file. Object states are read only to report
 where things ended up. Writes one MP4 per camera, setup.png (the first top-camera frame) and result.json.
@@ -209,11 +210,16 @@ def script(T, left, right, mode: str = "stir"):
             return work + [-radius * math.cos(a), radius * math.sin(a), 0.0]
         return at
 
-    for radius in RADII:                                                     # circles round the middle, each way
+    radii, circles, strokes = RADII, CIRCLES, True
+    if mode == "brief":                                                      # control: a short stir (a partial mix)
+        radii, circles, strokes = RADII[:1], 1, False
+    elif mode == "half":                                                     # control: half the stirring
+        radii, strokes = RADII[:1], False
+    for radius in radii:                                                     # circles round the middle, each way
         yield from right.move(work + [-radius, 0.0, 0.0], 0.6)
         for sign in (1, -1):
-            yield from right.follow(circle(radius, CIRCLES, sign), CIRCLES * CIRCLE_S)
-    for d in ((0.0, 1.0), (1.0, 0.0)):                                       # strokes across, both ways
+            yield from right.follow(circle(radius, circles, sign), circles * CIRCLE_S)
+    for d in ((0.0, 1.0), (1.0, 0.0)) if strokes else ():                   # strokes across, both ways
         v = np.array([d[0], d[1], 0.0]) * STROKE
         for _ in range(3):
             yield from right.move(work + v, 0.5)
@@ -329,7 +335,7 @@ if __name__ == "__main__":
     ap.add_argument("--max-steps", type=int, default=2400)
     ap.add_argument("--window", action="store_true", help="show the Isaac Sim window on the instance's desktop")
     ap.add_argument("--no-record", action="store_true")
-    ap.add_argument("--mode", default="stir", choices=("stir", "onehand", "still"))
+    ap.add_argument("--mode", default="stir", choices=("stir", "onehand", "still", "brief", "half"))
     ap.add_argument("--trace-every", type=int, default=5, help="steps between entries of the trace in result.json")
     a = ap.parse_args()
     sys.path.insert(0, str(Path(a.task).resolve().parent))

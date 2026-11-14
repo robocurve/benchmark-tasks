@@ -66,42 +66,57 @@ def test_dry_flour_taken_out_of_the_bowl_without_mixing_scores_zero():
     assert T.score({}) == 0.0
 
 
-# -- the real-world weighing ---------------------------------------------------------------------------------------------
+# -- the real-world weighing, on controlled partial mixes ---------------------------------------------------------------
+# Each case is a batch whose true mixed-in flour is known by construction: X g of the 240 g flour mixed into all the
+# dyed liquid, the rest left dry (loose in the bowl, sealed in lumps or taken out). The procedure weighs only white
+# (undyed) flour, so the reading follows from where the dry flour ends up.
 
-def test_bench_nothing_mixed_scores_zero():
-    assert T.bench_score(0.0) == 0.0                     # no dough: loose flour and liquid stay in the bowl
-
-
-def test_bench_removing_dry_flour_without_mixing_scores_zero():
-    """Taking 15 g of dry flour out of the bowl (under the spill limit) leaves no dough to weigh."""
-    assert T.bench_score(dough_g=0.0, spilled_g=15.0) == 0.0
-
-
-def test_bench_liquid_alone_is_not_flour():
-    """A wet lump that is mostly liquid earns nothing until it holds more than the batch's 140 g of liquid."""
-    assert T.bench_score(140.0) == 0.0
+def reading(mixed_g, sealed_g=0.0, removed_g=0.0, free_liquid_g=0.0, contact_g=0.0):
+    """What the procedure measures for a controlled batch: the white flour in the bowl (loose plus that sealed in
+    lumps, which rolling out to 2 mm exposes) and everything taken out of the bowl. Free liquid is poured off."""
+    dry_in_bowl = T.BATCH_FLOUR_G - mixed_g - removed_g - contact_g
+    return T.bench_mixed_g(dry_in_bowl, outside_g=removed_g, contact_g=contact_g)
 
 
-def test_bench_fully_mixed_dough_scores_one():
-    assert T.bench_score(380.0) == 1.0
-    assert T.bench_score(140.0 + 0.95 * 240.0) == pytest.approx(1.0)
+@pytest.mark.parametrize("mixed_g", [0.0, 60.0, 120.0, 180.0, 240.0])
+def test_partial_mixes_read_their_true_amount(mixed_g):
+    assert reading(mixed_g) == pytest.approx(mixed_g)
 
 
-def test_bench_half_mixed():
-    assert T.bench_score(140.0 + 120.0) == pytest.approx(0.5 / 0.95)
+def test_unmixed_batch_scores_zero():
+    assert T.bench_score(dry_in_bowl_g=240.0) == 0.0
 
 
-def test_bench_dry_flour_hidden_in_lumps_does_not_count():
-    """Breaking the lumps lets trapped dry flour fall through the sieve, so only the dough itself is weighed: 100 g of
-    dough plus 60 g of dry flour inside it reads as the 100 g of dough once broken open."""
-    whole, broken = 140.0 + 100.0 + 60.0, 140.0 + 100.0
-    assert T.bench_mixed_share(broken) < T.bench_mixed_share(whole)
-    assert T.bench_mixed_share(broken) == pytest.approx(100.0 / 240.0)
+def test_dry_flour_removed_without_mixing_scores_zero():
+    """15 g of dry flour spooned out (under the 19 g spill limit), nothing mixed: the removed flour is weighed with
+    everything else out of the bowl and counts as not mixed, so the score is 0."""
+    assert T.bench_score(dry_in_bowl_g=225.0, outside_g=15.0) == 0.0
 
 
-def test_bench_spill_or_tip_zeroes_the_trial():
-    assert T.bench_score(380.0, spilled_g=20.0) == 0.0
-    assert T.bench_score(380.0, tipped=True) == 0.0
+def test_dry_flour_sealed_in_small_lumps_is_not_credited():
+    """200 g mixed, 20 g of dry flour sealed in lumps under 1 cm, 20 g loose: rolling every lump to 2 mm brings the
+    sealed flour out with the loose, so the reading is 200 g, not 220 g."""
+    assert reading(200.0, sealed_g=20.0) == pytest.approx(200.0)
+    assert T.bench_mixed_g(dry_in_bowl_g=40.0) == pytest.approx(200.0)
+
+
+def test_free_liquid_does_not_undercount_mixed_flour():
+    """Half the flour mixed with only part of the liquid, 60 g of liquid left free: the liquid is poured off and never
+    weighed, so the reading stays 120 g."""
+    assert reading(120.0, free_liquid_g=60.0) == pytest.approx(120.0)
+
+
+def test_flour_wetted_by_contact_alone_is_calibrated_out():
+    """If an untouched batch shows 12 g of flour dyed just by lying against the liquid, that is subtracted: an unmixed
+    trial then reads 0 and a fully mixed one still reads full."""
+    assert T.bench_score(dry_in_bowl_g=228.0, contact_g=12.0) == 0.0
+    assert T.bench_score(dry_in_bowl_g=0.0, contact_g=12.0) == 1.0
+    assert T.bench_mixed_share(dry_in_bowl_g=114.0, contact_g=12.0) == pytest.approx(0.5)
+
+
+def test_spill_or_tip_zeroes_the_trial():
+    assert T.bench_score(0.0, outside_g=20.0) == 0.0
+    assert T.bench_score(0.0, tipped=True) == 0.0
 
 
 def pair(gap=0.0):

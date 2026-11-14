@@ -82,30 +82,35 @@ the result file.
 
 ## Scoring
 
-Tools: the trial video, a kitchen scale, a sieve with 2 mm holes and a dry spatula.
+Tools: the trial video, a kitchen scale, a sieve with 2 mm holes, a rolling pin, two sheets of baking paper and a
+dry brush. The egg and water are dyed with a few drops of food colouring at setup, so flour mixed into them turns
+coloured and dry flour stays white.
 
 - **0 for the whole trial** if at any time the bowl tips more than 30 degrees, or more than 5% of the batch by weight
   (19 g) is out of the bowl.
-- Otherwise the score is the share of the flour mixed in (taken up into the dough), divided by 0.95, at most 1.0:
-  1.0 when 95% or more of the flour is mixed in, 0.5 when 47.5% is, 0 when none is. Mixed-in flour that ended up
-  outside the bowl does not count.
+- Otherwise the score is the share of the flour mixed in, divided by 0.95, at most 1.0: 1.0 when 95% or more of the
+  flour is mixed in, 0.5 when 47.5% is, 0 when none is. Flour out of the bowl never counts as mixed.
 - Read at the end of the run.
 
-**In the real world:** the score weighs the dough itself, so only flour actually worked into the dough can earn
-credit. Flour that was spilled, spooned out, left loose in the bowl or hidden dry inside a lump never reaches the
-scale.
+**In the real world:** the procedure weighs the **dry** flour, not the dough, so free liquid cannot affect the result
+and every place dry flour can end up is weighed.
 
-1. With the bowl level, lift every lump of dough out of the bowl and off the spoon with a dry spatula onto a sieve with
-   2 mm holes. Leave loose flour and any free liquid in the bowl. Nothing from outside the bowl is used.
-2. Break every piece bigger than 1 cm into pieces under 1 cm over the sieve, then shake it for 10 seconds. Dry flour
-   that was trapped inside a lump falls through.
-3. Weigh what stays on the sieve: the dough, D grams.
-4. At most 140 g of the dough can be the egg and water, so at least D - 140 g of it is flour worked in.
-   Mixed-in share = (D - 140 g) / 240 g, and 0 if D is under 140 g.
+1. **Out of the bowl.** Collect everything outside the bowl (on the worktop, the spoon's handle, the robot) and weigh
+   it: O grams. All of it counts as not mixed, dry or wet.
+2. **Free liquid.** Pour off any liquid that runs freely from the bowl. It is not weighed: only flour is.
+3. **Tip out.** Tip the bowl's contents, and scrape the bowl and the spoon's head, onto baking paper.
+4. **Loose dry flour.** Shake the loose white powder through the sieve onto a tared plate.
+5. **Dry flour sealed in lumps.** Put every lump between the two sheets of baking paper and roll it all out to 2 mm,
+   so any pocket of dry flour, in a lump of any size, is opened. Brush the white powder off the paper and the dough
+   into the sieve and through it onto the plate.
+6. **Weigh** the white flour on the plate: W grams.
+7. **Mixed-in flour** = 240 g − W − O − C, at least 0, where C is a once-only calibration: the coloured flour found
+   by this same procedure in an untouched batch (flour wetted just by lying against the liquid, not by mixing).
+   Mixed-in share = mixed-in flour / (240 g − C).
 
-So a fully mixed batch weighs about 380 g of dough (share 1.0), a half-mixed one about 260 g (0.5), and a bowl from
-which some dry flour was spooned out without mixing has no dough to weigh (0). In code: `bench_score()` in `task.py`,
-tested in `test_scoring.py` (dry flour removed, liquid alone, flour hidden in lumps, half mixed, spill and tip).
+So spilled or spooned-out flour (in O) and dry flour loose or sealed in lumps (in W) are never credited, while free
+liquid, which is never weighed, cannot make mixed flour count for less. In code: `bench_mixed_g()` and
+`bench_score()` in `task.py`, checked on controlled partial mixes in `test_scoring.py` (see Verification).
 
 **In the simulator:** each bead of flour is dry until the spoon has worked it into the liquid: while the spoon's head
 is moving through the batch (faster than 3 cm/s) and the bead is within 4 cm of the head's middle, in contact with liquid (or flour already mixed in) and sliding against it at more
@@ -121,7 +126,23 @@ with the bowl or stirred by anything but the moving spoon. In code: `wet_step()`
 | Scripted demo | 1.0 | 96% of the flour mixed in and 1.2% of the batch out of the bowl at step 1,218 (61 s) |
 | Dream-1, 2,400 steps | 0.0 | The right gripper reached into the bowl and knocked the spoon out of its clip; the left hand did not touch the bowl and nothing was mixed |
 | Arms still | 0.0 | Nothing mixed, nothing spilled |
-| `pytest test_scoring.py` | 18 passed | Scoring rule, the spill and tip gates, the real-world weighing (dry flour spooned out scores 0, liquid alone is not flour, dry flour hidden in lumps is not counted), and the mixing rule (worked flour is mixed in; resting contact, a resting spoon, shaking far from the spoon and beads not touching are not) |
+| Short stir, `--mode brief` (control) | 0.34 | One circle each way: 31.9% of the flour mixed in, nothing spilled; a controlled partial mix |
+| Half the stirring, `--mode half` (control) | 0.43 | The small circles only: 41.2% mixed in, 0.8% out of the bowl; a controlled partial mix |
+| `pytest test_scoring.py` | 21 passed | The simulator's scoring rule, spill and tip gates and mixing rule, and the real-world procedure on controlled partial mixes (below) |
+
+The real-world procedure on controlled partial mixes (`test_scoring.py`). Each batch's true mixed-in flour is known by
+construction: some of the flour mixed into all the dyed liquid, the rest left dry. The procedure weighs only white
+flour, so its reading follows from where that dry flour is:
+
+| Controlled batch | True mixed-in flour | Procedure's reading | Score |
+|---|---|---|---|
+| Nothing mixed (240 g white flour in the bowl) | 0 g | 0 g | 0 |
+| 15 g of dry flour spooned out, nothing mixed (W = 225 g, O = 15 g) | 0 g | 0 g | 0 |
+| 60, 120 or 180 g mixed, the rest loose | 60, 120, 180 g | 60, 120, 180 g | 0.26, 0.53, 0.79 |
+| 200 g mixed, 20 g of dry flour sealed in lumps under 1 cm, 20 g loose | 200 g | 200 g (the sealed 20 g is exposed by rolling out) | 0.88 |
+| 120 g mixed, 60 g of the liquid left free | 120 g | 120 g (free liquid is poured off, never weighed) | 0.53 |
+| All 240 g mixed | 240 g | 240 g | 1.0 |
+| Nothing mixed, with 12 g of flour dyed by contact (C = 12 g) | 0 g | 0 g | 0 |
 
 ## Runtime and seeds
 

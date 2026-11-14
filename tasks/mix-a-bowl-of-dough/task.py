@@ -268,24 +268,35 @@ def score(objects) -> float:
     return min(1.0, wetted_share() / FULL)
 
 
-# -- the same score in the real world: weighing the dough --------------------------------------------------------------
+# -- the same score in the real world: weighing the dry flour ---------------------------------------------------------
 BATCH_FLOUR_G, BATCH_LIQUID_G = 240.0, 140.0
 
 
-def bench_mixed_share(dough_g: float) -> float:
-    """Real-world mixed-in share from the weighing: ``dough_g`` is what stays on the 2 mm sieve after the dough has
-    been lifted out of the bowl (loose flour and free liquid left behind, nothing from outside the bowl), broken into
-    pieces under 1 cm and shaken. At most 140 g of it can be the liquid, so at least dough_g - 140 g of it is flour
-    worked into the dough. Spilled, left-over or hidden dry flour is never in that weight, so it never counts."""
-    return max(0.0, min(1.0, (float(dough_g) - BATCH_LIQUID_G) / BATCH_FLOUR_G))
+def bench_mixed_g(dry_in_bowl_g: float, outside_g: float = 0.0, contact_g: float = 0.0) -> float:
+    """Real-world mixed-in flour (g) from the weighing (the procedure is in the README).
+
+    ``dry_in_bowl_g``: the white (undyed) flour from the bowl and spoon: the loose powder shaken through the sieve plus
+    what is brushed off after every lump has been rolled out to 2 mm, so dry flour sealed in a lump of any size is
+    counted. ``outside_g``: everything out of the bowl (spilled or spooned out, dry or wet), all of it counted as not
+    mixed in. ``contact_g``: the calibration: dyed flour found by the same procedure in an untouched batch (flour
+    wetted by lying against the liquid, not by mixing), measured once before trials.
+
+    Free liquid is poured off and not weighed at all, so however much liquid is left free, it cannot change the
+    result: only flour is weighed."""
+    dyed = BATCH_FLOUR_G - float(dry_in_bowl_g) - float(outside_g)
+    return max(0.0, min(BATCH_FLOUR_G - contact_g, dyed - contact_g))
 
 
-def bench_score(dough_g: float, spilled_g: float = 0.0, tipped: bool = False) -> float:
+def bench_mixed_share(dry_in_bowl_g: float, outside_g: float = 0.0, contact_g: float = 0.0) -> float:
+    return bench_mixed_g(dry_in_bowl_g, outside_g, contact_g) / (BATCH_FLOUR_G - contact_g)
+
+
+def bench_score(dry_in_bowl_g: float, outside_g: float = 0.0, contact_g: float = 0.0, tipped: bool = False) -> float:
     """The real-world score: 0 if the bowl tipped past 30 degrees or more than 19 g (5% of the batch) was ever out
     of the bowl; otherwise the mixed-in share divided by 0.95, at most 1."""
-    if tipped or spilled_g > SPILL_MAX * (BATCH_FLOUR_G + BATCH_LIQUID_G):
+    if tipped or outside_g > SPILL_MAX * (BATCH_FLOUR_G + BATCH_LIQUID_G):
         return 0.0
-    return min(1.0, bench_mixed_share(dough_g) / FULL)
+    return min(1.0, bench_mixed_share(dry_in_bowl_g, outside_g, contact_g) / FULL)
 
 
 def success(objects) -> bool:
