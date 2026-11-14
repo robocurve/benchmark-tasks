@@ -1,14 +1,15 @@
-"""An assembly station's spring balancer, with its nutrunner lying on the bench. The balancer housing hangs from
-a post over the bench; its cable ends in a load bar (a steel arm hanging level from the cable's swivel) with an
-open hook at its front end. The constant-force spring is set for the tool: it pulls the cable up with 12.3 N, the
-weight of the hook and the 1.1 kg tool together, so an empty hook is pulled up hard against the housing stop and a
-loaded hook floats wherever it is left. A park detent in the cable reel holds the loaded hook at the park height.
+"""An assembly station's spring balancer, with its air nutrunner lying on the bench, its air hose uncoupled. The
+balancer housing hangs from a boom over the bench; its cable ends in a swivel and a steel hook (a short shank with
+a level hook bar and an upturned tip). The constant-force spring pulls the cable up with 12.1 N, 3% over the weight
+of the hook and the 1.1 kg tool together, so an empty hook is pulled up hard against the cable stop and a hung tool
+drifts up until the park detent in the cable reel holds it, 1.5 cm below the stop.
 
 The nutrunner (a straight air nutrunner, 28 cm long) lies on the bench. It has two loops on top: the hang bail at
 its balance point, and the trigger guard around the start lever near the front.
 
-The job: pull the hook down, get it through the bail, lift the tool off the bench and leave it hanging at the park
-detent. Letting go of an empty hook lets it whip up into the stop; dropping the tool is a failure too.
+The job: lift the tool to the hook, put the bail (not the trigger guard) over the hook bar, let the spring take the
+weight and leave the tool hanging at the park detent. Letting go of an empty hook pulled down lets it whip up into
+the stop; dropping the tool is a failure too.
 
 Mechanism parts come from mechkit.py (in this folder), which adds joints to the stock runtime in memory.
 
@@ -89,7 +90,7 @@ LOOP_IN_W = 0.018  # loop opening across (x)
 LOOP_IN_H = 0.024  # loop opening height
 GUARD_X = 0.060  # trigger guard, toward the front (+x)
 TX = HX
-TY0 = HY - 0.024 - 0.090  # bail centred 2.4 cm along the hook bar from the shank  # start: 9 cm to -y of where the bail goes onto the hook
+TY0 = HY - 0.024 - 0.090  # start: 9 cm to -y of where the bail goes onto the hook (2.4 cm along the bar)
 TZ = TOP + BODY[2] / 2
 
 
@@ -216,7 +217,7 @@ def hooked(objects) -> bool:
 
 
 def hanging(objects) -> bool:
-    """Through the bail, the bail's inner top resting on the hook bar (within 4 mm), the tool's underside 1 cm or
+    """Through the bail, the bail's inner top resting on the hook bar (within 4 mm), the tool's underside 8 mm or
     more above the bench."""
     top = _through(objects, 0.0)
     return top is not None and LOOP_TOP - top <= 0.004 and float(objects["tool"].low[2]) >= TOP + 0.008
@@ -248,7 +249,7 @@ def parked(objects) -> bool:
 
 
 def failed(objects) -> bool:
-    """Latched: the hook whipped up (over 1.5 m/s, or 25 mm in one 50 ms step), or the tool fell (faster than
+    """Latched: the hook whipped up (over 1.5 m/s, or 12 mm in one 50 ms step), or the tool fell (faster than
     0.95 m/s down, i.e. a free drop of about 5 cm, or 5 cm below the bench top)."""
     M = mk.MEMORY
     return bool(M.get("whip") or M.get("dropped"))
