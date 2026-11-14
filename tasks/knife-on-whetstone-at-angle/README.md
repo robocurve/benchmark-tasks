@@ -7,6 +7,21 @@ few strokes on each face, then lay the knife back down flat with its edge facing
 (the easy pose for a gripper that picked it up flat), holding it steep, or doing one face only are the tempting wrong
 answers.
 
+## Run a trial
+
+Scripted demo (reaches full score):
+
+```
+inspect-robots run --embodiment yam_arena --policy yam_scripted -E task=tasks/knife-on-whetstone-at-angle/task.py \
+  -E object_jitter=0 -E control_hz=20 -E cam_width=320 -E cam_height=176 \
+  --instruction "Sharpen the knife on the whetstone, then put it back on the chopping block." \
+  --scorer task_score --max-steps 2400
+```
+
+Model run (Dream-1): the same command with `--policy dream --max-steps 2400` (2,400 steps = 2 minutes at 20 Hz).
+
+Offline checks (no simulator): `python3 test_task.py` (45 checks, prints "all pass").
+
 ## Spec
 
 ### Scene (cm from the midpoint between the arm bases, x forward, y to the robot's left, table top z = 0)
@@ -35,43 +50,14 @@ answers.
 | Fewer than 3 strokes on both faces (doing nothing, flat, too-steep or rolled-off strokes, hovering, dragging without a grip, edge-trailing) | 0 |
 | 3+ strokes on one face only: the edge is pushed over into a wire, not sharp | 0.25 |
 | 3+ strokes on each face, but under 12 of the 16 edge points (three quarters of the edge) worked on a face: the right technique, but a quarter or more of the edge still dull | 0.5 |
-| 3+ strokes and 12+ points worked on each face, knife still held, left on the stone or edge towards the robot: sharpened, but not put down safely | 0.75 |
+| 3+ strokes and 12+ points worked on each face, knife still held, left on the stone or edge toward the robot: sharpened, but not put down safely | 0.75 |
 | Both faces worked along most of the edge, knife put down safely, still for 1 s | 1.0 |
 
-Where the arms end is not scored. In a real trial the marker test reads the same things: ink gone right at the edge
-(the angle), on both faces, along at least three quarters of the edge on each (measured with a ruler); a knife held
-even slightly off the stone removes no ink.
+Where the arms end is not scored. These are the sim's tiers; a real trial scores the same ladder from edge-tester
+readings (Real-world build, below).
 
 Why edge leading: an edge-first stroke cuts into the stone like slicing a thin layer off it and raises less of a wire
 burr than a trailing stroke; on face A the demo pushes (edge away from the robot), on face B it pulls.
-
-## How it differs
-
-Unlike sanding an edge with a block held flat on it, the skill here is holding a tool tilted into a
-narrow band rather than flat: the knife is held off the stone at 13 to 22 degrees measured across the blade, with its
-length level so 3 cm or more of the edge is on the stone, moved along so the heel, middle and tip each cross it, and moved edge leading (pushed on one face, pulled on the
-other), then flipped over to sharpen the second face, since one face alone only raises a wire. Strokes held too steep
-work a steeper micro-bevel and do not count, whereas the sanding block has no wrong side and no wrong angle.
-
-## Files
-
-- `task.py`: scene, scorer and scripted demo (right arm only). `yamkit.py`: local copy of the kit, with three additions
-  (a `com` center of mass on `Prop`, an explicit `rot` matrix on `Tilted`, and `rot_z` on a box `Collider` for the
-  blade's rising tip).
-- `guardkit.py`: contact between a gripper's own shape (palm and both fingers at their present opening, boxes fitted to
-  its collision meshes) and the knife: `gripping()` for holding (both fingers on the handle, the opening stopped by
-  it) and `touching()` for letting go. Trimmed to these two checks.
-- `test_task.py`: offline scorer checks (prints "all pass"), including a hand half open round the handle, one finger
-  on it, an empty fist on it, and an open hand resting on the laid-down knife or just clear of it.
-
-## Run a trial
-
-```
-inspect-robots run --embodiment yam_arena --policy yam_scripted -E task=tasks/knife-on-whetstone-at-angle/task.py \
-  -E object_jitter=0 -E control_hz=20 -E cam_width=320 -E cam_height=176 \
-  --instruction "Sharpen the knife on the whetstone, then put it back on the chopping block." \
-  --scorer task_score --max-steps 2400 --log-dir ~/yam-eval
-```
 
 ## The demo
 
@@ -94,15 +80,72 @@ Sim result: 1.0 in 1,310 steps (65.5 seconds at 20 Hz): 6 strokes counted on fac
 
 ## Fidelity
 
-Nothing is ground: sharpness is scored from the knife's pose while on the stone; a real trial checks the marker ink on the bevels instead. The stone is rigid and dry. The knife
-is 100 g (real about 140 g); its blade colliders are boxes following the outline, turned along the tip's rise so the edge the scorer reads is the one that touches. The sharpening stand is 6 cm tall so the wrist housing clears the bench during strokes.
+Nothing is ground: the sim scores strokes from the knife's pose while it is on the stone (angle, contact, travel per
+edge point) as a stand-in for steel removed; a real trial measures the edge with the edge tester instead. The stone is
+rigid and dry. The knife is 100 g (real about 140 g); its blade colliders are boxes following the outline, turned along
+the tip's rise so the edge the scorer reads is the one that touches. The sharpening stand is 6 cm tall so the wrist
+housing clears the bench during strokes.
 
 ## Real-world build
 
 Any 165 to 180 mm santoku or gyuto with a wa handle; a 1000-grit 180 x 60 x 25 mm stone in a rubber holder screwed
 to a 6 cm hardwood block; a 12 x 22 x 8 cm end-grain butcher block. Fix the stand and block to the bench with
-double-sided tape or clamps at the positions above. Check a trial from the top and side video with 15 and 20 degree
-angle cards, and by coloring the bevel with a marker: the right angle takes the ink off at the very edge.
+double-sided tape or clamps at the positions above. Film the top and the side, with 15, 20 and 22 degree angle cards
+beside the stone.
+
+Edge tester: a BESS edge sharpness tester (for example an Edge-On-Up PT50B), which reads the grams of force an
+edge needs to cut through its standard test filament. Lower is sharper. Rough reference points on that scale: about 50 g
+for a new razor blade, 300 g or less for a new kitchen knife, and 500 g or more for a kitchen knife that needs
+sharpening. Use a fresh piece of filament for each reading.
+
+Starting dullness, before every trial (the same every time):
+
+1. Soak the stone 10 minutes and set it on a kitchen scale.
+2. Hold the knife upright, edge straight down on the stone, and draw the whole edge once along the stone's length, heel
+   to tip, pressing until the scale reads about 500 g above the stone's weight (about 5 N). This jointing pass grinds a
+   flat of even width along the edge, which shows under a lamp as a thin unbroken line of reflected light.
+3. Read the tester at the four points marked on face B, just above the bevel, 2, 6, 10 and 14 cm from the heel. Every
+   point must read 500 g or more; if one does not, repeat step 2. Write the four readings down as the start.
+
+After the trial: photograph the knife from above (put-down), then read the tester at the same four points without
+stropping, deburring or wiping the edge on anything.
+
+| Real-trial result | Score |
+|---|---|
+| At least 3 of the 4 points at 300 g or less, knife put down safely and still | 1.0 |
+| At least 3 of the 4 points at 300 g or less, knife not put down safely | 0.75 |
+| 1 or 2 points at 300 g or less | 0.5 |
+| No point at 300 g or less, but at least 3 points 100 g or more below their own start | 0.25 |
+| Anything else, including nothing done | 0 |
+
+Why these numbers: 300 g is a sharp kitchen edge that a 1000-grit stone gives, and the start (500 g or more) is a knife
+plainly in need of sharpening, so full credit needs a real change in the edge. Three of four points matches the sim's
+three quarters of the edge. A wire edge left by sharpening one face only can fold over on the filament and read high, so
+sharpening one face tends to land at 0.25, as it does in the sim. The angle cards let a reader see the angle used; the
+angle itself is not scored in a real trial, because the reading is the outcome.
+
+## How the sim's strokes relate to the measured edge
+
+The sim grinds no steel. It counts a point of the edge as worked once it has been on the stone for 5 cm of in-band,
+edge-first travel, and full credit needs 3 or more strokes and 12 of 16 points worked on each face. That is the
+smallest amount of work that can sharpen the edge: every point must have touched the stone at the sharpening angle on
+both faces. It is not a measured match. The jointing pass is kept to a single light pass so that the flat it leaves is
+narrow, but how many strokes per face a person needs to bring the four marked points from 500 g to 300 g on this stone
+has not yet been measured. Before real trials the builder sharpens the dulled knife by hand at 17 degrees, counting
+strokes per face and reading the tester after every pair of strokes. If that count is above the sim's thresholds, the
+sim's stroke and travel thresholds are raised to match and the demo is re-run. In a real trial the tester readings
+decide the score in every case.
+
+## Files
+
+- `task.py`: scene, scorer and scripted demo (right arm only). `yamkit.py`: the task's helper module for building the
+  scene, with three additions (a `com` center of mass on `Prop`, an explicit `rot` matrix on `Tilted`, and `rot_z` on
+  a box `Collider` for the blade's rising tip).
+- `guardkit.py`: contact between a gripper's own shape (palm and both fingers at their present opening, boxes fitted to
+  its collision meshes) and the knife: `gripping()` for holding (both fingers on the handle, the opening stopped by
+  it) and `touching()` for letting go. Trimmed to these two checks.
+- `test_task.py`: offline scorer checks (`python3 test_task.py`, prints "all pass"), including a hand half open round
+  the handle, one finger on it, an empty fist on it, and an open hand resting on the laid-down knife or just clear of it.
 
 ## Licenses
 
