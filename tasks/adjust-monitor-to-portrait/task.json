@@ -1,0 +1,21 @@
+{
+  "title": "Raise and pivot a desktop monitor to portrait without striking the desk or moving its base",
+  "category": "Societal relatability",
+  "keywords": [
+    "monitor",
+    "portrait rotation",
+    "counterbalance",
+    "friction hinge",
+    "clearance",
+    "bimanual"
+  ],
+  "instruction": "Turn the monitor to portrait for reading a document. Leave its centre 32 cm above the desk, facing straight ahead and upright, with the base where it started. Let go and leave it stable.",
+  "context": "People turn adjustable desktop monitors to portrait to read long documents or code. The screen starts low, so its corners would strike the desk during a direct rotation. The robot must make room by raising and tilting the screen, manipulate its thin edges through the rotation, and leave it upright without moving the base or relying on a hand for support. This uses a normal directly adjustable stand rather than the three unmarked axis-release buttons of our earlier rejected trainer.",
+  "setup": "Standard bimanual YAM with parallel grippers and a laminate desk, top 747.5 mm above the floor. Coordinates in metres: x forward from the arm-base line, y left, z above the floor. Two fixed metal arm pedestals, each 200 x 200 x 350 mm, centred at (0,+/-0.305,0.9225), support robot bases at z=1.10. Monitor based on Dell P2217 dimensions: black plastic case 503.4 mm wide, 330.4 mm high, 50.3 mm deep; panel mass 3.00 kg; visible glass area 473.76 x 296.10 mm. Grey metal stand and weighted foot, total monitor/stand mass 5.33 kg. Foot is 180 mm front-to-back, 242.6 mm wide and 20 mm thick, centred at (0.19,0.025,0.7575). Column rises behind the screen. Monitor root at (0.18,0.025,0.7575); screen starts landscape, upright, facing -x. Its centre is 202.2 mm above the desk. Stand has a passive counterbalanced 130 mm height slide, -5 to +21 degree tilt, +/-90 degree pivot and +/-45 degree swivel; no axis-release buttons. Joint pivots and complete primitive geometry are in task.py. The desk, floor, camera mast, lights and one overhead plus two wrist cameras are the standard station. Arms start in READY with open grippers. One fixed layout, no jitter.",
+  "scoring": "1.0 if portrait within 3 degrees, centre 320 +/-10 mm above the desk, tilt and swivel within 3 degrees of their starting upright/forward orientations, hands clear, maintained for 2 s with centre drift below 2 mm and pivot drift below 1 degree. 0.5 if portrait within 3 degrees and hands clear but full-score conditions absent. Otherwise 0.25 if raised more than 100 mm and rotated more than 30 degrees; else 0. At every step, the base must stay within 10 mm and 3 degrees of its initial pose, and every panel corner must remain more than 1 mm above the desk; any violation permanently makes this trial score 0. Both clockwise and counterclockwise portrait count. Full success ends the trial early.",
+  "run_limit": "1,800 joint-position control steps (90 seconds at 20 Hz).",
+  "reset_notes": "Return the monitor to its lowest landscape position with zero tilt and swivel, put the foot back on its marked location and both arms at READY. Episode reset restores root and all four passive joints, clears history and settles physics.",
+  "fidelity": "Rigid primitive geometry uses Dell P2217 external dimensions/ranges. Internal mass distribution, counterbalance and friction are estimates, not manufacturer calibration. A preloaded low-rate spring represents the height counterbalance; passive friction holds tilt/pivot. No axis locks or task-joint goal actuation. Arm pedestals are physical. Cables, glass fracture and cosmetic damage are omitted; no invented force-based damage threshold.",
+  "scores": "Dream-1 beta: 0.0 (1800 steps, seed 1, no errored trial); scripted demo: 1.0 (787 steps).",
+  "media": "M-AJD7P9"
+}
