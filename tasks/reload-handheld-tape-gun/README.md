@@ -23,7 +23,7 @@ installs them. Before every shell: `source ~/IsaacLab-Arena/yam.env`; the Dream 
 python tasks/reload-handheld-tape-gun/reload_handheld_tape_gun.py
 ```
 
-Asserts the scoring rules on hand-built states (15 cases) and replays every demo plan (full and the three
+Asserts the scoring rules on hand-built states (13 cases) and replays every demo plan (full and the three
 degenerate variants, both arms) through the kinematics, checking IK error and joint limits.
 
 ## Run and score one Dream-1 trial
@@ -47,12 +47,14 @@ the roller's outside and slides it along the nose face past the blade. The left 
 the guard back past its detent; its spring shuts it on the leader. The right arm lets go. `TAPE_DEBUG=1` prints the
 state every second.
 
-Degenerate checks (same command, `DEMO_VARIANT` in the environment), all score 0:
+Degenerate checks (same command, `DEMO_VARIANT` in the environment):
 
-- `beside`: sets the roll down on the bench next to the gun.
+- `beside`: sets the roll down on the bench next to the gun: 0.
 - `over`: seats the roll, opens the guard, then lays the leader straight from the roll to the nose so the roller is on
-  its inside (draped over it) and pushes the guard shut on it: misfed, latched 0.
-- `tipped`: lifts the gun's handle end and drops it; the gun tips past 30 deg, latched 0.
+  its inside (draped over it) and pushes the guard shut on it: 0.3 (seated only). Nothing latches, so the guard could
+  be opened again and the leader rerouted.
+- `tipped`: lifts the gun's handle end, drops it and leaves: 0 (nothing loaded; knocking the gun over on the bench is
+  not itself a failure, only something dropping off the bench is).
 
 ## Run limit, runtime and seeds
 

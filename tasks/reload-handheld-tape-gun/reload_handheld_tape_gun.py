@@ -4,7 +4,7 @@ tape lies on the bench beside it, its leader wound round it with a folded tab at
 The job: push the roll's 76 mm core onto the spring hub until it clicks past the detent ball (12 N), peel the leader,
 lead it round the outside of the sprung tension roller, swing the blade guard open, lay the leader along the nose so
 its end sticks out past the blade, and let the guard close on it. One hand holds the gun by its handle while the
-other works; the gun is free on the bench and can be pushed around or tipped.
+other works; the gun is free on the bench and can be pushed around, tipped or knocked off it.
 
 The tape leader is eight rigid links joined by hinges (the adhesive side is each link's local -y face). Mechanism
 parts come from mechkit.py (in this folder), which adds joints to the stock runtime in memory.
@@ -211,7 +211,7 @@ UNDER = np.array([-1.0, 1.0]) / math.sqrt(2.0)  # the roller side facing away fr
 
 
 def under_roller(objects) -> bool:
-    """A segment of links 2-6 touches the roller (centreline within 13.5 mm of its axis) on its outer side."""
+    """A segment of links 2-6 touches the roller (centreline within 16 mm of its axis) on its outer side."""
     c = to_gun(objects, kit.point(objects, "roller", (ROLLER[0] - ROLLER_PIVOT[0], ROLLER[1] - ROLLER_PIVOT[1], 0)))
     c = c[:2]
     pts = chain_points(objects)
@@ -239,12 +239,6 @@ def end_past_blade(objects) -> float:
     if not (NOSE_X - 0.0045 <= mid[0] <= NOSE_X + 0.0035 and NOSE_X - 0.0045 <= tip[0] <= NOSE_X + 0.0035):
         return -1.0
     return float(BLADE_Y - tip[1])
-
-
-def end_at_nose(objects) -> bool:
-    """The leader's end is out at the nose (within 15 mm of its face, beyond the roller toward the blade)."""
-    tip = chain_points(objects)[-1]
-    return bool(abs(tip[0] - NOSE_X) <= 0.015 and tip[1] <= ROLLER[1] - 0.010)
 
 
 def guard_closed(objects) -> bool:
@@ -292,20 +286,8 @@ def _rules(objects):
     # guard detents: past 45 deg it stays open; below, the spring shuts it
     q = kit.q_deg(objects, "guard_turn")
     _drive_once("guard", "guard_turn", 100.0 if q >= 45.0 else -20.0)
-    shut = q <= 6.0
-    if shut and m.get("guard_was_open"):
-        past = end_past_blade(objects)
-        if 0.0 <= past < 0.005:
-            m["cut"] = True  # the guard snapped shut on a leader barely over the teeth: torn off short
-        elif (past >= 0.0 or (m.get("peeled") and end_at_nose(objects))) and not under_roller(objects):
-            m["misfed"] = True  # leader over the blade but not round the roller: the gun jams
-    m["guard_was_open"] = not shut
-    # wrong face: a turned-over roll with the leader engaged on the roller
-    if m.get("seat") == "dn" and under_roller(objects):
-        m["wrong_face"] = True
-    if gun_tilt(objects) > 30.0 or float(kit.point(objects, "gun", (0, 0, 0))[2]) < TOP - 0.05:
-        m["tipped"] = True
-    for n in ("roll", "lk8"):
+    # off the bench: the gun, the roll or the leader end dropped 5 cm below the bench top (out of reach, on the floor)
+    for n in ("gun", "roll", "lk8"):
         if float(kit.point(objects, n, (0, 0, 0))[2]) < TOP - 0.05:
             m["floor"] = True
     if os.environ.get("TAPE_DEBUG") and m["n"] % 20 == 0:
@@ -343,7 +325,7 @@ def settled(objects) -> bool:
 
 def failed(objects) -> bool:
     m = mk.MEMORY
-    return bool(m.get("tipped") or m.get("floor") or m.get("cut") or m.get("misfed") or m.get("wrong_face"))
+    return bool(m.get("floor"))
 
 
 def seated(objects) -> bool:
@@ -351,13 +333,14 @@ def seated(objects) -> bool:
 
 
 def score(objects) -> float:
-    """0 if failed() or the roll is not seated past the detent. Seated 0.3; leader round the outside of the roller
-    (roll face out) 0.3; with that, adhesive out on the last two links 0.2; with that, end 5-25 mm past the blade on
-    the nose face, guard shut on it, hands off and still 0.2."""
-    if failed(objects) or not seated(objects):
+    """0 if failed() or the roll is not seated face out past the detent. Seated face out 0.3; leader round the
+    outside of the roller 0.3; with that, adhesive out on the last two links 0.2; with that, end 5-25 mm past the
+    blade on the nose face, guard shut on it, hands off and still 0.2. Only failed() latches; the rest is read off
+    the state at the last step, so a misfed or short leader can still be put right."""
+    if failed(objects) or not seated(objects) or roll_face(objects) <= 0:
         return 0.0
     s = 0.30
-    if roll_face(objects) > 0 and under_roller(objects):
+    if under_roller(objects):
         s += 0.30
         if adhesive_out(objects):
             s += 0.20
@@ -562,7 +545,7 @@ def _plans(variant=""):
 
 
 def demo():
-    # DEMO_VARIANT: beside | over | tipped (degenerate checks; all score 0)
+    # DEMO_VARIANT: beside | over | tipped (degenerate checks: 0, 0.3 seated only, 0)
     return _plans(os.environ.get("DEMO_VARIANT", ""))
 
 
@@ -652,12 +635,10 @@ def self_test():
         "everything done": (st(chain=good), [], S, 1.0),
         "end 3 mm past the blade": (st(chain=_route("good", 0.003)), [], S, 0.8),
         "end 30 mm past the blade": (st(chain=_route("good", 0.030)), [], S, 0.8),
-        "turned-over roll, routed": (st(roll=flip, chain=good), [], {"detent": True, "seat": "dn"}, 0.3),
+        "turned-over roll": (st(roll=flip), [], {"detent": True, "seat": "dn"}, 0.0),
+        "turned-over roll, routed": (st(roll=flip, chain=good), [], {"detent": True, "seat": "dn"}, 0.0),
         "roll beside the hub": (st(roll=(np.array([0.16, -0.08, TOP + R_H / 2]), I)), [], {"detent": True}, 0.0),
-        "cut short": (st(chain=good), [], {**S, "cut": True}, 0.0),
-        "misfed": (st(chain=good), [], {**S, "misfed": True}, 0.0),
-        "wrong face latched": (st(chain=good), [], {**S, "wrong_face": True}, 0.0),
-        "gun tipped": (st(chain=good), [], {**S, "tipped": True}, 0.0),
+        "everything done, something fell off the bench earlier": (st(chain=good), [], {**S, "floor": True}, 0.0),
     }
     try:
         for name, (s_, tcps, mem, want) in cases.items():
@@ -667,7 +648,6 @@ def self_test():
             got = score(s_)
             assert abs(got - want) < 1e-9, (name, got, want)
         assert under_roller(st(chain=good)) and not under_roller(st(chain=_route("over")))
-        assert end_at_nose(st(chain=_route("over"))) and end_at_nose(st(chain=good))
     finally:
         mk.new_episode()
         _TEST_TCPS = None
