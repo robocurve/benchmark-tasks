@@ -30,7 +30,7 @@ INSTRUCTION = "Put a timber block on the tray in front of the left arm."
 BLOCK = (0.15, 0.05, 0.03)  # length, width, height
 BLOCK_KG = 0.20
 TIMBER, TIMBER_DARK = (0.78, 0.62, 0.40), (0.70, 0.54, 0.33)
-CRIB_C = (0.33, 0.17)
+CRIB_C = (0.37, 0.17)  # 8 cm clear of the left arm's wrist on its way to the tray
 LAYERS = 4
 GAP = 0.0005
 CASING = (0.16, 0.16, 0.08)
@@ -141,7 +141,7 @@ def distance(objects) -> float:
 
 # -- scripted demo -------------------------------------------------------------------------------------------------
 # The right arm brings the spare to the middle of the bench and sets it down; the left arm takes it from there to the
-# tray. The crib is never touched (the left arm passes 3.5 cm in front of it at most).
+# tray. The crib is never touched.
 TRAVEL_Z = TOP + 0.12
 GRIP_Z = TOP + BLOCK[2] / 2
 MID = (0.20, 0.0)

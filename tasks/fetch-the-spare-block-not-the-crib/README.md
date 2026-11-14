@@ -43,4 +43,4 @@ inspect-robots run --embodiment yam_arena --policy yam_scripted \
 - The demo (right arm, then left) takes about 20 s of simulated time. One fixed layout: `-E object_jitter=0`.
 - `test_task.py` (no GPU) checks the layout, the reach that makes the handover necessary, the 5 mm budget, the
   ladder, a held spare, and the null policy. It also replays the demo with the arms' link positions (1.0, more
-  than 3 cm from the crib throughout) and taking a crib block (0).
+  than 7 cm from the crib and casing after its first move) and taking a crib block (0).

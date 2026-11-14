@@ -98,10 +98,16 @@ def test_the_demo_replay_scores_one():
     assert R.run(M, M.TRIAL, frames) == 1.0 and not M.TRIAL.mem["violated"]
 
 
-def test_the_demo_stays_clear_of_the_crib():
+def test_the_demo_stays_clear_of_the_crib_and_casing():
+    # Link frame origins, not link surfaces: the wrist and gripper body extend about 4.5 cm around them. A first
+    # layout with 4.4 cm here had the left wrist knock the casing in the simulator.
     frames = R.replay(M, M.demo(), links=True)
-    gaps = [min(R.hhkit.point_box(p, c, s) for c, s in M.CRIB.values()) for _o, _g, pts in frames for p in pts]
-    assert min(gaps) > 0.03
+    spec = {o.name: o for o in M.OBJECTS}
+    boxes = [*M.CRIB.values(), (spec["casing"].pos, M.CASING)]
+    gaps = [min(R.hhkit.point_box(p, c, s) for c, s in boxes for p in pts) for _o, _g, pts in frames]
+    # The left arm's first move, down from its raised start pose, passes 4 cm above the casing (clear in sim).
+    start = int(6.0 * R.HZ)
+    assert min(gaps[:start]) > 0.04 and min(gaps[start:]) > 0.07
 
 
 def test_taking_a_crib_block_scores_zero():
