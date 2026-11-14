@@ -38,7 +38,7 @@ Offline checks (no simulator): `python3 test_task.py` (51 checks, prints "all pa
 | Term | Definition (all thresholds in task.py) |
 |---|---|
 | Sharpening angle | Measured across the blade: how far its width (spine to edge) tilts below the stone's level top, edge down. A knife pitched tip-down about its width has no sharpening angle |
-| Level | The blade's length (handle to tip) within 5 deg of horizontal: a stone stroke keeps the edge lying along the stone, and a 5 deg pitch already lifts the far end of a 6 cm contact 5 mm off it. The edge's rise near the tip comes onto the stone with the handle lifted about 3 deg, as a sharpener does for the tip, inside this limit |
+| Level | The blade's length (handle to tip) within 5 deg of horizontal: a stone stroke keeps the edge lying along the stone, and a 5 deg pitch already lifts the far end of a 6 cm contact 5 mm off it. The edge's rise near the tip comes onto the stone with the handle lifted about 3 deg, as a sharpener does for the tip, inside this limit (the demo does not lift it: The demo, below) |
 | Held | A gripper with both fingers touching the handle (a gap of 2 mm or less, the solver's resting gap, between the handle and the gripper's own shape: palm and fingers at their present opening) and their opening stopped by it (0.10 to 0.24 of full opening: the handle's 1.8 cm thickness less 15 %, to its 2.0 cm width plus 3 %). An empty fist, an open hand round the handle or a hand merely near it does not hold the knife, so a knife pushed or dragged without a hand on it makes no strokes |
 | On the stone | Held, edge lower than spine, touching: the edge's lowest point over the stone within 0.5 mm of its top (the knife's collider rests on the stone's, so a knife held up off it does not count). 16 edge points, about 1 cm apart from 0.5 cm past the heel to 16.2 cm, 3 mm short of the point, where the edge curves up to meet the spine: a point is on the stone within 1 mm of its top |
 | Stroke | One edge-leading pass across the edge of 5 cm or more at 13 to 22 deg (15 to 20 deg, plus 2 deg for a hand-held angle), the blade level and at least 3 cm of edge (3 scorer points, half the stone's 6 cm width) on the stone; a tip or heel dragged alone sharpens nothing. A pass ends when the knife lifts off or moves back 5 mm, so each forward pass of a back-and-forth stroke kept on the stone counts on its own; the edge-trailing return counts for nothing. Travel is counted net, so a knife jiggled in place makes no strokes. 15 deg is the usual angle for Japanese knives, 20 deg for Western ones |
@@ -143,7 +143,7 @@ housing clears the bench during strokes.
 
 ## Real-world build
 
-Any 165 to 180 mm santoku or gyuto with a wa handle; a 1000-grit 180 x 60 x 25 mm stone in a rubber holder screwed
+A 165 mm santoku with an octagonal wa handle, as in the setup (16.5 cm edge, 4.5 cm tall at the heel); a 1000-grit 180 x 60 x 25 mm stone in a rubber holder screwed
 to a 6 cm hardwood block; a 12 x 22 x 8 cm end-grain butcher block. Fix the stand and block to the bench with
 double-sided tape or clamps at the positions above. Film the top and the side, with 15, 20 and 22 degree angle cards
 beside the stone.
@@ -185,13 +185,12 @@ The sim grinds no steel. It counts a point of the edge as worked once it has bee
 edge-leading travel, and full credit needs 10 or more strokes and 12 of 16 points worked on each face. It is a
 stand-in, not a measured match, and in a real trial the tester readings decide the score in every case.
 
-This revision raised the stroke floor from 5 to 10 per face and counts strokes as the guides describe them (Technique,
+This revision raised the stroke floor from 3 per face (the version last reviewed) to 10, and the travel a point needs
+to count as worked from 5 to 10 cm, and it counts strokes as the guides describe them (Technique,
 above): one edge-leading pass per stroke, whether the knife is lifted for the return or kept on the stone back and
 forth. No guide gives a fixed count; they work a face until a burr runs from heel to tip, ATK checking for it "with
 every 10 passes", and CKTG then alternates faces in 10, 8, 6, 4, 2 and 1 strokes to remove the burr. So 10 per face is
-about one burr check's worth on each face, still a floor; it is not a calibration. The earlier revision's floor of 5
-per face cited the same two guides (Knifewear and CKTG) for the count only and did not use them for the stroke itself,
-which they describe as a sweep along the edge.
+about one burr check's worth on each face, still a floor; it is not a calibration.
 
 The real count has not yet been measured on this knife and stone, and the YAM presses at most about 5 N where Kramer
 asks for 9 to 27 N, so a real trial at the YAM's pressure may need more strokes than a person would. Before real trials
