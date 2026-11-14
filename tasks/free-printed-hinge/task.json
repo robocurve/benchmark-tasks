@@ -1,0 +1,23 @@
+{
+  "title": "Free a stuck print-in-place hinge by rocking it",
+  "category": "Impact on jobs",
+  "keywords": [
+    "3D printing",
+    "makerspace",
+    "print-in-place",
+    "stuck hinge",
+    "stiction",
+    "rocking",
+    "force limit",
+    "do not break the part"
+  ],
+  "instruction": "The orange leaf of the printed hinge is fused solid. Free the hinge so the orange leaf swings round at least 120 degrees, past the amber part of the card, and stays there. Do not snap the leaf off.",
+  "context": "Print-in-place hinges come off the printer fused: the thin layers between knuckle and pin have bonded, and production operators free them by hand (O*NET 51-9199). Forcing the leaf round in one swing snaps it at its root, because the fused hinge holds harder than the leaf can take. Rocking it in small pushes one way and the other, each gentler than the snap, loosens the fused layers a little at a time until the leaf swings freely. The first pushes move nothing.",
+  "setup": "Left and right are the robot's. Positions are centres in metres from the midpoint between the two arm bases: x forward, y to the robot's left, heights above the table top. Printed hinge, standing on its edge, 4 cm tall plates 1 cm thick (PLA, fine layer lines), on a vertical hinge axis at (0.34, -0.12): a dark teal base leaf 5 cm long, fixed to the table, from x 0.278 to 0.328 (its two barrels and steel pin reach the axis), and an orange leaf, 50 g, a 7.5 cm plate from x 0.347 to 0.422 on a 1.4 cm orange knuckle round the axis, at rest along +x. Both plates stand from 3.5 mm to 43.5 mm, the knuckle between the base leaf's two barrels. Card: a 28 x 17 cm light grey printed protractor, 2 mm thick, centred at (0.34, -0.08), its centre the hinge axis, 0 degrees along +x, counterclockwise from above: the 60 to 120 degree sector amber, 120 to 180 green. The hinge's stop is at 130 degrees. Nothing else is on the table.",
+  "scoring": "Angle: the orange leaf's turn about the hinge axis, counterclockwise from above, 0 where it starts (the base leaf's line). Layers: four hold the hinge at the start, and one fewer after each rocking cycle (the leaf turned 0.9 degrees or more one way, then the other, then back, and each further time it swings back again). Snapped: at any time the leaf's centre is 8 mm or more off the hinge, or the layers still on hold the leaf with 0.49 N m or more, which is the leaf turned 3.5 degrees with four layers on, 4.7 with three, 7 with two, 14 with one. Recorded: 0 for the rest of the trial. 1.0 (success, held 1 s): not snapped, angle 120 degrees or more, and the leaf still (under 10 mm/s and 0.5 rad/s), a leaf held still in a gripper included. 0.5: not snapped, angle 60 degrees or more at the end. 0 otherwise, including doing nothing, so 0, 0.5 or 1.0. In a real trial a protractor gives the angle and a snapped leaf shows.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Press the leaf back to 0 degrees, along the base leaf, and use a hinge that is fused again (rocking works the fused layers loose for good). Put a snapped leaf back on a fresh print.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. The friction is a programmed rule, not fused-plastic physics: four layers, each a torsion spring (2 N m/rad, capped at 0.2 N m) at the hinge, hold the leaf, and one switches off per rocking cycle. The leaf snaps off when the layers hold it with 0.49 N m (7.5 N at the grip). Plates collide as boxes. The meshes are drawn on them.",
+  "scores": "Dream-1 run: 0.0 (the right hand hovers at the hinge and nudges it, the leaf is never swung open), demo: 1.0 (success at step 575)",
+  "media": "M-6EU7NR"
+}
