@@ -47,14 +47,14 @@ What the model stands in for, and what a real trial checks instead: the thicknes
 above, which follows the real behavior (the rings set the floor, the dough springs back by a share of the excess, and
 volume is kept). The springback share is an estimate, so a real trial measures the sheet itself. The model cannot
 tear the sheet and cannot press it below 3 mm; in the sim a stroke without both hands on the pin simply does not count.
-A real trial has no such rule and checks only the physical outcome: thickness with a needle depth gauge, holes and tears by eye, and the edges with the
+A real trial has no such rule and checks only the physical outcome: thickness with a depth gauge, holes and tears by eye, and the edges with the
 gauge (see "In a real trial" below). Press force and the barrel's rotation are not modeled.
 
 The dough model also gives the pin no rolling resistance: the pastry pushes back on nothing, so in the sim the rings
 keep the pin level on the flat board however it is held, and the robot only has to drive it back and forth. A
 real block of chilled pastry pushes back hardest under the thicker side, so a pin pressed harder by one hand can ride
 up on the other; the sim cannot show that. The real trial checks the result directly: the sheet's thickness evenness
-across its width with the needle gauge (the 2 cm bands' averages within 0.5 mm of each other, as below).
+across its width with the depth gauge (the 2 cm bands' averages within 0.5 mm of each other, as below).
 
 Visuals (markers, no physics, never scored): one slab per covered 1 cm cell, as thick as the pastry there, colored by
 thickness band: cream (thicker than 6.5 mm), pale gold (4.5 to 6.5), light gold (3.5 to 4.5), golden (2.5 to 3.5, on
@@ -81,7 +81,7 @@ rolling past an end (the rings keep the barrel 3 mm up there as everywhere).
 Sim and real trial differ in one rule. In the sim, the dough model presses the pastry only while both grippers touch
 the pin; this is a documented approximation, because the sim's pin slides on its rings instead of turning, so the
 model cannot tell rolling from pushing it along. The real trial has no hand rule at all: it scores only the measured
-sheet (length, needle-gauge thickness and evenness) and the final pin state (set down level, let go). A sheet rolled
+sheet (length, depth-gauge thickness and evenness) and the final pin state (set down level, let go). A sheet rolled
 partly or wholly with one hand, intact and in spec, scores exactly what the same sheet rolled with two hands scores.
 
 Why each rule: the length and on-spec share are the job itself, a sheet that lines the pan and bakes evenly. Evenness
@@ -142,7 +142,8 @@ on the middle of the barrel 0 (nothing counts with one hand on the pin).
 In a real trial (no hand rule; the score is the measured sheet and the final pin state): lay a 1 cm grid transparency
 over the sheet, lined up with the board's front edge and its center line so the points are the same every trial, and
 photograph it from above to read its length per 1 cm strip (a ruler along both long edges and the middle is enough:
-every strip must reach 20 cm). Read thickness with a needle depth gauge pushed through the pastry to the board at fixed
+every strip must reach 20 cm). Read thickness with a digital tire tread depth gauge (zeroed on the bare board, its foot resting on the pastry without pressing,
+its pin pushed through to the board) at fixed
 points: the center of each 2 cm square of the grid the pastry covers (about 100 points; a point is on spec at 2.5 to
 3.5 mm, and at least 90 % must be), and every 2 cm along lines 0.5 cm in from each end and each long side. For evenness,
 average the readings in each 2 cm band running the sheet's length: the thickest band may be at most 0.5 mm above the
@@ -154,22 +155,29 @@ its place with a ruler, and check the last frames of the video that no finger to
 
 ## Real-world build
 
-- A maple pastry board about 31 x 28 x 1.5 cm, floured.
-- A wooden rolling pin with handles, barrel 5 cm across, and a pair of silicone spacer rings 3 mm (0.125 inch) proud of
-  the barrel (rolling-pin ring sets are sold in several thicknesses; use the 3 mm pair and check it with calipers).
-- Store-bought puff pastry, cut and pressed into a 6.5 x 20 x 1 cm block (130 g); one block per trial. Roll it at
+- A maple pastry board about 31 x 28 x 1.5 cm (12 x 11 inch), floured with all-purpose flour.
+- A handled wooden rolling pin (an American-style pin with a 10 inch, about 26 cm, barrel about 2 inches, 5 cm, across;
+  about 43 cm overall) and a pair of silicone spacer rings, for example the 0.125 inch pair from Mrs. Anderson's Baking
+  silicone rolling pin rings (an 8-piece set, two rings each in four thicknesses from 0.0625 to 0.375 inch, sold for
+  pins up to about 2.5 inches across). 0.125 inch is 3.2 mm, inside the 2.5 to 3.5 mm on-spec band; the sim uses 3 mm. Check the rings' height over
+  the barrel with calipers.
+- Store-bought puff pastry (frozen sheets or a block, thawed in the fridge), cut and pressed into a 6.5 x 20 x 1 cm block (130 g); one block per trial. Roll it at
   about 18 C (64 F; 20 to 30 minutes out of the fridge, when a fingertip leaves a dent): straight from the fridge, laminated
   pastry takes a baker leaning on the pin, more than the arms can push, while at 18 C the pin's weight and a light
   press from each hand thin it. If the first build shows the arms stalling on the 10 mm block, start from a 7 mm
   block 9.3 cm long (the same 130 mL) and say so in the setup.
-- A 1 cm grid transparency, a needle depth gauge (or a toothpick marked in mm), a ruler, a phone camera.
+- Measuring tools, all from a hardware or auto parts store: a digital tire tread depth gauge (the common 0 to 25 mm
+  kind reading 0.01 mm, a thin pin sliding out of a flat foot), digital calipers, a 30 cm ruler, a 1 cm grid
+  transparency (printed on an overhead sheet), a kitchen scale for the 130 g block, and a phone with a camera and a
+  level app. No lab equipment is needed.
+- Reset between trials: throw the rolled sheet away, scrape the board clean and re-flour it, set a fresh 130 g block
+  centered on the board, put the pin back in its rest (axis along y), and check that both rings sit on the barrel's ends.
 
 ## What the task tests
 
 Control of one tool's level: the thickness is set only while both spacer rings ride the board, so a 43 cm pin must be
 kept level as it travels (the natural way is with both hands, but the real trial scores only the sheet). The work changes under the tool: the sheet lengthens and springs back, so
-it takes several passes and the ends move out as it grows. Roller and flattening tasks that score coverage, or hold a springy sheet flat at
-a fixed size, test none of these.
+it takes several passes and the ends move out as it grows.
 
 ## Files
 
