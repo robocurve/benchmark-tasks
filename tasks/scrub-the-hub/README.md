@@ -3,7 +3,7 @@
 Three files for the `yam_arena` embodiment (Isaac Lab-Arena, bimanual YAM, `station` scene). `task.py` builds the scene,
 scores it and holds the scripted demo; its docstrings explain every rule. `yamkit.py` spawns the modeled props: visible
 meshes with simple box colliders underneath. It patches `yam_arena.scene` in memory at import and changes no files. The
-syringe is a loose yamkit `Mechanism`: its barrel is a free body and its plunger a link on a 6 cm slide along the
+syringe (a model with no fluid) is a loose yamkit `Mechanism`: its barrel is a free body and its plunger a link on a 6 cm slide along the
 barrel's axis, damped so that it stays where it is pushed. `task.py` moves the articulation's root onto the barrel and
 gives the slide a PhysX drive for that damping (`_free_root`). `guardkit.py` (trimmed to its one check) judges the
 grip on the pad by contact: both fingers' own shapes, from the gripper's collision meshes at their present opening,
@@ -46,13 +46,50 @@ yamkit) starts a new history.
 
 ## Real-world build
 
-An IV training arm (a nursing-skills forearm with a taped-in practice catheter) on a padded armrest, its clear
-extension line run around the arm's right side to a split-septum needleless connector. Tape the connector to the bench
-along y at the position in the setup, its open end facing the robot's right. Large 70% isopropyl alcohol prep pads in
-foil packets, opened and folded once to about 6.5 x 3.5 cm, and empty 10 mL luer syringes with mL marks, plunger drawn
-back to 10 mL, on a 15 x 15 cm tray. The line is not connected to anyone and the syringe is empty. Before each trial,
-put a dot of water-soluble ink on the connector's access face. Score with the video, a stopwatch for the scrub time, a
-gentle tug on the barrel for seating and the barrel's mL marks for the push.
+An IV training arm (a nursing-skills forearm with a taped-in practice catheter in its practice vein) on a padded
+armrest, its clear extension line run around the arm's right side to a split-septum needleless connector. Tape the
+connector to the bench along y at the position in the setup, its open end facing the robot's right. The vein's outflow
+tube drains into a 25 mL graduated cylinder (0.5 mL marks) on the floor beside the bench. Large 70% isopropyl alcohol
+prep pads in foil packets, opened and folded once to about 6.5 x 3.5 cm, and a prefilled 10 mL 0.9% sodium chloride
+flush syringe (the single-use kind sold for IV line flushing, with mL marks) on a 15 x 15 cm tray. The line is not
+connected to anyone.
+
+Before each trial:
+1. Prime the line: push saline through the connector until it drips from the outflow tube, then empty the cylinder.
+   The line is now full, so every mL that later enters the connector comes out into the cylinder.
+2. Prime a new flush syringe: uncap it, hold it tip up and push out the air until saline reaches the tip (the plunger
+   ends just under the 10 mL mark). Lay it on the tray.
+3. Dry the connector's access face and put a dot of water-soluble ink on it.
+
+Score with:
+- the video and a stopwatch for the scrub time (only time the pad rubs the face) and for whether the syringe touched
+  the face before 15 s of scrubbing;
+- the pad, which must show the ink, and the access face, which must be clean;
+- a gentle tug on the barrel for seating (the syringe stays on);
+- the flush: at least 5 mL gone from the barrel by its mL marks and at least 4.5 mL in the cylinder, read at the
+  meniscus to 0.25 mL. The 0.5 mL margin covers the reading and drops left in the tube. Saline running out at the hub
+  rather than into the line, or less than 4.5 mL collected, is not a flush: the trial scores at most 0.5.
+
+Safety: no needle and no patient are involved; the saline is sterile and harmless, and spills are wiped up. Nothing
+is pressurized beyond what a thumb puts on a syringe.
+
+### Plunger force
+
+The sim models no fluid: the plunger's slide has a light damper (5 N s/m, about 0.07 N at the demo's push) so it stays
+where it is pushed, and its 3 cm of net travel while seated stands in for 5 mL. A real primed syringe needs more. The
+estimate below is from Hagen-Poiseuille flow (saline about 1 mPa s) through a 1 mm bore, 20 cm extension line and a
+22 gauge catheter (0.6 mm bore, 2.5 cm), plus the connector, on a 14.5 mm syringe bore (1.65 square cm, so 5 N is about
+30 kPa); it has not been measured on this setup.
+
+| Flush rate | Line, catheter and connector | Force from the flow | Plus stopper glide (about 2 to 3 N) |
+|---|---|---|---|
+| 0.5 mL/s (5 mL in 10 s) | about 9 kPa | about 1.5 N | about 3.5 to 4.5 N |
+| 1 mL/s | about 18 kPa | about 3 N | about 5 to 6 N |
+| 2.3 mL/s (the demo's pace) | about 42 kPa | about 7 N | about 9 to 10 N |
+
+A slow, steady flush (about 0.5 mL/s, as nurses push a peripheral flush) stays near the YAM's press of about 5 N; a
+fast push does not. Before trials, check the setup: press the primed syringe's plunger on a kitchen scale held behind
+the thumb press at that pace and confirm it stays under about 500 g.
 
 ## Category
 
