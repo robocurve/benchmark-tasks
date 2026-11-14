@@ -1,0 +1,20 @@
+{
+  "title": "Strip 10 mm of insulation off a cable end in a lever-operated benchtop stripping station",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "bimanual",
+    "electrical assembly",
+    "wire stripping",
+    "insertion depth",
+    "lever"
+  ],
+  "instruction": "Strip 10 mm of insulation off the cable's free end in the stripping station, then let the station's lever back up and take your hands off it.",
+  "context": "Stripping cable ends to a set length is everyday work in electrical and electronics assembly, including the wiring of data centres and power equipment. Too short and the terminal does not seat; too long and bare copper shows. A benchtop stripper's blades only stay shut while its lever is held down, and the cut insulation only comes off if the cable is pulled out while they are shut.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) A fixed steel wire-stripping station, 1 kg: a block 5 x 5 cm and 4 cm tall, 24 cm forward and 12 cm left of the centre line, with a hole 16 mm across down into its top to 5 mm above the table, and a funnel 4.4 cm across round its mouth. At the hole's top sit two opposed hardened-steel V-blades that close to an 8.2 mm opening (just over the copper core) when the lever is down and open to 16 mm when it is up; a cam on the lever's hinge pushes them together, and while closed they bite the insulation and keep the cut slug in the station as the cable is pulled out (it drops out of the bottom when they open). The lever, a dark steel bar 24 x 16 mm and 22.5 cm long, 150 g, is hinged on the block's right side 1.2 cm above its top and reaches right; its red rubber grip (5 cm long) is 20 cm from the hinge, 11 cm right of the centre line. A torsion spring holds the lever 12 degrees up (the grip 4 cm above where it closes); holding it down takes about 6 N at the grip (the spring gives 0.06 N m per degree, 1.2 N m with the lever down). (2) A loose 35 mm2 single-core PVC-insulated copper cable, 12 cm long, 12 mm across over its insulation, with a copper core 8 mm across, 40 g, with a square grey ABS-plastic plug (16 mm, 3 cm tall) moulded on one end; at its other end 24 mm of insulation covers the core. It stands upright, plug up, in a small black plastic holder (a cup 19 mm across and 1.8 cm tall with an 11 mm bore round the cable's end) 30 cm forward and 21 cm left of the centre line. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Judged at the end of the trial. The cut: when the lever first closes (within 1.5 degrees) with the cable's end in the hole, the insulation between the end and the blades is cut, to the nearest 2 mm. Stripped: the cable then pulled out (its end 2 mm above the blades) while the lever is still down (within 4 degrees); if the lever comes up first, the cut insulation stays on the cable. Released: the lever back up at least 10 degrees and both grippers' fingertip centres (TCPs) at least 4 cm from its grip. 1.0: 8 to 12 mm stripped, released; 0.5: any strip, or a cut of 8 to 12 mm with the blades still closed on it; 0.25: the cable's end at least 5 mm into the hole at some point; else 0.0. The trial ends at the run limit, or once the full score has held with the lever and the cable still for 1 s.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "Empty the cut insulation out of the station, stand a fresh cable in the holder, plug up, and let the lever spring up.",
+  "fidelity": "Rigid-body PhysX (Isaac Sim 6.1, 20 Hz control) at real size and mass. Simplified: the blades are not modelled as bodies; the cut is an event: when the lever closes with the cable's end in the hole, the insulation below the blades (shown as 12 non-colliding 2 mm rings) is cut to the nearest 2 mm and moves to the station (fixed joints), and back to the cable if the lever comes up before the cable is out. Cameras 1280 x 704 (Dream-1 sees 320 x 176).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-AE4CXS"
+}
