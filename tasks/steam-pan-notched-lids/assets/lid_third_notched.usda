@@ -1,0 +1,224 @@
+#usda 1.0
+(
+    defaultPrim = "Lid"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Lid" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    doc = "Clear polycarbonate lid for a 325 x 176 mm GN pan, 2.0 mm sheet with a bridge handle 20 mm high and a 50 x 35 mm utensil notch in the middle of its +x end. Origin at the underside centre, +x along its length."
+)
+{
+    float physics:mass = 0.145
+
+    def Scope "Looks"
+    {
+        def Material "Phys" (
+            prepend apiSchemas = ["PhysicsMaterialAPI"]
+        )
+        {
+            float physics:dynamicFriction = 0.3
+            float physics:restitution = 0
+            float physics:staticFriction = 0.4
+        }
+
+        def Material "Steel"
+        {
+            token outputs:surface.connect = </Lid/Looks/Steel/PreviewSurface.outputs:surface>
+
+            def Shader "PreviewSurface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.8, 0.9, 0.95)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.2
+                token outputs:surface
+            }
+        }
+
+        def Material "Handle"
+        {
+            token outputs:surface.connect = </Lid/Looks/Handle/PreviewSurface.outputs:surface>
+
+            def Shader "PreviewSurface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.35, 0.37, 0.4)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.4
+                token outputs:surface
+            }
+        }
+    }
+
+    def "Visual"
+    {
+        def Cube "PlateMain" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </Lid/Looks/Steel>
+            double size = 1
+            float3 xformOp:scale = (0.29, 0.176, 0.002)
+            double3 xformOp:translate = (-0.0175, 0, 0.001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "PlateWingL" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </Lid/Looks/Steel>
+            double size = 1
+            float3 xformOp:scale = (0.035, 0.063, 0.002)
+            double3 xformOp:translate = (0.145, 0.0565, 0.001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "PlateWingR" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </Lid/Looks/Steel>
+            double size = 1
+            float3 xformOp:scale = (0.035, 0.063, 0.002)
+            double3 xformOp:translate = (0.145, -0.0565, 0.001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "HandleBar" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </Lid/Looks/Handle>
+            double size = 1
+            float3 xformOp:scale = (0.08, 0.012, 0.007)
+            double3 xformOp:translate = (0, 0, 0.0185)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "HandleLegA" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </Lid/Looks/Handle>
+            double size = 1
+            float3 xformOp:scale = (0.012, 0.012, 0.013)
+            double3 xformOp:translate = (0.034, 0, 0.0085)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "HandleLegB" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </Lid/Looks/Handle>
+            double size = 1
+            float3 xformOp:scale = (0.012, 0.012, 0.013)
+            double3 xformOp:translate = (-0.034, 0, 0.0085)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def "Colliders"
+    {
+        def Cube "PlateMain" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </Lid/Looks/Phys> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            uniform token purpose = "guide"
+            double size = 1
+            float3 xformOp:scale = (0.29, 0.176, 0.002)
+            double3 xformOp:translate = (-0.0175, 0, 0.001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "PlateWingL" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </Lid/Looks/Phys> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            uniform token purpose = "guide"
+            double size = 1
+            float3 xformOp:scale = (0.035, 0.063, 0.002)
+            double3 xformOp:translate = (0.145, 0.0565, 0.001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "PlateWingR" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </Lid/Looks/Phys> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            uniform token purpose = "guide"
+            double size = 1
+            float3 xformOp:scale = (0.035, 0.063, 0.002)
+            double3 xformOp:translate = (0.145, -0.0565, 0.001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "HandleBar" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </Lid/Looks/Phys> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            uniform token purpose = "guide"
+            double size = 1
+            float3 xformOp:scale = (0.08, 0.012, 0.007)
+            double3 xformOp:translate = (0, 0, 0.0185)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "HandleLegA" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </Lid/Looks/Phys> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            uniform token purpose = "guide"
+            double size = 1
+            float3 xformOp:scale = (0.012, 0.012, 0.013)
+            double3 xformOp:translate = (0.034, 0, 0.0085)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "HandleLegB" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </Lid/Looks/Phys> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            uniform token purpose = "guide"
+            double size = 1
+            float3 xformOp:scale = (0.012, 0.012, 0.013)
+            double3 xformOp:translate = (-0.034, 0, 0.0085)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+}
+
