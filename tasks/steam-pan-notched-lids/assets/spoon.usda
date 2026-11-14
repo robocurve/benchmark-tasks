@@ -1,0 +1,116 @@
+#usda 1.0
+(
+    defaultPrim = "Spoon"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Spoon" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    doc = "Serving spoon: 60 mm bowl, 12 x 5 mm flat handle, about 240 mm overall, 90 g. Origin at the bowl's centre; +x along the handle (frame as the spoon rests, handle rising about 20 degrees)."
+)
+{
+    float physics:mass = 0.09
+
+    def Scope "Looks"
+    {
+        def Material "Phys" (
+            prepend apiSchemas = ["PhysicsMaterialAPI"]
+        )
+        {
+            float physics:dynamicFriction = 0.3
+            float physics:restitution = 0
+            float physics:staticFriction = 0.4
+        }
+
+        def Material "Steel"
+        {
+            token outputs:surface.connect = </Spoon/Looks/Steel/PreviewSurface.outputs:surface>
+
+            def Shader "PreviewSurface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.74, 0.75, 0.77)
+                float inputs:metallic = 0.9
+                float inputs:roughness = 0.35
+                token outputs:surface
+            }
+        }
+
+        def Material "Bowl"
+        {
+            token outputs:surface.connect = </Spoon/Looks/Bowl/PreviewSurface.outputs:surface>
+
+            def Shader "PreviewSurface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.8, 0.8, 0.82)
+                float inputs:metallic = 0.9
+                float inputs:roughness = 0.3
+                token outputs:surface
+            }
+        }
+    }
+
+    def "Visual"
+    {
+        def Sphere "Bowl" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </Spoon/Looks/Bowl>
+            double radius = 1
+            float3 xformOp:scale = (0.03, 0.03, 0.03)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "Handle" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </Spoon/Looks/Steel>
+            double size = 1
+            float3 xformOp:scale = (0.184, 0.012, 0.005)
+            double3 xformOp:translate = (0.11800000000000001, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def "Colliders"
+    {
+        def Sphere "Bowl" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </Spoon/Looks/Phys> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            uniform token purpose = "guide"
+            double radius = 1
+            float3 xformOp:scale = (0.03, 0.03, 0.03)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "Handle" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </Spoon/Looks/Phys> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            uniform token purpose = "guide"
+            double size = 1
+            float3 xformOp:scale = (0.184, 0.012, 0.005)
+            double3 xformOp:translate = (0.11800000000000001, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+}
+
