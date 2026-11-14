@@ -1,0 +1,24 @@
+{
+  "title": "Square a racked two-rail gantry beam by moving both carriages onto their front end stops together",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "bimanual",
+    "gantry",
+    "linear rail",
+    "carriage binding",
+    "racked beam",
+    "squaring",
+    "end stop",
+    "3D printer",
+    "CNC"
+  ],
+  "instruction": "Move the gantry beam's two carriages forward along the rails until both rest against their front stops, then let go with both grippers.",
+  "context": "Squaring a gantry is a routine step when building or servicing a 3D printer, CNC router or Cartesian robot: with the belts loose, the beam is run onto both end stops together so it sits square. Pushed at one end only, the beam racks, its two carriages bind on the rails by friction, and it stops short. Robot-building and robot-servicing work like this is what an autonomous robot workforce for hardware assembly must learn.",
+  "setup": "Station table; positions in metres, x forward from the arm bases, y to the robot's left, z up; table top z 0.7475. (1) Two linear rails, MGN12 pattern, hardened steel, 12 mm wide x 8 mm high x 250 mm long, colour grey (0.62,0.64,0.68), fixed to the table along x from x 0.030 to 0.280 at y +0.170 and -0.170 (340 mm apart), friction 0.2. (2) Two end-stop blocks, steel, red (0.80,0.10,0.10), 10 x 30 x 13 mm, fixed at the front end of each rail, stop face at x 0.280. (3) Two carriage blocks, grey steel, 45.4 x 27 x 13 mm each, a U-channel 12.5 mm wide over the 12 mm rail (0.25 mm clearance a side), friction 0.2, riding on the rails. (4) Beam, 20 x 20 x 400 mm aluminium extrusion, silver (0.78,0.80,0.84), lying across the two blocks at y -200 to +200, with an orange toolhead 40 x 50 x 40 mm on its front at its centre; beam, blocks and toolhead 0.80 kg together. The beam starts racked, yawed -0.45 deg about the vertical: its centre at x 0.2160, the left block 2.7 mm ahead of the right, the left front face 40 mm and the right 42.7 mm short of the stops. Belts omitted (loose). Both arms start at the ready pose.",
+  "scoring": "Only the end state counts; nothing that happened on the way zeroes the run. Gap = the largest distance (mm) from a carriage block's front face to its stop face (what a feeler gauge finds). Ladder: 0.25 both carriages came at least 25 mm forward at some time; 0.5 both gaps at most 5 mm at the end; 0.75 both gaps at most 0.05 mm at the end (a 0.05 mm feeler does not enter at either stop); 1.0 the end state is also complete: both carriage blocks seated on their rails (less than 1 mm of lift, a ruler or feeler at the block ends), the beam under 3 mm/s for 1 s (60 fps video), and both grippers at least 30 mm clear of the beam and under 5 mm/s for 1 s (release gate). Real trial: 0.05 mm feeler gauge at each stop face, tape for 25 mm and 5 mm, 60 fps video for stillness.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Slide both carriages back along the rails until the left front face is 40 mm and the right 42.7 mm from its stop (tape), the beam racked with the left end ahead; the beam sits on the two blocks with the toolhead at its centre. Wipe the rails dry; check a 0.2 mm feeler passes the clearance at each block's side.",
+  "fidelity": "Rigid-body model: carriages are U-channel blocks sliding on steel rails with 0.25 mm clearance a side (a worn linear guide; real ball recirculation and preload are not modelled). Racking and binding come from contact friction (0.2) between the cocked blocks and the rails; nothing is scripted. Beam, blocks and toolhead are one 0.8 kg body; belts, motors and endstop switches are left out.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-93UWQ2"
+}
