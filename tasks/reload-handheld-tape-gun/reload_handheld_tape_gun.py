@@ -93,7 +93,7 @@ _gun = [
     mk.box((0.100, 0.030, 0.035), at=W(0.290, 0.160, ZP + 0.0175), color=BLACK),
     mk.box((0.008, 0.008, 0.006), at=W(*ROLLER_PIVOT, ZP + 0.003), color=STEEL),
 ]
-kit.part("gun", GUN_O, _gun, mass=0.32, color=GUN_C)  # 0.40 kg with collar, roller arm and drum, guard
+kit.part("gun", GUN_O, _gun, mass=0.33, color=GUN_C)
 
 # detent collar: three tabs round the hub on a slider; preloaded up against its stop at 12 N
 kit.part("collar", (*HUB, ZP + COL_TOP0 - 0.002),
@@ -103,21 +103,18 @@ kit.part("collar", (*HUB, ZP + COL_TOP0 - 0.002),
 kit.slider("collar_slide", "gun", "collar", axis=(0, 0, -1), lower=0.0, upper=COL_TRAVEL, stiffness=COL_K,
            rest=-DETENT_N / COL_K, damping=2.0)
 
-# tension roller on a sprung arm (6 N at the roller, toward the leader path); the roller turns freely on its axle
+# tension roller on a sprung arm (6 N at the roller, toward the leader path). It does not spin: a free-turning drum
+# on the arm made the peeled leader whip off the roll in sim, so the leader slides round a fixed roller.
 _ax, _ay = ROLLER[0] - ROLLER_PIVOT[0], ROLLER[1] - ROLLER_PIVOT[1]
 _arm_len, _arm_yaw = math.hypot(_ax, _ay), math.atan2(_ay, _ax)
 kit.part("roller", (*ROLLER_PIVOT, ZP),
-         [mk.box((_arm_len + 0.008, 0.008, 0.004), at=(_ax / 2, _ay / 2, 0.003), yaw=_arm_yaw)], mass=0.02,
-         color=STEEL)
+         [mk.box((_arm_len + 0.008, 0.008, 0.004), at=(_ax / 2, _ay / 2, 0.003), yaw=_arm_yaw),
+          mk.box((0.018, 0.018, ROLLER_H - 0.005), at=(_ax, _ay, 0.005 + (ROLLER_H - 0.005) / 2), color=BLACK),
+          mk.box((0.018, 0.018, ROLLER_H - 0.005), at=(_ax, _ay, 0.005 + (ROLLER_H - 0.005) / 2), color=BLACK,
+                 yaw=math.pi / 4)], mass=0.03, color=STEEL)
 ROLLER_K = 6.0 * _arm_len / math.radians(15.0)
 kit.hinge("roller_arm", "gun", "roller", anchor=(*ROLLER_PIVOT, ZP), axis=(0, 0, -1), lower_deg=0.0, upper_deg=25.0,
           stiffness=ROLLER_K, rest_deg=-15.0, damping=0.01)
-kit.part("drum", (*ROLLER, ZP),
-         [mk.box((0.018, 0.018, ROLLER_H - 0.005), at=(0, 0, 0.005 + (ROLLER_H - 0.005) / 2)),
-          mk.box((0.018, 0.018, ROLLER_H - 0.005), at=(0, 0, 0.005 + (ROLLER_H - 0.005) / 2), yaw=math.pi / 4)],
-         mass=0.02, color=BLACK)
-kit.hinge("drum_spin", "roller", "drum", anchor=(*ROLLER, ZP), axis=(0, 0, 1), lower_deg=-math.inf,
-          upper_deg=math.inf, damping=0.0002)
 
 # blade guard: a red plate over the nose face, hinged at its root, sprung shut, detent at open (90 deg)
 kit.part("guard", (*GUARD_HINGE, ZP),
@@ -218,7 +215,8 @@ PAST_ROLLER = 0.016  # the end must be this far past the roller's axis toward th
 
 
 def roller_axis(objects):
-    return to_gun(objects, kit.point(objects, "drum", (0, 0, 0)))[:2]
+    off = (ROLLER[0] - ROLLER_PIVOT[0], ROLLER[1] - ROLLER_PIVOT[1], 0)
+    return to_gun(objects, kit.point(objects, "roller", off))[:2]
 
 
 def roller_touch(objects) -> tuple[bool, bool]:
@@ -331,7 +329,7 @@ def _rules(objects):
               f"collar={kit.q(objects, 'collar_slide'):.4f} guard={q:.1f} roller={kit.q_deg(objects, 'roller_arm'):.1f} "
               f"tab={f(kit.point(objects, 'lk8', TAB_LOCAL))} tip={f(pts[-1])} gun={f(kit.point(objects, 'gun', (0, 0, 0)))} "
               f"tilt={gun_tilt(objects):.1f} gyaw={math.degrees(math.atan2(_gun_T(objects)[1, 0], _gun_T(objects)[0, 0])):.2f} "
-              f"touch={roller_touch(objects)} wrap={roller_wrap(objects):.1f} spin={kit.q_deg(objects, 'drum_spin'):.1f} "
+              f"touch={roller_touch(objects)} wrap={roller_wrap(objects):.1f} "
               f"under={under_roller(objects)} adh={adhesive_out(objects)} "
               f"past={end_past_blade(objects):.4f} mem={ {k: v for k, v in m.items() if isinstance(k, str) and k != 'n'} } "
               f"score={score(objects)}", flush=True)

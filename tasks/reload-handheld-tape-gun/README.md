@@ -5,7 +5,7 @@ Instruction given to the policy: `Load the new roll into the tape gun so it is r
 The instruction gives no hint about the steps. Done right: one hand holds the gun by its handle; the other puts the
 new roll on the hub with its tape face out (as packed), pushes it 12 N past the hub's detent ball so it drops onto
 its seat, swings the red blade guard open, takes the leader's folded tab, peels it back, leads it round the outside of
-the sprung tension roller (it turns freely on its axle) and down along the nose so its end sticks 5 to 25 mm past the blade, and the guard is
+the sprung tension roller and down along the nose so its end sticks 5 to 25 mm past the blade, and the guard is
 swung shut on it. Hands off, nothing moving.
 
 Files: `task.json`, `reload_handheld_tape_gun.py` (scene, `success()`, partial-credit `score()`, the scripted
