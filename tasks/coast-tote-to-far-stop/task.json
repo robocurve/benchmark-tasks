@@ -1,0 +1,24 @@
+{
+  "title": "Send a tote down a roller conveyor to the far station without slamming the end stop",
+  "category": "Impact on jobs",
+  "keywords": [
+    "warehouse",
+    "material handling",
+    "roller conveyor",
+    "gravity conveyor",
+    "tote",
+    "end stop",
+    "momentum",
+    "release speed",
+    "load stability"
+  ],
+  "instruction": "Send the tote down the conveyor to the packing station at the far end.",
+  "context": "Order pickers and packers move totes along non-powered roller conveyors between stations: they give the tote a push and let it roll on to the next station, which is often further than they can reach. Warehouse safety and handling guidance says not to throw or shove items onto conveyors and not to reach or climb onto the bed after a stalled one. A tote pushed too softly stops short and blocks the lane; one shoved too hard meets the end stop still running, stops dead, and its load falls over. Here a tall bottle stands loose in the tote, so the push has to be judged: the station starts 13 cm beyond either arm's reach, no robot point may come within 25 cm of it, and the rollers slow the tote by about 0.2 m/s each second. The crux is the release speed: too slow stops short, too fast tips the load at the stop. Done by: laborers and material movers; packers (O*NET 53-7062.00, 53-7064.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left). A non-powered gravity roller conveyor of the light-duty miniature kind used for small totes at bench stations (steel frame, 13 cm between its side rails, which stand 2 cm above the rollers; 25 zinc-plated steel tube rollers 16 mm in diameter at 40 mm centres on sealed ball bearings, their tops 3 cm above the table, so the 14 cm tote always rides on 3 or 4 of them) runs straight ahead in front of the right arm along y -20, from x 10.5 to x 111.5, past the table's edge onto a steel leg. A red steel end stop, 4.5 cm high, has its face at x 110. Two through-beam light gates on posts outside the rails, beams 3 cm above the rollers, are broken by the tote's front edge at x 105 and x 109; they stay in place for every trial. The packing station is the last 18 cm before the stop (x 92 to 110), marked with yellow tape on both rails and a yellow line across the rollers at x 92. The farthest any part of either arm reaches along the lane at the tote's height is x 79 (right arm), so the station starts 13 cm beyond reach. On the rollers at the near end stands an open blue polypropylene tote (14 x 12 x 6 cm, 350 g), its rear face at x 17.5. A full 500 mL square HDPE bottle (6 x 6 x 16 cm, red cap, 500 g) stands loose in the middle of the tote.",
+  "scoring": "From the poses of the tote, the bottle and the arms' links (on a real rig: where the tote stopped and whether the bottle stayed upright in it; the end-stop speed from the two end-stop light gates, 4 cm / the time between them; the robot points from the arms' logged joint positions through the URDF kinematics). Latched for the trial (score 0): the bottle leaned past 15 deg or left the tote; the tote was lifted (12 mm) or tipped (8 deg) off the rollers; the tote met the end stop faster than 0.40 m/s; or any robot point (gripper body, TCP, both pad tips, both finger middles; either arm) came within 25 cm of the station in plan view (none past x 67 in the lane). Score 0 while the tote or bottle moves (over 5 mm/s) or a gripper is within 3 cm of either. Otherwise, by the tote's rear face: past the station line (x 92) 1.0; within 5 cm short of it 0.5; within 12 cm short 0.25; else 0. 1.0 is success, held for 1 s. Scored at the last step. Possible scores: 0, 0.25, 0.5, 1.0.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Roll the tote back to the near end of the conveyor (rear face 17.5 cm ahead of the arm bases) and stand the bottle upright in its middle.",
+  "fidelity": "Rigid boxes, one friction (1.2/1.0), except the conveyor: its free-running rollers are a flat bed with friction 0.02 (sim: the tote slows at 0.196 m/s^2); the rollers are drawn without collision. A real rig measures its roller resistance by a three-light-gate coast-down and shims the grade to 0.176-0.216 m/s^2 (README). The tote stops on the end stop by rigid contact; the bottle falls by rigid tip-over. No step rule moves anything; judged from poses every step.",
+  "scores": "Dream-1 run: 0; demo: 1",
+  "media": "M-EA3S54"
+}
