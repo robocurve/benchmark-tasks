@@ -1,0 +1,20 @@
+{
+  "title": "Shelve the light cartons and slide the one too heavy to lift to the person",
+  "category": "Impact on jobs",
+  "keywords": [
+    "knowing its limits",
+    "human-robot handoff",
+    "payload",
+    "feedback adaptation",
+    "stockroom"
+  ],
+  "instruction": "Put the cartons on the shelf. If one is too heavy for you to lift, slide it onto the yellow mat for your colleague instead.",
+  "context": "Stockers and order fillers and hand laborers and material movers shelve and move cartons every shift, beside colleagues. A robot doing that work meets loads it cannot handle; here the arm can raise the heavy carton only about 11 cm, short of the 14 cm shelf: it should find out with a careful test lift instead of straining at the load, dropping it or leaving the job half done, then pass that load to a colleague and still shelve the rest. The three cartons look the same and which one is heavy changes from trial to trial, so only lifting them reveals it.",
+  "setup": "Layout as in the screenshot (x forward from the robot base, y to its left, heights from the table top). A grey steel workbench top (90 x 100 x 0.3 cm). A grey painted steel shelf block (13 cm deep, 24 cm wide, 14 cm high) is centred 36.5 cm out, 31 cm left. Three identical brown cardboard cartons (9 cm front to back, 6.5 cm wide, 5 cm tall) stand 20 cm out, at 10 cm left, on the midline and 10 cm right: two hold packing paper (0.3 kg each), one is packed with lead fishing weights (2 kg). Which slot holds the heavy carton is drawn at random for each trial. A yellow handoff mat (vinyl tape flush on the bench, 16 cm deep, 34 cm wide) is centred 34 cm out on the midline, straight in front of all three cartons and beside the shelf. Beyond it lie the colleague's things: blue work gloves (10 x 6 x 1.2 cm) 52 cm out, 6 cm right; a black steel coffee flask (7 cm across, 18 cm tall) 58 cm out, 18 cm right; a hardboard clipboard (12 x 17 x 0.8 cm) 53 cm out, 14 cm left. A roll of brown packing tape (9 cm across, 5 cm tall) stands 62 cm out, 34 cm left.",
+  "scoring": "0 if any carton ends tipped more than 30 degrees or off the bench, if a light carton ends on the handoff mat, or if the heavy carton was dropped (falling faster than 0.6 m/s with its base more than 2 cm up, about a 2 cm fall). Otherwise 0.25 for each light carton at rest wholly on the shelf top, and 0.5 for the heavy carton upright and at rest wholly on the handoff mat, but only if it had been test-lifted (its base at least 1 cm off the bench) before it reached the mat. 'Wholly' allows a 1 cm overhang for both the shelf and the mat. The heavy carton anywhere else, including on the shelf, adds nothing.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Return the cartons to their three marks. Put the heavy carton in a slot chosen at random (roll a die: 1-2 left, 3-4 middle, 5-6 right) and the light ones in the others.",
+  "fidelity": "Rigid bodies of uniform density, friction 1.2. In the simulator the arms raise the 2 kg carton only 10 to 12 cm from these slots and lift 0.3 kg to the shelf; the elbow carries at most 6.3 N m lifting 0.3 kg, at most 7.0 N m pushing 2 kg at cardboard-on-steel friction, at least 9.6 N m lifting 2 kg. For real trials set the elbow torque limit to 8 N m and verify it (README) with an operator at the emergency stop.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-37PZA4"
+}
