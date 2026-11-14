@@ -1,0 +1,68 @@
+#usda 1.0
+(
+    defaultPrim = "operator_mat"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "operator_mat"
+{
+    def "Looks"
+    {
+        def Material "mat"
+        {
+            token outputs:surface.connect = </operator_mat/Looks/mat/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor.connect = </operator_mat/Looks/mat/texture.outputs:rgb>
+                float inputs:metallic = 0
+                float inputs:roughness = 0.9
+                token outputs:surface
+            }
+
+            def Shader "st"
+            {
+                uniform token info:id = "UsdPrimvarReader_float2"
+                token inputs:varname = "st"
+                float2 outputs:result
+            }
+
+            def Shader "texture"
+            {
+                uniform token info:id = "UsdUVTexture"
+                asset inputs:file = @./textures/operator_mat.png@
+                float2 inputs:st.connect = </operator_mat/Looks/mat/st.outputs:result>
+                float3 outputs:rgb
+            }
+        }
+    }
+
+    def Xform "body" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.5
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Mesh "print" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform bool doubleSided = 1
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            rel material:binding = </operator_mat/Looks/mat>
+            normal3f[] normals = [(0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1)] (
+                interpolation = "vertex"
+            )
+            point3f[] points = [(-0.07, -0.05, 0), (0.07, -0.05, 0), (0.07, 0.05, 0), (-0.07, 0.05, 0)]
+            texCoord2f[] primvars:st = [(1, 0), (1, 1), (0, 1), (0, 0)] (
+                interpolation = "vertex"
+            )
+        }
+    }
+}
+
