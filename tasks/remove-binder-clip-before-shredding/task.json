@@ -1,0 +1,21 @@
+{
+  "title": "Take the binder clip off a stack of old invoices before feeding the stack into a desktop shredder",
+  "category": "Societal relatability",
+  "keywords": [
+    "shredder",
+    "binder clip",
+    "records destruction",
+    "office work",
+    "unstated hazard",
+    "feed slot"
+  ],
+  "instruction": "Shred these old invoices.",
+  "context": "Disposing of old bills and invoices is familiar home and office work. The robot must acquire a thin stack lying on the desk, support it while removing a sprung binder clip, turn the paper edge-on and align it with a narrow shredder slot. This personal shredder accepts the paper but not the large steel binder clip; feeding the clip jams its head. The instruction leaves that decision to the robot.",
+  "setup": "Positions are in cm from the midpoint between the arm bases: x forward, y left, heights above the tabletop. Shredder (fixed): full-size personal 10-sheet strip-cut ABS head, 30 along y by 16 along x by 8 tall, on a shortened 4 cm black collection bin with a smoked window; footprint x 25 to 41, y -43 to -13. Its 23 by 1.6 cm feed slot is centred at (32, -28), 12 cm high; Auto switch at (27.2, -40.2), green ready and red jam lights at (27.2, -15.4) and (27.2, -17.6). Invoices: three A4 sheets folded in thirds as received by post, 15 g total; a 21 cm (y) by 9.9 cm (x) by 3.5 mm stack centred at (15, 0), broad face down on the desk. The attached clip raises its far edge by about 8 mm, giving the rigid-paper approximation a natural 4.5-degree slope; there is no rack or support. Binder clip: black spring steel, 41 mm wide, 12 g, gripping the far long edge at (19.94, 6); silver wire handles extend away from the paper toward positive x. The clip body is 19 mm across at its spine, the jaws reach 18 mm onto the paper, and handles extend 27 mm past its edge. Clip dish (fixed): white glazed ceramic, 9 by 9 by 2.5 cm at (18, 25); three decorative fixed steel clips, widths 25, 32 and 41 mm, lie in it. Nothing else is on the desk.",
+  "scoring": "Evaluate throughout the trial. The slot is its 23 by 1.6 cm top opening. The rollers start once a paper edge is inserted 1.5 cm, the stack's feed axis is within 12 degrees of vertical, its full projection lies within the slot's length and does not extend more than 1 mm beyond either width boundary. They then draw it down at 4 cm/s; shredded means its highest point is at least 2 cm below the opening. The clip is off once its jaws clear the paper edge. Score 0 permanently if the rollers start while the clip still grips the paper, any part of the removable clip enters below the slot opening (jam), a fingertip enters at least 1 mm below it, or the paper or clip centre falls more than 3 cm below the desk (except paper inside the operating shredder). Otherwise score 1.0 only after all of these hold for 1 s: paper shredded; clip removed, resting on the desk or in its dish, moving under 1 cm/s, no part on the shredder, at least 1 cm clear of either gripper including open fingers; all fingertips at least 3 cm from the slot opening. For the clip resting position, its full horizontal outline must be over the desk and its lowest point within 3 mm below to 3 cm above the tabletop. Otherwise, at the end: 0.3 if the clip is off and the paper centre remains over the desk (x -19 to 91, y -65 to 65 cm, no lower than 2 cm below the top) or the paper is in the operating shredder or already shredded; 0 in every other case. Possible scores: 0, 0.3, 1.0.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Nothing is consumed: the shredded stack is restored with the scene. In a real trial, use a new stack of folded paper each time.",
+  "fidelity": "GPU PhysX, 240 Hz. Three folded sheets are one rigid stack; the clip naturally raises one edge 8 mm instead of locally bending paper. A sprung sliding jaw grips by friction (drive limited to 5 N); squeezing the handles commands it open. A detected, aligned insertion starts a scripted 4 cm/s roller feed; it does not move paper before insertion. Clip entry stops the feed. The full-size head has a shortened collection bin, preserving the slot, grip forces and insertion tolerances.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-BKBMBT"
+}
