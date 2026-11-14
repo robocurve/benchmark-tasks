@@ -1,0 +1,23 @@
+{
+  "title": "Test that a seat belt retractor locks: pull the webbing out steadily, then jerk it",
+  "category": "Safety and alignment",
+  "keywords": [
+    "seat belt",
+    "retractor",
+    "webbing-sensitive lock",
+    "speed-dependent lock",
+    "pull-out test",
+    "vehicle inspection",
+    "automotive technician",
+    "linkkit"
+  ],
+  "instruction": "Pull the seat belt webbing out 15 cm, then jerk it so the retractor locks, then let go so it winds back in.",
+  "context": "Automotive service and vehicle-inspection technicians (O*NET 49-3023.00, about 650,000 US workers) test a seat-belt retractor in every crash-repair, recall and pre-purchase check. A good unit pays out freely when the webbing is pulled steadily, locks the moment it is jerked, and winds back in when let go. A unit that locks on a slow pull, never locks on a jerk, or stays locked after release fails the car. This is a regular safety duty of the trade.",
+  "setup": "Station table; positions in metres, x forward from the arm bases, y to the robot's left, z up; the table top is at z 0.7475. (1) Seat-belt emergency-locking retractor, as fitted in a passenger car: steel frame 90 x 70 x 110 mm (x by y by z), dark grey painted steel, 0.5 kg, bolted with four M8 bolts to a 200 x 160 x 8 mm grey steel test plate that is clamped to the table (fixed). Frame centre at (0.595, -0.12); its webbing slot faces the robot at x = 0.55, 60 mm above the table. Webbing-sensitive (flywheel) lock, bench-tuned. (2) 46 mm wide, 1.2 mm thick black polyester webbing leaves the slot toward the robot, ending in a silver steel tongue plate 85 x 45 x 4 mm (120 g). At rest 100 mm of webbing and the tongue lie outside the slot, the tongue centre at (0.408, -0.12, 0.808); webbing and tongue together 0.15 kg. A white tick every 5 mm (labelled every 50 mm) is printed along the webbing from the slot. (3) Return spring: 0.2 N at rest rising to about 2 N at 0.2 m of pull-out (check with a 5 N spring scale at 0 and 0.2 m), with a light damper so the webbing winds in at about 0.2 m/s. Lock threshold, verified on the bench before use: a steady pull at 0.08 m/s runs free to 0.3 m; a pull faster than 0.30 m/s (measured as in Scoring) locks within 15 mm.",
+  "scoring": "Measured every control step from reset: e = webbing pull-out in mm (the last printed tick at the slot, read from a top camera at 60 fps with a steel rule beside the webbing), v = (e now - e 0.1 s ago) / 0.1 s (6 frames). Whole-run record, updated every step and cleared only by the simulator reset (letting go and starting again never clears it). Gate, any time, gives 0: v reaches 0.30 m/s before the steady pull-out to 150 mm is done (steady means v under 0.25 m/s throughout), because an early jerk locks the webbing. Ladder: 0 if no steady pull-out to 150 mm (v under 0.25 m/s throughout) followed by a jerk (v at least 0.30 m/s); 0.25 steady pull then jerk, but the webbing runs on more than 15 mm past the jerk point; 0.5 webbing stops within 15 mm of the jerk point; 0.75 and wound back in to 5 mm or less at the end; 1.0 and both grippers at least 30 mm clear of the tongue, webbing and retractor and moving under 5 mm/s for 1 s (release gate, read from the video and a rule). Real-trial measurement line: video from above at 60 fps with a 0.5 m steel rule laid beside the webbing; read e at the slot to the nearest tick (interpolate by eye) and take v over 6 frames; the 15 mm run-on is read from the ticks.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Let the webbing wind fully in (tongue against the slot, ticks at 0), check the lock is free by one slow hand pull of 100 mm (it must run free) and one quick pull of 20 mm (it must catch), then let go and let it wind in. Re-seat the tongue and check the spring with the scale at 0.2 m (about 2 N). The test plate stays clamped on its taped outline.",
+  "fidelity": "Rigid-body webbing: a 1.2 mm blade 0.40 m long on a slider with 0.30 m of pull-out; its tail sticks out behind the frame where a real belt winds on a spool. The lock is a brake that holds the slider once pull-out speed over 0.1 s passes 0.30 m/s (real units trip on webbing acceleration) and frees when no hand holds the tongue. Spring 10 N/m, damping 5 N s/m. The tongue is gripped by its 4 mm edges.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-TC9HH5"
+}
