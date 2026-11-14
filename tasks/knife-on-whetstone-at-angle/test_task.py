@@ -150,12 +150,28 @@ s, ok = put_down()
 check(f"full job (worked {m.coverage('A')} and {m.coverage('B')} of 16 points)", s, 1.0)
 assert ok, "success() should be true at the end of the full job"
 
-# 2b. Review, Nov 12: repeated strokes on the same part of the edge (the old demo's 4 strokes per face, all with the
-# blade's middle on the stone) cover about 6 of the 16.5 cm: 0.5, not full credit.
+# 2b. Review, Nov 12: repeated strokes on the same part of the edge (all with the blade's middle on the stone) cover
+# about 6 of the 16.5 cm: 0.5, not full credit.
 new_trial()
-strokes("A", 4)
-strokes("B", 4)
-check(f"4 strokes per face on the same 6 cm (worked {m.coverage('A')} and {m.coverage('B')})", put_down()[0], 0.5)
+strokes("A", 6)
+strokes("B", 6)
+check(f"6 strokes per face on the same 6 cm (worked {m.coverage('A')} and {m.coverage('B')})", put_down()[0], 0.5)
+# Under the floor of 5 strokes per face: 4 per face (heel, middle, tip, middle) score nothing, however well spread.
+new_trial()
+sharpen("A", per=1)
+strokes("A", 1)
+sharpen("B", per=1)
+strokes("B", 1)
+check("4 strokes per face along the whole edge: under 5 per face", put_down()[0], 0.0)
+# One stroke over each place (heel, middle, tip) plus two more over the middle: 5 strokes per face, but the heel's and
+# the tip's points have had one stroke's travel each, under the 10 cm that works a point: 0.5.
+new_trial()
+sharpen("A", per=1)
+strokes("A", 2)
+sharpen("B", per=1)
+strokes("B", 2)
+check(f"5 strokes per face, heel and tip stroked once (worked {m.coverage('A')} and {m.coverage('B')})",
+      put_down()[0], 0.5)
 new_trial()
 sharpen("A")
 strokes("B", 6, v=0.13)
@@ -333,14 +349,14 @@ def rolled(face, n, v=None):
 
 new_trial()
 sharpen("A")
-strokes("B", 2)
-rolled("B", 2)
-check("two good face-B strokes and two rolled off the end", put_down()[0], 0.25)
+strokes("B", 3)
+rolled("B", 3)
+check("three good face-B strokes and three rolled off the end", put_down()[0], 0.25)
 new_trial()
 sharpen("A")
-strokes("B", 2)
-strokes("B", 2)
-check("the same four face-B strokes lifted off instead", put_down()[0], 0.5)
+strokes("B", 3)
+strokes("B", 3)
+check("the same six face-B strokes lifted off instead", put_down()[0], 0.5)
 new_trial()
 sharpen("A")
 sharpen("B")
@@ -366,7 +382,7 @@ def tip_pos(r, a, lift=0.0):
     return np.r_[m.STONE_POS + a * m.S_U[:2], m.TOP + m.STONE_TOP + lift] - low
 
 
-def pitched(face, roll, pitch, n=4, travel=0.07):
+def pitched(face, roll, pitch, n=6, travel=0.07):
     """n edge-leading strokes on `face`, the knife rolled `roll` about its handle axis and pitched `pitch` tip-down
     (negative: heel-down)."""
     r = knife_rot(m.STONE_HEADING, roll if face == "A" else 180.0 - roll)

@@ -41,16 +41,16 @@ Offline checks (no simulator): `python3 test_task.py` (45 checks, prints "all pa
 | Held | A gripper with both fingers touching the handle (a gap of 2 mm or less, the solver's resting gap, between the handle and the gripper's own shape: palm and fingers at their present opening) and their opening stopped by it (0.10 to 0.24 of full opening: the handle's 1.8 cm thickness less 15 %, to its 2.0 cm width plus 3 %). An empty fist, an open hand round the handle or a hand merely near it does not hold the knife, so a knife pushed or dragged without a hand on it makes no strokes |
 | On the stone | Held, edge lower than spine, touching: the edge's lowest point over the stone within 0.5 mm of its top (the knife's collider rests on the stone's, so a knife held up off it does not count). 16 edge points, about 1 cm apart from 0.5 cm past the heel to 16.2 cm, 3 mm short of the point, where the edge curves up to meet the spine: a point is on the stone within 1 mm of its top |
 | Stroke | One touch with 5 cm of edge-leading travel at 13 to 22 deg (15 to 20 deg, plus 2 deg for a hand-held angle), the blade level and at least 3 cm of edge (3 scorer points, half the stone's 6 cm width) on the stone; a tip or heel dragged alone sharpens nothing. 15 deg is the usual angle for Japanese knives, 20 deg for Western ones |
-| Worked | An edge point on a face once it has been on the stone for 5 cm of in-band, edge-leading travel. The stone is 6 cm across and the edge 16.5 cm long, so one place covers about 6 cm; working most of the edge means moving the knife along so the heel, middle and tip each cross the stone |
+| Worked | An edge point on a face once it has been on the stone for 10 cm of in-band, edge-leading travel, two strokes' worth. The stone is 6 cm across and the edge 16.5 cm long, so one place covers about 6 cm; working most of the edge means moving the knife along so the heel, middle and tip each cross the stone |
 | Not counted | A touch with 2 cm of travel steeper than 22 deg (it works a steeper, more obtuse micro-bevel, not the 15 to 20 deg edge), or one whose edge drops 3 mm below the stone's top just past an end within 0.5 s of leaving it (rolled off the end instead of lifted): none of that touch's travel counts as strokes or worked edge. Neither zeroes the trial. A real trial reads the angle against a 22 deg card on the side video and watches for the roll-off |
 | Put down safely | Let go (no part of either gripper touching the knife; a gap of 2 mm or less, the solver's resting gap, between the knife and the gripper's own shape counts as touching), flat on the block (faces within 20 deg of level, edge within 1 cm of its top), edge within 60 deg of +x (away from the robot): a knife left in the hand or on the stone isn't put away, and with the edge away the next hand reaching for the handle does not meet it. Real trial: top photo and a protractor |
 
 | Outcome | Score |
 |---|---|
-| Fewer than 3 strokes on both faces (doing nothing, flat, too-steep or rolled-off strokes, hovering, dragging without a grip, edge-trailing) | 0 |
-| 3+ strokes on one face only: the edge is pushed over into a wire, not sharp | 0.25 |
-| 3+ strokes on each face, but under 12 of the 16 edge points (three quarters of the edge) worked on a face: the right technique, but a quarter or more of the edge still dull | 0.5 |
-| 3+ strokes and 12+ points worked on each face, knife still held, left on the stone or edge toward the robot: sharpened, but not put down safely | 0.75 |
+| Fewer than 5 strokes on both faces (doing nothing, flat, too-steep or rolled-off strokes, hovering, dragging without a grip, edge-trailing) | 0 |
+| 5+ strokes on one face only: the edge is pushed over into a wire, not sharp | 0.25 |
+| 5+ strokes on each face, but under 12 of the 16 edge points (three quarters of the edge) worked on a face: the right technique, but a quarter or more of the edge still dull | 0.5 |
+| 5+ strokes and 12+ points worked on each face, knife still held, left on the stone or edge toward the robot: sharpened, but not put down safely | 0.75 |
 | Both faces worked along most of the edge, knife put down safely, still for 1 s | 1.0 |
 
 Where the arms end is not scored. These are the sim's tiers; a real trial scores the same ladder from edge-tester
@@ -76,7 +76,7 @@ its range. The demo trims its aim by 2.5 degrees per face for the knife's sag in
 
 ## Runtime and seeds
 
-Sim result: 1.0 in 1,310 steps (65.5 seconds at 20 Hz): 6 strokes counted on face A and 7 on face B, all 16 edge points worked on both faces, the last one 16.2 cm along the edge, 3 mm short of the point (it had 12.9 cm of counted travel on face A and 15.8 cm on face B; 5 cm works it). On the stone the sharpening angle read 14.9 to 20.7 degrees and the blade's length stayed within 3.9 degrees of level (the most with the handle lifted for the tip); one fixed layout, `object_jitter=0`.
+Sim result, with the raised thresholds (5 strokes per face, 10 cm of travel per worked point): 1.0 in 1,310 steps (65.5 seconds at 20 Hz). 6 strokes counted on face A and 7 on face B, against 5 needed. All 16 edge points were worked on face A (12.2 to 24.5 cm of counted travel each) and 15 of 16 on face B (10.8 to 24.9 cm; the point 0.5 cm from the heel had 8.3 cm), against 12 needed. The last point, 16.2 cm along the edge and 3 mm short of the tip, had 12.9 cm on face A and 15.8 cm on face B. On the stone the sharpening angle read 14.9 to 20.7 degrees and the blade's length stayed within 3.9 degrees of level (the most with the handle lifted for the tip); one fixed layout, `object_jitter=0`.
 
 ## Fidelity
 
@@ -126,15 +126,23 @@ angle itself is not scored in a real trial, because the reading is the outcome.
 
 ## How the sim's strokes relate to the measured edge
 
-The sim grinds no steel. It counts a point of the edge as worked once it has been on the stone for 5 cm of in-band,
-edge-first travel, and full credit needs 3 or more strokes and 12 of 16 points worked on each face. That is the
-smallest amount of work that can sharpen the edge: every point must have touched the stone at the sharpening angle on
-both faces. It is not a measured match. The jointing pass is kept to a single light pass so that the flat it leaves is
-narrow, but how many strokes per face a person needs to bring the four marked points from 500 g to 300 g on this stone
-has not yet been measured. Before real trials the builder sharpens the dulled knife by hand at 17 degrees, counting
-strokes per face and reading the tester after every pair of strokes. If that count is above the sim's thresholds, the
-sim's stroke and travel thresholds are raised to match and the demo is re-run. In a real trial the tester readings
-decide the score in every case.
+The sim grinds no steel. It counts a point of the edge as worked once it has been on the stone for 10 cm of in-band,
+edge-first travel, and full credit needs 5 or more strokes and 12 of 16 points worked on each face. It is a stand-in,
+not a measured match, and in a real trial the tester readings decide the score in every case.
+
+This revision raised both thresholds, from 3 strokes per face and 5 cm of travel per point (one stroke over each part
+of the edge). That earlier floor was below what sharpening a dull edge takes. Guides for Japanese whetstones work each
+section of the edge until a burr can be felt all along it before moving on; one says "Keep working on that section
+until you do" (Knifewear, "How to Sharpen Kitchen Knives with Japanese Whetstones"). They then finish by alternating
+faces "in decreasing strokes - ten strokes per side, then eight, then six, then four, then two, then one stroke per
+side several times" (Chef Knives To Go, "How to sharpen a knife on a whetstone"), which is more than 30 strokes per face
+after the burr is raised. The new floor, 5 strokes per face with every worked point on the stone for two strokes'
+travel, is still well under that. It is a conservative lower bound that the scripted demo meets (6 and 7 strokes, 2 to 3
+over each part of the edge); it is not a calibration.
+
+The real count has not yet been measured on this knife and stone. Before real trials the builder sharpens the jointed
+knife by hand at 17 degrees, counting strokes per face and reading the tester after every pair of strokes. If more is
+needed than the sim requires, the sim's thresholds are raised again and the demo is re-run.
 
 ## Files
 

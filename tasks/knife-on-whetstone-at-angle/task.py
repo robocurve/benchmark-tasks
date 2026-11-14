@@ -95,14 +95,16 @@ EDGE_ON = 3  # edge points (about 1 cm apart, each standing for about 1 cm of ed
 COVER = 12  # of the 16 edge points (each about 1 cm of the 16.5 cm edge): full credit needs each face to have worked
 #             at least 12 (three quarters of the edge, "most of it"), so strokes on the same few cm do not count as a
 #             sharpened knife
-COVER_TRAVEL = 0.05  # m: a point counts as worked once it has been on the stone for a stroke's 5 cm of in-band,
-#                      edge-leading travel on that face
+COVER_TRAVEL = 0.10  # m: a point counts as worked once it has been on the stone for 10 cm of in-band, edge-leading
+#                      travel on that face: two strokes' worth (raised from one, 5 cm; still a floor, see PER_SIDE)
 LEVEL = 5.0  # deg: the blade's length (handle to tip) within this of level while stroking; a whetstone stroke keeps
 #               the whole edge on the stone, and a pitch above 5 deg lifts the far end of a 6 cm contact 5 mm off it
 STROKE = 0.05  # m: edge-leading travel on the stone, in band, that makes a stroke (most of the stone's 6 cm width
 #                     crossed by each part of the edge; the demo strokes 7 cm)
 STEEP_TRAVEL = 0.02  # m: a touch with 2 cm of travel steeper than STEEP is a too-steep stroke: none of it counts
-PER_SIDE = 3  # strokes on each face: "a few strokes per side"
+PER_SIDE = 5  # strokes on each face, a floor: sharpening guides for a dull edge on a 1000-grit stone work each section
+#              of the edge until a burr runs along it, then alternate faces in 10, 8, 6, 4, 2 and 1 strokes per side,
+#              far more than 5; the sim's strokes are a lower bound and a real trial's edge tester decides
 OFF_END = 0.003  # m: an edge point this far below the stone's top just past an end, within 0.5 s of the edge leaving
 #                  the stone: the stroke rolled off the end instead of being lifted, and it is not counted
 OFF_END_STEPS = 10  # control steps (0.5 s at 20 Hz) after lift-off in which a roll-off cancels the stroke just ended
@@ -420,7 +422,7 @@ def _totals():
 
 def coverage(face):
     """How many of the 16 edge points (about 1 cm each, the last 3 mm short of the point) have been worked on `face`:
-    on the stone for 5 cm of in-band, edge-leading travel, in strokes that count."""
+    on the stone for 10 cm of in-band, edge-leading travel, in strokes that count."""
     return int(np.sum(_totals()[1][face] >= COVER_TRAVEL))
 
 
@@ -458,11 +460,11 @@ def score(objects):
     """A stroke: the knife held, its edge touching the stone (its lowest point over the stone within 0.5 mm of its top,
     edge lower than spine) with at least 3 cm of edge within 1 mm of it, and moved 5 cm edge-leading with its faces 13
     to 22 degrees to the stone and its length level, in one touch (lifting off ends it). An edge point is worked on a
-    face once it has been on the stone for 5 cm of such travel. A touch that does not count at all: one with 2 cm of
+    face once it has been on the stone for 10 cm of such travel. A touch that does not count at all: one with 2 cm of
     travel steeper than 22 degrees (it works a steeper micro-bevel), or one whose edge drops 3 mm below the stone's top
-    just past an end within 0.5 s of leaving it (rolled off the end). 0 with under 3 strokes on both faces; 0.25 for
-    3+ strokes on one face only; 0.5 for 3+ on each face with under 12 of the 16 edge points (about 1 cm apart, 0.5 to
-    16.2 cm along the 16.5 cm edge) worked on a face; 0.75 for 3+ strokes and 12+ points worked on each face; 1.0
+    just past an end within 0.5 s of leaving it (rolled off the end). 0 with under 5 strokes on both faces; 0.25 for
+    5+ strokes on one face only; 0.5 for 5+ on each face with under 12 of the 16 edge points (about 1 cm apart, 0.5 to
+    16.2 cm along the 16.5 cm edge) worked on a face; 0.75 for 5+ strokes and 12+ points worked on each face; 1.0
     for that and the knife let go, lying flat on the board, edge facing away. Where the arms end is not scored.
     Possible scores: 0, 0.25, 0.5, 0.75, 1."""
     return _score(objects)
