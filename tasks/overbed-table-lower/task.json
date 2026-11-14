@@ -1,0 +1,22 @@
+{
+  "title": "Lower a gas-spring hospital overbed table to a marked height",
+  "category": "Impact on jobs",
+  "keywords": [
+    "healthcare",
+    "patient care",
+    "gas spring",
+    "locking column",
+    "bimanual",
+    "force coordination",
+    "hold-and-release order"
+  ],
+  "instruction": "Lower the overbed table to the marked height. Its single column is a locking gas spring, released by the paddle under the front edge of the top.",
+  "context": "Nursing assistants (O*NET 31-1131.00, 1,351,760 US workers, BLS OEWS May 2023) and orderlies (31-1132.00, 48,710) set overbed tables at a patient's bedside many times a shift. The column is a locking gas spring: it moves only while the release paddle under the top is held up, and then it pushes the top up with a steady force. So one hand holds the paddle while the other presses the top down near its middle, then the paddle is let go before the top. The top must not end up on the patient's legs.",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left); heights above the bench top, which stands in for the mattress. Overbed table top: laminated board 38 (x) x 76 (y) x 1.8 cm, 5.5 kg, spanning x 14 to 52 and y -30 to 46, its surface 14 cm up. It is cantilevered from one column under its left end at x 33, y 40: a grey steel outer tube 5 x 5 cm on a 30 x 8 x 1 cm dark foot, with a 3.6 cm inner post (2.5 kg with its 6 x 10 cm bracket) that slides in it. The column is a locking gas spring: 86 N push at the start, minus 50 N/m of travel, oil-damped (60 N*s/m), locked unless the paddle is lifted 6 deg or more. Release paddle: black bar 10.5 x 2 x 0.8 cm (50 g), pivoted under the top 3 cm in from its front edge at y 25. It sticks 6.5 cm out in front of the edge and is held down by a light return spring; a small red dot on the top marks it. Patient's shins under a blue blanket: block 30 (x) x 24 (y) x 6.8 cm (2 kg) at x 36, y -9, on a 4,000 N/m spring (flesh and mattress), 1.4 cm below the top's underside at the marked height. Measuring post: white 1.6 cm square post on a 6 x 6 cm foot at x 17, y -32.5, beside the top's right end, with a red tape tab whose top face is the marked height, 10 cm up (4 cm below the top's starting height).",
+  "scoring": "Height = start surface height + the column's travel (true column height; leaning the top over does not count). e = |height - mark|. Score 0, latched, if at any time the column springs up 40 mm above the lowest point it has reached, the top tilts more than 4 deg, or presses the shins with more than 30 N; also 0 if the top ends tilted more than 1 deg. Otherwise 0.6 for e of 10 mm or less, falling linearly to 0 at 33 mm (it starts at 40 mm). With e of 20 mm or less, add 0.3 if the column is locked and the top has stayed within 3 mm for 2 s with no gripper within 2 cm of the top or paddle, and 0.1 if neither is touched and the top is still. Success: 1.0 held for 1 s. Scored at the last step.",
+  "run_limit": "900 steps (45 seconds at 20 Hz)",
+  "reset_notes": "Lift the paddle and let the top rise back to its starting height (surface 14 cm up, 4 cm above the red tab), then let the paddle go so the column locks there.",
+  "fidelity": "Rigid boxes. Gas spring: a sprung slider, nearly constant force, oil-damped; locked = slider made very stiff while the paddle is below 6 deg. Column give: a 250 N*m/rad tilt spring about the top's long-axis roll only; fore-aft tilt is rigid. Shins: one sprung block. The bench stands in for the mattress, so the column is short and bolted down, not on castors. Only 4 cm of travel is modelled.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-E9CXYK"
+}
