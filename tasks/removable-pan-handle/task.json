@@ -1,0 +1,19 @@
+{
+  "title": "Attach a removable saucepan handle and use it",
+  "category": "Societal relatability",
+  "keywords": [
+    "bimanual",
+    "cookware",
+    "functional assembly",
+    "detachable handle"
+  ],
+  "instruction": "Attach the detachable handle to the saucepan and use it to move the pan onto the trivet.",
+  "context": "A detachable cookware handle must form a load-bearing connection before use. The task tests seating and closing a real household mechanism, then proving the attachment by carrying its pan; merely placing a loose handle beside a pan earns nothing.",
+  "setup": "Standard bimanual YAM arms with parallel grippers and the calibrated top/wrist cameras. Tabletop coordinates: origin midway between arm bases; X forward, Y left, Z above table. A cold, empty 18 cm stainless-steel saucepan, referencing the Tefal Ingenio Emotion L9254S14 set, stands at (0.30,0.16,0) m. The reconstruction is 95 mm high, 196 mm across its flared outer lip and 650 g. Its compatible removable handle starts detached and open, resting on its side with the grip body centred approximately at X=0.10 m, Y=-0.06 m and the jaw facing +X. The handle is approximately 18.2 cm long, up to 5.5 cm across its release controls and 261 g, with a black polymer housing, metal gripping jaw/linkage, lower closing lever and paired release buttons. A round cork trivet, 240 mm diameter and 12 mm thick, is taped to the table at (0.30,-0.17,0) m. Both arms start in the standard ready posture with open grippers. Pan and handle are free bodies. No heat, liquid, food or other task objects.",
+  "scoring": "0 unless a retained attachment proof is achieved. 0.5: hold the pan base at least 20 mm above the table for 1 continuous second, supported only through the locked handle, with pan tilt at most 5 degrees, observed linear speed at most 20 mm/s and angular speed at most 0.1 rad/s. Grippers may hold the housing but may not support the pan, moving jaw, closing lever or release buttons during this proof or carry. 1.0: after a valid proof, carry the pan from its original source through the continuously engaged handle, place its base on the trivet within 20 mm of the trivet centre, and release both robots for 2 continuous seconds under the same tilt and motion limits. The base must be within 2 mm of the 12 mm trivet height; pan and handle must both be still. Bracing during assembly is allowed; neither arm identity nor a prescribed trajectory is required. A slip cancels the attachment proof; retrying is allowed. Partial credit requires the attachment still retained and the pan controlled through the handle or resting on the table or trivet. Throwing, direct pan transfer, or placing an unconnected handle beside the pan cannot establish delivery. Safe handle removal after valid delivery is allowed. Apparatus falling off the table or invalid penetration greater than 2 mm scores zero. Otherwise 0. Contacts and summed motion of all 480 Hz poses implement the load-path and motion checks; engine velocities are diagnostic, not score inputs. README gives the complete operational definition.",
+  "run_limit": "1400 actions at 20 Hz (70 simulated seconds); seed 0; one fixed layout",
+  "reset_notes": "Restore the empty pan, detached open handle and taped trivet to the pictured positions. No consumables. The company may use the specified compatible retail pair; the simulation is an estimated reconstruction.",
+  "fidelity": "Estimated product-informed geometry, masses and passive linkage forces; not measured Ingenio CAD. Hollow pan and articulated handle retain the rim through contact, with no attachment weld. Pose-based stability is used because engine angular velocities disagree with observed motion; this discrepancy remains unresolved. No physical-robot validation.",
+  "scores": "Dream-1 beta: 0.0 (1400 actions); scripted demo: 1.0 (1348 actions). Pose-based stability; engine-velocity discrepancy disclosed.",
+  "media": "M-RPPS2A"
+}
