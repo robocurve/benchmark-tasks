@@ -1,0 +1,1845 @@
+{
+  "units": "metres, kilograms, seconds; box sizes are full edge lengths",
+  "frame": "x forward from the arm bases, y left, z up",
+  "station": {
+    "table_size": [
+      1.1,
+      1.3,
+      0.06
+    ],
+    "table_center": [
+      0.36,
+      0,
+      0.7175
+    ],
+    "arm_bases": [
+      [
+        0,
+        0.305,
+        0.75
+      ],
+      [
+        0,
+        -0.305,
+        0.75
+      ]
+    ],
+    "cameras": "unmodified calibrated YAM station overhead and two wrist cameras",
+    "room": "standard YAM station floor, lights and camera stand"
+  },
+  "objects": [
+    {
+      "name": "battery_1",
+      "position": [
+        0.16,
+        0.0,
+        0.8015000000000001
+      ],
+      "quaternion_xyzw": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "mass_kg": 0.023,
+      "fixed": false,
+      "asset": "aa_cell.usda"
+    },
+    {
+      "name": "battery_2",
+      "position": [
+        0.21000000000000002,
+        0.0,
+        0.8015000000000001
+      ],
+      "quaternion_xyzw": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "mass_kg": 0.023,
+      "fixed": false,
+      "asset": "aa_cell.usda"
+    },
+    {
+      "name": "battery_3",
+      "position": [
+        0.26,
+        0.0,
+        0.8015000000000001
+      ],
+      "quaternion_xyzw": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "mass_kg": 0.023,
+      "fixed": false,
+      "asset": "aa_cell.usda"
+    },
+    {
+      "name": "battery_4",
+      "position": [
+        0.31000000000000005,
+        0.0,
+        0.8015000000000001
+      ],
+      "quaternion_xyzw": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "mass_kg": 0.023,
+      "fixed": false,
+      "asset": "aa_cell.usda"
+    },
+    {
+      "name": "battery_5",
+      "position": [
+        0.36,
+        0.0,
+        0.8015000000000001
+      ],
+      "quaternion_xyzw": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "mass_kg": 0.023,
+      "fixed": false,
+      "asset": "aa_cell.usda"
+    },
+    {
+      "name": "red_probe",
+      "position": [
+        0.11,
+        0.3,
+        0.8078000000000001
+      ],
+      "quaternion_xyzw": [
+        0,
+        0,
+        1,
+        0
+      ],
+      "mass_kg": 0.028,
+      "fixed": false,
+      "asset": "red_probe.usda"
+    },
+    {
+      "name": "black_probe",
+      "position": [
+        0.11,
+        -0.3,
+        0.8078000000000001
+      ],
+      "quaternion_xyzw": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "mass_kg": 0.028,
+      "fixed": false,
+      "asset": "black_probe.usda"
+    },
+    {
+      "name": "battery_cradles",
+      "position": [
+        0,
+        0,
+        0.7475
+      ],
+      "quaternion_xyzw": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "mass_kg": null,
+      "fixed": true,
+      "asset": "battery_cradles.usda"
+    },
+    {
+      "name": "red_probe_rest",
+      "position": [
+        0,
+        0,
+        0.7475
+      ],
+      "quaternion_xyzw": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "mass_kg": null,
+      "fixed": true,
+      "asset": "red_probe_rest.usda"
+    },
+    {
+      "name": "black_probe_rest",
+      "position": [
+        0,
+        0,
+        0.7475
+      ],
+      "quaternion_xyzw": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "mass_kg": null,
+      "fixed": true,
+      "asset": "black_probe_rest.usda"
+    },
+    {
+      "name": "alive_bin",
+      "position": [
+        0,
+        0,
+        0.7475
+      ],
+      "quaternion_xyzw": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "mass_kg": null,
+      "fixed": true,
+      "asset": "alive_bin.usda"
+    },
+    {
+      "name": "dead_bin",
+      "position": [
+        0,
+        0,
+        0.7475
+      ],
+      "quaternion_xyzw": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "mass_kg": null,
+      "fixed": true,
+      "asset": "dead_bin.usda"
+    },
+    {
+      "name": "voltage_meter",
+      "position": [
+        0.525,
+        0.0,
+        0.7475
+      ],
+      "quaternion_xyzw": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "mass_kg": null,
+      "fixed": true,
+      "asset": "voltage_meter.usda"
+    }
+  ],
+  "asset_geometry": {
+    "aa_cell": [
+      {
+        "name": "insulated_can",
+        "kind": "Cylinder",
+        "radius": 0.00725,
+        "height": 0.0493,
+        "axis": "Y",
+        "pos": [
+          0,
+          -0.0004,
+          0
+        ],
+        "color": "blue",
+        "collision": true
+      },
+      {
+        "name": "negative_terminal",
+        "kind": "Cylinder",
+        "radius": 0.0055,
+        "height": 0.0002,
+        "axis": "Y",
+        "pos": [
+          0,
+          -0.025150000000000002,
+          0
+        ],
+        "color": "steel",
+        "collision": true
+      },
+      {
+        "name": "positive_terminal",
+        "kind": "Cylinder",
+        "radius": 0.00275,
+        "height": 0.001,
+        "axis": "Y",
+        "pos": [
+          0,
+          0.02475,
+          0
+        ],
+        "color": "steel",
+        "collision": true
+      },
+      {
+        "name": "positive_shoulder",
+        "kind": "Cylinder",
+        "radius": 0.00725,
+        "height": 0.0003,
+        "axis": "Y",
+        "pos": [
+          0,
+          0.0241,
+          0
+        ],
+        "color": "steel",
+        "collision": true
+      }
+    ],
+    "red_probe": [
+      {
+        "name": "insulated_handle",
+        "kind": "Cylinder",
+        "radius": 0.008,
+        "height": 0.07,
+        "axis": "Y",
+        "pos": [
+          0,
+          0,
+          0
+        ],
+        "color": "red",
+        "collision": true
+      },
+      {
+        "name": "finger_guard",
+        "kind": "Cylinder",
+        "radius": 0.012,
+        "height": 0.004,
+        "axis": "Y",
+        "pos": [
+          0,
+          0.032,
+          0
+        ],
+        "color": "red",
+        "collision": true
+      },
+      {
+        "name": "insulated_nose",
+        "kind": "Cylinder",
+        "radius": 0.004,
+        "height": 0.05,
+        "axis": "Y",
+        "pos": [
+          0,
+          0.062,
+          0
+        ],
+        "color": "red",
+        "collision": true
+      },
+      {
+        "name": "metal_shaft",
+        "kind": "Cylinder",
+        "radius": 0.0014,
+        "height": 0.028,
+        "axis": "Y",
+        "pos": [
+          0,
+          0.101,
+          0
+        ],
+        "color": "steel",
+        "collision": true
+      },
+      {
+        "name": "metal_tip",
+        "kind": "Sphere",
+        "radius": 0.0015,
+        "pos": [
+          0.0,
+          0.1155,
+          0.0
+        ],
+        "color": "steel",
+        "collision": true
+      }
+    ],
+    "black_probe": [
+      {
+        "name": "insulated_handle",
+        "kind": "Cylinder",
+        "radius": 0.008,
+        "height": 0.07,
+        "axis": "Y",
+        "pos": [
+          0,
+          0,
+          0
+        ],
+        "color": "black",
+        "collision": true
+      },
+      {
+        "name": "finger_guard",
+        "kind": "Cylinder",
+        "radius": 0.012,
+        "height": 0.004,
+        "axis": "Y",
+        "pos": [
+          0,
+          0.032,
+          0
+        ],
+        "color": "black",
+        "collision": true
+      },
+      {
+        "name": "insulated_nose",
+        "kind": "Cylinder",
+        "radius": 0.004,
+        "height": 0.05,
+        "axis": "Y",
+        "pos": [
+          0,
+          0.062,
+          0
+        ],
+        "color": "black",
+        "collision": true
+      },
+      {
+        "name": "metal_shaft",
+        "kind": "Cylinder",
+        "radius": 0.0014,
+        "height": 0.028,
+        "axis": "Y",
+        "pos": [
+          0,
+          0.101,
+          0
+        ],
+        "color": "steel",
+        "collision": true
+      },
+      {
+        "name": "metal_tip",
+        "kind": "Sphere",
+        "radius": 0.0015,
+        "pos": [
+          0.0,
+          0.1155,
+          0.0
+        ],
+        "color": "steel",
+        "collision": true
+      }
+    ],
+    "battery_cradles": [
+      {
+        "name": "support_0_0",
+        "kind": "Cube",
+        "size": [
+          0.03,
+          0.006,
+          0.04
+        ],
+        "pos": [
+          0.16,
+          -0.0165,
+          0.02
+        ],
+        "color": "rubber",
+        "angle": 0,
+        "collision": true
+      },
+      {
+        "name": "v_0_0_l",
+        "kind": "Cube",
+        "size": [
+          0.014,
+          0.006,
+          0.004
+        ],
+        "pos": [
+          0.153,
+          -0.0165,
+          0.0455
+        ],
+        "color": "rubber",
+        "angle": 0.7853981633974483,
+        "collision": true
+      },
+      {
+        "name": "v_0_0_r",
+        "kind": "Cube",
+        "size": [
+          0.014,
+          0.006,
+          0.004
+        ],
+        "pos": [
+          0.167,
+          -0.0165,
+          0.0455
+        ],
+        "color": "rubber",
+        "angle": -0.7853981633974483,
+        "collision": true
+      },
+      {
+        "name": "support_0_1",
+        "kind": "Cube",
+        "size": [
+          0.03,
+          0.006,
+          0.04
+        ],
+        "pos": [
+          0.16,
+          0.0165,
+          0.02
+        ],
+        "color": "rubber",
+        "angle": 0,
+        "collision": true
+      },
+      {
+        "name": "v_0_1_l",
+        "kind": "Cube",
+        "size": [
+          0.014,
+          0.006,
+          0.004
+        ],
+        "pos": [
+          0.153,
+          0.0165,
+          0.0455
+        ],
+        "color": "rubber",
+        "angle": 0.7853981633974483,
+        "collision": true
+      },
+      {
+        "name": "v_0_1_r",
+        "kind": "Cube",
+        "size": [
+          0.014,
+          0.006,
+          0.004
+        ],
+        "pos": [
+          0.167,
+          0.0165,
+          0.0455
+        ],
+        "color": "rubber",
+        "angle": -0.7853981633974483,
+        "collision": true
+      },
+      {
+        "name": "support_1_0",
+        "kind": "Cube",
+        "size": [
+          0.03,
+          0.006,
+          0.04
+        ],
+        "pos": [
+          0.21000000000000002,
+          -0.0165,
+          0.02
+        ],
+        "color": "rubber",
+        "angle": 0,
+        "collision": true
+      },
+      {
+        "name": "v_1_0_l",
+        "kind": "Cube",
+        "size": [
+          0.014,
+          0.006,
+          0.004
+        ],
+        "pos": [
+          0.203,
+          -0.0165,
+          0.0455
+        ],
+        "color": "rubber",
+        "angle": 0.7853981633974483,
+        "collision": true
+      },
+      {
+        "name": "v_1_0_r",
+        "kind": "Cube",
+        "size": [
+          0.014,
+          0.006,
+          0.004
+        ],
+        "pos": [
+          0.21700000000000003,
+          -0.0165,
+          0.0455
+        ],
+        "color": "rubber",
+        "angle": -0.7853981633974483,
+        "collision": true
+      },
+      {
+        "name": "support_1_1",
+        "kind": "Cube",
+        "size": [
+          0.03,
+          0.006,
+          0.04
+        ],
+        "pos": [
+          0.21000000000000002,
+          0.0165,
+          0.02
+        ],
+        "color": "rubber",
+        "angle": 0,
+        "collision": true
+      },
+      {
+        "name": "v_1_1_l",
+        "kind": "Cube",
+        "size": [
+          0.014,
+          0.006,
+          0.004
+        ],
+        "pos": [
+          0.203,
+          0.0165,
+          0.0455
+        ],
+        "color": "rubber",
+        "angle": 0.7853981633974483,
+        "collision": true
+      },
+      {
+        "name": "v_1_1_r",
+        "kind": "Cube",
+        "size": [
+          0.014,
+          0.006,
+          0.004
+        ],
+        "pos": [
+          0.21700000000000003,
+          0.0165,
+          0.0455
+        ],
+        "color": "rubber",
+        "angle": -0.7853981633974483,
+        "collision": true
+      },
+      {
+        "name": "support_2_0",
+        "kind": "Cube",
+        "size": [
+          0.03,
+          0.006,
+          0.04
+        ],
+        "pos": [
+          0.26,
+          -0.0165,
+          0.02
+        ],
+        "color": "rubber",
+        "angle": 0,
+        "collision": true
+      },
+      {
+        "name": "v_2_0_l",
+        "kind": "Cube",
+        "size": [
+          0.014,
+          0.006,
+          0.004
+        ],
+        "pos": [
+          0.253,
+          -0.0165,
+          0.0455
+        ],
+        "color": "rubber",
+        "angle": 0.7853981633974483,
+        "collision": true
+      },
+      {
+        "name": "v_2_0_r",
+        "kind": "Cube",
+        "size": [
+          0.014,
+          0.006,
+          0.004
+        ],
+        "pos": [
+          0.267,
+          -0.0165,
+          0.0455
+        ],
+        "color": "rubber",
+        "angle": -0.7853981633974483,
+        "collision": true
+      },
+      {
+        "name": "support_2_1",
+        "kind": "Cube",
+        "size": [
+          0.03,
+          0.006,
+          0.04
+        ],
+        "pos": [
+          0.26,
+          0.0165,
+          0.02
+        ],
+        "color": "rubber",
+        "angle": 0,
+        "collision": true
+      },
+      {
+        "name": "v_2_1_l",
+        "kind": "Cube",
+        "size": [
+          0.014,
+          0.006,
+          0.004
+        ],
+        "pos": [
+          0.253,
+          0.0165,
+          0.0455
+        ],
+        "color": "rubber",
+        "angle": 0.7853981633974483,
+        "collision": true
+      },
+      {
+        "name": "v_2_1_r",
+        "kind": "Cube",
+        "size": [
+          0.014,
+          0.006,
+          0.004
+        ],
+        "pos": [
+          0.267,
+          0.0165,
+          0.0455
+        ],
+        "color": "rubber",
+        "angle": -0.7853981633974483,
+        "collision": true
+      },
+      {
+        "name": "support_3_0",
+        "kind": "Cube",
+        "size": [
+          0.03,
+          0.006,
+          0.04
+        ],
+        "pos": [
+          0.31000000000000005,
+          -0.0165,
+          0.02
+        ],
+        "color": "rubber",
+        "angle": 0,
+        "collision": true
+      },
+      {
+        "name": "v_3_0_l",
+        "kind": "Cube",
+        "size": [
+          0.014,
+          0.006,
+          0.004
+        ],
+        "pos": [
+          0.30300000000000005,
+          -0.0165,
+          0.0455
+        ],
+        "color": "rubber",
+        "angle": 0.7853981633974483,
+        "collision": true
+      },
+      {
+        "name": "v_3_0_r",
+        "kind": "Cube",
+        "size": [
+          0.014,
+          0.006,
+          0.004
+        ],
+        "pos": [
+          0.31700000000000006,
+          -0.0165,
+          0.0455
+        ],
+        "color": "rubber",
+        "angle": -0.7853981633974483,
+        "collision": true
+      },
+      {
+        "name": "support_3_1",
+        "kind": "Cube",
+        "size": [
+          0.03,
+          0.006,
+          0.04
+        ],
+        "pos": [
+          0.31000000000000005,
+          0.0165,
+          0.02
+        ],
+        "color": "rubber",
+        "angle": 0,
+        "collision": true
+      },
+      {
+        "name": "v_3_1_l",
+        "kind": "Cube",
+        "size": [
+          0.014,
+          0.006,
+          0.004
+        ],
+        "pos": [
+          0.30300000000000005,
+          0.0165,
+          0.0455
+        ],
+        "color": "rubber",
+        "angle": 0.7853981633974483,
+        "collision": true
+      },
+      {
+        "name": "v_3_1_r",
+        "kind": "Cube",
+        "size": [
+          0.014,
+          0.006,
+          0.004
+        ],
+        "pos": [
+          0.31700000000000006,
+          0.0165,
+          0.0455
+        ],
+        "color": "rubber",
+        "angle": -0.7853981633974483,
+        "collision": true
+      },
+      {
+        "name": "support_4_0",
+        "kind": "Cube",
+        "size": [
+          0.03,
+          0.006,
+          0.04
+        ],
+        "pos": [
+          0.36,
+          -0.0165,
+          0.02
+        ],
+        "color": "rubber",
+        "angle": 0,
+        "collision": true
+      },
+      {
+        "name": "v_4_0_l",
+        "kind": "Cube",
+        "size": [
+          0.014,
+          0.006,
+          0.004
+        ],
+        "pos": [
+          0.353,
+          -0.0165,
+          0.0455
+        ],
+        "color": "rubber",
+        "angle": 0.7853981633974483,
+        "collision": true
+      },
+      {
+        "name": "v_4_0_r",
+        "kind": "Cube",
+        "size": [
+          0.014,
+          0.006,
+          0.004
+        ],
+        "pos": [
+          0.367,
+          -0.0165,
+          0.0455
+        ],
+        "color": "rubber",
+        "angle": -0.7853981633974483,
+        "collision": true
+      },
+      {
+        "name": "support_4_1",
+        "kind": "Cube",
+        "size": [
+          0.03,
+          0.006,
+          0.04
+        ],
+        "pos": [
+          0.36,
+          0.0165,
+          0.02
+        ],
+        "color": "rubber",
+        "angle": 0,
+        "collision": true
+      },
+      {
+        "name": "v_4_1_l",
+        "kind": "Cube",
+        "size": [
+          0.014,
+          0.006,
+          0.004
+        ],
+        "pos": [
+          0.353,
+          0.0165,
+          0.0455
+        ],
+        "color": "rubber",
+        "angle": 0.7853981633974483,
+        "collision": true
+      },
+      {
+        "name": "v_4_1_r",
+        "kind": "Cube",
+        "size": [
+          0.014,
+          0.006,
+          0.004
+        ],
+        "pos": [
+          0.367,
+          0.0165,
+          0.0455
+        ],
+        "color": "rubber",
+        "angle": -0.7853981633974483,
+        "collision": true
+      }
+    ],
+    "red_probe_rest": [
+      {
+        "name": "rest_0",
+        "kind": "Cube",
+        "size": [
+          0.022,
+          0.006,
+          0.052
+        ],
+        "pos": [
+          0.11,
+          0.27699999999999997,
+          0.026
+        ],
+        "color": "rubber",
+        "angle": 0,
+        "collision": true
+      },
+      {
+        "name": "rest_1",
+        "kind": "Cube",
+        "size": [
+          0.022,
+          0.006,
+          0.052
+        ],
+        "pos": [
+          0.11,
+          0.323,
+          0.026
+        ],
+        "color": "rubber",
+        "angle": 0,
+        "collision": true
+      }
+    ],
+    "black_probe_rest": [
+      {
+        "name": "rest_0",
+        "kind": "Cube",
+        "size": [
+          0.022,
+          0.006,
+          0.052
+        ],
+        "pos": [
+          0.11,
+          -0.323,
+          0.026
+        ],
+        "color": "rubber",
+        "angle": 0,
+        "collision": true
+      },
+      {
+        "name": "rest_1",
+        "kind": "Cube",
+        "size": [
+          0.022,
+          0.006,
+          0.052
+        ],
+        "pos": [
+          0.11,
+          -0.27699999999999997,
+          0.026
+        ],
+        "color": "rubber",
+        "angle": 0,
+        "collision": true
+      }
+    ],
+    "alive_bin": [
+      {
+        "name": "floor",
+        "kind": "Cube",
+        "size": [
+          0.22,
+          0.18,
+          0.006
+        ],
+        "pos": [
+          0.26,
+          0.3,
+          0.003
+        ],
+        "color": "green",
+        "angle": 0,
+        "collision": true
+      },
+      {
+        "name": "xwall_0",
+        "kind": "Cube",
+        "size": [
+          0.005,
+          0.18,
+          0.07
+        ],
+        "pos": [
+          0.15250000000000002,
+          0.3,
+          0.035
+        ],
+        "color": "green",
+        "angle": 0,
+        "collision": true
+      },
+      {
+        "name": "ywall_0",
+        "kind": "Cube",
+        "size": [
+          0.21,
+          0.005,
+          0.07
+        ],
+        "pos": [
+          0.26,
+          0.2125,
+          0.035
+        ],
+        "color": "green",
+        "angle": 0,
+        "collision": true
+      },
+      {
+        "name": "xwall_2",
+        "kind": "Cube",
+        "size": [
+          0.005,
+          0.18,
+          0.07
+        ],
+        "pos": [
+          0.3675,
+          0.3,
+          0.035
+        ],
+        "color": "green",
+        "angle": 0,
+        "collision": true
+      },
+      {
+        "name": "ywall_2",
+        "kind": "Cube",
+        "size": [
+          0.21,
+          0.005,
+          0.07
+        ],
+        "pos": [
+          0.26,
+          0.38749999999999996,
+          0.035
+        ],
+        "color": "green",
+        "angle": 0,
+        "collision": true
+      },
+      {
+        "name": "label_plate",
+        "kind": "Cube",
+        "size": [
+          0.035,
+          0.165,
+          0.003
+        ],
+        "pos": [
+          0.381,
+          0.3,
+          0.0715
+        ],
+        "color": "green",
+        "angle": 0,
+        "collision": false
+      }
+    ],
+    "dead_bin": [
+      {
+        "name": "floor",
+        "kind": "Cube",
+        "size": [
+          0.22,
+          0.18,
+          0.006
+        ],
+        "pos": [
+          0.26,
+          -0.3,
+          0.003
+        ],
+        "color": "red",
+        "angle": 0,
+        "collision": true
+      },
+      {
+        "name": "xwall_0",
+        "kind": "Cube",
+        "size": [
+          0.005,
+          0.18,
+          0.07
+        ],
+        "pos": [
+          0.15250000000000002,
+          -0.3,
+          0.035
+        ],
+        "color": "red",
+        "angle": 0,
+        "collision": true
+      },
+      {
+        "name": "ywall_0",
+        "kind": "Cube",
+        "size": [
+          0.21,
+          0.005,
+          0.07
+        ],
+        "pos": [
+          0.26,
+          -0.38749999999999996,
+          0.035
+        ],
+        "color": "red",
+        "angle": 0,
+        "collision": true
+      },
+      {
+        "name": "xwall_2",
+        "kind": "Cube",
+        "size": [
+          0.005,
+          0.18,
+          0.07
+        ],
+        "pos": [
+          0.3675,
+          -0.3,
+          0.035
+        ],
+        "color": "red",
+        "angle": 0,
+        "collision": true
+      },
+      {
+        "name": "ywall_2",
+        "kind": "Cube",
+        "size": [
+          0.21,
+          0.005,
+          0.07
+        ],
+        "pos": [
+          0.26,
+          -0.2125,
+          0.035
+        ],
+        "color": "red",
+        "angle": 0,
+        "collision": true
+      },
+      {
+        "name": "label_plate",
+        "kind": "Cube",
+        "size": [
+          0.035,
+          0.165,
+          0.003
+        ],
+        "pos": [
+          0.381,
+          -0.3,
+          0.0715
+        ],
+        "color": "red",
+        "angle": 0,
+        "collision": false
+      }
+    ],
+    "voltage_meter": [
+      {
+        "name": "case",
+        "kind": "Cube",
+        "size": [
+          0.165,
+          0.25,
+          0.035
+        ],
+        "pos": [
+          0,
+          0,
+          0.0175
+        ],
+        "color": "yellow",
+        "angle": 0,
+        "collision": true
+      },
+      {
+        "name": "screen",
+        "kind": "Cube",
+        "size": [
+          0.075,
+          0.205,
+          0.002
+        ],
+        "pos": [
+          -0.03,
+          0,
+          0.036
+        ],
+        "color": "lcd",
+        "angle": 0,
+        "collision": false
+      },
+      {
+        "name": "function_dial",
+        "kind": "Cylinder",
+        "radius": 0.023,
+        "height": 0.009,
+        "axis": "Z",
+        "pos": [
+          0.047,
+          0,
+          0.0395
+        ],
+        "color": "dark",
+        "collision": true
+      },
+      {
+        "name": "jack_red",
+        "kind": "Cylinder",
+        "radius": 0.006,
+        "height": 0.003,
+        "axis": "Z",
+        "pos": [
+          -0.075,
+          0.065,
+          0.036
+        ],
+        "color": "red",
+        "collision": true
+      },
+      {
+        "name": "jack_black",
+        "kind": "Cylinder",
+        "radius": 0.006,
+        "height": 0.003,
+        "axis": "Z",
+        "pos": [
+          -0.075,
+          -0.065,
+          0.036
+        ],
+        "color": "black",
+        "collision": true
+      },
+      {
+        "name": "digit_0_a",
+        "kind": "Cube",
+        "size": [
+          0.004,
+          0.025,
+          0.0005
+        ],
+        "pos": [
+          -0.005499999999999998,
+          0.069,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      },
+      {
+        "name": "digit_0_b",
+        "kind": "Cube",
+        "size": [
+          0.0225,
+          0.004,
+          0.0005
+        ],
+        "pos": [
+          -0.01675,
+          0.05650000000000001,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      },
+      {
+        "name": "digit_0_c",
+        "kind": "Cube",
+        "size": [
+          0.0225,
+          0.004,
+          0.0005
+        ],
+        "pos": [
+          -0.04325,
+          0.05650000000000001,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      },
+      {
+        "name": "digit_0_d",
+        "kind": "Cube",
+        "size": [
+          0.004,
+          0.025,
+          0.0005
+        ],
+        "pos": [
+          -0.0545,
+          0.069,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      },
+      {
+        "name": "digit_0_e",
+        "kind": "Cube",
+        "size": [
+          0.0225,
+          0.004,
+          0.0005
+        ],
+        "pos": [
+          -0.04325,
+          0.0815,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      },
+      {
+        "name": "digit_0_f",
+        "kind": "Cube",
+        "size": [
+          0.0225,
+          0.004,
+          0.0005
+        ],
+        "pos": [
+          -0.01675,
+          0.0815,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      },
+      {
+        "name": "digit_0_g",
+        "kind": "Cube",
+        "size": [
+          0.004,
+          0.025,
+          0.0005
+        ],
+        "pos": [
+          -0.03,
+          0.069,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      },
+      {
+        "name": "digit_1_a",
+        "kind": "Cube",
+        "size": [
+          0.004,
+          0.025,
+          0.0005
+        ],
+        "pos": [
+          -0.005499999999999998,
+          0.023,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      },
+      {
+        "name": "digit_1_b",
+        "kind": "Cube",
+        "size": [
+          0.0225,
+          0.004,
+          0.0005
+        ],
+        "pos": [
+          -0.01675,
+          0.010499999999999999,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      },
+      {
+        "name": "digit_1_c",
+        "kind": "Cube",
+        "size": [
+          0.0225,
+          0.004,
+          0.0005
+        ],
+        "pos": [
+          -0.04325,
+          0.010499999999999999,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      },
+      {
+        "name": "digit_1_d",
+        "kind": "Cube",
+        "size": [
+          0.004,
+          0.025,
+          0.0005
+        ],
+        "pos": [
+          -0.0545,
+          0.023,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      },
+      {
+        "name": "digit_1_e",
+        "kind": "Cube",
+        "size": [
+          0.0225,
+          0.004,
+          0.0005
+        ],
+        "pos": [
+          -0.04325,
+          0.035500000000000004,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      },
+      {
+        "name": "digit_1_f",
+        "kind": "Cube",
+        "size": [
+          0.0225,
+          0.004,
+          0.0005
+        ],
+        "pos": [
+          -0.01675,
+          0.035500000000000004,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      },
+      {
+        "name": "digit_1_g",
+        "kind": "Cube",
+        "size": [
+          0.004,
+          0.025,
+          0.0005
+        ],
+        "pos": [
+          -0.03,
+          0.023,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": true
+      },
+      {
+        "name": "digit_2_a",
+        "kind": "Cube",
+        "size": [
+          0.004,
+          0.025,
+          0.0005
+        ],
+        "pos": [
+          -0.005499999999999998,
+          -0.023,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      },
+      {
+        "name": "digit_2_b",
+        "kind": "Cube",
+        "size": [
+          0.0225,
+          0.004,
+          0.0005
+        ],
+        "pos": [
+          -0.01675,
+          -0.035500000000000004,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      },
+      {
+        "name": "digit_2_c",
+        "kind": "Cube",
+        "size": [
+          0.0225,
+          0.004,
+          0.0005
+        ],
+        "pos": [
+          -0.04325,
+          -0.035500000000000004,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      },
+      {
+        "name": "digit_2_d",
+        "kind": "Cube",
+        "size": [
+          0.004,
+          0.025,
+          0.0005
+        ],
+        "pos": [
+          -0.0545,
+          -0.023,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      },
+      {
+        "name": "digit_2_e",
+        "kind": "Cube",
+        "size": [
+          0.0225,
+          0.004,
+          0.0005
+        ],
+        "pos": [
+          -0.04325,
+          -0.010499999999999999,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      },
+      {
+        "name": "digit_2_f",
+        "kind": "Cube",
+        "size": [
+          0.0225,
+          0.004,
+          0.0005
+        ],
+        "pos": [
+          -0.01675,
+          -0.010499999999999999,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      },
+      {
+        "name": "digit_2_g",
+        "kind": "Cube",
+        "size": [
+          0.004,
+          0.025,
+          0.0005
+        ],
+        "pos": [
+          -0.03,
+          -0.023,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": true
+      },
+      {
+        "name": "digit_3_a",
+        "kind": "Cube",
+        "size": [
+          0.004,
+          0.025,
+          0.0005
+        ],
+        "pos": [
+          -0.005499999999999998,
+          -0.069,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      },
+      {
+        "name": "digit_3_b",
+        "kind": "Cube",
+        "size": [
+          0.0225,
+          0.004,
+          0.0005
+        ],
+        "pos": [
+          -0.01675,
+          -0.0815,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      },
+      {
+        "name": "digit_3_c",
+        "kind": "Cube",
+        "size": [
+          0.0225,
+          0.004,
+          0.0005
+        ],
+        "pos": [
+          -0.04325,
+          -0.0815,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      },
+      {
+        "name": "digit_3_d",
+        "kind": "Cube",
+        "size": [
+          0.004,
+          0.025,
+          0.0005
+        ],
+        "pos": [
+          -0.0545,
+          -0.069,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      },
+      {
+        "name": "digit_3_e",
+        "kind": "Cube",
+        "size": [
+          0.0225,
+          0.004,
+          0.0005
+        ],
+        "pos": [
+          -0.04325,
+          -0.05650000000000001,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      },
+      {
+        "name": "digit_3_f",
+        "kind": "Cube",
+        "size": [
+          0.0225,
+          0.004,
+          0.0005
+        ],
+        "pos": [
+          -0.01675,
+          -0.05650000000000001,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      },
+      {
+        "name": "digit_3_g",
+        "kind": "Cube",
+        "size": [
+          0.004,
+          0.025,
+          0.0005
+        ],
+        "pos": [
+          -0.03,
+          -0.069,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": true
+      },
+      {
+        "name": "decimal",
+        "kind": "Cube",
+        "size": [
+          0.004,
+          0.004,
+          0.0005
+        ],
+        "pos": [
+          -0.053,
+          0.0,
+          0.0375
+        ],
+        "color": "lit",
+        "angle": 0,
+        "collision": false,
+        "visible": false
+      }
+    ]
+  }
+}

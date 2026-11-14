@@ -1,0 +1,421 @@
+#usda 1.0
+(
+    defaultPrim = "Body"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Body" {
+    def Material "PhysicsMaterial" (prepend apiSchemas = ["PhysicsMaterialAPI"]) {
+        float physics:staticFriction = 0.9
+        float physics:dynamicFriction = 0.7
+        float physics:restitution = 0
+    }
+    def Material "blue" {
+        token outputs:surface.connect = </Body/blue/Shader.outputs:surface>
+        def Shader "Shader" {
+            uniform token info:id = "UsdPreviewSurface"
+            color3f inputs:diffuseColor = (0.19, 0.35, 0.52)
+            float inputs:roughness = 0.6
+            token outputs:surface
+        }
+    }
+    def Material "steel" {
+        token outputs:surface.connect = </Body/steel/Shader.outputs:surface>
+        def Shader "Shader" {
+            uniform token info:id = "UsdPreviewSurface"
+            color3f inputs:diffuseColor = (0.65, 0.68, 0.71)
+            float inputs:roughness = 0.6
+            token outputs:surface
+        }
+    }
+    def Material "dark" {
+        token outputs:surface.connect = </Body/dark/Shader.outputs:surface>
+        def Shader "Shader" {
+            uniform token info:id = "UsdPreviewSurface"
+            color3f inputs:diffuseColor = (0.07, 0.08, 0.09)
+            float inputs:roughness = 0.6
+            token outputs:surface
+        }
+    }
+    def Material "red" {
+        token outputs:surface.connect = </Body/red/Shader.outputs:surface>
+        def Shader "Shader" {
+            uniform token info:id = "UsdPreviewSurface"
+            color3f inputs:diffuseColor = (0.65, 0.07, 0.06)
+            float inputs:roughness = 0.6
+            token outputs:surface
+        }
+    }
+    def Material "black" {
+        token outputs:surface.connect = </Body/black/Shader.outputs:surface>
+        def Shader "Shader" {
+            uniform token info:id = "UsdPreviewSurface"
+            color3f inputs:diffuseColor = (0.055, 0.055, 0.055)
+            float inputs:roughness = 0.6
+            token outputs:surface
+        }
+    }
+    def Material "rubber" {
+        token outputs:surface.connect = </Body/rubber/Shader.outputs:surface>
+        def Shader "Shader" {
+            uniform token info:id = "UsdPreviewSurface"
+            color3f inputs:diffuseColor = (0.16, 0.17, 0.19)
+            float inputs:roughness = 0.6
+            token outputs:surface
+        }
+    }
+    def Material "green" {
+        token outputs:surface.connect = </Body/green/Shader.outputs:surface>
+        def Shader "Shader" {
+            uniform token info:id = "UsdPreviewSurface"
+            color3f inputs:diffuseColor = (0.1, 0.48, 0.22)
+            float inputs:roughness = 0.6
+            token outputs:surface
+        }
+    }
+    def Material "yellow" {
+        token outputs:surface.connect = </Body/yellow/Shader.outputs:surface>
+        def Shader "Shader" {
+            uniform token info:id = "UsdPreviewSurface"
+            color3f inputs:diffuseColor = (0.85, 0.57, 0.04)
+            float inputs:roughness = 0.6
+            token outputs:surface
+        }
+    }
+    def Material "lcd" {
+        token outputs:surface.connect = </Body/lcd/Shader.outputs:surface>
+        def Shader "Shader" {
+            uniform token info:id = "UsdPreviewSurface"
+            color3f inputs:diffuseColor = (0.025, 0.06, 0.045)
+            float inputs:roughness = 0.6
+            token outputs:surface
+        }
+    }
+    def Material "lit" {
+        token outputs:surface.connect = </Body/lit/Shader.outputs:surface>
+        def Shader "Shader" {
+            uniform token info:id = "UsdPreviewSurface"
+            color3f inputs:diffuseColor = (0.4, 0.95, 0.6)
+            float inputs:roughness = 0.6
+            token outputs:surface
+        }
+    }
+    def Cube "case" (prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.165, 0.25, 0.035)
+        double3 xformOp:translate = (0, 0, 0.0175)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/yellow>
+        bool physics:collisionEnabled = true
+        float physxCollision:contactOffset = 0.0003
+        float physxCollision:restOffset = 0
+        rel material:binding:physics = </Body/PhysicsMaterial>
+    }
+    def Cube "screen" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.075, 0.205, 0.002)
+        double3 xformOp:translate = (-0.03, 0, 0.036)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lcd>
+    }
+    def Cylinder "function_dial" (prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]) {
+        double radius = 0.023
+        double height = 0.009
+        uniform token axis = "Z"
+        double3 xformOp:translate = (0.047, 0, 0.0395)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        rel material:binding = </Body/dark>
+        bool physics:collisionEnabled = true
+        float physxCollision:contactOffset = 0.0003
+        float physxCollision:restOffset = 0
+        rel material:binding:physics = </Body/PhysicsMaterial>
+    }
+    def Cylinder "jack_red" (prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]) {
+        double radius = 0.006
+        double height = 0.003
+        uniform token axis = "Z"
+        double3 xformOp:translate = (-0.075, 0.065, 0.036)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        rel material:binding = </Body/red>
+        bool physics:collisionEnabled = true
+        float physxCollision:contactOffset = 0.0003
+        float physxCollision:restOffset = 0
+        rel material:binding:physics = </Body/PhysicsMaterial>
+    }
+    def Cylinder "jack_black" (prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]) {
+        double radius = 0.006
+        double height = 0.003
+        uniform token axis = "Z"
+        double3 xformOp:translate = (-0.075, -0.065, 0.036)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        rel material:binding = </Body/black>
+        bool physics:collisionEnabled = true
+        float physxCollision:contactOffset = 0.0003
+        float physxCollision:restOffset = 0
+        rel material:binding:physics = </Body/PhysicsMaterial>
+    }
+    def Cube "digit_0_a" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.004, 0.025, 0.0005)
+        double3 xformOp:translate = (-0.0055, 0.069, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+    def Cube "digit_0_b" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.0225, 0.004, 0.0005)
+        double3 xformOp:translate = (-0.01675, 0.0565, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+    def Cube "digit_0_c" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.0225, 0.004, 0.0005)
+        double3 xformOp:translate = (-0.04325, 0.0565, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+    def Cube "digit_0_d" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.004, 0.025, 0.0005)
+        double3 xformOp:translate = (-0.0545, 0.069, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+    def Cube "digit_0_e" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.0225, 0.004, 0.0005)
+        double3 xformOp:translate = (-0.04325, 0.0815, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+    def Cube "digit_0_f" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.0225, 0.004, 0.0005)
+        double3 xformOp:translate = (-0.01675, 0.0815, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+    def Cube "digit_0_g" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.004, 0.025, 0.0005)
+        double3 xformOp:translate = (-0.03, 0.069, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+    def Cube "digit_1_a" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.004, 0.025, 0.0005)
+        double3 xformOp:translate = (-0.0055, 0.023, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+    def Cube "digit_1_b" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.0225, 0.004, 0.0005)
+        double3 xformOp:translate = (-0.01675, 0.0105, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+    def Cube "digit_1_c" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.0225, 0.004, 0.0005)
+        double3 xformOp:translate = (-0.04325, 0.0105, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+    def Cube "digit_1_d" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.004, 0.025, 0.0005)
+        double3 xformOp:translate = (-0.0545, 0.023, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+    def Cube "digit_1_e" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.0225, 0.004, 0.0005)
+        double3 xformOp:translate = (-0.04325, 0.0355, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+    def Cube "digit_1_f" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.0225, 0.004, 0.0005)
+        double3 xformOp:translate = (-0.01675, 0.0355, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+    def Cube "digit_1_g" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.004, 0.025, 0.0005)
+        double3 xformOp:translate = (-0.03, 0.023, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+    }
+    def Cube "digit_2_a" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.004, 0.025, 0.0005)
+        double3 xformOp:translate = (-0.0055, -0.023, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+    def Cube "digit_2_b" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.0225, 0.004, 0.0005)
+        double3 xformOp:translate = (-0.01675, -0.0355, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+    def Cube "digit_2_c" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.0225, 0.004, 0.0005)
+        double3 xformOp:translate = (-0.04325, -0.0355, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+    def Cube "digit_2_d" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.004, 0.025, 0.0005)
+        double3 xformOp:translate = (-0.0545, -0.023, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+    def Cube "digit_2_e" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.0225, 0.004, 0.0005)
+        double3 xformOp:translate = (-0.04325, -0.0105, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+    def Cube "digit_2_f" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.0225, 0.004, 0.0005)
+        double3 xformOp:translate = (-0.01675, -0.0105, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+    def Cube "digit_2_g" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.004, 0.025, 0.0005)
+        double3 xformOp:translate = (-0.03, -0.023, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+    }
+    def Cube "digit_3_a" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.004, 0.025, 0.0005)
+        double3 xformOp:translate = (-0.0055, -0.069, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+    def Cube "digit_3_b" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.0225, 0.004, 0.0005)
+        double3 xformOp:translate = (-0.01675, -0.0815, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+    def Cube "digit_3_c" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.0225, 0.004, 0.0005)
+        double3 xformOp:translate = (-0.04325, -0.0815, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+    def Cube "digit_3_d" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.004, 0.025, 0.0005)
+        double3 xformOp:translate = (-0.0545, -0.069, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+    def Cube "digit_3_e" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.0225, 0.004, 0.0005)
+        double3 xformOp:translate = (-0.04325, -0.0565, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+    def Cube "digit_3_f" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.0225, 0.004, 0.0005)
+        double3 xformOp:translate = (-0.01675, -0.0565, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+    def Cube "digit_3_g" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.004, 0.025, 0.0005)
+        double3 xformOp:translate = (-0.03, -0.069, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+    }
+    def Cube "decimal" (prepend apiSchemas = ["MaterialBindingAPI"]) {
+        double size = 1
+        double3 xformOp:scale = (0.004, 0.004, 0.0005)
+        double3 xformOp:translate = (-0.053, 0, 0.0375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        rel material:binding = </Body/lit>
+        token visibility = "invisible"
+    }
+
+    def Material "meter_label_material" {
+        token outputs:surface.connect = </Body/meter_label_material/Surface.outputs:surface>
+        def Shader "Surface" {
+            uniform token info:id = "UsdPreviewSurface"
+            color3f inputs:diffuseColor.connect = </Body/meter_label_material/Texture.outputs:rgb>
+            float inputs:roughness = 1
+            token outputs:surface
+        }
+        def Shader "Texture" {
+            uniform token info:id = "UsdUVTexture"
+            asset inputs:file = @meter_label.png@
+            float2 inputs:st.connect = </Body/meter_label_material/UV.outputs:result>
+            float3 outputs:rgb
+        }
+        def Shader "UV" {
+            uniform token info:id = "UsdPrimvarReader_float2"
+            token inputs:varname = "st"
+            float2 outputs:result
+        }
+    }
+    def Mesh "meter_label" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    ) {
+        point3f[] points = [(-0.0135, 0.11, 0), (0.0135, 0.11, 0), (0.0135, -0.11, 0), (-0.0135, -0.11, 0)]
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        texCoord2f[] primvars:st = [(0, 0), (0, 1), (1, 1), (1, 0)] (interpolation = "vertex")
+        uniform token subdivisionScheme = "none"
+        bool doubleSided = true
+        double3 xformOp:translate = (0.063, 0, 0.047)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        rel material:binding = </Body/meter_label_material>
+    }
+
+}
