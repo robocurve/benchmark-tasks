@@ -1,0 +1,22 @@
+{
+  "title": "Fit a servo horn onto its splined output shaft with the horn arm on the zero mark",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "servo horn",
+    "25T spline",
+    "press fit",
+    "indexed alignment",
+    "robot assembly",
+    "zero mark",
+    "single arm"
+  ],
+  "instruction": "Fit the white servo horn onto the servo's splined output shaft with its arm lined up on the engraved zero mark, then let go.",
+  "context": "Building a robot arm means fitting a servo horn on each joint's 25-tooth output shaft. The horn seats at only 25 angles, 14.4 deg apart, so the technician lines its arm up on the engraved zero mark before pressing; pressed where it lands, the joint is off by whole teeth and every later calibration inherits it. This is the assembly step behind the arms that collect robot-learning data, and a robot able to do it can build and repair its own hardware.",
+  "setup": "Station table; positions in metres, x forward from the arm bases, y to the robot's left, z up; table top at z 0.7475. (1) Hobby servo: black ABS/aluminium case 40.7 x 19.7 x 36 mm, 55 g, long axis along x, bolted to the bench (fixed); silver 11.5 mm boss 3 mm tall on the case top and a silver 25-tooth output shaft 5.9 mm across, 5 mm proud of the boss, on the case top 10 mm from its -x end, at (0.250, -0.050). A white 1.2 x 24 mm zero mark is engraved on the case top from the boss out along +x. (2) Servo horn: white nylon single-arm horn, 4 g, a 14 mm x 7 mm hub with a 6.8 mm bore and a 28 mm arm 2 mm thick, lying flat at (0.220, -0.220), arm pointing 68 deg from +x (4 deg from a spline position). Crest on crest the horn stands 1.5 mm proud of the boss; it seats (hub flush on the boss) only when its bore is within 0.8 mm of the shaft, tilt 4 deg or less, and the arm within 2.0 deg of one of the 25 positions (every 14.4 deg from the zero mark), under a press of about 3.6 N. A horn seated on a wrong tooth can be pulled off (the fit lets go once the hub is lifted 0.8 mm) and refitted. Real parts: a TowerPro MG996R servo (25T output spline) with the single-arm horn from its own horn set; check the stand-off with a 1.5 mm feeler gauge and the press with a kitchen scale before the first trial.",
+  "scoring": "Final state only, read at the end of the run from the record kept every control step (cleared only by the simulator reset). Arm azimuth a is the horn arm's angle from the zero mark (top view). 0 if at the end the horn is seated (hub flush, ring travel 1.3 mm of 1.5) with its arm more than 2.0 deg from the mark (a wrong tooth). A horn seated on a wrong tooth earlier and pulled off and refitted correctly is scored by where it sits at the end; nothing is zeroed for the earlier try. 0.25: a gripper holds the horn (pad within 4 mm, opening 30 mm or less) with bore within 1.0 mm of the shaft, tilt 4 deg or less, on the crests, arm within 3.0 deg of the mark. 0.5: at the end seated at index 0 (arm within 2.0 deg of the mark, bore within 0.8 mm, tilt 4 deg or less). 0.75: seated flush (gap 0.5 mm or less), tilt 2 deg or less. 1.0: also the horn still (under 2 mm/s and 2 deg/s) and both grippers at least 30 mm from the horn and servo and moving under 5 mm/s for the last 1 s. Real trial: top photo with a ruler for the arm against the engraved mark (2.0 deg is 1.0 mm sideways at the arm tip); a 0.5 mm feeler gauge under the hub for flush seating; video frames for the hold and the 1 s release.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Pull the horn off the shaft (by hand, a servo-horn puller or a 4 mm bolt through the hub), lay it flat at (0.220, -0.220) with its arm 68 deg from +x (taped outline), and check with the 1.5 mm feeler gauge that a crest-on-crest horn stands proud again. The servo stays bolted.",
+  "fidelity": "True-size MG996R servo and horn, 25 teeth at 14.4 deg (checked: 360/25). Teeth are not modelled: a spring seat ring (3.6 N at 1.5 mm) travels only when bore, tilt and arm angle align. Stand-off 1.5 mm and seating force 3.6 N are set values, not datasheet figures: measure both on the chosen servo and horn (feeler gauge, kitchen scale); a real press fit likely needs more than 3.6 N. No pull-off force is modelled. Rigid, no wear.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-2SFFNS"
+}
