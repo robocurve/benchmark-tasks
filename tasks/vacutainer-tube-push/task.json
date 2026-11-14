@@ -1,0 +1,23 @@
+{
+  "title": "Fill two blood tubes from a needle holder in a training arm without moving the needle",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "phlebotomy",
+    "venipuncture",
+    "evacuated tube",
+    "needle holder",
+    "steady the holder",
+    "push and hold",
+    "spring push-back"
+  ],
+  "instruction": "A needle sits in the training arm's vein, in its holder. Fill both blood tubes from the tray on it, one at a time, without moving the needle, then lay each back in the tray.",
+  "context": "Drawing blood is core work for medical assistants (O*NET 31-9092.00, about 760,000 US workers, BLS OEWS May 2023: \"Collect blood, tissue, or other laboratory specimens\") and phlebotomists (31-9097.00, about 140,000: \"Draw blood from veins by vacuum tube, syringe, or butterfly venipuncture methods\"), and routine for registered nurses (29-1141.00). With the needle in the vein, one hand keeps the holder still, braced on the patient's arm, while the other pushes each tube onto the holder's needle, keeps it on against the needle sleeve's push-back while it fills, and pulls it off; a holder that moves pushes the needle through the vein or out of it.",
+  "setup": "Left and right are the robot's. Positions are in metres from the midpoint between the two arm bases: x forward, y to the robot's left. An adult IV/venipuncture training arm (about 575 mm long, 100 mm wide, silicone skin) lies along y, palm up, centred on x 0.30, from its fingertips at y -0.215 to its upper arm at y 0.36. A 21 G multi-sample needle is in its vein at the elbow crease, entering the skin at (0.30, 0.17, 75 mm up), on a single-use needle holder (polypropylene, 6.5 g, 52.3 mm long, body 20 mm, flange 30 mm, 17 mm bore) that rises 20 degrees toward -y, its open end 82 mm from the entry point; inside it the needle's back end (16 mm) points at the opening under a rubber sleeve. A blue tube tray (140 x 160 mm, 12 mm walls) is fixed with its centre at (0.19, -0.23); two empty 13 x 100 mm evacuated tubes (clear PET, 6 mL draw, red rubber stoppers, 7 g, a paper label leaving a clear window) lie on V-rests in its lanes at x 0.23 and 0.19, along y, stoppers toward +y (stopper face at y -0.18), 25 mm up; the third lane (x 0.15) is empty.",
+  "scoring": "Four steps, 0.2 each, judged from the video and photos. (1) A tube filled: a tube was pushed onto the needle, coaxial with it, far enough that the needle is through its stopper (stopper face at most 46 mm from the skin entry point), and kept there 8.6 s without a break, drawing its 6 mL at 0.70 mL/s, the rate measured with 21 G needles (once reached); the drawn blood shows as a dark-red column rising in the clear tube. (2) A filled tube back in the tray: lying level on the tray's rests, off the needle, no gripper within 3 cm of it (as things stand). (3) Both tubes filled. (4) Both filled tubes back in the tray. An unfilled tube in the tray scores nothing; a tube pulled off before 8.6 s does not fill (it keeps the blood it drew, shown part-full). Full score 1.0, ending the run, when all four hold, no gripper is within 3 cm of either tube or the holder, and the tubes and the holder have stayed put (within 2 mm and 2 degrees), all held without a break for 1 s; all four steps without that score 0.8. 0 overall if at any time the needle was pushed into or pulled out of the arm more than 5 mm (a pen mark on the holder against a ruler on the skin) or levered more than 5 degrees, or if a tube falls off the table. Real station: the training arm's simulated blood fills each tube (photo).",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lay each tube back on its lane's rests (lanes 1 and 2 from the robot's left), stopper toward the training arm; pull the needle out and put it back in the same puncture, 20 degrees up, the holder's open end toward the hand, its sleeve unfolded; use fresh or emptied tubes.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. The needle in the arm is a pivot (2 N m/rad) and a slide (100 N/m, 30 N s/m) at the skin entry point; its rubber sleeve a sprung slide (1.2-2.4 N, holder solved with 128 iterations). Piercing and the stopper's grip on the needle are not modelled. The blood is task code: while the needle is through the stopper a red column (visual only) rises at 0.7 mL/s; 6 mL (8.6 s unbroken) is filled; its 6 g is not added. Real sizes and masses.",
+  "scores": "Dream-1 run: 0.0 (both arms stayed near their bases; the right gripper moved over the tray's near edge but never moved a tube, and neither touched the holder); demo: 1.0 (all four steps at 62.6 s, success at step 1316)",
+  "media": "M-EEWGSZ"
+}
