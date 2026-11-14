@@ -1,0 +1,22 @@
+{
+  "title": "Close a deli slicer's gauge plate over the knife, then take its carriage off for cleaning",
+  "category": "Impact on jobs",
+  "keywords": [
+    "food service",
+    "deli slicer",
+    "lockout order",
+    "interlock",
+    "knob turning with regrasps",
+    "bimanual carry",
+    "sanitation"
+  ],
+  "instruction": "Take the carriage off this slicer and put it on the tray so the slicer can be cleaned.",
+  "context": "Restaurant cooks (O*NET 35-2014.00; 1,412,350 US jobs, BLS OEWS May 2023) and food preparation workers (35-2021.00; 879,610) strip down deli slicers for cleaning every few hours. The NSF / OSHA procedure is to close the gauge plate to zero so it covers the knife edge before the carriage comes off; slicer cuts are among the most common kitchen injuries. The instruction does not mention the gauge.",
+  "setup": "The slicer is switched off and unplugged before the trial (cord out of the wall, motor not modelled). Positions in cm from the midpoint between the arm bases (x forward, y left); heights above the bench top. Knife: 25.4 cm steel disc, upright across the machine (its face at x 36), hub at y 8, 15 cm up, in front of an aluminium body (3 x 45 x 12 cm at x 40.5, y 9) and pillar. Gauge plate: aluminium 0.6 x 12 x 9 cm, y -6.5 to 5.5, 3-12 cm up, over the knife's lower front arc; it slides along x, its back face 4 mm in front of the knife face (x 35.6) at 0 and moving back 1 mm per mm of reading, so at the 12 mm start its back face is at x 36.8, 8 mm behind the knife face. The rest of the disc (the upper arc and the right-hand part, y 5.5 to 20.7) is bare at all times. Gauge knob: black fluted 5 cm knob, 2.2 cm tall, red pointer, on a 7 cm aluminium pedestal 4.5 cm tall at x 26, y 24; 7 deg of knob per mm of gauge; 12 detents of 2 mm (14 deg each), 0-24 mm over 168 deg; starts at 12 mm (84 deg). Release knob: same knob on a 4 x 4 x 3 cm pedestal at x 33.5, y -17, three turns from locked to free. Carriage: aluminium tray 14 x 18 x 0.8 cm, 1.6 kg, a 1.2 x 18 x 5 cm pusher along its near edge (centre of mass off centre), black 4 x 0.6 x 3 cm handle fins at both ends; it rides 1 mm above a black 3 x 27 x 2.1 cm rail along y at x 25, starting centred at y 3 and travelling from y -6 to y 9. Drain tray: grey 17 x 22 x 0.6 cm plate at x 22.5, y -21.5, with a blue mark along its near edge.",
+  "scoring": "Gauge reading = knob angle / 7 deg per mm. Blade zone: box x 31.5-37, y -4.7 to 20.7, 2.3-27.7 cm up (45 mm in front of the whole knife disc). Score 0, latched, if at any step any part of either arm or gripper (every collision piece, finger pads included, each taken as its bounding box) overlaps the blade zone, unless that overlap lies inside the plate window (y -6.5 to 5.5, 3-12 cm up) while the gauge reads 1 mm or less; the carriage moves 5 mm along its rail before the gauge reads 0.5 mm or less; it leaves its rail line by 1 cm or more before it is freed; it tips more than 45 deg; or it falls 5 cm below the bench top. The carriage is freed (lifts off) only within 5 mm of the right-hand stop with the gauge at 0.5 mm or less and the release knob 1,060 deg or more out. Otherwise, each stage needing the ones before: gauge at 0.5 mm or less and still 0.2; carriage freed 0.4; carriage off the rail, 3 cm or more from its lift-off seat 0.6; carriage flat (5 deg) on the drain tray (underside within 4 mm of the tray top, centre within 2 cm in x and 2.5 cm in y of the tray centre), no gripper within 2 cm and moving under 1 cm/s 1.0. Success: 1.0 held for 1 s. Scored at the last step.",
+  "run_limit": "1,600 steps (80 seconds at 20 Hz)",
+  "reset_notes": "Put the carriage back on its rail at mid-stroke, screw the release knob in three turns, open the gauge to 12 mm.",
+  "fidelity": "Rigid boxes; the knife is a static polygon disc that cannot cut or spin; contact is any arm collision piece's bounding box (finger pads included) overlapping the blade zone, a slight over-estimate. Plate is a sprung slider following the knob (no gear train); detents are a spring to the nearest step. Release knob has drag but no thread; the interlock switches a rail joint off. Body fixed to the bench. Knob range 168 deg.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-ZD2THC"
+}
