@@ -112,3 +112,16 @@ def test_cup_rim_remains_in_contact():
     assert d.collar_resistance(.025)>0
     assert d.collar_resistance(.025)<d.collar_resistance(0)
     assert d.collar_resistance(.028)==0
+
+
+def test_task_lead_is_single_and_matches_published_twelve_mm():
+    import ast
+    from pathlib import Path
+    tree=ast.parse(Path(d.__file__).read_text())
+    assignments=[n for n in tree.body if isinstance(n,ast.Assign)
+                 and any(isinstance(t,ast.Name) and t.id=='LEAD' for t in n.targets)]
+    assert len(assignments)==1
+    assert d.LEAD==.012
+    # Legacy probe calibration remains separate, preserving its original behavior.
+    assert d.PROBE_REFERENCE_LEAD==.006
+    assert abs(d.SCREW_RATIO-2*np.pi/.006)<1e-10

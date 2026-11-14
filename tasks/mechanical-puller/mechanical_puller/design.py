@@ -11,11 +11,11 @@ import math
 import numpy as np
 
 TOP = 0.7475
-LEAD = 0.006  # m of ram travel per handle turn (coarse multi-start training screw), nominal
+PROBE_REFERENCE_LEAD = 0.006  # legacy rack/pinion probe calibration only; not the task screw lead
 SCREW_K = 20000.0  # N/m stiffness of the screw coupling (ram drive)
 SCREW_DAMPING = 50.0  # N s/m
 SCREW_MAX_FORCE = 60.0  # N, cap of the coupling (thread strength of the toy fixture)
-SCREW_RATIO = 2 * math.pi / LEAD  # rad of handle per m of ram (unit to be verified in the probe)
+SCREW_RATIO = 2 * math.pi / PROBE_REFERENCE_LEAD  # legacy probe ratio; unused by prepared task
 
 # isolated probe (A10 step 1)
 PROBE_FRAME = np.array([0.35, 0.18, TOP + 0.08])  # fixed frame centre; screw axis along +x

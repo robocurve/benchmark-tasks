@@ -196,15 +196,17 @@ were adapted from earlier team task prototypes, using the organizer's YAM
 adapter. No external mesh assets are bundled. Original task code and generated geometry are MIT-licensed; see `LICENSE`.
 Upstream runtime dependencies retain their own licenses.
 
-## Response to the fit review
+## Physical fit and model
 
-The [latest review](https://github.com/robocurve/benchmark-tasks/pull/369#issuecomment-6872582744)
-correctly identified that a 13 mm metal bore around a 12 mm shaft could not
-produce the previously specified 8 N resistance. This revision replaces that
-unsupported fit with the specified integral polymer interference land and
-geometry-derived elastic/contact model described above. The 13 mm collision
-proxy is explicitly distinguished from the physical 11.990 mm free land bore.
-Nominal extraction and released recovery are demonstrated through the complete
-38 mm shaft/cup geometry. Force estimates are calculated, not measured.
+The collar's lower interference land has an 11.990 mm free bore on the
+12.000 mm shaft. The 13 mm collision proxy is explicitly distinguished from
+that physical bore. The specified integral polymer geometry supplies the
+calculated elastic/contact resistance described above. Nominal extraction and
+released recovery are demonstrated through the complete 38 mm shaft/cup
+geometry. Force estimates are calculated, not measured.
+
+The task screw lead is 12 mm per turn in both the ram coupling and demonstration
+controller. A separately named 6 mm reference belongs only to the legacy isolated
+rack/pinion probe; it does not set the prepared task's screw advance or torque.
 
 Matching model-run, full-score demonstration and setup image: media `M-YHNVC3`.
