@@ -1,0 +1,20 @@
+{
+  "title": "Free and qualify a print-in-place hinge",
+  "category": "Other",
+  "keywords": [
+    "additive manufacturing",
+    "print-in-place",
+    "breakaway bridges",
+    "hinge qualification",
+    "force limit"
+  ],
+  "instruction": "Rock the orange leaf to break its sacrificial print bridges without damaging it. Verify that the freed leaf sweeps through the marked test sector, then leave it released beyond 120 degrees.",
+  "context": "Fabrication and repair: print-in-place joints can retain sacrificial bridges after printing. The useful outcome is not a forced pose but a released, undamaged joint whose low-force motion has been demonstrated. Done by: additive-manufacturing and prototyping technicians.",
+  "setup": "Station coordinates in metres from the arm-base midpoint: x forward, y left, z above table. Print one fresh PLA specimen per trial, flat with vertical hinge axis, using a 0.4 mm nozzle, 0.20 mm layers, three walls, 20% gyroid infill and no supports. Joint: 14 mm knuckle around a steel pin, 0.25 mm radial and 0.30 mm axial running clearance, plus four intentional bridges at 90-degree intervals; each bridge is 0.40 mm radial x 1.00 mm axial x one 0.20 mm layer high. Fixed teal base leaf: 50 x 10 x 40 mm. Orange moving leaf: 75 x 10 x 40 mm, 50 g. Hinge axis at (0.34,-0.12), moving leaf initially along +x. A fixed 280 x 170 x 2 mm protractor card under the joint marks 0, 30, 90 and 120 degrees. Keep a calibrated 0-1 N spring gauge for the post-release motion check.",
+  "scoring": "Breakage latches 0: moving leaf centre 8 mm or more off the hinge, visible crack through its root, or any remaining bridge loaded to 0.49 N m. Otherwise 0.4 when all four bridges are broken; 0.7 when freed and released at 60 degrees or more. 1.0 requires all four bridges broken, the leaf first at or below 30 degrees then moved through at least 90 degrees with the spring gauge never above 1.0 N at the 75 mm tip, and finally released at 120 degrees or more, speed below 10 mm/s and spin below 0.5 rad/s. A held leaf cannot score 1.0. Real check: video shows open grippers, protractor angles, gauge reading and no crack. All other outcomes score 0.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Use a newly printed, dimension-checked specimen every trial; broken bridges cannot be reset. Reject prints with pre-broken bridges, warped leaves, blocked clearance or a gauge reading above 1.0 N before robot contact. Align the 0-degree leaf to the card and confirm the gauge is zeroed.",
+  "fidelity": "Approximate. Four capped torsion springs represent the specified printed bridges and switch off after alternating rocking cycles; the simulation does not model PLA fracture surfaces. The post-release 30-to-90-degree traversal is recorded only after all springs are off. Breakage, hinge seating, angle, speed and spin are measured geometrically.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-T62TK9"
+}
