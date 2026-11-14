@@ -1,0 +1,21 @@
+{
+  "title": "Take a recessed book off a packed shelf by tipping it out by its head, leaving its neighbours standing",
+  "category": "Societal relatability",
+  "keywords": [
+    "packed row",
+    "no side grasp",
+    "tip out by the head",
+    "hardcover books",
+    "bimanual",
+    "regrasp"
+  ],
+  "instruction": "Take the red book off the shelf and put it on the cork mat. Leave the other books standing on the shelf.",
+  "context": "Taking one book from a full shelf is done in every home, school and library. This row is packed tight and the wanted book sits 12 to 14 mm behind its neighbours, so no finger fits at its sides: people tip it out by the top of its spine. The board's shelf bottle and bookend tasks grasp freely; this book has no grasp until it is tipped out.",
+  "setup": "Positions in cm from the midpoint between the arm bases: x forward, y to the robot's left. Table: wood, bare. Bookshelf, white-painted MDF, clamped down: base 20 deep x 32.3 wide x 1.5 thick, front edge at x 38, centred on y 0; on it two end panels 20 x 1.5 x 25 tall, 29.3 apart; behind it a back panel 0.6 thick, 26.5 tall; open above. Desk mat: cork, 20 x 30 (along y) x 0.3, taped down, x 18 to 38, against the base. Nine cloth-bound hardcover books stand on the base, spines to the robot, fore-edges at the back panel, 0.4 mm apart (4 mm of slack in the row, shared evenly). From the left, thickness x depth x height and mass: navy 2.8 x 17.8 x 23.5, 0.70 kg; green 3.5 x 17.6 x 23.8, 0.88; grey 2.4 x 17.0 x 22.8, 0.56; black 4.0 x 17.2 x 23.2, 0.96; RED 3.2 x 16.0 x 24.0, 0.74, y -1.45 to 1.75, spine at x 41.96; mustard 3.0 x 17.4 x 23.4, 0.73; brown 3.8 x 16.8 x 23.0, 0.88; teal 2.6 x 18.0 x 23.6, 0.66; slate blue 3.6 x 17.2 x 22.8, 0.85. So the red spine is 1.2 cm behind the black spine and 1.4 behind the mustard; its head is 0.8 and 0.6 cm above theirs. Each book: 2.5 mm boards, a rounded spine, page block 3 mm short of the boards at head, tail and fore-edge.",
+  "scoring": "Whole run, from the overhead and a side camera (20 frames a second), tape and protractor. T: the red book's head front edge 4 cm or more in front of its start. V: another book tilted over 35 degrees, its spine foot 3 cm or more in front of its start, or off the shelf base. D: a corner of the red book moving faster than 0.6 m/s (over 3 cm between frames). At the end, with both grippers 3 cm or more from the red book and it at rest (under 1 cm/s for 1 s), H: it rests on the cork mat on its tail (within 10 degrees of upright) or on a cover (within 10 degrees of flat), its lowest point within 5 mm of the mat, all of its outline over the mat. 1.0: H, no V, no D. 0.5: H with V or D; or, not H, at rest on the desk or mat with no part over the shelf, and no V. 0.25: T and none of those (still held, leaning on or back in the shelf, off the table). Otherwise 0.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Stand the red book back in its gap, fore-edge against the back panel, and push every book back to the back panel. Square the row so its 4 mm of slack is shared evenly (a card slips between any two books, a finger does not).",
+  "fidelity": "Each book is rigid: a rounded spine piece (eight facets), two boards and a page block, mass spread evenly at 0.6 g/cm3. Pages do not flex or fan; cloth is plain friction (books 0.4, shelf 0.3, mat 0.6, averaged per pair). Speeds are read frame to frame at 20 Hz. The simulator scores the last step without opening the grippers, so a book still held, in the air or within 3 cm of a gripper earns only the tip-out 0.25.",
+  "scores": "Dream-1 run: 0.0 (right arm rested on the shelf top, red book never left the row); demo: 1.0 (right arm tipped red book out, left arm stood it on cork mat, released)",
+  "media": "M-UMZBZB"
+}
