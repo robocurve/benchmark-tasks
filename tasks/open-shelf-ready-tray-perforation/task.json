@@ -1,0 +1,23 @@
+{
+  "title": "Open a shelf-ready can tray by tearing its front panel off along the perforation",
+  "category": "Impact on jobs",
+  "keywords": [
+    "shelf-ready packaging",
+    "retail-ready tray",
+    "perforation",
+    "tear panel",
+    "stocking",
+    "bimanual",
+    "hold and pull",
+    "corrugated board"
+  ],
+  "instruction": "Open the shelf-ready tray so it can go straight on the shelf.",
+  "context": "Opening shelf-ready trays is daily work for stockers and order fillers (O*NET 53-7065, 2.8M US workers; core task: receive, unload, open, unpack sales floor merchandise) and retail salespersons (41-2031, 3.8M). Large retailers' supplier packaging standards require shelf-ready trays to open by hand along a perforation, without a knife; a torn tray or spilled product is a defect. Here a 4.7 kg tray of 12 soup cans slides at about 14 N, while the panel's first row needs about 16 N: pulled straight out with the tray free, it drags; with the tray held and the panel peeled out of the wall, it tears down the corner lines and off the lip; pulled up or sideways it does not open. Unlike peeling a film off a sheet, tearing a towel off a roll or slitting carton tape with a cutter, this is a two-hand tear along a designed line in a loaded tray; package-opening tasks in known suites only lift flaps.",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), heights above the table. Tray: a brown B-flute corrugated shelf-ready tray (3 mm board, 250 g), outside 28.3 wide (y) x 21.6 deep (x) x 11.0 high, its front wall toward the robot at x 16.5, centred on y 0, square to the table edge. The front wall's lower 4.0 cm is a fixed lip; above it the 7.0 cm tall front panel is joined to the tray only by a perforation down both front corners and along the top of the lip; the panel's top 1.5 cm is folded over outward (double board, the pull edge), and at its centre, over the gap between the two middle cans where a finger fits behind it, a 2 x 0.8 cm thumb mark is printed. Inside: twelve 10.75 oz soup cans (steel, 6.8 cm diameter x 10.2 cm, 360 g, red label), upright on the floor, 4 across x 3 deep, 1 mm apart, the front row 2 mm behind the panel. Perforation: 6 mm cuts, 2 mm ties (calibration in reset notes). Nothing else on the table.",
+  "scoring": "From the trial's recorded poses and the perforation readout (on a real rig: the video, a tape mark at the tray's corners and a look at the torn edges). Latched 0 for the trial: the board ever tore off the perforation (a tear edge more than 10 mm from the perforation line; in sim a tie's in-plane load reaching twice its peel strength), or the tray ever tipped more than 10 deg or lifted 1.5 cm, or any can ever left the tray. Otherwise: 0 nothing torn; 0.25 the tear started (part of the perforation torn) but the panel still on; 0.5 the panel fully off; 1.0 the panel fully off, the tray never shifted more than 3 cm at any corner, all cans upright in it, no part of the panel left in or on the tray, both grippers more than 2.5 cm from tray and panel, and everything still (success when held 1 s). Scored at the last step. Possible scores: 0, 0.25, 0.5, 1.0.",
+  "run_limit": "2,400 steps (120 seconds at 20 Hz)",
+  "reset_notes": "Replace the tray with a fresh one of the same make (the torn panel is consumed); stand the twelve cans in it 4 x 3, front row against the front wall, and set the tray on its marks with the front wall toward the robot. Put the torn panel aside. Calibrate each new tray with a spring scale at the pull edge: the loaded tray slides at 12-16 N, and, held, the top row's corners part at 15-20 N pulled outward; discard trays outside that range.",
+  "fidelity": "Approximate. Board parts are rigid boxes at full size; the panel is 4 hinged rows (weighted 25 g each for solver stability). The perforation is 8 spring ties (4000 N/m): from its stretch each step, a tie tears at 9 N (corners) or 8 N (lip) of peel and its joint is switched off; in-plane load of twice that latches a wall tear. Tie strengths are set to the setup's calibration targets. Not modelled: board bending, flute crush, paper fibres.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-H3SCH6"
+}
