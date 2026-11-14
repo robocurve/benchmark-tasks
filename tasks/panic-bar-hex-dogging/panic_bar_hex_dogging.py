@@ -92,7 +92,8 @@ kit.slider("bolt_slide", "case", "bolt", axis=(0, 1, 0), lower=0.0, upper=0.021,
 # dogging cam: a square drive at the bottom of the hole on a disc inside the case
 kit.part("cam", (HX, HY, SEAT_Z), [mk.box((0.0055, 0.0055, 0.006), at=(0, 0, -0.003)),
                                     mk.box((0.020, 0.020, 0.004), at=(0, 0, -0.010))], mass=0.05, color=BRASS)
-kit.hinge("cam_turn", "case", "cam", anchor=(HX, HY, SEAT_Z), axis=(0, 0, 1), lower_deg=-10.0, upper_deg=115.0,
+CAM_STOP_DEG = 94.0  # the cam's hard stop: it cannot be turned further than this
+kit.hinge("cam_turn", "case", "cam", anchor=(HX, HY, SEAT_Z), axis=(0, 0, 1), lower_deg=-10.0, upper_deg=CAM_STOP_DEG,
           stiffness=0.15, rest_deg=0.0, damping=0.004)
 _dog = kit.parts["bar"].ref.copy()
 _dog[2, 3] -= DOG_HOLD
@@ -275,8 +276,6 @@ def _key_rule(objects):
 def _cam_rule(objects):
     m = mk.MEMORY
     a, d = cam_deg(objects), travel(objects)
-    if a > 100.0:
-        m["stripped"] = True
     if m.get("dogged"):
         if a < 45.0:
             _disengage("bar_dog")
@@ -321,24 +320,17 @@ SCORE_OVER = "end"
 # -- scoring -------------------------------------------------------------------------------------------------------
 
 
-def failed(objects) -> bool:
-    """The dogging cam turned past 100 deg (stripped). Latched for the rest of the run."""
-    return bool(mk.MEMORY.get("stripped"))
-
-
 def dogged(objects) -> bool:
-    return (bool(mk.MEMORY.get("dogged")) and 80.0 <= cam_deg(objects) <= 100.0
+    return (bool(mk.MEMORY.get("dogged")) and cam_deg(objects) >= 80.0
             and travel(objects) >= DOG_TRAVEL - 0.001 and latch(objects) >= LATCH_OK)
 
 
 def score(objects) -> float:
-    """0 if failed() (cam stripped). Otherwise 0.25 if the bar was ever held 23 mm or more down while the key was
-    seated on the cam; plus 0.5 if the cam is at 80-100 deg and has caught the bar, the bar 22 mm or more down and
+    """0.25 if the bar was ever held 23 mm or more down while the key was seated on the cam; plus 0.5 if the cam
+    is at 80 deg or more (its hard stop is at 94 deg) and has caught the bar, the bar 22 mm or more down and
     the latch drawn in 18 mm or more (clear of the strike); with that, plus 0.25 if the key is out of the hole and
     lies on the door, frame or bench, no gripper is within 2 cm of the bar or the key, and both are still. A key
     left in the hole of a dogged bar scores 0.75."""
-    if failed(objects):
-        return 0.0
     s = 0.25 * bool(mk.MEMORY.get("held"))
     if dogged(objects):
         s += 0.5
@@ -427,6 +419,11 @@ def _plans(variant=""):
     for k in range(1, n + 1):
         th = Y0 + (Y1 - Y0) * k / n
         R.go(2.7 / n, kp((HX, HY), th, zs), FINGER_CLOSED, "turn the key a quarter turn", th)
+    if variant == "overturn":  # try to turn 30 deg past dogged: the cam's hard stop at 94 deg stops it
+        for k in range(1, 4):
+            th = Y1 + math.radians(10.0) * k
+            R.go(0.4, kp((HX, HY), th, zs), FINGER_CLOSED, "try to turn past the stop", th)
+        R.go(0.8, kp((HX, HY), Y1 + math.radians(30.0), zs), FINGER_CLOSED, "against the stop", Y1 + math.radians(30.0))
     R.go(1.0, kp((HX, HY), Y1, zs), FINGER_CLOSED, "hold", Y1)
     t_turned = R.t
     if press:
@@ -461,7 +458,8 @@ def _plans(variant=""):
 
 
 def demo():
-    # DEMO_VARIANT: hold_only | no_bar | key_left (degenerate checks; all score 0)
+    # DEMO_VARIANT: hold_only | no_bar (degenerate checks, score 0) | key_left (stage credit, 0.75) |
+    # overturn (the full demo, but the key is forced 30 deg past dogged against the cam's hard stop)
     return _plans(os.environ.get("DEMO_VARIANT", ""))
 
 
@@ -495,7 +493,7 @@ def self_test():
         "cam at 90, never dogged": (st(0.0, 90, key=flat), [], {"held": True}, 0.25),
         "dogged but cam turned back": (st(DOG_HOLD, 30, key=flat), [], D, 0.25),
         "dogged, latch not in": (st(DOG_HOLD, 90, lat=0.010, key=flat), [], D, 0.25),
-        "stripped": (st(DOG_HOLD, 90, key=flat), [], {**D, "stripped": True}, 0.0),
+        "dogged, cam against its stop": (st(DOG_HOLD, CAM_STOP_DEG, key=flat), [], D, 1.0),
         "dogged, key dropped on the floor": (st(DOG_HOLD, 90, key=floor), [], D, 0.75),
         "not dogged, key left in": (st(0.0, 0, key=seat), [], {"key_in": 0}, 0.0),
         "dogged without the seated hold (impossible)": (st(DOG_HOLD, 90, key=flat), [], {"dogged": True}, 0.75),
@@ -522,7 +520,7 @@ if __name__ == "__main__":
     print(f"scoring: {self_test()} cases pass")
     task = load(__file__)
     hz = 20.0
-    for v in ("", "hold_only", "no_bar", "key_left"):
+    for v in ("", "hold_only", "no_bar", "key_left", "overturn"):
         os.environ["DEMO_VARIANT"] = v
         for arm, waypoints in task.demo().items():
             plan = ArmPlan(list(waypoints), station.BASES[arm])

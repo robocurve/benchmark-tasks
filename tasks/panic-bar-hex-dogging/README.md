@@ -9,7 +9,8 @@ so the door is latched. Drawing the bolt in 18 mm or more puts its end clear of 
 The instruction leaves the method unstated. One hand holds the push bar fully down (25 mm, against a 40 N return
 spring) while the other puts the short leg of the 4 mm hex key into the 6 mm dogging hole on the mechanism case
 and turns it a quarter turn against its detent. The dogging cam only catches the bar if the bar is down 23 mm or
-more; otherwise the cam springs back to 0 when the key is let go. Then the bar is let go (it stays down, latch
+more; otherwise the cam springs back to 0 when the key is let go. The cam has a hard stop at 94 deg, so it cannot
+be turned past dogged. Then the bar is let go (it stays down, latch
 drawn in), the key is drawn out of the hole and laid on the door, frame or bench. A dogged bar with the key left in the hole scores 0.75.
 
 Files: `task.json`, `panic_bar_hex_dogging.py` (the scene, `success()`, the partial-credit `score()`, the scripted
@@ -57,6 +58,8 @@ Degenerate checks use the same command with `DEMO_VARIANT` set in the environmen
   then taken out and laid down.
 - `key_left` (scores 0.75, stage credit): everything in order and the bar is dogged, but the key is left in the
   dogging hole.
+- `overturn` (scores 1.0): the full demo, but the wrist tries to turn the key 30 deg past dogged; the cam stays at
+  its hard stop (94 deg) and the job finishes normally.
 
 `PANIC_DEBUG=1` prints the state every 20 steps.
 
