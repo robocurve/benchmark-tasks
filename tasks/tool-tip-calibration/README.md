@@ -2,11 +2,11 @@
 
 | Item | Rule |
 |---|---|
-| Tool | A pointed steel shaft stays fixed to the left gripper. |
+| Tool | A pointed steel shaft stays fixed to the left gripper housing, its mount between the open fingers. |
 | Reference | An exposed silver contact, 2 mm across, at x 27, y 22 cm (from the midpoint between the arm bases), 5.1 cm above the table. |
 | Pose credit | 0.25 after one second of valid contact. Four poses earn 1.0. |
 | Contact | Physical touch. Simulation: contact force at least 0.02 N. Real trial: a continuity tester beeps. |
-| Tip position | Within 1 mm horizontally and 0.25 mm vertically of the reference center. |
+| Tip position | Within 1 mm horizontally of the contact's centre and 0.25 mm vertically of its top. |
 | Stillness | Tip drift at most 0.5 mm. Axis drift at most 2 degrees during the one-second hold. |
 | Tool axis | Tilt 10–35 degrees. Each axis differs from every earlier axis by at least 15 degrees. |
 | Fixed mount | Translation error at most 0.5 mm. Rotation error at most 0.5 degree. |
@@ -49,26 +49,39 @@ inspect-robots run --embodiment yam_tool_calibration --policy tool_calibration_s
 
 ## Check a real trial
 
-Only simple tools: a continuity tester, a protractor, calipers, a scribe and two fixed cameras. Nobody
-reaches in while the arm moves; every reading comes from photos, video or the robot's joint log.
+Only simple tools: a continuity tester, a protractor, calipers, a scribe, a steel rule with 0.5 mm marks and two
+fixed phone cameras. Nobody reaches in while the arm moves; every reading comes from photos, video or the robot's
+joint log.
 
-1. Bolt the pointed tool to the gripper. Measure the tip offset with calipers (88 mm from the tool point).
+1. Fix the pointed tool to the gripper housing with its rigid bracket, the mount between the open fingers. Measure
+   from the tip to the gripper housing with calipers.
 2. Wire a low-voltage continuity tester (buzzer) between the tool and the silver contact.
-3. Scribe a witness line across the mount and the gripper, and photograph it.
-4. Film the trial with two fixed cameras at post height, one looking along y and one along x.
-5. **Contact:** the tester beeps. The contact is only 2 mm across, so the tip is within 1 mm of its centre. A close-up
-   photo shows that the point, not the side of the shaft, is on top.
-6. **Hold:** each pose keeps the beep for at least 1 s (video timestamps). A steady beep on the 2 mm contact keeps the
-   tip within it; the 0.5 mm stillness limit is checked in simulation, and on a real table the beep and the video are the check.
-7. **Lean:** in each camera's photo, read the tool's angle from vertical with a protractor: `a` from the camera looking along
+3. Scribe a witness line across the mount and the gripper housing, and photograph it with the rule.
+4. Fix two phone cameras at the contact's height: one looking along y (it sees x and height) and one along x (it
+   sees y and height), for example at x 27, y 2 and at x 47, y 22 cm. Use the main camera at 2x about 20 cm away,
+   so each frame is at most 15 cm wide (many phone telephoto lenses can't focus that close), with focus and
+   exposure locked on the contact. Film in 4K at 30 fps or more, with the buzzer audible.
+5. **Calibrate the video:** before the run, hold a steel rule (0.5 mm marks) on the post top against the contact,
+   square to each camera, and photograph it to fix that view's scale. A 15 cm wide 4K frame gives at least 25
+   pixels per mm, so 0.5 mm is at least 12 pixels. Remove the rule. The 2 mm contact rechecks the scale in every frame.
+6. **Contact:** the tester beeps. The contact stands 1 mm above the post, so the tip shows in silhouette in both
+   views. The frames show the point on the contact's top: within 1 mm of its centre and 0.25 mm (6 pixels) of its
+   top, so a touch on the contact's side does not count.
+7. **Hold and drift:** a pose needs at least 1 s of unbroken beep (video timestamps); any second of it may count,
+   as in simulation. In both views, mark where the tip meets the contact on 20 evenly spaced frames through that second
+   (the simulator's 20 control steps), and convert to mm: `dx` from the view along y, `dy` from the view along x,
+   `dz` averaged from both. Drift from the first mark, `sqrt(dx^2 + dy^2 + dz^2)`, must stay at most 0.5 mm.
+8. **Lean:** on a still from each view, read the tool's angle from vertical with a protractor: `a` from the camera looking along
    y (tilt toward x), `b` from the camera looking along x (tilt toward y). Take `a` positive when the tool's top
    leans toward +x and `b` positive toward +y; otherwise the direction can come out 90 or 180 degrees off. Then `lean = atan(sqrt(tan(a)^2 + tan(b)^2))`, which must be 10 to 35 degrees, and
    `direction = atan2(tan(b), tan(a))`. A single side photo is not enough: a lean toward the camera looks vertical.
-8. **Spread:** the angle between two poses is
+9. **Spread:** the angle between two poses is
    `acos(cos(lean1) cos(lean2) + sin(lean1) sin(lean2) cos(direction1 - direction2))`. It must be at least 15 degrees
-   for every pair.
-9. **Mount:** measure the tip offset again with calipers after the trial. It must still be 88 mm (within 0.5 mm), and
-   the witness line must show no shift. The exact 0.5 degree mount limit is checked in simulation.
+   for every pair of poses. The same formula, from the first marked frame of a hold to its middle and last ones,
+   checks the 2 degree axis drift.
+10. **Mount:** after the trial, measure from the tip to the gripper housing with calipers again; it must agree with step 1
+    within 0.5 mm. Photograph the witness line with the rule: no offset over 0.5 mm. The exact 0.5 degree mount
+    limit is checked in simulation only.
 
 The robot's joint log gives the same lean and direction through forward kinematics, as a cross-check.
 
