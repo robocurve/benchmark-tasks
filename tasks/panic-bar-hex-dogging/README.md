@@ -59,7 +59,7 @@ Degenerate checks use the same command with `DEMO_VARIANT` set in the environmen
 - `key_left` (scores 0.75, stage credit): everything in order and the bar is dogged, but the key is left in the
   dogging hole.
 - `overturn` (scores 1.0): the full demo, but the wrist tries to turn the key 30 deg past dogged; the cam stays at
-  its hard stop (94 deg) and the job finishes normally.
+  its hard stop (94 deg; at most 98 deg was measured while the wrist forces it) and the job finishes normally.
 
 `PANIC_DEBUG=1` prints the state every 20 steps.
 
