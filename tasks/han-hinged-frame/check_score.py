@@ -100,15 +100,29 @@ four = list(SEATS)
 three = SEATS[:3] + [TRAY[3]]
 high = SEATS[:3] + [SEATS[3] + np.array([0.0, 0.0, 0.003])]
 off = SEATS[:3] + [SEATS[3] + np.array([0.0015, 0.0, 0.0])]
+fell = SEATS[:3] + [SEATS[3] - np.array([0.0, 0.0, 0.02])]
+rolled = SEATS[:3] + [np.array([SEATS[3][0], 0.03, TOP + 0.005])]  # fallen through, then rolled onto the table 3 cm across: no longer near its position
+pinch = FAR.copy()
+pinch[0] = SEATS[0] + np.array([0.0, 0.0145, 0.03])  # a fingertip 2 mm off the module's face, near its top
 near_end = FAR.copy()
 near_end[0] = np.array([ns["F"][0] + 0.045, ns["WALL_IN"] + 0.010, TOP + ns["STAND_H"] + 0.010])  # a fingertip 1 cm off a wall's far end
 CASES = {
     "all four set, frame shut and clicked, hands clear 1 s": ([(5, dict(mods=four)), (HOLD + 2, dict(mods=four, shut=True))], (1.0, True)),
     "all four, shut, a fingertip 1 cm off a wall's far end": ([(5, dict(mods=four)), (HOLD + 2, dict(mods=four, shut=True, tips=near_end))], (0.6, False)),
     "all four set on the open frame, not closed": ([(HOLD + 5, dict(mods=four))], (0.3, False)),
+    "three set on the open frame, the fourth still in the tray": ([(HOLD + 5, dict(mods=three))], (0.225, False)),
+    "two set on the open frame": ([(HOLD + 5, dict(mods=SEATS[:2] + TRAY[2:]))], (0.15, False)),
+    "one set on the open frame": ([(HOLD + 5, dict(mods=SEATS[:1] + TRAY[1:]))], (0.075, False)),
+    "one set on the open frame, its foot 1.4 mm over the open edges (2.4 mm over its shut seat)": ([(HOLD + 5, dict(mods=[SEATS[0] + np.array([0.0, 0.0, 0.0024])] + TRAY[1:]))], (0.075, False)),
+    "one set on the open frame, its foot 2 mm over the open edges": ([(HOLD + 5, dict(mods=[SEATS[0] + np.array([0.0, 0.0, 0.003])] + TRAY[1:]))], (0.0, False)),
+    "two set and shut, the other two positions empty": ([(5, dict(mods=SEATS[:2] + TRAY[2:])), (HOLD + 2, dict(mods=SEATS[:2] + TRAY[2:], shut=True))], (0.15, False)),
+    "one set 2 mm off along the frame, open": ([(HOLD + 5, dict(mods=[SEATS[0] + np.array([0.002, 0.0, 0.0])] + TRAY[1:]))], (0.0, False)),
     "three set and shut, the fourth position empty": ([(5, dict(mods=three)), (HOLD + 2, dict(mods=three, shut=True))], (0.6, False)),
     "shut on a module 3 mm high (forced)": ([(5, dict(mods=four)), (HOLD + 2, dict(mods=high, shut=True))], (0.0, False)),
-    "shut with one module 1.5 mm off along the frame": ([(5, dict(mods=four)), (HOLD + 2, dict(mods=off, shut=True))], (0.0, False)),
+    "shut with one module 1.5 mm off along the frame, the other three seated": ([(5, dict(mods=four)), (HOLD + 2, dict(mods=off, shut=True))], (0.225, False)),
+    "three seated and shut, the fourth fallen through, lying under its position": ([(5, dict(mods=fell)), (HOLD + 2, dict(mods=fell, shut=True))], (0.225, False)),
+    "three seated and shut, the fourth fell through and rolled clear of the frame": ([(5, dict(mods=fell)), (HOLD + 2, dict(mods=rolled, shut=True))], (0.225, False)),
+    "one set on the open frame, still pinched by the hand": ([(HOLD + 5, dict(mods=SEATS[:1] + TRAY[1:], tips=pinch))], (0.0, False)),
     "frame squeezed shut empty": ([(HOLD + 5, dict(shut=True))], (0.0, False)),
     "a module dropped off the table, the rest done": ([(2, dict(mods=SEATS[:3] + [TRAY[3] - np.array([0.0, 0.0, 0.1])])), (HOLD + 2, dict(mods=four, shut=True))], (0.0, False)),
     "nothing done": ([(HOLD + 5, {})], (0.0, False)),
