@@ -1,0 +1,20 @@
+{
+  "title": "Clamp a wooden strip in a screw vise and saw a 150 mm piece to length",
+  "category": "Impact on jobs",
+  "keywords": [
+    "carpentry",
+    "hand sawing",
+    "vise clamping",
+    "measured cut length",
+    "bimanual tool use"
+  ],
+  "instruction": "Clamp the wooden strip in the vise, then saw it so the retained piece is 150 mm long, within 1 mm. Leave the saw clear of the wood when finished.",
+  "context": "Carpenters regularly measure, clamp and cut wood to specified dimensions with hand tools. The challenge is to hold the strip against saw forces while choosing and maintaining a cut line precise enough to meet the length tolerance. This differs from cutting a 45-degree mitre in a guided mitre box: the workpiece is held by a screw vise, the cut is unguided, and the final length is measured from the actual remaining wood.",
+  "setup": "YAM station table. A fixed blue cast-style steel bench vise is centred at x 245 mm, y -30 mm; its 80 mm wide fixed and moving steel faces straddle the strip across y. The moving jaw starts with a 22.5 mm opening and is driven by a dark 34 x 26 x 34 mm square handwheel on a horizontal steel screw at x 245 mm, y -140 mm. A pale index stripe shows handwheel rotation. A loose 60 g, 300 x 20 x 20 mm wood strip lies along x from 200 to 500 mm, with its left portion between the jaws. A dark pencil line crosses the top 150 mm from the left end. Its right end rests on a blue and steel support, about 35 x 60 x 80 mm, centred at x 475 mm, y -30 mm. A 150 g hand saw with a 200 mm long, 0.6 mm thick steel blade and a 26 x 110 x 28 mm rubberized orange grip stands in an open wooden rack at x 380 mm, y 300 mm. Coordinates are forward (x) and left (y) from the midpoint between arm bases; heights are set by the task scene relative to the table.",
+  "scoring": "0 if any wood is removed before the vise is tightened (judged from the video), or if any end condition fails. Otherwise 1.0 if the strip has been physically separated into exactly two pieces and every sampled point on the retained end face measures 150 +/- 1 mm from its original left end; the moving jaw opening is 19.2 to 20.2 mm; the screw has turned more than 1.5 rad from its start; the retained strip remains within 3 mm of its original position; and the entire saw tooth line is at least 5 mm above the uncut top face. The two-piece and length conditions use remaining solid geometry, never stroke count or elapsed time. A real trial uses a ruler or calipers and top/side video.",
+  "reset_notes": "Return the intact wood strip to its original vise and support position with the left end at x 200 mm; open the moving jaw to 22.5 mm, reset the screw index to zero and put the saw upright in its rack. Confirm that the strip is free before starting.",
+  "fidelity": "Rigid wood is a 0.25 x 2 x 0.5 mm dexel heightfield; measured tooth pose, stroke and contact drive uncalibrated removal, rebuilt colliders and a dynamic offcut. Vise: box casting, self-locking 6 mm/rev screw-jaw coupling, 100 N force cap versus a 750 N commercial reference. Saw: 200 mm/150 g versus 210 mm/200 g reference, thin tooth-strip collider. Teeth, grain, bending and splinters omitted. No blade guide, fixed wood joint or stroke counter.",
+  "run_limit": "3,200 actions at 20 Hz (160 s)",
+  "scores": "Dream-1, seed 1: 0.0 in 3,200/3,200 actions. Scripted YAM demo: 1.0 in 2,310/3,200 actions.",
+  "media": "M-57EASV"
+}
