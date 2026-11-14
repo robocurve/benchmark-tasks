@@ -63,7 +63,7 @@ class TestGeometry(unittest.TestCase):
 
     def test_the_lever_toggle_has_hysteresis(self):
         self.assertLess(g.LEVER_TOGGLE_DOWN, g.LEVER_TOGGLE_UP)
-        self.assertGreater(g.LEVER_TOGGLE_DOWN, g.LEVER_SHUT)
+        self.assertGreater(g.LEVER_TOGGLE_DOWN, g.LEVER_FLAT_MAX)
         self.assertLess(g.LEVER_TOGGLE_UP, g.LEVER_OPENED)
 
     def test_layouts(self):
@@ -101,7 +101,7 @@ class TestGeometry(unittest.TestCase):
         self.assertLess(g.BEARING_NEAR, g.BEARING_HALF)
         self.assertLess(g.MOVED_OK, g.MOVED_BAD)
         self.assertLess(g.YAW_OK, g.YAW_BAD)
-        self.assertLess(g.LEVER_SHUT, g.LEVER_OPENED)
+        self.assertLess(g.LEVER_FLAT_MAX, g.LEVER_OPENED)
 
 
 if __name__ == "__main__":

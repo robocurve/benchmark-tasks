@@ -61,7 +61,8 @@ GUARD_DAMPING = 0.02                          # N m s/rad: a free guard turns ea
 
 # -- the monitor's thresholds (the scoring rules; task.json and the README quote these) ------------------------------------
 LEVER_OPENED = math.radians(60)               # raised at least this far counts as opened
-LEVER_SHUT = math.radians(8)                  # within this of flat counts as shut (and the clamp holds the guard)
+LEVER_FLAT_MAX = math.radians(8)                # the lever counts as flat (shut) within 8 degrees of flat: the clamp holds the guard, and
+                                                # the 0.75 rung and full credit need it. NOT the 40-degree snap threshold above.
 BEARING_OK = math.radians(30)                 # 1.00: the guard's closed side within 30 degrees of the operator
 BEARING_NEAR = math.radians(45)               # 0.75
 BEARING_HALF = math.radians(90)               # 0.50

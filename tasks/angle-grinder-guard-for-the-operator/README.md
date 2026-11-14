@@ -199,6 +199,36 @@ Nothing in the scene is touched in the recorded steps: the grinder never moves (
 
 The arm movement visible in the video is Dream-1 acting, not the reset: the first 31 steps are static and the motion starts at step 32. The service refused only at step 176, although the scene is the same at every step; the run's files do not explain why it refused then and not at step 0, and we make no claim about it.
 
+## Fonts used for the printed text
+
+The printed text in the scene is rendered by `build_assets.py` with Pillow into three PNG textures under `assets/textures/`: the
+sticker round the motor housing (`motor_label.png`: brand, model, ratings and the guard warning), the print on the disc
+(`disc_top.png`) and the OPERATOR mat's print (`operator_mat.png`). Only two fonts are used:
+
+| Font | File used (`build_assets.py` lines 34 and 35) | Source | License |
+|---|---|---|---|
+| DejaVu Sans Bold | `/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf` | The Ubuntu package `fonts-dejavu-core` 2.37 (https://dejavu-fonts.github.io/) | Bitstream Vera Fonts License: free to use, copy, modify and distribute with the copyright and permission notice; DejaVu's own changes are public domain |
+| DejaVu Sans (regular) | `/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf` | the same package | the same license |
+
+The license text is at https://dejavu-fonts.github.io/License.html and, on a machine with the package installed, in
+`/usr/share/doc/fonts-dejavu-core/copyright`. The font files themselves are not part of this task folder: only the rendered
+PNG images are, and the text they show is the task's own.
+
+## Test result for the lever threshold
+
+Full credit and the 0.75 rung read the lever's measured angle against `LEVER_FLAT_MAX`, which is 8 degrees
+(`geometry.py`; `task.lever_flat()`). It is not the clamp's 40-degree snap threshold (`LEVER_TOGGLE_DOWN`), which only decides
+when the simulated clamp snaps shut. Two tests in `tests/test_scoring.py` cover it, and both pass:
+
+    test_the_flat_threshold_is_8_degrees_not_the_40_degree_snap ... ok
+        (LEVER_FLAT_MAX is 8 degrees and LEVER_TOGGLE_DOWN is 40; lever_flat() is True at 7.99 and 8.0 degrees and False at 8.01,
+        20 and 39.99 degrees)
+    test_a_lever_between_8_and_40_degrees_from_flat_cannot_score_full ... ok
+        (levers at 8.5, 15, 25 and 39.9 degrees from flat, with the clamp's snap state "shut", score neither 1.0 nor 0.75; at 0, 4
+        and 8 degrees the same state scores 1.0)
+
+Run them with `python -m unittest tests.test_scoring -v`. The whole suite is 37 tests and passes.
+
 ## Board check
 
 Titles below were read with `gh pr view` on the board (state as read on 2026-11-13). None is a guard-orientation task.

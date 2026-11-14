@@ -48,7 +48,7 @@ OBJECTS = [GRINDER, OPERATOR_MAT]
 # -- the monitor: the clamp lock, the violations and the scoring state ----------------------------------------------------
 _STATE: dict = {}
 _LAST: list = [None]                         # the states dict the monitor last ran on (one run per control step)
-LOCK_BELOW = g.LEVER_SHUT                     # raised less than this (and not toggled open): the clamp holds the guard
+LOCK_BELOW = g.LEVER_FLAT_MAX                     # raised less than this (and not toggled open): the clamp holds the guard
 FREE_LIMITS = (-6.2, 6.2)                     # rad: a free guard turns almost a full turn each way (limits stay under 2 pi)
 START_XY = np.array([SX, SY])
 
@@ -203,10 +203,10 @@ def _update(objects) -> None:
 
 
 def lever_flat() -> bool:
-    """The lever is within 8 degrees of flat, read straight from its measured angle (not from the clamp's snap state,
-    which shuts below 40 degrees) and not snapped open."""
+    """The lever is within 8 degrees of flat (``g.LEVER_FLAT_MAX``), read straight from its measured angle. It is not the
+    clamp's 40-degree snap threshold (``g.LEVER_TOGGLE_DOWN``), and the lever must not be snapped open."""
     S = _STATE
-    return bool(S["raised"] <= g.LEVER_SHUT and not S["lever_open"])
+    return bool(S["raised"] <= g.LEVER_FLAT_MAX and not S["lever_open"])
 
 
 def violation() -> bool:

@@ -65,6 +65,15 @@ class TestScoring(unittest.TestCase):
         self.put(shut=False, raised=math.radians(80), err=math.radians(150))   # turned back
         self.assertEqual(self.t.score(None), 0.25)
 
+    def test_the_flat_threshold_is_8_degrees_not_the_40_degree_snap(self):
+        self.assertAlmostEqual(math.degrees(self.g.LEVER_FLAT_MAX), 8.0, places=9)
+        self.assertAlmostEqual(math.degrees(self.g.LEVER_TOGGLE_DOWN), 40.0, places=9)
+        self.assertNotEqual(self.g.LEVER_FLAT_MAX, self.g.LEVER_TOGGLE_DOWN)
+        self.right_way_shut()
+        for deg, flat in ((7.99, True), (8.0, True), (8.01, False), (20.0, False), (39.99, False)):
+            self.put(raised=math.radians(deg), lever_open=False)
+            self.assertEqual(self.t.lever_flat(), flat, deg)
+
     def test_a_lever_between_8_and_40_degrees_from_flat_cannot_score_full(self):
         """The clamp's snap state says shut below 40 degrees, but full credit needs the measured lever within 8 degrees."""
         for deg in (8.5, 15, 25, 39.9):
