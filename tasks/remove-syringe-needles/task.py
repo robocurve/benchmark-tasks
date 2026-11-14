@@ -13,7 +13,8 @@ it, so the syringe has to be held still while its needle is unscrewed.
 
 Once a needle has been drawn clear of the collar it is a loose body: the simulator swaps in a separate capped
 needle at the same pose (the syringe's own needle and cap, part of the syringe's articulation, are hidden inside its
-barrel). The capped needles go into a yellow sharps tray beyond the tips.
+barrel). The capped needles go into a puncture-resistant sharps container beyond the tips, through the wide opening
+in its lid.
 
 Run it:    inspect-robots run --embodiment yam_arena -E task=task.py -E object_jitter=0 --scorer task_score ...
 Demo:      python demo.py task.py out_dir
@@ -40,7 +41,7 @@ SCENE = "station"
 SCORE_OVER = "end"
 TOP = TABLE_TOP[SCENE]
 
-INSTRUCTION = "Take the needles off the three syringes on the stand and put them in the sharps tray."
+INSTRUCTION = "Take the needles off the three syringes on the stand and put them in the sharps container."
 
 STAND_COLOR = (0.82, 0.84, 0.86)
 LIQUIDS = ((0.80, 0.88, 0.98), (0.98, 0.93, 0.70), (0.85, 0.95, 0.85))
@@ -76,7 +77,9 @@ OFF = 0.010                             # lifted this far, the hub is clear of t
                                         # and from then on it is a loose body
 LIFT_MAX = 0.012                        # an unscrewed needle slides along the collar's taper up to here
 HIDDEN = -0.045                         # where the syringe's own needle goes once the loose one has replaced it
-PIN_STEPS = 10                          # control steps the syringe is held where it was while its needle is hidden
+LIGHT = 0.01                            # the syringe's own needle parts are made this much lighter (1.4 g to 0.014 g)
+LIGHTEN_AT = 0.007                      # ... once the free needle is drawn this far, before it is swapped and hidden,
+                                        # so hiding it shifts the syringe by under 0.1 mm (nothing holds the syringe)
 NEEDLE_MASS = 0.0014                    # needle 0.6 g and cap 0.8 g
 CAP_SPRING = 2000.0                     # N/m: the cap's friction fit holds up to 4 N ...
 CAP_POP = 0.002                         # ... and lets go once it has slid this far
@@ -115,10 +118,14 @@ def _stand() -> list:
     return parts
 
 
-# -- the sharps tray beyond the needles' tips, and where the loose needles wait (under the table) --------------------
-TRAY_X = (XS[0] - 0.040, XS[-1] + 0.040)
-TRAY_Y = (-0.115, -0.010)
-TRAY_WALL, TRAY_H = 0.003, 0.025
+# -- the sharps container beyond the needles' tips, and where the loose needles wait (under the table) ---------------
+# A rigid, puncture-resistant, low 0.6 L sharps container (yellow polypropylene, 3 mm walls) with its lid on: the lid has a
+# wide opening that a capped needle is dropped through.
+BIN_X = (XS[0] - 0.040, XS[-1] + 0.040)
+BIN_Y = (-0.115, -0.010)
+BIN_WALL, BIN_H, LID_T = 0.003, 0.035, 0.004
+OPENING_X = (XS[0] - 0.030, XS[-1] + 0.030)            # the lid's opening: 16 x 7 cm
+OPENING_Y = (-0.100, -0.030)
 FREE = tuple(f"needle_{i + 1}" for i in range(N))
 
 
@@ -126,19 +133,24 @@ def park_point(i: int) -> tuple:
     return (float(XS[i]), 0.0, TOP - 0.25)
 
 
-def _tray() -> list:
-    yellow = (0.95, 0.80, 0.15)
-    x0, x1 = TRAY_X
-    y0, y1 = TRAY_Y
+def _sharps_bin() -> list:
+    yellow, lid = (0.95, 0.80, 0.15), (0.85, 0.15, 0.12)
+    x0, x1 = BIN_X
+    y0, y1 = BIN_Y
+    ox0, ox1 = OPENING_X
+    oy0, oy1 = OPENING_Y
 
-    def part(name, xa, xb, ya, yb, za, zb):
+    def part(name, xa, xb, ya, yb, za, zb, color=yellow):
         return Fixed(name, pos=((xa + xb) / 2, (ya + yb) / 2, TOP + (za + zb) / 2), size=(xb - xa, yb - ya, zb - za),
-                     color=yellow, roughness=0.5, static_friction=0.6, dynamic_friction=0.5)
+                     color=color, roughness=0.5, static_friction=0.6, dynamic_friction=0.5)
 
-    w = TRAY_WALL
-    return [part("tray_floor", x0, x1, y0, y1, 0.0, 0.004),
-            part("tray_near", x0, x0 + w, y0, y1, 0.004, TRAY_H), part("tray_far", x1 - w, x1, y0, y1, 0.004, TRAY_H),
-            part("tray_left", x0, x1, y1 - w, y1, 0.004, TRAY_H), part("tray_right", x0, x1, y0, y0 + w, 0.004, TRAY_H),
+    w, h, t = BIN_WALL, BIN_H, LID_T
+    return [part("bin_floor", x0, x1, y0, y1, 0.0, 0.004),
+            part("bin_near", x0, x0 + w, y0, y1, 0.004, h), part("bin_far", x1 - w, x1, y0, y1, 0.004, h),
+            part("bin_left", x0, x1, y1 - w, y1, 0.004, h), part("bin_right", x0, x1, y0, y0 + w, 0.004, h),
+            # the lid: four strips round its opening
+            part("lid_left", x0, x1, oy1, y1, h, h + t, lid), part("lid_right", x0, x1, y0, oy0, h, h + t, lid),
+            part("lid_near", x0, ox0, oy0, oy1, h, h + t, lid), part("lid_far", ox1, x1, oy0, oy1, h, h + t, lid),
             Fixed("park_shelf", pos=(float(np.mean(XS)), 0.0, TOP - 0.265), size=(0.20, 0.10, 0.01),
                   color=(0.3, 0.3, 0.3))]
 
@@ -148,14 +160,14 @@ def _free(i: int) -> FreeNeedle:
                       size=(0.01, 0.01, 0.046), mass=NEEDLE_MASS)
 
 
-def in_tray(pos) -> bool:
-    """Whether a loose needle's middle lies in the tray, on its floor."""
+def in_bin(pos) -> bool:
+    """Whether a loose needle's middle lies inside the sharps container: inside its walls, below its lid."""
     m = 0.004
-    return (TRAY_X[0] + m < pos[0] < TRAY_X[1] - m and TRAY_Y[0] + m < pos[1] < TRAY_Y[1] - m
-            and pos[2] < TOP + 0.025)
+    return (BIN_X[0] + m < pos[0] < BIN_X[1] - m and BIN_Y[0] + m < pos[1] < BIN_Y[1] - m
+            and pos[2] < TOP + BIN_H - 0.004)
 
 
-OBJECTS = [*_stand(), *(_syringe(i) for i in range(N)), *_tray(), *(_free(i) for i in range(N))]
+OBJECTS = [*_stand(), *(_syringe(i) for i in range(N)), *_sharps_bin(), *(_free(i) for i in range(N))]
 
 
 # -- what happened during the trial ---------------------------------------------------------------------------------
@@ -164,7 +176,8 @@ _STATE: dict = {}
 
 def _clear() -> None:
     _STATE.update({n: dict(unscrewed=0.0, last_spin=0.0, free=False, off=False, popped=False, exposed=False,
-                           dragging=True, knocked=False, in_tray=False) for n in NAMES})
+                           dragging=True, knocked=False, in_bin=False, light=False, at_swap=None, swap_shift=None,
+                           swap_steps=0) for n in NAMES})
 
 
 _clear()
@@ -180,6 +193,8 @@ def _reset(environment) -> None:
         write_joint(environment, n, "spin", damping=SPIN_DRAG)
         write_joint(environment, n, "cap", stiffness=CAP_SPRING, limits=(0.0, 0.05))
         show_needle(n, True)
+        if n in K._MASSES:
+            K.set_part_masses(environment, n, None)
     for i, f in enumerate(FREE):
         write_pose(environment, f, park_point(i), (0.0, math.sqrt(0.5), 0.0, math.sqrt(0.5)))
 
@@ -206,18 +221,23 @@ def _watch(environment) -> None:
         if dragging != s["dragging"]:
             s["dragging"] = dragging
             write_joint(environment, n, "spin", damping=SPIN_DRAG if dragging else SPIN_FREE)
+        if s["free"] and not s["off"] and not s["light"] and j["lift"] >= LIGHTEN_AT:
+            s["light"] = True                                          # about to come off: see LIGHT
+            K.set_part_masses(environment, n, LIGHT)
         if s["free"] and not s["off"] and j["lift"] >= OFF:
             # Clear of the collar: from here the capped needle is a loose body. It takes the place of the syringe's
-            # own needle and cap (same pose, same grip), which are hidden inside the barrel.
+            # own needle and cap (same pose, same grip), which are hidden inside the barrel. They weigh almost
+            # nothing by now, so moving them there leaves the syringe where it is; nothing holds or moves the syringe.
             s["off"] = True
             pos, quat = needle_pose(environment, n)
             write_pose(environment, FREE[i], pos, quat)
-            s["restore"], s["pin"] = K.hold_root(environment, n), PIN_STEPS
+            s["at_swap"] = np.asarray(st.pos, float).copy()
             write_joint(environment, n, "lift", limits=(HIDDEN, HIDDEN), position=HIDDEN)
             show_needle(n, False)
-        if s.get("pin", 0) > 0:                                        # the syringe itself stays where it was
-            s["restore"]()
-            s["pin"] -= 1
+        if s["at_swap"] is not None and s["swap_shift"] is None and s["off"]:
+            s["swap_steps"] += 1
+            if s["swap_steps"] == 1:                                   # how far the swap moved the syringe
+                s["swap_shift"] = float(np.linalg.norm(np.asarray(st.pos) - s["at_swap"]))
         if not s["off"]:
             if not s["popped"] and j["cap"] > CAP_POP:
                 s["popped"] = True                                     # the friction fit has let go
@@ -229,7 +249,7 @@ def _watch(environment) -> None:
             clear = all(float(np.linalg.norm(mid - p)) > 0.04 for p in finger_points(environment))
             speed = body_speed(environment, FREE[i])
             s["needle_mid"], s["needle_speed"] = [round(100 * float(v), 2) for v in mid], round(100 * speed, 2)
-            s["in_tray"] = bool(in_tray(mid) and speed < 0.01 and clear)
+            s["in_bin"] = bool(in_bin(mid) and speed < 0.01 and clear)
         s["knocked"] = s["knocked"] or float(np.linalg.norm(np.asarray(st.pos) - flange_point(i))) > MOVED
 
 
@@ -238,15 +258,15 @@ def needle_score(name: str) -> float:
     s = _STATE[name]
     if s["knocked"]:
         return 0.0
-    if s["off"] and s["in_tray"]:
+    if s["off"] and s["in_bin"]:
         return 1.0
     return 0.5 if s["free"] else 0.0
 
 
 def score(objects) -> float:
     """0 if any needle was ever bared (its cap slid off its hub). Else per syringe: 1 when its needle is off (turned
-    free and drawn clear of the collar) and lies capped in the sharps tray, still and let go; 0.5 when it is turned
-    free but not in the tray (still on the collar, or off and elsewhere); 0 otherwise or if the syringe was knocked
+    free and drawn clear of the collar) and lies capped inside the sharps container, still and let go; 0.5 when it is
+    turned free but not in the container (still on the collar, or off and elsewhere); 0 otherwise or if the syringe was knocked
     off its place. The score is their mean."""
     if any(_STATE[n]["exposed"] for n in NAMES):
         return 0.0
@@ -269,7 +289,8 @@ def report(objects) -> dict:
         s, st = _STATE[n], objects[n]
         out[n] = {"unscrewed_deg": round(math.degrees(s["unscrewed"]), 1), "free": s["free"], "off": s["off"],
                   "cap_mm": round(1000 * st.joints["cap"], 1), "lift_mm": round(1000 * st.joints["lift"], 1),
-                  "exposed": s["exposed"], "knocked": s["knocked"], "in_tray": s["in_tray"],
+                  "exposed": s["exposed"], "knocked": s["knocked"], "in_bin": s["in_bin"],
+                  "swap_shift_mm": None if s["swap_shift"] is None else round(1000 * s["swap_shift"], 2),
                   "needle_cm": s.get("needle_mid"), "needle_speed_cm_s": s.get("needle_speed"),
                   "moved_cm": round(100 * float(np.linalg.norm(np.asarray(st.pos) - flange_point(i))), 2),
                   "roll_deg": round(roll_deg(st), 1)}

@@ -38,7 +38,7 @@ import numpy as np
 from yam_arena.task_file import Box, ObjectState
 
 __all__ = ["Fixed", "FreeNeedle", "JOINTS", "Syringe", "SyringeState", "body_pose", "body_speed", "env",
-           "finger_points", "hold_root", "install", "needle_pose", "on_reset", "on_step", "show_needle", "write_joint",
+           "finger_points", "hold_root", "set_part_masses", "install", "needle_pose", "on_reset", "on_step", "show_needle", "write_joint",
            "write_pose"]
 
 JOINTS = ("lift", "spin", "cap")
@@ -536,6 +536,28 @@ def hold_root(environment, name: str):
                 getattr(asset, stem)(*kw.values())
 
     return restore
+
+
+_MASSES: dict = {}
+
+
+def set_part_masses(environment, name: str, scale: float | None) -> None:
+    """Scale the masses (and inertias) of syringe ``name``'s needle parts (carrier, needle, cap) by ``scale`` in the
+    running simulation; ``None`` puts their own masses back. A needle part made almost massless can be moved inside
+    the syringe without shifting it: an articulation keeps its centre of mass when a joint is moved by hand, so the
+    shift scales with the moved mass."""
+    import torch
+
+    asset = environment.unwrapped.scene[name]
+    if name not in _MASSES:
+        _MASSES[name] = (_t(asset.data.body_mass).clone(), _t(asset.data.body_inertia).clone())
+    m0, i0 = _MASSES[name]
+    k = 1.0 if scale is None else float(scale)
+    ids = [list(asset.body_names).index(part) for part in ("carrier", "needle", "cap")]
+    body_ids = torch.tensor(ids, dtype=torch.int32, device=m0.device)
+    env_ids = torch.tensor([0], dtype=torch.int32, device=m0.device)
+    asset.set_masses_index(masses=m0[0:1, ids] * k, body_ids=body_ids, env_ids=env_ids)
+    asset.set_inertias_index(inertias=i0[0:1, ids] * k, body_ids=body_ids, env_ids=env_ids)
 
 
 def show_needle(name: str, visible: bool) -> None:
