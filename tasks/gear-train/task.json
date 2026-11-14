@@ -1,0 +1,20 @@
+{
+  "title": "Mesh a three-gear train, finding each gear's tooth phase by contact",
+  "category": "Impact on jobs",
+  "keywords": [
+    "gearbox assembly",
+    "gear meshing",
+    "tooth phase matching",
+    "search by contact",
+    "chained dependency"
+  ],
+  "instruction": "Assemble the gear train on the grey plate: put the large gear on the nearest shaft, the medium gear on the middle shaft and the small gear on the farthest shaft, each pushed all the way down so its teeth mesh with the gear next to it, then let go and move the grippers clear.",
+  "context": "Woods DS8.50 Operator's Manual, Dealer Service, spindle gearbox assembly, step 11: \"Place gear (1) through top of housing and align gear (1) and gear (5) so that gear teeth are a match.\" (a crown gear and its pinion there) https://www.manualslib.com/manual/1174793/Woods-Ds8-50.html?page=31 Done by: dealer service technicians (gearbox and drivetrain mechanics).",
+  "setup": "The two arm bases stand 61 cm apart on an oak table. A fixed grey gear plate, 150 x 75 mm (Isaac Lab Factory gear base), lies 15 cm right of the midline with its long side running out from the bases. Three upright steel shafts (NIST task board: MISUMI SPTR10-20, 10 mm g6; 9.5 mm in the sim's Factory assets) stand on its centre line, 28.0, 33.0 and 36.1 cm out from the bases (about 50.5 and 30.5 mm apart), their tips 26 mm above the table. Three loose polyacetal spur gears (MISUMI GEABP1.0, module 1, 20 deg pressure angle, 10 mm bore, 20 mm long; 25 mm in the sim, with 0.23 mm radial bore play) lie flat on the table: a large one (60 teeth, 62 mm across, 60 g) 40 cm out and 32 cm right, a medium one (40 teeth, 42 mm, 30 g) 24 cm out and 30 cm right, a small one (20 teeth, 22 mm, 10 g) 20 cm out and 24 cm right. The shafts sit 0.5 mm wider than the standard 50 and 30 mm centre distances, for backlash. No gear starts nearest its own shaft. Dimensions, bore clearance and sources: README.",
+  "scoring": "A gear is seated when its centre is within 2 mm of its own shaft's axis, the centre of its bottom face within 1 mm of the seated height (6 mm above the table) and its axis within 3 degrees of vertical; still means under 0.01 m/s and 0.5 rad/s; clear means no part of either arm within 10 mm of any gear (a conservative check against each gear's bounding cylinder). A pair meshes when the large and medium, or the medium and small, gears are both seated. 1.0 only when all three are seated and still and both arms clear for 1 s, which ends the trial. If the limit ends first, the last step scores: with all three seated, 0.8 when still and clear, 0.7 when clear but at least one is moving, 0.6 when an arm is within 10 mm of a gear (still held); otherwise 0.1 for each seated gear plus 0.3 for each meshed pair: 0.5 for one pair, 0.2 for the large and small gears seated without the medium (no mesh). A gear stopped on teeth, on the wrong shaft, on a shaft's tip or elsewhere scores nothing.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lift the gears off the shafts and lay them back where the setup puts them.",
+  "fidelity": "The plate and gears are the Isaac Lab Factory gear assets (NIST models of MISUMI parts) at full size, collided by their meshes. The plate is fixed. The gears weigh 60, 30 and 10 g, near the real polyacetal parts (about 51, 25 and 5 g). Every object has rubber-like friction (1.2 static, 1.0 dynamic), so teeth grip each other and the shafts more than dry acetal on acetal or steel would.",
+  "scores": "Dream-1 run: 0 (2,400 steps, run with the instruction before the let-go clause was added); demo: 1.0 (success at 94.45 s, step 1,889)",
+  "media": "M-TYJ5V9"
+}
