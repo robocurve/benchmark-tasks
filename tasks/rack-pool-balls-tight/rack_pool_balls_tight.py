@@ -7,7 +7,8 @@ away without disturbing them.
 Why it is hard: the rack's cavity is larger than the pack (269.9 mm inside from the head ball to the rear centre,
 against 255.1 mm for fifteen touching balls), so lifting it straight off a loose pack leaves the gaps in place. The
 pack has to be squeezed into the rack's apex, then the frame lifted off a group of rolling balls without dragging
-any of them: a few mm of sideways motion while the walls still touch the balls rolls them apart.
+any of them (a few mm of sideways motion while the walls still touch the balls rolls them apart) and set down on the
+table away from the pack.
 
 Physics: the balls are rigid spheres (0.165 kg) whose rolling resistance on the cloth is modelled by angular damping
 (PhysX has no rolling friction); contact offsets of 0.1 mm keep the 0.5 mm gap measure meaningful. The rack is a free
@@ -49,6 +50,7 @@ RACK_KG = 0.227  # 0.5 lb
 CLOTH_T = 0.003
 CLOTH_TOP = TOP + CLOTH_T
 X_SPOT, Y_SPOT = 0.46, 0.0  # the foot spot
+TABLE_X0 = 0.36 - 1.1 / 2  # the station table's edge behind the arm bases
 START_PAST = float(os.environ.get("RK_START_PAST", "0.015"))  # the loose head ball this far past the spot (+x)
 G_LOOSE = 0.002  # the balls stand this far apart at the start
 VX0 = X_SPOT + START_PAST + 2 * R  # the rack's inner apex vertex at the start (the head ball touches both sides)
@@ -220,7 +222,8 @@ _install_scene_patch()
 # -- readouts ------------------------------------------------------------------------------------------------------------
 GATE_RISE = 0.002  # m: the rack counts as rising once its lowest point is this far above the cloth
 GATE_MOVE = 0.003  # m: any ball's centre moving more than this horizontally while the rack rises: latched 0
-CLEAR = 0.050  # m: rack clear of every ball surface
+CLEAR = 0.050  # m: rack clear: every part this far horizontally (seen from above) from every ball's outline...
+DOWN_Z = 0.005  # m: ...and set down: its lowest point within this of the table top (on the table or the cloth), still
 GAP_OK = 0.0005  # m: a pair counts as tight at <= 0.5 mm (feeler gauge)
 SPOT_25, SPOT_100 = 0.010, 0.005  # m: head-ball centre to the spot's centre
 HAND_CLEAR = 0.030  # m: every robot point this far from every ball surface
@@ -244,18 +247,52 @@ def pair_gaps(c) -> np.ndarray:
     return np.array([np.linalg.norm(c[a] - c[b]) - D for a, b in PAIRS])
 
 
+def _hull(p) -> np.ndarray:
+    """Convex hull (counter-clockwise) of 2D points."""
+    p = sorted(map(tuple, np.round(p, 9)))
+    lower, upper = [], []
+    for seq, out in ((p, lower), (p[::-1], upper)):
+        for q in seq:
+            while len(out) >= 2 and ((out[-1][0] - out[-2][0]) * (q[1] - out[-2][1])
+                                     - (out[-1][1] - out[-2][1]) * (q[0] - out[-2][0])) <= 0:
+                out.pop()
+            out.append(q)
+    return np.array(lower[:-1] + upper[:-1])
+
+
+def _dist_to_poly(q, poly) -> np.ndarray:
+    """Distance (m) from each 2D point in q to the convex polygon poly (CCW); 0 inside."""
+    a, b = poly, np.roll(poly, -1, axis=0)
+    e = b - a
+    rel = q[:, None, :] - a[None, :, :]
+    inside = np.all(e[None, :, 0] * rel[:, :, 1] - e[None, :, 1] * rel[:, :, 0] >= 0, axis=1)
+    s = np.clip((rel * e[None]).sum(-1) / (e * e).sum(-1)[None], 0.0, 1.0)
+    d = np.linalg.norm(rel - s[..., None] * e[None], axis=2).min(axis=1)
+    return np.where(inside, 0.0, d)
+
+
 def rack_clearance(objects, c) -> float:
-    """Least distance (m) from any ball's surface to the rack (its three bars as oriented boxes)."""
+    """Least horizontal distance (m), seen from above, from any ball's outline to the rack: each bar's footprint (its
+    oriented box projected on the table) against each ball's circle."""
     t = kit._pose_T(objects, "rack")
     best = 9.0
     for b in RACK_BOXES:
-        rb = mk.quat_to_mat(b.quat)
-        rw = t[:3, :3] @ rb
+        rw = t[:3, :3] @ mk.quat_to_mat(b.quat)
         cw = t[:3, :3] @ np.asarray(b.at) + t[:3, 3]
-        local = (c - cw) @ rw  # ball centres in the box frame
-        d = np.linalg.norm(np.maximum(np.abs(local) - np.asarray(b.size) / 2, 0.0), axis=1) - R
-        best = min(best, float(d.min()))
+        h = np.asarray(b.size) / 2
+        corners = np.array([cw + rw @ (h * np.array([i, j, k])) for i in (-1, 1) for j in (-1, 1) for k in (-1, 1)])
+        best = min(best, float((_dist_to_poly(c[:, :2], _hull(corners[:, :2])) - R).min()))
     return best
+
+
+def rack_down(objects) -> bool:
+    """The rack set down: its lowest point within 5 mm of the table top and moving under 5 mm/s."""
+    st = objects["rack"]
+    return bool(float(np.asarray(st.low)[2]) - TOP <= DOWN_Z and float(np.linalg.norm(np.asarray(st.lin_vel))) < STILL)
+
+
+def rack_away(objects, c) -> bool:
+    return rack_down(objects) and rack_clearance(objects, c) >= CLEAR
 
 
 def rack_low(objects) -> float:
@@ -364,12 +401,23 @@ def _on_step(objects) -> None:
             m["gate"] = m["n"]
             print(f"[rk] LATCH lift-disturbed: a ball moved {mv * 1000:.2f} mm sideways while the rack was rising "
                   f"(limit {GATE_MOVE * 1000:.0f} mm), control step {m['n']}, rack lowest point {low * 1000:.1f} mm", flush=True)
-        if clear >= CLEAR:
+        if clear >= CLEAR and rack_down(objects):
             m["cleared"] = m["n"]
             apex, rear = orientation(c)
-            print(f"[rk] rack clear of every ball by {clear * 1000:.0f} mm at control step {m['n']}; most any ball moved "
+            g = pair_gaps(c)
+            print(f"[rk] rack set down {clear * 1000:.0f} mm (horizontally) from the nearest ball at control step {m['n']}: "
+                  f"pairs <= 0.5 mm {int((g <= GAP_OK).sum())}/30, widest gap {g.max() * 1000:.2f} mm, head ball "
+                  f"{_head_off(c) * 1000:.1f} mm from the spot; most any ball moved "
                   f"while it rose: {m['max_move'] * 1000:.2f} mm; orientation: apex {apex:.2f} deg off +x (limit "
                   f"{APEX_TOL:.0f}), rear row {rear:.2f} deg off square (limit {REAR_TOL:.0f})", flush=True)
+    if m["label"] != m.get("phase"):
+        m["phase"] = m["label"]
+        g = pair_gaps(c)
+        apex, rear = orientation(c)
+        print(f"[rk] k={m['n']} phase '{m['label']}': pairs <= 0.5 mm {int((g <= GAP_OK).sum())}/30, widest gap "
+              f"{g.max() * 1000:.2f} mm, head ball {_head_off(c) * 1000:.1f} mm; apex {apex:.2f} deg, rear row "
+              f"{rear:.2f} deg; rack low {low * 1000:+.1f} mm, at x {kit.pose(objects, 'rack')[0][0] * 1000:.1f} mm, "
+              f"{clear * 1000:+.0f} mm from the balls", flush=True)
     tiers = _tiers(objects, c)
     if tiers != m["tiers"]:
         apex, rear = orientation(c)
@@ -424,7 +472,7 @@ def _tiers(objects, c) -> str:
     g = pair_gaps(c)
     return "".join([
         "S" if _head_off(c) <= SPOT_25 else "-",
-        "C" if rack_clearance(objects, c) >= CLEAR else "-",
+        "C" if rack_away(objects, c) else "-",
         "T" if (g <= GAP_OK).sum() >= 24 else "-",
         "A" if (g <= GAP_OK).all() else "-",
         "O" if _oriented(c) else "-",
@@ -436,8 +484,8 @@ def _tiers(objects, c) -> str:
 
 def score(objects) -> float:
     """0 if any ball moved more than 3 mm sideways while the rack was rising (latched). Otherwise: 0.25 the head ball's
-    centre within 10 mm of the foot spot; 0.5 that and the rack clear (every part of it at least 50 mm from every ball);
-    0.75 that, at least 24 of the 30 touching pairs within 0.5 mm and the pack facing the head of the table (apex
+    centre within 10 mm of the foot spot; 0.5 that and the rack taken away (set down on the table, still, every part of
+    it at least 50 mm horizontally from every ball); 0.75 that, at least 24 of the 30 touching pairs within 0.5 mm and the pack facing the head of the table (apex
     within 5 deg of +x from the centroid, rear row within 3 deg of square to the long axis); 1.0 that, all 30 within
     0.5 mm, the head ball within 5 mm of the spot, every ball still and both grippers at least 30 mm from every ball."""
     m = _mem()
@@ -446,7 +494,7 @@ def score(objects) -> float:
     c = centres(objects)
     if _head_off(c) > SPOT_25:
         return 0.0
-    if rack_clearance(objects, c) < CLEAR:
+    if not rack_away(objects, c):
         return 0.25
     g = pair_gaps(c)
     if (g <= GAP_OK).sum() < 24 or not _oriented(c):
@@ -463,13 +511,16 @@ def success(objects) -> bool:
 def distance(objects) -> float:
     c = centres(objects)
     g = pair_gaps(c)
-    return float(_head_off(c) + np.clip(g, 0, None).sum() + max(0.0, CLEAR - rack_clearance(objects, c)))
+    return float(_head_off(c) + np.clip(g, 0, None).sum() + max(0.0, CLEAR - rack_clearance(objects, c))
+                 + max(0.0, float(np.asarray(objects["rack"].low)[2]) - TOP))
 
 
 # -- the scripted demo -----------------------------------------------------------------------------------------------------
-# Both hands pinch the back bar in the cusps between back-row balls 1-2 and 4-5, fingers closing across the bar; pull the
-# rack back toward the robot (its apex squeezes the pack tight and walks the head ball onto the spot), wait, lift it
-# straight up and hold it clear.
+# Both hands pinch the back bar in the cusps between back-row balls 1-2 and 4-5, fingers closing across the bar, and lift
+# the rear bar about 1 mm (the apex stays on the cloth); pull it back toward the robot (its apex squeezes the
+# pack tight and walks the head ball onto the spot), the last 3.5 mm slowly; let the pack settle; ease the rack 1.5 mm
+# forward so its bars stand off the balls; lift it straight up, slowly past the balls' equators; carry it toward the
+# robot, set it down on the table well behind the pack, let go and raise the hands.
 SP0 = D + G_LOOSE
 Y_HAND = 1.5 * SP0
 X_BAR0 = VX0 - L_IN - WALL_T / 2
@@ -479,8 +530,15 @@ from yam_arena.constants import PAD_TIP_PAST_TCP  # noqa: E402
 Z_PINCH = CLOTH_TOP + TIP_Z + PAD_TIP_PAST_TCP
 YAW = {1: -math.pi / 2, -1: math.pi / 2}  # per arm (left +y, right -y): fingers close along x, across the bar
 W_OPEN, W_HOLD = 0.021, WALL_T - 0.004  # 3 mm clear of each face going down
-PULL = float(os.environ.get("RK_PULL", "0.0155"))
-LIFT = 0.130
+RAISE = float(os.environ.get("RK_RAISE", "0.001"))  # hands 1 mm up while pulling (rear bar up, apex on the cloth)
+PULL = float(os.environ.get("RK_PULL", "0.016"))  # total pull back
+PULL_SLOW = 0.0035  # the last part of the pull, at about 1 mm/s
+SETTLE = 3.0  # s
+EASE = float(os.environ.get("RK_EASE", "0.0015"))  # forward ease-off before the lift: the side bars stand off 0.75 mm
+LIFT_SLOW, LIFT = 0.035, 0.100  # the first 35 mm at 5 mm/s (bars past the balls' equators), then at 2 cm/s
+# set-down spot: the rack's apex (20.5 mm past its inner vertex) 65 mm horizontally behind the back row's outline
+X_APEX_SET = X_SPOT - 4 * ROW - R - CLEAR - 0.015
+X_BAR_SET = X_APEX_SET - 0.0205 - L_IN - WALL_T / 2
 DRIFT = float(os.environ.get("RK_DRIFT", "0.0"))  # controls only: sideways drift over the first 20 mm of the lift
 
 
@@ -495,21 +553,30 @@ def _go(plan, dur, pos, w, label, sg):
 def _arm(sg, pull=PULL):
     y = sg * Y_HAND
     x0 = X_BAR0
+    zr = Z_PINCH + RAISE
     p = []
     _go(p, 3.0, (x0, y, Z_PINCH + 0.10), W_OPEN, "over the back bar", sg)
     _go(p, 2.0, (x0, y, Z_PINCH), W_OPEN, "down astride the back bar", sg)
     _go(p, 1.0, (x0, y, Z_PINCH), W_HOLD, "pinch the back bar", sg)
-    _go(p, 0.5, (x0, y, Z_PINCH), W_HOLD, "hold", sg)
+    _go(p, 0.5, (x0, y, zr), W_HOLD, "lift the rear bar 1 mm", sg)
     if pull > 0:
-        _go(p, pull / 0.003, (x0 - pull, y, Z_PINCH), W_HOLD, "[tighten] pull the rack back: its apex squeezes the pack", sg)
-        _go(p, 1.5, (x0 - pull, y, Z_PINCH), W_HOLD, "let the pack settle", sg)
-    xl = x0 - pull
+        fast = pull - PULL_SLOW
+        _go(p, fast / 0.003, (x0 - fast, y, zr), W_HOLD, "[tighten] pull the rack back: its apex squeezes the pack", sg)
+        _go(p, PULL_SLOW / 0.001, (x0 - pull, y, zr), W_HOLD, "[tighten] the last 3.5 mm slowly", sg)
+    _go(p, SETTLE, (x0 - pull, y, zr), W_HOLD, "let the pack settle", sg)
+    xl = x0 - pull + EASE
+    _go(p, 2.5, (xl, y, zr), W_HOLD, "ease the rack 1.5 mm forward, bars off the balls", sg)
     if DRIFT:
         _go(p, 1.0, (xl, y + DRIFT, Z_PINCH + 0.020), W_HOLD, "[ctl-a] lift with sideways drift", sg)
-        _go(p, (LIFT - 0.020) / 0.02, (xl, y + DRIFT, Z_PINCH + LIFT), W_HOLD, "[lift] lift it straight up", sg)
+        _go(p, (LIFT_SLOW - 0.020) / 0.005, (xl, y + DRIFT, Z_PINCH + LIFT_SLOW), W_HOLD, "[lift] lift slowly past the equators", sg)
     else:
-        _go(p, LIFT / 0.02, (xl, y, Z_PINCH + LIFT), W_HOLD, "[lift] lift it straight up", sg)
-    _go(p, 2.5, p[-1].pos, W_HOLD, "hold the rack clear", sg)
+        _go(p, LIFT_SLOW / 0.005, (xl, y, Z_PINCH + LIFT_SLOW), W_HOLD, "[lift] lift slowly past the equators", sg)
+    _go(p, (LIFT - LIFT_SLOW) / 0.02, (xl + 0, p[-1].pos[1], Z_PINCH + LIFT), W_HOLD, "[lift] lift it clear", sg)
+    xs = X_BAR_SET
+    _go(p, 6.0, (xs, y, Z_PINCH + LIFT), W_HOLD, "[carry] carry the rack toward the robot", sg)
+    _go(p, 2.5, (xs, y, Z_PINCH - CLOTH_T + 0.0015), W_HOLD, "[set down] set it on the table", sg)
+    _go(p, 1.0, (xs, y, Z_PINCH - CLOTH_T + 0.0015), W_OPEN, "let go", sg)
+    _go(p, 2.0, (xs, y, Z_PINCH + 0.10), W_OPEN, "hands up", sg)
     return p
 
 
@@ -566,8 +633,10 @@ kit.on_step(_cl_step)
 
 
 def demo():
-    """Both hands: pinch the back bar between back-row balls, pull the rack back 15.5 mm at 3 mm/s (tighten), let the
-    pack settle 1.5 s, lift it straight up 130 mm at 2 cm/s and hold it there."""
+    """Both hands: pinch the back bar between back-row balls and lift it about 1 mm; pull it back 16 mm (12.5 mm at
+    3 mm/s, the last 3.5 mm at 1 mm/s) to tighten; let the pack settle 3 s; ease the rack 1.5 mm forward; lift it
+    straight up (35 mm at 5 mm/s, then to 100 mm at 2 cm/s); carry it toward the robot, set it on the table with its
+    apex 65 mm behind the pack, let go and raise the hands."""
     return {"left": _arm(1), "right": _arm(-1)}
 
 
@@ -578,11 +647,15 @@ def controls_no_tighten():
 
 
 # -- offline self-test --------------------------------------------------------------------------------------------------
-def _states(ball_xy, rack_shift=(0.0, 0.0, 0.0), moving=False):
+def _states(ball_xy, rack_shift=(0.0, 0.0, 0.0), moving=False, rack_moving=False):
+    import dataclasses
+
     from yam_arena.task_file import ObjectState
 
     pos0, q0 = kit.pose(kit.fake_states(), "rack")
     st = kit.fake_states(moved={"rack": (np.asarray(pos0) + np.asarray(rack_shift), q0)})
+    if rack_moving:
+        st["rack"] = dataclasses.replace(st["rack"], lin_vel=np.array([-0.02, 0.0, 0.0]))
     z = np.zeros(3)
     for name, (x, y) in zip(NAMES, ball_xy):
         p = np.array([x, y, CLOTH_TOP + R])
@@ -599,7 +672,9 @@ def self_test():
     some = [list(p) for p in tight]
     for k in range(10, 15):  # back row pulled 1 mm back: 5 pairs of the back row + 4 diagonals... count below
         some[k][0] -= 0.001
-    up = (0.0, 0.0, 0.13)
+    up = (0.0, 0.0, 0.10)  # lifted 100 mm straight up: above the pack, not taken away
+    away = (X_BAR_SET - X_BAR0, 0.0, -(CLOTH_T + 0.0003))  # set down on the table where the demo puts it
+    near = (X_BAR_SET - X_BAR0 + 0.040, 0.0, -(CLOTH_T + 0.0003))  # set down 40 mm short of that (25 mm from the pack)
 
     def turned(deg):  # the tight pack rotated about the head ball, which stays on the spot
         a = math.radians(deg)
@@ -608,18 +683,21 @@ def self_test():
     cases = {
         "start (loose, 15 mm past, rack on)": (_states(START), {}, [], 0.0),
         "tight on the spot, rack still on": (_states(tight, (-(START_PAST), 0, 0)), {}, [], 0.25),
-        "loose on the spot, rack lifted clear": (_states(loose_on, up), {}, [], 0.5),
-        "tight on the spot, rack clear, still, hands away": (_states(tight, up), {}, [], 1.0),
-        "tight, head 7 mm off the spot, rack clear": (_states(tight_off7, up), {}, [], 0.75),
-        "tight, rack clear, balls rolling": (_states(tight, up, moving=True), {}, [], 0.75),
-        "tight, rack clear, a pad touching the head ball": (_states(tight, up), {}, [np.array([X_SPOT + R + 0.005, 0, CLOTH_TOP + R])], 0.75),
-        "tight but the lift disturbed it (latched)": (_states(tight, up), {"gate": 5}, [], 0.0),
-        "back row 1 mm off, rack clear": (_states(some, up), {}, [], None),
-        "rack only 30 mm up (not clear)": (_states(tight, (0, 0, 0.03 + 0.0003)), {}, [], 0.25),
-        "orientation: correct pack, rotated 2 deg (inside both limits)": (_states(turned(2.0), up), {}, [], 1.0),
-        "orientation: rotated 180 deg, head ball on the spot (apex faces the foot)": (_states(turned(180.0), up), {}, [], 0.5),
-        "orientation: rotated 10 deg, head ball on the spot": (_states(turned(10.0), up), {}, [], 0.5),
-        "orientation: rotated 4 deg (apex inside 5, rear row outside 3)": (_states(turned(4.0), up), {}, [], 0.5),
+        "tight on the spot, rack lifted 100 mm straight up (not taken away)": (_states(tight, up), {}, [], 0.25),
+        "tight on the spot, rack carried away but still 60 mm up": (_states(tight, (away[0], 0, 0.06)), {}, [], 0.25),
+        "tight on the spot, rack set down 25 mm behind the pack": (_states(tight, near), {}, [], 0.25),
+        "tight on the spot, rack set down away but still sliding": (_states(tight, away, rack_moving=True), {}, [], 0.25),
+        "loose on the spot, rack set down away": (_states(loose_on, away), {}, [], 0.5),
+        "tight on the spot, rack set down away, still, hands away": (_states(tight, away), {}, [], 1.0),
+        "tight, head 7 mm off the spot, rack away": (_states(tight_off7, away), {}, [], 0.75),
+        "tight, rack away, balls rolling": (_states(tight, away, moving=True), {}, [], 0.75),
+        "tight, rack away, a pad touching the head ball": (_states(tight, away), {}, [np.array([X_SPOT + R + 0.005, 0, CLOTH_TOP + R])], 0.75),
+        "tight but the lift disturbed it (latched)": (_states(tight, away), {"gate": 5}, [], 0.0),
+        "back row 1 mm off, rack away": (_states(some, away), {}, [], None),
+        "orientation: correct pack, rotated 2 deg (inside both limits)": (_states(turned(2.0), away), {}, [], 1.0),
+        "orientation: rotated 180 deg, head ball on the spot (apex faces the foot)": (_states(turned(180.0), away), {}, [], 0.5),
+        "orientation: rotated 10 deg, head ball on the spot": (_states(turned(10.0), away), {}, [], 0.5),
+        "orientation: rotated 4 deg (apex inside 5, rear row outside 3)": (_states(turned(4.0), away), {}, [], 0.5),
     }
     try:
         for name, (st, flags, pts, want) in cases.items():
@@ -646,6 +724,12 @@ def self_test():
               f"{pair_gaps(centres(st)).max() * 1000:.2f} mm, head ball {_head_off(centres(st)) * 1000:.1f} mm past the spot; "
               f"back bar centre x {X_BAR0:.4f}", file=sys.stderr)
         assert rack_clearance(st, centres(st)) > -1e-6
+        for name, sh in (("away", away), ("near", near)):
+            sa = _states(tight, sh)
+            print(f"rack set down {name}: {rack_clearance(sa, centres(sa)) * 1000:.1f} mm horizontally from the pack, lowest "
+                  f"point {(float(sa['rack'].low[2]) - TOP) * 1000:.1f} mm above the table, nearest rack x "
+                  f"{float(sa['rack'].low[0]):.3f}..{float(sa['rack'].high[0]):.3f}", file=sys.stderr)
+        assert float(_states(tight, away)["rack"].low[0]) > TABLE_X0 + 0.005  # on the table
     finally:
         mk.new_episode()
         _TEST_POINTS = None
