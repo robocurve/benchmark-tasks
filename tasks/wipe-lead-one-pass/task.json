@@ -1,0 +1,24 @@
+{
+  "title": "Wipe a monitor lead, cord and both end pieces, outward from its blue band, never wiping back",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "cable",
+    "deformable",
+    "sliding contact",
+    "healthcare",
+    "cleaning",
+    "process constraint",
+    "role switch",
+    "placement"
+  ],
+  "instruction": "Wipe the whole grey monitor lead with the wipe pads, its cord and both end pieces, wiping outward from the blue band and never back over any part already wiped, then lay the lead on the white drape and let go.",
+  "context": "O*NET 31-9093.00: \"Disinfect and sterilize equipment, such as respirators, hospital beds, or oxygen or dialysis equipment\". Philips ECG guide: \"Wipe the entire outer surfaces of the cable\". Nunavut \"Damp Wiping\": \"wiping each part of the surface ONCE is enough.\" Ability: one-way wipe pinch along a free cord and off each end piece while the other hand holds it taut, roles switching halfway. The blue-band start is a task choice; sources give none.",
+  "setup": "Cm from the midpoint between the arm bases on the table (x forward, y to robot's left). Arm bases at x 0, y +30.5 (left) and y -30.5 (right); both arms start in their ready pose, gripper about 26 cm above the table at x 32 in front of its base. Lead: grey 6 mm round PVC cord, 60 cm, straight along y at x 40 from y 6.25 to y -53.75; grey plug 35x16x12 mm (12 g) on its left end (centre y 8), red patient clip 25x15x15 mm (10 g) on its right end. Blue tape band 2 cm wide on the cord 14-16 cm from the plug end (y -7.75 to -9.75). Drape: white cloth on a 3 mm board, 18x76 cm, x 12-30, y -56 to 20, taped down. Wipes: PDI Sani-Cloth Plus pre-moistened disinfectant wipes, 6 x 6.75 in (about 15x17 cm); one per gripper, cut in half, each half folded to an 8-layer pad about 4x4 cm and 3 mm thick laid over one finger pad and its tip and held by a rubber band round the outer face of the finger, fitted before the trial; the robot grips everything through them. With the pads fitted, note the gripper gap g0 when closed on nothing; real-trial gap thresholds are the scoring ones plus g0. Before the trial dust the cord and the two long side faces of the plug and the clip with UV tracer powder and mark the cord every 1 cm from 1.5 to 58.5 cm and draw a line round the plug and the clip 8 mm from the cord face.",
+  "scoring": "Score 0 if (latched): a hand closed on the cord (finger gap <= 7 mm; real trial 7 mm + g0, the gap of the gripper closed on nothing with pads fitted) goes more than 3 cm back against its stroke direction along the cord, or comes more than 3 cm closer to the end piece behind it; a stroke passes over more than 4 already-wiped 1 cm marks; such a body pass goes more than 1 cm back toward the cord, or slides 1 cm or more along a body already wiped; or at the end the plug is not on the drape or a gripper is within 3 cm of the lead. A stroke wipes the 1 cm marks its pads slide over (counted once it has slid 2 cm) while the other hand holds the end piece behind it; strokes toward the clip count marks from 13.5 cm, toward the plug marks up to 16.5 cm. A body (plug 35 mm, clip 25 mm long) is wiped by one closure with the finger gap fitting it (sim, bare fingers: plug 10-23 mm, clip 13-22 mm; real trial: up to the larger cross size + g0 + 1 mm) and the body between the pads, that closes with the pads straddling the cord face (pad centre at most 8 mm onto the body) and slides outward until the pad centre reaches the free tip, while the other hand holds the other end piece throughout; real trial: tracer gone from both long side faces and one such pass on video. c = fraction of the 58 marks (1.5 to 58.5 cm) wiped. 0.3: c 0.5 to <0.9. 0.6: c >= 0.9 but not every mark wiped, or a body not wiped, or not the whole lead on the drape. 1.0: all 58 marks and both bodies wiped and the whole lead, plug and clip on the drape.",
+  "run_limit": "1,600 steps (80 s at 20 Hz)",
+  "reset_notes": "Lay the lead straight along the tape line at x 40 cm, plug centre on its mark at y 8 cm, clip end to the right; drape flat and empty on its tape marks. Fit fresh wipe pads to both grippers. Real trial: dust the cord and the long side faces of the plug and clip with UV tracer powder and mark the cord every 1 cm from 1.5 to 58.5 cm; afterwards a mark or body face counts as wiped when it is clean under a UV torch.",
+  "fidelity": "Lead: 2 cm rigid segments, soft bending springs, no twist or plasticity; plug and clip are rigid boxes. Wipe pads not modelled: a mark counts when it passes between bare finger pads closed on the cord; body passes run the fingers ~3 mm (pad thickness) clear of each side face, since bare fingers rubbing a body destabilize the cable. 1.5 cm of cord at each end piece is unscored. Real trial reads wiping from UV tracer. Drape is a fixed board.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-RJKYN8"
+}
