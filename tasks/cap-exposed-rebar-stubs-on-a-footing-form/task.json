@@ -1,0 +1,21 @@
+{
+  "title": "Cap the bare rebar stubs on a footing form, leaving the capped ones as they are",
+  "category": "Safety and alignment",
+  "instruction": "Make the rebar stubs safe for the crew to walk the formwork.",
+  "context": "Reinforcing bars that stick up out of formwork and slabs are an impalement hazard to anyone who trips or falls onto them, and OSHA's construction rule for concrete work (29 CFR 1926.701(b)) requires protruding reinforcing steel that workers could fall onto to be guarded against impalement, usually with plastic caps. Construction laborers number about one million workers in the United States (BLS).",
+  "setup": "A plywood footing-form board, 100 x 600 x 30 mm, stands on the table with its centre at x = 0.300 m, y = 0. Five vertical #4 reinforcing bars (12.7 mm round steel) stand in it in a row along y at y = -0.22, -0.11, 0, +0.11 and +0.22 m, each 70 mm above the floor. The two outer bars already wear a red plastic safety cap, seated; the three middle bars are bare. Three more identical caps stand mouth-down on three 70 x 70 x 4 mm grey staging pads at x = 0.175 m, in front of the bare bars (y = -0.11, 0, +0.11). A safety cap is moulded red plastic, 0.05 kg: a 70 x 70 x 16 mm square head on a 64 x 64 x 28 mm square stem, with a blind 14 x 14 mm square bore 30 mm deep, flared at its mouth from 56 mm across down to the bore over 21 mm, so a bar is led in. All positions are table-top coordinates in metres from the midpoint between the arm bases (x forward, y to the robot's left). Real-world build: the cap is a rebar safety cap in red polyethylene about 70 mm across with a 14 mm square bore, the bars are cut lengths of 12.7 mm (#4) rebar stood in drilled holes in a plywood sheet, and the pads are rubber feet.",
+  "scoring": "Score is the state at the current step. A cap is seated on a bar when the bar tip is at least 26 mm up the cap's bore, the bore axis is within 3 mm of the bar axis and the cap's axis is within 8 degrees of vertical (on a real build, the head's top face is 82 to 88 mm above the floor and a protractor reads at most 8 degrees). With n of the five bars wearing a seated cap (two do at the start): 0.25 for n = 3, 0.5 for n = 4, 0.75 for n = 5, and 1.0 for n = 5 with both tool points at least 15 cm (horizontally) from every bar, or above 25 cm over the table, held for 3.0 s. Knocking a cap off lowers the score again, because that bar is bare again. Nothing is latched.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Put the two outer caps back on their bars (seated, bar tip against the bore's roof) and the three loose caps back on their pads, mouth down, on the marked spots. Nothing is consumed.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. The bars are 12.7 mm steel cylinders; the caps are box colliders (a hollow square cap with a flared mouth) with friction 0.45 (plastic on steel) and no snap or interference fit: a cap stays on by its bore, not a grip. The footing form is a 30 mm plywood board; the bars are 70 mm long, much shorter than real starter bars.",
+  "scores": "Dream-1: 0.0 (2,400 steps; the arms rose and hovered by their bases, no cap moved). Demo: 1.0 in 1,312 steps. Ablations: one cap 0.25, two caps 0.50, caps 40 mm off target 0, arm left over the form 0.75, no motion 0.",
+  "keywords": [
+    "rebar",
+    "safety cap",
+    "impalement",
+    "construction",
+    "formwork",
+    "two-arm"
+  ],
+  "media": "M-U6C392"
+}
