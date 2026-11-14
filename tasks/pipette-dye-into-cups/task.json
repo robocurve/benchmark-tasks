@@ -1,0 +1,20 @@
+{
+  "title": "Pipette dye into three cups of water",
+  "category": "Impact on jobs",
+  "keywords": [
+    "laboratory",
+    "pipetting",
+    "dilution",
+    "following steps in order",
+    "liquid handling"
+  ],
+  "instruction": "Use the transfer pipette to dilute the dark stock by half in each cup. The dark stock cup is at the front of the row and cups 1, 2 and 3 stand behind it, front to back, each holding water. Move one pipetteful from the stock into cup 1, then one from cup 1 into cup 2, then one from cup 2 into cup 3. Then stand the empty pipette back in its holder and let go.",
+  "context": "Diluting a liquid step by step is how labs make standards, dose ranges and countable samples, and is among the first bench skills technicians learn. Order matters: each cup is made from the one before, and putting a used pipette back into an earlier cup contaminates it. Done by: biological technicians; medical and clinical laboratory technicians.",
+  "setup": "Positions in cm from the midpoint between the arm bases: x forward, y to the robot's left. Four clear acrylic cups (3 mm sheet; square openings 3.0 x 3.0 cm inside; 4 cm tall; open top) are taped down in a row at y 12, centred at x 17 (stock), 21.5 (cup 1), 26 (cup 2) and 30.5 (cup 3); each is marked at 1 and 2 pipettefuls (5 and 10 mL). The stock cup holds 10 mL of dark blue dye solution (1 mL of blue food colouring in 100 mL of water); cups 1-3 hold 5 mL of clean water each. On a real bench each cup has a small magnetic stir bar, so liquid mixes as it lands. Pipette holder: a grey square collar, 2.2 cm across inside, 3 mm walls, 5 cm tall, taped down at x 24, y 18. Transfer pipette: a white plastic squeeze bulb (squeeze faces 2.8 cm apart, pointing to the robot's left and right; 2 cm deep; 3 cm tall) on a 9 cm stem 0.8 cm thick, about 40 g, standing tip down in the holder. One pipetteful is one full squeeze and release (sim); on a real bench use a graduated transfer pipette filled to its 5 mL mark.",
+  "scoring": "Scored at the end. A cup is right when it holds one or two pipettefuls, read against its 5 and 10 mL marks, and its strength is its target: cup 1 half the stock, cup 2 a quarter, cup 3 an eighth. In a top photo each cup is compared with reference cups made by hand at 1:2, 1:4, 1:8 and 1:16 at the same fill; it is right if its closest reference is its target (sim: dye fraction within a factor of 1.41 of target). Cups count in order: 0 if cup 1 isn't right, 0.3 for cup 1, 0.6 for cups 1 and 2, 0.9 for all three, 1.0 if the pipette also stands empty in its holder (tip inside the collar, under 2 cm above the table, leaning under 20 degrees) and the robot has let go (grippers open before the photo). 0 if more than one pipetteful left the stock, or if the tip re-entered an earlier cup's liquid or liquid was carried back to an earlier cup (checked on video). Liquid squeezed out anywhere but into or just above a cup (up to 3 cm over its opening) caps the score at 0.5. Doing nothing scores 0.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Empty and rinse all cups; refill the stock cup with 10 mL of the same dye solution and cups 1-3 with 5 mL of water each; empty the pipette and stand it back in its holder, squeeze faces left and right. Run with -E object_jitter=0 (one fixed layout).",
+  "fidelity": "Approximate. No liquids: volumes and dye are tracked per cup in Python, mixing is instant, and a full squeeze-release moves exactly one pipetteful. The bulb is square, its sides spring-loaded sliders (9 mm travel): past 70% is a squeeze, under 30% a release. Sim cups are opaque and unmarked; their floor colour shows dye strength. Let-go is read from the bulb's sides. The pipette is heavier than a real one. Rubber-like friction everywhere.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-DK9K37"
+}
