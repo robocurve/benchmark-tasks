@@ -1,0 +1,26 @@
+{
+  "title": "Mount an emergency-stop button in a panel hole with its tab in the notch, then thread its locking ring on behind",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "bimanual",
+    "robot cell build",
+    "emergency stop",
+    "panel mount",
+    "keyed part",
+    "anti-rotation tab",
+    "locking ring",
+    "multi-start thread",
+    "turn then insert",
+    "electrician",
+    "linkkit"
+  ],
+  "instruction": "Fit the red emergency-stop button flush in the panel hole, then screw its yellow locking ring snug against the back of the panel, and let go.",
+  "context": "Electricians and industrial machinery mechanics fit a mushroom emergency-stop button into the operator panel of every new robot cell. The button's anti-rotation tab must be turned to the hole's notch before it will go in; then one hand keeps the button seated from the front while the other reaches behind the panel and screws the locking ring on. Building and commissioning cells is routine work that robots will have to do to build more robots.",
+  "setup": "Station table, top at z 0.7475; positions in metres, x forward from the arm bases, y to the robot's left, z up. (1) Panel: a 180 x 110 x 2 mm mild-steel plate, grey (0.62, 0.64, 0.68), 0.3 kg, plane y = -0.040, x 0.15 to 0.33, z 0.8125 to 0.9225, standing on a fixed 180 x 60 x 65 mm steel bench frame block (dark grey, 5.5 kg, bolted to the table, z 0.7475 to 0.8125). A 22.5 mm round hole centred at (0.24, -0.040, 0.8675) with a 5 mm wide anti-rotation notch above it, cut 13.5 mm from the hole centre. Friction 0.3. (2) Emergency-stop button: ABS, 70 g, lying on its head with its axis along y, head toward the robot's left arm: red 40 mm diameter mushroom head 22 mm long, black 31 mm collar 4 mm long, dark grey threaded barrel 21.8 mm diameter and 13 mm long (a 2 mm chamfer at the tip, 3-start thread of 4 mm pitch), and a yellow anti-rotation tab 2.8 mm wide, 1.9 mm long, standing 12.9 mm from the axis. Friction 1.0 / 0.9. The collar's back face centre starts at (0.26, 0.135, 0.798) with the tab pointing 100 deg from straight up toward -x (a 100 deg roll from the notch). (3) Button stand: aluminium, 47 x 26 x 30 mm at (0.26, 0.150, 0.7625), fixed, with two 4 x 26 x 4 mm rails 15.5 mm either side of the centre that stop the head rolling off. (4) Locking ring: yellow nylon hex ring, 20 g, 30 mm across flats, 5 mm thick, hex bore 22.4 mm across flats, internal 3-start thread of 4 mm pitch (12 mm lead: a half turn moves it 6 mm). It waits coaxial with the hole, its front face 6 mm behind the back of the panel (ring centre y = -0.0495, front face y = -0.0470, panel back y = -0.0410), held in a printed starter carrier that does not touch the button. Friction 0.9 / 0.8. The ring turns freely only once the barrel stands in the hole.",
+  "scoring": "Measured each control step from reset (a linkkit History, cleared only by the simulator reset): y = the collar's back face above the panel's mid-plane (the panel front face is at y = 1 mm), tab = angle between the tab and the notch, lateral = barrel centre off the hole axis, tilt = button axis off the panel normal, ring angle and ring advance. Gate, any time in the run, gives 0: the button falls off the table. Ladder: 0.25 = barrel at least 8 mm into the hole (y at most 6 mm) with the tab within 12 deg of the notch, lateral at most 3 mm, tilt at most 8 deg; 0.5 = seated: y at most 3 mm (collar within 2 mm of the panel) with tab 12 deg or less, tilt 6 deg or less; 0.75 = ring turned 90 deg while the button is seated (or the 1.0 state without the release); 1.0 = at the end the button is seated, the ring is turned 165 to 185 deg with its face within 0.5 mm of the panel back, both grippers have every pad point at least 30 mm from button and ring and move under 10 mm/s for 1 s, and button and ring are still (under 3 and 5 mm/s) for 1 s. Real trial: a top photo with a 2 mm feeler at the collar, the tab seen through the notch from behind, a painted line on the ring and panel to read the ring turn on video (165 deg or more), a 0.5 mm feeler between ring and panel back, and video frames for the release and stillness.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Back the ring off to the carrier (front face 6 mm behind the panel back), lay the button on its stand with the tab pointing 100 deg from straight up toward -x (mark the head with a tab arrow), wipe the barrel and notch clean and check a 21.8 mm plug gauge passes the hole with the tab in the notch. The panel, frame and stand are fixed on taped outlines.",
+  "fidelity": "Rigid parts. The hole is a 0.75 mm stepped circle, so it is slightly larger than a true round hole near its top and bottom edges. The ring runs on a fixed helical track about the hole axis (12 mm per turn, only while the barrel stands in the hole with the tab in the notch) instead of on the barrel's own thread, so the ring does not clamp the button; thread starting and cross-threading are not modelled. The sprung gasket and contact block are omitted.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-2UGUDA"
+}
