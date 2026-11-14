@@ -1,0 +1,21 @@
+{
+  "title": "Open a crown-capped bottle on a mounted bottle opener and serve it on a coaster",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bar service",
+    "wall-mount bottle opener",
+    "crown cap",
+    "fixed tool",
+    "bring the workpiece to the tool",
+    "catch and pull"
+  ],
+  "instruction": "Open the bottle on the mounted bottle opener, then stand the open bottle on the coaster and let go.",
+  "context": "Bartenders and servers open crown-capped bottles on counter- or wall-mounted openers many times a shift (O*NET 35-3011.00, 35-3031.00). The opener is fixed, so the bottle goes to the tool: lift it, slide the back of the cap into the opener's jaw so the catch lip is under the skirt's edge, and pull the bottle down so the lip springs the crimp. A crown cap can't be pulled off by hand.",
+  "setup": "Positions in cm from the midpoint between the arm bases, on the table (x forward, y left); the layout is the same in every trial. (1) A full 275 ml long-neck green glass bottle, 450 g, 18.5 cm tall to the top of its standard 26 mm crown finish: a body 5.8 cm across and 11 cm tall with a cream paper label band, a shoulder narrowing to a lower neck 3.2 cm across (13 to 16.2 cm up), then 2.35 cm under the finish, whose bead is 2.64 cm across and 4.3 mm tall; standing at x 27, y -25. (2) A red steel crown cap crimped on the finish: 2.88 cm across the skirt, 6 mm tall, its skirt's edge 0.7 mm below the bead and 1.2 mm out from it. (3) A cast steel jaw-type wall-mount bottle opener screwed to a dark post 4.5 cm wide and 2.5 cm deep that stands on the table and runs up to the plate's top (23.5 cm): a back plate 6 cm wide, 7 cm tall (16.5 to 23.5 cm above the table) and 5 mm thick, its front face at x 43.8, centred on y -20; and a jaw 1.8 cm wide sticking out of the plate toward the robot. From the bottom up the jaw has a catch lip 4 mm thick, its top 21.4 cm above the table, reaching 2.45 cm out from the plate; an 8.5 mm slot whose back wall is 2.35 cm out from the plate, the lip sticking 1 mm out of it; and an upper prong 3 mm thick reaching 3.15 cm out from the plate. (4) A cork coaster, 9 cm across and 4 mm thick, centred at x 31, y -4.",
+  "scoring": "Judged from the video with a ruler. 0 if the bottle ever tilts more than 30 degrees or falls off the table. Otherwise: 1.0 if the opener took the cap off (the back of the cap's skirt in the jaw's slot, on the catch lip, and the cap coming off as the bottle is pulled down) and the bottle then stands on the coaster (axis within 3 cm of its centre, base on it, upright within 10 degrees), the bottle still and each gripper's fingertip centre at least 6 cm from where the bottle is gripped (its lower neck, 15.4 cm above its base), for 1 s; 0.75 if opened and standing on the coaster but still held or moving; 0.5 if opened; 0.25 if the back of the skirt was in the slot on the catch lip (seen from the side; cap axis within 6 mm of the jaw's centre line sideways) but the cap didn't come off; else 0.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "The cap is used up: use a new capped bottle (or crimp a new crown cap on with a bench capper) and stand it on its mark. Throw away the popped cap. Build the opener to the stated geometry (a cast jaw-type wall opener of this pattern, or one bent and welded from 3 mm steel); with the bottle held upright and pressed back into the jaw, a pull down pops the cap.",
+  "fidelity": "Rigid bodies (Isaac Sim, PhysX, 20 Hz control). The crimp is a rule, not a deformation: the cap stays on the finish unless the catch lip is under its skirt, and pops once the lip has bent the caught edge 1.5 mm up off the bead; it then springs 1 cm forward and 5.5 mm up in one step and falls. The skirt is 12 flat segments with a straight edge, not a fluted, tucked-in crimp. The drink is rigid mass.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-Y3X2LM"
+}
