@@ -6,8 +6,9 @@ out. The robot is told:
 
 > Put the headrest back into the seat, locked at its lowest position, then let go of it.
 
-Drivers take headrests out to fit seat covers or child seats, or to fold the seats, and refit them. The lock works
-the common way described in owner's manuals: the headrest goes down only while the release button is pressed, and
+Fitting headrests into seat backs is a station on every car-seat and vehicle assembly line, and seats are refitted
+after repairs and recalls: the kind of fit-and-lock operation team assemblers repeat all shift (BLS May 2024:
+1,457,800 miscellaneous assemblers and fabricators, which include team assemblers). The lock works the common way: the headrest goes down only while the release button is pressed, and
 rises freely. Inside, a sprung pawl in one sleeve clicks into each notch of the post and the notch's flat face stops
 it going down; going up, the notches' sloped faces push the pawl back (the first notch is square, so the headrest
 can't be pulled out without the button). The usual way:
