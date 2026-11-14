@@ -12,7 +12,7 @@ import shutil
 import subprocess
 import sys
 
-CORE = ('task.py', 'fluid.py', 'seal.py', 'sample_visuals.py', 'endpoint_hold.py', 'mechkit.py', 'demokit.py', 'task.json')
+CORE = ('task.py', 'fluid.py', 'seal.py', 'sample_visuals.py', 'endpoint_hold.py', 'rack.py', 'mechkit.py', 'demokit.py', 'task.json')
 
 def instruction(task):
     for node in ast.parse(task.read_text()).body:

@@ -50,7 +50,10 @@ class Fluid:
                 self.air -= da; self.expelled_air += da; dv -= da
             ds = min(dv, self.sample)
             self.sample -= ds; self.lost_sample += ds
-        if self.lost_sample > 0.50 + 1e-8 or self.aspirated > 0.20 + 1e-8:
+        # Corrective retraction is recoverable: newly admitted air must be purged
+        # again, but aspiration history alone does not invalidate a good endpoint.
+        # Keep the counter for conservation checks and diagnostics only.
+        if self.lost_sample > 0.50 + 1e-8:
             self.failed = True
 
     def score(self, released=False, parked=False, lifted=False):

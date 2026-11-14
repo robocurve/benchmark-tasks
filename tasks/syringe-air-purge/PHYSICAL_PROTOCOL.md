@@ -46,7 +46,7 @@ This is an operator preparation procedure **before reset**, not part of the robo
 
 ### C. Add and verify the 1.50 mL air pocket
 
-6. Keep the outlet open, upright and clear of liquid, with no filling connector attached. Hold the barrel and **slowly retract the plunger until the measured fiducial reaches `C(x0)=12.00 mL`**. Room air enters through the open nozzle as the cavity expands. This deliberately adds the air before t=0; it is not counted as the robot's prohibited in-trial aspiration. Do not use the printed 12 mL mark as the capacity calibration.
+6. Keep the outlet open, upright and clear of liquid, with no filling connector attached. Hold the barrel and **slowly retract the plunger until the measured fiducial reaches `C(x0)=12.00 mL`**. Room air enters through the open nozzle as the cavity expands. This deliberately adds the air before t=0; it precedes the scored trial; in-trial corrective aspiration is also permitted. Do not use the printed 12 mL mark as the capacity calibration.
 7. Wait for the liquid/air interface to stop moving with the outlet open to room air. Reweigh without further plunger movement. Confirm retained liquid is still **10.50 +/-0.01 mL**, total calibrated capacity is **12.00 +/-0.01 mL**, and compute **`initial_air = C(x0) - (m_initial-m_dry)/rho`**. Require the full air-volume uncertainty interval within **1.48-1.52 mL**. Log the actual readings and bounds, not only the nominal targets. Any liquid lost while drawing the air requires re-preparation or adjustment followed by all checks again.
 8. Gently roll/tilt the barrel, without moving the plunger, to coalesce visible gas into one pocket. Place it horizontally in the specified rack, outlet toward +Y. Keep the outlet clear of liquid and remove all temporary caps, clamps or filling connections before reset. Verify the final plunger fiducial and photograph the pocket with a backlight. If a drip, plunger movement or breakup into unresolved bubbles occurs during placement, repeat preparation and recheck the initial mass/capacity; do not start from the earlier accepted readings. The air-volume calculation includes all gas even if a tiny bubble is not visible.
 9. Save the initial mass, density, capacity, calculated liquid/air volumes, uncertainty bounds, timestamped pocket image and rack/arm views in the measurement sheet. Start the **90 s / 1,800-step** trial only after the accepted preparation is complete and both arms are reset. No human touches the syringe, solution or apparatus during the scored trial. Preparation and terminal metrology are outside that action budget.
@@ -72,19 +72,19 @@ The tracer solution remaining inside the outlet is retained sample. Tracer solut
 
 This capacity-minus-retained-solution method measures all gas inside the defined cavity, including small bubbles and nozzle dead space. It does not infer a volume from the simulation's white axial phase band or require the gas to form one easily photographed bubble. It also avoids transferring a 0.05 mL bubble through another tube.
 
-Estimate cumulative aspiration from the **sum of positive increases in calibrated cavity volume** over the recorded trajectory, not just net final retraction. This is the hardware counterpart of the simulator's open-tip retraction rule. Account for camera noise, seal compliance and pressure effects in the interval; repeated sub-resolution strokes must not be silently discarded. Require the outlet to remain in air, not submerged in expelled liquid. If the video cannot bound cumulative aspiration relative to 0.20 mL, label that condition unverified.
+Cumulative aspiration may optionally be logged from positive changes in calibrated cavity volume for diagnostics. It has **no scoring threshold** and does not need to be bounded to validate a trial. Corrective retraction followed by re-purging is permitted; only the final residual air and liquid-loss limits apply. Keep the outlet clear of collected liquid so retraction admits air, matching the model rather than refilling lost sample.
 
 ## 5. Numeric decision procedure
 
 Give every measured quantity an interval [lower, upper] incorporating calibration and reading errors. For an upper-limit condition, pass only if its upper bound is at or below the limit; fail only if its lower bound exceeds it. For lower-limit and strict inequalities, use the corresponding bound and preserve the strict comparison. If the interval crosses a decision boundary, report **indeterminate / repeat measurement**, never round into a passing tier. Record all qualifying tiers; do not automatically award a lower tier when a higher-tier boundary is unresolved.
 
-| Condition | Hardware evidence and unchanged code threshold |
+| Condition | Hardware evidence and current code threshold |
 |---|---|
 | Lift | Two-view barrel-origin trace exceeds 190 mm above the table at least once. |
-| Park | Endpoint XY distance from start <25 mm; origin strictly between 125 and 155 mm high; axis `abs(z)<0.15`, `y>0.985`; linear speed <25 mm/s. |
+| Park | Endpoint XY distance from start <25 mm; origin strictly between 125 and 155 mm high; axis `abs(z)<0.15`, `abs(y)>0.985` (either axial direction along the rack); linear speed <25 mm/s. |
 | Release | Every fingertip is >65 mm from both the barrel grasp reference and the current thumb-pad reference. |
 | Hold | Full success and the pose/release gates hold continuously for at least 1 s. Record the entire interval, not one photograph. |
-| Permanent zero | Any origin height <15 mm, XY displacement >350 mm, sample loss >0.50 mL, cumulative aspiration >0.20 mL, or invalid fluid-state evidence. Review the whole trial for these events. |
+| Permanent zero | Any origin height <15 mm, XY displacement >350 mm, sample loss >0.50 mL, or invalid fluid-state evidence. Review the whole trial for these events. |
 | 1.0 | After lift/park/release gates: residual air <=0.05 mL and sample loss <=0.30 mL, with all full-score conditions held continuously for1 s; before that hold completes the raw score is0.6. |
 | 0.6 | Otherwise: residual air <=0.30 mL and sample loss <=0.50 mL. |
 | 0.3 | Otherwise: residual air <=0.75 mL and sample loss <=0.50 mL. |

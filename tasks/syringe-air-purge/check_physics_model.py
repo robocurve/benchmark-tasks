@@ -47,7 +47,10 @@ class FluidChecks(unittest.TestCase):
         f=Fluid(pocket=0)
         f.update(1.5/AREA,1,.05);f.update(1./AREA,1,.05)
         self.assertAlmostEqual(f.air,.5)
-        self.assertTrue(f.failed)
+        self.assertFalse(f.failed)
+        self.assertEqual(f.score(True,True,True),.3)
+        f.update(1.5/AREA,1,.05)
+        self.assertEqual(f.score(True,True,True),1.)
         self.check_mass(f)
     def test_no_teleport_at_tilt(self):
         f=Fluid();f.update(0,1,.05)

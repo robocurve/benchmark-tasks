@@ -13,6 +13,7 @@ from fluid import Fluid, AREA, CAPACITY
 from seal import Seal, SEAL_STIFFNESS, SEAL_FORCE
 from sample_visuals import phase_segments
 from endpoint_hold import EndpointHold
+from rack import is_parked
 from yam_arena.task_file import TABLE_TOP
 
 SCENE='station'
@@ -115,8 +116,7 @@ class Trial:
         local=(fingers-s.pos)@R
         self.released=bool(np.min(np.linalg.norm(local-GRASP,axis=1))>.065 and
                            np.min(np.linalg.norm(local-np.array([0,PAD_Y+q,0]),axis=1))>.065)
-        self.parked=bool(np.linalg.norm(s.pos[:2]-ORIGIN[:2])<.025 and abs(R[2,1])<.15 and R[1,1]>.985 and
-                         TOP+.125<s.pos[2]<TOP+.155 and np.linalg.norm(s.lin_vel)<.025)
+        self.parked=is_parked(s.pos, R[:,1], s.lin_vel, ORIGIN, TOP)
         if self.dropped: self.fluid.failed=True
         self.value=self.endpoint.step(float(env.unwrapped.step_dt), self.fluid.score(self.released,self.parked,self.lifted))
         self.show(env)
@@ -173,8 +173,8 @@ def demo_script(ctx):
             yield from R.move(R.at()+delta*s.rotation()[:,1],t=.25,label='advance plunger')
     yield from advance_to(4. if ctx.mode=='overpush' else 1.0 if ctx.mode=='partial' else 1.55)
     if ctx.mode=='retract_repurge':
-        # Retract 0.40 mL, then restore the successful endpoint. A final-state-only
-        # scorer would miss this excessive aspiration; the failure must persist.
+        # Corrective retraction is a valid alternative: admit 0.40 mL, then
+        # purge it again and meet the same final air/loss and endpoint criteria.
         goal=max(0.,ctx.state('syringe').joint('plunger')-.40/AREA)
         for _ in range(100):
             s=ctx.state('syringe');error=s.joint('plunger')-goal

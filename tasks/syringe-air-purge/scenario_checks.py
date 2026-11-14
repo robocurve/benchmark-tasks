@@ -12,7 +12,7 @@ from pathlib import Path
 from fluid import Fluid, AREA, INITIAL_AIR, INITIAL_SAMPLE
 
 EXPECTED = {'full': 1., 'horizontal': 0., 'overpush': 0., 'partial': .3,
-            'medium_partial': .6, 'retract_repurge': 0., 'no_return': 0.,
+            'medium_partial': .6, 'retract_repurge': 1., 'no_return': 0.,
             'no_release': 0., 'no_lift': 0., 'none': 0.}
 
 
@@ -51,7 +51,7 @@ def run(mode, dt=.05):
     score = f.score(**gates)
     assert score == EXPECTED[mode], (mode, score, EXPECTED[mode])
     if mode == 'retract_repurge':
-        assert f.air <= .05 and f.lost_sample <= .30 and f.aspirated > .20 and f.failed
+        assert f.air <= .05 and f.lost_sample <= .30 and f.aspirated > .20 and not f.failed
     return dict(mode=mode, expected_score=EXPECTED[mode], measured_model_score=score,
                 passed=True, evidence_level='fluid_model_only', endpoint_gate_assumptions=gates,
                 final=dict(air_ml=f.air, sample_loss_ml=f.lost_sample,

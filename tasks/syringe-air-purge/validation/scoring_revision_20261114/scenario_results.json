@@ -1,0 +1,211 @@
+{
+  "evidence_level": "fluid_model_only",
+  "control_hz": 20,
+  "limitation": "No robot motion, contacts, lift/return/release measurement, video, or hardware validation. Endpoint gates are supplied by the test.",
+  "source_sha256": {
+    "fluid.py": "ba3d10f15dbe536150fa390ff47e2e3060d33978cc550c9708d62003cd042e8d",
+    "scenario_checks.py": "b1a38d8adddb5a79c3fe23a38fa2b2f742c13de1b7946f4636a6a039e23a2993"
+  },
+  "cases": [
+    {
+      "mode": "full",
+      "expected_score": 1.0,
+      "measured_model_score": 1.0,
+      "passed": true,
+      "evidence_level": "fluid_model_only",
+      "endpoint_gate_assumptions": {
+        "released": true,
+        "parked": true,
+        "lifted": true
+      },
+      "final": {
+        "air_ml": 0.0,
+        "sample_loss_ml": 0.050000000000000724,
+        "aspirated_ml": 0.0,
+        "failed": false
+      },
+      "trace_file": "full.model_trace.json.gz",
+      "trace_sha256": "ad60ed15692b314f91e696d4c90881c8ca8f1c4e5092336825c3d3e0f33ed362"
+    },
+    {
+      "mode": "horizontal",
+      "expected_score": 0.0,
+      "measured_model_score": 0.0,
+      "passed": true,
+      "evidence_level": "fluid_model_only",
+      "endpoint_gate_assumptions": {
+        "released": true,
+        "parked": true,
+        "lifted": true
+      },
+      "final": {
+        "air_ml": 1.5,
+        "sample_loss_ml": 1.5499999999999996,
+        "aspirated_ml": 0.0,
+        "failed": true
+      },
+      "trace_file": "horizontal.model_trace.json.gz",
+      "trace_sha256": "08f1ccd4fc61baeb1c49af54c70a33dbd4606d7e5a1f6284f0510a4e082b78ae"
+    },
+    {
+      "mode": "overpush",
+      "expected_score": 0.0,
+      "measured_model_score": 0.0,
+      "passed": true,
+      "evidence_level": "fluid_model_only",
+      "endpoint_gate_assumptions": {
+        "released": true,
+        "parked": true,
+        "lifted": true
+      },
+      "final": {
+        "air_ml": 0.0,
+        "sample_loss_ml": 2.5000000000000013,
+        "aspirated_ml": 0.0,
+        "failed": true
+      },
+      "trace_file": "overpush.model_trace.json.gz",
+      "trace_sha256": "8975efead61e27714a3e9d79fb3bd56480a00ab06404cdd94d0f46a782c63b26"
+    },
+    {
+      "mode": "partial",
+      "expected_score": 0.3,
+      "measured_model_score": 0.3,
+      "passed": true,
+      "evidence_level": "fluid_model_only",
+      "endpoint_gate_assumptions": {
+        "released": true,
+        "parked": true,
+        "lifted": true
+      },
+      "final": {
+        "air_ml": 0.5000000000000004,
+        "sample_loss_ml": 0.0,
+        "aspirated_ml": 0.0,
+        "failed": false
+      },
+      "trace_file": "partial.model_trace.json.gz",
+      "trace_sha256": "f5e190affb5bb36c5336f36be6f31d0475e5088164f941323f494a1543f70986"
+    },
+    {
+      "mode": "medium_partial",
+      "expected_score": 0.6,
+      "measured_model_score": 0.6,
+      "passed": true,
+      "evidence_level": "fluid_model_only",
+      "endpoint_gate_assumptions": {
+        "released": true,
+        "parked": true,
+        "lifted": true
+      },
+      "final": {
+        "air_ml": 0.25,
+        "sample_loss_ml": 0.0,
+        "aspirated_ml": 0.0,
+        "failed": false
+      },
+      "trace_file": "medium_partial.model_trace.json.gz",
+      "trace_sha256": "6b7a0374f2a16fa607261b73c910c89f504255efbae0e5c7ec1456fdc86b1647"
+    },
+    {
+      "mode": "retract_repurge",
+      "expected_score": 1.0,
+      "measured_model_score": 1.0,
+      "passed": true,
+      "evidence_level": "fluid_model_only",
+      "endpoint_gate_assumptions": {
+        "released": true,
+        "parked": true,
+        "lifted": true
+      },
+      "final": {
+        "air_ml": 2.2551405187698492e-17,
+        "sample_loss_ml": 0.050000000000000724,
+        "aspirated_ml": 0.40000000000000024,
+        "failed": false
+      },
+      "trace_file": "retract_repurge.model_trace.json.gz",
+      "trace_sha256": "695e890550233e9331af11b8a5d897e03cca047afd3fc7af344f8a5e049a19e1"
+    },
+    {
+      "mode": "no_return",
+      "expected_score": 0.0,
+      "measured_model_score": 0.0,
+      "passed": true,
+      "evidence_level": "fluid_model_only",
+      "endpoint_gate_assumptions": {
+        "released": true,
+        "parked": false,
+        "lifted": true
+      },
+      "final": {
+        "air_ml": 0.0,
+        "sample_loss_ml": 0.050000000000000724,
+        "aspirated_ml": 0.0,
+        "failed": false
+      },
+      "trace_file": "no_return.model_trace.json.gz",
+      "trace_sha256": "ad60ed15692b314f91e696d4c90881c8ca8f1c4e5092336825c3d3e0f33ed362"
+    },
+    {
+      "mode": "no_release",
+      "expected_score": 0.0,
+      "measured_model_score": 0.0,
+      "passed": true,
+      "evidence_level": "fluid_model_only",
+      "endpoint_gate_assumptions": {
+        "released": false,
+        "parked": true,
+        "lifted": true
+      },
+      "final": {
+        "air_ml": 0.0,
+        "sample_loss_ml": 0.050000000000000724,
+        "aspirated_ml": 0.0,
+        "failed": false
+      },
+      "trace_file": "no_release.model_trace.json.gz",
+      "trace_sha256": "ad60ed15692b314f91e696d4c90881c8ca8f1c4e5092336825c3d3e0f33ed362"
+    },
+    {
+      "mode": "no_lift",
+      "expected_score": 0.0,
+      "measured_model_score": 0.0,
+      "passed": true,
+      "evidence_level": "fluid_model_only",
+      "endpoint_gate_assumptions": {
+        "released": true,
+        "parked": true,
+        "lifted": false
+      },
+      "final": {
+        "air_ml": 0.0,
+        "sample_loss_ml": 0.050000000000000724,
+        "aspirated_ml": 0.0,
+        "failed": false
+      },
+      "trace_file": "no_lift.model_trace.json.gz",
+      "trace_sha256": "ad60ed15692b314f91e696d4c90881c8ca8f1c4e5092336825c3d3e0f33ed362"
+    },
+    {
+      "mode": "none",
+      "expected_score": 0.0,
+      "measured_model_score": 0.0,
+      "passed": true,
+      "evidence_level": "fluid_model_only",
+      "endpoint_gate_assumptions": {
+        "released": true,
+        "parked": true,
+        "lifted": true
+      },
+      "final": {
+        "air_ml": 1.5,
+        "sample_loss_ml": 0.0,
+        "aspirated_ml": 0.0,
+        "failed": false
+      },
+      "trace_file": "none.model_trace.json.gz",
+      "trace_sha256": "b2c6c11a66095f7ed142ac1927ce034ca10b07adc603f1a6262a04634964b8ee"
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 # PR #1151 — revision preview
 
+> **14 November scoring revision:** the current rules and offline regression evidence are in [SCORING_REVISION.md](SCORING_REVISION.md). The following is retained history from the first revision; its aspiration penalty and original-direction-only rack rule are superseded. Recorded results and hashes are unchanged.
+
 Prepared 12 November 2026. **Local draft only; no push or reviewer reply sent.**
 
 Review: [RoboCurve comment on PR #1151](https://github.com/robocurve/benchmark-tasks/pull/1151#issuecomment-6820098680). The stated unmet criterion is **clarity and reproducibility**. The reviewer asks for a real syringe/seal, real liquid, initial-fill preparation, air/loss measurements at the thresholds and remaining simulation-to-hardware differences. The comment does not ask for a different task or harder physics.
@@ -58,7 +60,7 @@ The written review requests are addressed in the draft. Real-hardware calibratio
 | `horizontal` | 0.0 | 1.5106 | 1.5764 | 0.0257 | 657 |
 | `retract_repurge` | 0.0 | 0.0106 | 0.1017 | 0.5419 | 887 |
 
-All three runs lifted, parked and released the syringe. Horizontal pushing fails through excess sample loss; retract/repurge ends within the full-score air/loss limits but remains failed because aspiration exceeded 0.20 mL. Neither negative is explained by a missed grasp or omitted return.
+These historical runs used the superseded aspiration penalty: retract/repurge was recorded as zero despite meeting the final air/loss limits. The 14 November revision removes that penalty and treats successful corrective re-purging as a valid positive control. Historical scores and source hashes below are preserved as recorded, not presented as current-scoring results. Horizontal pushing still fails through excess sample loss.
 
 Fresh processes, seed 1, zero jitter, identical scene/scoring and 20 Hz control. Each trial has a complete trace, exact source snapshot, initial image and three nonblank camera streams. Automated evidence checks and full composite-video decoding passed. These are **scripted rigid-body simulations with reduced-order fluid models**, not Dream-1 or hardware trials. [Recorded results and source/media hashes](validation/recorded_results_20261112.json). The earlier review used downsampled overhead-only copies. The current review below provides all three native-resolution views.
 
@@ -68,7 +70,7 @@ The exact physics/controller sources are frozen in each run. This documentation 
 
 The current sample is blue 0.01% w/v aqueous Brilliant Blue FCF tracer; see PHYSICAL_PROTOCOL.md for its preparation and density calibration. The barrel/collar are translucent and non-overlapping blue liquid/white air bands follow the phase volumes. This changes visual evidence, not collision geometry, fluid rules or score thresholds. Earlier recorded results retain their original source/visuals; fresh recordings of the coloured version are reported below.
 
-## Current coloured-sample recordings and three-view review
+## Historical coloured-sample recordings — 12 November 2026
 
 | Approach | Score | Air (mL) | Sample lost (mL) | Aspiration (mL) | Steps |
 |---|---:|---:|---:|---:|---:|

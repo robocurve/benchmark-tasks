@@ -1,10 +1,10 @@
 # Nursing preparation: purge air while preserving the drawn-up liquid
-Current submission media: **M-QDEBV2** — Dream-1 beta **0.0**, scripted demo **1.0**; source and video hashes accompany the current evidence. Earlier media IDs below are historical.
+Submission media **M-QDEBV2** records the 12 November scorer: Dream-1 beta **0.0**, scripted demo **1.0**. The 14 November revision changes scoring eligibility only; these videos have not been rerun under the revised scorer. Original source/video hashes remain preserved.
 
 
-> **Revision — 12 November 2026.** Physical reconstruction and measurement details are in [PHYSICAL_PROTOCOL.md](PHYSICAL_PROTOCOL.md); comment-by-comment changes and evidence status are in [REVISION_NOTES.md](REVISION_NOTES.md). Historical trials and fresh scripted controls are explicitly separated below. Dream-1 beta ran the current instruction and held-endpoint scorer on 12 November 2026 and scored0.0. No hardware validation is claimed.
+> **Scoring revision — 14 November 2026.** Corrective aspiration is recoverable, and either axial direction is accepted in the rack. See [SCORING_REVISION.md](SCORING_REVISION.md) for the second-review response and validation. The following recording history describes the 12 November implementation. Physical reconstruction and measurement details are in [PHYSICAL_PROTOCOL.md](PHYSICAL_PROTOCOL.md); comment-by-comment changes and evidence status are in [REVISION_NOTES.md](REVISION_NOTES.md). Historical trials and fresh scripted controls are explicitly separated below. Dream-1 beta ran the same instruction and the earlier held-endpoint scorer on 12 November 2026 and scored0.0. No hardware validation is claimed.
 
-**Status: the current raw-score hold correction has a verified scripted1.0 demonstration (700 steps); current Dream-1 completed with score0.0. No hardware validation is claimed.**
+**Status:** 26 offline regression tests pass for the revised scorer, including corrective aspiration above 0.20 mL, both rack directions and the unchanged one-second hold. Prior scripted/model recordings remain available; no new robot or hardware trial is claimed for this scoring revision.
 
 A YAM pair performs the **air-management motor subtask of nursing preparation of a manually drawn-up injectable medicine**: support and orient the syringe, bring trapped air to the outlet, and advance the plunger without unnecessary liquid loss. The needle-free blue-tracer rig isolates that manipulation after loading; the robot then returns the practice syringe to its rack. It does not prepare a clinically usable dose.
 
@@ -12,7 +12,7 @@ A YAM pair performs the **air-management motor subtask of nursing preparation of
 
 The relevant occupation is **registered nurses, SOC 29-1141**. [BLS](https://www.bls.gov/ooh/healthcare/registered-nurses.htm) reports **3,465,400 US jobs in 2025**; [O*NET](https://www.onetonline.org/link/summary/29-1141.00) lists medication administration among the occupation's tasks. These are occupation totals, not a measured count of nurses performing this particular substep every day. The connection is routine injectable-medication preparation: nursing guidance describes managing bubbles using syringe orientation and controlled plunger movement while retaining the liquid. [Nursing preparation reference](https://elsevier-elibrary.com/contents/fullcontent/71232/epubcontent_v2/OEBPS/B9780729541107500387B.htm), ampoule preparation; [Immunize.org](https://www.immunize.org/ask-experts/topic/admin-vaccines/general-issues/) distinguishes air removal in user-filled syringes from manufacturer-prefilled vaccine syringes. Sources checked 12 November 2026.
 
-The robotic difficulty is supporting a free barrel while manipulating its moving plunger and controlling which phase reaches the outlet. Horizontal pushing wastes liquid; excessive retraction can reintroduce air even when a later purge produces a good final image. Those are the physical abilities tested, independent of the nursing label.
+The robotic difficulty is supporting a free barrel while manipulating its moving plunger and controlling which phase reaches the outlet. Horizontal pushing wastes liquid; retraction reintroduces air that must be purged again to meet the final volume limits. Corrective withdrawal followed by a successful purge is allowed. Those are the physical abilities tested, independent of the nursing label.
 
 ### Exact scope of the nursing analogy
 
@@ -23,7 +23,7 @@ The robotic difficulty is supporting a free barrel while manipulating its moving
 | Work with a syringe and its seal | BD Plastipak 300629 with its factory stopper is the physical practice counterpart; its dimensions and forces require calibration and differ from the procedural model. |
 | Complete the isolated practice exercise | Returning the open needle-free syringe to the rack is a bench endpoint, not clinical storage or injection readiness. |
 
-No patient, medicine, needle attachment, ampoule/vial withdrawal, aseptic workflow, labelling, dose verification or injection is scored. Needle resistance/dead space and real wetting are omitted from the simulation. The residual-air, liquid-loss and cumulative-retraction limits are **benchmark parameters**, not clinical safety or dosing criteria; some real preparation procedures legitimately use corrective withdrawal. The task does not claim that all products require purging, and does not apply to manufacturer-prefilled products with product-specific air-handling instructions. A real clinical deployment would need those additional capabilities; this task evaluates the retained orientation-and-piston subskill.
+No patient, medicine, needle attachment, ampoule/vial withdrawal, aseptic workflow, labelling, dose verification or injection is scored. Needle resistance/dead space and real wetting are omitted from the simulation. The residual-air and liquid-loss limits are **benchmark parameters**, not clinical safety or dosing criteria; some real preparation procedures legitimately use corrective withdrawal. The task does not claim that all products require purging, and does not apply to manufacturer-prefilled products with product-specific air-handling instructions. A real clinical deployment would need those additional capabilities; this task evaluates the retained orientation-and-piston subskill.
 
 ## Reconstructing and measuring the practice task
 
@@ -31,7 +31,7 @@ Use a needle-free **BD Plastipak 300629, 20 mL, original factory stopper**, a PE
 
 Prepare 0.01% w/v blue tracer by dissolving 0.100 g Brilliant Blue FCF product and making up to1.000 L final volume with distilled water. With a calibrated0.001 g-readability balance and measured solution density, adjust bubble-free retained liquid to10.50 +/-0.01 mL. Open the outlet to air and retract to calibrated total cavity capacity12.00 +/-0.01 mL including nozzle dead space; verify gas1.50 +/-0.02 mL by capacity minus retained-liquid volume. Reweigh and photograph after horizontal rack placement; reject leaks or unintended piston motion.
 
-Calibrate capacity against photographed plunger position and weighed bubble-free fills; validate independent fills to an air-volume uncertainty <=0.01 mL. At the endpoint, record pose/release/one-second hold, fix the plunger against movement and weigh retained liquid. Residual air = calibrated cavity capacity minus retained-liquid mass/density; liquid loss = initial minus final retained-liquid mass/density. Synchronized >=60 fps calibrated views check lift, park, motion, fingertips and cumulative positive cavity-volume changes. Require uncertainty bounds to pass each numerical limit; unresolved boundaries are unverified. This specifies a proposed measurement procedure, not achieved hardware precision. Full component dimensions, calibration/rejection steps and transfer limits are in [PHYSICAL_PROTOCOL.md](PHYSICAL_PROTOCOL.md).
+Calibrate capacity against photographed plunger position and weighed bubble-free fills; validate independent fills to an air-volume uncertainty <=0.01 mL. At the endpoint, record pose/release/one-second hold, fix the plunger against movement and weigh retained liquid. Residual air = calibrated cavity capacity minus retained-liquid mass/density; liquid loss = initial minus final retained-liquid mass/density. Synchronized >=60 fps calibrated views check lift, park, motion, fingertips and the one-second hold. Cumulative aspiration is optional diagnostic information and has no pass/fail threshold. Require uncertainty bounds to pass each numerical limit; unresolved boundaries are unverified. This specifies a proposed measurement procedure, not achieved hardware precision. Full component dimensions, calibration/rejection steps and transfer limits are in [PHYSICAL_PROTOCOL.md](PHYSICAL_PROTOCOL.md).
 
 
 ## Instruction
@@ -64,12 +64,14 @@ This approximation omits bubble breakup, capillary pinning, fluid viscosity and 
 
 ## Scoring
 
-Score is evaluated at the end after the syringe has been lifted above its initial rack, returned with axis components |z| < 0.15 and y > 0.985 relative to the original +Y direction, within 25 mm of its start XY position and between 125 and 155 mm above the tabletop, stopped below 25 mm/s, and the fingers withdrawn at least 65 mm from the grasp and thumb-plate locations.
+Score is evaluated at the end after the syringe has been lifted above its initial rack, returned with axis components |z| < 0.15 and |y| > 0.985 (either +Y or -Y along the rack), within 25 mm of its start XY position and between 125 and 155 mm above the tabletop, stopped below 25 mm/s, and the fingers withdrawn more than 65 mm from the grasp and thumb-plate locations.
 
 - 1.0: at most 0.05 mL air remains and sample loss is at most 0.30 mL.
 - 0.6: at most 0.30 mL air remains and sample loss is at most 0.50 mL.
 - 0.3: at most 0.75 mL air remains and sample loss is at most 0.50 mL.
-- 0 otherwise. Dropping the syringe, losing over 0.50 mL sample or drawing in over 0.20 mL air permanently invalidates the episode.
+- 0 otherwise. A barrel origin below tabletop+15 mm or farther than 350 mm from initial XY, sample loss over 0.50 mL, or invalid fluid inputs permanently invalidates the episode.
+
+Corrective aspiration is permitted without a cumulative-volume cap; newly admitted air still counts toward the final residual air. Full credit requires all full-score conditions to hold continuously for one second; otherwise a full-quality endpoint receives 0.6 until the hold completes. The rack has no keyed nozzle end: reversing the syringe is accepted with the same position, horizontal alignment, speed and release requirements.
 
 The reference controller reads geometric state to grasp and advance the piston. The floating articulation uses eight velocity solver iterations to reduce numerical drift. It is a feasibility demonstration, not a vision-policy result. Dream-1 beta completed a separate 1,800-step vision-policy trial on 8 November 2026 and scored **0.0**. It did not lift the syringe or expel air; 1.5 mL air remained with 0.0 mL sample loss. See [dream_result.json](dream_result.json) for the measured result, source hashes and package versions. Validation results are recorded separately; do not treat a playable video as proof of a full score.
 
@@ -106,7 +108,7 @@ The task includes the historical full-score scripted demonstration and actual Dr
 | `horizontal` | 0.0 | 1.5106 | 1.5764 | 0.0257 | 657 |
 | `retract_repurge` | 0.0 | 0.0106 | 0.1017 | 0.5419 | 887 |
 
-All three runs lifted, parked and released the syringe. Horizontal pushing fails through excess sample loss; retract/repurge ends within the full-score air/loss limits but remains failed because aspiration exceeded 0.20 mL. Neither negative is explained by a missed grasp or omitted return.
+These historical runs used the superseded aspiration penalty: retract/repurge was recorded as zero despite meeting the final air/loss limits. The 14 November revision removes that penalty and treats successful corrective re-purging as a valid positive control. Historical scores and source hashes below are preserved as recorded, not presented as current-scoring results. Horizontal pushing still fails through excess sample loss.
 
 Fresh processes, seed 1, zero jitter, identical scene/scoring and 20 Hz control. Each trial has a complete trace, exact source snapshot, initial image and three nonblank camera streams. Automated evidence checks and full composite-video decoding passed. These are **scripted rigid-body simulations with reduced-order fluid models**, not Dream-1 or hardware trials. [Recorded results and source/media hashes](validation/recorded_results_20261112.json). The earlier review used downsampled overhead-only copies. The current review below provides all three native-resolution views.
 
@@ -116,7 +118,7 @@ The exact physics/controller sources are frozen in each run. This documentation 
 
 The current sample is blue 0.01% w/v aqueous Brilliant Blue FCF tracer; see PHYSICAL_PROTOCOL.md for its preparation and density calibration. The barrel/collar are translucent and non-overlapping blue liquid/white air bands follow the phase volumes. This changes visual evidence, not collision geometry, fluid rules or score thresholds. Earlier recorded results retain their original source/visuals; fresh recordings of the coloured version are reported below.
 
-## Current coloured-sample recordings and three-view review
+## Historical coloured-sample recordings — 12 November 2026
 
 | Approach | Score | Air (mL) | Sample lost (mL) | Aspiration (mL) | Steps |
 |---|---:|---:|---:|---:|---:|
@@ -138,14 +140,14 @@ The raw scorer now requires **one continuous second** of the complete full-score
 
 Check with `python -m unittest -v test_endpoint_hold`.
 
-## Current held-endpoint recording — 12 November 2026
+## Prior held-endpoint recording — 12 November 2026
 
-The corrected scorer completes the full scripted sequence at **700/1800 steps,35.00 s,score1.0** with air0.0106 mL and liquid loss0.2059 mL. All three640x360 camera streams have zero blank frames. The raw score is0.6 at step699 with0.95 s endpoint hold and becomes1.0 at step700 with1.00 s hold. Nineteen offline tests pass. Current task.py hash: `3d3e690bb47d58b83dd262c57ff6fbbc99b0aa555fe3b2777909482a916c05aa`.
+The corrected scorer completes the full scripted sequence at **700/1800 steps,35.00 s,score1.0** with air0.0106 mL and liquid loss0.2059 mL. All three640x360 camera streams have zero blank frames. The raw score is0.6 at step699 with0.95 s endpoint hold and becomes1.0 at step700 with1.00 s hold. Nineteen offline tests pass. 12 November task.py hash: `3d3e690bb47d58b83dd262c57ff6fbbc99b0aa555fe3b2777909482a916c05aa`.
 
 Both recordings use CPU PhysX and RTX rendering, seed1, zero jitter and20 Hz; these are scripted runs, not Dream-1 or physical experiments. Complete traces, source snapshots and three-camera footage are retained. Source bytes were independently checked against the separate pre-run run_config hashes. The automatically generated manifest mistakenly hashed its own preceding version; its original and original failed verification were preserved, that self-entry was removed with a correction note, and all remaining source hashes and evidence checks pass. No source/score was changed to repair packaging. The current Dream-1 result is recorded below; current official media are identified in task.json.
 
 
-## Current Dream-1 evidence — 12 November 2026
+## Prior Dream-1 evidence — 12 November 2026
 
 Dream-1 beta (`dreamlabs/dream-1-beta`) completed the current instruction, scene and continuous-hold scorer with **score0.0** after **1800 control steps**, with no evaluation error. This is an actual model-policy run, not a refusal or an access failure. Seed1, zero jitter,20 Hz, CPU PhysX and RTX rendering; three640x360 camera recordings are retained. Model failure does not alter the independently recorded full-score scripted demonstration. The run configuration, results, source hashes and recording validation are in `validation/current_dream_20261112.json`. Current demo, model and setup media are prepared separately from the historical media ID; current media are identified in task.json.
 

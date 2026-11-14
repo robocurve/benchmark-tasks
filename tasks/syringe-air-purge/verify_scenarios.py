@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 import sys
 
-SYRINGE={'full':1.,'horizontal':0.,'overpush':0.,'partial':.3,'retract_repurge':0.,'no_return':0.,'no_release':0.,'unsupported':0.,'none':0.}
+SYRINGE={'full':1.,'horizontal':0.,'overpush':0.,'partial':.3,'retract_repurge':1.,'no_return':0.,'no_release':0.,'unsupported':0.,'none':0.}
 DENTAL={'full':1.,'fixed_site':1.,'point':0.,'static':.25,'off':0.,'late_suction':0.,'no_withdraw':.75,'obstruct':0.,'none':0.}
 
 def verify(case,kind):
@@ -32,11 +32,13 @@ def verify(case,kind):
     if kind=='syringe':
         quality=m['air_ml']<=.05 and m['sample_loss_ml']<=.30
         if mode in {'full','retract_repurge','no_return','no_release'}: assert quality,'purge itself did not succeed; endpoint/control cause not isolated'
-        if mode=='full':assert all(m[x] for x in ['lifted','parked','released']) and not m['failed']
+        if mode in {'full','retract_repurge'}:
+            assert all(m[x] for x in ['lifted','parked','released']) and not m['failed']
+            assert m['endpoint_hold_s']>=1., 'full endpoint not held for one second'
         if mode in {'horizontal','overpush'}:
             assert m['sample_loss_ml']>.50 and m['failed'],'expected sample-loss failure absent'
             assert all(m[x] for x in ['lifted','parked','released']),'endpoint failure confounds sample-loss comparison'
-        if mode=='retract_repurge':assert m['aspirated_ml']>.20 and m['failed'],'aspiration not latched'
+        if mode=='retract_repurge':assert m['aspirated_ml']>.20 and not m['failed'],'corrective aspiration did not recover'
         if mode=='no_return':assert not m['parked'],'return omission not demonstrated'
         if mode=='no_release':assert m['parked'] and not m['released'],'release omission not isolated'
         if mode=='unsupported':assert m['failed'],'removing support did not produce the expected physical failure'
