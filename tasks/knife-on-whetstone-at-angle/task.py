@@ -55,7 +55,8 @@ def spine_x(y):
 
 
 GRIP_Y = -0.060  # where the demo holds the handle (6 cm behind the bolster)
-KNIFE_MASS = 0.10  # kg (a real 165 mm santoku with a wa handle is about 140 g; see fidelity)
+KNIFE_MASS = 0.14  # kg: a 165 mm santoku with a magnolia wa handle, 46 mm tall at the heel, is listed at 140 g
+#                   (Sakai Takayuki VG5 hammered santoku 165 mm, Seisuke Knife product page)
 EDGE_SAMPLES = np.linspace(0.005, 0.162, 16)  # points along the edge the scorer checks: about 1 cm apart, from 0.5 cm
 #                                                past the heel to 16.2 cm, 3 mm short of the point, where the edge
 #                                                curves up to meet the spine (the last one 4.9 mm up the tip's rise)
@@ -529,9 +530,15 @@ def _hand(heading, spin):
 
 
 DEMO_ANGLE = 17.0  # deg: the angle the demo aims for on the stone
-DEMO_TRIM = {"A": 2.5, "B": -2.5}  # deg: the knife sits about 2.5 deg low in the grip on face A and high on B (sim)
+DEMO_TRIM = {"A": 4.0, "B": -3.5}  # deg: under the press the knife sits low on face A and high on B: the arm's
+#                                     joints give about 1.5 deg per N on A and 0.6 on B (J K^-1 J^T), plus the grip
 GRIP_OPEN = 0.45 * FINGER_OPEN  # part open: room round the 18 mm handle without the lower finger hitting the bench
-DEMO_PRESS = 0.001  # m: the edge aimed this far into the stone
+DEMO_FORCE = 3.5  # N: the press the aim is planned for. The knife's weight rests on the stone; each newton more needs
+#                  the edge aimed deeper by the arm's vertical give at the edge (_give, scaled by GIVE_SIM). Measured
+#                  in the sim, the stone took a median 2.4 N on face A (pushed) and 3.3 N on face B (pulled): the
+#                  stone's drag holds the hand back. Planned for 4.5 N, the edge pressed 6 to 7 N, the drag turned
+#                  the knife 4 to 8 deg further in the grip, and the edge came off the stone
+GIVE_SIM = 0.6  # the arm's give at the edge in the sim against _give's model (that 4.5 N plan pressed 6 to 7 N)
 DEMO_HEEL, DEMO_TIP = 0.025, 0.145  # m past the bolster: the part of the blade over the stone's middle line as each
 #                                     stroke starts (the heel: the 0.5 cm scorer point 1.5 cm onto the 6 cm stone)
 #                                     and as it ends (the tip: the last scorer point, 16.2 cm, 1.7 cm onto it)
@@ -553,10 +560,39 @@ DEMO_TIP_YAW = -10.0  # deg: during the sweep the knife turns 10 deg on the ston
 #                       the tip's 6 mm rise, sit 1 to 2 mm above the stone and may not count (12 of 16 are needed)
 
 
-def _stroke_pose(face, v, u, turn=0.0):
+def _give(pos, rot, point):
+    """The arm's vertical give (m per N) at `point` (world) for a pushed-up held tool, the hand at (`pos`, `rot`):
+    J K^-1 J^T from the joint servos' stiffness (constants.py), the joints from the arm's own IK."""
+    from yam_arena import demo
+    from yam_arena.constants import SHOULDER, WRIST
+    from yam_arena.station import BASES
+
+    base = np.asarray(BASES["right"], float)
+    q, _, _ = demo.ik.solve(np.asarray(pos), demo.ik.matrix_to_quat_xyzw(np.asarray(rot).reshape(3, 3)),
+                            q_init=None, base_pos=base)
+
+    def fk(qq):
+        p, r = demo.ik.tcp_pose(qq, base)
+        r = np.asarray(r)
+        return np.asarray(p), r.reshape(3, 3) if r.size == 9 else demo.ik.quat_xyzw_to_matrix(r)
+
+    p0, r0 = fk(q)
+    off = r0.T @ (np.asarray(point) - p0)
+    jz = np.zeros(6)
+    for i in range(6):
+        dq = np.zeros(6)
+        dq[i] = 1e-6
+        (pp, rp), (pm, rm) = fk(q + dq), fk(q - dq)
+        jz[i] = ((pp + rp @ off) - (pm + rm @ off))[2] / 2e-6
+    k = np.array([SHOULDER["stiffness"]] * 3 + [WRIST["stiffness"]] * 3)
+    return float(np.sum(jz * jz / k))
+
+
+def _stroke_pose(face, v, u, turn=0.0, press=True):
     """The hand's (position, rotation) with blade point `v` (m past the bolster) over the stone's middle line and the
     edge `u` m along the stone from its middle, at the demo's angle for `face`; `turn`: the share of DEMO_TIP_YAW the
-    knife is turned on the stone (0 to 1, as the stroke nears the tip)."""
+    knife is turned on the stone (0 to 1, as the stroke nears the tip). `press`: the edge aimed into the stone for
+    DEMO_FORCE (else just on it)."""
     ang = DEMO_ANGLE + DEMO_TRIM[face]
     heading = STONE_HEADING + turn * DEMO_TIP_YAW
     su, sv = _dirs(heading)
@@ -564,7 +600,11 @@ def _stroke_pose(face, v, u, turn=0.0):
     reach = math.cos(math.radians(ang)) * EDGE_X  # the edge's distance across from the handle axis, seen from above
     c = np.r_[STONE_POS, 0.0] - (v - GRIP_Y) * np.r_[sv[:2], 0.0]  # the grip point with point v on the middle line
     a = c + su * (u - (reach if face == "A" else -reach))  # face A's edge faces +u (away), face B's -u
-    a[2] = TOP + STONE_TOP + math.sin(math.radians(ang)) * EDGE_X - DEMO_PRESS
+    a[2] = TOP + STONE_TOP + math.sin(math.radians(ang)) * EDGE_X
+    if press:
+        edge = a + (v - GRIP_Y) * sv + su * (reach if face == "A" else -reach)
+        edge[2] = TOP + STONE_TOP
+        a[2] -= (DEMO_FORCE - KNIFE_MASS * 9.81) * GIVE_SIM * _give(a, rot0, edge)
     return a, tuple(rot0.ravel())
 
 
@@ -599,14 +639,16 @@ def demo():
         heel2, _ = _stroke_pose(face, DEMO_HEEL, u0 + d)
         swept, rot_swept = _stroke_pose(face, DEMO_SWEEP_V, u1 - d, turn=1.0)
         end, _ = _stroke_pose(face, DEMO_TIP, u1, turn=1.0)
-        out = [T(1.2, tuple(start + [0, 0, 0.03]), C, "over the stone, heel on it", rot=rot)]
+        start_on, _ = _stroke_pose(face, DEMO_HEEL, u0, press=False)  # the edge just on the stone, for lifts
+        end_on, _ = _stroke_pose(face, DEMO_TIP, u1, turn=1.0, press=False)
+        out = [T(1.2, tuple(start_on + [0, 0, 0.03]), C, "over the stone, heel on it", rot=rot)]
         for _ in range(n):
             out += [T(0.4, tuple(start), C, "heel on the stone", rot=rot),
                     T(0.3, tuple(heel2), C, "stroke: heel", rot=rot),
                     T(1.2, tuple(swept), C, "stroke: sweep heel to tip", rot=rot_swept),
                     T(0.4, tuple(end), C, "stroke: tip", rot=rot_swept),
-                    T(0.3, tuple(end + [0, 0, up]), C, "lift", rot=rot_swept),
-                    T(0.8, tuple(start + [0, 0, up]), C, "back", rot=rot)]
+                    T(0.3, tuple(end_on + [0, 0, up]), C, "lift", rot=rot_swept),
+                    T(0.8, tuple(start_on + [0, 0, up]), C, "back", rot=rot)]
         return out
 
     def turn():

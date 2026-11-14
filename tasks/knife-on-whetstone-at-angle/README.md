@@ -30,7 +30,7 @@ Offline checks (no simulator): `python3 test_task.py` (51 checks, prints "all pa
 | Part | What it is | Where |
 |---|---|---|
 | Chopping block | End-grain maple butcher block, 12 x 22 x 8 cm, fixed | center (16.4, 8.5), long side at heading 105 deg, top z 8 |
-| Knife | 165 mm santoku, 100 g: steel blade 16.5 cm long and 4.5 cm tall at the heel, its spine curving down to the tip, its edge straight with a 6 mm rise over the last 3 cm to the tip and a bright 6 mm ground bevel along it, octagonal magnolia wa handle 9.5 cm with a horn ferrule; balance point 2 cm in front of the bolster | flat on the block, face A down, edge away (heading 15 deg), bolster at (18.4, 0.8), handle reaching past the block's edge to (20.9, -8.4) |
+| Knife | 165 mm santoku, 140 g: steel blade 16.5 cm long and 4.5 cm tall at the heel, its spine curving down to the tip, its edge straight with a 6 mm rise over the last 3 cm to the tip and a bright 6 mm ground bevel along it, octagonal magnolia wa handle 9.5 cm with a horn ferrule; balance point 2 cm in front of the bolster | flat on the block, face A down, edge away (heading 15 deg), bolster at (18.4, 0.8), handle reaching past the block's edge to (20.9, -8.4) |
 | Whetstone | Orange 1000-grit stone 18 x 6 x 2.5 cm in a black rubber holder (21 x 8 x 1.5 cm, 3 cm end clamps) on a 6 cm wooden stand, all fixed | center (39.4, -5.5), long side at heading -15 deg, stone top z 10 |
 
 ### Rule and scoring
@@ -117,27 +117,35 @@ What the YAM's reach decided (real IK, offline, every control step):
   ends are both in reach. The knife crosses the stone nearly square to its length, where some guides hold it at
   about 45 degrees ([Ichimonji](https://global.ichimonji.co.jp/blogs/maintenance/santoku-household-sharpening)).
 
-The demo trims its aim by 2.5 degrees per face for the knife's sag in the grip. It aims the edge 1 mm into the stone.
-Through the YAM's joint stiffness (constants.py) that adds an estimated 0.2 to 0.7 N to the knife's 1 N weight, so it
-presses about 1.2 to 1.7 N. That is lighter than the guides (Fidelity).
+The demo aims the edge into the stone by the arm's vertical give at the edge, worked out per waypoint from the joint
+stiffness in constants.py (J K^-1 J^T, 1.5 to 6.4 mm per N, scaled to the give the sim showed), planned for 3.5 N.
+Measured in a telemetry run of the same demo (the hand's contact forces on the knife plus its weight; held in the air
+it reads 1.35 N against its 1.37 N weight), the stone took a median 2.4 N on face A (1.7 to 3.1 N, 10th to 90th
+percentile; 2.7, 2.5 and 2.0 N over the heel, middle and tip thirds of the sweep) and 3.3 N on face B (2.4 to 3.8 N;
+3.6, 3.5 and 2.8 N). Face A presses less because the push lags its plan against the stone's drag. A firmer aim,
+planned for 4.5 N, pressed 6 to 7 N: the drag turned the knife 4 to 8 degrees further in the grip, the edge stood off
+the stone and no stroke counted. So about 3 N is the most this demo presses, against 9 to 27 N by hand (Fidelity).
+The aim is trimmed by 4 degrees on face A and 3.5 on face B for the knife's turn in the grip under that press.
 
 ## Runtime and seeds
 
 Sim result: 1.0 in 1,992 steps (99.6 seconds at 20 Hz), of the 2,400 allowed. 11 strokes counted on each face, against
-10 needed. 15 of the 16 edge points were worked on face A (15 to 34 cm of counted travel each) and 14 on face B (11 to
-31 cm), against 12 needed. The points not worked are up the tip's rise, which the demo does not lift the handle for:
-the last on face A, and the last two on face B. On the stone the sharpening angle read 14.9 to 19.0 degrees, and the
-blade's length stayed within 1.3 degrees of level. One fixed layout, `object_jitter=0`.
+10 needed. In the telemetry run (also 1.0 in 1,992 steps) 15 of the 16 edge points were worked on face A and 13 on
+face B, against 12 needed. The points not worked are up the tip's rise, which the demo does not lift the handle for.
+On the stone the sharpening angle read 14.4 to 19.5 degrees, and the edge had 3 or more points on the stone through
+nearly every step of every stroke. One fixed layout, `object_jitter=0`.
 
 ## Fidelity
 
 Nothing is ground: the sim scores strokes from the knife's pose while it is on the stone (angle, contact, travel per
 edge point) as a stand-in for steel removed; a real trial measures the edge with the edge tester instead. The stone is
-rigid and dry. The press is light: about 1.2 to 1.7 N on the stone (the knife's 1 N weight plus the edge aimed 1 mm
-into the stone against the arm's joint stiffness, estimated from the stiffness in constants.py, not measured), where
-Kramer asks for 4 to 6 lb, then 2 to 3 lb (about 9 to 27 N), and the YAM gives at most about 5 N. No burr is felt: the
+rigid and dry, and its contact with the knife has the sim's default grip (friction 1.2), more drag than a wet stone.
+The press is light: measured at a median 2.4 N on face A and 3.3 N on face B (The demo), where Kramer asks for 4 to
+6 lb, then 2 to 3 lb (about 9 to 27 N). An aim for more drags the knife round in the grip. No burr is felt: the
 demo makes a fixed count (11 per face). The handle is not lifted for the tip and the knife crosses the stone nearly
-square (The demo). The knife is 100 g (real about 140 g); its blade colliders are boxes following the outline, turned along
+square (The demo). The knife is 140 g, as listed for a 165 mm magnolia-handled santoku
+([Sakai Takayuki VG5](https://us.seisukeknife.com/products/sakai-takayuki-vg5-hammered-santoku-165mm-magnolia-ferrule-black-plastic-handle-kataoka));
+its blade colliders are boxes following the outline, turned along
 the tip's rise so the edge the scorer reads is the one that touches. The sharpening stand is 6 cm tall so the wrist
 housing clears the bench during strokes.
 
@@ -192,9 +200,9 @@ forth. No guide gives a fixed count; they work a face until a burr runs from hee
 every 10 passes", and CKTG then alternates faces in 10, 8, 6, 4, 2 and 1 strokes to remove the burr. So 10 per face is
 about one burr check's worth on each face, still a floor; it is not a calibration.
 
-The real count has not yet been measured on this knife and stone, and the YAM presses at most about 5 N where Kramer
+The real count has not yet been measured on this knife and stone, and the demo presses about 2.4 to 3.3 N where Kramer
 asks for 9 to 27 N, so a real trial at the YAM's pressure may need more strokes than a person would. Before real trials
-the builder sharpens the jointed knife by hand at 17 degrees, pressing about 5 N (500 g on the kitchen scale), counting
+the builder sharpens the jointed knife by hand at 17 degrees, pressing about 3 N (300 g on the kitchen scale), counting
 strokes per face and reading the tester after every 2 strokes. If more is needed than the sim requires, the sim's
 thresholds are raised again and the demo is re-run.
 
