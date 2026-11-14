@@ -1,0 +1,541 @@
+#usda 1.0
+(
+    defaultPrim = "tourniquet"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "tourniquet" (
+    prepend apiSchemas = ["PhysicsArticulationRootAPI", "PhysxArticulationAPI"]
+)
+{
+    custom bool physxArticulation:enabledSelfCollisions = 0
+
+    def "Looks"
+    {
+        def Material "foam"
+        {
+            token outputs:surface.connect = </tourniquet/Looks/foam/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.78, 0.62, 0.5)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.9
+                token outputs:surface
+            }
+        }
+
+        def Material "wood"
+        {
+            token outputs:surface.connect = </tourniquet/Looks/wood/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.55, 0.4, 0.24)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.8
+                token outputs:surface
+            }
+        }
+
+        def Material "band"
+        {
+            token outputs:surface.connect = </tourniquet/Looks/band/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.1, 0.3, 0.62)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.85
+                token outputs:surface
+            }
+        }
+
+        def Material "rod"
+        {
+            token outputs:surface.connect = </tourniquet/Looks/rod/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.05, 0.05, 0.06)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.5
+                token outputs:surface
+            }
+        }
+
+        def Material "case"
+        {
+            token outputs:surface.connect = </tourniquet/Looks/case/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.16, 0.17, 0.19)
+                float inputs:metallic = 0.3
+                float inputs:roughness = 0.4
+                token outputs:surface
+            }
+        }
+
+        def Material "chrome"
+        {
+            token outputs:surface.connect = </tourniquet/Looks/chrome/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.8, 0.82, 0.85)
+                float inputs:metallic = 0.8
+                float inputs:roughness = 0.25
+                token outputs:surface
+            }
+        }
+
+        def Material "tube"
+        {
+            token outputs:surface.connect = </tourniquet/Looks/tube/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.12, 0.13)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.7
+                token outputs:surface
+            }
+        }
+
+        def Material "bladder"
+        {
+            token outputs:surface.connect = </tourniquet/Looks/bladder/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.14, 0.14, 0.16)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.8
+                token outputs:surface
+            }
+        }
+
+        def Material "needle"
+        {
+            token outputs:surface.connect = </tourniquet/Looks/needle/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.8, 0.08, 0.06)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.5
+                token outputs:surface
+            }
+        }
+
+        def Material "dial"
+        {
+            token outputs:surface.connect = </tourniquet/Looks/dial/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor.connect = </tourniquet/Looks/dial/texture.outputs:rgb>
+                float inputs:metallic = 0
+                float inputs:roughness = 0.6
+                token outputs:surface
+            }
+
+            def Shader "st"
+            {
+                uniform token info:id = "UsdPrimvarReader_float2"
+                token inputs:varname = "st"
+                float2 outputs:result
+            }
+
+            def Shader "texture"
+            {
+                uniform token info:id = "UsdUVTexture"
+                asset inputs:file = @./textures/dial.png@
+                float2 inputs:st.connect = </tourniquet/Looks/dial/st.outputs:result>
+                float3 outputs:rgb
+            }
+        }
+    }
+
+    def Xform "base" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 2
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cylinder "thigh" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "Y"
+            double height = 0.4
+            rel material:binding = </tourniquet/Looks/foam>
+            double radius = 0.0635
+            double3 xformOp:translate = (0, -0, 0.0655)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cube "chock_ra" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+        )
+        {
+            rel material:binding = </tourniquet/Looks/wood>
+            double size = 1
+            float3 xformOp:scale = (0.03, 0.04, 0.035)
+            double3 xformOp:translate = (-0.07069560126257729, 0.15, 0.0175)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "chock_rb" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+        )
+        {
+            rel material:binding = </tourniquet/Looks/wood>
+            double size = 1
+            float3 xformOp:scale = (0.03, 0.04, 0.035)
+            double3 xformOp:translate = (0.07069560126257729, 0.15, 0.0175)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "chock_la" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+        )
+        {
+            rel material:binding = </tourniquet/Looks/wood>
+            double size = 1
+            float3 xformOp:scale = (0.03, 0.04, 0.035)
+            double3 xformOp:translate = (-0.07069560126257729, -0.15, 0.0175)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "chock_lb" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+        )
+        {
+            rel material:binding = </tourniquet/Looks/wood>
+            double size = 1
+            float3 xformOp:scale = (0.03, 0.04, 0.035)
+            double3 xformOp:translate = (0.07069560126257729, -0.15, 0.0175)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cylinder "band" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "Y"
+            double height = 0.038
+            rel material:binding = </tourniquet/Looks/band>
+            double radius = 0.0695
+            double3 xformOp:translate = (0, 0, 0.0655)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cylinder "bladder" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "Y"
+            double height = 0.05
+            rel material:binding = </tourniquet/Looks/bladder>
+            double radius = 0.066
+            double3 xformOp:translate = (0, 0, 0.0655)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cube "band_tail" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </tourniquet/Looks/band>
+            double size = 1
+            float3 xformOp:scale = (0.004, 0.0342, 0.07)
+            double3 xformOp:translate = (-0.07150000000000001, 0, 0.0755)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cylinder "gauge_case" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.03
+            rel material:binding = </tourniquet/Looks/case>
+            double radius = 0.066
+            quatf xformOp:orient = (-0.66446304, -0.24184476, 0.24184476, 0.66446304)
+            double3 xformOp:translate = (0.1602846017549846, -0.15, 0.10774328891009635)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Cylinder "gauge_bezel" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.004
+            rel material:binding = </tourniquet/Looks/chrome>
+            double radius = 0.067
+            quatf xformOp:orient = (-0.66446304, -0.24184476, 0.24184476, 0.66446304)
+            double3 xformOp:translate = (0.1496786061951567, -0.15, 0.12038302222155949)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Mesh "gauge_face" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform bool doubleSided = 1
+            int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+            int[] faceVertexIndices = [0, 1, 2, 0, 2, 3, 0, 3, 4, 0, 4, 5, 0, 5, 6, 0, 6, 7, 0, 7, 8, 0, 8, 9, 0, 9, 10, 0, 10, 11, 0, 11, 12, 0, 12, 13, 0, 13, 14, 0, 14, 15, 0, 15, 16, 0, 16, 17, 0, 17, 18, 0, 18, 19, 0, 19, 20, 0, 20, 21, 0, 21, 22, 0, 22, 23, 0, 23, 24, 0, 24, 25, 0, 25, 26, 0, 26, 27, 0, 27, 28, 0, 28, 29, 0, 29, 30, 0, 30, 31, 0, 31, 32, 0, 32, 33, 0, 33, 34, 0, 34, 35, 0, 35, 36, 0, 36, 37, 0, 37, 38, 0, 38, 39, 0, 39, 40, 0, 40, 41, 0, 41, 42, 0, 42, 43, 0, 43, 44, 0, 44, 45, 0, 45, 46, 0, 46, 47, 0, 47, 48, 0, 48, 49, 0, 49, 50, 0, 50, 51, 0, 51, 52, 0, 52, 53, 0, 53, 54, 0, 54, 55, 0, 55, 56, 0, 56, 57, 0, 57, 58, 0, 58, 59, 0, 59, 60, 0, 60, 61, 0, 61, 62, 0, 62, 63, 0, 63, 64, 0, 64, 1]
+            rel material:binding = </tourniquet/Looks/dial>
+            point3f[] points = [(0.14807163, -0.15, 0.12229814), (0.14807163, -0.21, 0.12229814), (0.15257676, -0.20971109, 0.12607838), (0.15703851, -0.20884712, 0.12982224), (0.1614139, -0.20741642, 0.13349362), (0.16566078, -0.20543277, 0.13705719), (0.1697383, -0.20291528, 0.14047861), (0.17360713, -0.19988817, 0.14372495), (0.17723005, -0.19638063, 0.14676495), (0.18057215, -0.19242641, 0.1495693), (0.18360126, -0.18806359, 0.15211102), (0.1862882, -0.18333422, 0.15436563), (0.1886071, -0.17828381, 0.15631142), (0.1905356, -0.17296101, 0.15792963), (0.19205517, -0.16741708, 0.15920469), (0.19315115, -0.16170542, 0.16012433), (0.19381298, -0.15588103, 0.16067968), (0.19403431, -0.15, 0.1608654), (0.19381298, -0.14411896, 0.16067968), (0.19315115, -0.13829458, 0.16012433), (0.19205517, -0.13258292, 0.15920469), (0.1905356, -0.127039, 0.15792963), (0.1886071, -0.121716194, 0.15631142), (0.1862882, -0.11666579, 0.15436563), (0.18360126, -0.111936405, 0.15211102), (0.18057215, -0.10757359, 0.1495693), (0.17723005, -0.103619374, 0.14676495), (0.17360713, -0.10011182, 0.14372495), (0.1697383, -0.09708472, 0.14047861), (0.16566078, -0.094567224, 0.13705719), (0.1614139, -0.09258358, 0.13349362), (0.15703851, -0.091152884, 0.12982224), (0.15257676, -0.090288915, 0.12607838), (0.14807163, -0.09, 0.12229814), (0.1435665, -0.090288915, 0.11851788), (0.13910477, -0.091152884, 0.11477403), (0.13472939, -0.09258358, 0.11110265), (0.13048248, -0.094567224, 0.10753908), (0.12640499, -0.09708472, 0.104117654), (0.122536145, -0.10011182, 0.10087132), (0.11891323, -0.103619374, 0.097831324), (0.11557113, -0.10757359, 0.09502696), (0.11254202, -0.111936405, 0.09248524), (0.10985508, -0.11666579, 0.09023063), (0.10753618, -0.121716194, 0.08828485), (0.10560767, -0.127039, 0.086666636), (0.104088105, -0.13258292, 0.085391566), (0.10299213, -0.13829458, 0.08447193), (0.10233029, -0.14411896, 0.08391659), (0.10210897, -0.15, 0.08373088), (0.10233029, -0.15588103, 0.08391659), (0.10299213, -0.16170542, 0.08447193), (0.104088105, -0.16741708, 0.085391566), (0.10560767, -0.17296101, 0.086666636), (0.10753618, -0.17828381, 0.08828485), (0.10985508, -0.18333422, 0.09023063), (0.11254202, -0.18806359, 0.09248524), (0.11557113, -0.19242641, 0.09502696), (0.11891323, -0.19638063, 0.097831324), (0.122536145, -0.19988817, 0.10087132), (0.12640499, -0.20291528, 0.104117654), (0.13048248, -0.20543277, 0.10753908), (0.13472939, -0.20741642, 0.11110265), (0.13910477, -0.20884712, 0.11477403), (0.1435665, -0.20971109, 0.11851788)]
+            texCoord2f[] primvars:st = [(0.5, 0.5), (0.9916667, 0.5), (0.9892992, 0.5481918), (0.5, 0.5), (0.9892992, 0.5481918), (0.98221946, 0.59591943), (0.5, 0.5), (0.98221946, 0.59591943), (0.97049564, 0.6427233), (0.5, 0.5), (0.97049564, 0.6427233), (0.9542408, 0.6881527), (0.5, 0.5), (0.9542408, 0.6881527), (0.9336113, 0.73177004), (0.5, 0.5), (0.9336113, 0.73177004), (0.9088059, 0.7731554), (0.5, 0.5), (0.9088059, 0.7731554), (0.8800635, 0.81191003), (0.5, 0.5), (0.8800635, 0.81191003), (0.84766084, 0.84766084), (0.5, 0.5), (0.84766084, 0.84766084), (0.81191003, 0.8800635), (0.5, 0.5), (0.81191003, 0.8800635), (0.7731554, 0.9088059), (0.5, 0.5), (0.7731554, 0.9088059), (0.73177004, 0.9336113), (0.5, 0.5), (0.73177004, 0.9336113), (0.6881527, 0.9542408), (0.5, 0.5), (0.6881527, 0.9542408), (0.6427233, 0.97049564), (0.5, 0.5), (0.6427233, 0.97049564), (0.59591943, 0.98221946), (0.5, 0.5), (0.59591943, 0.98221946), (0.5481918, 0.9892992), (0.5, 0.5), (0.5481918, 0.9892992), (0.5, 0.9916667), (0.5, 0.5), (0.5, 0.9916667), (0.45180824, 0.9892992), (0.5, 0.5), (0.45180824, 0.9892992), (0.4040806, 0.98221946), (0.5, 0.5), (0.4040806, 0.98221946), (0.3572767, 0.97049564), (0.5, 0.5), (0.3572767, 0.97049564), (0.3118473, 0.9542408), (0.5, 0.5), (0.3118473, 0.9542408), (0.26822993, 0.9336113), (0.5, 0.5), (0.26822993, 0.9336113), (0.22684464, 0.9088059), (0.5, 0.5), (0.22684464, 0.9088059), (0.18808997, 0.8800635), (0.5, 0.5), (0.18808997, 0.8800635), (0.15233916, 0.84766084), (0.5, 0.5), (0.15233916, 0.84766084), (0.119936526, 0.81191003), (0.5, 0.5), (0.119936526, 0.81191003), (0.09119411, 0.7731554), (0.5, 0.5), (0.09119411, 0.7731554), (0.06638871, 0.73177004), (0.5, 0.5), (0.06638871, 0.73177004), (0.04575923, 0.6881527), (0.5, 0.5), (0.04575923, 0.6881527), (0.029504335, 0.6427233), (0.5, 0.5), (0.029504335, 0.6427233), (0.01778057, 0.59591943), (0.5, 0.5), (0.01778057, 0.59591943), (0.010700842, 0.5481918), (0.5, 0.5), (0.010700842, 0.5481918), (0.008333334, 0.5), (0.5, 0.5), (0.008333334, 0.5), (0.010700842, 0.45180824), (0.5, 0.5), (0.010700842, 0.45180824), (0.01778057, 0.4040806), (0.5, 0.5), (0.01778057, 0.4040806), (0.029504335, 0.3572767), (0.5, 0.5), (0.029504335, 0.3572767), (0.04575923, 0.3118473), (0.5, 0.5), (0.04575923, 0.3118473), (0.06638871, 0.26822993), (0.5, 0.5), (0.06638871, 0.26822993), (0.09119411, 0.22684464), (0.5, 0.5), (0.09119411, 0.22684464), (0.119936526, 0.18808997), (0.5, 0.5), (0.119936526, 0.18808997), (0.15233916, 0.15233916), (0.5, 0.5), (0.15233916, 0.15233916), (0.18808997, 0.119936526), (0.5, 0.5), (0.18808997, 0.119936526), (0.22684464, 0.09119411), (0.5, 0.5), (0.22684464, 0.09119411), (0.26822993, 0.06638871), (0.5, 0.5), (0.26822993, 0.06638871), (0.3118473, 0.04575923), (0.5, 0.5), (0.3118473, 0.04575923), (0.3572767, 0.029504335), (0.5, 0.5), (0.3572767, 0.029504335), (0.4040806, 0.01778057), (0.5, 0.5), (0.4040806, 0.01778057), (0.45180824, 0.010700842), (0.5, 0.5), (0.45180824, 0.010700842), (0.5, 0.008333334), (0.5, 0.5), (0.5, 0.008333334), (0.5481918, 0.010700842), (0.5, 0.5), (0.5481918, 0.010700842), (0.59591943, 0.01778057), (0.5, 0.5), (0.59591943, 0.01778057), (0.6427233, 0.029504335), (0.5, 0.5), (0.6427233, 0.029504335), (0.6881527, 0.04575923), (0.5, 0.5), (0.6881527, 0.04575923), (0.73177004, 0.06638871), (0.5, 0.5), (0.73177004, 0.06638871), (0.7731554, 0.09119411), (0.5, 0.5), (0.7731554, 0.09119411), (0.81191003, 0.119936526), (0.5, 0.5), (0.81191003, 0.119936526), (0.84766084, 0.15233916), (0.5, 0.5), (0.84766084, 0.15233916), (0.8800635, 0.18808997), (0.5, 0.5), (0.8800635, 0.18808997), (0.9088059, 0.22684464), (0.5, 0.5), (0.9088059, 0.22684464), (0.9336113, 0.26822993), (0.5, 0.5), (0.9336113, 0.26822993), (0.9542408, 0.3118473), (0.5, 0.5), (0.9542408, 0.3118473), (0.97049564, 0.3572767), (0.5, 0.5), (0.97049564, 0.3572767), (0.98221946, 0.4040806), (0.5, 0.5), (0.98221946, 0.4040806), (0.9892992, 0.45180824), (0.5, 0.5), (0.9892992, 0.45180824), (0.9916667, 0.5)] (
+                interpolation = "faceVarying"
+            )
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Cube "gauge_post" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+        )
+        {
+            rel material:binding = </tourniquet/Looks/case>
+            double size = 1
+            float3 xformOp:scale = (0.014, 0.014, 0.08416291)
+            double3 xformOp:translate = (0.1539627394282166, -0.15, 0.04208145725634993)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "gauge_foot" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+        )
+        {
+            rel material:binding = </tourniquet/Looks/case>
+            double size = 1
+            float3 xformOp:scale = (0.07, 0.07, 0.008)
+            double3 xformOp:translate = (0.1539627394282166, -0.15, 0.004)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cylinder "tube_0" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.047350422384599695
+            rel material:binding = </tourniquet/Looks/tube>
+            double radius = 0.0025
+            quatf xformOp:orient = (0.5199321, 0.75145197, 0.40619025, -0)
+            double3 xformOp:translate = (0.01, -0.041499999999999995, 0.022875)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Cylinder "tube_1" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.1114854089145971
+            rel material:binding = </tourniquet/Looks/tube>
+            double radius = 0.0025
+            quatf xformOp:orient = (0.70710677, 0.3805557, 0.5959676, -0)
+            double3 xformOp:translate = (0.06698136971410829, -0.09, 0.012)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Cylinder "tube_2" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.05314132102234569
+            rel material:binding = </tourniquet/Looks/tube>
+            double radius = 0.0025
+            quatf xformOp:orient = (0.8181441, 0.34500796, 0.46001062, -0)
+            double3 xformOp:translate = (0.13396273942821657, -0.135, 0.020999999999999998)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def "joints"
+    {
+        def PhysicsFixedJoint "root_joint"
+        {
+            rel physics:body1 = </tourniquet/base>
+        }
+
+        def PhysicsRevoluteJoint "twist" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0
+            float drive:angular:physics:stiffness = 0
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "Z"
+            rel physics:body0 = </tourniquet/base>
+            rel physics:body1 = </tourniquet/windlass>
+            point3f physics:localPos0 = (0, 0, 0.135)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.4539905, 0, 0, 0.8910065)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+        }
+
+        def PhysicsRevoluteJoint "press" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0
+            float drive:angular:physics:stiffness = 0
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "Y"
+            rel physics:body0 = </tourniquet/windlass>
+            rel physics:body1 = </tourniquet/rod>
+            point3f physics:localPos0 = (0, 0, 0.0135)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -30
+            float physics:upperLimit = 30
+        }
+
+        def PhysicsRevoluteJoint "needle" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0
+            float drive:angular:physics:stiffness = 0
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "Z"
+            rel physics:body0 = </tourniquet/base>
+            rel physics:body1 = </tourniquet/needle>
+            point3f physics:localPos0 = (0.14614327, -0.15, 0.12459627)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (-0.66446304, -0.24184476, 0.24184476, 0.66446304)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -137
+            float physics:upperLimit = 137
+        }
+    }
+
+    def Xform "windlass" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, 0)
+        float3 physics:diagonalInertia = (0.000002, 0.000002, 0.000002)
+        float physics:mass = 0.01
+        quatf xformOp:orient = (0.4539905, 0, 0, 0.8910065)
+        double3 xformOp:translate = (0, 0, 0.135)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Cube "strap" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </tourniquet/Looks/band>
+            double size = 1
+            float3 xformOp:scale = (0.03, 0.022, 0.0075)
+            double3 xformOp:translate = (0, 0, 0.00375)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def Xform "rod" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.03
+        quatf xformOp:orient = (0.4539905, 0, 0, 0.8910065)
+        double3 xformOp:translate = (0, 0, 0.14850000000000002)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Cylinder "bar" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.15
+            rel material:binding = </tourniquet/Looks/rod>
+            double radius = 0.006
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cylinder "rib_a" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.004
+            rel material:binding = </tourniquet/Looks/rod>
+            double radius = 0.0068000000000000005
+            double3 xformOp:translate = (-0.071, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cylinder "rib_b" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.004
+            rel material:binding = </tourniquet/Looks/rod>
+            double radius = 0.0068000000000000005
+            double3 xformOp:translate = (0.071, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "needle" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, 0)
+        float3 physics:diagonalInertia = (1e-7, 1e-7, 1e-7)
+        float physics:mass = 0.002
+        quatf xformOp:orient = (-0.66446304, -0.24184476, 0.24184476, 0.66446304)
+        double3 xformOp:translate = (0.14614327434188074, -0.15, 0.12459626665871386)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Cube "pointer" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </tourniquet/Looks/needle>
+            double size = 1
+            float3 xformOp:scale = (0.0035, 0.051, 0.0015)
+            double3 xformOp:translate = (0, 0.017499999999999998, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cylinder "cap" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.003
+            rel material:binding = </tourniquet/Looks/case>
+            double radius = 0.006
+            double3 xformOp:translate = (0, 0, 0.001)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+}
+
