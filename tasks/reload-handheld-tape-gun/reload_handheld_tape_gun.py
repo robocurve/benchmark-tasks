@@ -93,7 +93,7 @@ _gun = [
     mk.box((0.100, 0.030, 0.035), at=W(0.290, 0.160, ZP + 0.0175), color=BLACK),
     mk.box((0.008, 0.008, 0.006), at=W(*ROLLER_PIVOT, ZP + 0.003), color=STEEL),
 ]
-kit.part("gun", GUN_O, _gun, mass=0.33, color=GUN_C)
+kit.part("gun", GUN_O, _gun, mass=0.32, color=GUN_C)  # 0.40 kg with collar, roller arm and drum, guard
 
 # detent collar: three tabs round the hub on a slider; preloaded up against its stop at 12 N
 kit.part("collar", (*HUB, ZP + COL_TOP0 - 0.002),
@@ -103,17 +103,21 @@ kit.part("collar", (*HUB, ZP + COL_TOP0 - 0.002),
 kit.slider("collar_slide", "gun", "collar", axis=(0, 0, -1), lower=0.0, upper=COL_TRAVEL, stiffness=COL_K,
            rest=-DETENT_N / COL_K, damping=2.0)
 
-# tension roller on a sprung arm (6 N at the roller, toward the leader path)
+# tension roller on a sprung arm (6 N at the roller, toward the leader path); the roller turns freely on its axle
 _ax, _ay = ROLLER[0] - ROLLER_PIVOT[0], ROLLER[1] - ROLLER_PIVOT[1]
 _arm_len, _arm_yaw = math.hypot(_ax, _ay), math.atan2(_ay, _ax)
 kit.part("roller", (*ROLLER_PIVOT, ZP),
-         [mk.box((_arm_len + 0.008, 0.008, 0.004), at=(_ax / 2, _ay / 2, 0.003), yaw=_arm_yaw),
-          mk.box((0.018, 0.018, ROLLER_H - 0.005), at=(_ax, _ay, 0.005 + (ROLLER_H - 0.005) / 2), color=BLACK),
-          mk.box((0.018, 0.018, ROLLER_H - 0.005), at=(_ax, _ay, 0.005 + (ROLLER_H - 0.005) / 2), color=BLACK,
-                 yaw=math.pi / 4)], mass=0.03, color=STEEL)
+         [mk.box((_arm_len + 0.008, 0.008, 0.004), at=(_ax / 2, _ay / 2, 0.003), yaw=_arm_yaw)], mass=0.02,
+         color=STEEL)
 ROLLER_K = 6.0 * _arm_len / math.radians(15.0)
 kit.hinge("roller_arm", "gun", "roller", anchor=(*ROLLER_PIVOT, ZP), axis=(0, 0, -1), lower_deg=0.0, upper_deg=25.0,
           stiffness=ROLLER_K, rest_deg=-15.0, damping=0.01)
+kit.part("drum", (*ROLLER, ZP),
+         [mk.box((0.018, 0.018, ROLLER_H - 0.005), at=(0, 0, 0.005 + (ROLLER_H - 0.005) / 2)),
+          mk.box((0.018, 0.018, ROLLER_H - 0.005), at=(0, 0, 0.005 + (ROLLER_H - 0.005) / 2), yaw=math.pi / 4)],
+         mass=0.02, color=BLACK)
+kit.hinge("drum_spin", "roller", "drum", anchor=(*ROLLER, ZP), axis=(0, 0, 1), lower_deg=-math.inf,
+          upper_deg=math.inf, damping=0.0002)
 
 # blade guard: a red plate over the nose face, hinged at its root, sprung shut, detent at open (90 deg)
 kit.part("guard", (*GUARD_HINGE, ZP),
@@ -208,18 +212,46 @@ def _seg_closest(a, b, c):
 
 ROLLER_TOUCH = 0.016  # roller 12.7 mm to its corners + half the tape + 2.3 mm
 UNDER = np.array([-1.0, 1.0]) / math.sqrt(2.0)  # the roller side facing away from the roll and the nose
+OFF_ROLL = R_O + 0.010  # a leader point 70 mm or more from the roll's axis is off the roll (wound links lie at 64-65)
+WRAP_DEG = 120.0  # how far the leader must wind round the roller's axis, root to end (a wound leader: under 100)
+PAST_ROLLER = 0.016  # the end must be this far past the roller's axis toward the nose (gun -y)
 
 
-def under_roller(objects) -> bool:
-    """A segment of links 2-6 touches the roller (centreline within 16 mm of its axis) on its outer side."""
-    c = to_gun(objects, kit.point(objects, "roller", (ROLLER[0] - ROLLER_PIVOT[0], ROLLER[1] - ROLLER_PIVOT[1], 0)))
-    c = c[:2]
+def roller_axis(objects):
+    return to_gun(objects, kit.point(objects, "drum", (0, 0, 0)))[:2]
+
+
+def roller_touch(objects) -> tuple[bool, bool]:
+    """(touching, touching off the roll): a segment of links 2-6 has its centreline within 16 mm of the roller's
+    axis on the roller's outer side; off the roll if that touching point is also 70 mm or more from the roll's
+    axis (a leader still wound on the roll lies 64-65 mm from it)."""
+    c = roller_axis(objects)
+    rc = to_gun(objects, kit.point(objects, "roll", (0, 0, 0)))[:2]
     pts = chain_points(objects)
+    touch = off = False
     for k in range(1, 6):  # link k+1 runs from pts[k] to pts[k+1]
         q = _seg_closest(pts[k], pts[k + 1], c)
         if float(np.linalg.norm(q - c)) <= ROLLER_TOUCH and float(np.dot(q - c, UNDER)) > 0.002:
-            return True
-    return False
+            touch = True
+            off = off or float(np.linalg.norm(q - rc)) >= OFF_ROLL
+    return touch, off
+
+
+def roller_wrap(objects) -> float:
+    """Degrees the leader winds round the roller's axis from its root on the roll to its end, counter-clockwise
+    (the way round the roller's outside, from the roll toward the nose) positive. Each link subtends less than 180
+    deg at the axis (the roller body keeps the leader 9 mm or more from it), so summing per link is exact."""
+    c = roller_axis(objects)
+    pts = [p[:2] - c for p in chain_points(objects)]
+    return math.degrees(sum(math.atan2(a[0] * b[1] - a[1] * b[0], float(np.dot(a, b))) for a, b in zip(pts, pts[1:])))
+
+
+def under_roller(objects) -> bool:
+    """The leader is threaded round the roller: paid off the roll and touching the roller's outer side there,
+    wound 120 deg or more round the roller's axis the right way, its end past the roller toward the nose."""
+    _, off = roller_touch(objects)
+    tip = chain_points(objects)[-1]
+    return off and roller_wrap(objects) >= WRAP_DEG and float(tip[1]) <= float(roller_axis(objects)[1]) - PAST_ROLLER
 
 
 def adhesive_out(objects) -> bool:
@@ -298,7 +330,9 @@ def _rules(objects):
         print(f"[tape] n={m['n']} roll={f(to_gun(objects, kit.point(objects, 'roll', (0, 0, 0))))} yaw={ryaw:.1f} "
               f"collar={kit.q(objects, 'collar_slide'):.4f} guard={q:.1f} roller={kit.q_deg(objects, 'roller_arm'):.1f} "
               f"tab={f(kit.point(objects, 'lk8', TAB_LOCAL))} tip={f(pts[-1])} gun={f(kit.point(objects, 'gun', (0, 0, 0)))} "
-              f"tilt={gun_tilt(objects):.1f} gyaw={math.degrees(math.atan2(_gun_T(objects)[1, 0], _gun_T(objects)[0, 0])):.2f} under={under_roller(objects)} adh={adhesive_out(objects)} "
+              f"tilt={gun_tilt(objects):.1f} gyaw={math.degrees(math.atan2(_gun_T(objects)[1, 0], _gun_T(objects)[0, 0])):.2f} "
+              f"touch={roller_touch(objects)} wrap={roller_wrap(objects):.1f} spin={kit.q_deg(objects, 'drum_spin'):.1f} "
+              f"under={under_roller(objects)} adh={adhesive_out(objects)} "
               f"past={end_past_blade(objects):.4f} mem={ {k: v for k, v in m.items() if isinstance(k, str) and k != 'n'} } "
               f"score={score(objects)}", flush=True)
 
@@ -465,6 +499,23 @@ def _plans(variant=""):
     R.go(1.5, (HUB[0], HUB[1], top - 0.018 + TIP), F_PRESS, "push it past the detent ball", CORE_YAW)
     R.go(1.0, (HUB[0], HUB[1], top - 0.018 + TIP), F_PRESS, "hold it down", CORE_YAW)
     R.go(1.0, (ax, ay, TRAVEL), F_IN, "up", CORE_YAW)
+    if variant == "wound_pushed":
+        # leader left wound on the roll: turn the seated roll (two strokes of the pads on its face) until the wound
+        # leader faces the roller, then push the roller's arm in onto it and hold it there to the end
+        face = SEAT_Z + R_H / 2 - 0.002 + TIP
+        for _ in range(2):
+            R.go(1.5, (HUB[0], HUB[1], face + 0.020), F_PRESS, "over the roll's face", 0.6)
+            R.go(1.0, (HUB[0], HUB[1], face), F_PRESS, "pads on the face", 0.6)
+            for k in range(1, 8):
+                R.go(0.4, (HUB[0], HUB[1], face), F_PRESS, "turn the roll on its hub", 0.6 - 1.2 * k / 7)
+            R.go(1.0, (HUB[0], HUB[1], face + 0.020), F_PRESS, "up off it", -0.6)
+        px, py, pz = ROLLER[0] - 0.030, ROLLER[1] + 0.002, ZP + 0.016 + TIP
+        R.go(2.0, (px, py, TRAVEL), 0.0, "over the roller's outside")
+        R.go(1.5, (px, py, pz), 0.0, "down beside it")
+        R.go(2.0, (ROLLER[0] - 0.009, py, pz), 0.0, "push the roller arm in onto the wound leader")
+        R.until(79.0, "hold it there")
+        L.until(79.0, "hold the gun")
+        return {"left": L.w, "right": R.w}
     # R: swing the blade guard open (pads against its inside face beyond the blade, swept round its hinge)
     gx, gy = GUARD_HINGE
     gz = ZP + 0.010 + TIP
@@ -545,7 +596,7 @@ def _plans(variant=""):
 
 
 def demo():
-    # DEMO_VARIANT: beside | over | tipped (degenerate checks: 0, 0.3 seated only, 0)
+    # DEMO_VARIANT: beside | over | tipped | wound_pushed (degenerate checks: 0, 0.3 seated only, 0, 0.3 seated only)
     return _plans(os.environ.get("DEMO_VARIANT", ""))
 
 
@@ -574,6 +625,9 @@ def _route(kind="good", past=0.015):
         path = [(0.290, y_line), (0.270, y_line), (0.250, y_line), (0.230, y_line), corner]
         rest = np.linspace(corner[1], tip[1], 5)[1:]
         pts = path + [(x_line, y) for y in rest]
+    elif kind == "past":  # drawn straight off the roll past the roller's outside, not turned down round it
+        a, b = np.array([0.300, y_line]), np.array([0.300 - 8 * LINK_L, y_line])
+        pts = [tuple(a + (b - a) * t) for t in np.linspace(0, 1, 9)]
     else:  # draped straight across, roller on the inside
         a, b = np.array([0.300, y_line]), np.array(tip)
         pts = [tuple(a + (b - a) * t) for t in np.linspace(0, 1, 9)]
@@ -617,11 +671,15 @@ def self_test():
     seat = (np.array([*HUB, SEAT_Z]), I)
     flip = (np.array([*HUB, SEAT_Z]), mk.mat_to_quat(mk.axis_angle((1, 0, 0), math.pi)))
 
-    def st(roll=seat, chain=None, guard=0.0, flipped=False):
+    def st(roll=seat, chain=None, guard=0.0, flipped=False, arm=0.0):
         moved = {"roll": roll}
         if chain is not None:
             moved.update(_chain_moved(chain, flip=flipped))
-        return kit.fake_states(q={"guard_turn": math.radians(guard), "collar_slide": COL_TRAVEL}, moved=moved)
+        return kit.fake_states(q={"guard_turn": math.radians(guard), "collar_slide": COL_TRAVEL,
+                                  "roller_arm": math.radians(arm)}, moved=moved)
+
+    def turned(yaw_deg):  # the seated roll turned on its hub, leader still wound on it
+        return (np.array([*HUB, SEAT_Z]), mk.mat_to_quat(mk.axis_angle((0, 0, 1), math.radians(yaw_deg))))
 
     S = {"detent": True, "seat": "up"}
     good = _route("good")
@@ -630,6 +688,9 @@ def self_test():
         "roll on the hub, detent not passed": (st(), [], {"seat": "up"}, 0.0),
         "seated, leader still wound": (st(), [], S, 0.3),
         "seated, leader draped over the roller": (st(chain=_route("over")), [], S, 0.3),
+        "seated, leader wound, turned to face the roller, arm pushed 15 deg": (st(roll=turned(220), arm=15), [], S, 0.3),
+        "seated, leader wound, turned to face the roller, arm pushed 25 deg": (st(roll=turned(200), arm=25), [], S, 0.3),
+        "leader drawn past the roller's outside, not turned round it": (st(chain=_route("past")), [], S, 0.3),
         "routed, guard open": (st(chain=good, guard=90.0), [], S, 0.8),
         "routed, guard shut, hand on the tab": (st(chain=good), [kit.point(st(chain=good), "lk8", TAB_LOCAL)], S, 0.8),
         "everything done": (st(chain=good), [], S, 1.0),
@@ -648,6 +709,10 @@ def self_test():
             got = score(s_)
             assert abs(got - want) < 1e-9, (name, got, want)
         assert under_roller(st(chain=good)) and not under_roller(st(chain=_route("over")))
+        for yaw in range(0, 360, 10):  # a wound leader never counts, at any roll angle or arm position
+            for arm in (0.0, 15.0, 25.0):
+                assert not under_roller(st(roll=turned(yaw), arm=arm)), (yaw, arm)
+        assert roller_touch(st(roll=turned(220), arm=15))[0]  # (it touches the roller's outside, but on the roll)
     finally:
         mk.new_episode()
         _TEST_TCPS = None
@@ -662,7 +727,7 @@ if __name__ == "__main__":
     print(f"scoring: {self_test()} cases pass")
     task = load(__file__)
     hz = 20.0
-    for v in ("", "beside", "over", "tipped"):
+    for v in ("", "beside", "over", "tipped", "wound_pushed"):
         os.environ["DEMO_VARIANT"] = v
         for arm, waypoints in task.demo().items():
             plan = ArmPlan(list(waypoints), station.BASES[arm])

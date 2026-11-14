@@ -5,7 +5,7 @@ Instruction given to the policy: `Load the new roll into the tape gun so it is r
 The instruction gives no hint about the steps. Done right: one hand holds the gun by its handle; the other puts the
 new roll on the hub with its tape face out (as packed), pushes it 12 N past the hub's detent ball so it drops onto
 its seat, swings the red blade guard open, takes the leader's folded tab, peels it back, leads it round the outside of
-the sprung tension roller and down along the nose so its end sticks 5 to 25 mm past the blade, and the guard is
+the sprung tension roller (it turns freely on its axle) and down along the nose so its end sticks 5 to 25 mm past the blade, and the guard is
 swung shut on it. Hands off, nothing moving.
 
 Files: `task.json`, `reload_handheld_tape_gun.py` (scene, `success()`, partial-credit `score()`, the scripted
@@ -23,7 +23,8 @@ installs them. Before every shell: `source ~/IsaacLab-Arena/yam.env`; the Dream 
 python tasks/reload-handheld-tape-gun/reload_handheld_tape_gun.py
 ```
 
-Asserts the scoring rules on hand-built states (13 cases) and replays every demo plan (full and the three
+Asserts the scoring rules on hand-built states (16 cases, plus a sweep showing a leader still wound on the roll never
+counts as round the roller, at any roll angle or roller-arm position) and replays every demo plan (full and the four
 degenerate variants, both arms) through the kinematics, checking IK error and joint limits.
 
 ## Run and score one Dream-1 trial
@@ -55,6 +56,9 @@ Degenerate checks (same command, `DEMO_VARIANT` in the environment):
   be opened again and the leader rerouted.
 - `tipped`: lifts the gun's handle end, drops it and leaves: 0 (nothing loaded; knocking the gun over on the bench is
   not itself a failure, only something dropping off the bench is).
+- `wound_pushed`: seats the roll, leaves the leader wound on it, turns the roll on its hub until the wound leader
+  faces the roller, then pushes the roller's arm in onto it and holds it there to the end: 0.3 (seated only). The
+  wound leader touches the roller's outer side, but it is still on the roll and does not go round the roller.
 
 ## Run limit, runtime and seeds
 
