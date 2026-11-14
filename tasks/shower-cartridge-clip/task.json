@@ -1,0 +1,20 @@
+{
+  "title": "Push a shower valve's cartridge flush against its O-rings and hold it there while sliding the U-clip down past its ears",
+  "category": "Impact on jobs",
+  "keywords": [
+    "plumbing",
+    "shower valve",
+    "cartridge",
+    "retainer clip",
+    "hold and fit"
+  ],
+  "instruction": "Push the cartridge home, fit its retainer clip, then let go.",
+  "context": "What sets this apart from other hold-a-part-while-fitting tasks: the part is held home against a drag that pushes it back out (the cartridge's O-rings), and the retainer is a U-clip slid down across the part's ears, which passes in front of its ears only while the part sits fully home and square. It is not holding a sprung drive flat while the other hand turns its latch, nor handing a sprung ball over from a tool into a bore mid-motion. Replacing a leaking shower cartridge is routine work for plumbers (O*NET 47-2152: 'Repair and maintain plumbing by replacing defective washers, replacing or mending broken pipes, or opening clogged drains'). Released short of home, the cartridge can creep back out on its O-rings (1 mm here: assumed, not measured), so it is held flush while the clip goes in. Moen's instructions for this cartridge ('1222 Cartridge: Single Handle Shower, PosiTemp', solutions.moen.com) say: 'If you encounter any resistance, make sure the cartridge is flush.'",
+  "setup": "Two YAM arms at the near edge of the table; positions are (x forward from the arm bases, y left) in cm, heights above the table. A brass shower valve body (Moen Posi-Temp type) stands in a cut-out of a wall board with its copper supplies (hot left, cold right) and outlet, its bore axis along x, 7 cm up, at y 0; its face, with two notches for the cartridge's ears and two slotted lugs for the clip's legs, is at x 28. The cartridge (Moen 1222 type: body 105 mm long and 25 mm across, 0.15 kg, brass stem toward the arms) is already in the bore on its O-rings, 15 mm proud of home, ears level with their notches. The steel U-clip (2 mm thick, 10 g, legs 50 mm long and 33 mm apart, in 2.2 mm slots) stands in a small holder on the table at (20, 10).",
+  "scoring": "Look and a pull, as a plumber checks. 1.0, held 1 s: the cartridge pushed flush (its ears within 0.5 mm of fully home, turned under 3 degrees, read before the pull), the clip fully down (each leg in its own slot on its stop, the clip square within 5 degrees), the cartridge kept within 1 mm of home by the clip during a 20 N outward pull on its stem through that second, and no gripper within 3 cm of the clip's crossbar, the cartridge's ears or the end of its stem. 0.5: the cartridge flush and the clip started (both legs inside their own slots, under the lugs' tops), without the 1.0 result. 0.25: the cartridge pushed flush at some moment, or the clip started. 0 otherwise, or if the clip falls to the table or off it at any moment (its crossbar under 2 cm above the table top).",
+  "run_limit": "1200 steps (60 s at 20 Hz)",
+  "reset_notes": "The cartridge pulled back to 15 mm proud on its O-rings, ears level with their notches; the clip back in its holder.",
+  "fidelity": "Rigid bodies at 240 Hz on GPU. O-rings as coded drives: 15 N drag in, 1 mm spring-back. These and the clip's 0.2 mm slot clearance are assumed (no published figure): measure spring-back with a dial gauge on the stem, clearance with a feeler gauge. Ears 17.5 mm off the axis, 3 mm behind each 4 mm clip leg (approximated). Clip 2 mm, 10 g (real about 1.5 mm, 5 g; lighter, the pulled ears passed its legs), 96 solver iterations. Pipes visual only. The scorer pulls the stem 20 N.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-V62ELG"
+}
