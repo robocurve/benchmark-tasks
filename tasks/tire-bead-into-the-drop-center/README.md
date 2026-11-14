@@ -1,4 +1,4 @@
-# Hand-mount the last section of a kids' bike tire: push the bead into the rim's center channel first, no lever under it
+# Hand-mount the last section of a kids' bike tire by pushing the bead into the rim's center channel, no lever under it
 
 A 12-inch kids' bike wheel lies flat on a hub stand with its tire almost on: one bead (the tire's stiff inner edge) is
 fully on, the other is on except the last 60 degrees over the valve, which sits up on the rim's flange (its raised edge).
@@ -39,8 +39,8 @@ lever and rim.
 | Last section | starts tilted 20 degrees up about the tread; stops at 6 degrees short of seated without slack | 6 degrees is where its lip, 1.2 cm over the flange top at the start, comes down to the flange's edge |
 | Bead on | the last section within 2.6 degrees of seated | there its lip passes below the flange top; within 2.5 degrees it is pulled in and stays |
 | Valve straight | within 10 degrees of the line to the hub | 5.6 mm at the cap of the 3.2 cm stem, a lean you can see; it starts at 20 degrees (1.1 cm) |
-| Strike | the last section's bead lip driven toward its seat faster than 12 cm/s over a control step (its 20-degree roll in about 0.13 s), counted up to 2.5 degrees short of seated, where it snaps in by itself | a bead struck down over the flange can trap the tube under it and pinch it; a careful roll by hand takes about half a second, about 3 cm/s at the lip, so the limit is nearly 4 times that and over 4 times the demo's fastest step (2.8 cm/s). The sim has no tube, so a strike is a stand-in for a pinched tube and caps the score at 0.5 rather than zeroing it: speed alone does not prove damage. A real trial checks the tube itself with the dunk test, and a leak scores 0 |
-| Lever pinch | spoon tip more than 1 mm inside the bead seat line, down in the rim (radius 8.8 to 10.05 cm), at or below the bead's height there | that is the tube's space, where a lever pushed in past the bead can trap it against the rim; a tip that only hooks the bead on the flange or shoulder (careful lever use) or lies on top of it is not |
+| Strike | the last section's bead lip driven toward its seat faster than 12 cm/s over a control step (its 20-degree roll in about 0.13 s), counted up to 2.5 degrees short of seated, where it snaps in by itself | a bead struck down over the flange can trap the tube under it and pinch it; a careful roll by hand takes about half a second, about 3 cm/s at the lip, so the limit is nearly 4 times that and over 4 times the demo's fastest step (2.8 cm/s). Sim only. The sim has no tube, so a strike is a stand-in for a pinched tube and caps the score at 0.5 rather than zeroing it: speed alone does not prove damage. A real trial does not time the roll; it leak-tests the tube inside the inflated tire, and a leak scores 0 |
+| Lever pinch | spoon tip more than 1 mm inside the bead seat line, down in the rim (radius 8.8 to 10.05 cm), at or below the bead's height there | that is the tube's space, where a lever pushed in past the bead can trap it against the rim; a tip that only hooks the bead on the flange or shoulder (careful lever use) or lies on top of it is not. Sim only: a real trial does not score where the lever went; the leak test decides |
 | Let go | no gripper touching the tire, rim or valve: its own shape (palm and fingers at their present opening) more than 2 mm from them | 2 mm is the simulator's resting contact gap plus the fit of the boxes to the YAM's collision meshes; a hand hovering just over the tire is let go, one resting on it is not; a real trial checks the final photo |
 | Slack started | at least two bead arcs at least 6 mm down in the channel at the end (fully down they free 8.4 mm of the 10 mm needed) | the step that makes the job possible, visible as bare rim shoulder above the bead |
 
@@ -65,7 +65,12 @@ Scripted demo (reaches full score):
 
 Model run (Dream-1): the same command with `--policy dream`. Render the videos of a run with
 `inspect-robots video <log.json>`. Scorer tests: `python tasks/tire-bead-into-the-drop-center/test_task.py` (prints
-`all pass`). One trial takes up to 1,200 steps (60 seconds at 20 Hz). No seeds: the layout is fixed.
+`all pass`).
+
+## Runtime and seeds
+
+One trial takes up to 1,200 steps (60 seconds at 20 Hz); the scripted demo ends at full score in 506 steps (about
+25 s). No seeds: the layout is fixed (`object_jitter=0`).
 
 ## The demo
 
@@ -80,22 +85,27 @@ Model run (Dream-1): the same command with `--policy dream`. Render the videos o
 
 ## Scoring
 
-| Outcome | Score |
-|---|---|
-| The lever's spoon tip in the tube's space at any moment (irreversible): it can trap the tube against the rim and puncture it. The tip's position is the sim's stand-in for a pinched tube | 0 |
-| Real trial only: the tube leaks in the dunk test after the trial (40 psi, in water), whatever caused it | 0 |
-| Bead on, valve straight, and no hand touching the tire, rim or valve: the gripper's own shape (palm and fingers at their present opening, boxes fitted to the YAM's collision meshes) more than 2 mm from them, the simulator's resting contact gap plus the boxes' fit. A hand left on the tire can pull the bead back up, and the job ends with the wheel ready to inflate; a real trial checks the final photo for a finger on the tire | 1.0 |
-| Bead on, but the valve leaning more than 10 degrees (pulled sideways in the rim hole, it can tear off at its base) or a hand still touching the tire: the hard part is done, but the wheel is not ready to inflate | 0.5 |
-| Bead on, but struck in: the last section's bead lip driven toward its seat faster than 12 cm/s over a control step (irreversible cap). A strike can pinch the tube under the bead; the sim has no tube, so the speed is a stand-in for a pinched tube and only caps the score. The real trial's dunk test decides, and a leak there scores 0 | 0.5 (cap) |
-| Bead not on, but at least two arcs at least 6 mm down in the channel: the step that makes the job possible is started (fully down, two arcs free 8.4 mm of the 10 mm needed), but the tire is not on | 0.25 |
-| Anything else, including doing nothing or pressing the last section without slack so it stops at the flange's edge | 0 |
+The same three end-state conditions are scored in the sim and in a real trial: the bead on, the valve straight, the
+hands clear. Tube damage is scored differently, because the sim has no tube.
+
+| Outcome | Sim | Real trial |
+|---|---|---|
+| Bead on, valve within 10 degrees of the line to the hub, no hand touching the tire, rim or valve (contact: the gripper's own shape, palm and fingers at their present opening, inside the simulator's 2 mm resting contact gap). A hand left on the tire can pull the bead back up, and the job ends with the wheel ready to inflate | 1.0 | 1.0 if the tube passes the leak test |
+| Bead on, but the valve leaning more than 10 degrees (pulled sideways in the rim hole, it can tear off at its base) or a hand still touching the tire: the hard part is done, but the wheel is not ready to inflate | 0.5 | 0.5 if the tube passes the leak test |
+| Bead not on, but at least two arcs at least 6 mm down in the channel: the step that makes the job possible is started (fully down, two arcs free 8.4 mm of the 10 mm needed), but the tire is not on | 0.25 | 0.25 if the tube passes the leak test |
+| Anything else, including doing nothing or pressing the last section without slack so it stops at the flange's edge | 0 | 0 |
+| The tube leaks in the leak test after the trial, whatever caused it | (no tube) | 0 |
+| The lever's spoon tip in the tube's space at any moment (irreversible): it can trap the tube against the rim and puncture it | 0 (stand-in for a pinch) | not scored |
+| The last section's bead lip driven toward its seat faster than 12 cm/s over a control step (irreversible) | capped at 0.5 (stand-in for a pinch) | not scored |
 
 How the bead gets on is not scored (one hand or two, a lever used carefully, any order), and where the arms end is
 not scored. Possible scores: 0, 0.25, 0.5, 1.0.
 
-The lever's tip is checked at every control step and along its path since the last one, so a quick poke under the
-bead between two camera frames still counts. There is no debounce: the lever lies on the table 8 cm below and 11 cm
-outside the rim, so only a hand can put its tip there.
+The two sim stand-ins exist only because the sim has no tube to test. In a real trial they would take credit away from
+an intact, correctly mounted tire for how it was mounted, so they are dropped there and the leak test alone scores tube
+damage. In the sim the lever's tip is checked at every control step and along its path since the last one, so a quick
+poke under the bead between two camera frames still counts. There is no debounce: the lever lies on the table 8 cm
+below and 11 cm outside the rim, so only a hand can put its tip there.
 
 ## Real-world build
 
@@ -115,8 +125,21 @@ outside the rim, so only a hand can put its tip there.
 - Valve: a protractor card (marks at 0 and 10 degrees) taped to the rim bed beside the stem.
 - Checking a trial: bead on = the tire's molding line evenly just above the flange all round with no tube showing under
   the bead; valve = the stem against the card (10 degree mark); slack started = bare rim shoulder showing above the bead
-  where it sits in the channel; lever = the video, frame by frame where it goes into the rim; tube integrity = after every
-  trial, inflate to 40 psi and dunk the tube in water (bubbles mean a pinch, and a leak scores 0). The dunk test is the
-  real check behind both sim stand-ins for a pinched tube, the lever tip's position and a struck bead.
+  where it sits in the channel; tube = the leak test below. The lever's position and the roll's speed are not scored in
+  a real trial: the leak test is the real check behind both sim stand-ins for a pinched tube.
+- Leak test, after every trial, with the tube always inside the mounted tire (an unsupported tube is never inflated,
+  since it can balloon and burst well below the tire's pressure):
+  1. If the bead is not on at the end (a 0 or 0.25 trial), the tester first rolls the last section on by hand, without
+     a lever, so the whole tube is enclosed by the tire and rim. This does not change the trial's score.
+  2. Inflate to 10 psi and check that the molding line sits evenly just above the flange on both sides all round, with
+     no tube showing under either bead. If not, let the air out and re-seat the bead by hand before going on.
+  3. Inflate to the pressure printed on the tire's sidewall (read off the rig's tire when it is built and written on
+     the rig), never above it, with a gauge, and with hands and face clear of the bead line while it rises.
+  4. Dunk the wheel in a tub of water, tire and valve under, turning it slowly (or brush soapy water along both beads
+     and the valve). A pinched tube leaks into the tire, and the air comes out at the bead line and the valve hole.
+     Then read the gauge again 5 minutes after inflating. Bubbles, or a drop of 2 psi or more, mean a leak: the trial
+     scores 0 and the tube is replaced.
+  5. Let the tire down before the reset.
 - Safety: the arms press 1 cm into a soft tire on a clamped stand; no sharp edges, nothing under pressure beyond 5 psi
-  during the trial.
+  during the trial. The leak test is done by the tester after the arms have stopped, only on a fully mounted tire, and
+  never above the sidewall's rated pressure.
