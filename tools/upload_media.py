@@ -32,7 +32,10 @@ def multipart(fields, files):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("task_dir", help="the task folder, like tasks/lamp-task")
-    ap.add_argument("--video", required=True, help="the model run: Dream-1, or for robots other than two parallel-gripper arms, an LLM through Inspect Robots")
+    ap.add_argument("--video", help="the model run: Dream-1, or for robots other than two parallel-gripper arms, an LLM through Inspect Robots. "
+                    "Leave it out only if running the model produced no recording (for example, the model refused the instruction "
+                    "or errored before acting), and say what happened, with the exact error text, in task.json's no_model_video_reason. "
+                    "Lack of time, budget or compute credits is not a reason")
     ap.add_argument("--screenshot", required=True, help="the setup screenshot")
     ap.add_argument("--demo", help="the full-score demo (required unless the Dream-1 run reaches full score)")
     a = ap.parse_args()
@@ -40,7 +43,11 @@ def main():
     if not team or not token:
         sys.exit("Set ROBOCURVE_TEAM (your team code) and ROBOCURVE_TOKEN (your team's access token) first.")
     task_dir = Path(a.task_dir)
-    files = {"video": Path(a.video), "screenshot": Path(a.screenshot)}
+    if not a.video and not a.demo:
+        sys.exit("Without a model run video (--video), the full-score demo (--demo) is required.")
+    files = {"screenshot": Path(a.screenshot)}
+    if a.video:
+        files["video"] = Path(a.video)
     if a.demo:
         files["demo"] = Path(a.demo)
     for name, path in files.items():
@@ -50,7 +57,7 @@ def main():
     req = urllib.request.Request(f"{BOARD}/api/media", data=body, method="POST",
                                  headers={"Authorization": f"Bearer {team}:{token}", "Content-Type": ctype,
                                           # Cloudflare blocks Python's default user agent (error 1010), so name the client.
-                                          "User-Agent": "robocurve-upload-media/1.1"})
+                                          "User-Agent": "robocurve-upload-media/1.2"})
     try:
         with urllib.request.urlopen(req, timeout=600) as res:
             media_id = json.load(res)["media_id"]
@@ -66,6 +73,9 @@ def main():
         spec["media"] = media_id
         spec_path.write_text(json.dumps(spec, indent=2, ensure_ascii=False) + "\n")
         print(f"Uploaded. Media ID {media_id} written to {spec_path}. Commit it and open your pull request.")
+        if not a.video and not spec.get("no_model_video_reason"):
+            print("No model run video: add \"no_model_video_reason\" to task.json with what happened and the exact error text "
+                  "(for example, a refusal). Lack of time, budget or compute credits is not a reason, and the task will be rejected.")
     else:
         print(f"Uploaded. Media ID: {media_id} (add it to task.json as \"media\").")
 

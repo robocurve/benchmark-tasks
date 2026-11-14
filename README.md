@@ -60,6 +60,14 @@ tagged with the task's folder name.)
 - **run_limit:** the most actions a model gets: control steps for action policies like Dream-1 (20 a second),
   or model calls for language-model agents. Choose what the task reasonably needs.
 - **scores:** the score each video reached, as your scorer reported it.
+- **no_model_video_reason:** only when running the model produced no recording, for example because the
+  model refused the instruction or errored before taking any action. Say what happened, with the exact
+  error text. Upload without `--video`; the full-score demo is then required. **Lack of time, budget or
+  compute credits is not a reason:** every task needs its model run, and a submission without one is
+  rejected (or sent back by the reviewers). If your copy of `tools/upload_media.py` still requires
+  `--video`, update it first:
+
+      curl -fH "Authorization: Bearer $ROBOCURVE_TEAM:$ROBOCURVE_TOKEN" -o tools/upload_media.py https://tasks.robocurve.org/tools/upload_media.py
 
 ## Rules
 
