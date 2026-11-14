@@ -92,7 +92,9 @@ The saline is a volume and flow-resistance model (`flushkit.py`), not particle f
   While the luer tip is seated on the connector, that saline enters the primed line and the same volume runs out of
   the outflow tube into the cylinder; while it is not seated, it spills at the tip. The video shows the barrel's
   saline as a real syringe does, by the dark stopper against the mL marks, and the cylinder's as a blue column whose
-  top follows the collected volume (a slide inside the cylinder with no collider, set each step). Spilled saline is
+  top follows the collected volume (a slide inside the cylinder with no collider, set each step). The column is not
+  visible in the camera frames, even at 1280 x 704: the top camera looks down into the clear cylinder, and 5 mL
+  stands only about 2.4 cm at its bottom. The collected volume is in the scorer, not on the video. Spilled saline is
   counted, not drawn.
 - Force. The plunger's slide carries the force a real primed syringe needs:
   F = A x dP + glide, with A the stopper's area (14.5 mm bore, 1.65 square cm) and dP the Hagen-Poiseuille pressure drop
