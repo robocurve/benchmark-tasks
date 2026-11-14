@@ -1,0 +1,25 @@
+{
+  "title": "Fish a wire through a conduit run with a fish tape",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "wire",
+    "deformable",
+    "tool use",
+    "fish tape",
+    "EMT conduit",
+    "conduit bend",
+    "hooking",
+    "hand-over-hand pulling",
+    "electrician"
+  ],
+  "instruction": "Pull the orange wire through the conduit with the yellow fish tape: hook the wire's bent copper end through the eyelet on the fish tape's tip at the conduit's right-hand end, then pull the tape back out of the left-hand end until the wire's end is at least 5 cm out of the conduit.",
+  "context": "Electricians (O*NET 47-2111.00, 821,000 employed; task: \"pull insulated wires or cables through the conduit to complete circuits between boxes\") cannot reach inside a conduit run, so they bend the stripped wire end through the eyelet of a fish tape already pushed through it and pull the tape back. Tested: making that pulling joint at one mouth, then drawing the wire through a bent run by pulling the tape from the other mouth, keeping the joint made through the bend.",
+  "setup": "Positions in cm from the midpoint between the arm bases on the table (x forward, y left). Conduit: 1-inch EMT (galvanised steel, 29.5 mm OD, 26.6 mm bore, 1.45 mm wall), axis 5.6 cm above the table, strapped on two grey steel channels 4.1 cm tall (one under each straight). Right-hand mouth at x 17, y -20, facing the robot; 12.4 cm straight along +x; 90 deg sweep of 14.6 cm centreline radius turning left; 23.4 cm straight along +y to the left-hand mouth at x 44, y 18 (59 cm along the axis). Black plastic bushing (37 mm OD, 10 mm, flared throat) on each mouth. Yellow 4.8 mm fibreglass fish tape, 73 cm, through the run: 2 cm of tape then a brass tip (20 x 6 x 6 mm) with a flat eyelet (20 mm square, 3 mm bars, 14 mm hole, 6 mm above the tape axis) out of the right-hand mouth; black 40 x 14 x 9 mm handle end 12 cm out of the left-hand mouth. Orange 6 mm PVC-insulated wire, 82 cm, on the table: tail at x 89, y -50, straight along -x to x 32, quarter arc of 12 cm radius to x 20, y -38, straight along +y to its end at x 20, y -27. Its last 3 cm is stiff, then 16 mm of bare 3 mm copper bent down and folded back into a J (6 mm gap, 6 mm tail) that stands on the table.",
+  "scoring": "Distances along the conduit are along its axis from the right-hand mouth. Score 0 for the rest of the trial if the wire's end is ever 2 cm or more inside the right-hand mouth while off the eyelet for 0.3 s or longer (pushed in by hand), or if the tape is ever entirely out of the conduit before the wire's end has been 2 cm inside. At the end the J must pass through the eyelet's hole, else 0. Wire end less than 2 cm inside: 0.25 if the tape still runs through the whole conduit (tip out of the right-hand mouth, handle out of the left), the eyelet centre is within 10 cm of the right-hand mouth's centre and no wire is inside the conduit; else 0. Wire end 2 cm or more inside: the wire must run from its end back through the bore and out of the right-hand mouth, else 0; then 1.0 if the end is at least 5 cm past the left-hand mouth, 0.75 if past it by less, 0.5 if still inside.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Unhook the wire and pull it back out. Push the fish tape back in from the left until its brass tip is 2 cm out of the right-hand mouth with the eyelet flat on top. Lay the wire on its tape marks (tail x 89, y -50; arc; J end at x 20, y -27 pointing +y), J standing down on the table. The conduit and channels are bolted down; a trial in which they move is void and re-run.",
+  "fidelity": "Wire and tape are chains of 2 cm rigid segments with bending springs, no twist, no plasticity. The sim cannot bend copper, so the bare end starts pre-bent into a J and is hooked through the eyelet, not bent round it; no twisting or tape wrap, the joint holds by contact. The eyelet head is raised 6 mm above the tape so the J can reach it. Bore lined by a 12-sided collider with flats at the 26.6 mm bore. Hooked = J leg crosses the eyelet plane within 9 mm of its centre.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-EJ7WCU"
+}
