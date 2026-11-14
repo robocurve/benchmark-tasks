@@ -64,7 +64,9 @@ FOLD_STOP_DEG = 90.0  # its fold stop: lying flat along the top
 SLOT = 0.004  # half-width of the cross bar's slot for the upper strip
 # -- the brace: two steel strips (20 x 6 mm) from the top's bracket A to the leg's pin P, a knee between ---------------
 A = np.array([XH + 0.200, YC, TS + HZ - 0.001])
-BETA_S = 4.0  # knee bend (deg) with the leg upright on its stop
+BETA_S = 4.0  # knee bend (deg) with the leg upright on its stop (the knee's own stop holds it at least 3.5 deg bent:
+# a near-straight brace is so sensitive that 0.1 mm of give at the pins would let it reach straight, where an unlocked
+# brace no longer folds under the load)
 _AP0 = P_REF - A
 L = float(np.linalg.norm(_AP0) / (2 * math.cos(math.radians(BETA_S / 2))))  # each strip, pin to pin
 STRIP_H, STRIP_T = 0.020, 0.006
@@ -158,7 +160,7 @@ kit.hinge("brace_a", "tabletop", "link_a", anchor=tuple(A), axis=(0, -1, 0), low
           start_deg=_START["q_a"])
 kit.part("link_b", tuple(K0), [mk.box((L + 0.010, STRIP_T, STRIP_H), at=(L / 2, 0, 0))], mass=LINK_KG,
          color=STEEL, quat=tuple(mk.mat_to_quat(_rot_y(-SLOPE_B0))))
-kit.hinge("knee", "link_a", "link_b", anchor=tuple(K0), axis=(0, -1, 0), lower_deg=-3.0, upper_deg=155.0,
+kit.hinge("knee", "link_a", "link_b", anchor=tuple(K0), axis=(0, -1, 0), lower_deg=-0.5, upper_deg=155.0,
           start_deg=_START["q_knee"])
 _rw = (RING_IN_H + RING_WALL) / 2
 kit.part("ring", tuple(A + E_A0 * S0), [
@@ -230,7 +232,8 @@ def _mem() -> dict:
     m = mk.MEMORY.get(M)
     if m is None:
         m = mk.MEMORY[M] = {"n": 0, "init": False, "worked": False, "quiet": 0, "phase": None, "k": 0,
-                            "base": None, "fold_max": 0.0, "failed": False, "prev": {}, "still": {}}
+                            "base": None, "fold_max": 0.0, "failed": False, "prev": {}, "still": {},
+                            "armed_ok": False, "touched": False}
     return m
 
 
@@ -320,10 +323,14 @@ def _rules(objects) -> None:
         m["quiet"] = m["quiet"] + 1 if quiet else 0
         if m["quiet"] >= QUIET_STEPS:
             m["phase"], m["k"], m["base"] = "ramp", 0, a
-            _say(f"LOAD: leg {a:.2f} deg, knee {knee_deg(objects):.1f} deg, ring {ring_s(objects) * 1000:.1f} mm")
+            m["armed_ok"], m["touched"] = is_open(objects) and is_locked(objects), False
+            _say(f"LOAD: leg {a:.2f} deg, knee {knee_deg(objects):.1f} deg, ring {ring_s(objects) * 1000:.1f} mm, "
+                 f"open and locked {m['armed_ok']}")
     else:
         m["k"] += 1
         k = m["k"]
+        if not clear_of(objects):
+            m["touched"] = True  # a hand came back during the load: it does not count
         if ph == "ramp":
             _set_drive("push", -FAR + 2 * FAR * min(1.0, k / RAMP_STEPS))
             if k >= RAMP_STEPS:
@@ -335,8 +342,12 @@ def _rules(objects) -> None:
             if k >= BACK_STEPS:
                 m["phase"], m["k"] = "settle", 0
         elif ph == "settle" and k >= SETTLE_STEPS:
-            m["phase"] = "done"
-            _say(f"load over: leg folded at most {m['fold_max']:.2f} deg; failed {m['failed']}")
+            if m["armed_ok"] and not m["touched"]:
+                m["phase"] = "done"
+            else:  # void (the leg was not open and locked when it began, or a hand came back): it is run again
+                m["phase"], m["quiet"] = None, 0
+            _say(f"load over: leg folded at most {m['fold_max']:.2f} deg; failed {m['failed']}; counted "
+                 f"{m['phase'] == 'done'}")
         m["fold_max"] = max(m["fold_max"], a - m["base"])
         if a - m["base"] > FOLD_DEG and not m["failed"]:
             m["failed"] = True
@@ -359,7 +370,8 @@ kit.on_step(_rules)
 def score(objects) -> float:
     """0 if the leg folded more than 3 deg under the side load. Otherwise 0.25 for the leg open (within 1 deg of
     upright); with that, +0.25 for the ring over the knee (its leading end 12 mm or more onto the upper strip);
-    with both, +0.5 once the side load is over. Halved unless both grippers are 5 cm clear of the leg, the brace and
+    with both, +0.5 once a counted side load is over (one that began with the leg open and locked and during which
+    both grippers stayed 5 cm clear; any other load is run again the next time the conditions hold). Halved unless both grippers are 5 cm clear of the leg, the brace and
     the ring and all of them are still."""
     if mk._EP.get("env") is None:  # offline; in sim the per-step rule has already run
         _rules(objects)
@@ -395,7 +407,7 @@ def distance(objects) -> float:
 # (pushing the knee only presses the leg onto its fold stop), so the left hand lifts it by its left tube, 10 cm from
 # the hinge (the fingers close on the tube's sides, so the tube turns between the pads), up to about 35 deg from
 # upright: past that the tube would run up between the fingers into the palm. The right hand meanwhile comes in
-# along the brace's plane from beyond it, fingers open, and grips the brace's upper strip 7 cm from the leg's clevis;
+# along the brace's plane from beyond it, fingers open, and grips the brace's upper strip 8 cm from the leg's clevis;
 # it takes the leg's weight, the left lets go and backs off, and the right swings the strip along its own path (computed
 # from the four-bar's geometry), which straightens the brace and stands the leg on its stop, and presses it there.
 # It lets go, comes down astride the ring (on the lower strip by the bracket), grips it and slides it straight up the
@@ -416,8 +428,13 @@ R_PARK = (0.240, -0.330, TOP + 0.150)
 L_PARK = (0.220, 0.430, TOP + 0.150)
 PUSH_CAP = 25.0  # N: the most the plan asks of the right hand on the strip
 DRIVE_MARGIN = 3.0  # N over what the swing needs (gravity and hinge friction): beats the servo's dead band
+DRIVE_MIN = 15.0  # N: the least the right hand drives the strip with while swinging the leg up
+EDGE_BELOW = 0.015  # the closing push on the lower strip's outer edge, this far under the knee pin
+EDGE_N = 6.0  # N of the closing push on the stop
+TIP_R = 0.010  # the closed finger-tip block's reach along the strip's normal
 PRESS_N = 5.0  # N pressing the leg onto its upright stop
-G_FROM_P = 0.070  # the right hand grips the upper strip this far from the clevis pin (clear of the clevis cheeks)
+GRIP_DZ = -0.010  # the strip is held 10 mm higher between the pads (under the swing's load it rides ~1-2 cm up them)
+G_FROM_P = 0.080  # the right hand grips the upper strip this far from the clevis pin (clear of the clevis cheeks)
 PHI_GRIP = 36.0  # the leg angle the right hand grips at: the left's lift ends ~3 deg short of PHI_HAND (arm sag)
 IN_X = 0.030  # the right hand comes in along the brace's plane from this far beyond the knee
 REACH_X, REACH_Z = (0.120, 0.400), 0.185  # every waypoint's TCP inside this (x range; height above the bench)
@@ -452,7 +469,7 @@ def _strip_tcp(phi):
     """TCP gripping the brace's upper strip G_FROM_P from the leg's clevis pin at leg angle ``phi``: close to the
     leg, so the hand has nearly the leg's own lever (the pin is 13 cm up it)."""
     c = loop(phi)
-    return tuple(float(v) for v in c["P"] + (c["K"] - c["P"]) / L * G_FROM_P + np.array([0, 0, TIP_C]))
+    return tuple(float(v) for v in c["P"] + (c["K"] - c["P"]) / L * G_FROM_P + np.array([0, 0, TIP_C + GRIP_DZ]))
 
 
 def _strip_dir(phi):
@@ -487,9 +504,7 @@ def _aim(arm, pos, force):
     pos = np.asarray(pos, float)
     if not FF or not np.any(force):
         return tuple(float(v) for v in pos)
-    aim = pos + _compliance(arm, pos) @ np.asarray(force, float)
-    aim[2] = min(aim[2], TOP + REACH_Z)  # never aimed above the arms' reach
-    return tuple(float(v) for v in aim)
+    return tuple(float(v) for v in pos + _compliance(arm, pos) @ np.asarray(force, float))
 
 
 def _lift_force(phi, moving=True):
@@ -500,8 +515,21 @@ def _lift_force(phi, moving=True):
 def _drive_force(phi, moving=True):
     """Force (N) the right hand applies at the gripped strip point to hold (or, with a margin, swing up) the leg."""
     d, lever = _strip_dir(max(phi, 0.5))
-    f = _hinge_torque(phi, moving) / lever + (DRIVE_MARGIN if moving else 0.0)
-    return d * min(PUSH_CAP, f)
+    if not moving:
+        return d * min(PUSH_CAP, _hinge_torque(phi, False) / lever)
+    # swinging: never less than DRIVE_MIN, so a leg that lags the plan is still driven on (the servo's sag is far
+    # larger than the path's lag, so the hand's force barely depends on where the leg actually is)
+    return d * min(PUSH_CAP, max(DRIVE_MIN, _hinge_torque(phi) / lever + DRIVE_MARGIN))
+
+
+def _edge_tcp(phi, back=0.0):
+    """TCP pushing the lower strip's outer edge EDGE_BELOW under the knee pin at leg angle ``phi``, ``back`` m out
+    along the strip's outward normal (fingers closed: the tip block reaches TIP_R along it)."""
+    c = loop(phi)
+    ea = (c["K"] - A) / L
+    na = np.array([ea[2], 0.0, -ea[0]])
+    na = na if na @ c["n"] > 0 else -na
+    return tuple(float(v) for v in A + ea * (L - EDGE_BELOW) + na * (STRIP_H / 2 + TIP_R + back) + [0, 0, TIP_C]), na
 
 
 DEMO_PHI = []  # (time s, leg angle deg) the plan expects: for the offline clash check
@@ -570,7 +598,19 @@ def demo():
     w(R, 0.5, press, c, "hold")
     w(R, 0.5, g1, c, "ease off")
     w(R, 0.5, g1, RELEASE, "let go of the strip")
-    w(R, 0.8, np.array(g1) + [0.040, 0.0, 0.0], o, "out along the brace's plane, fingers open")
+    # then the closing push on the lower strip's outer edge, just under the knee (the brace knee push): it presses the
+    # leg onto its stop with the brace straight. The hand stays within about 3 cm of the brace all the way (5 cm clear
+    # for 2 s would count as letting go and bring on the side load early).
+    w(R, 0.5, np.array(g1) + [0.0, 0.0, 0.012], RELEASE, "up off the strip")
+    e1, na = _edge_tcp(0.0, 0.015)
+    w(R, 1.0, e1, RELEASE, "over the knee to the lower strip's outer edge")
+    w(R, 0.5, e1, c, "close the fingers")
+    e, na = _edge_tcp(0.0)
+    w(R, 0.6, e, c, "onto the strip under the knee")
+    w(R, 1.0, _aim("right", e, -na * EDGE_N), c, "push the strip under the knee: the leg onto its stop")
+    w(R, 0.5, _aim("right", e, -na * EDGE_N), c, "hold")
+    w(R, 0.6, e1, c, "back off")
+    w(R, 0.4, e1, o, "open the fingers")
     if VARIANT == "open":
         w(R, 1.5, R_PARK, o, "park")
     else:  # along the brace to the ring, never more than about 4 cm from it (so it does not count as let go)
@@ -679,6 +719,14 @@ def self_test():
         "ring slid up, then pulled back off the knee before letting go": (opening() + sliding()
                                                                           + sliding()[::-1] + away(0.0, 0.0)
                                                                           + load(0.0, 0.0, 19.0), 0.0),
+        "unlocked when the load starts, a hand braces the leg through it, then locked and let go: run again, held":
+            (opening() + away(0.0, 0.0) + [(ph, s, d, knee_hand) for ph, s, d, _ in load(0.0, 0.0, 0.5)]
+             + sliding() + away(0.0, full) + load(0.0, full, 0.3), 1.0),
+        "the same, scored after the braced (void) load and the lock, before the repeat": (
+            opening() + away(0.0, 0.0) + [(ph, s, d, knee_hand) for ph, s, d, _ in load(0.0, 0.0, 0.5)]
+            + sliding() + [(0.0, full, 0.0, ring_hand)] * 5, 0.25),
+        "open and locked, but a hand comes back during the load (void, not repeated: the hand stays)":
+            (good + [(ph, s, d, ring_hand) for ph, s, d, _ in load(0.0, full, 0.3)], 0.25),
         "demo, but the arm parks 3 cm over the ring (not clear: no load)": (opening() + sliding() + [(0.0, full, 0.0, [
             tuple(np.array(_ring_tcp(RING_TOP)) + np.array([0, 0, 0.030]))])] * 30, 0.25),
     }
@@ -721,13 +769,18 @@ if __name__ == "__main__":
           f"{(RING_TOP - S0) * 1000:.0f})")
     task = load(__file__)
     hz = 20.0
-    for arm, waypoints in task.demo().items():
+    FF = False  # the hands' real path (no sag aim): inside the arms' reach
+    for arm, waypoints in demo().items():
         for wp in waypoints:
             assert REACH_X[0] - 1e-9 <= wp.pos[0] <= REACH_X[1] + 1e-9 and wp.pos[2] - TOP <= REACH_Z + 1e-9, (arm, wp)
+    real_top = {arm: max(wp.pos[2] for wp in w) - TOP for arm, w in demo().items()}
+    FF = True
+    for arm, waypoints in task.demo().items():
+        for wp in waypoints:
+            assert REACH_X[0] - 1e-9 <= wp.pos[0] <= REACH_X[1] + 1e-9, (arm, wp)  # the aims too
         plan = ArmPlan(list(waypoints), station.BASES[arm])
         q = np.array([plan.action7((k + 1) / hz)[0] for k in range(round(plan.duration * hz) + 5)])
         assert plan.worst_ik_mm < 0.5 and plan.worst_ik_deg < 0.1, (arm, plan.worst_ik_mm, plan.worst_ik_deg)
         assert np.all(q[:, :6] >= ik.LOWER) and np.all(q[:, :6] <= ik.UPPER), arm
-        top = max(wp.pos[2] for wp in waypoints) - TOP
         print(f"{arm}: {plan.duration:.1f} s plan, worst IK {plan.worst_ik_mm:.3f} mm / {plan.worst_ik_deg:.3f} deg, "
-              f"TCP at most {top * 1000:.0f} mm above the bench")
+              f"TCP at most {real_top[arm] * 1000:.0f} mm above the bench")
