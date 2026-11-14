@@ -1,0 +1,20 @@
+{
+  "title": "Empty a robot vacuum's dustbin: hold it over the waste box while the other hand holds its door release",
+  "category": "Societal relevance",
+  "keywords": [
+    "bimanual",
+    "household robot maintenance",
+    "holding while pressing",
+    "pouring granular material",
+    "putting back in place"
+  ],
+  "instruction": "Empty the robot vacuum's dustbin into the waste box: lift the bin off the robot by its grip fin and hold it over the waste box, then hold the orange release button on its lid down so its bottom doors open and the dust falls into the box, without spilling dust outside the box. Then put the bin back in its seat on the robot with its doors shut, and take both arms back to where they started.",
+  "context": "Robot vacuums are the most common robots in homes, and every one of them still needs a person to empty its dustbin every few days. The bin's trap doors only open while the release is held, so it is a two-handed job: one hand holds the bin over the waste box, the other holds the release.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) A robot vacuum cleaner, fixed in place: a white ABS disc 34 cm across with a dark bumper band, its deck 6 cm above the table, its middle 41.5 cm forward on the centre line, with a dark lidar turret 8 cm across and 2.2 cm tall 8 cm further forward. On its deck, the dustbin's seat: a grey rim 1 cm tall round an area 11.4 by 19.4 cm, centred 32.5 cm forward on the centre line. (2) In the seat, the dustbin (150 g): a smoky grey ABS box 10 cm front to back, 18 cm side to side and 4 cm tall, with a blue-grey filter window on its lid; a dark grip fin 5 cm long, 1 cm thick and 2.2 cm tall running front to back on its lid, 6.5 cm right of its middle; an orange release button 2.6 cm across on its lid, 7.2 cm left of its middle. Its bottom is two trap doors, hinged at its front and back edges, that swing down open while the button is held down and spring shut when it is let go. (3) Inside the bin on its doors, ten dust balls (fluff and grit), grey-brown, 13 mm across, 2 g each, in two rows of five. (4) An open grey polypropylene waste box, inside 18 cm front to back and 26 cm side to side, with walls 6 cm tall, centred 14.5 cm forward on the centre line. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Judged at the end. Emptied: at least 9 of the 10 dust balls inside the waste box and at most 1 anywhere else outside the bin (on the table or the robot). Seated: the bin back in its seat on the robot (its middle within 6 mm of the seat's, its bottom within 4 mm of the deck, level within 5 degrees) with both trap doors shut (within 5 degrees). 1.0: emptied, the bin seated with its doors shut, and both arms back where they started (each gripper's fingertip centre within 5 cm of its start); 0.5: emptied; 0.25: at least 5 dust balls in the waste box; else 0.0. The trial ends at the run limit, or once the full score has held for 1 s with the bin still.",
+  "run_limit": "700 steps (35 s at 20 Hz)",
+  "reset_notes": "Put the 10 dust balls back in the bin on its doors and set the bin in its seat on the robot.",
+  "fidelity": "Rigid-body simulation (Isaac Sim 6.1, PhysX, 20 Hz control). Simplified: the dust is ten 13 mm balls; the doors' release is a rule: once the button is pushed 1.5 mm down, the task file turns both door springs to open, and back to shut when it is let go. The robot vacuum and the waste box are fixed bodies. Cameras 1280 x 704 (Dream-1 sees 320 x 176).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-FRZEYM"
+}
