@@ -1,0 +1,35 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Asset"
+{
+    def Cube "NeckWallNegative" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        bool physics:collisionEnabled = 1
+        color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+        double size = 1
+        float xformOp:rotateZ = 15
+        float3 xformOp:scale = (0.04658743, 0.009, 0.162)
+        double3 xformOp:translate = (-0.0575, -0.030407078564789556, 0.081)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+    }
+
+    def Cube "NeckWallPositive" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        bool physics:collisionEnabled = 1
+        color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+        double size = 1
+        float xformOp:rotateZ = -15
+        float3 xformOp:scale = (0.04658743, 0.009, 0.162)
+        double3 xformOp:translate = (-0.0575, 0.030407078564789556, 0.081)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+    }
+}

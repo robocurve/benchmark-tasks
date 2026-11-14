@@ -1,0 +1,35 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Asset" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxRigidBodyAPI"]
+)
+{
+    point3f physics:centerOfMass = (0, 0, 0.000632)
+    float3 physics:diagonalInertia = (7.208766e-7, 7.208766e-7, 7.5200995e-7)
+    float physics:mass = 0.028355215
+    custom bool physxRigidBody:enableCCD = 1
+
+    def Xform "DriveVisual" (
+        prepend references = @ratchet_visual.usda@</RatchetVisual/Drive>
+    )
+    {
+    }
+
+    def Cylinder "BearingContact" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.012081
+        bool physics:collisionEnabled = 0
+        double radius = 0.007283
+        token visibility = "invisible"
+        double3 xformOp:translate = (0, 0, 0.000632)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+}

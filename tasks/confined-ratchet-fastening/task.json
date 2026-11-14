@@ -1,0 +1,19 @@
+{
+  "title": "Fasten a bracket bolt with a ratchet in confined access",
+  "category": "Impact on jobs",
+  "keywords": [
+    "ratchet",
+    "tool use",
+    "confined access",
+    "fastening"
+  ],
+  "instruction": "Pick up the ratchet from its cradle, fit the socket onto the started bracket bolt, then tighten it with short back-and-forth strokes between the walls until the bolt is seated.",
+  "context": "Confined maintenance work requires repeated short drive and return strokes when surrounding structure prevents a full wrench turn.",
+  "setup": "Dual YAM station. Both arms start at their rest pose with open grippers. A 203 mm steel ratchet with a permanently fitted 13.4 mm AF socket rests on a painted-steel cradle. An M8x16 steel bolt (1.25 mm pitch, 14 g) is already threaded into a fixed steel receiver under a 3 mm bracket with a 2.5 mm gap. Two 162 mm high, 9 mm thick steel walls restrict swing to about ±16 degrees. Flat rubber grip pads provide purchase. The reference demo uses the right arm; the left stays at rest. Exact geometry and poses are in the source.",
+  "scoring": "Current-state score from the 2.5 mm initial under-head gap: 0.2 for >=0.3125 mm axial advance; 0.4 for >=1.25 mm; 0.7 for actual head/bracket surface contact; 1.0 after 0.5 s continuous seating. Thread integrity is required. Loss of seating removes seating credit. Torque and cycles are diagnostic only. Numerical contact, penetration, nonfinite-state and fixture-displacement checks are in README. Measure initial/final gap and inspect the exposed interface in physical trials.",
+  "run_limit": "4,000 actions (200 simulated seconds at 20 Hz)",
+  "reset_notes": "Reset restores both arms to READY with open fingers, the ratchet to its cradle and the started bolt to its receiver. Only the bolt uses a reset placement jig, which is removed before actions.",
+  "fidelity": "NVIDIA ratchet visuals plus original socket, bolt, grip pads, cradle and fixture. Physical contacts support pickup and transmit torque. A native clutch and pitch joint drive travel; thread ridges are visual. Seating requires measured head-underside/bracket-top impulse, separation and geometry checks. Deformation, fastener strength and clamp preload are not modeled. Both arms start at rest, tool separate from bolt; no hand/tool or socket/bolt attachments. Demo uses simulator pose feedback.",
+  "scores": "Demo: 1.0 (3,150 actions); repeat: 1.0 (3,150 actions); Dream-1: 0.0 (4,000 actions). Attached demo and Dream videos use the same frozen source, assets and seed 17.",
+  "media": "M-RPDV89"
+}

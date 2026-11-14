@@ -1,0 +1,2733 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Asset"
+{
+    def Cube "Base" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </Asset/Materials/Base>
+        bool physics:collisionEnabled = 1
+        color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+        double size = 1
+        float3 xformOp:scale = (0.18, 0.16, 0.012)
+        double3 xformOp:translate = (0, 0, 0.006)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def "Materials"
+    {
+        def Material "Base"
+        {
+            token outputs:surface.connect = </Asset/Materials/Base/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.35
+                float inputs:roughness = 0.45
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector00"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector00/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector01"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector01/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector02"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector02/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector03"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector03/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector04"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector04/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector05"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector05/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector06"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector06/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector07"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector07/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector08"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector08/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector09"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector09/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector10"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector10/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector11"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector11/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector12"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector12/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector13"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector13/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector14"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector14/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector15"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector15/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector16"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector16/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector17"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector17/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector18"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector18/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector19"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector19/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector20"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector20/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector21"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector21/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector22"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector22/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector23"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector23/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector24"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector24/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector25"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector25/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector26"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector26/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector27"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector27/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector28"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector28/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector29"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector29/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector30"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector30/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector31"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector31/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector32"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector32/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector33"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector33/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector34"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector34/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector35"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector35/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector36"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector36/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector37"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector37/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector38"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector38/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector39"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector39/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector40"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector40/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector41"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector41/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector42"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector42/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector43"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector43/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector44"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector44/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector45"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector45/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector46"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector46/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Receiver_Sector47"
+        {
+            token outputs:surface.connect = </Asset/Materials/Receiver_Sector47/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.12, 0.14, 0.16)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector00"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector00/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector01"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector01/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector02"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector02/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector03"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector03/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector04"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector04/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector05"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector05/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector06"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector06/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector07"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector07/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector08"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector08/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector09"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector09/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector10"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector10/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector11"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector11/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector12"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector12/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector13"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector13/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector14"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector14/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector15"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector15/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector16"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector16/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector17"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector17/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector18"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector18/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector19"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector19/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector20"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector20/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector21"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector21/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector22"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector22/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector23"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector23/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector24"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector24/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector25"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector25/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector26"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector26/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector27"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector27/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector28"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector28/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector29"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector29/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector30"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector30/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector31"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector31/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector32"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector32/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector33"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector33/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector34"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector34/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector35"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector35/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector36"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector36/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector37"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector37/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector38"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector38/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector39"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector39/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector40"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector40/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector41"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector41/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector42"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector42/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector43"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector43/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector44"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector44/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector45"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector45/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector46"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector46/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+
+        def Material "Bracket_Sector47"
+        {
+            token outputs:surface.connect = </Asset/Materials/Bracket_Sector47/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.17, 0.29, 0.4)
+                float inputs:metallic = 0.25
+                float inputs:roughness = 0.28
+                token outputs:surface
+            }
+        }
+    }
+
+    def "Receiver"
+    {
+        def Mesh "Sector00" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector00>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.00435, 0, 0.012), (0.045, 0, 0.012), (0.045, 0.005924362, 0.012), (0.0043127853, 0.00056778896, 0.012), (0.00435, 0, 0.09), (0.045, 0, 0.09), (0.045, 0.005924362, 0.09), (0.0043127853, 0.00056778896, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector01" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector01>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0043127853, 0.00056778896, 0.012), (0.045, 0.005924362, 0.012), (0.045, 0.012057713, 0.012), (0.0042017773, 0.0011258628, 0.012), (0.0043127853, 0.00056778896, 0.09), (0.045, 0.005924362, 0.09), (0.045, 0.012057713, 0.09), (0.0042017773, 0.0011258628, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector02" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector02>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0042017773, 0.0011258628, 0.012), (0.045, 0.012057713, 0.012), (0.045, 0.018639611, 0.012), (0.004018876, 0.001664673, 0.012), (0.0042017773, 0.0011258628, 0.09), (0.045, 0.012057713, 0.09), (0.045, 0.018639611, 0.09), (0.004018876, 0.001664673, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector03" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector03>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.004018876, 0.001664673, 0.012), (0.045, 0.018639611, 0.012), (0.045, 0.025980761, 0.012), (0.0037672105, 0.002175, 0.012), (0.004018876, 0.001664673, 0.09), (0.045, 0.018639611, 0.09), (0.045, 0.025980761, 0.09), (0.0037672105, 0.002175, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector04" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector04>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0037672105, 0.002175, 0.012), (0.045, 0.025980761, 0.012), (0.045, 0.034529716, 0.012), (0.003451087, 0.0026481121, 0.012), (0.0037672105, 0.002175, 0.09), (0.045, 0.025980761, 0.09), (0.045, 0.034529716, 0.09), (0.003451087, 0.0026481121, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector05" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector05>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.003451087, 0.0026481121, 0.012), (0.045, 0.034529716, 0.012), (0.04, 0.04, 0.012), (0.0030759145, 0.0030759145, 0.012), (0.003451087, 0.0026481121, 0.09), (0.045, 0.034529716, 0.09), (0.04, 0.04, 0.09), (0.0030759145, 0.0030759145, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector06" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector06>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0030759145, 0.0030759145, 0.012), (0.04, 0.04, 0.012), (0.03069308, 0.04, 0.012), (0.0026481121, 0.003451087, 0.012), (0.0030759145, 0.0030759145, 0.09), (0.04, 0.04, 0.09), (0.03069308, 0.04, 0.09), (0.0026481121, 0.003451087, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector07" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector07>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0026481121, 0.003451087, 0.012), (0.03069308, 0.04, 0.012), (0.023094011, 0.04, 0.012), (0.002175, 0.0037672105, 0.012), (0.0026481121, 0.003451087, 0.09), (0.03069308, 0.04, 0.09), (0.023094011, 0.04, 0.09), (0.002175, 0.0037672105, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector08" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector08>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.002175, 0.0037672105, 0.012), (0.023094011, 0.04, 0.012), (0.016568543, 0.04, 0.012), (0.001664673, 0.004018876, 0.012), (0.002175, 0.0037672105, 0.09), (0.023094011, 0.04, 0.09), (0.016568543, 0.04, 0.09), (0.001664673, 0.004018876, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector09" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector09>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.001664673, 0.004018876, 0.012), (0.016568543, 0.04, 0.012), (0.0107179675, 0.04, 0.012), (0.0011258628, 0.0042017773, 0.012), (0.001664673, 0.004018876, 0.09), (0.016568543, 0.04, 0.09), (0.0107179675, 0.04, 0.09), (0.0011258628, 0.0042017773, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector10" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector10>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0011258628, 0.0042017773, 0.012), (0.0107179675, 0.04, 0.012), (0.0052660997, 0.04, 0.012), (0.00056778896, 0.0043127853, 0.012), (0.0011258628, 0.0042017773, 0.09), (0.0107179675, 0.04, 0.09), (0.0052660997, 0.04, 0.09), (0.00056778896, 0.0043127853, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector11" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector11>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.00056778896, 0.0043127853, 0.012), (0.0052660997, 0.04, 0.012), (2.4492936e-18, 0.04, 0.012), (2.663607e-19, 0.00435, 0.012), (0.00056778896, 0.0043127853, 0.09), (0.0052660997, 0.04, 0.09), (2.4492936e-18, 0.04, 0.09), (2.663607e-19, 0.00435, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector12" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector12>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(2.663607e-19, 0.00435, 0.012), (2.4492936e-18, 0.04, 0.012), (-0.0052660997, 0.04, 0.012), (-0.00056778896, 0.0043127853, 0.012), (2.663607e-19, 0.00435, 0.09), (2.4492936e-18, 0.04, 0.09), (-0.0052660997, 0.04, 0.09), (-0.00056778896, 0.0043127853, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector13" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector13>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.00056778896, 0.0043127853, 0.012), (-0.0052660997, 0.04, 0.012), (-0.0107179675, 0.04, 0.012), (-0.0011258628, 0.0042017773, 0.012), (-0.00056778896, 0.0043127853, 0.09), (-0.0052660997, 0.04, 0.09), (-0.0107179675, 0.04, 0.09), (-0.0011258628, 0.0042017773, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector14" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector14>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0011258628, 0.0042017773, 0.012), (-0.0107179675, 0.04, 0.012), (-0.016568543, 0.04, 0.012), (-0.001664673, 0.004018876, 0.012), (-0.0011258628, 0.0042017773, 0.09), (-0.0107179675, 0.04, 0.09), (-0.016568543, 0.04, 0.09), (-0.001664673, 0.004018876, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector15" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector15>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.001664673, 0.004018876, 0.012), (-0.016568543, 0.04, 0.012), (-0.023094011, 0.04, 0.012), (-0.002175, 0.0037672105, 0.012), (-0.001664673, 0.004018876, 0.09), (-0.016568543, 0.04, 0.09), (-0.023094011, 0.04, 0.09), (-0.002175, 0.0037672105, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector16" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector16>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.002175, 0.0037672105, 0.012), (-0.023094011, 0.04, 0.012), (-0.03069308, 0.04, 0.012), (-0.0026481121, 0.003451087, 0.012), (-0.002175, 0.0037672105, 0.09), (-0.023094011, 0.04, 0.09), (-0.03069308, 0.04, 0.09), (-0.0026481121, 0.003451087, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector17" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector17>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0026481121, 0.003451087, 0.012), (-0.03069308, 0.04, 0.012), (-0.04, 0.04, 0.012), (-0.0030759145, 0.0030759145, 0.012), (-0.0026481121, 0.003451087, 0.09), (-0.03069308, 0.04, 0.09), (-0.04, 0.04, 0.09), (-0.0030759145, 0.0030759145, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector18" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector18>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0030759145, 0.0030759145, 0.012), (-0.04, 0.04, 0.012), (-0.045, 0.034529716, 0.012), (-0.003451087, 0.0026481121, 0.012), (-0.0030759145, 0.0030759145, 0.09), (-0.04, 0.04, 0.09), (-0.045, 0.034529716, 0.09), (-0.003451087, 0.0026481121, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector19" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector19>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.003451087, 0.0026481121, 0.012), (-0.045, 0.034529716, 0.012), (-0.045, 0.025980761, 0.012), (-0.0037672105, 0.002175, 0.012), (-0.003451087, 0.0026481121, 0.09), (-0.045, 0.034529716, 0.09), (-0.045, 0.025980761, 0.09), (-0.0037672105, 0.002175, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector20" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector20>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0037672105, 0.002175, 0.012), (-0.045, 0.025980761, 0.012), (-0.045, 0.018639611, 0.012), (-0.004018876, 0.001664673, 0.012), (-0.0037672105, 0.002175, 0.09), (-0.045, 0.025980761, 0.09), (-0.045, 0.018639611, 0.09), (-0.004018876, 0.001664673, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector21" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector21>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.004018876, 0.001664673, 0.012), (-0.045, 0.018639611, 0.012), (-0.045, 0.012057713, 0.012), (-0.0042017773, 0.0011258628, 0.012), (-0.004018876, 0.001664673, 0.09), (-0.045, 0.018639611, 0.09), (-0.045, 0.012057713, 0.09), (-0.0042017773, 0.0011258628, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector22" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector22>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0042017773, 0.0011258628, 0.012), (-0.045, 0.012057713, 0.012), (-0.045, 0.005924362, 0.012), (-0.0043127853, 0.00056778896, 0.012), (-0.0042017773, 0.0011258628, 0.09), (-0.045, 0.012057713, 0.09), (-0.045, 0.005924362, 0.09), (-0.0043127853, 0.00056778896, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector23" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector23>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0043127853, 0.00056778896, 0.012), (-0.045, 0.005924362, 0.012), (-0.045, 5.5109105e-18, 0.012), (-0.00435, 5.327214e-19, 0.012), (-0.0043127853, 0.00056778896, 0.09), (-0.045, 0.005924362, 0.09), (-0.045, 5.5109105e-18, 0.09), (-0.00435, 5.327214e-19, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector24" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector24>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.00435, 5.327214e-19, 0.012), (-0.045, 5.5109105e-18, 0.012), (-0.045, -0.005924362, 0.012), (-0.0043127853, -0.00056778896, 0.012), (-0.00435, 5.327214e-19, 0.09), (-0.045, 5.5109105e-18, 0.09), (-0.045, -0.005924362, 0.09), (-0.0043127853, -0.00056778896, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector25" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector25>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0043127853, -0.00056778896, 0.012), (-0.045, -0.005924362, 0.012), (-0.045, -0.012057713, 0.012), (-0.0042017773, -0.0011258628, 0.012), (-0.0043127853, -0.00056778896, 0.09), (-0.045, -0.005924362, 0.09), (-0.045, -0.012057713, 0.09), (-0.0042017773, -0.0011258628, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector26" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector26>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0042017773, -0.0011258628, 0.012), (-0.045, -0.012057713, 0.012), (-0.045, -0.018639611, 0.012), (-0.004018876, -0.001664673, 0.012), (-0.0042017773, -0.0011258628, 0.09), (-0.045, -0.012057713, 0.09), (-0.045, -0.018639611, 0.09), (-0.004018876, -0.001664673, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector27" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector27>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.004018876, -0.001664673, 0.012), (-0.045, -0.018639611, 0.012), (-0.045, -0.025980761, 0.012), (-0.0037672105, -0.002175, 0.012), (-0.004018876, -0.001664673, 0.09), (-0.045, -0.018639611, 0.09), (-0.045, -0.025980761, 0.09), (-0.0037672105, -0.002175, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector28" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector28>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0037672105, -0.002175, 0.012), (-0.045, -0.025980761, 0.012), (-0.045, -0.034529716, 0.012), (-0.003451087, -0.0026481121, 0.012), (-0.0037672105, -0.002175, 0.09), (-0.045, -0.025980761, 0.09), (-0.045, -0.034529716, 0.09), (-0.003451087, -0.0026481121, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector29" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector29>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.003451087, -0.0026481121, 0.012), (-0.045, -0.034529716, 0.012), (-0.04, -0.04, 0.012), (-0.0030759145, -0.0030759145, 0.012), (-0.003451087, -0.0026481121, 0.09), (-0.045, -0.034529716, 0.09), (-0.04, -0.04, 0.09), (-0.0030759145, -0.0030759145, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector30" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector30>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0030759145, -0.0030759145, 0.012), (-0.04, -0.04, 0.012), (-0.03069308, -0.04, 0.012), (-0.0026481121, -0.003451087, 0.012), (-0.0030759145, -0.0030759145, 0.09), (-0.04, -0.04, 0.09), (-0.03069308, -0.04, 0.09), (-0.0026481121, -0.003451087, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector31" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector31>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0026481121, -0.003451087, 0.012), (-0.03069308, -0.04, 0.012), (-0.023094011, -0.04, 0.012), (-0.002175, -0.0037672105, 0.012), (-0.0026481121, -0.003451087, 0.09), (-0.03069308, -0.04, 0.09), (-0.023094011, -0.04, 0.09), (-0.002175, -0.0037672105, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector32" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector32>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.002175, -0.0037672105, 0.012), (-0.023094011, -0.04, 0.012), (-0.016568543, -0.04, 0.012), (-0.001664673, -0.004018876, 0.012), (-0.002175, -0.0037672105, 0.09), (-0.023094011, -0.04, 0.09), (-0.016568543, -0.04, 0.09), (-0.001664673, -0.004018876, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector33" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector33>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.001664673, -0.004018876, 0.012), (-0.016568543, -0.04, 0.012), (-0.0107179675, -0.04, 0.012), (-0.0011258628, -0.0042017773, 0.012), (-0.001664673, -0.004018876, 0.09), (-0.016568543, -0.04, 0.09), (-0.0107179675, -0.04, 0.09), (-0.0011258628, -0.0042017773, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector34" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector34>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0011258628, -0.0042017773, 0.012), (-0.0107179675, -0.04, 0.012), (-0.0052660997, -0.04, 0.012), (-0.00056778896, -0.0043127853, 0.012), (-0.0011258628, -0.0042017773, 0.09), (-0.0107179675, -0.04, 0.09), (-0.0052660997, -0.04, 0.09), (-0.00056778896, -0.0043127853, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector35" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector35>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.00056778896, -0.0043127853, 0.012), (-0.0052660997, -0.04, 0.012), (-7.347881e-18, -0.04, 0.012), (-7.99082e-19, -0.00435, 0.012), (-0.00056778896, -0.0043127853, 0.09), (-0.0052660997, -0.04, 0.09), (-7.347881e-18, -0.04, 0.09), (-7.99082e-19, -0.00435, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector36" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector36>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-7.99082e-19, -0.00435, 0.012), (-7.347881e-18, -0.04, 0.012), (0.0052660997, -0.04, 0.012), (0.00056778896, -0.0043127853, 0.012), (-7.99082e-19, -0.00435, 0.09), (-7.347881e-18, -0.04, 0.09), (0.0052660997, -0.04, 0.09), (0.00056778896, -0.0043127853, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector37" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector37>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.00056778896, -0.0043127853, 0.012), (0.0052660997, -0.04, 0.012), (0.0107179675, -0.04, 0.012), (0.0011258628, -0.0042017773, 0.012), (0.00056778896, -0.0043127853, 0.09), (0.0052660997, -0.04, 0.09), (0.0107179675, -0.04, 0.09), (0.0011258628, -0.0042017773, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector38" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector38>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0011258628, -0.0042017773, 0.012), (0.0107179675, -0.04, 0.012), (0.016568543, -0.04, 0.012), (0.001664673, -0.004018876, 0.012), (0.0011258628, -0.0042017773, 0.09), (0.0107179675, -0.04, 0.09), (0.016568543, -0.04, 0.09), (0.001664673, -0.004018876, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector39" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector39>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.001664673, -0.004018876, 0.012), (0.016568543, -0.04, 0.012), (0.023094011, -0.04, 0.012), (0.002175, -0.0037672105, 0.012), (0.001664673, -0.004018876, 0.09), (0.016568543, -0.04, 0.09), (0.023094011, -0.04, 0.09), (0.002175, -0.0037672105, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector40" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector40>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.002175, -0.0037672105, 0.012), (0.023094011, -0.04, 0.012), (0.03069308, -0.04, 0.012), (0.0026481121, -0.003451087, 0.012), (0.002175, -0.0037672105, 0.09), (0.023094011, -0.04, 0.09), (0.03069308, -0.04, 0.09), (0.0026481121, -0.003451087, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector41" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector41>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0026481121, -0.003451087, 0.012), (0.03069308, -0.04, 0.012), (0.04, -0.04, 0.012), (0.0030759145, -0.0030759145, 0.012), (0.0026481121, -0.003451087, 0.09), (0.03069308, -0.04, 0.09), (0.04, -0.04, 0.09), (0.0030759145, -0.0030759145, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector42" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector42>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0030759145, -0.0030759145, 0.012), (0.04, -0.04, 0.012), (0.045, -0.034529716, 0.012), (0.003451087, -0.0026481121, 0.012), (0.0030759145, -0.0030759145, 0.09), (0.04, -0.04, 0.09), (0.045, -0.034529716, 0.09), (0.003451087, -0.0026481121, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector43" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector43>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.003451087, -0.0026481121, 0.012), (0.045, -0.034529716, 0.012), (0.045, -0.025980761, 0.012), (0.0037672105, -0.002175, 0.012), (0.003451087, -0.0026481121, 0.09), (0.045, -0.034529716, 0.09), (0.045, -0.025980761, 0.09), (0.0037672105, -0.002175, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector44" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector44>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0037672105, -0.002175, 0.012), (0.045, -0.025980761, 0.012), (0.045, -0.018639611, 0.012), (0.004018876, -0.001664673, 0.012), (0.0037672105, -0.002175, 0.09), (0.045, -0.025980761, 0.09), (0.045, -0.018639611, 0.09), (0.004018876, -0.001664673, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector45" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector45>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.004018876, -0.001664673, 0.012), (0.045, -0.018639611, 0.012), (0.045, -0.012057713, 0.012), (0.0042017773, -0.0011258628, 0.012), (0.004018876, -0.001664673, 0.09), (0.045, -0.018639611, 0.09), (0.045, -0.012057713, 0.09), (0.0042017773, -0.0011258628, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector46" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector46>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0042017773, -0.0011258628, 0.012), (0.045, -0.012057713, 0.012), (0.045, -0.005924362, 0.012), (0.0043127853, -0.00056778896, 0.012), (0.0042017773, -0.0011258628, 0.09), (0.045, -0.012057713, 0.09), (0.045, -0.005924362, 0.09), (0.0043127853, -0.00056778896, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector47" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Receiver_Sector47>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0043127853, -0.00056778896, 0.012), (0.045, -0.005924362, 0.012), (0.045, -1.1021821e-17, 0.012), (0.00435, -1.0654428e-18, 0.012), (0.0043127853, -0.00056778896, 0.09), (0.045, -0.005924362, 0.09), (0.045, -1.1021821e-17, 0.09), (0.00435, -1.0654428e-18, 0.09)]
+            color3f[] primvars:displayColor = [(0.12, 0.14, 0.16)]
+            uniform token subdivisionScheme = "none"
+        }
+    }
+
+    def "Bracket"
+    {
+        def Mesh "Sector00" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector00>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0046, 0, 0.09), (0.07, 0, 0.09), (0.07, 0.009215675, 0.09), (0.004560646, 0.00060042046, 0.09), (0.0046, 0, 0.093), (0.07, 0, 0.093), (0.07, 0.009215675, 0.093), (0.004560646, 0.00060042046, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector01" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector01>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.004560646, 0.00060042046, 0.09), (0.07, 0.009215675, 0.09), (0.07, 0.018756444, 0.09), (0.004443259, 0.0011905676, 0.09), (0.004560646, 0.00060042046, 0.093), (0.07, 0.009215675, 0.093), (0.07, 0.018756444, 0.093), (0.004443259, 0.0011905676, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector02" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector02>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.004443259, 0.0011905676, 0.09), (0.07, 0.018756444, 0.09), (0.07, 0.02899495, 0.09), (0.0042498456, 0.0017603438, 0.09), (0.004443259, 0.0011905676, 0.093), (0.07, 0.018756444, 0.093), (0.07, 0.02899495, 0.093), (0.0042498456, 0.0017603438, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector03" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector03>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0042498456, 0.0017603438, 0.09), (0.07, 0.02899495, 0.09), (0.07, 0.04041452, 0.09), (0.003983717, 0.0023, 0.09), (0.0042498456, 0.0017603438, 0.093), (0.07, 0.02899495, 0.093), (0.07, 0.04041452, 0.093), (0.003983717, 0.0023, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector04" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector04>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.003983717, 0.0023, 0.09), (0.07, 0.04041452, 0.09), (0.05864514, 0.045, 0.09), (0.0036494255, 0.0028003026, 0.09), (0.003983717, 0.0023, 0.093), (0.07, 0.04041452, 0.093), (0.05864514, 0.045, 0.093), (0.0036494255, 0.0028003026, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector05" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector05>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0036494255, 0.0028003026, 0.09), (0.05864514, 0.045, 0.09), (0.045, 0.045, 0.09), (0.0032526911, 0.0032526911, 0.09), (0.0036494255, 0.0028003026, 0.093), (0.05864514, 0.045, 0.093), (0.045, 0.045, 0.093), (0.0032526911, 0.0032526911, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector06" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector06>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0032526911, 0.0032526911, 0.09), (0.045, 0.045, 0.09), (0.034529716, 0.045, 0.09), (0.0028003026, 0.0036494255, 0.09), (0.0032526911, 0.0032526911, 0.093), (0.045, 0.045, 0.093), (0.034529716, 0.045, 0.093), (0.0028003026, 0.0036494255, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector07" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector07>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0028003026, 0.0036494255, 0.09), (0.034529716, 0.045, 0.09), (0.025980761, 0.045, 0.09), (0.0023, 0.003983717, 0.09), (0.0028003026, 0.0036494255, 0.093), (0.034529716, 0.045, 0.093), (0.025980761, 0.045, 0.093), (0.0023, 0.003983717, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector08" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector08>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0023, 0.003983717, 0.09), (0.025980761, 0.045, 0.09), (0.018639611, 0.045, 0.09), (0.0017603438, 0.0042498456, 0.09), (0.0023, 0.003983717, 0.093), (0.025980761, 0.045, 0.093), (0.018639611, 0.045, 0.093), (0.0017603438, 0.0042498456, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector09" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector09>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0017603438, 0.0042498456, 0.09), (0.018639611, 0.045, 0.09), (0.012057713, 0.045, 0.09), (0.0011905676, 0.004443259, 0.09), (0.0017603438, 0.0042498456, 0.093), (0.018639611, 0.045, 0.093), (0.012057713, 0.045, 0.093), (0.0011905676, 0.004443259, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector10" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector10>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0011905676, 0.004443259, 0.09), (0.012057713, 0.045, 0.09), (0.005924362, 0.045, 0.09), (0.00060042046, 0.004560646, 0.09), (0.0011905676, 0.004443259, 0.093), (0.012057713, 0.045, 0.093), (0.005924362, 0.045, 0.093), (0.00060042046, 0.004560646, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector11" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector11>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.00060042046, 0.004560646, 0.09), (0.005924362, 0.045, 0.09), (2.7554553e-18, 0.045, 0.09), (2.8166878e-19, 0.0046, 0.09), (0.00060042046, 0.004560646, 0.093), (0.005924362, 0.045, 0.093), (2.7554553e-18, 0.045, 0.093), (2.8166878e-19, 0.0046, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector12" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector12>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(2.8166878e-19, 0.0046, 0.09), (2.7554553e-18, 0.045, 0.09), (-0.005924362, 0.045, 0.09), (-0.00060042046, 0.004560646, 0.09), (2.8166878e-19, 0.0046, 0.093), (2.7554553e-18, 0.045, 0.093), (-0.005924362, 0.045, 0.093), (-0.00060042046, 0.004560646, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector13" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector13>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.00060042046, 0.004560646, 0.09), (-0.005924362, 0.045, 0.09), (-0.012057713, 0.045, 0.09), (-0.0011905676, 0.004443259, 0.09), (-0.00060042046, 0.004560646, 0.093), (-0.005924362, 0.045, 0.093), (-0.012057713, 0.045, 0.093), (-0.0011905676, 0.004443259, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector14" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector14>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0011905676, 0.004443259, 0.09), (-0.012057713, 0.045, 0.09), (-0.018639611, 0.045, 0.09), (-0.0017603438, 0.0042498456, 0.09), (-0.0011905676, 0.004443259, 0.093), (-0.012057713, 0.045, 0.093), (-0.018639611, 0.045, 0.093), (-0.0017603438, 0.0042498456, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector15" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector15>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0017603438, 0.0042498456, 0.09), (-0.018639611, 0.045, 0.09), (-0.025980761, 0.045, 0.09), (-0.0023, 0.003983717, 0.09), (-0.0017603438, 0.0042498456, 0.093), (-0.018639611, 0.045, 0.093), (-0.025980761, 0.045, 0.093), (-0.0023, 0.003983717, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector16" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector16>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0023, 0.003983717, 0.09), (-0.025980761, 0.045, 0.09), (-0.034529716, 0.045, 0.09), (-0.0028003026, 0.0036494255, 0.09), (-0.0023, 0.003983717, 0.093), (-0.025980761, 0.045, 0.093), (-0.034529716, 0.045, 0.093), (-0.0028003026, 0.0036494255, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector17" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector17>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0028003026, 0.0036494255, 0.09), (-0.034529716, 0.045, 0.09), (-0.045, 0.045, 0.09), (-0.0032526911, 0.0032526911, 0.09), (-0.0028003026, 0.0036494255, 0.093), (-0.034529716, 0.045, 0.093), (-0.045, 0.045, 0.093), (-0.0032526911, 0.0032526911, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector18" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector18>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0032526911, 0.0032526911, 0.09), (-0.045, 0.045, 0.09), (-0.05864514, 0.045, 0.09), (-0.0036494255, 0.0028003026, 0.09), (-0.0032526911, 0.0032526911, 0.093), (-0.045, 0.045, 0.093), (-0.05864514, 0.045, 0.093), (-0.0036494255, 0.0028003026, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector19" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector19>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0036494255, 0.0028003026, 0.09), (-0.05864514, 0.045, 0.09), (-0.07, 0.04041452, 0.09), (-0.003983717, 0.0023, 0.09), (-0.0036494255, 0.0028003026, 0.093), (-0.05864514, 0.045, 0.093), (-0.07, 0.04041452, 0.093), (-0.003983717, 0.0023, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector20" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector20>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.003983717, 0.0023, 0.09), (-0.07, 0.04041452, 0.09), (-0.07, 0.02899495, 0.09), (-0.0042498456, 0.0017603438, 0.09), (-0.003983717, 0.0023, 0.093), (-0.07, 0.04041452, 0.093), (-0.07, 0.02899495, 0.093), (-0.0042498456, 0.0017603438, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector21" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector21>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0042498456, 0.0017603438, 0.09), (-0.07, 0.02899495, 0.09), (-0.07, 0.018756444, 0.09), (-0.004443259, 0.0011905676, 0.09), (-0.0042498456, 0.0017603438, 0.093), (-0.07, 0.02899495, 0.093), (-0.07, 0.018756444, 0.093), (-0.004443259, 0.0011905676, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector22" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector22>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.004443259, 0.0011905676, 0.09), (-0.07, 0.018756444, 0.09), (-0.07, 0.009215675, 0.09), (-0.004560646, 0.00060042046, 0.09), (-0.004443259, 0.0011905676, 0.093), (-0.07, 0.018756444, 0.093), (-0.07, 0.009215675, 0.093), (-0.004560646, 0.00060042046, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector23" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector23>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.004560646, 0.00060042046, 0.09), (-0.07, 0.009215675, 0.09), (-0.07, 8.572528e-18, 0.09), (-0.0046, 5.6333755e-19, 0.09), (-0.004560646, 0.00060042046, 0.093), (-0.07, 0.009215675, 0.093), (-0.07, 8.572528e-18, 0.093), (-0.0046, 5.6333755e-19, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector24" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector24>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0046, 5.6333755e-19, 0.09), (-0.07, 8.572528e-18, 0.09), (-0.07, -0.009215675, 0.09), (-0.004560646, -0.00060042046, 0.09), (-0.0046, 5.6333755e-19, 0.093), (-0.07, 8.572528e-18, 0.093), (-0.07, -0.009215675, 0.093), (-0.004560646, -0.00060042046, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector25" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector25>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.004560646, -0.00060042046, 0.09), (-0.07, -0.009215675, 0.09), (-0.07, -0.018756444, 0.09), (-0.004443259, -0.0011905676, 0.09), (-0.004560646, -0.00060042046, 0.093), (-0.07, -0.009215675, 0.093), (-0.07, -0.018756444, 0.093), (-0.004443259, -0.0011905676, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector26" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector26>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.004443259, -0.0011905676, 0.09), (-0.07, -0.018756444, 0.09), (-0.07, -0.02899495, 0.09), (-0.0042498456, -0.0017603438, 0.09), (-0.004443259, -0.0011905676, 0.093), (-0.07, -0.018756444, 0.093), (-0.07, -0.02899495, 0.093), (-0.0042498456, -0.0017603438, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector27" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector27>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0042498456, -0.0017603438, 0.09), (-0.07, -0.02899495, 0.09), (-0.07, -0.04041452, 0.09), (-0.003983717, -0.0023, 0.09), (-0.0042498456, -0.0017603438, 0.093), (-0.07, -0.02899495, 0.093), (-0.07, -0.04041452, 0.093), (-0.003983717, -0.0023, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector28" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector28>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.003983717, -0.0023, 0.09), (-0.07, -0.04041452, 0.09), (-0.05864514, -0.045, 0.09), (-0.0036494255, -0.0028003026, 0.09), (-0.003983717, -0.0023, 0.093), (-0.07, -0.04041452, 0.093), (-0.05864514, -0.045, 0.093), (-0.0036494255, -0.0028003026, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector29" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector29>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0036494255, -0.0028003026, 0.09), (-0.05864514, -0.045, 0.09), (-0.045, -0.045, 0.09), (-0.0032526911, -0.0032526911, 0.09), (-0.0036494255, -0.0028003026, 0.093), (-0.05864514, -0.045, 0.093), (-0.045, -0.045, 0.093), (-0.0032526911, -0.0032526911, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector30" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector30>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0032526911, -0.0032526911, 0.09), (-0.045, -0.045, 0.09), (-0.034529716, -0.045, 0.09), (-0.0028003026, -0.0036494255, 0.09), (-0.0032526911, -0.0032526911, 0.093), (-0.045, -0.045, 0.093), (-0.034529716, -0.045, 0.093), (-0.0028003026, -0.0036494255, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector31" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector31>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0028003026, -0.0036494255, 0.09), (-0.034529716, -0.045, 0.09), (-0.025980761, -0.045, 0.09), (-0.0023, -0.003983717, 0.09), (-0.0028003026, -0.0036494255, 0.093), (-0.034529716, -0.045, 0.093), (-0.025980761, -0.045, 0.093), (-0.0023, -0.003983717, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector32" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector32>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0023, -0.003983717, 0.09), (-0.025980761, -0.045, 0.09), (-0.018639611, -0.045, 0.09), (-0.0017603438, -0.0042498456, 0.09), (-0.0023, -0.003983717, 0.093), (-0.025980761, -0.045, 0.093), (-0.018639611, -0.045, 0.093), (-0.0017603438, -0.0042498456, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector33" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector33>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0017603438, -0.0042498456, 0.09), (-0.018639611, -0.045, 0.09), (-0.012057713, -0.045, 0.09), (-0.0011905676, -0.004443259, 0.09), (-0.0017603438, -0.0042498456, 0.093), (-0.018639611, -0.045, 0.093), (-0.012057713, -0.045, 0.093), (-0.0011905676, -0.004443259, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector34" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector34>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.0011905676, -0.004443259, 0.09), (-0.012057713, -0.045, 0.09), (-0.005924362, -0.045, 0.09), (-0.00060042046, -0.004560646, 0.09), (-0.0011905676, -0.004443259, 0.093), (-0.012057713, -0.045, 0.093), (-0.005924362, -0.045, 0.093), (-0.00060042046, -0.004560646, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector35" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector35>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-0.00060042046, -0.004560646, 0.09), (-0.005924362, -0.045, 0.09), (-8.266366e-18, -0.045, 0.09), (-8.450063e-19, -0.0046, 0.09), (-0.00060042046, -0.004560646, 0.093), (-0.005924362, -0.045, 0.093), (-8.266366e-18, -0.045, 0.093), (-8.450063e-19, -0.0046, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector36" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector36>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(-8.450063e-19, -0.0046, 0.09), (-8.266366e-18, -0.045, 0.09), (0.005924362, -0.045, 0.09), (0.00060042046, -0.004560646, 0.09), (-8.450063e-19, -0.0046, 0.093), (-8.266366e-18, -0.045, 0.093), (0.005924362, -0.045, 0.093), (0.00060042046, -0.004560646, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector37" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector37>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.00060042046, -0.004560646, 0.09), (0.005924362, -0.045, 0.09), (0.012057713, -0.045, 0.09), (0.0011905676, -0.004443259, 0.09), (0.00060042046, -0.004560646, 0.093), (0.005924362, -0.045, 0.093), (0.012057713, -0.045, 0.093), (0.0011905676, -0.004443259, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector38" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector38>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0011905676, -0.004443259, 0.09), (0.012057713, -0.045, 0.09), (0.018639611, -0.045, 0.09), (0.0017603438, -0.0042498456, 0.09), (0.0011905676, -0.004443259, 0.093), (0.012057713, -0.045, 0.093), (0.018639611, -0.045, 0.093), (0.0017603438, -0.0042498456, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector39" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector39>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0017603438, -0.0042498456, 0.09), (0.018639611, -0.045, 0.09), (0.025980761, -0.045, 0.09), (0.0023, -0.003983717, 0.09), (0.0017603438, -0.0042498456, 0.093), (0.018639611, -0.045, 0.093), (0.025980761, -0.045, 0.093), (0.0023, -0.003983717, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector40" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector40>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0023, -0.003983717, 0.09), (0.025980761, -0.045, 0.09), (0.034529716, -0.045, 0.09), (0.0028003026, -0.0036494255, 0.09), (0.0023, -0.003983717, 0.093), (0.025980761, -0.045, 0.093), (0.034529716, -0.045, 0.093), (0.0028003026, -0.0036494255, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector41" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector41>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0028003026, -0.0036494255, 0.09), (0.034529716, -0.045, 0.09), (0.045, -0.045, 0.09), (0.0032526911, -0.0032526911, 0.09), (0.0028003026, -0.0036494255, 0.093), (0.034529716, -0.045, 0.093), (0.045, -0.045, 0.093), (0.0032526911, -0.0032526911, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector42" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector42>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0032526911, -0.0032526911, 0.09), (0.045, -0.045, 0.09), (0.05864514, -0.045, 0.09), (0.0036494255, -0.0028003026, 0.09), (0.0032526911, -0.0032526911, 0.093), (0.045, -0.045, 0.093), (0.05864514, -0.045, 0.093), (0.0036494255, -0.0028003026, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector43" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector43>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0036494255, -0.0028003026, 0.09), (0.05864514, -0.045, 0.09), (0.07, -0.04041452, 0.09), (0.003983717, -0.0023, 0.09), (0.0036494255, -0.0028003026, 0.093), (0.05864514, -0.045, 0.093), (0.07, -0.04041452, 0.093), (0.003983717, -0.0023, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector44" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector44>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.003983717, -0.0023, 0.09), (0.07, -0.04041452, 0.09), (0.07, -0.02899495, 0.09), (0.0042498456, -0.0017603438, 0.09), (0.003983717, -0.0023, 0.093), (0.07, -0.04041452, 0.093), (0.07, -0.02899495, 0.093), (0.0042498456, -0.0017603438, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector45" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector45>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.0042498456, -0.0017603438, 0.09), (0.07, -0.02899495, 0.09), (0.07, -0.018756444, 0.09), (0.004443259, -0.0011905676, 0.09), (0.0042498456, -0.0017603438, 0.093), (0.07, -0.02899495, 0.093), (0.07, -0.018756444, 0.093), (0.004443259, -0.0011905676, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector46" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector46>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.004443259, -0.0011905676, 0.09), (0.07, -0.018756444, 0.09), (0.07, -0.009215675, 0.09), (0.004560646, -0.00060042046, 0.09), (0.004443259, -0.0011905676, 0.093), (0.07, -0.018756444, 0.093), (0.07, -0.009215675, 0.093), (0.004560646, -0.00060042046, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "Sector47" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </Asset/Materials/Bracket_Sector47>
+            uniform token physics:approximation = "convexHull"
+            bool physics:collisionEnabled = 1
+            point3f[] points = [(0.004560646, -0.00060042046, 0.09), (0.07, -0.009215675, 0.09), (0.07, -1.7145055e-17, 0.09), (0.0046, -1.1266751e-18, 0.09), (0.004560646, -0.00060042046, 0.093), (0.07, -0.009215675, 0.093), (0.07, -1.7145055e-17, 0.093), (0.0046, -1.1266751e-18, 0.093)]
+            color3f[] primvars:displayColor = [(0.17, 0.29, 0.4)]
+            uniform token subdivisionScheme = "none"
+        }
+    }
+}

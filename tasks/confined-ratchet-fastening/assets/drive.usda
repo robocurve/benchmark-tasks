@@ -1,0 +1,23 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Asset" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxRigidBodyAPI"]
+)
+{
+    float physics:mass = 0.04
+    custom bool physxRigidBody:enableCCD = 1
+
+    def Xform "Socket" (
+        apiSchemas = None
+        prepend references = @socket.usda@</Asset>
+    )
+    {
+        double3 xformOp:translate = (0, 0, -0.028)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+}
