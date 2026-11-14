@@ -2,11 +2,15 @@
 
 Instruction given to the policy: `Set this exit bar so the door stays unlatched, and take the key out.`
 
+The scene is the lock-edge corner of a closed door and its frame, laid flat on the bench push face up. A rim
+exit device is on the door; its latch bolt sticks 21 mm out past the door edge into a rim strike on the frame jamb,
+so the door is latched. Drawing the bolt in 18 mm or more puts its end clear of the strike and frees the door.
+
 The instruction leaves the method unstated. One hand holds the push bar fully down (25 mm, against a 40 N return
 spring) while the other puts the short leg of the 4 mm hex key into the 6 mm dogging hole on the mechanism case
 and turns it a quarter turn against its detent. The dogging cam only catches the bar if the bar is down 23 mm or
 more; otherwise the cam springs back to 0 when the key is let go. Then the bar is let go (it stays down, latch
-drawn in), the key is drawn out of the hole and laid on the panel or bench. A key left in the hole scores 0.
+drawn in), the key is drawn out of the hole and laid on the door, frame or bench. A dogged bar with the key left in the hole scores 0.75.
 
 Files: `task.json`, `panic_bar_hex_dogging.py` (the scene, `success()`, the partial-credit `score()`, the scripted
 `demo()` with its degenerate variants, and an offline self-test) and `mechkit.py` (joints, sliders and catches
@@ -25,7 +29,7 @@ python tasks/panic-bar-hex-dogging/panic_bar_hex_dogging.py
 ```
 
 This asserts the scoring rules on hand-built states and replays every demo variant through the kinematics at
-20 Hz, checking joint limits and IK error. It prints `scoring: 14 cases pass` and one line per arm and variant.
+20 Hz, checking joint limits and IK error. It prints `scoring: 15 cases pass` and one line per arm and variant.
 
 ## Run and score one Dream-1 trial
 
@@ -42,16 +46,17 @@ inspect-robots run --embodiment yam_arena --policy dream \
 
 Run the same command with `--policy yam_scripted` and `--log-dir ~/yam-eval/panic-bar-demo`. The demo is open
 loop and deterministic. The left arm presses its closed fingers down on the bar and holds it at the bottom of its
-travel. The right arm pinches the key's long leg 2 cm from the bend, lifts it out of its stand, lowers the short
+travel. The right arm pinches the key's long leg 2.5 cm out from the short leg, lifts it out of its stand, lowers the short
 leg into the dogging hole and turns it a quarter turn (wrist from -45 to +45 deg while the hand follows the arc).
-The left arm lets go (the bar stays down), then the right arm draws the key straight out and lays it on the panel.
+The left arm lets go (the bar stays down), then the right arm draws the key straight out and lays it on the door.
 
-Degenerate checks use the same command with `DEMO_VARIANT` set in the environment. Each one scores 0:
+Degenerate checks use the same command with `DEMO_VARIANT` set in the environment:
 
-- `hold_only`: the left arm holds the bar down to the end of the run; the key is never touched.
-- `no_bar`: the bar is never pressed; the key is turned a quarter turn, let go (the cam springs back), then
-  taken out and laid down.
-- `key_left`: everything in order, but the key is left in the dogging hole.
+- `hold_only` (scores 0): the left arm holds the bar down to the end of the run; the key is never touched.
+- `no_bar` (scores 0): the bar is never pressed; the key is turned a quarter turn, let go (the cam springs back),
+  then taken out and laid down.
+- `key_left` (scores 0.75, stage credit): everything in order and the bar is dogged, but the key is left in the
+  dogging hole.
 
 `PANIC_DEBUG=1` prints the state every 20 steps.
 
@@ -71,5 +76,6 @@ ffmpeg -y -i ~/yam-eval/panic-bar-demo/frames/<run>/*top_cam.mp4 -frames:v 1 set
 
 ## Reset between trials
 
-Hold the bar down, put the key in the hole and turn the cam back to 0, let the bar up, and stand the key back in
+Hold the bar down, put the key in the hole and turn the cam back to 0, let the bar up (the bolt goes back into the
+strike), and stand the key back in
 its stand with its long leg pointing forward-right.

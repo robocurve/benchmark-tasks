@@ -1,7 +1,9 @@
-"""A rim exit device (push bar) lies on a plywood training panel on the bench, bar up. Its 0.30 m push bar rides
-25 mm down on a slider against a return spring (15 N at rest, 40 N fully down) and pulls the latch bolt into the
-mechanism case as it goes. The case top has a 6 mm dogging hole; a 4 mm hex L-key (60 mm long leg) stands in a
-key stand nearby.
+"""The lock-edge corner of a closed door and its frame lie flat on the bench, push face up, with a rim exit device
+(push bar) on the door. Its latch bolt sticks out past the door edge into a rim strike on the frame jamb, so the
+door is latched. The 29.8 cm push bar rides 25 mm down on a slider against a return spring (15 N at rest, 40 N
+fully down) and draws the latch bolt into the mechanism case as it goes; with the bolt drawn in 18 mm or more its
+end is clear of the strike and the door is free to swing. The case top has a 6 mm dogging hole; a 4 mm hex L-key
+(60 mm long leg) stands in a key stand nearby.
 
 The job ("hex dogging"): hold the bar fully down, put the short leg of the key into the dogging hole and turn it a
 quarter turn against its detent, so the dogging cam catches the bar and holds it down (latch retracted). Then let
@@ -9,8 +11,8 @@ go of the bar, pull the key out and lay it down. The cam only catches the bar if
 otherwise it springs back to 0 when the key is let go.
 
 Mechanism parts come from mechkit.py (in this folder), which adds joints to the stock runtime in memory. The key
-couples to the cam through six pre-built, disabled prismatic joints (one per hex flat), switched on when the key's
-short leg is down in the hole and off when it is drawn 10 mm back out.
+couples to the cam through six pre-built, disabled prismatic joints (one per 60 deg seat angle, as a hex key has),
+switched on when the key's short leg is down in the hole and off when it is drawn 10 mm back out.
 
 Run it:  inspect-robots run --embodiment yam_arena -E task=tasks/panic-bar-hex-dogging/panic_bar_hex_dogging.py \\
            -E object_jitter=0 -E control_hz=20 -E cam_width=320 -E cam_height=176 --max-steps 1200 \\
@@ -41,8 +43,13 @@ BRASS = (0.78, 0.62, 0.25)
 BLACK = (0.06, 0.06, 0.07)
 BLUE = (0.15, 0.35, 0.75)
 
-# -- panel and device --------------------------------------------------------------------------------------------
-Z0 = TOP + 0.012  # panel face
+# -- door, frame and device --------------------------------------------------------------------------------------
+Z0 = TOP + 0.012  # push face of the door (and face of the frame), 1.2 cm above the bench top
+LEAF_T = 0.044  # door leaf thickness; it lies in a recess in the bench, so only its top 1.2 cm shows
+DOOR_EDGE = -0.247  # the door's lock edge (y)
+JAMB_Y = (-0.300, -0.250)  # frame jamb face, 3 mm gap to the door edge
+STRIKE_X, STRIKE_Y, STRIKE_T = (0.252, 0.288), (-0.292, -0.252), Z0 + 0.032  # rim strike on the jamb face
+POCKET_X, POCKET_Y0, POCKET_FLOOR = (0.259, 0.281), -0.274, Z0 + 0.009  # keeper pocket, open toward the door
 BX = 0.270  # bar / case centre line (x)
 CASE_X, CASE_Y = (0.245, 0.295), (-0.245, -0.150)
 CT = Z0 + 0.045  # case top
@@ -59,7 +66,7 @@ BAR_K, BAR_REST = 1000.0, -0.015  # 15 N at rest, 40 N fully down
 DOG_TRAVEL = 0.023  # the cam only catches the bar down this far
 DOG_HOLD = 0.024  # where the caught bar is held
 LATCH_PER_BAR = 0.84  # latch bolt retraction per mm of bar travel (21 mm at full travel)
-LATCH_OK = 0.018
+LATCH_OK = 0.018  # bolt end at y -0.248 or more: 4 mm clear of the strike face, the door free to swing
 
 
 def _holed_block(x0, x1, y0, y1, z0, z1, cx, cy, h, depth, color):
@@ -103,8 +110,22 @@ KEY0 = (STAND[0], STAND[1], STAND_TOP - (KEY_SHORT - KEY_W))
 REST = (STAND[0] + 0.052 * math.cos(KEY_YAW0), STAND[1] + 0.052 * math.sin(KEY_YAW0))
 kit.part("key", KEY0, KEY_BOXES, mass=0.020, color=BLACK, yaw=KEY_YAW0)
 
+FRAME = (0.42, 0.43, 0.45)
+STRIKE = (0.55, 0.56, 0.58)
+_SX, _SY = STRIKE_X, STRIKE_Y
+_STRIKE_BOXES = [  # floor under the bolt, two cheeks and a back wall: a pocket open toward the door and upward
+    ((_SX[0], _SX[1]), (_SY[0], _SY[1]), (Z0, POCKET_FLOOR)),
+    ((_SX[0], POCKET_X[0]), (_SY[0], _SY[1]), (POCKET_FLOOR, STRIKE_T)),
+    ((POCKET_X[1], _SX[1]), (_SY[0], _SY[1]), (POCKET_FLOOR, STRIKE_T)),
+    ((POCKET_X[0], POCKET_X[1]), (_SY[0], POCKET_Y0), (POCKET_FLOOR, STRIKE_T)),
+]
 FIXTURES = [
-    Box("panel", pos=(0.270, -0.030, TOP + 0.006), size=(0.300, 0.620, 0.012), color=WOOD),
+    Box("door_leaf", pos=(0.270, (DOOR_EDGE + 0.283) / 2, Z0 - LEAF_T / 2), size=(0.300, 0.283 - DOOR_EDGE, LEAF_T),
+        color=WOOD),
+    Box("frame_jamb", pos=(0.270, sum(JAMB_Y) / 2, Z0 - LEAF_T / 2), size=(0.300, JAMB_Y[1] - JAMB_Y[0], LEAF_T),
+        color=FRAME),
+    *[Box(f"strike{i}", pos=((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2), size=(x1 - x0, y1 - y0, z1 - z0),
+          color=STRIKE) for i, ((x0, x1), (y0, y1), (z0, z1)) in enumerate(_STRIKE_BOXES)],
     Box("end_cap", pos=(BX, 0.1645, (Z0 + CT) / 2), size=(0.050, 0.030, CT - Z0), color=DARK),
     *[Box(f"stand{i}", pos=b.at, size=b.size, color=BLUE)
       for i, b in enumerate(_holed_block(STAND[0] - 0.010, STAND[0] + 0.010, STAND[1] - 0.010, STAND[1] + 0.010,
@@ -209,11 +230,11 @@ def key_seated(objects) -> bool:
 
 
 def key_down(objects) -> bool:
-    """The key lies on the panel or bench (its centre within 15 mm of the panel face), 3 cm or more from the
-    hole and the stand."""
+    """The key lies on the door, frame or bench (its centre no lower than 5 mm below the bench top and 15 mm or
+    less above the door face), 3 cm or more from the hole and the stand (so out of both)."""
     c = kit.point(objects, "key", (0.014, 0, 0.018))
     far = all(math.hypot(float(c[0]) - x, float(c[1]) - y) >= 0.030 for x, y in ((HX, HY), STAND))
-    return far and float(c[2]) <= Z0 + 0.015
+    return far and TOP - 0.005 <= float(c[2]) <= Z0 + 0.015
 
 
 _TEST_TCPS = None
@@ -249,8 +270,6 @@ def _key_rule(objects):
     elif float(t[2]) >= SEAT_Z + 0.010:  # drawn 10 mm back up the hole: the key comes free
         _disengage(f"key_socket_{m['key_in']}")
         m["key_in"] = None
-    if float(kit.point(objects, "key", (0.014, 0, 0.018))[2]) < TOP - 0.05:
-        m["key_lost"] = True
 
 
 def _cam_rule(objects):
@@ -303,7 +322,8 @@ SCORE_OVER = "end"
 
 
 def failed(objects) -> bool:
-    return bool(mk.MEMORY.get("key_lost") or mk.MEMORY.get("stripped"))
+    """The dogging cam turned past 100 deg (stripped). Latched for the rest of the run."""
+    return bool(mk.MEMORY.get("stripped"))
 
 
 def dogged(objects) -> bool:
@@ -312,11 +332,12 @@ def dogged(objects) -> bool:
 
 
 def score(objects) -> float:
-    """0 if failed() or the key is still in the hole. Otherwise 0.25 if the bar was held 23 mm down while the key
-    was seated; 0.5 if the cam is at its 90 deg detent holding the bar down (latch in 18 mm or more); with that,
-    0.25 if the key lies on the panel or bench, no gripper is within 2 cm of the bar or the key, and both are
-    still."""
-    if failed(objects) or key_in_hole(objects):
+    """0 if failed() (cam stripped). Otherwise 0.25 if the bar was ever held 23 mm or more down while the key was
+    seated on the cam; plus 0.5 if the cam is at 80-100 deg and has caught the bar, the bar 22 mm or more down and
+    the latch drawn in 18 mm or more (clear of the strike); with that, plus 0.25 if the key is out of the hole and
+    lies on the door, frame or bench, no gripper is within 2 cm of the bar or the key, and both are still. A key
+    left in the hole of a dogged bar scores 0.75."""
+    if failed(objects):
         return 0.0
     s = 0.25 * bool(mk.MEMORY.get("held"))
     if dogged(objects):
@@ -336,11 +357,11 @@ def distance(objects) -> float:
 
 
 # -- the scripted demo -------------------------------------------------------------------------------------------
-# Left arm: closed fingers down on the bar at y +6 cm, pushed 3 cm past the bottom of its travel (the arm gives
-# under the 40 N spring), held there. Right arm: pinches the key at its bend (fingers across the long leg, TCP over
-# the short leg), lifts it out of the stand, lowers the short leg into the dogging hole, turns the wrist a quarter
+# Left arm: closed fingers down on the bar at y +6 cm, commanded 7.5 cm below the bottom of its travel (the arm
+# gives under the 40 N spring), held there. Right arm: pinches the key's long leg 2.5 cm out from the short leg's
+# axis (fingers across the long leg), lifts it out of the stand, lowers the short leg into the dogging hole, turns the wrist a quarter
 # turn (-45 to +45 deg), and once the left arm has let go of the dogged bar draws the key straight up and lays it
-# on the panel.
+# on the door.
 
 TIP = 0.013
 TRAVEL = 0.840
@@ -349,7 +370,7 @@ GRIP_DZ = KEY_SHORT - KEY_W - 0.007 + TIP  # TCP above the key tip: pad tips 7 m
 GRIP_OUT = 0.025  # pinched 2.5 cm out along the long leg from the short leg's axis
 PRESS = (BX, 0.060)
 PRESS_Z = BAR_Z + BAR[2] / 2 - BAR_TRAVEL + TIP - 0.075
-DROP = (0.180, -0.230)
+DROP = (0.180, -0.200)
 PARK_L, PARK_R = (0.20, 0.25, TRAVEL), (0.18, -0.26, TRAVEL)
 Y0, Y1 = KEY_YAW0, KEY_YAW0 + math.pi / 2
 
@@ -429,7 +450,7 @@ def _plans(variant=""):
         return {"left": L.w, "right": R.w}
     yk = Y0 if variant == "no_bar" else Y1
     R.go(1.5, kp((HX, HY), yk, zs + 0.020), FINGER_CLOSED, "draw the key straight out", yk)
-    R.go(2.5, (*DROP, Z0 + GRIP_DZ + 0.020), FINGER_CLOSED, "over the panel", yk)
+    R.go(2.5, (*DROP, Z0 + GRIP_DZ + 0.020), FINGER_CLOSED, "over the door", yk)
     R.go(1.0, (*DROP, Z0 + GRIP_DZ + 0.006), FINGER_CLOSED, "down", yk)
     R.go(0.8, (*DROP, Z0 + GRIP_DZ + 0.006), KEY_OPEN, "let go", yk)
     R.go(1.5, (DROP[0], DROP[1], TRAVEL), KEY_OPEN, "up", yk)
@@ -451,7 +472,8 @@ def self_test():
     global _TEST_TCPS
     I = np.array([0, 0, 0, 1.0])
     seat = (np.array([HX, HY, SEAT_Z]), mk.mat_to_quat(mk.axis_angle((0, 0, 1), Y1)))
-    flat = (np.array([0.18, -0.23, Z0 + 0.002]), mk.mat_to_quat(mk.axis_angle((1, 0, 0), math.pi / 2)))
+    floor = (np.array([0.18, -0.20, 0.02]), mk.mat_to_quat(mk.axis_angle((1, 0, 0), math.pi / 2)))
+    flat = (np.array([0.18, -0.20, Z0 + 0.002]), mk.mat_to_quat(mk.axis_angle((1, 0, 0), math.pi / 2)))
     stand = (np.array(KEY0), mk.mat_to_quat(mk.axis_angle((0, 0, 1), Y0)))
 
     def st(d=0.0, a=0.0, lat=None, key=stand):
@@ -463,18 +485,19 @@ def self_test():
     cases = {
         "start": (st(), [], {}, 0.0),
         "bar held down, no key": (st(0.025), [], {}, 0.0),
-        "bar held, key seated, cam 0": (st(0.025, key=seat), [], {"held": True, "key_in": 0}, 0.0),
-        "held then key out on the panel": (st(0.0, key=flat), [], {"held": True}, 0.25),
-        "dogged, key left in": (st(DOG_HOLD, 90, key=seat), [], {**D, "key_in": 0}, 0.0),
-        "dogged, key on the panel, all still": (st(DOG_HOLD, 90, key=flat), [], D, 1.0),
-        "dogged, key on the panel, hand on the bar":
+        "bar held, key seated, cam 0": (st(0.025, key=seat), [], {"held": True, "key_in": 0}, 0.25),
+        "held then key out on the door": (st(0.0, key=flat), [], {"held": True}, 0.25),
+        "dogged, key left in": (st(DOG_HOLD, 90, key=seat), [], {**D, "key_in": 0}, 0.75),
+        "dogged, key on the door, all still": (st(DOG_HOLD, 90, key=flat), [], D, 1.0),
+        "dogged, key on the door, hand on the bar":
             (st(DOG_HOLD, 90, key=flat), [kit.point(st(DOG_HOLD), "bar", (0, 0.06, 0.02))], D, 0.75),
         "dogged, key back in its stand": (st(DOG_HOLD, 90, key=stand), [], D, 0.75),
         "cam at 90, never dogged": (st(0.0, 90, key=flat), [], {"held": True}, 0.25),
         "dogged but cam turned back": (st(DOG_HOLD, 30, key=flat), [], D, 0.25),
         "dogged, latch not in": (st(DOG_HOLD, 90, lat=0.010, key=flat), [], D, 0.25),
         "stripped": (st(DOG_HOLD, 90, key=flat), [], {**D, "stripped": True}, 0.0),
-        "key lost off the bench": (st(DOG_HOLD, 90, key=flat), [], {**D, "key_lost": True}, 0.0),
+        "dogged, key dropped on the floor": (st(DOG_HOLD, 90, key=floor), [], D, 0.75),
+        "not dogged, key left in": (st(0.0, 0, key=seat), [], {"key_in": 0}, 0.0),
         "dogged without the seated hold (impossible)": (st(DOG_HOLD, 90, key=flat), [], {"dogged": True}, 0.75),
     }
     try:
