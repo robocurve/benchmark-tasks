@@ -1,0 +1,23 @@
+{
+  "title": "Read a wheel's tyre pressure through its Schrader valve with a pencil gauge, then put the gauge back",
+  "category": "Societal relatability",
+  "keywords": [
+    "tyre pressure gauge",
+    "Schrader valve",
+    "valve core",
+    "pencil gauge",
+    "hand truck wheel",
+    "press and hold",
+    "gasket seal",
+    "everyday maintenance"
+  ],
+  "instruction": "Read the tyre pressure of the wheel with the pencil gauge, then put the gauge back upright in its holder.",
+  "context": "Checking tyre pressure is a routine chore for anyone with a car, bicycle, wheelbarrow or hand truck, and a courier or warehouse picker does it on a sack-truck wheel that has gone soft. A pencil gauge reads only when its chuck seats on the Schrader valve's tip and its depressor pin pushes the valve core down; seated off square or without opening the core, it reads nothing or low. The robot takes the gauge from its holder, presses it onto the valve, holds it, and puts it back.",
+  "setup": "Station table; positions in metres from the midpoint between the arm bases, x forward, y to the robot's left, z up; table top z 0.7475. (1) Wheel: 10 inch pneumatic hand-truck wheel, black rubber tyre 260 mm across x 70 mm wide, steel rim, 1.4 kg, lying flat, axle at (0.275, -0.100), chocked with two wooden blocks and fixed; tyre at 35 psi. (2) Schrader valve: brass barrel 8.5 mm across, 19 mm tall on the upward rim face at (0.220, -0.100), 55 mm from the axle, with a 4.5 mm bore; in the bore a 2.4 mm core pin sits 0.5 mm below the barrel tip on a 0.8 N/mm spring with 2.5 mm of travel; air flows only while the pin is pushed down 1.2 mm or more (spring checked with a kitchen scale: 2.0 N at 2.5 mm). (3) Pencil tyre gauge: steel and brass, 124 mm long, 12 mm square barrel, 60 g, upright in its holder at (0.300, -0.300), head bottom 8 mm above the table. Chuck: 20 mm square head, 12 mm square socket 12 mm deep whose ceiling is a rubber gasket face, and a 2 mm square steel depressor pin standing 2 mm out of the ceiling. A 5 mm square stick slides out of the top, 70 mm travel marked 1 mm per psi, held where it stops by 0.5 N of friction (checked with a spring scale). (4) Gauge holder: grey ABS, 50 x 50 mm base, 25 mm square pocket 18 mm deep, 8 mm floor, screwed to the table at (0.300, -0.300).",
+  "scoring": "Ladder (first rung that holds, checked every step; run history is cleared only by the simulator reset): 0 unless a sealed press was held 1.5 s at some time; 0.4 sealed press held; 0.7 and the stick ends at 33 to 37 mm (33 to 37 psi); 1.0 and the gauge is back in its holder (within 6 mm across and 4 mm up, within 4 deg of upright) and still for 1 s, and both grippers at least 30 mm clear of it and under 10 mm/s for 1 s. Sealed = all of: the gasket face is within 0.4 mm of the valve barrel's tip, the barrel lies within 2 mm of the socket axis, the gauge axis is within 3 deg of the valve axis, and the depressor has pushed the core pin down 1.2 mm or more (valve open), continuously. There is no collar or displaced plate: opening the valve needs the depressor pin down the bore. Valve open but gasket not seated is a leak: the stick reaches only 12 psi. Gasket seated but core not pushed: no air, no reading. A wrong early try that is undone does not zero the run; only the sealed hold and the final state count. Real trial: the stick reading against the 1 mm per psi marks with a steel rule (33 to 37), checked against a reference gauge on the same valve; the real air seal produces the reading, and the gauge in its holder is read from a top photo with a 6 mm square round the pocket.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Stick pushed back to 0 mm, gauge upright in its holder, core pin released, wheel and holder in their marked places, tyre at 35 psi. Run history is cleared only by the simulator reset.",
+  "fidelity": "Rigid-body physics: a sprung core pin in the valve bore, a gauge chuck with a depressor pin and a gasket face, and a friction-held sliding stick. Air flow is not simulated: the stick is drawn out in proportion to the time the gasket is seated on the barrel tip with the core pushed down 1.2 mm or more, read from the simulated pose and the core joint. The barrel and bore are built from square boxes in simulation; the real valve is round.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-PESVLL"
+}
