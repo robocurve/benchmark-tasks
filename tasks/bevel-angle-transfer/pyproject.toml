@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robocurve-bevel-angle-transfer"
+version = "0.1.0"
+description = "Capture and transfer an angle with a passive bevel gauge using bimanual YAM arms"
+requires-python = ">=3.12,<3.13"
+license = "MIT"
+dependencies = ["numpy>=1.26", "inspect-robots==0.60.0", "Pillow>=10"]
+
+[project.entry-points."inspect_robots.embodiments"]
+bevel_angle_transfer = "bevel_angle_transfer.runtime:make_embodiment"
+
+[project.entry-points."inspect_robots.policies"]
+bevel_angle_transfer_demo = "bevel_angle_transfer.replay_policy:make_demo_policy"
+bevel_angle_transfer_feedback = "bevel_angle_transfer.feedback_policy:make_demo_policy"
+
+[tool.setuptools.packages.find]
+include = ["bevel_angle_transfer*"]
+
+[tool.setuptools.package-data]
+bevel_angle_transfer = ["assets/*.usda", "data/*.json", "finger_envelopes.json", "LICENSE.i2rt"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

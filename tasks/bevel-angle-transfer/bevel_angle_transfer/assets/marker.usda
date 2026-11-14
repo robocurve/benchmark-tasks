@@ -1,0 +1,44 @@
+#usda 1.0
+(
+    defaultPrim = "Marker"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Marker" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxRigidBodyAPI"])
+{
+    bool physics:rigidBodyEnabled = true
+    bool physics:kinematicEnabled = false
+    float physics:mass = 0.04
+    float physxRigidBody:maxDepenetrationVelocity = 1
+    int physxRigidBody:solverPositionIterationCount = 16
+    int physxRigidBody:solverVelocityIterationCount = 4
+    def Cube "Barrel" (prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"])
+    {
+        double size = 1
+        double3 xformOp:translate = (0, 0, 0.015)
+        double3 xformOp:scale = (0.022, 0.022, 0.08)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.95, 0.35, 0.04)]
+        float physxCollision:contactOffset = 0.001
+        float physxCollision:restOffset = 0
+    }
+    def Cube "Stem" (prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"])
+    {
+        double size = 1
+        double3 xformOp:translate = (0, 0, -0.0365)
+        double3 xformOp:scale = (0.004, 0.004, 0.023)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.02, 0.02, 0.02)]
+        float physxCollision:contactOffset = 0.001
+        float physxCollision:restOffset = 0
+    }
+    def Sphere "Nib" (prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"])
+    {
+        double radius = 0.002
+        double3 xformOp:translate = (0, 0, -0.05)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        color3f[] primvars:displayColor = [(0.01, 0.01, 0.01)]
+        float physxCollision:contactOffset = 0.001
+        float physxCollision:restOffset = 0
+    }
+}

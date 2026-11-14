@@ -1,0 +1,21 @@
+{
+  "title": "Transfer a reference angle with a bevel gauge",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "workshop",
+    "angle transfer",
+    "adjustable tool",
+    "marking",
+    "passive hinge"
+  ],
+  "instruction": "Fit the blue-stock bevel gauge to the two grey reference faces by adjusting its hinged blade. Lift and carry the gauge to the wooden board without changing the captured angle. Seat its stock against the board's near edge and use the orange marker along the blade to draw one straight line through the red tick across the board. Avoid extra marks, then lift the marker clear. The gauge has a passive friction hinge; there is no locking screw.",
+  "context": "Copying a reference angle onto a separate workpiece is a workshop layout operation. The robot adjusts a passive hinge and carries the captured angle between work surfaces.",
+  "setup": "Fixed layout in metres with x away from the arm bases, y left and z up. Tabletop z = 0.7475. Bimanual YAM bases at (0, +0.305, 0.75) and (0, -0.305, 0.75). Wood board 140 × 180 × 16 mm at (0.29, 0, 0.7555), with top at z = 0.7635 and a printed red 4 × 2 mm tick at (0.222, −0.03). Grey rigid plastic reference stock fence 20 × 50 × 25 mm at (0.23, 0.365, 0.7600) and blade fence 140 × 20 × 25 mm at (0.295128859, 0.127004133, 0.7600), yaw −20°. Loose blue plastic gauge stock 24 × 250 × 36 mm, 180 g, at (0.18, 0.28, 0.7655), yaw 0°. Hollow plastic blade 170 × 20 × 6 mm with an 18 × 18 × 24 mm raised tab, 18 g combined. Pivot at (0, −0.1075, 0.001) in the stock frame and tab at (0.115, 0.015, 0.015) in the blade frame. Initial hinge angle +10°, limits -45 to +45 degrees. Loose orange rigid plastic marker, 40 g, root at (0.18, −0.19, 0.8175), barrel 22 × 22 × 80 mm centred 15 mm above the root, nose 4 × 4 × 23 mm, and a 2 mm-radius rigid sphere representing the felt nib centred 50 mm below the root. Fixed rigid plastic holder has a 40 × 40 × 18 mm base and four 15 mm walls around a 6 × 6 mm opening. See the README and scene code for the full layout.",
+  "scoring": "Score 0 for an invalid or incomplete transfer. For 0.25, fit the stock and blade to their reference faces with gaps of at most 3 mm at both ends of each mating span. Open and clear the blade gripper visibly before leaving the fixture. Carry the gauge by the stock without dragging, setting it down, regrasping or readjusting. Seat the stock within 3 mm of the board edge, with the blade flat on the board (gap at most 3 mm). The stock-to-blade angles at capture and board placement must differ by at most 2°. For 0.5, use the seated blade to guide one line that comes within 5 mm of the red tick centre, covers at least 70 distinct mm projected across the 140 mm board width, stays within 5 mm perpendicular to the target centreline and has internal gaps of at most 5 mm. For 1.0, require 3 mm for tick distance, target band and internal gaps, at least 126 mm of projected coverage and at least 5 mm of final nib clearance above the board. Both line grades require a line at most 4 mm wide and no separate specks or second line. All visible marker ink counts. See the physical judging guide for measurement instructions.",
+  "run_limit": "2,400 control steps (120 seconds at 20 Hz)",
+  "reset_notes": "Clear ink and temporal scoring state. Restore the fixed layout, loose tool poses and +10° initial blade angle. Use zero layout jitter and seed 0. Clean or replace the board for physical reproduction.",
+  "fidelity": "PhysX simulates rigid tools and a passive friction hinge with no angle target. Visible fit, release, carry and marking checks use measured geometry. Localized nib collision creates geometric ink; flow, wear, compliance and wood deformation are omitted. The fixed demo replays calibrated joint targets without simulator feedback. Dream-1 receives camera and joint observations. Physical judging uses video, a ruler and a template.",
+  "scores": "Dream-1 beta: 0.0 in 2,400 control steps. Fixed joint-action demo: 1.0 in 1,897 steps with demo_observations=false. Both raw traces matched regrading on the validation VM and a separate CPU.",
+  "media": "M-BQ6BH2"
+}
