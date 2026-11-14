@@ -54,7 +54,7 @@ WHEEL_R, WHEEL_L = 0.008, 0.011  # the worm: 16 mm across, 11 mm long, its top 3
 WHEEL_AT = (-0.038, -0.004)  # its center in the wrench's frame (axis along x)
 HANDLE_Y, HANDLE_W, HANDLE_T = -0.016, 0.018, 0.007  # the handle's centerline (y), width and thickness
 HANDLE_X = (-0.180, -0.050)  # its extent along x
-GRIP_X = -0.130  # where the demo pushes and grips the handle (130 mm from the nut's axis)
+GRIP_X = -0.130  # a point on the handle's grip, 130 mm from the nut's axis (the tests hold the wrench here)
 TURN0 = math.radians(-120)  # the wrench's start: its x axis 120 degrees clockwise of world x (handle toward 60 deg)
 NUT0 = math.radians(30)  # the nut's start angle, flats square to the wrench's jaws
 WRENCH_MASS = 0.25  # kg (a real 8-inch adjustable wrench is 0.2 to 0.3 kg)
@@ -468,8 +468,14 @@ def score(objects):
 
 
 # --- The scripted demo.
-SWING = math.radians(80)  # how far the demo swings the handle (the nut follows less the thread's flex)
-PUSH_Z = TOP + WZ - 0.004 + PAD_TIP_PAST_TCP  # TCP height with the pad tips 4 mm below the handle's mid-plane
+PULL_X = -0.150  # where the demo grips the handle to pull it: 150 mm from the nut's axis, near the grip's end
+GRIP_Z = TOP + WZ - 0.002 + PAD_TIP_PAST_TCP  # TCP height with the pad tips 2 mm below the handle's mid-plane
+FIXED_PAD = 0.0445  # m: the YAM's fingers close on the pad that stays put, its face this far from the tool point
+GRIP_CLEAR = 0.017  # m: the hand comes down with that pad this far clear of the handle; the other finger closes it
+STROKE = math.radians(30)  # each pull swings the handle this far past where the hand took hold of it
+LEAD = math.radians(4)  # pulled this much further: the arm's servos give about 3 to 4 degrees under 0.76 N*m
+SETTLE = math.radians(2) + BREAK  # the wrench ends this far short of the pull: the arm's give, then the thread's flex
+N_PULLS = 3
 ROLL_Z = TOP + WZ + WHEEL_R - 0.0025 + PAD_TIP_PAST_TCP  # pad tips 2.5 mm below the worm's top
 
 
@@ -479,11 +485,19 @@ def _at(turn, local, dx=0.0, dy=0.0):
     return float(p[0] + dx), float(p[1] + dy)
 
 
+def _grip_xy(turn):
+    """The tool point for a grip on the handle at PULL_X, the wrench turned `turn`, the hand's yaw = turn. The pad that
+    stays put is on the wrench's -y side (the side the handle moves toward in a loosening pull), GRIP_CLEAR from it."""
+    shift = FIXED_PAD - HANDLE_W / 2 - GRIP_CLEAR  # handle centerline from the tool point, toward that pad
+    return _at(turn, (PULL_X, HANDLE_Y + shift))
+
+
 def demo():
     """Left arm (the right arm stays home): roll the worm with the closed fingertips, six strokes across its top
-    toward the throat side (each closes the jaw about 0.8 mm; the worm stops once the jaw meets the flats). Then push
-    the handle 80 degrees counterclockwise (seen from above) with closed fingers, grip it, lift the wrench 3.5 cm off
-    the nut, carry it 6 cm forward, lay it down and let go. Home."""
+    toward the throat side (each closes the jaw about 0.8 mm; the worm stops once the jaw meets the flats). Then three
+    pulls, as a person ratchets a wrench: grip the handle across its width near the end, pull it about 30 degrees
+    counterclockwise (seen from above) round the nut's axis, let go, take a new hold where the handle now lies. Last,
+    grip it, lift the wrench 3.5 cm off the nut, carry it 6 cm forward, lay it down and let go. Home."""
     from yam_arena.demo import Waypoint
 
     # the worm: strokes along the wrench's -y (top of the worm moving toward the throat)
@@ -500,31 +514,31 @@ def demo():
                     Waypoint(0.8, (a[0], a[1], ROLL_Z + 0.02), FINGER_CLOSED, f"stroke {k + 1}: back", yaw_r)]
     strokes.append(Waypoint(0.8, (a[0], a[1], ROLL_Z + 0.05), FINGER_CLOSED, "up off the worm", yaw_r))
 
-    # left arm: closed fingers against the handle's front side (the wrench's +y), pushed round the nut's axis
-    push_local = (GRIP_X, HANDLE_Y + HANDLE_W / 2 + 0.013)
+    def at(turn, dur, finger, label, dz=0.0):
+        return Waypoint(dur, (*_grip_xy(turn), GRIP_Z + dz), finger, label, turn)
 
-    def push(turn, dur, label, lift_z=0.0):
-        x, y = _at(turn, push_local)
-        return Waypoint(dur, (x, y, PUSH_Z + lift_z), FINGER_CLOSED, label, turn)
-
-    left = strokes + [Waypoint(2.5, (*_at(TURN0, push_local), PUSH_Z + 0.05), FINGER_CLOSED, "over the handle",
-                                TURN0),
-                       push(TURN0, 1.2, "beside the handle")]
-    n = 8
-    for k in range(1, n + 1):
-        left.append(push(TURN0 + SWING * k / n, 0.9, f"pull the handle round ({k}/{n})"))
-    left.append(push(TURN0 + SWING, 0.8, "hold"))
-    end = TURN0 + SWING - BREAK  # where the wrench settles once let go (the thread's flex springs back)
-    gx, gy = _at(end, (GRIP_X, HANDLE_Y))
-    grip_z = TOP + WZ - 0.002 + PAD_TIP_PAST_TCP
-    left += [Waypoint(0.8, (*_at(end, push_local, 0, 0), PUSH_Z + 0.05), FINGER_CLOSED, "off the handle", end),
-             Waypoint(1.2, (gx, gy, grip_z + 0.05), FINGER_OPEN, "over the handle", end),
-             Waypoint(1.0, (gx, gy, grip_z), FINGER_OPEN, "around the handle", end),
-             Waypoint(0.8, (gx, gy, grip_z), FINGER_CLOSED, "grip it", end),
-             Waypoint(1.2, (gx, gy, grip_z + 0.035), FINGER_CLOSED, "lift the wrench off the nut", end),
-             Waypoint(1.5, (gx + 0.06, gy, grip_z + 0.035), FINGER_CLOSED, "carry it clear", end),
-             Waypoint(1.0, (gx + 0.06, gy, grip_z + 0.001), FINGER_CLOSED, "lay it down", end),
-             Waypoint(0.7, (gx + 0.06, gy, grip_z + 0.001), FINGER_OPEN, "let go", end),
-             Waypoint(1.0, (gx + 0.06, gy, grip_z + 0.08), FINGER_OPEN, "up", end),
+    left = list(strokes)
+    turn = TURN0  # where the wrench lies
+    for k in range(1, N_PULLS + 1):
+        pull = turn + STROKE + LEAD
+        left += [at(turn, 2.0 if k == 1 else 1.2, FINGER_OPEN, f"pull {k}: over the handle", 0.05),
+                 at(turn, 0.9, FINGER_OPEN, f"pull {k}: round the handle"),
+                 at(turn, 0.9, FINGER_CLOSED, f"pull {k}: grip it")]
+        n = 4
+        for i in range(1, n + 1):
+            left.append(at(turn + (pull - turn) * i / n, 0.6, FINGER_CLOSED, f"pull {k}: pull round ({i}/{n})"))
+        left += [at(pull, 0.3, FINGER_CLOSED, f"pull {k}: hold"),
+                 at(pull, 0.6, FINGER_OPEN, f"pull {k}: let go"),
+                 at(pull, 0.6, FINGER_OPEN, f"pull {k}: up", 0.05)]
+        turn = pull - SETTLE
+    gx, gy = _grip_xy(turn)
+    left += [at(turn, 1.2, FINGER_OPEN, "over the handle", 0.05),
+             at(turn, 0.9, FINGER_OPEN, "round the handle"),
+             at(turn, 0.8, FINGER_CLOSED, "grip it"),
+             at(turn, 1.2, FINGER_CLOSED, "lift the wrench off the nut", 0.035),
+             Waypoint(1.5, (gx + 0.06, gy, GRIP_Z + 0.035), FINGER_CLOSED, "carry it clear", turn),
+             Waypoint(1.0, (gx + 0.06, gy, GRIP_Z + 0.001), FINGER_CLOSED, "lay it down", turn),
+             Waypoint(0.7, (gx + 0.06, gy, GRIP_Z + 0.001), FINGER_OPEN, "let go", turn),
+             Waypoint(1.0, (gx + 0.06, gy, GRIP_Z + 0.08), FINGER_OPEN, "up", turn),
              kit.Home(2.0), kit.Home(1.5, label="hold at home")]
     return {"left": left, "right": [kit.Home(2.0, label="stay home")]}
