@@ -1,0 +1,57 @@
+{
+  "schema": "runtime-evidence-v1",
+  "status": "paired_native_runs_verified_ready_for_user_review",
+  "scope": "Native111 demo: 1.0, six ridged shells across 87 mm, 1114 actions, 55.7 simulated seconds, 501.57 wall seconds. Dream111: 0.0, 2400 actions, 120 simulated seconds, 1041.90 wall seconds, one session. Physical judging uses prescribed per-trial calibrated photographs; real icing precision is not claimed.",
+  "current_task_runtime_verified": true,
+  "python": "3.12.16",
+  "packages": {
+    "numpy": "2.5.4",
+    "yam-arena": "0.1.0",
+    "inspect-robots": "1.0.0",
+    "inspect-robots-yam": "0.38.0",
+    "inspect-robots-dream": "0.1.0",
+    "dreamlabs-client": "1.0.14",
+    "isaaclab": "17.0.2",
+    "isaacsim": "6.1.0.0"
+  },
+  "repositories": {
+    "launchable": {
+      "url": "https://github.com/ttpierson/YAM-inspect-Isaac",
+      "revision": "25a2963d10451265dd2a6cbddea69d6a3b3b9b0d"
+    },
+    "adapter": {
+      "url": "https://github.com/kairosiann/yam-isaac-lab-arena",
+      "revision": "0059d02a1a91bc6834c1d0846022891df0c78730"
+    },
+    "inspect": {
+      "url": "https://github.com/robocurve/inspect-robots",
+      "revision": "fc5ace923ce85117f9c86f35274122212fbcfe2c"
+    },
+    "arena": {
+      "url": "https://github.com/isaac-sim/IsaacLab-Arena",
+      "revision": "c7edf3a9d5d8276565208f72422f8f8a0806d6cf"
+    },
+    "isaaclab": {
+      "url": "https://github.com/isaac-sim/IsaacLab",
+      "revision": "91a0906f93802eb859192dcb0bca879f891e92d6",
+      "installation": "IsaacLab-Arena/submodules/IsaacLab; actual activated interpreter source, not the separate unused checkout."
+    }
+  },
+  "arena_asset_path_patch": {
+    "file": "isaaclab_arena/assets/nucleus.py",
+    "assignment": "ARENA_NUCLEUS_DIR: str = ISAACLAB_NUCLEUS_DIR",
+    "reason": "Use the public production asset root instead of unavailable staging assets.",
+    "sha256": "991c3d0dcfc331bc4177379b538646407f78b7dbb6e21b7f6e310518c13aa33d"
+  },
+  "platform": {
+    "gpu": "NVIDIA RTX 6000 Ada Generation",
+    "vram_mib": 49140,
+    "driver": "595.91.07",
+    "os": "Ubuntu 24.04.3 LTS",
+    "kernel": "6.8.0-138-generic",
+    "cpu": "AMD EPYC 75F3",
+    "ram_mib": 59127
+  },
+  "before_running": "Check installed versions/source revisions and save a fresh per-run manifest. A source/API inspection is not runtime validation.",
+  "reference_checked_utc_date": "2026-11-13"
+}
