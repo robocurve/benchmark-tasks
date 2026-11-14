@@ -95,14 +95,34 @@ def strokes(face, n, angle=17.0, lead=True, lift=0.0, a0=None, travel=0.065, v=N
     return out
 
 
-SECTIONS = m.DEMO_SECTIONS  # heel, middle and tip of the blade over the stone in turn, as the demo does
+SECTIONS = (0.035, 0.0825, 0.140)  # heel, middle and tip of the blade over the stone's middle, for strokes in place
 
 
-def sharpen(face, per=m.DEMO_PER, **kw):
-    """`per` strokes with each of the heel, middle and tip over the stone (the stone is 6 cm across, the edge 16.5 cm
-    long, so one place covers about 6 cm of it)."""
-    for v in SECTIONS:
-        strokes(face, per, v=v, **kw)
+def sweep(face, n, angle=17.0, lead=True, lift=0.0, pitch=0.0, **kw):
+    """n heel-to-tip strokes on `face`, as the demo makes them: the heel set on the stone, the knife drawn 8 cm along
+    it (face A pushed, face B pulled, edge leading; `lead`=False reverses them) while sliding along its own length so
+    the stone runs from heel to tip, then lifted 2 cm and brought back. `pitch`: degrees tip-down throughout."""
+    phi = angle if face == "A" else 180.0 - angle
+    r = knife_rot(m.STONE_HEADING, phi)
+    r = axrot(r @ np.array([1.0, 0, 0]), -pitch if face == "A" else pitch) @ r
+    sign = (1 if face == "A" else -1) * (1 if lead else -1)
+    a0, dw, run = -0.04 * sign, 0.02, 0.08
+    path = ([(m.DEMO_HEEL, a0 + sign * dw * k / 5) for k in range(6)]
+            + [(m.DEMO_HEEL + (m.DEMO_SWEEP_V - m.DEMO_HEEL) * k / 20, a0 + sign * (dw + (run - 2 * dw) * k / 20))
+               for k in range(1, 21)]
+            + [(m.DEMO_SWEEP_V + (m.DEMO_TIP - m.DEMO_SWEEP_V) * k / 5, a0 + sign * (run - dw + dw * k / 5))
+               for k in range(1, 6)])
+    out = []
+    for _ in range(n):
+        out += [frame(on_stone_pos(r, a, lift, v), r, **kw) for v, a in path]
+        out.append(frame(on_stone_pos(r, a0 + sign * run, lift, m.DEMO_TIP) + [0, 0, 0.02], r, **kw))
+        out.append(frame(on_stone_pos(r, a0, lift, m.DEMO_HEEL) + [0, 0, 0.02], r, **kw))
+    return out
+
+
+def sharpen(face, n=m.PER_SIDE + 1, **kw):
+    """A face sharpened as the demo does it: PER_SIDE + 1 heel-to-tip strokes."""
+    sweep(face, n, **kw)
 
 
 def start_pos():
@@ -141,8 +161,8 @@ for _ in range(30):
     s, _ = frame(p, r, grippers=HOME)
 check("do nothing", s, 0.0)
 
-# 2. The full job: 2 strokes each with heel, middle and tip over the stone, both faces, 17 degrees, edge leading,
-# put down flat edge away.
+# 2. The full job: 11 heel-to-tip strokes per face (face A pushed, face B pulled, edge leading), 17 degrees, put
+# down flat edge away.
 new_trial()
 sharpen("A")
 sharpen("B")
@@ -153,29 +173,71 @@ assert ok, "success() should be true at the end of the full job"
 # 2b. Review, Nov 12: repeated strokes on the same part of the edge (all with the blade's middle on the stone) cover
 # about 6 of the 16.5 cm: 0.5, not full credit.
 new_trial()
-strokes("A", 6)
-strokes("B", 6)
-check(f"6 strokes per face on the same 6 cm (worked {m.coverage('A')} and {m.coverage('B')})", put_down()[0], 0.5)
-# Under the floor of 5 strokes per face: 4 per face (heel, middle, tip, middle) score nothing, however well spread.
+strokes("A", 11)
+strokes("B", 11)
+check(f"11 strokes per face on the same 6 cm (worked {m.coverage('A')} and {m.coverage('B')})", put_down()[0], 0.5)
+# Under the floor of 10 strokes per face: 9 heel-to-tip strokes per face score nothing, however well spread; 10 do.
 new_trial()
-sharpen("A", per=1)
-strokes("A", 1)
-sharpen("B", per=1)
-strokes("B", 1)
-check("4 strokes per face along the whole edge: under 5 per face", put_down()[0], 0.0)
-# One stroke over each place (heel, middle, tip) plus two more over the middle: 5 strokes per face, but the heel's and
-# the tip's points have had one stroke's travel each, under the 10 cm that works a point: 0.5.
+sharpen("A", n=m.PER_SIDE - 1)
+sharpen("B", n=m.PER_SIDE - 1)
+check("9 heel-to-tip strokes per face: under 10 per face", put_down()[0], 0.0)
 new_trial()
-sharpen("A", per=1)
-strokes("A", 2)
-sharpen("B", per=1)
-strokes("B", 2)
-check(f"5 strokes per face, heel and tip stroked once (worked {m.coverage('A')} and {m.coverage('B')})",
+sharpen("A", n=m.PER_SIDE)
+sharpen("B", n=m.PER_SIDE)
+check(f"10 heel-to-tip strokes per face (worked {m.coverage('A')} and {m.coverage('B')})", put_down()[0], 1.0)
+# One heel-to-tip stroke plus nine more over the middle: 10 strokes per face, but the heel's and the tip's points have
+# had one stroke's travel each, under the 10 cm that works a point: 0.5.
+new_trial()
+sharpen("A", n=1)
+strokes("A", 9)
+sharpen("B", n=1)
+strokes("B", 9)
+check(f"10 strokes per face, heel and tip stroked once (worked {m.coverage('A')} and {m.coverage('B')})",
       put_down()[0], 0.5)
 new_trial()
 sharpen("A")
-strokes("B", 6, v=0.13)
+strokes("B", 11, v=0.13)
 check("face A all along, face B only at the tip", put_down()[0], 0.5)
+
+
+# 2d. A back-and-forth stroke kept on the stone (Kramer: "move the blade straight back and forth"): each edge-leading
+# pass of 5 cm or more is a stroke, the edge-trailing returns count for nothing. 11 round trips with the middle on the
+# stone: 11 strokes per face, one place on the edge (0.5); the same with sweeps along the blade: 1.0.
+def back_and_forth(face, n, travel=0.065, v=None, sweep_v=False):
+    phi = 17.0 if face == "A" else 163.0
+    r = knife_rot(m.STONE_HEADING, phi)
+    sign = 1 if face == "A" else -1
+    a0 = -0.005 * sign
+    for i in range(n):
+        for k in list(range(21)) + list(range(19, 0, -1)):
+            vv = (m.DEMO_HEEL + (m.DEMO_TIP - m.DEMO_HEEL) * k / 20) if sweep_v else v
+            frame(on_stone_pos(r, a0 + sign * travel * k / 20, 0.0, vv), r)
+    frame(on_stone_pos(r, a0, 0.0, v) + [0, 0, 0.02], r)
+
+
+new_trial()
+back_and_forth("A", 11)
+back_and_forth("B", 11)
+cnt = m._totals()[0]
+check(f"back and forth on the stone, middle only ({cnt['A']} and {cnt['B']} strokes)", put_down()[0], 0.5)
+assert cnt == {"A": 11, "B": 11}, cnt
+new_trial()
+back_and_forth("A", 11, sweep_v=True)
+back_and_forth("B", 11, sweep_v=True)
+check("back and forth on the stone, sweeping heel to tip", put_down()[0], 1.0)
+# A knife held on the stone at the right angle and jiggled 3 mm to and fro (a hand trembling, or solver jitter) for
+# 30 s makes no strokes and works nothing: travel is counted net, per pass.
+new_trial()
+for face, phi in (("A", 17.0), ("B", 163.0)):
+    r = knife_rot(m.STONE_HEADING, phi)
+    frame(on_stone_pos(r, 0.0, 0.0) + [0, 0, 0.02], r)  # brought over the stone, then set down on it
+    for k in range(600):
+        frame(on_stone_pos(r, 0.003 * (k % 2), 0.0), r)
+    frame(on_stone_pos(r, 0.0, 0.0) + [0, 0, 0.02], r)
+cnt = m._totals()[0]
+check(f"jiggled 3 mm on the stone for 30 s per face ({cnt['A']} and {cnt['B']} strokes, "
+      f"{m.coverage('A')} points worked)", put_down()[0], 0.0)
+assert cnt == {"A": 0, "B": 0} and m.coverage("A") == 0, (cnt, m.coverage("A"))
 
 # 2c. Review, Nov 12: strokes hovering above the stone (the old scorer counted up to 3 mm) earn nothing.
 for lift in (0.003, 0.002, 0.0008):
@@ -240,7 +302,7 @@ check("every face-B touch ends too steep: none count", put_down()[0], 0.25)
 
 # 7. One face only: 0.25.
 new_trial()
-strokes("A", 5)
+sharpen("A")
 check("one side only", put_down()[0], 0.25)
 
 # 8. Two strokes per face: not enough.
@@ -249,10 +311,10 @@ strokes("A", 2)
 strokes("B", 2)
 check("two strokes per side", put_down()[0], 0.0)
 
-# 9. Edge-trailing strokes only: none count.
+# 9. Edge-trailing strokes only (lifted between, or the light return of a back-and-forth stroke): none count.
 new_trial()
-strokes("A", 4, lead=False)
-strokes("B", 4, lead=False)
+sweep("A", 11, lead=False)
+sweep("B", 11, lead=False)
 check("edge trailing", put_down()[0], 0.0)
 
 # 10. Hovering 1 cm above the stone: no contact, no strokes.
@@ -349,14 +411,14 @@ def rolled(face, n, v=None):
 
 new_trial()
 sharpen("A")
-strokes("B", 3)
-rolled("B", 3)
-check("three good face-B strokes and three rolled off the end", put_down()[0], 0.25)
+strokes("B", 6)
+rolled("B", 5)
+check("six good face-B strokes and five rolled off the end", put_down()[0], 0.25)
 new_trial()
 sharpen("A")
-strokes("B", 3)
-strokes("B", 3)
-check("the same six face-B strokes lifted off instead", put_down()[0], 0.5)
+strokes("B", 6)
+strokes("B", 5)
+check("the same eleven face-B strokes lifted off instead", put_down()[0], 0.5)
 new_trial()
 sharpen("A")
 sharpen("B")
@@ -382,7 +444,7 @@ def tip_pos(r, a, lift=0.0):
     return np.r_[m.STONE_POS + a * m.S_U[:2], m.TOP + m.STONE_TOP + lift] - low
 
 
-def pitched(face, roll, pitch, n=6, travel=0.07):
+def pitched(face, roll, pitch, n=11, travel=0.07):
     """n edge-leading strokes on `face`, the knife rolled `roll` about its handle axis and pitched `pitch` tip-down
     (negative: heel-down)."""
     r = knife_rot(m.STONE_HEADING, roll if face == "A" else 180.0 - roll)
@@ -435,13 +497,14 @@ print(f"ok  edge colliders follow the edge (tip {1000 * (m.EDGE_X - m.edge_x(m.B
       f"edge; the last scorer point {1000 * (m.EDGE_X - m.edge_x(m.EDGE_SAMPLES[-1])):.1f} mm)")
 
 # 19. The last scorer point, 16.2 cm (3 mm short of the point, 4.9 mm up the tip's rise), is on the stone only with the
-# handle lifted for the tip, as a sharpener does: tip strokes with the blade level work 15 of the 16 points; with the
-# handle lifted 2.5 deg (inside the 5 deg level rule) all 16, the tip included.
+# handle lifted for the tip, as a sharpener does: strokes in place (4 each with the heel, middle and tip over the
+# stone) with the blade level work 15 of the 16 points; with the handle lifted 2.5 deg for the tip (inside the 5 deg
+# level rule) all 16. The demo's heel-to-tip strokes do not lift the handle (see task.py, DEMO_TIP_YAW).
 for tip_pitch, want in ((0.0, 15), (2.5, 16)):
     new_trial()
     for face in ("A", "B"):
         for v in SECTIONS:
-            strokes(face, m.DEMO_PER, v=v, pitch=tip_pitch if v == SECTIONS[-1] else 0.0)
+            strokes(face, 4, v=v, pitch=tip_pitch if v == SECTIONS[-1] else 0.0)
     s, _ = put_down()
     got = (m.coverage("A"), m.coverage("B"))
     assert got == (want, want) and s == 1.0, f"tip strokes pitched {tip_pitch} deg: worked {got}, score {s}"

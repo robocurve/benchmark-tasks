@@ -2,10 +2,11 @@
 
 A 165 mm santoku lies on an end-grain chopping block next to a 1000-grit whetstone held in a non-slip rubber holder
 on a sharpening stand. "Sharpen the knife on the whetstone, then put it back on the chopping block." means what anyone who
-sharpens their own knives at home, or a cook or butcher, does without thinking about it: hold the blade 15 to 20 degrees off the stone, draw it across edge first, a
-few strokes on each face, then lay the knife back down flat with its edge facing away. Rubbing it flat on the stone
-(the easy pose for a gripper that picked it up flat), holding it steep, or doing one face only are the tempting wrong
-answers.
+sharpens their own knives at home, or a cook or butcher, does without thinking about it: hold the blade 15 to 20
+degrees off the stone and sweep it across edge first so the stone runs along the edge from heel to tip, working one
+face until a burr runs the whole edge, then the other, then alternating with fewer strokes; then lay the knife back
+down flat with its edge facing away (sources under Technique, below). Rubbing it flat on the stone (the easy pose for a
+gripper that picked it up flat), holding it steep, or doing one face only are the tempting wrong answers.
 
 ## Run a trial
 
@@ -20,7 +21,7 @@ inspect-robots run --embodiment yam_arena --policy yam_scripted -E task=tasks/kn
 
 Model run (Dream-1): the same command with `--policy dream --max-steps 2400` (2,400 steps = 2 minutes at 20 Hz).
 
-Offline checks (no simulator): `python3 test_task.py` (45 checks, prints "all pass").
+Offline checks (no simulator): `python3 test_task.py` (51 checks, prints "all pass").
 
 ## Spec
 
@@ -40,49 +41,103 @@ Offline checks (no simulator): `python3 test_task.py` (45 checks, prints "all pa
 | Level | The blade's length (handle to tip) within 5 deg of horizontal: a stone stroke keeps the edge lying along the stone, and a 5 deg pitch already lifts the far end of a 6 cm contact 5 mm off it. The edge's rise near the tip comes onto the stone with the handle lifted about 3 deg, as a sharpener does for the tip, inside this limit |
 | Held | A gripper with both fingers touching the handle (a gap of 2 mm or less, the solver's resting gap, between the handle and the gripper's own shape: palm and fingers at their present opening) and their opening stopped by it (0.10 to 0.24 of full opening: the handle's 1.8 cm thickness less 15 %, to its 2.0 cm width plus 3 %). An empty fist, an open hand round the handle or a hand merely near it does not hold the knife, so a knife pushed or dragged without a hand on it makes no strokes |
 | On the stone | Held, edge lower than spine, touching: the edge's lowest point over the stone within 0.5 mm of its top (the knife's collider rests on the stone's, so a knife held up off it does not count). 16 edge points, about 1 cm apart from 0.5 cm past the heel to 16.2 cm, 3 mm short of the point, where the edge curves up to meet the spine: a point is on the stone within 1 mm of its top |
-| Stroke | One touch with 5 cm of edge-leading travel at 13 to 22 deg (15 to 20 deg, plus 2 deg for a hand-held angle), the blade level and at least 3 cm of edge (3 scorer points, half the stone's 6 cm width) on the stone; a tip or heel dragged alone sharpens nothing. 15 deg is the usual angle for Japanese knives, 20 deg for Western ones |
-| Worked | An edge point on a face once it has been on the stone for 10 cm of in-band, edge-leading travel, two strokes' worth. The stone is 6 cm across and the edge 16.5 cm long, so one place covers about 6 cm; working most of the edge means moving the knife along so the heel, middle and tip each cross the stone |
+| Stroke | One edge-leading pass across the edge of 5 cm or more at 13 to 22 deg (15 to 20 deg, plus 2 deg for a hand-held angle), the blade level and at least 3 cm of edge (3 scorer points, half the stone's 6 cm width) on the stone; a tip or heel dragged alone sharpens nothing. A pass ends when the knife lifts off or moves back 5 mm, so each forward pass of a back-and-forth stroke kept on the stone counts on its own; the edge-trailing return counts for nothing. Travel is counted net, so a knife jiggled in place makes no strokes. 15 deg is the usual angle for Japanese knives, 20 deg for Western ones |
+| Worked | An edge point on a face once it has been on the stone for 10 cm of in-band, edge-leading travel. The stone is 6 cm across and the edge 16.5 cm long, so one place covers about 6 cm; working most of the edge means sweeping the knife along its length so the stone runs from heel to tip, or moving it along in sections |
 | Not counted | A touch with 2 cm of travel steeper than 22 deg (it works a steeper, more obtuse micro-bevel, not the 15 to 20 deg edge), or one whose edge drops 3 mm below the stone's top just past an end within 0.5 s of leaving it (rolled off the end instead of lifted): none of that touch's travel counts as strokes or worked edge. Neither zeroes the trial. A real trial reads the angle against a 22 deg card on the side video and watches for the roll-off |
 | Put down safely | Let go (no part of either gripper touching the knife; a gap of 2 mm or less, the solver's resting gap, between the knife and the gripper's own shape counts as touching), flat on the block (faces within 20 deg of level, edge within 1 cm of its top), edge within 60 deg of +x (away from the robot): a knife left in the hand or on the stone isn't put away, and with the edge away the next hand reaching for the handle does not meet it. Real trial: top photo and a protractor |
 
 | Outcome | Score |
 |---|---|
-| Fewer than 5 strokes on both faces (doing nothing, flat, too-steep or rolled-off strokes, hovering, dragging without a grip, edge-trailing) | 0 |
-| 5+ strokes on one face only: the edge is pushed over into a wire, not sharp | 0.25 |
-| 5+ strokes on each face, but under 12 of the 16 edge points (three quarters of the edge) worked on a face: the right technique, but a quarter or more of the edge still dull | 0.5 |
-| 5+ strokes and 12+ points worked on each face, knife still held, left on the stone or edge toward the robot: sharpened, but not put down safely | 0.75 |
+| Fewer than 10 strokes on both faces (doing nothing, flat, too-steep or rolled-off strokes, hovering, dragging without a grip, edge-trailing only) | 0 |
+| 10+ strokes on one face only: the edge is pushed over into a wire, not sharp | 0.25 |
+| 10+ strokes on each face, but under 12 of the 16 edge points (three quarters of the edge) worked on a face: the right technique, but a quarter or more of the edge still dull | 0.5 |
+| 10+ strokes and 12+ points worked on each face, knife still held, left on the stone or edge toward the robot: sharpened, but not put down safely | 0.75 |
 | Both faces worked along most of the edge, knife put down safely, still for 1 s | 1.0 |
 
 Where the arms end is not scored. These are the sim's tiers; a real trial scores the same ladder from edge-tester
 readings (Real-world build, below).
 
-Why edge leading: an edge-first stroke cuts into the stone like slicing a thin layer off it and raises less of a wire
-burr than a trailing stroke; on face A the demo pushes (edge away from the robot), on face B it pulls.
+## Technique: what the guides say
+
+Quotes checked word for word against each page on Nov 14, 2026. Serious Eats, Shun and Lifehacker could not be
+fetched and are not cited.
+
+- **Heel to tip.** Most guides sweep every stroke along the edge so the whole edge crosses the stone: Chef Knives To
+  Go (CKTG) has the sharpener "move your guiding fingers from the heel toward the tip so that the entire edge makes
+  contact with the stone from heel to tip"; Bob Kramer: "pull the knife towards you, heel to tip, making a swooping
+  motion on the stone"; America's Test Kitchen (ATK) draws the blade "until the tip of the knife runs off the other
+  edge". (Knifewear and Korin instead work a section at a time; Wüsthof goes tip to heel.)
+  [CKTG](https://www.chefknivestogo.com/how-to-sharpen-a-knife-on-a-whetstone.html),
+  [Kramer](https://kramerknives.com/sharpening/),
+  [ATK](https://www.americastestkitchen.com/cooksillustrated/articles/275-how-to-use-a-whetstone)
+- **Direction.** The guides differ on push or pull, but where they say which stroke carries the pressure it is the
+  edge-leading one: CKTG "This edge-leading stroke on the forward pass is the standard approach for double-bevel
+  knives" with the return made "with less pressure or lift it and reset"; Korin pushes "with the edge facing away from
+  you ... exerting pressure as you move forward and releasing pressure as you return"
+  ([Korin](https://www.korin.com/about-knife-sharpening)). Kramer pulls toward the body; Knifewear and Global go
+  "back and forth" ([Knifewear](https://knifewear.com/blogs/articles/how-to-sharpen-kitchen-knives-with-japanese-whetstones),
+  [Global](https://www.globalcutleryusa.com/knife-care)). Holding the handle in one hand, the edge faces away on one face and toward the sharpener on the
+  other, so edge leading is a push on one face and a pull on the other (ATK: the second side "in the opposite
+  direction"). Tormek, a sharpening-machine maker, found "no noticeable difference between the two in relation to
+  sharpness" ([Tormek](https://tormek.com/en/knowledge/the-tormek-way-of-sharpening/edge-leading-vs-edge-trailing)).
+- **Angle.** 10 to 15 deg (Kramer, Global, Ichimonji), 10 to 20 (Korin), 14
+  ([Wüsthof](https://www.wusthof.com/how-to-sharpen-your-wusthof-knives)), 15 Asian and 20 Western (ATK).
+- **Pressure.** Kramer: "Start with about 4 – 6 lbs and end with about 2 – 3 lbs" (about 18 to 27 N, then 9 to 13 N);
+  Knifewear: "just enough weight to maintain contact with the stone"; CKTG: "light to moderate pressure".
+- **How many strokes.** No fixed number: a face is worked until a burr runs the whole edge (ATK: "when you can feel the
+  burr from handle to tip, that side is sharp enough", checking "with every 10 passes"; Knifewear: "Keep working on that
+  section until you do!"). Then CKTG alternates faces "in decreasing strokes - ten strokes per side, then eight, then
+  six, then four, then two, then one stroke per side several times", which "removes the burr".
+
+The sim counts edge-leading passes only (the stroke the guides press on) and needs 10 per face: about one ATK burr
+check's worth, still a floor, since the sim feels no burr. The demo follows the common pattern: heel-to-tip strokes,
+edge leading, face A pushed (its edge faces away) and face B pulled toward the robot, 9 per face, then 2 more on each
+face in turn.
 
 ## The demo
 
 The right arm slides its open hand sideways round the handle (fingers above and below it, approach along the
-handle), lifts, turns the knife to 17 degrees edge-down over the stone and makes push strokes on face A, two each with
-the heel, middle and tip of the blade over the stone (the stone's 6 cm covers about 6 cm of edge at a time), lifts
-straight up, rolls the knife over through upright and does the same with pull strokes on face B (three with the tip),
-lays it back on the block edge-away, lets go and goes home. For the tip strokes the knife is turned 10 degrees on the
-stone, tip further from the robot, and the handle is lifted (2.5 degrees on face A, 3.5 on face B) so the edge's rise
-lies on the stone up to the last scorer point, 3 mm short of the point. Held square to the stone, the tip strokes
-put the wrist at its joint limit: the hand fell 1 to 1.5 cm short and lost the lift, so the last 1 cm of edge never
-touched the stone. On face B the tip strokes are aimed at the stone's top rather than 1 mm into it, and start with
-more lift, because the pull turns the knife back about 2 degrees in the grip. The wrist roll (joint 6) covers the 146
-degrees between the two faces; the hand is turned 90 degrees round the handle at the pick so both faces fall inside
-its range. The demo trims its aim by 2.5 degrees per face for the knife's sag in the grip.
+handle), lifts, and turns the knife to 17 degrees edge-down over the stone. Each stroke sets the heel on the stone and
+draws the knife 8 cm along it, edge leading, while sliding it 12 cm along its own length, so the stone runs along the
+edge from heel to tip: 2 cm with the heel, 4 cm sweeping, 2 cm with the tip. The hand then lifts 1.5 cm and goes back.
+Face A (edge away from the robot) is pushed, 9 strokes; the knife is lifted, rolled over through upright, and face B
+(edge toward the robot) is pulled toward the robot, 9 strokes; then 2 more on face A and 2 on face B, alternating to
+finish, 11 per face in all. It lays the knife back on the block edge-away, lets go and goes home.
+
+What the YAM's reach decided (real IK, offline, every control step):
+- **Face A is pushed, not pulled.** On face A a heel-to-tip pull (Kramer's stroke) is out of reach: drawing toward
+  the robot and sliding toward the tip both turn joint 4 further, and it hit its 90 degree limit 6 cm into the
+  stroke. The edge-leading push of CKTG and Korin keeps it 2.6 degrees inside.
+- **The knife turns 10 degrees during the sweep** (tip further from the robot). Square to the stone the tip end puts
+  joint 5 at its -90 degree limit and the hand misses by up to 17 mm.
+- **The handle is not lifted for the tip** as a sharpener does (Knifewear: "roll the tip into the stone"). 2.5 degrees
+  of lift swung joints 4 and 6 through the wrist's singularity, 60 degrees in 0.4 s. So the last scorer point or two,
+  up the tip's 6 mm rise, stay 1 to 2 mm off the stone (12 of 16 points are needed).
+- **The stroke runs over 8 cm of the stone's 18** (from its middle to 8 cm toward its far end), where the heel and tip
+  ends are both in reach. The knife crosses the stone nearly square to its length, where some guides hold it at
+  about 45 degrees ([Ichimonji](https://global.ichimonji.co.jp/blogs/maintenance/santoku-household-sharpening)).
+
+The demo trims its aim by 2.5 degrees per face for the knife's sag in the grip. It aims the edge 1 mm into the stone.
+Through the YAM's joint stiffness (constants.py) that adds an estimated 0.2 to 0.7 N to the knife's 1 N weight, so it
+presses about 1.2 to 1.7 N. That is lighter than the guides (Fidelity).
 
 ## Runtime and seeds
 
-Sim result, with the raised thresholds (5 strokes per face, 10 cm of travel per worked point): 1.0 in 1,310 steps (65.5 seconds at 20 Hz). 6 strokes counted on face A and 7 on face B, against 5 needed. All 16 edge points were worked on face A (12.2 to 24.5 cm of counted travel each) and 15 of 16 on face B (10.8 to 24.9 cm; the point 0.5 cm from the heel had 8.3 cm), against 12 needed. The last point, 16.2 cm along the edge and 3 mm short of the tip, had 12.9 cm on face A and 15.8 cm on face B. On the stone the sharpening angle read 14.9 to 20.7 degrees and the blade's length stayed within 3.9 degrees of level (the most with the handle lifted for the tip); one fixed layout, `object_jitter=0`.
+Sim result: 1.0 in 1,992 steps (99.6 seconds at 20 Hz), of the 2,400 allowed. 11 strokes counted on each face, against
+10 needed. 15 of the 16 edge points were worked on face A (15 to 34 cm of counted travel each) and 14 on face B (11 to
+31 cm), against 12 needed. The points not worked are up the tip's rise, which the demo does not lift the handle for:
+the last on face A, and the last two on face B. On the stone the sharpening angle read 14.9 to 19.0 degrees, and the
+blade's length stayed within 1.3 degrees of level. One fixed layout, `object_jitter=0`.
 
 ## Fidelity
 
 Nothing is ground: the sim scores strokes from the knife's pose while it is on the stone (angle, contact, travel per
 edge point) as a stand-in for steel removed; a real trial measures the edge with the edge tester instead. The stone is
-rigid and dry. The knife is 100 g (real about 140 g); its blade colliders are boxes following the outline, turned along
+rigid and dry. The press is light: about 1.2 to 1.7 N on the stone (the knife's 1 N weight plus the edge aimed 1 mm
+into the stone against the arm's joint stiffness, estimated from the stiffness in constants.py, not measured), where
+Kramer asks for 4 to 6 lb, then 2 to 3 lb (about 9 to 27 N), and the YAM gives at most about 5 N. No burr is felt: the
+demo makes a fixed count (11 per face). The handle is not lifted for the tip and the knife crosses the stone nearly
+square (The demo). The knife is 100 g (real about 140 g); its blade colliders are boxes following the outline, turned along
 the tip's rise so the edge the scorer reads is the one that touches. The sharpening stand is 6 cm tall so the wrist
 housing clears the bench during strokes.
 
@@ -127,22 +182,22 @@ angle itself is not scored in a real trial, because the reading is the outcome.
 ## How the sim's strokes relate to the measured edge
 
 The sim grinds no steel. It counts a point of the edge as worked once it has been on the stone for 10 cm of in-band,
-edge-first travel, and full credit needs 5 or more strokes and 12 of 16 points worked on each face. It is a stand-in,
-not a measured match, and in a real trial the tester readings decide the score in every case.
+edge-leading travel, and full credit needs 10 or more strokes and 12 of 16 points worked on each face. It is a
+stand-in, not a measured match, and in a real trial the tester readings decide the score in every case.
 
-This revision raised both thresholds, from 3 strokes per face and 5 cm of travel per point (one stroke over each part
-of the edge). That earlier floor was below what sharpening a dull edge takes. Guides for Japanese whetstones work each
-section of the edge until a burr can be felt all along it before moving on; one says "Keep working on that section
-until you do" (Knifewear, "How to Sharpen Kitchen Knives with Japanese Whetstones"). They then finish by alternating
-faces "in decreasing strokes - ten strokes per side, then eight, then six, then four, then two, then one stroke per
-side several times" (Chef Knives To Go, "How to sharpen a knife on a whetstone"), which is more than 30 strokes per face
-after the burr is raised. The new floor, 5 strokes per face with every worked point on the stone for two strokes'
-travel, is still well under that. It is a conservative lower bound that the scripted demo meets (6 and 7 strokes, 2 to 3
-over each part of the edge); it is not a calibration.
+This revision raised the stroke floor from 5 to 10 per face and counts strokes as the guides describe them (Technique,
+above): one edge-leading pass per stroke, whether the knife is lifted for the return or kept on the stone back and
+forth. No guide gives a fixed count; they work a face until a burr runs from heel to tip, ATK checking for it "with
+every 10 passes", and CKTG then alternates faces in 10, 8, 6, 4, 2 and 1 strokes to remove the burr. So 10 per face is
+about one burr check's worth on each face, still a floor; it is not a calibration. The earlier revision's floor of 5
+per face cited the same two guides (Knifewear and CKTG) for the count only and did not use them for the stroke itself,
+which they describe as a sweep along the edge.
 
-The real count has not yet been measured on this knife and stone. Before real trials the builder sharpens the jointed
-knife by hand at 17 degrees, counting strokes per face and reading the tester after every pair of strokes. If more is
-needed than the sim requires, the sim's thresholds are raised again and the demo is re-run.
+The real count has not yet been measured on this knife and stone, and the YAM presses at most about 5 N where Kramer
+asks for 9 to 27 N, so a real trial at the YAM's pressure may need more strokes than a person would. Before real trials
+the builder sharpens the jointed knife by hand at 17 degrees, pressing about 5 N (500 g on the kitchen scale), counting
+strokes per face and reading the tester after every 2 strokes. If more is needed than the sim requires, the sim's
+thresholds are raised again and the demo is re-run.
 
 ## Files
 
