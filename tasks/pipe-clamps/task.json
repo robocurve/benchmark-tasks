@@ -1,0 +1,23 @@
+{
+  "title": "Fix a copper tube in two self-closing pipe clamps: press it into both until each double-clicks and locks",
+  "category": "Impact on jobs",
+  "keywords": [
+    "plumbing",
+    "pipe clamp",
+    "self-closing clamp",
+    "copper tube",
+    "snap fit",
+    "detent",
+    "plumber",
+    "pipefitter"
+  ],
+  "instruction": "A 600 mm length of 1/2 in copper tube lies across two black cradles in front of the robot. Behind it, two self-closing pipe clamps are screwed to a wooden plank, 360 mm apart, mouths up, each with its two arms standing open. Fix the tube in both clamps as the clamp maker's instructions say: insert the tube into each clamp and press it in until the clamp double-clicks. The first click holds the tube; the second click locks it, with the arms closed round it. Both clamps must lock on the tube, with the tube lying straight along the plank through both. Then let go and move both grippers at least 10 mm from the tube.",
+  "context": "O*NET 47-2152.00 Plumbers, Pipefitters, and Steamfitters (510,600 jobs, 2025) lists as a Core task \"Attach pipes to walls, structures, or fixtures, such as radiators or tanks, using brackets, clamps, tools, or welding equipment.\" Oatey's installation instructions for its self-closing pipe clamps: \"1 Secure the self-closing clamp to the mounting surface. 2 Insert the pipe into the self-closing clamp. 3 Press the pipe inwards until you feel a double click. The first click holds pipe in place with the ability to position, the second click locks the pipe in place.\" Step 1 is done (the clamps are screwed down); the task is steps 2 and 3 on two clamps along one run: the tube goes into both mouths and is pressed through both clamps' two detents, ending straight along the plank and right through both clamps.",
+  "setup": "Coordinates: x forward from the arm bases (at y +-0.305), y left, z up from the table. A 2x6 plank (38.1 x 139.7 mm, 600 mm long along y) at x 0.335. On it, two clamps sized as Oatey 34338 (1/2 in CTS): base 27.9 mm across the tube (B), 28 mm along it, closed height 35.6 mm, the seated tube's axis 23.9 mm over the plank, at y 0.18 and -0.18. Each clamp: a fixed foot; a trigger pad under the mouth on a prismatic joint (6 mm travel, 100 N/m return spring preloaded 2 mm up); two arms on revolute joints along y, 12 mm either side, whose tails lie under the pad, so pressing the pad down closes them round the tube (open 36.9 deg at rest, a 0.004 N m/rad opening spring); and a spring plunger in the foot (3000 N/m, preloaded 3 mm) pressing on a bar that hangs from the pad and carries two V notches, 2.4 mm wide, reached at 3 mm (first click, 0.4 mm deep) and 6 mm (second click, locked, 0.8 mm deep). Loose: a 1/2 in Type L copper tube, OD 15.9 mm, 600 mm long, 0.254 kg, axis along y at x 0.2, in two V cradles at y 0.2 and -0.2.",
+  "scoring": "Each step, per clamp: the tube is in the mouth when its axis at the clamp's y is within 3 mm of the clamp's centre line in x and between 1.2 mm under and 7.5 mm over the seated axis, and the tube counts at a clamp only where it runs right through the arms (the clamp at least 9.5 mm in from either tube end); seated when within 1.2 mm of the seated axis in x and z with the tube within 3 deg of the plank's line. Clicks count only with the tube in the mouth: one click at a pad depth of 2.2 mm or more; locked at 5.2 mm or more with both arms within 3 deg of closed. Clear: both grippers' collision hulls 10 mm or more from the tube. Still: the tube under 5 mm/s and its axis turning under 0.05 rad/s. Success (1.0, held 1 s): both clamps locked on the seated tube, clear, still. Partial credit at the last step: both locked on the seated tube, clear and still 0.8; clear 0.7; a hand within 10 mm of the tube (or the hands unread) 0.55; otherwise by clicks: both at the second click but the tube not seated in both 0.45; one second and one first 0.4; both first 0.3; one second 0.2; one first 0.1; else 0. The tube below the table top by 30 mm scores 0 from then on.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lay the tube in its two cradles; the clamps start open (pads up, arms open). Nothing else moves.",
+  "fidelity": "Approximate. Oatey publishes no click force, so the springs and the detent are ours; the real clamp's arms close by its own linkage, here by the pad pressing their tails. The lock is a spring detent holding about 5 N against a pull on the pad, where the real clamp is rated 134 lb. The tube is a solid cylinder of the tube's mass. The scorer reads joints, poses and hand hulls, not forces.",
+  "scores": "Dream-1 run: 0 (2,400 steps); demo: 1.0 (success at 14.4 s, step 288)",
+  "media": "M-Z8VSB7"
+}
