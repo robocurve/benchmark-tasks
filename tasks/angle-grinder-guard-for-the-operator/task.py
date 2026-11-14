@@ -202,17 +202,24 @@ def _update(objects) -> None:
                                                   "clear", "pos", "tcp", "why")}, default=float) + "\n")
 
 
+def lever_flat() -> bool:
+    """The lever is within 8 degrees of flat, read straight from its measured angle (not from the clamp's snap state,
+    which shuts below 40 degrees) and not snapped open."""
+    S = _STATE
+    return bool(S["raised"] <= g.LEVER_SHUT and not S["lever_open"])
+
+
 def violation() -> bool:
     S = _STATE
     return bool(S["shoved"] or S["forced"] or S["disc_touch"])
 
 
 def success(objects) -> bool:
-    """The guard's closed side within 30 degrees of the operator, the clamp lever shut, the grinder where it started
+    """The guard's closed side within 30 degrees of the operator, the clamp lever within 8 degrees of flat, the grinder where it started
     (within 20 mm and 10 degrees) and not tipped, both arms clear of it, no violation so far; held 2 s."""
     _update(objects)
     S = _STATE
-    return bool(not violation() and S["shut"] and S["err"] <= g.BEARING_OK and S["moved"] <= g.MOVED_OK
+    return bool(not violation() and lever_flat() and S["err"] <= g.BEARING_OK and S["moved"] <= g.MOVED_OK
                 and S["yaw"] <= g.YAW_OK and S["tilt"] <= g.TILT_OK and S["clear"])
 
 
@@ -230,7 +237,7 @@ def score(objects) -> float:
         s = 0.25
     if S["err"] <= g.BEARING_HALF:
         s = max(s, 0.50)
-    if S["shut"] and S["err"] <= g.BEARING_NEAR:
+    if lever_flat() and S["err"] <= g.BEARING_NEAR:
         s = max(s, 0.75)
     return min(s, 0.25) if violation() else s
 

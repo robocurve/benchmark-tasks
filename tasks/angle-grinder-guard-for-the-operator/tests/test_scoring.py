@@ -65,12 +65,26 @@ class TestScoring(unittest.TestCase):
         self.put(shut=False, raised=math.radians(80), err=math.radians(150))   # turned back
         self.assertEqual(self.t.score(None), 0.25)
 
+    def test_a_lever_between_8_and_40_degrees_from_flat_cannot_score_full(self):
+        """The clamp's snap state says shut below 40 degrees, but full credit needs the measured lever within 8 degrees."""
+        for deg in (8.5, 15, 25, 39.9):
+            self.right_way_shut()
+            self.put(shut=True, raised=math.radians(deg), lever_open=False)   # even with the snap state "shut"
+            self.assertFalse(self.t.success(None), deg)
+            self.assertLess(self.t.score(None), 1.0, deg)
+            self.assertLess(self.t.score(None), 0.75, deg)                   # nor the lever-flat 0.75 rung
+        for deg in (0.0, 4.0, 8.0):
+            self.right_way_shut()
+            self.put(raised=math.radians(deg), lever_open=False)
+            self.assertTrue(self.t.success(None), deg)
+            self.assertEqual(self.t.score(None), 1.0, deg)
+
     def test_the_lever_shut_with_the_guard_wrong_is_not_075(self):
         self.put(shut=True, raised=0.0, err=math.radians(60))
         self.assertEqual(self.t.score(None), 0.50)
 
     def test_success_needs_every_condition(self):
-        for key, bad in (("shut", False), ("err", math.radians(31)), ("moved", 0.021), ("yaw", math.radians(11)),
+        for key, bad in (("raised", math.radians(8.5)), ("lever_open", True), ("err", math.radians(31)), ("moved", 0.021), ("yaw", math.radians(11)),
                          ("tilt", math.radians(11)), ("clear", False)):
             self.right_way_shut()
             self.put(**{key: bad})

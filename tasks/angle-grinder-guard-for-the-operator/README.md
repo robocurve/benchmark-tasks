@@ -131,6 +131,9 @@ flat). The score is the state at the current step; no best score is kept.
   or tilted more than 30 degrees.
 - **End state:** apart from the violations, every condition is judged at the current step, so undoing a step lowers the score
   again (lowering the lever alone leaves the guard where it is, but a guard turned back drops the score).
+- **Full credit reads the lever angle itself.** `success()` and the 0.75 step test the measured lever angle against the 8-degree
+  limit (`task.lever_flat()`), not the clamp's snap state (which shuts below 40 degrees). A lever resting anywhere from 8 to
+  40 degrees off flat can't score 0.75 or 1.0; `test_a_lever_between_8_and_40_degrees_from_flat_cannot_score_full` covers it.
 - **In simulation** the hand test is the clamp: the guard joint's limits are held at its present angle while the lever is
   flat (below 40 degrees and not snapped open), and released when it snaps open (past 45 degrees).
 - A policy cannot score by turning the whole grinder (that is a shove) or by pulling the lever off (it is on a hinge with a
