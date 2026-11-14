@@ -49,7 +49,7 @@ TOP = TABLE_TOP
 SUCCESS_HOLD_S = 1.0
 SCORE_OVER = "end"
 
-# 1. Housing (fixed 25 kg stand-in) carrying the drawer on a prismatic slide
+# 1. Housing (fixed to the bench) carrying the drawer on a prismatic slide
 housing_shapes = [box(c, s, COLOR_HOUSING) for c, s, _ in HOUSING_BOXES] + [box(STAND_BOX[0], STAND_BOX[1], COLOR_STAND)]
 drawer_shapes = [box(c, s, COLOR_DRAWER) for c, s, _ in DRAWER_BOXES]
 
@@ -104,7 +104,7 @@ BASKET = Mech(
     joints=[button_joint],
 )
 
-# 3. Heat-proof mat (fixed 25 kg stand-in)
+# 3. Heat-proof mat (fixed to the bench)
 mat_shapes = [box(c, s, COLOR_MAT) for c, s, _ in MAT_BOXES]
 MAT = Mech(
     "af2_mat",

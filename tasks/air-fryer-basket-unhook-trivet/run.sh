@@ -19,12 +19,17 @@ case "$mode" in
     policy=yam_scripted
     steps=1200
     ;;
+  shove)
+    export ABLATION=shove
+    policy=yam_scripted
+    steps=1200
+    ;;
   dream)
     policy=dream
     steps=1500
     ;;
   *)
-    echo "Unknown mode: $mode (use settle, demo, ablation, dream)" >&2
+    echo "Unknown mode: $mode (use settle, demo, ablation, shove, dream)" >&2
     exit 2
     ;;
 esac
@@ -36,5 +41,5 @@ export TASK_TRACE="$out/trace.jsonl"
 
 inspect-robots run --embodiment yam_arena --policy "$policy" \
   -E task="$PWD/task.py" -E object_jitter=0 -E control_hz=20 -E cam_width=320 -E cam_height=176 \
-  --instruction "Take the basket out of the air fryer drawer and set it on the mat; release it." \
+  --instruction "Take the basket out of the air fryer drawer by its release button and handle, set it flat on the mat, and let go of everything; touch nothing hot." \
   --scorer task_score --max-steps "$steps" --store-frames --log-dir "$out"

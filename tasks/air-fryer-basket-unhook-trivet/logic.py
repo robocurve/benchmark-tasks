@@ -133,12 +133,12 @@ def on_mat(basket_pos: Sequence[float], basket_quat: Sequence[float]) -> bool:
 
 
 def button_out(button_displacement: float) -> bool:
-    """BUTTON_OUT: button >= 90% extended (displacement <= 0.9 mm)."""
+    """BUTTON_OUT: button >= 90% extended (displacement <= 1.4 mm of the 14 mm stroke)."""
     return button_displacement <= BUTTON_OUT_THRESHOLD_M
 
 
 def catches_hold_basket(button_displacement: float) -> bool:
-    """Catches hook under ledges when button displacement is less than 6 mm."""
+    """Catches are scored as hooking under the ledges while the button displacement is below 8 mm (they physically clear after 7 mm)."""
     return button_displacement < BUTTON_CLEARANCE_DISPLACEMENT_M
 
 
@@ -147,7 +147,7 @@ def released(
     basket_pos: Sequence[float],
     basket_quat: Sequence[float],
 ) -> bool:
-    """RELEASED: all gripper centres at least 3 cm from the basket body and handle."""
+    """RELEASED: every point passed in (both gripper centres and all finger pad box centres) is at least 3 cm from the basket body and handle."""
     rot = rotation_from_quat(basket_quat)
     b_origin = np.asarray(basket_pos, dtype=float)
 
@@ -159,6 +159,24 @@ def released(
             if np.linalg.norm(d) < RELEASE_MIN_DIST_M:
                 return False
     return True
+
+
+def resting_out_of_drawer(basket_pos: Sequence[float], basket_quat: Sequence[float]) -> bool:
+    """End-state check for the 0.5 rung: the basket is out of the drawer (12 cm or more from its start in x/y), low on the
+    bench (not on the housing), and upright (tilt < 20 degrees)."""
+    dx = float(basket_pos[0]) - BASKET_START_POS[0]
+    dy = float(basket_pos[1]) - BASKET_START_POS[1]
+    if math.hypot(dx, dy) < 0.12:
+        return False
+    if float(basket_pos[2]) > TABLE_TOP + 0.05:
+        return False
+    return tilt_deg(basket_quat) < 20.0
+
+
+def seated_in_drawer(basket_pos: Sequence[float], basket_quat: Sequence[float]) -> bool:
+    """End-state check for the 0.25 rung: the basket is seated back in the drawer (within 10 mm of its start, tilt < 5 degrees)."""
+    d = np.asarray(basket_pos, dtype=float) - np.asarray(BASKET_START_POS, dtype=float)
+    return bool(float(np.max(np.abs(d))) < 0.010 and tilt_deg(basket_quat) < 5.0)
 
 
 def still(hist: Sequence[Sequence[float]]) -> bool:
@@ -179,10 +197,16 @@ def evaluate_state(
     unhook_lift_ever: bool,
     grippers_released: bool,
     basket_still: bool,
+    bypass_ever: bool = False,
+    dropped_ever: bool = False,
 ) -> tuple[float, str]:
     """Score the end state. Returns (score, reason)."""
     if hot_contact_ever:
         return 0.0, "hot contact occurred (permanent zero)"
+    if bypass_ever:
+        return 0.0, "latch bypassed: basket lifted without the release button pressed (permanent zero)"
+    if dropped_ever:
+        return 0.0, "the hot basket was dropped (fell more than 5 cm in 0.25 s: permanent zero)"
 
     mat_ok = on_mat(basket_pos, basket_quat)
     btn_ok = button_out(button_disp)
@@ -192,10 +216,10 @@ def evaluate_state(
             return 1.0, "basket placed on mat, released, still, no hot contact"
         return 0.75, "basket on mat without hot contact, but button not extended, grippers not released, or not still"
 
-    if cleared_drawer_ever:
-        return 0.5, "basket cleared drawer, rests off mat without hot contact"
+    if cleared_drawer_ever and resting_out_of_drawer(basket_pos, basket_quat):
+        return 0.5, "basket cleared drawer, rests upright on the bench off the mat, not dropped, no hot contact"
 
-    if unhook_lift_ever:
-        return 0.25, "button pressed >= 6 mm and lifted >= 20 mm, but basket not removed"
+    if unhook_lift_ever and seated_in_drawer(basket_pos, basket_quat):
+        return 0.25, "button pressed and basket lifted, but it ended seated back in the drawer"
 
     return 0.0, "basket remained in drawer"

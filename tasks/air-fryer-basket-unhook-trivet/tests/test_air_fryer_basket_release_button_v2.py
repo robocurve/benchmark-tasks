@@ -54,8 +54,8 @@ class TestGeometry(unittest.TestCase):
 
     def test_slide_properties(self):
         """Drawer and button slides must match design specifications."""
-        self.assertAlmostEqual(g.DRAWER_TRAVEL_M, 0.255)
-        self.assertAlmostEqual(g.DRAWER_RATE_N_M, 4.0)
+        self.assertAlmostEqual(g.DRAWER_TRAVEL_M, 0.225)
+        self.assertAlmostEqual(g.DRAWER_RATE_N_M, 0.0)   # not sprung
         self.assertAlmostEqual(g.DRAWER_DAMPING_NS_M, 30.0)
 
         self.assertAlmostEqual(g.BUTTON_TRAVEL_M, 0.014)
@@ -75,19 +75,19 @@ class TestLogicCatchesAndButtons(unittest.TestCase):
     """Test physical release latch logic and button extension thresholds."""
 
     def test_catches_hold_basket_until_pressed(self):
-        """Catches physically engage for displacements < 6 mm, withdraw at >= 6 mm."""
+        """Catches are scored as engaged below 8 mm of travel (they physically clear after 7 mm)."""
         self.assertTrue(l.catches_hold_basket(0.000))
         self.assertTrue(l.catches_hold_basket(0.003))
-        self.assertTrue(l.catches_hold_basket(0.0059))
-        self.assertFalse(l.catches_hold_basket(0.0060))
-        self.assertFalse(l.catches_hold_basket(0.0090))
+        self.assertTrue(l.catches_hold_basket(0.0079))
+        self.assertFalse(l.catches_hold_basket(0.0080))
+        self.assertFalse(l.catches_hold_basket(0.0140))
 
     def test_button_out_threshold(self):
-        """BUTTON_OUT requires button >= 90% extended (displacement <= 0.9 mm)."""
+        """BUTTON_OUT requires the button >= 90% extended (displacement <= 1.4 mm of the 14 mm stroke)."""
         self.assertTrue(l.button_out(0.000))
         self.assertTrue(l.button_out(0.0005))
-        self.assertTrue(l.button_out(0.0009))
-        self.assertFalse(l.button_out(0.0010))
+        self.assertTrue(l.button_out(0.0014))
+        self.assertFalse(l.button_out(0.0015))
         self.assertFalse(l.button_out(0.0090))
 
 
@@ -263,15 +263,13 @@ class TestAblationAndReach(unittest.TestCase):
     """Test ablation mode, TCP reach limits, and arm separation."""
 
     def test_ablation_mode_plan(self):
-        """Ablation: the same hand grips the bar between the posts, away from the release cap, so the catches stay hooked."""
-        import demo_plan as dp
+        """Ablation: the right arm stays idle at ready, so the release button is never pressed and the catches hold."""
         os.environ["ABLATION"] = "1"
         try:
-            pinch = next(w for w in plans()["right"] if "pinch" in w.label)
-            self.assertAlmostEqual(pinch.pos[1], dp.BAR_ONLY_GRIP[1])
-            cap_y0 = g.BASKET_START_POS[1] + g.BUTTON_AT[1] + g.BUTTON_BOXES[0][0][1] - g.BUTTON_BOXES[0][1][1] / 2
-            cap_y1 = cap_y0 + g.BUTTON_BOXES[0][1][1]
-            self.assertTrue(pinch.pos[1] - 0.015 > cap_y1 or pinch.pos[1] + 0.015 < cap_y0)  # 15 mm finger half-width clear of the cap
+            p = plans()
+            self.assertEqual(len(p["right"]), 1)
+            self.assertIn("idle", p["right"][0].label)
+            self.assertIn("lift out of drawer", [w.label for w in p["left"]])
         finally:
             os.environ.pop("ABLATION", None)
 
@@ -283,27 +281,38 @@ class TestAblationAndReach(unittest.TestCase):
                 self.assertLessEqual(wp.pos[0], 0.30, f"{arm} waypoint x exceeds 0.30: {wp.pos}")
                 self.assertLessEqual(wp.pos[2] - g.TABLE_TOP, 0.19 + 1e-4, f"{arm} waypoint z exceeds 0.19: {wp.pos}")
 
-    def test_demo_pinch_presses_cap_and_clears_hot_boxes(self):
-        """The pinch spans the release cap face to the bar's back face; closing pushes the cap to its stop, and the open
-        fingers' pads stay out of the inflated hot zones of the drawer front and the basket front wall."""
+    def test_button_is_small_and_separate_from_the_lifting_grip(self):
+        """The release is a thumb-sized button (<= 3 cm either way) at the handle's right end; the lifting grip is the
+        handle's left post, at least 12.5 cm away from the button so the two hands do not meet."""
         import demo_plan as dp
-        gx = dp.CAP_GRIP[0]
-        cap_face = g.BASKET_START_POS[0] + g.BUTTON_AT[0] + g.BUTTON_BOXES[0][0][0] - g.BUTTON_BOXES[0][1][0] / 2
-        bar_back = g.BASKET_START_POS[0] + g.BASKET_HANDLE_BOXES[2][0][0] + g.BASKET_HANDLE_BOXES[2][1][0] / 2
-        half_open = abs(dp.GRIP_OPEN)
-        self.assertLess(gx - half_open, cap_face)          # front finger starts in front of the cap
-        self.assertGreater(gx + half_open, bar_back)       # back finger starts behind the bar
-        self.assertAlmostEqual(gx, (cap_face + g.BUTTON_TRAVEL_M + bar_back) / 2, places=3)  # closed: cap pressed fully
-        rear_pad = gx + half_open + 0.006
+        size = g.BUTTON_BOXES[0][1]
+        self.assertLessEqual(size[1], 0.030)
+        self.assertLessEqual(size[2], 0.030)
+        self.assertGreaterEqual(abs(dp.POST_Y - dp.BUTTON_Y), 0.125)   # the offline arm check needs the hands >= 120 mm apart in y
+        bar = g.BASKET_HANDLE_BOXES[2][1]
+        self.assertLessEqual(bar[1], 0.180)   # a realistic handle (17.5 cm on a 20.4 cm basket)
+
+    def test_demo_press_is_commanded_past_the_stop(self):
+        """The right hand presses 4 to 10 mm past the button's full stroke (more shoves the whole basket back through the plate)."""
+        import demo_plan as dp
+        plan = plans()["right"]
+        touch = next(w for w in plan if "ready to press" in w.label).pos[0] + 0.030
+        stop = next(w for w in plan if "press button to stop" in w.label).pos[0]
+        past = stop - touch - g.BUTTON_TRAVEL_M
+        self.assertGreaterEqual(past, 0.004)
+        self.assertLessEqual(past, 0.010)
+
+    def test_left_pads_clear_the_hot_front_wall_and_the_right_post(self):
+        """Left fingers open 20 mm each side along y: the outer pad stays clear of the bar end, the inner pad clear of the
+        right post; in x the pad sits well behind the hot front wall zone."""
+        import demo_plan as dp
+        half = abs(dp.POST_OPEN)
+        inner_edge = dp.POST_Y - half - 0.012
+        right_post_edge = g.BASKET_START_POS[1] + g.BASKET_HANDLE_BOXES[1][0][1] + g.BASKET_HANDLE_BOXES[1][1][1] / 2
+        self.assertGreater(inner_edge, right_post_edge + 0.010)
         basket_front = g.BASKET_START_POS[0] + g.BASKET_BODY_BOXES[4][0][0] - g.BASKET_BODY_BOXES[4][1][0] / 2
-        drawer_front = g.HOUSING_POS[0] + g.DRAWER_AT[0] + g.DRAWER_BOXES[4][0][0] - g.DRAWER_BOXES[4][1][0] / 2
         zone = g.HOT_INFLATION_M + g.PAD_BOX_HALF[0]
-        self.assertLess(rear_pad, basket_front - zone)
-        # the drawer front strip is cleared in height: its inflated top is below the pad tips
-        strip_top = g.HOUSING_POS[2] + g.DRAWER_AT[2] + g.DRAWER_BOXES[4][0][2] + g.DRAWER_BOXES[4][1][2] / 2
-        tip_pad_z = g.TABLE_TOP + dp.PINCH_Z - 0.013
-        self.assertGreater(tip_pad_z, strip_top + zone)
-        self.assertGreater(drawer_front, 0.0)
+        self.assertLess(dp.POST_X, basket_front - zone - 0.008)   # pad centre (the pad box is centred on the tool point)
 
 
 class TestTaskSpec(unittest.TestCase):
@@ -322,8 +331,6 @@ class TestTaskSpec(unittest.TestCase):
         self.assertAlmostEqual(g.LAMP_TILE_LOCAL[2], 0.281)
 
 
-if __name__ == "__main__":
-    unittest.main()
 
 
 class TestCatchGeometry(unittest.TestCase):
@@ -331,7 +338,7 @@ class TestCatchGeometry(unittest.TestCase):
 
     def _x_ranges(self, travel):
         lugs, ledges = [], []
-        for c, s, _ in g.BUTTON_BOXES[1:]:
+        for c, s, _ in g.BUTTON_BOXES[2:]:
             x = g.BASKET_START_POS[0] + g.BUTTON_AT[0] + c[0] + travel
             z = g.BASKET_START_POS[2] + g.BUTTON_AT[2] + c[2]
             lugs.append((x - s[0] / 2, x + s[0] / 2, z - s[2] / 2, z + s[2] / 2))
@@ -348,4 +355,53 @@ class TestCatchGeometry(unittest.TestCase):
             self.assertLess(lug[3], ledge[2])  # below the ledge: a lift catches it
         lugs, ledges = self._x_ranges(g.BUTTON_TRAVEL_M)
         for lug, ledge in zip(lugs, ledges):
-            self.assertGreaterEqual(lug[0] - ledge[1], 0.002)  # >= 2 mm past the ledge at full travel: the basket lifts free
+            self.assertGreaterEqual(lug[0] - ledge[1], 0.005)  # >= 5 mm past the ledge's rear edge at full travel: the basket lifts free
+        lugs, ledges = self._x_ranges(g.BUTTON_CLEARANCE_DISPLACEMENT_M)
+        for lug, ledge in zip(lugs, ledges):
+            self.assertGreater(lug[0], ledge[1])   # the scoring threshold is only reached once the lugs are physically clear
+
+
+class TestEndStateRungsAndBypass(unittest.TestCase):
+    """The partial rungs must not reward an unsafe end state, and the latch cannot be bypassed."""
+
+    q0 = (0.0, 0.0, 0.0, 1.0)
+
+    def _score(self, pos, bypass=False, dropped=False, cleared=True, unhook=True, quat=None):
+        s, _ = l.evaluate_state(pos, quat or self.q0, 0.0, False, cleared, unhook, True, True, bypass, dropped)
+        return s
+
+    def test_bypass_is_a_permanent_zero(self):
+        self.assertEqual(self._score(g.MAT_CENTRE[:2] + (g.MAT_TOP_Z + 0.005,), bypass=True), 0.0)
+
+    def test_half_credit_needs_the_basket_resting_on_the_bench_not_dropped(self):
+        off = (g.BASKET_START_POS[0] - 0.20, g.BASKET_START_POS[1], g.TABLE_TOP + 0.015)
+        self.assertEqual(self._score(off), 0.5)
+        self.assertEqual(self._score(off, dropped=True), 0.0)   # dropped: no 0.5, and it is not seated either
+        back_in_drawer = tuple(g.BASKET_START_POS)
+        self.assertEqual(self._score(back_in_drawer), 0.25)   # lifted and put back: only the 0.25 rung
+        on_housing = (g.HOUSING_POS[0], g.HOUSING_POS[1], g.TABLE_TOP + 0.35)
+        self.assertEqual(self._score(on_housing), 0.0)         # left on the hot housing: nothing
+
+    def test_quarter_credit_needs_the_basket_seated_back(self):
+        half_out = (g.BASKET_START_POS[0], g.BASKET_START_POS[1], g.BASKET_START_POS[2] + 0.03)
+        self.assertEqual(self._score(half_out, cleared=False), 0.0)
+
+    def test_tipped_basket_gets_nothing_above_zero(self):
+        off = (g.BASKET_START_POS[0] - 0.20, g.BASKET_START_POS[1], g.TABLE_TOP + 0.015)
+        tipped = (0.0, 0.7071, 0.0, 0.7071)   # on its side
+        self.assertEqual(self._score(off, quat=tipped), 0.0)
+
+
+class TestReleasedUsesFingerPads(unittest.TestCase):
+    """RELEASED must see the finger pads, not only the gripper centres (an earlier rejection was for a one-point scorer)."""
+
+    def test_pad_touching_the_basket_is_not_released(self):
+        pos = (g.MAT_CENTRE[0], g.MAT_CENTRE[1], g.MAT_TOP_Z + 0.005)
+        far_centre = (0.10, 0.14, g.TABLE_TOP + 0.12)
+        pad_on_basket = (pos[0], pos[1] + 0.100, pos[2] + 0.03)   # on the basket's left wall
+        self.assertTrue(l.released([far_centre], pos, (0, 0, 0, 1)))
+        self.assertFalse(l.released([far_centre, pad_on_basket], pos, (0, 0, 0, 1)))
+
+
+if __name__ == "__main__":
+    unittest.main()

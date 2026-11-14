@@ -18,18 +18,18 @@ COLOR_MAT = (0.478, 0.180, 0.180)        # #7A2E2E dark red silicone mat
 COLOR_AMBER = (0.950, 0.550, 0.100)      # amber glow tiles and heating lamp
 
 # Mat definition (fixed on table beside drawer)
-MAT_CENTRE = (0.384, -0.410, TABLE_TOP)   # a 30 x 30 cm silicone trivet mat on the right of the appliance; its +y edge (y -0.26) clears the housing board (y -0.25)
+MAT_CENTRE = (0.414, 0.300, TABLE_TOP)   # a 30 x 30 cm silicone trivet mat on the left of the appliance; its -y edge (y 0.15) clears the housing board (y 0.11)
 MAT_SIZE = (0.300, 0.300, 0.010)
-MAT_X_MIN = 0.234
-MAT_X_MAX = 0.534
-MAT_Y_MIN = -0.560
-MAT_Y_MAX = -0.260
+MAT_X_MIN = 0.264
+MAT_X_MAX = 0.564
+MAT_Y_MIN = 0.150
+MAT_Y_MAX = 0.450
 MAT_TOP_Z = TABLE_TOP + 0.010
 MAT_Z_TOL = 0.005
 TILT_MAX_DEG = 5.0
 
 # Housing definition (fixed, mass=None)
-HOUSING_POS = (0.650, -0.120, TABLE_TOP + 0.030)   # on a 3 cm stand so the handle and release button are within the arm's low reach
+HOUSING_POS = (0.650, -0.020, TABLE_TOP + 0.030)   # on a 3 cm stand so the handle and release button are within the arm's low reach
 HOUSING_MASS = 25.0
 HOUSING_FRICTION = 1.2
 
@@ -47,10 +47,10 @@ HOUSING_BOXES = [
 ]
 
 # Drawer slide definition (joint on housing)
-DRAWER_AT = (-0.265, 0.000, 0.006)   # relative to housing origin (pulled out at start)
+DRAWER_AT = (-0.235, 0.000, 0.006)   # relative to housing origin (pulled out at start; 15 mm of the drawer's rear wall stays inside the housing)
 DRAWER_MASS = 0.8
-DRAWER_TRAVEL_M = 0.255
-DRAWER_RATE_N_M = 4.0
+DRAWER_TRAVEL_M = 0.225
+DRAWER_RATE_N_M = 0.0     # not sprung: the drawer stays where it is left (damping only)
 DRAWER_DAMPING_NS_M = 30.0
 
 # 9 Drawer collision boxes (all hot: true) - relative to drawer origin
@@ -67,9 +67,9 @@ DRAWER_BOXES = [
 ]
 
 # Basket definition (loose Mech)
-BASKET_START_POS = (0.384, -0.120, TABLE_TOP + 0.047)
-BASKET_MASS = 0.35
-BASKET_FRICTION = 0.4
+BASKET_START_POS = (0.414, -0.020, TABLE_TOP + 0.047)
+BASKET_MASS = 0.30       # an empty steel basket with a rubber-coated handle (real 0.25 to 0.45 kg)
+BASKET_FRICTION = 1.2    # rubber-coated handle grips the pads (GPU r96: at 0.4 the basket slipped in the pinch and fell 11 cm onto the mat)
 
 # 5 Basket body collision boxes (all hot: true) - relative to basket origin
 BASKET_BODY_BOXES = [
@@ -82,9 +82,10 @@ BASKET_BODY_BOXES = [
 
 # 3 Handle collision boxes (touchable, hot: false) - relative to basket origin
 BASKET_HANDLE_BOXES = [
-    ((-0.131, 0.025, 0.0355), (0.036, 0.014, 0.025), False),   # left post
-    ((-0.131, -0.025, 0.0355), (0.036, 0.014, 0.025), False),  # right post
-    ((-0.1615, 0.000, 0.0355), (0.025, 0.180, 0.025), False),  # cool-touch bar
+    ((-0.143, 0.065, 0.0355), (0.060, 0.014, 0.025), False),   # left post, 6 cm long (gripped across y by the lifting hand; room for a finger body each side)
+    ((-0.143, -0.065, 0.0355), (0.060, 0.014, 0.025), False),  # right post
+    ((-0.1855, 0.01875, 0.0355), (0.025, 0.1375, 0.025), False),  # cool-touch bar, main part (y -0.050 to 0.0875)
+    ((-0.1855, -0.08375, 0.0355), (0.025, 0.0075, 0.025), False), # bar end cap (y -0.0875 to -0.080); the 30 mm slot between them holds the release button
 ]
 
 # Basket floor half extents for corner checks
@@ -93,19 +94,21 @@ BASKET_FLOOR_BACK_X = 0.065   # back edge of the floor (the basket is 17.8 cm lo
 BASKET_FLOOR_HALF_Y = 0.102
 
 # Release button definition (slide joint on basket)
-BUTTON_AT = (-0.1815, 0.000, 0.028)    # relative to basket origin
+BUTTON_AT = (-0.2015, -0.065, 0.028)    # relative to basket origin
 BUTTON_MASS = 0.04
 BUTTON_TRAVEL_M = 0.014
 BUTTON_RATE_N_M = 8.0
 BUTTON_DAMPING_NS_M = 5.0
-BUTTON_CLEARANCE_DISPLACEMENT_M = 0.006 # at 6 mm travel, catches clear ledges
-BUTTON_OUT_THRESHOLD_M = 0.0009         # >= 90% extended (<= 0.9 mm displaced)
+BUTTON_CLEARANCE_DISPLACEMENT_M = 0.008 # the lugs clear the ledges' rear edge after 7 mm of travel; 8 mm is the scoring threshold
+BYPASS_BAND_BUTTON_M = 0.004            # while the basket passes the ledges (lift 8 to 14 mm) the button must be at least this far in (a deliberate press, 30 % of the stroke; GPU r95: a held press reads 5.6 to 14 mm during the lift)
+BUTTON_OUT_THRESHOLD_M = 0.0014         # >= 90% extended (<= 1.4 mm displaced of the 14 mm stroke)
 
 # 3 Button collision boxes (touchable, hot: false) - relative to button joint origin
 BUTTON_BOXES = [
-    ((-0.010, 0.000, 0.005), (0.005, 0.100, 0.030), False),  # 30 mm tall: covers the bar's whole front face (bar z 7.0 to 9.5 cm) so a pushing finger cannot slip under it onto the bar;    # button cap: a 5 mm plate, face at the same x, so a full 9 mm stroke stays clear of the handle bar (sibling collision)
-    ((0.0675, 0.090, 0.004), (0.012, 0.010, 0.010), False),   # catch lug left: 6 mm under its ledge at rest, 3 mm past it at full travel (test_catch_lugs_hold_then_clear)
-    ((0.0675, -0.090, 0.004), (0.012, 0.010, 0.010), False),  # catch lug right
+    ((0.000, 0.000, 0.005), (0.005, 0.025, 0.025), False),    # the push button: 2.5 x 2.5 cm plate, front face 6 mm in front of the bar front face
+    ((0.0055, 0.000, 0.005), (0.006, 0.012, 0.012), False),   # its stem, in the slot of the bar (6 mm clear of the bar's rear face at a full 14 mm stroke)
+    ((0.0875, 0.155, 0.004), (0.012, 0.010, 0.010), False),   # catch lug left (y +0.09 on the basket): under its ledge at rest, 7 mm past its rear edge at full travel
+    ((0.0875, -0.025, 0.004), (0.012, 0.010, 0.010), False),  # catch lug right (y -0.09 on the basket)
 ]
 
 # Mat box (touchable, hot: false) - relative to mat origin
@@ -120,7 +123,7 @@ HOT_INFLATION_M = 0.002                # 2 mm inflation of hot boxes
 RELEASE_MIN_DIST_M = 0.030             # 3 cm clearance from basket/handle/button
 STILL_MOTION_M = 0.001                 # 1 mm peak-to-peak motion
 STILL_WINDOW_STEPS = 20                # 1.0 s at 20 Hz
-BASKET_CLEARED_DRAWER_Z = TABLE_TOP + 0.120  # 9 cm above table
+BASKET_CLEARED_DRAWER_Z = TABLE_TOP + 0.120  # 12 cm above table (basket origin; the floor underside is 11.5 cm up)
 BASKET_LIFT_MIN_M = 0.020              # 20 mm lift above start
 
 # TCP and ready poses

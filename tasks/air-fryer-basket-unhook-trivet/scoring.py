@@ -14,13 +14,13 @@ from geometry import (
     BASKET_CLEARED_DRAWER_Z,
     BASKET_LIFT_MIN_M,
     BUTTON_CLEARANCE_DISPLACEMENT_M,
+    BYPASS_BAND_BUTTON_M,
     MAT_CENTRE,
     STILL_WINDOW_STEPS,
     TABLE_TOP,
     TCP_BELOW_LINK_M,
 )
 from logic import (
-    catches_hold_basket,
     evaluate_state,
     hot_contact,
     on_mat,
@@ -34,6 +34,12 @@ _RUN = {
     "hot_contact_ever": False,
     "cleared_drawer_ever": False,
     "unhook_lift_ever": False,
+    "button_used": False,
+    "band_checked": False,
+    "hand_fail": False,
+    "bypass_ever": False,
+    "dropped_ever": False,
+    "z_hist": [],
     "basket_start_z": None,
     "hist": [],
     "step": 0,
@@ -44,6 +50,12 @@ def _reset_run() -> None:
     _RUN["hot_contact_ever"] = False
     _RUN["cleared_drawer_ever"] = False
     _RUN["unhook_lift_ever"] = False
+    _RUN["button_used"] = False
+    _RUN["band_checked"] = False
+    _RUN["hand_fail"] = False
+    _RUN["bypass_ever"] = False
+    _RUN["dropped_ever"] = False
+    _RUN["z_hist"] = []
     _RUN["basket_start_z"] = None
     _RUN["hist"] = []
     _RUN["step"] = 0
@@ -76,38 +88,6 @@ def _to_numpy(val: Any) -> np.ndarray:
     return np.asarray(val, dtype=np.float64)
 
 
-def _hand_data(environment) -> tuple[list[np.ndarray], list[np.ndarray]]:
-    """Read TCPs and fingertip pad positions (tip_left, tip_right) from Isaac Lab articulation."""
-    if environment is None:
-        return [], []
-    try:
-        scene = environment.unwrapped.scene
-        origin = _to_numpy(scene.env_origins[0])
-        tcps = []
-        pads = []
-        for arm in ("left", "right"):
-            if False:  # InteractiveScene does not support "in"
-                continue
-            robot = scene[f"{arm}_robot"]
-            names = list(robot.body_names)
-            body_pos = _to_numpy(robot.data.body_pos_w)[0]
-            # Gripper centre TCP
-            idx = names.index("gripper") if "gripper" in names else len(names) - 1
-            tcp = np.asarray(body_pos[idx] - origin, dtype=float) - np.array([0.0, 0.0, TCP_BELOW_LINK_M])
-            tcps.append(tcp)
-            # Fingertip pad boxes (tip_left and tip_right)
-            for tip in ("tip_left", "tip_right"):
-                if tip in names:
-                    tip_idx = names.index(tip)
-                    pad_pos = np.asarray(body_pos[tip_idx] - origin, dtype=float)
-                    pads.append(pad_pos)
-                else:
-                    pads.append(tcp)
-        return tcps, pads
-    except Exception:
-        return [], []
-
-
 def advance(
     basket_pos: Sequence[float],
     basket_quat: Sequence[float],
@@ -126,19 +106,33 @@ def advance(
     if pads and hot_contact(pads, basket_pos, basket_quat, drawer_slide):
         _RUN["hot_contact_ever"] = True
 
-    # Physical catches check: if catches are hooked and basket is lifted without button pressed,
-    # the lugs hit the ledges
-    if catches_hold_basket(button_disp) and bz > _RUN["basket_start_z"] + 0.015:
-        # Catches hold the basket: lifting without pressing button is blocked
-        pass
-
     # Cleared drawer
     if bz >= BASKET_CLEARED_DRAWER_Z:
         _RUN["cleared_drawer_ever"] = True
 
-    # Unhook lift: button pressed >= 6 mm and lifted >= 20 mm
+    # Unhook lift: button pressed >= 8 mm and lifted >= 20 mm
     if button_disp >= BUTTON_CLEARANCE_DISPLACEMENT_M and bz >= _RUN["basket_start_z"] + BASKET_LIFT_MIN_M:
         _RUN["unhook_lift_ever"] = True
+
+    # Latch bypass: the catches only let the basket past the ledges (a lift of 8 to 14 mm) while the release button is held
+    # in at least 7 mm AT THAT MOMENT. A basket that passes the ledges with the button out (shoved back, or released after a
+    # tap) is a permanent zero.
+    if button_disp >= BUTTON_CLEARANCE_DISPLACEMENT_M:
+        _RUN["button_used"] = True
+    lift = bz - _RUN["basket_start_z"]
+    if lift >= 0.008 and not _RUN["band_checked"]:
+        _RUN["band_checked"] = True
+        if button_disp < BYPASS_BAND_BUTTON_M:
+            _RUN["bypass_ever"] = True
+    if 0.008 <= lift <= 0.014 and button_disp < BYPASS_BAND_BUTTON_M:
+        _RUN["bypass_ever"] = True
+
+    # Dropped: the basket fell more than 5 cm within 5 steps (0.25 s)
+    _RUN["z_hist"].append(bz)
+    if len(_RUN["z_hist"]) > 5:
+        _RUN["z_hist"] = _RUN["z_hist"][-6:]
+        if _RUN["z_hist"][0] - min(_RUN["z_hist"][1:]) > 0.05:
+            _RUN["dropped_ever"] = True
 
     # History for stillness check
     _RUN["hist"].append(list(map(float, basket_pos)))
@@ -169,11 +163,13 @@ def _trace(record: dict) -> None:
 
 
 def _hand_data2(environment):
-    """Both grippers' tool point (TCP) and BOTH fingertip pad centres.
+    """Both grippers' tool point (TCP) and every finger pad box centre (eight per hand).
 
     TCP = gripper body position + its rotation applied to the 0.134 m tool offset (the yam_arena TCP_OFFSET, as in the
     accepted tasks), so a tilted hand is placed correctly. Pads: on the gripper x axis (the closing axis) at the measured
-    finger opening (joint7/joint8) plus 6 mm, centred at the TCP and 7 mm lower (lower face at the fingertip): four per hand.
+    finger opening (joint7/joint8) plus 6 mm, for each finger four 12 mm boxes along the finger: centred at the TCP, 7 mm
+    below it (lower face at the fingertip), and 3 cm and 6 cm above it (the finger root and the base of the gripper).
+    A failure to read the hands is latched and scores 0 (it never silently skips the hot-surface check).
     """
     if environment is None:
         return [], []
@@ -202,15 +198,15 @@ def _hand_data2(environment):
             except Exception:
                 pass
             half_gap = max(q)
-            # As in the accepted tasks: the fingers close along the gripper's own x axis. Two 12 mm pad boxes per finger:
-            # one centred at the TCP, and one whose lower face is the fingertip (13 mm past the TCP, so centred 7 mm past it).
-            for along in (0.0, 0.007):
+            # As in the accepted tasks: the fingers close along the gripper's own x axis. Four 12 mm boxes per finger (see above).
+            for along in (0.0, 0.007, -0.030, -0.060):
                 centre = tcp + rot @ np.array([0.0, 0.0, along])
                 for side in (1.0, -1.0):
                     pads.append(centre + rot[:, 0] * side * (half_gap + 0.006))
             _TILT[arm] = round(math.degrees(math.acos(max(-1.0, min(1.0, -float(rot[2, 2]))))), 1)
         return tcps, pads
     except Exception:
+        _RUN["hand_fail"] = True
         return [], []
 
 
@@ -240,7 +236,7 @@ def score(objects: dict[str, Any], environment: Any = None) -> float:
         pass
     advance(b_pos, b_quat, button_disp, tcps, pads, drawer_slide)
 
-    rel = released(tcps, b_pos, b_quat) if tcps else True
+    rel = released(list(tcps) + list(pads), b_pos, b_quat) if tcps else False   # both gripper centres and every finger pad box
     stl = still(_RUN["hist"])
 
     s, reason = evaluate_state(
@@ -252,7 +248,11 @@ def score(objects: dict[str, Any], environment: Any = None) -> float:
         _RUN["unhook_lift_ever"],
         rel,
         stl,
+        _RUN["bypass_ever"],
+        _RUN["dropped_ever"],
     )
+    if _RUN["hand_fail"]:
+        s, reason = 0.0, "hand poses could not be read (scores 0)"
 
     _trace({
         "step": int(_RUN["step"]),
