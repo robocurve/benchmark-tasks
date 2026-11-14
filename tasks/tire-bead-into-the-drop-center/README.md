@@ -117,6 +117,24 @@ below and 11 cm outside the rim, so only a hand can put its tip there.
   over at 5 psi, and that the bead beside the last section rises back out of the channel when let go). This is done
   once, when the rig is built: if that tire needs a different pressure to take about half the bead, that pressure is
   written on the rig and set with the gauge at every reset in place of 5 psi, so every trial starts the same.
+- Bead force. The sim asks for little force. A far arc leaves its shoulder detent at under 1 N (200 N/m over 3 mm).
+  The arc beside the last section pushes back 3.6 N at the channel floor (400 N/m over 9 mm). Once 10 mm of slack is
+  freed, the last section rolls over against only light damping, because rubber stretch is not simulated. A real
+  tight kids' bead takes far more. No published measurement in newtons of the hand force to seat the last section of a
+  bicycle bead was found. Schwalbe's mounting guidance says that when rim and tire are not well matched "it is
+  extremely hard to pull the last piece of the tire over the rim flange" and that "using tire levers helps a lot"
+  ([Schwalbe, Mounting](https://www.schwalbe.com/en/technology-faq/mounting/)). Park Tool says to "use tire lever as a
+  last resort" if the bead will not seat by hand
+  ([Park Tool](https://www.parktool.com/en-us/blog/repair-help/tire-and-tube-removal-and-installation)). An unmeasured
+  estimate for a tight 12-inch bead is tens of newtons of thumb force, well above the arm's press of about 5 N. On a
+  typical tight kids' tire a real trial is therefore likely beyond the arm. The sim tests the method (slack first, the
+  arc beside held, the section rolled over), not the effort. No source was found that names a 203 tire and rim pairing
+  known to mount easily by hand, so none is named here.
+- Out-of-spec check, done when the rig is built and whenever its tire or tube is replaced: push the bead into the
+  channel all round and hold the arc beside the last section down, as in the task, then seat the last section with
+  thumbs alone, with no lever or other tool. If the last section can't be seated with thumbs alone, the setup is out of
+  spec: use a different tire. Passing this check shows the tire can be mounted by hand. It does not show that the force
+  is within the arm's 5 N.
 - The slack law is the sim's stand-in for rubber stretch: it reproduces the real limit (the last section goes on only
   once enough bead sits in the channel), and a real trial checks the outcome, the bead on all round, instead.
 - Slack in a real trial is the bead's own position: the bead visibly sits down in the channel, the rim's bare shoulder showing
