@@ -1,0 +1,20 @@
+{
+  "title": "Replace a razor's blade cartridge and put the old one in a tray",
+  "category": "Societal relatability",
+  "keywords": [
+    "cartridge razor",
+    "blade cartridge",
+    "latch",
+    "release button",
+    "consumable replacement",
+    "household"
+  ],
+  "instruction": "Replace the cartridge on the razor handle with the replacement in the dispenser. Put the old cartridge in the collection tray.",
+  "context": "Replacing a used blade cartridge is a routine part of home grooming with a reusable cartridge razor. This task completes the consumable-replacement operation: the old cartridge is removed and placed in a collection tray, and the replacement is fitted securely to the same handle. The result is an assembled razor whose replacement cartridge remains attached after release.",
+  "setup": "Mat coordinates in mm: origin at the mat's centre (30 cm in front of the midpoint between the arm bases), x to the robot's right, y away from the robot, z up from the mat's top. A 600 x 400 x 2 mm light grey silicone mat. A Gillette Mach3-type handle (131 mm, 35 g) lies loose on the mat, release buttons up, its axis along y with the cartridge end toward +y, the razor's middle at the origin. Its old cartridge (orange identity mark) is latched on. A loose white dispenser (40 x 60 x 12 mm, 30 g), centred at x +180, y -80 and turned 120 degrees, holds the replacement cartridge (green identity mark) blade-down in its pocket, socket up. A loose tray, inside floor 120 x 100, walls 15 tall, at x -180, y -80. Arms start in the ready pose. Part sizes are estimates (see README).",
+  "scoring": "Final state, highest tier met. 0 if anything fell off the table at any time, if the old cartridge is latched on the handle, or if nothing below holds. 0.25: old cartridge detached (unlatched, 10 mm or more from the handle) but not stowed, replacement not retained. 0.5: old cartridge stowed (on the tray's floor, footprint inside, untouched 2 s), replacement not retained. 0.75: replacement retained, old cartridge detached but not stowed. 1.0: replacement retained and old cartridge stowed. Retained: the replacement latched on the handle (seated, square and the right way round, both latch teeth out), out of the dispenser, handle and cartridge untouched for 2 s, then still latched through a 2 s hang check: the handle's connector pulled from the cartridge with twice the handle's weight. A cartridge only resting in the dispenser or fitted backwards does not count.",
+  "run_limit": "3,600 steps (3 minutes at 20 Hz)",
+  "reset_notes": "Inspect the handle, both cartridges and both latches. Refit the old (orange) cartridge on the handle until both latches click; check it holds a light pull. Put the replacement (green) cartridge blade-down in the dispenser's pocket, socket up. Restore the handle, dispenser and tray to their marked poses and empty the tray.",
+  "fidelity": "Estimates, not measurements: no Mach3 handle or cartridge was measured. Rigid boxes. Each latch is a sprung slide (2 N preload) with a 45-degree tooth that snaps into a window in the socket's wall; pinching the head pushes both buttons in and retracts both teeth. The blade unit is a sprung hinge. No joint, weld or release rule attaches a cartridge: retention is contact only. Demo checked in PyBullet (check_demo.py), not yet in Isaac Sim.",
+  "scores": "Dream-1 run: TBD; scripted demo: TBD"
+}
