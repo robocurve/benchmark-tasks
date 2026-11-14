@@ -1,0 +1,20 @@
+{
+  "title": "Take kitchen shears apart for cleaning",
+  "category": "Societal relatability",
+  "keywords": [
+    "kitchen",
+    "take-apart shears",
+    "bimanual",
+    "keyed pivot",
+    "cleaning preparation"
+  ],
+  "instruction": "Separate the kitchen shears into their two halves and leave both flat in the washing tray, touching only their molded handles.",
+  "context": "Taking apart kitchen shears exposes the blade overlap and pivot for cleaning after food preparation; the pivot retains the halves until their release geometry aligns.",
+  "setup": "A brandless pair of take-apart kitchen shears, 200 mm overall length when closed, stainless steel blades 3 mm thick with molded polypropylene handle loops up to 12 mm thick. Lower half 55 g, upper half 50 g (estimated). Each handle loop is a 64 x 44 mm oval with a 48 x 28 mm opening. Lower half has a 6 mm diameter pivot stem with a 12 x 6 x 2 mm elongated chamfered head; upper half has a 6.8 x 12.8 mm through-slot. The two independent halves start assembled, pivot at x=255 mm, y=0 on the standard YAM station table, with blade directions +30 and -30 degrees from +x (60 degrees open). Both handle loops rest on the table; lower blade underside is 6 mm above it and upper underside 9.4 mm. A loose polypropylene washing tray, 270 x 260 x 24 mm outside, 3 mm floor and walls, 220 g, is centred x=475 mm, y=0. Table top z=747.5 mm. Exact compound geometry is in geometry.py. Use the installed station robot bases and cameras; verify the setup capture against this fixed layout.",
+  "scoring": "Score 0 permanently for any hand contact with metal outside the molded handles, or any fracture or permanent deformation over 1 mm. Otherwise all credit requires: both halves independently separated with at least 5 mm between their complete overhead axis-aligned bounding rectangles along x or y; each half supported either wholly on the tray floor or on the tabletop with its entire footprint at least 2 mm outside the tray along x or y; tray upright within 5 degrees and lowest surface within 2 mm of the table; all fingertips at least 80 mm clear of every object envelope; every other hand surface at least 2 mm clear; and all object surface points moving less than 1 mm over every pair of times in the final 1 s (21 observations spanning 20 control intervals). Award 1.0 if both halves also lie wholly at least 3 mm inside the tray's inner walls, lowest surfaces within 2 mm of its floor, and frame planes within 5 degrees of horizontal, either face up. Award 0.5 for other supported, released, independently separated final states; all others 0. Transient separation earns no credit if undone. Conservative hand-volume proxies and real-trial measurements are described in README.",
+  "run_limit": "1,800 control steps (90 seconds at 20 Hz).",
+  "reset_notes": "Inspect both intact halves, align the elongated head with the slot at 90 degrees relative angle, join the halves, then close to the 60-degree starting opening and lay them at the specified pivot pose. Restore the empty tray. Do not change contact meshes or add a pivot attachment to reset. Physical trials should keep people outside robot reach and use the actual shears only by their handles.",
+  "fidelity": "Full-size rigid meshes: two loose halves retained by a headed stem and matching slot, with passive contact. No attachment, joint deletion or angle-triggered unlock. Cutting is omitted. Pivot clearances, masses and friction are estimates; blade preload and handle compliance are omitted. Hand clearance uses conservative volume proxies. Scripted demo uses visible poses to trim alignment and move the halves. This is not a measured product twin.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-ZLPZQC"
+}
