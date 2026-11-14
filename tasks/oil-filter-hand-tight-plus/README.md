@@ -142,7 +142,17 @@ and never turns the filter by itself (stick-slip friction, not a spring). A hard
 degrees past contact. The real torque by hand at three quarters of a turn is about 15 to 20 N·m, 15 to 20 times the sim's
 cap, so contact is felt far less here and shows mainly as the gasket meeting the head and the stripe lining up with the
 head's witness line. The sim therefore tests where the turn stops (the count of degrees past contact, judged by eye and
-by the ticks), not the effort of tightening; a real trial on a real filter needs the full hand torque. No
+by the ticks), not the effort of tightening; a real trial on a real filter needs the full hand torque.
+
+How much the robot can turn it, measured: with the sim's turning friction raised well past the task's cap (1.5 N·m
+per radian past contact, up to 8 N·m), the demo's wrist-roll strokes stalled 96 degrees past contact, where the
+friction is about 2.5 N·m. Past that the pads slipped on the can while the wrist kept rolling. So the robot reaches
+about 2.5 N·m in sim versus 15 to 20 N·m real. The limit is the pinch: two pads at the gripper's 50 N on a can 3.3 cm
+in radius hold at most about 3.3 to 4 N·m at the sim's grip friction, and less with real rubber pads on a painted can.
+The wrist's motor (7 N·m) is not the limit. Holding the wrist still and turning with the shoulder and elbow does not
+help either. With the hand pointing down, the wrist's roll joint lies on the filter's axis, so all torque about that axis
+passes through that one joint, whatever the bigger joints do. Tried in the sim, turning the shoulder with the wrist
+held gained under half a degree and pushed the filter back off when the hand let go. No
 oil, gasket deformation or leak is simulated; the scorer reads the angle, and a real trial reads the same angle from
 the witness marks (the line across the can and head, and the protractor ring).
 
