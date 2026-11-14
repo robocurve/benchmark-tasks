@@ -1,0 +1,20 @@
+{
+  "title": "Flex a 3D printer's build plate with both hands to pop a printed robot part free, without kinking it",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "bimanual",
+    "3D printing",
+    "robot building",
+    "deformable plate",
+    "force limit"
+  ],
+  "instruction": "Get the printed part off the build plate and into the bin: flex the plate by its side edges until the part pops free, and leave the plate flat on its stand.",
+  "context": "Every robot part printed in-house comes off a spring-steel build plate by hand: the plate is bent away under the part, both sides at once, until it lets go. Bending it the other way squeezes the part, and bending it too sharply kinks the steel so it no longer lies flat for the next print. A robot that can do this can clear the printers making its own parts.",
+  "setup": "Two YAM arms, bases 60 cm apart along the bench's near edge (bottom of the setup image). Plate stand: aluminium block, 200 mm deep, 170 mm wide, 180 mm high, centred 33 cm in front of the bases' line, midway between them. Build plate: 257 x 257 mm spring steel, 0.5 mm thick, 230 g, textured PEI face up, lying square on the stand (overhanging 28.5 mm front and back, 43.5 mm each side), a printed mark at the corner nearest the left arm's base. Printed part: orange PLA robot arm link, 170 mm long (left to right) x 24 mm x 18 mm high, 40 g, lying left to right with its centre 10 cm nearer the bases than the plate's centre (its near side 16.5 mm in from the plate's near edge), stuck to the PEI. Parts bin: open-top polypropylene box, inside 90 mm front to back x 190 mm x 80 mm deep, 3 mm walls, on the bench centred 27 cm in front of the bases' line and 24.5 cm right of centre. Both arms start at rest.",
+  "scoring": "0 if, at any time, the plate bends more sharply than a 15 cm radius anywhere (more than 20 degrees across any 52 mm of its width: kinked), any of five points on its left-to-right centre line (its middle and 52 and 103 mm each side) drops 2 cm below the stand's top, or the part comes down on the bench outside the bin (its centre under 3 cm above the bench); 0 unless the plate and the part moved under 1 mm in the last second. Otherwise 0.25 once the part has been freed (the plate under both of its ends turned 6 degrees or more from the plate's middle at once, edges down); 0.5 with the part in the bin; 0.75 with the plate also back flat on its stand (every point within 10 mm of where it started and 3 mm of its height, flat within 3 degrees); 1.0 with every fingertip also 8 cm or more from the plate and the part.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Lay the plate back on its stand, mark at the corner nearest the left arm's base, with the part in its starting place, bonded (the sim re-bonds it at every reset).",
+  "fidelity": "The plate is five rigid strips on four spring hinges (0.04 and 0.08 N m per degree inner and outer, about a quarter of real 0.5 mm steel), 2 mm thick so fingers can hold its edge. The bond is a fixed joint released all at once when the plate under both of the part's ends has turned 6 degrees, edges down; a real part lets go gradually. A bend past 20 degrees at one hinge counts as a kink. The part is a block the size of the link.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-UU43KV"
+}
