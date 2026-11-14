@@ -1,0 +1,23 @@
+{
+  "title": "Seat a strain-wave flexspline unit in a robot joint housing, turning it until the teeth mesh",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "robot joint assembly",
+    "harmonic drive",
+    "strain-wave gear",
+    "flexspline",
+    "circular spline",
+    "turn to mesh",
+    "insertion",
+    "gear mesh"
+  ],
+  "instruction": "Seat the blue flexspline unit in the black joint housing so its collar sits flat on the housing and the teeth mesh, then let go.",
+  "context": "Robot-joint assembly. A technician building a robot arm joint presses a strain-wave (harmonic drive) flexspline unit into the joint housing's circular spline. If its teeth start out of line they stall on the housing's tooth tips, so the technician turns the hub a few degrees while pushing until they drop into mesh and the collar sits flat. Every humanoid and cobot joint is built this way, so robots that can assemble robot joints speed up building more robots.",
+  "setup": "Station table; positions in metres, x forward from the arm bases, y to the robot's left, z up; table top z 0.7475. (1) Joint housing: anodised aluminium, black sRGB (0.10, 0.10, 0.12), 0.35 kg, bolted to the table; 80 mm across, 30 mm tall, centred (0.300, -0.100), bore up, bore axis vertical. Bore = circular spline: 52 internal teeth, tips at r 24 mm, roots at r 26 mm, each 1.05 mm wide, 12 mm long, pitch 6.92 deg (3.0 mm), in the top 12 mm; below them a plain cavity to 16 mm deep over a floor. Tooth 0 points along world +x. A 0.5 deg-graduated ring is printed on the face with a mark at 3.46 deg. (2) Flexspline unit: steel, grey sRGB (0.62, 0.64, 0.68) with a blue collar, 0.18 kg, standing on its lead end at (0.300, -0.250), hub up. Cup 47 mm across, 14 mm long; wave generator inside it makes the teeth engage in two patches of 5 on opposite sides, each tooth 1.0 mm wide, 12 mm long, tips at r 25.5 mm, pitch 6.92 deg; 63 mm collar, 3 mm thick, above the cup; hub 14 mm (two wrench flats) x 22 mm x 40 mm above the collar, flats facing +-x. A white index line on the collar sits on the teeth patches' axis and starts at 0 deg to the housing's tooth 0, so teeth stand exactly on the housing's tooth tips (worst case).",
+  "scoring": "Measured every control step from reset in the housing frame: g = collar-bottom height above the housing face (12.0 mm when the tooth tips first touch, 0 seated), lat = axis offset, tilt = hub axis from vertical, phase = index-line angle minus 3.46 deg, modulo 6.92 deg. Whole-run history cleared only by the simulator reset. Gate, any time, gives 0: tilt 8 deg or more with g under 13 mm and lat under 12 mm (cocked in the bore). Ladder: 0.25 = at some time g at most 13 mm with phase within 1.0 deg, lat at most 1.0 mm and tilt at most 3 deg (teeth in line with the gaps); 0.5 = at some time g at most 6 mm with lat at most 1.0 mm (teeth meshed); 0.75 = at the end seated (g at most 0.5 mm, lat at most 1.0 mm, tilt at most 3 deg); 1.0 = also still for 1 s (under 3 mm/s and 3 deg/s) and released: every pad point of both grippers 30 mm or more from the unit and housing and moving under 5 mm/s for 1 s. Real trial: phase read from top video against the printed ring (mark at 3.46 deg); g and tilt from a side video frame with a ruler and protractor, seated when a 0.5 mm feeler gauge cannot enter under the collar at 4 points 90 deg apart; stillness and release from the video.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Stand the unit on its lead end at (0.300, -0.250) on a taped 47 mm ring, hub flats facing +-x, index line along +x (turn it until the line sits on the housing's tooth-0 mark). Pull the previous unit out of the housing (it comes out with a straight pull) and wipe both toothed surfaces. The housing is bolted down and needs no reset.",
+  "fidelity": "Rigid bodies: the flexspline is a solid cup with two 5-tooth patches standing in for the wave generator's oval, and the circular spline is the housing bore. Tooth pitch is 3.0 mm against about 1.5 mm on a size-20 unit, so the 0.5 mm side clearances can be simulated and built. Collar, cup, hub, housing and mass are at size-20 scale. The housing is fixed. Friction is dry steel on aluminium.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-LLN3RY"
+}
