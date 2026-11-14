@@ -19,9 +19,6 @@ to the plunger's slide:
   per control step averaged over about 0.5 s (at least GLIDE_V), so the plunger meets about GLIDE at a steady push
   and holds still when nothing pushes it. An explicit glide force held for a 50 ms control step throws the light
   plunger from stop to stop, and the joint's speed read at the end of a step jitters well above its mean travel.
-- Record: with FLUSHKIT_LOG set to a file path, each control step appends the plunger's position (m) and joint speed
-  (m/s), the force it met over the last step (N), whether the valve is open, and the barrel's, cylinder's and spilled
-  volumes (mL).
 - What the cameras see: the barrel's saline is read as on a real syringe, by the dark stopper against the mL marks.
   The cylinder's saline is a blue column on a slide inside it that follows the collected volume (`level`). Spilled
   saline is counted, not drawn. (Isaac Lab visualization markers, as pourkit draws liquids, did not show in this
@@ -29,7 +26,6 @@ to the plunger's slide:
 """
 
 import math
-import os
 
 import yamkit as kit
 
@@ -72,15 +68,12 @@ def plunger_force(q_ml_s, seated=True):
 
 
 # -- what the scorer and the law share --------------------------------------------------------------------------------
-STATE = {"episode": None, "seated": False, "barrel": 10.0, "cylinder": 0.0, "spilled": 0.0, "force": 0.0}
+STATE = {"episode": None, "seated": False, "barrel": 10.0, "cylinder": 0.0, "spilled": 0.0}
 
 
-def fresh(state=None):
+def fresh():
     """A trial's starting volumes."""
-    s = dict(barrel=10.0, cylinder=0.0, spilled=0.0, gone=0.0)
-    if state is not None:
-        state.update(s)
-    return s
+    return dict(barrel=10.0, cylinder=0.0, spilled=0.0, gone=0.0)
 
 
 def account(vol, delta_m, seated):
@@ -108,17 +101,9 @@ class Flow:
     def drive(self, key, q, qd, J, mem):
         speed = (q - mem.get("q", q)) * CONTROL_HZ  # the last step's mean speed, from the plunger's travel
         mem["q"] = q
-        force = mem.get("c", 0.0) * speed  # what the plunger met over the last step (the damper's mean force)
-        STATE["force"] = float(force)
         v = mem.get("v", 0.0) + SPEED_AVG * (abs(speed) - mem.get("v", 0.0))
         mem["v"] = v
         c = AREA ** 2 * (R_LINE if STATE["seated"] else R_TIP) + GLIDE / max(v, GLIDE_V)
-        mem["c"] = c
-        path = os.environ.get("FLUSHKIT_LOG")
-        if path:
-            with open(path, "a") as f:
-                f.write("%.5f %.5f %.3f %d %.3f %.3f %.3f\n" % (q, qd, force, STATE["seated"], STATE["barrel"],
-                                                               STATE["cylinder"], STATE["spilled"]))
         return q, 0.0, 0.0, c
 
 

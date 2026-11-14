@@ -37,7 +37,6 @@ from yam_arena.constants import FINGER_OPEN, PAD_TIP_PAST_TCP, TCP_OFFSET
 from yam_arena.task_file import Box, ObjectState
 
 GRIPPERS = {"left_gripper": "left_robot", "right_gripper": "right_robot"}
-TIP_LINKS = ("tip_left", "tip_right")
 _OPENING: dict[str, float] = {}
 _EPISODE = {"count": 0, "last": None}  # trials seen, and the env's step count within the current one
 _PROPS: set[str] = set()
@@ -348,11 +347,6 @@ def _law_mem(key: str, lk) -> dict:
             mem.update(lk.law.fresh(lk))
         _LAW_MEM[key] = (_EPISODE["count"], mem)
     return mem
-
-
-def law_state(key: str) -> dict:
-    """What link `key`'s law has recorded this trial (e.g. a ratchet's "clicks", a pump's "level")."""
-    return _LAW_MEM.get(key, (None, {}))[1]
 
 
 def joint(objects, key: str) -> JointState:

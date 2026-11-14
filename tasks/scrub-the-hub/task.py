@@ -1,10 +1,11 @@
-"""An IV flush on a training arm. The patient's forearm (skin-colored, about 7 cm thick and 32 cm long, tapering to the
+"""An IV flush on a training arm. The training forearm (skin-colored, about 7 cm thick and 32 cm long, tapering to the
 wrist) lies on a dark padded armrest, pointing at the robot. A peripheral IV catheter is taped in the forearm under a
 clear film dressing. A short clear extension line runs from it around the arm's right side and across the armrest to a
 needleless connector (a clear valve with a blue cap ring) that lies on the bench beside the armrest, taped down, its
 open end pointing to the robot's right. On the right, a light-blue tray holds an opened large alcohol prep pad, folded,
-on its torn foil packet, and a primed 10 mL saline flush syringe (luer tip; the sim models no fluid), plunger at the
-10 mL mark, lying with its tip toward the connector."""
+on its torn foil packet, and a primed 10 mL saline flush syringe (luer tip), plunger at the 10 mL mark, lying with
+its tip toward the connector. On the left, the arm's outflow tube drains into a 25 mL graduated cylinder on the bench.
+The saline is a volume and flow-resistance model (flushkit), not particle fluid."""
 
 import math
 import os
@@ -31,7 +32,6 @@ INSTRUCTION = "Flush the IV line on the training arm."
 REST_X, REST_L, REST_W, REST_H = 0.29, 0.36, 0.12, 0.01
 ARM_X, ARM_L, ARM_R = 0.29, 0.32, 0.035
 ARM_Z = TOP + REST_H + ARM_R
-ARM_TOP = ARM_Z + ARM_R
 CATH = (0.31, -0.012)  # where the catheter enters the skin
 
 # The needleless connector lies on the bench along y, its open end (the hub) facing -y.
@@ -459,7 +459,7 @@ def score(objects):
 def demo():
     """Right arm: pick up the prep pad by one end, turn it on its edge and scrub the hub's open end face-on with small
     side-to-side strokes for 20 s, put the pad back on the tray, then pick up the syringe, lay it in line with the
-    connector, push its tip home and let go, and push the plunger in about 3.4 cm with the closed fingers, slowly and in
+    connector, push its tip home and let go, and push the plunger in about 3.2 cm with the closed fingers, slowly and in
     seven pulses with short pauses (the push-pause flush), at about 0.5 mL/s while pushing."""
 
     def grip(top, below=0.012):  # TCP height that puts the finger pads `below` an object's top
@@ -517,7 +517,7 @@ def demo():
     press_y = sy_seat + PLUNGER_ANCHOR  # the thumb press, plunger pulled back
     pz = TOP + 0.022  # closed fingertips about 9 mm above the bench, level with the press's middle
     push = 0.030  # the hand's last target past the start: the plunger, pushed against the saline's resistance, ends
-    #               about 3.4 cm in (the fingers meet the press about 5 mm on, and the hand lags behind its targets)
+    #               about 3.2 cm in (the fingers meet the press about 5 mm on, and the hand lags behind its targets)
     syringe += [Waypoint(1.5, (HUB_X, press_y - 0.03, travel), c, "behind the thumb press", 0.0),
                 Waypoint(1.2, (HUB_X, press_y - 0.03 + lag, pz), c, "down", 0.0),
                 Waypoint(1.0, (HUB_X, press_y - 0.012 + lag, pz), c, "on the thumb press", 0.0)]
