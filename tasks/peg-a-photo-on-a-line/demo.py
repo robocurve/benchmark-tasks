@@ -1,17 +1,21 @@
 """Demo for the clothes-peg task, run in the yam_arena embodiment.
 
-    python demo.py task.py out_dir [--window] [--max-steps 1200] [--no-record] [--mode peg|still]
+    python demo.py task.py out_dir [--window] [--max-steps 1200] [--no-record] [--mode peg|still|slide|beside]
 
 1. The right hand comes straight down on a spare peg clipped on the basket's rim, its fingers either side of the
    peg's soft grips, and squeezes: the jaws open and let go of the rim. It lifts the peg off.
 2. It carries the peg, still squeezed open, to just short of the photo's near end above the wire, then over the
-   corner, and down so that the open jaws pass either side of the wire and the photo's edge together.
+   corner. There it reads where the peg actually sits in its fingers and corrects its aim, then comes down so that
+   the open jaws pass either side of the wire and the photo's edge together.
 3. It lets go: the jaws close on both. It rises clear.
 
-``--mode still`` keeps both arms still (a scene check).
+``--mode still`` keeps both arms still (a scene check). Controls: ``--mode slide`` squeezes a spare peg and slides it
+2.5 cm along the basket's rim, leaving it there; ``--mode beside`` clips the peg on the wire 3 cm past the photo's
+near end, beside the photo but not on it.
 
-Open loop: every pose comes from the layout constants in the task file. Object states are read only to report
-where things ended up. Writes one MP4 per camera, setup.png (the first top-camera frame) and result.json.
+Every pose comes from the layout constants in the task file, except one correction: above the wire, the demo reads
+the squeezed peg's position to aim from where it really sits in the fingers. Otherwise object states are read only
+to report where things ended up. Writes one MP4 per camera, setup.png (the first top-camera frame) and result.json.
 """
 
 from __future__ import annotations
@@ -161,23 +165,35 @@ def best_ik(hand, pos, rot):
 
 PEG_OPEN, PEG_SHUT = 0.032, 0.005        # finger gap around the peg's handles / squeezed (firm, not crushed)
 HANDLE_UP = 0.016                        # the pads' tips this far above the peg's pivot (on its soft grips)
-SQUEEZED = np.array([0.0062, 0.0073, -0.0277])   # where a squeezed peg's pivot sits from the tool point (measured)
+SQUEEZED = np.array([0.0062, 0.0073, -0.0277])   # roughly where a squeezed peg's pivot sits from the tool point; the
+                                                 # demo then measures it above the wire and aims from that
 DOWN_R = frame((0.0, 0.0, -1.0), (0.0, -1.0, 0.0))     # straight down, fingers closing across the wire (-y)
 
 
-def script(T, left, right, mode: str = "peg"):
+def script(T, left, right, mode: str = "peg", peg_at=None):
     yield from wait(0.3)
     if mode == "still":
         yield from wait(8.0)
         return
     take = T.spare_start(0) + [0.0, 0.0, HANDLE_UP + TIP]
-    put = T.corner_pivot(-1) + [0.0, -0.0004, 0.0] - SQUEEZED                # 0.4 mm clear of the wire
+    put = T.corner_pivot(-1) + [0.0, -0.0004, 0.0] - SQUEEZED            # 0.4 mm clear of the wire
     yield from right.move_joints(best_ik(right, take + [0.0, 0.0, 0.05], DOWN_R), 2.5, grip=gap(PEG_OPEN))
     yield from right.move(take, 0.8)
     yield from chain(right.set_grip(gap(PEG_SHUT), 0.6), wait(0.3))         # squeeze: the jaws open
+    if mode == "slide":                                                      # control: slid along the rim, left on it
+        yield from chain(right.move(take + [-0.025, 0.0, 0.0], 1.5), wait(0.3), right.set_grip(gap(PEG_OPEN), 0.5),
+                         wait(0.3), right.move(right.pos + [0.0, 0.0, 0.05], 0.8), wait(3.0))
+        return
+    if mode == "beside":                                                     # control: clipped on the wire, beside the photo
+        put = put + [-0.030, 0.0, 0.0]
     yield from right.move(take + [0.0, 0.0, 0.030], 0.8)                      # off the rim
     yield from right.move(put + [-0.030, 0.0, 0.030], 2.5)                   # short of the photo's near end, above it
-    yield from right.move(put + [0.0, 0.0, 0.030], 0.8)
+    yield from chain(right.move(put + [0.0, 0.0, 0.030], 0.8), wait(0.3))
+    if peg_at is not None:                                                   # aim from where the peg really sits
+        target = T.corner_pivot(-1) + [-0.030 if mode == "beside" else 0.0, -0.0004, 0.0]
+        offset = peg_at() - right.pos                                        # peg's pivot from the tool point
+        put = target - offset
+        yield from chain(right.move(put + [0.0, 0.0, 0.030], 0.4), wait(0.3))
     yield from chain(right.move(put, 1.2), wait(0.3))                        # jaws down over the wire and photo
     if mode == "drop":
         return
@@ -211,7 +227,7 @@ def run(task_path: str, out_dir: str, max_steps: int = 2400, record: bool = True
     T = emb.task.module
     obs = emb.reset(Scene(id="peg-demo", instruction=T.INSTRUCTION))
     left, right = Hand("left", station.BASES["left"]), Hand("right", station.BASES["right"])
-    gen = script(T, left, right, mode)
+    gen = script(T, left, right, mode, peg_at=lambda: np.asarray(states()[T.SPARES[0]].pos, float))
     frames: dict[str, list] = {}
     trace = []
 
@@ -273,7 +289,7 @@ def run(task_path: str, out_dir: str, max_steps: int = 2400, record: bool = True
         top = next((c for c in frames if "top" in c), next(iter(frames), None))
         if top:
             imageio.imwrite(out / "setup.png", frames[top][0])
-    (out / "result.json").write_text(json.dumps(result, indent=2))
+    (out / "result.json").write_text(json.dumps(result, indent=2, default=lambda o: o.item()))
     print(json.dumps({k: v for k, v in result.items() if k != "trace"}), flush=True)
     return result
 
@@ -285,7 +301,7 @@ if __name__ == "__main__":
     ap.add_argument("--max-steps", type=int, default=2400)
     ap.add_argument("--window", action="store_true", help="show the Isaac Sim window on the instance's desktop")
     ap.add_argument("--no-record", action="store_true")
-    ap.add_argument("--mode", default="peg", choices=("peg", "still"))
+    ap.add_argument("--mode", default="peg", choices=("peg", "still", "slide", "beside"))
     ap.add_argument("--trace-every", type=int, default=5, help="steps between entries of the trace in result.json")
     a = ap.parse_args()
     sys.path.insert(0, str(Path(a.task).resolve().parent))

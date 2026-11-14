@@ -10,7 +10,6 @@ let go there.
 
 Run it:    inspect-robots run --embodiment yam_arena -E task=task.py -E object_jitter=0 --scorer task_score ...
 Demo:      python demo.py task.py out_dir
-Second layout: set the environment variable PEG_LOT=B before the command (default A).
 """
 
 from __future__ import annotations
@@ -36,8 +35,7 @@ INSTRUCTION = "The photo hangs from the wire by one peg. Peg its other top corne
 
 # -- layout ---------------------------------------------------------------------------------------------------------
 LOT = os.environ.get("PEG_LOT", "A")
-LOTS = {"A": dict(photo_x=0.300, basket_y=-0.150, pegs_x=(0.360, 0.400)),
-        "B": dict(photo_x=0.310, basket_y=-0.165, pegs_x=(0.355, 0.395))}
+LOTS = {"A": dict(photo_x=0.300, basket_y=-0.150, pegs_x=(0.360, 0.400))}
 if LOT not in LOTS:
     raise ValueError(f"PEG_LOT must be one of {sorted(LOTS)}, got {LOT!r}")
 PHOTO_X = LOTS[LOT]["photo_x"]          # where along the wire the photo hangs (its middle)
@@ -68,7 +66,11 @@ OPEN_ON_WIRE = math.radians(-1.6)       # a peg clipped on the wire and the phot
 HANG_STEPS = 40                         # held this many control steps (2 s) for full marks
 STILL = 0.005                           # m/s
 CLEAR = 0.040                           # both grippers' tool points this far from a peg: let go
-TAKEN = 0.020                           # a spare peg moved this far from its place on the basket has been taken
+CLOSED = math.radians(-4.0)             # a peg's spring joint above this: jaws closed by the spring, not squeezed open
+PARTED = math.radians(-0.6)             # ... and below this: held apart by something between them (0 closed on nothing)
+GROOVE = 0.0015                         # m: the jaws' groove for the line, cut this deep into each face
+PAPER_DOWN = 0.002                      # m: the photo is checked this far down from its top edge
+JAW_TOL = 0.0006                        # m: slack allowed outside the jaws' faces for the wire and the photo
 CORNER = 0.020                          # a peg within this of the photo's near end (along the wire) holds that corner
 FALLEN = 0.010                          # the photo's top edge this far below where it hung: knocked off
 SPARES = tuple(f"peg_{i + 1}" for i in range(len(PEGS_X)))
@@ -149,18 +151,82 @@ def peg_on_line(pos, quat) -> bool:
             and -K.PIVOT_Z - 0.002 < local[2] < -K.PIVOT_Z + 0.016)
 
 
+def _basket_box():
+    """The basket's footprint and rim: (x0, x1), (y0, y1), the near rim's middle y."""
+    y1 = BASKET_Y + RIM_T / 2
+    return (min(PEGS_X) - 0.040, max(PEGS_X) + 0.040), (y1 - 0.12, y1)
+
+
+def peg_on_rim(pos, quat) -> bool:
+    """Whether a peg is still clipped on the basket's near rim: the rim's top edge between its legs, in its jaws.
+    Sliding a peg along the rim keeps it on the rim."""
+    (x0, x1), _ = _basket_box()
+    rot = K._rotation(quat)
+    local = rot.T @ (np.array([float(np.clip(pos[0], x0, x1)), BASKET_Y, TOP + RIM_Z]) - np.asarray(pos))
+    return bool(abs(local[0]) < RIM_T / 2 + 0.004 and abs(local[1]) < K.PEG_W / 2 + 0.003
+                and -K.PIVOT_Z - 0.004 < local[2] < -K.PIVOT_Z + 0.020)
+
+
+def in_basket(pos) -> bool:
+    """Whether a peg has dropped into the basket (inside its walls, below the rim)."""
+    (x0, x1), (y0, y1) = _basket_box()
+    return x0 < pos[0] < x1 and y0 < pos[1] < y1 and pos[2] < TOP + RIM_Z
+
+
+def taken_off(pos, quat) -> bool:
+    """A spare peg has been taken: it is off the basket's rim and not lying in the basket."""
+    return not peg_on_rim(pos, quat) and not in_basket(pos)
+
+
+def jaw_faces(z: float, spring: float) -> tuple:
+    """In a peg's frame, the x of its two jaws' faces at height z (negative: below the pivot) for spring angle
+    ``spring`` (rad, negative open): leg a is fixed, leg b turns about the pivot's y axis."""
+    return -K.GAP / 2, K.GAP / 2 * math.cos(spring) + z * math.sin(spring)
+
+
+def between_jaws(local, spring: float, half: float = 0.0, slack: float = JAW_TOL) -> bool:
+    """Whether a point given in a peg's frame (the middle of something of half-thickness ``half`` across the jaws)
+    lies between its jaws' faces (give or take ``slack``), in the jaws (between the tips and the pivot) and across the
+    peg's width."""
+    lo, hi = jaw_faces(float(local[2]), spring)
+    return (lo - slack < local[0] - half and local[0] + half < hi + slack
+            and -K.PIVOT_Z < local[2] < 0.0 and abs(local[1]) < K.PEG_W / 2)
+
+
 def photo_top_edge(photo_pos, photo_quat) -> np.ndarray:
     """The middle of the photo's top edge."""
     return np.asarray(photo_pos) + K._rotation(photo_quat)[:, 2] * PHOTO[2] / 2
 
 
-def holds_near_corner(pos, quat, photo_pos, photo_quat) -> bool:
-    """Whether a peg on the wire also holds the photo's near top corner: it sits within 2 cm of the photo's near end,
-    and the photo's top edge passes between its legs."""
+def grip_check(pos, quat, spring: float, photo_pos, photo_quat) -> dict:
+    """What a peg's jaws hold: whether they are closed by the spring on something (not squeezed open, not shut on
+    nothing), whether the wire lies between the jaws' faces, and whether the photo's paper does (a point 2 mm down from
+    its top edge, under the peg, with the peg across the photo's width)."""
+    pos = np.asarray(pos, float)
+    rot = K._rotation(quat)
+    x_line = float(np.clip(pos[0], *LINE_X))
+    wire = rot.T @ (np.array([x_line, LINE_Y, TOP + LINE_Z]) - pos)
+    prot = K._rotation(photo_quat)
     top = photo_top_edge(photo_pos, photo_quat)
-    near_end = top[0] - PHOTO[0] / 2
-    return (peg_on_line(pos, quat) and near_end - 0.002 < pos[0] < near_end + CORNER
-            and abs(top[1] - pos[1]) < 0.004)
+    along = float((pos - top) @ prot[:, 0])                     # the peg's place along the photo's top edge
+    paper = rot.T @ (top + prot[:, 0] * along - prot[:, 2] * PAPER_DOWN - pos)
+    return {"closed": bool(CLOSED < spring < PARTED),
+            "wire": bool(between_jaws(wire, spring, LINE_R, GROOVE + JAW_TOL)),  # the wire lies in the jaws' groove
+            "photo": bool(between_jaws(paper, spring, PHOTO[1] / 2) and abs(along) < PHOTO[0] / 2 - 0.002),
+            "wire_mm": [round(1000 * float(v), 2) for v in wire], "paper_mm": [round(1000 * float(v), 2) for v in paper]}
+
+
+def grips_wire_and_photo(pos, quat, spring: float, photo_pos, photo_quat) -> bool:
+    g = grip_check(pos, quat, spring, photo_pos, photo_quat)
+    return g["closed"] and g["wire"] and g["photo"]
+
+
+def holds_near_corner(pos, quat, spring: float, photo_pos, photo_quat) -> bool:
+    """Whether a peg holds the photo's near top corner on the wire: its jaws closed on both the wire and the photo,
+    within 2 cm of the photo's near end."""
+    near_end = float(photo_top_edge(photo_pos, photo_quat)[0]) - PHOTO[0] / 2
+    return (near_end < pos[0] < near_end + CORNER
+            and grips_wire_and_photo(pos, quat, spring, photo_pos, photo_quat))
 
 
 @on_reset
@@ -185,13 +251,14 @@ def _watch(environment) -> None:
     on_line, corner = False, False
     for i, p in enumerate(SPARES):
         st = states[p]
-        if float(np.linalg.norm(np.asarray(st.pos) - spare_start(i))) > TAKEN:
+        if taken_off(np.asarray(st.pos), st.quat_xyzw):
             s["taken"] = True
         free = all(float(np.linalg.norm(np.asarray(st.pos) - h)) > CLEAR for h in hands)
         still = float(np.linalg.norm(st.lin_vel)) < STILL
         if free and still and peg_on_line(np.asarray(st.pos), st.quat_xyzw):
             on_line = True
-            corner = corner or holds_near_corner(np.asarray(st.pos), st.quat_xyzw, np.asarray(ph.pos), ph.quat_xyzw)
+            corner = corner or holds_near_corner(np.asarray(st.pos), st.quat_xyzw, st.joints["spring"],
+                                                 np.asarray(ph.pos), ph.quat_xyzw)
     s["on_line"] = on_line
     good = corner and not s["fallen"] and float(np.linalg.norm(ph.lin_vel)) < STILL
     s["held_steps"] = s["held_steps"] + 1 if good else 0
@@ -201,8 +268,9 @@ def _watch(environment) -> None:
 # -- scoring --------------------------------------------------------------------------------------------------------
 def score(objects) -> float:
     """0 if the photo was ever knocked off the wire (its top edge 1 cm below where it hung). Otherwise 1.0 once a
-    second peg holds the photo's near top corner on the wire, let go, with the photo still, for 2 s; 0.5 if a peg is
-    closed on the wire, let go; 0.25 if a peg has been taken off the basket; 0 otherwise."""
+    second peg's jaws are closed on both the wire and the photo within 2 cm of the photo's near end, let go, with the
+    photo still, for 2 s; 0.5 if a peg is closed on the wire, let go; 0.25 if a spare peg has been taken off the
+    basket's rim (not slid along it, not dropped into the basket); 0 otherwise."""
     s = _STATE
     if s["fallen"]:
         return 0.0
@@ -224,7 +292,12 @@ def report(objects) -> dict:
         st = objects[n]
         out[n] = [round(100 * float(v), 2) for v in st.pos]
         if n != "photo":
-            out[n + "_open_deg"] = round(math.degrees(st.joints.get("spring", 0.0)), 1)
+            sp = st.joints.get("spring", 0.0)
+            out[n + "_open_deg"] = round(math.degrees(sp), 2)
+            out[n + "_on_rim"] = peg_on_rim(np.asarray(st.pos), st.quat_xyzw)
+            g = grip_check(np.asarray(st.pos), st.quat_xyzw, sp, np.asarray(objects["photo"].pos),
+                           objects["photo"].quat_xyzw)
+            out[n + "_grip"] = g
     return out
 
 
