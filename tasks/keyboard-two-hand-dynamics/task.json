@@ -1,0 +1,20 @@
+{
+  "title": "Play Ode to Joy's opening on a touch-sensitive keyboard: a soft left-hand bass under a loud right-hand melody",
+  "category": "Societal relatability",
+  "keywords": [
+    "keyboard",
+    "touch-sensitive",
+    "dynamics",
+    "two hands",
+    "Ode to Joy"
+  ],
+  "instruction": "Play the opening of Ode to Joy, as in the keyboard's lesson, at about 80 beats per minute. Right hand, loud: E E F G, G F E D in quarter notes, letting each key up before the next, starting on the E a tenth above middle C. Left hand, soft: middle C with the first E, held through the first bar and let up before the G below it, then that G with the second bar's G, held through the second bar. Keep a steady beat, then let every key up and lift both hands clear of the keys.",
+  "context": "Ode to Joy is the first two-hand piece in many beginner keyboard lessons. The Yamaha PSR-E373, sold as a beginner's instrument, has it as lesson song 010 'Ode to Joy (Basic)' (LEARN TO PLAY), and Yamaha's Song Book says of it: 'In this version you play monophonic lines with both hands. No tricky techniques are required.' Its manual adds Touch Tutor lessons: 'Learn how to use expressive “touch” control while playing the keyboard according to the strength level displayed in the LCD.' On a touch-sensitive keyboard each note's loudness is set by how fast its key goes down, so a soft bass under a loud melody means two press speeds at once: the left hand presses each bass key slowly but all the way down and holds it through its bar, while the right strikes the melody briskly, letting each key up before the next, the repeated E and G struck twice.",
+  "setup": "Two YAM arms at the near edge of a table; positions are (x forward from the arm bases, y left) in cm, heights above the table. A Yamaha PSR-E373 keyboard (945 x 369 x 118 mm, 61 full-size keys C2 to C7, Touch Response at 2, Medium, its default) lies on the table, keys towards the arms, its front edge at x 25, G4 at y 0 (so middle C, C4, at y 9.4, and the melody's keys at y -9.4 to -16.5 for D5 to G5). White keys 23.5 mm apart and 150 mm long, their tops 8.5 cm up, a 10 mm dip at the front; black keys 11 mm wide and 95 mm long, 12 mm higher. The keyboard logs every note over MIDI from its USB TO HOST port: key, onset, velocity and release.",
+  "scoring": "From the keyboard's note log. Each onset is the next expected note of the melody (E5 E5 F5 G5, G5 F5 E5 D5) or of the bass (C4, then G3), or it is wrong: any other key, black keys included, or an extra press of an expected key; a wrong note does not move either line on. 0.25/8 for each melody note in order (0.25 for all eight). With all eight, 0.125 for each bass note that sounds within 80 ms of its melody note (C4 with note 1, G3 with note 5) and is held at least three beats (the player's own mean beat), G3 only after C4 is let up (0.5 with both). Then, also, 0.75 when both bass notes are at least 25 velocity below the melody's mean. Then, also, 1.0 when every gap between melody onsets is within 10% of their mean, the mean is 60 to 100 per minute, each melody note is let up before the next sounds, and at the end every key is up and every fingertip of both hands is at least 5 cm above the white keys, held 1 s (at most 0.95 until then). Each wrong note costs 0.1, up to two; a third scores 0; 0 while any key is down. Real trial: the MIDI log; every key up and the hands' clearance from a side camera with a mark 5 cm over the keys.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "Nothing is consumed: every key is let up at the end, and the arms go back to their start.",
+  "fidelity": "Rigid bodies at 240 Hz on GPU. Every key is a link on a hinge at its back with a return spring (0.5 N at rest, 0.8 N at the bed, at its front) and a 10 mm dip. Two virtual contacts at 3 and 8 mm of dip are read at every physics step: the note sounds at the second, its velocity from the time between them (log of key speed: slow full presses give about 40, brisk strikes about 87; the real keyboard's curve differs). No audio. Key sizes and heights approximated.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-7DHSD4"
+}
