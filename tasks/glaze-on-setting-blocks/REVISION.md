@@ -1,14 +1,149 @@
+# Third review (2026-11-14)
+
+The reviewer's text, verbatim:
+
+> Construct validity (not met): The cut-down frame requires lowering the unit from above between two fixed stops
+> rather than inserting it from the room side with a bead removed. Scoring (not met): A 0.5 mm simulated air gap
+> triggers the zero-score contact gate, but the real-world chalk check does not detect that near miss. What to
+> change: ... make the simulated sill-contact gate and real-world check measure the same event, since a 0.5 mm air
+> gap currently scores as contact in simulation but leaves no chalk print; and use a representative window frame and
+> insertion procedure, including a removable bead and room-side insertion, rather than lowering the unit from above
+> between two fixed stops. Update the demo and scorer for the revised setup.
+
+## A representative frame, with room-side insertion
+
+Done. The cut-down channel (a sill with two fixed stops) is gone. The frame is now a complete small fixed light
+standing on the table: a sill, two jambs and a head, 20 x 60 mm sections, round a 240 mm wide opening (`layout.py`,
+`FRAME_BOXES`). A fixed outside stop runs round the opening on the far side, 15 mm into it; the unit ends standing
+against it. The room side is open: its glazing bead has been taken off and lies on the table beside the frame (a
+240 x 12 x 15 mm bar, fixed, a prop, not scored: loose, a policy could push it into the opening). The head is 6 mm
+above a unit standing on the blocks and covers the whole rebate, so the unit cannot be lowered in from above (test
+`Frame.test_the_unit_cannot_be_lowered_in_from_above`): it must come in from the room side. The blocks go in the
+same way, slid in under the head.
+
+The demo now does what a glazier does: the right arm sets the two blocks on the marks (gripping them with its hand
+pitched 60 degrees so that it reaches under the head); the left arm grips the unit by its top edge, carries it to
+the room side of the frame, tilts its top 48 degrees toward the room, sets its bottom edge on the two blocks without
+touching the sill and holds it there; the right arm brings a closed fingertip to the unit's room face; the left arm
+gives the unit's weight to the blocks, lets go and backs out; the right arm pushes the unit upright under the head
+until it stands against the outside stop, then withdraws. README, "Demo and run limit", lists the moves with their
+control steps and the numbers behind them.
+
+## The sill-contact gate and the bench check measure the same event
+
+Done. rigstate reads the arms only (TCP, pad tips, opening) and mechkit builds bodies; neither reads contacts, and
+yam_arena builds the embodiment with contact processing off. So the gate is on poses, and it is now contact with no
+tolerance: the unit touched the sill when the unit and the sill (any face of it) or a mark are touching or pressed
+into each other, their separation 0.0 mm or less. The separation is decided exactly for the two boxes by the
+separating-axis test over all 15 axes (`box_separation`, `sill_gap`, `touches_sill` in `scoring.py`;
+`SILL_TOUCH_GAP` is 0.0 in `layout.py`). Any air gap, however small, is not a touch: 0.3 mm of air over the marks or
+the bare sill, or in front of the sill's room face, is not a touch; contact (0.0 mm) and pressed in are. That is
+what a chalk print shows, and the `scoring` field and the README say so in those words.
+
+The bench check is turned round so that it sees every contact, and only contact: blue marking chalk is rubbed on the
+sill (its top and room-side face) and on the two white marks before the trial; after the end photo and video the
+unit is lifted out, and any blue on it shows it touched. Only contact transfers chalk.
+
+## The scorer for the new frame
+
+The 0 / 0.25 / 0.5 / 0.75 / 1.0 ladder, the latched zero and the let-go and still rules are unchanged. "Standing in
+the channel" is now "standing in the rebate": all eight corners of the unit inside the opening seen from above
+(from the frame's room face to the outside stop, between the jambs, 1 mm slack), its outside face within 3 mm of the
+outside stop, and tilt under 3 degrees; resting on the blocks as before (let go and still for 1 s, at least half of
+the block's top under it, within 1 mm). A unit left leaning on its edge, held, or standing on the blocks more than
+3 mm short of the stop earns 0.25 at most (the blocks); leaning over 30 degrees counts as down (0). The trace
+records `sill_gap_mm`, `min_sill_gap_mm`, `stop_gap_mm` and `in_rebate`.
+
+## Numbers the offline model changed (from the brief's design)
+
+- Tilt 48 degrees: the left hand holding the top edge must be 15 mm or more from the head as it sets the unit down,
+  opens and backs out; at 45 degrees it comes within 16 mm, at 48 it keeps 22.6 mm.
+- Rebate 37 mm deep (a 12 mm bead space in front of the unit); the head 6 mm over the unit; 20 mm at each end.
+- Setting blocks 30 x 30 x 8 mm (9 g; were 24 x 30) on 30 x 30 mm marks centred 19 mm from the stop: they run under
+  the unit's whole thickness when it stands, and 9 mm room-side of it, where its bottom edge is first set down. The
+  payload sag (below) makes where that edge lands uncertain by millimetres; the wider block keeps it on the block.
+- Payload sag compensated: tilted on the blocks, the static estimate is 10.4 mm down, 5.6 mm toward the arms and
+  6.2 mm left, turned up to 2.7 degrees; those waypoints are commanded that much the other way (`SAG`), and the
+  command returns to the unsagged pose once the blocks carry the unit, so the hand does not spring toward the head as
+  it opens. The bottom edge is set 2.5 mm short of where it stands against the stop, so an error in the sag either
+  way still sets it on the blocks and lets it come upright.
+- The left hand grips 75 mm left of the unit's centre and the fingertip touches 45 mm right of it, 75 mm up its
+  face, the right wrist rolled 35 degrees: the TCPs stay 13.2 cm or more apart, and the leaning unit cannot twist off
+  the fingertip (every turn about a block's end and the fingertip lifts its centre of mass).
+- The tray moved to x 32.0 cm, y -24.0 cm (from x 20.0) and the bead lies to the left of the frame: the hand pitched
+  60 degrees reaches the blocks there and keeps 15 mm from the right jamb and the head.
+- Run limit 1,800 steps (was 1,200): the demo takes 74.1 s; success holds at step 1,476 offline.
+
+## Text
+
+The title drops "channel". The instruction states the goal only (146 characters): "Stand the glass unit in the
+window frame on the two black setting blocks, set on the white marks, and let go. The glass must never touch the
+sill." The setup describes the frame, the stop, the open room side and the bead; the context says the unit goes in
+tilted from the room side and is turned upright under the head. The fidelity no longer says the unit goes in from
+above; it says what is still simplified: refitting the glazing bead, the gasket or tape and any sealant are the next
+steps on the job and not part of the task. `scores` and the README now carry the GPU run of the revised frame
+(2026-11-14): demo 1.0, left arm idle 0.25, right arm idle 0.0, Dream-1 0.0.
+
+## Tests (`tests/test_scoring.py`)
+
+- `Frame`: the opening and its clearances (240 mm, 20 mm ends, 6 mm head, 1 mm play at the stop), the outside stop
+  15 mm into the opening all round, the open room side and the bead on the table, the unit cannot be lowered in from
+  above, and the room-side path (tilted in, set on the blocks, turned upright, slid against the stop) never meets
+  the frame or the sill and scores 1.0.
+- The new gate: a 0.3 mm (and a 0.01 mm) air gap over the marks is not a touch, contact and pressed-in are; the same
+  over the bare sill and in front of the sill's room face; the separation is checked against exact cases.
+- Wrong ways: the unit set straight on the sill or the marks (0, on the step it happens); left tilted (0.25, or 0
+  over 30 degrees) or held (0.25); short of the stop (0.25); blocks off their marks (0.75, 0.5); one arm idle (0.25
+  left idle, 0 right idle); a momentary dip, stacked blocks, blocks on the tray, lying down, off the table.
+- The demo's plan (offline kinematics and capsule model): grips and releases slow enough, set-downs slow, releases on
+  the marks, the handover in order (the fingertip on the unit before the left hand lets go, the push after it is
+  out), the TCPs 13 cm or more apart, 15 mm or more from the head and jambs at every waypoint (loaded) and 10 mm with
+  no sag at all, the sag constants recomputed, the leaning unit held by the fingertip and the push under 1 N, all
+  let go before the policy stops, the run limit covers the demo.
+- The text rules: no dashes of the em or en kind, no attribution, lines of 120 characters or less.
+
+## Checks
+
+- `python3 -m unittest discover -s tests`: 73 tests pass.
+- `python3 tools/offline/check_task.py tasks/glaze-on-setting-blocks --one-arm --require-json --strict`: PASS,
+  predicted demo score 1.0 (success held at step 1,476); one arm: left alone 0.0, right alone 0.25.
+- `python3 tools/field_limits.py tasks/glaze-on-setting-blocks`: ok.
+
+## GPU
+
+First GPU run of the revised frame (2026-11-14): the demo scored 0, a demo fault, not a scorer or setup fault. The
+right hand, pitched 60 degrees, went down beside each block to within 1 mm of the commanded point, but its fingers
+closed to the commanded 22 mm on nothing, and neither block ever left the tray. The demo had placed the hand with
+the finger pads drawn as 27 mm wide rectangles; the real pads taper to 15 mm at the tip, so pitched 60 degrees their
+lowest corner was 7.7 mm over the block's bottom, 0.3 mm under its 8 mm top. Without blocks the glass came down on
+the marks (the touch rule scored it 0, as it should). The rest of the plan ran: the fingertip held the leaning
+glass, the left hand let go and backed out, and the push stood it upright in the rebate, 2.3 mm from the stop.
+
+Demo fix, nothing else changed (setup, scoring and fidelity text unchanged): the block grip is now placed by the
+pads' real faces, their lowest corner 2 mm over the block's bottom (the hand 5.7 mm lower), so the faces cover the
+block's sides from 2 mm up to its top over about 10 mm; the pad tips sit 1.5 mm room-side of the block's centre so
+the hand keeps 15 mm from the outside stop; the block is carried 6 mm higher so the hand travels at its old height;
+the final slide is sent 3.5 mm past the stop instead of 0.5 mm, since the unit ended 3.7 mm short of the finger's
+command. A new test checks the real faces' cover of the block at each pick and release. GPU re-run (job
+20261114T203743): demo 1.0 (glass on both blocks, 0.4 mm from the stop, tilt 0.05 deg, never touched the sill, closest
+8 mm), left arm idle 0.25, right arm idle 0.0, Dream-1 0.0.
+
 # Second review (2026-11-14)
 
 Review of TK-WB6CLU, "Not accepted" (not final, one more revision allowed). The reviewer's text, verbatim:
 
 > Flags: Prior review feedback for the revision was not supplied; verify that the revision addresses it.
 >
-> Importance (not met): Setting blocks in a double-glazed unit is specialist work rather than a scenario most people know firsthand, but window repair is regular work for general maintenance and repair workers.
+> Importance (not met): Setting blocks in a double-glazed unit is specialist work rather than a scenario most
+> people know firsthand, but window repair is regular work for general maintenance and repair workers.
 >
-> Scoring (not met): A chalk print detects contact, not every approach within the scored 2 mm clearance, and the hidden channel makes that clearance difficult to verify throughout a real trial.
+> Scoring (not met): A chalk print detects contact, not every approach within the scored 2 mm clearance, and the
+> hidden channel makes that clearance difficult to verify throughout a real trial.
 >
-> What to change: Use Impact on jobs and explain how placing replacement glazing units fits the regular work of general maintenance and repair workers. Make the real and simulated sill-contact rule agree: for example, score actual contact in both and use the chalk transfer to check it, or provide a practical way to detect the specified 2 mm clearance throughout the trial.
+> What to change: Use Impact on jobs and explain how placing replacement glazing units fits the regular work of
+> general maintenance and repair workers. Make the real and simulated sill-contact rule agree: for example, score
+> actual contact in both and use the chalk transfer to check it, or provide a practical way to detect the
+> specified 2 mm clearance throughout the trial.
 
 ## Category and context
 
@@ -28,7 +163,8 @@ chalk print, only shows contact. Both now use contact:
   points every 5 mm or finer along its twelve edges (`touches_sill` in `scoring.py`), not corners alone: a unit
   lowered with no blocks rests on the two 1 mm marks along its bottom edges while its corners hang 1 mm above the
   bare sill, and that must still be a touch.
-- Bench: blue marking chalk on all four edges of the unit (the marks are white, so a blue print shows); a print on the sill or on a white mark shows a touch, and a near miss leaves
+- Bench: blue marking chalk on all four edges of the unit (the marks are white, so a blue print shows); a print on
+  the sill or on a white mark shows a touch, and a near miss leaves
   none. No clearance has to be measured through the hidden channel. The `scoring` field and the README table say
   the same thing in the same words.
 - Nothing changes for the demo, which stays about 9 mm above the sill, and the scripted demo still predicts 1.0.
@@ -195,13 +331,16 @@ only the glass's pose and is unchanged.
 
 The instruction now states the goal only, not the order of work or how to lower the glass: "Stand the glass unit in
 the frame on the two black setting blocks, set on the white marks, and let go. The glass must never touch the sill."
-(139 characters; the second review changed it, see "Second review" above). The title is now "Stand a glass unit on two setting blocks in a window frame channel": it names
-the step the robot completes, since no glazing beads or sealant are fitted. The context says what is withheld. A test checks that neither the instruction nor the title says "then", "first", "before",
+(139 characters; the second review changed it, see "Second review" above). The title is now "Stand a glass unit on
+two setting blocks in a window frame channel": it names
+the step the robot completes, since no glazing beads or sealant are fitted. The context says what is withheld. A
+test checks that neither the instruction nor the title says "then", "first", "before",
 "after", "lower" or "straight down".
 
 ## Text, so that every threshold can be read in a real trial
 
-- The scoring text ends with how a real trial is read: blue chalk on all four edges of the unit (a print on the sill or on a
+- The scoring text ends with how a real trial is read: blue chalk on all four edges of the unit (a print on the
+  sill or on a
   white mark is a touch; glass lowered without blocks lands on the 1 mm marks), the unit lifted out
   after the end photo and the channel photographed from above for the block and chalk readings, ruler and protractor
   on the end photo for centring and tilt, the video for the 30 mm release and the 1 s stillness, and, for "resting",
@@ -243,12 +382,14 @@ the step the robot completes, since no glazing beads or sealant are fitted. The 
 The revised task (this `scoring.py`, `layout.py` and demo) on an L40S, 2026-11-12, one trial each,
 `-E object_jitter=0 -E control_hz=20`:
 
-| Run | Score | From the trace |
-|---|---|---|
-| Scripted demo | 1.0 | Success ended the trial at step 882 of 1,200 (offline prediction 881). Glass let go from step 844; 1.0 conditions from step 863; final `hand_gap_mm` (nearer finger zone) 120.7 for the unit, 168.3 and 224.2 for the blocks; `arms_unreadable` 0; `min_low_in_channel_mm` 8.3; unit 3.8 mm off centre, tilt 0.06 degrees, gap to both blocks 0.0 mm; blocks 0.6 and 0.8 mm from their marks |
-| Left arm idle | 0.25 | Both blocks set; the glass not moved |
-| Right arm idle | 0.0 | The glass came down on the marks (1.0 mm above the sill) at step 782 |
-| Dream-1, 1,200 steps | 0.0 | One block moved into the channel, 42 mm from its mark; the glass not moved |
+- Scripted demo: 1.0. Success ended the trial at step 882 of 1,200 (offline prediction 881). Glass let go from
+  step 844; 1.0 conditions from step 863; final `hand_gap_mm` (nearer finger zone) 120.7 for the unit, 168.3 and
+  224.2 for the blocks; `arms_unreadable` 0; `min_low_in_channel_mm` 8.3; unit 3.8 mm off centre, tilt 0.06
+  degrees, gap to both blocks 0.0 mm; blocks 0.6 and 0.8 mm from their marks.
+- Left arm idle: 0.25. Both blocks set; the glass not moved.
+- Right arm idle: 0.0. The glass came down on the marks (1.0 mm above the sill) at step 782.
+- Dream-1, 1,200 steps: 0.0. One block moved into the channel, 42 mm from its mark; the glass not moved.
 
-The README's results table, `task.json`'s `scores` and these figures are the same run.
+At the time the README's results table, `task.json`'s `scores` and these figures were the same run. They
+are for the cut-down channel and no longer apply (see the third review, above).
 
