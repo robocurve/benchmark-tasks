@@ -3,8 +3,8 @@ wrist) lies on a dark padded armrest, pointing at the robot. A peripheral IV cat
 clear film dressing. A short clear extension line runs from it around the arm's right side and across the armrest to a
 needleless connector (a clear valve with a blue cap ring) that lies on the bench beside the armrest, taped down, its
 open end pointing to the robot's right. On the right, a light-blue tray holds an opened large alcohol prep pad, folded,
-on its torn foil packet, and an empty 10 mL luer syringe, plunger pulled back to 10 mL, lying with its tip toward the
-connector."""
+on its torn foil packet, and a primed 10 mL saline flush syringe (luer tip; the sim models no fluid), plunger at the
+10 mL mark, lying with its tip toward the connector."""
 
 import math
 import os
@@ -15,6 +15,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import numpy as np  # noqa: E402
 import yamkit as kit  # noqa: E402  (spawns the modeled props below; nothing on disk changes)
 import guardkit as gk  # noqa: E402  (the gripper's own shape, for the grip on the pad)
+import flushkit as fk  # noqa: E402  (the saline: volumes, the flow's resistance on the plunger, and its drawing)
 from yam_arena.constants import FINGER_CLOSED, FINGER_OPEN  # noqa: E402
 import yam_arena.demo as D  # noqa: E402
 from yam_arena.demo import Waypoint, pick_place_waypoints  # noqa: E402
@@ -68,7 +69,11 @@ SEAT_TILT = 5.0  # ... its barrel within 5 degrees of the connector's axis ...
 SEAT_STEPS = 10  # ... for 0.5 s in a row
 PLUNGER_ANCHOR = -0.102  # the thumb press's center on the syringe's axis at the start (pulled back to 10 mL)
 STROKE = 0.060  # the plunger's travel from 10 mL to empty
-FLUSH = 0.030  # 3 cm of plunger travel is 5 mL from this 10 mL syringe (6 cm stroke), the usual peripheral flush
+FLUSH_GONE = 5.0  # mL gone from the barrel (net), the usual peripheral flush: 3 cm of this syringe's 6 cm stroke ...
+FLUSH_IN = 4.5  # ... and mL collected in the graduated cylinder, the real trial's rule: the 0.5 mL margin covers the
+#                 reading (0.25 mL) and drops left in the tube, and caps what may run out at the hub
+CYL_X, CYL_Y = 0.36, 0.12  # the 25 mL graduated cylinder the training arm's vein drains into, on the bench at the left
+CYL_R, CYL_WALL, CYL_H, CYL_BASE = 0.0085, 0.0015, 0.14, 0.008  # inside radius, wall, tube height, base thickness
 
 # -- looks and models -------------------------------------------------------------------------
 
@@ -89,6 +94,7 @@ BARREL = kit.Look((0.94, 0.96, 0.98), 0.15, opacity=0.5)
 MARK = kit.Look((0.15, 0.15, 0.18), 0.6)
 PLUNGER = kit.Look((0.97, 0.97, 0.97), 0.5)
 STOPPER = kit.Look((0.18, 0.18, 0.20), 0.6)
+SALINE = kit.Look((0.20, 0.50, 0.95), 0.1)  # the clear saline in the cylinder, drawn blue so its level shows
 
 
 def _tube(path, radius, look, n=10):
@@ -172,7 +178,7 @@ def _pad():
 def _free_root(text):
     """The syringe is loose: its articulation root goes on its barrel body (PhysX otherwise roots a floating
     articulation at its most central body, and the plunger's slide misbehaves). The plunger's slide also gets a PhysX
-    drive, so its damping (a rubber stopper's drag in the barrel) is applied by the solver, not once per step."""
+    drive, so its damping (the flow's resistance, see flushkit) is applied by the solver, not once per step."""
     root = 'def Xform "Root" (\n    prepend apiSchemas = ["PhysicsArticulationRootAPI", "PhysxArticulationAPI"]\n)\n{\n'
     lines = text.replace(root, 'def Xform "Root"\n{\n', 1).splitlines(True)
     settings = [ln for ln in lines if ln.startswith("    ") and not ln.startswith("     ") and "physxArticulation:" in ln]
@@ -187,9 +193,11 @@ def _free_root(text):
              "        float drive:linear:physics:stiffness = 0\n"
              "        float drive:linear:physics:damping = 0\n"
              "        float drive:linear:physics:targetPosition = 0\n")
-    if old not in text or joint not in text:
+    has_drive = '"PhysicsDriveAPI:linear"]' in text  # a slide with a law already has its drive (yamkit)
+    if old not in text or (joint not in text and not has_drive):
         raise RuntimeError("scrub-the-hub: unexpected yamkit USD layout")
-    return text.replace(old, new + "".join("    " + ln for ln in settings), 1).replace(joint, drive, 1)
+    text = text.replace(old, new + "".join("    " + ln for ln in settings), 1)
+    return text if has_drive else text.replace(joint, drive, 1)
 
 
 _mech_usda = kit._mech_usda
@@ -197,8 +205,9 @@ kit._mech_usda = lambda mech: _free_root(_mech_usda(mech)) if mech.name == "syri
 
 
 def _syringe():
-    """An empty 10 mL luer syringe: clear barrel with mL marks and a white finger flange, luer tip at +y; the white
-    plunger (thumb press, cross-shaped rod, dark rubber stopper) slides 6 cm on its axis and stays where it is pushed."""
+    """The primed 10 mL saline flush syringe: clear barrel with mL marks and a white finger flange, luer tip at +y;
+    the white plunger (thumb press, cross-shaped rod, dark rubber stopper) slides 6 cm on its axis and stays where it
+    is pushed. Pushing it meets the saline's flow resistance and the stopper's glide (flushkit.Flow)."""
     r = SYR_W / 2 - 0.001
     blen = BARREL_FRONT - BARREL_BACK
     stopper = 0.0675  # the stopper's middle, from the thumb press
@@ -212,7 +221,7 @@ def _syringe():
                 kit.cylinder((0, stopper, 0), r - 0.0012, 0.005, STOPPER, axis="y")),
         colliders=(kit.Collider((0, 0, 0), size=(0.016, 0.003, 0.016)),
                    kit.Collider((0, 0.033, 0), size=(0.010, 0.060, 0.010))),
-        damping=5.0, stick=True)
+        damping=5.0, stick=True, law=fk.Flow())
     return kit.Mechanism(
         "syringe", pos=SYR_START, size=(SYR_W, SYR_L, SYR_W), mass=0.02,
         meshes=(kit.cylinder((0, (BARREL_FRONT + BARREL_BACK) / 2, 0), r, blen, BARREL, axis="y"),
@@ -233,6 +242,39 @@ def _tray():
                                kit.Collider((PAD_START[0] - TRAY_X, 0, TRAY_H / 2 + 0.001), size=(0.05, 0.06, 0.002))))
 
 
+def _cylinder():
+    """The 25 mL graduated cylinder (clear, marks every 5 mL on the side facing the robot) on a white plastic base, with
+    the training arm's outflow tube running from the arm's left side across the bench and down into its mouth. Its
+    frame's origin is the middle of its height. The saline collected in it is a blue column on a slide (no collider,
+    no gravity) whose top follows the collected volume (flushkit.level): at 0 mL the column sits below the inside
+    floor, hidden in the base and under the bench."""
+    ro = CYL_R + CYL_WALL
+    top = CYL_BASE + CYL_H
+    z0 = -top / 2  # the bench, in the cylinder's frame
+    floor = z0 + CYL_BASE  # the inside floor: the top of the base
+    per_ml = 1e-6 / (math.pi * CYL_R ** 2)  # m of height per mL
+    marks = tuple(kit.box((-ro - 0.0002, 0, floor + 5 * k * per_ml), (0.0004, 0.006 if k % 2 else 0.009, 0.0006),
+                          MARK) for k in range(6))
+    outflow = [(ARM_X + 0.11 - CYL_X, ARM_R + 0.001 - CYL_Y, ARM_Z - TOP + z0),
+               (ARM_X + 0.10 - CYL_X, REST_W / 2 + 0.006 - CYL_Y, z0 + 0.004), (0.02, -0.035, z0 + 0.003),
+               (0.007, -0.02, z0 + 0.04), (0.003, -0.015, -z0 - 0.02), (0.0, -0.006, -z0 + 0.012),
+               (0.0, 0.0, -z0 - 0.015)]
+    meshes = (kit.cylinder((0, 0, z0 + CYL_BASE / 2), 0.022, CYL_BASE, WHITE),
+              kit.lathe([(ro, 0.0), (ro, CYL_H), (CYL_R, CYL_H), (CYL_R, 0.0), (0.0, 0.0)], CLEAR,
+                        center=(0, 0, floor), axis="z"),
+              _tube(outflow, 0.0015, TUBE)) + marks
+    column = 0.10  # m: the column's length (10 mL stands 4.4 cm)
+    saline = kit.Link(
+        "saline", "prismatic", "Z", anchor=(0, 0, floor - 0.0005), lower=0.0, upper=0.05, mass=0.001,
+        meshes=(kit.cylinder((0, 0, -column / 2), CYL_R - 0.0004, column, SALINE),), floating=True,
+        follow=lambda qs: min(0.05, fk.level(math.pi * CYL_R ** 2)), follow_rate=0.01)
+    return kit.Mechanism("cylinder", pos=(CYL_X, CYL_Y, TOP + top / 2), size=(0.044, 0.044, top), mass=None,
+                         meshes=meshes,
+                         colliders=(kit.Collider((0, 0, z0 + CYL_BASE / 2), size=(0.044, 0.044, CYL_BASE)),
+                                    kit.Collider((0, 0, floor + CYL_H / 2), size=(2 * ro, 2 * ro, CYL_H))),
+                         links=(saline,))
+
+
 OBJECTS = [
     kit.Prop("armrest", pos=(REST_X, 0.0, TOP + REST_H / 2), size=(REST_L, REST_W, REST_H),
              meshes=(kit.box((0, 0, 0), (REST_L, REST_W, REST_H), REST_LOOK),),
@@ -242,6 +284,7 @@ OBJECTS = [
     _tray(),
     _pad(),
     _syringe(),
+    _cylinder(),
 ]
 
 
@@ -276,8 +319,8 @@ class _History:
         self.seat_run = 0  # control steps in a row the syringe has been seated
         self.connected = False  # seated for SEAT_STEPS in a row after the scrub; latched
         self.last_depth = None  # the plunger's depth at the last step
-        self.flushed = 0.0  # net plunger travel while the syringe was connected and still seated
-        self.flush_done = False  # 3 cm of it reached; latched
+        self.vol = fk.fresh()  # mL: saline in the barrel, collected in the cylinder, spilled at the tip, gone (net)
+        self.flush_done = False  # 5 mL gone and 4.5 mL collected, after the connection; latched
 
 
 _H = _History()
@@ -371,11 +414,15 @@ def _update(objects):
         _H.connected = True
     depth = _plunger_depth(objects)
     if depth is not None:
-        if _H.connected and seated and _H.last_depth is not None:
-            _H.flushed += depth - _H.last_depth  # net travel through the seated connection: drawing back subtracts
+        if _H.last_depth is not None:  # saline pushed through the seated tip enters the line, else it spills
+            fk.account(_H.vol, depth - _H.last_depth, seated)
         _H.last_depth = depth
-        if _H.flushed >= FLUSH:
+        v = _H.vol
+        if (_H.connected and v["gone"] >= FLUSH_GONE and v["cylinder"] >= FLUSH_IN
+                and v["gone"] - v["cylinder"] <= FLUSH_GONE - FLUSH_IN):  # at most 0.5 mL not collected
             _H.flush_done = True
+    # what the plunger's law and the drawing read (flushkit): the valve open or not, and the volumes
+    fk.STATE.update(episode=kit.episode(), seated=seated, **_H.vol)
 
 
 def _score(objects):
@@ -387,8 +434,9 @@ def _score(objects):
 
 
 def success(objects):
-    """1.0: the access face scrubbed for 15 s before the syringe touched it, the syringe seated, and 5 mL flushed
-    through it. Called first each step, so it also records the step's history."""
+    """1.0: the access face scrubbed for 15 s before the syringe touched it, the syringe seated, and the flush
+    collected (5 mL gone from the barrel, 4.5 mL in the cylinder). Called first each step, so it also records the
+    step's history."""
     _update(objects)
     return _score(objects) == 1.0
 
@@ -398,9 +446,12 @@ def score(objects):
     s in all, even if it was scrubbed later; 0 also if the face was never scrubbed for 15 s. Otherwise 0.25 for the
     scrub alone; 0.5 once the syringe was seated on the face (its luer tip touching it: the tip end from 0.5 mm
     short of the face to pressed 3 mm in, within 1.5 mm of the axis, lined up within 5 degrees) for 0.5 s in a row;
-    1.0 once the plunger was then pushed 3 cm (5 mL) while the syringe stayed seated. A scrub step is a control step
-    in which a gripper holds the pad (both fingers touching it, their opening stopped by its 3.5 cm width) with a
-    face of it on the access face, covering it, and rubs it across the face at 1 cm/s or more (see _scrubbing).
+    1.0 once, after that, at least 5 mL had gone from the barrel (net) and at least 4.5 mL had been collected in the
+    graduated cylinder, with no more than 0.5 mL of the difference lost (flushkit: saline pushed while the tip is
+    seated enters the primed line and the same volume runs out into the cylinder; pushed unseated, it spills at the
+    tip). A scrub step is a control step in which a gripper holds the pad (both fingers touching it, their opening
+    stopped by its 3.5 cm width) with a face of it on the access face, covering it, and rubs it across the face at
+    1 cm/s or more (see _scrubbing).
     Possible scores: 0, 0.25, 0.5, 1."""
     return _score(objects)
 
@@ -408,7 +459,8 @@ def score(objects):
 def demo():
     """Right arm: pick up the prep pad by one end, turn it on its edge and scrub the hub's open end face-on with small
     side-to-side strokes for 20 s, put the pad back on the tray, then pick up the syringe, lay it in line with the
-    connector, push its tip home and let go, and push the plunger in about 3.4 cm with the closed fingers."""
+    connector, push its tip home and let go, and push the plunger in about 3.4 cm with the closed fingers, slowly and in
+    seven pulses with short pauses (the push-pause flush), at about 0.5 mL/s while pushing."""
 
     def grip(top, below=0.012):  # TCP height that puts the finger pads `below` an object's top
         return top - below + 0.013
@@ -453,7 +505,8 @@ def demo():
                 Waypoint(0.8, (PAD_START[0], PAD_START[1] + end, travel), o, "up", yaw)]
     syr_top = SYR_START[2] + SYR_W / 2
     sy_seat = HUB_TIP_Y - SYR_L / 2  # syringe center when its tip meets the hub
-    sx = HUB_X + 0.002  # the syringe settles 2 mm toward -x of the grip
+    sx = HUB_X + 0.0028  # the syringe settles about 2.8 mm toward -x of the grip (its tip 0.8 to 1.6 mm toward -x of
+    #                      the axis with 2 mm, against the seat's 1.5 mm)
     held = grip(TOP + SYR_W, 0.008)
     syringe = pick_place_waypoints((SYR_START[0], SYR_START[1], grip(syr_top, 0.008)),
                                    (sx, sy_seat - 0.02 + lag, held + 0.003), travel_z=travel, yaw=yaw)[:6]
@@ -463,12 +516,20 @@ def demo():
                 Waypoint(1.0, (sx, sy_seat + lag, travel), o, "up", yaw)]
     press_y = sy_seat + PLUNGER_ANCHOR  # the thumb press, plunger pulled back
     pz = TOP + 0.022  # closed fingertips about 9 mm above the bench, level with the press's middle
-    push = 0.016  # the closed fingers meet the press about 1.8 cm before this target: a ~3.4 cm push
+    push = 0.030  # the hand's last target past the start: the plunger, pushed against the saline's resistance, ends
+    #               about 3.4 cm in (the fingers meet the press about 5 mm on, and the hand lags behind its targets)
     syringe += [Waypoint(1.5, (HUB_X, press_y - 0.03, travel), c, "behind the thumb press", 0.0),
                 Waypoint(1.2, (HUB_X, press_y - 0.03 + lag, pz), c, "down", 0.0),
-                Waypoint(1.0, (HUB_X, press_y - 0.012 + lag, pz), c, "on the thumb press", 0.0),
-                Waypoint(2.5, (HUB_X, press_y + push + lag, pz), c, "push 5 mL", 0.0),
-                Waypoint(1.0, (HUB_X, press_y + push + lag, pz), c, "hold", 0.0),
+                Waypoint(1.0, (HUB_X, press_y - 0.012 + lag, pz), c, "on the thumb press", 0.0)]
+    # A slow push-pause flush, as nurses push a peripheral flush: seven pushes of about 0.8 mL, 1.6 s each, with
+    # 0.4 s pauses between them; about 0.5 mL/s while pushing, so the plunger meets about 4 N (flushkit), not ~7 N.
+    pulses = 7
+    for k in range(1, pulses + 1):
+        y = press_y - 0.012 + (push + 0.012) * k / pulses + lag
+        syringe.append(Waypoint(1.6, (HUB_X, y, pz), c, "push about 0.8 mL", 0.0))
+        if k < pulses:
+            syringe.append(Waypoint(0.4, (HUB_X, y, pz), c, "pause", 0.0))
+    syringe += [Waypoint(1.0, (HUB_X, press_y + push + lag, pz), c, "hold", 0.0),
                 Waypoint(1.0, (HUB_X, press_y, travel), c, "up", 0.0)]
     park = (0.16, -0.26, TOP + 0.22)
     right = pick_pad + scrub + put_back + syringe + [Waypoint(1.2, park, o, "park"), Waypoint(2.0, park, o, "hold")]

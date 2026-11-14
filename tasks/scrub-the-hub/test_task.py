@@ -223,6 +223,24 @@ check("plunger jiggled in and out never adds up to a flush (0.5)",
 check("a full flush then drawn back 1 cm stays 1.0",
       run([(S, FACE), (20, {"syr": SEATED, "plunger": 0.0}), (60, {"syr": SEATED}, push(0.031)),
            (20, {"syr": SEATED}, lambda i: {"plunger": 0.031 - 0.0005 * (i + 1)})])[0], 1.0)
+r = run([(S, FACE), (20, {"syr": SEATED, "plunger": 0.0}), (60, {"syr": SEATED}, push(0.031))])
+v = m._H.vol
+check("3.1 cm pushed while seated: 5.17 mL gone, all of it in the cylinder, none spilled",
+      (round(v["gone"], 2), round(v["cylinder"], 2), round(v["spilled"], 2)), (5.17, 5.17, 0.0))
+check("2 mm pushed on the tray, then 2.8 cm seated: 5 mL gone, 4.67 mL collected, 0.33 mL spilled (1.0)",
+      run([(5, {"plunger": 0.0}), (10, {}, lambda i: {"plunger": 0.0002 * (i + 1)}), (S, FACE),
+           (20, {"syr": SEATED, "plunger": 0.002}),
+           (60, {"syr": SEATED}, lambda i: {"plunger": 0.002 + 0.028 * (i + 1) / 60})])[0], 1.0)
+check("2.7 cm seated, then 6 mm pushed with the tip pulled off: 4.5 mL collected but 1 mL spilled (0.5)",
+      run([(S, FACE), (20, {"syr": SEATED, "plunger": 0.0}), (60, {"syr": SEATED}, push(0.027)),
+           (20, {"syr": syr_at(0.005)}, lambda i: {"plunger": 0.027 + 0.0003 * (i + 1)})])[0], 0.5)
+check("2.9 cm seated (4.83 mL): short of 5 mL gone (0.5)",
+      run([(S, FACE), (20, {"syr": SEATED, "plunger": 0.0}), (60, {"syr": SEATED}, push(0.029))])[0], 0.5)
+fk = m.fk
+check("computed plunger force at 0.5 mL/s is about 3.6 N", round(fk.plunger_force(0.5), 1), 3.6)
+check("... at 1 mL/s about 4.8 N", round(fk.plunger_force(1.0), 1), 4.8)
+check("... at 2 mL/s about 7.1 N", round(fk.plunger_force(2.0), 1), 7.1)
+check("unseated, the flow adds under 0.02 N at 2 mL/s", fk.pressure_force(2.0, seated=False) < 0.02, True)
 check("scene without a plunger tops out at 0.5", run([(S, FACE), (40, {"syr": SEATED})])[0], 0.5)
 
 # touching before the scrub

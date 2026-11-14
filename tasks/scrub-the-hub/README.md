@@ -1,12 +1,13 @@
 # Scrub the IV connector's hub for 15 seconds before attaching the flush syringe
 
-Three files for the `yam_arena` embodiment (Isaac Lab-Arena, bimanual YAM, `station` scene). `task.py` builds the scene,
+Four files for the `yam_arena` embodiment (Isaac Lab-Arena, bimanual YAM, `station` scene). `task.py` builds the scene,
 scores it and holds the scripted demo; its docstrings explain every rule. `yamkit.py` spawns the modeled props: visible
 meshes with simple box colliders underneath. It patches `yam_arena.scene` in memory at import and changes no files. The
-syringe (a model with no fluid) is a loose yamkit `Mechanism`: its barrel is a free body and its plunger a link on a 6 cm slide along the
-barrel's axis, damped so that it stays where it is pushed. `task.py` moves the articulation's root onto the barrel and
-gives the slide a PhysX drive for that damping (`_free_root`). `guardkit.py` (trimmed to its one check) judges the
-grip on the pad by contact: both fingers' own shapes, from the gripper's collision meshes at their present opening,
+syringe is a loose yamkit `Mechanism`: its barrel is a free body and its plunger a link on a 6 cm slide along the
+barrel's axis. `task.py` moves the articulation's root onto the barrel (`_free_root`). `flushkit.py` models the saline
+(see "The saline and the plunger force" below): the volumes in the barrel, the primed line and the graduated cylinder,
+the flow's resistance and the stopper's glide on the plunger's slide, and the cylinder's saline level. `guardkit.py`
+(trimmed to its one check) judges the grip on the pad by contact: both fingers' own shapes, from the gripper's collision meshes at their present opening,
 touching the pad, with the opening stopped by its 3.5 cm width.
 
 ## Run a trial
@@ -34,12 +35,17 @@ luer tip touching the access face: the tip end from 0.5 mm short of the face (th
 pressed 3 mm in (the colliders' give), within 1.5 mm of the connector's axis and lined up within 5 degrees, for 0.5 s
 in a row. A tip hovering off the face, however close, is not seated. The sim's connector is solid, so the tip pressed
 square on the port stands in for the luer slipped into the valve; a real trial checks it with a gentle tug on the
-barrel. Seating and a 3 cm push of the plunger while the syringe stays seated are latched once reached.
+barrel. Seating is latched once reached. The flush is scored on the modeled saline, by the real trial's rule: at least
+5 mL gone from the barrel and at least 4.5 mL collected in the graduated cylinder, with at most 0.5 mL of the
+difference lost (spilled at the tip). Saline pushed while the tip is seated enters the primed line, so the same volume
+runs out into the cylinder; pushed while it is not seated, it spills. Drawing the plunger back while seated pulls the
+line back (the sim counts the net volume pushed through). The full flush is latched once reached.
 
 `python test_task.py` replays step-by-step histories offline (no simulator), including rubbing the connector's top
 instead of its face, a leaning pad whose far corner passes the face while the face itself is 4 mm short, a syringe
 left 8 mm off the hub, a tip hovering 0.8 or 1.5 mm off the port (not seated), a tip touching or pressed 1 mm in
-(seated), and a plunger pushed before the syringe is seated. For the grip it checks a hand holding the pad
+(seated), a plunger pushed before the syringe is seated, a push split between the tray and the seated hub, a seated
+flush finished with the tip pulled off (spilled), and the computed plunger forces. For the grip it checks a hand holding the pad
 by its far end (counts), a hand closed to the pad's width with its fingertips 5 mm off it, one finger on the pad, an
 open hand around it and an empty fist on it (none count). Each scene reset by the simulator (counted by
 yamkit) starts a new history.
@@ -49,7 +55,8 @@ yamkit) starts a new history.
 An IV training arm (a nursing-skills forearm with a taped-in practice catheter in its practice vein) on a padded
 armrest, its clear extension line run around the arm's right side to a split-septum needleless connector. Tape the
 connector to the bench along y at the position in the setup, its open end facing the robot's right. The vein's outflow
-tube drains into a 25 mL graduated cylinder (0.5 mL marks) on the floor beside the bench. Large 70% isopropyl alcohol
+tube runs across the bench and down into a 25 mL graduated cylinder (0.5 mL marks, about 2 cm across and 15 cm tall)
+standing on the bench at the cylinder's position in the setup, left of the armrest. Large 70% isopropyl alcohol
 prep pads in foil packets, opened and folded once to about 6.5 x 3.5 cm, and a prefilled 10 mL 0.9% sodium chloride
 flush syringe (the single-use kind sold for IV line flushing, with mL marks) on a 15 x 15 cm tray. The line is not
 connected to anyone.
@@ -67,29 +74,57 @@ Score with:
 - the pad, which must show the ink, and the access face, which must be clean;
 - a gentle tug on the barrel for seating (the syringe stays on);
 - the flush: at least 5 mL gone from the barrel by its mL marks and at least 4.5 mL in the cylinder, read at the
-  meniscus to 0.25 mL. The 0.5 mL margin covers the reading and drops left in the tube. Saline running out at the hub
-  rather than into the line, or less than 4.5 mL collected, is not a flush: the trial scores at most 0.5.
+  meniscus to 0.25 mL. The 0.5 mL margin covers the reading and drops left in the tube. Less than 4.5 mL collected,
+  or more than 0.5 mL of what left the barrel missing from the cylinder (saline running out at the hub rather than
+  into the line), is not a flush: the trial scores at most 0.5. The sim scores its modeled volumes by the same rule.
 
 Safety: no needle and no patient are involved; the saline is sterile and harmless, and spills are wiped up. Nothing
 is pressurized beyond what a thumb puts on a syringe.
 
-### Plunger force
+### The saline and the plunger force
 
-The sim models no fluid: the plunger's slide has a light damper (5 N s/m, about 0.07 N at the demo's push) so it stays
-where it is pushed, and its 3 cm of net travel while seated stands in for 5 mL. A real primed syringe needs more. The
-estimate below is from Hagen-Poiseuille flow (saline about 1 mPa s) through a 1 mm bore, 20 cm extension line and a
-22 gauge catheter (0.6 mm bore, 2.5 cm), plus the connector, on a 14.5 mm syringe bore (1.65 square cm, so 5 N is about
-30 kPa); it has not been measured on this setup.
+The sim models the saline's volume and its flow resistance (`flushkit.py`); it has no particles.
 
-| Flush rate | Line, catheter and connector | Force from the flow | Plus stopper glide (about 2 to 3 N) |
+- Volume. The primed syringe starts with 10 mL in its barrel (10 mL over the 6 cm stroke), the line and the training
+  arm's vein start full and the 25 mL graduated cylinder starts empty. Plunger travel pushes saline out of the barrel.
+  While the luer tip is seated on the connector, that saline enters the primed line and the same volume runs out of
+  the outflow tube into the cylinder; while it is not seated, it spills at the tip. The video shows the barrel's
+  saline as a real syringe does, by the dark stopper against the mL marks, and the cylinder's as a blue column whose
+  top follows the collected volume (a slide inside the cylinder with no collider, set each step). Spilled saline is
+  counted, not drawn.
+- Force. The plunger's slide carries the force a real primed syringe needs:
+  F = A x dP + glide, with A the stopper's area (14.5 mm bore, 1.65 square cm) and dP the Hagen-Poiseuille pressure drop
+  8 mu L Q / (pi r^4) summed over the connector, the extension line and the catheter, with saline's viscosity
+  mu = 1.0 mPa s (water is 1.00 mPa s at 20 C; 0.9 % saline is about 2 % more). The flow term is a damper on the slide
+  (A^2 R = 377 N s/m when seated), applied by PhysX's own drive. The glide is a friction against the plunger's motion,
+  applied the same way as a damper of 2.5 N divided by the plunger's speed (averaged over about 0.5 s, and capped at
+  1,250 N s/m below 2 mm/s so a plunger at rest stays put). Unseated, only the luer tip's 1.8 mm bore resists (under
+  0.02 N of flow force).
+
+| Part | Length | Inside diameter | Pressure drop per mL/s | Source |
+|---|---|---|---|---|
+| 22 G x 25 mm catheter | 25 mm | 0.648 mm | 5.8 kPa | BD Insyte Autoguard 22 G (product 381423): 0.648 mm ID, 25 mm |
+| Small-bore extension set | 18 cm | 1.0 mm | 7.3 kPa | B. Braun small-bore set, 15.2 cm with 0.2 mL priming volume (so at most 1.29 mm inside, hubs included); 1.0 mm and 18 cm taken as the conservative case |
+| Split-septum connector | 2.6 cm | 1.1 mm | 0.7 kPa | BD Q-Syte (385100): straight, open fluid path, 0.16 mL priming volume; the bore is an estimate |
+| In series | | | 13.8 kPa | |
+
+| Flush rate | Pressure drop | Force from the flow | Plus stopper glide (2.5 N) |
 |---|---|---|---|
-| 0.5 mL/s (5 mL in 10 s) | about 9 kPa | about 1.5 N | about 3.5 to 4.5 N |
-| 1 mL/s | about 18 kPa | about 3 N | about 5 to 6 N |
-| 2.3 mL/s (the demo's pace) | about 42 kPa | about 7 N | about 9 to 10 N |
+| 0.5 mL/s | 6.9 kPa | 1.1 N | 3.6 N |
+| 1 mL/s | 13.8 kPa | 2.3 N | 4.8 N |
+| 2 mL/s | 27.7 kPa | 4.6 N | 7.1 N |
 
-A slow, steady flush (about 0.5 mL/s, as nurses push a peripheral flush) stays near the YAM's press of about 5 N; a
-fast push does not. Before trials, check the setup: press the primed syringe's plunger on a kitchen scale held behind
-the thumb press at that pace and confirm it stays under about 500 g.
+The glide force is the least certain number. No published measured glide force for a 10 mL prefilled flush syringe
+was found (the FDA 510(k) summaries for these syringes list the break-loose and sustaining force tests only as
+equivalent to a predicate), so 2.5 N is an estimate for a lubricated 10 mL stopper; every 1 N more raises each row by
+1 N. Before trials, check the setup: press the primed syringe's plunger on a kitchen scale held behind the thumb press,
+at about 0.5 mL/s, and confirm it stays under about 500 g.
+
+The demo flushes the way nurses are taught for a peripheral line, push-pause (pulsatile): seven pushes of about
+0.8 mL, each over 1.6 s, with 0.4 s pauses (one hospital teaching sheet describes "10 short 1 ml boluses with short
+pauses in between"). In the demo run the plunger moved 3.2 cm in 14.2 s, 5.4 mL into the cylinder and none
+spilled: 0.38 mL/s on average and at most 0.53 mL/s over any 1 s. The force it met in the sim averaged 3.2 N and
+never exceeded 3.9 N (computed for those rates: 3.4 and 3.7 N), within the YAM's press of about 5 N.
 
 ## Category
 
@@ -98,6 +133,6 @@ access and flush IV lines many times a shift.
 
 ## Runtime and seeds
 
-- Demo: 1,056 control steps (53 s simulated), including a 20 s scrub; it ends on success.
+- Demo: 1,284 control steps (64 s simulated), including a 20 s scrub and a 14 s push-pause flush; it ends on success.
 - Model run limit: 2,400 steps (2 minutes at 20 Hz).
 - Seed 0, one fixed layout (`object_jitter=0`).
