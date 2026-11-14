@@ -1,0 +1,25 @@
+{
+  "title": "Zero an unpowered robot arm joint: hold the link on its zero mark and insert the calibration pin",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "bimanual",
+    "robot arm calibration",
+    "joint zeroing",
+    "calibration pin",
+    "zero mark",
+    "gravity-loaded link",
+    "hold while pinning",
+    "aligned holes",
+    "robot building",
+    "linkkit"
+  ],
+  "instruction": "Zero the robot arm joint: raise the link to its zero mark, push the calibration pin home so the link rests on it, then let go.",
+  "context": "Robot builders and technicians zero each arm joint after fitting a motor or encoder. With power off the link swings under its own weight, so one hand lifts it onto the zero mark until the pin hole in the link lines up with the one in the housing, and the other hand pushes the calibration pin through. The pin then holds the link at zero while the controller stores it. Every robot arm built or serviced needs this, and robot-learning data is only as good as that zero.",
+  "setup": "Station table; positions in metres, x forward from the arm bases, y to the robot's left, z up; table top z 0.7475. The joint assembly is turned 75 deg about the vertical: its hinge line and pin axis run along world (0.259, 0.966), its link points along (-0.966, 0.259) at the zero mark and swings in the vertical plane through that line. (1) Joint housing: 6061 aluminium, silver-grey sRGB (0.30, 0.31, 0.34), 1.2 kg, fixed to the table: a 50 x 24 x 110 mm block on a 120 x 150 x 8 mm base plate, hinge line 90 mm above the table at (0.240, 0.000), the block 38 mm behind the hinge (centre (0.277, -0.010)); two 10 x 10 x 24 mm guide cheeks and a 20 x 35 mm post carry the pin guide at (0.197, 0.012, 0.8375), 45 mm out along the link. A white engraved zero mark on the housing and one on the link line up at 0 deg. (2) Arm link: aluminium bar 10 x 20 x 160 mm, bright silver sRGB (0.74, 0.75, 0.78), with a black 28 mm dia x 34 mm actuator can (sRGB (0.08, 0.09, 0.09)) centred 145 mm from the hinge, 150 g in all, friction 0.9 / 0.8; free hinge (motors off, friction 0.004 N m, damping 0.01 N m s/rad), resting on its stop at -30 deg (tip 25 mm above the table), free to +25 deg; gravity torque 0.12 N m at zero. A 7 x 7 mm window goes through the bar's 10 mm thickness 45 mm from the hinge (world (0.197, 0.012, 0.8375) at zero). Zero: bar horizontal, can centre at (0.100, 0.038, 0.8375). (3) Calibration pin: 6 mm dia, 40 mm long steel pin, 13 g, bright steel sRGB (0.80, 0.80, 0.82), with a red 16 mm dia x 8 mm knob (sRGB (0.85, 0.15, 0.12)); it slides along the hinge line in the guide, tip waiting at (0.191, -0.008, 0.8375), 15 mm before the bar's near face, knob centre at (0.180, -0.050, 0.8375); travel 28 mm, a light return spring (0.8 N at full travel) and an O-ring detent that holds it from 26 mm. The tip reaches the bar's far face at 25 mm travel. (4) Both arms start at the ready pose; nothing else is on the table.",
+  "scoring": "Measured every control step from reset: th = link angle from the zero mark (deg, + raising the can end), qp = pin travel (mm). Whole-run record (a linkkit History updated every control step and cleared only by the simulator reset, so withdrawing the pin and starting again never clears it). No speed gate: a fast or fumbled swing of the link costs nothing; only the final state and the ladder decide. Zeroed: th within 1.0 deg of the mark (the can end within 2.8 mm of the zero height). Ladder: 0.25 = the pin 18 mm in with the link zeroed at that time (its tip 3 mm into the window); 0.5 = pin home (26 mm or more) with the link zeroed, at some time; 0.75 = at the end the pin is home and the link within 1 deg of zero; 1.0 = that, with the link still (under 2 mm/s at the can end and 2 deg/s) for 1 s and the release gate: every pad of both grippers at least 30 mm from the assembly and both grippers moving under 5 mm/s for the last 1 s. Success (1.0) must hold 1 s. Real trial: scribe a zero line on housing and link; a height gauge on the can end reads 90 mm over the bench at zero (1 deg = 2.8 mm); calipers measure the knob front to the guide face (3 mm or less = pin home, 26 mm or more of travel); a 60 fps top and side video shows stillness (can end moves under 2 mm in 1 s) and the hands clear by ruler marks on the table.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Let the link rest on its -30 deg stop (can end 25 mm above the table), pull the pin back to its start (tip 15 mm before the link's near face) so the detent is released, and check both zero marks are clean. Move both grippers to the ready pose. The housing is bolted down and needs no reset.",
+  "fidelity": "Rigid parts only. The pin is a sprung plunger sliding in a guide (cheeks and post), its O-ring detent modelled as a brake; the actuator can is a plain cylinder, with no cabling or gearbox drag beyond 0.004 N m of hinge friction. The window gives 0.5 mm of play each way (0.64 deg at 45 mm). Real zero pins and holes are often tighter.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-EVR9RE"
+}
