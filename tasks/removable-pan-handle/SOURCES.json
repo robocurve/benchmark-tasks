@@ -1,0 +1,56 @@
+{
+  "reference_pair": "18 cm saucepan and supplied compatible handle from Ingenio Emotion set L9254S14; exact asset reconstruction pending",
+  "references": [
+    {
+      "name": "Tefal official set listing",
+      "url": "https://www.tefal.co.uk/accessories-store/Products-/Pressure-cookers--pots-and-pans/Pots-And-Pans-Stackable-Stainless-Steel/INGENIO-EMOTION-4-PIECE-SET-L9254S14%3A-SAUCEPANS-16-18-20-CM-%2B-1-HANDLE/csp/2100107888",
+      "supports": "Product set identity and 16/18/20 cm saucepan sizes with supplied handle; not detailed geometry or mass."
+    },
+    {
+      "name": "Tefal Ingenio use and care",
+      "url": "https://dam.groupeseb.com/m/529a04b3892e5140/original/Ingenio-Use-and-Care-UK.pdf",
+      "supports": "Rim placement, lower-lever closing and paired-button release; use on compatible cookware; small-pan tipping warning."
+    },
+    {
+      "name": "SEB removable handle with two rocker buttons, WO2017006039A1",
+      "url": "https://patents.google.com/patent/WO2017006039A1/en",
+      "supports": "Mechanism topology visually checked in PDF pages 19-21, figures 1-9: fixed inner side lugs, outer central support, sliding underside fork, rear-pivot lower lever, compliant link, longitudinal-axis short/long rocker buttons. Exact selected retail revision and dimensions remain unverified. Text explicitly describes vertically staggered inner/outer supports, approximately60-degree upper bearing face and45-degree movable bearing face on an outward-flared rim."
+    },
+    {
+      "name": "Isaac Sim physics fundamentals",
+      "url": "https://docs.isaacsim.omniverse.nvidia.com/latest/physics/simulation_fundamentals.html",
+      "supports": "Native rigid-body, collider and joint authoring approach; does not validate this task."
+    },
+    {
+      "name": "Ingenio Premium Black Handle L9863202 official manual",
+      "url": "https://dam.groupeseb.com/m/29692d451482ce7a/original/2010671411-IFU-Ingenio.pdf",
+      "supports": "Manual diagrams visually inspected: open handle presented above rim at an angle; lower lever squeezed fully; paired buttons release. Product photographs inspected privately and not redistributed."
+    }
+  ],
+  "assets": [
+    {
+      "name": "Parametric saucepan, passive handle and cork trivet reconstruction",
+      "path": "geometry.py",
+      "author": "RESIST contributors",
+      "license": "MIT",
+      "provenance": "Original authored geometry informed by linked product/mechanism references; not downloaded CAD or a measured product twin",
+      "scope": "Original reconstruction of nominal18cm stainless saucepan with estimated196mm flared outside lip, staggered fixed supports,60/45-degree bearing faces, native rear-pivot linkage and paired rocker release. Dimensions/mass/force parameters remain estimates."
+    },
+    {
+      "name": "Standard I2RT YAM robot model and meshes",
+      "path": "External yam_arena/assets/yam/ dependency; not copied into this task folder",
+      "author": "I2RT Robotics",
+      "license": "MIT (robot model/assets only)",
+      "upstream": "https://github.com/i2rt-robotics/i2rt",
+      "source_commit": "120c3c81400171174604e503943f8d1ebc891058",
+      "evidence": "Installed asset directory on visnu contains LICENSE.i2rt and SOURCE_COMMIT; inspected2026-11-13. The enclosing yam-arena repository README says its code has no license yet; do not extend the asset MIT license to that code."
+    }
+  ],
+  "license_note": "No third-party meshes, textures, product photographs or patent figures are bundled. Links are research references, not asset licenses. Original task documents are MIT; any later product asset requires an explicit per-asset provenance and redistribution license. No rights to Tefal trademarks or third-party materials are asserted.",
+  "missing_product_evidence": [
+    "Dimensioned rim and jaw contact surfaces",
+    "Handle revision and its actual internal linkage",
+    "Part masses, centre of mass and passive force-displacement parameters",
+    "Verification that the original licensed reconstruction matches the selected product contact profiles"
+  ]
+}
