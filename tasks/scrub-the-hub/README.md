@@ -52,14 +52,16 @@ yamkit) starts a new history.
 
 ## Real-world build
 
-An IV training arm (a nursing-skills forearm with a taped-in practice catheter in its practice vein) on a padded
-armrest, its clear extension line run around the arm's right side to a split-septum needleless connector. Tape the
-connector to the bench along y at the position in the setup, its open end facing the robot's right. The vein's outflow
-tube runs across the bench and down into a 25 mL graduated cylinder (0.5 mL marks, about 2 cm across and 15 cm tall)
-standing on the bench at the cylinder's position in the setup, left of the armrest. Large 70% isopropyl alcohol
-prep pads in foil packets, opened and folded once to about 6.5 x 3.5 cm, and a prefilled 10 mL 0.9% sodium chloride
-flush syringe (the single-use kind sold for IV line flushing, with mL marks) on a 15 x 15 cm tray. The line is not
-connected to anyone.
+An IV training arm (a nursing-skills forearm whose practice veins run out of its upper end as tubing, for example
+the Laerdal Multi-Venous IV Training Arm, 270-00001) on a padded armrest, with a 22 G x 25 mm catheter (BD Insyte
+Autoguard, 381423) taped into a practice vein. A small-bore extension set (B. Braun 471991, 6 in) runs from the catheter
+around the arm's right side to a split-septum needleless connector (BD Q-Syte, 385100). Tape the connector to the bench
+along y at the position in the setup, its open end facing the robot's right. The vein's outflow tube runs across the
+bench and down into a 25 mL polypropylene graduated cylinder (Nalgene 3662-0025: 0.5 mL graduations, 147.5 mm tall;
+the sim draws only its 5 mL marks) standing on the bench at the cylinder's position in the setup, left of the armrest.
+Large 70% isopropyl alcohol prep pads in foil packets, opened and folded once to about 6.5 x 3.5 cm, and a prefilled
+10 mL 0.9% sodium chloride flush syringe (BD PosiFlush normal saline syringe, 10 mL fill in a 10 mL syringe, 306546;
+0.5 mL graduations) on a 15 x 15 cm tray. The line is not connected to anyone.
 
 Before each trial:
 1. Prime the line: push saline through the connector until it drips from the outflow tube, then empty the cylinder.
@@ -83,7 +85,7 @@ is pressurized beyond what a thumb puts on a syringe.
 
 ### The saline and the plunger force
 
-The sim models the saline's volume and its flow resistance (`flushkit.py`); it has no particles.
+The saline is a volume and flow-resistance model (`flushkit.py`), not particle fluid.
 
 - Volume. The primed syringe starts with 10 mL in its barrel (10 mL over the 6 cm stroke), the line and the training
   arm's vein start full and the 25 mL graduated cylinder starts empty. Plunger travel pushes saline out of the barrel.
@@ -114,9 +116,17 @@ The sim models the saline's volume and its flow resistance (`flushkit.py`); it h
 | 1 mL/s | 13.8 kPa | 2.3 N | 4.8 N |
 | 2 mL/s | 27.7 kPa | 4.6 N | 7.1 N |
 
+What the sum leaves out (not modeled in the sim). Hagen-Poiseuille assumes laminar, fully developed flow. In the
+catheter, the narrowest part, the Reynolds number is about 1,000 at 0.5 mL/s, 2,000 at 1 mL/s and 3,900 at 2 mL/s
+(turbulent), and the flow's entry length is longer than its 25 mm. The entry and exit losses there come to about 2 to
+3 velocity heads (1.2 kPa each at 0.5 mL/s), and lifting the saline from the connector to the outflow's end in the
+cylinder's mouth (about 12 cm) adds 1.2 kPa. Together they add about 0.6 to 0.8 N at 0.5 mL/s (about 4.2 to 4.4 N
+in all) and about 1.7 to 2.5 N at 1 mL/s (about 6.5 to 7.3 N). The 2 mL/s row is a lower bound. The training vein and
+outflow tube are wide and add little.
+
 The glide force is the least certain number. No published measured glide force for a 10 mL prefilled flush syringe
 was found (the FDA 510(k) summaries for these syringes list the break-loose and sustaining force tests only as
-equivalent to a predicate), so 2.5 N is an estimate for a lubricated 10 mL stopper; every 1 N more raises each row by
+equivalent to a predicate), so 2.5 N is an estimate (a judgment for a siliconized 10 mL stopper, not a measurement); every 1 N more raises each row by
 1 N. Before trials, check the setup: press the primed syringe's plunger on a kitchen scale held behind the thumb press,
 at about 0.5 mL/s, and confirm it stays under about 500 g.
 
@@ -124,7 +134,9 @@ The demo flushes the way nurses are taught for a peripheral line, push-pause (pu
 0.8 mL, each over 1.6 s, with 0.4 s pauses (one hospital teaching sheet describes "10 short 1 ml boluses with short
 pauses in between"). In the demo run the plunger moved 3.2 cm in 14.2 s, 5.4 mL into the cylinder and none
 spilled: 0.38 mL/s on average and at most 0.53 mL/s over any 1 s. The force it met in the sim averaged 3.2 N and
-never exceeded 3.9 N (computed for those rates: 3.4 and 3.7 N), within the YAM's press of about 5 N.
+never exceeded 3.9 N (computed for those rates: 3.4 and 3.7 N), within the YAM's press of about 5 N. With the losses
+the sum leaves out, a real push at the demo's rate needs about 4.2 to 4.9 N, so the margin is under 1 N and rests on
+the glide estimate: the kitchen-scale check decides it.
 
 ## Category
 
