@@ -1,0 +1,19 @@
+{
+  "title": "Find the higher-friction sled with a fair test",
+  "category": "Other",
+  "keywords": [
+    "controlled experiment",
+    "friction",
+    "confound",
+    "launch"
+  ],
+  "instruction": "The two sleds have bases made of different materials. Find which base has more friction and put that sled on the red mat. The red button fires the launchers at the top of the track.",
+  "context": "Comparing materials fairly means holding everything else equal, a basic skill in lab and product testing. The launcher gives every sled the same push, so the lighter sled slides farther whatever its base; the robot has to notice the mass difference and equalise it with the weight before comparing.",
+  "setup": "A low-friction two-lane track (24 x 95 cm, 10 cm marks) lies 21 to 45 cm in front of the arm bases, running from 39.5 cm left of the centre line between the arms to 55.5 cm right of it, with an end wall at the right end. The lanes run 27 and 39 cm out, each with a spring launcher cradle at the left end; a red push button (3.6 cm cap) 49 cm out, 34.5 cm left of the centre line, fires both launchers. Two sleds (8 x 6 x 4 cm, blue-grey, printed 150g and 250g, bases of two hidden materials) sit 15 cm out, 23.5 and 11.5 cm left of the centre line, and a grey 100 g weight block (4 x 4 x 3 cm, printed 100g) 15 cm out, 35.5 cm left. A red mat (12 x 12 cm) lies 52 cm out, 14.5 cm left of the centre line.",
+  "scoring": "0: no sled, weight or button is touched. 0.25: a sled or the weight is touched or the button pressed. 0.5: at least one launch with the sled stopping on the track. 0.75: both sleds launched at the same total mass (the 150 g sled carrying the 100 g weight against the 250 g sled, together or one after the other), neither reaching the end wall, and the shorter slide belongs to the higher-friction sled. 1.0: the 0.75 condition holds and only the higher-friction sled is on the red mat. The score is the highest level reached.",
+  "run_limit": "2,800 steps (2 min 20 s at 20 Hz)",
+  "reset_notes": "Hidden per trial (redrawn every trial from its seed): Base friction coefficients 0.30 and 0.40, random per episode. The instruction no longer says that every launch gives the same push, that the sleds differ in mass, or what the 100 g weight is for; the masses are only printed on the blocks. Comparing the sleds as they are picks the heavy sled every time (right half the time) and earns no science credit.",
+  "fidelity": "The launcher sets the sled's (and its load's) velocity to J / M in code on the button press; sliding friction is MuJoCo's Coulomb friction on the sled base.",
+  "scores": "Dream-1 run: 0.25; demo: 1",
+  "media": "M-GVJSFS"
+}
