@@ -1,0 +1,21 @@
+{
+  "title": "Crack a walnut with a hand nutcracker and sort the kernel from the shell",
+  "category": "Societal relatability",
+  "keywords": [
+    "bimanual",
+    "kitchen",
+    "squeezing",
+    "opposing forces",
+    "nutcracker",
+    "sorting pieces"
+  ],
+  "instruction": "Crack the walnut with the nutcracker. Put the kernel in the white bowl and every piece of shell on the blue saucer, then bring both arms back to where they started.",
+  "context": "Cracking nuts, crushing garlic or working pliers or crimpers all need two opposing forces on a hand tool; a light tool on a smooth worktop just slides away from a push on one handle, so the second hand is what closes it. A cracked walnut then leaves a kernel and several pieces of shell to sort apart.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) A steel hand nutcracker, 320 g (two 160 g levers), lying flat on a smooth worktop, its pivot 44 cm forward on the centre line. Its levers open in a V toward the arms, 30 degrees each side of the centre line, held open against a stop by a spring (0.04 N m per degree); they close to 20 degrees at most. Each runs 20 cm straight out from the pivot, then bends into a 9 cm red PVC handle grip (2.2 cm square) that runs along the centre line. Its jaws are toothed steel blocks 4 to 9.8 cm out from the pivot. (2) An in-shell walnut, 36 x 34 x 33 mm and 12 g, on the worktop between the jaws, its middle 7 cm out from the pivot. Cracked, it leaves a 6 g kernel (28 x 25 x 24 mm) and three pieces of shell: half the shell (3 g) and two quarters (1.5 g each). (3) A white porcelain bowl, 10 cm across and 4 cm deep, 300 g, 27 cm forward and 25 cm right of the centre line. (4) A blue porcelain saucer, 12.4 cm across, 300 g, 27 cm forward and 25 cm left of the centre line. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Cracked: both jaws pressed the walnut with at least 40 N each (PhysX contact forces) for two control steps running (0.1 s), while it lay between them (4-9.8 cm out from the pivot, within 1.5 cm of the V's middle line, on the worktop) and the levers were pressed in at least 1 degree from fully open; the shell then gives into a kernel and three pieces of shell. Judged at the end: 1.0 when it cracked, the kernel is in the bowl (its middle within 4.2 cm of the bowl's middle, inside it), all three pieces of shell are on the saucer (each middle within 5.6 cm of its middle and at most 4 cm above its base) and both arms are back where they started (each TCP within 5 cm of its start); 0.75 for the same with an arm not back; 0.5 when it cracked and the kernel is in the bowl with no shell in it; 0.25 when it cracked; else 0.0. The trial ends at the run limit, or once the full score has held for 1 s with the kernel, the shell pieces, the bowl and the saucer still. In a real trial: the shell must break in the nutcracker's jaws (a walnut cracked any other way scores 0); then the kernel, whole or in pieces, must be in the bowl with no shell, every piece of shell larger than about 5 mm on the saucer, and both arms back at their start.",
+  "run_limit": "1100 steps (55 s at 20 Hz)",
+  "reset_notes": "A whole walnut between the open jaws; bowl and saucer empty.",
+  "fidelity": "Rigid-body simulation (Isaac Sim 6.1, PhysX, 20 Hz control). Rigid bodies can't fracture, so the walnut is one 12 g body until both jaws press it with 40 N (PhysX contact forces; about 13 N on each handle); the task file then swaps it for a kernel and three shell pieces laid out between the levers. A real walnut takes about 200-400 N at the jaws, 54-106 N per handle at this 3.85:1 lever: 5-10 times more than here. Cameras 1280 x 704 (Dream-1 sees 320 x 176).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-9DW8C9"
+}
