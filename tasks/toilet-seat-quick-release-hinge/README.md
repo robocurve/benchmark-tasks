@@ -4,8 +4,10 @@ Instruction given to the policy: `Put the toilet seat back on.`
 
 The steps it leaves unstated: lift the back of the seat clear of the post tops, bring both sockets over their posts
 together (cocked, one socket goes on and the other sits on its post or jams), lower them onto the spring buttons and
-push each socket down until its button clicks, then let go. A seat left resting on the buttons, or clicked on one
-side only, scores 0. A seat dropped from about 5 cm (a socket coming down faster than 0.95 m/s) scores 0.
+push each socket down until its button clicks, then let go. Partial credit follows the real stages: 0.2 for each
+socket on its post and 0.3 for each socket clicked on, so a seat left resting on both buttons scores 0.4 and one
+clicked on one side only (the other socket resting on its button) scores 0.7. The seat ring turns on the hinge piece
+that carries the sockets, so once fitted it lifts on its hinges.
 
 Files: `task.json`, `toilet_seat_quick_release_hinge.py` (scene, `success()`, `score()`, the scripted `demo()` and an
 offline self-test), `mechkit.py` (joints added to the stock runtime in memory), `README.md`.
@@ -24,9 +26,9 @@ python tasks/toilet-seat-quick-release-hinge/toilet_seat_quick_release_hinge.py
 Expected:
 
 ```
-scoring: 9 cases pass
-left: 18.0 s plan, worst IK 0.084 mm / 0.013 deg
-right: 18.0 s plan, worst IK 0.089 mm / 0.013 deg
+scoring: 16 cases pass
+left: 18.0 s plan, worst IK 0.090 mm / 0.013 deg
+right: 18.0 s plan, worst IK 0.077 mm / 0.013 deg
 ```
 
 ## Run and score one Dream-1 trial
@@ -38,22 +40,26 @@ inspect-robots run --embodiment yam_arena --policy dream \
   --scorer task_score --max-steps 1200 --seed 0 --no-prompt --store-frames --log-dir ~/yam-eval/toilet-dream
 ```
 
-`task_score` is 1.0 when `success()` has held for 1 s, otherwise `score()` at the last step.
+`task_score` is 1.0 when `success()` has held for 1 s, otherwise `score()` at the last step. A click is read from
+the button cap's height (its bounding box), and only counts when the socket itself pressed it (post inside the bore).
+Stillness is read from how far the sockets and the seat's front corners moved over the last 20 Hz control step.
 
 ## Run and score the full-score demo
 
 Same command with `--policy yam_scripted` (log dir `~/yam-eval/toilet-demo`). Open loop and deterministic, an 18 s
 plan. Each arm pinches one socket housing across its sides, lifts the back of the seat 4.5 cm (the front stays on the
 rim and the seat turns in the pinch), carries it 4.5 cm back over the posts, lowers both sockets onto the buttons
-together, pushes both down until they click, lets go and backs off. `TOILET_DEBUG=1` prints the buttons, sockets and
-score every 20 steps.
+together, pushes both down until they click, lets go and backs off. `TOILET_DEBUG=1` prints the buttons, sockets,
+seat swing angle and score every 20 steps (`TOILET_DEBUG=2` adds a line every step).
 
-Degenerate checks (same command, `DEMO_VARIANT` in the environment), all score 0:
+Degenerate and check runs (same command, `DEMO_VARIANT` in the environment):
 
-- `unlatched`: sets both sockets on the posts and lets go without pushing; the seat rests 10 mm high on the buttons.
-- `one_side`: the right arm lets go with its socket on the button and only the left arm pushes. The rigid seat
-  shares the push between both buttons and neither reaches the click; it ends resting on them. (A seat clicked on one
-  side only is covered by the offline self-test: it scores 0.)
+- `unlatched`: sets both sockets on their posts and lets go without pushing; the seat rests 12 mm high on the
+  buttons. Partial: 0.4.
+- `one_side`: sets both sockets on their posts; the right arm holds its side up while the left arm pushes its
+  socket down until it clicks, then both let go. The right socket stays on its unclicked button. Partial: 0.7.
+- `lift_seat` (check, not degenerate): the full demo, then the left arm pinches the seat's left rail and swings the
+  seat up on its hinges and back down while the right arm still holds its socket; then both let go. 1.0.
 
 ## Videos and screenshot
 
