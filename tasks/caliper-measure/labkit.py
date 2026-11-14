@@ -56,6 +56,10 @@ _AXES = ("X", "Y", "Z")
 
 # Physics defaults for every part body and collider.
 CONTACT_OFFSET = 0.0005  # m: below 1 mm fits, so tight parts do not touch on every face at once
+# Torsional contact patch radius (m) by part name: a finger pad pressed on the part holds it by friction over its
+# area, as a real pad does; without it PhysX treats a pad contact as points and a pinched part turns about the line
+# between the pads.
+TORSIONAL_PATCH: dict[str, float] = {}
 SOLVER_POS_ITERS = 32
 SOLVER_VEL_ITERS = 4
 ANGULAR_DAMPING = 1.0
@@ -337,6 +341,9 @@ def _author(prim_path: str, cfg, translation=None, orientation=None, **kwargs):
         pc = PhysxSchema.PhysxCollisionAPI.Apply(prim)
         pc.CreateContactOffsetAttr(CONTACT_OFFSET)
         pc.CreateRestOffsetAttr(0.0)
+        if spec.name in TORSIONAL_PATCH:
+            pc.CreateTorsionalPatchRadiusAttr(TORSIONAL_PATCH[spec.name])
+            pc.CreateMinTorsionalPatchRadiusAttr(TORSIONAL_PATCH[spec.name] / 2)
         bind_physics_material(str(prim.GetPath()), phys, stage=stage)
         bind_visual_material(str(prim.GetPath()), look(color), stage=stage)
 
