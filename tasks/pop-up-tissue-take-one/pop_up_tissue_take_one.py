@@ -1,16 +1,19 @@
-"""On the station table stands a long flat pop-up tissue box (printed paperboard, 28 x 14 x 5.5 cm, 40 g with its last
-few sheets) and, to the right, a shallow tray. The box's slot is a plastic film slit across the top: one edge of the
-slit is the board, the other a light sprung film strip that presses whatever passes through it against the board
-(about 0.14 N). The top tissue stands 25 mm up out of the slit. Inside, it runs down through the slit, bends round
-the leading edge of the next tissue and lies under it, interleaved as in a real pop-up box; the next tissue's
-leading edge waits just inside the slit, pressed against the top one.
+"""On the station table lies a flat pop-up tissue box at full size (Kleenex Professional flat box 21400: printed
+paperboard, 22.5 x 12.1 x 5.1 cm; 40 g with a light spacer and its last two sheets) and, to the right, a tray. Centred
+in the box's top is the usual oval opening (8.9 x 5.7 cm), covered by clear plastic film with one slit (8.3 cm) along
+the oval's long axis, which is also the box's. One film edge of the slit is fixed; the other is a light sprung strip
+that presses whatever passes through the slit against the fixed edge (about 0.14 N). The top tissue stands 25 mm up out
+of the slit. Inside, it runs down through the slit, bends round the leading edge of the next tissue and lies under it,
+interleaved as in a real pop-up box; the next tissue's leading edge waits just inside the slit, pressed against the top
+one.
 
-Both tissues are real soft bodies (PhysX surface-deformable cloth, about 700 mesh nodes each, creased as folded),
+Both tissues are real soft bodies (PhysX surface-deformable cloth, 550-675 mesh nodes each, creased as folded),
 not rigid parts, and nothing in the box is scripted: pull the top tissue up and the film slit squeezes it against
 the next one, so friction drags the next tissue's edge up through the slit after it; once the top one's end has
-passed, the film holds the next one standing there, ready. The same squeeze drags on the box: it weighs only 40 g,
-so if nobody holds it down, pulling the tissue drags the slit end up and the box tips about its far end; the jaws
-slip off the sheet and the tissue stays in.
+passed, the film holds the next one standing there, ready. The same squeeze drags on the box (only 40 g): pulled
+one-handed it rocks a little (in sim about 1.6 deg and 8 mm) but stays put, so the demo's steadying hand is a
+precaution. A single pinch on the thin sheet creeps out of the fingers under that drag, so the demo pulls hand over
+hand.
 
 The job: take one tissue out and put it on the tray, leaving the box where it is with the next tissue ready to pull.
 
@@ -38,33 +41,61 @@ TOP = TABLE_TOP[SCENE]
 DEBUG = False  # sim only: log the box pose and both tissues' heights every 10 steps to ~/dbg/b18-tissue.jsonl
 
 # Frame: x forward from the arm bases, y left, z up, metres. Left arm base (0, +0.305, 0.75), right (0, -0.305).
-XB, YB = 0.280, -0.100  # the slit's centre on the table (the box's origin)
-# box-local geometry: origin on the box's bottom under the slit's centre, the slit along x at y = 0, 6 cm from the
-# box's right end
-BX, BH, WALL, LID = 0.140, 0.055, 0.003, 0.003
-Y0, Y1 = -0.060, 0.220  # the box's ends (28 cm long)
-BY, YM = Y1 - Y0, (Y0 + Y1) / 2
+XB, YB = 0.230, -0.060  # the centre of the box and of its oval opening and slit, on the table (the box's origin)
+IN = 0.0254
+# A real flat pop-up box at full size (Kleenex Professional flat box 21400: 8.875 x 4.75 x 2.0 in) lying with its
+# long axis along x. Box-local geometry: origin on the box's bottom at its centre; the oval opening is centred in
+# the top, its long axis along x (3.5 x 2.25 in), and the film's slit (3.25 in) runs along that long axis at y = 0.
+BX, BY, BH = 8.875 * IN, 4.75 * IN, 2.0 * IN  # 225 x 121 x 51 mm
+WALL, LID = 0.003, 0.003
+Y0, Y1 = -BY / 2, BY / 2  # the box's long sides
 ZT, ZL = BH, BH - LID  # lid top, lid underside
-SLX = 0.040  # slit half length
-FACE = -0.003  # the board edge of the slit (fixed)
-LIP_T, LIP_H = 0.004, 0.010  # film strip: thickness (y), depth (z, from the lid top down)
-D0 = 0.006  # film strip travel at spawn (both tissues in the slit)
-STACK_TOP = 0.035  # top of the remaining stack (rigid, part of the box)
+OVAL_A, OVAL_B = 3.5 * IN / 2, 2.25 * IN / 2  # the oval opening's half length (x) and half width (y)
+SLX = 3.25 * IN / 2  # film slit half length
+FACE = -0.003  # the fixed film edge of the slit
+LIP_T, LIP_H = 0.004, 0.010  # sprung film edge: thickness (y), depth (z, from the lid top down)
+D0 = 0.006  # sprung edge travel at spawn (both tissues in the slit)
+SLOT = (-0.003, 0.010)  # the slit's open gap in y, between the fixed edge and the film beyond the sprung edge
+FILM_T = 0.001
+STACK_TOP = BH - 0.020  # top of the spacer under the last two sheets, 20 mm under the lid top (rigid, part of the box)
 BOX_KG = 0.040
 CARD, WHITE, FILM, TRAY_C = (0.30, 0.50, 0.72), (0.97, 0.97, 0.95), (0.80, 0.84, 0.88), (0.55, 0.55, 0.58)
+PINK = (0.98, 0.70, 0.78)  # pale pink tissues (a common facial-tissue tint), easy to see against the box and tray
+
+
+def _oval_x(y: float) -> float:
+    """Half length of the oval opening at lateral offset y (0 outside it)."""
+    return OVAL_A * math.sqrt(max(0.0, 1.0 - (y / OVAL_B) ** 2))
 
 
 def _box_boxes():
-    b = [mk.box((BX - 2 * WALL, BY - 2 * WALL, STACK_TOP), at=(0, YM, STACK_TOP / 2), color=WHITE)]
+    """Walls, the spacer, the paperboard lid with its oval opening (a staircase of thin strips) and the plastic film
+    over the opening, slit along the long axis (the film's fixed edge of the slit is a 10 mm deep lip)."""
+    b = [mk.box((BX - 2 * WALL, BY - 2 * WALL, STACK_TOP), at=(0, 0, STACK_TOP / 2), color=WHITE)]
     for s in (-1, 1):
-        b.append(mk.box((WALL, BY, ZL), at=(s * (BX / 2 - WALL / 2), YM, ZL / 2)))
-        b.append(mk.box((BX - 2 * WALL, WALL, ZL), at=(0, YM + s * (BY / 2 - WALL / 2), ZL / 2)))
-    ym0, yp0 = -0.006, 0.016  # lid opening in y
-    b.append(mk.box((BX, ym0 - Y0, LID), at=(0, (Y0 + ym0) / 2, ZL + LID / 2)))
-    b.append(mk.box((BX, Y1 - yp0, LID), at=(0, (Y1 + yp0) / 2, ZL + LID / 2)))
-    for s in (-1, 1):
-        b.append(mk.box((BX / 2 - SLX, yp0 - ym0, LID), at=(s * (BX / 2 + SLX) / 2, (yp0 + ym0) / 2, ZL + LID / 2)))
-    b.append(mk.box((2 * SLX, FACE - ym0, LIP_H), at=(0, (FACE + ym0) / 2, ZT - LIP_H / 2), color=FILM))
+        b.append(mk.box((WALL, BY, ZL), at=(s * (BX / 2 - WALL / 2), 0, ZL / 2)))
+        b.append(mk.box((BX - 2 * WALL, WALL, ZL), at=(0, s * (BY / 2 - WALL / 2), ZL / 2)))
+    zl = ZL + LID / 2
+    for s in (-1, 1):  # lid: the two ends beyond the oval and the two long sides beside it
+        b.append(mk.box((BX / 2 - OVAL_A, BY, LID), at=(s * (BX / 2 + OVAL_A) / 2, 0, zl)))
+        b.append(mk.box((2 * OVAL_A, BY / 2 - OVAL_B, LID), at=(0, s * (BY / 2 + OVAL_B) / 2, zl)))
+    cut = [-0.006, *SLOT]  # the fixed lip's back face and the slit's open gap
+    edges = sorted([e for e in (-OVAL_B + k * OVAL_B / 10 for k in range(21)) if min(abs(e - c) for c in cut) > 0.001]
+                   + cut)
+    zf = ZT - FILM_T / 2
+    for y0, y1 in zip(edges[:-1], edges[1:]):
+        ym, h = (y0 + y1) / 2, y1 - y0
+        xe = _oval_x(ym)
+        for s in (-1, 1):  # paperboard round the oval, band by band
+            if OVAL_A - xe > 0.0005:
+                b.append(mk.box((OVAL_A - xe, h, LID), at=(s * (OVAL_A + xe) / 2, ym, zl)))
+        if -0.006 <= ym <= SLOT[1]:  # the slit and its fixed lip: film only beyond the slit's ends
+            for s in (-1, 1):
+                if xe - SLX > 0.0005:
+                    b.append(mk.box((xe - SLX, h, FILM_T), at=(s * (xe + SLX) / 2, ym, zf), color=FILM))
+        else:
+            b.append(mk.box((2 * xe, h, FILM_T), at=(0, ym, zf), color=FILM))
+    b.append(mk.box((2 * SLX, FACE + 0.006, LIP_H), at=(0, (FACE - 0.006) / 2, ZT - LIP_H / 2), color=FILM))
     return b
 
 
@@ -77,19 +108,20 @@ ZC = ZT - LIP_H  # centre of both bends
 TAB = 0.025  # the top tissue stands this far above the lid
 # cross-sections (box-local y, z): top tissue = tab, down the slit, round the next one's edge, flat under it
 PATH_1 = tuple([(-0.001, ZT + TAB)] + _arc(0.007, ZC, 0.008, math.pi, 1.5 * math.pi) + [(0.037, ZC - 0.008)])
-PATH_2 = tuple([(0.003, ZT - 0.001)] + _arc(0.007, ZC, 0.004, math.pi, 1.5 * math.pi) + [(0.073, ZC - 0.004)])
+PATH_2 = tuple([(0.003, ZT - 0.001)] + _arc(0.007, ZC, 0.004, math.pi, 1.5 * math.pi) + [(0.053, ZC - 0.004)])
 SHEET_W = 0.070
-CLOTH = dict(kind="cloth", friction=3.0, edge=0.003, color=WHITE)
+SHEET_DX = 0.002  # the sheets sit 2 mm forward of the slit's middle, 4 mm inside its front end
+CLOTH = dict(kind="cloth", friction=3.0, edge=0.003, color=PINK)
 
 kit = mk.Kit()
 kit.part("box", (XB, YB, TOP), _box_boxes(), mass=BOX_KG, color=CARD)
 kit.part("film", (XB, YB + FACE + 0.002 + LIP_T / 2, TOP + ZT - LIP_H / 2), [mk.box((2 * SLX, LIP_T, LIP_H))],
          mass=0.003, color=FILM)
 kit.slider("film_slide", "box", "film", (0, 1, 0), 0.0, 0.012, start=D0, stiffness=20.0, rest=0.0)
-TISSUE_1 = sk.Soft("tissue_1", pos=(XB, YB, TOP), size=(SHEET_W, sk.path_length(PATH_1), 0.001), profile=PATH_1,
-                   **CLOTH)
-TISSUE_2 = sk.Soft("tissue_2", pos=(XB, YB, TOP), size=(SHEET_W, sk.path_length(PATH_2), 0.001), profile=PATH_2,
-                   **CLOTH)
+TISSUE_1 = sk.Soft("tissue_1", pos=(XB + SHEET_DX, YB, TOP), size=(SHEET_W, sk.path_length(PATH_1), 0.001),
+                   profile=PATH_1, **CLOTH)
+TISSUE_2 = sk.Soft("tissue_2", pos=(XB + SHEET_DX, YB, TOP), size=(SHEET_W, sk.path_length(PATH_2), 0.001),
+                   profile=PATH_2, **CLOTH)
 
 # the tray, right of the box
 TRX, TRY = 0.260, -0.250
@@ -294,48 +326,67 @@ def distance(objects) -> float:
 
 
 # -- the scripted demo ------------------------------------------------------------------------------------------
-# Open loop from the scene's geometry. The left hand comes down first, fingers closed, and presses the lid near
-# its left end (200 mm left of the slit) so the box cannot ride up. The right hand comes over the standing tab with the
-# fingers part open (30 mm), goes down until the pad tips are 6 mm above the lid (the pads then cover the tab from
-# 6 to 22 mm up) and closes to a 2 mm jaw gap, a firm pinch on the thin tissue (closing fully on a single sheet
-# squeezes it out of the jaws in this simulator). It pulls straight up 10.6 cm in 7 s, which draws the whole tissue
-# out of the slit and, through the slit's squeeze, the next tissue's edge up after it. Then the left hand lets go of
+# Open loop from the scene's geometry. The left hand comes down first, fingers closed, and presses the lid's near
+# left corner (108 mm behind the slit's middle, as far from the pulling hand as the box allows) to steady it. The
+# right hand waits beside the box, then comes over the standing tab with the fingers part open (30 mm), goes
+# down until the pad tips are 6 mm above the lid (the pads then cover the tab from 6 to 22 mm up) and closes to a 2 mm
+# jaw gap, a firm pinch on the thin tissue (closing fully on a single sheet squeezes it out of the jaws in this
+# simulator). It pulls straight up hand over hand (two 3 cm strokes, each time sliding the eased pads back down to
+# 20 mm above the lid and pinching again, then 10 cm), which draws the whole tissue out of the slit and, through the
+# slit's squeeze, the next tissue's edge up after it. Then the left hand lets go of
 # the box, the right carries the tissue to the tray, lowers it until it touches and opens; both arms park.
 
 TIP = 0.013  # pad tips below the TCP
 GRIP = -0.0010  # finger target: 2 mm jaw gap
 APPROACH = -0.015  # 30 mm jaw gap coming down round the tab
-PRESS = (XB, YB + 0.200)
+PRESS = (XB - 0.108, YB + 0.045)  # the lid's near left corner, 5 mm in from the near end, 15 mm from the side
+PINCH_DX = 0.006  # the right hand pinches the tab 6 mm forward of the slit's middle (4 mm from the sheet's)
 DROP_Y = TRY - 0.025  # the sheet's creased lower end folds over toward +y as it lands
-PULL = 0.106
+PULL = 0.106  # (single-stroke pull height, kept for the controls)
+STAGE = 0.030  # each of the two short strokes
+EASE = -0.003  # 6 mm jaw gap: the pads slide down the sheet without letting it out from between them
+REGRIP = 0.020  # pad tips this high above the lid for the re-pinch (the next tissue's edge stands <= ~17 mm)
+LAST = 0.100  # the final stroke
 L_PARK, R_PARK = (0.150, 0.250, 0.950), (0.200, -0.250, TOP + 0.160)
-NAIVE = False  # True: the naive policy, the right hand pulls the same way and nobody holds the box (sim check)
+NAIVE = False  # True: one-handed, the right hand pulls the same way and nobody holds the box (sim check)
 
 
 def demo():
     """Hold the box down with the left hand; pull the top tissue straight up and out with the right; lay it on the
     tray."""
     c = FINGER_CLOSED
-    g = (XB, YB - 0.001, TOP + ZT + 0.006 + TIP)
+    g = (XB + PINCH_DX, YB - 0.001, TOP + ZT + 0.006 + TIP)
     R, L = [], []
 
     def w(arm, dur, pos, f, label, yaw=0.0):
         arm.append(Waypoint(dur, tuple(float(v) for v in pos), f, label, yaw))
 
-    w(R, 3.0, (g[0], g[1], g[2] + 0.06), APPROACH, "over the tab, fingers part open")
-    w(R, 1.5, (g[0], g[1], g[2] + 0.06), APPROACH, "wait for the left hand")
+    w(R, 3.0, (g[0] + 0.04, g[1] - 0.04, g[2] + 0.06), APPROACH, "beside the box, fingers part open")
+    w(R, 1.5, (g[0], g[1], g[2] + 0.06), APPROACH, "over the tab once the left hand is down")
     w(R, 1.5, g, APPROACH, "down round the tab")
     w(R, 0.5, g, APPROACH, "settle")
     w(R, 1.0, g, GRIP, "pinch the tab")
     w(R, 0.5, g, GRIP, "settle")
-    w(R, 7.0, (g[0], g[1], g[2] + PULL), GRIP, "pull straight up, out of the slit")
-    w(R, 1.0, (g[0], g[1], g[2] + PULL), GRIP, "hold")
-    w(R, 2.5, (TRX, DROP_Y, g[2] + PULL), GRIP, "carry to the tray")
+    # Hand over hand: the thin sheet creeps through the pads under the slit's drag, so pull 3 cm, ease the pads to a
+    # 6 mm gap, slide them back down the sheet to 20 mm above the lid (clear of the next tissue's edge) and pinch
+    # again; twice, then the long pull that draws the rest out.
+    lo = (g[0], g[1], TOP + ZT + REGRIP + TIP)
+    for k in (1, 2):
+        top = (g[0], g[1], (g[2] if k == 1 else lo[2]) + STAGE)
+        w(R, 2.0, top, GRIP, f"pull {k}: 3 cm up")
+        w(R, 0.4, top, EASE, "ease the pads")
+        w(R, 1.0, lo, EASE, "slide them down the sheet")
+        w(R, 0.6, lo, GRIP, "pinch again")
+        w(R, 0.3, lo, GRIP, "settle")
+    w(R, 6.5, (lo[0], lo[1], lo[2] + LAST), GRIP, "pull straight up, out of the slit")
+    w(R, 1.0, (lo[0], lo[1], lo[2] + LAST), GRIP, "hold")
+    held = sum(x.duration for x in R)
+    w(R, 2.5, (TRX, DROP_Y, lo[2] + LAST), GRIP, "carry to the tray")
     w(R, 1.5, (TRX, DROP_Y, TRAY_TOP + 0.078), GRIP, "lower until it touches")
     w(R, 1.0, (TRX, DROP_Y, TRAY_TOP + 0.078), FINGER_OPEN, "let go")
     w(R, 1.0, (TRX, DROP_Y, TRAY_TOP + 0.150), FINGER_OPEN, "up")
     w(R, 2.0, R_PARK, FINGER_OPEN, "park")
-    total = sum(x.duration for x in R) + 3.0
+    total = sum(x.duration for x in R) + 1.0
     w(R, total - sum(x.duration for x in R), R_PARK, FINGER_OPEN, "wait")
     if NAIVE:
         w(L, 2.0, L_PARK, FINGER_OPEN, "park")
@@ -344,12 +395,51 @@ def demo():
     lid = TOP + ZT + TIP
     w(L, 2.5, (*PRESS, lid + 0.05), c, "over the lid's left side, fingers closed")
     w(L, 1.5, (*PRESS, lid - 0.004), c, "press the box down")
-    hold = 3.0 + 1.5 + 1.5 + 0.5 + 1.0 + 0.5 + 7.0 + 1.0 - 4.0
-    w(L, hold, (*PRESS, lid - 0.004), c, "hold the box while the tissue is pulled")
-    w(L, 1.0, (*PRESS, lid + 0.05), c, "lift off")
-    w(L, 2.0, L_PARK, FINGER_OPEN, "park")
-    w(L, total - sum(x.duration for x in L), L_PARK, FINGER_OPEN, "wait")
+    w(L, held - 4.0, (*PRESS, lid - 0.004), c, "hold the box while the tissue is pulled")
+    w(L, 1.0, (*PRESS, lid + 0.08), c, "lift off")
+    view = Tilt(VIEW_ROT)
+    w(L, 2.0, VIEW, c, "to the viewing pose beside the box", view)
+    w(L, total - sum(x.duration for x in L), VIEW, c, "watch the next tissue standing in the slit", view)
     return {"left": L, "right": R}
+
+
+# The viewing pose. Once the box is let go, the left hand goes to a pose 10 cm off the box's long side (TCP 10 cm
+# above the table), pointing across the box (-y) and 30 deg down with the fingers closed, so that its wrist camera
+# looks at the slit face-on (2.5 deg off the standing tab's middle). The top camera looks along the slit and sees a
+# standing tab edge-on. The hand stays 9 cm clear of the box. yam_arena's Waypoint carries only a down grip's yaw, so
+# Tilt (a float that also carries a full TCP rotation) and an in-memory patch of yam_arena.demo.grip_rotation pass
+# the tilted rotation to the planner. Nothing here touches the scene or the scoring.
+VIEW = (XB, YB + BY / 2 + 0.100, TOP + 0.100)
+_EL = math.radians(30.0)
+VIEW_ROT = np.column_stack([(1.0, 0.0, 0.0), (0.0, -math.sin(_EL), math.cos(_EL)),
+                            (0.0, -math.cos(_EL), -math.sin(_EL))])
+
+
+class Tilt(float):
+    """A Waypoint yaw that also carries a full TCP rotation (used by the patched grip_rotation below)."""
+
+    def __new__(cls, rot):
+        self = super().__new__(cls, 0.0)
+        self.rot = np.asarray(rot, dtype=float)
+        return self
+
+
+def _patch_grip_rotation() -> None:
+    import yam_arena.demo as _demo
+
+    if getattr(_demo, "_tilt_patch", False):
+        return
+    base = _demo.grip_rotation
+
+    def grip_rotation(yaw=0.0):
+        rot = getattr(yaw, "rot", None)
+        return rot.copy() if rot is not None else base(yaw)
+
+    _demo.grip_rotation = grip_rotation
+    _demo._tilt_patch = True
+
+
+_patch_grip_rotation()
 
 
 # -- offline self-test ------------------------------------------------------------------------------------------
