@@ -1,0 +1,20 @@
+{
+  "title": "Grate a block of cheese on a box grater onto a cutting board",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "food preparation",
+    "grater",
+    "rubbing",
+    "steadying"
+  ],
+  "instruction": "Grate at least 5 g of cheese from the block on the box grater onto the board. Then put the cheese down, leave the grater standing on the board and take both arms back to where they started.",
+  "context": "Grating cheese, vegetables or zest is routine kitchen prep. A box grater is light and tall and grating needs the food pressed on its teeth, so the cook holds it by its handle with one hand and grates with the other; unheld, it slides away or tips over.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) A fixed beech-wood cutting board, 30 cm front to back, 34 cm wide and 1.2 cm thick, centred 30 cm forward and 1 cm right. (2) A loose stainless-steel box grater, 180 g, 8 cm front to back, 7 cm wide and 13 cm tall, open at the bottom, standing on the board 30 cm forward on the centre line. Its right side, toward the right arm, is the coarse grating face: 10 staggered rows of 8 x 4 mm cutting holes, 9.5 mm apart, from 2 to 11.5 cm up; a black plastic flat handle 10 cm long reaches left from its top. (3) A loose yellow block of semi-hard cheese (cheddar), 50 g, 6 cm long, 2.4 cm wide and 3.5 cm tall, lying on the board along the left-right line, its middle 30 cm forward and 14 cm right. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Judged from the whole trial; the primary measure is the mass of grated cheese. Real trial: afterwards all the grated cheese on the board and inside the grater is brushed into a tared bowl and weighed on a kitchen scale reading to 0.1 g. Simulation (it cannot cut cheese): a control step counts as grating only if, at its start and its end, the PhysX contact force between the cheese and the grater, normal to the grating face, is at least 3 N, the contact is the cheese's end on the perforated area (the middle of its end over the holes: within 2.8 cm of the face's middle, 2 to 11.5 cm up, at most 5 mm off the face's surface) and the grater stands (within 20 degrees of upright, its foot on the board); the cheese's travel down the face in such steps converts to grated mass at 0.25 g per cm. Travel up the face, and any movement near the face without that press, counts nothing. 1.0: at least 5.0 g grated (simulation: 20 cm of pressed downstroke) and, at the end, the grater standing on the board (within 20 degrees of upright, its foot on the board inside its edges), the cheese put down (its middle at most 3 cm above the board) and both arms back where they started (each fingertip centre within 5 cm of its start); 0.5: at least 2.5 g (10 cm), or 5.0 g without that end state; 0.25: at least 0.5 g (2 cm); else 0.0. The trial ends at the run limit, or once the full score has held for 1 s with the grater, the cheese and the fallen shreds still.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "Lift the grater, sweep the grated cheese off the board, stand the grater back on its spot and put a fresh 50 g block of cheese where the cheese lay.",
+  "fidelity": "Rigid-body simulation (Isaac Sim 6.1, PhysX, 20 Hz control). The cheese is not cut and does not wear down: grated mass is estimated as 0.25 g per cm of downstroke with the cheese's end pressed on the holes at 3 N or more (PhysX contact force), a rate estimated from tooth geometry, not measured; a real trial weighs it. Rigid shreds (one per 0.5 g) drop in from out of view as a cue. The teeth are drawn on a flat face. The board is fixed. Cameras 1280 x 704 (Dream-1 sees 320 x 176).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-9NT6XC"
+}
