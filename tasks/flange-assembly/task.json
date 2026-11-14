@@ -1,5 +1,5 @@
 {
-  "title": "Align two pipe flanges and insert four locating pins",
+  "title": "Hold and align pipe flanges for horizontal pin insertion",
   "category": "Impact on jobs",
   "keywords": [
     "bimanual",
@@ -7,13 +7,13 @@
     "flange alignment",
     "pin insertion"
   ],
-  "instruction": "Place both flanges on the holder, then insert four pins.",
-  "context": "Pipework and equipment assembly require matching the bolt circles of two mating flanges before fastening. This lightweight bench analogue tests transferring and aligning two loose flanges, followed by four separate pin insertions. The pins provide temporary location only.",
-  "setup": "Official calibrated bimanual YAM station; table z=0.7475 m, x forward, y left. All coordinates are in metres. Two rigid lightweight training flanges use the supplied CAD: 150 mm outer diameter, 54 mm bore, 51 mm overall height, 16 mm mating plate, four nominal 16 mm holes on a 110 mm bolt circle. Lower flange: 0.15 kg, neck down, initially centred at (0.20,0.085), bounding-box centre 80.5 mm above the table after settling. Upper flange: 0.25 kg, neck up, initially centred at (0.20,-0.26), same settled centre height. Each rests on a fixed 100 x 100 x 55 mm rectangular staging block beneath it. The dark fixed annular holder is centred at (0.28,-0.08), inner radius 67 mm, outer radius 85 mm, height 60 mm. Four gold rigid pins, 35 g each, start upright on the table at (0.07,0.28), (0.07,0.09), (0.07,-0.09), (0.07,-0.28). Each has a 50 mm shank of maximum diameter 10 mm, including a 10 mm tapered lead narrowing to 6 mm, plus a 20 mm diameter, 10 mm high head. There are no other task objects. Flanges approximate lightweight printed parts, staging blocks approximate rigid wood, holder rigid plastic, and pins metal-like training pieces; friction and density are not calibrated. The source files specify the fixed poses; no object jitter is used.",
-  "scoring": "Final state only. Score 0 unless the inverted lower flange is at rest, its XY centre is less than 12 mm from the holder centre, its bottom differs by less than 6 mm from 25 mm above the table, and its local z axis is within about 7.25 degrees of downward vertical. Then score 0.2. Raise this to 0.4 if the upper flange is at rest, neck up within the same tilt limit, its XY centre is less than 4 mm from the lower centre, its bottom differs by less than 3 mm from the lower top, and every lower hole has an upper hole less than 3 mm away in XY. Add 0.15 for each distinct hole occupied by one pin whose XY centre is less than 3 mm from that lower hole, bottom is at least 12 mm below the lower top, top is at least 16 mm above the lower top, local z axis is within about 7.25 degrees of upward vertical, and motion is below the rest limits. Rest means linear speed less than 10 mm/s and angular speed less than 0.5 rad/s. A hole counts once; pins may be assigned to any hole. Maximum 1.0. If the holder condition fails the entire score is 0; if flange alignment fails pins receive no credit. The scorer evaluates final poses and velocities, not action order, arm assignment or measured gripper contact.",
-  "run_limit": "2,700 control steps (135 seconds of simulated time at 20 Hz).",
-  "reset_notes": "Restore both flanges to their staging blocks and all four pins upright to the listed positions; reset both arms to the station ready pose. Use seed 0 and object_jitter=0. No parts are consumed.",
-  "fidelity": "Rigid CAD visuals with 55 convex collision pieces per flange; annular holder and tapered pins have physical colliders. Lightweight training masses and uncalibrated friction approximate bench assembly. No gasket, threads, locking clips, preload, pressure or deformation. Final pose/velocity scoring infers seating; it does not measure contact, release or action sequence. Scripted demo uses measured pose feedback. CPU PhysX at 240 Hz, RTX rendering.",
-  "scores": "Dream-1 (dreamlabs/dream-1-beta): 0.0; scripted demo: 1.0.",
-  "media": "M-KSJ5FA"
+  "instruction": "Hold the loose pipe flange against the fixed flange and insert two pins horizontally in the top and bottom holes.",
+  "context": "Pipework assembly requires holding mating flanges in alignment while temporary locating pins are installed.",
+  "setup": "Fixed 150 mm diameter, 51 mm deep vertical CAD flange with 16 mm holes on a 55 mm bolt-circle radius, on a 100 × 54 mm pipe and 50 × 80 × 130 mm support. A 250 g loose flange, pipe stub, collar and side lug rest on supports of 60 × 80 × 56, 18 × 80 × 70 and 25 × 35 × 55 mm. Two 35 g pins have 50 × 14 mm shanks and 20 mm heads, lying parallel on two 50 × 28 × 185 mm supports. Parts are rigid steel-like solids; supports are rigid fixtures. Positions in task.py; no jitter; bimanual YAM station.",
+  "scoring": "At the end, alignment within 3 mm and axes within 7.25° of the pipe earn 0.4. Add 0.3 for a pin in each of the top and bottom holes, axis within 7.25°, center within 4.5 mm radially and between 5 mm toward the head and 8 mm toward the tip from the mating plane. Only one pin counts per hole; without alignment the score is zero. Poses are scored, including while held.",
+  "run_limit": "2,700 control steps (135 seconds at 20 Hz).",
+  "reset_notes": "Restore the fixed-layout object poses and both arms to the ready pose; no object jitter.",
+  "fidelity": "Rigid CAD visuals with perforated collision approximations, a pipe stub and side lifting lug; approximate friction. No gasket, threads, clips, preload, deformation or fluid seal. Final poses do not measure gripper contact or prove unsupported retention.",
+  "scores": "Dream-1: 0.0 (2,700 steps); scripted demo: 1.0 (2,231 steps).",
+  "media": "M-SXH5C5"
 }

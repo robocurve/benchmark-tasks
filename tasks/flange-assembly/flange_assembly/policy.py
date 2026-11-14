@@ -45,67 +45,61 @@ class PanelPolicy(YamScriptedPolicy):
         self._offsets = {}
         self._upper_yaw = 0.
         self._pin_holes = {}
+        self._align_offset = np.zeros(3)
+        self._align_rot = np.zeros(3)
+        self._insertion_offsets = {'second': np.zeros(3)}
         for side, p in self._plans.items():
             p.adjust = lambda t, pos, rot, finger, label, side=side: self._feedback(
                 side, t, pos, rot, finger, label)
 
     def _feedback(self, side, t, pos, rot, finger, label):
-        # This oracle changes robot targets only. Object poses remain governed
-        # by rigid-body contacts; the Dream policy does not call this helper.
         from flange_assembly.embodiment import demo_states
         states = demo_states()
-        if not states or self._task is None:
+        if side == 'right' and label == 'done':
+            return pos + self._insertion_offsets['second'], rot, finger, label
+        if side == 'right' and states:
+            for name, pin_name, hole_y, hole_z in (
+                ('second', 'pin_1', .06, .225),
+            ):
+                if name not in label or not any(action in label for action in
+                        ('approach', 'insert', 'seat', 'release', 'back off', 'push', 'clear', 'withdraw')):
+                    continue
+                pin = states[pin_name]
+                desired = np.array([hole_y, self._task.module.TOP + hole_z])
+                error = desired - np.asarray(pin.pos)[1:]
+                if ('hole' in label or 'insert' in label or 'seat' in label) and pin.pos[0] > .19 and np.linalg.norm(error) < .008:
+                    self._insertion_offsets[name][1:] += np.clip(.01 * error, -.00005, .00005)
+                    np.clip(self._insertion_offsets[name], -.004, .004, out=self._insertion_offsets[name])
+                return pos + self._insertion_offsets[name], rot, finger, label
+        if side == 'left' and label in ('release flange', 'withdraw flange arm', 'done'):
+            angle = np.linalg.norm(self._align_rot)
+            if angle > 1e-8:
+                rot = axis_angle_matrix(self._align_rot / angle, angle) @ rot
+            return pos + self._align_offset, rot, finger, label
+        if side != 'left' or label != 'hold flange' or t < 13.5 or not states:
             return pos, rot, finger, label
-        module = self._task.module
-        key = None
-        error = None
-        if label in ('lower into holder', 'release lower flange',
-                     'withdraw lower horizontally', 'lift clear lower'):
-            key = 'lower_flange'
-            if label == 'lower into holder':
-                # Release/withdrawal moves this rim grip slightly north.
-                error = np.asarray(module.HOLDER) + (0., -.006) - states[key].pos[:2]
-        elif label in ('align upper flange', 'release upper flange',
-                       'clear upper neck', 'withdraw above flange'):
-            key = 'upper_flange'
-            if label == 'align upper flange':
-                # The neck settles east as the loaded jaw opens. Compensate
-                # this repeatable release motion rather than relaxing scoring.
-                error = states['lower_flange'].pos[:2] + (-.004, 0.) - states[key].pos[:2]
-                a = quat_xyzw_to_matrix(states['lower_flange'].quat_xyzw)
-                b = quat_xyzw_to_matrix(states[key].quat_xyzw)
-                delta = np.arctan2(a[1, 0], a[0, 0]) + .022 - np.arctan2(b[1, 0], b[0, 0])
-                delta = (delta + np.pi/4) % (np.pi/2) - np.pi/4
-                self._upper_yaw += float(np.clip(.15 * delta, -.015, .015))
-            elif label in ('clear upper neck', 'withdraw above flange'):
-                # Once open, centre the jaw opening on the neck before lifting.
-                # This avoids dragging the released flange with an inner pad.
-                tcp, _ = ik.tcp_pose(self._observed_joints[side], self._bases[side])
-                error = states[key].pos[:2] - tcp[:2]
-            rot = axis_angle_matrix(np.array([0., 0., 1.]), self._upper_yaw) @ rot
-        elif label.startswith('pin_'):
-            key, phase = label.split(' ', 1)
-            if key not in self._pin_holes:
-                # Choose the matched pair nearest this pin's nominal goal.
-                nominal = next(w.pos[:2] for w in self._plans[side].waypoints
-                               if w.label == key + ' lower')
-                lower = module._holes(states['lower_flange'])
-                upper = module._holes(states['upper_flange'])
-                hole = min(lower, key=lambda h: np.linalg.norm(h - nominal))
-                other = min(upper, key=lambda h: np.linalg.norm(h - hole))
-                self._pin_holes[key] = (hole + other) / 2
-            if phase in ('settle above hole', 'lower', 'settle pin in hole'):
-                error = self._pin_holes[key] - states[key].pos[:2]
-            if phase not in ('carry', 'settle above hole', 'lower',
-                             'settle pin in hole', 'release', 'retreat'):
-                key = None
-        if key:
-            offset = self._offsets.setdefault(key, np.zeros(2))
-            if error is not None:
-                offset += np.clip(.15 * error, -.0015, .0015)
-                np.clip(offset, -.08, .08, out=offset)
-            pos = pos + np.r_[offset, 0.]
-        return pos, rot, finger, label
+        # The side lug extends the loose object's bounding box by 40 mm in +y.
+        target = np.array([.2495, .08, self._task.module.TOP + .17])
+        error = target - states['upper_flange'].pos
+        obj_rotation = quat_xyzw_to_matrix(states['upper_flange'].quat_xyzw)
+        desired = axis_angle_matrix(np.array([0., 1., 0.]), -np.pi/2)
+        angular_error = ik._rot_error(desired, obj_rotation)
+        self._align_rot += np.clip(.01 * angular_error, -.00015, .00015)
+        np.clip(self._align_rot, -.15, .15, out=self._align_rot)
+        angle = np.linalg.norm(self._align_rot)
+        if angle > 1e-8:
+            rot = axis_angle_matrix(self._align_rot / angle, angle) @ rot
+        # Keep a 4.5 mm axial gap while correcting the bolt-circle offset.
+        # A 14 mm pin in a 16 mm hole allows only 1 mm radial clearance.
+        pin = states['pin_2']
+        pin_engaged = (pin.pos[0] > .295 and abs(pin.pos[1] - .06) < .012
+                       and abs(pin.pos[2] - (self._task.module.TOP + .115)) < .012)
+        if not pin_engaged and (np.linalg.norm(error[1:]) > .001 or np.linalg.norm(angular_error) > .02):
+            error[0] = .245 - states['upper_flange'].pos[0]
+        correction = np.clip(.01 * error, -.00005, .00005)
+        self._align_offset += correction
+        np.clip(self._align_offset, -.04, .04, out=self._align_offset)
+        return pos + self._align_offset, rot, finger, label
 
 
 def make_policy(**kwargs):
