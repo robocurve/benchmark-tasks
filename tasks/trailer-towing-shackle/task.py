@@ -3,18 +3,18 @@
 - a two-wheeled utility trailer (fixed): a blue steel deck (42 x 34 cm, 12 cm off the table, 5 cm rails) on one
   axle with two 18 cm wheels. Its drawbar ends in a painted steel block (80 x 80 mm, 77.5 mm tall) with a towing
   lug on its front face: a 15 mm steel plate projecting 50 mm toward the robot, 40 mm wide, its top flush with the
-  block's top (lug centre 7 cm above the table), with a 19 mm square hole 30 mm out from the block;
-- a 1/2 in screw-pin D shackle without its pin (galvanised steel, 0.25 kg): 12.7 mm bar, two round ears 27 mm across
+  block's top (lug centre 7 cm above the table), with a 19 mm round hole 30 mm out from the block;
+- a 1/2 in screw-pin D shackle without its pin (galvanised steel, 0.25 kg): 12.7 mm bar, two round ears 30 mm across
   and 12.7 mm thick with 20.6 mm between them, 47.8 mm inside length. The upper ear has a plain 17.5 mm hole; the
-  lower ear takes the pin's quick-lock thread (a steep lead: half a turn locks it) under a 3.5 mm plain lead-in. It stands upright in a
+  lower ear is threaded 5/8-11 UNC (2.31 mm per turn) for its bottom 5.8 mm, under a 6.9 mm plain bore. It stands upright in a
   pine stand (a 10 mm base with a slot that holds its lower ear and lower bar), threaded ear down, bow toward the
   robot, left of the block;
 - its screw pin (steel, red, 0.11 kg): a 15.8 mm pin 46 mm long under a 25 mm collar, with a flat eye 26 mm wide and
   8 mm thick on top. It stands eye up in a hole through a pine block (40 x 40 x 30 mm), right of the block.
 
 The robot must put the shackle on the lug (the lug between its ears), push the pin through the upper ear, the lug
-and into the lower ear, and lock it with one twist: turned 120 degrees clockwise (seen from above) on the thread, the
-pin latches; half a turn seats its collar.
+and into the lower ear, and screw it fully home: two and a half clockwise turns (seen from above) from the thread's first catch
+seat its collar on the upper ear.
 
 Run it:  inspect-robots run --embodiment yam_arena -E task=task.py -E object_jitter=0 --scorer task_score ...
 """
@@ -36,7 +36,7 @@ from yam_arena.task_file import TABLE_TOP, Box  # noqa: E402
 SCENE = "station"
 SCORE_OVER = "end"
 TOP = TABLE_TOP[SCENE]
-INSTRUCTION = "Shackle the trailer's towing lug: the lug between the shackle's ears and the pin screwed home to lock it."
+INSTRUCTION = "Shackle the trailer's towing lug: the lug between the shackle's ears and the pin screwed fully home."
 
 GALV, RED = (0.66, 0.68, 0.70), (0.78, 0.10, 0.08)
 PAINT, PINE = (0.16, 0.30, 0.52), (0.80, 0.64, 0.42)
@@ -66,11 +66,15 @@ FACE = XH + 0.030                    # the block's front face; the lug's tip is 
 TIP = FACE - 0.050
 LUG_TOP, LUG_BOT = LUG_Z + LUG_T / 2, LUG_Z - LUG_T / 2
 h2, w2 = HOLE / 2, LUG_W / 2
-BLOCK = [fixed("block", (FACE, YH - 0.04, TOP), (FACE + 0.08, YH + 0.04, LUG_TOP), PAINT),
-         fixed("lug_front", (TIP, YH - w2, LUG_BOT), (XH - h2, YH + w2, LUG_TOP), PAINT),
-         fixed("lug_back", (XH + h2, YH - w2, LUG_BOT), (FACE, YH + w2, LUG_TOP), PAINT),
-         fixed("lug_left", (XH - h2, YH + h2, LUG_BOT), (XH + h2, YH + w2, LUG_TOP), PAINT),
-         fixed("lug_right", (XH - h2, YH - w2, LUG_BOT), (XH + h2, YH - h2, LUG_TOP), PAINT)]
+BLOCK = ([fixed("block", (FACE, YH - 0.04, TOP), (FACE + 0.08, YH + 0.04, LUG_TOP), PAINT),
+          fixed("lug_front", (TIP, YH - w2, LUG_BOT), (XH - w2 + 0.001, YH + w2, LUG_TOP), PAINT),
+          fixed("lug_back", (XH + w2 - 0.001, YH - w2, LUG_BOT), (FACE, YH + w2, LUG_TOP), PAINT)]
+         # the round 19 mm hole: a 16-sided ring out to the plate's edges, and the four corners around it
+         + [Box(name=f"lug_ring_{k}", pos=(XH + p[0], YH + p[1], LUG_Z), size=sz, color=PAINT, yaw=math.radians(yaw))
+            for k, (p, sz, _c, yaw) in enumerate(ring(h2, w2, -LUG_T / 2, LUG_T / 2, PAINT))]
+         + [fixed(f"lug_corner_{k}", (XH + sx * 0.010 - (sx < 0) * 0.010, YH + sy * 0.010 - (sy < 0) * 0.010, LUG_BOT),
+                  (XH + sx * 0.010 + (sx > 0) * 0.010, YH + sy * 0.010 + (sy > 0) * 0.010, LUG_TOP), PAINT)
+            for k, (sx, sy) in enumerate(((1, 1), (1, -1), (-1, 1), (-1, -1)))])
 
 # -- the trailer behind the drawbar (fixed): a deck with side rails on one axle with two wheels ------------------------
 TIRE, HUB = (0.08, 0.08, 0.09), (0.70, 0.70, 0.72)
@@ -102,13 +106,13 @@ def wheel(name, yc):
 TRAILER = DECK + wheel("wheel_l", YH + DW + WW / 2 + 0.002) + wheel("wheel_r", YH - DW - WW / 2 - 0.002)
 
 # -- the shackle (origin: on the pin axis midway between the ears; pin axis z, bow toward -x) -------------------------
-PITCH, TURNS = 2 * 0.0092, 0.5      # quick-lock pin: a steep 18.4 mm lead, half a turn from first catch to locked
-TRAVEL = PITCH * TURNS               # 9.2 mm
-GAP, EAR_T, EAR_R, BAR = 0.0206, 0.0127, 0.0135, 0.0127
+PITCH, TURNS = 0.0254 / 11, 2.5     # 5/8-11 UNC thread; two and a half turns from the first catch to seated
+TRAVEL = PITCH * TURNS               # 5.8 mm (shortened from the real pin's full-ear thread to fit the 60 s run)
+GAP, EAR_T, EAR_R, BAR = 0.0206, 0.0127, 0.0151, 0.0127   # Crosby G-209 1/2 in: A 20.6, F 30.2, D 12.7 mm
 EAR_IN = GAP / 2                     # 10.3 mm: the ears' inner faces
 EAR_OUT = EAR_IN + EAR_T             # 23.0 mm: their outer faces
 HOLE_A, MINOR_A = 0.00875, 0.00675   # plain hole (17.5 mm) and thread minor diameter (13.5 mm), as apothems
-LEAD = EAR_T - TRAVEL                # 3.5 mm plain lead-in at the top of the threaded ear
+LEAD = EAR_T - TRAVEL                # 6.9 mm plain bore above the threaded part of the lower ear
 STEP = -EAR_IN - LEAD                # where the pin's end rests before the thread catches
 LEG_Z = EAR_IN + BAR / 2             # 16.65 mm: the bars' centre lines
 APEX_X = -(0.0478 + BAR / 2)         # 47.8 mm inside length
@@ -124,13 +128,14 @@ XS, YS = 0.27, 0.07                  # where the shackle's pin axis stands
 STAND_FLOOR = TOP + 0.010
 S0 = np.array([XS, YS, STAND_FLOOR + EAR_OUT])  # the shackle's origin in the stand
 WALL = STAND_FLOOR + 0.012
-STAND = [fixed("stand_base", (XS - 0.0665, YS - 0.025, TOP), (XS + 0.0195, YS + 0.025, STAND_FLOOR), PINE),
-         fixed("stand_slot_l", (XS - 0.0665, YS + 0.0075, STAND_FLOOR), (XS - 0.0145, YS + 0.025, WALL), PINE),
-         fixed("stand_slot_r", (XS - 0.0665, YS - 0.025, STAND_FLOOR), (XS - 0.0145, YS - 0.0075, WALL), PINE),
+P_, E_ = 0.016, 0.021                # the pocket around the lower ear (30.2 mm across) and its outer wall
+STAND = [fixed("stand_base", (XS - 0.0665, YS - 0.025, TOP), (XS + E_, YS + 0.025, STAND_FLOOR), PINE),
+         fixed("stand_slot_l", (XS - 0.0665, YS + 0.0075, STAND_FLOOR), (XS - P_, YS + 0.025, WALL), PINE),
+         fixed("stand_slot_r", (XS - 0.0665, YS - 0.025, STAND_FLOOR), (XS - P_, YS - 0.0075, WALL), PINE),
          fixed("stand_slot_end", (XS - 0.0665, YS - 0.0075, STAND_FLOOR), (XS - 0.0615, YS + 0.0075, WALL), PINE),
-         fixed("stand_ear_l", (XS - 0.0145, YS + 0.0145, STAND_FLOOR), (XS + 0.0195, YS + 0.025, WALL), PINE),
-         fixed("stand_ear_r", (XS - 0.0145, YS - 0.025, STAND_FLOOR), (XS + 0.0195, YS - 0.0145, WALL), PINE),
-         fixed("stand_ear_end", (XS + 0.0145, YS - 0.0145, STAND_FLOOR), (XS + 0.0195, YS + 0.0145, WALL), PINE)]
+         fixed("stand_ear_l", (XS - P_, YS + P_, STAND_FLOOR), (XS + E_, YS + 0.025, WALL), PINE),
+         fixed("stand_ear_r", (XS - P_, YS - 0.025, STAND_FLOOR), (XS + E_, YS - P_, WALL), PINE),
+         fixed("stand_ear_end", (XS + P_, YS - P_, STAND_FLOOR), (XS + E_, YS + P_, WALL), PINE)]
 SHACKLE = part("shackle", pos=tuple(float(v) for v in S0 + [0, 0, 0.0005]), mass=0.25, color=GALV, friction=0.6,
                boxes=SHACKLE_BOXES)
 
@@ -174,12 +179,11 @@ HOLDER = [fixed("holder_l", (HX - 0.020, HY + 0.009, TOP), (HX + 0.020, HY + 0.0
 OBJECTS = BLOCK + TRAILER + STAND + HOLDER + [SHACKLE, PIN]
 
 # -- the thread (pure Python; the physics hook below feeds it) ------------------------------------------------------
-# n: the pin's net tightening turn (rad, clockwise seen from above), 0 at the first catch, pi seated, LOCK latched.
+# n: the pin's net tightening turn (rad, clockwise seen from above), 0 at the first catch, 2 pi TURNS seated.
 # h: the pin's origin above its seat (m). The thread wants h = PITCH * (TURNS - n / 2 pi).
-FRICTION = 0.05                 # N m: running torque of the quick-lock thread
+FRICTION = 0.05                 # N m: running torque of the thread (hand-turned, free running)
 SLACK = math.radians(30)        # give: the pin can be turned 30 degrees past where its height says it should be
 SEATED = 0.001                  # m: a collar within 1 mm of the ear is seated
-LOCK = math.radians(120)        # quick-lock pin: turned 120 degrees on the thread, it latches (locked)
 RELEASE = math.radians(10)      # unscrewed 10 degrees past the first catch: the pin is off the thread
 SETTLE = 60                     # physics steps (0.25 s) after a catch in which the pin settles on the thread
 
@@ -351,9 +355,9 @@ def _update(objects) -> float:
         return 0.0
     if _STATE["engaged"]:
         h = float(shackle.to_local(pin.pos)[2] - Z_SEAT)
-        if h <= SEATED or _STATE["n"] >= LOCK:
+        if h <= SEATED:
             return 1.0
-        if _STATE["n"] >= math.pi / 4:
+        if _STATE["n"] >= 2 * math.pi:
             return 0.5
     return 0.25
 
@@ -500,9 +504,10 @@ def plan(route: str = "demo") -> dict[str, list]:
     left = _left(t_rest - t_in + 0.5)
     t_free = sum(w[0] for w in left[:11])         # the left hand is clear of the shackle
     right += [(max(0.5, t_free - t_rest), right[-1][1], right[-1][2], -0.012, "wait for the left hand")]
-    # one twist locks it: half a turn plus 35 degrees (the wrist's limit), because the fingers slip a little on the eye
+    # two and a half turns, in half turns with a regrip between them; the last goes 35 degrees further (the wrist's limit)
+    # because the fingers slip a little on the eye, and one spare half turn follows in case it is not seated yet
     n = int(round(2 * TURNS))
-    right += _strokes(n, TRAVEL, extra=math.radians(35), extra_at=n - 1)
+    right += _strokes(n + 1, TRAVEL, extra=math.radians(35), extra_at=n - 1)
     right += [(1.0, (XH, YH, TOP + 0.16), right[-1][2], OPEN, "clear")]
     return {"left": left, "right": right}
 
@@ -510,7 +515,7 @@ def plan(route: str = "demo") -> dict[str, list]:
 def demo():
     """Left arm lifts the shackle out of its stand and slides its ears over the lug. Right arm lifts the pin out of its
     holder and lowers it through the upper ear and the lug onto the threaded ear, where the thread catches. Left arm lets
-    go. Right arm locks the pin with one clockwise twist of the eye."""
+    go. Right arm screws the pin home: clockwise half turns of the eye, regripping between them."""
     from yam_arena.demo import Waypoint
 
     return {arm: [Waypoint(d, tuple(p), f, label, r) for d, p, r, f, label in wps] for arm, wps in plan().items()}
