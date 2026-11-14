@@ -1,0 +1,24 @@
+{
+  "title": "Join two boards on three glued dowels, pressing them together evenly",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "carpenter",
+    "cabinetmaker",
+    "dowel joint",
+    "glued dowels",
+    "end-to-end joint",
+    "dowel binding",
+    "loose boards",
+    "linkkit"
+  ],
+  "instruction": "Join the pale board to the dark board on the three dowels so their ends meet flat on the bench, then let go.",
+  "context": "Carpenters (SOC 47-2031, about 900,000 US workers, BLS) and cabinetmakers join boards end to end on glued dowels in face frames, rails and furniture as a regular duty. The two loose boards are held one in each hand and brought together so three dowels enter three sockets at once. Pressed with one end first, the boards twist and the dowels bind in their sockets, leaving the joint wedged half open. Both hands are needed: each board lies beside its own arm, 0.51 m from the other board's seam end, and the arm cannot carry its board to the far board and press it on.",
+  "setup": "Station table, positions in metres, x forward from the arm bases, y to the robot's left, z up; the table top is at z 0.7475. The bench is a waxed laminate top, friction about 0.25 against wood. (1) Pale board: birch, 18 x 80 x 150 mm, 123 g, colour sRGB (0.87, 0.74, 0.52), centre (0.36, -0.33), long axis along y. Three beech dowels, 8 mm diameter, 20 mm long with a 0.6 mm stepped tip, tan (0.72, 0.50, 0.25), are glued into its +y end at x -25, 0 and +25 mm from its centre line, 9 mm above the bench. (2) Dark board: walnut, 18 x 80 x 150 mm, 140 g, colour (0.36, 0.24, 0.16), centre (0.36, +0.33), long axis along y. Its -y end has three 9 mm square sockets, 22 mm deep, at the same pitch and height (0.5 mm of clearance a side). (3) Real build: dowels pushed (dry press fit) into 8 mm holes, sockets cut with a 9 mm square mortise chisel and checked with 9.0 and 9.2 mm gauge blocks, bench friction checked with a spring scale (about 0.3 N to slide the 123 g board). (4) Nothing clamps, jigs or stops either board. Seat line: y 0; the left arm base is at y +0.305, the right at y -0.305. Ready pose for both arms.",
+  "scoring": "Every control step from reset a history record (cleared only by the simulator reset) measures the two seam-end corner gaps, the sideways offset, the yaw and each board's tilt from the two board poses. Only the end state counts: a wrong first try that was backed out is not penalised, and a wedged joint stays below the seated rungs. 0.25: tips in with both corner gaps at most 19 mm, offset at most 1 mm, yaw at most 2 deg. 0.5: the corner gaps at most 10 mm at the end after that. 0.75: seated at the end: both corner gaps at most 0.5 mm, edges flush within 1 mm, both boards flat within 3 deg. 1.0: also both grippers at least 30 mm from both boards and moving under 10 mm/s for 1 s, boards still under 5 mm/s. Real trial: a feeler gauge at the two seam corners, a try square or straightedge on the long edge for the 1 mm offset, a protractor for 3 deg, a tape for the 30 mm clearance, and a 60 fps overhead video over a 1 mm grid to read the two corner gaps in every frame once a tip is in.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Pull the boards apart and wipe the sockets and dowels clean (dry fit, no glue). Set the pale board with its dowel end toward the middle and the dark board with its socket end toward the middle, centres at (0.36, -0.33) and (0.36, +0.33), edges square to the x axis on taped outlines, 0.51 m between the seam ends.",
+  "fidelity": "Real boards and dowels at true size and mass. Sockets are 9 mm square, built from boxes, for 0.5 mm of clearance a side (real round holes are 8.0 to 8.2 mm for a snug glue fit); the glue is not modelled; the wedge is geometric. Boards are rigid at one friction (0.25) on the bench, and the grip is a 1.5 mm squeeze of the 80 mm width.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-5PTTJ5"
+}
