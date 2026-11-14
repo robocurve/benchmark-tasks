@@ -1,0 +1,24 @@
+{
+  "title": "Fit a keyed pulley on a shaft",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "keyed shaft",
+    "parallel key",
+    "DIN 6885",
+    "pulley",
+    "keyway alignment",
+    "counter-holding",
+    "slip fit",
+    "machinery maintenance"
+  ],
+  "instruction": "Put the yellow key in the shaft's keyway, then slide the aluminium pulley onto the shaft over the key, up against the shoulder, and let go of everything.",
+  "context": "Fitting a keyed pulley, sprocket or coupling hub on a shaft is routine machinery maintenance: the parallel key goes into the shaft's keyway, the shaft is held so it cannot turn, and the hub's keyway is lined up with the key before the hub is slid home against the shoulder (parallel keys per DIN 6885-1 / ANSI B17.1; pulley makers' mounting instructions). It is a core duty of general maintenance and repair workers (O*NET 49-9071, about 1.5 million US jobs), industrial machinery mechanics (49-9041, about 400,000) and millwrights (49-9044, about 40,000), and of HVAC mechanics replacing blower pulleys (49-9021, about 400,000) (BLS OEWS, approximate).",
+  "setup": "Left and right are the robot's. Positions are in metres from the midpoint between the two arm bases: x forward, y to the robot's left. Shaft stand: a blue pedestal with a pillow-block bearing, screwed to the table at (0.32, 0.06), the 25 mm steel shaft's axis along y, 65 mm above the table. The shaft turns freely; a crank with a red handle on its left end hangs down, so its keyway (8.2 mm wide, 4 mm deep, 42 mm long, open at the shaft's right end, in the 46 mm pulley seat) faces the robot. Key: a yellow DIN 6885 parallel key, 8 x 7 x 40 mm steel, 17 g, lying on the table at (0.28, -0.10), along y. Pulley: an aluminium V-belt pulley, 80 mm across, 217 g, 25.5 mm bore with an 8.2 mm keyway, a 50 mm hub with two flats toward the robot's right, standing in a grey cradle fixed to the table at (0.30, -0.18), its keyway turned 35 degrees toward the robot from the top.",
+  "scoring": "Four steps, 0.2 each. (1) Key in the shaft's keyway: lying on the keyway's floor (within 0.5 mm), within 0.5 mm of its middle line, lined up with the shaft, ends inside the keyway; not held. (2) Pulley started: with the key in, the pulley's bore around the shaft (axes within 1 mm and 3 degrees), at least 10 mm on. (3) Pulley home: its face within 2 mm of the shoulder, the key inside the pulley's keyway too. (4) Released: no gripper touches the key, the pulley or the crank handle and each gripper is at least 3 cm from them. Full score 1.0 (ends the run) only once every full-success condition has held together, without a break, for 1 s: all four steps, nothing off the table, and the key, the pulley and the shaft still (each within 2 mm and 2 degrees of where it was when that second began); any lapse restarts the second, and the step points stop at 0.8, also while it is being timed. A pulley home without the key scores nothing for steps 2 and 3. 0 overall if the key or the pulley has fallen off the table.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Turn the shaft until the crank hangs down; slide the pulley off and take the key out; lay the key on its mark along the shaft; stand the pulley in its cradle, hub toward the robot's right, its keyway mark turned 35 degrees toward the robot from the top.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. Shaft on a free revolute joint (0.004 N m s/rad), crank sleeve on a pin. True-scale DIN 6885 parts: 8 x 7 x 40 key (17 g) in 8.2 mm keyways (0.1 mm a side), 25.5 mm bore on the 25 mm shaft (0.25 mm a side), 1 mm entry chamfers; colliders are convex pieces (bore 16-sided, seat 24-sided). Aluminium pulley 217 g. A sliding fit, not the standard's light tap fit; no set screw: fit and key alone hold the pulley.",
+  "scores": "Dream-1 run: 0.0 (both arms reached out over the shaft stand and stayed there, the left one nudging the crank once; neither picked up the key or the pulley); demo: 1.0 (all four steps and the parts still from step 1125, held 1 s: 1.0 at step 1145)",
+  "media": "M-NE959U"
+}
