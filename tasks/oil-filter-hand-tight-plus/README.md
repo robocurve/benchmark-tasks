@@ -1,8 +1,8 @@
-# Fit a spin-on oil filter: gasket contact, then three quarters to one turn by hand, not left loose or cranked on
+# Fit a spin-on oil filter to gasket contact, then three quarters to one turn by hand, not left loose or cranked on
 
 A new spin-on oil filter has been started on the threaded nipple of a remote oil filter mount (a filter head) bolted to
 the bench, pointing up, and stops three quarters of a turn short of its gasket touching the head. "Fit the new oil
-filter." means doing what filter makers print on the can and anyone who changes their own oil learns: spin it on until the
+filter." means doing what filter makers print on the can and what automotive mechanics do at every oil change: spin it on until the
 gasket contacts the head, then tighten it a further three quarters of a turn (some makers say three quarters to one
 turn) by hand, and let go. Stopping at contact
 (it feels tight already) is the tempting wrong answer: the filter can work loose under engine vibration and leak.
@@ -18,7 +18,7 @@ pressure, and the filter may not come off by hand at the next change.
 | Instruction | "Fit the new oil filter." |
 | Unstated rule | Gasket contact, then three quarters to one turn more by hand (the makers' printed instruction): not left at contact, not cranked on |
 | Core mechanism | A modeled thread (1.5 mm per turn) whose turning friction grows with the angle past gasket contact, turned by a regrasp loop of wrist rolls |
-| Category | Societal relatability: changing the oil and filter is familiar vehicle upkeep that most drivers have done every few months, and many do it themselves at home |
+| Category | Impact on jobs: automotive service technicians and mechanics (O*NET 49-3023.00; 825,800 US jobs in 2025, BLS Occupational Outlook Handbook) replace oil filters as regular work. O*NET lists the task "Perform routine and scheduled maintenance services, such as oil changes, lubrications, and tune-ups", and the BLS duties list "changing oil"; a new filter is normally fitted at each oil change |
 | Trap | Stopping at contact or a little past it (0 or 0.25); over-tightening past a turn (0.5) or past 1.25 turns (0, irreversible) |
 | Score | Degrees past contact at the end, in bands with reasons (below); the turning past contact must come from a holding hand's own wrist roll; let go |
 
@@ -27,6 +27,7 @@ pressure, and the filter may not come off by hand at the next change.
 | File | What it is |
 |---|---|
 | `task.py` | Scene, scorer (`score()`, `success()`) and scripted demo (`demo()`), for the `yam_arena` embodiment (Isaac Lab-Arena, bimanual YAM, `station` scene). Its docstrings explain every rule. |
+| `guardkit.py` | The task's helper module for contact checks: the grippers' own shapes (boxes fitted to the YAM's collision meshes) and the 2 mm contact test used to decide whether a hand is still on the filter. |
 | `twistkit.py` | Threaded parts: the filter is the "cap" of an articulation (a slide along the nipple coupled to a hinge, 1.5 mm per turn), with a seat (gasket contact), a gasket friction growing with the angle past it, a hard stop 540 degrees past it, and "off" five turns back. Gives the scorer the filter's angle from contact and which gripper holds it, and builds the demo's regrasp loop. Built on `yamkit.py`. |
 | `yamkit.py` | Helper that spawns the modeled props and articulations, and gives the scorer the grippers. It patches `yam_arena` in memory at import; no files change. |
 | `test_task.py` | Offline scorer checks: step-by-step histories of the thread and the grippers, near misses included. No simulator needed. |
@@ -138,8 +139,10 @@ as contact. The score reads the thread's angle, not the filter's height, so this
 with the angle, 0.1 N·m per radian (0.47 N·m at three quarters of a turn, 0.63 N·m at a full turn), capped at 1 N·m so
 the arm can still finish: a stiff hold where it was left that slips at that torque, so it opposes turning either way
 and never turns the filter by itself (stick-slip friction, not a spring). A hard stop sits 540
-degrees past contact. The real torque by hand at three quarters of a turn is about 15 to 20 N·m, so contact is felt far
-less here and shows mainly as the gasket meeting the head and the stripe lining up with the head's witness line. No
+degrees past contact. The real torque by hand at three quarters of a turn is about 15 to 20 N·m, 15 to 20 times the sim's
+cap, so contact is felt far less here and shows mainly as the gasket meeting the head and the stripe lining up with the
+head's witness line. The sim therefore tests where the turn stops (the count of degrees past contact, judged by eye and
+by the ticks), not the effort of tightening; a real trial on a real filter needs the full hand torque. No
 oil, gasket deformation or leak is simulated; the scorer reads the angle, and a real trial reads the same angle from
 the witness marks (the line across the can and head, and the protractor ring).
 
@@ -148,7 +151,8 @@ the witness marks (the line across the can and head, and the protractor ring).
 A universal remote oil filter mount with an M20 x 1.5 nipple (aluminum, about 7.5 x 9 cm, two side ports with plastic
 plugs) bolted to a board clamped to the bench, nipple up, so the filter's axis is at x 30, y -12 cm. A small spin-on
 oil filter, about 6.6 cm across and 7 cm tall, with the M20 x 1.5 thread (motorcycle and small-engine filters of this
-size are common), its gasket lightly oiled. A paint-pen index stripe down the can's side (the top left plain), three
+size are common; many car filters are larger, about 7.6 cm across, and are fitted by the same printed rule), its gasket
+lightly oiled. A paint-pen index stripe down the can's side (the top left plain), three
 black quarter-turn ticks, and a black witness line on the front of the head, set as in the real-trial steps above.
 
 ## Licenses
