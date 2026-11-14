@@ -45,8 +45,7 @@ def _mm(x0, x1, y0, y1, z0, z1, color, rot=None):
 # the orange spring latch, under the moving handle's end.
 FIXED_BOXES = [
     _mm(8, 52, 14, 26, -9, 9, STEEL),            # fixed jaw
-    _mm(-128, -4, -18, -9, -5, 5, RED),          # fixed handle
-    _mm(-85, -55, -19, -9, -7, 7, RED),          # its rubber grip
+    _mm(-128, -4, -18, -9, -7, 7, RED),          # uniform straight fixed handle; no enlarged grip
     _mm(-142, -108, -18, 28, -9, -5.5, STEEL),   # bracket under the moving handle's end and the latch
 ]
 FIXED_CYLS = [((0.0, 0.0, 0.0), 0.013, 0.012, STEEL)]  # pivot boss
@@ -63,15 +62,13 @@ def _turned(spec, a):
 # The moving half is authored open: its hinge reads 0 open and -OPEN (0.40 rad) shut.
 MOVING_BOXES = tuple(_turned(b, OPEN) for b in (
     _mm(8, 52, -24, -8, -9, 9, STEEL),           # moving jaw
-    _mm(-124, -4, 9, 18, -5, 5, RED),            # moving handle
+    _mm(-124, -4, 9, 18, -7, 7, RED),            # moving handle
 ))
 _PIN = (-0.128, 0.0135)      # m: the round end of the moving handle (a 8 mm pin) that the latch closes over
-# Its rubber grip is round (a 20 mm vertical cylinder on the handle, 7 cm behind the pivot), so a flat finger meets it
-# square at any handle angle.
+# The handle has a uniform 9 x 14 mm rectangular cross-section along its full length.
+# There is no extra grasp collar, cylinder, visual bulb or hidden enlarged collider.
 _GA = OPEN
 MOVING_CYLS = (((0.0, 0.0, 0.0055), 0.011, 0.002, DARK),   # rivet head
-               ((-0.070 * math.cos(_GA) - 0.0135 * math.sin(_GA), -0.070 * math.sin(_GA) + 0.0135 * math.cos(_GA),
-                 0.0), 0.010, 0.014, RED),
                ((_PIN[0] * math.cos(_GA) - _PIN[1] * math.sin(_GA), _PIN[0] * math.sin(_GA) + _PIN[1] * math.cos(_GA),
                  0.0), 0.004, 0.009, STEEL))
 JAW_X = 32.0                 # mm: where the tube sits in the jaws

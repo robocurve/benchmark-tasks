@@ -352,6 +352,31 @@ def _part_state(environment, spec: Part) -> PartState:
                      low=pts.min(0), high=pts.max(0), sliders=sliders, hinges=hinges)
 
 
+
+def _reset_joint_positions(environment) -> None:
+    """Restore articulated parts to their declared start ONLY at an episode reset.
+
+    The station reset event restores object root poses but does not restore these
+    task-owned passive joints. Reset them before the SDK settles/renders the new
+    episode, so a previous locked handle cannot carry over into its first frame.
+    """
+    import torch
+
+    base = environment.unwrapped
+    for spec in _SPECS.values():
+        if not (spec.sliders or spec.hinges):
+            continue
+        asset = base.scene[spec.name]
+        names = list(asset.joint_names)
+        positions = torch.zeros_like(_t(asset.data.joint_pos))
+        for hinge in spec.hinges:
+            positions[:, names.index(f"{hinge.name}_turn")] = hinge.start
+        asset.write_joint_state_to_sim_index(position=positions, velocity=torch.zeros_like(positions))
+        # The SDK's subsequent reset settles with the same initial targets as
+        # the first episode. Preloaded spring targets are restored afterward.
+        asset.set_joint_position_target_index(target=positions)
+
+
 def _set_spring_zeros(environment) -> None:
     """Point each hinge's spring at its zero (which may lie beyond a limit: a preloaded spring). Isaac Lab starts
     every drive at the joint's start position, so the spring is set after each reset."""
@@ -443,7 +468,10 @@ def _patch_embodiment(ie) -> None:
         return base_task_step(self, *a, **k)
 
     def reset(self, *a, **k):
+        if getattr(self, "_partkit_has_reset", False):
+            _reset_joint_positions(self._env)
         obs = base_reset(self, *a, **k)
+        self._partkit_has_reset = True
         _ENV["env"] = self._env
         _set_spring_zeros(self._env)
         for fn in _RESET:

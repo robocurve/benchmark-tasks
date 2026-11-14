@@ -26,11 +26,11 @@ from pathlib import Path
 import numpy as np
 
 CONTROL_HZ = 20
-GRIP_X = -0.066                 # along the handles from the pivot, where the fingers squeeze (pliers frame, m)
-GRIP_Y = 0.0135                 # midway between the open handles' outer faces at the fingers (pliers frame, m)
-OPEN_WIDTH = 0.065              # across the open handles' outer faces at the fingers (m)
-HOLD_WIDTH = 0.059              # gripper opening while carrying: just enough squeeze to hold them
-SHUT_WIDTH = 0.0425             # across the shut handles' outer faces
+GRIP_X = -0.035                 # along the handles from the pivot, where the fingers squeeze (pliers frame, m)
+GRIP_Y = 0.00675                 # midway between the open handles' outer faces at the fingers (pliers frame, m)
+OPEN_WIDTH = 0.0495              # across the open handles' outer faces at the fingers (m)
+HOLD_WIDTH = 0.040              # gripper opening while carrying: just enough squeeze to hold them
+SHUT_WIDTH = 0.036             # across the shut handles' outer faces
 TUBE_IN_JAWS = np.array([0.032, -0.004])   # tube axis in the pliers frame when the jaws are slid on (open, 2 mm off the pad)
 TUBE_LOCKED_Y = 0.002           # tube axis in the pliers frame once squeezed shut (pad pressed 4 mm)
 LEAD = 0.045                    # how far short of the tube the jaws start their slide (m)
@@ -135,8 +135,8 @@ def script(task, ctx):
     on_tube = tube - np.array([TUBE_IN_JAWS[0], TUBE_IN_JAWS[1], 0.0])
     approach = on_tube - np.array([LEAD, 0.0, 0.0])
     flip = _grip_yaw([tcp_for(p0.pos, yaw0), tcp_for(approach, 0.0), tcp_for(on_tube, 0.0)], A.base)
-    down = _rz(yaw0) @ grip_rotation(flip)
-    level = grip_rotation(flip)
+    down = _rz(yaw0 + T.OPEN / 2) @ grip_rotation(flip)
+    level = _rz(T.OPEN / 2) @ grip_rotation(flip)
 
     if variant == "sweep":
         # Closed fingers behind the pliers' handle ends, pushed forward along the holder toward the tube.
@@ -195,7 +195,8 @@ def script(task, ctx):
     shift = (OPEN_WIDTH - SHUT_WIDTH) / 2 + (TUBE_LOCKED_Y - TUBE_IN_JAWS[1])
     if os.environ.get("DEMO_SHIFT_MM"):
         shift = float(os.environ["DEMO_SHIFT_MM"]) / 1000
-    yield from A.move(A.pos - [0, shift, 0], level, 3.0, grip=0.0)
+    yield from A.move(A.pos - [0, shift, 0], _rz(-T.OPEN / 2) @ level, 3.0, grip=0.0)
+    level = _rz(-T.OPEN / 2) @ level
     yield from wait(0.5)
 
     # 5. Let go and lift away.
@@ -244,12 +245,13 @@ def run(task_path: str, out_dir: str, max_steps: int = 1200, record: bool = True
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     emb = yam_arena_embodiment(task=task_path, object_jitter=0, control_hz=CONTROL_HZ, cam_width=cam_width,
-                               cam_height=cam_height)
+                               cam_height=cam_height, device=os.environ.get("DEMO_DEVICE", "cpu"))
     obs = emb.reset(Scene(id="demo", instruction="demo"))
     task = emb.task.module
     ctx = Ctx(emb)
     gen = script(task, ctx)
     frames: dict[str, list] = {}
+    trace = (out / "trace.jsonl").open("w", buffering=1)
 
     def snap(o):
         if record:
@@ -266,6 +268,12 @@ def run(task_path: str, out_dir: str, max_steps: int = 1200, record: bool = True
         res = emb.step(ctx.action())
         steps += 1
         snap(res.observation)
+        p = ctx.states()["pliers"]
+        measure = task.measure(p)
+        trace.write(json.dumps(dict(step=steps, score=res.info.get("score"), pos=p.pos.tolist(),
+            quat=p.quat_xyzw.tolist(), hinges=p.hinges, sliders=p.sliders,
+            measure={k: (v.tolist() if isinstance(v, np.ndarray) else v) for k,v in measure.items()},
+            tcp=ctx.right.pos.tolist(), command=ctx.right.cmd.tolist())) + "\n")
         if steps % 50 == 0:
             p = ctx.states()["pliers"]
             print(f"step {steps} score {res.info.get('score')} pliers_mm {np.round(p.pos * 1000, 1).tolist()}",
@@ -274,6 +282,7 @@ def run(task_path: str, out_dir: str, max_steps: int = 1200, record: bool = True
             break
         if ended is not None and steps - ended >= hold_s * CONTROL_HZ:
             break
+    trace.close()
     scored = task_score()(SimpleNamespace(steps=[SimpleNamespace(result=res)]), None)
     print(f"task_score: {scored.value:g} ({scored.explanation}) after {steps} steps", flush=True)
     result = {"task_score": scored.value, "explanation": scored.explanation, "steps": steps,
@@ -285,6 +294,25 @@ def run(task_path: str, out_dir: str, max_steps: int = 1200, record: bool = True
         cams = sorted(frames, key=lambda c: ("left" not in c, "top" not in c))   # left, top, right
         _write_mp4([np.hstack([frames[c][i] for c in cams]) for i in range(len(frames[cams[0]]))], out / "demo.mp4")
         imageio.imwrite(out / "setup.png", np.hstack([frames[c][0] for c in cams]))
+    if os.environ.get("DEMO_RESET_CHECK") == "1":
+        reset_obs = emb.reset(Scene(id="reset-check", instruction=task.INSTRUCTION))
+        reset_ctx = Ctx(emb)
+        fresh = reset_ctx.states()["pliers"]
+        reset_record = dict(pos=fresh.pos.tolist(), hinges=fresh.hinges, sliders=fresh.sliders,
+                            recent_samples=len(task._STATE["recent"]), step=task._STATE["step"])
+        for _ in range(20):
+            reset_result = emb.step(reset_ctx.action())
+        fresh = reset_ctx.states()["pliers"]
+        reset_record.update(after20_pos=fresh.pos.tolist(), after20_hinges=fresh.hinges,
+                            score=reset_result.info.get("score"), success=bool(reset_result.terminated))
+        reset_record["passed"] = bool(
+            np.linalg.norm(fresh.pos - np.asarray(task.PLIERS_START)) < 0.002
+            and abs(fresh.hinges["moving_half"]) < .01
+            and reset_record["step"] == 0 and reset_record["recent_samples"] == 0
+            and reset_record["score"] == 0.0 and not reset_record["success"])
+        (out / "reset-check.json").write_text(json.dumps(reset_record, indent=2))
+        if not reset_record["passed"]:
+            raise RuntimeError("Same-process reset check failed; see reset-check.json")
     (out / "result.json").write_text(json.dumps(result, indent=2))
     print(json.dumps(result), flush=True)
     return result
