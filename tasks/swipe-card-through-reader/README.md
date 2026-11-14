@@ -1,14 +1,38 @@
 # Swipe a magnetic-stripe card through a desktop reader in one pass
 
-Swipe the card through the reader once, then put it back in its stand.
+Pick up the card, swipe it through the reader once, then stand it in the card stand.
 
 A desktop magnetic-stripe reader only decodes a card when four physical conditions hold together: the stripe faces
 the read head, the card's edge rides the slot floor so its track crosses the head gap, the whole encoded stripe
 passes the head in one continuous stroke, and the card moves inside the reader's rated speed. The card is a true
-0.76 mm ID-1 card and the reader is a true-size desktop swipe reader with a sprung head. The card starts standing in a
-desk stand with its stripe facing away from the robot, a quarter turn from the reader's head side, so the robot must
-also turn it before the swipe. Swipes are daily work for cashiers (O*NET 41-2011.00) and hotel desk clerks (O*NET 43-4081.00): gift and
+0.76 mm ID-1 card and the reader is a true-size desktop swipe reader with a sprung head. The card starts lying flat on
+the counter, stripe face up, as cards are set down at a till or a front desk. A 0.76 mm card cannot be pinched off a
+flat surface by its edge, so it must first be got off the counter (the demo slides it until one end overhangs the
+counter's edge, as people do), then turned so the stripe faces the reader's head with its edge down, swiped, and
+stood in the empty card stand beside the reader. Swipes are daily work for cashiers (O*NET 41-2011.00) and hotel desk clerks (O*NET 43-4081.00): gift and
 prepaid cards, payment cards when the chip fails, hotel key cards, badges at time clocks.
+
+## Revision: earlier review feedback and what changed
+
+The earlier version of this task was not accepted. Its review said: "Card should start flat on the table to add the
+realistic challenge of picking it up."
+
+Changes in this version, and nothing else:
+1. Start state: the card now lies flat on the counter (stripe face up, printed front down), just in front of the
+   card stand and 202 mm from the counter's right edge, instead of standing in the card stand; the stand starts
+   empty. The instruction now begins "Pick up the card" and says "stand it in the card stand" instead of "put it
+   back in its stand".
+2. Scoring, only where the new start forces it: a card lying on the counter used to count as dropped; it is where the
+   card now starts, so it is not a drop, and neither is a card held past the counter's edge. Dropped now means the
+   card fell off the counter and was let go. The read rules, the stand rule and the score table are unchanged.
+3. Demo: the robot first picks the card up from flat the way people do at a counter. One fingertip slides the card
+   240 mm until its end overhangs the counter's edge by 36 mm, the pads pinch that end from above and below, and the
+   card is set upright in the stand; the earlier stand pick and swipe then run unchanged. No fixture was added, and the
+   card's size, thickness and friction are unchanged.
+4. Run limit: 2,400 steps, because the pickup adds 29 s to the demo (now 60 s).
+
+The setup, reset notes, fidelity note, tests and layouts were updated to match, and the scripted demo, the Dream-1 run
+and the setup image were recorded again for this version.
 
 ## Run and score
 
@@ -17,16 +41,16 @@ From this task folder, with the official YAM Arena environment installed:
 ```sh
 inspect-robots run --embodiment yam_arena --policy yam_scripted \
   -E task=swipe_card_through_reader.py -E object_jitter=0 -E control_hz=20 \
-  --instruction "Swipe the card through the reader once, then put it back in its stand." \
-  --scorer task_score --max-steps 1200 --epochs 2 --store-frames --log-dir ./demo-run
+  --instruction "Pick up the card, swipe it through the reader once, then stand it in the card stand." \
+  --scorer task_score --max-steps 2400 --epochs 2 --store-frames --log-dir ./demo-run
 ```
 
 For a model trial, replace `--policy yam_scripted` with `--policy dream`. The output of `--scorer task_score` is the
 score, taken at the end of the run.
 
-Each trial allows 1,200 control steps (60 seconds at 20 Hz). There are no seeds: the layout is fixed and the card is
-never jittered, so every trial starts identically. The scripted demo lasts 32.55 s; with the 3 s stop grace it ends
-at about 711 steps. `success()` requires a score of 1.0, and the run ends after a further second at full score.
+Each trial allows 2,400 control steps (120 seconds at 20 Hz). There are no seeds: the layout is fixed and the card is
+never jittered, so every trial starts identically. The scripted demo lasts 60.15 s; with the 3 s stop grace it ends
+at about 1,263 steps. `success()` requires a score of 1.0, and the run ends after a further second at full score.
 
 `pytest` in this folder runs the generated offline checks (no GPU): the scorer on the start, the goal and the named
 layouts built from recorded 20 Hz swipe samples, and the demo's reach and length.
@@ -38,15 +62,30 @@ the head or the lamp. The right arm does the work; the left arm parks. Times are
 
 | Time | Right arm |
 | --- | --- |
-| 0.00-6.40 | Park, move over the stand, lower the open pads to either side of the card (yaw -90 degrees, pads closing along x) 26 mm from its centre toward its +y end, pinch it 30 mm above its bottom edge (pad tips) over 1.9 s, settle |
-| 6.40-10.00 | Lift it out of the stand, carry it toward the reader's near end, on the line straight out from the right arm's base, and turn it a quarter (wrist yaw -90 to 0 degrees) so the stripe faces the head side, edge still down, the pinched end trailing and the leading end 8 mm short of the reader |
-| 10.00-13.80 | Lower the card until its edge is 0.8 mm above the track floor's height, wait 0.6 s, turn the wrist 1 degree past its mark and back onto it |
-| 13.80-15.80 | Slide the leading end 3 mm into the mouth, set the edge 0.6 mm into the floor, settle |
-| 15.80-16.55 | One smoothstep stroke of 147.4 mm in 0.75 s straight out from the arm's base (+x), the edge commanded down to 1.0 mm into the floor: the head crosses the encoded data at 0.22 to 0.30 m/s commanded |
-| 16.55-18.15 | Stop with the trailing end 15 mm past the head, lift the card straight up out of the slot |
-| 18.15-24.45 | Carry it back, turn it back, lower it to 6 mm above the stand's lips, wait 0.8 s, lower it slowly into the slot to 1 mm above the floor, settle |
-| 24.45-28.55 | Open over 1.9 s, rise clear, back off |
-| 28.55-32.55 | Hold still |
+| 0.00-11.30 | Pads open along y, the hand rolled 3 degrees so that only the +y pad's tip touches the counter: put that tip down 6 mm beyond the card's +y end, then slide it 240 mm toward -y over 6 s, its flat inner face pushing the card's end, until the card's -y end overhangs the counter's right edge by 36 mm (its centre stays 6.8 mm over the counter); lift |
+| 11.30-16.70 | Move past the edge and turn the wrist so the pads point along +x, tipped 19 degrees down, and close nearly vertically; move the open pads back and down beside the overhanging end, one above and one below it (the lower finger stays 6 mm clear of the counter's side), and slide them over and under it |
+| 16.70-19.90 | Pinch the overhanging end, pad tips 24 mm in from the card's -x long edge, over 1.9 s; the card tilts 19 degrees with the pads, resting on its stripe edge; lift it off the counter |
+| 19.90-29.10 | Turn the card upright over the stand (stripe edge down, stripe toward +x), lower it to 6 mm above the stand's lips, wait 0.8 s, lower it into the slot, open over 1.9 s, rise |
+| 29.10-34.00 | Move over the stand, lower the open pads to either side of the card (yaw -90 degrees, pads closing along x) 26 mm from its centre toward its +y end, pinch it 30 mm above its bottom edge (pad tips) over 1.9 s, settle |
+| 34.00-37.60 | Lift it out of the stand, carry it toward the reader's near end, on the line straight out from the right arm's base, and turn it a quarter (wrist yaw -90 to 0 degrees) so the stripe faces the head side, edge still down, the pinched end trailing and the leading end 8 mm short of the reader |
+| 37.60-41.40 | Lower the card until its edge is 0.8 mm above the track floor's height, wait 0.6 s, turn the wrist 1 degree past its mark and back onto it |
+| 41.40-43.40 | Slide the leading end 3 mm into the mouth, set the edge 0.6 mm into the floor, settle |
+| 43.40-44.15 | One smoothstep stroke of 147.4 mm in 0.75 s straight out from the arm's base (+x), the edge commanded down to 1.0 mm into the floor: the head crosses the encoded data at 0.22 to 0.30 m/s commanded |
+| 44.15-45.75 | Stop with the trailing end 15 mm past the head, lift the card straight up out of the slot |
+| 45.75-52.05 | Carry it back, turn it back, lower it to 6 mm above the stand's lips, wait 0.8 s, lower it slowly into the slot to 1 mm above the floor, settle |
+| 52.05-56.15 | Open over 1.9 s, rise clear, back off |
+| 56.15-60.15 | Hold still |
+
+The pickup is the one people use for a card on a smooth counter: slide it to the edge and pinch the overhang. The
+gripper cannot pinch a 0.76 mm edge lying on a surface, and a pad pressed on top of the card would not reliably drag it
+(the pads' simulated friction on the card equals the card's on the counter, see Fidelity), so a pad's flat inner face
+pushes the card's end instead, its tip riding on the counter; the hand is rolled 3 degrees so the other pad stays
+clear above the card. The overhang is 36 mm of the card's length, and the card's centre stays 6.8 mm over the counter,
+so it cannot tip off. The pads approach the overhanging end along the counter's edge, one above and one below it,
+because a level hand reaching in across the edge is out of this arm's reach. The card is then stood in the stand and
+picked from there with the grip the swipe needs (near its top edge, toward its trailing end); the end pinch holds only
+the card's last 14 to 16 mm, too little against the swipe's drag. Robot pre-grasp sliding of thin objects to a table
+edge is described in the sources below.
 
 The reader is turned so that its slot lies on the line straight out from the right arm's base, and the stroke runs
 outward along that line. The arm's joints are soft and lag their targets; along this line the base and wrist yaw
@@ -61,13 +100,20 @@ centre). The drag still slides the card about 4 mm back along the pads during th
 longer than the card at each end, so it goes back in anyway. One constant compensates the wrist's steady yaw error from joint friction (0.38 degrees,
 measured in simulation): from the turn until the carry back the wrist is commanded 0.38 degrees the other way, and
 before entering the slot it is turned 1 degree past that mark and back, so it always comes to rest from the same
-side. These are fixed numbers in the script, not feedback.
+side. A second constant aims the first set-down in the stand 4.0 mm toward -y of its centre (also measured in
+simulation: the slide stops about 2 mm short, so the end pinch holds the card about 2.3 mm deeper than planned; the arm
+stops about 0.6 mm short over the stand, and the card slips about 1 mm in the pads as it lands), so the card is
+centred when the stand pick takes it; held 2.6 mm nearer its centre, it slid about twice as far along the pads during
+the stroke and the read failed. These are fixed
+numbers in the script, not feedback.
 
-All demo targets are within 0.36 m (planar) of the right arm's base (worst 0.348 m, at the end of the stroke). The
-wrist stays 27.1 degrees inside joint 6's limit, every per-step joint change stays inside the action guard (worst
-0.50 of joint 6's cap, 0.62 at 0.8x speed), and the pad tips stay 6.5 mm above the reader's top while the card is in
-the slot. Both fingers are clear of the card by 27.10 s; the plan allows a full score from 29.10 s, and the scripted
-policy stops at about 711 steps. A copy with every demo duration scaled by 0.8 passes the same checks.
+The swipe's targets are within 0.36 m (planar) of the right arm's base (worst 0.348 m, at the end of the stroke); the
+end pinch past the counter's edge reaches 0.414 m. Every joint stays at least 13.1 degrees inside its limits (joint 4
+while the wrist turns level; joint 5 keeps 19.0 degrees at the end pinch, joint 6 30.0 degrees), the inverse
+kinematics tracks every target within 0.1 mm, every per-step joint change stays inside the action guard (worst 0.47 of
+joint 6's cap, 0.58 at 0.8x speed), and the pad tips stay 6.5 mm above the reader's top while the card is in the
+slot. Both fingers are clear of the card by 54.70 s; the plan allows a full score from 56.70 s, and the scripted policy
+stops at about 1,263 steps. A copy with every demo duration scaled by 0.8 passes the same offline checks.
 
 ## Rebuild the setup
 
@@ -90,12 +136,13 @@ Station tabletop (the counter) z=0.7475 m, spanning x -0.19 to 0.91 m, y -0.65 t
   the top at reader (8.0, 31.2) mm: green when ready, red for 2 s after a failed swipe.
 - **Card stand:** fixed grey ABS plastic desk stand, origin (0.235,-0.410,0.7475): base 24 by 108 by 4 mm; a 1.6 mm
   slot, 100 mm long along y (7.2 mm longer than the card at each end), with straight walls up to 15 mm, then 3 mm radius rounded lips that open it to 7.6 mm at
-  the 18 mm top.
+  the 18 mm top. It starts empty.
 - **Card:** ISO/IEC 7810 ID-1 bank-card size, rigid PVC plastic, 85.60 by 53.98 by 0.76 mm, 4.9 g, square corners,
-  dynamic. It stands in the stand's slot, centre (0.235,-0.410,0.77859), long side along y, faces normal to x, 0.1 mm
-  above the slot floor. Its black magnetic stripe (a visual band 5.54 to 15.95 mm from one long edge, the ISO/IEC 7811
-  three-track area) is on the face toward +x (away from the robot), with that edge down; the blue printed front faces
-  the robot.
+  dynamic. It lies flat on the counter, centre (0.165,-0.405,0.7479), 0.1 mm above it at spawn, long side along y,
+  just in front of the stand (its +x long edge 31 mm short of the stand's base), its -y end 202 mm from the counter's
+  right edge (y = -0.65). Its black magnetic
+  stripe (a visual band 5.54 to 15.95 mm from one long edge, the ISO/IEC 7811 three-track area) is on the upper face,
+  along the +x long edge (away from the robot); the blue printed front faces down onto the counter.
 - **Contact:** friction static/dynamic (estimates for dry plastics and a polished head, not measured): card
   0.40/0.35, stand 0.40/0.35, reader body and mouths 0.30/0.25, head 0.20/0.15. Contact offsets: card and stand 0.5 mm, reader and mouths 1.5 mm; rest offsets zero, restitution zero.
   The card has 32 position and 4 velocity solver iterations, 0.5 m/s maximum depenetration velocity and 0.05 linear
@@ -141,7 +188,7 @@ centre and size; cylinders give centre, radius, length and axis.
 | card_stand | rounded lip, +x | (3.80, 0, 15.0) | cylinder r 3.0, 108 along y |
 | card_stand | slot end, -y | (0, -52.0, 11.0) | 7.6 x 4.0 x 14.0 |
 | card_stand | slot end, +y | (0, 52.0, 11.0) | 7.6 x 4.0 x 14.0 |
-| card | card (dynamic, 4.9 g) | world (0.235, -0.410, 0.77859) | 0.76 x 85.60 x 53.98 |
+| card | card (dynamic, 4.9 g), lying flat | world (0.165, -0.405, 0.7479) | 53.98 x 85.60 x 0.76 |
 
 The card's stripe, its blue print and the white panel on the print, and the lamp are visual only (no collider, no
 mass). The head link's cylinder is the only moving collider besides the card.
@@ -195,14 +242,14 @@ its samples so far (no sample after it is needed) if the head has already crosse
 a card stopped with the head on its blank last 7 mm after one clean stroke is a clean read, left in the reader
 (0.5). Otherwise it is a failed swipe: alone it gives no read (0); after a good swipe it makes the read late.
 
-**Back in the stand.** Both ends of the card's bottom edge are inside the 1.6 by 100 mm slot (0.5 mm tolerance) and
+**In the stand.** Both ends of the card's bottom edge are inside the 1.6 by 100 mm slot (0.5 mm tolerance) and
 within 2 mm of the slot floor, the long axis is within 10 degrees of the slot and the card's plane within 15 degrees
-of vertical. Either face may point toward the robot. **Done** means back in the stand, both gripper TCPs at least
+of vertical. Either face may point toward the robot. **Done** means in the stand, both gripper TCPs at least
 30 mm from the card's bounding box, and the card below 0.01 m/s and 0.5 rad/s, held for 1 s.
 
-**Dropped (sticky for the episode).** The card leaves the counter (more than 20 mm below its surface, or outside its
-x/y edges), or, with both gripper TCPs at least 30 mm from its bounding box (let go), its centre is less than 20 mm
-above the counter or it lies within 45 degrees of flat anywhere. A card still held low or flat is not dropped. A 0.76 mm card lying flat cannot be picked up again with these fingers. Putting
+**Dropped (sticky for the episode).** The card falls off the counter: with both gripper TCPs at least 30 mm from its
+bounding box (let go), its centre is more than 20 mm below the counter's surface. A card lying on the counter (where
+it starts), on the reader or on the stand is not dropped, and neither is a card held past the counter's edge. Putting
 it back afterwards does not clear the drop.
 
 | Score | Condition at the end of the run |
@@ -223,14 +270,17 @@ colours only.
 
 ## Reset
 
-Stand the card back in the stand, stripe edge down, stripe away from the robot, at rest; the head returns to its stop.
-Nothing is consumed. For a real trial use a test card with track 2 encoded, fix the reader with its fastening tape, and clear the
+Lay the card flat on the counter at its marked spot, stripe face up along the long edge away from the robot, printed
+front down; leave the stand empty; the head returns to its stop. Nothing is consumed. For a real trial use a test card with track 2 encoded, fix the reader with its fastening tape, and clear the
 host's last read before each trial; the reader's LED and decoded data confirm each read.
 
 ## Fidelity
 
 - **Card:** rigid box at true ID-1 size, thickness and mass (PVC, 1.39 g/cm3). Real cards flex; bending is not
-  modelled or scored. ID-1 corners are rounded (3.18 mm radius); the collider's are square.
+  modelled or scored. A real card's flex can help lift it off a counter (a fingernail under a bowed edge); the rigid
+  card here cannot bow, so it has to be got off the counter another way, such as sliding it over an edge, which is
+  how the demo does it. ID-1
+  corners are rounded (3.18 mm radius); the collider's are square.
 - **Read:** magnetic decoding is not simulated. The scorer applies the reader's documented conditions to the
   simulated card at the head: stripe face, edge height, a single pass and the rated speed.
 - **Thin plate in a narrow slot:** a 0.76 mm card in a 1.06 mm slot at 240 Hz, with 32 solver iterations on the card
@@ -242,7 +292,9 @@ host's last read before each trial; the reader's LED and decoded data confirm ea
 - **Reader mount:** fixed (fastening tape, as the manual allows); the tape is not modelled.
 - **Pads:** the arm's finger pads carry the simulator's default friction (0.5 static and dynamic) rather than a
   rubber value, so the 1.9 N pinch lets the card slide a few millimetres under the swipe's drag; the card's own
-  friction is not raised to compensate.
+  friction is not raised to compensate. The same default makes a pad's grip on the card equal the card's grip on the
+  counter (the simulator averages the two surfaces' values), so dragging the card with a pad pressed on top is not
+  reliable here, as it is with a real fingertip; the demo pushes the card's end instead.
 - **Friction:** the coefficients are estimates, not measurements. The read rules do not use them; they set how hard
   the card drags in the slot and how well the pinch holds it.
 - **Stand:** a generic desk card stand (no datasheet), fixed to the counter.
@@ -264,6 +316,10 @@ host's last read before each trial; the reader's LED and decoded data confirm ea
   5.66 to 8.46 mm, track 2 8.97 to 11.76 mm; stripe area to 15.95 mm with track 3; first data bit 7.44 +/- 0.50 mm
   from one end, last at least 6.93 mm from the other).
 - Three-track magnetic read heads list a 1.5 mm read-core width per track.
+- Sliding a thin flat object over a table edge to grasp it: C. Eppner et al., "Exploitation of environmental
+  constraints in human and robotic grasping", International Journal of Robotics Research, 2015; K. Hang, A. S. Morgan
+  and A. M. Dollar, "Pre-grasp sliding manipulation of thin objects using soft, compliant, or underactuated hands",
+  IEEE Robotics and Automation Letters, 2019.
 - O*NET 41-2011.00 Cashiers, https://www.onetonline.org/link/summary/41-2011.00; O*NET 43-4081.00 Hotel, Motel, and
   Resort Desk Clerks, https://www.onetonline.org/link/summary/43-4081.00.
 

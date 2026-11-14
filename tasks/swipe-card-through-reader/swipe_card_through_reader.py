@@ -22,7 +22,9 @@ from yam_parts import Part, PartState, box, cyl  # noqa: E402
 from yam_joints import Lamp, Link, Mechanism, Slide  # noqa: E402
 from yam_arena.constants import FINGER_CLOSED, FINGER_OPEN, PAD_TIP_PAST_TCP  # noqa: E402
 from yam_arena.demo import Waypoint  # noqa: E402
+import yam_arena.demo as _motion  # noqa: E402
 from yam_arena.task_file import TABLE_TOP  # noqa: E402
+from yam_arena.urdf import axis_angle_matrix  # noqa: E402
 
 SCENE = "station"
 
@@ -140,7 +142,7 @@ def ever(key, cond):
 
 TOP = TABLE_TOP[SCENE]
 SUCCESS_HOLD_S, SCORE_OVER = 1.0, "end"
-RUN_LIMIT_STEPS = 1200  # 60 s at 20 Hz
+RUN_LIMIT_STEPS = 2400  # 120 s at 20 Hz
 CONTROL_DT = 0.05
 DEMO_PACE = 1.0  # scales every demo duration (0.8 for the timing-margin copy)
 TEST_HISTORY = None  # offline only: recorded samples before the scored layout (see history rows below)
@@ -154,8 +156,8 @@ CARD_CONTACT_OFFSET = 0.0005
 STRIPE_FROM, STRIPE_TO = 0.00554, 0.01595
 TRACK2 = (0.00897, 0.01176)  # ISO/IEC 7811-4 track 2, from the reference edge
 DATA_FROM, DATA_TO = 0.00744 - 0.00050, CARD_L - 0.00693  # first data bit 7.44 +- 0.50 mm; last >= 6.93 mm from the far edge
-# Card part frame: x = out of the stripe face, y = along the length, z = across the width from the stripe edge
-# (the reference edge is at z = -W/2). At the start the stripe edge is down and the stripe faces +x.
+# Card part frame: x = across the width (the stripe, or reference, edge is at x = +W/2), y = along the length,
+# z = out of the stripe face. At the start the card lies flat on the counter, stripe face up, stripe edge toward +x.
 
 # ---------------------------------------------------------------- reader: desktop USB swipe reader, fixed with tape
 # Turned -90 deg so the slot lies on the line straight out from the right arm's base (reader +y = world +x).
@@ -207,10 +209,7 @@ LED_RED_S = 2.0
 HOME_X_TOL, HOME_Z_TOL = 0.0005, 0.002
 HOME_ALONG_DEG, HOME_LEAN_DEG = 10.0, 15.0
 LINEAR_SPEED, ANGULAR_SPEED = 0.010, 0.5
-FLAT_COS = math.sin(math.radians(45.0))  # stripe-face normal within 45 deg of vertical: the card lies down
-LOW_Z = TOP + 0.020
-TABLE_X, TABLE_Y = (-0.19, 0.91), (-0.65, 0.65)
-FALL_DEPTH = 0.020
+FALL_DEPTH = 0.020  # let go with its centre this far below the counter's surface: the card fell off the counter
 
 def reader_to_world(p_local):
     """Reader (u across, v along, absolute z) to world; the reader's planar origin is (XR, YR)."""
@@ -224,7 +223,7 @@ FRONT_WORLD = READER_R @ np.array([-1.0, 0.0, 0.0])
 class CardPart(Part):
     @property
     def free(self):
-        # Dynamic at runtime, but a card standing in a 1.2 mm slot must never be jittered sideways.
+        # Dynamic at runtime; the task has one fixed starting layout, so the card is never jittered.
         return False
 
 
@@ -309,8 +308,12 @@ def _stand_shapes():
 STAND = Part("card_stand", (XS, YS, TOP), _stand_shapes(), color=GREY, friction=STAND_FRICTION,
              contact_offset=CARD_CONTACT_OFFSET)
 STAND_FLOOR_Z = TOP + S_FLOOR
-CARD_START = (XS, YS, STAND_FLOOR_Z + CARD_W / 2 + 0.0001)
-CARD = CardPart("card", CARD_START, [box((0.0, 0.0, 0.0), (CARD_T, CARD_L, CARD_W))], CARD_MASS, CARD_WHITE,
+# The card lies flat on the counter in front of the stand (toward the robot), long side along y, its -y end 202 mm
+# short of the counter's right edge (y = -0.65), stripe face up and stripe edge toward +x (away from the robot); here
+# the top camera sees it past the right arm's home pose.
+CARD_X0, CARD_Y0 = 0.165, -0.405
+CARD_START = (CARD_X0, CARD_Y0, TOP + CARD_T / 2 + 0.0001)
+CARD = CardPart("card", CARD_START, [box((0.0, 0.0, 0.0), (CARD_W, CARD_L, CARD_T))], CARD_MASS, CARD_WHITE,
                 friction=CARD_FRICTION, contact_offset=CARD_CONTACT_OFFSET)
 # The closing pads intentionally pinch the card; kinematic replay cannot carry a non-jittered dynamic part.
 PRESSED_PARTS = ("card",)
@@ -361,13 +364,13 @@ def _spawn_card(prim_path, cfg, *args, **kwargs):
     rigid.CreateAngularDampingAttr().Set(0.05)
     stage = kwargs.get("stage") or sim.get_current_stage()
     # Visual only (no collider, no mass): the black stripe on the back face and the printed blue front.
-    stripe_z = -CARD_W / 2 + (STRIPE_FROM + STRIPE_TO) / 2
-    _visual_box(stage, f"{prim_path}/stripe", (CARD_T / 2 + 0.00001, 0.0, stripe_z),
-                (0.00002, CARD_L - 0.001, STRIPE_TO - STRIPE_FROM), _material(f"{prim_path}/stripe_look", STRIPE_BLACK))
-    _visual_box(stage, f"{prim_path}/front_print", (-CARD_T / 2 - 0.00001, 0.0, 0.0),
-                (0.00002, CARD_L - 0.0004, CARD_W - 0.0004), _material(f"{prim_path}/print_look", CARD_BLUE))
-    _visual_box(stage, f"{prim_path}/front_panel", (-CARD_T / 2 - 0.00002, -0.020, 0.008),
-                (0.00002, 0.026, 0.016), _material(f"{prim_path}/panel_look", CARD_WHITE))
+    stripe_x = CARD_W / 2 - (STRIPE_FROM + STRIPE_TO) / 2
+    _visual_box(stage, f"{prim_path}/stripe", (stripe_x, 0.0, CARD_T / 2 + 0.00001),
+                (STRIPE_TO - STRIPE_FROM, CARD_L - 0.001, 0.00002), _material(f"{prim_path}/stripe_look", STRIPE_BLACK))
+    _visual_box(stage, f"{prim_path}/front_print", (0.0, 0.0, -CARD_T / 2 - 0.00001),
+                (CARD_W - 0.0004, CARD_L - 0.0004, 0.00002), _material(f"{prim_path}/print_look", CARD_BLUE))
+    _visual_box(stage, f"{prim_path}/front_panel", (-0.008, -0.020, -CARD_T / 2 - 0.00002),
+                (0.016, 0.026, 0.00002), _material(f"{prim_path}/panel_look", CARD_WHITE))
     return body
 
 
@@ -454,7 +457,7 @@ _install_card_hooks()
 def card_axes(R):
     """(along the length, across the width from the stripe edge, out of the stripe face) as world vectors."""
     R = np.asarray(R, float)
-    return R[:, 1], R[:, 2], R[:, 0]
+    return R[:, 1], -R[:, 0], R[:, 2]
 
 
 def measure(origin, R, lin_vel, ang_vel, head_q):
@@ -680,11 +683,9 @@ def home_terms(card):
 
 
 def dropped_now(card):
-    """Off the table, or let go lying low on the counter or lying down."""
-    p = card.origin
-    off = (p[2] < TOP - FALL_DEPTH or not TABLE_X[0] <= p[0] <= TABLE_X[1] or not TABLE_Y[0] <= p[1] <= TABLE_Y[1])
-    flat = abs(float(card.rotation()[2, 0])) > FLAT_COS
-    return bool(off or ((p[2] < LOW_Z or flat) and released(card)))
+    """Fallen off the counter: let go with its centre more than 20 mm below the counter's surface. A card lying
+    on the counter is where the task starts, and a card held past the counter's edge is still in hand."""
+    return bool(card.origin[2] < TOP - FALL_DEPTH and released(card))
 
 
 def score_terms(objects):
@@ -715,9 +716,13 @@ def success(objects):
 
 # ---------------------------------------------------------------- history rows for offline layouts and tests
 # A row is (step, t, card origin xyz, card quat xyzw, lin vel, ang vel, head joint q); 20 Hz, contiguous steps.
-# Fixture quaternions are reader-frame; _rows rotates poses and velocities into world coordinates.
+# Fixture quaternions are reader-frame and describe an upright card (identity: stripe toward reader +x, stripe edge
+# down, length along reader y); _rows rotates poses and velocities into world coordinates and Q_UPRIGHT turns the
+# card's own flat frame up onto its edge.
+Q_UPRIGHT = (0.0, math.sin(math.pi / 4), 0.0, math.cos(math.pi / 4))  # flat card frame -> standing on its stripe edge
+Q_STAND = Q_UPRIGHT  # world: standing in the stand, stripe toward +x, stripe edge down
 Q_TURNED = (0.0, 0.0, 1.0, 0.0)  # card turned 180 deg about vertical: stripe toward the head, stripe edge down
-Q_WRONG_SIDE = (0.0, 0.0, 0.0, 1.0)  # as it starts in the stand: stripe toward the back wall
+Q_WRONG_SIDE = (0.0, 0.0, 0.0, 1.0)  # stripe toward the back wall
 Q_UPSIDE_DOWN = (0.0, 1.0, 0.0, 0.0)  # stripe toward the head but its edge up (half turn about the long axis)
 SLOT_CARD_U = SLOT_B - CARD_T / 2  # reader-frame u: card pressed against the far wall by the head (m)
 FLOOR_CARD_Z = TOP + R_FLOOR + CARD_W / 2
@@ -740,7 +745,14 @@ def _quat_mul(a, b):
 
 
 Q_READER = (0.0, 0.0, math.sin(READER_YAW / 2), math.cos(READER_YAW / 2))
-Q_TURNED_W = _quat_mul(Q_READER, Q_TURNED)
+
+
+def _world_q(q):
+    """A reader-frame fixture quaternion of an upright card as the card's world orientation."""
+    return _quat_mul(_quat_mul(Q_READER, q), Q_UPRIGHT)
+
+
+Q_TURNED_W = _world_q(Q_TURNED)
 
 
 def _pitched(q, deg):
@@ -752,7 +764,7 @@ def _pitched(q, deg):
 def _rows(path, q, t0=0.0, step0=1, in_slot=True, u=SLOT_CARD_U):
     """Sample reader-frame v(t), z(t) at 20 Hz into world-frame history rows, until the path returns None."""
     rows, k, h = [], 0, 1e-4
-    q_world = _quat_mul(Q_READER, q)
+    q_world = _world_q(q)
     while True:
         t = k * CONTROL_DT
         p = path(t)
@@ -818,7 +830,7 @@ def swipe_history(kind="clean"):
     if kind in ("tilted", "tilted_small"):
         # Nose-up along-track tilt (3 deg, or 0.4 deg), riding on its lowest bottom corner on the floor.
         q = _pitched(Q_TURNED, 3.0 if kind == "tilted" else 0.4)
-        R = PartState.rotation(SimpleNamespace(quat_xyzw=q))
+        R = PartState.rotation(SimpleNamespace(quat_xyzw=_quat_mul(q, Q_UPRIGHT)))
         e_l, e_w, _ = card_axes(R)
         drop = max(abs(float((-CARD_W / 2 * e_w + s * CARD_L / 2 * e_l)[2])) for s in (-1.0, 1.0))
         return _chain(_rows(_profile(clean, z_of_y=lambda y: TOP + R_FLOOR + drop), q))
@@ -885,9 +897,99 @@ PICK_YAW, SWIPE_YAW = -math.pi / 2, 0.0  # pads close along world y at the reade
 # that offset the same every run and at 0.8x pace.
 YAW_TRIM = math.radians(-0.38)
 YAW_SEAT = math.radians(1.0)
-PARK_L, PARK_R = (0.100, 0.270, TOP + 0.160), (0.100, -0.300, TOP + 0.160)
+PARK_L = (0.100, 0.270, TOP + 0.160)
 FINAL_HOLD_S = 4.0
 GRIP_S = 1.9  # a smoothstep grip ramp peaks at 1.5/GRIP_S per s; the action guard allows 0.05 per 50 ms tick (0.8x too)
+
+
+# ---------------------------------------------------------------- pickup from flat
+# A 0.76 mm card lying flat cannot be pinched from above. As people do at a counter, the demo slides it with a
+# fingertip until one end overhangs the counter's edge, pinches the overhanging end between the pads (one above, one
+# below), and stands the card in its stand; the stand pick and the swipe below then follow unchanged.
+EDGE_Y = -0.65  # the counter's right edge
+OVERHANG = 0.036  # the card's -y end is slid 36 mm past the edge; its centre stays 6.8 mm over the counter
+PUSH_YAW = 0.0  # pads open along world y; the +y pad's flat inner face pushes the card's +y end
+PUSH_TCP_Z = TOP + 0.014  # TCP height while sliding the card
+PUSH_PRESS = 0.0015  # the hand is rolled so the pushing pad's tip is commanded 1.5 mm into the counter and rides on
+# it, as a fingertip does, while the far pad stays clear above the card
+PUSH_ROLL = math.asin((PUSH_TCP_Z - TOP + PUSH_PRESS - PAD_TIP_PAST_TCP) / -FINGER_OPEN)  # about 3 deg
+PUSH_CLEAR = 0.006  # the pushing pad goes down 6 mm beyond the card's +y end
+PINCH_PITCH = math.radians(19.0)  # the pinch points along +x, tipped 19 deg down; the pinched card tilts with the pads
+PINCH_DEPTH = 0.024  # pad tips 24 mm in from the card's -x long edge, so 30 mm from its stripe edge, as at the stand
+PINCH_Y = EDGE_Y - 0.040  # pads centred 40 mm past the edge: the lower finger and its base stay clear of the counter
+PINCH_BACK = 0.060  # the open pads start 60 mm back along the approach, then slide over and under the card's end
+PINCH_LIFT = 0.060
+# Measured in simulation: the slide stops about 2 mm short, so the end pinch holds the card about 2.3 mm deeper than
+# planned; the arm stops about 0.6 mm short of its target over the stand, and the card slips about 1 mm in the pads as
+# it lands; uncorrected, it seats about 4 mm toward +y of the stand's centre. The stand pick below must find it centred
+# (its pinch 26 mm toward the trailing end: 2.6 mm less doubled the card's slip in the pads during the stroke and lost
+# the read), so the set-down aims 4.0 mm toward -y. A fixed number in the script, like YAW_TRIM, not feedback.
+SEAT_TRIM = 0.0040
+PICKUP_Z = TOP + 0.090  # the wrist turns level, and the card upright, with the TCP at least this high
+
+
+class GripOrientation(float):
+    """A waypoint's grip as a full rotation (the level pinch at the counter's edge). Its float value is the closure's
+    azimuth, read as a plain yaw by tools that only know straight-down grips."""
+
+    def __new__(cls, matrix):
+        m = np.asarray(matrix, float)
+        c = m[:, 0]
+        azimuth = math.atan2(-c[0], c[1]) if math.hypot(c[0], c[1]) > 0.5 else -math.pi / 2
+        obj = super().__new__(cls, azimuth)
+        obj.matrix = m.copy()
+        return obj
+
+
+# The scripted demo's waypoints may carry a GripOrientation; plain float yaws keep the straight-down grip.
+_ORIGINAL_GRIP_ROTATION = getattr(_motion.grip_rotation, "_original", _motion.grip_rotation)
+
+
+def _grip_rotation(yaw=0.0):
+    matrix = getattr(yaw, "matrix", None)
+    if isinstance(matrix, np.ndarray) and matrix.shape == (3, 3):
+        return matrix
+    return _ORIGINAL_GRIP_ROTATION(yaw)
+
+
+_grip_rotation._original = _ORIGINAL_GRIP_ROTATION
+_motion.grip_rotation = _grip_rotation
+
+
+def pinch_rotation():
+    """Approach along +x tipped PINCH_PITCH down, pads closing nearly vertically: the stand grip turned onto its side."""
+    turn = axis_angle_matrix(np.array([0.0, 1.0, 0.0]), PINCH_PITCH - math.pi / 2)
+    return turn @ _ORIGINAL_GRIP_ROTATION(PICK_YAW)
+
+
+def push_rotation():
+    """The straight-down grip, pads open along y, rolled PUSH_ROLL about x so the +y pad's tip is the lowest point."""
+    return axis_angle_matrix(np.array([1.0, 0.0, 0.0]), -PUSH_ROLL) @ _ORIGINAL_GRIP_ROTATION(PUSH_YAW)
+
+
+def pickup_targets():
+    # The +y pad's inner face at its tip, across y from the TCP, with the fingers open and the hand rolled.
+    open_face = -FINGER_OPEN * math.cos(PUSH_ROLL) - PAD_TIP_PAST_TCP * math.sin(PUSH_ROLL)
+    end_y = EDGE_Y - OVERHANG + CARD_L  # the card's +y end once its -y end overhangs the edge
+    push0 = (CARD_X0, CARD_Y0 + CARD_L / 2 + PUSH_CLEAR - open_face, PUSH_TCP_Z)
+    push1 = (CARD_X0, end_y - open_face, PUSH_TCP_Z)
+    # Pinched, the card tilts with the pads about its stripe edge, which stays on the counter; the TCP is on the
+    # card's mid-plane, its pad tips PINCH_DEPTH in from the card's -x edge.
+    b = PINCH_PITCH
+    s = CARD_W - PINCH_DEPTH + PAD_TIP_PAST_TCP
+    pinch = np.array((CARD_X0 + CARD_W / 2 - s * math.cos(b) + CARD_T / 2 * math.sin(b), PINCH_Y,
+                      TOP + s * math.sin(b) + CARD_T / 2 * math.cos(b)))
+    back = pinch - PINCH_BACK * pinch_rotation()[:, 2]
+    beyond = (EDGE_Y - OVERHANG) - PINCH_Y  # TCP past the card's -y end, along the card
+    stand_y = YS - CARD_L / 2 - beyond - SEAT_TRIM  # TCP over the stand with the card centred in it
+    return {
+        "above_push": (push0[0], push0[1], TOP + 0.060), "push_down": push0, "push_end": push1,
+        "push_up": (push1[0], push1[1], TOP + 0.060), "past_edge": (pinch[0], PINCH_Y, TOP + 0.070),
+        "pinch_high": (pinch[0], PINCH_Y, PICKUP_Z), "pinch_back": tuple(back), "pinch": tuple(pinch),
+        "pinch_lift": tuple(pinch + (0.0, 0.0, PINCH_LIFT)), "upright": (XS, stand_y, PICKUP_Z),
+        "set_hover": (XS, stand_y, TOP + S_H + STAND_HOVER + TCP_ABOVE_EDGE),
+        "set_place": (XS, stand_y, STAND_FLOOR_Z + 0.001 + TCP_ABOVE_EDGE), "set_rise": (XS, stand_y, TRAVEL_Z),
+    }
 
 
 def demo_targets():
@@ -911,6 +1013,32 @@ def demo_targets():
     }
 
 
+def pickup(w):
+    """Right arm: slide the card until one end overhangs the counter's edge, pinch that end, stand it in the stand."""
+    C, O = FINGER_CLOSED, FINGER_OPEN
+    P, G, H = pickup_targets(), GripOrientation(pinch_rotation()), GripOrientation(push_rotation())
+    return [w(2.0, P["above_push"], O, "over the card's +y end, pads open along y", H),
+            w(1.4, P["push_down"], O, "pushing fingertip down on the counter beyond the card's end", H),
+            w(0.5, P["push_down"], O, "settle on the counter", H),
+            w(6.0, P["push_end"], O, "slide the card until its end overhangs the edge", H),
+            w(0.4, P["push_end"], O, "settle at the edge", H),
+            w(1.0, P["push_up"], O, "lift the fingertip", H),
+            w(1.2, P["past_edge"], O, "move past the counter's edge", PUSH_YAW),
+            w(2.0, P["pinch_high"], O, "turn the wrist level, pads above and below", G),
+            w(1.0, P["pinch_back"], O, "lower the open pads beside the overhanging end", G),
+            w(1.2, P["pinch"], O, "slide the pads over and under the overhanging end", G),
+            w(GRIP_S, P["pinch"], C, "pinch the overhanging end", G),
+            w(0.3, P["pinch"], C, "settle the end pinch", G),
+            w(1.0, P["pinch_lift"], C, "lift the card off the counter", G),
+            w(2.6, P["upright"], C, "turn the card upright over the stand", PICK_YAW),
+            w(1.0, P["set_hover"], C, "lower the card to just above the stand", PICK_YAW),
+            w(0.8, P["set_hover"], C, "settle above the stand", PICK_YAW),
+            w(1.6, P["set_place"], C, "set the card into the stand", PICK_YAW),
+            w(0.3, P["set_place"], C, "settle in the stand", PICK_YAW),
+            w(GRIP_S, P["set_place"], O, "let go in the stand", PICK_YAW),
+            w(1.0, P["set_rise"], O, "rise clear of the card", PICK_YAW)]
+
+
 def demo():
     # Known start layout and time only: no sensing, no object or scorer reads.
     C, O = FINGER_CLOSED, FINGER_OPEN
@@ -919,7 +1047,7 @@ def demo():
     def w(seconds, xyz, finger, label, yaw):
         return Waypoint(seconds * DEMO_PACE, tuple(float(v) for v in xyz), finger, label, yaw)
 
-    right = [w(1.5, PARK_R, O, "park", PICK_YAW),
+    right = [*pickup(w),
              w(1.5, T["above_stand"], O, "over the card stand, pads across the card", PICK_YAW),
              w(1.2, T["pick"], O, "lower the open pads beside the card", PICK_YAW),
              w(GRIP_S, T["pick"], C, "pinch the card", PICK_YAW),
