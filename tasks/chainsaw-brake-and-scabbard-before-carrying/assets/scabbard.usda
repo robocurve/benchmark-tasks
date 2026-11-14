@@ -1,0 +1,135 @@
+#usda 1.0
+(
+    defaultPrim = "scabbard"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "scabbard" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+)
+{
+    float physics:mass = 0.14
+
+    def "Looks"
+    {
+        def Material "plastic"
+        {
+            token outputs:surface.connect = </scabbard/Looks/plastic/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.96, 0.78, 0.08)
+                float inputs:roughness = 0.45
+                token outputs:surface
+            }
+        }
+
+        def Material "top_tex"
+        {
+            token outputs:surface.connect = </scabbard/Looks/top_tex/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor.connect = </scabbard/Looks/top_tex/texture.outputs:rgb>
+                float inputs:roughness = 0.5
+                token outputs:surface
+            }
+
+            def Shader "st"
+            {
+                uniform token info:id = "UsdPrimvarReader_float2"
+                token inputs:varname = "st"
+                float2 outputs:result
+            }
+
+            def Shader "texture"
+            {
+                uniform token info:id = "UsdUVTexture"
+                asset inputs:file = @./textures/scabbard.png@
+                float2 inputs:st.connect = </scabbard/Looks/top_tex/st.outputs:result>
+                float3 outputs:rgb
+            }
+        }
+    }
+
+    def Cube "bottom" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </scabbard/Looks/plastic>
+        color3f[] primvars:displayColor = [(0.96, 0.78, 0.08)]
+        double size = 1
+        float3 xformOp:scale = (0.052, 0.265, 0.003)
+        double3 xformOp:translate = (0, 0, -0.01125)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "top" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </scabbard/Looks/plastic>
+        color3f[] primvars:displayColor = [(0.96, 0.78, 0.08)]
+        double size = 1
+        float3 xformOp:scale = (0.052, 0.265, 0.003)
+        double3 xformOp:translate = (0, 0, 0.01125)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "wall_left" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </scabbard/Looks/plastic>
+        color3f[] primvars:displayColor = [(0.96, 0.78, 0.08)]
+        double size = 1
+        float3 xformOp:scale = (0.003, 0.265, 0.0195)
+        double3 xformOp:translate = (-0.0245, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "wall_right" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </scabbard/Looks/plastic>
+        color3f[] primvars:displayColor = [(0.96, 0.78, 0.08)]
+        double size = 1
+        float3 xformOp:scale = (0.003, 0.265, 0.0195)
+        double3 xformOp:translate = (0.0245, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "end_cap" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI"]
+    )
+    {
+        rel material:binding = </scabbard/Looks/plastic>
+        color3f[] primvars:displayColor = [(0.96, 0.78, 0.08)]
+        double size = 1
+        float3 xformOp:scale = (0.046, 0.003, 0.0195)
+        double3 xformOp:translate = (0, -0.131, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Mesh "label" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </scabbard/Looks/top_tex>
+        normal3f[] normals = [(0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1)] (
+            interpolation = "faceVarying"
+        )
+        point3f[] points = [(-0.024, 0.1305, 0.01315), (-0.024, -0.1305, 0.01315), (0.024, -0.1305, 0.01315), (0.024, 0.1305, 0.01315)]
+        texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1)] (
+            interpolation = "faceVarying"
+        )
+    }
+}
+
