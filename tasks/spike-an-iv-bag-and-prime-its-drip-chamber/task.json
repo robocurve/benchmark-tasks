@@ -1,0 +1,20 @@
+{
+  "title": "Spike an IV bag and prime its drip chamber",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "nursing",
+    "infusion",
+    "spike insertion",
+    "drip-chamber priming"
+  ],
+  "instruction": "Prepare the IV set: hold the saline bag by its hanger tab, remove the blue spike-port cap, seat the giving-set spike to its collar, lower the chamber below the port, and squeeze and release it until the liquid column is 15-27 mm high. Release everything and return both arms to their starting poses.",
+  "context": "Spiking an IV bag and setting the drip-chamber liquid level are routine preparation steps performed by nurses and infusion technicians. The task tests coordinated stabilization, cap removal, axial insertion and controlled priming.",
+  "setup": "Fixed YAM station; metres from the arm-base midpoint, x forward, y left. A 34 x 54 x 0.4 cm stainless tray covers x 0.16-0.50, y -0.30-0.24. A sealed 500 mL PVC saline bag lies at (0.32,0.06): 13 x 20 x 2.6 cm external pillow (676 mL bounding volume), 530 g filled mass, welded rim, 28 x 8 x 20 mm upright hanger tab, and two downward-side ports. Its 10 mm-diameter, 30 mm spike port is capped; the filled bag keeps the port lumen wetted. A giving set starts at (0.42,-0.13): 25 mm spike, 20 mm-ID x 45 mm clear chamber with 39 mm measurable height, 10 cm tube and roller clamp. During priming keep the measured lower chamber region at least 10 mm below the port.",
+  "scoring": "Measured at trial end, with cap removal and full spike seating latched. 0.25: cap displaced at least 5 mm. 0.5: spike seated 23-25 mm with its collar at the port mouth. 1.0: seated spike; chamber liquid column 15-27 mm high; no overfill above 34 mm; bag remains within tray bounds; both TCPs at least 4 cm from chamber and port; both TCPs within 5 cm of their starts; bag and set at rest for 1 s. Any overfill above 34 mm scores 0. All other outcomes score the highest completed stage.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Use a fresh sealed 500 mL bag and sterile giving set for each real trial. Lay the bag and giving set at the stated coordinates, ports toward the right arm, chamber empty, cap attached and clamp closed. Simulation reset restores every joint and liquid height. Use object_jitter=0.",
+  "fidelity": "Approximate rigid-body model. Bag dimensions and 530 g mass are consistent with 500 mL saline. Spike depth and cap displacement are geometric. Fluid dynamics are simplified: measured gripper compression produces a continuous liquid-column height only while the spike is locked and the chamber is at least 10 mm below the wetted port. Scoring uses height, not squeeze count.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-F43RTD"
+}
