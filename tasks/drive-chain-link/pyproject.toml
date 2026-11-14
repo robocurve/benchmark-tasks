@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robocurve-chain-link"
+version = "0.1.0"
+description = "Native chain-end joining with a reusable headed-pin connecting link"
+requires-python = ">=3.12,<3.13"
+dependencies = ["inspect-robots==1.0.0", "inspect-robots-yam==0.38.0", "yam-arena @ git+https://github.com/kairosiann/yam-isaac-lab-arena.git@0059d02a1a91bc6834c1d0846022891df0c78730"]
+
+[project.entry-points."inspect_robots.embodiments"]
+chain_link = "chain_link.environment:chain_link_embodiment"
+
+[project.entry-points."inspect_robots.policies"]
+chain_link_scripted = "chain_link.controller:scripted_policy"
+
+[tool.setuptools.packages.find]
+include = ["chain_link*"]
+
+[tool.setuptools.package-data]
+chain_link = ["motions/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

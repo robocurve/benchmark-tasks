@@ -1,0 +1,135 @@
+{
+  "scope": "Fresh native physics execution of the clock-only robot program with actual cameras",
+  "source_sha256": "e416a5f7a88d638b0ce04c317eba00e26f4e66616e67f434f28df5ee2dd18de7",
+  "source_unchanged": true,
+  "native_score": 1.0,
+  "steps": 1180,
+  "physics_audits": 14160,
+  "instruction": "Join and retain the two loose ends of the chain using the yellow connecting link and blue retaining plate. Leave the assembled joint in its service cradle, the chain seated on its guide, and both hands released.",
+  "controller": {
+    "kind": "precalibrated fourteen-joint/gripper program",
+    "inputs": [
+      "elapsed time"
+    ],
+    "program_sha256": "f05496beef0fcfb96d67cfb708a855ca88abe8cd392013ab403ee4622476dc93",
+    "runtime_object_state_feedback": false
+  },
+  "native_receipt_sha256": "b7335b1eaafba2d93fdbc269e65b1c4e0cddc8fa7d780482105f99467b30e9b8",
+  "native_trace_sha256": "958caf7daaa1f839f63c3d8e72d7bc8e1d2709a37d4451946edf986812a20e55",
+  "tracks": {
+    "top_cam": {
+      "sha256": "8e28410a7e7b974e303d2490637f399bbd2c1dc73d63a6c5dc689ff8d4d3982e",
+      "all_frames_decoded": 1181,
+      "minimum_frame_mean": 157.1180752840909,
+      "minimum_frame_std": 59.49552293792754,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 320,
+            "height": 176,
+            "pix_fmt": "yuv420p",
+            "r_frame_rate": "20/1",
+            "nb_frames": "1181"
+          }
+        ],
+        "format": {
+          "duration": "59.050000",
+          "size": "416226"
+        }
+      }
+    },
+    "left_cam": {
+      "sha256": "72d95fbfd118fa913956a74794f31d763addd11d9ba85b68cea94372d5c5cbc5",
+      "all_frames_decoded": 1181,
+      "minimum_frame_mean": 51.241861979166664,
+      "minimum_frame_std": 55.71594653324606,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 320,
+            "height": 176,
+            "pix_fmt": "yuv420p",
+            "r_frame_rate": "20/1",
+            "nb_frames": "1181"
+          }
+        ],
+        "format": {
+          "duration": "59.050000",
+          "size": "645508"
+        }
+      }
+    },
+    "right_cam": {
+      "sha256": "aa9876c68955aa69d0a8534eff7a4dbabebc8246ae7a45d9f7eff571d2aae840",
+      "all_frames_decoded": 1181,
+      "minimum_frame_mean": 90.51770241477273,
+      "minimum_frame_std": 59.701968833536775,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 320,
+            "height": 176,
+            "pix_fmt": "yuv420p",
+            "r_frame_rate": "20/1",
+            "nb_frames": "1181"
+          }
+        ],
+        "format": {
+          "duration": "59.050000",
+          "size": "523088"
+        }
+      }
+    }
+  },
+  "composition": "Every initial/action frame preserved in order, top above both wrists; resize and spatial stacking only; no overlays, generated frames, temporal edits or speed changes.",
+  "demo_probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "h264",
+        "width": 640,
+        "height": 528,
+        "pix_fmt": "yuv420p",
+        "r_frame_rate": "20/1",
+        "nb_frames": "1181"
+      }
+    ],
+    "format": {
+      "duration": "59.050000",
+      "size": "2795427"
+    }
+  },
+  "dream_api_used": false,
+  "visually_reviewed": true,
+  "three_cameras_valid": true,
+  "files": {
+    "setup.png": {
+      "bytes": 67746,
+      "sha256": "c15026908eea4fa3710b5a1224ff39a08c34045a0cc6db2af840ea030687279a"
+    },
+    "demo.mp4": {
+      "bytes": 2795427,
+      "sha256": "24bcfc5c7861ada786c70f89770a0ca8859adb7b069f620ddeff5ae477fb52b9"
+    },
+    "final-top.png": {
+      "bytes": 68523,
+      "sha256": "137ff94efaca890f9aef124a7e687878b41d78985f7d02044cdd8e276696212f"
+    },
+    "review.png": {
+      "bytes": 641001,
+      "sha256": "7bf4acc7ccf6c9fc5a7cb9e378dc51be4df97a4d918462b8a6e785900e139ce8"
+    }
+  },
+  "full_composite_decode_passed": true,
+  "visual_review": "Initial layout, chain-end joining, keeper insertion, final assembly and both wrist views inspected; no team identity or overlays. Chain remains seated and hands release/withdraw."
+}

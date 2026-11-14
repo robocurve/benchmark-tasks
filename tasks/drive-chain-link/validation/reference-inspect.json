@@ -1,0 +1,92 @@
+{
+  "scope": "Fresh registered Inspect Robots reference with native RGB cameras and standard action guards",
+  "source_sha256": "e416a5f7a88d638b0ce04c317eba00e26f4e66616e67f434f28df5ee2dd18de7",
+  "environment_id": "chain-link-e416a5f7a88d638b",
+  "environment_revision": "e416a5f7a88d",
+  "policy": "chain_link_scripted",
+  "evaluation_seed": 0,
+  "trial_seed": 1415158438,
+  "score": 1.0,
+  "steps": 1180,
+  "termination": {
+    "reason": "success",
+    "detail": null,
+    "terminated": true,
+    "truncated": false
+  },
+  "elapsed_wall_s": 469.81378438405227,
+  "native_and_registered_actions_identical_to_frozen_program": true,
+  "standard_guards": {
+    "type": "inspect_robots.guard.GuardChain",
+    "guards": [
+      {
+        "type": "inspect_robots.guard.ClampGuard",
+        "config": {
+          "low": [
+            -2.61799,
+            -8.88178e-16,
+            0.0,
+            -1.69297,
+            -1.5708,
+            -2.0944,
+            0.0,
+            -2.61799,
+            -8.88178e-16,
+            0.0,
+            -1.69297,
+            -1.5708,
+            -2.0944,
+            0.0
+          ],
+          "high": [
+            3.14159,
+            3.66519,
+            3.14159,
+            1.5708,
+            1.5708,
+            2.0944,
+            1.0,
+            3.14159,
+            3.66519,
+            3.14159,
+            1.5708,
+            1.5708,
+            2.0944,
+            1.0
+          ]
+        }
+      },
+      {
+        "type": "inspect_robots.guard.DeltaLimitGuard",
+        "config": {
+          "mode": "absolute",
+          "max_delta": [
+            0.287979,
+            0.18325950000000005,
+            0.1570795,
+            0.16318850000000001,
+            0.15708,
+            0.20944,
+            0.05,
+            0.287979,
+            0.18325950000000005,
+            0.1570795,
+            0.16318850000000001,
+            0.15708,
+            0.20944,
+            0.05
+          ]
+        }
+      }
+    ],
+    "names": [
+      "clamp",
+      "delta-limit"
+    ]
+  },
+  "report_sha256": "4e0eb9228b4e4d45791add2fd265e6403e628caf63c2dd425c2c3f0ca8c65ca2",
+  "record_sha256": "fb90c44d87d87f7abb3dcc2ae88fa998bc780e3801af2edbf3015fe9a8063881",
+  "actions_sha256": "602c235f42021d3fbf09ef1c29d98fe0b9c703efcddbff7916b01a2cb179bd6a",
+  "native_camera_frames_stored": true,
+  "dream_api_used": false
+}

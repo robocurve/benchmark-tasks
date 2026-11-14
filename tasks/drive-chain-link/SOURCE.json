@@ -1,0 +1,64 @@
+{
+  "license": "MIT: original task code, primitive scene geometry and documentation",
+  "custom_assets": "All task assets generated locally from boxes, cylinders and cones; no third-party chain CAD or textures.",
+  "dependencies": [
+    {
+      "name": "yam-arena",
+      "url": "https://github.com/kairosiann/yam-isaac-lab-arena",
+      "commit": "0059d02a1a91bc6834c1d0846022891df0c78730",
+      "usage": "Installed runtime dependency; not vendored. Official launchable pin.",
+      "license": "Upstream README states adapter license pending; robot model separately MIT."
+    },
+    {
+      "name": "I2RT YAM robot model",
+      "url": "https://github.com/i2rt-robotics/i2rt",
+      "license": "MIT, provided by upstream yam-arena with LICENSE.i2rt and SOURCE_COMMIT",
+      "usage": "Unmodified installed standard robot"
+    },
+    {
+      "name": "Isaac Lab-Arena",
+      "url": "https://github.com/isaac-sim/IsaacLab-Arena",
+      "ref": "release/0.3.1",
+      "license": "Apache-2.0",
+      "usage": "Installed simulation framework",
+      "commit": "c7edf3a9d5d8276565208f72422f8f8a0806d6cf",
+      "local_patch": "Official November 5 launchable fix: ARENA_NUCLEUS_DIR = ISAACLAB_NUCLEUS_DIR. Applied only in an isolated Arena checkout."
+    },
+    {
+      "name": "Isaac Sim",
+      "version": "6.1.0.0",
+      "license": "NVIDIA Omniverse license; not redistributed"
+    },
+    {
+      "name": "Inspect Robots",
+      "version": "1.0.0",
+      "url": "https://github.com/robocurve/inspect-robots",
+      "usage": "Installed evaluation framework"
+    }
+  ],
+  "references": [
+    {
+      "url": "https://mt3.tsubaki.eu/assets/tsubaki-small-size-conveyor-chains-and-sprockets-en.pdf",
+      "usage": "Motivation for joining chain ends. No CAD, images or document text copied."
+    },
+    {
+      "url": "https://shop.renold.com/pages/technical-information",
+      "usage": "Connecting-link assembly context. Custom side-entry fork training keeper differs from commercial spring clips."
+    },
+    {
+      "url": "https://en.tt-net.tsubakimoto.co.jp/tecs/engd/cdc/engd_cdc_tri_kir.asp",
+      "usage": "Manufacturer chain-joining procedure and sprocket-supported alignment. Commercial fastening differs from our disclosed custom keeper; no assets copied."
+    },
+    {
+      "url": "https://www.onetonline.org/link/summary/49-9041.00",
+      "usage": "Industrial machinery mechanic occupation and reassembly context; no assets copied."
+    },
+    {
+      "url": "https://www.bls.gov/ooh/installation-maintenance-and-repair/industrial-machinery-mechanics-and-maintenance-workers-and-millwrights.htm",
+      "usage": "Occupation family and conveying-system maintenance/reassembly context; not an estimate of workers performing this exact assembly."
+    }
+  ],
+  "fidelity": "Enlarged dark grey unpowered training chain assembled in a fixed toothed service former. Nine physical teeth locate resting link windows. The yellow two-pin connector starts loose on the table and is placed into an empty cradle before both bare end links are joined and retained with the blue keeper supplied from the left. Central 30mm-long side-rail sections are 20mm high for natural finger contact, without separate grasp posts. No powered-drive, OEM, rated-load, vibration-locking or spring-clip claim.",
+  "runtime_configuration": "Standard PhysX actuator path (sim.use_newton_actuators=False) with passive task hinges and normal fourteen robot joint/gripper controls.",
+  "reference_controller": "Fixed 20 Hz fourteen-command robot program calibrated in earlier simulator-assisted development; elapsed-time input only in actual native re-execution. Calibration provenance is in chain_link/motions/*.json. No live object-pose or scoring feedback."
+}

@@ -1,0 +1,524 @@
+{
+  "units": "metres, kilograms, seconds; quaternion XYZW; z up",
+  "seed": 0,
+  "control_hz": 20,
+  "physics_hz": 240,
+  "max_steps": 2400,
+  "rig": {
+    "name": "station-calibrated",
+    "bases": {
+      "left": [
+        0.0,
+        0.305,
+        0.75
+      ],
+      "right": [
+        0.0,
+        -0.305,
+        0.75
+      ]
+    },
+    "top_cam": {
+      "pos": [
+        -0.16649487853050232,
+        -0.008999999612569809,
+        1.6918205499649046
+      ],
+      "rot_xyzw": [
+        0.18301085645621007,
+        -0.18301085645621007,
+        -0.6830131963726356,
+        0.6830131963726356
+      ],
+      "convention": "opengl",
+      "lens": {
+        "fx": 392.195617675781,
+        "fy": 391.722351074219,
+        "cx": 318.389434814453,
+        "cy": 177.876312255859,
+        "width": 640,
+        "height": 360
+      }
+    },
+    "wrist_cams": {
+      "left": {
+        "pos": [
+          0.0003999999999999915,
+          -0.069638,
+          0.07276200000000001
+        ],
+        "rot_xyzw": [
+          0.9756188502039811,
+          -0.002816999567479388,
+          0.003226999504528134,
+          0.21942996630883527
+        ],
+        "convention": "opengl",
+        "lens": {
+          "fx": 390.666,
+          "fy": 390.162,
+          "cx": 317.526,
+          "cy": 176.146,
+          "width": 640,
+          "height": 360
+        }
+      },
+      "right": {
+        "pos": [
+          -8.528195379902339e-18,
+          -0.069638,
+          0.071699
+        ],
+        "rot_xyzw": [
+          0.9756188502039811,
+          -0.002816999567479388,
+          0.003226999504528134,
+          0.21942996630883527
+        ],
+        "convention": "opengl",
+        "lens": {
+          "fx": 390.666,
+          "fy": 390.162,
+          "cx": 317.526,
+          "cy": 176.146,
+          "width": 640,
+          "height": 360
+        }
+      }
+    },
+    "dream_look": true
+  },
+  "standard_objects": [
+    {
+      "name": "table",
+      "type": "static cuboid",
+      "size_m": [
+        1.1,
+        1.3,
+        0.06
+      ],
+      "center_m": [
+        0.36,
+        0.0,
+        0.7174999999999999
+      ],
+      "material": "nominal wood top"
+    },
+    {
+      "name": "floor",
+      "type": "static cuboid",
+      "size_m": [
+        200,
+        200,
+        0.02
+      ],
+      "center_m": [
+        0,
+        0,
+        -0.02250000000000007
+      ],
+      "material": "nominal floor"
+    },
+    {
+      "name": "dome_light",
+      "type": "illumination",
+      "intensity": 250
+    },
+    {
+      "name": "lamp",
+      "type": "sphere light",
+      "radius_m": 0.1,
+      "center_m": [
+        0.03999999999999998,
+        -0.8,
+        2.6875
+      ],
+      "intensity": 600000
+    },
+    {
+      "name": "two YAM arms and parallel grippers",
+      "type": "standard calibrated robot",
+      "material": "upstream metal/polymer model; unmodified collision hulls",
+      "ready_joint_targets": [
+        0,
+        1,
+        1,
+        -0.6,
+        0,
+        0
+      ],
+      "source": "pinned yam-arena adapter"
+    },
+    {
+      "name": "camera_stand",
+      "type": "static fixture",
+      "parts": {
+        "stand_foot": [
+          "box",
+          [
+            0.11,
+            0.11,
+            0.016
+          ],
+          [
+            -0.23649487853050233,
+            -0.008999999612569809,
+            0.7555
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "stand_mast": [
+          "capsule",
+          [
+            0.012,
+            0.9283205499649047
+          ],
+          [
+            -0.23649487853050233,
+            -0.008999999612569809,
+            1.2276602749824523
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "stand_arm": [
+          "capsule",
+          [
+            0.009,
+            0.053851648071345064
+          ],
+          [
+            -0.2114948785305023,
+            -0.008999999612569809,
+            1.7018205499649046
+          ],
+          [
+            0.0,
+            0.5606288093051837,
+            0.0,
+            0.8280672304692729
+          ]
+        ],
+        "camera_housing": [
+          "box",
+          [
+            0.05,
+            0.042,
+            0.022
+          ],
+          [
+            -0.1734948130126891,
+            -0.008999999612569809,
+            1.7039449434443779
+          ],
+          [
+            0.18301085645621007,
+            -0.18301085645621007,
+            -0.6830131963726356,
+            0.6830131963726356
+          ]
+        ]
+      },
+      "material": "nominal metal"
+    }
+  ],
+  "chain": {
+    "type": "eleven-link open articulated training chain; two free ends splayed",
+    "pitch_m": 0.1,
+    "node_positions_world_m": [
+      [
+        0.16256122015273006,
+        -0.08,
+        0.847
+      ],
+      [
+        0.24499999999999997,
+        -0.13660254037844385,
+        0.847
+      ],
+      [
+        0.3316025403784439,
+        -0.1866025403784439,
+        0.847
+      ],
+      [
+        0.4316025403784438,
+        -0.1866025403784439,
+        0.847
+      ],
+      [
+        0.5182050807568878,
+        -0.1366025403784439,
+        0.847
+      ],
+      [
+        0.5682050807568878,
+        -0.04999999999999999,
+        0.847
+      ],
+      [
+        0.5682050807568878,
+        0.049999999999999906,
+        0.847
+      ],
+      [
+        0.5182050807568878,
+        0.13660254037844385,
+        0.847
+      ],
+      [
+        0.43160254037844387,
+        0.1866025403784439,
+        0.847
+      ],
+      [
+        0.331602540378444,
+        0.1866025403784439,
+        0.847
+      ],
+      [
+        0.2449999999999999,
+        0.1366025403784438,
+        0.847
+      ],
+      [
+        0.16256122015272995,
+        0.08,
+        0.847
+      ]
+    ],
+    "link_mass_kg": 0.035,
+    "layers": "8mm inner plates; paired 4mm outer plates at +/-6mm; metal 8mm-diameter hinge pins",
+    "passive_hinges": 10,
+    "free_end_bore_diameter_m": 0.032,
+    "keeper_support_shoulders": {
+      "height_m": 0.005,
+      "centre_local_z_m": 0.0065,
+      "ring_centre_radius_m": 0.0195
+    },
+    "material": "nominal dark grey printed polymer links and metal pins",
+    "bare_end_rails": {
+      "width_m": 0.006,
+      "central_length_m": 0.03,
+      "central_total_height_m": 0.02,
+      "central_bottom_local_z_m": -0.004,
+      "central_top_local_z_m": 0.016,
+      "material": "same dark grey polymer as the link; no added grasp posts"
+    },
+    "display_color_rgb": [
+      0.075,
+      0.09,
+      0.105
+    ]
+  },
+  "former": {
+    "type": "fixed toothed chain-assembly former with open front service sector",
+    "centre_world_xy_m": [
+      0.3816025403784439,
+      0.0
+    ],
+    "hub_radius_m": 0.145,
+    "hub_height_m": 0.008,
+    "guide_teeth": [
+      {
+        "link": "Link01",
+        "centre_world_xy_m": [
+          0.2883012701892219,
+          -0.16160254037844388
+        ],
+        "radius_m": 0.006,
+        "height_m": 0.05,
+        "lead_height_m": 0.003
+      },
+      {
+        "link": "Link02",
+        "centre_world_xy_m": [
+          0.3816025403784438,
+          -0.1866025403784439
+        ],
+        "radius_m": 0.006,
+        "height_m": 0.05,
+        "lead_height_m": 0.003
+      },
+      {
+        "link": "Link03",
+        "centre_world_xy_m": [
+          0.47490381056766573,
+          -0.1616025403784439
+        ],
+        "radius_m": 0.006,
+        "height_m": 0.05,
+        "lead_height_m": 0.003
+      },
+      {
+        "link": "Link04",
+        "centre_world_xy_m": [
+          0.5432050807568878,
+          -0.09330127018922195
+        ],
+        "radius_m": 0.006,
+        "height_m": 0.05,
+        "lead_height_m": 0.003
+      },
+      {
+        "link": "Link05",
+        "centre_world_xy_m": [
+          0.5682050807568878,
+          -4.163336342344337e-17
+        ],
+        "radius_m": 0.006,
+        "height_m": 0.05,
+        "lead_height_m": 0.003
+      },
+      {
+        "link": "Link06",
+        "centre_world_xy_m": [
+          0.5432050807568878,
+          0.09330127018922188
+        ],
+        "radius_m": 0.006,
+        "height_m": 0.05,
+        "lead_height_m": 0.003
+      },
+      {
+        "link": "Link07",
+        "centre_world_xy_m": [
+          0.47490381056766584,
+          0.16160254037844388
+        ],
+        "radius_m": 0.006,
+        "height_m": 0.05,
+        "lead_height_m": 0.003
+      },
+      {
+        "link": "Link08",
+        "centre_world_xy_m": [
+          0.38160254037844393,
+          0.1866025403784439
+        ],
+        "radius_m": 0.006,
+        "height_m": 0.05,
+        "lead_height_m": 0.003
+      },
+      {
+        "link": "Link09",
+        "centre_world_xy_m": [
+          0.2883012701892219,
+          0.16160254037844385
+        ],
+        "radius_m": 0.006,
+        "height_m": 0.05,
+        "lead_height_m": 0.003
+      }
+    ],
+    "spokes": "22mm wide, 4mm thick, partially recessed into bed; complete geometry in inventory",
+    "boss_radius_m": 0.025,
+    "boss_height_m": 0.014,
+    "material": "nominal metal, rigidly fixed to service deck",
+    "role": "positive location of chain windows throughout the 40mm end lift and subsequent assembly; no powered drive",
+    "display_color_rgb": [
+      0.075,
+      0.09,
+      0.105
+    ],
+    "tooth_display_color_rgb": [
+      0.13,
+      0.15,
+      0.17
+    ]
+  },
+  "connector": {
+    "position_m": [
+      0.35,
+      -0.35,
+      0.7495
+    ],
+    "rotation_xyzw": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "mass_kg": 0.12,
+    "backing_size_m": [
+      0.045,
+      0.14,
+      0.004
+    ],
+    "pin_spacing_m": 0.1,
+    "stem_diameter_m": 0.008,
+    "stem_length_m": 0.027,
+    "head_base_diameter_m": 0.024,
+    "head_height_m": 0.01,
+    "material": "nominal polymer backing and metal pins",
+    "target_cradle_position_m": [
+      0.195,
+      0.0,
+      0.839
+    ],
+    "head_shape": "6mm cylindrical shoulder with 4mm tapered lead, same 24mm diameter and 10mm total head height",
+    "initial_condition": "loose on the table; the service cradle is initially empty"
+  },
+  "keeper": {
+    "position_m": [
+      0.18,
+      0.35,
+      0.7515000000000001
+    ],
+    "rotation_xyzw": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "mass_kg": 0.075,
+    "size_m": [
+      0.08,
+      0.128,
+      0.008
+    ],
+    "grip_size_m": [
+      0.024,
+      0.03,
+      0.06
+    ],
+    "slot_width_m": 0.018,
+    "closed_slot_x_m": -0.026,
+    "material": "nominal printed polymer",
+    "reference_arm": "left"
+  },
+  "fixture": {
+    "deck_size_m": [
+      0.6,
+      0.48,
+      0.012
+    ],
+    "deck_centre_m": [
+      0.42,
+      0,
+      0.831
+    ],
+    "deck_top_z_m": 0.837,
+    "support_posts": "four 25mm square metal posts at x=.18/.60,y=+/- .19",
+    "cradle": "Three 4mm-high locating edges with the front open for sliding the free connector under the end plates; complete geometry in inventory",
+    "material": "nominal metal service fixture"
+  },
+  "contact": {
+    "static_friction": 0.65,
+    "dynamic_friction": 0.5,
+    "restitution": 0,
+    "contact_offset_m": 0.0002,
+    "controls": "standard PhysX robot actuators; passive chain joints have no actuator groups"
+  },
+  "inventory": "scene-inventory.json; complete primitive dimensions, masses, frames and joints",
+  "reset": "Restore fixed poses and zero passive hinge coordinates, open both grippers at ready, settle 0.5s, then start scoring."
+}

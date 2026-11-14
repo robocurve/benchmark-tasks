@@ -1,0 +1,62 @@
+{
+  "source_run": "chain-preflight-dream-001",
+  "original_log": "adhoc_abbac0ef.json",
+  "original_log_sha256": "53f13173315db0123150d24e6475d7545435539e6bc68af234e562bd5a122957",
+  "source_sha256": "e416a5f7a88d638b0ce04c317eba00e26f4e66616e67f434f28df5ee2dd18de7",
+  "model": "dreamlabs/dream-1-beta",
+  "epochs": 1,
+  "seed": 0,
+  "steps": 2400,
+  "score": 0.0,
+  "composition": "Every native frame in order; top view above both wrists; resize/stack only; no overlays or generated frames.",
+  "dream_api_used": true,
+  "encoding_requires_inference": false,
+  "ffprobe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "h264",
+        "width": 640,
+        "height": 528,
+        "pix_fmt": "yuv420p",
+        "r_frame_rate": "20/1",
+        "nb_frames": "2401"
+      }
+    ],
+    "format": {
+      "duration": "120.050000",
+      "size": "6994247"
+    }
+  },
+  "files": {
+    "dream-1.mp4": {
+      "bytes": 6994247,
+      "sha256": "80e0ad0461586b5cb40c527530ec3c97beb572a86a0e15ce94e40301bb66d9ac"
+    },
+    "setup-dream.png": {
+      "bytes": 68714,
+      "sha256": "d5058e5f48875975565905d413fff17221da622ad408a6c3a68bcbbdb75fb4aa"
+    }
+  },
+  "camera_validation": {
+    "left_cam": {
+      "frames": 2401,
+      "minimum_mean": 116.30414891098485,
+      "minimum_std": 57.73816145237868
+    },
+    "right_cam": {
+      "frames": 2401,
+      "minimum_mean": 101.44961529356061,
+      "minimum_std": 56.22782360620025
+    },
+    "top_cam": {
+      "frames": 2401,
+      "minimum_mean": 159.2765802556818,
+      "minimum_std": 56.60679256265703
+    }
+  },
+  "full_composite_decode_passed": true,
+  "visually_reviewed": true,
+  "visual_review": "Initial, intermediate and final composite views inspected; the chain-joint goal is not completed. All three camera views are visible; no team identity, generated frames or overlays."
+}

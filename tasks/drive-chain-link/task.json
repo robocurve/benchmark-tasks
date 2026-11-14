@@ -1,0 +1,19 @@
+{
+  "title": "Join a drive-chain service joint",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "maintenance",
+    "chain assembly",
+    "connecting link"
+  ],
+  "instruction": "Join and retain the two loose ends of the chain using the yellow connecting link and blue retaining plate. Leave the assembled joint in its service cradle, the chain seated on its guide, and both hands released.",
+  "context": "Conveyor-chain joining is maintenance work for industrial machinery mechanics, machinery maintenance workers and millwrights. This bench fixture isolates alignment and retention of two articulated ends with a connecting link and reusable keeper.",
+  "setup": "Fixed seed-0 station with two standard YAM arms/parallel grippers and calibrated overhead/two wrist cameras; 1.10x1.30x0.06m nominal wooden table, top z=0.7475m; 0.60x0.48x0.012m metal service deck, top z=0.837m, on four 25mm square posts. Eleven dark grey polymer links, 100mm pitch and 35g each, ten passive metal-pin hinges; flat inner plates 8mm, paired outer plates 4mm at z=+/-6mm, 32mm free-end bores and 5mm keeper-support shoulders. The two bare end links have 30mm central side-rail sections 20mm high, with no yellow grasp posts; open end holes start 160mm apart. Dark grey fixed former centred at (0.38160254,0)m: 145mm-radius hub and nine 6mm-radius guide teeth, each 50mm high plus 3mm lead. Loose yellow connector at (0.35,-0.35,0.7495)m: 120g, 45x140x4mm backing, 8mm-diameter x27mm stems 100mm apart, 24mm-diameter heads with 6mm straight shoulders and 4mm leads. Cradle target (0.195,0,0.839)m starts empty, with an open front for inserting the backing beneath the end plates. Blue keeper on the left at (0.18,0.35,0.7515)m: 75g, 80x128x8mm, 18mm side-entry slots and 24x30x60mm grip. All dimensions, exact per-link poses, lights, camera stand and collision primitives are listed in setup-layout.json and scene-inventory.json.",
+  "scoring": "Current-state score is 0 after any permanent invalid-state or workspace violation, or if either hole is unseated. Otherwise 0.4 requires both hole centres within 12mm radially of their stems, connector-local z strictly 3-14mm and link-normal dot >0.98. Score 0.7 additionally requires keeper-local centre z strictly 16-25mm, relative rotation <=0.10rad, and both stem projections in their slots: x strictly -22.5 to 36mm, y within strictly 5mm of their respective +/-50mm slot centres. Full 1.0 additionally requires both stem x projections strictly -22.5 to -8mm; connector within strictly 15mm and <=10deg of its cradle pose; every moving body below 20mm/s and 0.3rad/s; both jaw openings >=70mm and every robot collision body >=25mm from moving parts; all nine guided links within 6mm of world z=0.847m, normal-z dot >0.995, and their guide axes inside local |x|<21mm, |y|<11.5mm. All full-score conditions must hold continuously for 1s. Every physics step audits all moving solids within world x=[-0.19,0.91]m, y=[-0.65,0.65]m, z>=0.7415m. All other outcomes score the greatest currently satisfied level; no peak score persists after disassembly.",
+  "run_limit": "2400 control steps (120 seconds at 20 Hz)",
+  "reset_notes": "Reset all free parts and ten passive hinges to the fixed layout; open grippers in the standard ready pose, settle 0.5 s, then start scoring. Nothing is consumed.",
+  "fidelity": "Rigid articulated chain with ten passive hinges in a fixed assembly fixture. Enlarged printed parts approximate a connecting-link operation; the custom forked keeper replaces commercial spring clips/cotters. Native contact and ordinary robot joint/gripper actuation only. No powered operation, chain tension, fatigue or load-capacity testing.",
+  "scores": "Dream-1 run: 0.0; scripted full-score demo: 1.0.",
+  "media": "M-4UKEJ5"
+}
