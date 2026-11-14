@@ -1,0 +1,20 @@
+{
+  "title": "Draw a 10 ml dose from a vented vial into a syringe without drawing air, then stand the syringe back in its rack",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "medical",
+    "syringe",
+    "dose",
+    "vial",
+    "precision"
+  ],
+  "instruction": "Draw 10 ml of the red liquid from the vial into the syringe without drawing in air, then stand the syringe back in its rack, let go of it, and take both arms back to where they started.",
+  "context": "Drawing an exact dose from a vial is routine for nurses and pharmacy technicians. The syringe must stay seated in the stopper, with the needle's tip under the liquid, while the plunger is drawn to the mark; the needle holds in the stopper only lightly.",
+  "setup": "Station table, one fixed layout. A 50 ml amber glass vial (42 mm across, 1.5 mm glass, its inside floor 9.5 mm above the table) stands in a grey ABS weighted holder (7 x 7 cm) at x 0.36, y 0.00 m, its aluminium crimp cap and grey butyl-rubber stopper up, the stopper's top 6.6 cm above the table (16 mm of rubber exposed). The cap carries a filtered air vent (0.2 um), so air replaces what is drawn and the vial never builds a vacuum. The vial holds 50 ml of training liquid: water dyed red with food colouring; its surface starts 14.6 mm below the stopper's top and falls 0.84 mm per ml drawn (11.9 cm2 inside). A white ABS syringe rack (7 x 7 cm base, 7.5 cm tall, a 25 mm square cup with a lead-in on top over a bore for the needle) stands at x 0.27, y -0.11 m. In it, needle down, stands an empty 20 ml syringe: a clear polypropylene barrel 22 mm across and 8.5 cm long, a black mark every 2 ml and a red mark at 10 ml, a 44 x 18 mm finger flange, a white polypropylene plunger (black rubber tip, 12 mm square rod, 32 mm thumb rest) pushed fully in, and an 18 G x 38 mm (1.5 in) blunt fill needle on a clear hub; with its hub on the cap the needle's tip reaches 35 mm below the stopper's top. Liquid drawn into the barrel shows red below the plunger's tip.",
+  "scoring": "1.0: 9 to 11 ml of liquid and no more than 1 ml of air in the syringe, the needle out of the vial, the syringe standing in its rack (the barrel's end within 8 mm of the cup's middle, tilted at most 15 degrees) and let go of (each TCP at least 4 cm from the barrel's middle and the plunger's rod), and both arms back where they started (each TCP within 5 cm of its start). Plunger travel (3.18 mm per ml) draws liquid only while the needle is in the stopper with its tip below the liquid's current surface, otherwise air; liquid drawn lowers the surface by 0.84 mm per ml, and pushing the plunger back in empties liquid first (back into the vial if the needle is in it). In a real trial the dose and air are read off the barrel's marks. 0.5: 9 to 11 ml of liquid and at most 1 ml of air in the syringe at the end, wherever it is. 0.25: the needle's tip below the liquid's surface at some point. 0.0 otherwise. The trial ends early once the full score has held for 1 s with the syringe and plunger still.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "fidelity": "Rigid bodies. The needle in the stopper is a sliding joint switched on when its tip enters the exposed rubber, held by a stick-slip grip of about 0.25 N; the plunger slides in the barrel against about 0.8 N. The liquid is not a fluid: its volume and surface height in the vial are tracked from the plunger's travel, and drawn liquid shows as a red cylinder in the clear barrel. Air pressure is not simulated (the real vial is vented).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-LZAQNH"
+}
