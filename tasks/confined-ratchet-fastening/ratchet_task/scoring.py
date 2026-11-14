@@ -1,7 +1,7 @@
 """Current-state scoring and explicit integrity gates, independent of a policy."""
 from dataclasses import dataclass
 import math
-from ratchet_task.config import (REQUIRED_TURNS,SEAT_ROUNDOFF,SEAT_MAX_PENETRATION,
+from ratchet_task.config import (INITIAL_GAP,PITCH,SEAT_ROUNDOFF,SEAT_MAX_PENETRATION,
                                 SEAT_MAX_EDGE_GAP,SEAT_MIN_FORCE,SEAT_CONTACT_FRACTION)
 @dataclass
 class State:
@@ -40,17 +40,16 @@ class History:
         if not all(math.isfinite(v) for v in numbers) or dt<=0:self.invalid=True;self.reason='nonfinite_state'
         elif not s.valid:self.invalid=True;self.reason='mechanism_integrity'
         elif s.fixture_displacement>.002:self.invalid=True;self.reason='fixture_displaced'
-        elif abs(s.interface_torque)>1.:self.invalid=True;self.reason='over_torque'
         elif s.captured and s.seat_gap_min_m < -SEAT_MAX_PENETRATION:self.invalid=True;self.reason='seat_penetration'
         self.score=0.
         if self.invalid:return self.score
         if not s.captured:
             self.tightened=False;self.proof=0.;self.released_seconds=0.;return self.score
-        if s.turns>=.25:self.score=.2
-        if s.turns>=1.:self.score=.4
+        if s.gap<=INITIAL_GAP-PITCH/4:self.score=.2
+        if s.gap<=INITIAL_GAP-PITCH:self.score=.4
         seated=seat_confirmed(s)
-        if seated and s.turns>=REQUIRED_TURNS:self.score=.7
-        good=seated and s.turns>=REQUIRED_TURNS and s.socket_engaged and s.ratchet_cycles>=6
+        if seated:self.score=.7
+        good=seated
         self.proof=self.proof+dt if good else 0.
         if self.proof>=.5-1e-9:self.tightened=True
         if not seated:self.tightened=False

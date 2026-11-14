@@ -6,8 +6,6 @@ PITCH = .00125
 BOLT_LENGTH = .016
 BRACKET_THICKNESS = .003
 THREAD_ENTRY_Z = AXIS[2]-BRACKET_THICKNESS
-START_GAP = BOLT_LENGTH-BRACKET_THICKNESS-.0018
-REQUIRED_TURNS = 1.8
 HEAD_AF = .013
 HEAD_HEIGHT = .0053
 BOLT_MASS = .014
@@ -17,8 +15,6 @@ SOCKET_MASS = .040
 CAPTURE_OFFSET = .0007
 CAPTURE_TILT = np.deg2rad(5)
 THREAD_START = np.deg2rad(15)
-TARGET_TORQUE = (.4, .6)
-MAX_TORQUE = 1.
 SOLVER_POSITION = 64
 SOLVER_VELOCITY = 16
 PHYSICS_HZ = 480
@@ -38,7 +34,8 @@ SEAT_CONTACT_FRACTION = .9
 # Backup angular limit sits behind the physical seat, so it cannot support a
 # separated head. This is an integrity backstop, not the scored seating surface.
 SEAT_STOP_GAP = -.0001
-BOLT_START = AXIS + np.array([0.,0.,.0025])
+INITIAL_GAP = .0025  # Reproducible under-head clearance, measured from bracket top.
+BOLT_START = AXIS + np.array([0.,0.,INITIAL_GAP])
 TOOL_PARK = np.array([.30,-.21,TABLE+.036])
 TOOL_WORK_START = BOLT_START + np.array([0.,0.,.0285])
 INSTRUCTION = ('Pick up the ratchet from its cradle, fit the socket onto the started bracket '

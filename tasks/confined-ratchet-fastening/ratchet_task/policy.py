@@ -22,6 +22,7 @@ class FastenPolicy(YamScriptedPolicy):
         self.last_report = -100.
         self.pickup_verified = False
         self.socket_fit_verified = False
+        self.withdrawal_verified = False
         self.settle_waits = 0
 
     def begin_hand(self, phase, targets, t, f):
@@ -62,23 +63,31 @@ class FastenPolicy(YamScriptedPolicy):
                             meta={'waypoint': label})], control_hz=1/self._dt)
 
     def servo_body(self, p, r, f):
-        """Move the measured grasp consistently in translation and orientation."""
+        """Command a fixed measured grasp; contacts supply all tool motion."""
+        self.transport_q, pe, re = ik.solve(p+r@self.transport_offset,
+            ik.matrix_to_quat_xyzw(r@self.transport_relative.T), self.transport_q,
+            base_pos=station.BASES['right'], iters=100)
+        if pe > .002 or re > .02:
+            raise RuntimeError(f'Placement IK: {pe}, {re}')
+        return np.r_[self.transport_q, 0.]
+
+    def servo_withdrawal(self, p, r, f):
+        """Correct measured tool pose as the physical grasp unloads."""
         h, hr = f['poses']['handle'], f['rotations']['handle']
         hand = f['hands']['right']
         error = ik._rot_error(r, hr)
         n = np.linalg.norm(error)
-        delta = np.eye(3) if n < 1e-9 else axis_angle_matrix(error/n, min(.04, .6*n))
-        shift = .6*(p-h)
+        delta = np.eye(3) if n < 1e-9 else axis_angle_matrix(error/n, min(.03, .4*n))
+        shift = .4*(p-h)
         length = np.linalg.norm(shift)
-        if length > .005:
-            shift *= .005/length
-        tcp = hand['tcp'] + shift + (delta-np.eye(3))@(hand['tcp']-h)
+        if length > .003:shift *= .003/length
+        tcp = hand['tcp']+shift+(delta-np.eye(3))@(hand['tcp']-h)
         rotation = delta@hand['rotation']
         q, pe, re = ik.solve(tcp, ik.matrix_to_quat_xyzw(rotation),
-                            hand['joints'], base_pos=station.BASES['right'], iters=100)
+            hand['joints'], base_pos=station.BASES['right'], iters=100)
         if pe > .002 or re > .02:
-            raise RuntimeError(f'Placement IK: {pe}, {re}')
-        return np.r_[q, 0.]
+            raise RuntimeError(f'Withdrawal IK: {pe}, {re}')
+        return np.r_[q,0.]
 
     def act(self, observation):
         from ratchet_task.embodiment import FEEDBACK as f
@@ -91,8 +100,11 @@ class FastenPolicy(YamScriptedPolicy):
         if self.phase == 'rest' and t >= self.end:
             hr = f['rotations']['handle']
             self.initial_tool = h.copy()
-            p = h+hr@np.array([-.13, 0, .0185])
-            r = hr@np.array([[0,-1,0],[-1,0,0],[0,0,-1.]])
+            p = h+hr@np.array([-.115, 0, .0132])
+            # A small approach tilt keeps the wrist away from its vertical singularity.
+            a = np.deg2rad(-5.)
+            tilt = np.array([[np.cos(a),0,np.sin(a)],[0,1,0],[-np.sin(a),0,np.cos(a)]])
+            r = hr@tilt@np.array([[0,-1,0],[-1,0,0],[0,0,-1.]])
             self.begin_hand('pickup', [
                 Target(3., p+[0,0,.08], r, .65, 'above ratchet'),
                 Target(2.5, p, r, .65, 'descend around grip'),
@@ -103,6 +115,10 @@ class FastenPolicy(YamScriptedPolicy):
             if h[2]-self.initial_tool[2] < .06:
                 raise RuntimeError('Physical pickup did not lift the ratchet')
             self.pickup_verified = True
+            hr = f['rotations']['handle']
+            self.transport_offset = hr.T@(hand['tcp']-h)
+            self.transport_relative = hand['rotation'].T@hr
+            self.transport_q = hand['joints'].copy()
             self.entry_height = float(b[2]+.047)
             self.begin_body('carry', [
                 Target(4., np.array([.20,-.12,self.entry_height]), np.eye(3), 0., 'carry outside wall'),
@@ -113,7 +129,7 @@ class FastenPolicy(YamScriptedPolicy):
             if t >= self.end:
                 pe = np.linalg.norm(p-h)
                 re = np.linalg.norm(ik._rot_error(r, f['rotations']['handle']))
-                if pe > .002 or re > .01:
+                if pe > .002 or re > .02:
                     self.settle_waits += 1
                     if self.settle_waits > 8:
                         raise RuntimeError(f'Tool pose failed to settle in {self.phase}: {pe}, {re}')
@@ -157,12 +173,76 @@ class FastenPolicy(YamScriptedPolicy):
                 if elapsed > 20.:
                     raise RuntimeError('Socket placement did not establish stable hex engagement')
                 return self.pack(self.servo_body(root, rz(theta), f), 'lower and rock socket onto bolt', observation)
+        if self.phase == 'hold' and f.get('tightened', False):
+            self.phase, self.start = 'unload', t
+            self.unload_from = float(hw['angles']['handle'])
+            print('ROBOT_POLICY', self.phase, t, flush=True)
+        if self.phase == 'unload':
+            elapsed = t-self.start
+            if elapsed >= 5. and f.get('score') == 1. and hw['socket_engaged']:
+                self.phase = 'withdraw_start'
+            else:
+                if elapsed > 12.:
+                    raise RuntimeError('Seat did not qualify after the freewheel return')
+                theta = self.unload_from+(np.deg2rad(14)-self.unload_from)*ik.smoothstep(elapsed/3.)
+                r = rz(theta)
+                root = b+np.array([0,0,.0005])+.028*f['rotations']['drive'][:,2]
+                self.command_q, pe, re = ik.solve(root+r@self.offset,
+                    ik.matrix_to_quat_xyzw(r@self.relative.T), self.command_q,
+                    base_pos=station.BASES['right'], iters=100)
+                if pe > .002 or re > .02:
+                    raise RuntimeError(f'Freewheel return IK: {pe}, {re}')
+                return self.pack(np.r_[self.command_q,0.], 'unload socket before extraction', observation)
+        if self.phase == 'withdraw_start':
+            # Reverse the insertion path. Clear the hex before neutralizing yaw,
+            # then settle each physical pose before moving through the opening.
+            hr = f['rotations']['handle']
+            self.integral[:] = 0.
+            # Eight millimetres clears the 5.3 mm head. Slow extraction
+            # limits the disturbance as the physical grasp unloads.
+            self.withdraw_height = float(h[2]+.008)
+            self.begin_body('withdraw_lift', [
+                Target(2., h.copy(), hr.copy(), 0., 'settle unloaded grasp'),
+                Target(20.,
+                np.array([AXIS[0], 0., self.withdraw_height]),
+                f['rotations']['handle'].copy(), 0., 'lift socket clear of head')], t, f)
+        if self.phase in ['withdraw_lift','withdraw_level','withdraw_exit','withdraw_expose']:
+            p, r, label = self.body_goal(t-self.start)
+            if t >= self.end:
+                pe = np.linalg.norm(p-h)
+                re = np.linalg.norm(ik._rot_error(r, f['rotations']['handle']))
+                bottom = f['poses']['drive']-.028*f['rotations']['drive'][:,2]
+                clear = bool(not hw['socket_engaged'] and bottom[2] > b[2]+HEAD_HEIGHT+.001)
+                settled = clear if self.phase == 'withdraw_lift' else pe <= .003 and re <= .03
+                if not settled:
+                    self.settle_waits += 1
+                    if self.settle_waits > 12:
+                        raise RuntimeError(f'Withdrawal failed to settle in {self.phase}: {pe}, {re}')
+                    self.end = t+1.
+                elif self.phase == 'withdraw_lift':
+                    self.withdraw_height = float(h[2])
+                    self.begin_body('withdraw_level', [Target(3., h.copy(), np.eye(3), 0., 'level tool for exit')], t, f)
+                elif self.phase == 'withdraw_level':
+                    self.begin_body('withdraw_exit', [Target(6.,
+                        np.array([.20,0,self.withdraw_height]),np.eye(3),0.,'withdraw through opening')], t, f)
+                elif self.phase == 'withdraw_exit':
+                    self.begin_body('withdraw_expose', [Target(3.,
+                        np.array([.20,-.12,self.withdraw_height]),np.eye(3),0.,'expose seated interface'),
+                        Target(2.,np.array([.20,-.12,self.withdraw_height]),np.eye(3),0.,'inspect exposed seat')], t, f)
+                else:
+                    self.withdrawal_verified = bool(not hw['socket_engaged'] and
+                        np.linalg.norm(h[:2]-b[:2]) > .10 and f.get('score') == 1.)
+                    if not self.withdrawal_verified:
+                        raise RuntimeError('Withdrawal did not preserve and expose the seated bolt')
+                    self.stop = True
+            p, r, label = self.body_goal(t-self.start)
+            return self.pack(self.servo_withdrawal(p, r, f), label, observation)
         if self.phase in ['ratchet','hold']:
             from ratchet_task.scoring import State, seat_confirmed
             seated = seat_confirmed(State(gap=hw.get('seat_gap_m',1.),
                 seat_contact=hw.get('seat_contact',False),seat_contact_fraction=hw.get('seat_contact_fraction',0.),
                 seat_force_n=hw.get('seat_force_mean_n',0.),seat_gap_min_m=hw.get('seat_gap_min_m',1.),
-                seat_gap_max_m=hw.get('seat_gap_max_m',1.))) and hw['turns'] >= REQUIRED_TURNS
+                seat_gap_max_m=hw.get('seat_gap_max_m',1.)))
             if seated and self.phase == 'ratchet':
                 self.phase, self.hold_angle = 'hold', float(hw['angles']['handle'])
             if self.phase == 'hold' and not seated:
