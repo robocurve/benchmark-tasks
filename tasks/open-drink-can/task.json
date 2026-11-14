@@ -1,0 +1,20 @@
+{
+  "title": "Open a drink can by its stay-on tab: pinch the tail inside the lid's recess and lift it until the seal breaks",
+  "category": "Societal relatability",
+  "keywords": [
+    "drink can",
+    "stay-on tab",
+    "lever",
+    "breakaway force",
+    "small parts in a recess"
+  ],
+  "instruction": "Open the can.",
+  "context": "Opening a drink can is something most people do every day. The stay-on tab is a lever riveted to the lid: lifting its tail presses its nose down on the scored panel until the seal breaks and the panel folds into the can (Wikipedia, Beverage can: the tab \"uses a separate tab attached to the upper surface as a lever to depress a scored part of the lid\"). The hard part is physical: the tail lies nearly flat inside a lid recessed 6 mm below the rim, it has to be lifted on its arc about the rivet, and it takes a pull to break the seal.",
+  "setup": "Positions in cm on the table, from the midpoint between the two arm bases: x forward (away from the arms), y to the robot's left. One closed 12 fl oz (355 ml) aluminium drink can, red, 6.6 cm across and 12.27 cm tall, stands upright at (26, 0), held in place by a holder (it is fixed). Its lid is 5.1 cm across inside a rim, recessed 6.3 mm below the rim's top. The stay-on tab lies on the lid, 1.7 cm long and 1.2 cm wide, riveted at the lid's centre: its rolled tail (3.6 mm across, its underside 2.4 mm above the lid) points away from the arms (+x), its nose over the scored panel (1.7 x 1.4 cm), which is on the side nearer the arms (-x). Both grippers start open at the ready pose.",
+  "scoring": "Measured on the can at the end: how far the tab's tail is raised about its rivet, and how far the panel is pushed into the can about its hinge, in degrees. 1.0: the panel in at least 45 degrees and the tab raised at least 10 degrees (it was the tab that opened it), held for 1 s, which ends the trial (if time runs out before that has held, it scores 0.9). 0.5: the seal broken (the panel in at least 10 degrees) with the tab raised at least 3 degrees. 0.25: the tab raised at least 10 degrees but the seal holding. 0 otherwise, including a panel poked in with the tab still flat.",
+  "run_limit": "600 steps (30 s at 20 Hz)",
+  "reset_notes": "Use a fresh closed can for every trial, its tab pointing away from the robot and its opening towards it; the holder keeps it from moving.",
+  "fidelity": "The can is fixed in place. The tab, panel and seal are a jointed mechanism (a copy of an MIT-licensed mechanism module, see the README): the tab and panel are rigid plates on hinges and the seal is a sprung catch the panel cams aside, not tearing metal. The tab is thicker than a real one (1 mm) and its tail is a 3.6 mm round edge standing 2.4 mm off the lid so the 6 mm fingertips can pinch it; tab and panel weigh 3 g each, heavier than real, for stable contacts.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-F24W4M"
+}
