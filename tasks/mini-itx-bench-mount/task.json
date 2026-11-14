@@ -1,0 +1,19 @@
+{
+  "title": "Seat a Mini-ITX motherboard on four test-bench standoffs",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "motherboard",
+    "computer assembly",
+    "standoff alignment",
+    "bimanual"
+  ],
+  "instruction": "Seat the Mini-ITX motherboard on all four standoffs with its rear ports in the opening, then release it.",
+  "context": "Accurate motherboard handling and fixture setup is a recurring step in building and testing compute hardware.",
+  "setup": "Unpowered open station; tabletop z=0.7475 m. A 210 x 210 x 4 mm black ESD mat is centred at (0.100,0,0.7495) m. A 240 x 240 x 12 mm fixed aluminium test-bench plate is centred at (0.350,0,0.7535) m. Four brass standoff bases of radius 7 mm and height 24 mm are centred at x=0.278 or 0.422 m, y=-0.072 or +0.072 m, z=0.7715 m, each with a coaxial 2 mm radius, 6 mm high locating pin centred at z=0.7865 m. A fixed open-topped rear metal channel at x=0.455 m is 100 mm wide between its side pieces, with a lower crosspiece below the I/O housing. One 170 x 170 x 1.6 mm green fiberglass Mini-ITX board with four 8 x 8 mm square mounting apertures at local (x,y)=(+/-0.072,+/-0.072) m, plastic CPU cover and slots, and a 38 x 60 x 18 mm rear I/O housing starts flat on the mat at body origin (0.100,0,0.7523) m, zero yaw, mass 0.44 kg. The board target body origin is (0.350,0,0.7843) m. Two removable 16 x 26 x 18 mm black polymer protective edge clamps are attached to the board at local (-0.060,+0.079,+0.010) and (+0.050,-0.079,+0.010) m, clear of the four mounting holes. They stay attached during this seating operation and provide raised gripping surfaces. All parts start stationary; the board is carried by its protective clamps.",
+  "scoring": "0 if the board centre is more than 20 mm from the target, tipped more than 8 degrees, or yawed more than 12 degrees. 0.25 for a board within that coarse zone. 0.5 when all four mounting-hole centres are within 4 mm horizontally of their corresponding pins and the board underside is within 6 mm of the standoff top. 0.75 when each 4 mm pin fits fully inside its 8 mm square aperture (at most 2 mm centre offset on each horizontal axis), the underside within 2 mm, tilt and yaw each at most 3 degrees, and the I/O housing tip reaches x=0.453 m or farther while its centre stays within 30 mm of the opening centre. 1.0 only after that pose is still for 1 second and both grippers are open with TCPs at least 60 mm from the board's bounding box. This task scores seating ready for fastening; it does not score screw fastening or electrical operation.",
+  "run_limit": "2,500 control steps (125 seconds at 20 Hz)",
+  "reset_notes": "Put the motherboard back flat on the ESD mat at the stated starting pose. Inspect that every hole and locating pin is unobstructed. The fixed bench and rear wall do not move.",
+  "fidelity": "A real-size Mini-ITX board and four standoffs are modelled, but the PCB and port housing are rigid simplified shapes and the 8 mm apertures are square. The locating pins do not simulate the spring detent of commercial push-pin standoffs; seating and release, not retention or electrical contact, are measured. The protective clamps are rigidly coupled to the board rather than modelled as separate removable parts.",
+  "scores": "Dream-1 scored 0.0 (seed 0, 2,500-step limit); the board remained on the ESD mat. The scripted Isaac Lab demo v10 scored 1.0 (seed 0): the board seated on all four standoffs, remained still, and both grippers cleared it.",
+  "media": "M-E9YYC2"
+}
