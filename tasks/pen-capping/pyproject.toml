@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robocurve-pen-capping"
+version = "0.1.0"
+
+[project.entry-points."inspect_robots.embodiments"]
+yam_pen_capping = "pen_capping.embodiment:make_embodiment"
+
+[project.entry-points."inspect_robots.policies"]
+pen_capping_scripted = "pen_capping.policy:make_policy"
+
+[tool.setuptools.packages.find]
+include = ["pen_capping*"]
