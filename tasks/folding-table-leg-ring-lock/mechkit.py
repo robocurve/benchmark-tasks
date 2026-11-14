@@ -431,7 +431,16 @@ class Kit:
             quat = mat_to_quat(m[:3, :3])
             return float(2 * math.atan2(float(np.dot(quat[:3], j.axis)), float(quat[3])))
         if j.kind == "slider":
-            return float(np.dot(m[:3, 3], j.axis))
+            # travel along the axis in the parent's own frame: the world-frame motion's translation would pick up the
+            # parent's rotation times the child's distance from the world origin (wrong once the parent turns)
+            tc = self._pose_T(objects, j.child)
+            if j.parent is None:
+                d, ax = tc[:3, 3] - self.parts[j.child].ref[:3, 3], np.asarray(j.axis, float)
+            else:
+                pr = self.parts[j.parent].ref
+                now = _inv(self._pose_T(objects, j.parent)) @ tc
+                d, ax = now[:3, 3] - (_inv(pr) @ self.parts[j.child].ref)[:3, 3], pr[:3, :3].T @ np.asarray(j.axis, float)
+            return float(np.dot(d, ax))
         raise ValueError(f"{name!r} is a plain bond; use broken() / slip()")
 
     def q_deg(self, objects, name: str) -> float:

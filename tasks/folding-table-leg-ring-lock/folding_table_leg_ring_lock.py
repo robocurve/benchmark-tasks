@@ -393,44 +393,35 @@ def distance(objects) -> float:
 # -- the scripted demo ------------------------------------------------------------------------------------------
 # Open loop from the scene's geometry; both arms. The leg starts folded flat, where its brace is near a dead point
 # (pushing the knee only presses the leg onto its fold stop), so the left hand lifts it by its left tube, 10 cm from
-# the hinge (the fingers close on the tube's sides, so the tube turns between the pads), up to 33 deg from upright:
-# past that the tube would run up between the fingers into the palm. The right hand meanwhile comes in from the side,
-# fingers closed, onto the outer edge of the brace's lower strip just under the bent knee; the left lets go and backs
-# off, and the right pushes the strip along its own path (computed from the four-bar's geometry) until the brace is
-# straight and the leg on its stop, then 15 mm further into the stop. It backs off, opens, comes down astride the ring (still on its stop by the
-# bracket), grips it and slides it straight up the lower strip, over the knee, onto its upper stop. Then it opens,
-# lifts off, and both arms park and wait while the leg is pushed. Every TCP waypoint stays at x 0.12-0.40 and at most
-# 185 mm above the bench (the arms' reach there), checked offline.
+# the hinge (the fingers close on the tube's sides, so the tube turns between the pads), up to about 35 deg from
+# upright: past that the tube would run up between the fingers into the palm. The right hand meanwhile comes in
+# along the brace's plane from beyond it, fingers open, and grips the brace's upper strip 7 cm from the leg's clevis;
+# it takes the leg's weight, the left lets go and backs off, and the right swings the strip along its own path (computed
+# from the four-bar's geometry), which straightens the brace and stands the leg on its stop, and presses it there.
+# It lets go, comes down astride the ring (on the lower strip by the bracket), grips it and slides it straight up the
+# strip, over the knee, onto its upper stop. Then it opens, lifts off, and both arms park and wait while the leg is
+# pushed. The arms are position servos of finite stiffness, so where a hand lifts or pushes, the plan aims it past
+# the path by the sag that load causes (the arm's compliance, from its joint gains). Every commanded TCP stays at
+# x 0.12-0.40 and at most 185 mm above the bench (the arms' reach there), checked offline.
 
 TIP_C = 0.0065  # the finger-tip block's centre below the TCP (tips 13 mm below)
-TIP_R = 0.010  # its reach along the knee's outward normal (half-sizes 7.8 x 6.5 mm)
 GRIP = -0.005  # 10 mm between the pads (the ring is 18 mm across): 8 mm squeeze
 GRIP_TUBE = -0.008  # 16 mm between the pads on the 25 mm tube: 9 mm squeeze
 RELEASE = -0.016  # let go of the tube only this far open (32 mm): wider, the fingers' bodies swing in toward it
 R_GRIP = 0.100  # the left hand's grip on its tube, this far from the hinge
 PHI_HAND = 33.0  # the leg angle (deg from upright) at which the right hand takes over at the knee
-SIDE = 0.050  # the right hand comes onto the knee from this far out along -y
-KNEE_BELOW = 0.015  # the right hand pushes the lower strip this far under the knee pin
 SLIDE_OVER = 0.004  # commanded past the ring's upper stop
 SAG = 0.0015  # the slide path is held this far toward straight (a hand that sags pushes the knee onto its stop)
-PRESS_OVER = 0.015  # the knee pushed this far past straight-and-on-stop
 R_PARK = (0.240, -0.330, TOP + 0.150)
 L_PARK = (0.220, 0.430, TOP + 0.150)
 PUSH_CAP = 25.0  # N: the most the plan asks of the right hand on the strip
+DRIVE_MARGIN = 3.0  # N over what the swing needs (gravity and hinge friction): beats the servo's dead band
+PRESS_N = 5.0  # N pressing the leg onto its upright stop
+G_FROM_P = 0.070  # the right hand grips the upper strip this far from the clevis pin (clear of the clevis cheeks)
+PHI_GRIP = 36.0  # the leg angle the right hand grips at: the left's lift ends ~3 deg short of PHI_HAND (arm sag)
+IN_X = 0.030  # the right hand comes in along the brace's plane from this far beyond the knee
 REACH_X, REACH_Z = (0.120, 0.400), 0.185  # every waypoint's TCP inside this (x range; height above the bench)
 YL = YC + TUBE_Y  # the left tube
-
-
-def _knee_tcp(phi, back=0.0, dy=0.0):
-    """TCP pushing the lower strip's outer edge KNEE_BELOW under the knee pin at leg angle ``phi`` (deg), ``back`` m
-    further out along the strip's outward normal (the knee's side). Pushed there, the strip turns about its bracket
-    and the brace straightens; it keeps the hand lower than a push on the knee's corner."""
-    c = loop(phi)
-    ea = (c["K"] - A) / L
-    na = np.array([ea[2], 0.0, -ea[0]])
-    na = na if na @ c["n"] > 0 else -na
-    p = A + ea * (L - KNEE_BELOW) + na * (STRIP_H / 2 + TIP_R + back) + np.array([0, dy, TIP_C])
-    return tuple(float(v) for v in p)
 
 
 def _ring_tcp(s, out=0.0):
@@ -457,16 +448,17 @@ def _hinge_torque(phi, moving=True):
     return LEG_KG * 9.81 * LEG_COM * math.sin(math.radians(phi)) + (LEG_FRICTION if moving else 0.0)
 
 
-def _strip_push(phi):
-    """Unit push direction on the lower strip and its lever (m of contact travel per rad of unfolding)."""
-    def contact(ph):
-        c = loop(ph)
-        ea = (c["K"] - A) / L
-        na = np.array([ea[2], 0.0, -ea[0]])
-        return A + ea * (L - KNEE_BELOW), (na if na @ c["n"] > 0 else -na)
-    p, na = contact(phi)
-    p2, _ = contact(phi - 0.2)
-    return -na, float(-na @ (p2 - p)) / math.radians(0.2)
+def _strip_tcp(phi):
+    """TCP gripping the brace's upper strip G_FROM_P from the leg's clevis pin at leg angle ``phi``: close to the
+    leg, so the hand has nearly the leg's own lever (the pin is 13 cm up it)."""
+    c = loop(phi)
+    return tuple(float(v) for v in c["P"] + (c["K"] - c["P"]) / L * G_FROM_P + np.array([0, 0, TIP_C]))
+
+
+def _strip_dir(phi):
+    """Unit direction the gripped point moves as the leg unfolds, and its lever (m per rad of unfolding)."""
+    d = (np.array(_strip_tcp(phi - 0.2)) - np.array(_strip_tcp(phi))) / math.radians(0.2)
+    return d / np.linalg.norm(d), float(np.linalg.norm(d))
 
 
 def _compliance(arm, pos):
@@ -495,7 +487,9 @@ def _aim(arm, pos, force):
     pos = np.asarray(pos, float)
     if not FF or not np.any(force):
         return tuple(float(v) for v in pos)
-    return tuple(float(v) for v in pos + _compliance(arm, pos) @ np.asarray(force, float))
+    aim = pos + _compliance(arm, pos) @ np.asarray(force, float)
+    aim[2] = min(aim[2], TOP + REACH_Z)  # never aimed above the arms' reach
+    return tuple(float(v) for v in aim)
 
 
 def _lift_force(phi, moving=True):
@@ -503,18 +497,20 @@ def _lift_force(phi, moving=True):
     return np.array([-math.cos(a), 0.0, math.sin(a)]) * _hinge_torque(phi, moving) / R_GRIP
 
 
-def _push_force(phi, moving=True):
-    d, lever = _strip_push(max(phi, 1.0))
-    return d * min(PUSH_CAP, _hinge_torque(phi, moving) / lever)
+def _drive_force(phi, moving=True):
+    """Force (N) the right hand applies at the gripped strip point to hold (or, with a margin, swing up) the leg."""
+    d, lever = _strip_dir(max(phi, 0.5))
+    f = _hinge_torque(phi, moving) / lever + (DRIVE_MARGIN if moving else 0.0)
+    return d * min(PUSH_CAP, f)
 
 
 DEMO_PHI = []  # (time s, leg angle deg) the plan expects: for the offline clash check
 
 
 def demo():
-    """Lift the folded leg by its tube (left), hand over to a push on the brace's knee (right), push it straight (the
-    leg swings upright onto its stop), then grip the ring and slide it up over the knee; let go, park and wait while
-    the leg is pushed."""
+    """Lift the folded leg by its tube (left), hand it over to a grip on the brace's upper strip (right), swing the
+    strip until the brace is straight and the leg on its stop, then grip the ring and slide it up over the knee; let
+    go, park and wait while the leg is pushed."""
     c, o = FINGER_CLOSED, FINGER_OPEN
     Lw, R = [], []
     DEMO_PHI.clear()
@@ -542,36 +538,43 @@ def demo():
     hold = _aim("left", _tube_tcp(PHI_HAND), _lift_force(PHI_HAND, moving=False))
     w(Lw, 0.5, hold, GRIP_TUBE, "hold the leg up")
     t_up = t(Lw)
-    # right: wait, then in from the side onto the knee's outer corner
+    # right: wait, then in along the brace's plane, from beyond it, fingers open, and grip the upper strip by the clevis
+    g0 = _strip_tcp(PHI_GRIP)
     w(R, 2.0, R_PARK, c, "start")
     w(R, t_up - 2.0, R_PARK, c, "wait while the leg is lifted")
-    w(R, 1.5, _knee_tcp(PHI_HAND, 0.010, -SIDE), c, "beside the bent knee, fingers closed")
-    w(R, 1.0, _knee_tcp(PHI_HAND, 0.010), c, "in, just off the lower strip's outer edge")
-    w(R, 0.6, _knee_tcp(PHI_HAND, 0.0), c, "onto the strip under the knee")
+    beyond = np.array([loop(PHI_GRIP)["K"][0] + IN_X, YC, TOP + 0.165])  # past the knee, nothing of the brace there
+    w(R, 1.5, beyond + [0, -0.080, 0], o, "out beyond the knee, fingers open")
+    w(R, 1.0, beyond, o, "in line with the brace, beyond the knee")
+    w(R, 1.0, g0, o, "the upper strip between the fingers, by the clevis")
+    w(R, 0.8, g0, c, "grip the strip")
+    w(R, 0.3, g0, c, "settle closed")
     w(Lw, t(R) - t_up, hold, GRIP_TUBE, "hold the leg up")
-    # hand the leg's weight over: the right takes it on the strip while the left eases off, then the left lets go
-    w(R, 1.2, _aim("right", _knee_tcp(PHI_HAND), _push_force(PHI_HAND, moving=False)), c, "take the leg's weight")
+    # hand the leg's weight over: the right takes it by the strip while the left eases off, then the left lets go
+    take = _aim("right", g0, _drive_force(PHI_GRIP, moving=False))
+    w(R, 1.2, take, c, "take the leg's weight")
     w(Lw, 1.2, _tube_tcp(PHI_HAND), GRIP_TUBE, "ease off")
     w(Lw, 0.5, _tube_tcp(PHI_HAND), RELEASE, "let go of the tube")
     w(Lw, 0.8, _tube_tcp(PHI_HAND, (-0.040, 0.0)), RELEASE, "back off, square to the tube")
     w(Lw, 1.5, L_PARK, o, "park")
-    w(R, t(Lw) - 1.5 - t(R), _aim("right", _knee_tcp(PHI_HAND), _push_force(PHI_HAND, moving=False)), c,
-      "hold the leg up while the left lets go")
-    DEMO_PHI.append((t(R), PHI_HAND))
+    w(R, t(Lw) - 1.5 - t(R), take, c, "hold the leg up while the left lets go")
+    DEMO_PHI.append((t(R), PHI_GRIP))
     n = 10
     for k in range(1, n + 1):
-        phi = PHI_HAND * (1 - k / n)
-        w(R, 6.0 / n, _aim("right", _knee_tcp(phi), _push_force(phi)), c,
-          "push the strip along its path: the leg swings upright")
+        phi = PHI_GRIP * (1 - k / n)
+        w(R, 6.0 / n, _aim("right", _strip_tcp(phi), _drive_force(phi)), c,
+          "swing the strip along its path: the leg comes upright")
         DEMO_PHI.append((t(R), phi))
-    w(R, 1.0, _knee_tcp(0.0, -PRESS_OVER), c, "press it onto the stop")
-    w(R, 0.5, _knee_tcp(0.0, -PRESS_OVER), c, "hold")
-    w(R, 0.6, _knee_tcp(0.0, 0.015), c, "back off")
+    g1 = _strip_tcp(0.0)
+    press = _aim("right", g1, _strip_dir(0.5)[0] * PRESS_N)
+    w(R, 1.0, press, c, "press it onto the stop")
+    w(R, 0.5, press, c, "hold")
+    w(R, 0.5, g1, c, "ease off")
+    w(R, 0.5, g1, RELEASE, "let go of the strip")
+    w(R, 0.8, np.array(g1) + [0.040, 0.0, 0.0], o, "out along the brace's plane, fingers open")
     if VARIANT == "open":
-        w(R, 1.5, R_PARK, c, "park")
+        w(R, 1.5, R_PARK, o, "park")
     else:  # along the brace to the ring, never more than about 4 cm from it (so it does not count as let go)
         up = np.array([0, 0, 0.030])
-        w(R, 0.4, _knee_tcp(0.0, 0.015), o, "open the fingers")
         w(R, 1.2, np.array(_ring_tcp(S0)) + up, o, "over the ring")
         w(R, 1.2, _ring_tcp(S0, -SAG), o, "down astride the ring")
         w(R, 0.4, _ring_tcp(S0, -SAG), o, "settle")
@@ -609,7 +612,7 @@ def self_test():
             assert math.radians(q) > j.lower + 0.02 or phi == 0.0, (jn, phi, q)
             assert math.radians(q) < j.upper - 0.02, (jn, phi, q)
     assert abs(ring_s(state(START_DEG, 0.0)) - S0) < 1e-9
-    knee_hand = [_knee_tcp(0.0)]
+    knee_hand = [_strip_tcp(0.0)]
     lift_hand = [_tube_tcp(START_DEG)]
     ring_hand = [_ring_tcp(RING_TOP)]
 
