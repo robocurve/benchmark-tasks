@@ -6,6 +6,28 @@ Files: `task.json`, `rack_pool_balls_tight.py` (scene, `success()`, partial-cred
 sim control plan and an offline self-test), `mechkit.py` (unchanged helper: multi-box free part, per-episode memory),
 `README.md`.
 
+## Response to review
+
+Review verdict (2026-11-14 15:14Z), verbatim:
+
+> Scoring (not met): The distance-based full-score conditions permit a tightly packed triangle facing the wrong
+> direction while its head ball remains on the foot spot. What to change: Add a numeric final-orientation check so the
+> apex points toward the head of the table and the rear row is appropriately aligned; include it in the scorer and its
+> tests.
+
+Change: `score()` now requires the pack to face the head of the table for 0.75 and 1.0 (`orientation()` and
+`_oriented()` in the task file); a pack that fails it stops at 0.5. Two numeric tests: the line from the centroid of
+the 15 ball centres to the head ball within 5 degrees of the table's long axis, pointing toward the head string, and
+the least-squares line through the five rear-row centres within 3 degrees of square to that axis (limits and their
+reasons under "Scoring rules"). On the real rig both angles come from the after-lift overhead grid photo. The
+self-test adds four cases: the tight pack turned 2 degrees about the head ball scores 1.0; turned 180 degrees with the
+head ball on the spot (apex 180 degrees off), turned 10 degrees (both angles 10 degrees off) and turned 4 degrees (rear
+row over its 3-degree limit, apex inside 5) each score 0.5. task.json scoring is updated to match. The demo passes the
+new test by a wide margin: replayed with the new scorer, the pack stayed within 0.18 degrees (apex) and 0.24 degrees
+(rear row) for the whole run, and was at 0.01 and 0.20 degrees when the rack came clear; the rack itself turned at most
+0.13 degrees. The demo plan, the recording and the media are unchanged. This revision also carries an earlier
+text-only change: a shorter context, and the real-rig check of ball movement during the lift from two grid photos.
+
 ## Environment
 
 Isaac Lab-Arena 0.3.1 with yam-arena and inspect-robots, as the program's launchable installs them. Before every shell:
@@ -21,12 +43,19 @@ python tasks/rack-pool-balls-tight/rack_pool_balls_tight.py
 
 It asserts the scoring rules on hand-built states (start, tight on the spot with the rack on, loose with the rack
 clear, tight and clear, head ball 7 mm off, balls rolling, a pad touching a ball, the lift gate latched, back row 1 mm
-off, rack only 30 mm up) and replays both plans (the demo and control b) through the kinematics at 20 Hz, every joint
+off, rack only 30 mm up, and four orientation cases: a correct pack turned 2 degrees passes; the tight pack turned
+180 degrees, 10 degrees or 4 degrees about the head ball on the spot each stop at 0.5), checks the orientation angles
+directly, and replays both plans (the demo and control b) through the kinematics at 20 Hz, every joint
 inside the URDF limits, IK error under 0.5 mm. Expected output:
 
 ```
 (back row 1 mm off, rack clear: 22/30 pairs tight -> 0.5)
-scoring: 10 cases pass
+(pack turned +0 deg about the head ball: apex 0.00 deg, rear row 0.00 deg, oriented True)
+(pack turned +180 deg about the head ball: apex 180.00 deg, rear row 0.00 deg, oriented False)
+(pack turned +10 deg about the head ball: apex 10.00 deg, rear row 10.00 deg, oriented False)
+(pack turned -4 deg about the head ball: apex 4.00 deg, rear row 4.00 deg, oriented False)
+start: rack clearance -0.00 mm (balls touching the V), widest gap 2.00 mm, head ball 15.0 mm past the spot; back bar centre x 0.2262
+scoring: 14 cases pass
 demo left: 22.2 s plan, worst IK 0.099 mm / 0.012 deg
 demo right: 22.2 s plan, worst IK 0.099 mm / 0.012 deg
 control b (not the demo) left: 15.5 s plan, worst IK 0.080 mm / 0.012 deg
@@ -96,13 +125,23 @@ by 20 mm up), a ball moved 9.6 mm and gaps opened to 3.1 mm; a loose pack (2 mm 
 - Latched 0: once the rack's lowest point is 2 mm above the cloth, any ball's centre moves more than 3 mm horizontally
   before the rack is clear of every ball by 50 mm.
 - 0 if the head (1) ball's centre is more than 10 mm from the spot; 0.25 within 10 mm; 0.5 that and the rack clear (every
-  part at least 50 mm from every ball); 0.75 that and at least 24 of the 30 touching pairs within 0.5 mm; 1.0 all 30
-  within 0.5 mm, the head ball within 5 mm of the spot, all balls still (under 5 mm/s), and no gripper point (both TCPs,
+  part at least 50 mm from every ball); 0.75 that, at least 24 of the 30 touching pairs within 0.5 mm, and the pack
+  facing the head of the table (below); 1.0 that, all 30 within 0.5 mm, the head ball within 5 mm of the spot, all balls still (under 5 mm/s), and no gripper point (both TCPs,
   all four pad tips and pad middles) within 30 mm of any ball. Held 1 s.
 - Real rig: ball movement during the lift is measured from two overhead photos against a grid on the cloth, one taken
   just before the rack starts to rise and one once it is clear; the trial fails (0) if any ball's centre moved more
   than 3 mm between them. The same photos give the head ball's distance from the spot and the rack's clearance, and a
   0.5 mm feeler gauge goes between neighbouring balls.
+- Orientation (needed for 0.75 and 1.0). The table's long axis is x; the head of the table, where the apex points, is
+  +x. (1) Apex: the line from the centroid of the 15 ball centres to the head ball within 5 degrees of the long axis,
+  pointing toward the head string. (2) Rear row: the least-squares line through the five rear-row centres (balls 5, 13,
+  15, 6, 12) within 3 degrees of square to the long axis. Why these limits: the centroid is 132 mm behind the head
+  ball, so 5 degrees puts the rear row's centre at most 17 mm (under a third of a ball) off the long string, and the
+  apex test is the one that rejects a pack facing the wrong way (turned 180 degrees, its rear row is still square); the
+  rear row spans 229 mm, so 3 degrees puts its end balls at most 6.0 mm (a tenth of a ball) out of square, and since a
+  tight pack is rigid this also holds its rotation to 3 degrees. Real rig: both angles from the ball centres in the
+  after-lift overhead grid photo; with centres read to about 1 mm, the angles are good to about 0.6 degrees (apex) and
+  0.3 degrees (rear-row fit), well inside the limits.
 
 ## Sim controls
 

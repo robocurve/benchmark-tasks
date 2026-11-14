@@ -225,6 +225,15 @@ GAP_OK = 0.0005  # m: a pair counts as tight at <= 0.5 mm (feeler gauge)
 SPOT_25, SPOT_100 = 0.010, 0.005  # m: head-ball centre to the spot's centre
 HAND_CLEAR = 0.030  # m: every robot point this far from every ball surface
 STILL = 0.005  # m/s
+# Orientation (for 0.75 and 1.0). The table's long axis is x; the head of the table (head string) is +x, the way the
+# apex points in the setup. APEX_TOL: the direction from the pack's centroid (132 mm behind the head ball) to the head
+# ball within +-5 deg of +x, i.e. the rear row's centre within 17 mm (under a third of a ball) of the long string; this
+# is what rejects a pack facing the wrong way (180 deg), which the rear-row line alone cannot tell apart. REAR_TOL: the
+# line fitted through the five rear-row centres within +-3 deg of square to the long axis, i.e. its end balls within
+# 6.0 mm (a tenth of a ball) of square. A tight pack is rigid, so this also bounds its rotation to +-3 deg. Overhead
+# grid photo, centres to ~1 mm: angle error about 0.6 deg (apex) and 0.3 deg (rear-row fit), well inside both.
+APEX_TOL, REAR_TOL = 5.0, 3.0  # deg
+REAR = slice(10, 15)  # NAMES indices of the rear row (5, 13, 15, 6, 12)
 
 
 def centres(objects) -> np.ndarray:
@@ -357,11 +366,15 @@ def _on_step(objects) -> None:
                   f"(limit {GATE_MOVE * 1000:.0f} mm), control step {m['n']}, rack lowest point {low * 1000:.1f} mm", flush=True)
         if clear >= CLEAR:
             m["cleared"] = m["n"]
+            apex, rear = orientation(c)
             print(f"[rk] rack clear of every ball by {clear * 1000:.0f} mm at control step {m['n']}; most any ball moved "
-                  f"while it rose: {m['max_move'] * 1000:.2f} mm", flush=True)
+                  f"while it rose: {m['max_move'] * 1000:.2f} mm; orientation: apex {apex:.2f} deg off +x (limit "
+                  f"{APEX_TOL:.0f}), rear row {rear:.2f} deg off square (limit {REAR_TOL:.0f})", flush=True)
     tiers = _tiers(objects, c)
     if tiers != m["tiers"]:
-        print(f"[rk] k={m['n']} tiers {tiers} (score {score(objects):.2f})", flush=True)
+        apex, rear = orientation(c)
+        print(f"[rk] k={m['n']} tiers {tiers} (score {score(objects):.2f}); apex {apex:.2f} deg, rear row {rear:.2f} deg",
+              flush=True)
         m["tiers"] = tiers
     if DEBUG and m["n"] % 10 == 0:
         g = pair_gaps(c)
@@ -385,6 +398,24 @@ def _head_off(c) -> float:
     return float(math.dist(c[0][:2], (X_SPOT, Y_SPOT)))
 
 
+def orientation(c) -> tuple:
+    """(apex error, rear-row error) in degrees. Apex: the angle between the vector from the 15 ball centres' centroid
+    to the head ball and +x (toward the head of the table), in [0, 180]. Rear row: the angle between the least-squares
+    line through the five rear-row centres and the y axis (square to the long axis), in [0, 90]."""
+    xy = c[:, :2]
+    v = xy[0] - xy.mean(axis=0)
+    apex = abs(math.degrees(math.atan2(v[1], v[0])))
+    r = xy[REAR] - xy[REAR].mean(axis=0)
+    d = np.linalg.svd(r)[2][0]  # principal direction of the rear-row centres
+    rear = math.degrees(math.atan2(abs(d[0]), abs(d[1])))
+    return apex, rear
+
+
+def _oriented(c) -> bool:
+    apex, rear = orientation(c)
+    return apex <= APEX_TOL and rear <= REAR_TOL
+
+
 def _still(objects) -> bool:
     return all(float(np.linalg.norm(np.asarray(objects[b].lin_vel, float))) < STILL for b in NAMES)
 
@@ -396,6 +427,7 @@ def _tiers(objects, c) -> str:
         "C" if rack_clearance(objects, c) >= CLEAR else "-",
         "T" if (g <= GAP_OK).sum() >= 24 else "-",
         "A" if (g <= GAP_OK).all() else "-",
+        "O" if _oriented(c) else "-",
         "5" if _head_off(c) <= SPOT_100 else "-",
         "H" if hand_clearance(c) >= HAND_CLEAR else "-",
         "G" if _mem()["gate"] is not None else "-",
@@ -405,8 +437,9 @@ def _tiers(objects, c) -> str:
 def score(objects) -> float:
     """0 if any ball moved more than 3 mm sideways while the rack was rising (latched). Otherwise: 0.25 the head ball's
     centre within 10 mm of the foot spot; 0.5 that and the rack clear (every part of it at least 50 mm from every ball);
-    0.75 that and at least 24 of the 30 touching pairs within 0.5 mm; 1.0 all 30 within 0.5 mm, the head ball within
-    5 mm of the spot, every ball still and both grippers at least 30 mm from every ball."""
+    0.75 that, at least 24 of the 30 touching pairs within 0.5 mm and the pack facing the head of the table (apex
+    within 5 deg of +x from the centroid, rear row within 3 deg of square to the long axis); 1.0 that, all 30 within
+    0.5 mm, the head ball within 5 mm of the spot, every ball still and both grippers at least 30 mm from every ball."""
     m = _mem()
     if m["gate"] is not None:
         return 0.0
@@ -416,7 +449,7 @@ def score(objects) -> float:
     if rack_clearance(objects, c) < CLEAR:
         return 0.25
     g = pair_gaps(c)
-    if (g <= GAP_OK).sum() < 24:
+    if (g <= GAP_OK).sum() < 24 or not _oriented(c):
         return 0.5
     if (g <= GAP_OK).all() and _head_off(c) <= SPOT_100 and _still(objects) and hand_clearance(c) >= HAND_CLEAR:
         return 1.0
@@ -567,6 +600,11 @@ def self_test():
     for k in range(10, 15):  # back row pulled 1 mm back: 5 pairs of the back row + 4 diagonals... count below
         some[k][0] -= 0.001
     up = (0.0, 0.0, 0.13)
+
+    def turned(deg):  # the tight pack rotated about the head ball, which stays on the spot
+        a = math.radians(deg)
+        return [(X_SPOT + (x - X_SPOT) * math.cos(a) - (y - Y_SPOT) * math.sin(a),
+                 Y_SPOT + (x - X_SPOT) * math.sin(a) + (y - Y_SPOT) * math.cos(a)) for x, y in tight]
     cases = {
         "start (loose, 15 mm past, rack on)": (_states(START), {}, [], 0.0),
         "tight on the spot, rack still on": (_states(tight, (-(START_PAST), 0, 0)), {}, [], 0.25),
@@ -578,6 +616,10 @@ def self_test():
         "tight but the lift disturbed it (latched)": (_states(tight, up), {"gate": 5}, [], 0.0),
         "back row 1 mm off, rack clear": (_states(some, up), {}, [], None),
         "rack only 30 mm up (not clear)": (_states(tight, (0, 0, 0.03 + 0.0003)), {}, [], 0.25),
+        "orientation: correct pack, rotated 2 deg (inside both limits)": (_states(turned(2.0), up), {}, [], 1.0),
+        "orientation: rotated 180 deg, head ball on the spot (apex faces the foot)": (_states(turned(180.0), up), {}, [], 0.5),
+        "orientation: rotated 10 deg, head ball on the spot": (_states(turned(10.0), up), {}, [], 0.5),
+        "orientation: rotated 4 deg (apex inside 5, rear row outside 3)": (_states(turned(4.0), up), {}, [], 0.5),
     }
     try:
         for name, (st, flags, pts, want) in cases.items():
@@ -592,6 +634,12 @@ def self_test():
             assert abs(got - want) < 1e-9 and success(st) == (want >= 1.0), (name, got, want)
         g = pair_gaps(np.array([[x, y, 0] for x, y in tight]))
         assert np.abs(g).max() < 1e-9
+        for deg, want in ((0.0, (0.0, 0.0)), (180.0, (180.0, 0.0)), (10.0, (10.0, 10.0)), (-4.0, (4.0, 4.0))):
+            o = orientation(np.array([[x, y, 0] for x, y in turned(deg)]))
+            assert abs(o[0] - want[0]) < 1e-6 and abs(o[1] - want[1]) < 1e-6, (deg, o)
+            assert np.abs(pair_gaps(np.array([[x, y, 0] for x, y in turned(deg)]))).max() < 1e-9  # still tight
+            print(f"   (pack turned {deg:+.0f} deg about the head ball: apex {o[0]:.2f} deg, rear row {o[1]:.2f} deg, "
+                  f"oriented {_oriented(np.array([[x, y, 0] for x, y in turned(deg)]))})", file=sys.stderr)
         assert len(PAIRS) == 30
         st = _states(START)
         print(f"start: rack clearance {rack_clearance(st, centres(st)) * 1000:.2f} mm (balls touching the V), widest gap "
