@@ -1,0 +1,20 @@
+{
+  "title": "Slit a taped carton's 40 cm seam with a box cutter, short of the product 6 mm below, then draw the blade back in",
+  "category": "Impact on jobs",
+  "keywords": [
+    "box cutter",
+    "partial-depth cut",
+    "carton",
+    "packing tape",
+    "retractable knife"
+  ],
+  "instruction": "Use the knife to cut the box open along its taped seam without cutting what's inside, then draw the blade back in.",
+  "context": "The knife starts with its blade concealed in the handle, as a retractable knife is left: the blade is pushed out on its slider, 20 mm, to cut, and drawn back in after. The cut's depth is set by what lies under it: other knife tasks cut through their work, but here the product's top is 6 mm under the tape, so with its nose on the board the knife must be held between about 2 and 17 degrees to the carton's top along the whole 40 cm seam, keeping to the seam: through the tape, short of the product, in at one edge and out at the other. The tape is one strip that stops at the two top edges, a real, lighter way of taping. Stockers, order fillers and hand material movers open taped cartons all day, and a blade pushed too deep cuts the stock.",
+  "setup": "Two YAM arms at the near edge of the table; positions are (x forward from the arm bases, y left) in cm, heights above the table. A single-wall C-flute corrugated carton, 40 x 30 x 25 cm (16 x 12 x 10 in), board 4 mm thick, stands with its 40 cm side along x and its middle at (50, 2.5). Its two long top flaps meet along the middle with a 3 mm gap; the two short inner flaps are cut off. One strip of 48 mm brown polypropylene packing tape runs along the seam and stops at the two top edges. Inside, a white folding-carton (paperboard) product box fills the carton, its top 2 mm under the flaps' underside and 6 mm under the tape's top; carton and product weigh 3 kg. A retractable utility knife lies on its side on the table, tip forward, its slider facing the right arm, its handle's middle at (50.5, -30): a yellow handle 15 x 2.8 x 1.8 cm with a black grip, 150 g, and a standard trapezoid blade drawn in. Its slider button stands 5 mm proud of the handle's spine; pushed 20 mm forward, it puts the blade out 20 mm, to its stop, where a notch holds it; drawn back, it clicks into the notch at the other stop.",
+  "scoring": "Photo and inspection. 1.0, held for 3 s: the box cut open, the tape slit along the whole 40 cm seam so that each flap, lifted by hand by its free edge, rises to 30 degrees without tearing tape; nothing cut that should not be: no knife mark on the product box's top and no cut in the carton's cardboard outside the seam's 48 mm tape strip; and the blade drawn back in at the end, none of it past the knife's nose. 0.5: the box opened without the rest (a mark, or the blade left out). 0 otherwise, or if the carton tips over. Tape torn or peeled by a gripper does not count as cut. Not checked: which hand does what, or where the knife ends up.",
+  "run_limit": "2400 steps (120 s at 20 Hz)",
+  "reset_notes": "A fresh carton, taped as above, at its marks; the knife at its mark on its side, blade drawn in. No seed changes the scene.",
+  "fidelity": "Rigid bodies at 240 Hz on GPU. Flaps are rigid plates on crease hinges, locked while any 2 cm of tape over the seam is whole; tape is cut once the exposed blade passes under it. A crease spring lifts a freed flap about 10 degrees. The blade has no collider: a cut is any blade corner inside the product, a wall, or a flap's board outside the tape strip. The slider holds by 2 N friction and weak notches at its stops. 3 N of drag acts on the handle in the tape. Unmeasured: drag, lift, slider.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-5BMMJ8"
+}
