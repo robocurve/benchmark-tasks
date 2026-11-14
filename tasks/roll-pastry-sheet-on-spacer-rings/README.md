@@ -1,8 +1,8 @@
-# Roll puff pastry into an even 3 mm sheet, both hands keeping the spacer-ring pin level
+# Roll puff pastry into an even 3 mm sheet with a spacer-ring rolling pin
 
 A block of puff pastry on a floured maple pastry board, and a wooden rolling pin with 3 mm spacer rings on both ends of
 its barrel. "Roll this puff pastry out into a 3 mm sheet at least 20 cm long." The rings only set the thickness if
-both of them ride on the board, so the pin is driven by both hands and kept level: with one end lifted the barrel
+both of them ride on the board, so the pin has to be kept level along its length: with one end lifted the barrel
 leaves a wedge, thick on that side. The pastry springs back, so it takes several passes. Category: Societal relatability.
 Rolling dough out with a rolling pin, for a pie crust, cookies or pastry, is something most people have done at home,
 and rolling-pin spacer rings are a common home tool for an even thickness.
@@ -40,18 +40,18 @@ never changes.
 | Lengthening | a pressed slice grows longer; the pastry beyond it, away from the block's middle, moves out | the middle of the block is held by its own weight on the board; the sheet grows at both ends |
 | Rolled past an end | the end slice is pressed like any other the barrel crosses | the rings hold the barrel 3 mm up there too, so nothing goes thinner than the gap; no damage is assumed |
 | Pin set down | axis level within 3 degrees, and back in its rest (axis within 5 mm of the seat height, within 1 cm of the rest's x) or lying on its rings on the board (their bottoms within 5 mm of it) | resting, not held in the air; a round pin left on the board can roll, hence the rest |
-| Both hands on the pin (a stand-in) | presses count only while both grippers touch the pin: each gripper's own shape (palm and fingers, boxes fitted to the YAM's collision meshes, at their present opening) within 2 mm of a handle, the barrel or a ring (flat-ended cylinders as the colliders), whether it grips a handle or presses on the barrel with a closed hand | the sim's pin slides on its rings instead of turning, so the model cannot tell rolling from pushing the pin along; two hands on the pin can hold both ends down, so both rings can stay on the board. The instruction names no grip, so handles and palms on the barrel both count. A hand hovering over the pin does not count. A stroke with one hand or none on the pin is not penalized, and nothing is assumed torn: that stroke just does not count. A real trial checks the hands in the video |
+| Both hands on the pin (sim only, a stand-in) | presses count only while both grippers touch the pin: each gripper's own shape (palm and fingers, boxes fitted to the YAM's collision meshes, at their present opening) within 2 mm of a handle, the barrel or a ring (flat-ended cylinders as the colliders), whether it grips a handle or presses on the barrel with a closed hand | the sim's pin slides on its rings instead of turning, so the model cannot tell rolling from pushing the pin along; two hands on the pin can hold both ends down, so both rings can stay on the board. The instruction names no grip, so handles and palms on the barrel both count. A hand hovering over the pin does not count. A stroke with one hand or none on the pin is not penalized, and nothing is assumed torn: that stroke just does not count. A real trial has no hand rule: it scores the measured sheet and the final pin state |
 | Let go | no gripper touching the pin's barrel, rings or handles (its own shape more than 2 mm away: the simulator's resting gap plus the fit of the boxes) | a hand still on the pin has not set it down; an open hand near the pin but not touching it has |
 
 What the model stands in for, and what a real trial checks instead: the thickness and length come from the press rule
 above, which follows the real behavior (the rings set the floor, the dough springs back by a share of the excess, and
 volume is kept). The springback share is an estimate, so a real trial measures the sheet itself. The model cannot
-tear the sheet and cannot press it below 3 mm; a stroke without both hands on the pin simply does not count. A real
-trial checks the physical outcome: thickness with a needle depth gauge, holes and tears by eye, and the edges with the
+tear the sheet and cannot press it below 3 mm; in the sim a stroke without both hands on the pin simply does not count.
+A real trial has no such rule and checks only the physical outcome: thickness with a needle depth gauge, holes and tears by eye, and the edges with the
 gauge (see "In a real trial" below). Press force and the barrel's rotation are not modeled.
 
 The dough model also gives the pin no rolling resistance: the pastry pushes back on nothing, so in the sim the rings
-keep the pin level on the flat board whatever the two hands do, and the robot only has to drive it back and forth. A
+keep the pin level on the flat board however it is held, and the robot only has to drive it back and forth. A
 real block of chilled pastry pushes back hardest under the thicker side, so a pin pressed harder by one hand can ride
 up on the other; the sim cannot show that. The real trial checks the result directly: the sheet's thickness evenness
 across its width with the needle gauge (the 2 cm bands' averages within 0.5 mm of each other, as below).
@@ -75,17 +75,23 @@ The pastry is read on the board's 1 cm grid (rows: the 20 strips; columns: 1 cm 
 | Anything else: nothing done, one pass, a wedge from a tilted pin | 0 |
 
 Where the arms end is not scored. Possible scores: 0, 0.25, 0.5, 1.0. Doing nothing scores 0. The score is the sheet the
-robot leaves: no penalty is assumed for a stroke with one hand off the pin (it just does not count) or for
+robot leaves: no penalty is assumed for a stroke with one hand off the pin (in the sim it just does not count) or for
 rolling past an end (the rings keep the barrel 3 mm up there as everywhere).
+
+Sim and real trial differ in one rule. In the sim, the dough model presses the pastry only while both grippers touch
+the pin; this is a documented approximation, because the sim's pin slides on its rings instead of turning, so the
+model cannot tell rolling from pushing it along. The real trial has no hand rule at all: it scores only the measured
+sheet (length, needle-gauge thickness and evenness) and the final pin state (set down level, let go). A sheet rolled
+partly or wholly with one hand, intact and in spec, scores exactly what the same sheet rolled with two hands scores.
 
 Why each rule: the length and on-spec share are the job itself, a sheet that lines the pan and bakes evenly. Evenness
 across the width is checked on its own because it is the one fault the rings exist to prevent: rolled with one end
 lifted, the pin leaves a wedge, thicker on that side, and puff pastry rises higher and bakes slower where it is
 thicker, so the base can come out lopsided. The
 pin must be set down level and let go, because a pin still held or hung in the air is not finished with, and a round pin
-let go off its rest or tilted can roll onto the fresh sheet or off the board. Only strokes with both hands on the pin
-count (on its handles or on the barrel), because two hands holding both ends down are how both rings are kept on the
-board; the sim's pin slides rather than turns, so two hands on it are the stand-in for rolling it.
+let go off its rest or tilted can roll onto the fresh sheet or off the board. In the sim only, strokes count while both
+hands are on the pin (on its handles or on the barrel): the sim's pin slides rather than turns, so two hands on it are
+the stand-in for rolling it. The real trial does not check the hands.
 
 Why each level is worth what it is: 1.0 is the job as asked. 0.5 is a sheet at least 18 cm long everywhere, most of
 the work with about one pass to go, or a finished sheet with the pin not put away; either is half the job. 0.25 is
@@ -133,15 +139,18 @@ score): three passes 0.5 (19.3 cm); doing nothing 0; one pass 0 (11.6 cm); one a
 pin skews 3.6 cm and its free end rides 4 to 10 mm up, and with one hand on the pin no stroke counts); one arm closed
 on the middle of the barrel 0 (nothing counts with one hand on the pin).
 
-In a real trial: lay a 1 cm grid transparency over the sheet and photograph it from above to read its length per 1 cm
-strip (a ruler along both long edges and the middle is enough: every strip must reach 20 cm). Read thickness with a
-needle depth gauge pushed through the pastry to the board at the center of each 2 cm square (about 100 points; a cell
-is on spec at 2.5 to 3.5 mm), and at points 0.5 cm in from each end and each long side, every 2 cm. For evenness,
+In a real trial (no hand rule; the score is the measured sheet and the final pin state): lay a 1 cm grid transparency
+over the sheet, lined up with the board's front edge and its center line so the points are the same every trial, and
+photograph it from above to read its length per 1 cm strip (a ruler along both long edges and the middle is enough:
+every strip must reach 20 cm). Read thickness with a needle depth gauge pushed through the pastry to the board at fixed
+points: the center of each 2 cm square of the grid the pastry covers (about 100 points; a point is on spec at 2.5 to
+3.5 mm, and at least 90 % must be), and every 2 cm along lines 0.5 cm in from each end and each long side. For evenness,
 average the readings in each 2 cm band running the sheet's length: the thickest band may be at most 0.5 mm above the
 thinnest. A point under
 2.5 mm, a hole where the board shows through, or a cell a tear crosses counts as off spec. A ringed pin cannot press
 below 3 mm, so anything thinner is real damage (the pin dragged, an edge smeared or torn), and it shows in the same
-90 % share. The sim cannot produce these, so they matter only in a real trial.
+90 % share. The sim cannot produce these, so they matter only in a real trial. For the pin, read its level with a level app and
+its place with a ruler, and check the last frames of the video that no finger touches it.
 
 ## Real-world build
 
@@ -157,7 +166,14 @@ below 3 mm, so anything thinner is real damage (the pin dragged, an edge smeared
 
 ## What the task tests
 
-Bimanual control of one tool's level: the thickness is set only while both spacer rings ride the board, so two hands
-must keep a 43 cm pin level as it travels. The work changes under the tool: the sheet lengthens and springs back, so
+Control of one tool's level: the thickness is set only while both spacer rings ride the board, so a 43 cm pin must be
+kept level as it travels (the natural way is with both hands, but the real trial scores only the sheet). The work changes under the tool: the sheet lengthens and springs back, so
 it takes several passes and the ends move out as it grows. Roller and flattening tasks that score coverage, or hold a springy sheet flat at
 a fixed size, test none of these.
+
+## Files
+
+- `task.py`: the scene, the scorer and the scripted demo.
+- `doughkit.py`: the pastry model (the press, springback and lengthening rules above).
+- `guardkit.py` and `yamkit.py`: the task's helper modules (gripper contact shapes, scene and arm helpers).
+- `test_task.py`: offline model and scorer checks; run `python tasks/roll-pastry-sheet-on-spacer-rings/test_task.py`.
