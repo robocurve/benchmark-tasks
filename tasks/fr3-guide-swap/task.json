@@ -1,0 +1,20 @@
+{
+  "title": "Hand-guide a Franka arm to its service pose with its grip's enabling button held mid-band, then teach the pose",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "Franka Research 3",
+    "hand guiding",
+    "enabling switch",
+    "teaching a robot",
+    "robot setup"
+  ],
+  "instruction": "The Franka arm stopped mid-task. Guide it by hand with its grip's buttons to its service pose: the hand pointing straight down over the tool stand, its fingers about 5 cm above it, the grip turned toward the right-hand arm. Let the buttons go there, press Teach, then let go.",
+  "context": "Robots are set up and serviced by hand: a technician teaches a collaborative arm its poses by guiding it through its own enabling device, so robot cells are built and rebuilt this way. On a Franka Research 3 the arm moves by hand only while the Pilot-Grip's Enabling Button is held at its middle position and its Guiding Button is pressed. Three-position enabling switches (IEC 60947-5-8) work this way on purpose: released stops, middle enables, and a full squeeze, the reflex of a startled hand, stops too, and the arm moves again only after a full release. So the hand that guides must keep a squeeze inside a narrow band while the pull that moves the arm loads the same grip, bring a seven-joint arm to a pose by feel, let go there so the arm holds, and have the pose taught. A picture shows where the hand should end, not how hard to squeeze while drawing it.",
+  "setup": "Two YAM arms at the near edge of the table; positions are (x forward from the arm bases, y left) in cm, heights above the table. A Franka Research 3 arm (seven joints, its Franka Hand on the flange; Franka's own collision meshes and kinematics) stands on a 12 mm plinth at the table's far edge at (80, 0), facing the YAMs. It starts held, stopped mid-task: its flange 29 cm up at (38, -10), turned 23 degrees away. Its Pilot-Grip on link 7 is a handle 60 mm across, its Enabling Button (6 mm travel) on one flank and its Guiding Button on the other; the Teach button (16 mm across, 4 mm travel) sits in the middle of the Pilot-Disc on top of the wrist (link 6), facing up at the service pose, about 38 cm above the bench. A wooden tool stand, 10 x 10 x 3 cm, stands at (38, 0). The service pose: the flange 19 cm up at (38, 0), the hand straight down over the stand, the grip toward the right YAM.",
+  "scoring": "From the arm's own record (Desk's taught pose and its guiding log) and video. 0.25: guiding enabled (the Enabling Button at its middle position and the Guiding Button in) and the flange moved at least 10 cm along its path while enabled. 0.5: also the flange within 5 cm and 15 degrees of the service pose. 0.75: also within 1.5 cm and 5 degrees with both buttons let go there, so the arm holds. 1.0: then Teach pressed with the arm still at the pose, and every fingertip of both YAMs at least 5 cm from the Franka arm's surface (its links, hand, fingers, grip, buttons and Pilot-Disc), held 1 s. 0 if the Franka arm touches the bench or the tool stand, a joint reaches its limit, or a YAM pushes the held arm along (more than 2 cm/s for 0.5 s).",
+  "run_limit": "2400 steps (120 s at 20 Hz)",
+  "reset_notes": "The Franka arm back at its start pose and held, the buttons out. No seed changes the scene.",
+  "fidelity": "Rigid links from Franka's collision meshes, gravity-compensated as in Free mode, 2 N m s/rad damping per joint (to set from a real FR3's drag). The enabling logic is code: the middle band is 1.5 to 4.0 mm of the 6 mm travel; past 4.5 mm the arm stops until the button is let out below 1 mm; a held arm's joints are a stiff hold. Button springs approximated. The grip is a box at the visual mesh's width; Teach is on a 44 mm Pilot-Disc on link 6's top.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-BQEDDY"
+}
