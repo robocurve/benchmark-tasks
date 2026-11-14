@@ -1,0 +1,21 @@
+{
+  "title": "Refit a delta robot's sprung rod pair: spread it with both arms and clip its four cups onto the ball studs",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "robot maintenance",
+    "delta robot",
+    "bimanual",
+    "spring-loaded part",
+    "ball joint",
+    "snap-on assembly"
+  ],
+  "instruction": "Take the black rod pair from the tray, clip its four cups onto the arm's and the platform's balls, then let go.",
+  "context": "Robot upkeep. Light delta pickers and delta 3D printers hang each arm's rod pair on ball studs by two springs, so a crash pops it off and the machine stops until someone refits it by hand. Board tasks fit one rigid link on a pin or spread a circlip with pliers; here two arms open one free sprung part and its own springs capture it on four balls.",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left); heights above the table. Fixed parts are bolted down. TRAY, blue-grey ABS: base 11 x 30 x 0.8 cm centred x 15.5, y 0; two cradles 9 x 1.2 x 2.2 cm at y -4.5 and 4.5, each with two U notches 2.4 cm wide. ROD PAIR, 110 g, free, in the notches: two matt black carbon tubes, 2.0 cm diameter x 22.6 cm, along y, axes at x 12.7 and 18.3, 3.0 cm up. Each tube end has a white acetal cup housing, 2.8 cm diameter x 1.3 cm, with a 45 degree conical socket for a 1.5 cm ball, mouth toward the other rod; sockets 25.0 cm apart along a rod. Two steel extension springs (120 N/m together) join the rods: facing sockets 4.4 cm apart closed, 5.6 cm on the balls, rated stretch 9.4 cm. UPPER ARM END: light grey aluminium boss 3.2 x 1.6 x 1.6 cm at x 26, y 16, 11 cm up, on a grey cast arm and black motor (8 cm diameter x 7 cm, y 20, 24 cm up; brake on); its 0.8 cm steel stud carries two chrome 1.5 cm balls at x 23.2 and 28.8. PLATFORM: dark grey aluminium hexagon, 10 cm across flats x 2 cm, top 5 cm up, centre x 26, y -15.5, on a 4 cm steel post; on its +y flat a light grey lug 3.2 x 3.2 x 1.6 cm with the same stud and balls at x 23.2 and 28.8, y -8, 4 cm up; two unused lugs with rod stubs.",
+  "scoring": "Judged over the whole run from a top camera and a side camera with a mm scale behind the pair. Cup on: its socket centre within 2.5 mm of a ball centre (photo: ball inside the cup; tape: 81 mm over the two housings at that end, +-2.5 mm). Spread: facing sockets 78 mm or more apart while every part of the pair is 4 cm or more above the table. Dropped: any part of the pair under 1 cm above the table, or moving faster than 0.6 m/s. Overstretched: facing sockets 92 mm or more apart. Released: at the end both grippers are 3 cm or more from the pair and it has moved under 1 cm/s for 1 s. Score, first row that fits: dropped or overstretched at any time, 0; released with 4 cups on, 1.0; 3 cups, 0.75; 2 cups, 0.5; 1 cup, 0.25; spread at some time (then held, put back or left resting uncaptured), 0.25; otherwise 0. Either end may go on either ball pair, in any order.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Unclip the pair, let it close, and lay it back in the tray notches with the sockets facing each other and the paint-marked tube end toward the robot's left (+y). Check that neither spring has taken a set (closed spacing still 4.4 cm).",
+  "fidelity": "The two end springs are one 120 N/m slide between the rods (stops at closed coils and rated stretch, no initial tension), so the rods stay parallel and both ends close together; a real pair can splay and be clipped one end at a time. Sockets are 12-facet 45 degree cones, not spherical; tubes are solid. The arm is fixed and the platform sits on a post. The sim scores the last step without opening the grippers, so a pair still held is not released.",
+  "scores": "Dream-1 run: 0.0 (right arm reached over the tray, left arm pulled back, pair never clipped); demo: 1.0 (both arms lifted the rod pair, spread it, clipped it on the balls, then retreated)",
+  "media": "M-P62FNV"
+}
