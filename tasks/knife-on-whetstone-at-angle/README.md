@@ -118,7 +118,7 @@ What the YAM's reach decided (real IK, offline, every control step):
   about 45 degrees ([Ichimonji](https://global.ichimonji.co.jp/blogs/maintenance/santoku-household-sharpening)).
 
 The demo aims the edge into the stone by the arm's vertical give at the edge, worked out per waypoint from the joint
-stiffness in constants.py (J K^-1 J^T, 1.5 to 6.4 mm per N, scaled to the give the sim showed), planned for 3.5 N.
+stiffness of the YAM's joint servos (the yam_arena embodiment's constants; J K^-1 J^T, 1.5 to 6.4 mm per N, scaled to the give the sim showed), planned for 3.5 N.
 Measured in a telemetry run of the same demo (the hand's contact forces on the knife plus its weight; held in the air
 it reads 1.35 N against its 1.37 N weight), the stone took a median 2.4 N on face A (1.7 to 3.1 N, 10th to 90th
 percentile; 2.7, 2.5 and 2.0 N over the heel, middle and tip thirds of the sweep) and 3.3 N on face B (2.4 to 3.8 N;
@@ -134,6 +134,8 @@ Sim result: 1.0 in 1,992 steps (99.6 seconds at 20 Hz), of the 2,400 allowed. 11
 face B, against 12 needed. The points not worked are up the tip's rise, which the demo does not lift the handle for.
 On the stone the sharpening angle read 14.4 to 19.5 degrees, and the edge had 3 or more points on the stone through
 nearly every step of every stroke. One fixed layout, `object_jitter=0`.
+
+Model run: Dream-1 scored 0 in 2,400 steps on this version of task.py.
 
 ## Fidelity
 
