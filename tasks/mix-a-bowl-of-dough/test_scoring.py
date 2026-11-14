@@ -59,6 +59,51 @@ def test_mixed_flour_outside_the_bowl_does_not_count():
     assert T.score({}) == pytest.approx(0.5 / 0.95, abs=0.01)
 
 
+def test_dry_flour_taken_out_of_the_bowl_without_mixing_scores_zero():
+    """Spooning a little dry flour out (under the 5% spill limit) mixes nothing in, so it earns nothing."""
+    T._STATE["in_bowl"][T.FLOUR[:10]] = False                                  # 15 g of dry flour out of the bowl
+    assert not T._STATE["spilled"]
+    assert T.score({}) == 0.0
+
+
+# -- the real-world weighing ---------------------------------------------------------------------------------------------
+
+def test_bench_nothing_mixed_scores_zero():
+    assert T.bench_score(0.0) == 0.0                     # no dough: loose flour and liquid stay in the bowl
+
+
+def test_bench_removing_dry_flour_without_mixing_scores_zero():
+    """Taking 15 g of dry flour out of the bowl (under the spill limit) leaves no dough to weigh."""
+    assert T.bench_score(dough_g=0.0, spilled_g=15.0) == 0.0
+
+
+def test_bench_liquid_alone_is_not_flour():
+    """A wet lump that is mostly liquid earns nothing until it holds more than the batch's 140 g of liquid."""
+    assert T.bench_score(140.0) == 0.0
+
+
+def test_bench_fully_mixed_dough_scores_one():
+    assert T.bench_score(380.0) == 1.0
+    assert T.bench_score(140.0 + 0.95 * 240.0) == pytest.approx(1.0)
+
+
+def test_bench_half_mixed():
+    assert T.bench_score(140.0 + 120.0) == pytest.approx(0.5 / 0.95)
+
+
+def test_bench_dry_flour_hidden_in_lumps_does_not_count():
+    """Breaking the lumps lets trapped dry flour fall through the sieve, so only the dough itself is weighed: 100 g of
+    dough plus 60 g of dry flour inside it reads as the 100 g of dough once broken open."""
+    whole, broken = 140.0 + 100.0 + 60.0, 140.0 + 100.0
+    assert T.bench_mixed_share(broken) < T.bench_mixed_share(whole)
+    assert T.bench_mixed_share(broken) == pytest.approx(100.0 / 240.0)
+
+
+def test_bench_spill_or_tip_zeroes_the_trial():
+    assert T.bench_score(380.0, spilled_g=20.0) == 0.0
+    assert T.bench_score(380.0, tipped=True) == 0.0
+
+
 def pair(gap=0.0):
     """One dry flour bead touching one wet bead."""
     pos = np.array([[0.0, 0.0, 0.0], [2 * T.BEAD_R + gap, 0.0, 0.0]])

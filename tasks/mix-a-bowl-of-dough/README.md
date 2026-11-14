@@ -82,7 +82,7 @@ the result file.
 
 ## Scoring
 
-Tools: the trial video, a kitchen scale and a sieve.
+Tools: the trial video, a kitchen scale, a sieve with 2 mm holes and a dry spatula.
 
 - **0 for the whole trial** if at any time the bowl tips more than 30 degrees, or more than 5% of the batch by weight
   (19 g) is out of the bowl.
@@ -91,8 +91,21 @@ Tools: the trial video, a kitchen scale and a sieve.
   outside the bowl does not count.
 - Read at the end of the run.
 
-**In the real world:** tip the bowl's contents onto a sieve with 2 mm holes and shake it for 10 seconds. Dry flour
-passes through; flour taken up into the dough stays in lumps. Mixed-in share = 1 - (mass through the sieve / 240 g).
+**In the real world:** the score weighs the dough itself, so only flour actually worked into the dough can earn
+credit. Flour that was spilled, spooned out, left loose in the bowl or hidden dry inside a lump never reaches the
+scale.
+
+1. With the bowl level, lift every lump of dough out of the bowl and off the spoon with a dry spatula onto a sieve with
+   2 mm holes. Leave loose flour and any free liquid in the bowl. Nothing from outside the bowl is used.
+2. Break every piece bigger than 1 cm into pieces under 1 cm over the sieve, then shake it for 10 seconds. Dry flour
+   that was trapped inside a lump falls through.
+3. Weigh what stays on the sieve: the dough, D grams.
+4. At most 140 g of the dough can be the egg and water, so at least D - 140 g of it is flour worked in.
+   Mixed-in share = (D - 140 g) / 240 g, and 0 if D is under 140 g.
+
+So a fully mixed batch weighs about 380 g of dough (share 1.0), a half-mixed one about 260 g (0.5), and a bowl from
+which some dry flour was spooned out without mixing has no dough to weigh (0). In code: `bench_score()` in `task.py`,
+tested in `test_scoring.py` (dry flour removed, liquid alone, flour hidden in lumps, half mixed, spill and tip).
 
 **In the simulator:** each bead of flour is dry until the spoon has worked it into the liquid: while the spoon's head
 is moving through the batch (faster than 3 cm/s) and the bead is within 4 cm of the head's middle, in contact with liquid (or flour already mixed in) and sliding against it at more
@@ -108,7 +121,7 @@ with the bowl or stirred by anything but the moving spoon. In code: `wet_step()`
 | Scripted demo | 1.0 | 96% of the flour mixed in and 1.2% of the batch out of the bowl at step 1,218 (61 s) |
 | Dream-1, 2,400 steps | 0.0 | The right gripper reached into the bowl and knocked the spoon out of its clip; the left hand did not touch the bowl and nothing was mixed |
 | Arms still | 0.0 | Nothing mixed, nothing spilled |
-| `pytest test_scoring.py` | 10 passed | Scoring rule, the spill and tip gates, and the mixing rule (worked flour is mixed in; resting contact, a resting spoon, shaking far from the spoon and beads not touching are not) |
+| `pytest test_scoring.py` | 18 passed | Scoring rule, the spill and tip gates, the real-world weighing (dry flour spooned out scores 0, liquid alone is not flour, dry flour hidden in lumps is not counted), and the mixing rule (worked flour is mixed in; resting contact, a resting spoon, shaking far from the spoon and beads not touching are not) |
 
 ## Runtime and seeds
 
