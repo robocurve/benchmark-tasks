@@ -1,5 +1,7 @@
-"""An 8-inch adjustable wrench set on a tight M12 hex nut (19 mm across flats), on a hold-down stud of a steel machine
-base plate. The wrench's jaw has been left 2 mm wider than the nut. The job is to loosen the nut.
+"""An 8-inch adjustable wrench set on an M5 nylon 6/6 hex nut (8 mm across flats) tightened to its recommended 0.76 N*m,
+on a stud of a steel equipment mounting plate. The wrench's jaw has been left 1 mm wider than the nut. The job is to
+loosen the nut. Nylon nuts are used where a fastener must insulate or not corrode; their recommended torque is close
+to their failure torque (0.93 N*m for M5), so a loose jaw bearing on the corners damages them at service load.
 
 What a trained mechanic does first is roll the knurled worm (thumbwheel) in the wrench's head until the movable jaw
 closes snug on the nut's flats: a jaw with play lets the wrench turn on the nut until it bears on the corners, which
@@ -34,17 +36,18 @@ INSTRUCTION = "Loosen the nut on the base plate with the adjustable wrench, then
 # --- Scene, in world coordinates (m): x forward from the arm bases, y to the robot's left, z up from the table top.
 NX, NY = 0.30, 0.0  # the stud's axis
 PLATE_C, PLATE = (0.27, 0.04), (0.26, 0.30, 0.008)  # the steel base plate: center (x, y) and size
-WASHER_T, WASHER_R = 0.0025, 0.012  # a flat washer, 24 mm across
-AF = 0.019  # m: the nut's width across flats (an M12 nut, DIN 934)
-NUT_H = 0.010  # m: the nut's thickness
-NUT_R = AF / math.sqrt(3)  # its corner radius (21.9 mm across corners)
-NZ = PLATE[2] + WASHER_T + NUT_H / 2  # the nut's (and the wrench's) mid-plane above the table
-STUD_R, STUD_OUT = 0.006, 0.005  # the stud's radius and how far it stands above the nut
+WASHER_T, WASHER_R = 0.001, 0.005  # an M5 flat washer (DIN 125), 10 mm across, 1 mm thick
+AF = 0.008  # m: the nut's width across flats (an M5 nylon 6/6 hex nut, DIN 934 size)
+NUT_H = 0.004  # m: the nut's thickness
+NUT_R = AF / math.sqrt(3)  # its corner radius (9.24 mm across corners)
+NZ = PLATE[2] + WASHER_T + NUT_H / 2  # the nut's mid-plane above the table
+JAW_T = 0.010  # the wrench's head and jaws are 10 mm thick
+WZ = PLATE[2] + WASHER_T + JAW_T / 2  # the wrench's mid-plane: its jaws rest on the washer, round the 4 mm nut
+STUD_R, STUD_OUT = 0.0025, 0.004  # the M5 stainless stud's radius and how far it stands above the nut
 
 # --- The wrench (8 inches, 205 mm). Its frame: origin on the nut's axis at the wrench's mid-plane; x along the jaw's
 # travel (the fixed jaw on +x, the movable jaw and the handle toward -x), y toward the jaw opening (the throat on -y).
-JAW_T = 0.010  # the head and jaws are 10 mm thick
-OPEN0 = AF + 0.002  # m: the jaw opening at the start, 2 mm wider than the nut
+OPEN0 = AF + 0.001  # m: the jaw opening at the start, 1 mm wider than the nut (it turns 16.9 deg before bearing)
 OPEN_MIN, OPEN_MAX = 0.0005, 0.027  # the jaw's travel (closed to 27 mm)
 LEAD = 0.002  # m of jaw travel per turn of the worm
 WHEEL_R, WHEEL_L = 0.008, 0.011  # the worm: 16 mm across, 11 mm long, its top 3 mm above the head's faces
@@ -57,8 +60,9 @@ NUT0 = math.radians(30)  # the nut's start angle, flats square to the wrench's j
 WRENCH_MASS = 0.25  # kg (a real 8-inch adjustable wrench is 0.2 to 0.3 kg)
 
 # --- The thread and the jaws' play (see Model).
-K_THREAD = 8.0  # N*m/rad: the wrench's spring against a nut that has not broken loose (the tool and nut flexing)
-BREAK = 0.06  # rad: the flex at breakaway, so the nut breaks loose at K_THREAD * BREAK = 0.48 N*m (see fidelity)
+K_THREAD = 12.7  # N*m/rad: the wrench's spring against a nut that has not broken loose (the tool and nut flexing)
+BREAK = 0.06  # rad: the flex at breakaway, so the nut breaks loose at K_THREAD * BREAK = 0.76 N*m, the recommended
+#               tightening torque of an M5 nylon 6/6 nut (0.73-0.79 N*m; it fails at 0.93 N*m), see fidelity
 D_THREAD = 0.25  # N*m*s/rad: the thread's drag once it turns
 TIGHT_STOP = math.radians(10)  # the nut can be forced at most 10 degrees tighter than it starts
 SEAT_TOL = 0.002  # m: the wrench is down on the nut (lift joint within 2 mm of its rest)
@@ -68,13 +72,14 @@ LIFT_MAX = 0.06
 CLEAR = 0.03  # m: the wrench is off the nut once its jaw center is 3 cm from the nut's axis (the head is 4.4 cm long)
 
 # --- Scoring thresholds.
-PLAY_MAX = 0.001  # m: snug = jaw within 1 mm of the flats; 1 mm lets the nut turn 5.7 degrees in the jaws (see play)
+PLAY_MAX = 0.0004  # m: snug = jaw within 0.4 mm of the flats; 0.4 mm lets the nut turn 5.4 degrees in the jaws
+#                    (see play_angle); a new 150 mm wrench's jaw clearance is at most 0.25 mm (ISO 6787)
 ROUND_DEG = 2.0  # degrees: the nut turned this far with the jaw loose = corners rounded (it bears only on them)
 SPIN_TURN_DEG = 30.0  # degrees: the wrench spun this far on a nut that turns freely in its jaws = corners rounded
 CW_DEG = 2.0  # degrees: the nut forced this far clockwise (tighter) = the pull loaded the movable jaw
 # PLAY_MAX with ROUND_DEG, and CW_DEG, are operational proxies: the sim's nut can't deform, so the scorer counts the
 # pull that would round the corners or spring the jaw. A real trial reads the jaw's play and the nut's turn from
-# overhead video in every frame, checks a soft aluminum nut's corners in before and after photos (see the README).
+# overhead video in every frame, checks the nylon nut's corners in before and after photos (see the README).
 BROKEN_DEG = 5.0  # degrees: the nut has broken loose (more than any flex or play: it really turned on its thread)
 LOOSE_DEG = 60.0  # degrees: one flat of the hex, a full swing before the wrench is reset on the next flats
 SPRUNG_GAP = 0.003  # m: how far a movable jaw loaded at its tip springs open in its slot
@@ -86,6 +91,7 @@ KEY = "base"  # the mechanism's name
 PAINT = kit.Look((0.20, 0.30, 0.42), 0.6, metallic=0.3)  # the machine base's blue-gray paint
 BOLT = kit.Look((0.30, 0.30, 0.32), 0.4, metallic=0.7)
 ZINC = kit.Look((0.78, 0.78, 0.74), 0.35, metallic=0.8)
+NYLON = kit.Look((0.92, 0.90, 0.84), 0.55)  # natural (undyed) nylon 6/6, off-white
 STEEL = kit.Look((0.55, 0.56, 0.58), 0.4, metallic=0.8)
 CHROME = kit.Look((0.80, 0.81, 0.83), 0.2, metallic=0.95)
 KNURL = kit.Look((0.40, 0.41, 0.43), 0.5, metallic=0.8)
@@ -94,9 +100,9 @@ GRIP = kit.Look((0.75, 0.10, 0.08), 0.6)  # a red dipped handle grip
 
 
 def play_angle(play: float) -> float:
-    """How far (rad) a hex nut 19 mm across flats can turn between parallel jaws `play` wider than it before both jaws
+    """How far (rad) a hex nut 8 mm across flats can turn between parallel jaws `play` wider than it before both jaws
     bear (on its corners): the hex is 2 * NUT_R * cos(30 deg - phi) wide at a turn phi. inf once it spins freely
-    (play over 2.94 mm, the across-corners width)."""
+    (play over 1.24 mm, the across-corners width less the flats)."""
     if play <= 0:
         return 0.0
     c = (AF + play) / (2 * NUT_R)
@@ -343,12 +349,12 @@ def _base():
     # --- the nut (link frame: its center on the axis), turned only by the model
     nut = kit.Link("nut", "revolute", "Z", (0.0, 0.0, NZ), lower=NUT0 - TIGHT_STOP - 0.01, upper=NUT0 + 4 * math.pi,
                    start=NUT0, mass=0.02, damping=0.0, floating=True, law=NutLaw(),
-                   meshes=(kit.cylinder((0, 0, 0), NUT_R - 0.0002, NUT_H - 0.0006, ZINC, n=6),
-                           kit.cylinder((0, 0, 0), NUT_R * 0.93, NUT_H, ZINC, n=24),  # the chamfered faces
-                           kit.cylinder((0, 0, NUT_H / 2 + 0.0002), 0.0012, 0.0004, DARK, n=8)))
+                   meshes=(kit.cylinder((0, 0, 0), NUT_R - 0.0002, NUT_H - 0.0006, NYLON, n=6),
+                           kit.cylinder((0, 0, 0), NUT_R * 0.93, NUT_H, NYLON, n=24),  # the chamfered faces
+                           kit.box((0.0034, 0, NUT_H / 2 + 0.0002), (0.0016, 0.0006, 0.0004), DARK)))  # the paint line
 
     # --- the wrench: lift (Z) -> turn about the nut's axis -> slide x -> slide y (the wrench body) in its own frame
-    pin = (0.0, 0.0, NZ)
+    pin = (0.0, 0.0, WZ)
     reach = 0.10
     wm, wc = _wrench_parts()
     lift = kit.Link("lift", "prismatic", "Z", pin, lower=0.0, upper=LIFT_MAX, start=0.0,
@@ -367,7 +373,7 @@ def _base():
                    colliders=(kit.Collider((-0.0055, -0.001, 0), size=(0.011, 0.024, JAW_T)),), damping=0.0,
                    floating=True, parent="wrench", law=JawLaw())
     # the worm: knurled, its axis along the wrench's x
-    wa = (WHEEL_AT[0], WHEEL_AT[1], NZ)
+    wa = (WHEEL_AT[0], WHEEL_AT[1], WZ)
     wheel_m = [kit.cylinder((0, 0, 0), WHEEL_R, WHEEL_L, KNURL, axis="x", n=28)]
     for k in range(5):
         wheel_m.append(kit.cylinder((-WHEEL_L / 2 + 0.0015 + k * 0.002, 0, 0), WHEEL_R + 0.0003, 0.0006, DARK,
@@ -404,7 +410,7 @@ def _held(objects, J) -> bool:
     """Any gripper with its fingers under 60 % open and its tool point within 5 cm of the wrench (its handle's
     centerline, or its head)."""
     a, b = wrench_point(J, (HANDLE_X[0], HANDLE_Y)), wrench_point(J, (0.0, 0.0))
-    z = TOP + NZ + J["lift"]
+    z = TOP + WZ + J["lift"]
     for g in GRIPPERS:
         if g not in objects or kit.opening(objects, g) >= HOLD_OPEN:
             continue
@@ -451,7 +457,7 @@ def success(objects):
 
 
 def score(objects):
-    """Doing nothing scores 0. 0 if the nut was ever turned 2 degrees or more with the jaw over 1 mm wider than its
+    """Doing nothing scores 0. 0 if the nut was ever turned 2 degrees or more with the jaw over 0.4 mm wider than its
     flats (the proxy for rounding its corners; irreversible), or forced 2 degrees or more clockwise (the proxy for
     loading the movable jaw, which springs open; irreversible), or if it never turned 5 degrees looser, or if a
     gripper still holds the wrench at the end (fingers under 60 % open, tool point within 5 cm of it). Otherwise 0.25
@@ -463,8 +469,8 @@ def score(objects):
 
 # --- The scripted demo.
 SWING = math.radians(80)  # how far the demo swings the handle (the nut follows less the thread's flex)
-PUSH_Z = TOP + NZ - 0.004 + PAD_TIP_PAST_TCP  # TCP height with the pad tips 4 mm below the handle's mid-plane
-ROLL_Z = TOP + NZ + WHEEL_R - 0.0025 + PAD_TIP_PAST_TCP  # pad tips 2.5 mm below the worm's top
+PUSH_Z = TOP + WZ - 0.004 + PAD_TIP_PAST_TCP  # TCP height with the pad tips 4 mm below the handle's mid-plane
+ROLL_Z = TOP + WZ + WHEEL_R - 0.0025 + PAD_TIP_PAST_TCP  # pad tips 2.5 mm below the worm's top
 
 
 def _at(turn, local, dx=0.0, dy=0.0):
@@ -510,7 +516,7 @@ def demo():
     left.append(push(TURN0 + SWING, 0.8, "hold"))
     end = TURN0 + SWING - BREAK  # where the wrench settles once let go (the thread's flex springs back)
     gx, gy = _at(end, (GRIP_X, HANDLE_Y))
-    grip_z = TOP + NZ - 0.002 + PAD_TIP_PAST_TCP
+    grip_z = TOP + WZ - 0.002 + PAD_TIP_PAST_TCP
     left += [Waypoint(0.8, (*_at(end, push_local, 0, 0), PUSH_Z + 0.05), FINGER_CLOSED, "off the handle", end),
              Waypoint(1.2, (gx, gy, grip_z + 0.05), FINGER_OPEN, "over the handle", end),
              Waypoint(1.0, (gx, gy, grip_z), FINGER_OPEN, "around the handle", end),

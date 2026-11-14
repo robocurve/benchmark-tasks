@@ -14,7 +14,7 @@ m = load(os.path.join(HERE, "task.py")).module
 kit = m.kit
 PARK = {"left_gripper": (0.20, 0.27, m.TOP + 0.20), "right_gripper": (0.20, -0.27, m.TOP + 0.20)}
 PER_MM = 2 * math.pi / (m.LEAD * 1000)  # worm radians per mm of jaw travel
-SNUG = 2.0 * PER_MM  # the worm turned until the 2 mm of play is gone
+SNUG = 1.0 * PER_MM  # the worm turned until the 1 mm of play is gone
 
 
 def st(pos):
@@ -149,7 +149,7 @@ def open_hand_resting_near_wrench_is_not_holding():
 @case
 def loose_jaw_pull_rounds_the_corners():
     t = Trial().step(3)
-    t.turn(70)  # never touched the worm: 2 mm of play
+    t.turn(70)  # never touched the worm: 1 mm of play
     assert m.model().rounded
     assert t.s == 0.0, t.s
 
@@ -157,7 +157,7 @@ def loose_jaw_pull_rounds_the_corners():
 @case
 def loose_jaw_round_then_snug_and_redo_still_zero():
     t = Trial().step(3)
-    t.turn(20)
+    t.turn(30)
     assert m.model().rounded
     t.step(3, wheel=SNUG)
     t.turn(70)
@@ -167,8 +167,8 @@ def loose_jaw_round_then_snug_and_redo_still_zero():
 
 @case
 def play_just_under_limit_ok():
-    t = Trial().step(3, wheel=1.1 * PER_MM)  # 0.9 mm of play left
-    t.turn(66 + math.degrees(m.BREAK + m.play_angle(0.0009)))
+    t = Trial().step(3, wheel=0.65 * PER_MM)  # 0.35 mm of play left
+    t.turn(66 + math.degrees(m.BREAK + m.play_angle(0.00035)))
     assert not m.model().rounded
     t.step(3, wr_turn=t.j["wr_turn"] - m.BREAK).take_off().home()
     assert t.s == 1.0, (t.s, m.loosened_deg(m.model()))
@@ -176,7 +176,7 @@ def play_just_under_limit_ok():
 
 @case
 def play_just_over_limit_rounds():
-    t = Trial().step(3, wheel=0.85 * PER_MM)  # 1.15 mm of play
+    t = Trial().step(3, wheel=0.5 * PER_MM)  # 0.5 mm of play
     t.turn(20)
     assert m.model().rounded and t.s == 0.0
 
@@ -184,13 +184,13 @@ def play_just_over_limit_rounds():
 @case
 def jaw_reopened_before_a_later_pull_is_caught():
     """Review, Nov 12: play must be tracked over every pull, not only before the first. Snug, a good first pull, the
-    wrench reset off the nut, then the worm rolled back 1.5 mm and a second pull: 0, and still 0 after re-snugging."""
+    wrench reset off the nut, then the worm rolled back 0.7 mm and a second pull: 0, and still 0 after re-snugging."""
     t = Trial().step(3, wheel=SNUG)
     t.turn(30 + math.degrees(m.BREAK))
     assert not m.model().rounded
     t.step(3, lift=0.03)
     t.step(3, wr_turn=t.j["wr_turn"] - math.radians(40))
-    t.step(3, wheel=0.5 * PER_MM)  # opened again: 1.5 mm of play
+    t.step(3, wheel=0.3 * PER_MM)  # opened again: 0.7 mm of play
     t.step(3, lift=0.0)
     t.turn(30)
     assert m.model().rounded, m.loosened_deg(m.model())
@@ -208,7 +208,7 @@ def jaw_readjusted_snug_between_pulls_is_fine():
     t.turn(30 + math.degrees(m.BREAK))
     t.step(3, lift=0.03)
     t.step(3, wr_turn=t.j["wr_turn"] - math.radians(40))
-    t.step(3, wheel=0.5 * PER_MM)
+    t.step(3, wheel=0.3 * PER_MM)
     t.step(3, lift=0.0)
     t.step(3, wheel=SNUG)  # snug again on the flats before pulling
     t.turn(40 + math.degrees(m.BREAK))
@@ -321,7 +321,7 @@ def reseated_wrench_couples_again():
 
 @case
 def jaw_opened_past_the_corners_spins_and_rounds():
-    t = Trial().step(3, wheel=-2.0 * PER_MM)  # 4 mm of play: wider than the nut's corners
+    t = Trial().step(3, wheel=-1.0 * PER_MM)  # 2 mm of play: wider than the nut's corners
     t.turn(40)
     mod = m.model()
     assert mod.rounded and abs(m.loosened_deg(mod)) < 1e-6 and t.s == 0.0
