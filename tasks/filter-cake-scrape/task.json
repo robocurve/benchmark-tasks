@@ -1,0 +1,21 @@
+{
+  "title": "Hold a filter tray steady and scrape the filter cake into a collection container",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "laboratory",
+    "filtration",
+    "tool use",
+    "stabilizing",
+    "scraping"
+  ],
+  "instruction": "Hold the filter tray steady with one hand and use the spatula with the other to scrape all of the solid off the filter into the collection container.",
+  "context": "Recovering the solid after a filtration is routine lab work: one hand steadies the filter while the other scrapes the cake off with a spatula. The filter is light and slides when scraped, so the two hands must act together.",
+  "setup": "Table top at 74.75 cm, two 6-DoF arms with parallel grippers on the back edge, bases 61 cm apart; an overhead camera and a camera on each wrist. Positions are object centres in cm, x forward from the arm bases, y to the left, origin midway between the bases. Filter tray: white porcelain block, 3.2 cm (x) by 21.5 cm (y) by 4 cm tall, 100 g, loose on the table at (28, 4.75); its flat top is the filter surface, spanning y from -6 to 15.5, and its left part (beyond the side walls) is where a hand holds it. Filter cake: twelve blue copper-sulfate crystals, modelled as 8 mm cubes (2 g each), on the filter surface in four rows (y -4.8, -3.4, -2.0, -0.6) of three (x 27.15, 28, 28.85). Side walls (fixed): two white porcelain walls 4 mm thick standing on the table 4 mm in front of and behind the tray (inner faces at x 26 and 30), rising 1.5 cm above the filter surface, from y 1.5 (just behind the cake) to y -12.05. Collection container (fixed): the 6 cm stretch between the side walls past the tray's right end (y -12.05 to -6.05), closed by a glass far wall; the tray's end face closes the near side. Spatula: steel-grey flat paddle, 2.8 cm (x) by 1.5 cm (y) by 13 cm tall, 50 g, standing on its edge at (22, -20). Bench glassware (fixed, along the front of the table, clear of the arms): a filter flask (8 cm diameter, 12 cm tall) at (40, 24), a beaker of water (6.4 cm diameter, 8 cm tall) at (40, 6) and an amber reagent bottle (5.6 cm diameter, 10 cm tall) at (40, -24). Exact values are in filter_cake_scrape.py.",
+  "scoring": "Scored at the end of the run. A crystal counts when its centre is inside the container's 4 x 6 cm footprint and it is on the table there, below the filter surface. The tray is steady if, at every moment of the run, its centre stayed within 1 cm of where it started and it neither tilted nor turned more than 5 degrees (marks on the table and the trial video). Score = (crystals in the container) / 12, halved if the tray was not steady. The run ends early with 1.0 once all twelve crystals are in the container, at rest, with the tray steady throughout, for 1 s.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Return the twelve crystals, the tray and the spatula to their marked positions.",
+  "fidelity": "Rigid-body approximation. The filter assembly is a single rigid block whose top is the filter surface, and the filter cake is twelve rigid 8 mm cubes; a real cake is a damp powder that sticks to the paper and the spatula, crumbles and smears, none of which is modelled. The spatula is a rigid flat paddle held upright by its middle, so scraping is pushing its lower edge along the surface. Fixed side walls keep the cubes on the filter except at its right end, as a funnel's wall would; the container's near side is the tray's end face. Friction and contact parameters follow the station's defaults.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-MREFCH"
+}
