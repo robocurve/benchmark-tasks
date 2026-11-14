@@ -221,6 +221,7 @@ _install_scene_patch()
 
 # -- readouts ------------------------------------------------------------------------------------------------------------
 GATE_RISE = 0.002  # m: the rack counts as rising once its lowest point is this far above the cloth
+GATE_REST = 0.0005  # m: back down (lowest point within this of the cloth, still, not away): the gate re-arms
 GATE_MOVE = 0.003  # m: any ball's centre moving more than this horizontally while the rack rises: latched 0
 CLEAR = 0.050  # m: rack clear: every part this far horizontally (seen from above) from every ball's outline...
 DOWN_Z = 0.005  # m: ...and set down: its lowest point within this of the table top (on the table or the cloth), still
@@ -376,9 +377,39 @@ def _check_quat_convention() -> None:
           f"{errs[True] * 1000:.1f} mm, xyzw {errs[False] * 1000:.1f} mm)", flush=True)
 
 
+def _rack_still(objects) -> bool:
+    return float(np.linalg.norm(np.asarray(objects["rack"].lin_vel))) < STILL
+
+
+def _gate_step(m, c, low, away, still):
+    """The lift gate, one control step. Armed: the reference is taken when the rack's lowest point first rises 2 mm
+    above the cloth; from then until the rack is set down away from the pack, any ball centre moving more than 3 mm
+    horizontally from the reference latches 0. If the rack comes back down on the cloth (lowest point within 0.5 mm,
+    still) before it is away, the reference is dropped and the next rise takes a new one. Returns the event, if any."""
+    if m["gate"] is not None or m["cleared"] is not None:
+        return None
+    if m["ref"] is None:
+        if low > GATE_RISE:
+            m["ref"] = c.copy()
+            return "rising"
+        return None
+    mv = float(np.linalg.norm((c - m["ref"])[:, :2], axis=1).max())
+    m["max_move"] = max(m["max_move"], mv)
+    if mv > GATE_MOVE:
+        m["gate"] = m["n"]
+        return "latched"
+    if away:
+        m["cleared"] = m["n"]
+        return "cleared"
+    if low <= GATE_REST and still:
+        m["ref"] = None
+        m["max_move"] = 0.0
+        return "rearmed"
+    return None
+
+
 def _on_step(objects) -> None:
-    """Every control step: the lift gate (ball centres' horizontal travel since the rack first rose 2 mm, until it is
-    clear of every ball), rack clearance, and a trace."""
+    """Every control step: the lift gate (`_gate_step`), rack clearance, and a trace."""
     if mk._EP.get("env") is None:
         return
     m = _mem()
@@ -388,28 +419,25 @@ def _on_step(objects) -> None:
     c = centres(objects)
     low = rack_low(objects)
     clear = rack_clearance(objects, c)
-    if m["ref"] is None and low > GATE_RISE:
-        m["ref"] = c.copy()
+    ev = _gate_step(m, c, low, rack_away(objects, c), _rack_still(objects))
+    if ev == "rising":
         g = pair_gaps(c)
         print(f"[rk] rack rising (lowest point {low * 1000:.1f} mm up) at control step {m['n']}: pairs <= 0.5 mm "
               f"{int((g <= GAP_OK).sum())}/30, widest gap {g.max() * 1000:.2f} mm, head ball "
               f"{_head_off(c) * 1000:.1f} mm from the spot", flush=True)
-    if m["ref"] is not None and m["cleared"] is None:
-        mv = float(np.linalg.norm((c - m["ref"])[:, :2], axis=1).max())
-        m["max_move"] = max(m["max_move"], mv)
-        if mv > GATE_MOVE and m["gate"] is None:
-            m["gate"] = m["n"]
-            print(f"[rk] LATCH lift-disturbed: a ball moved {mv * 1000:.2f} mm sideways while the rack was rising "
-                  f"(limit {GATE_MOVE * 1000:.0f} mm), control step {m['n']}, rack lowest point {low * 1000:.1f} mm", flush=True)
-        if clear >= CLEAR and rack_down(objects):
-            m["cleared"] = m["n"]
-            apex, rear = orientation(c)
-            g = pair_gaps(c)
-            print(f"[rk] rack set down {clear * 1000:.0f} mm (horizontally) from the nearest ball at control step {m['n']}: "
-                  f"pairs <= 0.5 mm {int((g <= GAP_OK).sum())}/30, widest gap {g.max() * 1000:.2f} mm, head ball "
-                  f"{_head_off(c) * 1000:.1f} mm from the spot; most any ball moved "
-                  f"while it rose: {m['max_move'] * 1000:.2f} mm; orientation: apex {apex:.2f} deg off +x (limit "
-                  f"{APEX_TOL:.0f}), rear row {rear:.2f} deg off square (limit {REAR_TOL:.0f})", flush=True)
+    elif ev == "latched":
+        print(f"[rk] LATCH lift-disturbed: a ball moved {m['max_move'] * 1000:.2f} mm sideways while the rack was rising "
+              f"(limit {GATE_MOVE * 1000:.0f} mm), control step {m['n']}, rack lowest point {low * 1000:.1f} mm", flush=True)
+    elif ev == "rearmed":
+        print(f"[rk] rack back down on the cloth at control step {m['n']}: lift gate re-armed", flush=True)
+    elif ev == "cleared":
+        apex, rear = orientation(c)
+        g = pair_gaps(c)
+        print(f"[rk] rack set down {clear * 1000:.0f} mm (horizontally) from the nearest ball at control step {m['n']}: "
+              f"pairs <= 0.5 mm {int((g <= GAP_OK).sum())}/30, widest gap {g.max() * 1000:.2f} mm, head ball "
+              f"{_head_off(c) * 1000:.1f} mm from the spot; most any ball moved "
+              f"while it rose: {m['max_move'] * 1000:.2f} mm; orientation: apex {apex:.2f} deg off +x (limit "
+              f"{APEX_TOL:.0f}), rear row {rear:.2f} deg off square (limit {REAR_TOL:.0f})", flush=True)
     if m["label"] != m.get("phase"):
         m["phase"] = m["label"]
         g = pair_gaps(c)
@@ -712,6 +740,26 @@ def self_test():
             assert abs(got - want) < 1e-9 and success(st) == (want >= 1.0), (name, got, want)
         g = pair_gaps(np.array([[x, y, 0] for x, y in tight]))
         assert np.abs(g).max() < 1e-9
+        # lift gate sequences: (lowest point m, ball shift m, away, still) per step -> latched?
+        c0 = np.array([[x, y, CLOTH_TOP + R] for x, y in tight])
+        seqs = {
+            "rise, a ball moves 4 mm, rack set down away": ([(0.003, 0, 0, 0), (0.02, 0.004, 0, 0), (-0.003, 0.004, 1, 1)], True),
+            "rise, balls still, rack set down away": ([(0.003, 0, 0, 0), (0.05, 0.001, 0, 0), (-0.003, 0.001, 1, 1)], False),
+            "rise, back flat on the cloth, a ball moves 4 mm, rise again": (
+                [(0.003, 0, 0, 0), (0.0, 0, 0, 1), (0.0, 0.004, 0, 1), (0.003, 0.004, 0, 0), (0.05, 0.0045, 0, 0)], False),
+            "rise, back down but still moving (not re-armed), a ball moves 4 mm": (
+                [(0.003, 0, 0, 0), (0.0, 0, 0, 0), (0.0, 0.004, 0, 0)], True),
+            "set down away, then a ball moves 4 mm (gate over)": ([(0.003, 0, 0, 0), (-0.003, 0, 1, 1), (-0.003, 0.004, 1, 1)], False),
+        }
+        for name, (steps, latched) in seqs.items():
+            m = {"n": 0, "ref": None, "gate": None, "max_move": 0.0, "cleared": None}
+            for low_s, dx, away_s, still_s in steps:
+                m["n"] += 1
+                cc = c0.copy()
+                cc[7, 0] += dx  # ball 7 (fourth row)
+                _gate_step(m, cc, low_s, bool(away_s), bool(still_s))
+            assert (m["gate"] is not None) == latched, (name, m)
+        print(f"lift gate: {len(seqs)} sequences pass", file=sys.stderr)
         for deg, want in ((0.0, (0.0, 0.0)), (180.0, (180.0, 0.0)), (10.0, (10.0, 10.0)), (-4.0, (4.0, 4.0))):
             o = orientation(np.array([[x, y, 0] for x, y in turned(deg)]))
             assert abs(o[0] - want[0]) < 1e-6 and abs(o[1] - want[1]) < 1e-6, (deg, o)

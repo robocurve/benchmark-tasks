@@ -36,7 +36,11 @@ Also in this revision:
 - **Demo re-tuned for margin, re-recorded once.** The pull now ends slowly, the pack settles for 3 s, the rack is eased
   1.5 mm forward so its bars stand off the balls, and the first 35 mm of the lift is at 5 mm/s. The recorded run ends
   with every pair within 0.25 mm (scored at 0.5 mm) and no ball moved while the rack rose. The margin, including what
-  did not work, is under "Run limit, runtime and seeds". Dream-1 was re-run with the new code.
+  did not work, is under "Run limit, runtime and seeds". Dream-1 was re-run with the final code.
+- **Reproducibility.** demo() as shipped scored 1.0 in 5 of 5 debug runs on the recording host (table under "Run
+  limit, runtime and seeds"). The lift gate now re-arms if the rack comes back down flat on the cloth before it is
+  set down away, so an attempt that lifts and lowers the rack is judged on its last lift; five gate sequences are in
+  the self-test.
 - **Text.** The long axis and the head of the table are named in task.json; the feeler gauge goes in only after both
   photos; the fidelity names tightening as the difficulty. An earlier text-only change also goes up with this
   revision: a shorter context, and the real-rig check of ball movement during the lift from two grid photos.
@@ -59,12 +63,15 @@ lifted 100 mm straight up over it, carried away but still 60 mm up, set down onl
 away but still sliding (all 0.25); a loose pack with the rack set down away (0.5); a tight pack with the rack set down
 away (1.0), with the head ball 7 mm off, balls rolling or a pad touching a ball (0.75); the lift gate latched (0); the
 back row 1 mm off; and four orientation cases (a correct pack turned 2 degrees passes; turned 180, 10 or 4 degrees about
-the head ball on the spot each stop at 0.5). It checks the orientation angles directly and that the set-down spot is on
+the head ball on the spot each stop at 0.5). It runs five lift-gate sequences (a latch, no latch, a re-arm after the
+rack is set back on the cloth, no re-arm while it is still moving, and the gate ending once the rack is away), checks
+the orientation angles directly and that the set-down spot is on
 the table, and replays both plans (the demo and control b) through the kinematics at 20 Hz, every joint inside the
 URDF limits, IK error under 0.5 mm. Expected output:
 
 ```
 (back row 1 mm off, rack away: 22/30 pairs tight -> 0.5)
+lift gate: 5 sequences pass
 (pack turned +0 deg about the head ball: apex 0.00 deg, rear row 0.00 deg, oriented True)
 (pack turned +180 deg about the head ball: apex 180.00 deg, rear row 0.00 deg, oriented False)
 (pack turned +10 deg about the head ball: apex 10.00 deg, rear row 10.00 deg, oriented False)
@@ -133,8 +140,8 @@ near edge and its rear bar below the camera's view, and both grippers are open a
   0.06, ball-cloth 0.20, ball-wood 0.30; restitution 0. These are estimates.
 - Contact offset 0.1 mm and rest offset 0 on balls, rack and cloth, so a gap of 0.5 mm means something: a tight pack
   settles with every pair within 0.05 mm.
-- Tightening is the real difficulty. Pushed through the rack's V, the balls jam: in debug trials the pull left the
-  widest gap between 0.2 and 0.8 mm, and an arm moving in small jerks (about 1.3 mm) sets the pack coasting. A
+- Tightening is the real difficulty. Pushed through the rack's V, the balls jam: in six debug trials of demo variants
+  the pull left the widest gap between 0.25 and 0.80 mm, and an arm moving in small jerks (about 1.3 mm) sets the pack coasting. A
   stationary tight pack needs the push to end gently.
 - The rack is a free body of three wooden bars (227 g) that the grippers hold by friction.
 
@@ -148,7 +155,8 @@ by 20 mm up), a ball moved 9.6 mm and gaps opened to 3.1 mm; a loose pack (2 mm 
 The table's long axis runs along x; the head of the table and its head string are at +x (away from the robot).
 
 - Latched 0: once the rack's lowest point is 2 mm above the cloth, any ball's centre moves more than 3 mm horizontally
-  before the rack has been set down away from the pack.
+  before the rack has been set down away from the pack. If the rack comes back down flat on the cloth before that
+  (lowest point within 0.5 mm, still), the reference is dropped and taken again at its next rise (`_gate_step`).
 - 0 if the head (1) ball's centre is more than 10 mm from the spot; 0.25 within 10 mm; 0.5 that and the rack taken
   away: set down on the table (its lowest point within 5 mm of the table top, moving under 5 mm/s) with every part at
   least 50 mm horizontally, seen from above, from every ball (each bar's footprint against each ball's circle); 0.75
@@ -158,7 +166,10 @@ The table's long axis runs along x; the head of the table and its head string ar
 - Real rig: two overhead photos against a grid on the cloth, one just before the rack starts to rise and one after it
   has been set down; the trial fails (0) if any ball's centre moved more than 3 mm between them. The second photo also
   gives the head ball's distance from the spot, the rack's horizontal clearance from the pack and both orientation
-  angles. Only after both photos does a 0.5 mm feeler gauge go between neighbouring balls (the gauge can nudge a ball).
+  angles. Only after both photos (the gauge can nudge a ball) are the 30 touching pairs checked with a 0.5 mm feeler
+  gauge: a leaf held vertical, square to the line between the two centres, is lowered into the gap midway between
+  them. Two spheres are closest at their equators on that line, so the pair is within 0.5 mm unless the leaf passes
+  the equators and reaches the cloth. The leaf must not push either ball.
 - Orientation (needed for 0.75 and 1.0). The table's long axis is x; the head of the table, where the apex points, is
   +x. (1) Apex: the line from the centroid of the 15 ball centres to the head ball within 5 degrees of the long axis,
   pointing toward the head string. (2) Rear row: the least-squares line through the five rear-row centres (balls 5, 13,
@@ -172,14 +183,15 @@ The table's long axis runs along x; the head of the table and its head string ar
 
 ## Sim controls
 
-Two control plans show the lift gate and the pair tier firing. They were run with the previous version of this task
-(the same scene, scorer gates and pinch; the rack was then pulled 15.5 mm at 3 mm/s, lifted 130 mm and held, not set
-down), each in a debug copy of that code (no frames):
+- **(a) Lift with drift, final code:** the shipped demo with `RK_DRIFT=0.005`: the hands drift 5 mm sideways over the
+  first 20 mm of the lift. The pack was tight when the rack started rising (30/30 pairs within 0.5 mm, widest
+  0.25 mm). Logged: `[rk] LATCH lift-disturbed: a ball moved 3.03 mm sideways while the rack was rising (limit 3 mm),
+  control step 416, rack lowest point 14.2 mm`. task_score 0. (With the previous version of the task, the same control
+  latched at 3.28 mm.)
 
-- **(a) Lift with drift:** the demo, but the hands drift 5 mm sideways over the first 20 mm of the lift. The pack was
-  tight when the rack started rising (30/30 pairs within 0.5 mm, widest 0.29 mm). Logged: `[rk] LATCH lift-disturbed: a
-  ball moved 3.28 mm sideways while the rack was rising (limit 3 mm), control step 280, rack lowest point 13.2 mm`; by
-  the time the rack was clear a ball had moved 5.14 mm. task_score 0. The plan is still in the task file (`RK_DRIFT`).
+Control (b) was run with the previous version of this task (the same scene, scorer gates and pinch; the rack was then
+pulled 15.5 mm at 3 mm/s, lifted 130 mm and held, not set down), in a debug copy of that code (no frames):
+
 - **(b) No tightening:** `controls_no_tighten()`, started with the head ball on the spot (`START_PAST = 0`): the same pinch
   and straight lift with no pull back. At the lift 3/30 pairs were within 0.5 mm (widest gap 2.19 mm); the lift moved
   no ball more than 0.92 mm. task_score 0.5 (head on the spot, rack clear, pack loose).
@@ -205,21 +217,33 @@ its measured TCP in x and z (the arms sit about 5 mm toward the robot when this 
 
 ## Dream-1 run
 
-One Dream-1 trial with this code (1,200 steps, 60 s, instruction as above): task_score 0. No score tier changed during
-the run: the head ball stayed 15 mm past the spot, the rack stayed in place around the loose pack, and no gripper point
-came within 30 mm of a ball.
+One Dream-1 trial with this code (1,200 steps, 60 s, instruction as above): task_score 0. The arms reached in over the
+rack late in the run (grippers within 30 mm of a ball at times from step 888) but never moved or lifted it; the head
+ball stayed 15 mm past the spot, and no other score tier changed.
 
 ## Run limit, runtime and seeds
 
 - Run limit: 1,200 steps (60 seconds at 20 Hz). The demo plan is 41.4 s.
 - One fixed layout: `-E object_jitter=0`. Dream-1 is hosted and not seeded. The demo is deterministic on one host
   (repeat runs on the same machine give the same numbers); results can differ slightly across GPU hosts.
-- Margin, reported as found: tightening the pack is sensitive. Six debug trials of demo variants on the recording
-  host (pull 14.5-16 mm, with and without the 1 mm lift, with and without the x correction during the pull) ended with
-  widest gaps of 0.25, 0.33, 0.40, 0.53, 0.54 and 0.80 mm when the rack was set down; three scored 1.0 and three 0.75.
-  The final demo is the variant that reached 0.25 mm, and its recording repeated that trial exactly. Its head ball ends
-  4.0 mm from the spot (limit 5 mm): the pack coasts about 2.8 mm back off the apex after the pull. A run of the earlier
-  demo on this host scored 0.75 (widest 0.64 mm) where it had scored 1.0 on another machine.
+- demo() as shipped: 5/5 at 1.0 on one host (Brev, L40S). Five debug runs of the final code, no frames:
+
+  | Run | task_score | Widest gap when set down | Head ball from spot | Ball movement during lift |
+  |---|---|---|---|---|
+  | 1 | 1.0 | 0.25 mm | 4.0 mm | 0.00 mm |
+  | 2 | 1.0 | 0.25 mm | 4.0 mm | 0.00 mm |
+  | 3 | 1.0 | 0.25 mm | 4.0 mm | 0.00 mm |
+  | 4 | 1.0 | 0.25 mm | 4.0 mm | 0.00 mm |
+  | 5 | 1.0 | 0.25 mm | 4.0 mm | 0.00 mm |
+
+  The runs are identical, so they show the demo repeats on that host; they do not measure margin against small
+  changes. The head ball ends 4.0 mm from the spot (limit 5 mm) because the pack coasts about 2.8 mm back off the apex
+  after the pull.
+- Background, the variant sweep: tightening is sensitive. Six debug trials of demo variants on the same host (pull
+  14.5-16 mm, with and without the 1 mm lift, with and without the x correction during the pull) ended with widest
+  gaps of 0.25, 0.33, 0.40, 0.53, 0.54 and 0.80 mm when the rack was set down; three scored 1.0 and three 0.75. The
+  shipped demo is the variant that reached 0.25 mm. A run of the earlier demo on this host scored 0.75 (widest
+  0.64 mm) where it had scored 1.0 on another machine.
 - Runtime per trial: roughly 1 minute of wall clock per 400 steps for Dream-1, plus Isaac Sim warm-up.
 
 ## Reset between trials
