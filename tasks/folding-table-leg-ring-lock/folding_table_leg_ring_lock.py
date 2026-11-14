@@ -1,9 +1,11 @@
-"""On the station table, in front of the right arm, a folding banquet table lies upside down: its moulded top (only
-the end that carries one leg pair is modelled) rests on the bench and the leg pair is half swung up. The leg pair is
-a U of two aluminium tubes 60 cm apart, 70 cm long, hinged to brackets on the top's underside 10 cm from its end.
-A folding brace runs from a bracket on the top to the leg's cross bar: two steel strips riveted together at a knee.
-Swung right out (upright), the leg reaches its stop and the brace is then almost straight (the knee 4 deg short of
-straight, on the side it folds to). The leg starts 10 deg short of upright, its brace folded up 48 deg at the knee.
+"""On the station table, in front of the arms, a folding banquet table lies upside down: its moulded top rests on the
+bench (the end that carries one leg pair is modelled, from 10 cm before the leg's hinge to the bench's far edge) and
+the leg pair is folded flat against it, as a table is stored. The leg pair is a U of two aluminium tubes 60 cm apart,
+70 cm long, hinged to brackets on the top's underside 10 cm from its end; folded, it lies along the top, away from the
+robot, on two moulded rests. A folding brace runs from a bracket on the top to the leg's cross bar: two steel strips
+riveted together at a knee. Folded, the brace's knee stands up between the leg's tubes; its upper strip passes through
+a slot in the cross bar to the clevis pin under it. Swung right out (upright), the leg reaches its stop and the brace
+is then almost straight (the knee 4 deg short of straight, on the side it folds to).
 
 The lock is a steel ring that slides on the brace's lower strip. Slid up over the knee and onto the upper strip, its
 walls stop the knee bending, so the brace becomes a strut and the leg cannot fold. The ring only passes the knee
@@ -15,7 +17,8 @@ Then the check: once the robot has let go and stood clear for 2 s, a padded rod 
 the leg is pushed when the table is turned over and stood on its feet (about 6 N, 1.5 s, then it retracts). A
 locked leg does not move. An unlocked leg folds.
 
-The job: swing the leg out until the brace is straight, slide the ring up over the knee, let go and stand clear.
+The job: swing the leg up out of its folded position until it stands on its stop and the brace is straight, slide the
+ring up over the knee, let go and stand clear.
 
 Run it:  inspect-robots run --embodiment yam_arena -E task=tasks/folding-table-leg-ring-lock/folding_table_leg_ring_lock.py \\
            -E object_jitter=0 -E control_hz=20 -E cam_width=320 -E cam_height=176 \\
@@ -45,20 +48,22 @@ VARIANT = "demo"  # sim smoke tests: "demo", "open" (leg opened, ring left), "ha
 YC = -0.120
 SLAB = 0.040  # the table top's thickness; it lies upside down, its underside facing up
 TS = TOP + SLAB  # the underside (now the upper face)
-TOP_X = (0.080, 0.540)  # the modelled end of the top
 TOP_W = 0.760
-# -- the leg pair: hinged along y at H, upright in the reference pose, folds toward the robot (-x) -----------------
-XH = 0.440
-H = np.array([XH, YC, TS + 0.016])  # hinge axis
+# -- the leg pair: hinged along y at H, upright in the reference pose, folds away from the robot (+x) -------------
+XH = 0.140
+HZ = 0.027  # the hinge axis above the underside (the brackets lift it so the folded leg's clevis clears the top)
+H = np.array([XH, YC, TS + HZ])  # hinge axis
+TOP_X = (XH - 0.100, 0.910)  # the modelled part of the top: its end 10 cm before the hinge, to the bench's edge
 TUBE, TUBE_L, TUBE_Y = 0.025, 0.700, 0.300  # square tube, length, its offset from the centre line
 LEG_KG = 0.60
-LEG_FRICTION = 0.5  # N*m: the hinge's friction (its own weight at 10 deg is 0.35 N*m)
+LEG_FRICTION = 0.5  # N*m: the hinge's friction
 R_B = 0.130  # the brace bar's height up the leg
-P_REF = np.array([XH - 0.018, YC, H[2] + R_B])  # brace pin on the leg (clevis on the brace bar), leg upright
-START_DEG = 10.0  # the leg starts this far short of upright
-FOLD_STOP_DEG = 25.0  # the leg's travel is stopped here (a real one folds flat; this keeps the arms clear)
+P_REF = np.array([XH + 0.018, YC, H[2] + R_B])  # brace pin on the leg (clevis under the brace bar), leg upright
+START_DEG = 90.0  # the leg starts folded flat against the top (stowed)
+FOLD_STOP_DEG = 90.0  # its fold stop: lying flat along the top
+SLOT = 0.004  # half-width of the cross bar's slot for the upper strip
 # -- the brace: two steel strips (20 x 6 mm) from the top's bracket A to the leg's pin P, a knee between ---------------
-A = np.array([0.270, YC, TS + 0.015])
+A = np.array([XH + 0.200, YC, TS + HZ - 0.001])
 BETA_S = 4.0  # knee bend (deg) with the leg upright on its stop
 _AP0 = P_REF - A
 L = float(np.linalg.norm(_AP0) / (2 * math.cos(math.radians(BETA_S / 2))))  # each strip, pin to pin
@@ -72,14 +77,15 @@ RING_FRICTION = 1.0  # N: it stays where it is slid
 S0 = 0.032  # the ring's centre this far up the lower strip from A at the start (on its stop)
 RING_TOP = L + 0.005  # its centre's highest point: the leading end 25 mm past the knee
 LOCK_S = L - RING_LEN / 2 + 0.012  # locked: the ring's leading end at least 12 mm past the knee
-# -- the side-load rig: a padded rod on a slide, pushing the right tube 40 cm up, toward folded --------------------
+# -- the side-load rig: a padded rod on a slide, pushing the right tube 40 cm up, toward folded (+x) ---------------
 PUSH_R = 0.400
 PUSH_TRAVEL = 0.140
 PUSH_KG = 0.20
 K_PUSH, FAR = 1.2, 5.0  # drive: target -5 m holds it on its rear stop with 6 N; +5 m pushes with 6 N
 PAD = (0.024, 0.050, 0.050)
-PAD_X = XH + TUBE / 2 + 0.003 + PAD[0] / 2
+PAD_X = XH - TUBE / 2 - 0.003 - PAD[0] / 2  # on the robot's side of the upright tube
 PAD_Z = H[2] + PUSH_R
+ROD_DY = 0.120  # the pad's arm runs out past the table's side to the rod
 PARTS = ("leg", "link_a", "link_b", "ring")
 
 HDPE, ALU, STEEL = (0.86, 0.86, 0.83), (0.62, 0.64, 0.67), (0.25, 0.26, 0.28)
@@ -96,59 +102,63 @@ def _slope(v):
 
 
 def loop(phi_deg):
-    """The brace's pose for the leg folded ``phi_deg`` from upright (planar four-bar, knee bent up and toward the
+    """The brace's pose for the leg folded ``phi_deg`` from upright (planar four-bar, knee bent up and away from the
     robot): pin P, knee K (world), the strips' slopes (deg), and the joint values for the kit's tree."""
-    r = mk.axis_angle((0, -1, 0), math.radians(phi_deg))  # folding turns the leg about -y (top toward -x)
+    r = mk.axis_angle((0, 1, 0), math.radians(phi_deg))  # folding turns the leg about +y (top toward +x)
     p = H + r @ (P_REF - H)
     ap = p - A
     d = float(np.linalg.norm(ap))
     e = ap / d
-    n = np.array([-e[2], 0.0, e[0]])  # in-plane normal on the knee's side (up and toward the robot)
+    n = np.array([e[2], 0.0, -e[0]])  # in-plane normal on the knee's side (up, and away from the robot)
     h = math.sqrt(max(L * L - (d / 2) ** 2, 0.0))
     k = A + e * d / 2 + n * h
     sa, sb = _slope(k - A), _slope(p - k)
     beta = 2 * math.degrees(math.asin(min(1.0, h / L)))
     return {"P": p, "K": k, "n": n, "slope_a": sa, "slope_b": sb, "beta": beta,
-            "q_a": sa - SLOPE_A0, "q_knee": beta - BETA_S}
+            "q_a": sa - SLOPE_A0, "q_knee": beta - BETA_S, "q_pin": (sb - SLOPE_B0 + phi_deg) % 360.0}
 
 
-SLOPE_A0 = 0.0
+SLOPE_A0 = SLOPE_B0 = 0.0
 _ref = loop(0.0)
-SLOPE_A0 = _ref["slope_a"]
-K0, SLOPE_B0 = _ref["K"], _ref["slope_b"]
+SLOPE_A0, SLOPE_B0 = _ref["slope_a"], _ref["slope_b"]
+K0 = _ref["K"]
 E_A0 = (K0 - A) / L
 _START = loop(START_DEG)
 
 kit = mk.Kit()
 _tx = (TOP_X[0] + TOP_X[1]) / 2
+_REST_H = HZ - TUBE / 2 - 0.0015  # the moulded leg rests: 1.5 mm under the folded tubes
 kit.part("tabletop", (_tx, YC, TOP), [
     mk.box((TOP_X[1] - TOP_X[0], TOP_W, SLAB), at=(0, 0, SLAB / 2)),  # the moulded top, upside down
-    mk.box((0.010, TOP_W, 0.030), at=(TOP_X[1] - _tx - 0.005, 0, SLAB + 0.015)),  # its end rim
-    *[mk.box((0.034, 0.008, 0.030), at=(XH - _tx, s * (TUBE_Y + TUBE / 2 + 0.005), SLAB + 0.015), color=STEEL)
-      for s in (-1, 1)],  # leg hinge brackets
-    mk.box((0.016, 0.022, 0.016), at=(A[0] - _tx - 0.004, 0, SLAB + 0.008), color=STEEL),  # brace bracket
+    mk.box((0.010, TOP_W, 0.030), at=(TOP_X[0] - _tx + 0.005, 0, SLAB + 0.015)),  # its end rim
+    *[mk.box((0.034, 0.008, HZ + 0.013), at=(XH - _tx, s * (TUBE_Y + TUBE / 2 + 0.005), SLAB + (HZ + 0.013) / 2),
+             color=STEEL) for s in (-1, 1)],  # leg hinge brackets
+    *[mk.box((0.040, 0.040, _REST_H), at=(XH + 0.560 - _tx, s * TUBE_Y, SLAB + _REST_H / 2)) for s in (-1, 1)],
+    mk.box((0.016, 0.022, HZ), at=(A[0] - _tx + 0.004, 0, SLAB + HZ / 2), color=STEEL),  # brace bracket
 ], color=HDPE)
 
+_BAR_HALF = (TUBE_Y - SLOT) / 2
 _leg_boxes = [mk.box((TUBE, TUBE, TUBE_L), at=(0, s * TUBE_Y, TUBE_L / 2 - TUBE / 2)) for s in (-1, 1)]
 _leg_boxes += [
     mk.box((0.020, 2 * TUBE_Y, 0.020), at=(0, 0, 0)),  # hinge rod
-    mk.box((0.020, 2 * TUBE_Y, 0.020), at=(0, 0, R_B)),  # brace bar
-    mk.box((0.022, 0.016, 0.022), at=(-0.012, 0, R_B), color=STEEL),  # brace clevis
+    # the brace bar, slotted at the middle for the upper strip, with the clevis's two cheeks under it
+    *[mk.box((0.020, _BAR_HALF, 0.020), at=(0, s * (SLOT + _BAR_HALF / 2), R_B)) for s in (-1, 1)],
+    *[mk.box((0.024, 0.003, 0.024), at=(0.012, s * (STRIP_T / 2 + 0.0035), R_B), color=STEEL) for s in (-1, 1)],
     mk.box((0.020, 2 * TUBE_Y + 0.02, 0.020), at=(0, 0, 0.660)),  # foot bar
     *[mk.box((0.030, 0.030, 0.012), at=(0, s * TUBE_Y, TUBE_L - TUBE / 2), color=RUBBER) for s in (-1, 1)],
 ]
 kit.part("leg", tuple(H), _leg_boxes, mass=LEG_KG, color=ALU)
-kit.hinge("leg_hinge", "tabletop", "leg", anchor=tuple(H), axis=(0, -1, 0), lower_deg=0.0, upper_deg=FOLD_STOP_DEG,
+kit.hinge("leg_hinge", "tabletop", "leg", anchor=tuple(H), axis=(0, 1, 0), lower_deg=0.0, upper_deg=FOLD_STOP_DEG,
           start_deg=START_DEG, friction=LEG_FRICTION)
 
 _qa = tuple(mk.mat_to_quat(_rot_y(-SLOPE_A0)))
 kit.part("link_a", tuple(A), [mk.box((L + 0.008, STRIP_T, STRIP_H), at=((L - 0.008) / 2, 0, 0))], mass=LINK_KG,
          color=STEEL, quat=_qa)
-kit.hinge("brace_a", "tabletop", "link_a", anchor=tuple(A), axis=(0, -1, 0), lower_deg=-30.0, upper_deg=80.0,
+kit.hinge("brace_a", "tabletop", "link_a", anchor=tuple(A), axis=(0, -1, 0), lower_deg=-75.0, upper_deg=10.0,
           start_deg=_START["q_a"])
-kit.part("link_b", tuple(K0), [mk.box((L + 0.013, STRIP_T, STRIP_H), at=((L + 0.003) / 2, 0, 0))], mass=LINK_KG,
+kit.part("link_b", tuple(K0), [mk.box((L + 0.010, STRIP_T, STRIP_H), at=(L / 2, 0, 0))], mass=LINK_KG,
          color=STEEL, quat=tuple(mk.mat_to_quat(_rot_y(-SLOPE_B0))))
-kit.hinge("knee", "link_a", "link_b", anchor=tuple(K0), axis=(0, 1, 0), lower_deg=-3.0, upper_deg=100.0,
+kit.hinge("knee", "link_a", "link_b", anchor=tuple(K0), axis=(0, -1, 0), lower_deg=-3.0, upper_deg=155.0,
           start_deg=_START["q_knee"])
 _rw = (RING_IN_H + RING_WALL) / 2
 kit.part("ring", tuple(A + E_A0 * S0), [
@@ -160,19 +170,22 @@ kit.part("ring", tuple(A + E_A0 * S0), [
 kit.slider("ring_slide", "link_a", "ring", axis=tuple(E_A0), lower=-0.004, upper=RING_TOP - S0, start=0.0,
            friction=RING_FRICTION)
 
-ROD = 0.200
+ROD = 0.300
+
 kit.part("pusher", (PAD_X, YC - TUBE_Y, PAD_Z), [
     mk.box(PAD, color=RUBBER),
-    mk.box((ROD, 0.016, 0.016), at=(PAD[0] / 2 + ROD / 2, 0, 0), color=STEEL),  # its rod
+    mk.box((0.016, ROD_DY, 0.016), at=(-0.004, -ROD_DY / 2 - PAD[1] / 2 + 0.008, 0), color=STEEL),  # its arm
+    mk.box((ROD, 0.016, 0.016), at=(ROD / 2 - 0.012, -ROD_DY - PAD[1] / 2 + 0.008, 0), color=STEEL),  # its rod
 ], mass=PUSH_KG, color=RIG)
-kit.slider("push", None, "pusher", axis=(-1, 0, 0), lower=0.0, upper=PUSH_TRAVEL, start=0.0, stiffness=K_PUSH,
+kit.slider("push", None, "pusher", axis=(1, 0, 0), lower=0.0, upper=PUSH_TRAVEL, start=0.0, stiffness=K_PUSH,
            rest=-FAR)
-# the rig (fixed): a column on the bench past the table's end and a guide rail beside the rod (clear of it)
-_RIG_X, _RIG_DY = 0.640, 0.040
-kit.part("rig", (_RIG_X, YC - TUBE_Y + _RIG_DY, TOP), [
+# the rig (fixed): a column on the bench beside the table, and a guide rail beside the rod (clear of it)
+_ROD_Y = YC - TUBE_Y - ROD_DY - PAD[1] / 2 + 0.008
+_RIG_X, _RIG_Y = PAD_X + 0.250, _ROD_Y - 0.040
+kit.part("rig", (_RIG_X, _RIG_Y, TOP), [
     mk.box((0.040, 0.040, PAD_Z - TOP + 0.03), at=(0, 0, (PAD_Z - TOP + 0.03) / 2)),
-    mk.box((0.160, 0.120, 0.012), at=(0, 0, 0.006)),
-    mk.box((_RIG_X - 0.490, 0.016, 0.016), at=(-(_RIG_X - 0.490) / 2, 0, PAD_Z - TOP)),  # guide rail
+    mk.box((0.100, 0.100, 0.012), at=(0, 0, 0.006)),
+    mk.box((0.200, 0.016, 0.016), at=(-0.090, 0.020, PAD_Z - TOP)),  # guide rail, beside the rod
 ], color=RIG)
 
 OBJECTS = [*kit.objects()]
@@ -183,7 +196,7 @@ SCORE_OVER = "end"
 # -- the loop: the brace's upper pin (leg <-> upper strip) closes the four-bar. The kit builds trees only, so this
 # one joint is authored here, with the kit's own authoring code, right after the kit has authored its joints. -------
 _PIN = mk._Joint("brace_pin", "hinge", "leg", "link_b", np.array(P_REF, float), np.array([0.0, 1.0, 0.0]),
-                 math.radians(-90.0), math.radians(90.0), 0.0)
+                 -math.inf, math.inf, 0.0)  # free: the loop sets it (it turns ~210 deg)
 _author_all0 = mk._author_all
 
 
@@ -330,7 +343,8 @@ def _rules(objects) -> None:
             _say(f"the leg FOLDED under the load: {a:.1f} deg")
     if DEBUG and sim and (m["n"] % 5 == 0 or m["phase"] in ("ramp", "back")):
         tc = mk.tcps()
-        tz = f"({tc[1][0]:.3f},{tc[1][1]:.3f},{tc[1][2] - TOP:.3f})" if tc else "-"
+        tz = (f"({tc[1][0]:.3f},{tc[1][1]:.3f},{tc[1][2] - TOP:.3f}) L ({tc[0][0]:.3f},{tc[0][1]:.3f},"
+              f"{tc[0][2] - TOP:.3f})") if tc else "-"
         pin = np.linalg.norm(kit.point(objects, "leg", P_REF - H) - kit.point(objects, "link_b", (L, 0, 0)))
         lp, lq = kit.pose(objects, "leg")
         _say(f"R tcp {tz}; leg {a:.2f} deg, knee {knee_deg(objects):.1f} deg, ring {ring_s(objects) * 1000:.1f} mm "
@@ -377,25 +391,45 @@ def distance(objects) -> float:
 
 
 # -- the scripted demo ------------------------------------------------------------------------------------------
-# Open loop from the scene's geometry; right arm only, the left stays parked. Fingers closed, the finger tips come
-# down on the outside of the bent knee and push it along its own path (computed from the four-bar's geometry) until
-# the brace is straight and the leg on its stop, then 15 mm further into the stop. They back off, open, come down
-# astride the ring (still on its stop by the bracket), grip it and slide it straight up the lower strip, over the
-# knee, onto its upper stop. Then they open, lift off, and the arm parks and waits while the leg is pushed.
+# Open loop from the scene's geometry; both arms. The leg starts folded flat, where its brace is near a dead point
+# (pushing the knee only presses the leg onto its fold stop), so the left hand lifts it by its left tube, 10 cm from
+# the hinge (the fingers close on the tube's sides, so the tube turns between the pads), up to 33 deg from upright:
+# past that the tube would run up between the fingers into the palm. The right hand meanwhile comes in from the side,
+# fingers closed, onto the outer edge of the brace's lower strip just under the bent knee; the left lets go and backs
+# off, and the right pushes the strip along its own path (computed from the four-bar's geometry) until the brace is
+# straight and the leg on its stop, then 15 mm further into the stop. It backs off, opens, comes down astride the ring (still on its stop by the
+# bracket), grips it and slides it straight up the lower strip, over the knee, onto its upper stop. Then it opens,
+# lifts off, and both arms park and wait while the leg is pushed. Every TCP waypoint stays at x 0.12-0.40 and at most
+# 185 mm above the bench (the arms' reach there), checked offline.
 
 TIP_C = 0.0065  # the finger-tip block's centre below the TCP (tips 13 mm below)
 TIP_R = 0.010  # its reach along the knee's outward normal (half-sizes 7.8 x 6.5 mm)
 GRIP = -0.005  # 10 mm between the pads (the ring is 18 mm across): 8 mm squeeze
+GRIP_TUBE = -0.008  # 16 mm between the pads on the 25 mm tube: 9 mm squeeze
+RELEASE = -0.016  # let go of the tube only this far open (32 mm): wider, the fingers' bodies swing in toward it
+R_GRIP = 0.100  # the left hand's grip on its tube, this far from the hinge
+PHI_HAND = 33.0  # the leg angle (deg from upright) at which the right hand takes over at the knee
+SIDE = 0.050  # the right hand comes onto the knee from this far out along -y
+KNEE_BELOW = 0.015  # the right hand pushes the lower strip this far under the knee pin
 SLIDE_OVER = 0.004  # commanded past the ring's upper stop
 SAG = 0.0015  # the slide path is held this far toward straight (a hand that sags pushes the knee onto its stop)
 PRESS_OVER = 0.015  # the knee pushed this far past straight-and-on-stop
-PARK = (0.200, -0.300, TOP + 0.200)
+R_PARK = (0.240, -0.330, TOP + 0.150)
+L_PARK = (0.220, 0.430, TOP + 0.150)
+PUSH_CAP = 25.0  # N: the most the plan asks of the right hand on the strip
+REACH_X, REACH_Z = (0.120, 0.400), 0.185  # every waypoint's TCP inside this (x range; height above the bench)
+YL = YC + TUBE_Y  # the left tube
 
 
-def _knee_tcp(phi, back=0.0):
-    """TCP pushing the knee's outer corner at leg angle ``phi`` (deg), ``back`` m further out along its normal."""
+def _knee_tcp(phi, back=0.0, dy=0.0):
+    """TCP pushing the lower strip's outer edge KNEE_BELOW under the knee pin at leg angle ``phi`` (deg), ``back`` m
+    further out along the strip's outward normal (the knee's side). Pushed there, the strip turns about its bracket
+    and the brace straightens; it keeps the hand lower than a push on the knee's corner."""
     c = loop(phi)
-    p = c["K"] + c["n"] * (STRIP_H / 2 + TIP_R + back) + np.array([0, 0, TIP_C])
+    ea = (c["K"] - A) / L
+    na = np.array([ea[2], 0.0, -ea[0]])
+    na = na if na @ c["n"] > 0 else -na
+    p = A + ea * (L - KNEE_BELOW) + na * (STRIP_H / 2 + TIP_R + back) + np.array([0, dy, TIP_C])
     return tuple(float(v) for v in p)
 
 
@@ -405,47 +439,156 @@ def _ring_tcp(s, out=0.0):
     return tuple(float(v) for v in p)
 
 
+def _tube_tcp(phi, off=(0.0, 0.0)):
+    """TCP on the left tube's axis R_GRIP from the hinge at leg angle ``phi``; ``off`` (m) along the tube's fold-side
+    normal and up."""
+    a = math.radians(phi)
+    f = np.array([math.cos(a), 0.0, -math.sin(a)])
+    p = np.array([XH + R_GRIP * math.sin(a), YL, H[2] + R_GRIP * math.cos(a)]) + f * off[0] + np.array([0, 0, off[1]])
+    return tuple(float(v) for v in p)
+
+
+LEG_COM = 0.30  # m up the leg: its centre of mass (the tubes and three bars, by volume)
+FF = True  # feed the arms' compliance forward (the offline clash check replays the plan with FF off)
+
+
+def _hinge_torque(phi, moving=True):
+    """N*m the robot must supply to hold (``moving``: to swing up) the leg at ``phi`` deg from upright."""
+    return LEG_KG * 9.81 * LEG_COM * math.sin(math.radians(phi)) + (LEG_FRICTION if moving else 0.0)
+
+
+def _strip_push(phi):
+    """Unit push direction on the lower strip and its lever (m of contact travel per rad of unfolding)."""
+    def contact(ph):
+        c = loop(ph)
+        ea = (c["K"] - A) / L
+        na = np.array([ea[2], 0.0, -ea[0]])
+        return A + ea * (L - KNEE_BELOW), (na if na @ c["n"] > 0 else -na)
+    p, na = contact(phi)
+    p2, _ = contact(phi - 0.2)
+    return -na, float(-na @ (p2 - p)) / math.radians(0.2)
+
+
+def _compliance(arm, pos):
+    """The arm's TCP compliance (m/N, 3x3) at ``pos``: its joints are position servos of finite stiffness (the
+    station's shoulder and wrist gains), so a hand that pushes or lifts sags back by C @ F. The plan aims that far
+    beyond the path, as a stiffer or force-controlled arm would hold it."""
+    from yam_arena import ik, station
+    from yam_arena.constants import READY, SHOULDER, WRIST
+    from yam_arena.demo import grip_rotation
+
+    base = station.BASES[arm]
+    q, _, _ = ik.solve(np.asarray(pos, float), ik.matrix_to_quat_xyzw(grip_rotation(0.0)), np.array(READY, float),
+                       base_pos=base, iters=200)
+    p0 = ik.tcp_pose(q, base)[0]
+    jac = np.zeros((3, 6))
+    for i in range(6):
+        dq = np.zeros(6)
+        dq[i] = 1e-6
+        jac[:, i] = (ik.tcp_pose(q + dq, base)[0] - p0) / 1e-6
+    k = np.array([SHOULDER["stiffness"]] * 3 + [WRIST["stiffness"]] * 3, float)
+    return jac @ np.diag(1.0 / k) @ jac.T
+
+
+def _aim(arm, pos, force):
+    """Where to command the TCP so that, loaded with ``force`` (N, applied by the hand), it sits at ``pos``."""
+    pos = np.asarray(pos, float)
+    if not FF or not np.any(force):
+        return tuple(float(v) for v in pos)
+    return tuple(float(v) for v in pos + _compliance(arm, pos) @ np.asarray(force, float))
+
+
+def _lift_force(phi, moving=True):
+    a = math.radians(phi)
+    return np.array([-math.cos(a), 0.0, math.sin(a)]) * _hinge_torque(phi, moving) / R_GRIP
+
+
+def _push_force(phi, moving=True):
+    d, lever = _strip_push(max(phi, 1.0))
+    return d * min(PUSH_CAP, _hinge_torque(phi, moving) / lever)
+
+
+DEMO_PHI = []  # (time s, leg angle deg) the plan expects: for the offline clash check
+
+
 def demo():
-    """Push the bent knee straight (the leg swings upright onto its stop), then grip the ring and slide it up over
-    the knee; let go, lift off, park and wait while the leg is pushed."""
+    """Lift the folded leg by its tube (left), hand over to a push on the brace's knee (right), push it straight (the
+    leg swings upright onto its stop), then grip the ring and slide it up over the knee; let go, park and wait while
+    the leg is pushed."""
     c, o = FINGER_CLOSED, FINGER_OPEN
-    R = [Waypoint(2.0, PARK, c, "start", 0.0)]
+    Lw, R = [], []
+    DEMO_PHI.clear()
 
-    def w(dur, pos, f, label):
-        R.append(Waypoint(dur, tuple(float(v) for v in pos), f, label, 0.0))
+    def w(arm, dur, pos, f, label):
+        arm.append(Waypoint(dur, tuple(float(v) for v in pos), f, label, 0.0))
 
-    w(2.0, _knee_tcp(START_DEG, 0.040), c, "up and behind the bent knee, fingers closed")
-    w(1.0, _knee_tcp(START_DEG, 0.002), c, "onto the knee's outer corner")
-    w(0.3, _knee_tcp(START_DEG, 0.0), c, "settle")
-    n = 8
+    def t(arm):
+        return sum(x.duration for x in arm)
+
+    # left: down astride its tube by the hinge, grip, lift the leg to PHI_HAND
+    w(Lw, 2.0, L_PARK, o, "start")
+    w(Lw, 2.0, _tube_tcp(START_DEG, (0.0, 0.040)), o, "over the left tube by its hinge")
+    w(Lw, 1.0, _tube_tcp(START_DEG), o, "down astride the tube")
+    w(Lw, 0.8, _tube_tcp(START_DEG), GRIP_TUBE, "grip the tube")
+    w(Lw, 0.3, _tube_tcp(START_DEG), GRIP_TUBE, "settle closed")
+    DEMO_PHI.append((t(Lw), START_DEG))
+    w(Lw, 1.0, _aim("left", _tube_tcp(START_DEG), _lift_force(START_DEG)), GRIP_TUBE, "take the leg's weight")
+    DEMO_PHI.append((t(Lw), START_DEG))
+    n = 11
     for k in range(1, n + 1):
-        w(3.0 / n, _knee_tcp(START_DEG * (1 - k / n)), c, "push the knee along its path: the leg swings upright")
-    w(1.0, _knee_tcp(0.0, -PRESS_OVER), c, "press it onto the stop")
-    w(0.5, _knee_tcp(0.0, -PRESS_OVER), c, "hold")
-    w(0.6, _knee_tcp(0.0, 0.015), c, "back off")
+        phi = START_DEG + (PHI_HAND - START_DEG) * k / n
+        w(Lw, 6.0 / n, _aim("left", _tube_tcp(phi), _lift_force(phi)), GRIP_TUBE, "lift the leg by its tube")
+        DEMO_PHI.append((t(Lw), phi))
+    hold = _aim("left", _tube_tcp(PHI_HAND), _lift_force(PHI_HAND, moving=False))
+    w(Lw, 0.5, hold, GRIP_TUBE, "hold the leg up")
+    t_up = t(Lw)
+    # right: wait, then in from the side onto the knee's outer corner
+    w(R, 2.0, R_PARK, c, "start")
+    w(R, t_up - 2.0, R_PARK, c, "wait while the leg is lifted")
+    w(R, 1.5, _knee_tcp(PHI_HAND, 0.010, -SIDE), c, "beside the bent knee, fingers closed")
+    w(R, 1.0, _knee_tcp(PHI_HAND, 0.010), c, "in, just off the lower strip's outer edge")
+    w(R, 0.6, _knee_tcp(PHI_HAND, 0.0), c, "onto the strip under the knee")
+    w(Lw, t(R) - t_up, hold, GRIP_TUBE, "hold the leg up")
+    # hand the leg's weight over: the right takes it on the strip while the left eases off, then the left lets go
+    w(R, 1.2, _aim("right", _knee_tcp(PHI_HAND), _push_force(PHI_HAND, moving=False)), c, "take the leg's weight")
+    w(Lw, 1.2, _tube_tcp(PHI_HAND), GRIP_TUBE, "ease off")
+    w(Lw, 0.5, _tube_tcp(PHI_HAND), RELEASE, "let go of the tube")
+    w(Lw, 0.8, _tube_tcp(PHI_HAND, (-0.040, 0.0)), RELEASE, "back off, square to the tube")
+    w(Lw, 1.5, L_PARK, o, "park")
+    w(R, t(Lw) - 1.5 - t(R), _aim("right", _knee_tcp(PHI_HAND), _push_force(PHI_HAND, moving=False)), c,
+      "hold the leg up while the left lets go")
+    DEMO_PHI.append((t(R), PHI_HAND))
+    n = 10
+    for k in range(1, n + 1):
+        phi = PHI_HAND * (1 - k / n)
+        w(R, 6.0 / n, _aim("right", _knee_tcp(phi), _push_force(phi)), c,
+          "push the strip along its path: the leg swings upright")
+        DEMO_PHI.append((t(R), phi))
+    w(R, 1.0, _knee_tcp(0.0, -PRESS_OVER), c, "press it onto the stop")
+    w(R, 0.5, _knee_tcp(0.0, -PRESS_OVER), c, "hold")
+    w(R, 0.6, _knee_tcp(0.0, 0.015), c, "back off")
     if VARIANT == "open":
-        w(1.5, PARK, c, "park")
+        w(R, 1.5, R_PARK, c, "park")
     else:  # along the brace to the ring, never more than about 4 cm from it (so it does not count as let go)
         up = np.array([0, 0, 0.030])
-        w(0.4, _knee_tcp(0.0, 0.015), o, "open the fingers")
-        w(1.2, np.array(_ring_tcp(S0)) + up, o, "over the ring")
-        w(1.2, _ring_tcp(S0, -SAG), o, "down astride the ring")
-        w(0.4, _ring_tcp(S0, -SAG), o, "settle")
-        w(0.8, _ring_tcp(S0, -SAG), GRIP, "grip the ring")
-        w(0.3, _ring_tcp(S0, -SAG), GRIP, "settle closed")
+        w(R, 0.4, _knee_tcp(0.0, 0.015), o, "open the fingers")
+        w(R, 1.2, np.array(_ring_tcp(S0)) + up, o, "over the ring")
+        w(R, 1.2, _ring_tcp(S0, -SAG), o, "down astride the ring")
+        w(R, 0.4, _ring_tcp(S0, -SAG), o, "settle")
+        w(R, 0.8, _ring_tcp(S0, -SAG), GRIP, "grip the ring")
+        w(R, 0.3, _ring_tcp(S0, -SAG), GRIP, "settle closed")
         s_end = S0 + 0.035 if VARIANT == "half" else RING_TOP + SLIDE_OVER
         n = 6
         for k in range(1, n + 1):
-            w(3.0 / n, _ring_tcp(S0 + (s_end - S0) * k / n, -SAG), GRIP, "slide the ring up over the knee")
-        w(0.5, _ring_tcp(s_end, -SAG), GRIP, "hold on its stop")
-        w(0.6, _ring_tcp(s_end, -SAG), o, "let go")
-        w(1.0, np.array(_ring_tcp(s_end)) + np.array([-0.020, 0, 0.035]), o, "lift off")
-        w(2.0, PARK, o, "park")
-    R.append(Waypoint(9.0, PARK, R[-1].finger, "wait: the side load", 0.0))
-    total = sum(x.duration for x in R)
-    left = [Waypoint(2.0, (0.120, 0.330, 0.930), FINGER_OPEN, "park"),
-            Waypoint(total - 2.0, (0.120, 0.330, 0.930), FINGER_OPEN, "park")]
-    return {"left": left, "right": R}
+            w(R, 3.0 / n, _ring_tcp(S0 + (s_end - S0) * k / n, -SAG), GRIP, "slide the ring up over the knee")
+        w(R, 0.5, _ring_tcp(s_end, -SAG), GRIP, "hold on its stop")
+        w(R, 0.6, _ring_tcp(s_end, -SAG), o, "let go")
+        w(R, 1.0, np.array(_ring_tcp(s_end)) + np.array([0.0, 0, 0.037]), o, "lift off")
+        w(R, 0.8, np.array(_ring_tcp(s_end)) + np.array([0.0, -0.070, 0.037]), o, "out to the side")
+        w(R, 2.0, R_PARK, o, "park")
+    w(R, 9.0, R_PARK, R[-1].finger, "wait: the side load")
+    w(Lw, t(R) - t(Lw), L_PARK, o, "park")
+    return {"left": Lw, "right": R}
 
 
 # -- offline self-test ------------------------------------------------------------------------------------------
@@ -455,13 +598,19 @@ def self_test():
     """The scoring rules on hand-built sequences of poses (one trial each, fed one control step at a time). The
     brace is posed by the four-bar's geometry for each leg angle, so every state is one the linkage can reach."""
     global _TEST_TCPS
-    for phi in (0.0, 5.0, START_DEG, FOLD_STOP_DEG):  # the kit's tree, posed from loop(), closes at the brace pin
+    for phi in np.linspace(0.0, FOLD_STOP_DEG, 19):  # the kit's tree, posed from loop(), closes at the brace pin
         st = state(phi, 0.0)
         gap = np.linalg.norm(kit.point(st, "leg", P_REF - H) - kit.point(st, "link_b", (L, 0, 0)))
         assert gap < 1e-9, (phi, gap)
         assert abs(knee_deg(st) - loop(phi)["beta"]) < 1e-6, phi
+        c = loop(phi)
+        for jn, q in (("brace_a", c["q_a"]), ("knee", c["q_knee"])):
+            j = kit.joints_[jn]
+            assert math.radians(q) > j.lower + 0.02 or phi == 0.0, (jn, phi, q)
+            assert math.radians(q) < j.upper - 0.02, (jn, phi, q)
     assert abs(ring_s(state(START_DEG, 0.0)) - S0) < 1e-9
     knee_hand = [_knee_tcp(0.0)]
+    lift_hand = [_tube_tcp(START_DEG)]
     ring_hand = [_ring_tcp(RING_TOP)]
 
     def lin(a, b, n=8):
@@ -478,7 +627,8 @@ def self_test():
         return got, st
 
     def opening(hand=True):
-        return [(a, 0.0, 0.0, knee_hand if hand else []) for a in lin(START_DEG, 0.0)]
+        return ([(a, 0.0, 0.0, lift_hand if hand else []) for a in lin(START_DEG, PHI_HAND)]
+                + [(a, 0.0, 0.0, knee_hand if hand else []) for a in lin(PHI_HAND, 0.0)])
 
     def sliding(to=RING_TOP - S0, phi=0.0):
         return [(phi, s, 0.0, ring_hand) for s in lin(0.0, to)]
@@ -498,7 +648,7 @@ def self_test():
     full = RING_TOP - S0
     good = opening() + sliding() + away(0.0, full)
     cases = {  # name: (plan, score)
-        "start": ([(START_DEG, 0.0, 0.0, [])], 0.0),
+        "start (folded)": ([(START_DEG, 0.0, 0.0, [])], 0.0),
         "nothing touched for 3 s (no load is applied)": (away(START_DEG, 0.0, 60), 0.0),
         "open, ring over the knee, let go, the load held (demo)": (good + load(0.0, full, 0.3), 1.0),
         "the same, scored before the load": (good, 0.5),
@@ -506,6 +656,9 @@ def self_test():
                                                              0.25),
         "naive: leg opened only, let go; the load folds it": (opening() + away(0.0, 0.0) + load(0.0, 0.0, 19.0), 0.0),
         "leg opened only, scored before the load": (opening() + away(0.0, 0.0), 0.25),
+        "leg lifted half way and let go: it falls back onto its fold stop (load into air)":
+            ([(a, 0.0, 0.0, lift_hand) for a in lin(START_DEG, 45.0)] + [(a, 0.0, 0.0, []) for a in lin(45.0, 90.0)]
+             + away(START_DEG, 0.0) + load(START_DEG, 0.0, 0.0), 0.0),
         "ring slid only part way (its end short of the knee); the load folds it":
             (opening() + sliding(0.035) + away(0.0, 0.035) + load(0.0, 0.035, 19.0), 0.0),
         "ring 2 mm short of locked; the load folds the leg": (opening() + sliding(LOCK_S - S0 - 0.002)
@@ -523,10 +676,6 @@ def self_test():
         "ring slid up, then pulled back off the knee before letting go": (opening() + sliding()
                                                                           + sliding()[::-1] + away(0.0, 0.0)
                                                                           + load(0.0, 0.0, 19.0), 0.0),
-        "the leg bumped 4 deg and let go; the load folds it further": ([(a, 0.0, 0.0, knee_hand)
-                                                                       for a in lin(START_DEG, START_DEG - 4)]
-                                                                      + away(START_DEG - 4, 0.0)
-                                                                      + load(START_DEG - 4, 0.0, 10.0), 0.0),
         "demo, but the arm parks 3 cm over the ring (not clear: no load)": (opening() + sliding() + [(0.0, full, 0.0, [
             tuple(np.array(_ring_tcp(RING_TOP)) + np.array([0, 0, 0.030]))])] * 30, 0.25),
     }
@@ -557,20 +706,25 @@ def state(phi, s, d=0.0):
 
 if __name__ == "__main__":
     # Offline checks, no GPU: the scoring rules on hand-built states, then both arms' plans replayed through the
-    # kinematics at 20 Hz, every joint inside the URDF limits with an IK error under 0.5 mm.
+    # kinematics at 20 Hz, every joint inside the URDF limits with an IK error under 0.5 mm, and every waypoint
+    # inside the arms' reach (x 0.12-0.40, at most 185 mm above the bench).
     from yam_arena import ik, station
     from yam_arena.demo import ArmPlan
     from yam_arena.task_file import load
 
     n = self_test()
-    print(f"scoring: {n} cases pass (strips {L * 1000:.1f} mm; knee bent {_START['beta']:.1f} deg at the start, "
+    print(f"scoring: {n} cases pass (strips {L * 1000:.1f} mm; knee bent {_START['beta']:.1f} deg folded, "
           f"{BETA_S:.0f} deg on the stop; locked from ring travel {(LOCK_S - S0) * 1000:.0f} mm of "
           f"{(RING_TOP - S0) * 1000:.0f})")
     task = load(__file__)
     hz = 20.0
     for arm, waypoints in task.demo().items():
+        for wp in waypoints:
+            assert REACH_X[0] - 1e-9 <= wp.pos[0] <= REACH_X[1] + 1e-9 and wp.pos[2] - TOP <= REACH_Z + 1e-9, (arm, wp)
         plan = ArmPlan(list(waypoints), station.BASES[arm])
         q = np.array([plan.action7((k + 1) / hz)[0] for k in range(round(plan.duration * hz) + 5)])
         assert plan.worst_ik_mm < 0.5 and plan.worst_ik_deg < 0.1, (arm, plan.worst_ik_mm, plan.worst_ik_deg)
         assert np.all(q[:, :6] >= ik.LOWER) and np.all(q[:, :6] <= ik.UPPER), arm
-        print(f"{arm}: {plan.duration:.1f} s plan, worst IK {plan.worst_ik_mm:.3f} mm / {plan.worst_ik_deg:.3f} deg")
+        top = max(wp.pos[2] for wp in waypoints) - TOP
+        print(f"{arm}: {plan.duration:.1f} s plan, worst IK {plan.worst_ik_mm:.3f} mm / {plan.worst_ik_deg:.3f} deg, "
+              f"TCP at most {top * 1000:.0f} mm above the bench")
