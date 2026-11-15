@@ -117,34 +117,43 @@ and the uploaded media identifier are recorded in `task.json`.
 
 ## Run and score
 
-Use the native Isaac environment from the challenge walkthrough. Recorded
-versions: Python 3.12, Isaac Sim 6.1.0.0, Isaac Lab 17.0.2, IsaacLab-Arena 0.3.0,
-yam-arena 0.1.0. The launcher verifies hostname `visnu`; this is the host used
-for these recordings. The current launcher deliberately refuses another host
-rather than attributing unverified results to it.
+Use a Linux machine with an RTX-capable NVIDIA GPU, its compatible driver,
+Python 3.12, Git and FFmpeg. Set up the native Isaac/YAM environment and Dream
+credentials using the [official simulation walkthrough](https://tasks.robocurve.org/walkthrough).
+Recorded versions: Isaac Sim 6.1.0.0, Isaac Lab 17.0.2, IsaacLab-Arena 0.3.0,
+yam-arena 0.1.0. Dependency details are in `requirements.txt`.
 
-The shared runtime and scripted trajectory helper are pinned below. Scene,
-mechanism, scoring and Dream entry point are supplied in this task folder. Use a
-fresh checkout/output for each run; do not edit a running source checkout.
+The required runtime and trajectory helper are **included in this task folder**
+(`resist_isaac/` and `tools/`). No personal repository, recording-machine account,
+SSH connection or machine-name setting is needed. Launchers record the actual
+hostname and GPU for provenance but do not use host identity to allow or reject
+execution. GPU selection is configurable; `cuda:0` works with a single visible GPU.
+
+After checking out this PR, activate the compatible native Python environment
+and run the following from the benchmark-tasks repository root. Output directories
+must be fresh and outside the task source directory, so recording files cannot
+be mistaken for source files.
 
 ```bash
-# Run from the benchmark-tasks repository root, in the native Python environment.
-submission_task=$(realpath tasks/removable-pan-handle)
-git clone https://github.com/spindro/resist.git /tmp/pan-handle-runtime
-git -C /tmp/pan-handle-runtime checkout 49832b12cf8ed1a75a3721130258899bcd161cf1
-cp "$submission_task/"*.py /tmp/pan-handle-runtime/tasks/removable-pan-handle/
-cp "$submission_task/pilot.json" "$submission_task/trajectory.json" /tmp/pan-handle-runtime/tasks/removable-pan-handle/
-cd /tmp/pan-handle-runtime
-export PYTHONPATH="$PWD"
+cd tasks/removable-pan-handle
+python -m pip install -r requirements.txt
 
-# Scripted full-score demo; seed 0 is the default.
-python tools/run_recovery_pilot.py tasks/removable-pan-handle /tmp/pan-demo-new \
-  --policy deliver_pan --device cuda:1 --seed 0
-python tasks/removable-pan-handle/validate_scoring.py /tmp/pan-demo-new --expected 1
+# Scripted full-score demo; no Dream account is needed.
+python -m tools.run_recovery_pilot . /tmp/pan-demo-new \
+  --policy deliver_pan --device cuda:0 --seed 0
+python validate_scoring.py /tmp/pan-demo-new --expected 1
 
-# Actual hosted Dream-1; API key configured as in the official walkthrough.
-python tasks/removable-pan-handle/run_dream.py /tmp/pan-dream-new --device cuda:1
+# Actual hosted Dream-1; credentials configured through the official walkthrough.
+python run_dream.py /tmp/pan-dream-new --device cuda:0
+# Use the score in this new run's receipt; the submitted model run scored zero.
+python validate_scoring.py /tmp/pan-dream-new --expected 0
 ```
+
+To check installation and CLI arguments without starting physics or calling
+Dream-1, run `python -m tools.run_recovery_pilot --help`,
+`python run_dream.py --help`, and `python validate_scoring.py --help`.
+Use `--device cuda:1` only when selecting an existing second GPU. No hostname
+spoofing, system renaming, or edits to the launcher are required.
 
 The Dream runner uses Inspect Robots with the CLI's default action guards and
 stores a JSON evaluation, actions, all camera frames, videos, native contacts,
@@ -158,6 +167,13 @@ A scripted trial took about 20.6 minutes of wall time on a shared RTX 3090;
 Dream additionally waits for hosted inference. Different GPU load changes wall
 time, not the 70-second simulated budget. Camera views and physics are identical
 between policies; the Dream client resizes images internally for its model.
+
+The portability revision was checked from a fresh sparse submission checkout
+with no external project on `PYTHONPATH`: the bundled runtime completed a native
+60-action reset/hold/render trial, and replay reproduced every score of the
+1,348-action demonstration and 1,400-action Dream recording. Scene, controller,
+scorer and physics runtime remain unchanged. This packaging check is not a new
+full demonstration or a claim of testing on a second physical machine.
 
 ## Assets and licenses
 

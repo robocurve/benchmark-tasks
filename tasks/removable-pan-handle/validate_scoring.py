@@ -1,17 +1,24 @@
 #!/usr/bin/env python3
 """Replay a completed native trial and require agreement with its live scores.
 
-Run from the repository root with PYTHONPATH=. in the native environment:
-  python tasks/removable-pan-handle/validate_scoring.py OUTPUT --expected 1
+Run from this task folder in the native environment:
+  python validate_scoring.py OUTPUT --expected 1
 This validates recorded evidence; it does not run or replace a simulation.
 """
 import argparse
 import hashlib
-import importlib
+import importlib.util
+import sys
 import json
 from pathlib import Path
 
-PanScore = importlib.import_module('tasks.removable-pan-handle.scoring').PanScore
+TASK = Path(__file__).resolve().parent
+spec = importlib.util.spec_from_file_location('_pan_score', TASK/'scoring.py',
+                                             submodule_search_locations=[str(TASK)])
+module = importlib.util.module_from_spec(spec)
+sys.modules[spec.name] = module
+spec.loader.exec_module(module)
+PanScore = module.PanScore
 
 
 def sha256(path):
@@ -24,7 +31,8 @@ def sha256(path):
 
 def validate(directory, expected, rescore=False):
     receipt = json.loads((directory/'receipt.json').read_text())
-    assert receipt['hostname'] == 'visnu' and receipt['status'] == 'completed'
+    assert isinstance(receipt.get('hostname'), str) and receipt['hostname'].strip()
+    assert receipt['status'] == 'completed'
     assert receipt['source_unchanged']
     devices = receipt['native_devices']
     assert all(devices[k] == devices['requested'] for k in ('environment','simulation_config','physics_manager'))
@@ -33,10 +41,12 @@ def validate(directory, expected, rescore=False):
     for name in ('native-pan-contacts.jsonl','trace.jsonl','top_cam.mp4'):
         assert sha256(directory/name) == receipt['evidence_sha256'][name], name
     task = Path(__file__).parent
+    sources = receipt['source_files_sha256']
+    # Historical recordings used repository-relative keys; new runs are task-local.
+    prefix = '' if 'task.py' in sources else 'tasks/removable-pan-handle/'
     for name in ('task.py','geometry.py','contacts.py'):
-        key = 'tasks/removable-pan-handle/'+name
-        assert sha256(task/name) == receipt['source_files_sha256'][key], 'Source differs: '+name
-    original_scorer = receipt['source_files_sha256']['tasks/removable-pan-handle/scoring.py']
+        assert sha256(task/name) == sources[prefix+name], 'Source differs: '+name
+    original_scorer = sources[prefix+'scoring.py']
     evaluated_scorer = sha256(task/'scoring.py')
     assert rescore or original_scorer == evaluated_scorer, 'Scorer differs; use --rescore explicitly'
     trace = [json.loads(line) for line in (directory/'trace.jsonl').read_text().splitlines()]

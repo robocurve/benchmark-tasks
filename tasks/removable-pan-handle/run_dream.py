@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run hosted Dream-1 against native Isaac on visnu; retain real scoring evidence."""
+"""Run hosted Dream-1 against native Isaac; retain real scoring evidence."""
 import argparse
 from dataclasses import asdict
 import hashlib
@@ -11,17 +11,15 @@ import subprocess
 import sys
 import time
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('output', type=Path)
-    parser.add_argument('--device', default='cuda:1')
+    parser.add_argument('--device', default='cuda:0')
     args = parser.parse_args()
-    if socket.gethostname() != 'visnu':
-        raise RuntimeError('Native task evaluation must run on verified visnu')
 
     from inspect_robots import Scene, Task, eval as evaluate
     from inspect_robots.cli import _build_guardrails
@@ -35,6 +33,8 @@ def main():
     task = Path(__file__).parent
     cfg = json.loads((task / 'pilot.json').read_text())
     output = args.output.resolve()
+    if output.is_relative_to(task):
+        raise ValueError('Output must be outside the task source folder')
     output.mkdir(parents=True, exist_ok=False)
     hashes = source_snapshot(task, output)
     receipt = dict(status='starting', hostname=socket.gethostname(), policy='dream',
