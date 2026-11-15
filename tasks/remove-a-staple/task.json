@@ -1,0 +1,18 @@
+{
+  "title": "Remove a staple without tearing the papers",
+  "category": "Societal relatability",
+  "keywords": [
+    "document preparation",
+    "tool use",
+    "fragile material"
+  ],
+  "instruction": "Remove the staple without tearing either sheet.",
+  "context": "Staple removal is a familiar part of preparing paper records for scanning or reuse. The tool must release the clinched legs without tearing the sheets.",
+  "setup": "Two white 200 gsm paper sheets, each 210 × 148 × 0.2 mm, lie on a 210 × 128 × 20 mm support with a 1.5 × 16 × 8 mm pocket beneath the clinch. The upper sheet is offset 12 mm. One steel staple has a 12.8 mm crown, 6 mm legs and 0.50 × 0.30 mm wire, passing through existing 0.8 × 0.6 mm holes. A free 45 g steel/ABS forked remover (108 × 18 × 16 mm) rests beside the sheets. The table is 747.5 mm high. Dimensions and the fixed positions are in setup.json.",
+  "scoring": "0.5 when at least one whole staple leg is clear of both sheets and the preservation checks pass. 1.0 when both legs are clear, the intact staple is at least 10 mm from either sheet, and staple and papers remain released for three seconds. A new tear over 2 mm beyond an original hole, any new cut or puncture elsewhere, a broken staple, altered sheets or invalid evidence gives zero. Creases alone are not tears. The staple may remain in or on a remover that the robot has released onto the work surface.",
+  "run_limit": "600 control steps (30 seconds at 20 Hz).",
+  "reset_notes": "Use fresh matched paper and one fresh staple for every trial. Record both sides before and after. Reuse the remover only while intact.",
+  "fidelity": "Paper uses native flexible panels with passive bending hinges and no pins; small panels have a 5 mg minimum mass. A fork beneath the staple crown lifts and straightens the clinched legs through their original holes. Crosswise pulling before extraction records damage. The cleared staple rests ideally on the upward fork until tipped off. Steel bending force, frictional slip and paper fibre fracture are not calibrated. Native hinge breaks and model damage invalidate a trial.",
+  "scores": "Dream-1: 0.0 (600 steps; no staple lift). Scripted demo: 1.0 (596 steps; both legs extracted, intact sheets, staple over 103 mm clear during the final three-second release).",
+  "media": "M-DZDU9P"
+}

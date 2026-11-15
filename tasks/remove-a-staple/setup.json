@@ -1,0 +1,148 @@
+{
+  "schema": "fixed-setup-v2",
+  "calibrated": false,
+  "coordinates": "Metres in the standard YAM station: x forward, y left, z up.",
+  "table_top_z_m": 0.7475,
+  "paper": {
+    "count": 2,
+    "material": "uncoated white 200 gsm paper",
+    "size_m": [
+      0.21,
+      0.148,
+      0.0002
+    ],
+    "bottom_sheet_center_m": [
+      0.32,
+      0,
+      0.7676
+    ],
+    "top_sheet_center_m": [
+      0.32,
+      0.012,
+      0.76782
+    ],
+    "orientation": "210 mm edges parallel to x; upper sheet shifted 12 mm along +y. Both sheets remain free.",
+    "reset_settling": "Both free sheets settle through native gravity and contact. No pins or attachments.",
+    "initial_midplane_gap_m": 0.00022,
+    "initial_crown_clearance_m": 2e-05
+  },
+  "staple": {
+    "material": "galvanized low-carbon steel; constitutive parameters uncalibrated",
+    "crown_width_m": 0.0128,
+    "leg_length_m": 0.006,
+    "wire_section_m": [
+      0.0005,
+      0.0003
+    ],
+    "crown_center_m": [
+      0.227,
+      -0.05,
+      0.76809
+    ],
+    "crown_axis_direction": [
+      0.0,
+      1.0,
+      0.0
+    ],
+    "installation": "Crown midpoint 12 mm inside the left edge and 12 mm inside the upper sheet front edge (24 mm from the lower front edge). Both legs pass through explicit holes and clinch inward below the lower sheet; geometry is not scaled up for extraction."
+  },
+  "remover": {
+    "type": "forked lever staple remover",
+    "materials": "steel fork/fulcrum, ABS grip",
+    "overall_size_m": [
+      0.018,
+      0.108,
+      0.016
+    ],
+    "mass_kg": 0.045,
+    "minimum_steel_tip_thickness_m": 5e-05,
+    "fork_center_spacing_m": 0.0092,
+    "handle_size_m": [
+      0.018,
+      0.08,
+      0.016
+    ],
+    "body_origin_m": [
+      0.28,
+      -0.2,
+      0.7505
+    ],
+    "grip_center_m": [
+      0.28,
+      -0.243,
+      0.7555
+    ],
+    "start_orientation": "Grip along y, fork tips point +y. Heel and grip rest on tabletop. The native tool must pivot by physical support contact; no grasp attachment."
+  },
+  "assessor_tools": "A millimetre ruler, backlight and before/after photographs of both sides of both sheets; not used to help the robot.",
+  "implementation_status": "Complete fresh-reset robot extraction and three-second release demonstrated.",
+  "document_support": {
+    "material": "rigid flat plastic document support",
+    "size_m": [
+      0.21,
+      0.128,
+      0.02
+    ],
+    "center_m": [
+      0.32,
+      -0.01,
+      0.7575
+    ],
+    "top_m": 0.7675,
+    "purpose": "Supports the paper and remover fulcrum. A physical pocket under the staple clears its clinched legs; both sheets remain free.",
+    "clinch_clearance_pocket": {
+      "center_m": [
+        0.227,
+        -0.05,
+        0.7635
+      ],
+      "size_m": [
+        0.0015,
+        0.016,
+        0.008
+      ]
+    }
+  },
+  "final_scene": {
+    "paper_profile": "heavy-200gsm-candidate",
+    "paper_dimensions_m": [
+      0.21,
+      0.148,
+      0.0002
+    ],
+    "paper_gsm": 200,
+    "paper_centres_station_m": [
+      [
+        0.32,
+        0,
+        0.7676
+      ],
+      [
+        0.32,
+        0.012,
+        0.76782
+      ]
+    ],
+    "staple_station_m": [
+      0.227,
+      -0.05,
+      0.76809
+    ],
+    "remover_station_m": [
+      0.28,
+      -0.2,
+      0.7505
+    ],
+    "fixed_world_translation_m": [
+      -0.32,
+      0,
+      -0.7675
+    ],
+    "panel_spacing_m": 0.04,
+    "minimum_panel_mass_kg": 5e-06,
+    "physics_hz": 240,
+    "solver": "PGS",
+    "position_iterations": 128
+  },
+  "note": "Final-scene values above select the matching native panel model. Asset geometry is authored procedurally by task_panels.py; the metadata below describes component dimensions."
+}
