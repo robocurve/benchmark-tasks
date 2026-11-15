@@ -1,0 +1,58 @@
+#usda 1.0
+(
+    defaultPrim = "bench_props"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "bench_props"
+{
+    def Xform "disinfectant_a01" (
+        prepend references = @../props/disinfectant_a01/disinfectant_a01.usdc@
+    )
+    {
+        double3 xformOp:translate = (0.66000, 0.24000, 0.00048)
+        float xformOp:rotateZ = 200.0
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+    }
+    def Xform "disinfectant_c01" (
+        prepend references = @../props/disinfectant_c01/disinfectant_c01.usdc@
+    )
+    {
+        double3 xformOp:translate = (0.54500, 0.30000, 0.00046)
+        float xformOp:rotateZ = 15.0
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+    }
+    def Xform "ppe_gloves_lightDuty_a01" (
+        prepend references = @../props/ppe_gloves_lightDuty_a01/ppe_gloves_lightDuty_a01.usdc@
+    )
+    {
+        double3 xformOp:translate = (0.43478, 0.46766, 0.00050)
+        float xformOp:rotateZ = 70.0
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+    }
+    def Xform "box_glove_a01" (
+        prepend references = @../props/box_glove_a01/box_glove_a01.usdc@
+    )
+    {
+        double3 xformOp:translate = (0.35000, -0.27500, 0.00052)
+        float xformOp:rotateZ = 90.0
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+    }
+    def Xform "facemask_medical_a01" (
+        prepend references = @../props/facemask_medical_a01/facemask_medical_a01.usdc@
+    )
+    {
+        double3 xformOp:translate = (0.54000, -0.28000, 0.00046)
+        float xformOp:rotateZ = 90.0
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+    }
+    def Xform "cleaning_wipes_a01" (
+        prepend references = @../props/cleaning_wipes_a01/cleaning_wipes_a01.usdc@
+    )
+    {
+        double3 xformOp:translate = (0.45050, -0.47897, 0.00154)
+        float xformOp:rotateZ = 0.0
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+    }
+}
