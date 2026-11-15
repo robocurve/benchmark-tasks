@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bakery-mixer-isaac"
+version = "0.1.0"
+description = "Native bakery mixer task for Isaac Lab-Arena"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "yam-arena @ git+https://github.com/kairosiann/yam-isaac-lab-arena.git@bd62771e60320433893bd1d2df0fc79b5ddcd6d1",
+]
+
+[project.entry-points."inspect_robots.embodiments"]
+bakery_mixer = "resist_isaac:embodiment"
+
+[tool.setuptools.packages.find]
+include = ["resist_isaac*"]
