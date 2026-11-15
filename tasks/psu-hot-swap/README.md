@@ -6,23 +6,30 @@ rack. The left bay holds a failed supply (amber light); the right bay holds the 
 supplies (185 x 73.5 x 39.5 mm, 0.9 kg), the hot-swap format used across data-center servers. The robot must take
 the failed supply out and seat the spare in its bay without disturbing the live one.
 
-Each supply is held in its bay by a release latch, modelled on a CRPS latch. An orange grip handle stands on the
-supply's face; the handle and a hook on the supply's side are one spring-loaded part that slides across the supply.
-At rest the hook's square catch stands 5 mm out into a notch in the bay wall, so pulling the handle does nothing until
-the handle is pushed 5 mm sideways, which draws the hook in. Behind the catch the hook is ramped: a supply pushed into
-a bay rides the ramp in on the wall's edge, and the spring snaps the hook out into its notch when the supply reaches
-home. At the back of the bay the supply's edge connector is modelled as a spring plunger over the last 1.4 mm of
-insertion (4.2 N), so a supply has to be pushed fully home for its hook to catch.
+Each supply is held in its bay by a release latch modelled on a CRPS latch. An orange grip handle is fixed to the
+supply's face; beside it, on its left, stands a separate green release tab on a spring-loaded slider. The tab drives a
+hook on the supply's side whose square catch stands 5 mm out into a notch in the bay wall, so pulling the handle does
+nothing until the tab is pushed 5 mm toward the handle (as on a real CRPS supply), which draws the hook in. Behind the
+catch the hook is ramped: a supply pushed into a bay rides the ramp in on the mouth's edge, and the spring snaps the
+hook out into its notch when the supply reaches home.
+
+At the back of each bay is the supply's edge connector, modelled on a card-edge power connector: a steel blade from
+the back stop with a ridge on each side, entering a slot in the supply's back where two spring-loaded contacts take it.
+Over the last 8 mm of insertion the contacts climb the ridge's steep front face (spread 2 mm against 5 N/mm each), slide
+over it and drop down its back face 1 mm before home. That takes a push of about 35 N to mate and about 11 N to unmate,
+so a supply has to be pushed firmly and fully home for its hook to catch, and the failed one has to be pulled out
+against the connector's hold.
 
 What the task tests:
 
-- **Releasing while pulling.** The handle has to be held aside by the same grip that pulls; pulling it straight does
-  nothing.
+- **Releasing while pulling.** The tab has to be held against the handle while the same hand pulls; pulling the handle
+  alone does nothing.
 - **Moving a long, heavy part into a close bay.** The spare is 185 mm long with 2 mm of clearance a side (30-degree
   lead-ins at the mouth): turned by 1.2 degrees it jams. It starts off to the side and has to be slid across, squared
   up and pushed in straight.
-- **Seating it fully,** against the connector, so the latch catches.
-- **Not disturbing the live supply,** whose handle the failed supply passes when it is moved out of the way.
+- **Seating it fully,** through the connector's mating force, so the latch catches.
+- **Not disturbing the live supply,** whose handle and power-cord plug the failed supply passes when it is moved out of
+  the way.
 
 ## Files
 
@@ -59,20 +66,25 @@ DEMO_DEBUG=1 python demo.py task.py debug_out --no-record      # also prints eac
 python -m pytest test_scoring.py                               # offline checks
 ```
 
-1. The right arm closes on the failed supply's handle, pushes it aside to its stop (releasing the latch), pulls the
-   supply 26 cm straight out and lets go; then it grips the supply's body and slides it 15 cm right, in front of the
-   live supply and clear of the bay's line.
-2. The left arm grips the spare's body at its centre and slides it right until it lines up with the empty bay, then
-   pushes it straight in until its back half is in the bay, in steps of at most 3 cm with small corrections of
-   position and turn.
-3. The left arm grips the spare's handle and pushes it home and on 20 mm; the hook rides in on its ramp and snaps
-   into its notch. It lets go.
+1. The right arm closes its fingers across the failed supply's handle and tab together, one pad on the fixed handle bar
+   and the other on the tab, which pushes the tab to its stop against the handle (releasing the latch), as a
+   technician's thumb and fingers do. Holding that, it pulls the supply 26 cm straight out, over the connector's hold,
+   and lets go; then it grips the supply's body and slides it 15 cm right, in front of the live supply and clear of the
+   bay's line.
+2. The left arm grips the spare's body at its centre and slides it right and a little forward until it lines up with
+   the empty bay, its back face 2 cm short of the mouth, in steps of at most 3 cm with small corrections of position
+   and turn, and lets go.
+3. The left arm closes its fingers, turns the gripper to point forward (20 degrees below level) and pushes the spare
+   by the front of its handle bar, on its centreline, into the bay and home: the lead-ins steer it in, the hook rides
+   in on its ramp, the connector's contacts climb over the blade's ridge, and the hook snaps into its notch. Pushing
+   along the fingers, the force goes through the arm rather than bending its compliant wrist; the push is commanded
+   6 cm past home so the arm presses hard enough, and the back stop takes the rest.
 
 The demo runs open loop: it reads no simulator state. The arms are compliant and lag under the supplies' friction,
 so where a supply ends up after a move and the small corrections in step 2 were measured once with
 `DEMO_CALIBRATE=1 python demo.py task.py cal_out --no-record` (which runs the same moves closed loop on the
 simulator's poses and prints the numbers) and are fixed in `CAL` in `demo.py`. The layout is fixed and the
-simulation deterministic. The demo reaches 1.0 (success) at step 1,314 (66 s).
+simulation deterministic. The demo reaches 1.0 (success) at step 1,131 (57 s).
 
 ## Scoring
 
@@ -80,11 +92,14 @@ Evaluated every control step; the score at the end of the episode counts (`SCORE
 measured from where a supply sits latched home in the left bay.
 
 - 0 if the live (green) supply was at any point moved more than 5 mm.
-- 1.0 (success, which must hold for 1 s): the spare is home in the left bay (within 1.5 mm along it and 2 mm across
-  it, level within 3 degrees) with its hook out in the notch (the handle within 1 mm of its rest position), the
-  failed supply is clear of the bay (its back face at least 5 mm in front of the mouth, or its centre more than
-  7.85 cm to the side), and the spare is still (moving less than 1 mm over the last second).
-- 0.75: after the failed supply came out, the spare was pushed in with its back face 10 cm inside the mouth.
+- 1.0 once all of these have held together for 1 s (20 control steps in a row): the spare is home in the left bay
+  (within 1.5 mm along it and 2 mm across it, level within 3 degrees) with its hook out in the notch (the release tab
+  within 1 mm of its rest position), the failed supply is clear of the bay (its back face at least 5 mm in front of
+  the mouth, or its centre more than 7.85 cm to the side), and the spare is still (it moved less than 1 mm over the
+  preceding 1 s). `success()` returns this condition and the runtime ends the episode once it has held for 1 s;
+  `score()` gives 1.0 from that same step, never earlier.
+- 0.75 (also while the spare is home but has not yet held for 1 s): after the failed supply came out, the spare was
+  pushed in with its back face 10 cm inside the mouth.
 - 0.5: the failed supply was pulled all the way out of its bay (back face 5 mm in front of the mouth).
 - 0.25: the failed supply was pulled at least 2 cm out (which needs its latch released).
 - Otherwise 0.
@@ -96,22 +111,40 @@ layout is fixed (`-E object_jitter=0`); there are no seeds to choose.
 
 ## Fidelity
 
-Rigid bodies built from boxes; the supplies are full CRPS size and weight. The latch is one part (60 g) on a
-prismatic joint across the supply with a spring drive (300 N/m, 5 mm travel); on a real CRPS supply the release is
-a tab pushed toward a fixed handle, here the handle and tab are one part, so the handle itself is pushed aside. The
-handle stands 27.5 mm proud of the face and is 48 mm tall so a gripper's fingers fit on it. The edge connector is a
-spring plunger over the last 1.4 mm (4.2 N), lighter than a real connector's mating force, which is more than the
-YAM arms can push. Bays have 2 mm of clearance a side (a little more than a real chassis) and a 15 mm divider. The
-cage is fixed, as a server is bolted in its rack; there are no power cords (the failed supply's cord is taken to be
-unplugged first). Friction: 0.25 for the supplies, 0.15 for the steel cage. Light angular damping is added to the
-parts. No contact force cap is enforced in simulation.
+Rigid bodies built from boxes; the supplies are full CRPS size and weight. The handle is fixed to the supply's body,
+and the release tab is a separate part (60 g with the latch arm and hook) on a prismatic joint across the supply with a
+spring drive (1000 N/m, 5 N at its 5 mm stop), pushed toward the handle as on a real CRPS supply. The handle and tab
+stand 27.5 mm proud of the face and are 48 mm tall, larger than on a real supply, so a gripper's fingers fit on them.
+
+The edge connector's mating resistance is representative of a CRPS card-edge power connector, whose maximum mating
+force is specified at 40 N (TE Connectivity High Density Card Edge Power Connectors, which provide the CRPS power-supply
+connection; product data). In simulation two contacts, each on a slider with a 5000 N/m spring, ride over a ridge with a
+50-degree front and 40-degree back face: about 35 N at the peak (24 N of that from the springs and ramp, the rest
+friction at 0.2), and about 11 N to pull a supply out (specified minimum unmating forces for such connectors are around
+10 N). The newer, larger M-CRPS connectors are specified at higher forces (up to about 150 N); this task models the CRPS
+format. On a real supply the gold-finger blade is on the supply and the sprung contacts are in the server; here they are
+swapped, which gives the same forces. The connector's resistance is a function of position only (no wiping friction
+along the fingers beyond the ridge).
+
+Bays have 2 mm of clearance a side (a little more than a real chassis) and a 15 mm divider. The cage is fixed, as a
+server is bolted in its rack. Power cords: the live supply's cord plug (IEC C13) is modelled, seated in its AC inlet and
+part of that supply, so knocking it moves the live supply; the cord beyond the plug is not modelled (taken as routed
+away along the rack). The failed supply's cord is taken as already unplugged (the first step of a real swap, normally
+done by the technician before touching the latch); the spare has none. Nothing is powered. Friction: 0.25 for the
+supplies, 0.15 for the steel cage. Light angular damping is added to the parts. No contact force cap is enforced in
+simulation.
 
 ## Real-world build
 
-Use three CRPS supplies, or 3D-printed PLA shells of the same size weighted to 0.9 kg, with the handle, latch and
-hook as in `task.py` (a compression spring of about 0.3 N/mm, 5 mm travel, behind the latch). The cage is bent sheet
-steel or 3D-printed PLA with the dimensions in `task.py`, screwed to a board clamped to the table, with a spring
-plunger (about 3 N/mm, 1.5 mm travel) at the back of each bay. The lights can be coloured stickers.
+Use three CRPS supplies with no power connected, or 3D-printed PLA shells of the same size weighted to 0.9 kg. On the
+shells, the handle is a fixed loop on the face, and the release tab beside it is a separate slider with a compression
+spring of about 1 N/mm (5 mm travel) behind it, linked to the hook as in `task.py`; a real CRPS supply already has
+these. The cage is bent sheet steel or 3D-printed PLA with the dimensions in `task.py`, screwed to a board clamped to
+the table. At the back of each bay, either mount a real CRPS card-edge connector (unwired) and give the shells a
+matching blank board edge, or build the modelled connector: a blade with a ridge on each side, and two contacts in the
+supply's slot on leaf or compression springs of about 5 N/mm, sized to need about 35 N to mate. The lights can be
+coloured stickers. The live supply's plug is a dummy IEC C13 plug on a short cut cord (no conductors connected),
+pushed into its inlet; nothing in the setup is connected to mains, so there is no electrical hazard.
 
 ## Assets
 

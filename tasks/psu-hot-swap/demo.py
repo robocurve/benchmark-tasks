@@ -2,10 +2,12 @@
 
     python demo.py task.py demo_out [--max-steps 1800] [--no-record]
 
-The right arm grips the failed supply's handle and pushes it aside, which releases its latch, pulls the supply out,
-and slides it by its body in front of the live supply. The left arm grips the spare by its body, slides it until it
-lines up with the empty bay and pushes it in, correcting its position and turn as it goes, then pushes it home by its
-handle: the latch's ramped hook rides in on the bay wall and snaps into its notch.
+The right arm squeezes the failed supply's release tab against its fixed handle (one pinch, as a technician's thumb
+and fingers do), which draws the latch's hook in, pulls the supply out against the connector's hold, and slides it by
+its body in front of the live supply. The left arm grips the spare by its body, slides it until it lines up with the
+empty bay and pushes it in, correcting its position and turn as it goes, then turns its closed fingers forward and
+pushes the spare home by its handle, through the connector's mating force: the latch's ramped hook rides in on the bay
+wall and snaps into its notch.
 Writes one MP4 per camera, setup.png (the first top-camera frame) and result.json to the output folder.
 """
 
@@ -122,27 +124,23 @@ class _Pose:
 # numbers) and are fixed here. The layout is fixed (object_jitter=0) and the simulation deterministic.
 CAL = {
     # (x, y, yaw) of the failed supply after the 26 cm pull (the arm lags the pull by 2 cm)
-    "failed_pulled": (0.21368, -0.007, 0.01289),
-    # (dx, dy, turn) steps sliding the spare across in line with the bay and squaring it up
+    "failed_pulled": (0.22184, 0.00526, 0.01362),
+    # (dx, dy, turn) steps sliding the spare across in line with the bay, short of its mouth, and squaring it up
     "spare_square": [
-        (-0.00023, -0.03, -0.0159), (0.00092, -0.03, -0.03416), (0.00016, -0.03, -0.0351), (9e-05, -0.03, -0.03724),
-        (9e-05, -0.03, -0.03499), (0.00032, -0.03, -0.0339), (0.00045, -0.03, -0.0325), (0.00021, -0.03, -0.03309),
-        (-7e-05, 0.00587, -0.0339), (-0.00014, 0.00717, -0.03979), (-0.00028, 0.00804, -0.04549),
-        (-0.00037, 0.00834, -0.04802), (-0.0001, 0.00693, -0.03976), (-0.00038, 0.00446, -0.0268),
-        (-0.00055, 0.00276, -0.01971),
+        (0.02189, -0.03, -0.01566), (0.01053, -0.03, -0.04235), (-6e-05, -0.03, -0.04599),
+        (-0.00125, -0.03, -0.04512), (-0.00132, -0.03, -0.04655), (-0.00064, -0.03, -0.04682),
+        (-0.00069, -0.03, -0.04659), (-0.00082, -0.03, -0.04761), (-0.00095, 0.00387, -0.0485),
+        (-0.00094, 0.00523, -0.05327), (-0.00094, 0.00581, -0.05799), (-0.00096, 0.006, -0.06133),
+        (-0.00101, 0.00599, -0.06), (-0.00058, 0.00448, -0.0422), (-0.00049, 0.00381, -0.02521),
+        (-0.00048, 0.00353, -0.01811),
     ],
-    # (dx, dy, turn) steps pushing it in until its back half is in the bay
-    "spare_in": [
-        (0.03, 0.00052, -0.01921), (0.03, -0.01539, -0.02084), (0.03, -0.00013, -0.02131), (0.03, 0.00263, -0.02176),
-        (0.01147, 0.00102, -0.01714), (0.01236, 0.00069, -0.00507), (0.01372, 0.0013, 0.00565),
-        (0.01397, 0.0013, 0.01644), (0.01406, 0.00126, 0.02755), (0.01326, 0.00143, 0.03722),
-        (0.01169, 0.0026, 0.03724), (0.01137, 0.0026, 0.03724), (0.01133, 0.0026, 0.0372),
-        (0.01131, 0.00261, 0.03702), (0.01126, 0.00268, 0.03517), (0.01114, 0.00285, 0.0297),
-    ],
-    # (x, y, yaw) of the spare after that
-    "spare_pushed": (0.33566, -0.00412, 0.06697),
+    # (x, y, yaw) of the spare after that, let go
+    "spare_lined_up": (0.25722, 0.00498, -0.02044),
 }
 CALIBRATE = bool(os.environ.get("DEMO_CALIBRATE"))
+PINCH_OPEN = 0.6   # fingers opened to 56 mm around handle bar and tab (22 mm across together)
+PUSH_PAST = float(os.environ.get("DEMO_PUSH_PAST", 0.06))   # how far past home the final push is commanded (m)
+PUSH_Z = 0.028     # height of the fingertips' centre on the handle bar for the final push
 _MEASURED: dict = {}
 
 
@@ -155,8 +153,8 @@ def script(task, ctx):
     top = T.TOP
     failed0 = _Pose(*T.FAILED.pos[:2], top, 0.0)       # the published starting layout
     spare0 = _Pose(*T.SPARE.pos[:2], top, 0.0)
-    # Fingers close across the supply (world y). On the handle bar: pushing the bar toward -y slides it to its stop and
-    # draws the latch's hook in (the arms are compliant, so the grip is commanded past the stop). On the body: a firm
+    # Fingers close across the supply (world y). On the handle: one pad on the fixed handle bar, the other on the
+    # release tab beside it, so closing pushes the tab to its stop and draws the latch's hook in. On the body: a firm
     # grip, at its centre, for sliding and pushing the 0.9 kg supply.
     rot_l = grip_rotation(reachable_yaw(L, spare0.pos, 0.0))
     rot_r = grip_rotation(reachable_yaw(R, failed0.pos, 0.0))
@@ -165,7 +163,7 @@ def script(task, ctx):
     ex, ey = np.array([1.0, 0, 0]), np.array([0, 1.0, 0])
     bay = np.array([T.CAGE_XY[0], T.CAGE_XY[1]])
 
-    def handle(psu):   # TCP with the pad tips 14 mm above the table, across the handle bar
+    def handle(psu):   # TCP with the pad tips 14 mm above the table, across handle bar and release tab
         return psu.to_world((T.GRIP_X, T.GRIP_Y, 0.014 + tips))
 
     def body(psu):     # across the body at its centre, low, so sliding or pushing it doesn't twist or tip it
@@ -192,12 +190,12 @@ def script(task, ctx):
         yield from arm.set_grip(open_to, 0.6)
         yield from arm.move(arm.pos + up, rot, 0.8)
 
-    # 1. Right arm: grip the failed supply's handle, push it aside to its stop (latch released), pull the supply
-    #    straight out, and let go.
-    yield from grab(R, rot_r, handle(failed0))
-    yield from R.move(R.pos - (T.LATCH_TRAVEL + 0.005) * ey, rot_r, 1.0)
+    # 1. Right arm: squeeze the failed supply's tab against its handle (latch released), pull the supply straight out
+    #    (the connector's contacts hold it until pulled over their ridge), and let go.
+    yield from grab(R, rot_r, handle(failed0), open_to=PINCH_OPEN)
     yield from wait(0.3)
-    yield from R.move(R.pos - T.PULL * ex, rot_r, 4.5)
+    yield from R.move(R.pos - 0.03 * ex, rot_r, 1.5)
+    yield from R.move(R.pos - (T.PULL - 0.03) * ex, rot_r, 4.0)
     yield from wait(0.3)
     yield from let_go(R, rot_r)
 
@@ -208,9 +206,9 @@ def script(task, ctx):
     yield from let_go(R, rot_r, open_to=1.0)
     yield from R.move(R.pos + np.array([-0.04, -0.06, 0.04]), rot_r, 1.2)
 
-    # 3. Left arm: grip the spare's body at its centre. Slide it right until it lines up with the empty bay, then push
-    #    it straight in until its back half is in the bay (its centre 2.5 cm short of the mouth), so the bay's walls keep
-    #    it square from there. Both in steps of at most 3 cm, with small corrections of position and turn (calibrated).
+    # 3. Left arm: grip the spare's body at its centre and slide it right and a little forward until it lines up with
+    #    the empty bay, its back face 2 cm short of the mouth, in steps of at most 3 cm with small corrections of
+    #    position and turn (calibrated). Let go, so it settles flat on the table.
     yield from grab(L, rot_l, body(spare0), open_to=1.0)
     base_yaw = reachable_yaw(L, spare0.pos, 0.0)
 
@@ -235,20 +233,45 @@ def script(task, ctx):
         _MEASURED[key], _MEASURED["turn"] = done, turn
         print("CAL so far = " + json.dumps({k: v for k, v in _MEASURED.items() if k != "turn"}), flush=True)
 
-    yield from steps_to("spare_square", spare0.pos[0], bay[1], tol_x=0.01)
-    yield from steps_to("spare_in", bay[0] + T.MOUTH_X - 0.025, bay[1], tol_x=0.003)
+    yield from steps_to("spare_square", bay[0] + T.MOUTH_X - T.PSU_L / 2 - 0.020, bay[1], tol_x=0.005)
     yield from let_go(L, L.rot, open_to=1.0)
+    yield from wait(1.0)   # let it settle before (in calibration) measuring where it ended up
 
-    # 4. Left arm: grip the spare's handle (on the supply's centreline) and push the supply home and on 20 mm (the back
-    #    stop takes the push, and the arm's compliance presses the connector plunger home). The hook's ramp rides on
-    #    the bay wall's edge and draws the hook in; at home the spring snaps it out into its notch. Let go.
-    spare = measured_pose("spare_pushed", "spare_psu")
-    yield from grab(L, rot_l, handle(spare))
-    yield from L.move(L.pos + (bay[0] - spare.pos[0] + 0.020) * ex, rot_l, 4.0)
-    yield from wait(0.5)
-    yield from L.set_grip(0.5, 0.8)
-    yield from wait(0.5)
-    yield from L.move(L.pos - 0.02 * ex + up, rot_l, 1.2)
+    # 4. Left arm: close the fingers, turn the gripper to point forward (20 degrees below level), and push the spare
+    #    into the bay and home by the front of its handle bar, on the supply's centreline (the bay's lead-ins steer it
+    #    in), up to the connector, then on through its
+    #    mating force (the contacts climb the blade's ridge and drop behind it). Pushing along the fingers, the force
+    #    runs through the arm rather than bending the compliant wrist; the grip is commanded PUSH_PAST beyond home so
+    #    the arm presses hard enough, and the back stop takes the rest. The hook's ramp rides in on the bay wall and
+    #    the spring snaps it out into its notch at home. Back away.
+    spare = measured_pose("spare_lined_up", "spare_psu")
+    rot_push = _rot_axis((0, 1, 0), math.radians(-70)) @ grip_rotation(0.0)
+    along = rot_push[:, 2]                                     # the fingers' direction
+
+    def push_tcp(dx):   # TCP with the closed fingertips' centre on the handle bar's front face, dx further in
+        tip = spare.to_world((T.GRIP_X - 0.005, sum(T.HANDLE_Y) / 2, PUSH_Z)) + dx * ex
+        return tip - tips * along
+
+    yield from L.set_grip(0.0, 0.6)
+    yield from L.move(push_tcp(-0.012) + 1.5 * up, rot_push, 2.0)
+    yield from L.move(push_tcp(-0.012), rot_push, 1.2)
+    yield from L.move(push_tcp(bay[0] - spare.pos[0] + PUSH_PAST), rot_push, 9.0)
+    yield from wait(1.0)
+    yield from L.move(push_tcp(bay[0] - spare.pos[0] - 0.05), rot_push, 1.5)
+    yield from L.move(L.pos + up, rot_push, 0.8)
+
+
+def _lag_mm(emb, arm):
+    """Debug: the commanded TCP minus where the compliant arm actually is (mm), which shows how hard it pushes."""
+    from yam_arena import ik
+
+    try:
+        rob = emb._env.unwrapped.scene[f"{arm.name}_robot"]
+        q = rob.data.joint_pos
+        q = np.asarray(getattr(q, "torch", q)[0].detach().cpu(), float)
+        return np.round(1000 * (arm.pos - ik.tcp_pose(q[:6], arm.base)[0]), 1).tolist()
+    except Exception as e:  # noqa: BLE001
+        return f"? {e}"
 
 
 def _yaw_of(p):
@@ -316,6 +339,11 @@ def run(task_path: str, out_dir: str, max_steps: int = 1800, record: bool = True
         steps += 1
         info = res.info
         snap(res.observation)
+        if str(steps) in os.environ.get("DEMO_SNAP", "").split(","):
+            import imageio
+
+            for cam, img in res.observation.images.items():
+                imageio.imwrite(out / f"snap_{steps}_{cam}.png", np.asarray(img))
         if steps % 100 == 0 or (os.environ.get("DEMO_DEBUG") and steps % 20 == 0 and steps > int(os.environ.get("DEMO_DEBUG_FROM", 0))):
             msg = f"step {steps} score {info.get('score')}"
             if os.environ.get("DEMO_DEBUG"):
@@ -323,9 +351,11 @@ def run(task_path: str, out_dir: str, max_steps: int = 1800, record: bool = True
                 for n in ("failed_psu", "spare_psu", "live_psu"):
                     c = task.in_bay(st[n])
                     sl = st[n].sliders
-                    msg += (f" | {n} {np.round(1000 * c, 1)}mm latch {1000 * sl['latch']:.1f} plug {1000 * sl['plug']:.1f}"
+                    msg += (f" | {n} {np.round(1000 * c, 1)}mm latch {1000 * sl['latch']:.1f}"
+                            f" contacts {1000 * sl['contact_l']:.1f}/{1000 * sl['contact_r']:.1f}"
                             f" tilt {task.tilt_deg(st[n]):.1f}"
                             f" yaw {math.degrees(math.atan2(st[n].rotation()[1, 0], st[n].rotation()[0, 0])):.2f}")
+                msg += " | lag " + " ".join(f"{arm.name} {_lag_mm(emb, arm)}" for arm in (ctx.left, ctx.right))
             print(msg, flush=True)
         if res.terminated:
             success = res.termination_reason == "success"
