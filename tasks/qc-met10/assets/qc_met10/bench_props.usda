@@ -1,0 +1,70 @@
+#usda 1.0
+(
+    defaultPrim = "bench_props"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "bench_props"
+{
+    def Xform "computer_keyboard_a01_0"
+    {
+        float xformOp:rotateZ = 90
+        double3 xformOp:translate = (0.64, 0.08, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def Xform "model" (
+            prepend references = @./props/computer_keyboard_a01/computer_keyboard_a01.usdc@
+        )
+        {
+            double3 xformOp:translate = (-0, -0.0006699524819850922, -0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "computer_mouse_office_b01_0"
+    {
+        float xformOp:rotateZ = 90
+        double3 xformOp:translate = (0.64, -0.27, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def Xform "model" (
+            prepend references = @./props/computer_mouse_office_b01/computer_mouse_office_b01.usdc@
+        )
+        {
+            double3 xformOp:translate = (-0, -4.842877388000488e-8, -0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "instrument_caliper_a01_0"
+    {
+        float xformOp:rotateZ = 90
+        double3 xformOp:translate = (0.52, 0.1, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def Xform "model" (
+            prepend references = @./props/instrument_caliper_a01/instrument_caliper_a01.usdc@
+        )
+        {
+            double3 xformOp:translate = (0.10213201958686113, -0.008856149390339851, -0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "ppe_eyeProtection_safetyGlasses_a01_0"
+    {
+        float xformOp:rotateZ = 20
+        double3 xformOp:translate = (0.6, 0.42, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def Xform "model" (
+            prepend references = @./props/ppe_eyeProtection_safetyGlasses_a01/ppe_eyeProtection_safetyGlasses_a01.usdc@
+        )
+        {
+            double3 xformOp:translate = (-0.0009949002418936162, -9.848814511853599e-8, -0.00006700679813698152)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+}
+
