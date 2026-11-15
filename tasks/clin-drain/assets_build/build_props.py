@@ -45,7 +45,7 @@ PROPS = [
 def resize_copy(src, dst):
     code = ("import sys; from PIL import Image; im = Image.open(sys.argv[1]); n = int(sys.argv[3]);"
             "im = im.resize((n, n * im.size[1] // im.size[0]), Image.LANCZOS) if max(im.size) > n else im;"
-            "im.save(sys.argv[2])")
+            "im.save(sys.argv[2], optimize=True)")
     subprocess.run(["python3", "-I", "-c", code, str(src), str(dst), str(TEX_PX)], check=True)
 
 

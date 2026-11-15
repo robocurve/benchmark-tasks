@@ -248,11 +248,11 @@ OBJECTS = (MAT, DRAIN, PLUG)
 # Photoreal visual meshes (assets/visual, built by assets_build/); the shapes above stay as invisible colliders.
 _VIS = pathlib.Path(_HERE) / "assets" / "visual"
 labkit.VISUALS.update({
-    "mat/body": str(_VIS / "mat.usda"),
-    "drain/body": str(_VIS / "drain_body.usda"),
-    "drain/bellows_mid": str(_VIS / "drain_mid.usda"),
-    "drain/top_plate": str(_VIS / "drain_top.usda"),
-    "plug/body": str(_VIS / "plug.usda"),
+    "mat/body": str(_VIS / "mat.usdc"),
+    "drain/body": str(_VIS / "drain_body.usdc"),
+    "drain/bellows_mid": str(_VIS / "drain_mid.usdc"),
+    "drain/top_plate": str(_VIS / "drain_top.usdc"),
+    "plug/body": str(_VIS / "plug.usdc"),
 })
 # Visual-only bench props (SimReady, physics stripped; assets_build/build_props.py), referenced beside the mat:
 # kidney dish, folded drape, glove box, disinfectant spray, specimen bag, syringe, all at x >= 0.42 m (no robot path).

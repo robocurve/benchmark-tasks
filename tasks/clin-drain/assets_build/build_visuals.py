@@ -4,8 +4,8 @@ Run: blender -b --factory-startup --python assets_build/build_visuals.py -- <pkg
   <pad_usd>: sm_consumable_absorbent_pad_stack_a01_01.usd of the NVIDIA SimReady package (README).
 
 Every mesh is in its body's part frame (metres, Z up), so labkit can reference it straight under the body prim:
-  drain_body.usda (part body), drain_mid.usda (bellows_mid joint), drain_top.usda (top_plate joint),
-  plug.usda, mat.usda. Meshes whose name starts with "glass_" get labkit's glass material in Isaac (the inlet tube
+  drain_body.usdc (part body), drain_mid.usdc (bellows_mid joint), drain_top.usdc (top_plate joint),
+  plug.usdc, mat.usdc. Meshes whose name starts with "glass_" get labkit's glass material in Isaac (the inlet tube
   and the clear film wall) and cast no shadow.
 Geometry follows the frozen constants of clin_drain.py (Ø112 mm discs, 76 mm expanded, 20 mm compressed, spout at
 (+62, -2) mm, press pad at (-44, -5) mm, plug holder at (+77, -40) mm). The side wall follows the catalogue photo of
@@ -346,12 +346,12 @@ for group, objs in GROUPS.items():
     bpy.ops.object.select_all(action="DESELECT")
     for o in objs:
         o.select_set(True)
-    bpy.ops.wm.usd_export(filepath=str(OUT / f"{group}.usda"), selected_objects_only=True, export_materials=True,
+    bpy.ops.wm.usd_export(filepath=str(OUT / f"{group}.usdc"), selected_objects_only=True, export_materials=True,
                           generate_preview_surface=True, export_textures_mode="KEEP", relative_paths=True,
                           export_uvmaps=True, export_normals=True, root_prim_path="/visual",
                           convert_orientation=False, export_animation=False)
     print("exported", group, len(objs))
-    stage = Usd.Stage.Open(str(OUT / f"{group}.usda"))
+    stage = Usd.Stage.Open(str(OUT / f"{group}.usdc"))
     for prim in stage.Traverse():
         if prim.IsA(UsdGeom.Mesh) and prim.GetName().startswith("glass_"):
             UsdGeom.PrimvarsAPI(prim).CreatePrimvar("doNotCastShadows", Sdf.ValueTypeNames.Bool).Set(True)
