@@ -82,7 +82,7 @@ BIN_H = 0.06
 BIN_RIM = TRAY_TOP + BIN_H
 
 AUTOCLAVE_XY = (0.22, -0.20)
-AUTOCLAVE_INNER = (0.13, 0.08)
+AUTOCLAVE_INNER = (0.15, 0.12)  # the first GPU run set the pan down 1.9 cm off centre in y: 3.25 cm of room each side
 AUTOCLAVE_WALL = 0.003
 AUTOCLAVE_H = 0.02
 AUTOCLAVE_FLOOR = 0.002

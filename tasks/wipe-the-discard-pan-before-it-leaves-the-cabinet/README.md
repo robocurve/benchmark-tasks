@@ -124,7 +124,8 @@ within 15 degrees of upright.
 - **The set-downs go slowly.** Each descent pauses with the finger tips over the dish's rim or the pan's lid, settles,
   and only then makes its last 2.5 or 3 cm, so the fingers reach the pad and the pan within 0.5 mm of their centres with
   the arm lagging. The pan is lifted its first 3 cm in 2.5 s (its bottom swings 1.1 mm inside a holder with 3 mm to
-  spare) and set down after a pause 2 cm over the autoclave tray (4.6 mm off centre inside walls with 12.5 mm).
+  spare) and set down after a pause 2 cm over the autoclave tray. On the GPU the pan came down 1.9 cm off centre, so
+  the tray is 15 x 12 cm inside: 3.25 cm to spare on each side of the pan's width.
 - **The trial ends once the pan is let go.** `success()` also wants the pan's bottom within 5 mm of the tray's floor and
   no gripper over the pan lower than 3 cm above its lid, read from the arms' joints, so the run does not end with the
   pan still held 1.5 cm up; the score itself keeps the 1.5 cm.
