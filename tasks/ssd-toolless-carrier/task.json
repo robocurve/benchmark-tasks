@@ -1,0 +1,21 @@
+{
+  "title": "Load a 2.5-inch SSD into a tool-less server drive carrier",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "data center",
+    "hot-swap",
+    "SSD",
+    "drive carrier",
+    "spring latch",
+    "bimanual"
+  ],
+  "instruction": "Fit the SSD into the drive carrier so it is ready to go into the server.",
+  "context": "Data-center technicians load spare drives into tool-less carriers before hot-swapping them into servers. The carrier's pins stand in the drive's way, so one hand must hold the sprung rail open while the other sets the thin drive down beside the fixed pins, slides it onto them with its holes lined up, and the rail is let back so its pins spring into the other two holes.",
+  "setup": "Positions in cm from the midpoint between the two arm bases, on the table (x forward, y left). SSD: a standard 2.5-inch SATA SSD, aluminium case, 10.0 x 6.985 x 0.7 cm, 55 g, white label on top, black connector at one end; two side mounting holes on each side, 3 mm above its bottom face, 14.0 mm from the front end and 9.4 mm from the connector end (modelled 4 mm square, 3 mm deep). It lies flat, label up, centred at (30.0, -20.0), long side along y, connector toward -y. Carrier: tool-less 2.5-inch server drive carrier, steel with a dark plastic handle bezel, 14.0 x 7.6 x 1.5 cm, 0.2 kg, loose on the table, centred at (30.0, 0.0), long side along y, handle bezel (0.8 cm deep, blue release handle 0.4 cm in front of it) at the +y end. The drive's place is the carrier's rear 10 cm (the -y end): on two 4 mm cross ribs, connector end flush with the carrier's rear edge. Two 3 mm side rails, 1.2 cm tall, stand 0.5 mm clear of the drive's sides only around their pins (5.2 cm gap at the drive's centre), joined along their length by a low 3 mm bar. The rail nearer the arms carries two fixed pins. The far rail is a separate 30 g part that slides outward up to 7 mm against a 150 N/m spring; it carries the other two pins and a blue pull tab (1.2 cm wide, 0.25 cm thick, 0.8 to 3.4 cm above the table) on a bracket 8 mm outboard of its front end. Pins: 2.5 mm square, 7 mm above the table, 14.0 mm and 90.6 mm from the drive's front end, each standing 2 mm in past the drive's side.",
+  "scoring": "Measured with a ruler and a photo, relative to the carrier, from where a seated drive sits (on the ribs, centred between the rails, connector end flush with the rear edge). 0 for good if the drive was ever in the carrier (centre within its outline plus 1 cm along it, less than 1 cm above the seated height) upside down or end for end (connector toward the handle), or ever fell (moving down faster than 0.5 m/s, a free drop of about 1.3 cm). Otherwise: 1.0 if all four pins are in the drive's holes (each pin tip within 2 mm of its hole's centre along the drive and in height, and at least 1 mm past the drive's side), the sprung rail is within 1 mm of closed, and the drive lies flat in the carrier (centre within 5 mm of its seated position in top view, every bottom corner within 1 mm of the seated height) and has moved less than 1 mm over the last 1 s; the episode ends once this has held for 1 s. 0.75 if all four pins are in and the drive lies flat in the carrier, but the rest of the 1.0 condition does not hold; 0.5 if both pins of one side are in, the drive lying flat in the carrier; 0.25 if the drive lies flat in the carrier; else 0.",
+  "run_limit": "1,800 steps (1.5 minutes at 20 Hz)",
+  "reset_notes": "Hold the sprung rail open, lift the drive out and lay it back on its marked outline, label up; put the carrier back on its marked outline.",
+  "fidelity": "Rigid boxes. The SSD has a real 2.5-inch drive's size, mass and hole positions; holes 4 mm square, pins 2.5 mm square (real: M3 holes, ~2.8 mm round pins), 0.75 mm clearance. The sprung rail is a slider (150 N/m, 7 mm travel) instead of a flexing rail, softer than real so pulling it doesn't drag the loose carrier. Rails stand only around their pins, leaving finger room. The SATA connector is not mated (bench loading). Light angular damping.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-55Z3QW"
+}
