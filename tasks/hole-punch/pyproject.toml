@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hole-punch"
+version = "0.1.0"
+description = "Punch a card's two filing holes on their marks with a desk two-hole punch"
+requires-python = ">=3.11"
+dependencies = ["numpy", "yam-arena"]
+
+[project.entry-points."inspect_robots.embodiments"]
+yam_hole_punch = "punch_kit.embodiment:PunchEmbodiment"
+
+[project.entry-points."inspect_robots.policies"]
+hole_punch_scripted = "punch_kit.policy:PunchPolicy"
+
+[tool.setuptools.packages.find]
+include = ["punch_kit*"]
+
+[tool.setuptools.package-data]
+punch_kit = ["THIRD_PARTY_NOTICES.txt"]
