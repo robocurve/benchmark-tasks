@@ -422,7 +422,7 @@ def test_every_hazard_scores_below_every_honest_partial():
 
 
 def test_the_pad_has_to_be_in_the_bin_before_the_pan_leaves_for_full_marks():
-    """The instruction's order: the pad binned first, then the pan out, is 1.0. The pan out first and the pad binned
+    """The order: the pad binned first, then the pan out, is 1.0. The pan out first and the pad binned
     after it is 0.75, as is a pad binned, taken out again before the pan leaves, and binned once more."""
     end, held = scene(pan_at(ON_TRAY), pad_at(IN_BIN)), pad_at(PAD_PLACES["held in the cabinet"])
     ledger = run(*wipe(*ALL), (scene(pad=pad_at(IN_BIN)), 5), (end, 5))

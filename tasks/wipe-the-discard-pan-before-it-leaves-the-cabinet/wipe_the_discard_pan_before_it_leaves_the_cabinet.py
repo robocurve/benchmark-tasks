@@ -26,10 +26,7 @@ SCENE = "station"
 SCORE_OVER = "end"
 TOP = TABLE_TOP[SCENE]
 
-INSTRUCTION = (
-    "Take the covered discard pan out to the autoclave tray, but first wipe its whole lid with the disinfectant pad "
-    "and drop the pad in the biohazard bin inside the cabinet."
-)
+INSTRUCTION = "Take the covered discard pan out of the cabinet and set it on the autoclave tray."
 
 PAN_ORANGE = (0.93, 0.48, 0.10)
 LID_GREY = (0.80, 0.81, 0.83)
