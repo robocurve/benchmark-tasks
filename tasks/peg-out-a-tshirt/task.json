@@ -1,0 +1,19 @@
+{
+  "title": "Peg a T-shirt onto a clothesline",
+  "category": "Societal relatability",
+  "keywords": [
+    "laundry",
+    "cloth",
+    "spring-clamp",
+    "bimanual"
+  ],
+  "instruction": "Hang the T-shirt from the clothesline using the two pegs, then let go and leave it secure and clear of the table.",
+  "context": "Clipping flexible clothing onto a line combines fabric handling with operating a spring clamp, a common household and assisted-living activity.",
+  "setup": "A dry cotton child-sized T-shirt, 280 mm body width, 300 mm hem-to-shoulder length, 400 mm sleeve span and 33.9 g, draped over a fixed plastic laundry board on the YAM table (Z=0.7475 m). The board is 100 × 440 × 155 mm, centred at X=0.31, Y=0, with an 8 mm top and four 15 mm square legs. The hem overhangs its near edge by 65 mm. The shared reset places the shirt 3 mm above the board, hem X=0.195 and shoulders X=0.495, then settles it for 5 seconds. A taut 3 mm line spans Y=−0.25 to +0.25 at X=0.52, Z=1.09, on two fixed 25 mm square posts with 150 × 70 × 15 mm feet. Two wooden spring pegs, 70 × 10 × 22 mm and nominally 8 g each, start on the empty line at Y=0 and +0.06 m, handles down. Their hinge centres are (0.5211, Y, 1.060) m. The shirt starts clear of the pegs; neither hand holds anything. Leg centres are X=0.325 and 0.3475 m, Y=±0.185 m.",
+  "scoring": "0.5 if at least one peg retains both fabric and line, with the whole shirt at least 20 mm above the table and supported only by the line and pegs for 5 seconds. Award 1.0 for two such pegs at least 100 mm apart. Empty or misplaced pegs do not count. Fabric damage, external support or any other outcome gives zero.",
+  "run_limit": "2,400 control steps (120 seconds at 20 Hz), including the final 5-second released hold.",
+  "reset_notes": "Restore the loose drape and both pegs at their marked starting positions. Replace damaged cloth or pegs. Every policy uses the same raw reset followed by 5 seconds of gravity settling.",
+  "fidelity": "Two sewn layers use native surface FEM, gravity and self-contact. Stiffness is approximate. Contact-gated constraints approximate static finger and peg grip. Enclosed handles carry each peg; squeezing opens it. Release retains only fabric inside the mouth with the line. Peg motion, spring force and slip are approximate; free fall is simplified. Contact errors below 1 mm are numerical compliance. Fabric tearing is not modelled. No demo phase or score triggers a grip.",
+  "scores": "State-assisted demo: 1.0 (2,160 actions). Dream-1: 0.0 (2,400 actions).",
+  "media": "M-S2MEEJ"
+}
