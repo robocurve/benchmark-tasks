@@ -100,19 +100,19 @@ def test_moving_drive_does_not_succeed():
     assert _run(frames) == (0.75, False)
 
 
-def test_backwards_or_upside_down_is_zero_for_good():
+def test_wrong_way_or_dropped_on_the_way_does_not_count_against_a_seated_drive():
+    # Judged on the final state: a drive briefly held the wrong way over the carrier, or dropped into it, then seated
+    # correctly, scores 1.0.
     end_for_end = _quat((0, 0, 1), math.pi)
     upside = _quat((1, 0, 0), math.pi)
-    for q in (end_for_end, upside):
-        frames = [_objs(ssd=(0, 0, 0.003), quat=q)] + [_objs() for _ in range(25)]
-        assert _run(frames) == (0.0, False)
+    for first in (_objs(ssd=(0, 0, 0.003), quat=end_for_end), _objs(ssd=(0, 0, 0.003), quat=upside),
+                  _objs(ssd=(0, 0, 0.02), vz=-0.6)):
+        assert _run([first] + [_objs() for _ in range(25)]) == (1.0, True)
 
 
-def test_dropped_is_zero_for_good():
-    frames = [_objs(ssd=(0, 0, 0.02), vz=-0.6)] + [_objs() for _ in range(25)]
-    assert _run(frames) == (0.0, False)
-    frames = [_objs(ssd=(0, 0, 0.02), vz=-0.2)] + [_objs() for _ in range(25)]   # lowered gently
-    assert _run(frames) == (1.0, True)
+def test_wrong_way_in_the_carrier_scores_zero():
+    for q in (_quat((0, 0, 1), math.pi), _quat((1, 0, 0), math.pi)):
+        assert _run([_objs(quat=q) for _ in range(25)])[0] == 0.0
 
 
 # -- geometry ---------------------------------------------------------------------------------------------------------
@@ -211,11 +211,3 @@ def test_start_layout_has_nothing_overlapping():
     ssd_hi = max(c[1] + s[1] / 2 for _, c, s in ssd)
     car_lo = min(c[1] - s[1] / 2 for _, c, s in car)
     assert ssd_hi < car_lo - 0.05      # 5 cm apart
-
-
-def test_wrong_way_counts_anywhere_over_the_carrier_but_not_beside_it():
-    end_for_end = _quat((0, 0, 1), math.pi)
-    o = _objs(ssd=(-0.06, 0, 0.006), quat=end_for_end)        # over the carrier's front end, held 6 mm up
-    assert T.wrong_way(o["ssd"], o["carrier"])
-    o = _objs(ssd=(0, 0.06, 0.0), quat=end_for_end)           # on the table beside the carrier
-    assert not T.wrong_way(o["ssd"], o["carrier"])

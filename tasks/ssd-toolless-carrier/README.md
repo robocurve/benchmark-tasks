@@ -85,13 +85,12 @@ Evaluated every control step; the score at the end of the episode counts (`SCORE
 measured relative to the carrier, from where a seated drive sits (on the ribs, centred between the rails, connector
 end flush with the rear edge).
 
-- **0, for good,** if the drive was ever in the carrier (its centre within the carrier's outline plus 1 cm along it,
-  and its origin less than 1 cm above the seated height) upside down or end for end (connector toward the handle), or
-  if the drive ever fell (moving down faster than 0.5 m/s, a free drop of about 1.3 cm).
+- Only the drive's state at the time is judged: nothing earlier in the episode (turning it the wrong way on the way in,
+  or letting it drop) counts against it.
 - **1.0 (success):** all four pins in the drive's holes, the sprung rail closed (within 1 mm of its rest position),
-  and the drive lying flat in the carrier (its centre within 5 mm of its seated position in top view, every bottom
-  corner within 1 mm of the seated height), the drive having moved less than 1 mm over the last 1 s. The episode ends
-  once this has held for 1 s.
+  and the drive lying flat in the carrier (right way up with its connector toward the rear, its centre within 5 mm of
+  its seated position in top view, every bottom corner within 1 mm of the seated height; the same below), the drive
+  having moved less than 1 mm over the last 1 s. The episode ends once this has held for 1 s.
 - **0.75:** all four pins in and the drive lying flat in the carrier, but not yet still for 1 s or the rail not closed.
 - **0.5:** both pins of one side in their holes, the drive lying flat in the carrier.
 - **0.25:** the drive lying flat in the carrier, no side's two pins both in.

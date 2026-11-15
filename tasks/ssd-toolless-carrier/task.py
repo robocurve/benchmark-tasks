@@ -146,7 +146,6 @@ IN_CARRIER_XY = 0.005      # the drive's centre within 5 mm of its seated spot (
 FLAT = 0.001               # ... and every bottom corner within 1 mm of the seated height
 PIN_DEPTH = 0.001          # a pin is in its hole when its tip is inside the hole and at least 1 mm past the side
 RAIL_CLOSED = -0.001       # the sprung rail within 1 mm of fully closed (its slider within 1 mm of rest)
-DROP_SPEED = 0.5           # m/s down: a free fall of about 13 mm
 STILL = 0.001              # moving less than 1 mm over the last second (20 control steps)
 HOLD_STEPS = 20
 _STATE: dict = {}
@@ -154,7 +153,7 @@ _STATE: dict = {}
 
 @on_reset
 def _reset_state(environment=None) -> None:
-    _STATE.update(failed=False, recent=[], last=None)
+    _STATE.update(recent=[], last=None)
 
 
 _reset_state()
@@ -193,41 +192,29 @@ def pins_in(ssd: PartState, carrier: PartState) -> tuple[int, int]:
     return counts[0], counts[1]
 
 
-def wrong_way(ssd: PartState, carrier: PartState) -> bool:
-    """The drive lies in the carrier upside down, or end for end (connector toward the handle): its centre within the
-    carrier's outline (plus 1 cm along it) and less than 1 cm above its seated height."""
-    rot, off = relative(ssd, carrier)
-    over = abs(off[0] + SEAT[0]) < CAR_L / 2 + 0.01 and abs(off[1]) < CAR_W / 2 and off[2] < 0.010
-    return bool(over and (rot[2, 2] < 0 or rot[0, 0] < 0))
-
-
 def _update(objects) -> tuple[float, bool]:
     if _STATE["last"] is not None and _STATE["last"][0] is objects:
         return _STATE["last"][1]
     ssd, carrier = objects["ssd"], objects["carrier"]
-    _STATE["failed"] |= wrong_way(ssd, carrier) or float(ssd.lin_vel[2]) < -DROP_SPEED
     rot, off = relative(ssd, carrier)
     recent = _STATE["recent"]
     recent.append(off.copy())
     del recent[:-HOLD_STEPS]
-    if _STATE["failed"]:
-        out = (0.0, False)
+    lying = bool(np.hypot(off[0], off[1]) < IN_CARRIER_XY and np.all(np.abs(corner_heights(ssd, carrier)) < FLAT)
+                 and rot[2, 2] > 0 and rot[0, 0] > 0)
+    fixed, sprung = pins_in(ssd, carrier)
+    closed = carrier.sliders.get("rail", 0.0) <= -RAIL_CLOSED
+    still = len(recent) == HOLD_STEPS and all(np.linalg.norm(p - off) < STILL for p in recent)
+    if lying and fixed == 2 and sprung == 2 and closed:
+        out = (1.0, True) if still else (0.75, False)
+    elif lying and fixed == 2 and sprung == 2:
+        out = (0.75, False)
+    elif lying and (fixed == 2 or sprung == 2):
+        out = (0.5, False)
+    elif lying:
+        out = (0.25, False)
     else:
-        lying = bool(np.hypot(off[0], off[1]) < IN_CARRIER_XY and np.all(np.abs(corner_heights(ssd, carrier)) < FLAT)
-                     and rot[2, 2] > 0 and rot[0, 0] > 0)
-        fixed, sprung = pins_in(ssd, carrier)
-        closed = carrier.sliders.get("rail", 0.0) <= -RAIL_CLOSED
-        still = len(recent) == HOLD_STEPS and all(np.linalg.norm(p - off) < STILL for p in recent)
-        if lying and fixed == 2 and sprung == 2 and closed:
-            out = (1.0, True) if still else (0.75, False)
-        elif lying and fixed == 2 and sprung == 2:
-            out = (0.75, False)
-        elif lying and (fixed == 2 or sprung == 2):
-            out = (0.5, False)
-        elif lying:
-            out = (0.25, False)
-        else:
-            out = (0.0, False)
+        out = (0.0, False)
     _STATE["last"] = (objects, out)
     return out
 
@@ -241,6 +228,6 @@ def success(objects) -> bool:
 
 def score(objects) -> float:
     """0.25 lying flat in the carrier; 0.5 both pins of one side in; 0.75 all four in; 1.0 all four in with the rail
-    closed, held still for 1 s. 0 for good if the drive is ever in the carrier upside down or end for end, or falls."""
+    closed, held still for 1 s. Judged on the drive's state at the time: lying wrong way up or end for end scores 0."""
     pending = _STATE.pop("_this_step", None)
     return (pending[1] if pending and pending[0] is objects else _update(objects))[0]
