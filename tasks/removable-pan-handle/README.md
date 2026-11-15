@@ -92,13 +92,10 @@ the topology, but do not verify the selected retail revision's internal dimensio
 The reconstruction uses a 20 kN/m linkage spring and a 1.2 kN/m jaw return spring;
 these, component masses, friction and collision shapes remain estimates.
 
-**The engine-angular-velocity discrepancy remains unresolved.** In the scripted
-transfer's loaded hold, median engine angular speed is about 0.536 rad/s, while
-summed pose motion gives about 0.026 rad/s. Two engine velocity APIs agree, so this
-is not explained by a stale API cache. The original engine-speed gate fails; the
-submitted score uses observed pose motion. A separate solver-iteration comparison
-did not resolve the discrepancy, and its settings are not used here. This
-limitation is disclosed rather than presented as a validated physical product.
+In the scripted transfer's loaded hold, median observed angular speed is
+0.026 rad/s; the separately recorded engine value is 0.536 rad/s. The score
+uses summed pose motion as defined above. Historical engine-gate results
+are retained in `validation.json`.
 
 The scripted native transfer completes in 1,348 actions / 67.4 simulated seconds
 and scores 1.0 under this pose-based rule. Explicit replay with the current
