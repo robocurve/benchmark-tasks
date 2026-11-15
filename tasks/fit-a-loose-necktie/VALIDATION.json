@@ -1,0 +1,58 @@
+{
+  "status": "validated_submission",
+  "scores": {
+    "demo": 1.0,
+    "dream": 0.0
+  },
+  "control_hz": 20,
+  "demo_steps": 580,
+  "dream_steps": 1200,
+  "cpu_tests_passed": 5,
+  "material_model": "Reduced fixed-topology prepared knot, not full cloth or tying from scratch",
+  "runtime_sources_match": true,
+  "metadata_only_differences": "Final descriptive setup/fidelity, scores, media and documentation were completed after the runs. Instruction and all runtime Python/plan hashes match.",
+  "media_uploaded": true,
+  "requires_visual_review": true,
+  "wall_seconds": {
+    "demo": 238.6235411367379,
+    "dream": 523.5588454697281
+  },
+  "dream_requests": 146,
+  "dream_sessions": {
+    "session_count": 1
+  },
+  "sources_sha256": {
+    "task.py": "318513e8f55070f6403e4672009584a42c5129441cc2fc96688add31492c3be5",
+    "run.py": "4cca8a956d02069dea8d420b7873aa030d3af0219399ab43c621c0eae85e84da",
+    "material.py": "73637c0aab290c95e44bc4430a874eaa6badc0bc3bb07c98e45140219b4d98fb",
+    "test_material.py": "2b3d4e2bbbf3bbc9e0d53c1609bfcca956672a7f754b5d74fde92ed0e310f036",
+    "make_plan.py": "306d430787470598d5c170fd3b74f7fdac23195848db44507fe9edc92dd8d566",
+    "render_tie.py": "15c2ee07ca4fbd1159b4f48ce09a14759dd8b4251c4739e2e630e40395dd786a",
+    "joint_tracking.py": "f22bb7c34c8c4ba51859844f77fef8b29337b5b6353e7cc0b85cf0247866c453",
+    "dream_policy.py": "6a4690cc28fbebb04e372e39db41b4ba665ad2b7a2dcd1a7238228363846d67c",
+    "demo-plan.json": "9f107c3c6832e12951c45134dda34658f5b050b5ad195a35391f75ecb436bac4",
+    "review_views.py": "fe43ee4786cf39d9be76e56a849a548cf630e4c7dbaf5aa8a25662350b4811c9"
+  },
+  "evidence": [
+    "evidence/demo-run.json",
+    "evidence/dream-run.json",
+    "evidence/demo-trace.jsonl.gz",
+    "evidence/dream-trace.jsonl.gz",
+    "evidence/refused-wording-run.json"
+  ],
+  "checked_utc": "2026-11-15T20:12:49.476748+00:00",
+  "visual_review_passed": true,
+  "visual_review": {
+    "method": "Sampled front sequence at 0, 6, 12, 16, 20 and 29 seconds, front and side final photographs, and the Dream start policy view and final photograph.",
+    "result": "Demo tightens and fits the prepared knot, clears both hands and retains the fit. Dream leaves the initial loose tie unchanged.",
+    "model_limitations": "Idealized geometric grasp capture and a fixed-topology reduced tie; no full cloth or topological tying claim."
+  },
+  "prior_refusal": {
+    "record": "evidence/refused-wording-run.json",
+    "steps": 32,
+    "reason": "Dream interpreted the earlier instruction as tightening a tie on a person. The final instruction explicitly names the rigid plastic form and absence of a person; the resulting baseline completed normally."
+  },
+  "remaining_gates": [
+    "PR ingestion confirmation"
+  ]
+}
