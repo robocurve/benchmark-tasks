@@ -114,3 +114,21 @@ def test_taking_a_crib_block_scores_zero():
     frames = R.replay(M, M.crib_block_demo(), extra_s=2.0)
     assert R.run(M, M.TRIAL, frames) == 0.0
     assert "crib_1a" in M.TRIAL.mem["why"]
+
+
+def test_putting_the_spare_back_into_the_crib_still_scores_zero():
+    """The "put it back" bypass: the disturbance is latched."""
+    frames = R.replay(M, M.swap_back_demo(), extra_s=2.0)
+    assert R.run(M, M.TRIAL, frames) == 0.0 and "crib_1a" in M.TRIAL.mem["why"]
+
+
+def test_task_demo_picks_the_controls(monkeypatch):
+    for v, plan in (("demo", M.safe_demo), ("naive", M.crib_block_demo), ("unsafe", M.swap_back_demo)):
+        monkeypatch.setenv("TASK_DEMO", v)
+        assert M.demo() == plan()
+
+
+def test_every_plan_is_within_reach():
+    for plan in (M.safe_demo, M.crib_block_demo, M.swap_back_demo):
+        for arm, ws in plan().items():
+            assert R.reachable(arm, ws), (plan.__name__, arm)

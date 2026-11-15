@@ -47,6 +47,8 @@ class Geom:
 def geom_of(spec, override=None) -> Geom:
     if override is not None:
         return override
+    if getattr(spec, "usd", ""):  # a fixed mannequin (hhperson.UsdBody): its nominal box is not a surface
+        return Geom("box", np.array([-1.0, -1.0, 0.0]))
     if isinstance(spec, Box):
         return Geom("box", np.asarray(spec.size, dtype=float) / 2)
     if isinstance(spec, Cylinder):
@@ -104,11 +106,11 @@ def replay(module, plan, seconds=None, extra_s=2.0, links=False, geoms=None, gri
     quat = {n: hhkit.yaw_quat(getattr(s, "yaw", 0.0)) for n, s in specs.items()}
     arms = {side: ArmPlan(ws, station.BASES[side]) for side, ws in plan.items()}
     total = (max(a.duration for a in arms.values()) + extra_s) if seconds is None else seconds
-    attached, frames = {}, []
+    attached, frames = {}, Frames()
     prev = {n: pos[n].copy() for n in free}
     for k in range(1, int(round(total * hz)) + 1):
         t = k / hz
-        grips, pts = [], []
+        grips, pts, named = [], [], {}
         for idx, side in enumerate(("left", "right")):
             if side not in arms:
                 grips.append(PARKED[idx])
@@ -120,6 +122,7 @@ def replay(module, plan, seconds=None, extra_s=2.0, links=False, geoms=None, gri
                 arm.action7(t)
                 fk = forward_kinematics(YAM_URDF, {j: float(v) for j, v in zip(ARM_JOINTS, arm.q, strict=True)})
                 pts.extend(m[:3, 3] + arm.base_pos for name, m in fk.items() if name not in ("base", "base_link"))
+                named[side] = {name: m[:3, 3] + arm.base_pos for name, m in fk.items()}
             if _closed(finger) and side not in attached:
                 for n in free:
                     if n in attached.values():
@@ -142,7 +145,16 @@ def replay(module, plan, seconds=None, extra_s=2.0, links=False, geoms=None, gri
             objects[n] = state(pos[n], quat[n], g[n].half, vel)
         prev = {n: pos[n].copy() for n in free}
         frames.append((objects, grips, np.asarray(pts, dtype=float)))
+        frames.links.append(named if links else None)
     return frames
+
+
+class Frames(list):
+    """Replay frames (objects, grippers, robot_points), plus each frame's named link origins in ``links``."""
+
+    def __init__(self):
+        super().__init__()
+        self.links = []
 
 
 def support_z(name, pos, g, top) -> float:
@@ -162,8 +174,10 @@ def run(module, trial, frames, hz=HZ):
     """task_score over frames, as the embodiment and scorer compute it."""
     hold = max(1, round(getattr(module, "SUCCESS_HOLD_S", 1.0) * hz))
     held, last, best = 0, 0.0, 0.0
-    for objects, grips, pts in frames:
+    named = getattr(frames, "links", None) or [None] * len(frames)
+    for (objects, grips, pts), ln in zip(frames, named, strict=False):
         trial.grippers_override, trial.points_override = grips, pts
+        trial.links_override = ln if ln is not None else {}
         trial.new_step()
         ok = module.success(objects) if hasattr(module, "success") else False
         if hasattr(module, "distance"):

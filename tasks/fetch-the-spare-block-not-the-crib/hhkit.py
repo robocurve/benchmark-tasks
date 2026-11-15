@@ -9,7 +9,11 @@ handle the embodiment passes in during a run.
   from the simulator (offline tests set them by hand).
 - ``teleport``: move a loose body to a pose and zero its velocity, as the embodiment's own seeded reset does; used
   for a person's hand that slides along the bench on a schedule.
-- Geometry: box corners and footprints, convex footprint-to-rectangle gaps, point-to-box distances, tilt.
+- ``robot_capsules``: both arms as capsules (link to link, gripper, fingers), so proximity is checked along each
+  link's whole length rather than at link origins only.
+- Geometry: box corners and footprints, convex footprint-to-rectangle and polygon-to-polygon gaps, point-to-box and
+  capsule-to-capsule distances, tilt.
+- ``demo_variant``: which scripted plan to play (TASK_DEMO=naive / unsafe for the negative controls).
 """
 
 from __future__ import annotations
@@ -30,6 +34,7 @@ class Trial:
         self.hz = CONTROL_HZ
         self.grippers_override = None  # offline tests: a list of {"tcp": xyz, "tips": [xyz, xyz]}
         self.points_override = None  # offline tests: robot link points, an (n, 3) array
+        self.links_override = None  # offline tests: {"left": {link: xyz}, "right": {...}}
         self.clear()
         _install(self)
 
@@ -67,6 +72,19 @@ class Trial:
         if self.grippers_override is not None:
             return self.grippers_override
         return grippers(self.env) if self.env is not None else []
+
+    def links(self) -> dict:
+        """Each arm's link origins by name (world frame); {} offline unless a test sets them."""
+        if self.links_override is not None:
+            return self.links_override
+        if self.env is None:
+            return {}
+        return robot_links(self.env)
+
+    def robot_capsules(self) -> list:
+        """The arms as capsules (end, end, radius): every link between consecutive joints, the gripper body and
+        each finger. Checked over their whole length, not just at link origins."""
+        return robot_capsules(self.links(), self.grippers())
 
     def robot_points(self) -> np.ndarray:
         if self.points_override is not None:
@@ -130,6 +148,38 @@ def robot_points(env) -> np.ndarray:
     for g in grippers(env):
         pts.extend([g["tcp"], *g["tips"]])
     return np.asarray(pts, dtype=float)
+
+
+def robot_links(env) -> dict:
+    """Each arm's link origins by link name (world frame, env 0)."""
+    out = {}
+    for key, side in (("left_robot", "left"), ("right_robot", "right")):
+        names, pos = _bodies(env, key)
+        out[side] = {n: pos[i] for i, n in enumerate(names)}
+    return out
+
+
+ARM_CHAIN = ("link1", "link2", "link3", "link4", "link5", "gripper")
+LINK_R = 0.035  # m: an arm link's radius (the YAM's links are about 6-7 cm thick)
+GRIPPER_R = 0.03  # m: the gripper body, from its mount to between the finger pads
+FINGER_R = 0.012  # m: each finger
+
+
+def robot_capsules(links: dict, grips: list) -> list:
+    """Capsules (a, b, r) covering both arms: link to link along the chain, gripper mount to the pad centre, pad
+    centre to each fingertip."""
+    caps = []
+    for idx, side in enumerate(("left", "right")):
+        ln = links.get(side) or {}
+        chain = [np.asarray(ln[n], dtype=float) for n in ARM_CHAIN if n in ln]
+        caps.extend((a, b, LINK_R) for a, b in zip(chain, chain[1:], strict=False))
+        if idx < len(grips):
+            g = grips[idx]
+            tcp = np.asarray(g["tcp"], dtype=float)
+            if "gripper" in ln:
+                caps.append((np.asarray(ln["gripper"], dtype=float), tcp, GRIPPER_R))
+            caps.extend((tcp, np.asarray(t, dtype=float), FINGER_R) for t in g["tips"])
+    return caps
 
 
 def teleport(env, name: str, xyz) -> None:
@@ -263,3 +313,82 @@ def flat_tilt_deg(state) -> float:
 def yaw_deg(state) -> float:
     r = rot(state.quat_xyzw)
     return math.degrees(math.atan2(r[1, 0], r[0, 0]))
+
+
+def seg_seg(a, b, c, d) -> float:
+    """Closest distance (m) between segments ab and cd (3-D)."""
+    a, b, c, d = (np.asarray(v, dtype=float) for v in (a, b, c, d))
+    u, v, w = b - a, d - c, a - c
+    A, B, C, D, E = u @ u, u @ v, v @ v, u @ w, v @ w
+    den = A * C - B * B
+    if A < 1e-12 and C < 1e-12:
+        return float(np.linalg.norm(w))
+    if A < 1e-12:
+        s, t = 0.0, min(1.0, max(0.0, E / C))
+    elif C < 1e-12:
+        s, t = min(1.0, max(0.0, -D / A)), 0.0
+    else:
+        s = min(1.0, max(0.0, (B * E - C * D) / den)) if den > 1e-12 else 0.0
+        t = (B * s + E) / C
+        if t < 0.0:
+            t, s = 0.0, min(1.0, max(0.0, -D / A))
+        elif t > 1.0:
+            t, s = 1.0, min(1.0, max(0.0, (B - D) / A))
+    return float(np.linalg.norm(w + s * u - t * v))
+
+
+def capsule_gap(c1, c2) -> float:
+    """Surface gap (m) between two capsules (a, b, r); negative when they overlap."""
+    return seg_seg(c1[0], c1[1], c2[0], c2[1]) - c1[2] - c2[2]
+
+
+def point_capsule(p, cap) -> float:
+    return point_segment(p, cap[0], cap[1]) - cap[2]
+
+
+def poly_poly_gap(p, q) -> float:
+    """Gap (m) between two convex polygons seen from above; 0 if they overlap."""
+    p, q = np.asarray(p, dtype=float), np.asarray(q, dtype=float)
+    if any(inside(v, q) for v in p) or any(inside(v, p) for v in q):
+        return 0.0
+    for i in range(len(p)):
+        for j in range(len(q)):
+            if _cross_seg(p[i], p[(i + 1) % len(p)], q[j], q[(j + 1) % len(q)]):
+                return 0.0
+    gap = min(point_segment(v, q[j], q[(j + 1) % len(q)]) for v in p for j in range(len(q)))
+    return min(gap, min(point_segment(v, p[i], p[(i + 1) % len(p)]) for v in q for i in range(len(p))))
+
+
+def _cross_seg(a, b, c, d) -> bool:
+    def o(p, q, r):
+        return (q[0] - p[0]) * (r[1] - p[1]) - (q[1] - p[1]) * (r[0] - p[0])
+    return o(a, b, c) * o(a, b, d) < 0 and o(c, d, a) * o(c, d, b) < 0
+
+
+def demo_variant(default: str = "demo") -> str:
+    """Which scripted plan demo() plays: TASK_DEMO in the environment (e.g. "naive", "unsafe"), else ``default``.
+    Lets the same task file play its negative controls in the simulator."""
+    import os
+
+    return os.environ.get("TASK_DEMO", "") or default
+
+
+def capsule_poly_gap(cap, poly) -> float:
+    """Gap (m) seen from above between a capsule (a, b, r) and a convex polygon: the column above the polygon, at any
+    height. 0 if the capsule's shadow overlaps it."""
+    a, b, r = cap
+    seg = np.array([np.asarray(a, dtype=float)[:2], np.asarray(b, dtype=float)[:2]])
+    if np.allclose(seg[0], seg[1]):
+        poly = np.asarray(poly, dtype=float)
+        if inside(seg[0], poly):
+            return 0.0
+        d = min(point_segment(seg[0], poly[j], poly[(j + 1) % len(poly)]) for j in range(len(poly)))
+    else:
+        d = poly_poly_gap(seg, poly)
+    return max(0.0, d - r)
+
+
+def rect_poly(rect) -> np.ndarray:
+    """(x0, x1, y0, y1) as a 4-corner polygon."""
+    x0, x1, y0, y1 = rect
+    return np.array([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], dtype=float)
