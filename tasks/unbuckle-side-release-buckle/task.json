@@ -1,0 +1,21 @@
+{
+  "title": "Unbuckle a side-release strap buckle: squeeze both of its tabs in at once while drawing the halves apart",
+  "category": "Societal relatability",
+  "keywords": [
+    "everyday object",
+    "side-release buckle",
+    "strap",
+    "bimanual",
+    "pinch",
+    "spring latch"
+  ],
+  "instruction": "Unbuckle the strap: take the two halves of its buckle apart.",
+  "context": "Side-release buckles close backpack hip belts and chest straps, luggage and camera straps, pet harnesses, life jackets and high-chair and stroller harnesses; undoing one is something nearly everyone does daily, and a home or care robot would have to as well. The male half's two sprung prongs hook behind the female's mouth, and their tabs stand out of windows in its sides. The halves part only while both tabs are pressed in flush at the same time and the male is drawn out: one tab pressed leaves the other hooked, and pulling without pressing only drags the whole buckle. Both halves are loose and light, so one hand has to squeeze both tabs and hold the female while the halves are drawn apart, and the other has to keep the male from simply following it.",
+  "setup": "Positions in mm from the centre of the buckle's mouth, which lies 300 mm in front of the midpoint between the two arm bases, on the centre line (x forward, y to the robot's left). One 38 mm plastic side-release buckle lies flat and buckled on the table, running along y. Female half (dark grey, 22 g with its webbing): a hollow shell 14 mm thick, 54 mm wide at its mouth (y 0 to 10) and 38 mm wide behind it (to y 55), with side windows at y 10 to 42, a webbing bar to y 61 and 120 mm of blue 38 mm nylon webbing lying on the table toward +y. Male half (black, 36 g): a 48 x 40 x 12 mm base (y -42 to -2) with 120 mm of the same webbing toward -y, a 14 mm wide tongue reaching to y 45 inside the female, and two sprung prongs whose tabs (16 x 9 mm, y 11 to 27) stand 3 mm out of the female's windows on each side, hooked 1.5 mm deep behind the lips of its 41 mm mouth opening.",
+  "scoring": "Measured with a ruler, from the centre of the female's mouth to the centre of the front face of the male's base (2 mm when buckled). 0 if either half fell off the table. Otherwise 1.0 if that distance is at least 52 mm (the 47 mm tongue at least 5 mm clear of the mouth) for 1 s in a row; 0.75 if it was at some point; 0.5 if it was at some point at least 8 mm (the tabs past the mouth's lips: released); 0.25 if both tabs were at some point pressed in at least 1.5 mm at the same time; else 0.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Push the male half back into the female until both tabs click out of the windows, and lay the buckle flat on its marked outline, the female on the robot's left.",
+  "fidelity": "Rigid boxes at real size. Each flexing plastic prong is modelled as a rigid prong on a sprung slider across the buckle (1500 N/m, 3.5 mm travel: 4.5 N to press a tab flush); prongs are 10 g each for solver stability, so the male (36 g) is heavier than a real one. The webbing tails are stiff flat strips. The tongue is guided by ribs with 0.75 mm play. Plastic friction 0.4. Light angular damping; no contact force cap.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-JAR6YC"
+}
