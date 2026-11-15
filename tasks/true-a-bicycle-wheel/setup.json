@@ -1,0 +1,120 @@
+{
+  "schema": "fixed-setup-v2",
+  "calibrated": false,
+  "coordinates": "Metres in the standard YAM station: x forward, y left, z up.",
+  "table_top_z_m": 0.7475,
+  "wheel": {
+    "hub_center_m": [
+      0.36,
+      -0.2,
+      1.0
+    ],
+    "axle_direction": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "rim_centerline_diameter_m": 0.42,
+    "rim_radial_depth_m": 0.02,
+    "rim_axial_width_m": 0.022,
+    "rim_material": "aluminium, nominal E=69 GPa; hollow section response uncalibrated",
+    "rim_mass_kg": 0.42,
+    "spokes": 32,
+    "spoke_material": "steel, nominal E=200 GPa",
+    "spoke_diameter_m": 0.002,
+    "hub_flange_diameter_m": 0.05,
+    "hub_flange_spacing_m": 0.05,
+    "nipples": "Brass, 12 mm total length: 6 mm square flats of 3.23 mm width, followed by a 6 mm barrel of 3 mm diameter into the rim bearing. Flat centre is 16 mm inward from the rim centreline along the spoke; nominal thread pitch 0.454 mm.",
+    "starting_spoke_turn_offsets": {
+      "0": -0.75,
+      "2": -0.75
+    },
+    "reset_note": "Rest-length offsets: nipples 0 and 2 are -0.75 turn; all others zero. Initial model lateral runout 0.697 mm, spoke tensions 354\u2013932 N. It scores zero because two spokes are below 400 N. Engineering fixture, not calibrated commercial-wheel data.",
+    "robot_plan_candidate": {
+      "native_validated": true,
+      "clocking_deg": 55,
+      "square_flat_phase_deg": 45
+    },
+    "axle_geometry": {
+      "length_m": 0.1,
+      "diameter_m": 0.01,
+      "center_m": [
+        0.375,
+        -0.2,
+        1.0
+      ],
+      "note": "Fixed far-side stand clamps rear axle end. Hub rotates freely."
+    }
+  },
+  "stand": {
+    "material": "steel",
+    "base_center_m": [
+      0.49,
+      -0.18,
+      0.7575
+    ],
+    "base_size_m": [
+      0.14,
+      0.25,
+      0.02
+    ],
+    "upright_center_m": [
+      0.49,
+      -0.2,
+      0.88375
+    ],
+    "upright_size_m": [
+      0.025,
+      0.025,
+      0.2325
+    ],
+    "axle_arm_center_m": [
+      0.4575,
+      -0.2,
+      1.0
+    ],
+    "axle_arm_size_m": [
+      0.065,
+      0.025,
+      0.015
+    ],
+    "attachment": "Single-sided cantilever stand bolted to table, clamping the far axle end at x=.415m. Hub remains free on bearings; no active brake or wheel attachment to the robot.",
+    "pointer": "Steel20\u00d72\u00d72mm pointer beside bottom rim; gap measured with feeler gauges. No initial rim contact."
+  },
+  "wrench": {
+    "material": "Steel jaw and 175 mm neck, steel tang inside polymer grip",
+    "jaw_slot_m": 0.00325,
+    "handle_length_m": 0.055,
+    "mass_kg": 0.09,
+    "handle_center_m": [
+      0.2,
+      -0.2125,
+      0.7555
+    ],
+    "long_axis_direction": [
+      0.0,
+      1.0,
+      0.0
+    ],
+    "start": "Lying flat, slot centre at (0.20, -0.005, 0.7555) m and mouth toward +y; free from robot and nipple.",
+    "mouth_width_m": 0.005,
+    "lead_in_length_m": 0.006,
+    "jaw_thickness_m": 0.004,
+    "overall_length_m": 0.243,
+    "handle_cross_section_m": [
+      0.016,
+      0.016
+    ],
+    "neck_size_m": [
+      0.01,
+      0.175,
+      0.004
+    ],
+    "slot_to_grip_tcp_m": [
+      0,
+      -0.195,
+      0.011
+    ]
+  },
+  "assessor_tools": "0.1 mm feeler gauges, millimetre ruler, camera and mechanical spoke tensiometer with2mm round-steel conversion chart; used for judging, not available to the policy."
+}

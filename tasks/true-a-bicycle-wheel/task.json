@@ -1,0 +1,18 @@
+{
+  "title": "True a wobbly bicycle wheel",
+  "category": "Societal relatability",
+  "keywords": [
+    "bicycle repair",
+    "spoke tension",
+    "tool use"
+  ],
+  "instruction": "Use the spoke key to adjust the wheel until it runs straight, then spin it and leave it freely rotating.",
+  "context": "A wobbly bicycle wheel can rub the brake or frame. Correcting it requires finding the wobble and adjusting spoke tension while keeping the wheel centred.",
+  "setup": "A 420 mm centreline-diameter aluminium rim (440 mm outer diameter), 32 steel 2 mm spokes and brass nipples sit upright in a bolted steel truing stand. Nipples 0 and 2 start 0.75 turn loose; the wheel is clocked 55 degrees. A free 243 mm steel spoke key with a polymer grip and 3.25 mm slot lies on the table. A fixed pointer marks the rim edge. The table is 747.5 mm high; the hub is at (0.360, -0.200, 1.000) m. Full dimensions and the fixed layout are in setup.json.",
+  "scoring": "0.5 for lateral runout at most 1.5 mm; 1.0 for at most 0.5 mm. Both require one complete revolution after hands and key are clear, radial runout at most 1 mm, dish error at most 0.5 mm, and all 32 spokes at 400–1000 N. Use a fixed pointer and feeler gauges, a ruler and a mechanical spoke tensiometer. Damage, direct rim bending, external rim support, missing measurements or any other outcome scores zero.",
+  "run_limit": "2,400 control steps (120 seconds at 20 Hz).",
+  "reset_notes": "Restore the same documented nipple rest lengths and intact wheel. Initial wobble is created by uneven spoke rest lengths, not a bent rim animation.",
+  "fidelity": "An elastic ring/spoke model computes rim shape and tension from nipple settings. The measured key must surround a nipple and turn; pitch is 0.454 mm/revolution. The robot and free key use native contact. A rim pinch drives the axle, which coasts after release. Wheel geometry follows the equilibrium solution. Thread torque, vibration, plastic damage and force feedback are not calibrated. Wrong adjustments can worsen runout or tension.",
+  "scores": "Dream-1: 0.0 (2,400 steps; no nipple adjustment or released revolution). Scripted demo: 1.0 (1,782 steps; lateral runout 0.467 mm, radial ≤0.152 mm, dish 0.087 mm, spoke tensions 468–855 N).",
+  "media": "M-MFGFHV"
+}
