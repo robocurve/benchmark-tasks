@@ -5,7 +5,7 @@ red tote out and put it in the bin, keeping the queue from moving more than 2 cm
 queue slide forward so the next tote is against the stop.
 
 Run it:  inspect-robots run --embodiment yam_arena -E task=task.py \\
-           --instruction "Hold back the grey totes, put the red tote in the green bin, then let the grey totes slide forward to the stop. They must not move more than 2 cm until the red tote is in the bin." \\
+           --instruction "Put the red tote in the green bin, and leave the two grey totes in the lane with the front one against the stop. The grey totes must not move more than 2 cm before the red tote is in the bin." \\
            --scorer task_score ...
 """
 

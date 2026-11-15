@@ -27,7 +27,7 @@ In the Isaac Lab-Arena environment from the simulation walkthrough, from this fo
 ```bash
 inspect-robots run --embodiment yam_arena --policy dream \
   -E task=task.py -E object_jitter=0 -E control_hz=20 -E cam_width=320 -E cam_height=176 \
-  --instruction "Hold back the grey totes, put the red tote in the green bin, then let the grey totes slide forward to the stop. They must not move more than 2 cm until the red tote is in the bin." \
+  --instruction "Put the red tote in the green bin, and leave the two grey totes in the lane with the front one against the stop. The grey totes must not move more than 2 cm before the red tote is in the bin." \
   --scorer task_score --max-steps 2400 --store-frames --log-dir ~/yam-eval/lane-dream
 ```
 
@@ -36,7 +36,7 @@ The scripted demo:
 ```bash
 inspect-robots run --embodiment yam_arena --policy yam_scripted \
   -E task=task.py -E object_jitter=0 -E control_hz=20 -E cam_width=320 -E cam_height=176 \
-  --instruction "Hold back the grey totes, put the red tote in the green bin, then let the grey totes slide forward to the stop. They must not move more than 2 cm until the red tote is in the bin." \
+  --instruction "Put the red tote in the green bin, and leave the two grey totes in the lane with the front one against the stop. The grey totes must not move more than 2 cm before the red tote is in the bin." \
   --scorer task_score --max-steps 600 --store-frames --log-dir ~/yam-eval/lane-demo
 ```
 
@@ -73,7 +73,7 @@ stop checks where the totes end.
 
 ## Runtime and seeds
 
-A Dream-1 trial of 2,400 steps took about 11 minutes on one RTX-class GPU, mostly waiting on the model, plus about 1 minute
+A Dream-1 trial of 2,400 steps took about 8 to 11 minutes on one RTX-class GPU, mostly waiting on the model, plus about 1 minute
 for Isaac Sim to start (longer on a fresh instance). The scripted demo takes under a minute.
 The layout is fixed (`-E object_jitter=0`); there are no seeds to choose. The demo is open-loop and tuned to this layout,
 so it may not reach 1.0 with object jitter.
