@@ -117,6 +117,7 @@ def replay(module, plan, seconds=None, extra_s=2.0, links=False, geoms=None, gri
                 continue
             arm = arms[side]
             tcp, _r, finger, _ = arm.target(t)
+            gyaw = _grip_yaw(_r)
             grips.append(gripper(tcp))
             if links:
                 arm.action7(t)
@@ -129,14 +130,17 @@ def replay(module, plan, seconds=None, extra_s=2.0, links=False, geoms=None, gri
                         continue
                     local = np.abs(np.asarray(tcp) - pos[n]) - g[n].half
                     if np.all(local <= grip_tol):
-                        attached[side] = (n, pos[n] - np.asarray(tcp))
+                        attached[side] = (n, pos[n] - np.asarray(tcp), _quat_yaw(quat[n]) - gyaw, gyaw)
                         break
             if not _closed(finger) and side in attached:
-                n, _off = attached.pop(side)
+                n, *_rest = attached.pop(side)
                 pos[n][2] = support_z(n, pos, g, module.TOP)
             if side in attached:
-                n, off = attached[side]
-                pos[n] = np.asarray(tcp, dtype=float) + off
+                n, off, dyaw, yaw0 = attached[side]
+                c, si = np.cos(gyaw - yaw0), np.sin(gyaw - yaw0)  # the load turns with the grip about the TCP
+                off_r = np.array([c * off[0] - si * off[1], si * off[0] + c * off[1], off[2]])
+                pos[n] = np.asarray(tcp, dtype=float) + off_r
+                quat[n] = hhkit.yaw_quat(gyaw + dyaw)
         for gr in grips:
             pts.extend([gr["tcp"], *gr["tips"]])
         objects = {}
@@ -147,6 +151,24 @@ def replay(module, plan, seconds=None, extra_s=2.0, links=False, geoms=None, gri
         frames.append((objects, grips, np.asarray(pts, dtype=float)))
         frames.links.append(named if links else None)
     return frames
+
+
+_DOWN = None
+
+
+def _grip_yaw(rot) -> float:
+    """The grip's turn about the vertical (rad) from its TCP rotation matrix (0 for the plain downward grip)."""
+    global _DOWN
+    if _DOWN is None:
+        from yam_arena.demo import grip_rotation
+        _DOWN = grip_rotation(0.0)
+    rel = np.asarray(rot) @ _DOWN.T
+    return float(np.arctan2(rel[1, 0], rel[0, 0]))
+
+
+def _quat_yaw(q) -> float:
+    x, y, z, w = (float(v) for v in q)
+    return float(np.arctan2(2 * (w * z + x * y), 1 - 2 * (y * y + z * z)))
 
 
 class Frames(list):
