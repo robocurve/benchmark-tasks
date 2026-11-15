@@ -1,0 +1,49 @@
+{
+  "status": "validated_submission",
+  "scores": {
+    "demo": 1.0,
+    "dream": 0.0
+  },
+  "control_hz": 20,
+  "steps": {
+    "demo": 940,
+    "dream": 1200
+  },
+  "wall_seconds": {
+    "demo": 483.8879852402024,
+    "dream": 869.1933109802194
+  },
+  "runtime_sources_match": true,
+  "sources_sha256": {
+    "planner.py": "cf5a17d495934590ad6b93ef1462f82be10c6a7e326881bb116167565305b05a",
+    "task.py": "0e255458dc59f7d61876da086e1c5b95715aae4b761a73da71fe93ba88d02e00",
+    "run.py": "dac3ca153e364e9f8423540ca65669315a8057e77df439b68750185e194728c6",
+    "rescore.py": "c8de0dc83a4693d875e1dd21cbd118fe7faa9253404284625def048679b2c420",
+    "body_contact.py": "4a63abbc3e50f8519e142c24b9725373e1ccbf38db3b10aa25b61aa4702538b5",
+    "make_plan.py": "6ea2140c9245f013adfea5dd985cb6cbe189f96b8260e884998e40b369293181",
+    "model.py": "e2db9141efa2e0768ad0e10df5dee297c04cd93684ad69c0eacad3d1fe23f91b",
+    "common.py": "a5397d5857664f4694c2b174398a9adaf49ad03936613bdf84cfb96e5bb04fbc",
+    "joint_tracking.py": "f22bb7c34c8c4ba51859844f77fef8b29337b5b6353e7cc0b85cf0247866c453",
+    "dream_policy.py": "6a4690cc28fbebb04e372e39db41b4ba665ad2b7a2dcd1a7238228363846d67c",
+    "demo-plan.json": "e5d6130d151c21478b3bccc46dfd90cdb3094dc2e3aafd7e9beca935d4565098",
+    "review_views.py": "31575401bd48f1d2b4d353a545bb65a312ad61333a930a8b9a540bb2094775c6"
+  },
+  "metadata_only_differences": "Descriptive metadata, environment verification flag and documentation finalized after recording. Instruction and simulation code/plan are unchanged.",
+  "visual_review_passed": true,
+  "visual_review": {
+    "passed": true,
+    "method": "Native front demo frames at 0, 7, 12, 20, 35 and 47 s; native front Dream frames at 0, 15, 22, 30, 45 and 60 s; source-verified trace replay.",
+    "demo": "The robot grips the handle, rocks the full-size pram repeatedly over the marked travel and releases it stopped. Trace confirms ten cycles and 6.6 seconds released rest.",
+    "dream": "Completes the full budget and moves the handle/pram, but performs no complete qualifying rock. Later arm contact stops at the carrycot shell rather than passing through its body.",
+    "limitations": "Reduced planar cart and idealized handle capture. Native carrycot/doll collision shells; no suspension, tipping, occupant dynamics or pram reaction forces fed back to the robot."
+  },
+  "dream_requests": 146,
+  "dream_sessions": {
+    "session_count": 1
+  },
+  "media_uploaded": true,
+  "checked_utc": "2026-11-15T23:33:52.834236+00:00",
+  "remaining_gates": [
+    "PR ingestion confirmation"
+  ]
+}

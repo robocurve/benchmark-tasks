@@ -1,0 +1,14 @@
+{
+  "title": "Rock a pram smoothly",
+  "category": "Societal relatability",
+  "instruction": "Rock the pram containing a weighted training doll smoothly back and forth between the two floor marks ten times. Keep it straight, then stop near the starting mark and release the handle.",
+  "action_limit": 1200,
+  "context": "This tests controlled, repeated movement of a wheeled load through its handle. The occupant is a secured training doll; no live child is used.",
+  "setup": "A full-size aluminium-framed, four-wheel pram with a rigid polymer carrycot on a level, dry floor: 82.5 x 44.5 cm carrycot, 65 cm wheelbase, 51 cm wheel track, 24 cm rubber wheels and a 47 cm wide handle 102 cm above the floor. Total moving mass is 15 kg, including a secured 5 kg, approximately 56 cm vinyl training doll. A 70 x 36 cm foam mattress supports the doll. The robot faces the handle with both arms ready and grippers open. Two floor marks 20 cm apart align with the starting and forward positions of the rear axle. Use the fixed layout in the setup photograph.",
+  "scoring": "0 if lateral drift exceeds 4 cm, yaw exceeds 10 degrees, speed exceeds 0.30 m/s, acceleration exceeds 1.5 m/s², or the pram leaves the 35 cm travel envelope. Otherwise, 0.5 for at least five complete rocks and 1.0 for at least ten, followed by at least three seconds at less than 1 cm/s translation and 0.02 rad/s yaw with the hands released and the rear axle within 5 cm of its starting position. A complete rock reaches at least 16.5 cm forward and returns to within 3.5 cm of the start. Fewer than five earns 0. Measure travel and timing from a ruler-marked floor and video; the trace supplies the same quantities.",
+  "run_limit": "1,200 control steps (60 seconds at 20 Hz).",
+  "reset_notes": "Return the pram to the starting mark, with zero velocity and straight wheels; reset both arms. Nothing is consumed.",
+  "fidelity": "Native arms and moving carrycot/doll collision shells. A reduced planar model integrates 15 kg mass, yaw inertia, rolling resistance and compliant handle grasps from measured hands. Suspension, tipping, caster mechanics and occupant motion are omitted. Grip capture is idealized; pram reaction forces are not fed back to the robot. Smoothness thresholds define the task, not infant-safety guidance.",
+  "scores": "Dream-1: 0.0; scripted demo: 1.0.",
+  "media": "M-6UKL98"
+}
