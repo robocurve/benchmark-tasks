@@ -14,12 +14,14 @@ back edge and the middle of its top fix its centre.
 
 from __future__ import annotations
 
+import math
 import os
 
 import numpy as np
 
 _EST: dict = {}  # the last estimate, for the log
 _PLAN_LOG = open(os.environ["CLAMP_DEBUG"] + ".plan", "w") if os.environ.get("CLAMP_DEBUG") else None
+_POSE_LOG = open(os.environ["CLAMP_DEBUG"] + ".pose", "w") if os.environ.get("CLAMP_DEBUG") else None
 
 
 def _rotation(q) -> np.ndarray:
@@ -198,9 +200,15 @@ def plan_from_image(img: np.ndarray, m) -> dict:
 
 # The simulated YAM's joints are soft (position gains of 80 N m/rad at the shoulder and 10 at the wrist), so under
 # gravity and load each joint settles short of its target. The demo closes that gap from the joint angles it observes:
-# a slow integral term per joint, bounded.
+# an integral correction, bounded.
 SAG_GAIN = 0.08  # of the remaining error added to the offset per control step
-SAG_MAX = 0.12  # rad
+SAG_GAIN_CART = float(os.environ.get("CLAMP_SAG_GAIN", "0.25"))  # of the TCP pose error per step
+SAG_MAX = float(os.environ.get("CLAMP_SAG_MAX", "0.6"))  # rad: room to push the wrench against the nut's 5 to 7 N m
+#                                                            (the wrist's gain is 10 N m/rad)
+SAG_ARMS = os.environ.get("CLAMP_SAG_ARMS", "both")  # "both", "right" (hold the clamp down) or "left" (turn the nut)
+SAG_MODE = os.environ.get("CLAMP_SAG_MODE", "cart")  # "cart": correct the TCP's full pose (position and
+#                                                       orientation) through the Jacobian; "joint": the old per-joint
+#                                                       integral (it rolls the wrist)
 
 
 def install() -> None:
@@ -216,7 +224,30 @@ def install() -> None:
     if getattr(cls, "_clampdemo", False):
         return
     plain_reset, plain_act = cls.reset, cls.act
-    arm_idx = np.r_[0:6, 7:13]
+    arm_idx = np.r_[0:6, 7:13] if SAG_ARMS == "both" else (np.r_[7:13] if SAG_ARMS == "right" else np.r_[0:6])
+    from yam_arena import ik
+
+    def tcp_jacobian(q, base):
+        """d(TCP pose)/d(joint angles): 6 x 6, numerically, at ``q``. The last three rows are world-frame angular
+        velocity, so the orientation error below is in the same frame."""
+        p0, r0 = ik.tcp_pose(q, base)
+        jac = np.empty((6, 6))
+        for k in range(6):
+            qp = np.array(q, float)
+            qp[k] += 1e-4
+            p, r = ik.tcp_pose(qp, base)
+            jac[:3, k] = (p - p0) / 1e-4
+            w = (r - r0) / 1e-4 @ r0.T
+            jac[3:, k] = 0.5 * np.array([w[2, 1] - w[1, 2], w[0, 2] - w[2, 0], w[1, 0] - w[0, 1]])
+        return jac
+
+    def log_rot(r):
+        """The rotation vector of a rotation matrix (world frame), radians."""
+        c = np.clip((np.trace(r) - 1.0) / 2.0, -1.0, 1.0)
+        th = math.acos(c)
+        if th < 1e-7:
+            return 0.5 * np.array([r[2, 1] - r[1, 2], r[0, 2] - r[2, 0], r[1, 0] - r[0, 1]])
+        return th / (2.0 * math.sin(th)) * np.array([r[2, 1] - r[1, 2], r[0, 2] - r[2, 0], r[1, 0] - r[0, 1]])
 
     def reset(self, scene):
         plain_reset(self, scene)
@@ -235,20 +266,44 @@ def install() -> None:
             self._end = max((p.duration for p in self._plans.values()), default=0.0)
         if self._task is None or not hasattr(self._task.module, "plan_from_image_hook"):
             return plain_act(self, observation)
-        if _PLAN_LOG is not None and self._plans:
-            t = float(observation.state_time)
+        t = float(observation.state_time)
+        if self._plans:
             parts = []
             for arm, plan in self._plans.items():
                 pos, _, finger, label = plan.target(t)
-                parts.append(f"{arm}=({pos[0]:.4f},{pos[1]:.4f},{pos[2]:.4f}) f={finger:.4f} [{label}]")
-            _PLAN_LOG.write(f"{int(round(t * 20)):4d} " + " ".join(parts) + "\n")
-            _PLAN_LOG.flush()
+                if _PLAN_LOG is not None:
+                    parts.append(f"{arm}=({pos[0]:.4f},{pos[1]:.4f},{pos[2]:.4f}) f={finger:.4f} [{label}]")
+            if _PLAN_LOG is not None:
+                _PLAN_LOG.write(f"{int(round(t * 20)):4d} " + " ".join(parts) + "\n")
+                _PLAN_LOG.flush()
         chunk = plain_act(self, observation)
         planned = np.asarray(chunk.actions[0].data, float).copy()
         measured = np.asarray(observation.state[STATE_KEY], float)
+        if _POSE_LOG is not None:
+            fields = [f"{int(round(t * 20)):4d}"]
+            for arm, idx in (("left", np.r_[0:6]), ("right", np.r_[7:13])):
+                base = self._bases[arm]
+                _, r_plan = ik.tcp_pose(planned[idx], base)
+                _, r_meas = ik.tcp_pose(measured[idx], base)
+                fields.append(f"{arm}_err={math.degrees(np.linalg.norm(log_rot(r_plan @ r_meas.T))):5.1f}")
+                fields.append(f"{arm}_off={np.linalg.norm(self._clamp_off[idx]):5.3f}")
+            _POSE_LOG.write(" ".join(fields) + "\n")
+            _POSE_LOG.flush()
         if self._clamp_prev is not None:
-            err = self._clamp_prev[arm_idx] - measured[arm_idx]
-            self._clamp_off[arm_idx] = np.clip(self._clamp_off[arm_idx] + SAG_GAIN * err, -SAG_MAX, SAG_MAX)
+            if SAG_MODE == "cart":
+                for arm, idx in (("left", np.r_[0:6]), ("right", np.r_[7:13])):
+                    if not np.all(np.isin(idx, arm_idx)):
+                        continue
+                    base = self._bases[arm]
+                    p_plan, r_plan = ik.tcp_pose(planned[idx], base)
+                    p_meas, r_meas = ik.tcp_pose(measured[idx], base)
+                    err = np.r_[p_plan - p_meas, log_rot(r_plan @ r_meas.T)]
+                    jac = tcp_jacobian(measured[idx], base)
+                    dq = jac.T @ np.linalg.solve(jac @ jac.T + 1e-4 * np.eye(6), err)
+                    self._clamp_off[idx] = np.clip(self._clamp_off[idx] + SAG_GAIN_CART * dq, -SAG_MAX, SAG_MAX)
+            else:
+                err = self._clamp_prev[arm_idx] - measured[arm_idx]
+                self._clamp_off[arm_idx] = np.clip(self._clamp_off[arm_idx] + SAG_GAIN * err, -SAG_MAX, SAG_MAX)
         self._clamp_prev = planned
         out = planned + self._clamp_off
         return ActionChunk(actions=[Action(data=out, meta=chunk.actions[0].meta)], control_hz=chunk.control_hz)
