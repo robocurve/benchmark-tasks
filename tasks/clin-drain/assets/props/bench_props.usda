@@ -1,0 +1,106 @@
+#usda 1.0
+(
+    defaultPrim = "props"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "props"
+{
+    def Xform "kidney_dish"
+    {
+        float xformOp:rotateX = 0
+        float xformOp:rotateY = 0
+        float xformOp:rotateZ:yaw = 90
+        float3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:translate = (0.5149999925494194, 0.040000011175870896, -0.000045067416067468)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ:yaw", "xformOp:rotateY", "xformOp:rotateX", "xformOp:scale"]
+
+        def Xform "model" (
+            prepend references = @./kidney_dish/kidney_dish.usdc@
+        )
+        {
+        }
+    }
+
+    def Xform "drape"
+    {
+        float xformOp:rotateX = 0
+        float xformOp:rotateY = 0
+        float xformOp:rotateZ:yaw = 90
+        float3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:translate = (0.7049999888241291, -0.009999992549419403, 0.0006675563636235893)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ:yaw", "xformOp:rotateY", "xformOp:rotateX", "xformOp:scale"]
+
+        def Xform "model" (
+            prepend references = @./drape/drape.usdc@
+        )
+        {
+        }
+    }
+
+    def Xform "glove_box"
+    {
+        float xformOp:rotateX = 0
+        float xformOp:rotateY = 0
+        float xformOp:rotateZ:yaw = 272
+        float3 xformOp:scale = (1.27, 1.05, 1.15)
+        double3 xformOp:translate = (0.6, 0.3, 0.00002611808813947823)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ:yaw", "xformOp:rotateY", "xformOp:rotateX", "xformOp:scale"]
+
+        def Xform "model" (
+            prepend references = @./glove_box/glove_box.usdc@
+        )
+        {
+        }
+    }
+
+    def Xform "disinfectant"
+    {
+        float xformOp:rotateX = 0
+        float xformOp:rotateY = 0
+        float xformOp:rotateZ:yaw = 205
+        float3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:translate = (0.7196070243173524, 0.22518365551477718, -0.00002599852450657636)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ:yaw", "xformOp:rotateY", "xformOp:rotateX", "xformOp:scale"]
+
+        def Xform "model" (
+            prepend references = @./disinfectant/disinfectant.usdc@
+        )
+        {
+        }
+    }
+
+    def Xform "specimen_bag"
+    {
+        float xformOp:rotateX = 0
+        float xformOp:rotateY = -90
+        float xformOp:rotateZ:yaw = 100
+        float3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:translate = (0.5958197062935844, -0.19117809751507242, 0.017196418717503548)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ:yaw", "xformOp:rotateY", "xformOp:rotateX", "xformOp:scale"]
+
+        def Xform "model" (
+            prepend references = @./specimen_bag/specimen_bag.usdc@
+        )
+        {
+        }
+    }
+
+    def Xform "syringe"
+    {
+        float xformOp:rotateX = 0
+        float xformOp:rotateY = 0
+        float xformOp:rotateZ:yaw = 12
+        float3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:translate = (0.44092402410004894, -0.12668255288342378, -6.18696219589765e-7)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ:yaw", "xformOp:rotateY", "xformOp:rotateX", "xformOp:scale"]
+
+        def Xform "model" (
+            prepend references = @./syringe/syringe.usdc@
+        )
+        {
+        }
+    }
+}
+
