@@ -28,20 +28,23 @@ def tilt(quat_xyzw) -> float:
     return math.acos(max(-1.0, min(1.0, float(rotation(quat_xyzw)[2, 2]))))
 
 
-def seated_on(cap_pos, cap_quat, stub: int) -> bool:
+def seated_on(cap_pos, cap_quat, stub: int, jaws=None) -> bool:
     """Whether a cap (its origin is on the bore axis at the mouth) is seated on stub ``stub``: the bar is at least
-    SEAT_INSIDE_MIN inside the bore, the bore axis within SEAT_OFFSET_MAX of the bar's, and the cap within SEAT_TILT_MAX
-    of upright. A cap whose mouth is above the bar tip, or off to the side, is not on the bar."""
+    SEAT_INSIDE_MIN up the bore, both gripping fins are pushed out at least JAW_ENGAGED by the bar (``jaws`` is their two
+    displacements; None skips the check, for the unit tests), the bore axis is within SEAT_OFFSET_MAX of the bar's, and the
+    cap is within SEAT_TILT_MAX of upright. A cap whose mouth is above the bar tip, or off to the side, is not on the bar."""
     x, y, z = (float(v) for v in cap_pos)
     off = math.hypot(x - g.FORM_X, y - g.STUB_Y[stub])
     inside = g.BAR_TOP - z                                # how far the bar's tip is up inside the bore
+    gripped = jaws is None or min(float(jaws[0]), float(jaws[1])) >= g.JAW_ENGAGED
     return bool(off <= g.SEAT_OFFSET_MAX and inside >= g.SEAT_INSIDE_MIN and inside <= g.CAP_BORE_DEPTH + 0.002
-                and tilt(cap_quat) <= g.SEAT_TILT_MAX)
+                and gripped and tilt(cap_quat) <= g.SEAT_TILT_MAX)
 
 
 def capped_stubs(caps: dict) -> list[bool]:
-    """For each of the five stubs: does some cap sit seated on it. ``caps`` maps a cap's name to (pos, quat_xyzw)."""
-    return [any(seated_on(p, q, i) for p, q in caps.values()) for i in range(len(g.STUB_Y))]
+    """For each of the five stubs: does some cap sit seated on it. ``caps`` maps a cap's name to (pos, quat_xyzw[, jaws])."""
+    return [any(seated_on(v[0], v[1], i, v[2] if len(v) > 2 else None) for v in caps.values())
+            for i in range(len(g.STUB_Y))]
 
 
 def arms_clear(tcps) -> bool:

@@ -75,14 +75,24 @@ class TestLogic(unittest.TestCase):
         self.assertTrue(logic.seated_on(*seated(i), i))
         self.assertFalse(logic.seated_on(*seated(i, dx=0.004), i))              # 4 mm off the bar axis
         self.assertTrue(logic.seated_on(*seated(i, dx=0.0025), i))
-        self.assertFalse(logic.seated_on(*seated(i, dz=0.006), i))              # bar only 24 mm up the bore
+        self.assertFalse(logic.seated_on(*seated(i, dz=0.005), i))              # bar only 31 mm up the bore
         self.assertTrue(logic.seated_on(*seated(i, dz=0.003), i))
         self.assertFalse(logic.seated_on(*seated(i, quat=tilted(9)), i))
         self.assertTrue(logic.seated_on(*seated(i, quat=tilted(6)), i))
 
+    def test_a_cap_whose_fins_do_not_grip_the_bar_is_not_seated(self):
+        i = g.BARE[0]
+        pos, quat = seated(i)
+        self.assertTrue(logic.seated_on(pos, quat, i, jaws=(0.001, 0.001)))
+        self.assertFalse(logic.seated_on(pos, quat, i, jaws=(0.001, 0.0002)))      # one fin not pushed out
+        self.assertFalse(logic.seated_on(pos, quat, i, jaws=(0.0, 0.0)))           # right height, nothing between the fins
+        caps = start_caps()
+        caps["cap_loose_1"] = (pos, quat, (0.0, 0.0))
+        self.assertEqual(self.run_steps(caps)["n_capped"], 2)
+
     def test_a_cap_on_its_side_or_perched_on_the_tip_is_not_seated(self):
         i = g.BARE[0]
-        self.assertFalse(logic.seated_on((g.FORM_X, g.STUB_Y[i], g.BAR_TOP - 0.010), UP, i))   # on the tip: 10 mm up
+        self.assertFalse(logic.seated_on((g.FORM_X, g.STUB_Y[i], g.BAR_TOP - 0.010), UP, i))   # on the tip: 10 mm up the funnel
         self.assertFalse(logic.seated_on((g.FORM_X, g.STUB_Y[i], g.TOP + 0.03), tilted(90), i))
 
     def test_one_cap_cannot_count_for_two_stubs(self):

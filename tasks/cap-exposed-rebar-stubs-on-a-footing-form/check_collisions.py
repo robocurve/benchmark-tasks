@@ -2,15 +2,15 @@
 
 Plays every mode's script against the IK, puts both arms' collision hulls (from the URDF) in the world at every control
 step and measures their signed distance to the scene's solids: the table top (z = 0.7475 m), the footing form's floor, the
-five bars (bounding boxes of the cylinders), the three staging pads and every cap (a head box and a stem box), plus the
+five bars (bounding boxes of the cylinders), the three staging pads and every cap (a plate box, a boss box and a body box), plus the
 other arm. A cap is where the plan has put it: on its pad until the jaws close on it, in the hand (left out: pinching it is
-the task; one pad is fixed to the hand and still touches the cap after the jaws open) until the hand has lifted 5 mm,
-seated on its bar after that. The jaws close only as far as the cap's 60 mm head. Every
+the task; one pad is fixed to the hand and still touches the cap after the jaws open) until the hand has lifted 14 mm,
+seated on its bar after that. The jaws close only as far as the cap's 60 mm grip boss. Every
 other pair must keep at least 4 mm.
 
     PYTHONPATH=<yam-isaac-lab-arena checkout> python check_collisions.py [--mode MODE]
 
-Prints the minimum scene clearance of each arm per mode and the closest pair. `settle` (no motion) is not audited.
+Prints the minimum scene clearance of each arm per mode and the closest pair. `settle` (no motion) and `off_target` (it deliberately carries every cap 28 to 52 mm off its bar, into its neighbours) are not audited.
 """
 
 from __future__ import annotations
@@ -47,8 +47,10 @@ def static_obstacles():
 
 
 def cap_boxes(x, y, z_mouth):
-    return {"head": box((x, y, z_mouth + g.CAP_STEM_H + g.CAP_HEAD_H / 2), (g.CAP_HEAD, g.CAP_HEAD, g.CAP_HEAD_H)),
-            "stem": box((x, y, z_mouth + g.CAP_STEM_H / 2), (g.CAP_STEM, g.CAP_STEM, g.CAP_STEM_H))}
+    return {"plate": box((x, y, z_mouth + g.CAP_BODY_H + g.CAP_PLATE_T / 2), (g.CAP_PLATE, g.CAP_PLATE, g.CAP_PLATE_T)),
+            "boss": box((x, y, z_mouth + g.CAP_BODY_H + g.CAP_PLATE_T + g.CAP_BOSS_H / 2),
+                        (g.CAP_BOSS, g.CAP_BOSS, g.CAP_BOSS_H)),
+            "body": box((x, y, z_mouth + g.CAP_BODY_H / 2), (g.CAP_BODY, g.CAP_BODY, g.CAP_BODY_H))}
 
 
 class Ctx:
@@ -58,13 +60,13 @@ class Ctx:
 
 def hulls_of(arm: Arm, closed_once: bool):
     """The arm's hulls in the world; while closing on, holding or letting go of a cap the fingers stay at least half the
-    head's width apart."""
+    boss's width apart."""
     from yam_arena import analysis
     from yam_arena.constants import ARM_JOINTS, FINGER_JOINTS
 
     travel = -FINGER_OPEN * float(arm.grip)
     if closed_once and arm.grip < 0.995:
-        travel = max(travel, g.CAP_HEAD / 2)
+        travel = max(travel, g.CAP_BOSS / 2)
     q = {n: float(v) for n, v in zip(ARM_JOINTS, arm.q, strict=True)}
     q.update({n: -travel for n in FINGER_JOINTS})
     return analysis.world_hulls(analysis.fk_link_poses_world(q, arm.base))
@@ -90,7 +92,7 @@ def trace(mode: str):
                 state[arm.side] = "settling"                    # open, but the fixed pad still touches the cap
                 z_rel[arm.side] = float(arm.pos[2])
                 jobs[arm.side].append(cur[arm.side])
-            elif s == "settling" and float(arm.pos[2]) > z_rel[arm.side] + 0.005:
+            elif s == "settling" and float(arm.pos[2]) > z_rel[arm.side] + 0.014:
                 state[arm.side] = "released"                    # lifted clear of the cap
         if k % STRIDE:
             continue
@@ -160,7 +162,7 @@ def main() -> int:
     a = ap.parse_args()
     ok = True
     scene_min = np.inf
-    for mode in ([a.mode] if a.mode else [m for m in demo.MODES if m != "settle"]):
+    for mode in ([a.mode] if a.mode else [m for m in demo.MODES if m not in ("settle", "off_target")]):
         r = audit(mode)
         scene = min(r["left"][0], r["right"][0])
         scene_min = min(scene_min, scene)

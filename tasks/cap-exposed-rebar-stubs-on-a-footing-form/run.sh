@@ -13,7 +13,7 @@ case "$MODE" in
   dream) exec inspect-robots run --embodiment yam_arena --policy dream \
     -E task=task.py -E object_jitter=0 -E control_hz=20 -E cam_width=320 -E cam_height=176 \
     --instruction "$INSTRUCTION" --scorer task_score --max-steps 2400 --store-frames --log-dir "$OUT/$MODE" ;;
-  demo|one_cap|two_caps|off_target|stay|settle)
+  demo|one_cap|two_caps|off_target|half_press|release_above|stay|settle|pick_test)
     exec python demo.py task.py "$OUT/$MODE" --mode "$MODE" ;;
   *) echo "unknown mode $MODE"; exit 2 ;;
 esac

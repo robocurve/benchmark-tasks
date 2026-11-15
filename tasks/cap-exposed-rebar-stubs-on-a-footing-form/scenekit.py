@@ -109,6 +109,9 @@ def _usd_object(spec: UsdBody):
     if spec.articulation:
         addon["articulation_props"] = sim_utils.ArticulationRootPropertiesCfg(
             solver_position_iteration_count=spec.solver_iters)
+        if spec.torsional_patch:
+            addon["collision_props"] = sim_utils.CollisionPropertiesCfg(
+                torsional_patch_radius=spec.torsional_patch, min_torsional_patch_radius=0.8 * spec.torsional_patch)
     else:
         addon["rigid_props"] = sim_utils.RigidBodyPropertiesCfg(solver_position_iteration_count=spec.solver_iters,
                                                                 kinematic_enabled=spec.mass is None)
