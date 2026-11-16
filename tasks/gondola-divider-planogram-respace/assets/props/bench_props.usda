@@ -1,0 +1,81 @@
+#usda 1.0
+(
+    defaultPrim = "props"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "props"
+{
+    def Xform "barcode_scanner"
+    {
+        float xformOp:rotateX = 0
+        float xformOp:rotateY = 0
+        float xformOp:rotateZ:yaw = 200
+        float3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:translate = (0.6582145776223843, 0.38330066290867815, -7.27596455307733e-11)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ:yaw", "xformOp:rotateY", "xformOp:rotateX", "xformOp:scale"]
+
+        def Xform "model" (
+            prepend references = @./barcode_scanner/barcode_scanner.usdc@
+        )
+        {
+        }
+    }
+
+    def Xform "tape_dispenser"
+    {
+        float xformOp:rotateX = 0
+        float xformOp:rotateY = 0
+        float xformOp:rotateZ:yaw = 75
+        float3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:translate = (0.5599999856065836, -0.2299999961432957, 1.862645149230957e-9)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ:yaw", "xformOp:rotateY", "xformOp:rotateX", "xformOp:scale"]
+
+        def Xform "model" (
+            prepend references = @./tape_dispenser/tape_dispenser.usdc@
+        )
+        {
+        }
+    }
+
+    def Xform "planogram_card"
+    {
+        float xformOp:rotateZ:yaw = -90
+        double3 xformOp:translate = (0.535, -0.06, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ:yaw"]
+
+        def Xform "model" (
+            prepend references = @./planogram_card/planogram_card.usda@
+        )
+        {
+        }
+    }
+
+    def Xform "spare_gloves_0"
+    {
+        float xformOp:rotateZ:yaw = 90
+        double3 xformOp:translate = (0.69, -0.065, 0.028106681145800394)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ:yaw"]
+
+        def Xform "model" (
+            prepend references = @./glove_box.usda@
+        )
+        {
+        }
+    }
+
+    def Xform "spare_gloves_1"
+    {
+        float xformOp:rotateZ:yaw = 94
+        double3 xformOp:translate = (0.69, -0.061, 0.08432004343740118)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ:yaw"]
+
+        def Xform "model" (
+            prepend references = @./glove_box.usda@
+        )
+        {
+        }
+    }
+}
+

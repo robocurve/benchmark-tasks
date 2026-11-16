@@ -1,0 +1,19 @@
+#usda 1.0
+(
+    defaultPrim = "glove_box"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "glove_box"
+{
+    double3 xformOp:translate = (-0, -0, -0.02808396976433869)
+    uniform token[] xformOpOrder = ["xformOp:translate"]
+
+    def Xform "model" (
+        prepend references = @./glove_box_model/glove_box_model.usdc@
+    )
+    {
+    }
+}
+

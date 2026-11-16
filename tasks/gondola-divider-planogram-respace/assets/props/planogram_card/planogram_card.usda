@@ -1,0 +1,80 @@
+#usda 1.0
+(
+    defaultPrim = "card"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "card"
+{
+    def Mesh "face" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        float3[] extent = [(-0.074, -0.0525, 0.0005), (0.074, 0.0525, 0.0005)]
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </card/Looks/laminated_card>
+        point3f[] points = [(-0.074, -0.0525, 0.0005), (0.074, -0.0525, 0.0005), (0.074, 0.0525, 0.0005), (-0.074, 0.0525, 0.0005)]
+        texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1)] (
+            interpolation = "vertex"
+        )
+    }
+
+    def Cube "body" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </card/Looks/card_edge>
+        double size = 1
+        float3 xformOp:scale = (0.148, 0.105, 0.0005)
+        double3 xformOp:translate = (0, 0, 0.0002)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def "Looks"
+    {
+        def Material "laminated_card"
+        {
+            token outputs:surface.connect = </card/Looks/laminated_card/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                float inputs:clearcoat = 0.6
+                color3f inputs:diffuseColor.connect = </card/Looks/laminated_card/tex.outputs:rgb>
+                float inputs:roughness = 0.35
+                token outputs:surface
+            }
+
+            def Shader "st"
+            {
+                uniform token info:id = "UsdPrimvarReader_float2"
+                token inputs:varname = "st"
+                float2 outputs:result
+            }
+
+            def Shader "tex"
+            {
+                uniform token info:id = "UsdUVTexture"
+                asset inputs:file = @./Textures/planogram_card.png@
+                token inputs:sourceColorSpace = "sRGB"
+                float2 inputs:st.connect = </card/Looks/laminated_card/st.outputs:result>
+                color3f outputs:rgb
+            }
+        }
+
+        def Material "card_edge"
+        {
+            token outputs:surface.connect = </card/Looks/card_edge/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.92, 0.92, 0.9)
+                token outputs:surface
+            }
+        }
+    }
+}
+
