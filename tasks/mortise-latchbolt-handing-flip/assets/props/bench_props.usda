@@ -1,0 +1,42 @@
+#usda 1.0
+(
+    defaultPrim = "props"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "props"
+{
+    def Xform "pliers"
+    {
+        float xformOp:rotateX = 0
+        float xformOp:rotateY = 0
+        float xformOp:rotateZ:yaw = 5
+        float3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:translate = (0.1858077873128151, -0.058574493492064825, -0.00034794583916664124)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ:yaw", "xformOp:rotateY", "xformOp:rotateX", "xformOp:scale"]
+
+        def Xform "model" (
+            prepend references = @./pliers/pliers.usdc@
+        )
+        {
+        }
+    }
+
+    def Xform "hammer"
+    {
+        float xformOp:rotateX = 0
+        float xformOp:rotateY = 0
+        float xformOp:rotateZ:yaw = 30
+        float3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:translate = (0.6250423578451504, 0.1749253078567541, -0.00033967848867177963)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ:yaw", "xformOp:rotateY", "xformOp:rotateX", "xformOp:scale"]
+
+        def Xform "model" (
+            prepend references = @./hammer/hammer.usdc@
+        )
+        {
+        }
+    }
+}
+
