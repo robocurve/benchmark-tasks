@@ -66,7 +66,7 @@ def test_milestone_is_kept_after_dropping_back():
 def test_closed_and_latched_succeeds_after_one_second():
     frames = [_sash(90)] + [_sash(0.4)] * 39          # still over 1 s (20 steps), then that held for 1 s
     assert _run(frames) == (1.0, True)
-    assert _run(frames[:-1]) == (0.75, True)          # success, but not yet held for 1 s
+    assert _run(frames[:-1]) == (0.75, False)         # not yet held for 1 s, so no success
     assert _run([_sash(90)] + [_sash(0.4)] * 5) == (0.75, False)         # not yet still for a second
     assert _run([_sash(90)] + [_sash(-0.9)] * 39) == (1.0, True)         # against the upper sash
 
