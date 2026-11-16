@@ -1,0 +1,21 @@
+{
+  "title": "Turn a revolving countertop display round and restock its two empty back pockets",
+  "category": "Impact on jobs",
+  "keywords": [
+    "retail",
+    "stocking",
+    "revolving display",
+    "turntable",
+    "bimanual",
+    "hold still"
+  ],
+  "instruction": "Restock the two empty pockets of the revolving display with the two boxed chargers on the counter.",
+  "context": "Stockers and order fillers (O*NET 53-7065.00, about 2.8 million US workers) restock store racks and displays, among them the revolving displays of boxed goods at checkouts. The empty side faces away, out of reach behind the stocked side, and the display turns freely on its bearing: it has to be turned half a turn by hand, then held still with one hand while the other lowers each box into its close-fitting pocket, or a box catching a pocket wall turns the display away.",
+  "setup": "Positions in cm from the midpoint between the two arm bases, on the counter top (x forward, y to the robot's left). One four-sided revolving countertop display, black powder-coated steel: a 32 x 32 x 2 cm weighted base (3.0 kg, rubber feet) centred at (35, 0), square to the arms, and on it a 30 x 30 cm turntable (1 cm deck, its top 3 cm above the counter) that turns freely about the vertical through the base's centre. On the turntable: a 17 x 17 cm central column 9.5 cm tall with a red band near its top; on each of the four sides a row of two pockets, each 8.0 cm wide along the side and 4.5 cm deep, inside 3 mm walls 6 cm tall, from the column out to 13.3 cm from the axis; and a 16 mm round steel upright 6 cm tall at each corner, centred 13.5 cm from the axis in x and in y. The turntable with its stock weighs 1.75 kg. Every pocket holds one boxed USB charger standing upright, its 7 cm side along the row, except the two on the side facing away from the arms (+x), which are empty (their centres 45.75 cm in front of the arms, 4.15 cm either side of the centre line). Two loose boxed chargers, white printed card cartons with a blue band, 7.0 x 3.5 x 11.0 cm, 150 g, stand upright on the counter centred at (15, 22) and (15, -22), their 7 cm side along y.",
+  "scoring": "Measured with a ruler and a photo, relative to the turntable (turning or sliding the whole display is allowed). 0 if the display was at any point tipped more than 20 degrees (knocked over). Otherwise: 1.0 if each of the two formerly empty pockets holds a box seated in it (the box's centre within 6 mm of the pocket's centre both across and along the row, its bottom within 8 mm of the deck, upright within 10 degrees) and both boxes are still (moving less than 1 mm over the last 1 s), and this has held for 1 s; 0.75 if both pockets hold a seated box but that has not held for 1 s; 0.5 if one of the two pockets holds a seated box; 0.25 if neither does but the display has been turned so the empty side faces the arms (its outward direction within 20 degrees of pointing straight at them); else 0.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lift the two boxes out of the pockets and stand them back on their marked outlines; turn the display back so the empty side faces away from the arms (its base on its marked outline).",
+  "fidelity": "Rigid boxes and cylinders at full size; the frame is solid plates where a real one is often wire. The turntable is one body on a revolute joint with no stops and 0.05 N m s/rad of drag (a ball-bearing lazy-susan plate), on a 3 kg base on rubber feet (friction 0.8). The six stocked boxes are part of the turntable, so they cannot be taken out. Card friction 0.5. Light angular damping is added to the parts. No contact force cap in simulation.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-VQ23AF"
+}
