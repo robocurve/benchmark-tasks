@@ -85,7 +85,8 @@ The demo runs open loop: it reads no simulator state. The arms are compliant and
 so where a supply ends up after a move and the small corrections in step 2 were measured once with
 `DEMO_CALIBRATE=1 python demo.py task.py cal_out --no-record` (which runs the same moves closed loop on the
 simulator's poses and prints the numbers) and are fixed in `CAL` in `demo.py`. The layout is fixed and the
-simulation deterministic. The demo reaches 1.0 (success) at step 1,131 (57 s).
+simulation deterministic. The demo reaches the full score of 1.0 at step 1,131 (57 s); `success()` is true from that
+step and the episode ends with success at step 1,150, after the runtime's 1 s hold.
 
 ## Scoring
 
