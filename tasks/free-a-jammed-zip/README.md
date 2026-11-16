@@ -30,10 +30,50 @@ check and is explicitly excluded from submission evidence.
 
 ## Setup
 
-A 300 x 280 x 36 mm fabric washbag rests flat, weighted by its contents. Its 200 mm coil zip runs front to back, with a 10 x 13 mm slider and 8 x 25 mm pull tab. A yellow polyester lining flap, 140 x 60 x 0.4 mm, is caught at the left entrance of the slider. The two remote corners remain sewn to the bag. All starting positions are fixed by the setup image and model.py.
+Use a 300 × 280 × 36 mm woven-polyester washbag with a non-locking nylon-coil
+zip: 200 mm working travel, approximately 10 × 13 mm slider and 8 × 25 mm pull.
+Keep the same bag and zip for all compared trials. Do not glue down the bag.
 
-The setup image and constants in `model.py` fix positions in metres. Restore
-the photographed starting arrangement and open both hands before each trial.
+### Preparation and reset
+
+1. Weigh two sealed flat pouches of dry rice to **500 ± 5 g each**, including
+   their packaging. Each is approximately 100 × 240 × 30 mm. Put them flat,
+   lengthwise, one each side of the zip with their centres 75 mm from its line.
+   Smooth the bag over them; keep a 50 mm central channel clear of contents.
+   Nothing is loose inside the zip. Total contents: **1,000 ± 10 g**.
+2. Cut a **140 × 60 mm** flap of yellow, non-stretch woven polyester,
+   **0.4 ± 0.1 mm** thick. Hem or heat-seal its edges before attachment. With
+   its 140 mm direction perpendicular to the zip, sew a 5 mm-wide bar tack
+   through each remote corner, 60 mm apart, to the bag lining. Use ordinary
+   polyester sewing thread and five passes per tack. Leave the rest free;
+   do not sew the edge beside the slider. The two attachments correspond to
+   `model.py` vertices 0 and 6. Replace the flap if its weave or seams are damaged.
+3. Mark the initial slider position, **125 mm from the lower travel stop**.
+   Mark two travel-check positions 25 mm below and 45 mm above it. Put the flap
+   flat to the left, with its free edge centred 8 mm above the slider centre,
+   as in the setup image. Draw a short line 6 mm in from that edge.
+4. With the zip open, introduce the free edge into the slider's **left entry**
+   and advance the slider gently to its initial mark. The caught depth is
+   **6 ± 1 mm**, measured from that entry lip to the fabric edge; the 6 mm line
+   is visible at the lip. Do not knot, glue or puncture the fabric, or jam the
+   slider with another object. Photograph the ruler and caught edge.
+5. Check the snag using a **0–10 N spring balance** attached to the pull tab.
+   Apply 2 N along the closing direction for 2 seconds: slider movement must
+   be at most 2 mm and bag movement at most 2 mm. Reverse the slider 5 mm:
+   that must be possible at no more than 2 N, without damage. A free-running
+   slider, an immovable hard jam or a moving bag is an invalid reset.
+6. Restore the same caught depth and initial mark after the reverse check;
+   repeat the forward 2 N check, then remove the balance. Open both robot hands.
+   Record bag/zip identity, mass, depth and displacement. Start only with the
+   stated geometry and checks satisfied. If it fails, remake the snag; do not
+   change the fabric, add hidden restraints or increase the test force mid-series.
+
+A ruler, kitchen scale and spring balance are operator preparation tools and
+are removed before the trial. The reusable material takes a few minutes to
+reset; sewing is a one-time preparation. The simulator represents the loaded
+bag as fixed and approximates the snag by a compressive friction rule. The
+physical 2 N check standardizes preparation; it is **not** a claim that the
+simulation's friction has been calibrated to this bag.
 
 ## Judging
 
@@ -73,3 +113,11 @@ For CPU-only replay of the supplied evidence, install NumPy and SciPy and run:
 python tasks/free-a-jammed-zip/replay_evidence.py demo
 python tasks/free-a-jammed-zip/replay_evidence.py dream
 ```
+
+## Revision of 16 November 2026
+
+Added the contents, lining attachment and repeatable snag/reset protocol requested
+in PR #2355. The instruction, scene, material, controller, scorer and native
+recordings are unchanged. Both published traces were independently replayed
+again; the existing media therefore still shows the simulated starting condition.
+The physical preparation is a specified protocol, not an already-run hardware trial.
