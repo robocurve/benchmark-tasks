@@ -1,16 +1,15 @@
 {
-  "status": "fixed_head_cpu_usd_verified_native_pending",
-  "date": "2026-11-15",
-  "local_model_tests_passed": 42,
+  "status": "fixed_opposite_head_native_verified_power_on_lift_incomplete",
+  "date": "2026-11-16",
+  "local_model_tests_passed": 53,
   "native_runtime": true,
   "demo_score": null,
   "video": null,
   "remaining": [
-    "Validate the fixed-world head mount under native contact and every-row head-motion limits",
-    "Complete real switch actuation and dryer pickup",
-    "Manipulate and expose every hair surface with live airflow",
-    "Power off, park and release after all patches dry",
-    "Validate material parameters and full scored demo"
+    "Redesign the measured dryer-holder egress path/grasp without collisions or saturated joint targets",
+    "Native loaded sweep, lower/inner hair access and all240patch drying",
+    "Calibrate passive bundles and airflow/thermal approximations",
+    "Full-score feedback-free demo, genuine Dream attempt and media"
   ],
   "native_mechanics_probe": {
     "run": "hair-native-001",
@@ -24,7 +23,7 @@
     "segments_per_lock": 5,
     "passive_articulation": true,
     "actuated_hair_joints": false,
-    "head_mount": "world FixedJoint on ordinary stand; HEAD/identity rest frame",
+    "head_mount": "world FixedJoint on ordinary stand; HEAD/180-degree yaw rest frame (XYZW 0,0,1,0)",
     "head_swivel_dof": false,
     "passive_hair_dofs": 60
   },
@@ -92,5 +91,32 @@
       "thermal/moistureparameters",
       "dryingthresholds"
     ]
+  },
+  "opposite_head_revision": {
+    "native_validated": false,
+    "quaternion_xyzw": [
+      0,
+      0,
+      1,
+      0
+    ],
+    "nose_direction_world": [
+      1,
+      0,
+      0
+    ],
+    "all_hair_and_skin_frames_rotated": true,
+    "head_actuation": false,
+    "usd_fixed_frame_tests_passed": 8,
+    "partial_sweep_bands": 2,
+    "partial_sweep_native_validated": false,
+    "full_drying_controller": false
+  },
+  "native_full_demo_verified": false,
+  "latest_native": {
+    "orientation": "hair-opposite-orientation-002:180rows/9s,headtranslation4.22e-7m/rotation3.41e-5deg,nose+X",
+    "switch": "PhysicalsliderONretainedafterfingerwithdrawal",
+    "sweep": "hair-opposite-sweep-002:813rows/40.65s,failedlift,0drying,unscored",
+    "trace_sha256": "13fa63aa7e0b893a45e043decf2ad84e1e66777bcd5b5f9838b5712c6418ddb9"
   }
 }

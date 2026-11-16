@@ -45,13 +45,13 @@ def export(path,name):
  s.GetRootLayer().Save();return str(Path(path).resolve())
 def install_joints(s,parent,include_dryer=True):
  # The ordinary stand fixes the mannequin head to the world. The head's
- # declared HEAD/identity rest pose is physical, never maintained by pose writes.
- pivot=UsdPhysics.FixedJoint.Define(s,parent+'/head/neck_bearing');pivot.CreateBody1Rel().SetTargets([parent+'/head']);pivot.CreateLocalPos0Attr(Gf.Vec3f(HEAD[0],HEAD[1],TOP+.12));pivot.CreateLocalPos1Attr(Gf.Vec3f(0,0,TOP+.12-HEAD[2]));pivot.CreateLocalRot0Attr(Gf.Quatf(1.));pivot.CreateLocalRot1Attr(Gf.Quatf(1.));pivot.CreateExcludeFromArticulationAttr(True)
+ # declared HEAD/HEAD_QUAT rest pose is physical, never maintained by pose writes.
+ pivot=UsdPhysics.FixedJoint.Define(s,parent+'/head/neck_bearing');pivot.CreateBody1Rel().SetTargets([parent+'/head']);pivot.CreateLocalPos0Attr(Gf.Vec3f(HEAD[0],HEAD[1],TOP+.12));pivot.CreateLocalPos1Attr(Gf.Vec3f(0,0,TOP+.12-HEAD[2]));pivot.CreateLocalRot0Attr(Gf.Quatf(HEAD_QUAT[3],Gf.Vec3f(*HEAD_QUAT[:3])));pivot.CreateLocalRot1Attr(Gf.Quatf(1.));pivot.CreateExcludeFromArticulationAttr(True)
  for k in range(LOCKS):
   for n in range(SEGMENTS):
    child=f'{parent}/hair_{k}_{n}';child_q=segment_quat(k,n)
    if n:parent_name=f'{parent}/hair_{k}_{n-1}';parent_pos=segment(k,n-1);parent_q=segment_quat(k,n-1)
-   else:parent_name=parent+'/head';parent_pos=HEAD;parent_q=(0.,0.,0.,1.)
+   else:parent_name=parent+'/head';parent_pos=HEAD;parent_q=HEAD_QUAT
    anchor=points(k)[n];a0=rotate(conjugate(parent_q),tuple(x-y for x,y in zip(anchor,parent_pos)));a1=rotate(conjugate(child_q),tuple(x-y for x,y in zip(anchor,segment(k,n))));relative=multiply(conjugate(child_q),parent_q)
    j=UsdPhysics.RevoluteJoint.Define(s,child+'/bend_'+str(k)+'_'+str(n));j.CreateBody0Rel().SetTargets([parent_name]);j.CreateBody1Rel().SetTargets([child]);j.CreateAxisAttr('X' if (k+n)%2 else 'Y');j.CreateExcludeFromArticulationAttr(True);j.CreateCollisionEnabledAttr(n == 0);j.CreateLocalPos0Attr(Gf.Vec3f(*a0));j.CreateLocalPos1Attr(Gf.Vec3f(*a1));j.CreateLocalRot1Attr(Gf.Quatf(relative[3],Gf.Vec3f(*relative[:3])));j.CreateLowerLimitAttr(-70.);j.CreateUpperLimitAttr(70.)
    d=UsdPhysics.DriveAPI.Apply(j.GetPrim(),'angular');d.CreateTypeAttr('force');d.CreateTargetPositionAttr(0.);d.CreateStiffnessAttr(.00006);d.CreateDampingAttr(.000015)
@@ -77,9 +77,7 @@ def export_hair(path):
  assets={name:export(directory/(name+'.usda'),name) for name in names}
  s=Usd.Stage.CreateNew(str(path));UsdGeom.SetStageMetersPerUnit(s,1.);UsdGeom.SetStageUpAxis(s,'Z');rootprim=UsdGeom.Xform.Define(s,'/Mannequin');s.SetDefaultPrim(rootprim.GetPrim())
  for name in names:
-  prim=UsdGeom.Xform.Define(s,'/Mannequin/'+name);prim.GetPrim().GetReferences().AddReference(assets[name]);pos=HEAD if name=='head' else segment(*map(int,name.split('_')[1:]));prim.AddTranslateOp().Set(Gf.Vec3d(*pos))
-  if name!='head':
-   q=segment_quat(*map(int,name.split('_')[1:]));prim.AddOrientOp().Set(Gf.Quatf(q[3],Gf.Vec3f(*q[:3])))
+  prim=UsdGeom.Xform.Define(s,'/Mannequin/'+name);prim.GetPrim().GetReferences().AddReference(assets[name]);pose_hair_body(prim,name)
  install_joints(s,'/Mannequin',include_dryer=False)
  for prim in s.Traverse():
   if prim.IsA(UsdPhysics.Joint) and prim.GetName().startswith('bend_'):UsdPhysics.Joint(prim).GetExcludeFromArticulationAttr().Set(False)
@@ -91,3 +89,11 @@ def install_skin_attachment(stage,parent):
  j=UsdPhysics.FixedJoint.Define(stage,parent+'/scalp_collision/skin_attachment')
  j.CreateBody0Rel().SetTargets([parent+'/mannequin/head']);j.CreateBody1Rel().SetTargets([parent+'/scalp_collision'])
  j.CreateLocalPos0Attr(Gf.Vec3f(0,0,0));j.CreateLocalPos1Attr(Gf.Vec3f(0,0,0));j.CreateCollisionEnabledAttr(False);j.CreateExcludeFromArticulationAttr(True)
+
+
+def pose_hair_body(prim,name):
+ """Author each rest body in the same declared head frame (USD XYZW)."""
+ pos=HEAD if name=='head' else segment(*map(int,name.split('_')[1:]))
+ q=HEAD_QUAT if name=='head' else segment_quat(*map(int,name.split('_')[1:]))
+ prim.AddTranslateOp().Set(Gf.Vec3d(*pos))
+ prim.AddOrientOp().Set(Gf.Quatf(q[3],Gf.Vec3f(*q[:3])))

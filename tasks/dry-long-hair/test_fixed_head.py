@@ -6,12 +6,12 @@ import sys
 import types
 import unittest
 from unittest.mock import patch
-from config import HEAD,TOP,LOCKS,SEGMENTS
+from config import HEAD,HEAD_QUAT,TOP,LOCKS,SEGMENTS,multiply,rotate,root_local,segment_quat,segment
 from scoring import HairScorer,measured_head_motion
 
 
 def sample(time=0.,**changes):
- result=dict(time=time,head_pose=[*HEAD,0.,0.,0.,1.],root_separation=0.,min_height=.1,
+ result=dict(time=time,head_pose=[*HEAD,*HEAD_QUAT],root_separation=0.,min_height=.1,
              dry_fraction=0.,worst_remaining_water_fraction=1.,max_temperature_C=25.,dryer_speed=0.,
              power_on=True,water_removed_step_kg=1e-7,dryer_parked=False,hands_clear=False)
  result.update(changes)
@@ -37,7 +37,7 @@ class FixedHeadScoringTests(unittest.TestCase):
  def test_rotation_over1deg_all_axes_invalidates_despite_zero_translation(self):
   for axis in range(3):
    for angle,invalid in ((.999999,False),(1.000001,True),(180.,True)):
-    s=sample(dry_fraction=1.);a=math.radians(angle)/2;s['head_pose'][3+axis]=math.sin(a);s['head_pose'][6]=math.cos(a)
+    s=sample(dry_fraction=1.);a=math.radians(angle)/2;delta=[0.,0.,0.,math.cos(a)];delta[axis]=math.sin(a);s['head_pose'][3:]=multiply(HEAD_QUAT,delta)
     m=HairScorer().update(s);self.assertEqual(m['invalid'] is not None,invalid)
     if invalid:self.assertEqual(m['score'],0.)
 
@@ -50,7 +50,7 @@ class FixedHeadScoringTests(unittest.TestCase):
  def test_reference_is_declared_world_pose_and_quaternion_sign_is_equivalent(self):
   scorer=HairScorer();s=sample();s['head_pose'][0]+=.02
   self.assertIn('translated',scorer.update(s)['invalid']) # first sample cannot rebase
-  for q in ([0.,0.,0.,1.],[0.,0.,0.,-1.],[0.,0.,0.,.99999999]):
+  for q in (HEAD_QUAT,tuple(-v for v in HEAD_QUAT),tuple(v*.99999999 for v in HEAD_QUAT)):
    m=measured_head_motion([*HEAD,*q]);self.assertTrue(m['head_pose_valid']);self.assertEqual(m['head_translation_m'],0.);self.assertEqual(m['head_rotation_deg'],0.)
 
 
@@ -77,18 +77,38 @@ class FixedHeadUsdTests(unittest.TestCase):
   with patch.dict(sys.modules,modules):spec.loader.exec_module(cls.native)
 
  def stage(self):
-  stage=Usd.Stage.CreateInMemory();head=UsdGeom.Xform.Define(stage,'/Env/mannequin/head');head.AddTranslateOp().Set(Gf.Vec3d(*HEAD));UsdPhysics.RigidBodyAPI.Apply(head.GetPrim())
+  stage=Usd.Stage.CreateInMemory();head=UsdGeom.Xform.Define(stage,'/Env/mannequin/head');self.native.pose_hair_body(head,'head');UsdPhysics.RigidBodyAPI.Apply(head.GetPrim())
   self.native.install_joints(stage,'/Env/mannequin',include_dryer=False)
   return stage
 
- def test_world_fixed_mount_has_rest_anchor_identity_and_no_yaw_dof(self):
+ def test_world_fixed_mount_has_declared_rest_rotation_and_no_yaw_dof(self):
   stage=self.stage();p=stage.GetPrimAtPath('/Env/mannequin/head/neck_bearing');self.assertTrue(p.IsA(UsdPhysics.FixedJoint));self.assertFalse(p.IsA(UsdPhysics.RevoluteJoint));j=UsdPhysics.FixedJoint(p)
   self.assertEqual(j.GetBody0Rel().GetTargets(),[]);self.assertEqual([str(x)for x in j.GetBody1Rel().GetTargets()],['/Env/mannequin/head']);self.assertTrue(j.GetExcludeFromArticulationAttr().Get())
   a0=j.GetLocalPos0Attr().Get();a1=j.GetLocalPos1Attr().Get()
   for i in range(3):self.assertAlmostEqual(a0[i],HEAD[i]+a1[i],places=6)
   self.assertAlmostEqual(a0[2],TOP+.12,places=6)
-  self.assertEqual(j.GetLocalRot0Attr().Get(),Gf.Quatf(1.));self.assertEqual(j.GetLocalRot1Attr().Get(),Gf.Quatf(1.))
+  self.assertEqual(j.GetLocalRot0Attr().Get(),Gf.Quatf(HEAD_QUAT[3],Gf.Vec3f(*HEAD_QUAT[:3])));self.assertEqual(j.GetLocalRot1Attr().Get(),Gf.Quatf(1.))
   attrs={a.GetName()for a in p.GetAuthoredAttributes()};self.assertNotIn('physics:axis',attrs);self.assertNotIn('physics:lowerLimit',attrs);self.assertNotIn('physics:upperLimit',attrs)
+
+
+ def test_opposite_nose_root_and_fixed_mount_share_one_world_frame(self):
+  stage=self.stage();cache=UsdGeom.XformCache()
+  head=stage.GetPrimAtPath('/Env/mannequin/head');world=cache.GetLocalToWorldTransform(head)
+  nose=world.Transform(Gf.Vec3d(-.065,0,0))
+  self.assertAlmostEqual(nose[0],HEAD[0]+.065,places=7)
+  self.assertAlmostEqual(nose[1],HEAD[1],places=7)
+  for k in range(LOCKS):
+   j=UsdPhysics.RevoluteJoint.Get(stage,f'/Env/mannequin/hair_{k}_0/bend_{k}_0')
+   # USD local root offset must remain head-local: applying the new head
+   # orientation once gives the rotated segment endpoint, never twice.
+   root=world.Transform(Gf.Vec3d(*j.GetLocalPos0Attr().Get()))
+   expected=tuple(c+d for c,d in zip(HEAD,rotate(HEAD_QUAT,root_local(k))))
+   for a,b in zip(root,expected):self.assertAlmostEqual(a,b,places=7)
+   hair=UsdGeom.Xform.Define(stage,f'/Env/mannequin/hair_{k}_0')
+   self.native.pose_hair_body(hair,f'hair_{k}_0')
+   childworld=UsdGeom.XformCache().GetLocalToWorldTransform(hair.GetPrim())
+   childroot=childworld.Transform(Gf.Vec3d(*j.GetLocalPos1Attr().Get()))
+   for a,b in zip(root,childroot):self.assertAlmostEqual(a,b,places=7)
 
  def test_all60_passive_bends_and_separate_skin_attachment_remain(self):
   stage=self.stage();bends=[p for p in stage.Traverse()if p.IsA(UsdPhysics.RevoluteJoint)]

@@ -1,6 +1,9 @@
 """Explicit coarse bundle/airflow parameters, not a calibrated fibre model."""
 TOP=.7475
 HEAD=(.43,0.,1.045)
+# User-facing rest frame: yaw180 from the original nose-to-world-minus-X pose.
+# Exact XYZW quaternion avoids a nearly-zero scalar ambiguity at pi.
+HEAD_QUAT=(0.,0.,1.,0.)
 HEAD_RADIUS=.065
 LOCKS=12
 SEGMENTS=5
@@ -21,26 +24,28 @@ SWITCH_TRAVEL=.004
 SWITCH_DETENT_STIFFNESS=100.  # N/m
 SWITCH_DETENT_DAMPING=.05    # N s/m
 
-def points(k):
+def points_local(k):
  import math
  a=-2.12+4.24*k/(LOCKS-1)
  phi=math.radians(35. if k%2==0 else 60.)
  radius=(HEAD_RADIUS+.011)*math.sin(phi)
- z=HEAD[2]+(HEAD_RADIUS+.011)*math.cos(phi)
- result=[(HEAD[0]+radius*math.cos(a),radius*math.sin(a),z)]
+ z=(HEAD_RADIUS+.011)*math.cos(phi)
+ result=[(radius*math.cos(a),radius*math.sin(a),z)]
  for j in range(SEGMENTS):
   next_radius=.080 if j<2 or k%2 else .058
   dr=next_radius-radius
   if abs(dr)>=LENGTH:raise ValueError('invalid rest strand segment')
   z-=math.sqrt(LENGTH*LENGTH-dr*dr);radius=next_radius
-  result.append((HEAD[0]+radius*math.cos(a),radius*math.sin(a),z))
+  result.append((radius*math.cos(a),radius*math.sin(a),z))
  return result
 
+def points(k):return [tuple(c+d for c,d in zip(HEAD,rotate(HEAD_QUAT,p))) for p in points_local(k)]
+def root_local(k):return points_local(k)[0]
 def root(k):return points(k)[0]
 def segment(k,j):return tuple((a+b)/2 for a,b in zip(points(k)[j],points(k)[j+1]))
 def segment_quat(k,j):
  import math
- a,b=points(k)[j:j+2];t=[(x-y)/LENGTH for x,y in zip(a,b)];q=(-t[1],t[0],0.,1+t[2]);n=math.sqrt(sum(x*x for x in q));return tuple(x/n for x in q)
+ a,b=points_local(k)[j:j+2];t=[(x-y)/LENGTH for x,y in zip(a,b)];q=(-t[1],t[0],0.,1+t[2]);n=math.sqrt(sum(x*x for x in q));return multiply(HEAD_QUAT,tuple(x/n for x in q))
 def conjugate(q):return (-q[0],-q[1],-q[2],q[3])
 def multiply(a,b):
  x,y,z,w=a;X,Y,Z,W=b

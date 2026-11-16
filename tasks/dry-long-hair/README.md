@@ -1,6 +1,6 @@
 # Dry long hair evenly with a handheld dryer
 
-**Incomplete feedback draft:** see [DRAFT_STATUS.md](DRAFT_STATUS.md) for current measured evidence and missing work. No full-score demo or competition-ready submission is claimed.
+**Incomplete feedback draft:** [DRAFT_STATUS.md](DRAFT_STATUS.md) records current proof and missing work. No full completion is claimed.
 
 Native mechanics and controller under development; no complete drying demo yet.
 
@@ -20,8 +20,10 @@ Drying must depend on measured dryer position/direction, switch state,
 airflow attenuation/occlusion, distance, exposure and local moisture. Merely
 sweeping a target trajectory cannot flip hair regions to dry. Test front-only
 exposure, hidden inner layers, near/far operation, no airflow, manipulation,
-and released stable hair. Exact moisture/heat thresholds and task allowance
-remain unset until the model and native reach/access probes are established.
+and released stable hair. Current candidate conditions require at least90% water removal on every one
+of240 patches, temperature at most50C, power off and released parking. These
+limits remain unchanged; a demonstrated full-task allowance remains pending
+model and native reach/access validation.
 
 Native geometry, thermal/occlusion kernels and incomplete robot probes now exist. No complete drying score, demo or submission readiness is claimed.
 DYMO-Hair is relevant prior work on hair dynamics/manipulation, not proof that
@@ -30,7 +32,11 @@ this implementation can model or complete drying. See the batch record.
 ## Current implementation and probes
 
 The mannequin head is fixed to its ordinary stand by a passive world fixed
-joint at its declared HEAD position and identity orientation. It cannot swivel
+joint at its declared HEAD position and 180-degree yaw orientation
+(`HEAD_QUAT=(0,0,1,0)`, XYZW). The nose now points world+X, opposite
+the earlier prototype. Hair centres, cross-section/bending frames, scalp
+attachment, fixed-joint rest frame, native reset and scorer reference all
+use this same physical frame. It cannot swivel
 for coverage: only the arms/dryer and the flexible hair locks may move. The
 sixty passive hair bending joints remain free; no head motor, kinematic pose
 write or reset loop maintains the mount. This fixed-head revision has CPU/USD
@@ -39,7 +45,9 @@ accessible below; no extra grasp handles are added. The real handle slider
 sets power from measured travel. The robot braces the handle, pushes the
 slider using measured phase gates, confirms retained power after horizontal
 retraction, and verifies actual dryer lift. It then holds the powered dryer;
-full drying motion remains unimplemented.
+the optional `sweep-probe` then executes a bounded upper-layer raster.
+This is a partial motion diagnostic, not a full drying controller: lower/inner
+layer access, complete switch-off and released parking still need work.
 
 `airflow.py` traces from the measured nozzle to four surface quadrants on every
 hair segment. The scalp and other measured capsule locks can occlude airflow.
@@ -51,12 +59,17 @@ calibration. Heat, moisture and drag values remain uncalibrated.
 The hair model is a coarse bundle approximation, not individual-fibre CFD.
 
 ```bash
+# First check: 9 simulated seconds, both arms READY, passive hair/gravity only.
+/data/IsaacLab-Arena/.venv/bin/python run.py --mode orientation-check --no-video --out /path/to/new-opposite-head-check
+/data/IsaacLab-Arena/.venv/bin/python run.py --mode sweep-probe --no-video --out /path/to/new-upper-layer-sweep
 /data/IsaacLab-Arena/.venv/bin/python run.py --mode dynamics --out /path/to/new-probe
 /data/IsaacLab-Arena/.venv/bin/python run.py --mode power-probe --out /path/to/new-attempt
 /data/IsaacLab-Arena/.venv/bin/python run.py --mode slider-coupon --out /path/to/new-slider-coupon
 ```
 
-All modes are unscored diagnostics. Power-only runs report any scorer readback
+The optional `--no-video` disables policy/review cameras and image encoding;
+outputs are explicitly state-only, media-ineligible diagnostics. No RGB or
+successful demo is fabricated. All modes are unscored diagnostics. Power-only runs report any scorer readback
 separately; operating and lifting the dryer does not demonstrate complete drying.
 
 ### Passive slider retention candidate
@@ -190,3 +203,32 @@ its topology tests provide only an unused import namespace and exercise real
 UsdPhysics APIs, not PhysX simulation or mocked constraint behavior. Native
 fixed-head retention remains pending. Older swivel-head traces/videos, including
 hair-power013 (score0, ON retention failure), are historical evidence only.
+
+### Opposite fixed-head revision (CPU only, 2026-11-16)
+
+The first native prerequisite is `orientation-check`: inspect every measured
+head pose against the declared world rest pose (2mm/1degree limits), skin
+attachment and all60 passive root/bend anchors. This check never pushes hair,
+commands the head or moves an object pose. The older swivelling-head013 video
+is not evidence for this version.
+
+`sweep-probe` requires actual switch/pickup gates, then measures the real
+dryer-to-hand transform and preserves the last applied14D entry command.
+It holds the right arm's last command and moves only the left arm/dryer across
+two upper-height bands. Tool/TCP peak speed is bounded to20mm/s and rotation
+to10degrees/s. Live measured power, grasp drift (5mm/5degrees), tracking,
+conservative tool/gripper-to-head/hair/other-gripper clearance (3mm), joint/
+action limits and the original fixed-head scorer remain active. No I boost,
+head motor, pose reset, dry-state shortcut or right-hand lock animation exists.
+The raster has121-sample CPU IK/clearance checks for the nominal held geometry;
+full arm-link swept clearance and loaded native motion remain unverified.
+Lower raster bands fail the current upright wrist IK, so they are deliberately
+not included or credited. Thermal state always comes from measured live
+nozzle geometry/physical switch, with original occlusion, moisture, temperature
+and all240-patch full-score conditions unchanged.
+
+## 2026-11-16 native revision evidence
+
+The head is world-fixed at the opposite-facing rest rotation: the nose points along world +X. The same rigid rotation is applied consistently to the scalp, passive-lock roots, segment frames and scoring reference. Native orientation002 passed 180 controls/9 seconds with head translation below 0.5 micrometres and rotation below 0.00004 degrees. This is a setup/mechanics check, not drying.
+
+Actual-arm attempts physically switched ON and retained power after the finger withdrew, but failed during holder pickup. Sweep002 recorded 813 controls/40.65 seconds; no hair dried. Payload-gravity compensation used ordinary joint targets with unchanged actuator settings, preserved the original grasp reference, and did not resolve the obstruction. A subsequent CPU audit of recorded native poses finds fingertip-carrier overlap with the holder cradle. Candidate egress paths are not native-validated. No full-score demo/model result is claimed.

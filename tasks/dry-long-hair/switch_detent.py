@@ -123,7 +123,7 @@ class NativeDetentBinding:
         # propagates callback errors; no silent 20 Hz fallback is supported.
         from pxr import UsdPhysics
         from isaaclab_physx.physics.physx_manager import IsaacEvents
-        self.manager=base.sim.backend_manager
+        self.manager=base.sim.physics_manager
         joints=[p for p in base.scene.stage.Traverse() if p.GetName()=='power_slider' and p.IsA(UsdPhysics.PrismaticJoint)]
         if len(joints)!=1:raise RuntimeError('expected one native dryer power slider')
         drive=UsdPhysics.DriveAPI(joints[0],'linear');law=DetentLaw()

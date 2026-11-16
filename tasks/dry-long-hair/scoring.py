@@ -1,22 +1,23 @@
 """Measured surface dryness, fixed-head integrity and released finish."""
 import math
-from config import HEAD,MAX_TEMPERATURE
+from config import HEAD,HEAD_QUAT,MAX_TEMPERATURE,conjugate,multiply
 
 MAX_HEAD_TRANSLATION_M=.002
 MAX_HEAD_ROTATION_DEG=1.
 
 
 def measured_head_motion(pose):
- """Native root XYZ/XYZW displacement from declared HEAD/identity, not reset pose."""
+ """Native root XYZ/XYZW displacement from declared HEAD/HEAD_QUAT, not reset pose."""
  invalid={'head_pose_valid':False,'head_translation_m':None,'head_rotation_deg':None}
  try:
   if pose is None or len(pose)!=7 or not all(math.isfinite(v) for v in pose):return invalid
   norm=math.hypot(*pose[3:])
   if norm==0.:return invalid
   translation=math.dist(pose[:3],HEAD)
-  # q and -q represent the same rotation; normalize without assuming native
-  # float32 quaternion norm is exactly one. Identity is the fixed world frame.
-  rotation=math.degrees(2.*math.atan2(math.hypot(*pose[3:6])/norm,abs(pose[6])/norm))
+  # Compare to the declared physical rest frame, never rebase to the first
+  # observation. q and -q remain equivalent under native float32 transport.
+  relative=multiply(conjugate(HEAD_QUAT),tuple(v/norm for v in pose[3:]))
+  rotation=math.degrees(2.*math.atan2(math.hypot(*relative[:3]),abs(relative[3])))
   if not all(math.isfinite(v) for v in (translation,rotation)):return invalid
  except (TypeError,ValueError,OverflowError):return invalid
  return {'head_pose_valid':True,'head_translation_m':translation,'head_rotation_deg':rotation}
