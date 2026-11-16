@@ -7,7 +7,8 @@ from model import WIDTH,HEIGHT
 from crease import physical_bottom_angle,joint_parameters
 
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--out',type=Path,required=True);p.add_argument('--mode',choices=['dynamics','grip-probe','cut-probe','open-probe'],default='dynamics');p.add_argument('--unsealed',action='store_true',help='Explicit unscored starting condition for folding diagnostics');p.add_argument('--no-video',action='store_true',help='State-only engineering run: omit camera sensors/rendering and record exact native poses, without eligible media');a=p.parse_args();
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--out',type=Path,required=True);p.add_argument('--mode',choices=['dynamics','grip-probe','cut-probe','open-probe','turnover-probe','turn-and-cut-probe','setup-check'],default='dynamics');p.add_argument('--bottom-up-start',action='store_true',help='Legacy bottom-up engineering setup, not the revised full task');p.add_argument('--unsealed',action='store_true',help='Explicit unscored starting condition for folding diagnostics');p.add_argument('--no-video',action='store_true',help='State-only engineering run: omit camera sensors/rendering and record exact native poses, without eligible media');a=p.parse_args();
+ if a.mode=='cut-probe' and not a.bottom_up_start:p.error('legacy cut-probe requires explicit --bottom-up-start; full task starts upright')
  if a.mode=='open-probe' and not a.unsealed:p.error('open-probe requires --unsealed and cannot count as task completion')
  a.out=a.out.resolve();a.out.mkdir(parents=True,exist_ok=False);(a.out/'source').mkdir()
  for f in Path(__file__).parent.glob('*.py'):shutil.copy2(f,a.out/'source'/f.name)
@@ -31,7 +32,7 @@ def main():
   wrapper._APP=app;parts,hs=layout();byname={s['name']:s for s in parts};assets={s.name:export(a.out/(s.name+'.usda'),s.name) for s in task.OBJECTS if s.name!='cutter_pad'};original=sc.task_object
   def make(spec):
    if spec.name not in assets:return original(spec)
-   cfg=sim.UsdFileCfg(usd_path=assets[spec.name]);pos,q=starting_pose(byname[spec.name],upright=a.mode=='grip-probe') if spec.name in byname else (spec.pos,(1,0,0,0))
+   cfg=sim.UsdFileCfg(usd_path=assets[spec.name]);pos,q=starting_pose(byname[spec.name],upright=not a.bottom_up_start) if spec.name in byname else (spec.pos,(1,0,0,0))
    if spec.name=='cutter':
     spawn=cfg.func
     def with_joints(path,cfg,translation=None,orientation=None,**kwargs):
@@ -72,20 +73,22 @@ def main():
   def pose(name):return arr(base.arena_world.get_pose_w(name))[0]
   if not a.no_video:video=imageio.get_writer(str(a.out/'diagnostic.mp4'),fps=20,codec='libx264',pixelformat='yuv420p',macro_block_size=1,ffmpeg_params=['-movflags','+faststart'])
   worst=0.;minz=10.;bestflat=10.;robot=None
-  if a.mode in ('grip-probe','cut-probe','open-probe'):
+  if a.mode in ('grip-probe','cut-probe','open-probe','turnover-probe','turn-and-cut-probe'):
    from robot import CartonGripProbe,CartonCutProbe,CartonOpenProbe
-   robot=({'cut-probe':CartonCutProbe,'open-probe':CartonOpenProbe}.get(a.mode,CartonGripProbe))(env)
-  tracker=BreakdownScorer() if a.mode=='cut-probe' else None;released=False;previous_positions=None;previous_cutter=None
+   from turnover import CartonTurnoverProbe
+   robot=({'cut-probe':CartonCutProbe,'open-probe':CartonOpenProbe,'turnover-probe':CartonTurnoverProbe,'turn-and-cut-probe':CartonTurnoverProbe}.get(a.mode,CartonGripProbe))(env)
+  tracker=BreakdownScorer(require_turnover=a.mode=='turn-and-cut-probe') if a.mode in ('cut-probe','turn-and-cut-probe') else None;released=False;previous_positions=None;previous_cutter=None
   if tracker is not None:task._tracker=tracker;task._diagnostic=False
   with (a.out/'trajectory.jsonl').open('w') as trace:
-   for step in range(2400 if a.mode=='open-probe' else 4800 if a.mode=='cut-probe' else 440 if robot else 180):
+   for step in range(2400 if a.mode=='open-probe' else 6000 if a.mode=='turn-and-cut-probe' else 4800 if a.mode=='cut-probe' else 1600 if a.mode=='turnover-probe' else 440 if robot else 180):
     phase='settle' if step<60 else 'wall_load' if step<120 else 'release'
-    f=(0.,-.25,0.) if phase=='wall_load' and not robot else (0.,0.,0.)
+    f=(0.,-.25,0.) if phase=='wall_load' and not robot and a.mode!='setup-check' else (0.,0.,0.)
     base.scene['east'].permanent_wrench_composer.set_forces_and_torques_index(forces=torch.tensor([[f]],device=base.device),torques=torch.zeros((1,1,3),device=base.device),is_global=True)
     control=None
     if robot:
-     target,control=robot.command(step*.05);phase=control[0]['phase'];action=torch.tensor(target[None,:],device=base.device,dtype=torch.float32)
+     target,control=robot.command(step*.05-(cut_started if "cut_started" in locals() else 0.));phase=control[0]['phase'];action=torch.tensor(target[None,:],device=base.device,dtype=torch.float32)
     else:action=env._ready
+    if robot is not None and getattr(robot,'failure',None):break
     angle_observer.begin_control()
     env._env.step(action);env._t=(step+1)*.05
     if len(base._reset_env_ids):angle_observer.tracker.invalidate('native episode reset')
@@ -117,7 +120,7 @@ def main():
       ids,fids=env._ids[side+'_robot'];q=arr(base.scene[side+'_robot'].data.joint_pos)[0];tcp,rotation=ik.tcp_pose(q[ids],env.rig.bases[side]);opening=float(np.clip(q[fids].mean()/FINGER_OPEN,0,1));hands.append(tcp);held|=np.linalg.norm(tcp-cutter[:3])<.035 and .08<opening<.38
      bottom=[angles[n+'_bottom_hinge'] for n in ['north','south','east','west']];top=[(-angles[n+'_top_hinge'])%360 for n in ['north','south','east','west']];top=[0. if x>350 else x for x in top]
      speed=0. if previous_positions is None else max(float(np.linalg.norm(pp[n][:3]-previous_positions[n])/ .05) for n in pp);cspeed=0. if previous_cutter is None else float(np.linalg.norm(cutter[:3]-previous_cutter)/.05);previous_positions={n:p[:3].copy() for n,p in pp.items()};previous_cutter=cutter[:3].copy();vmin=vertices.min(0);vmax=vertices.max(0)
-     sample={'angle_evidence':angle_evidence,'time':env._t,'blade_tip_local':localtip.tolist(),'blade_alignment':float(-np.dot(cr[:,2],reference[:,2])),'cutter_held':bool(held),'bottom_angles':bottom,'top_angles':top,'crease_separation':sep,'min_height':low,'max_height':high,'carton_speed':speed,'cutter_height':float(cutter[2]-TOP),'cutter_parked':bool(np.linalg.norm(cutter[:3]-np.array(CUTTER_START))<.05 and cspeed<.02),'hands_clear':all(np.linalg.norm(h-np.clip(h,vmin,vmax))>.07 and np.linalg.norm(h-cutter[:3])>.065 for h in hands)}
+     sample={'body_up_dot':float(reference[2,2]),'angle_evidence':angle_evidence,'time':env._t,'blade_tip_local':localtip.tolist(),'blade_alignment':float(-np.dot(cr[:,2],reference[:,2])),'cutter_held':bool(held),'bottom_angles':bottom,'top_angles':top,'crease_separation':sep,'min_height':low,'max_height':high,'carton_speed':speed,'cutter_height':float(cutter[2]-TOP),'cutter_parked':bool(np.linalg.norm(cutter[:3]-np.array(CUTTER_START))<.05 and cspeed<.02),'hands_clear':all(np.linalg.norm(h-np.clip(h,vmin,vmax))>.07 and np.linalg.norm(h-cutter[:3])>.065 for h in hands)}
      row['score_sample']=sample;row['metrics']=tracker.update(sample);row['cutter_pose']=cutter.tolist()
      if tracker.coverage.complete and not released:
       for name in ['north','south']:
@@ -129,11 +132,14 @@ def main():
      panels=review.panels(base);canvas=np.zeros((594,960,3),dtype=np.uint8);canvas[36:306,240:720]=panels[0];canvas[306:576,:480]=panels[1];canvas[306:576,480:]=panels[2]
      cv2.putText(canvas,('CARTON ROBOT GRIP PROBE | ' if robot else 'NATIVE CARTON | ')+phase+(' | unsealed diagnostic' if a.unsealed else ' | sealed bottom'),(12,25),cv2.FONT_HERSHEY_SIMPLEX,.57,(255,255,255),1,cv2.LINE_AA);cv2.putText(canvas,(('Measured cutting score: '+str(tracker.value)+' | incomplete task attempt' if tracker else 'Ordinary robot commands. Rim grip/lift diagnostic, not task completion.') if robot else 'Free rigid panels and physical creases. Force probe, not robot completion.'),(12,590),cv2.FONT_HERSHEY_SIMPLEX,.45,(255,205,120),1,cv2.LINE_AA);video.append_data(canvas)
      if step in (59,119,179,279,399,599,799,999,1199):imageio.imwrite(a.out/f'step-{step}.png',canvas)
-    if robot is not None and (getattr(robot,"failure",None) or getattr(robot,"done",False)):break
+    if a.mode=='turn-and-cut-probe' and isinstance(robot,CartonTurnoverProbe) and robot.done:
+     robot=CartonCutProbe(env);robot.previous=arr(action)[0].copy();cut_started=env._t
+    elif robot is not None and (getattr(robot,"failure",None) or getattr(robot,"done",False)):break
     if a.mode=='open-probe' and robot.index>=4:break
   result={'diagnostic':True,'task_score':None,'unsealed_start':a.unsealed,'max_crease_separation_m':worst,'lowest_vertex_m':minz,'smallest_height_span_m':bestflat,'checks':{'creases_intact':worst<.004,'above_table':minz>-.004}}
+  if a.mode=='turnover-probe':result|={'controller_failure':robot.failure,'turnover_completed':robot.done,'final_roll_angle_deg':robot.angle}
   if a.mode=='open-probe':result|={'controller_failure':robot.failure,'flaps_completed':robot.index,'final_angles_deg':angles}
-  if tracker is not None:result|={'diagnostic':False,'task_score':tracker.value,'privileged_robot_attempt':True,'metrics':tracker.result(),'bottom_up_start':True,'controller_failure':robot.failure,'controller_completed_cut_attempt':robot.done}
+  if tracker is not None:result|={'diagnostic':False,'task_score':tracker.value,'privileged_robot_attempt':True,'metrics':tracker.result(),'bottom_up_start':a.bottom_up_start,'controller_failure':robot.failure,'controller_completed_cut_attempt':robot.done}
   result|={'state_only':a.no_video,'media_eligible':False,'capture_manifest':'capture-manifest.json'}
   if a.no_video:result|={'diagnostic':True,'diagnostic_reason':'camera-free engineering run; measured scorer values retained, no final media'}
   (a.out/'result.json').write_text(json.dumps(result,indent=2)+'\n')

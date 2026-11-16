@@ -31,14 +31,14 @@ def cut_all(t,s):
 
 class Tests(unittest.TestCase):
     def test_start(self):
-        t=BreakdownScorer();update(t,state());self.assertEqual(t.value,0.)
+        t=BreakdownScorer(require_turnover=False);update(t,state());self.assertEqual(t.value,0.)
 
     def test_three_cut_paths_required(self):
-        t=BreakdownScorer();s=state();update(t,s);cut_all(t,s)
+        t=BreakdownScorer(require_turnover=False);s=state();update(t,s);cut_all(t,s)
         self.assertTrue(t.coverage.complete);self.assertEqual(t.value,.25)
 
     def test_forced_open_latches_failure(self):
-        t=BreakdownScorer();s=state(bottom_angles=[20.,0.,0.,0.]);update(t,s)
+        t=BreakdownScorer(require_turnover=False);s=state(bottom_angles=[20.,0.,0.,0.]);update(t,s)
         s['bottom_angles']=[0.]*4;cut_all(t,s)
         self.assertEqual(t.value,0.);self.assertIn('sealed',t.invalid)
 
@@ -62,7 +62,7 @@ class Tests(unittest.TestCase):
         self.assertFalse(c.cut)
 
     def test_full_score_requires_eight_flaps_and_flat_released_hold(self):
-        t=BreakdownScorer();s=state();update(t,s);cut_all(t,s)
+        t=BreakdownScorer(require_turnover=False);s=state();update(t,s);cut_all(t,s)
         s.update(bottom_angles=[160.]*4,cutter_held=False)
         s['time']+=.05;update(t,s)
         self.assertEqual(t.value,.5)
@@ -74,14 +74,14 @@ class Tests(unittest.TestCase):
         self.assertEqual(t.value,.5)
 
     def test_destroying_carton_never_counts(self):
-        t=BreakdownScorer();s=state();update(t,s);cut_all(t,s)
+        t=BreakdownScorer(require_turnover=False);s=state();update(t,s);cut_all(t,s)
         s.update(bottom_angles=[160.]*4,crease_separation=.02,min_height=0.,max_height=.02,
                  cutter_parked=True,hands_clear=True)
         for _ in range(21):s['time']+=.05;update(t,s)
         self.assertEqual(t.value,0.)
 
     def test_flat_bounding_box_alone_is_not_success(self):
-        t=BreakdownScorer();update(t,state(max_height=.02,cutter_parked=True,hands_clear=True))
+        t=BreakdownScorer(require_turnover=False);update(t,state(max_height=.02,cutter_parked=True,hands_clear=True))
         self.assertEqual(t.value,0.)
 
 if __name__=='__main__':unittest.main()
@@ -106,7 +106,7 @@ class FlatteningGeometryTests(unittest.TestCase):
         # at90degrees it lies in the same plane as its wall.
         self.assertGreater(.087*abs(cos(radians(150))),.024)
         self.assertLess(.087*abs(cos(radians(90))),1e-12)
-        t=BreakdownScorer();s=state();update(t,s);cut_all(t,s)
+        t=BreakdownScorer(require_turnover=False);s=state();update(t,s);cut_all(t,s)
         s.update(bottom_angles=[160.]*4,top_angles=[270.]*4,min_height=0.,max_height=.02,cutter_parked=True,hands_clear=True)
         for _ in range(25):s['time']+=.05;update(t,s)
         self.assertEqual(t.value,.5)
@@ -117,7 +117,7 @@ class FlatteningGeometryTests(unittest.TestCase):
 
 class EvidenceIntegrityTests(unittest.TestCase):
     def test_old_wrapped_only_sample_is_rejected_stickily(self):
-        t=BreakdownScorer();s=state(bottom_angles=[274.9]*4)
+        t=BreakdownScorer(require_turnover=False);s=state(bottom_angles=[274.9]*4)
         t.update(s)
         self.assertEqual(t.value,0.)
         self.assertIn('continuous angle evidence',t.invalid)
@@ -125,7 +125,7 @@ class EvidenceIntegrityTests(unittest.TestCase):
         self.assertEqual(t.value,0.)
 
     def test_flaps_must_be_open_together(self):
-        t=BreakdownScorer();s=state();update(t,s);cut_all(t,s)
+        t=BreakdownScorer(require_turnover=False);s=state();update(t,s);cut_all(t,s)
         for i in range(4):
             s['bottom_angles']=[160. if i==j else 0. for j in range(4)]
             s['time']+=.05;update(t,s)

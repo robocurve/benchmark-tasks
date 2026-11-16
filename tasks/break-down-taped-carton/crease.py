@@ -1,13 +1,13 @@
 """Physical hinge angles and explicit USD angular-drive units (CPU only)."""
 from math import pi
-BOTTOM_CENTER=95.
-BOTTOM_LOW=-84.9
+BOTTOM_CENTER=137.45
+BOTTOM_LOW=0.
 BOTTOM_HIGH=274.9
 BOTTOM_OFFSET=.006
 
 
 def physical_bottom_angle(raw):
-    """95-centred branch: inward -10 remains -10; raw -90 means outer 270."""
+    """Outward-only hinge branch; raw -90 denotes the outer 270-degree fold."""
     return (float(raw)-BOTTOM_CENTER+180.)%360.-180.+BOTTOM_CENTER
 
 

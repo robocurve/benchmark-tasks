@@ -11,8 +11,8 @@ class CreaseRepairTests(unittest.TestCase):
  def test_centered_limits_and_sealed_zero_pose(self):
   for h in layout()[1]:
    if not h['b'].endswith('_bottom'):continue
-   p=joint_parameters(h);self.assertEqual(p['center'],95.);self.assertAlmostEqual(p['low'],-179.9);self.assertAlmostEqual(p['high'],179.9)
-   if h['sealed']:self.assertEqual(joint_parameters(h,True)['low'],-95.);self.assertEqual(joint_parameters(h,True)['high'],-95.)
+   p=joint_parameters(h);self.assertEqual(p['center'],137.45);self.assertAlmostEqual(p['low'],-137.45);self.assertAlmostEqual(p['high'],137.45)
+   if h['sealed']:self.assertEqual(joint_parameters(h,True)['low'],-137.45);self.assertEqual(joint_parameters(h,True)['high'],-137.45)
  def test_explicit_material_units_and_backing_collisions(self):
   for h in layout()[1]:
    p=joint_parameters(h)

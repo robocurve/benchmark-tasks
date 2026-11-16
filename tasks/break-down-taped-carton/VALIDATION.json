@@ -1,15 +1,16 @@
 {
-  "status": "sealed_cut011_all158_cut_and_cutter_parked_score025",
-  "date": "2026-11-15",
-  "local_tests_passed": 63,
+  "status": "outward_only_hinges_native_verified_turnover_opening_collapse_incomplete",
+  "date": "2026-11-16",
+  "local_tests_passed": 92,
   "native_runtime_verified": true,
   "demo_score": null,
   "dream_score": null,
   "media": null,
   "remaining": [
-    "Integrate and validate same-episode opening of all four bottom flaps after actual cutting",
-    "Implement and validate intact physical collapse; no collapse controller currently exists",
-    "Reach released hands-clear final hold and set honest full-task allowance from a successful complete demonstration"
+    "Clarify whether turnover is a scored robot action or labelled setup segment",
+    "Native physical turnover if required",
+    "Reliable outward opening of all four flaps and intact collapse",
+    "Fresh full-score demo, genuine model attempt and media"
   ],
   "native_mechanics_probe": {
     "run": "carton-native-001",
@@ -254,5 +255,23 @@
     "result_mtime": "2026-11-15 20:05:12",
     "interval_s": 442,
     "excludes_startup": true
+  },
+  "latest_native": {
+    "probe": "carton-outward-stop-001",
+    "scope": "unsealed bottom-up passive gravity stop check; not turnover/opening/demo",
+    "rows": 180,
+    "duration_s": 9.0,
+    "bottom_angle_range_deg": [
+      -0.007273875164429455,
+      -0.0011934620597173762
+    ],
+    "max_crease_separation_m": 2.9761886190103964e-06,
+    "trace_sha256": "31db9104c060a4649f8c071a97e287ac1573ea57225fc43c29ee453800787796"
+  },
+  "turnover": {
+    "native_validated": false,
+    "nominal_default_passes": "9/16",
+    "nominal_150mm_height_passes": "8/16",
+    "decision": "No turnover GPU trial; insufficient local reach/clearance proof"
   }
 }

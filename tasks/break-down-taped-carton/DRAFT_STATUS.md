@@ -1,11 +1,11 @@
-# Cut bottom tape, unfold all flaps and flatten a carton — incomplete feedback draft
+# Outward bottom flaps and a real turnover requirement — incomplete feedback draft
 
-This is an incomplete draft for early feedback on task relevance, novelty and physical fidelity. It is not presented as meeting the competition feasibility or media requirements. No completed model result or full-score demonstration is claimed. `task.json` and board media are deliberately absent until valid evidence exists; please keep this PR in draft.
+This remains an incomplete feedback draft, not an acceptance-ready competition submission. A full-score demonstration, genuine model attempt and required board media are still missing; task.json/media are deliberately absent. Please keep it in draft.
 
-Starting with an empty bottom-up carton, cut its bottom seam and both taped end folds with the guarded cutter, park the tool, physically unfold all four bottom flaps, then collapse the intact wall tube flat along its creases. There are no grasp handles or pre-cut tape.
+The revised task starts upright, requires physical turnover before cutting the bottom seam and both taped end folds, then outward opening of all four bottom flaps and intact flattening. No handles or animated turnover are added.
 
-Implemented: twelve articulated board panels, native crease/flap joints, tape-cut geometry, numeric scoring, cutter manipulation and incomplete flap controllers. Historical fresh sealed cut011 completed all 158 cut cells and parked the released cutter, reporting 0.25 for the cutting milestone. It did not open or flatten the box. Later opening probes failed; they are not full-task demonstrations.
+The old hinge range permitted inward folding. Bottom hinges now permit 0–274.9 degrees outward only, and the scorer rejects substantial inward motion and requires an upright-to-inverted history. Continuous 240 Hz pose tracking remains fail-closed against angle wrapping.
 
-The current source fixes an angle alias that could misclassify inward motion as a full opening: it tracks raw native relative poses continuously at 240 Hz and fails closed on missing samples. The revised API binding passed 87 CPU checks and an independently audited 180-control-row native capture. Historical wrapped-angle logs are not evidence of opening under the corrected scorer.
+Native unsealed bottom-up gravity validation passed180 controls/9 seconds: bottom angles remained -0.0073 to -0.0012 degrees, crease separation <3 micrometres. This is a passive stop check, not turnover/opening/collapse. The turnover prototype fails local reach/mesh screening (9/16 poses; taller hypothesis8/16); no turnover GPU trial was run. Earlier all158cut/park evidence belongs to the older bottom-up setup, not this full task.
 
-Unfinished: reliable flap acquisition/opening and complete collapse, fresh full-score replay, genuine Dream attempt and full media. The intended distinction from #1858 is starting with real bottom tape and requiring cutting plus all four bottom flaps to open before intact collapse. The material model uses rigid panels and crease joints rather than continuum corrugated-board deformation.
+92 local tests pass. Turnover, outward opening and complete collapse still lack a full demo/model attempt. The intended distinction from #1858 remains real bottom-tape preparation and all four flap openings before collapse; feedback on novelty is requested.
