@@ -1,0 +1,13 @@
+{
+  "title": "Give a measured dose with a medicine spoon",
+  "category": "Impact on jobs",
+  "instruction": "Give the manikin the 5 ml dose from the medicine spoon without spilling or touching its face. Return the spoon to its rest.",
+  "setup": "A fixed life-size care manikin faces the YAM arms: 150 × 200 mm face, projecting nose, 44 × 20 mm lip opening 150 mm above the table and a mouth drain/collector. A level adaptive medicine spoon holds a premeasured 5.0 ml of coloured water. Its 48 × 32 × 9.5 mm scoop and 100 × 28 × 12 mm padded handle rest on an 85 × 60 × 35 mm plastic support. Both arms start ready. Exact fixed coordinates, materials and reset instructions are in JUDGING.md.",
+  "scoring": "Zero for >0.25 ml spilled, face contact (>2 mm penetration), >18 mm insertion, robot/head-envelope contact or tip speed >0.12 m/s within 50 mm of the mouth. Otherwise: 0.25 for ≥1.5 ml collected; 0.5 for ≥3 ml; 0.75 for ≥4.5 ml. Full credit also requires <0.05 ml airborne, spoon returned within 15 mm and released for 1 s. All other outcomes: 0. Use video, ruler and graduated syringe.",
+  "run_limit": "1000 control steps (50 seconds at 20 Hz)",
+  "action_limit": 1000,
+  "fidelity": "Native YAM joints and cameras; measured-pose spoon pinch and gravity are reduced models. Conserved free-surface liquid can overflow, spill or miss the mouth; slosh, viscosity and swallowing are omitted. A life-size fixed manikin has lips, face, nose and an oral collector. Spoon geometry and all native robot collision shapes enforce contact limits. This tests delivery to a training fixture, not clinical readiness.",
+  "scores": "Dream-1: 0.0; scripted demo: 1.0.",
+  "context": "Assisted oral medicine delivery requires keeping a small dose level, approaching the mouth carefully and controlling the pour. This is a training-manikin exercise using coloured water, not a test of swallowing or clinical readiness.",
+  "media": "M-3FF6YM"
+}
