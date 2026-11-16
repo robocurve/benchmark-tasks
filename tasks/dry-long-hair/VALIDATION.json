@@ -1,0 +1,96 @@
+{
+  "status": "fixed_head_cpu_usd_verified_native_pending",
+  "date": "2026-11-15",
+  "local_model_tests_passed": 42,
+  "native_runtime": true,
+  "demo_score": null,
+  "video": null,
+  "remaining": [
+    "Validate the fixed-world head mount under native contact and every-row head-motion limits",
+    "Complete real switch actuation and dryer pickup",
+    "Manipulate and expose every hair surface with live airflow",
+    "Power off, park and release after all patches dry",
+    "Validate material parameters and full scored demo"
+  ],
+  "native_mechanics_probe": {
+    "run": "hair-native-001",
+    "max_joint_separation_m": 0.0009245453,
+    "max_lock_motion_m": 0.1177754,
+    "power_off_water_loss_kg": 0.0,
+    "task_score": null
+  },
+  "current_model": {
+    "locks": 12,
+    "segments_per_lock": 5,
+    "passive_articulation": true,
+    "actuated_hair_joints": false,
+    "head_mount": "world FixedJoint on ordinary stand; HEAD/identity rest frame",
+    "head_swivel_dof": false,
+    "passive_hair_dofs": 60
+  },
+  "current_native_mechanics_probe": {
+    "run": "hair-skin012",
+    "max_joint_separation_m": 2.417935e-07,
+    "max_lock_motion_m": 0.036507876,
+    "max_skin_attachment_error_m": 6.4461915e-07,
+    "scalp_contact_respected": true,
+    "power_off_water_loss_kg": 0.0,
+    "task_score": null
+  },
+  "current_revision_native_validated": false,
+  "historical_swivelling_head_controller": {
+    "run": "hair-power011",
+    "score": 0.0,
+    "failure": "insert_below_switch did not settle within measured tolerances",
+    "diagnosed": "actual dryer roll makes body-aligned wrist orientation unreachable; world-fixed orientation solves measured pose within43um, pending native repeat",
+    "current_fixed_head_validation": false
+  },
+  "latest_historical_power_probe": {
+    "run": "hair-power013",
+    "score": 0.0,
+    "current_fixed_head_validation": false,
+    "swivelling_head_video_outdated": true,
+    "failure": "physical slider did not remain on after horizontal retraction",
+    "dry_fraction": 0.0,
+    "worst_remaining_water_fraction": 1.0,
+    "scope": "Historical power-only attempt; not a fixed-head drying demonstration"
+  },
+  "fixed_head_requirement": {
+    "head_position_m": [
+      0.43,
+      0.0,
+      1.045
+    ],
+    "head_rotation_xyzw": [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "native_joint_type": "PhysicsFixedJoint",
+    "exclude_from_articulation": true,
+    "max_translation_m": 0.002,
+    "max_rotation_deg": 1.0,
+    "partial_credit_invalidated_on_motion": true,
+    "missing_nonfinite_pose_invalid": true,
+    "reference_rebased_from_observation": false,
+    "pose_writes_or_reset_loop": false,
+    "native_validated": false
+  },
+  "fixed_head_cpu_checks": {
+    "all_tests_passed_usd_env": 42,
+    "standard_env_passed": 40,
+    "standard_env_skipped_usd": 2,
+    "real_UsdPhysics_topology_tests": 2,
+    "PhysxSchema_plugin_available_locally": false,
+    "native_dynamics_tested": false,
+    "unchanged_fields": [
+      "60passivehairDOFs",
+      "skinattachment",
+      "slider/detent",
+      "bodymasses",
+      "thermal/moistureparameters",
+      "dryingthresholds"
+    ]
+  }
+}
