@@ -4,6 +4,7 @@ Upright -> side wall -> bottom-up. Targets follow measured rigid-body poses;
 no carton pose/velocity/joint state is written. Native feasibility is unproved.
 """
 import math
+import copy
 import numpy as np
 from yam_arena import ik
 from yam_arena.constants import FINGER_OPEN,READY
@@ -63,7 +64,7 @@ def advance_support(origin,R,world_vertices,angle):
 class CartonTurnoverProbe:
  def __init__(self,env):
   from turnover_safety import Geometry
-  self.env=env;self.geometry=Geometry();self.parts={p['name']:p for p in layout()[0]};self.previous=env._ready.detach().cpu().numpy().reshape(-1).copy();self.failure=None;self.done=False;self.brace_clear=None;self.phase_goal_q=None;self.stage='narrow_ready';self.started=0.;self.starts=None;self.last_raw=0.;self.angle=0.;self.best_angle=0.;self.last_progress=0.;self.bias=[np.zeros(3),np.zeros(3)];self.ready_start=None;self.ready_stable=0;self.settle_stable=0;self.tip_vertices=tip_vertices(self.geometry);self.front=max(float(t[:,:,2].max()) for _,n,t in self.geometry.local_hand((.012,.012)) if n.startswith('tip_'));self.report={}
+  self.env=env;self.geometry=Geometry();self.parts={p['name']:p for p in layout()[0]};self.previous=env._ready.detach().cpu().numpy().reshape(-1).copy();self.failure=None;self.done=False;self.brace_clear=None;self.phase_goal_q=None;self.stage='narrow_ready';self.started=0.;self.starts=None;self.last_raw=0.;self.angle=0.;self.best_angle=0.;self.last_progress=0.;self.bias=[np.zeros(3),np.zeros(3)];self.ready_start=None;self.ready_stable=0;self.settle_stable=0;self.tip_vertices=tip_vertices(self.geometry);self.front=max(float(t[:,:,2].max()) for _,n,t in self.geometry.local_hand((.012,.012)) if n.startswith('tip_'));self.report={};self.contact_stable=0;self.contact_previous_tcp=None;self.contact_previous_time=None
  def poses(self):
   result={}
   for name in self.parts:
@@ -76,6 +77,17 @@ class CartonTurnoverProbe:
   return result
  def change(self,name,time,measured):
   self.stage=name;self.started=time;self.phase_goal_q=None;self.start_q=[m[0].copy() for m in measured];self.starts=[(m[2].copy(),m[3].copy()) for m in measured];self.bias=[np.zeros(3),np.zeros(3)];self.last_progress=time
+  if name=='contact':self.contact_stable=0;self.contact_previous_tcp=None;self.contact_previous_time=None
+ def _candidate_state(self):
+  # Observed carton angles/progress are retained; phase/planner/PI changes
+  # become effective only after the complete issued vector passes the guard.
+  fixed={'env','geometry','parts','tip_vertices','front','previous','angle','last_raw','best_angle'}
+  return {k:copy.deepcopy(v) for k,v in self.__dict__.items() if k not in fixed}
+ def _restore_candidate_state(self,state):
+  fixed={'env','geometry','parts','tip_vertices','front','previous','angle','last_raw','best_angle'}
+  for k in list(self.__dict__):
+   if k not in fixed and k not in state:del self.__dict__[k]
+  for k,v in state.items():setattr(self,k,copy.deepcopy(v))
  def command(self,time):
   poses=self.poses();measured=self.measure();origin,R=body_frame(poses);raw=-math.degrees(math.atan2(R[2,1],R[1,1]));delta=(raw-self.last_raw+180)%360-180
   if abs(delta)>15:self.failure='turnover moved more than15degrees/control interval'
@@ -83,6 +95,7 @@ class CartonTurnoverProbe:
   if np.linalg.norm(R[:,0]-[1,0,0])>.10:self.failure='carton yaw/pitch left planned table-roll plane'
   if self.angle>self.best_angle+.5:self.best_angle=self.angle;self.last_progress=time
   if self.starts is None:self.change('narrow_ready',time,measured)
+  candidate_state=self._candidate_state();stage_before=self.stage
   age=time-self.started;vertices=np.concatenate([p+(np.array([[-1,-1,-1],[-1,-1,1],[-1,1,-1],[-1,1,1],[1,-1,-1],[1,-1,1],[1,1,-1],[1,1,1]])*np.array(self.parts[n]['size'])/2)@Q.T for n,(p,Q) in poses.items()])
   if vertices[:,2].min()<TOP-.003:self.failure='carton passed more than3mm below tabletop'
   park=ik.tcp_pose(self.env._ready.detach().cpu().numpy().reshape(-1)[:6],self.env.rig.bases['left']);right_goal=wall_target(origin,R,'right',HEIGHT,WIDTH,self.tip_vertices,0.);left_goal=wall_target(origin,R,'left',HEIGHT,WIDTH,self.tip_vertices,0.)
@@ -105,7 +118,7 @@ class CartonTurnoverProbe:
    path_q=[start+blend*(goal-start) for start,goal in zip(self.start_q,self.phase_goal_q)]
    targets=[ik.tcp_pose(q,self.env.rig.bases[side]) for q,side in zip(path_q,('left','right'))]
    if self.stage=='approach':contact=[(),()]
-   if age>=duration and all(np.max(np.abs(q-m[0]))<.02 for q,m in zip(path_q,measured)):self.change('contact' if self.stage=='approach' else 'first_roll',time,measured)
+   if self.stage=='approach' and age>=duration and all(np.max(np.abs(q-m[0]))<.02 for q,m in zip(path_q,measured)):self.change('contact',time,measured)
   elif self.stage in ('first_roll','second_roll'):
    second=self.stage=='second_roll';limit=180. if second else 90.;lead=max(0.,min(.3,limit-self.angle));goal_o,goal_R=advance_support(origin,R,vertices,lead);targets[1]=push_target(goal_o,goal_R,'bottom',self.front,.0002,roll_deg=90.) if second else wall_target(goal_o,goal_R,'right',HEIGHT,WIDTH,self.tip_vertices,.0002)
    if second:contact[1]=('north_bottom','south_bottom','east_bottom','west_bottom')
@@ -157,7 +170,9 @@ class CartonTurnoverProbe:
    self.ready_stable=self.ready_stable+1 if settled else 0;ready_done=self.ready_stable>=5
    if time-self.ready_started>self.ready_duration+5.:self.failure='READY return did not settle within bounded path budget'
   if self.stage!='return_ready' and age>(35 if self.stage in ('first_roll','second_roll') else 18):self.failure='turnover phase exceeded bounded endpoint time'
-  if self.failure or self.done:return self.previous.copy(),[dict(phase=self.stage,failure=self.failure,complete=self.done,roll_angle_deg=self.angle)]
+  if self.failure or self.done:
+   failure=self.failure;done=self.done;self._restore_candidate_state(candidate_state);self.failure=failure;self.done=done
+   return self.previous.copy(),[dict(phase=self.stage,failure=self.failure,complete=self.done,roll_angle_deg=self.angle)]
   output=self.previous.copy();errors=[]
   for i,side in enumerate(('left','right')):
    p,Q=targets[i]
@@ -172,15 +187,61 @@ class CartonTurnoverProbe:
   slew=np.array([.025]*6+[.04]+[.025]*6+[.04]);output=np.clip(output,self.previous-slew,self.previous+slew);output=np.clip(output,self.env._low,self.env._high)
   obs={n:(p,Q,self.parts[n]['size']) for n,(p,Q) in poses.items()};tool=self.env._base.arena_world.get_pose_w('cutter');tool=tool.torch if hasattr(tool,'torch') else tool;tool=tool.detach().cpu().numpy()[0];tr=quat_xyzw_to_matrix(tool[3:])
   for name,size,offset in [('handle',(.1,.025,.025),(0,0,0)),('guard',(.02,.03,.02),(.052,0,.002)),('blade',(.014,.0005,.008),(.062,0,-.016))]:obs['cutter_'+name]=(tool[:3]+tr@offset,tr,size)
-  checks=[]
+  proposed_phase=self.stage
+  def guarded_action(action):
+   action=np.asarray(action,float)
+   if action.shape!=(14,) or not np.isfinite(action).all():return False,[]
+   if any(float(action[j])<float(self.env._low[j])-1e-10 or float(action[j])>float(self.env._high[j])+1e-10 for j in range(14)):return False,[]
+   guards=[]
+   for i,side in enumerate(('left','right')):
+    other=1-i;pieces=self.geometry.parts(('left','right')[other],action[other*7:other*7+6],[FINGER_OPEN*action[other*7+6]]*2)
+    g=self.geometry.guard(side,action[i*7:i*7+6],[FINGER_OPEN*action[i*7+6]]*2,obs,pieces,intended=bool(contact[i]),intended_targets=contact[i]);guards.append(g)
+   return all(g['safe'] and math.isfinite(g['target_gap_m']) and g['target_gap_m']>=-.002 for g in guards),guards
+  actual=[]
   for i,side in enumerate(('left','right')):
-   other=1-i;pieces=self.geometry.parts(('left','right')[other],measured[other][0],measured[other][1]);g=self.geometry.guard(side,measured[i][0],measured[i][1],obs,pieces,intended=bool(contact[i]),intended_targets=contact[i]);checks.append(g)
-   if not g['safe'] or g['target_gap_m']<-.0006:self.failure=side+' measured turnover clearance failed'
-   pieces=self.geometry.parts(('left','right')[other],output[other*7:other*7+6],[FINGER_OPEN*output[other*7+6]]*2);g=self.geometry.guard(side,output[i*7:i*7+6],[FINGER_OPEN*output[i*7+6]]*2,obs,pieces,intended=bool(contact[i]),intended_targets=contact[i]);checks.append(g)
-   if not g['safe'] or g['target_gap_m']<-.002:self.failure=side+' issued turnover clearance failed'
-  report=dict(phase=self.stage,failure=self.failure,complete=self.done,roll_angle_deg=self.angle,tracking_errors_m=errors,com_beyond_leading_support_m=self.report.get('com_beyond_leading_support_m'),clearance=checks,table_supported=bool(abs(vertices[:,2].min()-TOP)<=.003),lowest_vertex_above_table_m=float(vertices[:,2].min()-TOP))
-  # A rejected command is not issued. No extra env.step on guard failure.
-  if self.failure:return self.previous.copy(),[report]
+   other=1-i;pieces=self.geometry.parts(('left','right')[other],measured[other][0],measured[other][1])
+   g=self.geometry.guard(side,measured[i][0],measured[i][1],obs,pieces,intended=bool(contact[i]),intended_targets=contact[i]);actual.append(g)
+   if not np.isfinite(measured[i][0]).all() or any(float(measured[i][0][j])<float(ik.LOWER[j])-1e-6 or float(measured[i][0][j])>float(ik.UPPER[j])+1e-6 for j in range(6)):self.failure=side+' measured turnover joint bound failed'
+   if not g['safe'] or not math.isfinite(g['target_gap_m']) or g['target_gap_m']<-.0006:self.failure=side+' measured turnover clearance failed'
+  # Recheck the OLD command against THIS measured scene and BOTH commanded
+  # arms. Holding an obsolete command is not automatically safe.
+  previous_safe,previous_guards=guarded_action(self.previous)
+  if not previous_safe:self.failure='previous issued turnover command no longer has fresh clearance'
+  alpha=0.;issued=previous_guards;proposal_rejected=False;advance_trials=[]
+  if not self.failure:
+   proposal=output.copy();accepted=False
+   for fraction in (1.,.5,.25,.125,.0625):
+    candidate=self.previous+fraction*(proposal-self.previous)
+    safe,gg=guarded_action(candidate)
+    advance_trials.append({'fraction':fraction,'safe':safe,'clearance':gg,'action_14d':candidate.tolist()})
+    if safe:
+     output=candidate;issued=gg;alpha=fraction;accepted=True;break
+    proposal_rejected=True
+   if not accepted:
+    # The freshly guarded previous command is the only permitted hold.
+    output=self.previous.copy();issued=previous_guards;alpha=0.
+   if proposal_rejected:
+    # Freeze PI/phase/cached targets after ANY rejected full advance. This
+    # deliberately does not reset the observed no-progress deadline.
+    self._restore_candidate_state(candidate_state)
+  checks=[actual[0],issued[0] if issued else {},actual[1],issued[1] if issued else {}]
+  report=dict(phase=self.stage,candidate_phase=proposed_phase,failure=self.failure,complete=self.done,roll_angle_deg=self.angle,tracking_errors_m=errors,com_beyond_leading_support_m=self.report.get('com_beyond_leading_support_m'),clearance=checks,previous_command_clearance=previous_guards,advance_fraction=alpha,advance_trials=advance_trials,planner_and_integrator_frozen=proposal_rejected,table_supported=bool(abs(vertices[:,2].min()-TOP)<=.003),lowest_vertex_above_table_m=float(vertices[:,2].min()-TOP))
+  if self.failure:
+   failure=self.failure;self._restore_candidate_state(candidate_state);self.failure=failure;report['failure']=failure
+   return self.previous.copy(),[report]
+  if stage_before=='contact' and self.stage=='contact':
+   # GEOMETRIC proximity/settling only: these signed mesh gaps are not force
+   # telemetry and cannot establish load-bearing or a successful roll.
+   positions=np.array([m[2] for m in measured]);prior=getattr(self,'contact_previous_tcp',None);prior_t=getattr(self,'contact_previous_time',None)
+   dt=None if prior_t is None else time-prior_t
+   speed=float('inf') if prior is None or dt is None or not 0<dt<=.1 else float(np.linalg.norm(positions-prior,axis=1).max()/dt)
+   endpoint_settled=path_q is not None and all(np.max(np.abs(q-m[0]))<.02 for q,m in zip(path_q,measured))
+   proximity=all(-.0006<=g['target_gap_m']<=.0003 for g in actual)
+   settled=age>=3. and endpoint_settled and proximity and speed<=.005 and alpha==1. and all(np.max(np.abs(m[1]+.012))<=.001 for m in measured)
+   self.contact_stable=getattr(self,'contact_stable',0)+1 if settled else 0
+   self.contact_previous_tcp=positions.copy();self.contact_previous_time=time
+   report['geometric_opposed_settle']={'stable_frames':self.contact_stable,'required_frames':5,'max_tcp_speed_m_s':None if not math.isfinite(speed) else speed,'both_mesh_gaps_in_range':proximity,'contact_force_verified':False}
+   if self.contact_stable>=5:self.change('first_roll',time,measured)
   ready_issued=ready_q is not None and np.max(np.abs(output-self.env._ready.detach().cpu().numpy().reshape(-1)))<1e-7
   self.done=bool(ready_done and ready_issued);report['complete']=self.done
   self.previous=output.copy();return output,[report]

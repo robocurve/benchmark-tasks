@@ -1,5 +1,5 @@
 {
-  "status": "outward_only_hinges_native_verified_turnover_opening_collapse_incomplete",
+  "status": "native_contact_reached_turnover_not_demonstrated",
   "date": "2026-11-16",
   "local_tests_passed": 92,
   "native_runtime_verified": true,
@@ -286,5 +286,27 @@
     "withdrawal_samples_passed": 164,
     "gravity_settling": "measured COM/support gate; no object pose writes",
     "full_task_complete": false
+  },
+  "native_turnover_restart_001": {
+    "source_commit": "74dcd3e",
+    "controls": 278,
+    "time_s": 13.9,
+    "turnover_completed": false,
+    "final_roll_angle_deg": 0.009679755338822815,
+    "controller_failure": "right issued turnover clearance failed",
+    "rejected_target_gap_m": -0.0020042503275910922,
+    "measured_target_gap_m": -0.00018420780620566715,
+    "trace_sha256": "5d2cccf5bcad96ff38611974989b27a867e523a7040e28294b969283dcca0752",
+    "force_evidence": "force_N is external diagnostic force, not reaction force; no measured fingertip-force claim"
+  },
+  "guarded_advance_cpu_candidate": {
+    "source_commit": "57fdc5b",
+    "native_validated": false,
+    "astra_review": "approved_CPU_only_after_transition_and_slew_regressions",
+    "task_tests": 97,
+    "controller_self_tests": 3,
+    "fix": "transactional PI/planner state; guarded full14D backtracking; freshly rechecked bounded hold; five-frame geometric settling gate",
+    "physics_or_guard_thresholds_changed": false,
+    "force_or_turnover_proved": false
   }
 }

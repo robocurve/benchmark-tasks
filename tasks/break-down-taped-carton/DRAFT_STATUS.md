@@ -1,7 +1,5 @@
-# Incomplete feedback draft — follow-up revision
+# Incomplete feedback draft — native follow-up
 
-New candidate: 220 × 180 × 180 mm carton, low brace and high opposite push using mesh-supported side contact and fixed downward wrists. The controller withdraws after measured COM crosses the leading table support and waits for actual gravity settling; it never writes object poses or adds a turnover force. Finite CPU checks cover 122 contact, 82 acquisition and 164 withdrawal configurations. These are geometry checks, not native physics. New scene/turnover are unproved because the retained VM failed to start and was subsequently confirmed stopped; no flip/opening/flattening video or full-score demo is claimed.
+Native source 74dcd3e reached contact at 278 controls / 13.9 simulated seconds, then rejected the next issued target at 2.00425 mm depth versus the unchanged 2 mm limit; carton rotation was only 0.00968°. No flip occurred. A subsequent CPU-only repair 57fdc5b adds transactional PI/planning, bounded guarded backtracking and geometric settling; Astra approved it, with 97 task tests + 3 controller checks passing. It has not run natively; force adequacy/turnover/opening/collapse remain unproved.
 
-This is an early feedback draft, not a received or acceptance-ready competition submission. Full feasibility, model attempt and eligible media remain missing.
-
-Follow-up lifecycle: 32.9-minute start-request-to-confirmed-stop window; zero new native trials. No new video is claimed.
+The retained VM is confirmed STOPPED after a19.2-minute start-to-stop window. New preview clips are labelled partial, unscored offline replays of actual native poses; they are not native RGB or full-score evidence. No task.json/media ID is supplied.
