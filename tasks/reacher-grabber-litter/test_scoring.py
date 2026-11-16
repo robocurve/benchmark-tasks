@@ -83,7 +83,7 @@ def test_mixed_partial():
 def test_all_in_bin_needs_to_be_still():
     objs = _objects(can=BIN_IN, bottle=BIN_IN + (0.04, 0.02, 0.03), cup=BIN_IN + (-0.07, 0, 0.02))
     assert _run([objs] * 5) == (0.9, False)              # all in, not yet still: 3 x 0.3
-    assert _run([objs] * 20) == (0.9, True)              # still for 1 s: success, not yet held for 1 s
+    assert _run([objs] * 20) == (0.9, False)             # still for 1 s, not yet held for 1 s: no success
     assert _run([objs] * 39) == (1.0, True)
     steps = [_objects(can=BIN_IN, bottle=BIN_IN + (0.04, 0.02, 0.03), cup=BIN_IN + (-0.07, 0, 0.02)) for _ in range(39)]
     T._reset_state()
