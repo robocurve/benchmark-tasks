@@ -1,0 +1,120 @@
+#usda 1.0
+(
+    defaultPrim = "Root"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Root"
+{
+    def Scope "Looks"
+    {
+        def Material "Absorbent"
+        {
+            token outputs:mdl:surface.connect = </Root/Looks/Absorbent/PBR.outputs:out>
+            token outputs:surface.connect = </Root/Looks/Absorbent/Preview.outputs:surface>
+
+            def Shader "PBR"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @OmniPBR.mdl@
+                uniform token info:mdl:sourceAsset:subIdentifier = "OmniPBR"
+                asset inputs:diffuse_texture = @./textures/bench_pad.png@
+                float inputs:metallic_constant = 0
+                float inputs:reflection_roughness_constant = 0.92
+                token outputs:out
+            }
+
+            def Shader "Preview"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor.connect = </Root/Looks/Absorbent/Tex.outputs:rgb>
+                float inputs:ior = 1.5
+                float inputs:metallic = 0
+                float inputs:roughness = 0.92
+                token outputs:surface
+            }
+
+            def Shader "st"
+            {
+                uniform token info:id = "UsdPrimvarReader_float2"
+                token inputs:varname = "st"
+                float2 outputs:result
+            }
+
+            def Shader "Tex"
+            {
+                uniform token info:id = "UsdUVTexture"
+                asset inputs:file = @./textures/bench_pad.png@
+                token inputs:sourceColorSpace = "sRGB"
+                float2 inputs:st.connect = </Root/Looks/Absorbent/st.outputs:result>
+                float3 outputs:rgb
+            }
+        }
+
+        def Material "PE_backing"
+        {
+            token outputs:mdl:surface.connect = </Root/Looks/PE_backing/PBR.outputs:out>
+            token outputs:surface.connect = </Root/Looks/PE_backing/Preview.outputs:surface>
+
+            def Shader "PBR"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @OmniPBR.mdl@
+                uniform token info:mdl:sourceAsset:subIdentifier = "OmniPBR"
+                color3f inputs:diffuse_color_constant = (0.22, 0.45, 0.78)
+                float inputs:metallic_constant = 0
+                float inputs:reflection_roughness_constant = 0.5
+                token outputs:out
+            }
+
+            def Shader "Preview"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.22, 0.45, 0.78)
+                float inputs:ior = 1.5
+                float inputs:metallic = 0
+                float inputs:roughness = 0.5
+                token outputs:surface
+            }
+        }
+    }
+
+    def Mesh "absorbent" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        float3[] extent = [(-0.055, -0.055, 0.0004), (0.055, 0.055, 0.002)]
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+        rel material:binding = </Root/Looks/Absorbent>
+        normal3f[] normals = [(0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0)] (
+            interpolation = "faceVarying"
+        )
+        point3f[] points = [(-0.055, -0.055, 0.0004), (-0.055, 0.055, 0.0004), (0.055, 0.055, 0.0004), (0.055, -0.055, 0.0004), (-0.055, -0.055, 0.002), (0.055, -0.055, 0.002), (0.055, 0.055, 0.002), (-0.055, 0.055, 0.002), (-0.055, -0.055, 0.0004), (0.055, -0.055, 0.0004), (0.055, -0.055, 0.002), (-0.055, -0.055, 0.002), (0.055, -0.055, 0.0004), (0.055, 0.055, 0.0004), (0.055, 0.055, 0.002), (0.055, -0.055, 0.002), (0.055, 0.055, 0.0004), (-0.055, 0.055, 0.0004), (-0.055, 0.055, 0.002), (0.055, 0.055, 0.002), (-0.055, 0.055, 0.0004), (-0.055, -0.055, 0.0004), (-0.055, -0.055, 0.002), (-0.055, 0.055, 0.002)]
+        texCoord2f[] primvars:st = [(0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0, 0), (1, 0), (1, 1), (0, 1), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02)] (
+            interpolation = "faceVarying"
+        )
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "backing" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        float3[] extent = [(-0.055, -0.055, 0), (0.055, 0.055, 0.0004)]
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+        rel material:binding = </Root/Looks/PE_backing>
+        normal3f[] normals = [(0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0)] (
+            interpolation = "faceVarying"
+        )
+        point3f[] points = [(-0.055, -0.055, 0), (-0.055, 0.055, 0), (0.055, 0.055, 0), (0.055, -0.055, 0), (-0.055, -0.055, 0.0004), (0.055, -0.055, 0.0004), (0.055, 0.055, 0.0004), (-0.055, 0.055, 0.0004), (-0.055, -0.055, 0), (0.055, -0.055, 0), (0.055, -0.055, 0.0004), (-0.055, -0.055, 0.0004), (0.055, -0.055, 0), (0.055, 0.055, 0), (0.055, 0.055, 0.0004), (0.055, -0.055, 0.0004), (0.055, 0.055, 0), (-0.055, 0.055, 0), (-0.055, 0.055, 0.0004), (0.055, 0.055, 0.0004), (-0.055, 0.055, 0), (-0.055, -0.055, 0), (-0.055, -0.055, 0.0004), (-0.055, 0.055, 0.0004)]
+        texCoord2f[] primvars:st = [(0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02), (0.02, 0.02)] (
+            interpolation = "faceVarying"
+        )
+        uniform token subdivisionScheme = "none"
+    }
+}
