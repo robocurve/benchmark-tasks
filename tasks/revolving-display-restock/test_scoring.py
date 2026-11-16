@@ -82,7 +82,7 @@ def test_one_box_seated_half():
 def test_both_seated_success_after_one_second():
     objs = _objects(TURNED, left=_in_pocket(TURNED, 1), right=_in_pocket(TURNED, 0))
     assert _run([objs]) == (0.75, False)              # seated, not yet still for 1 s
-    assert _run([objs] * 20) == (0.75, True)          # still for 1 s: success, not yet held for 1 s
+    assert _run([objs] * 20) == (0.75, False)         # still for 1 s, not yet held for 1 s: no success
     assert _run([objs] * 39) == (1.0, True)
 
 
