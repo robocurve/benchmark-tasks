@@ -1,0 +1,14 @@
+{
+  "title": "Untie a loose overhand knot",
+  "category": "Societal relatability",
+  "instruction": "Untie the overhand knot in the cord. Leave the cord on the table without any crossings, then let go.",
+  "action_limit": 1800,
+  "context": "Undoing accidental knots is a common problem with household cords. The robot must feed an end back through the loop without cutting or breaking the cord.",
+  "setup": "The wooden tabletop measures 1.10 x 1.30 m. One 1.075 m long, 10 mm diameter blue polyester cord, mass 80 g, lies on a wooden table in a loose overhand knot. Its two tips are marked yellow and red. The knot is centred about 28 cm in front of the robot; both free tips point towards the left-hand side of the table. Both grippers start open. The setup photograph and initial-nodes.json specify this single reproducible layout. No clamps, pins or hidden anchors hold the cord.",
+  "scoring": "1.0 if the original overhand has been removed, the intact cord is entirely on the tabletop and has no crossings in an overhead view, the gap beneath the cord is no more than 2.5 cm anywhere, and both hands have released it for three seconds. 0.5 if the knot has been removed and the cord released for three seconds but it still has loose crossings or is not laid down. Otherwise 0. A broken cord or an invalid initial knot scores 0. Judge the knot and crossings from overhead and side video with a ruler; topology analysis supplies an additional simulation check.",
+  "run_limit": "1,800 control steps (90 seconds at 20 Hz).",
+  "reset_notes": "Retie the same loose overhand and restore the photographed layout, or reset the scene. Nothing is consumed.",
+  "fidelity": "A native PhysX chain of 86 rounded capsules models bending, gravity, friction, gripper contact and non-neighbour self-collision at 240 Hz. No ideal grasp attachments, object teleports or scripted untying forces. Bending, torsion and compression are coarse approximations. Open-curve topology checks can be ambiguous; the released, uncrossed cord and video provide the physical success check.",
+  "scores": "Dream-1: 0.0; scripted demo: 1.0.",
+  "media": "M-DZMUEU"
+}

@@ -1,0 +1,26 @@
+{
+  "steps": 1800,
+  "score": 0.0,
+  "recorded_score": 0.0,
+  "score_agrees": true,
+  "measurements": {
+    "top_view_crossings": 3,
+    "initial_overhand": true,
+    "topology": "overhand_candidate",
+    "end_separation_m": 0.09436339166307953,
+    "table_clearance_m": 0.010406015284881834,
+    "released_seconds": 0.0,
+    "max_joint_gap_mm": 0.002956423517755962,
+    "failed": false
+  },
+  "frozen_source_verified": true,
+  "final_scorer_sha256": "94c183546ff74399062ced3704be26835a7de06ff708d07ac468232bc03fa60f",
+  "scoring_review": {
+    "old_sha256": "23790b7a1a866aa458f21c7287c0c35043c31ef1efc40d4270045b6669ae5f39",
+    "new_sha256": "94c183546ff74399062ced3704be26835a7de06ff708d07ac468232bc03fa60f",
+    "old_code": "  if self.kind=='unknot' and m['top_view_crossings']==0 and self.release>=3 and m['table_clearance_m']<.025:return 1.",
+    "new_code": "  # Whole cord above the 1.10 x 1.30 m station tabletop, allowing 2 mm contact tolerance.\n  on_table=np.all(self.points>=[-.185,-.645,.7505]) and np.all(self.points[:,:2]<=[.905,.645])\n  if self.kind=='unknot' and m['top_view_crossings']==0 and self.release>=3 and m['table_clearance_m']<.025 and on_table:return 1.",
+    "reason": "Strengthen full-score support check so a cord below or outside the tabletop cannot qualify. Only Model.score changes; no physics, observations, actions or instruction changes."
+  },
+  "visual_review_still_required": true
+}

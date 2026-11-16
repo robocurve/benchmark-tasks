@@ -1,0 +1,117 @@
+{
+  "status": "validated_submission",
+  "scores": {
+    "demo": 1.0,
+    "dream": 0.0
+  },
+  "control_hz": 20,
+  "steps": {
+    "demo": 1710,
+    "dream": 1800
+  },
+  "wall_seconds": {
+    "demo": 1070.9736763476394,
+    "dream": 1415.457435900811
+  },
+  "runtime_sources_match": false,
+  "physics_sources_match": true,
+  "scoring_review": {
+    "verified": true,
+    "old_sha256": "23790b7a1a866aa458f21c7287c0c35043c31ef1efc40d4270045b6669ae5f39",
+    "new_sha256": "94c183546ff74399062ced3704be26835a7de06ff708d07ac468232bc03fa60f",
+    "old_code": "  if self.kind=='unknot' and m['top_view_crossings']==0 and self.release>=3 and m['table_clearance_m']<.025:return 1.",
+    "new_code": "  # Whole cord above the 1.10 x 1.30 m station tabletop, allowing 2 mm contact tolerance.\n  on_table=np.all(self.points>=[-.185,-.645,.7505]) and np.all(self.points[:,:2]<=[.905,.645])\n  if self.kind=='unknot' and m['top_view_crossings']==0 and self.release>=3 and m['table_clearance_m']<.025 and on_table:return 1.",
+    "reason": "Strengthen full-score support check so a cord below or outside the tabletop cannot qualify. Only Model.score changes; no physics, observations, actions or instruction changes.",
+    "native_model_hashes": {
+      "demo": "94c183546ff74399062ced3704be26835a7de06ff708d07ac468232bc03fa60f",
+      "dream": "23790b7a1a866aa458f21c7287c0c35043c31ef1efc40d4270045b6669ae5f39"
+    }
+  },
+  "baseline_controller_equivalent": true,
+  "controller_differences": {
+    "make_plan.py": {
+      "demo_sha256": "606de29544c1685193062212da52f1e22e3a45d4bbf0a8bf4806f5c2859dc7da",
+      "dream_sha256": "1ecfa7f4086f045254bf89abf3490a252ffa96e68d63edfbc8bd8be273e9777c",
+      "scope": "Offline authoring/replay tool or scripted action plan; never executed by Dream mode. The unchanged run.py only indexes plan actions inside mode == demo."
+    },
+    "replay_evidence.py": {
+      "current_sha256": "61809b393bb24ad82904598cfdb28fd4bf2b54d5f56c605f142d0221f09f7451",
+      "demo_sha256": "61809b393bb24ad82904598cfdb28fd4bf2b54d5f56c605f142d0221f09f7451",
+      "dream_sha256": null,
+      "scope": "Offline evidence replay utility finalized after recording; not imported or executed by the simulator or Dream."
+    },
+    "demo-plan.json": {
+      "demo_sha256": "ecca3c0de4ba46d2b9ae4d1dfab1321ddd66f8000c3b24e1095aa1a4a21b1ac7",
+      "dream_sha256": "ffbf55e80112f595d3b7aefe9a21bfc93d2ef2220dfde614fb1edd805199b4b6",
+      "scope": "Offline authoring/replay tool or scripted action plan; never executed by Dream mode. The unchanged run.py only indexes plan actions inside mode == demo."
+    }
+  },
+  "baseline_render_equivalent": false,
+  "render_equivalence": null,
+  "sources_sha256": {
+    "planner.py": "cf5a17d495934590ad6b93ef1462f82be10c6a7e326881bb116167565305b05a",
+    "task.py": "c6d8e4e94fb93cd4a0554c3ba71752d6edb149d33db315865db233e5b1c0223c",
+    "run.py": "cc11949fdd7a239f9058b59e18ca91e9a77d9c7825b489d1694795e817647e55",
+    "rescore.py": "fa03ec29b1fd48d480dc1856593b71cbad77a46a0cc290a67fd2db21cf693e1b",
+    "make_plan.py": "606de29544c1685193062212da52f1e22e3a45d4bbf0a8bf4806f5c2859dc7da",
+    "model.py": "94c183546ff74399062ced3704be26835a7de06ff708d07ac468232bc03fa60f",
+    "replay_evidence.py": "61809b393bb24ad82904598cfdb28fd4bf2b54d5f56c605f142d0221f09f7451",
+    "common.py": "a5397d5857664f4694c2b174398a9adaf49ad03936613bdf84cfb96e5bb04fbc",
+    "rope.py": "113959d7d7098fb27bac6acd281cbea8dd86195c3044b70a1c041b59a31bfc7c",
+    "joint_tracking.py": "f22bb7c34c8c4ba51859844f77fef8b29337b5b6353e7cc0b85cf0247866c453",
+    "dream_policy.py": "6a4690cc28fbebb04e372e39db41b4ba665ad2b7a2dcd1a7238228363846d67c",
+    "topology.py": "21057280e6d69123019e432d2b50934e97b5f5131349186541215755f99a5ff2",
+    "initial-nodes.json": "883b84db8d31f30648a775834e55bfc6eeef2836b4a57283e73db1c5286e60cf",
+    "demo-plan.json": "ecca3c0de4ba46d2b9ae4d1dfab1321ddd66f8000c3b24e1095aa1a4a21b1ac7",
+    "review_views.py": "85d34ac7f115486d411a74b73532afb6b94010e298741c7bf6c611930334bf21"
+  },
+  "metadata_only_differences": "Offline demonstration authoring/replay files and the scripted plan differ as listed. Dream does not execute them. All physics, cameras, policy code, initial geometry and the instruction match. The final scorer review is recorded separately.",
+  "visual_review_passed": true,
+  "visual_review": {
+    "passed": true,
+    "method": "Inspected native front and rear demo frames at 0, 10, 20, 26, 30, 32, 42, 53, 64, 70, 75.5 and 85.5 seconds; overhead sequence and all three final judging views. Dream front frames at 0, 18, 36, 54, 72 and 90 seconds. Independently replayed every measured step.",
+    "demo": "Starts with the loose overhand. One hand raises an arch while the other feeds the red end through it. The cord briefly hangs on an open finger; an ordinary regrasp and closing that empty finger free it. Both tips are then grasped, spread, laid on the tabletop and released. Final native score 1.0: zero crossings, intact cord and 6.2 seconds released. Front/rear views complement each other to show both ends of the final one-metre cord.",
+    "dream": "Uses all 1800 actions but leaves the initial knot intact; score 0.0.",
+    "limitations": "Coarse capsule chain with approximate bending, torsion and compression. Native contacts permit transient capsule overlap; the largest measured overlap occurs after the end is unthreaded. No sampled centreline intersection was detected, which is not a continuous collision guarantee. No ideal attachments, teleporting or scripted untying forces. Static topology is supplementary to visible released straightness.",
+    "contact_diagnostic": {
+      "minimum_nonlocal_distance_m_and_step": [
+        0.004533507649340403,
+        639
+      ],
+      "minimum_through_untying_m_and_step": [
+        0.009458982212607258,
+        170
+      ],
+      "sampled_centreline_self_intersections": [],
+      "scope": "Every 20 Hz native recorded centreline. Finite capsule compression may occur. This is not a continuous collision certificate."
+    }
+  },
+  "dream_requests": 221,
+  "dream_sessions": {
+    "session_count": 1
+  },
+  "media_uploaded": true,
+  "checked_utc": "2026-11-16T01:41:56.717331+00:00",
+  "public_trace_format": {
+    "demo": {
+      "kind": "20 Hz scoring projection of the native trace",
+      "samples": 1711,
+      "original_raw_trace_sha256": "2697c96bc8dd38ddf1d20001432bc9e252564b64304811bdfaaa8c06a22a8e32",
+      "retained": "Every action, measured hand pose, score measurement, cord centreline and maximum joint gap; every original control step.",
+      "omitted": "Redundant rigid-link poses, quaternions, velocities and individual joint gaps. Full raw native archives retained locally.",
+      "compressed_sha256": "b945f082c6ac25800c45e6f59d18df1190b63846d0695ed42fb9684dc9ee1905"
+    },
+    "dream": {
+      "kind": "20 Hz scoring projection of the native trace",
+      "samples": 1801,
+      "original_raw_trace_sha256": "306cd8cba62e29b9074fabd6bfb174c203f560497d5554cbdcf4db40ae3a8697",
+      "retained": "Every action, measured hand pose, score measurement, cord centreline and maximum joint gap; every original control step.",
+      "omitted": "Redundant rigid-link poses, quaternions, velocities and individual joint gaps. Full raw native archives retained locally.",
+      "compressed_sha256": "c3ccde772b1dbc14463c3b94f39636360c892396f888979fc999bdcad26383a2"
+    }
+  },
+  "scoring_review_note": "Final scorer adds tabletop support bounds only. Both original native scores were independently confirmed unchanged under this stronger scorer.",
+  "remaining_gates": [
+    "PR ingestion confirmation"
+  ]
+}
