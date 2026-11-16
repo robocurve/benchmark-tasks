@@ -7,7 +7,10 @@
 1. Scoring rules on hand-built sequences of states (the gauge checks are stateful), the gauge's dimensions and the
    expected score of random sorting.
 2. The gauge reading (seated / stays out / none) on blocks seated in a gap, lying on the anvils, jammed tilted,
-   held, and over the other gap.
+   held, and over the other gap; and that a block held still just clear of the gauge (hovering 1 to 3 mm above the
+   anvils or the base, flat or tilted as if wedged, where the gripper would have it before letting go) gives no
+   reading. The hooks give the scorer no gripper or contact data, so "held by the gripper" is modelled as a block
+   at rest in the air; support is judged from the block's pose alone.
 3. The demo, replayed through yam_arena.demo.ArmPlan at 20 Hz for both arms, with the blocks' resting places
    tracked so the demo's gauge readings resolve: the physical scenario (a block drops into a gap exactly when it
    is narrower), every block staying out of GO, every block dropping through both gaps, and every block passing,
@@ -43,16 +46,32 @@ ARM_CLEARANCE = 0.100  # m between the arms' link-3/4/5, gripper and TCP frame o
 
 
 # -- small helpers -----------------------------------------------------------------------------------------------
-def _state(pos, size, vel=(0.0, 0.0, 0.0)) -> ObjectState:
+def _state(pos, size, vel=(0.0, 0.0, 0.0), roll: float = 0.0) -> ObjectState:
+    """A box at ``pos``, turned ``roll`` rad about x, with its world-aligned bounding box."""
     pos, half = np.asarray(pos, float), np.asarray(size, float) / 2
-    return ObjectState(pos, np.array([0, 0, 0, 1.0]), np.asarray(vel, float), np.zeros(3), pos - half, pos + half)
+    q = np.array([np.sin(roll / 2), 0.0, 0.0, np.cos(roll / 2)])
+    r = g._rot(q)
+    corners = np.array([pos + r @ (half * s) for s in product((-1, 1), repeat=3)])
+    return ObjectState(pos, q, np.asarray(vel, float), np.zeros(3), corners.min(0), corners.max(0))
+
+
+def wedged_pose(gap: str, w: float, roll: float = np.radians(10.0)) -> tuple[np.ndarray, float]:
+    """(centre, roll) of a block wider than the gap, jammed tilted: its low bottom corner against the -y anvil's inner
+    face, its bottom face resting on the +y anvil's top inner edge (the pose seen in simulation, ~12 deg)."""
+    gy, gw = g.GAPS[gap]
+    assert gw / np.cos(roll) < w  # the bottom face reaches the far anvil
+    low = np.array([gy - gw / 2, g.ANVIL_TOP - gw * np.tan(roll)])
+    along, up = np.array([np.cos(roll), np.sin(roll)]), np.array([-np.sin(roll), np.cos(roll)])
+    c = low + along * w / 2 + up * g.PART_H / 2
+    return np.array([g.GAUGE_X, c[0], c[1]]), roll
 
 
 def _world(where: dict, vel=None) -> dict:
     out = {}
     for name, (w, x, y) in g.PARTS.items():
         pos = where.get(name, (x, y, g.TOP + g.PART_H / 2))
-        out[name] = _state(pos, (g.PART_LEN, w, g.PART_H), (vel or {}).get(name, (0, 0, 0)))
+        pos, roll = pos if len(pos) == 2 else (pos, 0.0)  # (x, y, z) or ((x, y, z), roll)
+        out[name] = _state(pos, (g.PART_LEN, w, g.PART_H), (vel or {}).get(name, (0, 0, 0)), roll)
     return out
 
 
@@ -217,6 +236,36 @@ def _scoring_cases() -> None:
     # a narrow block held on top of a gap (it would drop in) is no reading: no GO credit
     held_top = (g.GAUGE_X, g.GO_Y, g.ANVIL_TOP + g.PART_H / 2)
     assert play(sorted_, all_but(one_pass), extra=[(one_pass, held_top)]) == (6 / 7, False)
+    # Held, never let go: a block kept still just above the anvils (or the base) for 3x the check time, as a
+    # gripper still holding it would have it, then put in the right tray, earns nothing; the rest still count.
+    # (A held block is modelled as one at rest in the air: the hooks give no gripper or contact data.)
+    long = 3 * g.CHECK_HOLD_STEPS
+    hovers = {
+        wide_reject: [("go", (g.GAUGE_X, g.GO_Y, g.ANVIL_TOP + 0.0015 + g.PART_H / 2))],  # 1.5 mm over GO anvils
+        one_pass: [("go", (g.GAUGE_X, g.GO_Y, g.BASE_TOP + 0.0015 + g.PART_H / 2)),  # 1.5 mm over the base, in GO
+                   ("nogo", (g.GAUGE_X, g.NOGO_Y, g.ANVIL_TOP + 0.0015 + g.PART_H / 2))],  # then over NO-GO
+        narrow_reject: [("go", (g.GAUGE_X, g.GO_Y, g.BASE_TOP + 0.002 + g.PART_H / 2)),
+                        ("nogo", (g.GAUGE_X, g.NOGO_Y, g.BASE_TOP + 0.002 + g.PART_H / 2))],
+    }
+    wedge_c, wedge_roll = wedged_pose("go", g.WIDTHS[wide_reject])
+    tilted_hover = (wedge_c + (0, 0, 0.0015), wedge_roll)  # tilted as if wedged, 1.5 mm clear of both anvils
+    for name, steps_ in hovers.items():
+        got = play(sorted_, all_but(name), extra=[(name, pos) for _, pos in steps_ for _ in range(3)], steps=long)
+        assert got == (6 / 7, False), (name, got)
+        assert g._CHECKS.go[name] is None and g._CHECKS.nogo[name] is None, name
+    got = play(sorted_, all_but(wide_reject), extra=[(wide_reject, tilted_hover)], steps=long)
+    assert got == (6 / 7, False) and g._CHECKS.go[wide_reject] is None, got
+    # the same block really let go onto the gauge is credited (the hovers above fail only for want of support)
+    wedge_rest = (wedge_c, wedge_roll)
+    assert play(sorted_, all_but(wide_reject), extra=[(wide_reject, wedge_rest)], steps=long) == (1.0, True)
+    # Gaming, all at 0: every block hovered over its gaps and never let go, then sorted right; nothing gauged;
+    # every check one step short; everything in one tray (above and below).
+    every_hover = [(n, p) for n in names for _, p in hovers.get(
+        n, [("go", (g.GAUGE_X, g.GO_Y, (g.BASE_TOP if g.WIDTHS[n] < g.GO_GAP else g.ANVIL_TOP) + 0.0015
+                     + g.PART_H / 2))])]
+    assert play(sorted_, extra=every_hover, steps=long) == (0.0, False)
+    assert play(sorted_, extra=[(n, tilted_hover) for n in sorted(g.REJECT) if g.WIDTHS[n] > g.UPPER],
+                steps=long) == (0.0, False)
     # checks clear at the next trial's start
     play(sorted_, names)
     assert play(sorted_) == (0.0, False)
@@ -279,11 +328,9 @@ def check_reading() -> None:
     def at(gap, w, bottom, dy=0.0, tall=g.PART_H):
         return _state((g.GAUGE_X, g.GAPS[gap][0] + dy, bottom + tall / 2), (g.PART_LEN, w, tall))
 
-    def wedged(gap, w):  # tipped about one anvil edge until its low corner meets the other anvil's face
-        gap_w = g.GAPS[gap][1]
-        th = np.arccos(gap_w / w)
-        drop = w * np.sin(th)
-        return at(gap, w, g.ANVIL_TOP - drop, dy=0.002, tall=drop + g.PART_H * np.cos(th))
+    def wedged(gap, w, lift=0.0):  # jammed tilted between the anvils; ``lift``: held that far above that pose
+        c, roll = wedged_pose(gap, w)
+        return _state(c + (0, 0, lift), (g.PART_LEN, w, g.PART_H), roll=roll)
 
     for gap, (_, gap_w) in g.GAPS.items():
         small, big = gap_w - g.MARGIN, gap_w + g.MARGIN
@@ -292,13 +339,31 @@ def check_reading() -> None:
         assert not g.seated(at(gap, big, g.ANVIL_TOP), gap)  # on the anvils
         assert g.stays_out(at(gap, big, g.ANVIL_TOP), gap)
         assert not g.seated(wedged(gap, big), gap)  # jammed tilted
-        assert g.stays_out(wedged(gap, big), gap)
+        assert g.stays_out(wedged(gap, big), gap, big)
+        assert not g.stays_out(wedged(gap, big), gap)  # a tilted pose needs the width to check contact
         assert not g.seated(wedged(gap, gap_w + 0.005), gap)
+        assert g.stays_out(wedged(gap, gap_w + 0.005), gap, gap_w + 0.005)
         assert not g.seated(at(gap, small, g.BASE_TOP + 0.012), gap)  # still on its way down / held
         assert not g.stays_out(at(gap, big, g.ANVIL_TOP + 0.010), gap)  # held above the anvils
         other = "go" if gap == "nogo" else "nogo"
         assert not g.seated(at(gap, small, g.BASE_TOP), other)  # the other gap
         assert not g.stays_out(at(gap, big, g.ANVIL_TOP), other)
+        # Held, not released: a block at rest just clear of the gauge, as a gripper still holding it would have it
+        # (the scorer gets no gripper or contact data). 1 to 3 mm of air under it: no reading. The old rule (3 mm
+        # tolerances, no contact test) read every one of these.
+        for air in (0.001, 0.0015, 0.002, 0.0029):
+            assert not g.stays_out(at(gap, big, g.ANVIL_TOP + air), gap, big), (gap, air)  # flat, above the anvils
+            assert not g.seated(at(gap, small, g.BASE_TOP + air), gap), (gap, air)  # above the base, in the gap
+            assert not g.stays_out(wedged(gap, big, lift=air), gap, big), (gap, air)  # tilted, clear of both anvils
+        # supported but not still (being set down or dragged across): no reading
+        moving = (0.0, 0.03, 0.0)
+        assert not g.seated(_state(at(gap, small, g.BASE_TOP).pos, (g.PART_LEN, small, g.PART_H), moving), gap)
+        assert not g.stays_out(_state(at(gap, big, g.ANVIL_TOP).pos, (g.PART_LEN, big, g.PART_H), moving), gap, big)
+        # level on the anvils but not spanning the gap (it would tip in): held
+        assert not g.stays_out(at(gap, big, g.ANVIL_TOP, dy=0.012), gap, big)
+        # tilted 5 deg on the base: not lying flat in the gap (held, or propped)
+        tipped = _state(at(gap, small, g.BASE_TOP).pos, (g.PART_LEN, small, g.PART_H), roll=np.radians(5))
+        assert not g.seated(tipped, gap)
     # gauge_reading: only the reading the block's width allows
     for name, w in g.WIDTHS.items():
         for gap, (_, gap_w) in g.GAPS.items():
@@ -307,7 +372,8 @@ def check_reading() -> None:
             assert g.gauge_reading(name, on_top, gap) is (None if w < gap_w else False), (name, gap)
             if w < gap_w:  # held partway down the gap: no reading
                 assert g.gauge_reading(name, at(gap, w, g.BASE_TOP + 0.012), gap) is None, (name, gap)
-    print("gauge reading: seated / on the anvils / jammed / held / other gap all read right; readings follow width")
+    print("gauge reading: seated / on the anvils / jammed / held / other gap all read right; readings follow width;"
+          " blocks held 1-3 mm clear of the anvils or base (flat or tilted), moving, or tipped give no reading")
 
 
 # -- 3. the demo -------------------------------------------------------------------------------------------------
@@ -337,6 +403,10 @@ class Blocks:
             rest = g.TOP
             for gap, (gy, _) in g.GAPS.items():
                 if abs(p[0] - g.GAUGE_X) < 0.01 and abs(p[1] - gy) < 0.01:
+                    # In simulation the block slides back under the TCP as the fingers open, landing off by about
+                    # -RELEASE_DY (logs/poses-r1); the demo's RELEASE_DY cancels that. Model the slide, so a block
+                    # lands where it would in the simulator, not where the TCP is.
+                    p = p - (0.0, g.RELEASE_DY[arm], 0.0)
                     seat = self.outcome(held, gap)
                     self.readings[held, gap] = seat
                     rest = g.BASE_TOP if seat else g.ANVIL_TOP

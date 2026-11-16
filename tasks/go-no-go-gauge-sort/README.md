@@ -50,16 +50,25 @@ a ten-sided die for 0 to 9) and set the blocks out by the numbers on their under
 
 A block earns credit only if it was checked with the gauge, in order, and ends in the right tray.
 
-- **A valid check** of a block at a gap: for at least 0.3 s (6 control steps in a row at 20 Hz) the block
-  either lies **seated** in the gap or **stays out**, resting on that gap's anvils.
-  - Seated: flat on the gauge base between that gap's anvils. Its centre is within 15 mm of the gap's centre,
-    its lowest point within 3 mm of the base, and its highest point less than 8 mm above the anvil tops.
-  - Stays out: resting on that gap's anvils, flat across them or wedged between them. Its centre is over the
-    gap, it is still, its lowest point is above the base by 3 mm or more but no more than 3 mm above the anvil
-    tops, and its highest point is no more than 3 mm above a block lying flat on them.
+- **A valid check** of a block at a gap: for at least 0.3 s (6 control steps in a row at 20 Hz) the block has
+  been let go and is **supported by the gauge**: still (under 1 cm/s and 0.5 rad/s), centred over the gap
+  (within 15 mm), and either **seated** in the gap or **staying out** on that gap's anvils.
+  - Seated: lying level (tilted 2 degrees or less) on the gauge base between the anvils, its lowest point
+    within 0.5 mm of the base.
+  - Stays out: clear of the base by 3 mm or more, and either lying level across both anvils (its lowest point
+    within 0.5 mm of the anvil tops, its bottom spanning the gap) or tilted and touching both anvils within
+    0.5 mm (wedged). Its highest point is no more than 3 mm above a block lying flat on them.
   - The reading must also be one the block's width allows: only a block narrower than the gap can seat, and
     only a wider one can rest on top. A narrow block held up on top of a gap, or partway down it, is no
-    reading. In the simulator this stands in for "the gripper is not holding it".
+    reading.
+  - Held is not a check. A block kept still in the air near the gauge, as a gripper that has not let go would
+    keep it, is not supported, and gives no reading even 1 mm above the anvils or the base. (Blocks that were
+    let go lay within 0.02 mm of the base or the anvil tops in the simulator logs.)
+  - What the simulator can and cannot see: the task file's hooks get each object's pose, velocity and bounding
+    box only, not the gripper's opening, the fingers' poses or contact forces. So the scorer judges release
+    from the block alone: still, and touching the gauge in a pose the gauge holds up. A gripper holding a
+    block perfectly still in exactly such a pose would not be told apart; in a real trial the judge checks
+    the gripper is open and clear (below).
 - **Order:** every block needs a valid GO check. A block seated in GO then needs a valid NO-GO check after it.
   A NO-GO reading before the block has passed GO doesn't count. A block that stays out of GO needs no NO-GO
   check. The first valid reading at each gap stands. The readings then call for a tray: stays out of GO, red;
@@ -104,6 +113,10 @@ python tasks/go-no-go-gauge-sort/check_demo.py     # about 4.5 min
   - Checks one step short of 0.3 s count for nothing.
   - A GO passer with no NO-GO check, or with NO-GO only before GO, gets no credit.
   - A narrow block held on top of GO gets no credit.
+  - Held, never let go: a block kept still 1.5 to 2 mm above the GO anvils, above the base in GO or NO-GO, or
+    tilted as if wedged but 1.5 mm clear of both anvils, for 0.9 s, then sorted right, gets no credit (6/7
+    with the rest checked); the same block really wedged is credited. Every block hovered over its gaps and
+    then sorted right scores 0.
   - Checks clear at the next trial's start.
   - These don't count as in a tray: a block held 10 cm or 5 mm above the floor, on the near or side rim,
     straddling a wall, or still moving. A block one layer up with nothing beneath doesn't count either; a
@@ -112,19 +125,23 @@ python tasks/go-no-go-gauge-sort/check_demo.py     # about 4.5 min
   - One escape: 0.25; two: 1/7. One false reject: 4/7. Only the in-tolerance blocks sorted: 3/7; only the
     others: 4/7.
   - Checked, then sorted at random over all 2^7 ways: expected score 0.052.
-- **The gauge reading:** checked on blocks seated in a gap, on the anvils, jammed tilted, held, partway down
-  and over the other gap; each reading must follow the block's width.
+- **The gauge reading:** checked on blocks seated in a gap, on the anvils, jammed tilted (two wedge angles),
+  held, partway down and over the other gap; each reading must follow the block's width. No reading for a
+  block held still 1 to 2.9 mm above the anvils or the base (flat), or 1 to 2.9 mm clear of a wedged pose;
+  for a block moving while on the gauge; for one level on the anvils but not spanning the gap; or one tipped
+  5 degrees on the base.
 - **The demo, replayed offline:** through `yam_arena.demo.ArmPlan` at 20 Hz, with `score()` running every step
   as in the simulator, but with no physics: a block moves with the TCP while gripped and drops straight down
-  when let go, and the scenario decides whether it seats. This checks the plan's logic, not that it works in the
+  when let go (over a gap, shifted by the release slide that `RELEASE_DY` corrects), and the scenario decides
+  whether it seats. This checks the plan's logic, not that it works in the
   simulator; the demo has been run in the simulator on layout 3 only (see Submitted runs).
   - Assumed outcomes (a block drops into a gap exactly when it is narrower) for layouts 0 to 9. In each, the
     scorer registers every block's GO check, a NO-GO check exactly for the GO passers, and a final 1.0.
   - Every block staying out of GO, every block dropping through both gaps, and every block passing, on layout
     3. Between them, these take each arm through every branch.
   - 4,005 steps (200 s), with a 0.5 s hold with the fingers shut before every let-go over a gap.
-  - Worst IK error 0.083 mm / 0.015 deg, every joint inside the URDF limits, and the arms' link-3/4/5,
-    gripper and TCP frames never closer than 165 mm.
+  - Worst IK error 0.095 mm / 0.015 deg, every joint inside the URDF limits, and the arms' link-3/4/5,
+    gripper and TCP frames never closer than 164 mm.
 
 ## Run and score one Dream-1 trial
 
@@ -199,10 +216,12 @@ well over the 0.3 s a check needs.
 
 ## Submitted runs
 
-To be redone for this revision on layout 3 (the earlier runs used a fixed layout and tray-only scoring):
+Layout 3, `object_jitter=0`, `--seed 0`, 20 Hz, scored by `task_score`:
 
-- Scripted demo, layout 3, `object_jitter=0`: `task_score` pending.
-- Dream-1, same settings, all 6,000 steps: `task_score` pending.
+- Dream-1: 0.0, all 6,000 steps.
+- Scripted demo: 1.0, success after 3,971 steps. Run under the previous check rule (3 mm tolerances); to be
+  re-confirmed under the support rule above. Replayed through the new rule, that run's logged block poses
+  give the same gauge checks at the same control steps.
 - `task.json` `scores` records both, and `media` holds the uploaded videos and setup screenshot.
 
 ## Reset between trials

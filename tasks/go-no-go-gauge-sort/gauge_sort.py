@@ -175,10 +175,16 @@ def use_layout(seed: int) -> None:
 
 # -- scoring ---------------------------------------------------------------------------------------------------
 # A block earns credit only if it was checked with the gauge, in order, and ends in the right tray:
-#   GO check: for CHECK_HOLD_STEPS control steps in a row (0.3 s at 20 Hz) the block is seated in the GO gap, or
-#     rests on the GO anvils (flat across them or wedged between them) without reaching the base. Each reading must
-#     be the one the block's width allows (only a narrower block can seat; only a wider one can rest on top), so a
-#     narrow block held above the gap does not read "stays out".
+#   GO check: for CHECK_HOLD_STEPS control steps in a row (0.3 s at 20 Hz) the block is at rest and supported by
+#     the gauge: seated (lying level on the base between the GO anvils, its bottom within SUPPORT_TOL of the base),
+#     or staying out (lying level across both GO anvils, its bottom within SUPPORT_TOL of their tops; or tilted and
+#     touching both anvils, within SUPPORT_TOL, clear of the base). A block held still in the air near those poses,
+#     even 1 mm above the anvils or the base, is not supported and gives no reading. Each reading must also be the
+#     one the block's width allows (only a narrower block can seat; only a wider one can rest on top), so a narrow
+#     block held on top of the gap does not read "stays out".
+#   The task hooks get each object's pose, velocity and bounding box only: no gripper opening, finger poses or
+#   contact forces. So "released" is judged from the block alone (still, and in contact with the gauge in a pose
+#   the gauge holds up); a gripper holding a block still in exactly such a pose cannot be told apart.
 #   NO-GO check: the same over the NO-GO gap, counted only after the block has passed GO. A block that stays out of
 #     GO needs no NO-GO check.
 # The first valid reading at each gap stands. Checks clear when a trial starts (every block lying still on the
@@ -189,46 +195,151 @@ CHECK_HOLD_STEPS = 6  # 0.3 s at the 20 Hz control rate
 LAYER_TOL = 0.003
 START_TOL = 0.035  # covers the embodiment's default 3 cm object jitter
 OVER_GAP, SEATED_LOW, SEATED_HIGH = 0.015, 0.003, 0.008  # see seated()
-ON_ANVILS = 0.003  # resting on the anvils: lowest point at most this far above the anvil tops
+ON_ANVILS = 0.003  # a tilted block's top at most this far above PART_H over the anvil tops
+# Supported: in contact with the gauge within SUPPORT_TOL. In the layout-3 simulator logs, blocks lying on the base
+# or flat on the anvils sat within 0.02 mm of them; a wedged block touched both anvils.
+SUPPORT_TOL = 0.0005
+FLAT_TILT = math.radians(2.0)  # level: the block's height axis within this of vertical
 ESCAPE_CAP = 0.25  # the most a trial earns with any out-of-tolerance part in the green tray
 ESCAPE_COST = 2  # an escape costs two correct parts' credit
 FALSE_REJECT_COST = 2  # so does a false reject: with 3 in tolerance and 4 not, every part in the red tray scores 0
 
 
+def _rot(q) -> np.ndarray:
+    x, y, z, w = (float(v) for v in q)
+    return np.array([
+        [1 - 2 * (y * y + z * z), 2 * (x * y - z * w), 2 * (x * z + y * w)],
+        [2 * (x * y + z * w), 1 - 2 * (x * x + z * z), 2 * (y * z - x * w)],
+        [2 * (x * z - y * w), 2 * (y * z + x * w), 1 - 2 * (x * x + y * y)],
+    ])
+
+
+def tilt(state) -> float:
+    """Angle (rad) between the block's height axis and vertical."""
+    return float(math.acos(min(1.0, abs(_rot(state.quat_xyzw)[2, 2]))))
+
+
+def _hull(pts) -> list:
+    pts = sorted({(round(p[0], 9), round(p[1], 9)) for p in pts})
+    if len(pts) <= 2:
+        return pts
+
+    def cross(o, a, b):
+        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+
+    lo, hi = [], []
+    for p in pts:
+        while len(lo) >= 2 and cross(lo[-2], lo[-1], p) <= 0:
+            lo.pop()
+        lo.append(p)
+    for p in reversed(pts):
+        while len(hi) >= 2 and cross(hi[-2], hi[-1], p) <= 0:
+            hi.pop()
+        hi.append(p)
+    return lo[:-1] + hi[:-1]
+
+
+def section(state, width: float) -> list:
+    """A block's outline seen along x (the gauge's gaps run along x): a convex polygon in (y, z)."""
+    half = np.array([PART_LEN, width, PART_H]) / 2
+    r, c = _rot(state.quat_xyzw), np.asarray(state.pos, float)
+    corners = [c + r @ (half * s) for s in np.array(np.meshgrid(*[(-1, 1)] * 3)).T.reshape(-1, 3)]
+    return _hull([(p[1], p[2]) for p in corners])
+
+
+def _seg_dist(p, q, a, b) -> float:
+    p, q, a, b = (np.asarray(v, float) for v in (p, q, a, b))
+
+    def pt(x, s0, s1):
+        d = s1 - s0
+        t = 0.0 if not d.any() else min(1.0, max(0.0, float(np.dot(x - s0, d) / np.dot(d, d))))
+        return float(np.linalg.norm(x - (s0 + t * d)))
+
+    def side(o, u, v):
+        return (u[0] - o[0]) * (v[1] - o[1]) - (u[1] - o[1]) * (v[0] - o[0])
+
+    if side(p, q, a) * side(p, q, b) < 0 and side(a, b, p) * side(a, b, q) < 0:
+        return 0.0
+    return min(pt(p, a, b), pt(q, a, b), pt(a, p, q), pt(b, p, q))
+
+
+def _inside(x, poly) -> bool:
+    """Is point x inside (or on) the convex counter-clockwise polygon?"""
+    n = len(poly)
+    return n >= 3 and all(
+        (poly[(i + 1) % n][0] - poly[i][0]) * (x[1] - poly[i][1])
+        - (poly[(i + 1) % n][1] - poly[i][1]) * (x[0] - poly[i][0]) >= -1e-12
+        for i in range(n)
+    )
+
+
+def poly_dist(a: list, b: list) -> float:
+    """Gap (m) between two convex polygons in (y, z); 0 if they touch or overlap."""
+    if any(_inside(p, b) for p in a) or any(_inside(p, a) for p in b):
+        return 0.0
+    return min(_seg_dist(a[i], a[(i + 1) % len(a)], b[j], b[(j + 1) % len(b)])
+               for i in range(len(a)) for j in range(len(b)))
+
+
+def anvil_sections(gap: str) -> list[list]:
+    """This gap's two anvils seen along x: rectangles in (y, z), counter-clockwise."""
+    gy, gw = GAPS[gap]
+    out = []
+    for s in (+1, -1):
+        y0, y1 = sorted((gy + s * gw / 2, gy + s * (gw / 2 + ANVIL[1])))
+        out.append([(y0, BASE_TOP), (y1, BASE_TOP), (y1, ANVIL_TOP), (y0, ANVIL_TOP)])
+    return out
+
+
+def _over(state, gap: str) -> bool:
+    return bool(abs(state.pos[0] - GAUGE_X) < OVER_GAP and abs(state.pos[1] - GAPS[gap][0]) < OVER_GAP)
+
+
 def seated(state, gap: str) -> bool:
-    """Has this block dropped into this gap: lying flat on the gauge base, between the anvils? A block resting on
-    the anvils, or jammed tilted between them, has not. (A seated block stands 5 mm proud of the anvil tops.)"""
-    gy = GAPS[gap][0]
+    """Supported in this gap: at rest, level, its bottom on the gauge base (within SUPPORT_TOL), between the
+    anvils. A block resting on the anvils, jammed tilted between them, or held above the base has not seated. (A
+    seated block stands 5 mm proud of the anvil tops.)"""
     return bool(
-        abs(state.pos[0] - GAUGE_X) < OVER_GAP
-        and abs(state.pos[1] - gy) < OVER_GAP
-        and state.low[2] < BASE_TOP + SEATED_LOW
+        _over(state, gap)
+        and state.resting()
+        and tilt(state) <= FLAT_TILT
+        and abs(state.low[2] - BASE_TOP) <= SUPPORT_TOL
         and state.high[2] < ANVIL_TOP + SEATED_HIGH
     )
 
 
-def stays_out(state, gap: str) -> bool:
-    """Is this block resting on this gap's anvils, flat across them or wedged between them, still and clear of the
-    base?"""
-    gy = GAPS[gap][0]
-    return bool(
-        abs(state.pos[0] - GAUGE_X) < OVER_GAP
-        and abs(state.pos[1] - gy) < OVER_GAP
-        and state.resting()
-        and BASE_TOP + SEATED_LOW <= state.low[2] <= ANVIL_TOP + ON_ANVILS
-        and state.high[2] <= ANVIL_TOP + PART_H + ON_ANVILS
-    )
+def stays_out(state, gap: str, width: float | None = None) -> bool:
+    """Supported on this gap's anvils, at rest and clear of the base: level across both anvil tops (bottom within
+    SUPPORT_TOL of them, spanning the gap), or tilted and touching both anvils within SUPPORT_TOL (wedged; needs
+    the block's ``width``). A block held still above the anvils is neither."""
+    if not (_over(state, gap) and state.resting()):
+        return False
+    gy, gw = GAPS[gap]
+    if not (state.low[2] >= BASE_TOP + SEATED_LOW and state.high[2] <= ANVIL_TOP + PART_H + ON_ANVILS):
+        return False
+    if tilt(state) <= FLAT_TILT:
+        return bool(abs(state.low[2] - ANVIL_TOP) <= SUPPORT_TOL
+                    and state.low[1] < gy - gw / 2 and state.high[1] > gy + gw / 2)
+    if width is None:
+        return False
+    sec = section(state, width)
+    return all(poly_dist(sec, a) <= SUPPORT_TOL for a in anvil_sections(gap))
 
 
 def gauge_reading(name: str, state, gap: str) -> bool | None:
-    """True: seated in the gap; False: stays out on its anvils; None: no reading (elsewhere, moving, or a pose the
-    block's width cannot take on its own, e.g. a narrow block held up on top of the gap)."""
+    """True: seated in the gap; False: stays out on its anvils; None: no reading (elsewhere, moving, held clear of
+    the gauge, or a pose the block's width cannot take on its own, e.g. a narrow block held up on top of the gap)."""
     narrower = WIDTHS[name] < GAPS[gap][1]
     if narrower and seated(state, gap):
         return True
-    if not narrower and stays_out(state, gap):
+    if not narrower and stays_out(state, gap, WIDTHS[name]):
         return False
     return None
+
+
+def looks_seated(state, gap: str) -> bool:
+    """The demo's look (not the scoring): is the block down in the gap, near the base? Pose only, as before."""
+    return bool(_over(state, gap) and state.low[2] < BASE_TOP + SEATED_LOW and state.high[2] < ANVIL_TOP + SEATED_HIGH)
 
 
 class _Checks:
@@ -362,10 +473,11 @@ def distance(objects) -> float:
 #   2. looks: if the block lies seated in the gap, it takes it out and sets it over the NO-GO gap the same way;
 #      if not (lying on the anvils or jammed between them), it takes it to the red tray;
 #   3. after a NO-GO test, looks again: seated in NO-GO goes to the red tray, anything else to the green tray.
-# "Looks" is the simulator's pose of that block (see seated()), the way an inspector sees whether a part sits down
-# in the gap; yam_scripted's observations carry only images and joints, so the task file's score() hook, which
-# runs after every control step, keeps the latest object states for the demo (_see). The waypoints after each
-# look are _Lazy: each works out its target the first time the plan reaches it, from those states.
+# "Looks" is the simulator's pose of that block (looks_seated(), not the scorer's stricter seated()), the way an
+# inspector sees whether a part sits down in the gap; yam_scripted's observations carry only images and joints, so
+# the task file's score() hook, which runs after every control step, keeps the latest object states for the demo
+# (_see). The waypoints after each look are _Lazy: each works out its target the first time the plan reaches it,
+# from those states.
 #
 # Grip: straight down, turned 90 degrees so the fingers close along x on the block's 50 mm ends (left arm -90,
 # right arm +90 deg, inside joint6's +-120 deg). The fingers then stand clear of the anvils, which are only 10 mm
@@ -461,7 +573,8 @@ def _gap_detail(name: str, s, gap: str) -> dict:
     return {
         "recorded": (_CHECKS.go if gap == "go" else _CHECKS.nogo)[name],  # True seated, False stays out, None not yet
         "now": gauge_reading(name, s, gap),
-        "seated": seated(s, gap), "stays_out": stays_out(s, gap),
+        "seated": seated(s, gap), "stays_out": stays_out(s, gap, WIDTHS[name]),
+        "tilt_deg": round(math.degrees(tilt(s)), 2),
         "streak": streak, "streak_reading": reading,
         "dx_mm": _mm(s.pos[0] - GAUGE_X), "dy_mm": _mm(s.pos[1] - gy),
     }
@@ -547,7 +660,7 @@ class _Inspector:
         if (name, gap) not in self.readings:
             s = _sense(name)
             grip = (float(s.pos[0]), float(s.pos[1]), max(float(s.low[2]), BASE_TOP) + GRIP_ABOVE_BOTTOM)
-            self.readings[name, gap] = (seated(s, gap), grip)
+            self.readings[name, gap] = (looks_seated(s, gap), grip)
         return self.readings[name, gap]
 
     def spot(self, arm: str, name: str, tray: str) -> tuple[float, float, float]:
