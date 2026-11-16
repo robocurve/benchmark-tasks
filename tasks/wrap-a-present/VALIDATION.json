@@ -1,0 +1,59 @@
+{
+  "status": "validated_submission",
+  "scores": {
+    "demo": 1.0,
+    "dream": 0.0
+  },
+  "control_hz": 20,
+  "steps": {
+    "demo": 1596,
+    "dream": 1600
+  },
+  "wall_seconds": {
+    "demo": 803.5588078983128,
+    "dream": 920.6731328330934
+  },
+  "runtime_sources_match": false,
+  "physics_sources_match": true,
+  "baseline_render_equivalent": true,
+  "render_equivalence": {
+    "verified": true,
+    "baseline_old_sha256": "7e73952127833cc2936d81a2774b2a1e865faa3fba5fc3a92e508ac72ddf6503",
+    "demo_new_sha256": "19a7c2d7b1a299ce46a7c2abafc9e93a8820758e47b0450e9cd2c4c09a616eeb",
+    "maximum_baseline_side_fold_degrees": 29.18974339129709,
+    "threshold_degrees": 89.9,
+    "explanation": "Only draw() offsets closed paper faces 0.6 mm to avoid coplanar box occlusion. The baseline never entered this branch, so its rendering, physics and policy observations are unchanged by this patch.",
+    "exact_added_code": "   # Render paper just outside a coplanar box face; physics uses the original fold.\n   if self.angles[k,0]>np.radians(89.9):verts[:4]+=self.out[k]*.0006\n"
+  },
+  "sources_sha256": {
+    "planner.py": "cf5a17d495934590ad6b93ef1462f82be10c6a7e326881bb116167565305b05a",
+    "task.py": "eb84148208bd7feda29ed0b21b3706479a6d298e9cd65ba5afa78c8e70addde6",
+    "run.py": "34c9f0cf698f2d3ce210c3c185ec5ba6ae3ce6a324e71b420b625d5e8568ade7",
+    "rescore.py": "c8de0dc83a4693d875e1dd21cbd118fe7faa9253404284625def048679b2c420",
+    "make_plan.py": "19ab3db79242cd346bbff25875cd7afa20ee2a1dde29458030b3b377348df4ad",
+    "model.py": "19a7c2d7b1a299ce46a7c2abafc9e93a8820758e47b0450e9cd2c4c09a616eeb",
+    "common.py": "9aa9f4c28a19dc514cccfa6ea88568bebc3f581e46e9ff3a9a74a98cceca624b",
+    "joint_tracking.py": "f22bb7c34c8c4ba51859844f77fef8b29337b5b6353e7cc0b85cf0247866c453",
+    "dream_policy.py": "6a4690cc28fbebb04e372e39db41b4ba665ad2b7a2dcd1a7238228363846d67c",
+    "demo-plan.json": "aca93f9dd5b173c2d3e75811768078c1ed02c9b0d2b7920524eb5a06d9cfebb6",
+    "review_views.py": "85d34ac7f115486d411a74b73532afb6b94010e298741c7bf6c611930334bf21"
+  },
+  "metadata_only_differences": "Docs/metadata finalized; one audited conditional rendering patch is detailed in render_equivalence. Runtime source is not byte-identical.",
+  "visual_review_passed": true,
+  "visual_review": {
+    "passed": true,
+    "method": "Native front demo frames at 0, 8, 16, 23, 33, 44, 56, 69 and 79.8 seconds, rear final photograph; native front Dream frames every 10 seconds from 0 to 80; frozen-source trace rescoring.",
+    "demo": "Both arms fold the four prepared paper flaps and secure the two overlaps with separate tape strips. Final front and rear views show the blue paper covering the box; both arms are clear for 9.5 seconds. Score 1.0.",
+    "dream": "Moves a flap but does not secure either pair. Completes the 1,600-action budget at 0.0.",
+    "limitations": "Pre-cut paper has passive creases and fixed central support; no arbitrary crumpling. Tape capture and adhesion are simplified. The demo's closed-side render offset is absent from the earlier baseline source, but exact code comparison and all-frame angle checks prove that branch never activates in the baseline. Physics and observations are unchanged."
+  },
+  "dream_requests": 196,
+  "dream_sessions": {
+    "session_count": 1
+  },
+  "media_uploaded": true,
+  "checked_utc": "2026-11-16T00:22:42.948807+00:00",
+  "remaining_gates": [
+    "PR ingestion confirmation"
+  ]
+}
