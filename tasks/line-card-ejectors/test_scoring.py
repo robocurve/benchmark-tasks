@@ -75,7 +75,7 @@ def test_seated_and_shut():
 
 def test_full_score_only_after_one_second_held():
     held = [_objects(gap=0.0003, lever_l=-0.4, lever_r=0.4) for _ in range(20)]
-    assert _run(held[:19]) == (0.75, True)            # 19 steps: success not yet held 1 s
+    assert _run(held[:19]) == (0.75, False)           # 19 steps: not yet held 1 s, so no success
     assert _run(held) == (1.0, True)
     T._reset_state()
     T._STATE["clear"] = True
