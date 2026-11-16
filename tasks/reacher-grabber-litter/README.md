@@ -87,10 +87,11 @@ bin when its centre is inside the bin's inner walls and below its rim.
 - 0 if a gripper touched a piece of litter at any point (any part of a piece within 3 mm of a gripper's fingers, the
   space between them or the gripper body just above them), or if the tool fell off the table (its handle more than 3 cm
   below the table top, or beyond the table's edges and less than 5 cm above the table top).
-- 1.0 (success, which must hold for 1 s): all three pieces in the bin and still (moving less than 1 mm over the last
-  1 s).
+- Success: all three pieces in the bin and still (moving less than 1 mm over the last 1 s). It scores 1.0 once success
+  has held for 1 s (20 control steps in a row), when the episode ends.
 - Otherwise 0.3 for each piece in the bin plus 0.1 for each piece that was lifted clear of the table (its lowest point
-  5 cm or more above the table top) at some point but is not in the bin; at most 0.7 (two in, one lifted).
+  5 cm or more above the table top) at some point but is not in the bin: 0.9 with all three in before success has
+  held for 1 s, otherwise at most 0.7 (two in, one lifted).
 
 ## Runtime and seeds
 

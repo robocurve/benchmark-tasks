@@ -82,9 +82,12 @@ def test_mixed_partial():
 
 def test_all_in_bin_needs_to_be_still():
     objs = _objects(can=BIN_IN, bottle=BIN_IN + (0.04, 0.02, 0.03), cup=BIN_IN + (-0.07, 0, 0.02))
-    score, ok = _run([objs] * 5)
-    assert score == 1.0 and not ok
-    assert _run([objs] * 25) == (1.0, True)
+    assert _run([objs] * 5) == (0.9, False)              # all in, not yet still: 3 x 0.3
+    assert _run([objs] * 20) == (0.9, True)              # still for 1 s: success, not yet held for 1 s
+    assert _run([objs] * 39) == (1.0, True)
+    steps = [_objects(can=BIN_IN, bottle=BIN_IN + (0.04, 0.02, 0.03), cup=BIN_IN + (-0.07, 0, 0.02)) for _ in range(39)]
+    T._reset_state()
+    assert [T.score(o) for o in steps][-2:] == [0.9, 1.0]   # score() alone gives the same
 
 
 def test_resting_on_the_rim_or_outside_is_not_in():
