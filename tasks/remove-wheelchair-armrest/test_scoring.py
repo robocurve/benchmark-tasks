@@ -80,7 +80,7 @@ def test_lying_clear_succeeds_once_still():
 def test_full_score_only_after_one_second_held():
     head = [_objects(pos=LIFTED), _objects(pos=CARRIED)]
     rest = [_objects(pos=LYING, tilt=UP) for _ in range(20)]
-    assert _run(head + rest[:19]) == (0.75, True)      # at rest 19 steps: success not yet held 1 s
+    assert _run(head + rest[:19]) == (0.75, False)     # at rest 19 steps: not yet held 1 s, so no success
     assert _run(head + rest) == (1.0, True)
     T._reset_state()                                  # score() alone gives the same
     assert [T.score(o) for o in head + rest][-2:] == [0.75, 1.0]
