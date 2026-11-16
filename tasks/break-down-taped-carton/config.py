@@ -1,6 +1,7 @@
 """Starting pose of the empty, top-open bottom-taped carton."""
 TOP=.7475
-CUTTER_START=(.13,.27,TOP+.020)
+CUTTER_START=(.13,.42,TOP+.020)
+CUTTER_PAD_START=(CUTTER_START[0],CUTTER_START[1],TOP+.001)
 # Empty used carton starts upright, with top flaps folded back.
 BOTTOM_UP=False
 CENTER=(.25,-.10,TOP+.183)

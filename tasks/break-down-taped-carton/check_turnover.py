@@ -12,7 +12,7 @@ from yam_arena.urdf import quat_xyzw_to_matrix
 from turnover import rx,push_target,brace_target,solve_target
 from turnover_safety import Geometry,BASES
 from scene import layout
-from config import CENTER,TOP,CUTTER_START
+from config import CENTER,TOP,CUTTER_START,CUTTER_PAD_START
 from model import WIDTH,HEIGHT
 
 ANGLES=(0,10,20,25,30,45,60,75,88,90,100,120,140,160,178,180)
@@ -22,7 +22,7 @@ def parked_cutter():
  result={}
  for name,size,offset in [('handle',(.1,.025,.025),(0,0,0)),('guard',(.02,.03,.02),(.052,0,.002)),('blade',(.014,.0005,.008),(.062,0,-.016))]:
   result['cutter_'+name]=(np.array(CUTTER_START)+offset,np.eye(3),size)
- result['cutter_pad']=(np.array([.13,.27,TOP+.001]),np.eye(3),(.17,.07,.002))
+ result['cutter_pad']=(np.array(CUTTER_PAD_START),np.eye(3),(.17,.07,.002))
  return result
 
 

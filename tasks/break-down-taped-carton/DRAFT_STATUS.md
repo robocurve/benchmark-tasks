@@ -1,5 +1,5 @@
-# Incomplete feedback draft — native follow-up
+# Incomplete feedback draft — no full feasibility demo
 
-Native source 74dcd3e reached contact at 278 controls / 13.9 simulated seconds, then rejected the next issued target at 2.00425 mm depth versus the unchanged 2 mm limit; carton rotation was only 0.00968°. No flip occurred. A subsequent CPU-only repair 57fdc5b adds transactional PI/planning, bounded guarded backtracking and geometric settling; Astra approved it, with 97 task tests + 3 controller checks passing. It has not run natively; force adequacy/turnover/opening/collapse remain unproved.
+Latest native source6b0f302 ran325controls/16.25simseconds. Both signed hand-contact forces were acquired, but a fresh previous-command clearance check rejected further action; final carton rotation0.0183degrees, no meaningful flip. Actual native sensor clocks and motor telemetry were verified. Opening/collapse and the full upright-start sequence remain unproved.
 
-The retained VM is confirmed STOPPED after a19.2-minute start-to-stop window. New preview clips are labelled partial, unscored offline replays of actual native poses; they are not native RGB or full-score evidence. No task.json/media ID is supplied.
+The retained VM is OFF. The latest window used32.65conservative start-to-STOPPED wall minutes; about27.35minutes remain from the user's last one-hour estimate. This is not invoice evidence. Any offline native-pose preview is explicitly partial/unscored and is not native RGB. No task.json/media ID or completed Dream run is supplied.

@@ -10,7 +10,7 @@ from config import *
 SCENE='station';SUCCESS_HOLD_S=0.;SCORE_OVER='end'
 PARTS,HINGES=layout()
 OBJECTS=[Box(p['name'],pos=starting_pose(p,upright=True)[0],size=p['size'],mass=p['mass'],color=(.58,.36,.17)) for p in PARTS]
-OBJECTS += [Box('cutter_pad',pos=(.13,.27,TOP+.001),size=(.17,.07,.002),color=(.85,.30,.08)),Box('cutter',pos=CUTTER_START,size=(.11,.025,.025),mass=.055,color=(1.,.30,.02))]
+OBJECTS += [Box('cutter_pad',pos=CUTTER_PAD_START,size=(.17,.07,.002),color=(.85,.30,.08)),Box('cutter',pos=CUTTER_START,size=(.11,.025,.025),mass=.055,color=(1.,.30,.02))]
 _tracker=None
 _diagnostic=True
 def score(objects):return 0. if _tracker is None or _diagnostic else _tracker.value

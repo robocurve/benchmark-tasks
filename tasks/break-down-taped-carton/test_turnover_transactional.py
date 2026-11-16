@@ -15,6 +15,7 @@ from yam_arena.constants import READY,FINGER_OPEN
 from yam_arena.urdf import quat_xyzw_to_matrix
 from turnover import CartonTurnoverProbe
 from turnover_safety import BASES
+from test_turnover_force_acquisition import ControlledReader
 
 FIXTURE=json.loads(r'''
 {
@@ -261,6 +262,7 @@ def make_probe():
  values={side:Tensor([[*hands[i]['joints'],*hands[i]['finger_joints']]]) for i,side in enumerate(('left','right'))}
  def pose(name):return Tensor([[*(f['cutter_pose'] if name=='cutter' else f['poses'][name])]])
  env=SimpleNamespace(_ready=Tensor([ready]),_low=np.r_[ik.LOWER,0.,ik.LOWER,0.],_high=np.r_[ik.UPPER,1.,ik.UPPER,1.],_ids={s+'_robot':(list(range(6)),[6,7]) for s in ('left','right')},rig=SimpleNamespace(bases=BASES),_base=SimpleNamespace(arena_world=SimpleNamespace(get_pose_w=pose),scene={s+'_robot':SimpleNamespace(data=SimpleNamespace(joint_pos=values[s])) for s in ('left','right')}))
+ env._turnover_contact_reader=ControlledReader()
  probe=CartonTurnoverProbe(env);measured=probe.measure();probe.change('first_roll',f['first_roll_started'],measured);probe.previous=np.array(f['previous_action']);probe.bias=[np.array(v) for v in f['bias_before_rejected_command']];probe.angle=probe.last_raw=f['last_control_angle_deg'];probe.best_angle=0.;probe.last_progress=f['first_roll_started']
  return probe
 
@@ -313,7 +315,7 @@ class Tests(unittest.TestCase):
   for index in range(5):
    _,reports=probe.command(3.+.05*index)
    self.assertIsNone(reports[0]['failure']);self.assertEqual(probe.stage,'contact')
-   self.assertFalse(reports[0]['geometric_opposed_settle']['contact_force_verified'])
+   self.assertTrue(reports[0]['geometric_opposed_settle']['contact_force_verified'])
   _,reports=probe.command(3.25);self.assertIsNone(reports[0]['failure']);self.assertEqual(probe.stage,'first_roll')
 
  def test_a_close_endpoint_without_both_wall_proximities_never_starts_roll(self):

@@ -29,7 +29,17 @@ def main():
   from yam_arena.constants import FINGER_OPEN
   from pxr import UsdPhysics
   import task
-  wrapper._APP=app;parts,hs=layout();byname={s['name']:s for s in parts};assets={s.name:export(a.out/(s.name+'.usda'),s.name) for s in task.OBJECTS if s.name!='cutter_pad'};original=sc.task_object
+  wrapper._APP=app;parts,hs=layout();byname={s['name']:s for s in parts};assets={s.name:export(a.out/(s.name+'.usda'),s.name) for s in task.OBJECTS if s.name!='cutter_pad'};original=sc.task_object;original_callback=sc.env_cfg_callback
+  instrument_contacts=a.mode in ('turnover-probe','turn-and-cut-probe')
+  if instrument_contacts:
+   def contact_callback(hz=None):
+    configure_original=original_callback(hz)
+    def configure(cfg):
+     cfg=configure_original(cfg)
+     if hasattr(cfg.sim,'disable_contact_processing'):cfg.sim.disable_contact_processing=False
+     return cfg
+    return configure
+   sc.env_cfg_callback=contact_callback
   def make(spec):
    if spec.name not in assets:return original(spec)
    cfg=sim.UsdFileCfg(usd_path=assets[spec.name]);pos,q=starting_pose(byname[spec.name],upright=not a.bottom_up_start) if spec.name in byname else (spec.pos,(1,0,0,0))
@@ -45,14 +55,19 @@ def main():
   original_init=BimanualYamEmbodiment.__init__
   def with_reviews(instance,*args,**kwargs):
    capture.configure_embodiment(instance,args,kwargs,original_init,review,no_video=a.no_video)
+   if instrument_contacts:
+    from turnover_contacts import add_sensors
+    add_sensors(instance)
   BimanualYamEmbodiment.__init__=with_reviews
   sc.task_object=make
   try:
    env=wrapper.YamArenaEmbodiment(task=str(Path(__file__).with_name('task.py')),object_jitter=0.,control_hz=20,headless=True,cam_width=320,cam_height=180);env._ensure_sim(None)
-  finally:sc.task_object=original;BimanualYamEmbodiment.__init__=original_init
+  finally:sc.task_object=original;sc.env_cfg_callback=original_callback;BimanualYamEmbodiment.__init__=original_init
   base=env._base
+  from turnover_contacts import Reader
+  contacts=Reader(base) if instrument_contacts else None
   capture.suppress_state_only_rendering(base,no_video=a.no_video)
-  env._env.reset();env._instruction='Native carton mechanics probe';env._t=0.
+  env._env.reset();env._instruction='Native carton mechanics probe';env._t=0.;env._turnover_contact_reader=contacts
   from native_angle_binding import install as install_angle_observer
   angle_observer=install_angle_observer(base)
   from native_angle_binding import PINS
@@ -112,6 +127,10 @@ def main():
     for side in ['left','right']:
      ids,fids=env._ids[side+'_robot'];qnative=arr(base.scene[side+'_robot'].data.joint_pos)[0];tcpnative,rnative=ik.tcp_pose(qnative[ids],env.rig.bases[side]);native_hands.append({'side':side,'joints':qnative[ids].tolist(),'finger_joints':qnative[fids].tolist(),'tcp':tcpnative.tolist(),'tcp_rotation':rnative.tolist(),'opening':float(np.clip(qnative[fids].mean()/FINGER_OPEN,0,1))})
     row={'time':env._t,'phase':phase,'robot_control':control,'action_14d':arr(action)[0].tolist(),'native_hands':native_hands,'cutter_pose':pose('cutter').tolist(),'poses':{n:v.tolist() for n,v in pp.items()},'angles_deg':angles,'max_crease_separation_m':sep,'lowest_vertex_m':low,'highest_vertex_m':high,'force_N':f}
+    if contacts is not None:
+     row['fingertip_carton_normal_forces']=contacts.read(env._t)
+     from turnover_effort import read_current
+     row['current_motor_state']=read_current(base,env,env._t)
     row['angle_evidence']=angle_evidence
     row['angle_substeps']=angle_observer.samples
     row['native_owner_poses']=capture.native_body_world_poses(base.scene,owners,{**pp,'cutter':row['cutter_pose']})
