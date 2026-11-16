@@ -1,12 +1,12 @@
-# Flip, cut the bottom tape, unfold and flatten a used carton
+> **Incomplete feedback draft.** No full-score demo or completed model trial is claimed. See DRAFT_STATUS.md.
 
-**Incomplete feedback draft:** [DRAFT_STATUS.md](DRAFT_STATUS.md) records current proof and missing work. No full completion is claimed.
+# Flip, cut the bottom tape, unfold and flatten a used carton
 
 Development prototype: no full-score demonstration or genuine model result exists. The carton starts upright with its top flaps folded back and its bottom closed with tape. The intended robot sequence is turnover, cutting the bottom seam and both taped end folds, parking the guarded cutter, opening every bottom flap outward, then collapsing the intact wall tube flat. No handles or pre-cut tape are added.
 
 ## Physical setup
 
-Empty 220 × 180 × 100 mm carton, 3 mm board: four 35 g walls and eight 18 g flaps, joined by native crease hinges. Packing tape is 48 mm wide with 40 mm end-wall tails. The ordinary guarded cutter is 55 g and starts on its pad. Exact poses, colors and shapes are in config.py, scene.py and native.py. The rigid-panel/hinge model approximates cardboard; it is not continuum board or tape-film simulation.
+Empty 220 × 180 × 180 mm carton, 3 mm board: four 35 g walls and eight 18 g flaps, joined by native crease hinges. Packing tape is 48 mm wide with 40 mm end-wall tails. The ordinary guarded cutter is 55 g and starts on its pad. Exact poses, colors and shapes are in config.py, scene.py and native.py. The rigid-panel/hinge model approximates cardboard; it is not continuum board or tape-film simulation.
 
 Bottom hinges now permit only outward opening, from 0 to 274.9 degrees. The old negative-angle range allowed flaps to fall into the empty box; it is removed. Sealed outer flaps remain restrained until all 158 sampled seam/end-fold cells have been cut by a valid held blade sweep. Continuous 240 Hz relative-pose tracking prevents inward motion or a wrapped negative angle from counting as opening. Missing native samples and substantial inward motion fail closed.
 
@@ -33,3 +33,7 @@ Historical sealed cut011 completed all 158 cut cells and parked the cutter at a 
 ```
 
 This deliberately unsealed, bottom-up check has no task score. Camera-free outputs preserve the composed scene and actual native actor poses for labelled offline previews, not native RGB. Legacy cutting requires explicit `--bottom-up-start`; it cannot satisfy the revised full-task turnover requirement. Full feasibility, reproducible policy integration and model/media evidence remain unfinished.
+
+## Follow-up turnover candidate (native pending)
+
+The next physical diagnostic uses an ordinary 220×180×180mm carton at XY(250,−100)mm. Mesh-supported lateral fingertip contact permits fixed downward wrists: a low brace and high opposite push, followed by brace withdrawal at25°. The controller withdraws after the measured panel COM passes the leading table-support edge, and waits for actual gravity settling before the second push. It never sets object poses or adds a turnover force. CPU sampling covers122 contact postures,82 acquisition samples and164 withdrawal samples; these are finite geometry checks, not native contact or turnover proof. The changed dimensions invalidate historical native scene equivalence.

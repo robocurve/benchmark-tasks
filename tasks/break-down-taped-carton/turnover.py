@@ -12,6 +12,7 @@ from yam_arena.urdf import quat_xyzw_to_matrix
 from config import TOP
 from model import HEIGHT,WIDTH
 from scene import layout
+from turnover_targets import wall_target,tip_vertices
 
 
 def rx(angle):
@@ -62,7 +63,7 @@ def advance_support(origin,R,world_vertices,angle):
 class CartonTurnoverProbe:
  def __init__(self,env):
   from turnover_safety import Geometry
-  self.env=env;self.geometry=Geometry();self.parts={p['name']:p for p in layout()[0]};self.previous=env._ready.detach().cpu().numpy().reshape(-1).copy();self.failure=None;self.done=False;self.stage='approach';self.started=0.;self.starts=None;self.last_raw=0.;self.angle=0.;self.best_angle=0.;self.last_progress=0.;self.bias=[np.zeros(3),np.zeros(3)];self.ready_start=None;self.ready_stable=0;self.front=max(float(t[:,:,2].max()) for _,n,t in self.geometry.local_hand((.012,.012)) if n.startswith('tip_'));self.report={}
+  self.env=env;self.geometry=Geometry();self.parts={p['name']:p for p in layout()[0]};self.previous=env._ready.detach().cpu().numpy().reshape(-1).copy();self.failure=None;self.done=False;self.brace_clear=None;self.phase_goal_q=None;self.stage='narrow_ready';self.started=0.;self.starts=None;self.last_raw=0.;self.angle=0.;self.best_angle=0.;self.last_progress=0.;self.bias=[np.zeros(3),np.zeros(3)];self.ready_start=None;self.ready_stable=0;self.settle_stable=0;self.tip_vertices=tip_vertices(self.geometry);self.front=max(float(t[:,:,2].max()) for _,n,t in self.geometry.local_hand((.012,.012)) if n.startswith('tip_'));self.report={}
  def poses(self):
   result={}
   for name in self.parts:
@@ -74,41 +75,74 @@ class CartonTurnoverProbe:
    ids,fids=self.env._ids[side+'_robot'];d=self.env._base.scene[side+'_robot'].data.joint_pos;d=d.torch if hasattr(d,'torch') else d;q=d.detach().cpu().numpy()[0];p,R=ik.tcp_pose(q[ids],self.env.rig.bases[side]);result.append((q[ids],q[fids],p,R))
   return result
  def change(self,name,time,measured):
-  self.stage=name;self.started=time;self.starts=[(m[2].copy(),m[3].copy()) for m in measured];self.bias=[np.zeros(3),np.zeros(3)];self.last_progress=time
+  self.stage=name;self.started=time;self.phase_goal_q=None;self.start_q=[m[0].copy() for m in measured];self.starts=[(m[2].copy(),m[3].copy()) for m in measured];self.bias=[np.zeros(3),np.zeros(3)];self.last_progress=time
  def command(self,time):
   poses=self.poses();measured=self.measure();origin,R=body_frame(poses);raw=-math.degrees(math.atan2(R[2,1],R[1,1]));delta=(raw-self.last_raw+180)%360-180
   if abs(delta)>15:self.failure='turnover moved more than15degrees/control interval'
   self.angle+=delta;self.last_raw=raw
   if np.linalg.norm(R[:,0]-[1,0,0])>.10:self.failure='carton yaw/pitch left planned table-roll plane'
   if self.angle>self.best_angle+.5:self.best_angle=self.angle;self.last_progress=time
-  if self.starts is None:self.change('approach',time,measured)
+  if self.starts is None:self.change('narrow_ready',time,measured)
   age=time-self.started;vertices=np.concatenate([p+(np.array([[-1,-1,-1],[-1,-1,1],[-1,1,-1],[-1,1,1],[1,-1,-1],[1,-1,1],[1,1,-1],[1,1,1]])*np.array(self.parts[n]['size'])/2)@Q.T for n,(p,Q) in poses.items()])
   if vertices[:,2].min()<TOP-.003:self.failure='carton passed more than3mm below tabletop'
-  park=ik.tcp_pose(self.env._ready.detach().cpu().numpy().reshape(-1)[:6],self.env.rig.bases['left']);right_goal=push_target(origin,R,'south',self.front,0.);left_goal=brace_target(origin,R,self.front)
-  targets=[left_goal,right_goal];contact=[('north','north_top'),('south','south_top')]
-  if self.stage in ('approach','contact'):
-   duration=4. if self.stage=='approach' else 2.;blend=ik.smoothstep(age/duration)
-   for i,(p,Q) in enumerate(targets):
-    if self.stage=='approach':p=p-Q[:,2]*.035
-    targets[i]=(self.starts[i][0]+blend*(p-self.starts[i][0]),ik.slerp_matrix(self.starts[i][1],Q,blend))
-   if age>=duration and max(np.linalg.norm(targets[i][0]-measured[i][2]) for i in (0,1))<.004:self.change('contact' if self.stage=='approach' else 'first_roll',time,measured)
+  park=ik.tcp_pose(self.env._ready.detach().cpu().numpy().reshape(-1)[:6],self.env.rig.bases['left']);right_goal=wall_target(origin,R,'right',HEIGHT,WIDTH,self.tip_vertices,0.);left_goal=wall_target(origin,R,'left',HEIGHT,WIDTH,self.tip_vertices,0.)
+  targets=[left_goal,right_goal];contact=[('north',),('south','south_top')]
+  forced_q={};path_q=None
+  if self.stage=='narrow_ready':
+   targets=[ik.tcp_pose(np.asarray(READY),self.env.rig.bases[side]) for side in ('left','right')];contact=[(),()];path_q=[np.asarray(READY)]*2
+   if age>=2 and all(np.max(np.abs(m[1]+.012))<.001 for m in measured):self.change('approach',time,measured)
+  elif self.stage in ('approach','contact'):
+   duration=8. if self.stage=='approach' else 3.
+   if self.phase_goal_q is None:
+    self.phase_goal_q=[]
+    for i,(side,(p,Q)) in enumerate(zip(('left','right'),targets)):
+     normal=np.array([0.,-1. if side=='left' else 1.,0.])
+     if self.stage=='approach':p=p-normal*.05
+     q,pe,re=solve_target(p,Q,measured[i][0],self.env.rig.bases[side],starts=10)
+     if pe>.0003 or re>.003:self.failure=side+' initial contact path endpoint IK failed'
+     self.phase_goal_q.append(q)
+   blend=ik.smoothstep(age/duration)
+   path_q=[start+blend*(goal-start) for start,goal in zip(self.start_q,self.phase_goal_q)]
+   targets=[ik.tcp_pose(q,self.env.rig.bases[side]) for q,side in zip(path_q,('left','right'))]
+   if self.stage=='approach':contact=[(),()]
+   if age>=duration and all(np.max(np.abs(q-m[0]))<.02 for q,m in zip(path_q,measured)):self.change('contact' if self.stage=='approach' else 'first_roll',time,measured)
   elif self.stage in ('first_roll','second_roll'):
-   second=self.stage=='second_roll';limit=180. if second else 90.;lead=max(0.,min(1.2,limit-self.angle));goal_o,goal_R=advance_support(origin,R,vertices,lead);targets[1]=push_target(goal_o,goal_R,'bottom' if second else 'south',self.front,.001)
+   second=self.stage=='second_roll';limit=180. if second else 90.;lead=max(0.,min(.3,limit-self.angle));goal_o,goal_R=advance_support(origin,R,vertices,lead);targets[1]=push_target(goal_o,goal_R,'bottom',self.front,.0002,roll_deg=90.) if second else wall_target(goal_o,goal_R,'right',HEIGHT,WIDTH,self.tip_vertices,.0002)
    if second:contact[1]=('north_bottom','south_bottom','east_bottom','west_bottom')
-   if second or self.angle>25.:targets[0]=park;contact[0]=()
-   if self.angle>=limit-2. and age>1:self.change('finish_clear' if second else 'clear_first',time,measured)
+   if second:targets[0]=park;contact[0]=()
+   elif self.angle>25.:
+    if self.brace_clear is None:
+     p,Q=measured[0][2:];clear,pe,re=solve_target(p+np.array([0.,.05,.05]),Q,measured[0][0],self.env.rig.bases['left'],starts=10)
+     if pe>.0003 or re>.003:self.failure='left brace withdrawal IK failed'
+     self.brace_clear=(time,measured[0][0].copy(),clear)
+    t0,start,clear=self.brace_clear;elapsed=time-t0
+    qleft=start+ik.smoothstep(elapsed/3.)*(clear-start) if elapsed<3 else clear+ik.smoothstep((elapsed-3)/3.)*(np.asarray(READY)-clear)
+    targets[0]=ik.tcp_pose(qleft,self.env.rig.bases['left']);forced_q[0]=qleft;contact[0]=('north',) if elapsed<6 else ()
+    if elapsed<6:
+     forced_q[1]=self.previous[7:13].copy();targets[1]=ik.tcp_pose(forced_q[1],self.env.rig.bases['right']);self.last_progress=time
+   # Gravity torque about the measured leading support edge must favour
+   # the requested roll. Use actual panel COM, not a fixed aspect-ratio angle.
+   support=vertices[vertices[:,2]<=vertices[:,2].min()+.0005]
+   pivot_y=float(support[:,1].max())
+   total_mass=sum(part['mass'] for part in self.parts.values())
+   com_y=sum(self.parts[n]['mass']*float(pos[1]) for n,(pos,_) in poses.items())/total_mass
+   self.report['com_beyond_leading_support_m']=com_y-pivot_y
+   if com_y-pivot_y>.003 and age>1:
+    self.change('finish_clear' if second else 'clear_first',time,measured);self.settle_stable=0
    if time-self.last_progress>5:self.failure='table-roll push produced no measured angular progress for5s'
   elif self.stage=='clear_first':
-   targets=[park,(self.starts[1][0]-self.starts[1][1][:,2]*min(.10,.04*age),self.starts[1][1])];contact=[(),()]
-   if age>=3:self.change('bottom_hover',time,measured)
+   targets=[park,(self.starts[1][0]+np.array([0.,-.05,.05])*ik.smoothstep(age/3.),self.starts[1][1])];contact=[(),('south','south_top')]
+   self.settle_stable=self.settle_stable+1 if 85<=self.angle<=95 else 0
+   if age>=3 and self.settle_stable>=10:self.change('bottom_hover',time,measured)
   elif self.stage in ('bottom_hover','bottom_contact'):
-   p,Q=push_target(origin,R,'bottom',self.front,0.);targets[0]=park;contact[0]=();contact[1]=('north_bottom','south_bottom','east_bottom','west_bottom')
+   p,Q=push_target(origin,R,'bottom',self.front,0.,roll_deg=90.);targets[0]=park;contact[0]=();contact[1]=('north_bottom','south_bottom','east_bottom','west_bottom')
    if self.stage=='bottom_hover':p=p-Q[:,2]*.06
    blend=ik.smoothstep(age/3);targets[1]=(self.starts[1][0]+blend*(p-self.starts[1][0]),ik.slerp_matrix(self.starts[1][1],Q,blend))
    if age>=3 and np.linalg.norm(p-measured[1][2])<.004:self.change('bottom_contact' if self.stage=='bottom_hover' else 'second_roll',time,measured)
   elif self.stage=='finish_clear':
-   targets=[park,(self.starts[1][0]-self.starts[1][1][:,2]*min(.12,.04*age),self.starts[1][1])];contact=[(),()]
-   if age>=3 and 175<=self.angle<=185 and vertices[:,2].max()<TOP+HEIGHT+.03:self.change('return_ready',time,measured)
+   targets=[park,(self.starts[1][0]-self.starts[1][1][:,2]*min(.12,.04*age),self.starts[1][1])];contact=[(),('north_bottom','south_bottom','east_bottom','west_bottom')]
+   self.settle_stable=self.settle_stable+1 if 175<=self.angle<=185 and vertices[:,2].max()<TOP+HEIGHT+.03 else 0
+   if age>=3 and self.settle_stable>=10:self.change('return_ready',time,measured)
   ready_q=None;ready_grip=None;ready_done=False
   if self.stage=='return_ready':
    if self.ready_start is None:
@@ -122,12 +156,14 @@ class CartonTurnoverProbe:
    settled=fraction>=1. and all(np.max(np.abs(measured[i][0]-ready[i*7:i*7+6]))<.01 and np.max(np.abs(measured[i][1]-FINGER_OPEN))<.001 for i in (0,1))
    self.ready_stable=self.ready_stable+1 if settled else 0;ready_done=self.ready_stable>=5
    if time-self.ready_started>self.ready_duration+5.:self.failure='READY return did not settle within bounded path budget'
-  if self.stage!='return_ready' and age>18:self.failure='turnover phase exceeded18s without reaching measured endpoint'
+  if self.stage!='return_ready' and age>(35 if self.stage in ('first_roll','second_roll') else 18):self.failure='turnover phase exceeded bounded endpoint time'
   if self.failure or self.done:return self.previous.copy(),[dict(phase=self.stage,failure=self.failure,complete=self.done,roll_angle_deg=self.angle)]
   output=self.previous.copy();errors=[]
   for i,side in enumerate(('left','right')):
    p,Q=targets[i]
-   if ready_q is not None:q=ready_q[i];pe=re=0.
+   if i in forced_q:q=forced_q[i];pe=re=0.
+   elif path_q is not None:q=path_q[i];pe=re=0.
+   elif ready_q is not None:q=ready_q[i];pe=re=0.
    else:
     self.bias[i]=np.clip(self.bias[i]+.06*(p-measured[i][2]),-.008,.008)
     q,pe,re=solve_target(p+self.bias[i],Q,measured[i][0],self.env.rig.bases[side],starts=4)
@@ -142,7 +178,7 @@ class CartonTurnoverProbe:
    if not g['safe'] or g['target_gap_m']<-.0006:self.failure=side+' measured turnover clearance failed'
    pieces=self.geometry.parts(('left','right')[other],output[other*7:other*7+6],[FINGER_OPEN*output[other*7+6]]*2);g=self.geometry.guard(side,output[i*7:i*7+6],[FINGER_OPEN*output[i*7+6]]*2,obs,pieces,intended=bool(contact[i]),intended_targets=contact[i]);checks.append(g)
    if not g['safe'] or g['target_gap_m']<-.002:self.failure=side+' issued turnover clearance failed'
-  report=dict(phase=self.stage,failure=self.failure,complete=self.done,roll_angle_deg=self.angle,tracking_errors_m=errors,clearance=checks,table_supported=bool(abs(vertices[:,2].min()-TOP)<=.003),lowest_vertex_above_table_m=float(vertices[:,2].min()-TOP))
+  report=dict(phase=self.stage,failure=self.failure,complete=self.done,roll_angle_deg=self.angle,tracking_errors_m=errors,com_beyond_leading_support_m=self.report.get('com_beyond_leading_support_m'),clearance=checks,table_supported=bool(abs(vertices[:,2].min()-TOP)<=.003),lowest_vertex_above_table_m=float(vertices[:,2].min()-TOP))
   # A rejected command is not issued. No extra env.step on guard failure.
   if self.failure:return self.previous.copy(),[report]
   ready_issued=ready_q is not None and np.max(np.abs(output-self.env._ready.detach().cpu().numpy().reshape(-1)))<1e-7

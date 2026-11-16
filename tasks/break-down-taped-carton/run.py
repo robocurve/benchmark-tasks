@@ -88,7 +88,8 @@ def main():
     if robot:
      target,control=robot.command(step*.05-(cut_started if "cut_started" in locals() else 0.));phase=control[0]['phase'];action=torch.tensor(target[None,:],device=base.device,dtype=torch.float32)
     else:action=env._ready
-    if robot is not None and getattr(robot,'failure',None):break
+    if robot is not None and getattr(robot,'failure',None):
+     (a.out/'rejected-command.json').write_text(json.dumps({'time':env._t,'control':control,'failure':robot.failure},indent=2)+'\n');break
     angle_observer.begin_control()
     env._env.step(action);env._t=(step+1)*.05
     if len(base._reset_env_ids):angle_observer.tracker.invalidate('native episode reset')

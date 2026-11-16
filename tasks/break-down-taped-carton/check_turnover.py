@@ -99,7 +99,8 @@ def self_test():
    R=rx(-math.pi);origin=np.array([CENTER[0],CENTER[1],TOP+HEIGHT+.0015]);poses={p['name']:(origin+R@np.array(p['pos']),R@quat_xyzw_to_matrix([*p['quat'][1:],p['quat'][0]])) for p in parts}
    ready=np.r_[READY,1.,READY,1.];start=ready.copy();start[[0,7]]+=.1;start[[6,13]]=.012/abs(FINGER_OPEN)
    probe.previous=start.copy();probe.failure=None;probe.done=False;probe.stage='return_ready';probe.started=0.;probe.starts=[(np.zeros(3),np.eye(3))]*2
-   probe.last_raw=probe.angle=probe.best_angle=180.;probe.last_progress=0.;probe.bias=[np.zeros(3)]*2;probe.front=.014;probe.ready_start=None;probe.ready_stable=0
+   from turnover_targets import tip_vertices
+   probe.tip_vertices=tip_vertices(Geometry());probe.report={};probe.last_raw=probe.angle=probe.best_angle=180.;probe.last_progress=0.;probe.bias=[np.zeros(3)]*2;probe.front=.014;probe.ready_start=None;probe.ready_stable=0
    probe.poses=lambda:poses
    def measure():
     return [(np.array(READY),np.array([FINGER_OPEN]*2),*ik.tcp_pose(READY,BASES[side])) for side in ('left','right')]

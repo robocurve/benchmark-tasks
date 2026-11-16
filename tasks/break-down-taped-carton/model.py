@@ -5,7 +5,7 @@ carton and robot adapter are still required. No function changes object poses.
 """
 from math import dist, isfinite
 
-LENGTH, WIDTH, HEIGHT, BOARD = .22, .18, .10, .003
+LENGTH, WIDTH, HEIGHT, BOARD = .22, .18, .18, .003
 TAPE_WIDTH, WRAP = .048, .04
 CELL = .002
 FILM_Z = -BOARD/2-.00005

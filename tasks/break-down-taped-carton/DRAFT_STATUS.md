@@ -1,11 +1,5 @@
-# Outward bottom flaps and a real turnover requirement — incomplete feedback draft
+# Incomplete feedback draft — follow-up revision
 
-This remains an incomplete feedback draft, not an acceptance-ready competition submission. A full-score demonstration, genuine model attempt and required board media are still missing; task.json/media are deliberately absent. Please keep it in draft.
+New candidate: 220 × 180 × 180 mm carton, low brace and high opposite push using mesh-supported side contact and fixed downward wrists. The controller withdraws after measured COM crosses the leading table support and waits for actual gravity settling; it never writes object poses or adds a turnover force. Finite CPU checks cover 122 contact, 82 acquisition and 164 withdrawal configurations. These are geometry checks, not native physics. New scene/turnover are unproved because the retained VM is stuck STARTING; no flip/opening/flattening video or full-score demo is claimed.
 
-The revised task starts upright, requires physical turnover before cutting the bottom seam and both taped end folds, then outward opening of all four bottom flaps and intact flattening. No handles or animated turnover are added.
-
-The old hinge range permitted inward folding. Bottom hinges now permit 0–274.9 degrees outward only, and the scorer rejects substantial inward motion and requires an upright-to-inverted history. Continuous 240 Hz pose tracking remains fail-closed against angle wrapping.
-
-Native unsealed bottom-up gravity validation passed180 controls/9 seconds: bottom angles remained -0.0073 to -0.0012 degrees, crease separation <3 micrometres. This is a passive stop check, not turnover/opening/collapse. The turnover prototype fails local reach/mesh screening (9/16 poses; taller hypothesis8/16); no turnover GPU trial was run. Earlier all158cut/park evidence belongs to the older bottom-up setup, not this full task.
-
-92 local tests pass. Turnover, outward opening and complete collapse still lack a full demo/model attempt. The intended distinction from #1858 remains real bottom-tape preparation and all four flap openings before collapse; feedback on novelty is requested.
+This is an early feedback draft, not a received or acceptance-ready competition submission. Full feasibility, model attempt and eligible media remain missing.

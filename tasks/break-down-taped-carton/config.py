@@ -1,9 +1,9 @@
 """Starting pose of the empty, top-open bottom-taped carton."""
 TOP=.7475
 CUTTER_START=(.13,.27,TOP+.020)
-# Empty used carton is presented bottom-up, with top flaps folded back.
+# Empty used carton starts upright, with top flaps folded back.
 BOTTOM_UP=False
-CENTER=(.27,-.14,TOP+.103)
+CENTER=(.25,-.10,TOP+.183)
 YAW_DEG=45.
 def starting_pose(part,upright=False):
  if upright:return tuple((CENTER[0],CENTER[1],TOP+.0015)[i]+part['pos'][i] for i in range(3)),part['quat']
