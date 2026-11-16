@@ -1,6 +1,6 @@
-# Dry long hair evenly with a handheld dryer
+> **Incomplete feedback draft.** No full-score demo or completed model trial is claimed. See DRAFT_STATUS.md.
 
-**Incomplete feedback draft:** [DRAFT_STATUS.md](DRAFT_STATUS.md) records current proof and missing work. No full completion is claimed.
+# Dry long hair evenly with a handheld dryer
 
 Native mechanics and controller under development; no complete drying demo yet.
 
@@ -21,13 +21,39 @@ airflow attenuation/occlusion, distance, exposure and local moisture. Merely
 sweeping a target trajectory cannot flip hair regions to dry. Test front-only
 exposure, hidden inner layers, near/far operation, no airflow, manipulation,
 and released stable hair. Current candidate conditions require at least90% water removal on every one
-of240 patches, temperature at most50C, power off and released parking. These
+of960 patches, temperature at most50C, power off and released parking. These
 limits remain unchanged; a demonstrated full-task allowance remains pending
 model and native reach/access validation.
 
 Native geometry, thermal/occlusion kernels and incomplete robot probes now exist. No complete drying score, demo or submission readiness is claimed.
 DYMO-Hair is relevant prior work on hair dynamics/manipulation, not proof that
 this implementation can model or complete drying. See the batch record.
+
+## Hair physics refinement (2026-11-16)
+
+The physical model now has **24 locks, 10 passive links per lock**, versus
+12 locks with 5 links previously. Each native capsule is 25 mm long and
+7 mm in diameter, with real passive joints/contact geometry rather than
+render-only hairs. Each lock remains 250 mm long. The dry mass (32 g), initial
+water (6.4 g), total lateral exchange area, dry heat capacity and heater/drag
+caps are unchanged. Four surface quadrants per link give 960 independent
+moisture/temperature samples, so refinement grants no initial drying credit.
+
+Each previous 50 mm rest segment is subdivided at its midpoint. Alternate
+bending directions are retained in two-link groups; finer joints have half
+the angular range. Dividing each bundle stiffness by two and doubling angular
+stiffness for the half-length links preserves the reference uniform-curvature
+elastic/viscous energy across the full head. This is a discretization check,
+not empirical bending calibration or proof of identical large-deflection
+dynamics. A bundle remains a porous aggregate, not an individual fibre.
+Self-contact, scalp contact and root attachment are native physics; tangling,
+cuticles, humidity/capillary transport and calibrated fibre friction remain
+unmodelled. Full drying and successful holder egress are still incomplete.
+
+Ray/capsule occlusion now uses a batched version of the same finite-segment
+distance calculation. Live geometry is rebuilt each step; the parallel,
+degenerate and endpoint-clamped cases are compared to the scalar reference.
+No occlusion, safety threshold or drying rule was relaxed for speed.
 
 ## Current implementation and probes
 
@@ -38,9 +64,9 @@ the earlier prototype. Hair centres, cross-section/bending frames, scalp
 attachment, fixed-joint rest frame, native reset and scorer reference all
 use this same physical frame. It cannot swivel
 for coverage: only the arms/dryer and the flexible hair locks may move. The
-sixty passive hair bending joints remain free; no head motor, kinematic pose
-write or reset loop maintains the mount. This fixed-head revision has CPU/USD
-tests only; native constraint accuracy and a new robot run remain pending. A normal open U-shaped dryer holder supports the barrel with its handle
+240 passive hair bending joints remain free; no head motor, kinematic pose
+write or reset loop maintains the mount. The earlier 60-link fixed-head model passed native constraint checks; this
+new 240-link refinement has CPU/USD checks and still needs its own native smoke. A normal open U-shaped dryer holder supports the barrel with its handle
 accessible below; no extra grasp handles are added. The real handle slider
 sets power from measured travel. The robot braces the handle, pushes the
 slider using measured phase gates, confirms retained power after horizontal

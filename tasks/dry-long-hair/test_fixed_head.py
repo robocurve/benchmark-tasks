@@ -6,7 +6,7 @@ import sys
 import types
 import unittest
 from unittest.mock import patch
-from config import HEAD,HEAD_QUAT,TOP,LOCKS,SEGMENTS,multiply,rotate,root_local,segment_quat,segment
+from config import HEAD,HEAD_QUAT,TOP,LOCKS,SEGMENTS,BEND_LIMIT_DEG,BEND_STIFFNESS,BEND_DAMPING,multiply,rotate,root_local,segment_quat,segment
 from scoring import HairScorer,measured_head_motion
 
 
@@ -110,11 +110,11 @@ class FixedHeadUsdTests(unittest.TestCase):
    childroot=childworld.Transform(Gf.Vec3d(*j.GetLocalPos1Attr().Get()))
    for a,b in zip(root,childroot):self.assertAlmostEqual(a,b,places=7)
 
- def test_all60_passive_bends_and_separate_skin_attachment_remain(self):
+ def test_all240_passive_bends_and_separate_skin_attachment_remain(self):
   stage=self.stage();bends=[p for p in stage.Traverse()if p.IsA(UsdPhysics.RevoluteJoint)]
-  self.assertEqual(len(bends),LOCKS*SEGMENTS);self.assertEqual(len(bends),60)
+  self.assertEqual(len(bends),LOCKS*SEGMENTS);self.assertEqual(len(bends),240)
   for p in bends:
-   j=UsdPhysics.RevoluteJoint(p);self.assertEqual(j.GetLowerLimitAttr().Get(),-70.);self.assertEqual(j.GetUpperLimitAttr().Get(),70.);d=UsdPhysics.DriveAPI(p,'angular');self.assertAlmostEqual(d.GetStiffnessAttr().Get(),.00006,places=10);self.assertAlmostEqual(d.GetDampingAttr().Get(),.000015,places=10)
+   j=UsdPhysics.RevoluteJoint(p);self.assertEqual(j.GetLowerLimitAttr().Get(),-BEND_LIMIT_DEG);self.assertEqual(j.GetUpperLimitAttr().Get(),BEND_LIMIT_DEG);d=UsdPhysics.DriveAPI(p,'angular');self.assertAlmostEqual(d.GetStiffnessAttr().Get(),BEND_STIFFNESS,places=10);self.assertAlmostEqual(d.GetDampingAttr().Get(),BEND_DAMPING,places=10)
   self.native.install_skin_attachment(stage,'/Env');j=UsdPhysics.FixedJoint.Get(stage,'/Env/scalp_collision/skin_attachment');self.assertTrue(j);self.assertTrue(j.GetExcludeFromArticulationAttr().Get());self.assertFalse(j.GetCollisionEnabledAttr().Get());self.assertEqual([str(x)for x in j.GetBody0Rel().GetTargets()],['/Env/mannequin/head'])
 
 if __name__=='__main__':unittest.main()

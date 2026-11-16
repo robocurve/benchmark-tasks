@@ -4,6 +4,7 @@ Coarse capsules approximate locks. This is not CFD and ignores humidity and
 inter-fibre capillary transport. All exposure comes from live body geometry.
 """
 import math
+import numpy as np
 from config import *
 from moisture import Patch
 
@@ -26,6 +27,32 @@ def segment_distance(a,b,c,d):
   elif t>1.:t=1.;s=max(0.,min(1.,(bb-dd)/aa))
  return norm(sub(add(a,mul(u,s)),add(c,mul(v,t))))
 
+
+def ray_segment_distances(a,b,starts,ends):
+ """Exact batched counterpart of segment_distance for one ray, live capsules.
+
+ Geometry is rebuilt every step; no frozen hair/occlusion cache is used.
+ The degenerate/parallel/clamped cases follow the scalar reference exactly.
+ """
+ a=np.asarray(a,dtype=float);b=np.asarray(b,dtype=float)
+ starts=np.asarray(starts,dtype=float);ends=np.asarray(ends,dtype=float)
+ u=b-a;v=ends-starts;w=a-starts
+ aa=float(u@u);bb=v@u;cc=np.einsum('ij,ij->i',v,v)
+ dd=w@u;ee=np.einsum('ij,ij->i',v,w)
+ s=np.zeros(len(starts));t=np.zeros(len(starts));valid=cc>=1e-15
+ if aa<1e-15:
+  t[valid]=np.clip(ee[valid]/cc[valid],0.,1.)
+ else:
+  s[~valid]=np.clip(-dd[~valid]/aa,0.,1.)
+  den=aa*cc-bb*bb;nonparallel=valid&(den>1e-15)
+  s[nonparallel]=np.clip((bb[nonparallel]*ee[nonparallel]-cc[nonparallel]*dd[nonparallel])/den[nonparallel],0.,1.)
+  t[valid]=(bb[valid]*s[valid]+ee[valid])/cc[valid]
+  low=valid&(t<0.);high=valid&(t>1.)
+  t[low]=0.;s[low]=np.clip(-dd[low]/aa,0.,1.)
+  t[high]=1.;s[high]=np.clip((bb[high]-dd[high])/aa,0.,1.)
+ difference=w+s[:,None]*u-t[:,None]*v
+ return np.sqrt(np.einsum('ij,ij->i',difference,difference))
+
 class HairThermal:
  def __init__(self):
   area=2*math.pi*RADIUS*LENGTH/PATCHES_PER_SEGMENT
@@ -37,6 +64,7 @@ class HairThermal:
   nn=norm(axis)
   if nn<.999 or nn>1.001:raise ValueError('dryer axis must be unit length')
   capsules=[(add(s['pos'],mul(column(s['rotation'],2),-LENGTH/2+RADIUS)),add(s['pos'],mul(column(s['rotation'],2),LENGTH/2-RADIUS))) for s in segments]
+  capsule_starts=np.asarray([a for a,b in capsules]);capsule_ends=np.asarray([b for a,b in capsules])
   scalp_clearance=min(segment_distance(a,b,head_center,head_center)-RADIUS-HEAD_RADIUS for a,b in capsules)
   flux=[];wind=[0. for _ in segments];patch_geometry=[]
   for i,s in enumerate(segments):
@@ -50,9 +78,11 @@ class HairThermal:
      if segment_distance(nozzle,point,head_center,head_center)<HEAD_RADIUS:exposed=0.;occluder='scalp'
      if exposed>0:
       end=add(point,mul(ray,-.0002/distance))
-      for k,(a,b) in enumerate(capsules):
-       if k!=i and segment_distance(nozzle,end,a,b)<RADIUS-.0001:
-        exposed=0.;occluder='hair_'+str(k//SEGMENTS)+'_'+str(k%SEGMENTS);break
+      blocked=ray_segment_distances(nozzle,end,capsule_starts,capsule_ends)<RADIUS-.0001
+      blocked[i]=False
+      indices=np.flatnonzero(blocked)
+      if len(indices):
+       k=int(indices[0]);exposed=0.;occluder='hair_'+str(k//SEGMENTS)+'_'+str(k%SEGMENTS)
      h=150.*(.15/distance)**2*power
     flux.append((h,exposed))
     if patch_samples:

@@ -362,7 +362,7 @@ class DryerSweepProbe(DryerProbe):
 
     def sweep_clearance(self,left,target,dryer):
         from dryer_sweep import bounds_gap,tool_and_hand_bounds
-        from config import HEAD_RADIUS,RADIUS,LENGTH,TOP
+        from config import HEAD_RADIUS,RADIUS,LENGTH,TOP,LOCKS,SEGMENTS
         right=self.read_arm('right')
         pieces=self.geometry.pieces(left[1])
         actual=[a@left[3].T+left[2] for _,a in pieces]
@@ -384,7 +384,7 @@ class DryerSweepProbe(DryerProbe):
                 lo=v[:3]-np.abs(axis)-RADIUS;hi=v[:3]+np.abs(axis)+RADIUS
             else:continue
             mins.append(lo);maxs.append(hi)
-        if len(mins)!=61:return 0.
+        if len(mins)!=1+LOCKS*SEGMENTS:return 0.
         other=[a@right[3].T+right[2] for _,a in self.geometry.pieces(right[1])]
         obstacle=(np.r_[mins,[a.min((0,1)) for a in other]],np.r_[maxs,[a.max((0,1)) for a in other]])
         return min(min(float(a[0][:,2].min()-TOP),bounds_gap(a,obstacle)) for a in moving)

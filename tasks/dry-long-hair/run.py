@@ -35,7 +35,7 @@ def main():
    spawncfg=sim.UsdFileCfg(usd_path=assets['mannequin']);spawnfunc=spawncfg.func
    def spawn_world_geometry(path,cfg,translation=None,orientation=None,**kwargs):return spawnfunc(path,cfg,translation=(0.,0.,0.),orientation=(0.,0.,0.,1.),**kwargs)
    spawncfg.func=spawn_world_geometry
-   hair_cfg=ArticulationCfg(prim_path='{ENV_REGEX_NS}/mannequin',spawn=spawncfg,init_state=ArticulationCfg.InitialStateCfg(pos=HEAD,rot=HEAD_QUAT),actuators={'passive_bending':ImplicitActuatorCfg(joint_names_expr=['bend_.*'],stiffness=.00006,damping=.000015)})
+   hair_cfg=ArticulationCfg(prim_path='{ENV_REGEX_NS}/mannequin',spawn=spawncfg,init_state=ArticulationCfg.InitialStateCfg(pos=HEAD,rot=HEAD_QUAT),actuators={'passive_bending':ImplicitActuatorCfg(joint_names_expr=['bend_.*'],stiffness=BEND_STIFFNESS,damping=BEND_DAMPING)})
    from isaaclab_arena.utils.configclass import make_configclass
    fields=[(n,type(getattr(instance.scene_config,n)),getattr(instance.scene_config,n)) for n in instance.scene_config.__class__.__annotations__]
    instance.scene_config=make_configclass('YamWithPassiveHairCfg',fields+[('hair_model',ArticulationCfg,hair_cfg)])()
@@ -80,7 +80,7 @@ def main():
   owners=capture.native_body_owners(base.scene,asset_link_paths(),['dryer','switch','scalp_collision'])
   for name,index in hair_ids.items():
    owners['/World/envs/env_0/mannequin/'+name]={'kind':'articulation','entity':'hair_model','body_name':name,'body_index':index,'source':'ArticulationData.body_link_pose_w','parent_body_owner':None}
-  if len(owners)!=82:raise RuntimeError('expected82 actual robot/hair/object owners')
+  if len(owners)!=22+LOCKS*SEGMENTS:raise RuntimeError('unexpected actual robot/hair/object owner count')
   for path in owners:
    if not base.scene.stage.GetPrimAtPath(path):raise RuntimeError('missing native actor '+path)
   manifest=capture.capture_manifest(capture.export_scene(base.scene.stage,a.out/'capture-scene.usdc'),owners,json.loads((a.out/'source-sha256.json').read_text()),capture.virtual_review_views(sim.PinholeCameraCfg(focal_length=18.,clipping_range=(.03,20.)),target=(.36,0.,.99)),no_video=a.no_video)
@@ -155,7 +155,7 @@ def main():
      cv2.putText(canvas,('ROBOT DRYER POWER/PICKUP | ' if robot else 'NATIVE FLEXIBLE HAIR | ')+phase,(12,25),cv2.FONT_HERSHEY_SIMPLEX,.6,(255,255,255),1,cv2.LINE_AA);cv2.putText(canvas,('Ordinary robot commands; incomplete drying attempt. Actual moisture measured.' if robot else 'Diagnostic force test, not robot drying. Actual moisture/geometry measured.'),(12,590),cv2.FONT_HERSHEY_SIMPLEX,.45,(255,205,120),1,cv2.LINE_AA);video.append_data(canvas)
      if step in (59,99,139,179,239,319,379,459,619):imageio.imwrite(a.out/f'step-{step}.png',canvas)
     if control is not None and (control.get('failure') or control.get('complete')):break
-  result={'elapsed_wall_s':time.monotonic()-started,'no_video':a.no_video,'state_only_diagnostic':a.no_video,'media_eligible':False,'head_rest_quaternion_xyzw':HEAD_QUAT,'probe_mode':a.mode,'diagnostic':True,'task_score':None,'robot_demo':False,'max_joint_separation_m':worst_sep,'max_lock_motion_m':max_motion,'thermal':thermal.result(),'max_skin_attachment_error_m':worst_skin_attachment,'checks':{'scalp_contact_respected':all(s['thermal']['min_scalp_capsule_clearance_m']>=-.0002 for s in samples),'joints_intact':worst_sep<.005,'locks_move':max_motion>.005,'power_off_no_drying':all(s['thermal']['water_removed_step_kg']==0 for s in samples if s['power_slider_fraction']<.5)}}
+  result={'elapsed_wall_s':time.monotonic()-started,'no_video':a.no_video,'state_only_diagnostic':a.no_video,'media_eligible':False,'hair_discretization':{'locks':LOCKS,'segments_per_lock':SEGMENTS,'passive_bending_dofs':LOCKS*SEGMENTS,'patches':LOCKS*SEGMENTS*PATCHES_PER_SEGMENT,'capsule_length_m':LENGTH,'capsule_radius_m':RADIUS},'head_rest_quaternion_xyzw':HEAD_QUAT,'probe_mode':a.mode,'diagnostic':True,'task_score':None,'robot_demo':False,'max_joint_separation_m':worst_sep,'max_lock_motion_m':max_motion,'thermal':thermal.result(),'max_skin_attachment_error_m':worst_skin_attachment,'checks':{'scalp_contact_respected':all(s['thermal']['min_scalp_capsule_clearance_m']>=-.0002 for s in samples),'joints_intact':worst_sep<.005,'locks_move':max_motion>.005,'power_off_no_drying':all(s['thermal']['water_removed_step_kg']==0 for s in samples if s['power_slider_fraction']<.5)}}
   result['max_head_translation_m']=max_head_translation;result['max_head_rotation_deg']=max_head_rotation;result['checks']['head_fixed']=max_head_translation<=MAX_HEAD_TRANSLATION_M and max_head_rotation<=MAX_HEAD_ROTATION_DEG
   result['slider_detent']=detent.snapshot();result['checks']['detent_callback_cadence_verified']=True
   if robot:result|={'robot_power_probe':a.mode=='power-probe','robot_sweep_probe':a.mode=='sweep-probe','diagnostic':True,'task_score':None,'diagnostic_score_readback':tracker.value,'score_invalid':tracker.invalid,'controller_complete':bool(control and control.get('complete')),'controller_failure':None if control is None else control.get('failure'),'final_measured_power_fraction':samples[-1]['power_slider_fraction'],'final_dryer_pose':samples[-1]['dryer_pose']}

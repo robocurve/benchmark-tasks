@@ -5,7 +5,7 @@ from unittest.mock import patch
 import numpy as np
 from yam_arena import ik
 from yam_arena.constants import READY
-from config import HEAD,HEAD_QUAT,TOP,LOCKS,SEGMENTS,segment,segment_quat
+from config import HEAD,HEAD_QUAT,TOP,LOCKS,SEGMENTS,LENGTH,RADIUS,segment,segment_quat
 from yam_arena.urdf import quat_xyzw_to_matrix
 from dryer_sweep import DryerSweepPlan,MAX_SWEEP_SPEED,bounds_gap,tool_and_hand_bounds
 from robot import DryerProbe,DryerSweepProbe,LEFT_R,HANDLE_GRASP_LOCAL
@@ -33,7 +33,7 @@ class DryerSweepTests(unittest.TestCase):
   scalp=np.asarray(HEAD);segments=[{'pos':segment(k,j),'rotation':quat_xyzw_to_matrix(segment_quat(k,j))} for k in range(LOCKS) for j in range(SEGMENTS)]
   low=[scalp-.065];high=[scalp+.065]
   for s in segments:
-   axis=s['rotation'][:,2]*(.025-.007);low.append(s['pos']-abs(axis)-.007);high.append(s['pos']+abs(axis)+.007)
+   axis=s['rotation'][:,2]*(LENGTH/2-RADIUS);low.append(s['pos']-abs(axis)-RADIUS);high.append(s['pos']+abs(axis)+RADIUS)
   old=None;exposed=0
   for clock in np.linspace(0,plan.duration,121):
    p,r=plan.target(float(clock));q,pe,re=ik.solve(p,ik.matrix_to_quat_xyzw(r),seed,base_pos=(0,.305,.75),iters=220,tol=1e-6)

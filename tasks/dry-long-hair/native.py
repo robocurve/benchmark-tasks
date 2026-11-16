@@ -1,6 +1,6 @@
 """Native articulated flexible-lock approximation and a physical dryer slider.
 
-Coarse rigid capsules connected with passive bending joints. No fixed painted
+Refined rigid bundle capsules connected with passive bending joints. No fixed painted
 hair sheet, no scripted lock animation and no state-driven drying shortcuts.
 """
 from pathlib import Path
@@ -53,8 +53,8 @@ def install_joints(s,parent,include_dryer=True):
    if n:parent_name=f'{parent}/hair_{k}_{n-1}';parent_pos=segment(k,n-1);parent_q=segment_quat(k,n-1)
    else:parent_name=parent+'/head';parent_pos=HEAD;parent_q=HEAD_QUAT
    anchor=points(k)[n];a0=rotate(conjugate(parent_q),tuple(x-y for x,y in zip(anchor,parent_pos)));a1=rotate(conjugate(child_q),tuple(x-y for x,y in zip(anchor,segment(k,n))));relative=multiply(conjugate(child_q),parent_q)
-   j=UsdPhysics.RevoluteJoint.Define(s,child+'/bend_'+str(k)+'_'+str(n));j.CreateBody0Rel().SetTargets([parent_name]);j.CreateBody1Rel().SetTargets([child]);j.CreateAxisAttr('X' if (k+n)%2 else 'Y');j.CreateExcludeFromArticulationAttr(True);j.CreateCollisionEnabledAttr(n == 0);j.CreateLocalPos0Attr(Gf.Vec3f(*a0));j.CreateLocalPos1Attr(Gf.Vec3f(*a1));j.CreateLocalRot1Attr(Gf.Quatf(relative[3],Gf.Vec3f(*relative[:3])));j.CreateLowerLimitAttr(-70.);j.CreateUpperLimitAttr(70.)
-   d=UsdPhysics.DriveAPI.Apply(j.GetPrim(),'angular');d.CreateTypeAttr('force');d.CreateTargetPositionAttr(0.);d.CreateStiffnessAttr(.00006);d.CreateDampingAttr(.000015)
+   j=UsdPhysics.RevoluteJoint.Define(s,child+'/bend_'+str(k)+'_'+str(n));j.CreateBody0Rel().SetTargets([parent_name]);j.CreateBody1Rel().SetTargets([child]);j.CreateAxisAttr(bend_axis(k,n));j.CreateExcludeFromArticulationAttr(True);j.CreateCollisionEnabledAttr(n == 0);j.CreateLocalPos0Attr(Gf.Vec3f(*a0));j.CreateLocalPos1Attr(Gf.Vec3f(*a1));j.CreateLocalRot1Attr(Gf.Quatf(relative[3],Gf.Vec3f(*relative[:3])));j.CreateLowerLimitAttr(-BEND_LIMIT_DEG);j.CreateUpperLimitAttr(BEND_LIMIT_DEG)
+   d=UsdPhysics.DriveAPI.Apply(j.GetPrim(),'angular');d.CreateTypeAttr('force');d.CreateTargetPositionAttr(0.);d.CreateStiffnessAttr(BEND_STIFFNESS);d.CreateDampingAttr(BEND_DAMPING)
  if include_dryer:install_slider(s,parent)
 
 def install_slider(s,parent):
