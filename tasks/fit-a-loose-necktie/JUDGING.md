@@ -3,6 +3,9 @@
 Use the video, front and rear photographs, and a ruler. The collar's lower
 edge is z = 1.200 m; the black mark shows its centre. Score the final condition,
 after both grippers release for at least five seconds within the run limit.
+Before the trial, check the Simple (Oriental) threading and loose blade
+arrangement against [the reset procedure and diagram](README.md#prepared-knot-and-reset).
+The operator prepares this knot; tying it from scratch is outside the task.
 
 | Final condition | Score |
 |---|---:|
