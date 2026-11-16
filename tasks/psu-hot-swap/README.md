@@ -39,6 +39,7 @@ What the task tests:
 | `psukit.py` | Rigid parts built from boxes, with spring-loaded sliders or fixed in place, for yam_arena task files |
 | `demo.py` | The scripted full-score demo |
 | `test_scoring.py` | Offline checks: every scoring outcome, and the layout's geometry (no GPU) |
+| `fabrication/` | Real-world build: OpenSCAD sources for every printed part (dimensions from `task.py`), `BUILD.md` (parts list, print settings, assembly, force calibration) and `check_params.py` / `test_fabrication.py` (check the sources against `task.py`) |
 
 `psukit.py` hooks `yam_arena.scene` and the embodiment's reset without modifying yam_arena, so the task runs with the
 standard `yam_arena` embodiment and `task_score` scorer. It follows the part kit used by other tasks in this
@@ -63,7 +64,7 @@ inspect-robots run --embodiment yam_arena --policy dream \
 ```bash
 python demo.py task.py demo_out --max-steps 1800              # writes demo_*_cam.mp4, setup.png, result.json
 DEMO_DEBUG=1 python demo.py task.py debug_out --no-record      # also prints each supply's offset, sliders, tilt, yaw
-python -m pytest test_scoring.py                               # offline checks
+python -m pytest test_scoring.py fabrication/test_fabrication.py   # offline checks
 ```
 
 1. The right arm closes its fingers across the failed supply's handle and tab together, one pad on the fixed handle bar
@@ -96,8 +97,9 @@ measured from where a supply sits latched home in the left bay.
   (within 1.5 mm along it and 2 mm across it, level within 3 degrees) with its hook out in the notch (the release tab
   within 1 mm of its rest position), the failed supply is clear of the bay (its back face at least 5 mm in front of
   the mouth, or its centre more than 7.85 cm to the side), and the spare is still (it moved less than 1 mm over the
-  preceding 1 s). `success()` returns this condition and the runtime ends the episode once it has held for 1 s;
-  `score()` gives 1.0 from that same step, never earlier.
+  preceding 1 s). `score()` gives 1.0 from the step this has held for 1 s, and `success()` returns true only from
+  that same step (never while the score is below 1.0); the runtime ends the episode once `success()` has stayed true
+  for its own 1 s, so an episode can only end with success at 1.0.
 - 0.75 (also while the spare is home but has not yet held for 1 s): after the failed supply came out, the spare was
   pushed in with its back face 10 cm inside the mouth.
 - 0.5: the failed supply was pulled all the way out of its bay (back face 5 mm in front of the mouth).
@@ -136,15 +138,22 @@ simulation.
 
 ## Real-world build
 
-Use three CRPS supplies with no power connected, or 3D-printed PLA shells of the same size weighted to 0.9 kg. On the
-shells, the handle is a fixed loop on the face, and the release tab beside it is a separate slider with a compression
-spring of about 1 N/mm (5 mm travel) behind it, linked to the hook as in `task.py`; a real CRPS supply already has
-these. The cage is bent sheet steel or 3D-printed PLA with the dimensions in `task.py`, screwed to a board clamped to
-the table. At the back of each bay, either mount a real CRPS card-edge connector (unwired) and give the shells a
-matching blank board edge, or build the modelled connector: a blade with a ridge on each side, and two contacts in the
-supply's slot on leaf or compression springs of about 5 N/mm, sized to need about 35 N to mate. The lights can be
-coloured stickers. The live supply's plug is a dummy IEC C13 plug on a short cut cord (no conductors connected),
-pushed into its inlet; nothing in the setup is connected to mains, so there is no electrical hazard.
+`fabrication/BUILD.md` covers the whole build, with OpenSCAD sources for every printed part in `fabrication/`:
+
+- **Cage:** two bays, with lead-ins, notches, back stops and the connector blades. It prints in two halves for a
+  220 mm bed and is screwed to a board clamped to the table.
+- **Supplies:** printed shells weighted with steel flat bar to 0.9 kg. Each has a fixed handle, a release tab that
+  slides on a 1 N/mm spring and drives the latch carriage and ramped hook, and two contact carriers on 5 N/mm
+  springs in the connector slot.
+- **Dummy plug and inlet**, with stickers for the status lights.
+
+`BUILD.md` also lists generic hardware (springs by rate and size, M3 screws and heat-set inserts), print settings,
+assembly steps and the layout on the board. Its calibration checks use a kitchen scale and a luggage scale: the tab
+releases at about 5 N over 5 mm, the connector mates at about 35 N and unmates at about 11 N, and each supply weighs
+0.9 kg. Every dimension is in `fabrication/params.scad`, and `python fabrication/check_params.py` checks those values
+against `task.py`. `BUILD.md` also describes using real unpowered CRPS supplies with only the cage printed. Nothing
+in the setup is powered or connected to mains. The live supply's plug is a printed dummy, optionally with a short
+cut cord stub whose conductors are not connected, so there is no electrical hazard.
 
 ## Assets
 

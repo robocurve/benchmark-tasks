@@ -305,11 +305,12 @@ def _update(objects) -> tuple[float, bool]:
 
 
 def success(objects) -> bool:
-    """The spare seated, latched and still in the left bay, the failed supply out, the live supply untouched (the
-    runtime ends the episode once this has held for 1 s)."""
+    """True only once the full score has been reached: the spare seated, latched and still in the left bay, the
+    failed supply out and the live supply untouched, held for 1 s (score() is 1.0 from the same step). The runtime
+    then ends the episode after this has stayed true for its own 1 s, so it can only end at 1.0."""
     out = _update(objects)
     _STATE["_this_step"] = (objects, out)   # the runtime calls success() then score() on each step's states:
-    return out[1]                            # score() reuses this, so the step counts once
+    return out[0] >= 1.0                     # score() reuses this, so the step counts once
 
 
 def score(objects) -> float:

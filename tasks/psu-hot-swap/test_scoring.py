@@ -84,12 +84,12 @@ def test_seated_and_latched_succeeds_after_one_second():
     frames = [_objects(failed=OUT)] + [_objects(failed=AWAY, spare=(0.001, 0, 0))] * HELD   # against the back stop
     assert _run(frames) == (1.0, True)
     frames = [_objects(failed=OUT)] + [_objects(failed=AWAY, spare=HOME)] * (HELD - 1)
-    assert _run(frames) == (0.75, True)
+    assert _run(frames) == (0.75, False)   # one step short of the full hold: no success yet
 
 
 def test_full_score_only_after_the_condition_has_held_one_second():
     # The spare comes to rest home: it must be still over 1 s (21 samples, 20 intervals), and that must then hold for
-    # another 1 s (20 steps) before score() gives 1.0, on the same step success() has held for the runtime's 1 s.
+    # another 1 s (20 steps) before score() gives 1.0. success() turns true on that same step, never earlier.
     T._reset_state()
     frames = [_objects(failed=OUT)] + [_objects(failed=AWAY, spare=HOME)] * 60
     seen = []
@@ -98,9 +98,32 @@ def test_full_score_only_after_the_condition_has_held_one_second():
         seen.append((T.score(objs), ok))
     first_ok = next(i for i, (_, ok) in enumerate(seen) if ok)
     first_full = next(i for i, (sc, _) in enumerate(seen) if sc == 1.0)
-    assert first_ok == 1 + T.HOLD_STEPS                     # still over the last 1 s
-    assert first_full == first_ok + T.HOLD_STEPS - 1        # ... and that has held for 20 steps (1 s)
-    assert all(sc == 0.75 for sc, _ in seen[1:first_full])  # seated but not yet held: partial credit
+    assert first_full == 1 + T.HOLD_STEPS + T.HOLD_STEPS - 1   # still over 1 s, then held for 20 steps (1 s)
+    assert first_ok == first_full                              # success() only once the full hold is complete
+    assert all(ok == (sc == 1.0) for sc, ok in seen)
+    assert all(sc == 0.75 for sc, _ in seen[1:first_full])     # seated but not yet held: partial credit
+
+
+def test_runtime_can_only_end_the_episode_at_full_score():
+    # The runtime ends the episode once success() has been true for its own 1 s (round(1.0 * 20) steps in a row).
+    # Whatever the spare does, the score on the step the episode ends is 1.0.
+    hold = round(1.0 * 20)
+    patterns = {
+        "settles": [HOME] * 80,
+        "knocked": [HOME] * 45 + [(-0.004, 0, 0)] + [HOME] * 60,
+        "creeps then settles": [(-0.0012 + 0.0001 * i, 0, 0) for i in range(20)] + [HOME] * 70,
+    }
+    for name, spares in patterns.items():
+        T._reset_state()
+        held, ended = 0, None
+        for i, sp in enumerate([None] + spares):
+            objs = _objects(failed=OUT) if sp is None else _objects(failed=AWAY, spare=sp)
+            held = held + 1 if T.success(objs) else 0
+            sc = T.score(objs)
+            if held >= hold:
+                ended = (i, sc)
+                break
+        assert ended is not None and ended[1] == 1.0, name
 
 
 def test_moving_spare_never_scores_full():
