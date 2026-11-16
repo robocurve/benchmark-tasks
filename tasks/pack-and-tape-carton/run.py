@@ -20,7 +20,7 @@ def main():
   from carton_native import export as cexport
   from tape_native import export as texport,install_joints
   import carton_scene
-  carton_scene.INITIAL_TOP_ANGLE=160. if a.mode=='closure-probe' else 0.
+  carton_scene.INITIAL_TOP_ANGLE=160.  # all task starts reveal preloaded products
   import task
   task_path=Path(__file__).with_name('task.py')
   coupon_size=(.10,.10,.04);coupon_pos=(.15,.12,TOP+.022);coupon_start=np.array((.15,.12,TOP+.042+TAPE_THICKNESS/2+.0002))
@@ -49,7 +49,9 @@ def main():
     def with_joints(path,cfg,translation=None,orientation=None,**kwargs):
      prim=spawn(path,cfg,translation=translation,orientation=orientation,**kwargs);s=prim.GetStage();parent=str(prim.GetPath()).rsplit('/',1)[0];install_joints(s,parent)
      if a.mode=='adhesion-probe':
-      for name in ['wound_tack','film_bend']:UsdPhysics.Joint(s.GetPrimAtPath(parent+f'/tape_{CELLS-1}/'+name)).GetJointEnabledAttr().Set(False)
+      for name in ['wound_tack','film_bend']:
+       prim_joint=s.GetPrimAtPath(parent+f'/tape_{CELLS-1}/'+name)
+       if prim_joint:UsdPhysics.Joint(prim_joint).GetJointEnabledAttr().Set(False)
      # Explicit test-bench fixtures only. Not present in a real task episode.
      if a.mode!='bench':return prim
      j=UsdPhysics.FixedJoint.Define(s,parent+'/roll/bench_fixture');j.CreateBody1Rel().SetTargets([parent+'/roll']);j.CreateLocalPos0Attr(Gf.Vec3f(*ROLL_START));j.CreateLocalPos1Attr(Gf.Vec3f(0,0,0));j.CreateExcludeFromArticulationAttr(True)
@@ -147,9 +149,9 @@ def main():
        return r.T@(anchor-np.array(origin))
       a0=states[i-1][:3]+quat_xyzw_to_matrix(states[i-1][3:])@localpoint(p0,y0);a1=states[i][:3]+quat_xyzw_to_matrix(states[i][3:])@localpoint(p1,y1);anchor_errors[i]=float(np.linalg.norm(a0-a1))
       if i not in contacts.blade.cuts:sep=max(sep,anchor_errors[i])
-    if step<20:initial_displacement=max(initial_displacement,max(displaced[:-1] if a.mode=='adhesion-probe' else displaced))
+    if step<20:initial_displacement=max(initial_displacement,max(displaced[:WOUND_CELLS]))
     if step==19 and initial_displacement>.0005:raise RuntimeError('tape shifted before peel loading; initial wrap invalid')
-    worst=max(worst,sep);unwound=sum(d>.003 for d in displaced)*CELL_LENGTH;max_unwound=max(max_unwound,unwound)
+    worst=max(worst,sep);unwound=PREUNWOUND_LENGTH+sum(d>.003 for d in displaced[:WOUND_CELLS])*CELL_LENGTH;max_unwound=max(max_unwound,unwound)
     row={'time':env._t,'phase':phase,'robot_control':control,'bench_target_m':target,'roll_pose':roll.tolist(),'film_poses':[s.tolist() for s in states],'native_cell_displacement_m':displaced,'material_anchor_separation_m':sep,'unwound_length_estimate_m':unwound,'native_contact':contacts.telemetry()}
     if robot:
      native_hands=[]
@@ -184,7 +186,7 @@ def main():
      for n in ['north','south','east','west']:
       r=rr[n].T@rr[n+'_top'];angles.append(float(np.degrees(np.arctan2(r[2,1],r[1,1]))))
      speed=0. if previous_parts is None else max(float(np.linalg.norm(pp[n][:3]-previous_parts[n])/.05) for n in pp);previous_parts={n:p[:3].copy() for n,p in pp.items()};previous_items=current_items
-     peeled={i for i,d in enumerate(displaced) if d>.003};payout=max(tracker.tape.paid_out,len(peeled)*CELL_LENGTH);film_length=payout+sum(e for i,e in anchor_errors.items() if i in peeled and i-1 in peeled and i not in contacts.blade.cuts)
+     peeled=set(range(WOUND_CELLS,CELLS))|{i for i,d in enumerate(displaced[:WOUND_CELLS]) if d>.003};payout=max(tracker.tape.paid_out,len(peeled)*CELL_LENGTH);film_length=payout+sum(e for i,e in anchor_errors.items() if i in peeled and i-1 in peeled and i not in contacts.blade.cuts)
      films={f'tape_{i}':{'pos':body[:3],'rotation':quat_xyzw_to_matrix(body[3:])} for i,body in enumerate(states)}
      component=strip_component(contacts.blade.cuts,anchor_errors)
      seam_bond,end_bond=bonded_coverage(films,contacts.adhesion.active_patches(),component,origin,reference)
@@ -204,7 +206,7 @@ def main():
      cv2.putText(canvas,(('ROBOT FLAP CLOSURE | ' if a.mode=='closure-probe' else 'ROBOT PRODUCT PACKING | ') if robot else 'NATIVE WOUND TAPE | ')+phase,(12,25),cv2.FONT_HERSHEY_SIMPLEX,.6,(255,255,255),1,cv2.LINE_AA);cv2.putText(canvas,('Actual robot commands. Packing score: '+str(tracker.value)+' | sealing incomplete' if robot else 'Clamped material bench, not robot packing. No tape pose animation.'),(12,590),cv2.FONT_HERSHEY_SIMPLEX,.46,(255,205,120),1,cv2.LINE_AA);video.append_data(canvas)
      if step in (19,59,99,179,259,339,419,499,579,659,719) or (a.mode=='closure-probe' and step%200==199):imageio.imwrite(a.out/f'step-{step}.png',canvas)
     if robot is not None and (getattr(robot,'failure',None) or getattr(robot,'done',False)):break
-  result={'diagnostic':True,'robot_demo':False,'task_score':None,'bench_fixtures':True,'physics_dt_s':float(base.sim.get_physics_dt()),'explicit_material_length_m':ACTIVE_LENGTH,'initial_wrap_displacement_m':initial_displacement,'max_anchor_separation_m':worst,'max_displaced_material_estimate_m':max_unwound,'native_contact':contacts.telemetry(),'contact_integration_native_validated':False,'checks':{'stays_wound_before_pull':initial_displacement<.0005,'material_connected':worst<CELL_LENGTH*MAX_STRAIN,'material_peels':max_unwound>.025}}
+  result={'diagnostic':True,'robot_demo':False,'task_score':None,'bench_fixtures':True,'physics_dt_s':float(base.sim.get_physics_dt()),'explicit_material_length_m':ACTIVE_LENGTH,'initial_preunwound_length_m':PREUNWOUND_LENGTH,'initial_top_flap_angle_deg':carton_scene.INITIAL_TOP_ANGLE,'initial_wrap_displacement_m':initial_displacement,'max_anchor_separation_m':worst,'max_displaced_material_estimate_m':max_unwound,'native_contact':contacts.telemetry(),'contact_integration_native_validated':False,'checks':{'stays_wound_before_pull':initial_displacement<.0005,'material_connected':worst<CELL_LENGTH*MAX_STRAIN,'additional_material_peels':max_unwound>PREUNWOUND_LENGTH+.025}}
   if a.mode=='adhesion-probe':result|={'diagnostic':True,'task_score':None,'coupon_probe':True,'bench_fixtures':True,'final_coupon_film_height_m':float(states[-1,2]-coupon_start[2])}
   if tracker is not None:result|={'diagnostic':False,'bench_fixtures':False,'privileged_robot_attempt':robot is not None,'task_score':tracker.value,'metrics':tracker.result(),'controller_failure':getattr(robot,'failure',None),'controller_completed':getattr(robot,'done',False),'control_steps':steps_completed,'elapsed_s':env._t}
   if a.mode=='roll-pickup-probe':

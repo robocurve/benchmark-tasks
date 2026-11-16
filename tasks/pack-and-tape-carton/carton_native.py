@@ -4,13 +4,14 @@ Cardboard is a hinged-panel approximation. Tape uses passive hinge restraint
 until measured blade coverage cuts all three paths; it is not a film FEM.
 """
 from pathlib import Path
-from pxr import Usd,UsdGeom,UsdPhysics,PhysxSchema,Gf
+from pxr import Usd,UsdGeom,UsdPhysics,Gf
 from model import CARTON_HEIGHT as H,CARTON_WIDTH as W
 T=.003
 from config import *
 from carton_scene import layout
 
 def box(s,p,size,pos,color,collision=True):
+ from pxr import PhysxSchema
  c=UsdGeom.Cube.Define(s,p);c.CreateSizeAttr(1.);c.AddTranslateOp().Set(Gf.Vec3d(*pos));c.AddScaleOp().Set(Gf.Vec3f(*size));c.CreateDisplayColorAttr([Gf.Vec3f(*color)])
  if collision:
   UsdPhysics.CollisionAPI.Apply(c.GetPrim());a=PhysxSchema.PhysxCollisionAPI.Apply(c.GetPrim());a.CreateContactOffsetAttr(.0002);a.CreateRestOffsetAttr(0.)

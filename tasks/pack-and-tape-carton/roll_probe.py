@@ -95,7 +95,7 @@ class Geometry:
   for n,size,off in [('handle',(.10,.025,.025),(0,0,0)),('guard',(.02,.03,.02),(.052,0,.002)),('blade',(.014,.0005,.008),(.062,0,-.016))]:obs.append(('cutter_'+n,p+R@off,R,size))
   obs.append(('cutter_pad',np.array((.36,-.22,TOP+.001)),np.eye(3),(.16,.07,.002)))
   return obs
- def check(self,qs,fs,poses,contact=False):
+ def check(self,qs,fs,poses,contact=False,contact_targets=None,contact_side=1):
   if not all(np.isfinite(v).all() for v in [*qs,*fs,*[a for p in poses.values() for a in p]]):raise ValueError('nonfinite roll guard state')
   hands=[self.pieces(s,q,f) for s,q,f in zip(('left','right'),qs,fs)];obs=self.obstacles(poses);hard=(10.,None);target=10.
   centers=np.array([p for _,p,_,_ in obs]);extents=np.array([np.abs(R)@(np.array(size)/2) for _,_,R,size in obs]);omin,omax=centers-extents,centers+extents
@@ -104,7 +104,7 @@ class Geometry:
    gaps=np.maximum(pmin[:,None]-omax[None,:],omin[None,:]-pmax[:,None]).max(2)
    for i,j in np.argwhere(gaps<=.003):
     n,p,R,size=obs[j];gaps[i,j]=box_gap(pieces[i][1],p,R,size)
-   allowed=np.array([[contact and side==1 and name in ('tip_left','tip_right') and n in FAMILY for n,_,_,_ in obs] for name,_ in pieces])
+   allowed=np.array([[contact and side==contact_side and name in ('tip_left','tip_right') and n in (FAMILY if contact_targets is None else contact_targets) for n,_,_,_ in obs] for name,_ in pieces])
    if allowed.any():target=min(target,float(gaps[allowed].min()))
    values=np.where(allowed,np.inf,gaps);i,j=np.unravel_index(values.argmin(),values.shape)
    if values[i,j]<hard[0]:hard=(float(values[i,j]),('left' if side==0 else 'right',pieces[i][0],obs[j][0]))

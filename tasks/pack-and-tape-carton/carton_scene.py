@@ -29,7 +29,7 @@ def quat(z,x=0.):
             math.sin(z/2)*math.sin(x/2),math.sin(z/2)*math.cos(x/2))
 
 
-INITIAL_TOP_ANGLE=0.  # folded but untaped; sealing is the task
+INITIAL_TOP_ANGLE=160.  # open: both preloaded products are visible before closure
 
 def layout(top_angle=None,bottom_angle=0.):
     if top_angle is None:top_angle=INITIAL_TOP_ANGLE

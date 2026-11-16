@@ -1,6 +1,6 @@
 """Finite ordinary tape-roll geometry and material accounting, in SI units.
 
-No pre-laid strip, hidden leader, virtual tape gun, contact-activated teleport
+No pre-laid strip, hidden material, virtual tape gun, contact-activated teleport
 or unbounded tape source. Physics still has to realize peeling and adhesion.
 """
 from math import pi,sqrt,isfinite

@@ -15,10 +15,14 @@ class Tests(unittest.TestCase):
  def test_progress_requires_connected_actual_tape_bonds(self):
   scorer=PackingScorer();s=state(time=0.,flap_angles=[0]*4,inner_flaps_under_outer=True,payout=.10,ribbon_length=.10,continuous_material=True)
   s['seam_bond'][:11]=[1.]*11;self.assertEqual(scorer.update(s)['score'],.25)
- def test_native_reset_geometry_is_closed_and_untaped(self):
+ def test_native_reset_geometry_is_open_and_untaped(self):
   from carton_scene import layout
   from yam_arena.urdf import quat_xyzw_to_matrix
   parts={p['name']:p for p in layout()[0]}
   for side in ('north','south','east','west'):
-   p=parts[side];f=parts[side+'_top'];R=quat_xyzw_to_matrix([*p['quat'][1:],p['quat'][0]]);Q=quat_xyzw_to_matrix([*f['quat'][1:],f['quat'][0]]);np.testing.assert_allclose(R,Q,atol=1e-12)
+   p=parts[side];f=parts[side+'_top'];R=quat_xyzw_to_matrix([*p['quat'][1:],p['quat'][0]]);Q=quat_xyzw_to_matrix([*f['quat'][1:],f['quat'][0]]);relative=R.T@Q;self.assertAlmostEqual(np.degrees(np.arctan2(relative[2,1],relative[1,1])),-160.)
+ def test_initial_preunwound_material_does_not_award_credit(self):
+  from config import PREUNWOUND_LENGTH
+  scorer=PackingScorer();s=state(payout=PREUNWOUND_LENGTH,ribbon_length=PREUNWOUND_LENGTH,flap_angles=[-160.]*4)
+  self.assertEqual(scorer.update(s)['score'],0.);self.assertIsNone(scorer.invalid)
 if __name__=='__main__':unittest.main()

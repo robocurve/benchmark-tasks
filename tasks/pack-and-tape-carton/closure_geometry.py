@@ -6,7 +6,7 @@ import numpy as np
 GRASPS={'east':('left',-1,1,0.),'west':('left',1,1,3.),
         'north':('right',-1,1,0.),'south':('right',1,1,3.)}
 PAD_CONTACT_FORWARD=.004
-GRASP_FROM_HINGE=.040
+GRASP_FROM_HINGE=.055
 EDGE_INSET=.014
 
 

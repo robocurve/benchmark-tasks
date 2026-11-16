@@ -12,7 +12,9 @@ class ClosureProbe:
  def __init__(self,env):
   from carton_scene import layout
   self.env=env;self.previous=env._ready.detach().cpu().numpy().reshape(-1).copy();self.order=['east','west','north','south'];self.index=0;self.stage='preloaded';self.started=0.;self.failure=None;self.done=False;self.entered=False;self.bias=np.zeros(3);self.contact_offset=None;self.rotation_offset=None;self.last_time=0.;self.closed_hold=0.
-  parts,hinges=layout();self.parts={p['name']:p for p in parts};self.hinges={h['a']:h for h in hinges if h['b'].endswith('_top')}
+  parts,hinges=layout();self.parts={p['name']:p for p in parts}
+  from roll_probe import Geometry
+  self.geometry=Geometry();self.hinges={h['a']:h for h in hinges if h['b'].endswith('_top')}
  def pose(self,name):
   from yam_arena.urdf import quat_xyzw_to_matrix
   d=self.env._base.arena_world.get_pose_w(name);d=d.torch if hasattr(d,'torch') else d;p=d.detach().cpu().numpy()[0]
@@ -98,5 +100,18 @@ class ClosureProbe:
    alternate,ape,are=ik.solve(target,ik.matrix_to_quat_xyzw(rotation),seed,base_pos=self.env.rig.bases[side],iters=200)
    if ape+.05*are<pe+.05*re:q,pe,re=alternate,ape,are;self.bias[:]=0.
   out=self.previous.copy();out[7*i:7*i+6]=q;out[7*i+6]=g
-  delta=np.array([.04]*6+[.05]+[.04]*6+[.05]);out=np.clip(out,self.previous-delta,self.previous+delta);out=np.clip(out,self.env._low,self.env._high);self.previous=out
+  delta=np.array([.04]*6+[.05]+[.04]*6+[.05]);out=np.clip(out,self.previous-delta,self.previous+delta);out=np.clip(out,self.env._low,self.env._high)
+  # Ordinary contact is permitted only between the two active fingertips and
+  # the selected flap. Never sweep through an unrelated flap/carrier/arm.
+  names=[*self.parts,*[p[0] for p in PRODUCTS],'roll','cutter',*[f'tape_{j}' for j in range(CELLS)]]
+  poses={n:self.pose(n) for n in names};qs=[];fs=[]
+  for other in ('left','right'):
+   aid,fid=self.env._ids[other+'_robot'];v=self.env._base.scene[other+'_robot'].data.joint_pos;v=v.torch if hasattr(v,'torch') else v;v=v.detach().cpu().numpy()[0];qs.append(v[aid]);fs.append(v[fid])
+  contact_allowed=stage_before in ('enter','pinch','fold','release','clear_edge')
+  actual=self.geometry.check(qs,fs,poses,contact_allowed,contact_targets={name+'_top'},contact_side=i)
+  issued=self.geometry.check([out[:6],out[7:13]],[[FINGER_OPEN*out[6]]*2,[FINGER_OPEN*out[13]]*2],poses,contact_allowed,contact_targets={name+'_top'},contact_side=i)
+  if not actual['safe'] or not issued['safe']:
+   self.failure=name+':'+stage_before+' full315 unrelated-object clearance rejected'
+   return self.previous.copy(),{'phase':name+':'+stage_before,'failure':self.failure,'clearance_actual':actual,'clearance_issued':issued,'not_issued':True}
+  self.previous=out
   return out,{'phase':name+':'+stage_before,'flap_angles_deg':angles,'active_arm':side,'finger_gap_m':gap,'position_error_m':float(np.linalg.norm(error)),'rotation_error_rad':float(np.linalg.norm(ik._rot_error(rotation,rhand))),'tcp_actual':tcp.tolist(),'tcp_target':target.tolist(),'grip_contact_target':contact.tolist(),'command_angle_deg':getattr(self,'command_angle',angle),'engagement_verified':getattr(self,'engaged',False),'ik_error_m':pe,'ik_error_rad':re,'flaps_completed':self.index,'failure':self.failure}

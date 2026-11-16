@@ -1,4 +1,4 @@
-"""Nominal full315 roll-pickup screen; explicit closed/untaped carton hypothesis.
+"""Nominal full315 roll-pickup screen; open/untaped carton and 60 mm free ribbon hypothesis.
 
 No native contact, friction retention or film-end acquisition is certified.
 """
@@ -14,7 +14,7 @@ from carton_scene import layout
 
 
 def nominal_poses(lift=0.):
- poses={p['name']:(np.array(p['pos'])+CENTER,quat_xyzw_to_matrix([*p['quat'][1:],p['quat'][0]])) for p in layout(top_angle=0.)[0]}
+ poses={p['name']:(np.array(p['pos'])+CENTER,quat_xyzw_to_matrix([*p['quat'][1:],p['quat'][0]])) for p in layout()[0]}
  for n,p,_,_,_ in PRODUCTS:poses[n]=(np.array(p),np.eye(3))
  poses['roll']=(np.array(ROLL_START)+[0,0,lift],np.eye(3));poses['cutter']=(np.array(CUTTER_START),np.eye(3))
  for i in range(CELLS):p,y=tape_cell(i);c,s=math.cos(y),math.sin(y);poses[f'tape_{i}']=(np.array(p)+[0,0,lift],np.array([[c,-s,0],[s,c,0],[0,0,1]]))
@@ -39,4 +39,4 @@ def check():
  return rows
 
 if __name__=='__main__':
- rows=check();path=Path('/private/tmp/packing-roll-pickup-nominal.json');path.write_text(json.dumps({'scope':'Nominal sampled36poses/full315; no continuous swept/native/contact proof','closed_untaped_carton':True,'rows':rows,'pass':all(r['safe'] for r in rows)},indent=2)+'\n');print(path)
+ rows=check();path=Path('/private/tmp/packing-roll-pickup-nominal.json');path.write_text(json.dumps({'scope':'Nominal sampled36poses/full315; no continuous swept/native/contact proof','open_untaped_carton':True,'preunwound_length_m':PREUNWOUND_LENGTH,'rows':rows,'pass':all(r['safe'] for r in rows)},indent=2)+'\n');print(path)

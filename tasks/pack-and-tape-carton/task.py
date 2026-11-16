@@ -1,9 +1,10 @@
 """Seal a preloaded carton with an ordinary loose tape roll.
 
-The two products already start inside and the four top flaps are folded closed but untaped.
+The two products already start inside and the four top flaps start open to reveal them. Close the flaps.
 Peel the roll end, lay one connected strip along the seam and both end faces,
 cut it using the guarded cutter, release everything and leave the seal holding.
-No pre-laid tape, prepared leader or extra handles. Use run.py for mechanics.
+The ordinary roll has 60 mm of its existing ribbon already unwound; no added tab,
+pre-laid carton tape or extra handles. Use run.py for mechanics.
 """
 from yam_arena.task_file import Box
 from carton_scene import layout
