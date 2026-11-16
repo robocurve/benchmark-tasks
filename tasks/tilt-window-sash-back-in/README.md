@@ -76,9 +76,10 @@ Evaluated every control step; the score at the end of the episode counts (`SCORE
 lower sash leans in from upright (0 upright, 90 lying flat toward the arms).
 
 - 0 if the sash ever came off its pivots (its pivot axis more than 1 cm from where the shoes hold it).
-- 1.0 (success): the sash upright (tilt between -1 and 1.5 degrees; it closes against the upper sash) with both latch
-  bolts out in their slots (each latch within 1 mm of its rest position), held still (tilt changing less than
-  0.3 degrees) for 1 s.
+- Success: the sash upright (tilt between -1 and 1.5 degrees; it closes against the upper sash) with both latch bolts
+  out in their slots (each latch within 1 mm of its rest position), and still (its tilt changing less than 0.3 degrees
+  over the last 1 s). It scores 1.0 once success has held for 1 s (20 control steps in a row), when the episode ends;
+  until then, 0.75.
 - Otherwise the furthest it got: 0.75 if it was brought within 3 degrees of upright (only possible with both bolts
   drawn in); 0.5 within 20 degrees; 0.25 within 60 degrees (top rail lifted about 14 cm); else 0.
 
