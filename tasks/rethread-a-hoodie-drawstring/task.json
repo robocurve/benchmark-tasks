@@ -1,0 +1,13 @@
+{
+  "title": "Rethread a hoodie drawstring",
+  "category": "Societal relevance",
+  "instruction": "Feed the blunt threader through the hood casing until at least 8 cm of drawstring extends from each opening. Leave the hood and threader on the table.",
+  "context": "Replacing a lost drawstring means guiding a partly hidden tool through flexible fabric while keeping the trailing end outside. The cord is already attached to the threader; detaching it is outside this trial.",
+  "setup": "An adult hood lies flat with its 56.5 cm curved drawstring casing facing the robot. The casing is 16 mm wide; the adjoining cotton fabric panel is 10 cm deep. A 90 cm long, 4 mm diameter braided cord is attached to a blunt 40 x 3 mm steel bodkin. Its nose starts 15 mm inside the right opening; the loose tail lies in a broad U on the table. Both hands start open. model.py specifies the complete fixed layout. A 650 x 850 x 1 mm silicone workmat covers the tabletop.",
+  "scoring": "1.0: cord follows the existing casing, at least 8 cm extends from each opening, fabric and cord intact, and both hands released for 3 seconds. 0.75 for that result before release/hold. 0.5 if the threader has emerged at least 4 cm but either usable tail is not yet long enough. Otherwise 0. Losing the trailing end into the casing or damaging material overrides credit. Check with photographs and a ruler.",
+  "run_limit": "1,200 actions (60 seconds at 20 Hz)",
+  "action_limit": 1200,
+  "fidelity": "Native YAM arms/cameras. Hood panel is a free flexible mass-point sheet with table friction. A reduced sliding guide follows its casing; tool alignment and friction govern advance and drag the fabric. Cord is a length-constrained chain. Pinching through fabric gives idealized tool capture. Fibre friction, finger reaction and full tunnel-wall contacts are simplified; forces are uncalibrated.",
+  "scores": "Dream-1: 0.0; scripted demo: 1.0. Dream errored before its first action after 32 observation-preroll steps: ValueError: q_l_chunk gripper leaves 0..1: [-0.110, 0.967]. Same error in two attempts; not a completed rollout.",
+  "media": "M-5TMF5F"
+}
