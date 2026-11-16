@@ -42,6 +42,7 @@ Positions in cm from the midpoint between the two arm bases, on the table (x for
 | `ssdkit.py` | Rigid parts built from boxes, with spring-loaded sliders, for yam_arena task files |
 | `demo.py` | The scripted full-score demo |
 | `test_scoring.py` | Offline checks: every scoring outcome, and the geometry of the drive, its holes and the pins (no GPU) |
+| `fabrication/` | Real-world build: OpenSCAD parts, `BUILD.md` (materials, printing, assembly, acceptance checks), and a check of every dimension against `task.py` |
 
 `ssdkit.py` hooks `yam_arena.scene` and the embodiment's reset without modifying yam_arena, so the task runs with the
 standard `yam_arena` embodiment and `task_score` scorer. It follows the part kit used by other tasks in this
@@ -65,7 +66,7 @@ inspect-robots run --embodiment yam_arena --policy dream \
 
 ```bash
 python demo.py task.py demo_out --max-steps 1800     # writes demo_*_cam.mp4, setup.png, result.json
-python -m pytest test_scoring.py                     # offline checks
+python -m pytest test_scoring.py fabrication/test_fabrication.py   # offline checks
 ```
 
 1. The left arm pinches the sprung rail's pull tab (its hand leaning 30 degrees to the left, so the two wrists stay
@@ -119,10 +120,13 @@ enforced in simulation.
 
 ## Real-world build
 
-Use a real 2.5-inch SSD (or a 100 x 69.85 x 7 mm aluminium blank weighted to 55 g with M3 holes at the standard
-positions) and a real tool-less 2.5-inch carrier, or a 3D-printed PLA one with the dimensions in `task.py`: steel
-dowel pins, and the sprung rail on two short guide rods with a light compression spring (about 0.15 N/mm). Mark the
-outlines of the drive and the carrier on the table.
+`fabrication/BUILD.md` has the complete build: OpenSCAD sources for the printed carrier frame (with its guide-rod
+mounts), the sprung rail with its pull tab, and a 2.5-inch SSD dummy with the task's 4 mm side holes. It also has a
+bill of materials, print settings, assembly steps and acceptance checks. The sprung rail runs on two 3 x 26 mm ground
+steel rods, each with a 0.3 mm-wire, 5 mm OD compression spring (0.075 N/mm each, 0.15 N/mm the pair). It stops at
+7 mm of travel, and steel 2.5 x 6 mm dowel pins stand 2 mm past the drive's side. Every dimension is in
+`fabrication/params.scad`, and `fabrication/check_params.py` checks it against `task.py`. The carrier stays loose on
+the table; mark the outlines of the drive and the carrier for resets.
 
 ## Assets
 
