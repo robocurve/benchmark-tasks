@@ -203,6 +203,7 @@ _STATE: dict = {}
 @m.on_reset
 def _reset_state(environment=None) -> None:
     _STATE.update(clear=False, at_pins=False, engaging=False, seated=False, bent=False, latched={"lever_l": False, "lever_r": False})
+    _STATE["_held"], _STATE["_step"] = 0, None
 
 
 _reset_state()
@@ -260,7 +261,7 @@ def lever_deg(card, link: str) -> float:
     return abs(card.deg(link))
 
 
-def _update(objects) -> tuple[float, bool]:
+def _assess(objects) -> tuple[float, bool]:
     card = objects["card"]
     g = end_gaps(card)
     worst = float(g.max())
@@ -280,6 +281,24 @@ def _update(objects) -> tuple[float, bool]:
     if _STATE["engaging"]:
         return 0.5, False
     return (0.25 if _STATE["at_pins"] else 0.0), False
+
+
+FULL_HOLD_STEPS = 20        # the success condition must hold this many control steps in a row (1 s) for 1.0
+UNHELD = 0.75                # the score while it has held for less
+
+
+def _update(objects) -> tuple[float, bool]:
+    """This step's (score, success). success() and score() are both called on each step's states; the step is
+    assessed once. The score is 1.0 only once the success condition has held for 1 s; until then it is UNHELD."""
+    last = _STATE.get("_step")
+    if last is not None and last[0] is objects and last[2] < 2:
+        _STATE["_step"] = (last[0], last[1], last[2] + 1)
+        return last[1]
+    raw, ok = _assess(objects)
+    _STATE["_held"] = _STATE.get("_held", 0) + 1 if ok else 0
+    out = (raw if raw < 1.0 else 1.0 if _STATE["_held"] >= FULL_HOLD_STEPS else UNHELD, ok)
+    _STATE["_step"] = (objects, out, 1)
+    return out
 
 
 def success(objects) -> bool:

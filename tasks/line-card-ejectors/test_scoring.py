@@ -70,7 +70,16 @@ def test_seated_levers_open():
 
 
 def test_seated_and_shut():
-    assert _run([_objects(gap=0.0003, lever_l=-0.4, lever_r=0.4)]) == (1.0, True)
+    assert _run([_objects(gap=0.0003, lever_l=-0.4, lever_r=0.4) for _ in range(20)]) == (1.0, True)
+
+
+def test_full_score_only_after_one_second_held():
+    held = [_objects(gap=0.0003, lever_l=-0.4, lever_r=0.4) for _ in range(20)]
+    assert _run(held[:19]) == (0.75, True)            # 19 steps: success not yet held 1 s
+    assert _run(held) == (1.0, True)
+    T._reset_state()
+    T._STATE["clear"] = True
+    assert [T.score(o) for o in held][-2:] == [0.75, 1.0]   # score() alone gives the same
 
 
 def test_seated_and_shut_but_still_held_is_not_success():
@@ -104,12 +113,12 @@ def test_cocked_while_mating_is_sticky_zero():
 
 
 def test_cocked_before_mating_is_allowed():
-    frames = [_objects(gap=0.030, cock=0.003), _objects(gap=0.0003, lever_l=-0.4, lever_r=0.4)]
+    frames = [_objects(gap=0.030, cock=0.003)] + [_objects(gap=0.0003, lever_l=-0.4, lever_r=0.4) for _ in range(20)]
     assert _run(frames) == (1.0, True)
 
 
 def test_slightly_uneven_while_mating_is_allowed():
-    frames = [_objects(gap=0.004, cock=0.0012), _objects(gap=0.0003, lever_l=-0.4, lever_r=0.4)]
+    frames = [_objects(gap=0.004, cock=0.0012)] + [_objects(gap=0.0003, lever_l=-0.4, lever_r=0.4) for _ in range(20)]
     assert _run(frames) == (1.0, True)
 
 

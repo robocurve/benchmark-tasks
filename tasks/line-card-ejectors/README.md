@@ -82,8 +82,9 @@ back and the chassis face, less the 1 mm).
 
 - 0 if, at any point while both end gaps are 8 mm or less (the connectors mating), the two end gaps differ by more
   than 1.5 mm (bent backplane pins).
-- 1.0 (success, which must hold for 1 s): both end gaps 1 mm or less, both levers within 3 degrees of shut (in their
-  catches), and no gripper finger within 3 cm of either lever's finger tab.
+- 1.0 (success): both end gaps 1 mm or less, both levers within 3 degrees of shut (in their catches), and no gripper
+  finger within 3 cm of either lever's finger tab, held for 1 s (20 control steps in a row); until it has held for
+  1 s, it scores 0.75.
 - 0.75 if both end gaps were at some point 1 mm or less.
 - 0.5 if both end gaps were at some point 8 mm or less.
 - 0.25 if both end gaps were at some point 25 mm or less (in far enough for the levers to catch their pins).
