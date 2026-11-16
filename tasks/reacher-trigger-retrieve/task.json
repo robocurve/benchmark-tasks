@@ -1,0 +1,20 @@
+{
+  "title": "Retrieve a remote with a handheld trigger reacher",
+  "category": "Impact on jobs",
+  "keywords": [
+    "home care",
+    "assistive device",
+    "reacher",
+    "remote tool",
+    "parallel gripper"
+  ],
+  "instruction": "Use the reacher to retrieve the remote. Leave the remote flat inside the blue outline and the reacher open on the clear side of the table.",
+  "context": "Home health aides and personal care aides (O*NET 31-1121.00 and 31-1122.00; 4,305,810 US jobs, BLS May 2025 OEWS) help clients with everyday activities at home. Home health aides instruct clients and families in living independently and adapting to disability. This is a device-only example of demonstrating a reaching aid for a client who cannot reach across a table. A squeeze at the handle closes the jaws 380 mm away. The operator has to maintain trigger force while relocating the remote, then let it go and clear the aid from the usable area.",
+  "setup": "Station table, TOP=0.7475 m; +x forward, +y left, metres. Arms ready and open. Unbranded 450 mm, 111 g reacher lies on its side so the horizontal jaw setting and squeeze trigger lie in the tabletop plane. Aluminium shaft, dark plastic casing and jaw brackets, red ABS trigger and rubber jaw pads. Handle butt near (0.230,-0.260), shaft points +y, trigger is on the +x side. The open distal jaws straddle the near end of a face-up 42 x 142 x 19 mm, 95 g plastic TV remote with its centre at (0.230,0.244,TOP+0.010) and long axis +y. A 180 x 192 mm blue vinyl placement marker (0.68 mm proud of the tabletop), centred (0.267,0.108), has a pale perimeter. Clear tool placement area lies at x <= 0.183 m. One fixed arrangement.",
+  "scoring": "0 unless the remote has travelled at least 65 mm toward the marker while its centre is within 84 mm horizontally of the reacher nose, each gripper TCP is at least 105 mm from the remote centre, the trigger is squeezed at least 15 degrees, the distal jaw closes at least 6 degrees and the internal rod moves at least 3 mm. 0.4 for this transfer, 0.8 if at the end the entire remote also lies inside the perimeter (175 x 184 mm), within 10 degrees of flat, within 3 mm of resting height and moving no faster than 15 mm/s. 1.0 if the trigger and jaw are also within 4 and 5 degrees of open respectively, the handle centre is at x <= 0.183 m and at tabletop rest height within 6 mm, the reacher is moving no faster than 25 mm/s and both TCPs are at least 105 mm from the handle. Final state must hold 1.6 s for success.",
+  "run_limit": "800 steps (40 seconds at 20 Hz)",
+  "fidelity": "Real-size 450 mm, 111 g reacher. Free rigid body with separate spring-return trigger, distal jaw and contact-driven axial pushrod. Cam profiles and spring forces are estimated. The model spring alone implies about 7 N at 26 degrees; the supplier gives no force measurement. Q6 proxy for the small grip interface: linked displacement of the remote, visible whole remote inside the marker and the open reacher set aside. Use the trigger and jaw close-ups to read the mechanical state.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "reset_notes": "Place the reacher on its side along +y with the trigger and jaw released. Restore the remote face up at the initial centre and long-axis direction. Check the placement marker is flat and the near side of the table is clear.",
+  "media": "M-6QHMYN"
+}
