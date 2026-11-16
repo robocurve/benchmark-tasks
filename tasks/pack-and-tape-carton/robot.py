@@ -3,27 +3,15 @@ import numpy as np
 from yam_arena.demo import ArmPlan,Waypoint as W
 from yam_arena.constants import FINGER_OPEN
 from config import *
-class ProductsProbe:
- def __init__(self,env):
-  self.env=env;self.previous=env._ready.detach().cpu().numpy().reshape(-1).copy();O=FINGER_OPEN;path=[];travel=TOP+.16
-  for (name,p,size,mass,color),target in zip(PRODUCTS,[(.275,0.),(.365,0.)]):
-   x,y,z=p;grip=-.0185 if name=='product_a' else -.0135
-   path += [W(1.5,(x,y,travel),O),W(2.,(x,y,z+.008),O),W(1.,(x,y,z+.008),grip),W(2.,(x,y,travel),grip),W(3.,(*target,travel),grip),W(2.,(*target,TOP+.039),grip),W(1.,(*target,TOP+.039),O),W(2.,(*target,travel),O)]
-  path += [W(3.,(.13,.24,TOP+.17),O)]
-  self.plan=ArmPlan(path,env.rig.bases['left']);self.park=ArmPlan([W(3.,(.13,-.24,TOP+.17),O)],env.rig.bases['right']);self.duration=self.plan.duration
- def command(self,t):
-  a,phase=self.plan.action7(t+.05);b,_=self.park.action7(t+.05);out=np.r_[a,b];delta=np.array([.04]*6+[.05]+[.04]*6+[.05]);out=np.clip(out,self.previous-delta,self.previous+delta);out=np.clip(out,self.env._low,self.env._high);self.previous=out
-  return out,{'phase':'pack_products' if t<self.duration else 'hold_packed','ik_error_m':self.plan.worst_ik_mm/1000,'ik_error_deg':self.plan.worst_ik_deg}
-
 class ClosureProbe:
- """Proven product prefix followed by feedback grasps of four ordinary rims.
+ """Preloaded contents; feedback grasps close the four ordinary rims.
 
  All manipulation uses ordinary arm/finger commands. Angles, finger aperture
  and acquired contact offsets gate progress; no phase contributes task credit.
  """
  def __init__(self,env):
   from carton_scene import layout
-  self.env=env;self.products=ProductsProbe(env);self.prefix_duration=self.products.duration;self.previous=self.products.previous.copy();self.order=['east','west','north','south'];self.index=0;self.stage='products';self.started=0.;self.failure=None;self.done=False;self.entered=False;self.bias=np.zeros(3);self.contact_offset=None;self.rotation_offset=None;self.last_time=0.;self.closed_hold=0.
+  self.env=env;self.previous=env._ready.detach().cpu().numpy().reshape(-1).copy();self.order=['east','west','north','south'];self.index=0;self.stage='preloaded';self.started=0.;self.failure=None;self.done=False;self.entered=False;self.bias=np.zeros(3);self.contact_offset=None;self.rotation_offset=None;self.last_time=0.;self.closed_hold=0.
   parts,hinges=layout();self.parts={p['name']:p for p in parts};self.hinges={h['a']:h for h in hinges if h['b'].endswith('_top')}
  def pose(self,name):
   from yam_arena.urdf import quat_xyzw_to_matrix
@@ -45,8 +33,6 @@ class ClosureProbe:
   from yam_arena.demo import grip_rotation
   from closure_geometry import GRASPS,PAD_CONTACT_FORWARD
   dt=min(.05,max(.001,time-self.last_time));self.last_time=time
-  if time<self.prefix_duration:
-   action,report=self.products.command(time);self.previous=action.copy();return action,report
   if self.failure or self.done:return self.previous.copy(),{'phase':'closure_failed' if self.failure else 'four_flaps_closed','failure':self.failure,'flaps_completed':self.index}
   angles={n:self.angle(n) for n in self.order}
   if self.index>=4:
@@ -60,7 +46,7 @@ class ClosureProbe:
    return self.previous.copy(),{'phase':'verify_released_closure','flap_angles_deg':angles,'closed_hold_s':self.closed_hold,'inner_flaps_under_outer':bool(inner_under),'failure':self.failure}
   name=self.order[self.index];side=GRASPS[name][0];i=0 if side=='left' else 1
   ids,fids=self.env._ids[side+'_robot'];d=self.env._base.scene[side+'_robot'].data.joint_pos;d=d.torch if hasattr(d,'torch') else d;native=d.detach().cpu().numpy()[0];qa=native[ids];tcp,rhand=ik.tcp_pose(qa,self.env.rig.bases[side]);opening=float(np.clip(native[fids].mean()/FINGER_OPEN,0,1));gap=opening*2*abs(FINGER_OPEN);angle=angles[name]
-  if self.stage=='products':self.change('approach',time,tcp,rhand)
+  if self.stage=='preloaded':self.change('approach',time,tcp,rhand)
   p,r,contact=self.target(name);elapsed=time-self.started;opened=.020/(2*abs(FINGER_OPEN));closed=.0015/(2*abs(FINGER_OPEN));stage_before=self.stage;g=opened
   if self.stage=='approach':
    blend=ik.smoothstep(elapsed/3);target=self.startp+blend*(p-r[:,2]*.040-self.startp);rotation=ik.slerp_matrix(self.startr,r,blend)
@@ -100,7 +86,7 @@ class ClosureProbe:
     if any(abs(angles[n])>5 for n in self.order[:self.index+1]):self.failure='a released flap reopened before the next fold'
     else:
      self.index+=1;self.contact_offset=None;self.rotation_offset=None;self.change('approach',time,tcp,rhand)
-     if self.index<4:self.stage='products'
+     if self.index<4:self.stage='preloaded'
   if elapsed>(18. if stage_before=='fold' else 12.):self.failure=name+':'+stage_before+' timed out at measured pose/grip gate'
   error=target-tcp
   self.bias=np.clip(self.bias+.06*error,-.012,.012) if np.linalg.norm(error)<.025 else self.bias*.95

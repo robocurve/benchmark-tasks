@@ -43,13 +43,16 @@ class PackingScorer:
         # 44 x 5 mm seam cells must each have >=80% width adhesion. End wrap
         # values are bonded lengths, not tool-path positions. The same single
         # connected material strip must supply the entire seal.
-        seal=(self.tape.cut_at is not None and s['single_strip'] and
+        seal=(self.tape.cut_at is not None and s['single_strip'] and s.get('continuous_material',False) and
               all(.8 <= x <= 1. for x in s['seam_bond']) and all(x >= .035 for x in s['end_bond']) and
               not s['strip_still_on_roll'])
+        connected=s.get('continuous_material',False) and self.tape.paid_out>=.055
+        seam_complete=(connected and all(.8<=x<=1. for x in s['seam_bond']))
+        seam_started=(connected and sum(.8<=x<=1. for x in s['seam_bond'])>=11)
         ready=(inside and closed and seal and s['hands_clear'] and s['tools_parked'] and s['carton_speed'] < .01)
         self.hold=self.hold+dt if ready else 0.
         self.value=(0. if self.invalid else 1. if self.hold >= 2. else
-                    .75 if inside and closed and seal else .5 if inside and closed else .25 if inside else 0.)
+                    .75 if inside and closed and seal else .5 if inside and closed and seam_complete else .25 if inside and closed and seam_started else 0.)
         return self.result()
 
     def result(self):

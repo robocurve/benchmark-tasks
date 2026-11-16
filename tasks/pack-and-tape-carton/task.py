@@ -1,6 +1,7 @@
-"""Pack two products, close four flaps and seal with an ordinary loose tape roll.
+"""Seal a preloaded carton with an ordinary loose tape roll.
 
-Peel its flush end, lay one connected strip along the seam and both end faces,
+The two products already start inside and the four top flaps are folded closed but untaped.
+Peel the roll end, lay one connected strip along the seam and both end faces,
 cut it using the guarded cutter, release everything and leave the seal holding.
 No pre-laid tape, prepared leader or extra handles. Use run.py for mechanics.
 """

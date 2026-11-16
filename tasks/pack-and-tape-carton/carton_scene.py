@@ -29,7 +29,10 @@ def quat(z,x=0.):
             math.sin(z/2)*math.sin(x/2),math.sin(z/2)*math.cos(x/2))
 
 
-def layout(top_angle=160.,bottom_angle=0.):
+INITIAL_TOP_ANGLE=0.  # folded but untaped; sealing is the task
+
+def layout(top_angle=None,bottom_angle=0.):
+    if top_angle is None:top_angle=INITIAL_TOP_ANGLE
     parts=[];hinges=[]
     walls=[('north',(0.,W/2,H/2),L,0.),
            ('east',(L/2,0.,H/2),W,-math.pi/2),
@@ -52,7 +55,7 @@ def layout(top_angle=160.,bottom_angle=0.):
                                low=-175. if end=='top' else 0.,high=0. if end=='top' else 175.,
                                # USD angular drives use torque per degree, not per radian.
                                # Weak worn top-crease memory; gravity can retain closure.
-                               spring=.00002 if end=='top' else .003,target=sign*160.,sealed=end=='bottom' and name in ('north','south')))
+                               spring=.00002 if end=='top' else .003,target=sign*10. if end=='top' else sign*160.,sealed=end=='bottom' and name in ('north','south')))
     # Corner anchors are expressed in each body's local frame.
     corners=[(L/2,W/2,H/2),(L/2,-W/2,H/2),(-L/2,-W/2,H/2),(-L/2,W/2,H/2)]
     for i,(name,center,_,yaw) in enumerate(walls):

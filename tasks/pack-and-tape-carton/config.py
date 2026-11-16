@@ -10,7 +10,11 @@ CELLS=72
 ACTIVE_LENGTH=CELLS*CELL_LENGTH
 ACTIVE_INNER_RADIUS=math.sqrt(OUTER_RADIUS**2-ACTIVE_LENGTH*TAPE_THICKNESS/math.pi)
 BOARD=.003
-PRODUCTS=[('product_a',(.12,.20,TOP+.017),(.080,.050,.030),.10,(.10,.37,.85)),('product_b',(.22,.24,TOP+.017),(.060,.040,.030),.07,(.93,.28,.12))]
+# Products are preloaded, supported by two overlapping 3 mm bottom flaps.
+PRELOADED=True
+FLOOR_SURFACE_Z=CENTER[2]+1.5*BOARD
+PRODUCTS=[('product_a',(.275,0.,FLOOR_SURFACE_Z+.015+.0001),(.080,.050,.030),.10,(.10,.37,.85)),('product_b',(.365,0.,FLOOR_SURFACE_Z+.015+.0001),(.060,.040,.030),.07,(.93,.28,.12))]
+
 
 def tape_cell(i):
  # Archimedean spiral; end is flush on the outer wrap, with no pull tab.
