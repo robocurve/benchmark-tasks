@@ -222,7 +222,7 @@ def _update(objects) -> tuple[float, bool]:
 
 def success(objects) -> bool:
     """Both empty pockets hold a seated box, the display upright, both boxes still for 1 s."""
-    return _update(objects)[1]
+    return _update(objects)[0] >= 1.0   # true only once the full score's 1 s hold is complete
 
 
 def score(objects) -> float:
