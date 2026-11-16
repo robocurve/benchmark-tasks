@@ -204,7 +204,7 @@ def success(objects) -> bool:
     """The sash upright in the frame with both tilt latches out in their slots, held still for 1 s."""
     out = _update(objects)
     _STATE["_this_step"] = (objects, out)   # the runtime calls success() then score() on each step's states:
-    return out[1]                            # score() reuses this, so the step counts once
+    return out[0] >= 1.0                     # true only once the full score's 1 s hold is complete
 
 
 def score(objects) -> float:
