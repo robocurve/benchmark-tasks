@@ -24,12 +24,17 @@ case "$mode" in
     policy=yam_scripted
     steps=1200
     ;;
+  posecheck)
+    export POSE_CHECK=1
+    policy=yam_scripted
+    steps=640
+    ;;
   dream)
     policy=dream
     steps=1500
     ;;
   *)
-    echo "Unknown mode: $mode (use settle, demo, ablation, shove, dream)" >&2
+    echo "Unknown mode: $mode (use settle, demo, ablation, shove, posecheck, dream)" >&2
     exit 2
     ;;
 esac

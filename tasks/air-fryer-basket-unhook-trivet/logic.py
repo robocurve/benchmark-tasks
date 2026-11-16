@@ -70,6 +70,24 @@ def hand_pose_boxes(body_pos: Sequence[float], quat_xyzw: Sequence[float], half_
     return tcp, pads, tilt
 
 
+# Finger link origins in the gripper frame, from the robot's URDF (yam.urdf joints joint7 and joint8: origin xyz, rpy
+# (-pi, 0, pi/2), prismatic axis +y / -y, which the rpy turns into the gripper's +x / -x). joint7/joint8 read 0 closed
+# and down to -0.04695 open.
+TIP_LEFT_AT = (0.0445119, -0.0239931, 0.0566829)
+TIP_RIGHT_AT = (-0.0445119, 0.0239931, 0.0566829)
+
+
+def tip_link_positions(body_pos: Sequence[float], quat_xyzw: Sequence[float], q7: float, q8: float):
+    """World positions of the tip_left and tip_right link origins predicted from the gripper body pose and the finger joint
+    positions. Compared on the GPU with the tip_left/tip_right positions the simulator reports (an independent check of the
+    quaternion order: those positions do not depend on how the gripper's quaternion is read)."""
+    rot = rotation_from_quat(quat_xyzw)
+    body = np.asarray(body_pos, dtype=float)
+    left = body + rot @ (np.asarray(TIP_LEFT_AT) + np.array([q7, 0.0, 0.0]))
+    right = body + rot @ (np.asarray(TIP_RIGHT_AT) + np.array([-q8, 0.0, 0.0]))
+    return left, right
+
+
 def tilt_deg(q: Sequence[float]) -> float:
     """Angle between the body +z axis and world +z in degrees."""
     rot = rotation_from_quat(q)

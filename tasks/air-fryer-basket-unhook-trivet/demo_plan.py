@@ -53,6 +53,9 @@ def plans() -> dict[str, list[Waypoint]]:
             "right": [Waypoint(8.0, R_READY, FINGER_OPEN, "settle", 0.0)],
         }
 
+    if os.getenv("POSE_CHECK"):
+        return pose_check_plans()
+
     gx, gy = POST_X + LEFT_DX, POST_Y + LEFT_DY
     mat_gy = MAT_CENTRE[1] + (POST_Y - BY) + LEFT_DY           # the basket centre lands on the mat centre
     shove = os.getenv("ABLATION") == "shove"
@@ -106,4 +109,43 @@ def plans() -> dict[str, list[Waypoint]]:
         if total > r_time:
             right.append(Waypoint(total - r_time, R_READY, FINGER_OPEN, "right idle at ready", 0.0))
 
+    return {"left": left, "right": right}
+
+
+def pose_check_plans() -> dict[str, list[Waypoint]]:
+    """Check run (run.sh posecheck) for the gripper quaternion order and for both contact checks with turned wrists.
+
+    Both wrists turn through yaw 0, 45 degrees and about 90 degrees in free space, with the fingers open and closed. The
+    turned left hand (yaw -90 degrees) then hovers with its fingertips 1 cm above the vertical grip bar (not released) and leaves (released).
+    Last, the turned right hand (yaw 80 degrees) lowers its fingertips onto the top of the drawer's hot front right wall
+    (hot contact, a permanent zero). The scorer logs the simulator's fingertip link positions at every step.
+    """
+    top = TABLE_TOP
+    yaw_l, yaw_r = -1.5708, 1.40          # the wrist limits (see the yam_arena notes): left -pi/2, right 1.40 rad
+    free_l, free_r = (0.200, 0.200, top + 0.150), (0.200, -0.220, top + 0.150)
+    bar = (POST_X, POST_Y)
+    wall = (0.296, -0.126)                 # drawer front right wall (x 0.295 to 0.301, y -0.132 to -0.120, top z 11.3 cm)
+    left = [
+        Waypoint(3.0, free_l, FINGER_OPEN, "free yaw 0 open", 0.0),
+        Waypoint(2.5, free_l, FINGER_OPEN, "free yaw -45 open", -0.7854),
+        Waypoint(2.5, free_l, FINGER_CLOSED, "free yaw -45 closed", -0.7854),
+        Waypoint(2.5, free_l, FINGER_CLOSED, "free yaw -90 closed", yaw_l),
+        Waypoint(2.5, free_l, POST_OPEN, "free yaw -90 part open", yaw_l),
+        Waypoint(3.0, (bar[0], bar[1], top + HOVER_LEFT_Z), POST_OPEN, "turned hand over grip bar", yaw_l),
+        Waypoint(2.0, (bar[0], bar[1], top + HOVER_LEFT_Z), POST_OPEN, "hold over grip bar", yaw_l),
+        Waypoint(3.0, L_READY, FINGER_OPEN, "turned hand leaves", yaw_l),
+        Waypoint(9.0, L_READY, FINGER_OPEN, "left wait", yaw_l),
+    ]
+    right = [
+        Waypoint(3.0, free_r, FINGER_OPEN, "free yaw 0 open", 0.0),
+        Waypoint(2.5, free_r, FINGER_OPEN, "free yaw 45 open", 0.7854),
+        Waypoint(2.5, free_r, FINGER_CLOSED, "free yaw 45 closed", 0.7854),
+        Waypoint(2.5, free_r, FINGER_CLOSED, "free yaw 80 closed", yaw_r),
+        Waypoint(2.5, free_r, POST_OPEN, "free yaw 80 part open", yaw_r),
+        Waypoint(8.0, free_r, FINGER_CLOSED, "wait for left hand", yaw_r),
+        Waypoint(3.0, (wall[0], wall[1], top + 0.160), FINGER_CLOSED, "turned hand over hot wall", yaw_r),
+        Waypoint(2.5, (wall[0], wall[1], top + 0.110), FINGER_CLOSED, "fingertips onto hot wall", yaw_r),
+        Waypoint(1.5, (wall[0], wall[1], top + 0.110), FINGER_CLOSED, "touch hot wall", yaw_r),
+        Waypoint(2.5, R_READY, FINGER_OPEN, "withdraw right", yaw_r),
+    ]
     return {"left": left, "right": right}

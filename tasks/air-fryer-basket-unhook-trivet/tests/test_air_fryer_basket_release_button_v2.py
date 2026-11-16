@@ -15,13 +15,9 @@ HERE = pathlib.Path(__file__).resolve()
 TASK_DIR = HERE.parents[1]
 sys.path.insert(0, str(TASK_DIR))
 
-# Ensure yam_arena can be imported
-_ROOT = HERE.parents[3].parent
-_KNOWN = _ROOT / "robocurve-windows-transfer-2026-11-05" / "project" / "robocurve" / "tmp" / "yam-upstream"
-for cand in [_KNOWN] if (_KNOWN / "yam_arena").is_dir() else _ROOT.rglob("yam-upstream"):
-    if (cand / "yam_arena").is_dir():
-        sys.path.insert(0, str(cand))
-        break
+# yam_arena: installed, or a source checkout named by YAM_ARENA_SRC
+if os.environ.get("YAM_ARENA_SRC"):
+    sys.path.insert(0, os.environ["YAM_ARENA_SRC"])
 
 import geometry as g
 import logic as l
@@ -477,16 +473,116 @@ def test_pad_boxes_follow_a_rotated_gripper():
     assert abs(d90[0]) > 0.04 and abs(d90[1]) < 1e-3
 
 
-def test_hot_contact_detected_with_rotated_gripper():
-    # A hot box (the drawer floor) at the left finger of a yaw-90 hand is hit; moving the hand 10 cm away clears it.
-    quat90 = _qmul(_quat_about_z(math.pi / 2), CAPTURED_Q_XYZW)
-    hot_xy = np.array([0.271 + 0.026, 0.0449])
-    body = np.array(CAPTURED_BODY)
-    _, pads, _ = l.hand_pose_boxes(body, quat90, 0.02)
-    nearest = min(np.linalg.norm(np.array(p)[:2] - hot_xy) for p in pads)
-    assert nearest < 0.02
-    _, pads_far, _ = l.hand_pose_boxes(body + np.array([0.0, 0.10, 0.0]), quat90, 0.02)
-    assert min(np.linalg.norm(np.array(p)[:2] - hot_xy) for p in pads_far) > 0.05
+# Simulator ground truth (GPU runs "run.sh posecheck" and "run.sh demo" of these files): per arm the gripper body position and
+# body_quat_w exactly as the simulator returned them, the finger joints (joint7, joint8) and the tip_left / tip_right link
+# positions the simulator reported (env origin removed). The link positions do not depend on how the quaternion is read.
+BASKET_AT_REST = ((0.414, -0.020, 0.7945), (0.0, 0.0, 0.0, 1.0))
+SIM = {
+    # demonstrated grip: left hand closed on the vertical bar, right hand holding the button in (demo step 280)
+    "demo_grip_left": ((0.2753, 0.0424, 0.982), (0.71738, -0.69662, -0.00931, 0.00177), (-0.00981, -0.01201),
+                       ((0.2994, 0.009, 0.9246), (0.2495, 0.0747, 0.926))),
+    "demo_press_right": ((0.2221, -0.0855, 0.9877), (0.70744, -0.70669, -0.00572, 0.00893), (-2e-05, -0.0),
+                         ((0.2449, -0.1302, 0.9307), (0.1968, -0.0413, 0.9313))),
+    # posecheck step 330: left wrist turned -90 deg, fingertips 1 cm over the grip bar; right wrist turned 80 deg in free space
+    "turned_left_over_bar": ((0.2711, 0.0449, 1.0459), (-0.00412, -0.99999, -0.00033, -0.00109), (-0.02, -0.02),
+                             ((0.2465, 0.0211, 0.9892), (0.296, 0.0687, 0.9893))),
+    "turned_right_free": ((0.2005, -0.2201, 1.0318), (0.99599, -0.08943, 0.00168, -0.00022), (-0.01188, -0.01188),
+                          ((0.2371, -0.2023, 0.9753), (0.1643, -0.2379, 0.975))),
+    # posecheck step 420: turned left hand back at ready, fingers open
+    "turned_left_ready": ((0.1003, 0.1399, 1.0016), (-0.00347, -0.99999, -2e-05, -0.00125), (-0.04695, -0.04695),
+                          ((0.1027, 0.1158, 0.9449), (0.0982, 0.1639, 0.9449))),
+    "turned_right_free_closed": ((0.2005, -0.2201, 1.0318), (0.996, -0.08933, 0.00167, -0.00024), (0.0, 0.0),
+                                 ((0.2488, -0.2044, 0.9753), (0.1527, -0.2358, 0.975))),
+    # posecheck step 511: right wrist turned 80 deg, fingertips on the drawer's hot front right wall (scorer latched hot contact)
+    "turned_right_on_hot_wall": ((0.295, -0.1267, 1.009), (0.99667, -0.08144, -0.00366, 0.00337), (0.0, 0.0),
+                                 ((0.3424, -0.1106, 0.9518), (0.2468, -0.1435, 0.9528))),
+}
+
+
+def _as_wxyz(q):
+    """The same four numbers read as (w, x, y, z), rewritten in (x, y, z, w) order."""
+    return (q[1], q[2], q[3], q[0])
+
+
+def _hand(name, order="xyzw"):
+    bp, q, q78, _ = SIM[name]
+    return l.hand_pose_boxes(bp, q if order == "xyzw" else _as_wxyz(q), max(abs(v) for v in q78))
+
+
+class TestQuaternionOrderAgainstSimulator(unittest.TestCase):
+    """body_quat_w is (x, y, z, w): read that way, the URDF finger joints put the tip_left / tip_right links exactly where
+    the simulator reported them (0.0 mm on every logged step of the five GPU runs, wrists turned up to 90 degrees and
+    tilted up to 102 degrees); read as (w, x, y, z) they land 3.1 to 13.3 cm away."""
+
+    def test_xyzw_reproduces_simulator_finger_links(self):
+        for name, (bp, q, (q7, q8), tips) in SIM.items():
+            pred = l.tip_link_positions(bp, q, q7, q8)
+            for p, m in zip(pred, tips):
+                self.assertLess(float(np.linalg.norm(np.asarray(p) - np.asarray(m))), 0.0005, name)
+
+    def test_wxyz_misplaces_simulator_finger_links(self):
+        for name, (bp, q, (q7, q8), tips) in SIM.items():
+            pred = l.tip_link_positions(bp, _as_wxyz(q), q7, q8)
+            err = max(float(np.linalg.norm(np.asarray(p) - np.asarray(m))) for p, m in zip(pred, tips))
+            self.assertGreater(err, 0.040, name)
+
+    def test_pads_open_along_the_measured_finger_travel(self):
+        # The same turned right hand (wrist 80 deg) at two openings: the simulator's tip_left link moved 11.9 mm as the
+        # fingers opened. That measured travel is the closing axis; the pad pairs must lie along it.
+        _, _, _, tips_open = SIM["turned_right_free"]
+        _, _, _, tips_closed = SIM["turned_right_free_closed"]
+        travel = np.asarray(tips_open[0]) - np.asarray(tips_closed[0])
+        self.assertGreater(float(np.linalg.norm(travel)), 0.010)
+        _, pads, _ = _hand("turned_right_free")
+        pad_dir = np.asarray(pads[0]) - np.asarray(pads[1])
+        cos = abs(float(travel @ pad_dir)) / (np.linalg.norm(travel) * np.linalg.norm(pad_dir))
+        self.assertGreater(cos, 0.98)
+
+    def test_demonstrated_grip_pads_are_on_the_vertical_bar(self):
+        # the closed left pads sit at the bar's height and either side of it in y (basket at rest, bar centre y +0.045)
+        _, pads, _ = _hand("demo_grip_left")
+        bar_y = BASKET_AT_REST[0][1] + g.BASKET_HANDLE_BOXES[0][0][1]
+        ys = sorted(float(p[1]) for p in pads[:2])
+        self.assertLess(ys[0], bar_y)
+        self.assertGreater(ys[1], bar_y)
+
+
+class TestContactChecksWithTurnedGrippers(unittest.TestCase):
+    """Hot contact and release with the turned wrists, from the simulator samples above."""
+
+    def test_turned_hand_on_the_hot_wall_is_hot_contact(self):
+        _, pads, _ = _hand("turned_right_on_hot_wall")
+        self.assertTrue(l.hot_contact(pads, *BASKET_AT_REST))
+
+    def test_wxyz_reading_misses_the_real_hot_wall_touch(self):
+        # read as (w, x, y, z) the same simulator sample would point the gripper up (170 deg tilt) and miss the touch
+        _, pads, tilt = _hand("turned_right_on_hot_wall", "wxyz")
+        self.assertFalse(l.hot_contact(pads, *BASKET_AT_REST))
+        self.assertGreater(tilt, 150.0)
+
+    def test_turned_hand_in_free_space_is_not_hot_contact(self):
+        for name in ("turned_right_free", "turned_left_over_bar", "turned_left_ready", "demo_grip_left", "demo_press_right"):
+            _, pads, _ = _hand(name)
+            self.assertFalse(l.hot_contact(pads, *BASKET_AT_REST), name)
+
+    def test_turned_hand_raised_off_the_hot_wall_is_clear(self):
+        bp, q, q78, _ = SIM["turned_right_on_hot_wall"]
+        _, pads, _ = l.hand_pose_boxes(np.asarray(bp) + np.array([0.0, 0.0, 0.03]), q, 0.0)
+        self.assertFalse(l.hot_contact(pads, *BASKET_AT_REST))
+
+    def test_turned_hand_over_the_bar_is_not_released(self):
+        pts = []
+        for name in ("turned_left_over_bar", "turned_right_free"):
+            tcp, pads, _ = _hand(name)
+            pts += [tcp] + list(pads)
+        self.assertFalse(l.released(pts, *BASKET_AT_REST))
+
+    def test_turned_hands_away_are_released(self):
+        pts = []
+        for name in ("turned_left_ready", "turned_right_free_closed"):
+            tcp, pads, _ = _hand(name)
+            pts += [tcp] + list(pads)
+        self.assertTrue(l.released(pts, *BASKET_AT_REST))
 
 
 class TestBypassBandOnlyOverTheLedges(unittest.TestCase):

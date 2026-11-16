@@ -204,6 +204,20 @@ def _hand_data2(environment):
                 q = [abs(float(jp[jn.index(j)])) if j in jn else 0.02 for j in ("joint7", "joint8")]
             except Exception:
                 pass
+            # Ground truth for the quaternion order (logged only, never scored): the simulator's own tip_left/tip_right link
+            # positions against those predicted from the gripper body pose read as (x, y, z, w) and as (w, x, y, z)
+            try:
+                q7, q8 = (float(jp[jn.index(j)]) for j in ("joint7", "joint8"))
+                meas = [np.asarray(bp[names.index(t)] - origin, dtype=float) for t in ("tip_left", "tip_right")]
+                err = {}
+                for order, qq in (("xyzw", (x, y, z, w)), ("wxyz", (y, z, w, x))):
+                    pred = logic.tip_link_positions(body_rel, qq, q7, q8)
+                    err[order] = round(1000.0 * max(float(np.linalg.norm(p - m)) for p, m in zip(pred, meas)), 2)
+                _RAW[arm]["tips"] = [[round(float(v), 4) for v in m] for m in meas]
+                _RAW[arm]["q78"] = [round(q7, 5), round(q8, 5)]
+                _RAW[arm]["tip_err_mm"] = err
+            except Exception:
+                pass
             half_gap = max(q)
             # As in the accepted tasks: the fingers close along the gripper's own x axis. Four 12 mm boxes per finger (logic.hand_pose_boxes).
             tcp, hand_pads, tilt = logic.hand_pose_boxes(body_rel, (x, y, z, w), half_gap)
