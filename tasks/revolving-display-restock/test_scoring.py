@@ -81,13 +81,20 @@ def test_one_box_seated_half():
 
 def test_both_seated_success_after_one_second():
     objs = _objects(TURNED, left=_in_pocket(TURNED, 1), right=_in_pocket(TURNED, 0))
-    assert _run([objs]) == (1.0, False)
-    assert _run([objs] * 20) == (1.0, True)
+    assert _run([objs]) == (0.75, False)              # seated, not yet still for 1 s
+    assert _run([objs] * 20) == (0.75, True)          # still for 1 s: success, not yet held for 1 s
+    assert _run([objs] * 39) == (1.0, True)
+
+
+def test_score_alone_gives_the_same():
+    steps = [_objects(TURNED, left=_in_pocket(TURNED, 1), right=_in_pocket(TURNED, 0)) for _ in range(39)]
+    T._reset_state()
+    assert [T.score(o) for o in steps][-21:] == [0.75] * 20 + [1.0]
 
 
 def test_either_box_in_either_pocket():
     objs = _objects(TURNED, left=_in_pocket(TURNED, 0), right=_in_pocket(TURNED, 1))
-    assert _run([objs] * 20) == (1.0, True)
+    assert _run([objs] * 39) == (1.0, True)
 
 
 def test_both_boxes_in_one_pocket_count_once():
@@ -107,7 +114,7 @@ def test_seated_limits():
 def test_moving_boxes_not_still():
     a = _objects(TURNED, left=_in_pocket(TURNED, 1), right=_in_pocket(TURNED, 0))
     b = _objects(TURNED, left=_in_pocket(TURNED, 1, dy=0.002), right=_in_pocket(TURNED, 0))
-    assert _run([a, b] * 10) == (1.0, False)
+    assert _run([a, b] * 20) == (0.75, False)
 
 
 def test_pockets_follow_the_base():
@@ -115,7 +122,7 @@ def test_pockets_follow_the_base():
     d = _display(math.pi / 2, base_xy=(0.33, 0.02), base_yaw=math.pi / 2)
     assert T.facing_deg(d) < 1e-6
     objs = _objects(d, left=_in_pocket(d, 0), right=_in_pocket(d, 1))
-    assert _run([objs] * 20) == (1.0, True)
+    assert _run([objs] * 39) == (1.0, True)
 
 
 def test_tipped_display_zero_for_the_trial():
@@ -123,7 +130,7 @@ def test_tipped_display_zero_for_the_trial():
     tipped = _objects(_display(math.pi, tilt=math.radians(25)))
     assert _run([tipped] + [full] * 25) == (0.0, False)
     slight = _objects(_display(math.pi, tilt=math.radians(5)))
-    assert _run([slight] + [full] * 25) == (1.0, True)
+    assert _run([slight] + [full] * 39) == (1.0, True)
 
 
 # -- geometry ------------------------------------------------------------------------------------------------------

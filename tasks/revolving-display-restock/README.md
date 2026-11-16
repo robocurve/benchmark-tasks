@@ -76,9 +76,11 @@ relative to the turntable (as a ruler on the display would measure them), so tur
 allowed.
 
 - 0 if the display was at any point tipped more than 20 degrees (knocked over).
-- 1.0 (success, which must hold for 1 s): each of the two formerly empty pockets holds a box seated in it, that is,
-  the box's centre within 6 mm of the pocket's centre both across and along the pocket row, its bottom within 8 mm of
-  the deck, and the box upright within 10 degrees; and both boxes still (moving less than 1 mm over the last second).
+- Success: each of the two formerly empty pockets holds a box seated in it, that is, the box's centre within 6 mm of
+  the pocket's centre both across and along the pocket row, its bottom within 8 mm of the deck, and the box upright
+  within 10 degrees; and both boxes still (moving less than 1 mm over the last second). It scores 1.0 once success
+  has held for 1 s (20 control steps in a row), when the episode ends.
+- 0.75: both pockets hold a seated box, but success has not yet held for 1 s.
 - 0.5: one of the two pockets holds a seated box.
 - 0.25: neither does, but the display has been turned so the empty side faces the arms (its outward direction within
   20 degrees of pointing straight at them).

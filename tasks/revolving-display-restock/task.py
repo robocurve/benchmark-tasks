@@ -141,7 +141,7 @@ _STATE: dict = {}
 @on_reset
 def _reset_state(environment=None) -> None:
     _STATE.update(failed=False, recent=[])
-    _STATE.pop("_this_step", None)
+    _STATE["_held"], _STATE["_step"] = 0, None
 
 
 _reset_state()
@@ -185,7 +185,7 @@ def filled(objects) -> int:
     return sum(any(seated(d, objects[b], pk) for b in BOXES) for pk in EMPTY_POCKETS)
 
 
-def _update(objects) -> tuple[float, bool]:
+def _assess(objects) -> tuple[float, bool]:
     d = objects["display"]
     _STATE["failed"] |= tilt_deg(d) > TIPPED
     if _STATE["failed"]:
@@ -202,14 +202,29 @@ def _update(objects) -> tuple[float, bool]:
     return (0.25 if facing_deg(d) <= FACING else 0.0), False
 
 
+FULL_HOLD_STEPS = 20        # the success condition must hold this many control steps in a row (1 s) for 1.0
+UNHELD = 0.75                # the score while it has held for less
+
+
+def _update(objects) -> tuple[float, bool]:
+    """This step's (score, success). success() and score() are both called on each step's states; the step is
+    assessed once. The score is 1.0 only once the success condition has held for 1 s; until then it is UNHELD."""
+    last = _STATE.get("_step")
+    if last is not None and last[0] is objects and last[2] < 2:
+        _STATE["_step"] = (last[0], last[1], last[2] + 1)
+        return last[1]
+    raw, ok = _assess(objects)
+    _STATE["_held"] = _STATE.get("_held", 0) + 1 if ok else 0
+    out = (raw if raw < 1.0 else 1.0 if _STATE["_held"] >= FULL_HOLD_STEPS else UNHELD, ok)
+    _STATE["_step"] = (objects, out, 1)
+    return out
+
+
 def success(objects) -> bool:
     """Both empty pockets hold a seated box, the display upright, both boxes still for 1 s."""
-    out = _update(objects)
-    _STATE["_this_step"] = (objects, out)   # the runtime calls success() then score() on each step's states:
-    return out[1]                            # score() reuses this, so the step counts once
+    return _update(objects)[1]
 
 
 def score(objects) -> float:
-    """1.0 both pockets filled; 0.5 one; 0.25 the empty side turned to face the arms; 0 if the display was tipped."""
-    pending = _STATE.pop("_this_step", None)
-    return (pending[1] if pending and pending[0] is objects else _update(objects))[0]
+    """1.0 both pockets filled, still, held 1 s; 0.75 both filled; 0.5 one; 0.25 the empty side turned to face the arms; 0 if the display was tipped."""
+    return _update(objects)[0]
