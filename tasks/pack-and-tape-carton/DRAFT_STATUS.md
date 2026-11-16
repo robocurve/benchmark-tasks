@@ -1,7 +1,5 @@
-# Incomplete feedback draft — follow-up revision
+# Incomplete feedback draft — native follow-up
 
-Both products start inside, with flaps 160° open. The last 12 ordinary film cells form a 60 mm unwound leader, still physically connected to the roll. No handle, fixture or carton bond is added; reset earns zero score. 52 CPU/USD checks pass. A 55 mm-from-hinge grasp clears sampled acquisition; later folding still meets the adjacent flap. Actual/issued 315-piece guards now stop before unintended contact. New setup/native closure are pending: the retained VM failed to start and was subsequently confirmed stopped.
+The open 160° preloaded setup with 60 mm ordinary unwound leader completed its two-second native stability check at score 0. The robot recorded 172 controls / 8.6 simulated seconds, reached the rim pinch, then rejected the next east-fold command at the unrelated-object guard before stepping. No flap closure, tape application or sealing is demonstrated. No completed demo/model result exists.
 
-This is an early feedback draft, not a received or acceptance-ready competition submission. Full feasibility, model attempt and eligible media remain missing.
-
-Follow-up lifecycle: 32.9-minute start-request-to-confirmed-stop window; zero new native trials. No new video is claimed.
+The retained VM is confirmed STOPPED after a19.2-minute start-to-stop window. New preview clips are labelled partial, unscored offline replays of actual native poses; they are not native RGB or full-score evidence. No task.json/media ID is supplied.

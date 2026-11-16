@@ -46,3 +46,5 @@ Before this open/free-leader revision, the first native prefix timed out after 3
 ## Latest CPU-only closure check
 
 The previous east-flap approach contacted the unrelated north flap before acquisition. The revised plain-rim point is 55 mm from the hinge instead of 40 mm. At both 160 and 175 degree open starts, 39 sampled ready/hover/entry/closure configurations pass full 315-piece arm and obstacle checks. The full fold arc is **not** clear: the north flap blocks the later carrier path. Runtime checks actual and issued configurations before stepping, allowing contact only between the selected flap and its active fingertips. This is a bounded acquisition/partial-fold candidate, not a completed flap-closing sequence or continuous clearance certificate.
+
+Native open/leader follow-up: the two-second preloaded stability check scored0, with connected film and no unintended bonds/cuts. The robot attempt ended at8.6s: last applied action was the plain-rim pinch; the next east-fold command was rejected by the unrelated-object guard before stepping. No flap closure or sealing is demonstrated.
