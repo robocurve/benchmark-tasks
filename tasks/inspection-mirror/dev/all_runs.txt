@@ -1,0 +1,17 @@
+peek-l0 2400 --policy inspection_mirror_scripted -E leak=0 -P mode=peek
+demo-l0 3600 --policy inspection_mirror_scripted -E leak=0
+demo-l1 3600 --policy inspection_mirror_scripted -E leak=1
+demo-l2 3600 --policy inspection_mirror_scripted -E leak=2
+demo-l3 3600 --policy inspection_mirror_scripted -E leak=3
+demo-l4 3600 --policy inspection_mirror_scripted -E leak=4
+aimp2-l4 3600 --policy inspection_mirror_scripted -E leak=4 -P aim_mm=2
+aimm2-l4 3600 --policy inspection_mirror_scripted -E leak=4 -P aim_mm=-2
+touch-l2 3600 --policy inspection_mirror_scripted -E leak=2 -P mode=touch
+idle 3600 --policy inspection_mirror_scripted -P mode=idle
+guess-l0 3600 --policy inspection_mirror_scripted -E leak=0 -P mode=guess
+guess-l1 3600 --policy inspection_mirror_scripted -E leak=1 -P mode=guess
+guess-l2 3600 --policy inspection_mirror_scripted -E leak=2 -P mode=guess
+guess-l3 3600 --policy inspection_mirror_scripted -E leak=3 -P mode=guess
+guess-l4 3600 --policy inspection_mirror_scripted -E leak=4 -P mode=guess
+seeded5 3600 --policy inspection_mirror_scripted --epochs 5
+dream 3600 --policy dream

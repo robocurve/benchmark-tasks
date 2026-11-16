@@ -1,0 +1,21 @@
+{
+  "title": "Find a hidden coolant leak with an inspection mirror and mark the spot above it",
+  "category": "Impact on jobs",
+  "keywords": [
+    "inspection mirror",
+    "leak check",
+    "maintenance",
+    "tight clearance",
+    "active perception",
+    "tool use",
+    "bimanual"
+  ],
+  "instruction": "Using the inspection mirror, find where coolant has leaked on the housing's hidden side face inside the gap, then mark that spot with the paint marker on the cover strip directly above it. Do not let the mirror touch the hidden face, and put both tools down when you are done.",
+  "context": "Done by: general maintenance and repair workers (about 1.6 million US jobs) and automotive service technicians and mechanics (805,600), BLS Occupational Outlook Handbook 2024. O*NET 49-9071.00 task: \"Inspect, operate, or test machinery or equipment to diagnose machine malfunctions.\" O*NET 49-3023.00 task: \"Inspect vehicles for damage and record findings so that necessary repairs can be made.\" A leak on a face that sits close to a wall is found with a hand inspection mirror and its place marked for the repair.",
+  "setup": "Station table; x forward from the line between the arm bases, y left, heights above the table top. A grey steel housing side and a dark wall (18 x 13 cm, 5 mm steel) stand 55 mm apart from x 22.5 to 40.5 cm, the gap centred on y 0; it is open at its near end (facing the robot), closed at the far end and the bottom, and on top by a 65 mm wide steel cover strip (top 13.5 cm up). On the housing's face inside the gap, a green coolant trace 22 x 50 mm, centred 7.5 cm up, at one of five places x 30, 32, 34, 36 or 38 cm, 7.5 to 15.5 cm in from the open end (drawn per trial from the seed). Ullman HTC-2 inspection mirror (57 mm round glass head set at 45 degrees on its rim swivel, hanging below the shaft; black vinyl grip 100 mm long, 12.7 mm across; steel shaft telescoped 120 mm; 90 g; a small LED added at the head): grip on two grey blocks (12 x 30 x 94 mm) at (12.5, -13) and (22.5, -13) cm, its free end (x 11.5 cm) toward the robot. Sharpie oil-based paint marker, medium point (142 x 16 mm, 22 g, yellow paint): standing tip down in a steel pen cup (34 mm square, 60 mm tall, 18 mm bore) on a 50 mm steel stand at (19, 9) cm. Both grippers open at the ready pose.",
+  "scoring": "Paint marks are where the marker tip touched the cover strip. Per mark: 1.0 if its centre is within 6 mm (along the gap) of the trace's centre, falling linearly to 0 at 14 mm. Score = the lowest mark credit (a stray mark sends the repair to the wrong place); 0 with no mark; 0 if the mirror head touched the hidden face (it smears the trace). Taken when both grippers are at least 80% open and the mirror and marker are still for 1 s; the latest such state counts. 1.0 ends the trial. The leak is at one of five places 20 mm apart, so one blind mark averages 0.2 (measured).",
+  "run_limit": "3,600 steps (3 minutes at 20 Hz)",
+  "reset_notes": "Wipe the paint marks off the cover strip, put a fresh trace at the next place, lay the mirror back on its two blocks (grip toward the robot, head set at 45 degrees) and stand the marker tip down in its cup.",
+  "fidelity": "The mirror is an ideal flat reflector drawn by the path tracer; its swivel is fixed at 45 degrees; an added LED (as on the HTC-2LT) lights the face. The grip is modelled square in section. The trace is a green film; paint is a dot drawn where the tip met the strip. Housing, wall and cup are fixed. Mirror and marker masses are estimates.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0"
+}
