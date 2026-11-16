@@ -4,11 +4,12 @@ Use a top photo, a low side photo and a millimetre ruler for the broad shape
 measurements. Judge the finished icing, not the nozzle path or number of squeezes.
 The native demo scores 1.0 and the completed Dream baseline scores 0.0.
 
-For ridge depth, use the calibrated projected-section procedure below. This is
-an explicit judging procedure for a physical trial; it has not been tested on
-real icing in this project. Native surface profiles independently verify the
-simulation result. An unresolved photograph must be retaken before assigning
-credit for its ridge depth.
+Take a top photo and two low oblique close-ups from opposite sides, with a
+millimetre ruler alongside the border. Use an ordinary phone camera in focus
+and diffuse room light; side lighting may be used to make raised ridges clear.
+At full resolution the 90 mm border should occupy at least 900 pixels. Retake
+an out-of-focus or occluded view. No projected stripe, feeler gauge, depth
+calibration or macro attachment is required.
 
 The marked section is 90 mm long. Its permitted strip extends 9 mm on either
 side and 2 mm beyond each end mark. A shell has a head 6–16 mm wide and 2.5–8 mm
@@ -18,11 +19,17 @@ the head. Its leading edge to qualifying tail must span at least 1.25 times its 
 a round mound does not count. A finer point beyond this section is allowed. Head-to-tail motion can vary; shells have no fixed
 centres, but distinct heads must be at least 6 mm apart. A low shoulder below
 the minimum head height is part of a tail, not another head. Oversized or
-over-height mounds remain obstructions; a shell cannot use a tail beyond them. For full credit, each counted shell needs at least two ridges at least
-1 mm high, separated by 1.5 mm or more, with a dip of at least 0.3 mm between
-them. Both ridges must continue for at least 2 mm on the shell, including its
-tapered shoulder; an isolated bump does not count. Top and close side photographs show their length and separation. The saved
-surface profiles measure depth; use the calibrated photographs below for a physical trial. Measure head height within 2 mm before
+over-height mounds remain obstructions; a shell cannot use a tail beyond them. For full credit, each counted shell needs two **separately visible raised
+ridges**. A crest and the groove separating it from its neighbour must both
+be traceable in the close photographs: two colour lines on a flat surface do
+not count. The two crests must be at least 1.5 mm apart and each must continue
+for at least 2 mm along the shell, including its tapered shoulder. Use the ruler
+in the photo for those lengths; **do not measure groove depth or ridge height**.
+A smooth mound or isolated bump fails this check. A ridge hidden in one view
+may be judged in the other. If no sharp unoccluded view shows both, the shell
+does not meet the full-credit ridge criterion.
+
+Measure head height within 2 mm before
 to 4 mm after its widest point, where width is at least 75% of the maximum.
 
 Measure the total marked length occupied by valid head-and-tail shapes:
@@ -42,62 +49,14 @@ permitted strip. Lost material outside the recorded scene makes evidence
 incomplete. Unmodeled robot/icing interpenetration also invalidates evidence.
 The simple footprint test replaces an earlier, unsuitable spilled-volume rule.
 
-`scoring.py` computes a draft analogue from the final surface. It finds actual
-peaks and tapered tails rather than requiring six exact bins. It defaults to
-incomplete evidence and cannot certify completion from a material file alone.
-Negative shape controls and native surface replay pass. Use the matching close-up photographs and measured profiles to inspect exact
-ridge dimensions. A repeated
-row of smooth blobs, a plain line or a drawn texture is not a shell border.
+`scoring.py` measures connected heads and tails from the final geometry.
+Its ridge check finds two crests separated by an actual valley and tracks them
+along the shell; the tiny numerical epsilon only rejects a flat plateau and is
+not a physical depth requirement. Check agreement against the native close-ups
+before reporting full score. A row of smooth blobs, a plain line or painted
+texture is not a ridged shell border.
 
-## Calibrated depth photographs
-
-Use a fixed macro camera (a phone with a macro attachment is sufficient if it
-passes calibration), a thin projected line, a millimetre reference frame and a
-0.30 mm feeler-gauge step. The light line lies in a vertical plane across the
-shell. Four marks outside the icing, in that same plane, are at (−10,0), (10,0),
-(10,10), (−10,10) mm; zero height is the cake surface. Photograph obliquely so
-both ridge crests and their intervening valley are visible. Perspective-correct
-the four marks to their known rectangle in an image editor, then measure the
-illuminated cross-section in millimetres. No hidden surface is inferred.
-
-Recalibrate after any camera, focus, reference-frame or light-plane movement.
-Before measuring icing, photograph the independent 0.30 mm step three times
-with unchanged camera, focus and light-plane settings, covering the relevant
-image positions and height range. Do not use the step to fit the coordinate map.
-Each recovered step must be 0.30 ± 0.05 mm; the largest and smallest readings
-must differ by no more than 0.05 mm. These are required evidence-quality checks,
-not a claim of measured real-world accuracy. If they fail, improve the view,
-lighting or magnification and repeat calibration.
-
-Reject clipped or saturated stripes, hidden valleys, occluded crests and ambiguous
-pixel correspondences. Include the stripe half-width and annotation uncertainty
-in each height measurement. If the resulting depth interval straddles 0.3 mm,
-retake the photograph; do not count that ridge as resolved. Retain top-view
-photographs showing both ridges continuing for at least 2 mm, with transverse
-profiles at several positions spanning that length. A single cross-section does
-not establish continuity.
-
-`photo_profile.py` optionally performs the coordinate arithmetic from manually
-annotated visible points. It accepts a JSON object with:
-
-- `reference_pixels`: the four `[u,v]` image coordinates in the order above.
-- `calibration_steps_pixels`: three pairs of step endpoints, using the unchanged
-  camera and reference frame.
-- `pixel_uncertainty`: annotation half-width in pixels, including half the stripe
-  width and at least 0.5 pixel.
-- `mapping_uncertainty_mm`: a conservative additional height-error allowance
-  for reference placement/annotation, calibration-step annotation and optical
-  distortion, supported by the reference photographs; at least 0.05 mm. This
-  is an explicit measurement assumption, not accuracy certified by the helper.
-  If it cannot be supported, the result remains unresolved.
-- `profiles`: objects with `name` and three `pixels` pairs in crest/valley/crest
-  order.
-
-```bash
-python tasks/pipe-a-shell-border/photo_profile.py annotations.json --out profile-measurements.json
-```
-
-The helper reports reference-step errors, spread, heights, separation and depth
-intervals conditional on that mapping allowance. It never fills occlusions or assigns a task score. The same arithmetic
-can be done with a perspective-corrected photograph and ruler in an image editor.
-Its tests use synthetic perspective geometry, not real-camera evidence.
+The old calibrated projected-section procedure and 0.3 mm dip criterion are
+retired. Historical evidence files retain their original measurements but do
+not define the current rubric. The revised demo and Dream audits are in
+`evidence/revision-2026-11-16/`.

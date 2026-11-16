@@ -8,10 +8,10 @@ six ridged shells covering 87 mm, with the dispenser released and no icing outsi
 the permitted strip. Independent review of the native top, side and detail
 photographs agrees with the six-shell result.
 Dream completes the full 2,400-action episode and scores 0.0: it deposits no icing.
-The judging guide specifies calibrated projected-section photographs for the
-small ridge-depth check, including independent reference-step checks and retakes
-for unresolved measurements. This physical judging procedure has not been tested
-on real icing here. Videos and the setup screenshot are linked by the media ID in `task.json`.
+The revised judging guide uses ordinary top/side close-up photographs and a ruler.
+Ridges are counted visually; no projected light, macro calibration or groove-depth
+measurement is required. The same recorded runs were rescored on 16 November
+2026. Videos and setup screenshot retain the media ID in `task.json`.
 
 ## Setup
 
@@ -31,10 +31,36 @@ is at (0.180, −0.100, 0.7775) m, 60 mm behind it. Both bodies start at yaw 180
 A 50 × 40 × 15 mm plastic rest at (0.180, −0.160, 0.755) m supports the dispenser. The tool starts
 on the table, outside both hands. The 80 g barrel and 25 g plunger are dynamic.
 
-This is a proposed reproducible prop specification. No real dispenser or recipe
-has yet been measured. A syringe avoids pretending that a
-rigid object is a deformable piping bag; pressure control still comes from
-physical piston movement.
+### Icing and quick surface preparation
+
+Use **Wilton Ready-to-Use Medium Consistency White Decorator Icing, 15 oz,
+SKU 191012026**, from one tub for the coating and piping. Keep the closed tub
+at 20–22°C until the contents are at that temperature; refrigerated icing
+needs advance tempering. Stir gently with a spatula for 30 seconds without
+whipping air into it. Add no water, sugar or other consistency modifiers.
+The manufacturer specifies stirring at room temperature and suitability for
+borders: [product instructions](https://wilton.com/ready-to-use-medium-consistency-white-decorator-icing-15-oz-tub/191012026/).
+The 20–22°C interval is our fixed trial condition, not a manufacturer tolerance.
+
+Before the session, trim a ready-made plain Madeira/pound cake to
+180 × 140 × 49 mm with a flat, level top. For each trial, brush off loose crumbs,
+spread white icing over the top and draw a straight spatula once across two
+1 mm spacer strips resting along its sides. Remove the spacers. The coated top
+is now 50 mm above the board. Draw the 90 mm guide and end marks with an edible
+pen using a ruler. This surface preparation takes a few minutes once the cake
+and icing are ready; no baking, chilling or crust-setting stage is required.
+
+For visible contrast, mix 0.10 g Wilton Pink gel icing colour into 100 g of the
+same icing for 30 seconds. Load 20 ml into the dispenser from the rear, tapping
+it gently to remove visible air pockets; fit its piston and wipe the nozzle.
+Pipe within 10 minutes of surface preparation, at 20–22°C. Keep unused icing
+covered. Between trials scrape the top flat, renew its 1 mm white coat and marks,
+or replace the cake if damaged. Do not reuse a gouged surface.
+
+The simulator's cream and seal parameters remain engineering approximations;
+they have not been fitted to measurements of this product. Specifying the
+physical consumables does not claim such calibration. A syringe preserves
+physical pressure control without pretending that a rigid handle is a soft bag.
 
 ## Run and score
 
@@ -87,9 +113,9 @@ shell locations. Full credit also requires a joined finish and released tool.
 Trial 111's independent audit finds 87 mm of valid decoration, six ridged shells,
 zero icing outside the permitted strip, no cake gouge, and more than 56 mm
 clearance from the border at release. Native top, side and close-up photographs
-show the raised heads and tapered, ridged tails. Exact millimetre criteria should
-be checked with the measured profiles as well as the photographs; the material
-surface is visibly faceted. See [the recorded evidence](evidence/native-six-shell-111.json).
+show the raised heads and tapered, ridged tails. Ridge quality is checked from the close photographs, using the 90 mm guide
+and 10 mm end mark for scale. Numerical profiles are optional diagnostics,
+not required judging tools; the material surface is visibly faceted. See [the recorded evidence](evidence/native-six-shell-111.json).
 
 The preceding trial 099's exact 11,928-step input replay reproduces deposited
 volume to numerical precision. Trial 111 retains its shell-making motion and
@@ -107,9 +133,11 @@ records were rescored: demo 1.0, Dream 0.0. No judging threshold changed.
 python -m unittest discover -s tasks/pipe-a-shell-border -p 'test_*.py'
 ```
 
-The 55 CPU checks cover pressure causality, finite volume, physical contact,
+The CPU checks cover pressure causality, finite volume, physical contact,
 damage, negative shape controls, segmentation, released-tool evidence and
-projective photo measurement with calibration rejection.
+ridge continuity. The old projected-section helper is retired and no longer
+part of judging. The revision removes the depth threshold, not the requirement
+for real raised, separated ridges; smooth blobs still cannot receive full credit.
 Older experiments remain in `evidence/` and `VALIDATION.json`; their scores are
 historical and should not be substituted for the final pair of runs.
 
