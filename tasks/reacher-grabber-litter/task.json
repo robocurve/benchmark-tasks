@@ -1,0 +1,21 @@
+{
+  "title": "Pick up litter with a reacher-grabber and drop it in the bin",
+  "category": "Impact on jobs",
+  "keywords": [
+    "tool use",
+    "bimanual",
+    "litter picking",
+    "trigger",
+    "long tool",
+    "grounds maintenance"
+  ],
+  "instruction": "Put the litter in the bin using the pick-up tool.",
+  "context": "Landscaping and groundskeeping workers (O*NET 37-3011.00, about 0.9 million in the US: \"gather and remove litter\") and janitors (37-2011.00) pick litter up with a trigger-grip pick-up tool. One parallel gripper cannot both hold the handle and work the trigger, so one arm points the 61 cm tool while the other pulls the trigger 28 mm back and keeps it there while the tool is lifted and swung to the bin; the jaws, 53 cm from the hand, have to close around each piece with 2.5 to 3.5 cm to spare.",
+  "setup": "Positions in cm from the midpoint between the two arm bases, on the table (x forward, y left). Pick-up tool: a 24-inch trigger-grip litter picker, 61 cm long, 0.22 kg: a black plastic handle housing (6.5 x 3 x 4.5 cm) with a 3 x 3 cm grip hanging 12.5 cm below the shaft's axis, a 19 mm aluminium shaft, and two rubber-faced jaw plates (10 x 0.6 x 5.5 cm) at the far end that stand 13 cm apart when open. In front of the grip under the shaft is a yellow trigger (3 x 2.4 x 9.3 cm) that slides 2.8 cm back to its stop against a 120 N/m return spring; pulling it closes the jaws in proportion (fully pulled, to a 0.6 cm gap). The tool rests on the table on its grip and the jaws' lower front corners (jaws 8.3 degrees down), the back of its handle at x 9, y 0.4, pointing ahead 8 degrees to the right. Bin: an open grey 16-quart polypropylene storage tote, 42.5 x 30.2 cm and 17.8 cm tall, 3 mm walls, long side along x, centred at x 58.5, y -39, fixed to the table. Litter: a red crushed 355 mL aluminium can (stamped flat end-on: 7 cm across, 3.5 cm tall, 15 g) standing at x 76.5, y -12; an empty clear 500 mL PET bottle (20.7 cm long, 6.5 cm across, 20 g, flattened along its underside) lying with its centre at x 77, y 8, its cap pointing away from the arms, 8 degrees to the left of straight ahead; a white 12 oz paper cup (11.2 cm tall, 6.4 cm across the base, 9 cm at the rim, 12 g) standing at x 64, y 21. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Measured from the videos and with a ruler. A piece is in the bin when its centre is inside the bin's walls and below its rim. 0 if a gripper touched a piece of litter at any point (came within 3 mm of it with its fingers, the space between them or the gripper body), or if the tool fell off the table (its handle more than 3 cm below the table top, or beyond the table's edges). Otherwise: 1.0 if all three pieces are in the bin and still (moving less than 1 mm over the last 1 s), and this has held for 1 s; else 0.3 for each piece in the bin plus 0.1 for each piece that was at some point lifted clear of the table (its lowest point 5 cm or more up) but is not in the bin.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Stand the tool back on its grip and open jaws at its marks, lay the three pieces of litter back at their marks; nothing is consumed.",
+  "fidelity": "Rigid boxes and cylinders. The tool has a real 24-inch picker's length, mass, shaft and jaw opening; simplified handle and trigger. Trigger: 30 g prismatic block, 28 mm stroke, light 120 N/m spring (the arms lag ~5 mm/N). No cable joints: each step code drives the jaws (15 g prismatic plates; real ones pivot) closed in proportion to trigger travel. Litter is rigid; the bottle has a flat strip so it doesn't roll. Tote fixed, straight walls. Touch check uses gripper zones, not contacts.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-XYMBKR"
+}
