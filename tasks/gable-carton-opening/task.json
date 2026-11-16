@@ -1,0 +1,18 @@
+{
+  "title": "Form the pouring spout of an unsealed gable carton",
+  "category": "Societal relatability",
+  "keywords": [
+    "everyday packaging",
+    "folded paperboard",
+    "bimanual manipulation"
+  ],
+  "instruction": "Unfold the inward-folded pouring spout of the already unsealed carton. Leave a mouth at least 30 mm wide, with the pouring tip and its upper lip at least 8 mm beyond the front wall. Leave the carton upright on the table, released and stable for at least three seconds.",
+  "context": "Before pouring milk or juice from a cap-free gable carton, its inward-folded paper spout must be unfolded. This everyday package-opening operation starts after the outer seal has been separated and ends before pouring.",
+  "setup": "One free cap-free gable carton: polymer-lined paperboard, nominal350g/m2 and0.45mm;70x70mm footprint,110mm body,35mm roof rise,12mm outer fins,24mm inner fins,520g lumped body/contents. Design dimensions,not a measured commercial SKU. Shoulder(0.18,0.05,0.8575)m;outer folds spread120deg,inner spout inward. Original dual-YAM table,three320x176RGB cameras;no tools. PHYSICAL_SETUP.md gives fold map and reset.",
+  "scoring": "Ending state:0 otherwise;0.25 for upright(<=5deg),upper lip>=35mm above shoulder,mouth>=20mm,tip and upper lip beyond front wall;0.5 when mouth>=30mm and both project>=8mm;1.0 when the0.5 state is supported by the table,free of robot contact,and remains within1mm/1deg for3s. A broken crease or gap>1mm invalidates the episode. SCORING.md gives exact landmarks and all boundaries.",
+  "run_limit": "2,400 actions /120 seconds at20Hz.",
+  "reset_notes": "New process reconstructs folds and plastic rest angles. Outer seal starts separated;inner spout remains inward. For a physical trial use equivalently prepared paperboard specimens;hand refolding does not reset paper fatigue. Fold geometry and preparation are specified in PHYSICAL_SETUP.md;real crease resistance is unmeasured.",
+  "fidelity": "Rigid facets and passive elastic-plastic crease memory approximate already-unsealed paperboard;forces and plasticity are uncalibrated. Actual robot/table contacts;fold self-contact omitted. No crushing,tearing,glue failure or fluid. Original YAM rig,cameras,20Hz controls;240Hz physics. No object-pose controller or goal-triggered opening.",
+  "scores": "Dream-1:0.0 after2,400actions/120s. Known-layout scripted demo:1.0 after1,200actions/60s;released supported opening holds21.3s.",
+  "media": "M-9D4XXH"
+}
