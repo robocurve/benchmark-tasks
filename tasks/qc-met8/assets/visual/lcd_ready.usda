@@ -1,0 +1,80 @@
+#usda 1.0
+(
+    defaultPrim = "root"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "root"
+{
+    def Scope "Looks"
+    {
+        def Material "lcd_ready"
+        {
+            token outputs:surface.connect = </root/Looks/lcd_ready/pbr.outputs:surface>
+            def Shader "pbr"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor.connect = </root/Looks/lcd_ready/img.outputs:rgb>
+                color3f inputs:emissiveColor.connect = </root/Looks/lcd_ready/glow.outputs:rgb>
+                float inputs:metallic = 0
+                float inputs:roughness = 0.25
+                token outputs:surface
+            }
+            def Shader "st"
+            {
+                uniform token info:id = "UsdPrimvarReader_float2"
+                string inputs:varname = "st"
+                float2 outputs:result
+            }
+            def Shader "img"
+            {
+                uniform token info:id = "UsdUVTexture"
+                asset inputs:file = @./textures/lcd_ready.png@
+                token inputs:sourceColorSpace = "sRGB"
+                float2 inputs:st.connect = </root/Looks/lcd_ready/st.outputs:result>
+                token inputs:wrapS = "repeat"
+                token inputs:wrapT = "repeat"
+                float4 inputs:scale = (1.0, 1.0, 1.0, 1.0)
+                float4 inputs:bias = (0.0, 0.0, 0.0, 0.0)
+                float3 outputs:rgb
+                float outputs:r
+                float outputs:g
+                float outputs:b
+            }
+            def Shader "glow"
+            {
+                uniform token info:id = "UsdUVTexture"
+                asset inputs:file = @./textures/lcd_ready.png@
+                token inputs:sourceColorSpace = "sRGB"
+                float2 inputs:st.connect = </root/Looks/lcd_ready/st.outputs:result>
+                token inputs:wrapS = "repeat"
+                token inputs:wrapT = "repeat"
+                float4 inputs:scale = (0.6, 0.6, 0.6, 1.0)
+                float4 inputs:bias = (0.0, 0.0, 0.0, 0.0)
+                float3 outputs:rgb
+                float outputs:r
+                float outputs:g
+                float outputs:b
+            }
+        }
+    }
+    def Mesh "m0_lcd_ready" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token subdivisionScheme = "none"
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        point3f[] points = [(0.0035, 0.0275, 0.0538), (0.0035, -0.0275, 0.0538), (0.0485, -0.0275, 0.0538), (0.0485, 0.0275, 0.0538)]
+        normal3f[] normals = [(0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1)] (
+            interpolation = "vertex"
+        )
+        texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1)] (
+            interpolation = "vertex"
+        )
+        float3[] extent = [(0.0035, -0.0275, 0.0538), (0.0485, 0.0275, 0.0538)]
+        rel material:binding = </root/Looks/lcd_ready>
+    }
+}

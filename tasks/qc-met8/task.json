@@ -1,0 +1,22 @@
+{
+  "title": "Seat and level a surface roughness drive unit on a turned shaft and run a measurement pass",
+  "category": "Impact on jobs",
+  "context": "Quality-control inspectors and machinists use portable stylus surface-roughness testers on turned cylindrical shafts. According to U.S. Bureau of Labor Statistics OEWS May 2023 occupational employment data (codes 51-9061 and 51-4041), roughly 875,000 inspectors, testers, sorters, samplers, weighers, and machinists perform dimensional and surface-finish verification tasks in manufacturing.",
+  "instruction": "Pick up the surface roughness drive unit from the staging pad and seat its front V-saddle squarely along the top crown of the steel shaft, with its rear leveling thumbscrew pad resting on the rear support anvil. Turn the knurled thumbscrew clockwise until the drive barrel sits horizontal within 1.5 degrees so the display reads READY, then press the START button on the display console and keep both arms open and clear while the motorized traverse completes.",
+  "setup": "Dual-arm YAM station tabletop (top 0.7475 m; x forward, y left from arm-base midpoint) with five assemblies: (1) a turned Ø42 x 150 mm steel cylindrical shaft mounted horizontally along Y (x=0.280, y=+0.010..+0.160, crown z=TOP+0.056) in dual dark-steel 90-deg V-blocks on the tabletop; (2) a steel rear support anvil (56 x 50 x 42 mm, top at TOP+0.042) with 4 mm-tall U-channel side guide rails (25 mm inner span) at (0.280, -0.045); (3) a dark rubber staging pad at (0.195, +0.095) holding the portable Mitutoyo-style surface-roughness drive unit (23 x 115 x 26 mm body, 40 mm cylindrical detector nose with orange stylus carriage, steel front 90-deg V-saddle, rear connector stub, and articulated rear foot pad with Ø26 mm brass knurled thumbscrew starting 7.5 mm retracted so seating gives +3.58 deg nose-up pitch); (4) a desktop display console (160 x 65.8 x 52.1 mm) at (0.240, -0.195) with an upper dark LCD showing color status bars (amber OUT OF RANGE, green READY, cyan TRAVERSING, green DONE, red FAULT), decorative keypad, and a sprung green START button at (0.195, -0.195); and (5) left/right YAM arms starting at retracted READY poses. Fixed bench dressing beyond the shaft and console, never touched: a vernier caliper, a nitrile glove box, safety glasses and a solvent spray can.",
+  "scoring": "0.25 seated on shaft crown (lateral <=1.5 mm, yaw <=2.5 deg, roll <=5 deg) + foot on anvil; +0.30 leveled <=1.5 deg (+0.10 partial <=2.8 deg); +0.30 traverse completes after >=1.6 s with finite observed travel >=4.790 mm (4.8 mm command, 0.010 mm engineering tolerance); +0.15 grippers open/clear >=3.0 cm. Tiers: 0, 0.25, 0.35, 0.4, 0.5, 0.55, 0.7, 0.85, 1.0.",
+  "fidelity": "Rigid-body seating and screw/slide actuation are simulated; cables and surface trace acquisition are omitted. Ra display is preset, not measured. Motor command is 4.8 mm over 1.6 s; observed travel must reach 4.790 mm. The 10 micrometre engineering tolerance rounds up a measured 9.786 micrometre CPU tracking error; it is not hardware calibration or an official rule. Current-source Isaac scripted demo passed.",
+  "keywords": [
+    "surface roughness",
+    "metrology",
+    "leveling",
+    "V-block",
+    "shaft inspection",
+    "precision alignment",
+    "quality control"
+  ],
+  "run_limit": "1,600 steps (80 seconds at 20 Hz)",
+  "scores": "Isaac scripted demo:1.0,756steps at20Hz/320x176. Dream-1 attempted once: server-side session expired/replaced at176steps; trial errored, no score produced (not0). No retry. Both used the same task source.",
+  "task_file": "qc_met8.py",
+  "media": "M-DQYF24"
+}
