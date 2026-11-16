@@ -151,8 +151,8 @@ class TestLogicHotContact(unittest.TestCase):
     def test_touchable_handle_contact_is_not_hot(self):
         """Pad touching cool-touch handle bar or button cap does NOT trigger hot contact."""
         b_origin = np.array(g.BASKET_START_POS)
-        # Left overhang of cool-touch handle bar: x = -0.1615, y = 0.070, z = 0.0355
-        pad_at_handle = [b_origin + np.array([-0.1615, 0.070, 0.0355])]
+        # the vertical cool-touch grip bar: x = -0.1855, y = 0.065, z = 0.0575
+        pad_at_handle = [b_origin + np.array([-0.1855, 0.065, 0.0575])]
         # Button cap: x = -0.1815, y = -0.070, z = 0.038
         pad_at_button = [b_origin + np.array([-0.1815, -0.070, 0.038])]
         self.assertFalse(l.hot_contact(pad_at_handle, g.BASKET_START_POS, (0, 0, 0, 1)))
@@ -289,8 +289,37 @@ class TestAblationAndReach(unittest.TestCase):
         self.assertLessEqual(size[1], 0.030)
         self.assertLessEqual(size[2], 0.030)
         self.assertGreaterEqual(abs(dp.POST_Y - dp.BUTTON_Y), 0.125)   # the offline arm check needs the hands >= 120 mm apart in y
-        bar = g.BASKET_HANDLE_BOXES[2][1]
-        self.assertLessEqual(bar[1], 0.180)   # a realistic handle (17.5 cm on a 20.4 cm basket)
+        bar = g.BASKET_HANDLE_BOXES[0][1]
+        self.assertGreater(bar[2], 2.5 * max(bar[0], bar[1]))   # the grip is vertical: much taller than wide
+        self.assertLessEqual(bar[2], 0.120)                    # a realistic grip (6 to 12 cm)
+        self.assertLessEqual(bar[1], 0.030)
+
+
+    def test_vertical_grip_is_reached_from_above_and_stays_in_reach(self):
+        """The left fingertips hover above the vertical bar's top, descend either side of it, and the lift never passes the 19 cm reach limit."""
+        import demo_plan as dp
+        bar = g.BASKET_HANDLE_BOXES[0]
+        bar_top = g.BASKET_START_POS[2] - g.TABLE_TOP + bar[0][2] + bar[1][2] / 2
+        self.assertGreater(dp.HOVER_LEFT_Z - 0.013, bar_top)             # fingertips 13 mm below the tool point
+        grip_tip = dp.GRIP_Z - 0.013
+        self.assertGreater(grip_tip, g.BASKET_START_POS[2] - g.TABLE_TOP + bar[0][2] - bar[1][2] / 2)
+        self.assertLess(grip_tip, bar_top - 0.02)                        # at least 2 cm of the bar between the fingertips and its top
+        self.assertLessEqual(dp.LIFT_Z, 0.19)
+        inner = g.BASKET_HANDLE_BOXES[0][1][1] / 2
+        self.assertGreater(abs(dp.POST_OPEN), inner + 0.006)             # open fingers clear the bar's sides
+
+    def test_handle_clears_the_drawer_strip_and_grippers_stay_apart(self):
+        """Handle parts over the drawer's front strip sit above it; the lifting hand grips 4 cm or more behind the pressing
+        hand's furthest point, so the two grippers do not touch (measured on the GPU: 0 cm apart in x jammed them)."""
+        import demo_plan as dp
+        b = g.BASKET_START_POS
+        strip_top = g.HOUSING_POS[2] + g.DRAWER_AT[2] + 0.032
+        drawer_front = g.HOUSING_POS[0] + g.DRAWER_AT[0] - 0.120
+        for c, sz, _ in g.BASKET_HANDLE_BOXES:
+            if b[0] + c[0] + sz[0] / 2 > drawer_front:
+                self.assertGreater(b[2] + c[2] - sz[2] / 2, strip_top + 0.001)
+        stop = max(w.pos[0] for w in plans()["right"])
+        self.assertGreaterEqual(dp.POST_X - stop, 0.040)
 
     def test_demo_press_is_commanded_past_the_stop(self):
         """The right hand presses 4 to 10 mm past the button's full stroke (more shoves the whole basket back through the plate)."""
@@ -405,11 +434,11 @@ class TestReleasedUsesFingerPads(unittest.TestCase):
 
 
 # --- gripper orientation convention: (x, y, z, w) as Isaac Lab 3 reports body_quat_w -----------------------------------
-# Captured from a real demo run: left gripper at the grip step, body position (0.271, 0.045, 0.9643) m, raw quaternion
-# below. The commanded tool point there was (0.271, 0.045, 0.830) m (grip height 8.25 cm above the bench top).
-CAPTURED_Q_XYZW = (0.70735, -0.70686, -0.00001, -0.00098)
-CAPTURED_BODY = (0.271, 0.0449, 0.9643)
-COMMANDED_TCP = (0.271, 0.045, 0.830)
+# Captured from the vertical-handle demo run (step 400): left gripper holding the grip bar, body position
+# (0.271, 0.0447, 0.9718) m, raw quaternion below. The commanded tool point was (0.2710, 0.045, 0.8375) m (grip height 9.0 cm).
+CAPTURED_Q_XYZW = (0.7072, -0.70702, 0.00032, -0.00093)
+CAPTURED_BODY = (0.271, 0.0447, 0.9718)
+COMMANDED_TCP = (0.271, 0.045, 0.8375)
 
 
 def _quat_about_z(angle):
@@ -458,6 +487,42 @@ def test_hot_contact_detected_with_rotated_gripper():
     assert nearest < 0.02
     _, pads_far, _ = l.hand_pose_boxes(body + np.array([0.0, 0.10, 0.0]), quat90, 0.02)
     assert min(np.linalg.norm(np.array(p)[:2] - hot_xy) for p in pads_far) > 0.05
+
+
+class TestBypassBandOnlyOverTheLedges(unittest.TestCase):
+    """The latch band (lift 8 to 14 mm with the button out) is a bypass only over the drawer's ledges, not when the basket is
+    later lowered through the same heights onto the mat (measured on the GPU: a level-hanging basket lowered with the button
+    out was wrongly flagged)."""
+
+    def _run(self, path):
+        import scoring as sc
+        sc._reset_run()
+        q = (0.0, 0.0, 0.0, 1.0)
+        for pos, btn in path:
+            sc.advance(pos, q, btn, [], [])
+        return sc._RUN["bypass_ever"]
+
+    def test_lift_in_the_drawer_with_the_button_out_is_a_bypass(self):
+        x, y, z = g.BASKET_START_POS
+        self.assertTrue(self._run([((x, y, z + dz), 0.0) for dz in (0.0, 0.004, 0.009, 0.012, 0.020)]))
+
+    def test_lift_with_the_button_held_is_not(self):
+        x, y, z = g.BASKET_START_POS
+        self.assertFalse(self._run([((x, y, z + dz), 0.012) for dz in (0.0, 0.004, 0.009, 0.012, 0.020)]))
+
+    def test_lowering_onto_the_mat_with_the_button_out_is_not(self):
+        x, y, z = g.BASKET_START_POS
+        path = [((x, y, z), 0.0), ((x, y, z + 0.005), 0.012), ((x, y, z + 0.010), 0.012), ((x, y, z + 0.016), 0.010),
+                ((x, y, z + 0.075), 0.003)]
+        mx, my = g.MAT_CENTRE[0] - 0.015, g.MAT_CENTRE[1]
+        path += [((mx, my, z + dz), 0.003) for dz in (0.075, 0.040, 0.014, 0.011, 0.008, -0.020)]
+        self.assertFalse(self._run(path))
+
+    def test_shove_back_then_lift_with_the_button_out_is_a_bypass(self):
+        x, y, z = g.BASKET_START_POS
+        path = [((x + dx, y, z), 0.0) for dx in (0.0, 0.015, 0.030, 0.045)]
+        path += [((x + 0.045, y, z + dz), 0.0) for dz in (0.004, 0.009, 0.012, 0.030)]
+        self.assertTrue(self._run(path))
 
 if __name__ == "__main__":
     unittest.main()

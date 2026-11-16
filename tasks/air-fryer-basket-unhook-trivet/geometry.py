@@ -80,12 +80,13 @@ BASKET_BODY_BOXES = [
     ((-0.111, 0.000, 0.035), (0.004, 0.155, 0.060), True),   # front wall with a 20 mm slot at each side for the catch lugs
 ]
 
-# 3 Handle collision boxes (touchable, hot: false) - relative to basket origin
+# 5 Handle collision boxes (touchable, hot: false) - relative to basket origin. The grip is VERTICAL: an upright bar on a short stem.
 BASKET_HANDLE_BOXES = [
-    ((-0.143, 0.065, 0.0355), (0.060, 0.014, 0.025), False),   # left post, 6 cm long (gripped across y by the lifting hand; room for a finger body each side)
-    ((-0.143, -0.065, 0.0355), (0.060, 0.014, 0.025), False),  # right post
-    ((-0.1855, 0.01875, 0.0355), (0.025, 0.1375, 0.025), False),  # cool-touch bar, main part (y -0.050 to 0.0875)
-    ((-0.1855, -0.08375, 0.0355), (0.025, 0.0075, 0.025), False), # bar end cap (y -0.0875 to -0.080); the 30 mm slot between them holds the release button
+    ((-0.143, 0.065, 0.0575), (0.025, 0.022, 0.075), False),    # vertical cool-touch grip bar: 2.5 x 2.2 cm, 7.5 cm tall (x -0.1555 to -0.1305, z 0.020 to 0.095), gripped across y by the lifting hand; it sits where the old post was gripped so the two grippers stay 10 cm apart in x
+    ((-0.1455, -0.065, 0.0355), (0.065, 0.014, 0.025), False),  # right post, 6.5 cm long (x -0.178 to -0.113): the button's stem slides toward its front end
+    ((-0.12175, 0.065, 0.035), (0.0175, 0.016, 0.020), False),  # stem of the grip bar to the basket front wall, 1.75 cm long (x -0.1305 to -0.113, z 0.025 to 0.045: 4 mm above the drawer's front strip)
+    ((-0.1855, -0.0375, 0.0405), (0.025, 0.020, 0.050), False), # upright button pillar (y -0.0475 to -0.0275, z 0.0155 to 0.0655), 5 mm inboard of the button; the button's outer side is open
+    ((-0.143, -0.0375, 0.035), (0.060, 0.010, 0.020), False),   # stem of the button pillar to the basket front wall (x -0.173 to -0.113, z 0.025 to 0.045)
 ]
 
 # Basket floor half extents for corner checks
@@ -101,12 +102,14 @@ BUTTON_RATE_N_M = 8.0
 BUTTON_DAMPING_NS_M = 5.0
 BUTTON_CLEARANCE_DISPLACEMENT_M = 0.008 # the lugs clear the ledges' rear edge after 7 mm of travel; 8 mm is the scoring threshold
 BYPASS_BAND_BUTTON_M = 0.004            # while the basket passes the ledges (lift 8 to 14 mm) the button must be at least this far in (a deliberate press, 30 % of the stroke; measured on the GPU: a held press reads 5.6 to 14 mm during the lift)
+BYPASS_ZONE_X_M = 0.070                 # the bypass band applies while the basket is still in its drawer: within 7 cm of its start in x
+BYPASS_ZONE_Y_M = 0.050                 # (covers the 50 mm of play toward the drawer back) and 5 cm in y; the mat is 32 cm away in y
 BUTTON_OUT_THRESHOLD_M = 0.0014         # >= 90% extended (<= 1.4 mm displaced of the 14 mm stroke)
 
 # 3 Button collision boxes (touchable, hot: false) - relative to button joint origin
 BUTTON_BOXES = [
-    ((0.000, 0.000, 0.005), (0.005, 0.025, 0.025), False),    # the push button: 2.5 x 2.5 cm plate, front face 6 mm in front of the bar front face
-    ((0.0055, 0.000, 0.005), (0.006, 0.012, 0.012), False),   # its stem, in the slot of the bar (6 mm clear of the bar's rear face at a full 14 mm stroke)
+    ((0.000, 0.000, 0.005), (0.005, 0.025, 0.025), False),    # the push button: 2.5 x 2.5 cm plate, front face 6 mm in front of the button pillar's front face
+    ((0.0055, 0.000, 0.005), (0.006, 0.012, 0.012), False),   # its stem: at a full 14 mm stroke it is 1 mm short of the right post front
     ((0.0875, 0.155, 0.004), (0.012, 0.010, 0.010), False),   # catch lug left (y +0.09 on the basket): under its ledge at rest, 7 mm past its rear edge at full travel
     ((0.0875, -0.025, 0.004), (0.012, 0.010, 0.010), False),  # catch lug right (y -0.09 on the basket)
 ]

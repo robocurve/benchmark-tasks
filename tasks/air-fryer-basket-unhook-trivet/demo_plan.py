@@ -1,7 +1,7 @@
 """Demo plan for air_fryer_basket_release_button_v2.
 
 The right arm presses the small release button on the front of the basket handle and holds it in while the left arm
-lifts the basket out of the drawer by the handle's left post; the left arm then sets the basket on the mat.
+lifts the basket out of the drawer by the vertical grip bar of its handle; the left arm then sets the basket on the mat.
 Every grasp hovers clear of everything until the arm has converged, then goes straight down.
 """
 
@@ -25,21 +25,22 @@ from geometry import (
 )
 
 # yam_arena: yaw 0 closes the fingers along world y. Finger commands open NEGATIVE (FINGER_OPEN = -0.04695 m per finger).
-POST_OPEN = -0.020    # left hand: fingers 20 mm out each side along y, around the 14 mm wide post
-CARRY_OPEN = -0.012   # to let go of the post: a 24 mm span (measured on the GPU: at 40 mm the outer pad touched the basket's left wall as the hand rose)
+POST_OPEN = -0.020    # left hand: fingers 20 mm out each side along y, around the 22 mm wide vertical grip bar
+CARRY_OPEN = -0.012   # to let go of the bar: a 24 mm span (measured on the GPU: at 40 mm the outer pad touched the basket's left wall as the hand rose)
 
 BX, BY = BASKET_START_POS[0], BASKET_START_POS[1]
-POST_Y = BY + BASKET_HANDLE_BOXES[0][0][1]                 # left post centre (world y)
-POST_X = BX + BASKET_HANDLE_BOXES[0][0][0]                 # post mid length (world x)
+POST_Y = BY + BASKET_HANDLE_BOXES[0][0][1]                 # vertical grip bar centre (world y)
+POST_X = BX + BASKET_HANDLE_BOXES[0][0][0]                 # vertical grip bar centre (world x)
 CAP_FACE_X = BX + BUTTON_AT[0] + BUTTON_BOXES[0][0][0] - BUTTON_BOXES[0][1][0] / 2   # button front face at rest
 BUTTON_Y = BY + BUTTON_AT[1] + BUTTON_BOXES[0][0][1]       # button centre (world y)
 PAD_HALF_X = 0.006                                         # a closed finger pad is 12 mm deep in x
 PUSH_Z = 0.0825       # tool point above the table when pressing: pads centred on the button
-GRIP_Z = 0.0825       # tool point above the table on the post: pads centred on the post
-LIFT_Z = 0.175        # basket floor rises 8 cm, past the drawer walls
-SET_Z = 0.053         # basket floor 3 mm above the mat top when let go (the basket hangs 3.5 cm below the grip)
+GRIP_Z = 0.090        # tool point above the table on the vertical bar: fingertips 13 mm lower, inside the bar's z 6.7 to 14.2 cm; a lift of 9.25 cm then ends at 18.25 cm (reach limit 19)
+HOVER_LEFT_Z = 0.165   # tool point hover: fingertips (13 mm lower) 10 mm above the bar top (z 14.2 cm), then straight down either side of the bar
+LIFT_Z = 0.1825        # the basket rises 9.25 cm, its floor past the drawer walls
+SET_Z = 0.0605        # basket floor 3 mm above the mat top when let go (the basket hangs 4.3 cm below the grip)
 # GPU-measured landing offsets are added here after the first runs
-LEFT_DX, LEFT_DY = 0.0, 0.0   # centred on the post: pads 12 mm clear of the bar and of the hot front wall
+LEFT_DX, LEFT_DY = 0.0, 0.0   # centred on the bar
 RIGHT_DX, RIGHT_DY = 0.0, 0.0
 
 
@@ -57,11 +58,11 @@ def plans() -> dict[str, list[Waypoint]]:
     shove = os.getenv("ABLATION") == "shove"
     gx2 = gx + (0.015 if shove else 0.0)                       # after a shove the hand keeps the basket where it was pushed
     left = [
-        # Hover over the post until the arm has converged, then straight down and close
-        Waypoint(3.0, (gx, gy, top + 0.130), POST_OPEN, "over handle post", 0.0),
-        Waypoint(2.5, (gx, gy, top + 0.130), POST_OPEN, "settle over post", 0.0),
-        Waypoint(2.0, (gx, gy, top + GRIP_Z), POST_OPEN, "down beside post", 0.0),
-        Waypoint(1.0, (gx, gy, top + GRIP_Z), FINGER_CLOSED, "grip post", 0.0),
+        # Hover above the bar top until the arm has converged, then straight down and close
+        Waypoint(3.0, (gx, gy, top + HOVER_LEFT_Z), POST_OPEN, "over grip bar", 0.0),
+        Waypoint(2.5, (gx, gy, top + HOVER_LEFT_Z), POST_OPEN, "settle over bar", 0.0),
+        Waypoint(2.0, (gx, gy, top + GRIP_Z), POST_OPEN, "down either side of the bar", 0.0),
+        Waypoint(1.0, (gx, gy, top + GRIP_Z), FINGER_CLOSED, "grip the bar", 0.0),
         # Wait while the right arm presses the release button
         Waypoint(3.0, (gx, gy, top + GRIP_Z), FINGER_CLOSED, "hold while button is pressed", 0.0),
         # Bypass probe (ablation "shove"): the left arm alone shoves the whole basket 15 mm toward the housing, hoping to
@@ -92,7 +93,7 @@ def plans() -> dict[str, list[Waypoint]]:
             Waypoint(3.0, (rx - 0.030, ry, top + 0.130), FINGER_CLOSED, "over button", 0.0),
             Waypoint(2.5, (rx - 0.030, ry, top + 0.130), FINGER_CLOSED, "settle over button", 0.0),
             Waypoint(2.0, (rx - 0.030, ry, top + PUSH_Z), FINGER_CLOSED, "down in front of button", 0.0),
-            # Wait until the left hand has closed on the post (about 9 s), then press the button in to its stop
+            # Wait until the left hand has closed on the grip bar (about 9 s), then press the button in to its stop
             Waypoint(2.0, (rx - 0.030, ry, top + PUSH_Z), FINGER_CLOSED, "ready to press", 0.0),
             Waypoint(1.5, (stop_x, ry, top + PUSH_Z), FINGER_CLOSED, "press button to stop", 0.0),
             Waypoint(0.5, (stop_x, ry, top + PUSH_Z), FINGER_CLOSED, "hold button pressed", 0.0),

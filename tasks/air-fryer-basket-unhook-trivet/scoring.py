@@ -15,6 +15,8 @@ from geometry import (
     BASKET_LIFT_MIN_M,
     BUTTON_CLEARANCE_DISPLACEMENT_M,
     BYPASS_BAND_BUTTON_M,
+    BYPASS_ZONE_X_M,
+    BYPASS_ZONE_Y_M,
     MAT_CENTRE,
     STILL_WINDOW_STEPS,
     TABLE_TOP,
@@ -42,6 +44,7 @@ _RUN = {
     "dropped_ever": False,
     "z_hist": [],
     "basket_start_z": None,
+    "basket_start_xy": None,
     "hist": [],
     "step": 0,
 }
@@ -58,6 +61,7 @@ def _reset_run() -> None:
     _RUN["dropped_ever"] = False
     _RUN["z_hist"] = []
     _RUN["basket_start_z"] = None
+    _RUN["basket_start_xy"] = None
     _RUN["hist"] = []
     _RUN["step"] = 0
 
@@ -103,6 +107,7 @@ def advance(
     bz = float(basket_pos[2])
     if _RUN["basket_start_z"] is None:
         _RUN["basket_start_z"] = bz
+        _RUN["basket_start_xy"] = (float(basket_pos[0]), float(basket_pos[1]))
 
     # Check hot contact with both fingertip bodies against every hot box
     if pads and hot_contact(pads, basket_pos, basket_quat, drawer_slide):
@@ -121,12 +126,17 @@ def advance(
     # tap) is a permanent zero.
     if button_disp >= BUTTON_CLEARANCE_DISPLACEMENT_M:
         _RUN["button_used"] = True
+    # The catches exist only in the drawer: the band applies while the basket is still in its drawer (within 7 cm of its
+    # start in x, which covers the 50 mm of play, and 5 cm in y), not when it is later lowered through the same heights
+    # onto the mat 32 cm away.
     lift = bz - _RUN["basket_start_z"]
-    if lift >= 0.008 and not _RUN["band_checked"]:
+    sx, sy = _RUN["basket_start_xy"]
+    over_ledges = abs(float(basket_pos[0]) - sx) <= BYPASS_ZONE_X_M and abs(float(basket_pos[1]) - sy) <= BYPASS_ZONE_Y_M
+    if over_ledges and lift >= 0.008 and not _RUN["band_checked"]:
         _RUN["band_checked"] = True
         if button_disp < BYPASS_BAND_BUTTON_M:
             _RUN["bypass_ever"] = True
-    if 0.008 <= lift <= 0.014 and button_disp < BYPASS_BAND_BUTTON_M:
+    if over_ledges and 0.008 <= lift <= 0.014 and button_disp < BYPASS_BAND_BUTTON_M:
         _RUN["bypass_ever"] = True
 
     # Dropped: the basket fell more than 5 cm within 5 steps (0.25 s)
