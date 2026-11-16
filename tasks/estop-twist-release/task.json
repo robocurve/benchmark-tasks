@@ -1,0 +1,21 @@
+{
+  "title": "Function-test a machine emergency stop and controlled restart",
+  "category": "Impact on jobs",
+  "keywords": [
+    "emergency stop",
+    "e-stop function test",
+    "push-to-lock turn-to-release",
+    "machine safety",
+    "restart interlock",
+    "maintenance"
+  ],
+  "instruction": "Verify the running grinder-polisher can be stopped by its emergency stop, that twisting and releasing the emergency-stop head alone does not restart it, and that operation resumes only after a fresh press of the separate green START button. Leave the emergency-stop head released, the machine running, and both arms clear of the controls.",
+  "context": "General maintenance and repair workers periodically function-test machine controls (O*NET 49-9071.00; BLS 1,629,700 US jobs in 2024). This task exercises contact-triggered stop, latched release and a separate deliberate start. Twisting the e-stop resets only that device; it never starts motion. This is a functional check, not hazardous-energy isolation or manual jam clearing. The contactor is deliberately simplified; no electrical safety rating is claimed.",
+  "setup": "Table top 0.7475 m; origin midway between the arm bases, +x forward, +y left, metres. Fixed on the table: a yellow 1-hole e-stop station (80 x 80 x 70 mm) centred at (0.300, -0.110) with a 16 mm-panel, 40 mm red mushroom push-to-lock / turn-to-release e-stop (head top 30.4 mm above the cover, 4.5 mm stroke, latches at 4.0 mm, 10.5 N, releases after 30 deg clockwise, 0.16 N*m) on a 60 mm EMERGENCY STOP legend plate; a grey 2-hole station (80 x 120 x 70 mm) centred at (0.300, 0.000) with a green 22 mm START push button (cap 24 mm, 14 mm proud, 4 mm stroke) at (0.300, -0.028) and a green RUN pilot lamp at (0.300, 0.030); a single-platen grinder-polisher (330 x 290 x 120 mm base, 200 mm platen at 60 rpm in a splash bowl) centred at (0.520, 0.120), cabled to both stations. Visual-only dressing (no collision, not scored): caliper (0.300, 0.330), solvent spray can (0.760, -0.080), box of nitrile gloves (0.770, -0.250). Start: machine running, RUN lamp lit, e-stop released, arms at READY, grippers open. One fixed layout.",
+  "scoring": "Scored from the observed joint trajectory and end state, not command flags alone. Initial running requires a visible RUN lens and observed platen motion >= 0.50 rad/s. +0.35: the e-stop latched while running and subsequently the measured platen stopped (<= 0.20 rad/s) with the lens off. +0.20: released by >= 30 degrees clockwise twist, unlatched and head within 0.5 mm of rest at the end. +0.10: after release, head out, observed stopped platen and lens off continuously for >= 1.0 s before the START button press. +0.25: START button contact after the head returns, never while latched, and observed machine motion and lens on at the end. +0.10: all these and both gripper centres >= 100 mm from both controls. Missing or nonfinite joint data gives zero. A new latch clears release, dwell and restart credit. Possible: 0, 0.35, 0.55, 0.65, 0.8, 0.9, 1.0. This is trajectory-dependent scoring: the final physical state alone cannot establish a completed test.",
+  "run_limit": "600 steps (30 s at 20 Hz)",
+  "fidelity": "Contact-driven spring/detent controls and a simplified contactor; no electrical safety rating. Twist-reset never starts motion; a fresh green START press after head return does. Lens/platen targets are physically simulated and scored from measured joints, not teleports. Stop uses servo holding, not disconnected-motor coast. Legacy reset joint IDs mean START. Same-version Isaac/PhysX demo and interrupted Dream-1 attempt recorded.",
+  "scores": "Dream-1 attempt: interrupted at 128 steps by DreamSessionExpired:expired; last trace (step 120) 0.0, no aggregate score. Scripted demo: 1.0 (264 steps).",
+  "reset_notes": "Turn the e-stop head clockwise to release it if latched, press START so the machine runs and the RUN lamp is lit, and return both arms to READY.",
+  "media": "M-XWQCYN"
+}
