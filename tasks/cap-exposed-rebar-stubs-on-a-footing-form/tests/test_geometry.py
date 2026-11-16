@@ -30,7 +30,7 @@ class TestGeometry(unittest.TestCase):
 
     def test_cap_meets_the_minimum_size_of_8_ccr_344_90(self):
         self.assertGreaterEqual(g.CAP_PLATE, 4 * 0.0254 - 1e-6)       # 4 x 4 in square plate
-        self.assertAlmostEqual(g.CAP_MASS / 0.4536, 0.5, delta=0.02)  # about 0.5 lb, the listed weight of a 4 x 4 in cap
+        self.assertAlmostEqual(g.CAP_MASS, 0.37 * 0.4536 + 0.03, delta=0.004)   # the PC110's 0.37 lb plus the printed grip adapter
 
     def test_funnel_catches_the_demo_landing_error(self):
         capture = g.CAP_FUNNEL_HALF - g.BAR_R

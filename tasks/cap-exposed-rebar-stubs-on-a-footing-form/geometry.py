@@ -46,7 +46,7 @@ CAP_BORE_Y = 0.0150                             # the bore's width across y: 15 
 CAP_BORE_DEPTH = 0.036                          # the blind bore's depth (to its roof)
 CAP_FUNNEL_H = 0.021                            # the flared mouth: wide at the mouth, down to the bore at this height (45 degrees)
 CAP_FUNNEL_HALF = 0.028                         # half-width of the mouth's opening (56 mm across)
-CAP_MASS = 0.23                                 # kg: 0.5 lb, the weight listed for a 4 x 4 in cap with a metal insert
+CAP_MASS = 0.20                                 # kg: the Dayton PC110's 0.37 lb (0.168 kg, its data sheet) plus a ~0.03 kg printed grip adapter
 CAP_FRICTION = (0.45, 0.4)                      # polymer on steel (the jaws' friction on the bar averages with the bar's 0.8)
 # the two gripping fins (jaws): each slides along x on a spring, pressed in toward the bar
 JAW_Z = (0.021, 0.033)                          # height of a fin's flat face above the mouth (the bar passes through it)
