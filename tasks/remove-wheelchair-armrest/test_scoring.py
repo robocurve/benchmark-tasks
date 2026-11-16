@@ -72,9 +72,18 @@ def test_lying_clear_succeeds_once_still():
     frames = [_objects(pos=LIFTED), _objects(pos=CARRIED)] + [_objects(pos=LYING, tilt=UP)] * 21
     assert _run(frames) == (1.0, True)
     frames = [_objects(pos=LIFTED), _objects(pos=CARRIED), _objects(pos=LYING, tilt=UP, vz=-0.02)]
-    assert _run(frames) == (1.0, False)          # full score, but still settling: not at rest
+    assert _run(frames) == (0.75, False)         # in place, but still settling: not at rest
     frames = [_objects(pos=LIFTED), _objects(pos=CARRIED), _objects(pos=LYING, tilt=UP, spin=0.1)]
-    assert _run(frames) == (1.0, False)
+    assert _run(frames) == (0.75, False)
+
+
+def test_full_score_only_after_one_second_held():
+    head = [_objects(pos=LIFTED), _objects(pos=CARRIED)]
+    rest = [_objects(pos=LYING, tilt=UP) for _ in range(20)]
+    assert _run(head + rest[:19]) == (0.75, True)      # at rest 19 steps: success not yet held 1 s
+    assert _run(head + rest) == (1.0, True)
+    T._reset_state()                                  # score() alone gives the same
+    assert [T.score(o) for o in head + rest][-2:] == [0.75, 1.0]
 
 
 def test_lying_either_way_counts():

@@ -78,10 +78,11 @@ is the point on its centreline 16.5 cm up the posts from their feet.
 
 - 0 if the armrest was ever let fall: moving down faster than 0.8 m/s with its lowest point more than 5 cm above the
   table (a free drop of about 8 cm or more). Tipping over with its feet on the table does not count.
-- 1.0 if both posts are out of their sockets, its centre is at least 10 cm out from the sockets' line toward the arms,
-  and it lies on the table on its side (tipped at least 75 degrees from upright, its lowest point within 3 mm of the
-  table). This is success once it is also at rest (moving slower than 1 cm/s and turning slower than 0.05 rad/s, about 3 degrees/s),
-  and the episode ends when that has held for 1 s.
+- 1.0 (success) if both posts are out of their sockets, its centre is at least 10 cm out from the sockets' line
+  toward the arms, and it lies on the table on its side (tipped at least 75 degrees from upright, its lowest point
+  within 3 mm of the table), at rest (moving slower than 1 cm/s and turning slower than 0.05 rad/s, about 3
+  degrees/s), and all this has held for 1 s (20 control steps in a row); the episode then ends. Until it has held
+  for 1 s, it scores 0.75.
 - Otherwise the furthest it got: 0.75 if both posts were out with its centre at least 10 cm out from the sockets'
   line; 0.5 if both posts were out of their sockets (each foot 5 mm above its socket's mouth, or 3 cm to the side of
   the socket's axis); 0.25 if it was lifted 2 cm (which needs the lock released: held, it lifts only 2 mm before the

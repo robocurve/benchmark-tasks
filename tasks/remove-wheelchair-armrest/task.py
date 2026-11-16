@@ -146,6 +146,7 @@ _CORNERS = np.array([[sx * POST / 2, y + sy * POST / 2, 0.0] for sx in (-1, 1) f
 @on_reset
 def _reset_state(environment=None) -> None:
     _STATE.update(started=False, out=False, clear=False, dropped=False)
+    _STATE["_held"], _STATE["_step"] = 0, None
 
 
 _reset_state()
@@ -178,7 +179,7 @@ def centre(arm: PartState) -> np.ndarray:
     return arm.to_world((0.0, 0.0, CENTRE_Z))
 
 
-def _update(objects) -> tuple[float, bool]:
+def _assess(objects) -> tuple[float, bool]:
     arm = objects["armrest"]
     low = lowest(arm)
     _STATE["dropped"] |= bool(arm.lin_vel[2] < -DROP_SPEED and low > DROP_HEIGHT)
@@ -198,6 +199,24 @@ def _update(objects) -> tuple[float, bool]:
     if _STATE["out"]:
         return 0.5, False
     return (0.25 if _STATE["started"] else 0.0), False
+
+
+FULL_HOLD_STEPS = 20        # the success condition must hold this many control steps in a row (1 s) for 1.0
+UNHELD = 0.75                # the score while it has held for less
+
+
+def _update(objects) -> tuple[float, bool]:
+    """This step's (score, success). success() and score() are both called on each step's states; the step is
+    assessed once. The score is 1.0 only once the success condition has held for 1 s; until then it is UNHELD."""
+    last = _STATE.get("_step")
+    if last is not None and last[0] is objects and last[2] < 2:
+        _STATE["_step"] = (last[0], last[1], last[2] + 1)
+        return last[1]
+    raw, ok = _assess(objects)
+    _STATE["_held"] = _STATE.get("_held", 0) + 1 if ok else 0
+    out = (raw if raw < 1.0 else 1.0 if _STATE["_held"] >= FULL_HOLD_STEPS else UNHELD, ok)
+    _STATE["_step"] = (objects, out, 1)
+    return out
 
 
 def success(objects) -> bool:
