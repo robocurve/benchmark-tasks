@@ -1,7 +1,5 @@
-# Incomplete feedback draft — follow-up revision
+# Incomplete feedback draft — native follow-up
 
-24 locks × 10 physical segments (240 passive joints, 960 thermal patches). Total length, dry/water mass and thermal area are conserved; alternating-axis bundles remain an uncalibrated reduced model. 57 CPU/USD checks pass, including batched occlusion versus scalar reference. The new discretization has not run natively yet: the retained VM failed to start and was subsequently confirmed stopped. Earlier 60-joint fixed-head proof is historical; lift still catches the holder and no full drying demo exists.
+The refined24 × 10 physical hair model recorded86 controls / 4.3 simulated seconds before its120-second wall timeout interrupted the planned nine-second passive check. All 262 native actors are present; observed head drift<0.47µm and skin attachment error<0.76µm. This is partial passive observation, not full dynamics validation or drying. No completed demo/model result exists.
 
-This is an early feedback draft, not a received or acceptance-ready competition submission. Full feasibility, model attempt and eligible media remain missing.
-
-Follow-up lifecycle: 32.9-minute start-request-to-confirmed-stop window; zero new native trials. No new video is claimed.
+The retained VM is confirmed STOPPED after a19.2-minute start-to-stop window. New preview clips are labelled partial, unscored offline replays of actual native poses; they are not native RGB or full-score evidence. No task.json/media ID is supplied.
