@@ -1,0 +1,48 @@
+{
+  "status": "stable_initial_wrap_native_peel_strain_fails_robot_products_pending",
+  "date": "2026-11-13",
+  "local_tests_passed": 22,
+  "native_runtime_verified": false,
+  "demo_score": null,
+  "dream_score": null,
+  "media": null,
+  "remaining": [
+    "Flush tape-edge physical peeling with ordinary fingers/tools",
+    "Native roll/ribbon winding and finite force-coupled payout",
+    "Contact adhesion with equal/opposite forces and calibrated peel",
+    "Physical tape severing and released seal retention under native flap forces",
+    "Packing/four-flap scene and robot controller",
+    "Full-score demo, repeat and final Dream/media"
+  ],
+  "native_probes": [
+    {
+      "run": "packing-native-001",
+      "valid": false,
+      "reason": "ribbon constraint instability under load"
+    },
+    {
+      "run": "packing-native-002",
+      "valid": false,
+      "reason": "negative control showed spontaneous initial unwinding; headline pass invalidated"
+    },
+    {
+      "run": "packing-native-003",
+      "valid": false,
+      "initial_wrap_displacement_m": 1.452048e-05,
+      "max_film_anchor_separation_m": 0.0004322519,
+      "strain_limit_m": 0.00025,
+      "displaced_material_estimate_m": 0.125,
+      "reason": "strain exceeds 5% despite stable initial winding"
+    }
+  ],
+  "latest_material_probe": {
+    "run": "packing-native-003",
+    "initial_wrap_displacement_m": 1.452e-05,
+    "peeled_estimate_m": 0.125,
+    "max_anchor_separation_m": 0.000432,
+    "passes_strain_limit": false
+  },
+  "invalidated_result": "packing-native-002 displacement began before loading and was not causal peel evidence; superseded by geometry and initial-wrap negative-control fixes.",
+  "work_state": "paused_by_user_serial_ethernet_priority",
+  "full_completion_verified": false
+}
