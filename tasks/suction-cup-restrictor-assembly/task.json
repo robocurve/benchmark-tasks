@@ -1,0 +1,18 @@
+{
+  "title": "Install a plug-in vacuum cup and its flow restrictor through a mounting plate",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "robot assembly",
+    "compliant installation",
+    "mechanical retention"
+  ],
+  "instruction": "Install the green suction cup through the plate and fit the white flow restrictor. Leave both installed and release them. Keep the arms clear of each other and the table.",
+  "context": "Assembly of a vacuum robot end effector includes mechanically retaining its plug-in cups and flow restrictors. The compliant head must pass through the mounting hole and recover, while a separate ribbed core must seat from the opposite face without displacing the cup. This custom subassembly ends before vacuum commissioning.",
+  "setup": "Original calibrated dual-YAM station and three original 320x176 RGB cameras. A fixed aluminum service plate (110mm outer diameter,4mm thick,18mm through hole,1mm entrance chamfer) has its hole centre at (0.24,0,0.89)m and axis along world Y. A loose green 40mm cup with four compliant radial fingers rests at (0.38,-0.09,0.90)m; a white POM-like restrictor with 8.8mm shaft,10.6mm retention rib,13mm cap and0.8mm through bore rests at (0.38,0.08,0.90)m. Fixed supports, complete dimensions, masses, spring constants and reset poses are in PHYSICAL_SETUP.md and assembly/geometry.py. Fabrication meshes, dimensioned drawings, materials and assembly instructions are in fabrication/.",
+  "scoring": "Ending state:0 otherwise;0.5 when the neck fits the real plate hole and its shoulder and all four head sectors capture opposite plate faces;0.75 when the core shaft fits the neck, its rib is past the retaining lips and its cap gap is<0.75mm;1.0 after both parts remain installed, physically supported and released for3 continuous seconds. No nominal pose or microscopic drift threshold; axial spin and any successful arm strategy allowed. Robot-robot or robot-table contact makes the episode0. SCORING.md gives exact surface checks, numerical allowances and simple-tool grading.",
+  "run_limit": "2,400 actions /120 seconds at20Hz.",
+  "reset_notes": "Use one fresh process and the fixed initial state for each trial. Restore every loose component to its specified support with all passive joints at zero. Replace damaged or permanently deformed physical specimens; simulation reset does not establish material reusability.",
+  "fidelity": "Custom parts, not OEM CAD. Rigid hollow bellows with four passive radial spring fingers approximate head elasticity; no continuum rubber, calibrated force, vacuum seal or airflow. Self-contact within the continuous head omitted. Native part/robot contacts; original YAM/cameras/20Hz;960Hz PhysX PGS. No object pose edits or proximity latches.",
+  "scores": "Dream-1: 0.0 after 2,400 actions / 120s. Known-layout scripted demo: 1.0 in 1060 actions / 53s. Both use the same fixed setup and final scorer; raw replay verified.",
+  "media": "M-QWDT38"
+}

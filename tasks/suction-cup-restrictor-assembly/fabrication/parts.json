@@ -1,0 +1,82 @@
+{
+  "units": "mm",
+  "source_simulation_sha256": "c4dcd1e088b5ca8c200a0b0d9f0265953d04c35449211b89720026bd205b339f",
+  "manufacturing_only": true,
+  "material_response_measured": false,
+  "parts": [
+    {
+      "file": "cup-compliant-master.stl",
+      "material": "Flexible polyurethane, nominal Shore A 80",
+      "quantity": 1,
+      "bounds_mm": [
+        [
+          -20.0,
+          -10.0,
+          -20.0
+        ],
+        [
+          20.0,
+          30.0,
+          20.0
+        ]
+      ],
+      "volume_mm3": 20959.21522378523,
+      "watertight": true,
+      "connected_solids": 1,
+      "notes": "Four 0.6x3 mm root webs, 2 mm clear bending span. Preserve collar/head/bore surfaces. Print in flexible resin or manufacture elastomer from this master; qualify return/force on a coupon."
+    },
+    {
+      "file": "restrictor.stl",
+      "material": "POM machined or rigid resin; clear 0.8 mm bore",
+      "quantity": 1,
+      "bounds_mm": [
+        [
+          -6.5,
+          -24.0,
+          -6.5
+        ],
+        [
+          6.5,
+          1.5000000000000004,
+          6.5
+        ]
+      ],
+      "volume_mm3": 1698.7997147249544,
+      "watertight": true,
+      "connected_solids": 1,
+      "notes": ""
+    },
+    {
+      "file": "plate-and-stand.stl",
+      "material": "Rigid printed fixture or machined plate on stand",
+      "quantity": 1,
+      "bounds_mm": [
+        [
+          -70.0,
+          -40.0,
+          -142.5
+        ],
+        [
+          70.0,
+          40.0,
+          54.99999237060547
+        ]
+      ],
+      "volume_mm3": 221782.54549295385,
+      "watertight": true,
+      "connected_solids": 1,
+      "notes": ""
+    }
+  ],
+  "notes": [
+    "Cup: 40 mm OD; neck 16.6 / 9.2 mm; head 21 mm, tip 15.6 mm.",
+    "Plate: 110 mm OD, 4 mm thick, 18 mm bore, 20-to-18 mm entrance chamfer.",
+    "Head capture faces at cup Y=21.4 and 26 mm; preserve 4.6 mm capture span.",
+    "Four added compliant root webs: 0.6 mm radial x 3 mm tangential, Y=23.5..26.5.",
+    "Restrictor: 8.8 mm shaft, 10.6 mm rib, 13 mm cap, 0.8 mm open bore.",
+    "Core profile Y=-24..+1.5 mm; assembled cap datum approximately Y=31.5 mm.",
+    "Native radial spring target 0.18 N/mm; printed webs require coupon qualification."
+  ],
+  "simulation_geometry_changed": false,
+  "manufacturing_connections_differ_from_collision_model": true
+}
