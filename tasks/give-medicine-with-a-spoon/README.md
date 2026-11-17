@@ -24,6 +24,10 @@ Recorded wall times below include simulator startup.
 
 ## Setup and judging
 
+See [FIXTURE.md](FIXTURE.md) for the affordable printable head, mouth/drain,
+collector, assembly, spill protection and commissioning checks. The STL files
+are in `fixture/`; no commercial manikin is required. This is an unbuilt
+physical-fixture design, checked geometrically, not a claim of physical testing.
 See `JUDGING.md` for dimensions, the fixed layout and the rubric. Fill the
 adaptive medicine spoon with 5.0 ml of water tinted with food colouring, measured
 with an oral dosing syringe. The scoop has a 5.73 ml geometric capacity, so it
@@ -51,13 +55,15 @@ patient responses. Its collector is shown cut away so the delivered volume
 can be seen. Material models receive measured hands, never the controller's
 stage or a success target. All sources and measured states are frozen for replay.
 
-## Relationship to earlier work
+## Physical fixture and evidence
 
-[PR 713](https://github.com/robocurve/benchmark-tasks/pull/713) was rejected for
-its rectangular mouth pit, solid-bead soup and missing face-contact safeguards.
-This task uses a life-size oral interface, spillable liquid, dose recovery and
-latched contact/insertion/speed limits. The manikin scope is explicit: passing
-this task does not establish that a robot can safely feed a person.
+The fixture specification preserves the recorded mouth geometry, layout,
+controller and scoring. The real drain, spill tray and pad covers are not newly
+simulated objects. Downstream drainage must pass the physical recovery checks
+before use; the simulated liquid model does not validate printed seals or
+wetting. The original demo and Dream recordings are therefore retained.
+No third-party meshes or head assets are used; the included fixture meshes
+and generator are original and use this folder's LICENSE.
 
 ## Checks
 
