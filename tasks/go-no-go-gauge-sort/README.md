@@ -64,11 +64,17 @@ A block earns credit only if it was checked with the gauge, in order, and ends i
   - Held is not a check. A block kept still in the air near the gauge, as a gripper that has not let go would
     keep it, is not supported, and gives no reading even 1 mm above the anvils or the base. (Blocks that were
     let go lay within 0.02 mm of the base or the anvil tops in the simulator logs.)
-  - What the simulator can and cannot see: the task file's hooks get each object's pose, velocity and bounding
-    box only, not the gripper's opening, the fingers' poses or contact forces. So the scorer judges release
-    from the block alone: still, and touching the gauge in a pose the gauge holds up. A gripper holding a
-    block perfectly still in exactly such a pose would not be told apart; in a real trial the judge checks
-    the gripper is open and clear (below).
+  - Released: every gripper whose tool centre point (between the finger pads) is within 50 mm of the block's
+    bounding box is open, its finger pads at least 55 mm apart (the block's gripped length, 50 mm, plus 5 mm).
+    A gripper farther away is ignored. A block resting exactly where a let-go block would, but with a closed
+    gripper still on it, gives no reading.
+  - How the simulator sees the gripper: the task file's hooks get only the objects' states, so the scorer
+    reads both arms' finger joints and gripper link poses from the physics engine each step
+    (`grip_reader()` in `gauge_sort.py`, through Isaac Lab's running `SimulationContext`). If that reading is
+    unavailable (no simulator, a missing joint or link, any error), no check counts that step, so no credit,
+    and the run prints a one-time warning. In a real trial the judge checks on the video that the gripper is
+    open and clear (below). With `GAUGE_POSE_LOG` set, the pose log records each arm's pad gap and its
+    distance to each block next to every check.
 - **Order:** every block needs a valid GO check. A block seated in GO then needs a valid NO-GO check after it.
   A NO-GO reading before the block has passed GO doesn't count. A block that stays out of GO needs no NO-GO
   check. The first valid reading at each gap stands. The readings then call for a tray: stays out of GO, red;
@@ -117,6 +123,13 @@ python tasks/go-no-go-gauge-sort/check_demo.py     # about 4.5 min
     tilted as if wedged but 1.5 mm clear of both anvils, for 0.9 s, then sorted right, gets no credit (6/7
     with the rest checked); the same block really wedged is credited. Every block hovered over its gaps and
     then sorted right scores 0.
+  - Released: a block lying exactly as a let-go block would (seated in GO, then NO-GO; on the GO anvils) with a
+    closed gripper on it, for 0.9 s, gets no credit; with that gripper open 0.1 mm past 55 mm it is
+    credited, 0.1 mm short of it not. Two arms: one gripper closed on the block while the other is open and
+    far, either way round: no credit; both open 20 mm above it: credited. A closed gripper 52 mm from the
+    block is ignored; at 48 mm it is not.
+  - Fail closed: with the gripper reading unavailable (None, or a reader that raises), every block checked
+    and sorted scores 0, and the warning prints once.
   - Checks clear at the next trial's start.
   - These don't count as in a tray: a block held 10 cm or 5 mm above the floor, on the near or side rim,
     straddling a wall, or still moving. A block one layer up with nothing beneath doesn't count either; a
@@ -129,9 +142,11 @@ python tasks/go-no-go-gauge-sort/check_demo.py     # about 4.5 min
   held, partway down and over the other gap; each reading must follow the block's width. No reading for a
   block held still 1 to 2.9 mm above the anvils or the base (flat), or 1 to 2.9 mm clear of a wedged pose;
   for a block moving while on the gauge; for one level on the anvils but not spanning the gap; or one tipped
-  5 degrees on the base.
+  5 degrees on the base. No reading for a seated or resting block with a gripper closed on it, or with no
+  gripper reading; the real reader, run with no simulator, returns no reading.
 - **The demo, replayed offline:** through `yam_arena.demo.ArmPlan` at 20 Hz, with `score()` running every step
-  as in the simulator, but with no physics: a block moves with the TCP while gripped and drops straight down
+  as in the simulator, but with no physics (the grippers' pad gaps and TCPs come from the plan's finger
+  commands and forward kinematics): a block moves with the TCP while gripped and drops straight down
   when let go (over a gap, shifted by the release slide that `RELEASE_DY` corrects), and the scenario decides
   whether it seats. This checks the plan's logic, not that it works in the
   simulator; the demo has been run in the simulator on layout 3 only (see Submitted runs).
@@ -218,10 +233,10 @@ well over the 0.3 s a check needs.
 
 Layout 3, `object_jitter=0`, `--seed 0`, 20 Hz, scored by `task_score`:
 
-- Dream-1: 0.0, all 6,000 steps.
-- Scripted demo: 1.0, success after 3,971 steps. Run under the previous check rule (3 mm tolerances); to be
-  re-confirmed under the support rule above. Replayed through the new rule, that run's logged block poses
-  give the same gauge checks at the same control steps.
+- Scripted demo: 1.0, success after 3,970 steps, scored under the current rule, including the gripper-release
+  check (finger joints read from the physics engine every step; the reading was available throughout).
+- Dream-1: 0.0, all 6,000 steps. This run was scored under an earlier, looser check rule. The current rule only
+  adds conditions to a valid check, so it cannot raise that score.
 - `task.json` `scores` records both, and `media` holds the uploaded videos and setup screenshot.
 
 ## Reset between trials

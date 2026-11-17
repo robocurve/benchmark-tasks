@@ -9,8 +9,11 @@
 2. The gauge reading (seated / stays out / none) on blocks seated in a gap, lying on the anvils, jammed tilted,
    held, and over the other gap; and that a block held still just clear of the gauge (hovering 1 to 3 mm above the
    anvils or the base, flat or tilted as if wedged, where the gripper would have it before letting go) gives no
-   reading. The hooks give the scorer no gripper or contact data, so "held by the gripper" is modelled as a block
-   at rest in the air; support is judged from the block's pose alone.
+   reading. Release: the scorer reads the grippers through gauge_sort.grip_reader(), which offline is replaced by
+   a model ({arm: (pad gap, TCP)}). A block supported on the gauge gives no reading while any gripper within 50 mm
+   of it is not open by 55 mm (a closed gripper holding it seated; one arm holding it while the other is open and
+   far), a far closed gripper is ignored, and with the reader unavailable (None, or the real reader with no
+   simulator) nothing is credited and a warning is printed once.
 3. The demo, replayed through yam_arena.demo.ArmPlan at 20 Hz for both arms, with the blocks' resting places
    tracked so the demo's gauge readings resolve: the physical scenario (a block drops into a gap exactly when it
    is narrower), every block staying out of GO, every block dropping through both gaps, and every block passing,
@@ -25,6 +28,8 @@
 
 from __future__ import annotations
 
+import contextlib
+import io
 import sys
 from itertools import product
 from pathlib import Path
@@ -43,6 +48,22 @@ g = load(HERE / "gauge_sort.py").module
 HZ = 20.0
 RUN_LIMIT_STEPS = 6000
 ARM_CLEARANCE = 0.100  # m between the arms' link-3/4/5, gripper and TCP frame origins
+
+# Offline grippers: {arm: (pad gap m, TCP xyz)}. By default both are wide open and parked, far from the gauge.
+WIDE = 2 * -FINGER_OPEN  # 93.9 mm
+OPEN_FAR = {arm: (WIDE, np.array([g.PARK[0], g.SIDE[arm] * g.PARK[1], g.PARK[2]])) for arm in ("left", "right")}
+g.grip_reader = lambda: OPEN_FAR
+
+
+@contextlib.contextmanager
+def grippers(grips):
+    """Within the block, grip_reader() returns ``grips`` (a dict, or None: unavailable)."""
+    before = g.grip_reader
+    g.grip_reader = lambda: grips
+    try:
+        yield
+    finally:
+        g.grip_reader = before
 
 
 # -- small helpers -----------------------------------------------------------------------------------------------
@@ -141,11 +162,12 @@ def _on_gauge(name: str, gap: str) -> tuple[float, float, float]:
     return (g.GAUGE_X, gy, bottom + g.PART_H / 2)
 
 
-def play(where: dict, checks=(), steps: int | None = None, nogo_first=(), only_go=(), extra=()) -> tuple[float, bool]:
+def play(where: dict, checks=(), steps: int | None = None, nogo_first=(), only_go=(), extra=(),
+         extra_grips=OPEN_FAR) -> tuple[float, bool]:
     """Score a trial: the start, then each block in ``checks`` set on GO for ``steps`` control steps and, if it
     drops into GO (and isn't in ``only_go``), on NO-GO; then ``extra`` states (name -> pos, each held for ``steps``);
-    then the end state ``where``. A block in ``nogo_first`` is set on NO-GO before GO too. Returns (score, success)
-    of the end state."""
+    then the end state ``where``. A block in ``nogo_first`` is set on NO-GO before GO too. The grippers are open and
+    far except during ``extra``, where they are ``extra_grips``. Returns (score, success) of the end state."""
     steps = g.CHECK_HOLD_STEPS if steps is None else steps
     g.score(_world({}))  # a trial starts: checks clear
     assert all(v is None for v in g._CHECKS.go.values())
@@ -161,9 +183,10 @@ def play(where: dict, checks=(), steps: int | None = None, nogo_first=(), only_g
             for _ in range(steps):
                 g.score(_world(dict(placed, **{name: _on_gauge(name, gap)})))
         placed[name] = where.get(name, (g.PARTS[name][1], g.PARTS[name][2], g.TOP + g.PART_H / 2))
-    for name, pos in extra:
-        for _ in range(steps):
-            g.score(_world(dict(placed, **{name: pos})))
+    with grippers(extra_grips):
+        for name, pos in extra:
+            for _ in range(steps):
+                g.score(_world(dict(placed, **{name: pos})))
     end = _world(where)
     return g.score(end), g.success(end)
 
@@ -238,7 +261,7 @@ def _scoring_cases() -> None:
     assert play(sorted_, all_but(one_pass), extra=[(one_pass, held_top)]) == (6 / 7, False)
     # Held, never let go: a block kept still just above the anvils (or the base) for 3x the check time, as a
     # gripper still holding it would have it, then put in the right tray, earns nothing; the rest still count.
-    # (A held block is modelled as one at rest in the air: the hooks give no gripper or contact data.)
+    # (Here the grippers read open and far: these fail for want of support alone.)
     long = 3 * g.CHECK_HOLD_STEPS
     hovers = {
         wide_reject: [("go", (g.GAUGE_X, g.GO_Y, g.ANVIL_TOP + 0.0015 + g.PART_H / 2))],  # 1.5 mm over GO anvils
@@ -266,6 +289,59 @@ def _scoring_cases() -> None:
     assert play(sorted_, extra=every_hover, steps=long) == (0.0, False)
     assert play(sorted_, extra=[(n, tilted_hover) for n in sorted(g.REJECT) if g.WIDTHS[n] > g.UPPER],
                 steps=long) == (0.0, False)
+    # Released: the scorer reads the grippers. A block resting exactly where a let-go block would (seated in GO and
+    # NO-GO, or on the GO anvils) earns nothing while a closed gripper holds it there, even for 3x the check time.
+    long_ = 3 * g.CHECK_HOLD_STEPS
+    def holding(pos, gap=g.PART_LEN):  # noqa: E306 - one gripper at the block, closed on its ends; the other far
+        return {"left": (gap, np.asarray(pos, float)), "right": OPEN_FAR["right"]}
+    for name in (one_pass, narrow_reject):
+        seq = [_on_gauge(name, "go"), _on_gauge(name, "nogo")]
+        held = play(sorted_, all_but(name), extra=[(name, p) for p in seq], steps=long_, extra_grips=holding(seq[0]))
+        assert held == (6 / 7, False) and g._CHECKS.go[name] is None, (name, held)
+    wide_on = _on_gauge(wide_reject, "go")
+    assert play(sorted_, all_but(wide_reject), extra=[(wide_reject, wide_on)], steps=long_,
+                extra_grips=holding(wide_on)) == (6 / 7, False)
+    # ... and is credited once that gripper is open past PART_LEN + GRIP_CLEAR (just over: yes; just under: no)
+    thresh = g.PART_LEN + g.GRIP_CLEAR
+    assert play(sorted_, all_but(wide_reject), extra=[(wide_reject, wide_on)], steps=long_,
+                extra_grips=holding(wide_on, thresh + 1e-4)) == (1.0, True)
+    assert play(sorted_, all_but(wide_reject), extra=[(wide_reject, wide_on)], steps=long_,
+                extra_grips=holding(wide_on, thresh - 1e-4)) == (6 / 7, False)
+    # two arms: one holds the block closed while the other is open and far: no credit; open near both: credited
+    for closed_arm in ("left", "right"):
+        other = "right" if closed_arm == "left" else "left"
+        two = {closed_arm: (g.PART_LEN, np.asarray(wide_on)), other: OPEN_FAR[other]}
+        assert play(sorted_, all_but(wide_reject), extra=[(wide_reject, wide_on)], steps=long_,
+                    extra_grips=two) == (6 / 7, False), closed_arm
+    above = np.asarray(wide_on) + (0, 0, 0.03)  # both TCPs 20 mm above the block, wide open
+    both_open = {"left": (WIDE, above), "right": (g.FINGER_AJAR * -2, above)}
+    assert play(sorted_, all_but(wide_reject), extra=[(wide_reject, wide_on)], steps=long_,
+                extra_grips=both_open) == (1.0, True)
+    # a closed gripper more than GRIP_NEAR away is ignored; one just inside it is not
+    box_top = wide_on[2] + g.PART_H / 2
+    for d, credited in ((g.GRIP_NEAR + 0.002, True), (g.GRIP_NEAR - 0.002, False)):
+        far_closed = {"left": (0.0, np.array([wide_on[0], wide_on[1], box_top + d])), "right": OPEN_FAR["right"]}
+        got = play(sorted_, all_but(wide_reject), extra=[(wide_reject, wide_on)], steps=long_, extra_grips=far_closed)
+        assert got == ((1.0, True) if credited else (6 / 7, False)), (d, got)
+    # Fail closed: with the reader unavailable for the whole trial, nothing is credited, and it says so once.
+    g._GRIP["warned"] = False
+    out = io.StringIO()
+    with grippers(None), contextlib.redirect_stdout(out):
+        assert play(sorted_, names) == (0.0, False)
+        assert play(sorted_, all_but(wide_reject), extra=[(wide_reject, wide_on)], steps=long_, extra_grips=None) == (
+            0.0, False)
+    assert out.getvalue().count("WARNING: cannot read the grippers") == 1, out.getvalue()
+    g._GRIP["warned"] = False
+    # a reader that raises fails closed too
+    def broken():  # noqa: E306
+        raise RuntimeError("test")
+    before, g.grip_reader = g.grip_reader, broken
+    try:
+        with contextlib.redirect_stdout(io.StringIO()):
+            assert play(sorted_, names) == (0.0, False)
+    finally:
+        g.grip_reader = before
+        g._GRIP["warned"] = False
     # checks clear at the next trial's start
     play(sorted_, names)
     assert play(sorted_) == (0.0, False)
@@ -349,7 +425,7 @@ def check_reading() -> None:
         assert not g.seated(at(gap, small, g.BASE_TOP), other)  # the other gap
         assert not g.stays_out(at(gap, big, g.ANVIL_TOP), other)
         # Held, not released: a block at rest just clear of the gauge, as a gripper still holding it would have it
-        # (the scorer gets no gripper or contact data). 1 to 3 mm of air under it: no reading. The old rule (3 mm
+        # (here the grippers read open and far, so only support decides). 1 to 3 mm of air under it: no reading. The old rule (3 mm
         # tolerances, no contact test) read every one of these.
         for air in (0.001, 0.0015, 0.002, 0.0029):
             assert not g.stays_out(at(gap, big, g.ANVIL_TOP + air), gap, big), (gap, air)  # flat, above the anvils
@@ -368,12 +444,20 @@ def check_reading() -> None:
     for name, w in g.WIDTHS.items():
         for gap, (_, gap_w) in g.GAPS.items():
             on_base, on_top = at(gap, w, g.BASE_TOP), at(gap, w, g.ANVIL_TOP)
-            assert g.gauge_reading(name, on_base, gap) is (True if w < gap_w else None), (name, gap)
-            assert g.gauge_reading(name, on_top, gap) is (None if w < gap_w else False), (name, gap)
+            assert g.gauge_reading(name, on_base, gap, OPEN_FAR) is (True if w < gap_w else None), (name, gap)
+            assert g.gauge_reading(name, on_top, gap, OPEN_FAR) is (None if w < gap_w else False), (name, gap)
             if w < gap_w:  # held partway down the gap: no reading
-                assert g.gauge_reading(name, at(gap, w, g.BASE_TOP + 0.012), gap) is None, (name, gap)
+                assert g.gauge_reading(name, at(gap, w, g.BASE_TOP + 0.012), gap, OPEN_FAR) is None, (name, gap)
+            # the same supported poses with a gripper closed on the block, or with no gripper reading: none
+            for s in (on_base, on_top):
+                closed = {"left": (g.PART_LEN, s.pos), "right": OPEN_FAR["right"]}
+                assert g.gauge_reading(name, s, gap, closed) is None, (name, gap)
+                assert g.gauge_reading(name, s, gap, None) is None, (name, gap)
+    # the real reader, with no simulator running, gives None (fail closed) and says why
+    assert g._sim_grip_reader() is None and g._GRIP["why"], g._GRIP["why"]
     print("gauge reading: seated / on the anvils / jammed / held / other gap all read right; readings follow width;"
-          " blocks held 1-3 mm clear of the anvils or base (flat or tilted), moving, or tipped give no reading")
+          " blocks held 1-3 mm clear of the anvils or base (flat or tilted), moving, or tipped give no reading;"
+          f" a closed gripper on the block or no gripper reading gives none (offline real reader: {g._GRIP['why']})")
 
 
 # -- 3. the demo -------------------------------------------------------------------------------------------------
@@ -450,6 +534,8 @@ def run(outcome, title: str) -> dict:
     """Replay the demo through ArmPlan with these gauge outcomes."""
     blocks = Blocks(outcome)
     g._SENSE = blocks.state
+    arms: dict = {}  # this step's {arm: (pad gap, TCP)}, from the plan's finger command and FK
+    before, g.grip_reader = g.grip_reader, lambda: dict(arms)
     try:
         plans_wp, insp, schedule = g.demo_plan()
         plans = {arm: ArmPlan(wps, station.BASES[arm]) for arm, wps in plans_wp.items()}
@@ -469,6 +555,7 @@ def run(outcome, title: str) -> dict:
                 pts = [poses[l][:3, 3] + base for l in ("link3", "link4", "link5", "gripper")] + [tcp]
                 frames[arm] = (np.array(pts), label)
                 blocks.update(arm, tcp, float(action[6]), label)
+                arms[arm] = (2 * float(action[6]) * -FINGER_OPEN, np.asarray(tcp, float).copy())
             g.score(fixed | {n: blocks.state(n) for n in g.PARTS})  # as the simulator does after every step
             (pl, ll), (pr, lr) = frames["left"], frames["right"]
             d = float(np.min(np.linalg.norm(pl[:, None] - pr[None], axis=2)))
@@ -500,6 +587,7 @@ def run(outcome, title: str) -> dict:
         }
     finally:
         g._SENSE = None
+        g.grip_reader = before
 
 
 def physical(name: str, gap: str) -> bool:

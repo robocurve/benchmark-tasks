@@ -29,6 +29,7 @@ import os
 
 import numpy as np
 
+from yam_arena.constants import TCP_OFFSET
 from yam_arena.demo import Waypoint
 from yam_arena.task_file import TABLE_TOP, Box
 
@@ -182,9 +183,11 @@ def use_layout(seed: int) -> None:
 #     even 1 mm above the anvils or the base, is not supported and gives no reading. Each reading must also be the
 #     one the block's width allows (only a narrower block can seat; only a wider one can rest on top), so a narrow
 #     block held on top of the gap does not read "stays out".
-#   The task hooks get each object's pose, velocity and bounding box only: no gripper opening, finger poses or
-#   contact forces. So "released" is judged from the block alone (still, and in contact with the gauge in a pose
-#   the gauge holds up); a gripper holding a block still in exactly such a pose cannot be told apart.
+#   Released: every gripper whose TCP is within GRIP_NEAR of the block's bounding box has its finger pads at least
+#     PART_LEN + GRIP_CLEAR apart (the fingers close on the block's 50 mm ends); a gripper farther away is ignored.
+#     The task hooks get only object states, so grip_reader() reads both arms' finger joints and gripper links
+#     from the physics engine each step. If it cannot (no simulator, a missing joint, any error), no reading
+#     counts that step: no credit, and a one-time warning.
 #   NO-GO check: the same over the NO-GO gap, counted only after the block has passed GO. A block that stays out of
 #     GO needs no NO-GO check.
 # The first valid reading at each gap stands. Checks clear when a trial starts (every block lying still on the
@@ -326,15 +329,124 @@ def stays_out(state, gap: str, width: float | None = None) -> bool:
     return all(poly_dist(sec, a) <= SUPPORT_TOL for a in anvil_sections(gap))
 
 
-def gauge_reading(name: str, state, gap: str) -> bool | None:
+def gauge_reading(name: str, state, gap: str, grips) -> bool | None:
     """True: seated in the gap; False: stays out on its anvils; None: no reading (elsewhere, moving, held clear of
-    the gauge, or a pose the block's width cannot take on its own, e.g. a narrow block held up on top of the gap)."""
+    the gauge, a pose the block's width cannot take on its own, e.g. a narrow block held up on top of the gap, a
+    gripper near it not open, or ``grips`` None: the finger reading was unavailable)."""
+    if not released(state, grips):
+        return None
     narrower = WIDTHS[name] < GAPS[gap][1]
     if narrower and seated(state, gap):
         return True
     if not narrower and stays_out(state, gap, WIDTHS[name]):
         return False
     return None
+
+
+# -- gripper release (read from the physics engine) -------------------------------------------------------------
+GRIP_NEAR = 0.050  # a gripper whose TCP is within this of a block's bounding box must be open; farther: ignored
+GRIP_CLEAR = 0.005  # open: finger pads at least PART_LEN + this apart
+ARM_PRIMS = {"left": "/World/envs/env_0/LeftArm", "right": "/World/envs/env_0/RightArm"}  # yam_arena SIDES
+ENV_PRIM = "/World/envs/env_0"  # object states are relative to this env's origin
+FINGER_DOFS = ("joint7", "joint8")  # prismatic, 0 closed (pads touching) to -0.04695 m each (pads 94 mm apart)
+GRIPPER_LINK = "gripper"  # the TCP is TCP_OFFSET in this link's frame, between the finger pads
+_GRIP: dict = {"sim": None, "views": None, "origin": None, "why": None, "warned": False}
+
+
+def _host(a) -> np.ndarray:
+    """A warp array or torch tensor as a float64 NumPy array."""
+    if hasattr(a, "detach"):
+        a = a.detach().cpu()
+    return np.asarray(a.numpy(), dtype=np.float64)
+
+
+def _sim_views(sim):
+    """{arm: (articulation view, finger dof indices, gripper link index)} and env 0's origin, built from the
+    running simulation's own physics view."""
+    from pxr import Usd, UsdGeom, UsdPhysics
+
+    psv = sim.physics_sim_view
+    if psv is None:
+        raise RuntimeError("no physics simulation view yet")
+    stage = sim.stage
+    views = {}
+    for arm, path in ARM_PRIMS.items():
+        prim = stage.GetPrimAtPath(path)
+        if not prim.IsValid():
+            raise RuntimeError(f"no prim at {path}")
+        roots = [p for p in Usd.PrimRange(prim) if p.HasAPI(UsdPhysics.ArticulationRootAPI)]
+        if len(roots) != 1:
+            raise RuntimeError(f"{len(roots)} articulation roots under {path}")
+        view = psv.create_articulation_view(str(roots[0].GetPath()))
+        if view is None or view.count != 1:
+            raise RuntimeError(f"articulation view at {roots[0].GetPath()} matched {getattr(view, 'count', 0)}")
+        dofs, links = list(view.shared_metatype.dof_names), list(view.shared_metatype.link_names)
+        views[arm] = (view, [dofs.index(j) for j in FINGER_DOFS], links.index(GRIPPER_LINK))
+    env = stage.GetPrimAtPath(ENV_PRIM)
+    if not env.IsValid():
+        raise RuntimeError(f"no prim at {ENV_PRIM}")
+    origin = np.array(UsdGeom.Xformable(env).ComputeLocalToWorldTransform(Usd.TimeCode.Default()).ExtractTranslation())
+    return views, origin
+
+
+def _sim_grip_reader() -> dict | None:
+    """{arm: (pad gap m, TCP xyz in the object states' frame)} from the running simulator, or None (with the reason
+    in _GRIP["why"]) if it cannot be read: no simulator, a missing arm, joint or link, a non-finite value, any
+    error. Never raises."""
+    try:
+        from isaaclab.sim import SimulationContext
+
+        sim = SimulationContext.instance()
+        if sim is None:
+            raise RuntimeError("no running SimulationContext")
+        if _GRIP["sim"] is not sim or _GRIP["views"] is None:  # first call, or the env was rebuilt
+            _GRIP["views"] = None
+            _GRIP["views"], _GRIP["origin"] = _sim_views(sim)
+            _GRIP["sim"] = sim
+        out = {}
+        for arm, (view, dofs, link) in _GRIP["views"].items():
+            q = _host(view.get_dof_positions()).reshape(-1)
+            tf = _host(view.get_link_transforms()).reshape(-1, 7)[link]  # x y z qx qy qz qw, world frame
+            gap = -float(q[dofs[0]] + q[dofs[1]])
+            tcp = tf[:3] + _rot(tf[3:7]) @ np.asarray(TCP_OFFSET, float) - _GRIP["origin"]
+            if not (math.isfinite(gap) and np.all(np.isfinite(tcp))):
+                raise RuntimeError(f"{arm}: non-finite finger or gripper reading")
+            out[arm] = (gap, tcp)
+        _GRIP["why"] = None
+        return out
+    except Exception as e:  # fail closed: no reading, no credit
+        _GRIP["views"] = None  # rebuild the views next step
+        _GRIP["why"] = f"{type(e).__name__}: {e}"
+        return None
+
+
+grip_reader = _sim_grip_reader  # offline checks replace this with their own model of the grippers
+
+
+def _box_dist(p, state) -> float:
+    """Distance (m) from point ``p`` to the block's bounding box (0 inside)."""
+    p = np.asarray(p, float)
+    return float(np.linalg.norm(np.maximum(np.maximum(state.low - p, p - state.high), 0.0)))
+
+
+def released(state, grips) -> bool:
+    """Every gripper within GRIP_NEAR of the block is open by PART_LEN + GRIP_CLEAR; False if ``grips`` is None."""
+    if grips is None:
+        return False
+    return all(gap >= PART_LEN + GRIP_CLEAR for gap, tcp in grips.values() if _box_dist(tcp, state) <= GRIP_NEAR)
+
+
+def _read_grips():
+    """grip_reader() for this step; warns once per process if it is unavailable."""
+    try:
+        grips = grip_reader()
+    except Exception as e:  # a replacement reader that raises fails closed too
+        grips, _GRIP["why"] = None, f"{type(e).__name__}: {e}"
+    if grips is None and not _GRIP["warned"]:
+        _GRIP["warned"] = True
+        print(f"gauge_sort: WARNING: cannot read the grippers ({_GRIP['why'] or 'reader returned None'}); "
+              "no gauge check counts while this lasts (no credit)", flush=True)
+    return grips
 
 
 def looks_seated(state, gap: str) -> bool:
@@ -353,6 +465,7 @@ class _Checks:
         self.nogo: dict[str, bool | None] = dict.fromkeys(WIDTHS)
         self.run: dict[tuple[str, str], tuple[bool | None, int]] = {}  # (name, gap) -> (reading, steps in a row)
         self.last = None  # the states dict last seen: success() and score() share one update per step
+        self.grips = None  # grip_reader() at that step (None: unavailable)
 
     def verdict(self, name: str) -> str | None:
         """The tray this block's valid check sequence calls for, or None if the sequence is incomplete."""
@@ -383,18 +496,19 @@ def _update(objects) -> None:
     """Advance the gauge checks by one control step (once per states dict)."""
     if objects is _CHECKS.last:
         return
+    grips = _read_grips()
     if _at_start(objects):
         _CHECKS.reset()
-        _CHECKS.last = objects
+        _CHECKS.last, _CHECKS.grips = objects, grips
         return
-    _CHECKS.last = objects
+    _CHECKS.last, _CHECKS.grips = objects, grips
     for name in PARTS:
         state = objects[name]
         for gap, done in (("go", _CHECKS.go), ("nogo", _CHECKS.nogo)):
             if done[name] is not None or (gap == "nogo" and _CHECKS.go[name] is not True):
                 _CHECKS.run.pop((name, gap), None)
                 continue
-            reading = gauge_reading(name, state, gap)
+            reading = gauge_reading(name, state, gap, grips)
             prev, n = _CHECKS.run.get((name, gap), (None, 0))
             n = n + 1 if reading is not None and reading == prev else (1 if reading is not None else 0)
             _CHECKS.run[name, gap] = (reading, n)
@@ -570,9 +684,14 @@ def _tray_detail(name: str, objects) -> dict:
 def _gap_detail(name: str, s, gap: str) -> dict:
     gy = GAPS[gap][0]
     reading, streak = _CHECKS.run.get((name, gap), (None, 0))
+    grips = _CHECKS.grips
     return {
         "recorded": (_CHECKS.go if gap == "go" else _CHECKS.nogo)[name],  # True seated, False stays out, None not yet
-        "now": gauge_reading(name, s, gap),
+        "now": gauge_reading(name, s, gap, grips),
+        "released": released(s, grips),
+        # each arm's finger pad gap and its TCP's distance to the block's bounding box; None: grippers unreadable
+        "pad_gap_mm": None if grips is None else {a: _mm(gp) for a, (gp, _) in grips.items()},
+        "tcp_to_block_mm": None if grips is None else {a: _mm(_box_dist(t, s)) for a, (_, t) in grips.items()},
         "seated": seated(s, gap), "stays_out": stays_out(s, gap, WIDTHS[name]),
         "tilt_deg": round(math.degrees(tilt(s)), 2),
         "streak": streak, "streak_reading": reading,
@@ -590,7 +709,8 @@ def _log_poses(objects) -> None:
 
         path = Path(out_dir).expanduser() / "gauge_poses.jsonl"
         path.parent.mkdir(parents=True, exist_ok=True)
-        row = {"step": _POSE_LOG["step"], "at_start": _at_start(objects)}
+        row = {"step": _POSE_LOG["step"], "at_start": _at_start(objects), "grippers": None if _CHECKS.grips is None else {
+            a: {"pad_gap_mm": _mm(gp), "tcp": [round(float(v), 4) for v in t]} for a, (gp, t) in _CHECKS.grips.items()}}
         for n in PARTS:
             s = objects[n]
             want = "pass_tray" if n in PASS else "reject_tray"
