@@ -119,6 +119,12 @@ Partial credit uses the final state and has no hold requirement. Leaving the ful
 
 For a physical trial, use an unpowered drill. Check clearance with a ruler, tilt from calibrated side views, and aiming error from the chuck axis projected to the marked tabletop. Use the trial video to check the one-second hold.
 
+## Simulation fidelity
+
+Isaac Sim PhysX models rigid robot links, joint limits, gravity, drill grasping, collisions and friction at 240 Hz, with joint-position commands at 20 Hz. The drill uses the Arena power_drill USD asset as a single rigid body with total mass 0.5 kg. Contact parameters, surface-material properties and internal mass distribution are approximations rather than measurements of a particular physical drill.
+
+The table, target marker and camera stand are fixed colliders. Clearance uses support vertices extracted from the drill USD mesh, scaled and transformed with the measured object pose. Aiming uses the same model frame and scale for the chuck-axis direction and tip offset. The trigger, motor, chuck rotation, bit cutting, drilling forces, deformation and surface damage are not simulated; the task requires pointing above the dot, without drilling or touching the table.
+
 ## Recorded results and runtime
 
 | Run | Score | Control steps | Simulation time | Recorded elapsed time |
