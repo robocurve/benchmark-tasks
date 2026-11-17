@@ -41,20 +41,27 @@ coordinates to obtain the scene coordinates. +x is rearward into the mixer
 column, +y is left, and +z is up. These are the scene axes, not a new camera.
 Keep the standard YAM station camera for evaluation.
 
-`build_assets.py` is the dimensional master for the external parts. `geometry.json`
-contains every primitive and convex mesh, and `setup-state.json` contains the
-settled starting poses. Do not manufacture the artificial seams between convex
-colliders: make each body a continuous solid. A printer/slicer mesh still needs
-to be generated from these dimensions; no production STL, assembly CAD or
-manufactured specimen is included. The coordinate and section descriptions here
-are the construction drawing, and the commissioning record must identify any
-departure from them.
+The actual manufacturing files are in [fabrication/](fabrication/README.md):
+watertight PETG meshes, steel-ballast blanks, dimensioned shaft/collar and carrier
+plate drawings, and a reproducible generator. `build_assets.py` / `geometry.json`
+remain the native scene master. The exported beater keeps the original bore and
+L-slot; only ballast fastener holes below the grip are added. The printed bowl
+has a continuous 2 mm wall/floor joint. Static draining platforms are wood.
+
+The physical drive uses a shorter orbit shaft supported above the spring and a
+round nose pod with a 40 mm-radius lower opening. These hidden supports differ
+from the native idealized drive. The tool, bowl, guard, pin/slot geometry,
+spring force target and lift travel are retained. The physical lower cover
+extends 12 mm below the rendered annulus; verify approach clearance on the
+constructed unit rather than treating the native robot path as hardware proof.
+No manufactured specimen or physical commissioning result is claimed.
 
 | Datum or part | Mixer-local dimension / location |
 | --- | --- |
 | Base | 310 x 280 x 28; centre (-5, 0, 14) |
 | Column envelope | 85 x 130 x 330; centre (105, 0, 190) |
 | Head cover envelope | 250 x 190 x 110; centre (15, 0, 420) |
+| Physical nose pod | 100 mm OD body; flange 130 mm OD; origin (-90,0,347), top 435 |
 | Orbit axis | (-90, 0); shaft-pin plane z = 330 |
 | Spindle, at reset | (-70, 0); 20 mm eccentricity from orbit axis |
 | Bowl origin, lowered | (-90, 0, 70); raised origin (-90, 0, 145) |
@@ -72,34 +79,42 @@ do not enlarge scoring thresholds to accommodate a faulty build.
 
 ## Parts and cost allowance
 
-The following is a workshop purchasing specification. Except for the linked
-motor specification, costs are estimates, not supplier quotes or proof of stock.
-They exclude a robot, worktop, tax, shipping, labour and tools. A workshop with a
-printer and drill press should budget roughly **US$750–900**, including allowance
-for reprints and replacement parts. Outsourced machining can exceed this amount.
+This workshop route has a **US$353.01 parts estimate**; allow **US$400**
+for material price changes and rework before tax/shipping. It uses ordinary stock,
+printed parts and an already-equipped workshop. Robot, worktop, labour and tools
+are excluded. Prices checked on 2026-11-17 and explicit allowances are itemized in
+[costed-bom.json](fabrication/costed-bom.json); the total is not a fully quoted
+supplier kit. No N50 purchase or custom machining service is necessary.
 
-| Quantity | Part / purchasing specification | Allowance, USD |
-| --- | --- | ---: |
-| 2 | Pololu **3041**, 100.37:1 HPCB 12 V micro gearmotor, 3 mm D shaft, no encoder; leads and mounting brackets | 65 |
-| 2 | Pololu **4036** DRV8876 motor driver carrier, plus 1.10 kOhm VREF resistors and headers | 40 |
-| 1 set | Two **TLC555CP** PDIP timers and sockets, two 100 kOhm multiturn trimmers, timing/decoupling components and perfboard specified below; enclosed 12-to-5 V regulator, 1 A | 30 |
-| 1 | Enclosed, listed 12 V DC, 3 A desktop supply; no exposed mains construction | 25 |
-| 1 | 6-circuit capsule slip ring, at most 12.5 mm OD, at least 1 A/circuit and 300 rpm rating | 20 |
-| 4 | 6801-2RS bearings, 12 x 21 x 5 | 20 |
-| 2 | Ground 12 mm steel shafts: spindle 80 mm; orbit shaft 99 mm | 15 |
-| 1 | Ground 4 mm dowel, 16 mm long; 12 mm split shaft collars; spacers | 15 |
-| 1 | Compression spring: 20.2 mm OD, 18.2 mm ID, 32 mm free length, 0.40 N/mm nominal rate; stainless or music wire; verify by measurement | 20 |
-| 1 set | 32 mm OD collar, 27 mm OD upper seat, three 1 mm guide wires, 22 mm OD spring shroud/upper stop, lower-stop washers and M2–M8 fasteners | 25 |
-| 2 each | MGN9 rail, 250 mm, and matching long carriage block | 40 |
-| 1 set | Printed 96-tooth lift pinion and 150 mm rack, M8 pivot, friction washers, handle and two stops | 20 |
-| 1 set | GT2 pulleys: 12 teeth/3 mm bore and 36 teeth/12 mm bore; 180 mm pitch-length belt, 6 mm wide | 20 |
-| 1 set | Two 24 mm OD smooth spin pulleys (3 mm and 12 mm bores), 2 mm polyurethane round belt, split-clamp hubs | 15 |
-| 1 set | Finder **55.34.9.012.0040**, 4-pole 12 V DC relay with matching socket, coil suppression, 2 A supply fuse and 0.5 A motor-branch fuses; terminal blocks | 35 |
-| 1 set | Latching mushroom STOP with normally-closed contact, normally-open START; three guard-seat switches, upper-lift switch and enclosure/cover switch | 35 |
-| 1 set | Plywood/aluminium frame stock, 1 mm cover sheet, brackets, table clamps | 55 |
-| 1 set | PETG/nylon for bowl, beater, supports, cage and mechanisms; captive ballast | 55 |
-| 1 set | Fixed clear containment screen, cable guards, warning/position marks, miscellaneous wiring | 30 |
-| | Subtotal before rework allowance | **580** |
+| Part / quantity | USD total | Basis |
+| --- | ---: | --- |
+| [Two Pololu 3041 12 V 100.37:1 motors](https://www.pololu.com/product/3041) | 52.90 | checked |
+| [Two Pololu 4036 DRV8876 drivers](https://www.pololu.com/product/4036) | 16.30 | checked |
+| Two TLC555CP circuits, trimmers, perfboard and 5 V regulator | 20.00 | allowance |
+| [Adafruit 798 enclosed 12 V / 1 A supply](https://www.adafruit.com/product/798) | 8.95 | checked |
+| [Adafruit 775 12 x 17 mm six-circuit slip ring](https://www.adafruit.com/product/775) | 17.50 | checked |
+| [Ten 6801-2RS 12 x 21 x 5 mm bearings; four used](https://jsbgreatbearings.com/product/6801-2rs-two-side-rubber-seals-bearing-6801-rs-ball-bearings-6801-rs/) | 11.00 | allowance; supplier listing varies by quantity |
+| [goBILDA 2100-0012-0200 12 x 200 mm steel shaft; cut 83 and 70 mm](https://www.gobilda.com/12mm-shaft-stainless-steel-200mm-length/) | 6.39 | checked |
+| 4 mm drive pin, 2 mm cross-pin, shaft collars and spacers | 8.00 | allowance |
+| [K&S 5502 music wire, 0.039 inch x 36 inch, 20 pieces](https://ksmetals.com/products/mw36-039) | 15.99 | checked |
+| Steel collar/seat blanks, 2 mm guides, M2-M8 fasteners | 15.00 | allowance |
+| [Two MGN9 250 mm rail-and-carriage sets](https://www.robotdigg.com/product/779/Quality-440C-SUS-MGN9-linear-rail-with-carriage) | 40.00 | allowance above listed 18 USD/set |
+| Lift pivot, friction washers, knob and stops | 8.00 | allowance |
+| 180 mm GT2 belt, stock 12T/36T pulleys and hubs | 8.00 | allowance |
+| 2 mm round belt and printed 24 mm spin pulleys | 5.00 | allowance |
+| [Jameco 291507 LB4H-12DS-R 4PDT relay, socket 175557 and diode](https://www.jameco.com/z/LB4H-12DS-R-Jameco-ValuePro-Electromechanical-Relay-4PDT-5A-12-Volt-160Ohm-Plug-In_291507.html) | 12.00 | 4.95 USD relay checked; socket/diode allowance |
+| START/STOP and five position/cover switches | 15.00 | allowance |
+| Plywood, aluminium offcuts, brackets and clamps | 35.00 | allowance |
+| [Two 1 kg PETG spools, ELEGOO Rapid PETG](https://us.elegoo.com/products/rapid-petg-filament-1-75mm-colored-1kg?variant=44479775375463) | 27.98 | checked |
+| Captive mild-steel ballast, nuts and ties | 10.00 | allowance |
+| Clear screen, guards, terminals, wiring and fuses | 20.00 | allowance |
+| **Parts total** | **353.01** | Checked prices plus allowances |
+
+All exported plastic meshes use about 0.72 kg at solid PETG density. Two complete
+spools cover supports, mounting pieces, calibration coupons, waste and reprints.
+Use plywood offcuts for the two static platforms rather than printing solid blocks.
+The rail-set allowance preserves ordinary low-friction MGN9 guides; it does not
+rely on an untested printed slide to lower the budget.
 
 The [motor manufacturer's specification](https://www.pololu.com/product/3041)
 gives a nominal 330 rpm no-load speed at 12 V. It does not guarantee either
@@ -117,12 +132,21 @@ limiting. Do not raise the limit merely to overcome a misaligned bearing or hub.
    Use 12 mm plywood sides with internal corner blocks, or an aluminium frame
    with 1 mm cosmetic covers. Bolt through the base using four M6 fasteners.
 3. Make the 250 x 190 x 110 mm head cover from 1 mm sheet or 3 mm printed panels.
-   A separate 6 mm aluminium bridge, z = 435–441, bolted to the column supports
-   the central bearing housing. Bore its orbit-axis opening 26 mm to admit the
-   bearing housing, which is clamped to it by a flange above the bridge. The
-   cover carries no bearing load.
-   The existing lower bearing-cover envelope is a 30–65 mm radius annulus about
-   the orbit axis, z = 359–371; retain at least 3 mm clearance to rotating parts.
+   A 240 x 100 x 6 mm aluminium bridge, centred at (5,0,438), bolts to the
+   column and carries the bearings. At the orbit axis bore 26 mm through, then
+   counterbore 38 mm diameter, 3 mm deep **from below**. Fit the printed orbit
+   bearing housing from below: its flange occupies z = 435–438. Drill three
+   3.2 mm holes at radius 16.5, angles 0/120/240 degrees. Use countersunk M3
+   screws flush with the bridge top and nuts below the flange; no screw head
+   may enter the belt plane. The cover carries no bearing load.
+   Print `drive_pod.stl` and mount it at (-90,0,347). Its 2 mm lower annulus
+   is z = 347–349, its 40–65 mm radius flange is z = 359–371, and its 50 mm
+   outer-radius wall reaches z = 435. Bolt its flange to side brackets from
+   the column/head. Fit the rectangular cover around its round nose, with
+   enclosed joints and removable top. This pod accommodates the real carrier
+   and motor outside the front edge of the rectangular native cover.
+   Its 40 mm-radius bottom opening differs from the rendered 30 mm opening.
+   Keep at least 3 mm clearance to rotating parts; hand-check the full sweep.
 4. Make the bowl cradle: rear bar 18 x 255 x 18; two 130 x 20 x 12 side arms;
    two 20 x 20 x 25 risers. Their centres relative to the **bowl origin** are
    (130,0,80), (75,+/-129,80), and (15,+/-129,93.5). Add the 15 x 65 x 50 rear
@@ -140,53 +164,79 @@ For this section, use a **spindle coordinate system** with z = 0 at the drive-pi
 centre, and +y along its protruding end. Thus its origin is mixer-local
 (-70,0,330) at reset. Rotate all of these parts together with the spindle.
 
-* Cut the 12 mm spindle from z = -10 to +70. Chamfer the bottom from radius
+* Cut the 12 mm spindle from z = -10 to +73 (83 mm overall). The extra 3 mm
+  at the hidden upper end accommodates a real pulley collar. Chamfer the bottom from radius
   3 mm at z = -10 to radius 6 mm at z = -5. Cross-drill a 4 mm hole at z = 0
   using a drill press and V block. Press/retain the 16 mm dowel with its ends
   at y = -6 and +10, so only +y has a 4 mm exposed projection. The opposite
   end must be flush. Deburr the pin and shaft. The simulated capsule has rounded
   ends; a real dowel's end must be rounded without reducing its 4 mm diameter.
 * Support the spindle in two 6801 bearings with centres at z = +47 and +59. Keep their bearing block within z = +44 to +62
-  and at most 26 mm OD. Its lowest face is then mixer-local 374, giving
+  and at most 26 mm OD. Print `spindle_bearing_housing.stl`, installed with
+  its bottom at mixer-local 374. Its lowest face then gives
   3 mm above the fixed cover's top at 371.
   Fit axial collars against the bearing inner races; leave the outer races
   fixed in the rotating carrier. Do not put the beater's axial or radial loads
   through the gearmotor's output bearings.
 * Make a retaining collar 32 mm OD, 18 mm ID and 1.5 mm thick. Its unloaded
-  centre plane is z = +12.75. Drill three 1.2 mm guide holes at radius 13.0,
-  120 degrees apart. Three 1 mm steel guide wires pass through these holes;
-  braze their upper ends to the underside of a **27 mm OD**, 1.5 mm thick
-  steel spring seat. Keep the complete seat/braze swept diameter at most
-  27.4 mm. These wires guide sideways only; they do not carry the hanging
-  beater load. Their inner swept radius is 12.5 mm, clear of the 12 mm-radius
-  hub. Braze small captive washers at their lower ends, with washer upper
-  faces at z = +12.00, to support the collar's lower face at zero travel.
-  Round these lower ends. These washers lie below the orbit shaft and do not
-  impose its narrow clearance requirement.
-* Braze a metal spring shroud/upper stop to the spring seat's underside:
-  **22 mm OD, 20.6 mm ID, 11.5 mm long**. Its bottom is z = +21.5 (mixer-local
-  height 351.5). The collar's upper face starts at +13.5
-  and contacts this tube after exactly 8 mm upward travel. The 20.2 mm OD
-  spring fits inside the shroud. No upper stop nuts project outside the guide
-  wire circle. Check that the spring remains free inside the shroud throughout
-  compression; reject rubbing or binding rather than assuming its 0.2 mm
-  nominal radial clearance proves it works.
+  centre plane is z = +12.75. Drill three 2.2 mm guide holes at radius 13.5,
+  120 degrees apart. Three smooth 2 mm steel guide rods have M2 threaded ends
+  and fasten to a 32 mm OD, 12.1 mm bore, 3 mm thick upper spring seat. Lower
+  stop washers/nuts have upper faces at z = +12.00, supporting the collar's
+  lower face at zero travel. Lock and round all rod ends.
+* Fit three 11.5 mm-long spacers, 4 mm OD / 2.2 mm ID, around the guide rods
+  immediately below the spring seat at z = +33. Their lower faces are +21.5,
+  stopping the collar's upper face after 8 mm travel. The complete rotating
+  spring-seat/guide envelope fits inside a 38 mm eccentric opening in the lower
+  carrier plate. The central orbit shaft begins above this mechanism, at
+  mixer-local z = 382, so it cannot intersect the collar, seat or guide sweep.
 * Put the compression spring between the collar's upper face and an upper
   seat whose underside starts at z = +33.00. The installed spring length is
   19.5 mm at zero collar travel: (32 - 19.5) x 0.4 = **5 N preload**. At 8 mm
   travel the length is 11.5 mm and the nominal force is 8.2 N. The spring's
   measured solid height must be below 10 mm. Use an adjustable split collar
-  above the upper seat and lock it after calibration. Its top must stay below
+  above the upper seat and lock it after calibration. A spacer above that clamp seats
+  against the lower bearing inner race; set axial play without crushing the
+  bearing seals. Its top must stay below
   z = +44.5, the lower bearing's bottom face; use a low-profile clamp/spacer
   stack rather than overlapping the bearing. The upper spin-pulley underside
   is z = +64, leaving a 2.5 mm spacer above the upper bearing's top face at
   +61.5; this pulley clamp retains that inner race axially. Keep the guide rods
   parallel; the spring must not rub the spindle. No physical damper is specified;
   the simulation's viscous damping is an explicit unvalidated approximation.
+  A workable lower stack is the 3 mm seat at mixer-local 363–366, a 7 mm
+  split clamp at 366–373 and a 1.5 mm spacer at 373–374.5. Make bearing
+  spacers at most 18 mm OD so they contact only inner races and clear the
+  housing pockets; the 24 mm OD clamp must remain below the housing.
 * Measure spring force at 0, 4 and 8 mm collar travel with a small spring scale
   or digital force gauge, before installing the beater. Accept 5 +/-0.5 N at
   zero and a rate of 0.40 +/-0.05 N/mm. Adjust seat height for preload, not by
   stretching or cutting the spring. Reject coil binding or collar sticking.
+
+For the spring, use 0.039 inch (0.991 mm) K&S 5502 music wire, a 36 inch
+length. Cut a roughly 450 mm blank. Cold-wind a first coupon with about
+3.5 active turns and two closed end turns, right handed, on the supplied
+17.2 mm mandrel. Remove it before measuring springback; aim for 18.2 mm ID,
+20.2 mm OD and 32 mm free length, with squared, deburred ends. The mandrel is
+a starting jig, not a guarantee of final diameter. Adjust the next mandrel's
+diameter and winding pitch using the coupon; maintain the final 32 mm length
+and select the turn count by the measured rate. The ordinary steel-spring
+estimate `k = G*d^4/(8*D^3*n)`, with G approximately 79,000 N/mm2, d = 0.991,
+D = 19.2 and n = 3.5, gives about 0.38 N/mm. It is a sizing estimate only.
+The measured 0.35–0.45 N/mm rate, preload and solid-height limits above decide
+acceptance. Guard the wire while winding; the plastic mandrel is not a heat
+treatment fixture. The spring does not need a purchased OEM part.
+
+At maximum travel the nominal axial hand load is 8.2 N spring force plus
+2.45 N tool weight, approximately **10.7 N** before friction. At an assumed
+dry pad coefficient of 0.3 this requires about 17.8 N normal force per finger.
+The lift estimate, including its maximum 1.1 N m brake, is
+`(1.2*9.81*0.047746 + 1.1)/0.100 = 16.6 N` at the knob, or about 27.7 N
+normal force per finger under the same friction assumption. These estimates
+are below 40 N per finger; actual friction and gripping must be measured.
+Reject binding or a knob force above 20 N, and reject any grasp needing over
+40 N per finger or slipping at that limit. Do not reduce the specified spring
+force or lifted mass to claim feasibility.
 
 Make the beater hub as a continuous 24 mm OD, 40 mm high body, with a 12.7 mm
 bore. The **hub-local** origin is the middle of that 40 mm height. The angular
@@ -218,24 +268,33 @@ the beater to the spindle.
 
 ## Beater and bowl
 
-Print the beater outline as one continuous PETG/nylon body, or fabricate the
-same outline from aluminium. Below the hub, add a 22 x 14 x 30 grip block centred
-at (0,0,-35). The remaining rods are 9 mm diameter, joining these hub-local
-points: (0,0,-50) to (0,0,-170); (0,0,-55) to (0,-50,-105) to
-(0,-35,-170) to (0,+35,-170) to (0,+50,-105) to (0,0,-55); and the crossbar
-(0,-50,-105) to (0,+50,-105). Overall width is approximately 109 mm and height
-195 mm. Use captive screws/washers in the grip and centre rod to bring mass to
-250 +/-10 g and centre of mass about 80 mm below the hub. Do not attach loose
-weights to the outer beaters. A scale and balance edge suffice for this build
-check; the source inertias are not physically verified.
+Print [beater.stl](fabrication/beater.stl) in PETG, 0.2 mm layers, at least six
+perimeters and solid infill. Inspect and ream the 12.7 mm hub bore. The mesh
+includes six 3.2 mm holes below the grip. Cut two 20 x 80 x 6 mm and one
+20 x 25 x 6 mm mild-steel webs using the supplied metal-blank files/drawing;
+**do not print these ballast pieces**. Deburr and round their edges.
+
+Install the two long webs with centres at hub-local (+8,+20,-125) and
+(-8,-20,-125); the short web is centred at (+8,0,-110). Their holes coincide
+with the beater's crossbar and centre rod. Use six M3 x 20 bolts, washers,
+0.5 mm spacers where needed, locking nuts and smooth end caps. These permanent
+webs remain outside the grip and inside the original rotating blade envelope;
+none supports the tool from outside. Weigh the complete beater: target
+**250 +/-10 g**. The density calculation gives approximately 251 g including
+12 g of fasteners; trim the short steel web or add captive washers to calibrate.
+The physical centre of mass is approximately 110 mm below the hub, versus the
+native lumped model's 80 mm. Neither centre of mass nor inertia is a score gate.
 
 Make the bowl as a continuous printed shell with 2 mm walls and bottom. Its
 inner radial section, (height, radius), is (0,70), (25,80), (65,98), (105,110),
 (140,112); linearly join the points. The upper locating rim has inner radius
 110, outer radius 116, bottom z = 138 and top z = 142, with a rear +x clearance
 notch spanning +/-0.08 radians. Add the cradle tabs from `build_assets.py` and
-bolt them to the cradle. Add captive ballast outside the bowl bottom/support
-until the bowl/cradle moving assembly is approximately 1.2 kg. The bowl cavity
+bolt them to the cradle. Fit captive steel stock below the bowl floor/support until the complete
+bowl/cradle moving assembly is 1.20 +/-0.05 kg. An 80 x 60 x 20 mm steel block
+is approximately 754 g; select/trim it after weighing the actual cradle. Mount
+with flush countersunk fasteners and exterior backing bosses, leaving the cavity
+floor flush and the moving ballast at least 10 mm above the base at the lower stop. The bowl cavity
 must remain empty; no ballast, tools or wires may enter the swept volume.
 
 Printed material is a low-cost substitute for the simulated aluminium beater
@@ -259,7 +318,10 @@ giving exactly 24 x 3.125 = **75 mm**. Standard involute proportions are:
 addendum 0.994718, dedendum 1.243398, and pitch-line tooth thickness 1.5625 mm.
 Make pinion and rack 8 mm wide; use a rack at least 150 mm long. At the lower
 position it spans z = 80–230. Its pitch line is x = 105-47.746483 = 57.253517,
-y = -140, with teeth pointing toward the pinion. Attach its body to the cradle
+y = -150, with teeth pointing toward the pinion. Keep the handle at its
+specified y = -140 plane and extend its shaft to carry the pinion 10 mm
+outboard, centred at y = -150. This puts the pinion's inner face at -146,
+7 mm outside the nearest cradle-arm face at -139. Attach the rack body to the cradle
 with an aluminium angle. Turning the handle from -x toward +z raises the rack.
 
 An M8 shoulder-bolt pivot with two 30–40 mm friction washers and a locknut gives
@@ -289,7 +351,12 @@ The lowest 5 mm ring rests on the rim: guard-origin height is then
 142+2.5 = **144.5 mm above the bowl origin**. Attach the 18 x 24 x 8 grip tab
 at (0,131,28), with a 6 mm support from (0,112,0) to (0,131,28). Add the
 10 x 8 x 5 orientation key at radius 112, angle 45 degrees, z = -1. Target
-guard mass 180 +/-10 g, adding captive ballast near its bottom ring if needed.
+guard mass 180 +/-10 g. The solid PETG mesh is about 72 g: capture approximately
+108 g of steel nuts on the intermediate ring near radius 95 mm, above the rim
+and outside the beater sweep. Eight ordinary M12 nuts are a starting quantity;
+weigh them. Use two independent locking ties/fasteners per nut, capped ends, and
+verify that none can fall or touch the beater. This ballast stays inside the
+guard's existing outer diameter. It is permanent apparatus, not an added trial prop.
 
 Install three small normally-open seat switches on the bowl cradle, one by
 each locating foot, using protected, recessed actuators. All three close only
@@ -302,43 +369,49 @@ the coupling during powered operation.
 
 ## Supported planetary drive
 
-Build the hidden carrier as two 3 mm aluminium plates, 90 mm diameter, centred
-on the orbit axis, at z = 354 and 390. Join them with three standoffs no more
-than 6 mm OD, using M3 fasteners at orbit-local (0,+24), (-24,0) and (0,-24).
-Their outer radius is at most 27 mm, leaving 3 mm inside the fixed bearing
-cover's 30 mm inner radius; none intersects the eccentric bearing/spring bore. The lower plate's underside is z = 352.5, 1 mm above
-the collar's highest possible upper face (351.5). Bore a **28 mm clearance
-hole** through that plate, centred on the spindle axis (-70,0), to clear the
-spring shroud and the guide wires' complete rotating sweep. The 32 mm collar
-stays below the plate. This hole is tangent to the central 12 mm shaft bore:
-there is **no metal web** between the bores. Use a C-shaped flanged central
-clamp with M3 attachment ears at orbit-local (0,+10) and (0,-10), bolted to the
-plate, and carry load through the upper plate and three standoffs. Machine the
-same 28 mm eccentric relief through this lower clamp. The upper plate and
-its central clamp also need a 28 mm eccentric opening/relief around the
-spindle-bearing block, whose outside diameter must not exceed 26 mm. No clamp
-material or fastener may enter either clearance cylinder. Do not rely on the tangent edge
-for strength. The central clamp holds the **99 mm orbit shaft**, cut/located
-from **z = 353 to 452**. Its lower end is 1.5 mm above the collar's maximum
-height. The 27.4 mm maximum upper-seat/braze envelope leaves only
-20-27.4/2-6 = 0.3 mm radial clearance to that shaft; the 1 mm guide wires at
-13 mm radius leave 0.5 mm. Measure the complete hand-turned sweep and reject
-any build with less than 0.3 mm clearance or contact. Its fixed 6801 bearing
-centres are z = 415 and 435 in a 26 mm OD bearing
-housing hanging from the head bridge. Drill a 4 mm axial wiring hole through
-the orbit shaft, from both ends with the shaft held in a V block; break out
-radially below the fixed bearing housing at z = 405. Deburr and sleeve the cable
-exit. The slip ring is electrical only and
-must carry no mechanical load. Mount it coaxially above the orbit shaft,
-approximately z = 455–472, leaving 3 mm above the shaft end; its stationary
-half is restrained by the fixed head.
+Cut the two 90 mm carrier discs using [carrier-plates.svg](fabrication/carrier-plates.svg).
+The lower plate is 3 mm thick, centred at z = 354, with a 38 mm eccentric
+opening centred on the spindle axis (-70,0). The upper plate is 6 mm thick,
+centred at z = 390, with a 12.1 mm central shaft bore and 26 mm eccentric
+bearing-block bore. Three standoffs no more than 6 mm OD connect the plates at
+orbit-local (0,+24), (-24,0), (0,-24). They leave ample clearance inside the
+physical cover's 40 mm inner radius. Keep the spindle-bearing block at most
+26 mm OD, between z = 374 and 392; retain it in the upper plate with a close
+fit and a radial M3 set screw.
+
+The **70 mm orbit shaft** occupies z = 382–452. It is supported by fixed
+6801 bearings centred at z = 415 and 435 in a 26 mm OD housing attached to the
+head bridge. Install `orbit_bearing_housing.stl` at z = 410–438, using the
+counterbore described above. Ream/fit both housings' 20.96 mm nominal pockets
+to the actual 21 mm bearing outer races; they must not spin or crack the print.
+The opposing inner-race collars/spacers retain each bearing inward against its
+housing shoulder. Set axial play below 0.2 mm with free rotation, without
+loading the seals. At the lower fixed bearing use a 24 mm OD clamp at
+z = 405–410 and an at-most-18 mm OD spacer at 410–412.5; a large collar must
+not enter the 21 mm bearing pocket. A 2 mm x 25 mm cross-pin along y at z = 390 locks the upper plate
+to the shaft; drill through an aligned jig, with the pin centred in the 6 mm
+plate thickness. The pin's ends are captive in the plate. The lower plate has
+no central shaft or clamp: load travels through the upper plate and standoffs.
+This keeps ordinary 32 mm spring-seat parts clear of the central axle.
+
+Drill a 4 mm axial wire passage through the orbit shaft, breaking out below the
+fixed housing at z = 405; deburr and sleeve the exit. The slip ring carries only
+the rotating motor's two leads. Mount its 12 x 17 mm capsule at z = 455–472,
+with its stationary half fixed to the head. It bears no mechanical load.
 
 The beater spindle is 20 mm in +x from the carrier axis at reset. Its two
 bearings and spring seat rotate with the carrier. Put the spin motor 26 mm in
 -x from the carrier axis, shaft downward. Its output face is approximately
-z = 403 and pulley centre z = 396 (4 mm pulley width). Use the 24 mm smooth pulleys and a 2 mm round
+z = 403 and pulley centre z = 396 (4 mm pulley width). Print the supplied
+`spin_motor_pulley.stl` (3.1 mm bore) and `spin_spindle_pulley.stl` (12.1 mm
+bore); both have 24 mm belt pitch diameter. Drill/tap the motor wheel radially
+along y for an M2 x 8 set screw, recessed below the groove. Fix the spindle
+wheel to a 5 mm-high split 12 mm shaft collar above it with two M2 screws
+through its face holes at x = +/-8.5 mm; drill/tap the collar face to match.
+The wheel is z = 394–398 and collar z = 398–403; the spindle ends at 403.
+Use a 2 mm round
 polyurethane belt between the motor and supported spindle. Both pulley pitch
-diameters must match. Start with roughly 174 mm installed belt centreline
+diameters must match. Start with roughly 167.4 mm installed belt centreline
 length at 46 mm shaft spacing; weld/cut the belt to the supplier's specified
 stretch and provide 3 mm of motor-slot adjustment. Use the **3041 without
 encoder**, not the longer 5217. The manufacturer's
@@ -363,8 +436,15 @@ a commissioning limit for this lightweight prototype, not an injury threshold.
 The fixed orbit motor drives the supported orbit shaft using the 12T/36T GT2
 pair and 180 mm belt. Use approximately 65.6 mm centre distance with slotted
 adjustment. Its output face is z = 437 and pulley centre about z = 445.5.
-The fixed motor lies rearward of the orbit axis, clear of the carrier's sweep.
-Fit axial retaining collars and cover both belts. Adjust electronic current
+Use ordinary 6 mm-wide GT2 pulleys, with a 3 mm motor bore and a 12 mm shaft
+bore (ream the larger pulley if needed). The belt plane is z = 442.5–448.5,
+above the bridge; a 5 mm spacer separates the upper bearing inner race
+(top 437.5) from the pulley underside at 442.5. Clamp the pulley to the shaft.
+Put the fixed motor axis at (-24.4,0), rearward of the orbit axis. Cut a
+16 x 18 mm motor-body window in the bridge there and use a slotted angle
+bracket to clamp its body with the specified output-face height. The 9 mm
+output shaft ends at 446; put the pulley set screw at 445.5 and verify grip.
+The motor remains clear of the carrier's sweep. Cover both belts. Adjust electronic current
 limiting and reject any belt or gear load above the motor's continuous rating.
 
 For the simulation's stated directions, viewed from above:
@@ -517,7 +597,8 @@ validated until every relevant item passes on the physical unit.
    including the spring guide rods; reject scraping, snagging, binding or a
    contact that props up the beater. Check that 0.8 N m lift-brake adjustment
    holds the assembled bowl when released at every height. Record actual
-   knob force and backlash; do not assume the estimate proves it holds.
+   knob force and backlash; require at most 20 N knob force and a stable grip
+   at at most 40 N per finger. Do not assume the estimate proves it holds.
 4. Verify each switch independently with a meter and motors disconnected.
    START must fail with each individual guard switch open, bowl below UP,
    STOP actuated or drive cover removed. Cut and restore supply while START
@@ -548,7 +629,7 @@ Release criteria include reliable retention, no loose parts, free running
 clearances, lift holding, observable seating, correct interlock behavior,
 repeatable empty running and a demonstrated stop. Failure of any is a reason
 to reject or revise the hardware before a physical trial. In particular, this
-document currently lacks a built specimen, fabrication meshes, measured motor
+document currently lacks a built specimen, measured motor
 margin, spring curve, contact wear record and physical stop/interlock results.
 It provides a construction specification and commissioning procedure; those
 missing measurements remain engineering work, not evidence already obtained.

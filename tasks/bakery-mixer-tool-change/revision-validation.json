@@ -1,5 +1,5 @@
 {
-  "scope": "Local revision validation and rescoring of actual recorded native states; no fresh native simulation or model inference",
+  "scope": "Revision validation: fresh native Isaac execution and independent metric/media audit, real historical native-trace/video rescoring, scorer regression tests and static manufacturing checks. Physical fabrication/commissioning remain unverified.",
   "review": "TK-2CWH6Y",
   "baseline_submission_revision": "8e4191f1f54f9819795951e293912484d4c3e425",
   "historical_native_revision": "aeebff6e0afde7c7d7ee5805f841417c2b9bdcfc",
@@ -134,15 +134,12 @@
   },
   "rescoring_results": "revision-rescores.json",
   "original_receipts_and_traces_modified": false,
-  "fresh_native_run": false,
+  "fresh_native_run": true,
   "revised_dream_score_verified": true,
   "physical_build_fabricated": false,
   "physical_build_calibrated": false,
-  "official_revision_submitted": false,
-  "blocking_condition": "Official PR revision requires new explicit user authorization under AGENTS.md. SSH password authentication also closes before remote commands; this prevents optional fresh reruns, not the documented rescoring of unchanged physical trials.",
   "remaining": [
-    "Obtain explicit authorization before pushing the prepared revision to the existing official PR, as required by AGENTS.md.",
-    "Physical fabrication and commissioning remain unverified; the submission supplies construction instructions and does not claim a validated physical build."
+    "Build and commission the physical apparatus before real robot trials; no fabricated specimen, measured spring curve, drive margin or physical stopping result is claimed."
   ],
   "historical_receipt_rejected_as_current": {
     "passed": true,
@@ -150,32 +147,38 @@
   },
   "physical_build_specification": {
     "file": "PHYSICAL_BUILD.md",
-    "parts_allowance_usd": 580,
-    "planning_budget_usd": [
-      750,
-      900
-    ],
-    "scope": "Unbuilt construction specification; primary motor/driver/timer references and manually checked critical dimensions. No whole-assembly CAD, hardware performance or physical safety validation.",
-    "critical_clearance_review": [
-      "Shortened orbit shaft clears the collar vertical sweep.",
-      "Reduced guide-wire and upper-seat envelopes clear the orbit shaft; lower plate/clamps have eccentric relief.",
-      "Standoff positions clear the fixed annulus.",
-      "Lower spindle-bearing block is above the fixed cover.",
-      "Encoder-free motor dimension gives documented bridge clearance."
-    ],
+    "fabrication_directory": "fabrication/",
+    "parts_estimate_usd": 353.01,
+    "planning_allowance_usd": 400,
+    "budget_scope": "Parts and workshop materials before tax, shipping, labour and already-owned tools; vendor prices and explicit allowances are separated.",
+    "scope": "Unbuilt full-size construction specification with 13 exported manufacturing meshes, two dimensioned SVG drawings and stock cut lists. Static CAD checks do not establish hardware performance or safety.",
+    "mesh_validation": "fabrication/mesh-validation.json",
+    "geometry_changes": "Six beater ballast holes below the grip; bowl wall/floor joined; physical printed nose cover, supports and drives differ as stated in the build/fidelity note. Native scene, controller and mechanics unchanged.",
+    "force_estimates_N": {
+      "maximum_beater_insertion": 10.7,
+      "lift_knob_with_maximum_brake": 16.6
+    },
+    "force_estimate_scope": "Calculated from target spring, masses, lift pitch radius and brake; friction/grip require physical measurement. Commissioning rejects knob force over 20 N and grasps over 40 N normal force per finger.",
     "firmware_required": false
   },
   "document_sha256": {
-    "README.md": "d13a218fd7bedadcbe519dacbc84a1189da5174cfacb3f5e7a8c0fc3d3e5e075",
-    "PHYSICAL_BUILD.md": "666cc70a195506e275d399684c14bac132beae32e36d567a5dcd8e5217e8182a",
+    "README.md": "0785dccc2f9e9611fcb43333a84348b36746e7abef4701129bb725eae1cc5161",
+    "PHYSICAL_BUILD.md": "d7bdd9c4e0ded5d573988d6f8c5f92f7197fac844cbe7cc2ef52fef03937bb89",
     "PHYSICAL_SCORING.md": "7a1615f0f6f0d719955a2c25fac39038fdaa9a4c0961479ce10db78678c29c34",
-    "task.json": "c39b0f455dc6c71de8b4a34181e36b4214bb486b7526bbbb21b49510eb022fb7",
-    "sources.json": "58300ee8cbdef0518689a707a558c2476996510caa20f716065f18433413f4df",
+    "task.json": "f1e201bb9afb15415af62052516dd088ec2b39b0bad9a3715ca71d86a51f02b7",
+    "sources.json": "be8eeaf4236c1df992fee0dfabbf6ddd6260fd5221d9397f1e06acc266618437",
     "dream-video-rescore.json": "347aeaa22e3919f6ceb81486cacb0fc3f933c425c6b2757a009921694b50def6",
-    "dream-final-frame.png": "8b56889b3f3148dd18839a0c3a3208c2fceb0341c802632d4548d7a1311af579"
+    "dream-final-frame.png": "8b56889b3f3148dd18839a0c3a3208c2fceb0341c802632d4548d7a1311af579",
+    "export_fabrication.py": "6ebb97a34f6306aa978c172f4d2d25182468459ca83a844c582186c72f62bf04",
+    "fabrication/README.md": "c7054d23470c31c25a694b28f83acb7c9bbd804689dfa6b2d2dc0531336f353b",
+    "fabrication/mesh-validation.json": "c7c9495c904bec374bf164875731145ae10ba9c10662173eb11445761e15d7f5",
+    "fabrication/carrier-plates.svg": "14e5c2e4d6c9093ed7310a1cd6ab97aa04586571d26368cd75e8ccdcece7dea3",
+    "fabrication/coupling-dimensions.svg": "7f9204c27a0523338095e18b90ce0c51362149696b40939470250a25042244b9",
+    "fabrication/costed-bom.json": "06fa597ebf563158df434f65729816f3a48a74d3bbb3c0e1e1ddad0a9b87d5d0",
+    "fresh-native-validation.json": "9c4e8d688dde38aedc00b49945124cebd98b3c095714eb15a3ec3e9e09adf3fc",
+    "fresh-demo-final-frame.png": "6e35df8cd221b11af9276917f62dcbca5905406792c1bd64876f9466d4ea46a8"
   },
   "revised_dream_scoring_method": "Manual application of current-stage observable rubric to the exact original native video endpoint, documented in dream-video-rescore.json; no new inference or full-trajectory numerical rescore.",
-  "fresh_native_run_required_for_this_rescore": false,
-  "fresh_native_run_requirement_basis": "No physical/controller/runtime or motor/interlock behavior changed. Actual recorded native states validate the revised demo score, and visible final non-assembly proves the revised model endpoint score. Reviewer requested observable real-world scoring and a construction specification; did not require new model inference after a scoring-only revision.",
-  "dream_video_rescore": "dream-video-rescore.json"
+  "dream_video_rescore": "dream-video-rescore.json",
+  "fresh_native_run_report": "fresh-native-validation.json"
 }

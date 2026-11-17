@@ -1,6 +1,6 @@
 # Refit a bakery mixer beater and verify a guarded start and stop
 
-Category: **Societal relatability**. Preparing a stand mixer for cakes, cookies or bread is recognizable from everyday baking at home and in bakeries. The robot fits the clean beater and leaves the guarded appliance ready after an empty-bowl start-and-stop check. This relevance rests on recognition of the activity, without a workforce-frequency claim.
+Category: **Societal relatability**. Fitting the clean flat beater after washing is a familiar part of preparing cake or cookie batter. Under the fixed mixer head, with the bowl already installed, the robot must align the hub with a partly obscured pin, maintain spring compression while turning into the retaining pocket, and release the tool without support. It then seats the guard, raises the bowl and verifies an empty-bowl start and stop.
 
 ## Setup, hardware and scoring
 
@@ -8,7 +8,9 @@ Category: **Societal relatability**. Preparing a stand mixer for cakes, cookies 
 
 The physical reference is specifically the guarded **Hobart N50-619 / N50CE**. Its [manufacturer listing](https://www.hobart.com.sg/products/food-preparation/mixers/product/n50) distinguishes it from the unguarded N50-604. The [Hobart-authored manual](https://resources.itwfeg.com/sites/resourcecenter/ProductDocumentation/F23138.PDF), printed pages 11 and 14, documents the pin/L-slot mounting, removable guard, bowl lift and agitator spring; page 18 identifies the spring as V-111227. Thus the spring serves a real retaining function. The simulation's passive collar, preload and stiffness approximate that function; they are not measurements of an OEM coupling.
 
-A new N50CE is expensive. [PHYSICAL_BUILD.md](PHYSICAL_BUILD.md) specifies the alternative low-voltage, empty-bowl demonstrator, its parts, construction and commissioning checks. That build has not been fabricated or calibrated. It must pass its commissioning checks before physical trials; the simulation evidence does not establish hardware build success.
+[PHYSICAL_BUILD.md](PHYSICAL_BUILD.md) specifies a full-size, low-voltage empty-bowl build with a **$353.01 parts estimate / $400 planning allowance**, before tax/shipping, labour and already-owned workshop tools. [The fabrication package](fabrication/README.md) contains the actual printable meshes, dimensioned carrier/coupling drawings, stock cut lists and [costed BOM](fabrication/costed-bom.json). Static mesh checks cover the pin/slot fit and the 75 mm rack lift. The spring target remains 5 N preload and 0.4 N/mm; the estimated maximum fitting load is 10.7 N and lift-knob load 16.6 N. These estimates require physical measurement.
+
+The build is unbuilt and uncalibrated. Its printed materials, captive ballast, hidden drive supports and lower nose cover differ from the native model; the build document and fidelity note state those differences. Commissioning requires measured spring force, clearances, grip/knob force, interlocks and ten fit/run/stop cycles before a real robot trial.
 
 [PHYSICAL_SCORING.md](PHYSICAL_SCORING.md) gives the ruler, external-mark and timed-video procedure:
 
@@ -52,6 +54,20 @@ inspect-robots run --embodiment bakery_mixer --policy dream \
 Export a completed evaluation with `inspect-robots video /path/to/final-eval.json --out /tmp/mixer-videos --fps 20`.
 
 ## Evidence and limits
+
+A fresh native run of the **revised scorer** on 2026-11-17 also reached **1.0
+in 3,540 controls / 177 seconds**, with no unsafe event. The independent verifier
+checked every recorded metric, 275 qualifying powered controls, the final
+40-control hold and all three 1280 x 720 H.264 videos. Final two-second angular
+travel was below 0.1 degree for both beater and carrier. The run took 48.4 minutes
+wall time on an RTX 3090. [fresh-native-validation.json](fresh-native-validation.json)
+records the actual receipt/trace/video hashes and source mapping;
+[fresh-demo-final-frame.png](fresh-demo-final-frame.png) is its exact endpoint.
+The frozen run snapshot came from `c04199a2`; all 23 evaluated Python/runtime
+and native configuration files still match this package. Only documentation
+and manufacturing files were added or updated afterward. The uploaded media
+remains the original recordings described below, independently rescored under
+the same revised rubric.
 
 The original native scripted demonstration reached **1.0** in 3,540 controls / 177 simulated seconds, within the 3,600-control limit, in 46.8 minutes wall time on an RTX 3090. The original Dream-1 beta trial reached **0.0** in 3,600 controls / 180 seconds, in 31.6 minutes wall time, with no evaluation error. Seed 0, the original physical sources and standard calibrated YAM cameras were used for both. `evaluation.json`, `evaluated-source-hashes.json` and `package-verification.json` describe those historical evaluations and their original rubric; they do not assert that the revised scorer ran then.
 
