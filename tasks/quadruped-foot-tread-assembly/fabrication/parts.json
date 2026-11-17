@@ -1,0 +1,187 @@
+{
+  "units": "mm",
+  "source_simulation_sha256": "8a1092424c6ffaa2b0ff5876e2f3e589f034e9f099c143220527e5bc81e83772",
+  "manufacturing_only": true,
+  "material_response_measured": false,
+  "parts": [
+    {
+      "file": "tread-cover.stl",
+      "material": "Flexible polyurethane / TPU, nominal Shore A 95",
+      "quantity": 1,
+      "bounds_mm": [
+        [
+          -32.0,
+          -24.0,
+          -26.0
+        ],
+        [
+          32.0,
+          24.0,
+          2.5
+        ]
+      ],
+      "volume_mm3": 25531.59898376465,
+      "watertight": true,
+      "connected_solids": 1,
+      "notes": "One connected cover. Full-body deformation replaces the simulation hinge surrogate; reproduce the wrap faces and qualify return before use."
+    },
+    {
+      "file": "left-bar.stl",
+      "material": "Rigid PA12 or machined polymer",
+      "quantity": 1,
+      "bounds_mm": [
+        [
+          -8.0,
+          -24.0,
+          -8.0
+        ],
+        [
+          2.0,
+          24.0,
+          15.0
+        ]
+      ],
+      "volume_mm3": 4595.55755226723,
+      "watertight": true,
+      "connected_solids": 1,
+      "notes": ""
+    },
+    {
+      "file": "left-clip-1.stl",
+      "material": "PA12 with metal pin / extension spring",
+      "quantity": 1,
+      "bounds_mm": [
+        [
+          -13.0,
+          -22.5,
+          -6.0
+        ],
+        [
+          1.0,
+          -15.5,
+          6.0
+        ]
+      ],
+      "volume_mm3": 428.1597941975219,
+      "watertight": true,
+      "connected_solids": 1,
+      "notes": "End coordinates remain in bar-local frame. Assemble in matching bar; do not glue the sliding tongue."
+    },
+    {
+      "file": "left-clip-2.stl",
+      "material": "PA12 with metal pin / extension spring",
+      "quantity": 1,
+      "bounds_mm": [
+        [
+          -13.0,
+          15.5,
+          -6.0
+        ],
+        [
+          1.0,
+          22.5,
+          6.0
+        ]
+      ],
+      "volume_mm3": 428.15979419714876,
+      "watertight": true,
+      "connected_solids": 1,
+      "notes": "End coordinates remain in bar-local frame. Assemble in matching bar; do not glue the sliding tongue."
+    },
+    {
+      "file": "right-bar.stl",
+      "material": "Rigid PA12 or machined polymer",
+      "quantity": 1,
+      "bounds_mm": [
+        [
+          -2.0,
+          -24.0,
+          -8.0
+        ],
+        [
+          8.0,
+          24.0,
+          15.0
+        ]
+      ],
+      "volume_mm3": 4595.557552267231,
+      "watertight": true,
+      "connected_solids": 1,
+      "notes": ""
+    },
+    {
+      "file": "right-clip-1.stl",
+      "material": "PA12 with metal pin / extension spring",
+      "quantity": 1,
+      "bounds_mm": [
+        [
+          -1.0,
+          -22.5,
+          -6.0
+        ],
+        [
+          13.0,
+          -15.5,
+          6.0
+        ]
+      ],
+      "volume_mm3": 428.15979419714864,
+      "watertight": true,
+      "connected_solids": 1,
+      "notes": "End coordinates remain in bar-local frame. Assemble in matching bar; do not glue the sliding tongue."
+    },
+    {
+      "file": "right-clip-2.stl",
+      "material": "PA12 with metal pin / extension spring",
+      "quantity": 1,
+      "bounds_mm": [
+        [
+          -1.0,
+          15.5,
+          -6.0
+        ],
+        [
+          13.0,
+          22.5,
+          6.0
+        ]
+      ],
+      "volume_mm3": 428.1597941975219,
+      "watertight": true,
+      "connected_solids": 1,
+      "notes": "End coordinates remain in bar-local frame. Assemble in matching bar; do not glue the sliding tongue."
+    },
+    {
+      "file": "foot-and-stand.stl",
+      "material": "Rigid printed fixture with secured base",
+      "quantity": 1,
+      "bounds_mm": [
+        [
+          -65.0,
+          -50.000003814697266,
+          -144.0
+        ],
+        [
+          65.0,
+          50.000003814697266,
+          -2.5
+        ]
+      ],
+      "volume_mm3": 282797.0018620491,
+      "watertight": true,
+      "connected_solids": 1,
+      "notes": ""
+    }
+  ],
+  "notes": [
+    "Cover: 64 x 48 x 5 mm sole; four hooked corners, 54 x 38 mm foot envelope.",
+    "Two bars: separate spring sliders; 3.0 mm travel, 1.0 mm captive guide pins.",
+    "Per slider: 1 extension spring, nominal 0.50 N/mm; no initial tension target.",
+    "Fit sliding tongues to 0.20 mm clearance per side. Deburr 1.1 mm pin holes.",
+    "Reference spring envelope: OD <= 2.0 mm; install between end-14 and end-19 pins.",
+    "The spring hooks must fit the 5 mm neutral anchor span and 8 mm extended span.",
+    "Spring force is a design target; select/test the assembled spring, not wire colour."
+  ],
+  "simulation_geometry_changed": false,
+  "manufacturing_connections_differ_from_collision_model": true
+}

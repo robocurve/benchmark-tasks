@@ -1,0 +1,18 @@
+{
+  "title": "Fit a robot foot tread cover and its two retaining clamp bars",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "robot assembly",
+    "compliant installation",
+    "mechanical retention"
+  ],
+  "instruction": "Fit the replacement tread cover and both retaining clamp bars onto the supported robot foot. Leave all parts secured and release them. Keep the arms clear of each other and the table.",
+  "context": "A replaceable robot-foot tread must wrap its ledges before two side bars prevent the wrap corners from opening again. The bars retain the previously installed cover, rather than being unrelated placements. This custom service subassembly ends at mechanical retention; it does not reproduce Spot screws or qualify walking loads.",
+  "setup": "Original calibrated dual-YAM station and three original 320x176 RGB cameras. A fixed inverted aluminum foot core (54x38x12mm envelope) is on a service stand. A loose 64x48x5mm elastomer-like tread with four passive hinged wrap corners rests at (0.29,-0.18,0.825)m. Two 18g side bars with two spring clips each rest separately at (0.38,+/-0.095,0.91)m. Core datum (0.24,0,0.8915)m, rotated 90deg about world Z. Fixed cradle posts and all dimensions, masses, springs and reset poses are specified in PHYSICAL_SETUP.md and assembly/geometry.py. No powered quadruped or whole-body handling. Fabrication meshes, dimensioned drawings, materials and assembly instructions are in fabrication/.",
+  "scoring": "Ending state:0 unless the supported cover encloses the foot with all four hooks beneath their ledges;0.25 for that cover;0.5 with one retained bar;0.75 with both on opposite sides;1.0 after installation, support and robot release persist for3 continuous seconds. Each hook/retaining edge needs at least1mm overlap with its matching ear; physical guide fit is checked. No nominal pose, drift, spring-coordinate or arm-strategy threshold. Equivalent half-turns and exchanged bars allowed. Robot-robot or robot-table contact makes the episode0. Complete surface geometry and practical checks:SCORING.md.",
+  "run_limit": "2,400 actions /120 seconds at20Hz.",
+  "reset_notes": "Use one fresh process and the fixed initial state for each trial. Restore every loose component to its specified support with all passive joints at zero. Replace damaged or permanently deformed physical specimens; simulation reset does not establish material reusability.",
+  "fidelity": "Custom quick-clamp parts, not OEM CAD. Rigid sole plus passive hinge corners and spring end clips approximate elasticity; no continuum rubber, calibrated forces, screws or walking-load test. Self-contact within each continuous part omitted. Native robot/part contacts, original YAM/cameras/20Hz;480Hz PhysX. No object pose edits or proximity latches.",
+  "scores": "Dream-1: 0.0 after 2,400 actions / 120s. Known-layout scripted demo: 1.0 in 1850 actions / 92.5s. Both use the same fixed setup and final scorer; raw replay verified.",
+  "media": "M-QZV85P"
+}
