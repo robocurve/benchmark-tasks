@@ -5,8 +5,7 @@
 Runs under Blender's bundled python (pxr); textures are converted with ffmpeg. For each prop in PROPS: flatten
 sm_<pkg>_01.usd with every physics variant Disabled, drop physics schemas/attributes, joints, physics materials and
 MDL shaders (the UsdPreviewSurface PBR networks stay), strip the absolute source path Flatten writes, copy each
-texture as a 512 px JPEG next to it and write assets/qc_met10/props/<pkg>/<pkg>.usdc + LICENSE.txt. Method after
-the movie-push wet-scrape1 `make_assets.simready`. Then writes assets/qc_met10/bench_props.usda, which places every
+texture as a 512 px JPEG next to it and write assets/qc_met10/props/<pkg>/<pkg>.usdc + LICENSE.txt. Then writes assets/qc_met10/bench_props.usda, which places every
 prop (bottom centre on the bench top) in the bench_props part frame (station frame, z = 0 on the bench top).
 """
 

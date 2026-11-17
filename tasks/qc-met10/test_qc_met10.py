@@ -63,7 +63,7 @@ def test_task_json_limits_and_constants():
                  "scores": 300, "run_limit": 200}.items():
         assert len(tj[k]) <= n
     assert len(", ".join(tj["keywords"])) <= 200
-    assert tj["category"] == "Impact on jobs"
+    assert tj["category"] == "Other"
     sc = tj["scoring"]
     # the scoring text quotes the same named thresholds score() uses (no stale constants)
     assert "17 mm ruler mark" in sc and task.DEPTH_MIN == pytest.approx(0.017)
@@ -76,6 +76,7 @@ def test_task_json_limits_and_constants():
     assert "5 cm" in sc and task.HAND_CLEAR_M == pytest.approx(0.05)
     assert "held 3 s" in sc and task.SUCCESS_HOLD_S == 3.0
     assert "Possible scores " + ", ".join(f"{v:g}" for v in _possible_scores()) + "." in sc
+    assert "jaw gap at most 4.7 mm" in sc and task.JAW_ON_TAB_MAX == pytest.approx(0.0047)
     for name in ("tension", "gauge reads", "RIGHT", "preload"):
         assert name not in sc
     credits = (task.SEAT_CREDIT, task.LEVER_CREDIT, task.GAP_CREDIT) * 2 + (task.STRAIGHT_CREDIT, task.GAUGE_CREDIT,
@@ -401,3 +402,17 @@ def test_bench_props_stay_off_the_robot_path():
             c, s = abs(math.cos(math.radians(yaw))), abs(math.sin(math.radians(yaw)))
             hx, hy = c * half[0] + s * half[1], s * half[0] + c * half[1]
             assert x - hx >= 0.48 and x + hx <= 0.90 and abs(y) + hy <= 0.64, (pkg, x, y)
+
+
+def test_seated_tab_with_the_jaw_held_open_is_not_clamped():
+    """Negative control (jaw closed on the tab): both tabs seated, both levers forward, but grip a's jaw is held open: no lever row for it."""
+    o = _objs(); o["upper_jaw_l"] = _jaw("l", task.JAW_OPEN)
+    s = task.score(o)
+    assert s == pytest.approx(0.4) and not task.success(o)
+    assert task.components(o)["passed"] == ["seat_a", "gap_a", "seat_b", "lever_b", "gap_b"]
+
+
+def test_a_tab_slid_out_of_its_grip_is_not_seated():
+    """Negative control (slip): the specimen displaced 12 mm toward -y loses the +y seat rows (depth under 17 mm) and every both-clamped row."""
+    o = _objs(pos=(SEATED[0], SEATED[1] - 0.012, SEATED[2]))
+    assert task.score(o) < 0.6 and not task.success(o)

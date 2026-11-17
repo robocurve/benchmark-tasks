@@ -50,7 +50,7 @@ save("anod_black_albedo", rgb((0.045, 0.047, 0.05), 0.006, b))
 save("anod_black_rough", 0.38 + 0.04 * b)
 # blue anodised (specimen tray)
 save("anod_blue_albedo", rgb((0.17, 0.30, 0.48), 0.012, b))
-# ESD bench mat: green two-layer dissipative rubber (movie-push: the black slab read as a plain block), pebbled
+# ESD bench mat: green two-layer dissipative rubber (a plain black slab read as a block), pebbled
 m = blur_noise(1, 1, 2.2)
 save("esd_albedo", rgb((0.22, 0.33, 0.29), 0.02, m))
 save("esd_rough", 0.82 + 0.05 * m)

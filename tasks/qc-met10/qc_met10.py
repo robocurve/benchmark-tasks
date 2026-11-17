@@ -85,14 +85,14 @@ JAW_K = 600.0  # N/m: spring-closed jaw: 1.9 N initial bite on a 3.2 mm tab, 3.7
 JAW_MASS = 0.040  # steel upper jaw + stem
 # -- motorised crosshead carrying grip B (horizontal motorized force test stand, user's guide in README provenance) --
 XH_BACK = 0.035  # start: crosshead backed off 35 mm along -y, as a previous test leaves it (grip B face at -92.5 mm)
-XH_MAX = XH_BACK + 0.015  # modelled end of travel for this scene (the stand's own travel is 457 mm)
+XH_MAX = XH_BACK + 0.015  # modelled end of travel for this scene (historical: 457 mm was the layout-source stand's travel; the build list's stand is a bench motorised screw stage)
 JOG_SPEED = 0.500 / 60.0  # m/s: SPEED set to 500 mm/min (guide: 0.5-1,100 mm/min; default 250)
 XH_K, XH_D, XH_MASS = 20000.0, 1000.0, 0.8  # lead-screw drive: stiff position servo on the crosshead target
 PANEL_XY = (0.300, 0.275)  # control panel on its bracket at the +y end of the frame (guide: left or right end)
 PANEL_TOP = 0.085  # key face above the bench (unverified)
 PANEL_SIZE = (0.110, 0.060, 0.016)
-KEY_SIZE = (0.016, 0.016, 0.004)
-KEY_DX = 0.036  # key pitch along x (unverified)
+KEY_SIZE = (0.024, 0.024, 0.004)  # 24 mm square simulation surrogate for the round Maple Systems PBS111 push-button head (head diameter not published in the datasheet; bezel 29 mm is the datasheet value)
+KEY_DX = 0.045  # key pitch along x: two PBS111 buttons with their 30 mm clip blocks side by side (30 mm datasheet block width) and 15 mm between blocks (estimate)
 KEY_ROW = 0.010  # key row on the panel, away from the gauge (unverified)
 KEY_TRAVEL = 0.002  # key stroke (unverified)
 KEY_TRIP = 0.0012  # pressed past this, the key runs the crosshead (momentary KEYS setting)
@@ -110,6 +110,7 @@ DEPTH_MIN = 0.017  # tab seated: past the 17 mm ruler mark at its jaw face (25 m
 SEAT_Z_TOL = 0.003  # ... inside the slot between the jaws (not on top of the 8 mm upper jaw) ...
 SEAT_X_TOL = 0.0040  # ... and its edge overhangs the 19.1 mm jaw by at most 4 mm
 STOP_GAP = 0.002  # visible gap of at least 2 mm between a tab end and its slot end
+JAW_ON_TAB_MAX = SPEC_T + 0.0015  # jaw closed on the tab: gap at most 1.5 mm over the 3.2 mm tab (feeler check); a lever forward with the jaw held open or off the tab does not count
 LEVER_FWD_MAX = 0.002  # lever fully forward: within 2 mm of its forward stop (22 mm travel)
 SKEW_MAX_DEG = 2.0  # specimen within 2 deg of the pull axis in yaw and pitch (protractor)
 GAUGE_L = 0.115  # ASTM D638 Type I distance between grips D = 115 +- 5 mm (Table 1), ruler between the jaw faces
@@ -467,7 +468,7 @@ def _hands_clear(tcps, objects: dict) -> bool:
 
 
 def jaw_gap(objects: dict, s: str) -> float:
-    """Upper-jaw gap of grip s ("l" = +y, "r" = -y), metres (logged, not scored); a missing part reads as open."""
+    """Upper-jaw gap of grip s ("l" = +y, "r" = -y), metres (scored through jaw_on_tab(): the clamped condition needs gap <= JAW_ON_TAB_MAX; also logged); a missing part reads as open."""
     jaw = objects.get(f"upper_jaw_{s}")
     return JAW_OPEN if jaw is None else float(jaw.joints.get(f"gap_{s}", JAW_OPEN))
 
@@ -477,9 +478,14 @@ def lever_forward(objects: dict, s: str) -> bool:
     return float(objects["test_stand"].joints.get(f"lever_{s}", LEVER_OPEN)) <= LEVER_FWD_MAX
 
 
+def jaw_on_tab(objects: dict, s: str) -> bool:
+    """The upper jaw of grip s is closed on the tab (gap <= JAW_ON_TAB_MAX); a missing jaw reads as open."""
+    return jaw_gap(objects, s) <= JAW_ON_TAB_MAX
+
+
 def components(objects: dict) -> dict:
     """One additive table (README "Scoring"): rows 1-3 (+y grip) and 4-6 (-y grip) count independently of each other;
-    rows 7-9 count once both tabs are clamped (seated with the lever forward)."""
+    rows 7-9 count once both tabs are clamped (seated, lever forward AND the jaw closed on the tab: gap <= JAW_ON_TAB_MAX)."""
     dog = objects["dogbone"]
     end_l, end_r = tab_ends(dog)
     face_l, face_r = grip_faces(objects)
@@ -487,7 +493,8 @@ def components(objects: dict) -> dict:
     gauge = face_l - face_r
     clear = _hands_clear(_trial["tcps"], objects)
     seat_l, seat_r = _seated(end_l, +1, face_l), _seated(end_r, -1, face_r)
-    clamp_l, clamp_r = seat_l and lever_forward(objects, "l"), seat_r and lever_forward(objects, "r")
+    clamp_l = seat_l and lever_forward(objects, "l") and jaw_on_tab(objects, "l")
+    clamp_r = seat_r and lever_forward(objects, "r") and jaw_on_tab(objects, "r")
     both = clamp_l and clamp_r
     rows = (
         ("seat_a", SEAT_CREDIT, seat_l),
@@ -506,7 +513,7 @@ def components(objects: dict) -> dict:
 
 
 def score(objects: dict) -> float:
-    """End-state sum of the additive table: per grip +0.10 tab seated, +0.10 lever forward on it, +0.05 tab end >= 2 mm
+    """End-state sum of the additive table: per grip +0.10 tab seated, +0.10 lever forward on it with the jaw closed on the tab (gap <= JAW_ON_TAB_MAX), +0.05 tab end >= 2 mm
     off its slot end; once both tabs are clamped +0.15 skew <= 2 deg, +0.20 jaw faces 115 +- 5 mm, +0.15 both
     grippers clear. The 3 s hold is not scored (success() only)."""
     return components(objects)["score"]
