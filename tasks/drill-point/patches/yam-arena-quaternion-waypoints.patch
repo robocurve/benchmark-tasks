@@ -1,0 +1,124 @@
+diff --git a/tests/test_demo.py b/tests/test_demo.py
+index 8c607ce..69af468 100644
+--- a/tests/test_demo.py
++++ b/tests/test_demo.py
+@@ -6,6 +6,7 @@ from yam_arena.constants import (
+     CONTROL_HZ,
+     CUBE_POS,
+     DOWN_XYZW,
++    FINGER_CLOSED,
+     FINGER_OPEN,
+     LEFT_BASE_POS,
+     PLATE_POS,
+@@ -13,8 +14,8 @@ from yam_arena.constants import (
+     RIGHT_BASE_POS,
+     TABLE_HEIGHT,
+ )
+-from yam_arena.demo import DOWN_GRIP, HOVER, make_plans
+-from yam_arena.urdf import quat_xyzw_to_matrix
++from yam_arena.demo import DOWN_GRIP, HOVER, ArmPlan, Waypoint, grip_rotation, make_plans
++from yam_arena.urdf import axis_angle_matrix, quat_xyzw_to_matrix
+
+ TARGETS = {"cube": (CUBE_POS, LEFT_BASE_POS), "plate": (PLATE_POS, RIGHT_BASE_POS)}
+
+@@ -53,6 +54,55 @@ def test_targets_start_at_ready_and_pass_through_every_waypoint():
+     np.testing.assert_allclose(rot, quat_xyzw_to_matrix(DOWN_GRIP), atol=1e-12)
+
+
++@pytest.mark.parametrize("quaternion_scale", [1.0, -2.0])
++def test_full_orientation_waypoints_interpolate_and_mix_with_yaw_waypoints(quaternion_scale):
++    pos = (*CUBE_POS[:2], HOVER)
++    down = grip_rotation()
++    tilted = axis_angle_matrix(np.array([1.0, 0.0, 0.0]), np.pi / 2) @ down
++    quaternion = tuple(quaternion_scale * ik.matrix_to_quat_xyzw(tilted))
++    plan = ArmPlan(
++        [
++            Waypoint(1.0, pos, FINGER_OPEN, "down"),
++            Waypoint(2.0, pos, FINGER_OPEN, "tilt", yaw=np.pi, quat_xyzw=quaternion),
++            Waypoint(1.0, pos, FINGER_OPEN, "down again", yaw=0.4),
++        ],
++        LEFT_BASE_POS,
++    )
++    halfway = axis_angle_matrix(np.array([1.0, 0.0, 0.0]), np.pi / 4) @ down
++    for t, expected in (
++        (1.0, down),
++        (2.0, halfway),
++        (3.0, tilted),
++        (4.0, grip_rotation(0.4)),
++        (5.0, grip_rotation(0.4)),
++    ):
++        actual_pos, actual_rot, finger, _ = plan.target(t)
++        np.testing.assert_allclose(actual_pos, pos)
++        np.testing.assert_allclose(actual_rot, expected, atol=1e-12)
++        assert finger == FINGER_OPEN
++
++
++def test_full_orientation_waypoints_reach_the_commanded_tcp_pose():
++    pos = (0.25, -0.25, TABLE_HEIGHT + 0.12)
++    rotation = axis_angle_matrix(np.array([1.0, 0.0, 0.0]), np.radians(10.0)) @ grip_rotation()
++    quaternion = tuple(ik.matrix_to_quat_xyzw(rotation))
++    plan = ArmPlan(
++        [
++            Waypoint(3.0, pos, FINGER_OPEN, "approach"),
++            Waypoint(2.0, pos, FINGER_CLOSED, "tilt", quat_xyzw=quaternion),
++            Waypoint(1.0, pos, FINGER_CLOSED, "hold", quat_xyzw=quaternion),
++        ],
++        RIGHT_BASE_POS,
++    )
++    actions = np.array([plan.action7((k + 1) / CONTROL_HZ)[0] for k in range(round(plan.duration * CONTROL_HZ))])
++    actual_pos, actual_rot = ik.tcp_pose(actions[-1, :6], RIGHT_BASE_POS)
++    np.testing.assert_allclose(actual_pos, pos, atol=5e-4)
++    np.testing.assert_allclose(actual_rot, rotation, atol=1e-3)
++    assert plan.worst_ik_mm < 0.5 and plan.worst_ik_deg < 0.1
++    assert np.all(actions[:, :6] >= ik.LOWER) and np.all(actions[:, :6] <= ik.UPPER)
++    assert actions[-1, 6] == 0.0
++
++
+ def test_both_arms_track_their_plans_within_the_joint_limits():
+     dt = 1 / CONTROL_HZ
+     for plan in make_plans():
+diff --git a/yam_arena/demo.py b/yam_arena/demo.py
+index 520af81..e510c8d 100644
+--- a/yam_arena/demo.py
++++ b/yam_arena/demo.py
+@@ -7,7 +7,10 @@ Each arm follows Cartesian TCP waypoints; every control step the target is inter
+ and turned into joint targets with DLS IK on the URDF kinematics, then sent through the embodiment's
+ 14-D joint action.
+
+-Two choices forced by the arm's reach (see ``ik.py`` tests):
++``Waypoint.quat_xyzw`` optionally supplies a full world-frame TCP orientation, overriding the default
++downward grip and its ``yaw``.
++
++Two choices for the default top-down plans, forced by the arm's reach (see ``ik.py`` tests):
+ - gripper orientation ``DOWN_GRIP``: pointing straight down with the fingers closing along world
+   Y, rotated 180 deg about the approach axis from ``DOWN_XYZW``, which needs joint6 beyond its
+   +-120 deg limit at these targets; a parallel gripper grasps the same either way.
+@@ -48,11 +51,14 @@ PRESS_Z = TIPS_ON_TABLE + PLATE_HEIGHT - 0.01  # commanded 10 mm *into* the plat
+
+ @dataclass
+ class Waypoint:
++    """A timed world-frame TCP target; an explicit XYZW quaternion takes precedence over yaw."""
++
+     duration: float
+     pos: tuple[float, float, float]
+     finger: float  # finger joint target (m): FINGER_OPEN .. FINGER_CLOSED
+     label: str = ""
+     yaw: float = 0.0  # the downward grip turned about the vertical (rad); 0 closes the fingers along world y
++    quat_xyzw: tuple[float, float, float, float] | None = None  # full TCP orientation in the world frame
+
+
+ def grip_rotation(yaw: float = 0.0) -> np.ndarray:
+@@ -135,7 +141,12 @@ class ArmPlan:
+         """(TCP position, rotation matrix, finger, label) at time t."""
+         prev_pos, prev_rot, prev_finger = self.start_pos, self.start_rot, self.finger_start
+         for w in self.waypoints:
+-            goal, rot = np.asarray(w.pos, dtype=float), grip_rotation(w.yaw)
++            goal = np.asarray(w.pos, dtype=float)
++            rot = (
++                quat_xyzw_to_matrix(np.asarray(w.quat_xyzw, dtype=float))
++                if w.quat_xyzw is not None
++                else grip_rotation(w.yaw)
++            )
+             if t < w.duration:
+                 s = ik.smoothstep(t / w.duration)
+                 return (
