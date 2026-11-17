@@ -1,15 +1,16 @@
 """Outcome scorer for the already-unsealed rigid-fold carton surrogate.
 
-Private physics inputs only. Optional --scored launcher branch, pending a
-verified full-score run. The same class is used by offline replay and live monitor.
+Private physics inputs only. The same class is used by offline replay and live
+monitor. Revision 3 measures sustained, released, supported functional opening.
+It does not require panel angles, micro-motion or footprint reconstruction.
 """
-from collections import deque
 import numpy as np
 from scipy.spatial.transform import Rotation
 
 HZ = 240
 HOLD_SAMPLES = 3 * HZ + 1  # 721 poses span three full seconds; reject slow overfolding.
 MAX_CREASE_GAP = .001
+RUBRIC = 'sustained-opening-v3'
 
 
 class Outcome:
@@ -21,7 +22,7 @@ class Outcome:
             raise ValueError('Incomplete or duplicated body coverage')
         self.centres = {n: np.asarray(c, float) for n, c in contract['centres'].items()}
         self.body = self.index['carton_body']
-        self.history = deque(maxlen=HOLD_SAMPLES)
+        self.qualified_pose_count = 0
         self.invalid_reason = None
         self.peak_gap = 0.
         self.samples = 0
@@ -31,7 +32,7 @@ class Outcome:
     def reject(self, reason):
         self.invalid_reason = self.invalid_reason or reason
         self.value = 0.
-        self.history.clear()
+        self.qualified_pose_count = 0
         self.detail = dict(score=0., invalid_reason=self.invalid_reason, samples=self.samples)
         return self.value
 
@@ -81,25 +82,19 @@ class Outcome:
         released = robot_contact_count == 0
         supported = support[self.body, 0] > 0
         ready = bool(opened and released and supported)
-        if ready:
-            self.history.append(q.copy())
-        else:
-            self.history.clear()
-        stable = False
-        drift = angle = None
-        if len(self.history) == HOLD_SAMPLES:
-            window = np.asarray(self.history)
-            drift = float(np.linalg.norm(window[:, :, :3] - window[0, :, :3], axis=-1).max())
-            dots = np.abs(np.sum(window[:, :, 3:] * window[0, :, 3:], axis=-1))
-            angle = float(np.rad2deg(2*np.arccos(np.clip(dots, -1, 1))).max())
-            stable = drift <= .001 and angle <= 1.
+        # Stable means the usable opening persists while released and supported,
+        # not that every paper edge or body corner is motionless. Every native
+        # substep must qualify; one failed condition restarts the three seconds.
+        self.qualified_pose_count = min(self.qualified_pose_count+1, HOLD_SAMPLES) if ready else 0
+        stable = self.qualified_pose_count == HOLD_SAMPLES
         self.value = 1. if stable else .5 if opened else .25 if partial else 0.
         self.detail = dict(score=self.value, samples=self.samples, width_mm=float(width*1000),
             apex_projection_mm=float((-apex[0]-a)*1000), upper_lip_projection_mm=float((-lip[0]-a)*1000),
             upper_lip_height_mm=float(lip[2]*1000), body_tilt_deg=float(tilt), crease_gap_mm=float(gap*1000),
             peak_crease_gap_mm=self.peak_gap*1000, robot_released=bool(released), body_supported=bool(supported),
-            open_form=bool(opened), qualified_pose_count=len(self.history), stable=bool(stable),
-            hold_drift_mm=None if drift is None else drift*1000, hold_angle_deg=angle, invalid_reason=None)
+            open_form=bool(opened), qualified_pose_count=self.qualified_pose_count, stable=bool(stable),
+            qualified_duration_s=max(0, self.qualified_pose_count-1)/HZ,
+            rubric=RUBRIC, invalid_reason=None)
         return self.value
 
 # Installed by the launcher/runtime, never exposed in policy observations.

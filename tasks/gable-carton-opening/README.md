@@ -10,7 +10,7 @@ pouring; no seal-breaking strength or liquid-flow behavior is claimed.
 One free carton on the original calibrated dual-YAM station. Its square footprint
 is70×70mm, body height110mm, roof rise35mm, outer fin height12mm, inner paper-fin
 height24mm and panel thickness0.45mm. The lower body and contents have lumped
-mass520g; panels use350g/m². The shoulder origin is(0.18,0.05,0.8575)m. The outer
+mass520g; moving panels add2.701g at350g/m² (522.701g total). The shoulder origin is(0.18,0.05,0.8575)m. The outer
 folds initially spread120°, while the inner pouring spout points inward. The
 surface arrow identifies the pouring side. All poses are deterministic; no jitter.
 
@@ -18,8 +18,9 @@ The specified material is pre-creased liquid-packaging paperboard, nominally
 350 g/m² and 0.45 mm thick, with a polymer barrier lining; the lining is part of
 the nominal sheet, not a separately simulated layer. These are design specifications,
 not measurements from a purchased carton. See [PHYSICAL_SETUP.md](PHYSICAL_SETUP.md)
-for the dimension table, fold map, initial landmark coordinates and reset procedure.
-The map describes the front panel topology, not a validated manufacturing blank.
+for the complete printable A3/A4 blank, cut/crease/glue map, assembly, fresh-specimen
+pre-creasing and mass procedure. Digital geometry checks are supplied; no physical
+specimen has yet been fabricated. See [REVISION.md](REVISION.md) for evidence scope.
 
 The original three320×176RGB cameras, joint observations, robot controls and20Hz
 action interface are retained. Native physics runs at240Hz. There are no extra
@@ -46,7 +47,7 @@ The known-layout demonstration uses the bundled `demo_plan.json` and ordinary
 joint feedback. It is a feasibility controller, not a general image-based policy.
 A60-second demo allows a long final released hold. Task budget is120seconds or
 2,400actions; every mode scores the ending state. See `SCORING.md` for numeric
-partial credit and the three-second support/release/stillness requirement.
+partial credit and the three-second sustained-opening/support/release requirement.
 
 The following first command is offline and free. The second sends original
 images and joint state to Dream and incurs API charges; run it only with explicit
@@ -60,8 +61,8 @@ python run.py --mode dream --steps 2400 --gpu auto --log-dir /tmp/carton-dream
 
 Dream uses `dreamlabs/dream-1-beta`,48rows/request and32preroll actions. It loads
 no demonstration controller, trajectory or private pose/contact information.
-The launcher, task metadata and scripted run share one instruction. At this
-pre-Dream preparation stage no formal model result or uploaded media ID exists.
+The launcher, task metadata and scripted run share one instruction. The formal
+model result and media ID are recorded below and in task.json.
 
 ## Evidence and scoring
 
@@ -99,7 +100,7 @@ single-scene GPU buffer capacities are reduced; contact overflow invalidates
 rather than simplifies a run. These limitations are part of the task definition.
 
 Reset reconstructs every panel and initial crease rest angle. A physical repeat
-would need an equivalent already-opened carton. The24mm extended inner paper
+uses one fresh custom specimen and the specified one-cycle preparation protocol. The24mm extended inner paper
 edge is a chosen design dimension, informed by the variant in
 [Elopak US5816487A,figures8–11](https://patents.google.com/patent/US5816487).
 It is not claimed to be a measured marketed carton or validated paper material.
@@ -135,6 +136,46 @@ recovering53 session-expiry refusals within this one episode.
 There was no second trial. The cause of frequent session expiry is unconfirmed;
 this should not be described as an uninterrupted server session.
 All3x2,401 original camera frames and28,920 physical samples were verified;
-official, live and archived-source replay scores agree. The simulation, control,
-scoring and instruction match the full-score demonstration. This one model run
+official, live and archived-source replay scores agree. The simulation, control and instruction match the full-score demonstration.
+Revision3 regrades both complete raw recordings with the sustained-opening
+rubric; final scores remain1.0 and0.0. These are regraded existing episodes,
+not new model calls or evidence of the revised scorer running in the old process. This one model run
 does not establish a failure rate or a causal explanation for the behavior.
+
+## Revision verification
+
+The original task geometry, dynamics, input instruction and camera streams are
+unchanged. [REVISION.md](REVISION.md) explains the full blank, mass clarification,
+revised sustained functional-opening rule and preserved-run evidence.
+[GRADING_PROTOCOL.md](GRADING_PROTOCOL.md) defines external physical grading
+views and uncertainty handling, without adding model sensors.
+
+```bash
+python make_blank.py
+python replay_score.py /path/to/original-run --output /tmp/regraded.json
+```
+
+Blank generation is an offline documentation operation using numpy, scipy,
+matplotlib and shapely from the supplied runtime. Pre-generated PDF/SVG files
+need no software to print. Regrading to a separate output preserves the original
+run's source and score records. Do not run the current validate_run.py against
+an old-source directory: its live/source agreement check deliberately rejects
+a different scorer. Use archived original source for original-run validation.
+
+## Asset sources and licenses
+
+| Asset | Source and terms |
+|---|---|
+| Carton facets, paper strips, front arrow, blank and assembly drawings | Procedurally authored in this task's geometry/drawing code; no downloaded carton mesh, texture, scan or commercial CAD. |
+| YAM robot meshes / URDF / collision geometry, including split black/white link meshes | I2RT Robotics, MIT; original asset source commit `120c3c81400171174604e503943f8d1ebc891058`, carried by the pinned official walkthrough adapter. The complete notice is included in [ASSET_LICENSE_I2RT.txt](ASSET_LICENSE_I2RT.txt). |
+| Table, floor, camera stand and lighting | Procedural boxes/cylinders and lights from the pinned adapter's station room; solid colors, no external table/room texture or HDR image. No library fruit or other downloaded scene prop is used. |
+
+The robot provenance and notice are also recorded in the pinned adapter's
+[asset directory](https://github.com/kairosiann/yam-isaac-lab-arena/tree/0059d02a1a91bc6834c1d0846022891df0c78730/yam_arena/assets/yam)
+and [README](https://github.com/kairosiann/yam-isaac-lab-arena/blob/0059d02a1a91bc6834c1d0846022891df0c78730/README.md).
+The asset MIT notice applies to the I2RT assets; it is not a claim that the
+entire adapter or NVIDIA runtime is MIT-licensed. No dependency code or robot
+meshes are redistributed in this task folder. Runtime dependencies retain
+their own terms and exact revisions in [runtime-lock.json](runtime-lock.json).
+The carton patent linked above is a design reference, not a licensed digital
+asset or a claim of exact product reproduction.

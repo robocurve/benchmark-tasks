@@ -7,6 +7,7 @@ sys.path.insert(0,str(ROOT))
 from carton_probe.scoring import Outcome
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('run',type=Path)
 p.add_argument('--output-name',default='score-replay.json',help='Use a separate file when evaluating a newer rubric on historical evidence')
+p.add_argument('--output',type=Path,help='Write outside the original run, preserving its evidence unchanged')
 a=p.parse_args()
 if Path(a.output_name).name!=a.output_name or not a.output_name.endswith('.json'):p.error('Output name must be a JSON filename')
 c=json.loads((a.run/'mechanism-contract.json').read_text());z=np.load(a.run/'physics-substeps.npz')
@@ -22,5 +23,7 @@ source=ROOT/'carton_probe/scoring.py'
 r=dict(score=s.value,first_full_sample=first_full,first_full_action=None if first_full is None else (first_full+1-120)/12,
        final=s.detail,scorer_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),samples=s.samples,
        note='Outcome replay of physical evidence; no full material-fidelity claim.',trace=trace)
-(a.run/a.output_name).write_text(json.dumps(r,indent=2)+'\n')
+output=a.output or a.run/a.output_name
+output.parent.mkdir(parents=True,exist_ok=True)
+output.write_text(json.dumps(r,indent=2)+'\n')
 print(json.dumps({k:v for k,v in r.items() if k!='trace'},indent=2))
