@@ -72,10 +72,34 @@ def recoverable_client_class(base, expired_error, request_audit, session_audit):
     return AuditedDreamClient
 
 
-def make_policy(request_audit, session_audit, *, rows_per_request=8):
+def make_policy(request_audit, session_audit, *, rows_per_request=48):
+    import os
     import dream
     from inspect_robots_dream import DreamPolicy
     from inspect_robots_dream.session import DreamSession
+    bridge_url = os.environ.get("ROBOCURVE_DREAM_BRIDGE_URL")
+    if bridge_url:
+        from inspect_robots_dream.bridge import BridgeSession
+        if not bridge_url.startswith("http://127.0.0.1:"):
+            raise ValueError("Use a loopback bridge through an authenticated SSH tunnel")
+        class AuditedBridge(BridgeSession):
+            def act(self, commanded):
+                started=time.monotonic()
+                event={"request":len(request_audit)+1,"transport":"loopback_ssh_bridge"}
+                request_audit.append(event)
+                try:
+                    chunk=super().act(commanded)
+                    seen=getattr(self,"_seen",set())
+                    if chunk.session_id:seen.add(chunk.session_id)
+                    self._seen=seen
+                    session_audit.update(session_count=len(seen),transport="loopback_ssh_bridge")
+                    event.update(status="success",attempts=chunk.attempts)
+                    return chunk
+                except Exception as error:
+                    event.update(status="error",error_type=type(error).__name__)
+                    raise
+                finally:event["wall_seconds"]=time.monotonic()-started
+        return DreamPolicy(rows_per_request=rows_per_request,session=AuditedBridge(bridge_url))
     warnings.filterwarnings("ignore", category=dream.DreamSlowNetworkWarning)
     client = recoverable_client_class(dream.DreamClient, dream.DreamSessionExpired,
                                      request_audit, session_audit)

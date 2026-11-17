@@ -39,12 +39,14 @@ def main():
    from yam_arena.constants import TCP_OFFSET,FINGER_JOINTS
    from review_views import configure,images
    if hasattr(m,'configure_station'):m.configure_station()
+   scene.PHYSICS_DT=1./240
    original=scene.make_env
    def with_cameras(embodiment,**kwargs):configure(embodiment);return original(embodiment,**kwargs)
    scene.make_env=with_cameras;wrapper._APP=app
    emb=wrapper.YamArenaEmbodiment(task=str(HERE/'task.py'),object_jitter=0.,control_hz=20,cam_width=320,cam_height=176)
    emb._ensure_sim(None);base=emb._base;emb._env.reset();instruction=json.loads((HERE/'task.json').read_text())['instruction'];emb._instruction=instruction
    for _ in range(20):emb._env.step(emb._ready)
+   m.bind_native(base)
    drawing=Drawing(omni.usd.get_context().get_stage());m.draw(drawing)
    def refresh():
     base.sim.render()
@@ -75,6 +77,8 @@ def main():
    from dream_policy import make_policy
    policy=make_policy(requests,sessions);policy.bind(emb.info);policy.reset(Scene(id=HERE.name,instruction=instruction))
   from joint_tracking import JointTracking
+  from demo_alignment import DemoAlignment
+  demo_alignment=DemoAlignment()
   from yam_arena.constants import SHOULDER,WRIST,GRIPPER,FINGER_OPEN
   trackers=[JointTracking(side=s) for s in ['left','right']];limit_vector=np.tile([SHOULDER['velocity']/20]*3+[WRIST['velocity']/20]*3+[GRIPPER['velocity']/abs(FINGER_OPEN)/20],2)
   report.update(status='running',initial_measurements=m.measure());save()
@@ -83,7 +87,10 @@ def main():
     wanted=np.asarray(plan['frames'][k-1]['action14'])
     if not a.cpu_preview:
      obs=np.asarray(emb._observation().state['joint_pos'])
-     for tracker in trackers:wanted=tracker.action(wanted,obs,enabled=True)
+     wanted=demo_alignment.action(wanted,obs,hands(),m,plan['frames'][k-1]['stage'])
+     for tracker in trackers:
+      feedback_right=tracker.indices.start==7 and demo_alignment.target is not None
+      wanted=tracker.action(wanted,obs,enabled=not feedback_right)
    elif policy is not None:
     chunk=policy.act(emb._observation());assert len(chunk.actions)==1;wanted=np.asarray(chunk.actions[0].data,float)
    else:wanted=current.copy()
@@ -95,6 +102,7 @@ def main():
    if not a.cpu_preview:m.draw(drawing);refresh()
    capture(k);report.update(steps=k,measurements=m.measure(),score=m.score())
    if k%20==0:save();trace.flush()
+   if a.mode=='demo' and m.failed:raise RuntimeError('Native band or clasp integrity failed; development demo stopped early.')
   report.update(status='complete',events=m.events,score=m.score(),requires_visual_review=True)
  except BaseException as error:
   report.update(status='failed',error_type=type(error).__name__,error_message=str(error));raise
@@ -104,6 +112,6 @@ def main():
   if policy is not None:
    from dream_policy import public_transcript
    (a.out/'dream-transcript.json').write_text(json.dumps(public_transcript(policy),indent=2)+'\n')
-  report.update(dream_requests=len(requests),dream_sessions=sessions);save()
+  report.update(dream_requests=len(requests),dream_sessions=sessions,events=m.events);save()
   if app is not None:app.close()
 if __name__=='__main__':main()
