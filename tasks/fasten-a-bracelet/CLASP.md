@@ -1,5 +1,7 @@
 # Clasp and physical reset
 
+The complete [fabrication specification](fabrication/BUILD.md), [editable CAD](fabrication/clasp.scad) and [dimensioned drawing](fabrication/clasp-drawing.svg) define the two spring leaves, grooved pin, brass housing, fasteners, assembly and manual reset. The spring stock is sourced by grade and part number. This is a fabrication design, not a claim of a physically tested clasp.
+
 Use a push-in pin-and-socket spring-detent clasp on a 10 mm leather bracelet.
 A magnetic clasp, lobster clasp or screw clasp is not an equivalent. The
 benchmark dimensions below define the equivalent mechanism; they are not
@@ -8,7 +10,7 @@ sides for the ordinary parallel gripper pads to contact.
 
 | Part | Dimensions and function |
 | --- | --- |
-| Leather band | 195 mm long, 10 mm wide, 2 mm thick, plus the two metal housings |
+| Leather band | 195 mm exposed length (199 mm cut length, including two 2 mm hidden mounting tabs), 10 mm wide, 2 mm thick, plus the two metal housings |
 | Each metal grip housing | 10 mm long, 12 × 7 mm outside cross-section; flat opposed grip faces |
 | Male pin | 3 mm exposed length, 2.2 × 2.2 mm square section, beyond a 3 mm long, 5 × 5 mm stop collar |
 | Female entrance | 4 × 4 mm clear opening, centred on end face; at least 6 mm clear bore depth |
@@ -67,7 +69,7 @@ The 12 mm housing width exceeds the 10 mm band width, allowing the finger
 pads to grip the metal without pinching the leather behind it. No enlarged
 robot-only handle is added; this is the clasp housing itself.
 
-The 195 mm leather strip joins the rear faces of the two 10 mm housings.
+The 195 mm exposed leather span joins the rear faces of the two 10 mm housings.
 Each fold begins outside the metal, at least 5 mm behind its housing centre;
 the band must not pass through the housing or socket.
 

@@ -6,9 +6,9 @@ Helping someone fasten small jewellery requires holding a flexible band, alignin
 
 ## Setup and reset
 
-A 220 mm long, 54 mm diameter rigid silicone wrist form is fixed horizontally on two 25 x 80 x 25 mm rigid supports. Below it, a 195 x 10 x 2 mm leather bracelet has two 10 x 12 x 7 mm metal clasp housings, initially 154 mm apart, with the leather ends folded back. The male end has a 3 mm exposed, 2.2 mm square pin beyond a 3 mm long, 5 mm square stop collar. The female has a 4 mm square bore and a spring detent at 2.5 mm entry. Each housing sits freely on a fixed 6 x 10 x 10 mm acrylic rest. Both hands start open. CLASP.md specifies the equivalent mechanism and fixed reset shown in the setup image.
+A 220 mm long, 54 mm diameter rigid silicone wrist form is fixed horizontally on two 25 x 80 x 25 mm rigid supports. Below it, a 195 mm exposed length, 10 x 2 mm leather bracelet has two 10 x 12 x 7 mm metal clasp housings, initially 154 mm apart, with the leather ends folded back. The male end has a 3 mm exposed, 2.2 mm square pin beyond a 3 mm long, 5 mm square stop collar. The female has a 4 mm square bore and a spring detent at 2.5 mm entry. Each housing sits freely on a fixed 6 x 10 x 10 mm acrylic rest. Both hands start open. CLASP.md specifies the equivalent mechanism and fixed reset shown in the setup image.
 
-See [CLASP.md](CLASP.md) for the physical mechanism, all dimensions, fixed positions and repeatable reset. The setup image shows the fixed starting scene. No material is consumed unless damaged.
+See the [fabrication files and parts list](fabrication/BUILD.md) for the complete spring-detent build. See [CLASP.md](CLASP.md) for the physical mechanism, all dimensions, fixed positions and repeatable reset. The setup image shows the fixed starting scene. No material is consumed unless damaged.
 
 ## Run
 
@@ -34,7 +34,7 @@ Scores describe the final state, including the recorded hands-clear hold. In the
 
 The band and both clasp ends are freely moving native rigid bodies. The leather attaches behind each housing, leaving the pin and socket unobstructed. Passive joints approximate leather bending, with a broad bending range so the folded reset can straighten around the wrist. Native position/velocity solver iterations are 128/32. Finger collisions and friction grip the small metal housings and transmit reactions to the arms. There are no gripper attachment constraints, proximity captures or pose-following clasp parts. The female housing has colliding walls and a real bore; the square pin must physically enter it. A reduced spring detent retains the pin only after at least 2.5 mm insertion, with a solid collar stopping travel at 3 mm. It allows axial twist and up to 8° swing, consistent with the loose pin and bore. Native joint-break events invalidate the trial. It does not pull the ends together. Slipping, missed insertion and catch breakage remain possible.
 
-The segmented band, friction and spring-detent forces are engineering approximations, not measured jewellery properties. The native integration uses 240 physics steps per second. The 30 N catch break threshold is approximate. CLASP.md specifies an equivalent pin-and-socket mechanism and a repeatable hand engagement check; it makes no unverified retail-product claim.
+The segmented band, friction and spring-detent forces are engineering approximations, not measured jewellery properties. The native integration uses 240 physics steps per second. The 30 N catch break threshold is approximate. The fabrication files specify the two leaf springs, their stock source and formed profile, grooved pin, housing, fasteners and repeatable engagement check. The reduced catch omits those internal features; no physical build or force calibration is claimed.
 
 ## Evidence
 
