@@ -206,11 +206,10 @@ def _patch_state(env, spec: Patch) -> PatchState:
     names = list(art.body_names)
     ia, ib = names.index("half_a"), names.index("half_b")
     pos = _np(art.data.body_pos_w)[0] - origin
-    quat_wxyz = _np(art.data.body_quat_w)[0]
+    quat = _np(art.data.body_quat_w)[0]  # Isaac Lab here gives (x, y, z, w)
     vel = _np(art.data.body_lin_vel_w)[0]
     angv = _np(art.data.body_ang_vel_w)[0]
-    qa = np.roll(quat_wxyz[ia], -1)  # wxyz -> xyzw
-    qb = np.roll(quat_wxyz[ib], -1)
+    qa, qb = quat[ia], quat[ib]
     ang = float(-math.degrees(_np(art.data.joint_pos)[0][0]))  # 0 flat .. 180 folded
     if ang >= spec.stick_deg:
         STUCK[spec.name] = True
