@@ -2,12 +2,13 @@
   "title": "Remove a seatbelt twist through its sliding tongue",
   "category": "Societal relevance",
   "instruction": "Remove the twist from the seatbelt without detaching either end. Leave the webbing flat through the tongue, then release both hands.",
-  "context": "A twisted seatbelt can be awkward to straighten because its sliding tongue traps the fold. Form a diagonal fold, work it through the slot and spread the webbing flat.",
-  "setup": "A 500 x 47 x 1.2 mm polyester seatbelt section is attached to two 70 x 22 x 40 mm bench anchors, 440 mm apart. A steel sliding tongue has a 49 x 3.5 mm slot and 1.5 mm thickness. It starts at the midpoint with opposing half-twists trapped on either side. Blue and yellow edge markers show the webbing orientation. Both hands start open. The deterministic settled reset, dimensions and fixed layout are in model.py.",
+  "context": "Straightening a twisted seatbelt requires coordinating its sliding tongue with the trapped webbing while working beside the seat and pillar.",
+  "setup": "A full-size empty passenger-seat mock-up has a 450 x 450 mm cushion, a 510 mm back, outboard pillar and door-side panel. A 47 x 1.2 mm polyester belt runs from the lower seat-side anchor through its sliding tongue to a shoulder guide and locked retractor. The 750 mm working span starts with opposing half-twists trapped at the tongue. Both ends remain attached. INSTALLATION.md gives inexpensive construction, dimensions, routing and reset.",
   "scoring": "1.0: webbing intact, tongue retained on it, crosswise roll below 15 degrees and visible width above 40 mm throughout, and both hands released for 3 seconds. 0.75 for this flat result before release/hold. 0.5 if maximum remaining roll is below 90 degrees but it is not yet flat. Otherwise 0; damage or detached hardware overrides credit. Inspect both edge markers using overhead/side photographs, a ruler and a protractor.",
   "run_limit": "1,200 actions (60 seconds at 20 Hz)",
   "action_limit": 1200,
-  "fidelity": "Native YAM arms/cameras. Webbing is a flexible mass-point ribbon with stretch, bending, table and coarse self-contact. Continuous edge/slot constraints preserve threading. The tongue is a reduced sliding body; ideal grasps move it. Initial stiction releases after 2 mm of sliding. Detailed weave, calibrated friction and arm reaction forces are omitted. No timed or score-triggered untwisting.",
-  "scores": "Dream-1: 0.0; scripted demo: 1.0. Dream completed with 25 server sessions after expiry recoveries.",
-  "media": "M-YQ659S"
+  "fidelity": "Native colliding seat, back, pillar and door panel constrain YAM access. The 750 mm working webbing is a flexible mass-point ribbon with stretch, bending and contact; the 650 mm remote guide-to-locked-retractor path is fixed. Slot contact and tongue motion are reduced; grasps are idealized. No occupant, active retractor, pretensioner or calibrated belt forces are modelled. No timed untwisting.",
+  "scores": "Dream-1: 0.0; scripted demo: 1.0. Dream completed across 25 server sessions with expiry recovery.",
+  "reset_notes": "Use the empty, unpowered seat buck in INSTALLATION.md. Lock the retractor length, leave 750 mm of webbing between the lower anchor and shoulder guide, and put the reversed midpoint through the tongue to trap two opposing half-twists. Restore the photographed marker positions and settled initial tongue position. Keep both ends attached; no occupant or live pretensioner.",
+  "media": "M-57K3GM"
 }

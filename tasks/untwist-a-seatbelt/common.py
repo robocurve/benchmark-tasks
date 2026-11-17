@@ -46,6 +46,14 @@ class Soft:
   self.k=np.ones(len(edges)) if stiffness is None else np.asarray(stiffness,float)
   self.radius=radius;self.floor=floor;self.failed=False;self.grips=Grips();self.elapsed=0.;self.released=0.
   self.self_pairs=None;self.last_targets={}
+  # Edge-coloured Gauss-Seidel projections preserve webbing length under gravity.
+  groups=[];used=[]
+  for edge,(a,b) in enumerate(self.edges):
+   for q,seen in enumerate(used):
+    if a not in seen and b not in seen:break
+   else:q=len(groups);groups.append([]);used.append(set())
+   groups[q].append(edge);used[q].update((a,b))
+  self.edge_groups=[np.array(g,dtype=int) for g in groups]
  def cable_collisions(self):
   i,j=np.triu_indices(len(self.p)-1,k=3);self.self_pairs=(i,j)
  def self_contact(self,w):
@@ -65,10 +73,12 @@ class Soft:
   starts={i:self.p[i].copy() for i in pins};w=np.ones(len(self.p));w[list(pins)]=0.
   h=dt/substeps;e=self.edges;i,j=e[:,0],e[:,1];den=np.maximum(w[i]+w[j],1e-12)
   for sub in range(substeps):
-   old=self.p.copy();self.v[:,2]-=gravity*h;self.v*=np.exp(-2.*h);self.p+=self.v*h
+   old=self.p.copy();g=np.array([0.,0.,-gravity]) if np.ndim(gravity)==0 else np.asarray(gravity);self.v+=g*h;self.v*=np.exp(-2.*h);self.p+=self.v*h
    for repeat in range(iterations):
-    delta=self.p[j]-self.p[i];length=np.linalg.norm(delta,axis=1);correction=delta*((length-self.rest)*self.k/np.maximum(length*den,1e-12))[:,None]
-    np.add.at(self.p,i,correction*w[i,None]*.24);np.add.at(self.p,j,-correction*w[j,None]*.24)
+    for group in self.edge_groups:
+     a=i[group];b=j[group];delta=self.p[b]-self.p[a];length=np.linalg.norm(delta,axis=1)
+     corr=delta*((length-self.rest[group])*self.k[group]/np.maximum(length*den[group],1e-12))[:,None]
+     self.p[a]+=corr*w[a,None]*.9;self.p[b]-=corr*w[b,None]*.9
     if self.self_pairs is not None:self.self_contact(w)
     if collide is not None:collide(self.p)
     if self.floor is not None:self.p[:,2]=np.maximum(self.p[:,2],self.floor+self.radius)

@@ -1,9 +1,9 @@
 """Fixed native judging cameras; their images never enter a policy input."""
 import numpy as np
 
-CONFIGS=[('judging_front',(.95,-.55,1.40),(.35,0.,.82),(0.,0.,1.),26.,(640,480)),
-         ('judging_rear',(.85,.40,1.25),(.35,0.,.82),(0.,0.,1.),25.,(640,480)),
-         ('judging_side',(.35,.85,1.45),(.35,0.,.82),(0.,0.,1.),25.,(640,480))]
+CONFIGS=[('judging_front',(.42,-.85,1.15),(.365,.08,.86),(0.,0.,1.),28.,(640,480)),
+         ('judging_rear',(.0,.90,1.25),(.365,.08,.86),(0.,0.,1.),23.,(640,480)),
+         ('judging_side',(.70,-.40,1.50),(.365,.08,.86),(0.,0.,1.),25.,(640,480))]
 
 
 def configure(embodiment):

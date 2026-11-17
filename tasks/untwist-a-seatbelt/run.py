@@ -26,6 +26,7 @@ def main():
  save();app=None;writers={};policy=None;requests=[];sessions={};trace=None;m=Model()
  try:
   if a.cpu_preview:
+   m.configure_station()
    from yam_arena import ik,station
    from yam_arena.constants import READY
    current=np.r_[READY,1.,READY,1.]

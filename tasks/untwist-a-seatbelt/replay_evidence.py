@@ -6,7 +6,7 @@ from model import Model
 HERE=Path(__file__).resolve().parent
 p=argparse.ArgumentParser();p.add_argument('mode',choices=['demo','dream']);a=p.parse_args()
 report=json.loads((HERE/'evidence'/(a.mode+'-run.json')).read_text())
-for name in ['model.py','common.py']:
+for name in ['model.py','common.py','installation.py']:
  assert hashlib.sha256((HERE/name).read_bytes()).hexdigest()==report['source_sha256'][name],name
 m=Model();count=0
 with gzip.open(HERE/'evidence'/(a.mode+'-trace.jsonl.gz'),'rt') as f:
