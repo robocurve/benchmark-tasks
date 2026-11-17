@@ -1,0 +1,20 @@
+{
+  "title": "Curl gift ribbon",
+  "category": "Societal relevance",
+  "instruction": "Curl the ribbon with the curling edge, then leave it loose on the table.",
+  "context": "Make a loose decorative curl for a wrapped gift. The robot must draw flat curling ribbon over an edge under tension, leaving a curl that holds after release.",
+  "setup": "One straight 400 x 10 mm strip of commercial polypropylene curling ribbon, about 0.1 mm thick, lies flat on the table. A deburred steel ruler (90 x 30 x 1 mm working piece) is secured vertically to a 100 x 25 x 55 mm wooden block; its blunt working edge is 65 mm above the table. The edge is fixed, so both hands can tension and draw the ribbon. Both hands start open. No sharp cutting blade, pre-curled strip or adhesive is used. README gives the fixed layout and material check.",
+  "scoring": "Judge the loose ribbon at the end. 1.0 for at least two consecutive complete turns, 8-60 mm in diameter, intact and on the table, with both hands released for 3 seconds. 0.75 for two turns before the release hold completes; after release, 0.5 for one complete turn or 0.25 for at least half a turn. Otherwise 0. Tearing or cutting the ribbon gives 0. Count visible turns from side photographs or video with a ruler. The video must show drawing the ribbon over the curling edge; folding or wrapping it around a support is not the target.",
+  "run_limit": "1,600 actions (80 seconds at 20 Hz)",
+  "action_limit": 1600,
+  "fidelity": "Native YAM arms and cameras. Ribbon is a reduced flexible strip with stretch, bending, gravity and full-segment self-contact. Loaded sliding over the ruler creates local plastic curvature; a free 3D beam solve forms the curl, not an animation. Width contact, torsion, finger capture, edge tension, plasticity and tearing are uncalibrated approximations. Stored curvature alone earns nothing: actual released turns are scored.",
+  "scores": "Dream-1: 0.0; scripted demo: 1.0. Dream completed with 33 server sessions after expiry recoveries.",
+  "keywords": [
+    "gift-wrapping",
+    "ribbon",
+    "tension",
+    "plastic-bending"
+  ],
+  "reset_notes": "Cut a fresh 400 mm piece from the same roll and lay it flat without creases or existing curls. Use ordinary curling ribbon, not woven satin. Check a spare piece by hand once per material batch: one loaded pass over the same edge must retain two turns after release. Use a new strip each trial; inspect the deburred edge and padded clamps.",
+  "media": "M-WVM6KM"
+}
