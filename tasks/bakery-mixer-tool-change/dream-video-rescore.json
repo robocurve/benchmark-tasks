@@ -1,0 +1,86 @@
+{
+  "schema": "bakery-mixer-observable-video-rescore-v1",
+  "scoring_scope": "Manual visual application of the revised observable rubric to the endpoint of the original Dream-1 video; no new inference or native execution.",
+  "original_trial": {
+    "model": "dreamlabs/dream-1-beta",
+    "seed": 0,
+    "controls": 3600,
+    "control_hz": 20,
+    "control_budget": 3600,
+    "termination_reason": "max_steps",
+    "completed_without_evaluation_error": true,
+    "original_rubric_score": 0.0,
+    "original_source_revision": "aeebff6e0afde7c7d7ee5805f841417c2b9bdcfc",
+    "source_unchanged_during_original_execution": true,
+    "execution_receipt": {
+      "file": "execution.json",
+      "sha256": "ff5fbe4ad569cc43bbd5fb3218427841ee38197415e1029c589c7594042221fe",
+      "matches_original_verification_hash": true
+    },
+    "inspect_evaluation": {
+      "file": "adhoc_2cc3c0fe.json",
+      "sha256": "d1934c20d33376afb9133449d6543499eb09d4b739a3636a720e8227bb6318fc",
+      "matches_original_verification_hash": true
+    },
+    "original_verification": {
+      "file": "verification.json",
+      "sha256": "c079b2f3c57b8689b4bbe8a78430bfad5617ba726ae960d7bd441dde79333bf3"
+    }
+  },
+  "video": {
+    "file": "scene-0-e0_top_cam.mp4",
+    "sha256": "a25483f514fd0de6c28641986361686cb746f7b1d407f2164fb06dff6bf3e183",
+    "matches_original_verification_hash": true,
+    "codec": "h264",
+    "pixel_format": "yuv420p",
+    "resolution": [
+      1280,
+      720
+    ],
+    "frame_rate": "20/1",
+    "container_frame_count": 3601,
+    "actually_decoded_frame_count": 3601,
+    "reset_frame_index": 0,
+    "final_control_frame_index": 3600,
+    "final_control_frame_pts_s": 180.0,
+    "frame_index_convention": "Zero-based decoded video frame index. Frame 0 is the extra reset image; frame 3600 records control 3600."
+  },
+  "decisive_frame": {
+    "file": "dream-final-frame.png",
+    "sha256": "8b56889b3f3148dd18839a0c3a3208c2fceb0341c802632d4548d7a1311af579",
+    "decoded_rgb24_sha256": "3460ad2cab80fda8da0c86bebe3833cd22866deefe14a2f9f376766591f8a044",
+    "decoded_rgb24_bytes": 2764800,
+    "pixels_match_direct_video_decode": true,
+    "image_processing": "Unchanged full-resolution PNG copy of the decoded video frame; no cropping, overlays, annotations, or generated pixels."
+  },
+  "revised_observer_judgment": {
+    "method": "Manual visual inspection of the decoded endpoint frame by an agent, independently confirmed in a second visual inspection.",
+    "rubric": "PHYSICAL_SCORING.md",
+    "rubric_sha256": "7a1615f0f6f0d719955a2c25fac39038fdaa9a4c0961479ce10db78678c29c34",
+    "scorer_file": "task.py",
+    "scorer_sha256": "62edfd314645e0cf10d4a23012361e846d6fdce4c0381fea4fb657ee5ae7f166",
+    "final_score": 0.0,
+    "positive_endpoint_observation": "The single flat beater is visibly beside the mixer at its separate left-hand draining support, with its exposed neck and paddle spatially separated from the shaft working position. The mounted working band is not occupied by that beater.",
+    "logical_basis": [
+      "The revised rubric awards the currently valid stage rather than the highest historical partial stage.",
+      "A beater outside its exterior mounted working band immediately cancels the retained-beater proof.",
+      "Every positive score stage requires that retained-beater proof. The visibly separated beater therefore forces a final score of zero, independently of earlier partial progress or any unobserved invalidating event."
+    ],
+    "falsifiable_check": "Inspect the full-resolution frame and original video endpoint. This judgment would fail if the visible object beside the mixer were not the unique flat beater, or if that beater occupied the shaft working band at the final control."
+  },
+  "reproduction": {
+    "input": "Use the original top-camera video with the SHA-256 recorded above.",
+    "decode_count_command": "ffprobe -v error -count_frames -select_streams v:0 -show_entries stream=nb_frames,nb_read_frames -of json ORIGINAL_TOP_CAMERA.mp4",
+    "frame_pts_command": "ffprobe -v error -select_streams v:0 -show_frames -show_entries frame=best_effort_timestamp_time -of json ORIGINAL_TOP_CAMERA.mp4",
+    "frame_extract_command": "ffmpeg -v error -i ORIGINAL_TOP_CAMERA.mp4 -vf 'select=eq(n\\,3600)' -vsync 0 -frames:v 1 dream-final-frame.png",
+    "pixel_verification": "Decode the selected frame as raw rgb24 and compare its SHA-256 with decoded_rgb24_sha256; the PNG RGB pixels were checked equal to that direct video decode.",
+    "frame_extract_command_verified": true,
+    "verified_output_rgb24_sha256": "3460ad2cab80fda8da0c86bebe3833cd22866deefe14a2f9f376766591f8a044"
+  },
+  "limits": [
+    "This endpoint proof establishes the revised final score only; it does not establish that no earlier partial stage occurred.",
+    "This is not a numeric rescore of the complete Dream trajectory; full saved object states are unavailable locally.",
+    "No new Dream inference, native simulator execution, physical build test, or acceptance decision is claimed.",
+    "The original evaluation, execution receipt, verification record and videos are preserved unchanged."
+  ]
+}

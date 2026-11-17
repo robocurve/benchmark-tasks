@@ -135,15 +135,14 @@
   "rescoring_results": "revision-rescores.json",
   "original_receipts_and_traces_modified": false,
   "fresh_native_run": false,
-  "revised_dream_score_verified": false,
+  "revised_dream_score_verified": true,
   "physical_build_fabricated": false,
   "physical_build_calibrated": false,
   "official_revision_submitted": false,
-  "blocking_condition": "SSH reaches the known visnu address but server rejects the offered registered public key; current hostname/GPU/source cannot be verified and no fresh run is claimed.",
+  "blocking_condition": "Official PR revision requires new explicit user authorization under AGENTS.md. SSH password authentication also closes before remote commands; this prevents optional fresh reruns, not the documented rescoring of unchanged physical trials.",
   "remaining": [
-    "Restore authenticated access to verified visnu for current native validation and revised model scoring.",
-    "Physical fabrication and commissioning remain unverified; do not claim hardware validation.",
-    "Obtain explicit authorization before pushing the revision to the official PR, as required by AGENTS.md."
+    "Obtain explicit authorization before pushing the prepared revision to the existing official PR, as required by AGENTS.md.",
+    "Physical fabrication and commissioning remain unverified; the submission supplies construction instructions and does not claim a validated physical build."
   ],
   "historical_receipt_rejected_as_current": {
     "passed": true,
@@ -167,10 +166,16 @@
     "firmware_required": false
   },
   "document_sha256": {
-    "README.md": "79b1ff5fadaec94b3cf8e4b48c605f137e501baea4736316d8da38acba749d46",
+    "README.md": "d13a218fd7bedadcbe519dacbc84a1189da5174cfacb3f5e7a8c0fc3d3e5e075",
     "PHYSICAL_BUILD.md": "666cc70a195506e275d399684c14bac132beae32e36d567a5dcd8e5217e8182a",
     "PHYSICAL_SCORING.md": "7a1615f0f6f0d719955a2c25fac39038fdaa9a4c0961479ce10db78678c29c34",
-    "task.json": "843a5f97e61532077f45cdb0c12b1227b5ff7c83e0ea023fe6fb3d7d474d6927",
-    "sources.json": "58300ee8cbdef0518689a707a558c2476996510caa20f716065f18433413f4df"
-  }
+    "task.json": "c39b0f455dc6c71de8b4a34181e36b4214bb486b7526bbbb21b49510eb022fb7",
+    "sources.json": "58300ee8cbdef0518689a707a558c2476996510caa20f716065f18433413f4df",
+    "dream-video-rescore.json": "347aeaa22e3919f6ceb81486cacb0fc3f933c425c6b2757a009921694b50def6",
+    "dream-final-frame.png": "8b56889b3f3148dd18839a0c3a3208c2fceb0341c802632d4548d7a1311af579"
+  },
+  "revised_dream_scoring_method": "Manual application of current-stage observable rubric to the exact original native video endpoint, documented in dream-video-rescore.json; no new inference or full-trajectory numerical rescore.",
+  "fresh_native_run_required_for_this_rescore": false,
+  "fresh_native_run_requirement_basis": "No physical/controller/runtime or motor/interlock behavior changed. Actual recorded native states validate the revised demo score, and visible final non-assembly proves the revised model endpoint score. Reviewer requested observable real-world scoring and a construction specification; did not require new model inference after a scoring-only revision.",
+  "dream_video_rescore": "dream-video-rescore.json"
 }
