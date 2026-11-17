@@ -23,6 +23,15 @@ class Scoring(unittest.TestCase):
         self.hands=[[-.1,.5,1.2],[-.1,-.5,1.2]]
         self.still=dict(beater=0.,shaft=0.,carrier=0.)
         self.rotating=dict(beater=136.,shaft=136.,carrier=-60.)
+        self.prove_retention()
+
+    def prove_retention(self):
+        """Logic fixture: first observe the released tool with bowl down and guard away."""
+        bowl=self.states['mixer/bowl'][0].copy();guard=self.states['guard'][0].copy()
+        self.states['mixer/bowl'][0][2]-=.075
+        self.states['guard'][0][:]=[.51,.31,.7825]
+        self.assertEqual(self.score(20)['score'],.25)
+        self.states['mixer/bowl'][0][:]=bowl;self.states['guard'][0][:]=guard
 
     def score(self,n=1,rpm=None):
         for _ in range(n):result=self.task.score_states(self.states,self.hands,rpm or self.still)
@@ -54,7 +63,7 @@ class Scoring(unittest.TestCase):
             self.assertEqual(self.task._drive_fraction,0.)
 
     def test_full_run_requires_stop(self):
-        self.assertEqual(self.score(20)['score'],.75)
+        self.assertEqual(self.score(20)['score'],.5)
         self.task._motor=True
         self.assertFalse(self.score(99,self.rotating)['verified_run'])
         self.assertTrue(self.score(1,self.rotating)['verified_run'])
@@ -64,13 +73,14 @@ class Scoring(unittest.TestCase):
         self.task._stopped_after_run=True
         self.assertTrue(self.score()['success'])
 
-    def test_guard_prop_cannot_count_as_released_retention(self):
+    def test_guard_prop_cannot_count_as_initial_released_retention(self):
+        self.task._reset_counters()
         self.states['mixer/shaft'][0][:]=[.28,.03,1.0775]
         self.states['beater'][0][:]=[.28,.03,1.0718]
         self.states['mixer/bowl'][0][:]=[.26,.03,.8175]
         self.states['guard'][0][:]=[.30294967,.04325,1.0043]
         self.hands[0]=[.29169134,.17425,1.0388]
-        self.assertTrue(self.task.mechanical_state(self.states)['retained_geometry'])
+        self.assertTrue(self.task.observable_state(self.states)['beater_attached'])
         for _ in range(40):
             result=self.task.score_states(self.states,self.hands,self.still,external_beater_contact=True)
         self.assertEqual(result['score'],0.)
@@ -98,6 +108,7 @@ class Scoring(unittest.TestCase):
         self.assertGreater(inner-bore,.0005,'Pressure face can catch the hub bore edge')
 
     def test_held_beater_has_no_credit(self):
+        self.task._reset_counters()
         self.hands[0]=[.28,-.22,1.0315]
         self.assertEqual(self.score(40)['score'],0.)
 
@@ -106,7 +117,7 @@ class Scoring(unittest.TestCase):
         self.assertEqual(self.score(40)['score'],.25)
         self.hands[0]=[-.1,.5,1.2]
         self.assertEqual(self.score(19)['score'],.25)
-        self.assertEqual(self.score()['score'],.75)
+        self.assertEqual(self.score()['score'],.5)
 
     def test_stop_approach_preserves_completed_run(self):
         self.score(20)
@@ -119,9 +130,9 @@ class Scoring(unittest.TestCase):
         self.hands[0]=[-.1,.5,1.2]
         self.assertTrue(self.score(20)['success'])
 
-    def test_unturned_hub_has_no_credit(self):
+    def test_hidden_hub_yaw_does_not_define_score(self):
         self.states['beater']=(self.states['beater'][0],np.eye(3),np.zeros(6))
-        self.assertEqual(self.score(40)['score'],0.)
+        self.assertEqual(self.score(40)['score'],.5)
 
     def test_stationary_beater_cannot_count_run(self):
         self.task._motor=True
@@ -144,7 +155,7 @@ class Scoring(unittest.TestCase):
     def test_partial_credit(self):
         self.states['mixer/bowl'][0][2]-=.075
         self.states['guard'][0][2]-=.075
-        self.assertEqual(self.score(20)['score'],.5)
+        self.assertEqual(self.score(20)['score'],.25)
         self.states['guard'][0][:]=[.51,.31,.7825]
         self.assertEqual(self.score()['score'],.25)
 
@@ -153,6 +164,7 @@ class Scoring(unittest.TestCase):
         with self.assertRaises(RuntimeError):self.score()
 
     def test_manual_unpowered_twist_is_not_rotating_machine_hazard(self):
+        self.task._reset_counters()
         self.hands[0]=[.28,-.22,1.0315]
         result=self.score(rpm=self.rotating)
         self.assertFalse(result['unsafe_event'])
@@ -266,7 +278,7 @@ class Scoring(unittest.TestCase):
         state={key:(np.array(p),quat_xyzw_to_matrix(np.array(q)),np.array(v))
                for key,(p,q,v) in row['objects'].items()}
         for _ in range(20):result=self.task.score_states(state,list(row['tcp'].values()),self.still)
-        self.assertEqual(result['score'],.5)
+        self.assertEqual(result['score'],.25)
 
     def test_inserted_turn_follows_the_current_shaft_frame(self):
         from yam_arena.urdf import axis_angle_matrix
@@ -396,13 +408,13 @@ class Scoring(unittest.TestCase):
         self.assertAlmostEqual(float(torque@delta),float(force@displacement),places=9)
         np.testing.assert_array_equal(controller.force_position_bias(q,np.zeros(3),station.BASES['right']),np.zeros(6))
 
-    def test_outside_retaining_pocket_has_no_credit(self):
+    def test_retaining_pocket_angle_is_not_a_scoring_predicate(self):
         for offset in [-15,15]:
             with self.subTest(offset=offset):
                 angle=self.task.cfg['hub_yaw']+math.radians(offset)
                 r=np.array([[math.cos(angle),-math.sin(angle),0],[math.sin(angle),math.cos(angle),0],[0,0,1]])
                 self.states['beater']=(self.states['beater'][0],r,np.zeros(6))
-                self.assertEqual(self.score(40)['score'],0.)
+                self.assertEqual(self.score(40)['score'],.5)
 
     def test_actual_native_released_retention_is_recognized(self):
         import json
@@ -413,8 +425,66 @@ class Scoring(unittest.TestCase):
                for key,(p,q,v) in row['objects'].items()}
         beater_contacts=[key for key in fixture['last_contact_snapshot']['pairs'] if 'beater/beater' in key]
         self.assertEqual(beater_contacts,['beater/beater | mixer/shaft'])
+        self.task._reset_counters()
         for _ in range(20):result=self.task.score_states(state,list(row['tcp'].values()),self.still)
         self.assertEqual(result['score'],.25)
+
+    def test_contact_diagnostics_do_not_gate_observable_retention(self):
+        self.task._reset_counters()
+        self.states['mixer/bowl'][0][2]-=.075
+        self.states['guard'][0][:]=[.51,.31,.7825]
+        for _ in range(20):
+            result=self.task.score_states(self.states,self.hands,self.still,external_beater_contact=True)
+        self.assertEqual(result['score'],.25)
+        self.assertTrue(result['external_beater_contact'])
+
+    def test_nearby_guard_cannot_prop_the_initial_retention_test(self):
+        self.task._reset_counters()
+        self.states['mixer/bowl'][0][2]-=.075
+        self.states['guard'][0][:]=self.states['beater'][0]+[.349,0,0]
+        self.assertEqual(self.score(40)['score'],0.)
+        self.states['guard'][0][:]=self.states['beater'][0]+[.351,0,0]
+        self.assertEqual(self.score(20)['score'],.25)
+
+    def test_guard_or_raised_bowl_cannot_supply_initial_retention_proof(self):
+        for lowered,guard_away in [(False,False),(False,True),(True,False)]:
+            with self.subTest(lowered=lowered,guard_away=guard_away):
+                self.task._reset_counters()
+                self.states['mixer/bowl'][0][2]=.8175 if lowered else .8925
+                self.states['guard'][0][:]=[.51,.31,.7825] if guard_away else [.26,-.22,1.037]
+                self.assertEqual(self.score(40)['score'],0.)
+
+    def test_rack_beater_does_not_earn_retention_credit(self):
+        self.task._reset_counters()
+        self.states['beater'][0][:]=self.task.cfg['poses']['beater']
+        self.assertEqual(self.score(40)['score'],0.)
+
+    def test_exterior_neck_band_has_a_five_mm_radial_boundary(self):
+        original=self.states['beater'][0].copy()
+        self.states['beater'][0][:]=original+[.0049,0,0]
+        self.assertTrue(self.task.observable_state(self.states)['beater_attached'])
+        self.assertEqual(self.score(20)['score'],.5)
+        self.states['beater'][0][:]=original+[.0051,0,0]
+        self.assertFalse(self.task.observable_state(self.states)['beater_attached'])
+        self.assertEqual(self.score()['score'],0.)
+        self.states['beater'][0][:]=original
+        self.assertEqual(self.score(40)['score'],0.,'Disassembly requires a new released hang test')
+
+    def test_hidden_shaft_speed_and_exact_ratio_do_not_gate_run(self):
+        self.task._motor=True
+        result=self.score(100,dict(beater=60.,shaft=0.,carrier=-23.))
+        self.assertTrue(result['verified_run'])
+        self.assertEqual(result['score'],.75)
+
+    def test_visible_rotation_below_one_turn_per_second_does_not_count(self):
+        self.task._motor=True
+        self.assertFalse(self.score(150,dict(beater=59.9,shaft=136.,carrier=-60.))['verified_run'])
+
+    def test_stop_uses_exterior_motion_and_ignores_hidden_shaft(self):
+        self.task._motor=True;self.score(100,self.rotating)
+        self.task._motor=False;self.task._stopped_after_run=True
+        self.assertTrue(self.score(rpm=dict(beater=.4,shaft=100.,carrier=-.4))['success'])
+        self.assertFalse(self.score(rpm=dict(beater=.401,shaft=0.,carrier=0.))['success'])
 
 
 if __name__=='__main__':unittest.main()

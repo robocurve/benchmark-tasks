@@ -1,9 +1,34 @@
 {
   "geometry": "Original generic CAD authored in build_assets.py; no downloaded OEM CAD or manual illustrations embedded in the task.",
   "references": [
-    {"url": "https://www.bls.gov/ooh/production/bakers.htm", "use": "Workplace relevance: bakers prepare equipment, use mixers and clean equipment."},
-    {"url": "https://www.hobart.com.sg/products/food-preparation/mixers/product/n50", "use": "Commercial five-litre mixer and low agitator-speed reference."},
-    {"url": "https://www.webstaurantstore.com/documents/pdf/425n50.pdf", "use": "Hobart-authored N50CE manual, pages 11 and 14: pin/L-slot mounting, removable guard, manual lift and operational interlocks. Generic geometry does not reproduce exact OEM tolerances."},
-    {"url": "https://dijf55il5e0d1.cloudfront.net/pdf/HobartLegacyPlanetaryMixersAccessoriesUseandApplicationHandbook.pdf", "use": "Hobart-authored handbook describes opposite tool spin and orbital rotation. The prototype's 60 rpm counter-orbit is assumed; the N50 accessory attachment speed is not an orbital-speed measurement."}
-  ]
+    {
+      "url": "https://www.hobart.com.sg/products/food-preparation/mixers/product/n50",
+      "use": "Manufacturer reference for N50-619 (guarded CE) versus N50-604 (unguarded), commercial mixer and agitator speed; no worker-count or low-price claim."
+    },
+    {
+      "url": "https://resources.itwfeg.com/sites/resourcecenter/ProductDocumentation/F23138.PDF",
+      "use": "Hobart-authored N50CE manual F-23138 (6-98), printed p11 pin/L-slot mounting and removable guard/bowl-lift interlock; p14 and Fig4 agitator spring; p18 spring V-111227 and guard478114. Supports mechanism only, not simulated preload, dimensions or stiffness."
+    },
+    {
+      "url": "https://dijf55il5e0d1.cloudfront.net/pdf/HobartLegacyPlanetaryMixersAccessoriesUseandApplicationHandbook.pdf",
+      "use": "Hobart-authored handbook describes opposite tool spin and orbital rotation. The prototype's 60 rpm counter-orbit is assumed; the N50 accessory attachment speed is not an orbital-speed measurement."
+    },
+    {
+      "url": "https://www.hobartfood.com.au/products/food-preparation/mixers/product/n50",
+      "use": "Manufacturer confirms removable stainless guard and hand-cranked self-locking bowl lift on the CE model."
+    },
+    {
+      "url": "https://www.pololu.com/product/3041",
+      "use": "Manufacturer specification for the proposed physical build motor; speed under assembled load remains a commissioning measurement."
+    },
+    {
+      "url": "https://www.pololu.com/product/4036",
+      "use": "Manufacturer pin functions, current-limit adjustment and logic interface for the physical build motor drivers."
+    },
+    {
+      "url": "https://www.ti.com/lit/ds/symlink/tlc555.pdf",
+      "use": "Manufacturer astable timer circuit and frequency/duty formulas for firmware-free preset motor speed control."
+    }
+  ],
+  "physical_reproduction": "PHYSICAL_BUILD.md specifies an unbuilt low-voltage demonstrator; PHYSICAL_SCORING.md defines observable score checks. No OEM dimensional or force calibration is claimed."
 }

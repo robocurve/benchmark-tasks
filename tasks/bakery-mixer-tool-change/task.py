@@ -60,6 +60,7 @@ class MixerTask(ClearanceRecovery):
         self._drive_started = False
         self._start_pressed = self._stop_pressed = False
         self._retained_count = self._guard_count = self._running_count = 0
+        self._retention_proven = False
         self._previous = None
         self._drive_fraction = self._ramp_start = 0.
         self._ramp_tick = 0
@@ -176,6 +177,32 @@ class MixerTask(ClearanceRecovery):
         player.actuators.target_command.set_velocity_index(
             value=torch.tensor([[orbit,spin]],device=base.device),joint_ids=indices)
 
+    def observable_state(self, state):
+        """Exterior reference bands for scoring; motor interlocks use mechanical_state."""
+        p,r,v=state['beater'];sp,sr,sv=state['mixer/shaft']
+        witness=p+r@np.array([0.,0.,-.04])
+        expected=sp+sr@np.array([0.,0.,self.cfg['hub_rest_offset']-.04])
+        offset=sr.T@(witness-expected)
+        mounted=(np.linalg.norm(offset[:2])<=.005
+                 and abs(offset[2])<=.010
+                 and r[2,2]>=math.cos(math.radians(10)))
+        bp,br,bv=state['mixer/bowl'];gp,gr,gv=state['guard']
+        guard=br.T@(gp-bp);guard_r=br.T@gr
+        guard_yaw=math.atan2(guard_r[1,0],guard_r[0,0])
+        seated=(np.linalg.norm(guard[:2])<=.005
+                and abs(guard[2]-self.cfg['guard_height'])<=.005
+                and guard_r[2,2]>=math.cos(math.radians(5))
+                and abs(guard_yaw)<=math.radians(10))
+        lift=bp[2]-(self.cfg['poses']['mixer'][2]+.070)
+        return dict(beater_attached=bool(mounted),guard_seated=bool(seated),
+                    bowl_raised=bool(abs(lift-self.cfg['lift_travel'])<=.005),
+                    bowl_lowered=bool(abs(lift)<=.005),
+                    visible_beater_xy_error_m=float(np.linalg.norm(offset[:2])),
+                    visible_beater_height_error_m=float(offset[2]),
+                    guard_xy_error_m=float(np.linalg.norm(guard[:2])),
+                    guard_height_error_m=float(guard[2]-self.cfg['guard_height']),
+                    lift_m=float(lift))
+
     def update_drive_ramp(self, interlock):
         if not interlock:
             self._drive_fraction=self._ramp_start=0.
@@ -192,32 +219,39 @@ class MixerTask(ClearanceRecovery):
     def score_states(self, state, tcps, rpm, external_beater_contact=False):
         for p,r,v in state.values():
             if not np.isfinite(np.r_[p,r.ravel(),v]).all():raise RuntimeError('Non-finite native mixer state')
-        m=self.mechanical_state(state);cfg=self.cfg
+        m=self.observable_state(state);cfg=self.cfg
         p,r,v=state['beater'];gp,gr,gv=state['guard'];bp,br,bv=state['mixer/bowl']
         for point in (p,gp):
             self._unsafe |= bool(point[2]<cfg['table_top']-.02 or point[2]>1.50 or abs(point[1])>.65 or not -.18<point[0]<.90)
-        moving=(self._motor or self._drive_started) and max(abs(rpm['shaft']),abs(rpm['carrier']))>5
+        moving=(self._motor or self._drive_started) and max(abs(rpm['beater']),abs(rpm['carrier']))>5
         # Operational hand-clearance proxy: hands must stay outside the swept bowl volume.
         intrusion=any(np.linalg.norm(np.asarray(t)[:2]-bp[:2])<.145 and
                       bp[2]-.02<np.asarray(t)[2]<cfg['poses']['mixer'][2]+.350 for t in tcps)
         self._unsafe |= bool(moving and (intrusion or not m['guard_seated'] or not m['bowl_raised']))
         beater_clear=all(min(np.linalg.norm(np.asarray(t)-(p+r@np.array([0,0,z]))) for z in [0,-.04,-.105,-.17])>.075 for t in tcps)
         guard_clear=all(np.linalg.norm(np.asarray(t)-gp)>.19 for t in tcps)
-        self._retained_count=self._retained_count+1 if m['retained_geometry'] and beater_clear and not external_beater_contact else 0
-        retained=self._retained_count>=20
+        if not m['beater_attached']:
+            self._retention_proven=False
+        # Prove unsupported hanging before the guard and raised bowl can prop the tool.
+        retention_test=(m['beater_attached'] and beater_clear and m['bowl_lowered']
+                        and np.linalg.norm(gp-p)>=.350)
+        self._retained_count=self._retained_count+1 if retention_test else 0
+        self._retention_proven |= self._retained_count>=20
+        retained=self._retention_proven
         self._guard_count=self._guard_count+1 if m['guard_seated'] and guard_clear else 0
         guard_released=self._guard_count>=20
         ready=retained and m['guard_seated'] and m['bowl_raised']
         if not ready:
             self._ran = self._stopped_after_run = False
-        rotating=abs(rpm['beater']-cfg['shaft_rpm'])<8 and abs(rpm['shaft']-cfg['shaft_rpm'])<8 and abs(rpm['carrier']-cfg['orbit_rpm'])<5
+        rotating=rpm['beater']>=60.
         good_run=ready and self._motor and rotating and beater_clear and guard_clear and not self._unsafe
         self._running_count=self._running_count+1 if good_run else 0
         self._ran |= self._running_count>=round(cfg['run_seconds']*20)
-        stopped=max(abs(x) for x in rpm.values())<1.
-        buttons_released=all(state['mixer/'+key][0][0]-cfg['button_rest_x']<.001 for key in ['start','stop'])
-        success=bool(ready and guard_released and self._ran and self._stopped_after_run and not self._motor and stopped and beater_clear and guard_clear and buttons_released and not self._unsafe)
-        score=0. if self._unsafe else 1. if success else .75 if ready and guard_released else .5 if retained and guard_released else .25 if retained else 0.
+        # At 20 Hz, a two-second hold below this rate bounds exterior travel to 4.8 degrees.
+        stopped=max(abs(rpm[key]) for key in ['beater','carrier'])<=.4
+        success=bool(ready and guard_released and self._ran and self._stopped_after_run and not self._motor and stopped and beater_clear and guard_clear and not self._unsafe)
+        score=(0. if self._unsafe else 1. if success else .75 if ready and guard_released and self._ran
+               else .5 if ready and guard_released else .25 if retained else 0.)
         return dict(success=success,score=score,unsafe_event=bool(self._unsafe),beater_retained=bool(retained),
                     guard_released=bool(guard_released),motor_on=bool(self._motor),verified_run=bool(self._ran),run_controls=int(self._running_count),
                     stop_after_run=bool(self._stopped_after_run),
