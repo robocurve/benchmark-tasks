@@ -1,0 +1,23 @@
+{
+  "title": "Price-mark the boxed stock: one price label on each box's marked spot, labeller back on its pad",
+  "category": "Impact on jobs",
+  "keywords": [
+    "hand price labeller",
+    "price marking",
+    "stock items",
+    "trigger squeeze",
+    "label placement",
+    "stocking shelves",
+    "bimanual tool use"
+  ],
+  "instruction": "Price-mark the three boxes: each box should end with exactly one price label on the printed price spot of its front face, and the labeller lying back on its pad.",
+  "context": "Marking stock items is a core daily task of stockers and order fillers (SOC 53-7065, 2,833,810 US workers, BLS OEWS https://www.bls.gov/oes/current/oes537065.htm) at the receiving bench and the shelf: O*NET lists \"Mark stock items, using identification tags, stamps, electric marking tools, or other labeling equipment.\" as a Core task rated 74 of 100 for importance (https://www.onetonline.org/link/details/53-7065.00). Cartons and items that arrive without a printed price, and sale or clearance stock, are marked there with a hand price labeller before they go on the shelf. A label only goes where the labeller's roller is held square on the item while it applies, so each item has to be met at its marked place and held steady until the label is on, then the labeller is put down for the next job.",
+  "setup": "Station scene, positions in mm in the station frame (x forward from the arm bases, y left, z up from the table top). A one-line hand price labeller (head 235 x 50 mm, 51 mm thick, handle 32 x 90 mm, plastic, 0.285 kg with a label roll) lies on its side on a dark 260 x 260 x 3 mm pad, trigger hinge at x = 215, y = -10, turned 45 degrees so its nose points forward-left; the trigger hangs in front of the handle, 30 mm from it, and swings 20 degrees (about 21 mm at its pad) to full squeeze against a return spring of 25 N at the pad at full travel. The applicator roller (16 mm diameter) sits at the front of the head's underside. Three closed kraft stock boxes (80 x 90 x 70 mm, fixed in a row) stand with their front faces at x = 420, facing the arms, centred at y = 230, 130 and 30; each front face has a printed dark 30 x 20 mm price spot centred 37 mm above the table. Labels are 21 x 12 mm. One fixed starting layout.",
+  "scoring": "Judged at the end of the trial. A full trigger cycle (at least 90 % of the travel, then back below 20 %) with the labeller's roller touching a box's front face (within 1 mm of it), inside the face, and the labeller flat and square to the face within 15 degrees puts that box's label where the roller was; each box shows at most one label, and a later cycle on the same box moves its label to the new place. 0.25 per box whose label centre ends within 10 mm of the printed spot's centre. Plus 0.25 when the labeller lies back on its pad (within 20 mm of its start, flat within 10 degrees, resting on it within 4 mm of the pad surface) with both grippers more than 150 mm from it, only if at least one box scored. Possible scores: 0, 0.25, 0.5, 0.75, 1.0. Shortcuts that score 0: doing nothing, squeezing in the air or with the roller held off the face, pressing a box without a full squeeze, sweeping or dropping the labeller. The run ends early once 1.0 has held for 1 s. Real trial: photograph each box face with a ruler taped beside the printed spot and measure the centre of the label applied last; the labeller's place on the pad against a drawn outline.",
+  "run_limit": "2,400 steps (120 s at 20 Hz)",
+  "reset_notes": "Peel the labels off the boxes, lay the labeller back on its pad in the drawn outline, trigger released.",
+  "fidelity": "Rigid-body simulation (PhysX, 20 Hz). The labeller is one rigid body with a sprung hinged trigger; printing, feed and backing paper are not modelled. A label is a rigid 21 x 12 mm tile on slide joints of its box, set by the rule where the roller touched (as merged #1893); no adhesion. Trigger return force 25 N at the pad is a disclosed estimate. Two parallel grippers cannot wrap a pistol grip, so the labeller is carried on its side: one holds the head, the other squeezes handle and trigger.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "real_trial_cost_usd": 93,
+  "media": "M-9K52RJ"
+}
