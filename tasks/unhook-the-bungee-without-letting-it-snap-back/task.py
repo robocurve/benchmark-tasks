@@ -37,7 +37,9 @@ INSTRUCTION = "Take the bungee off the crate."
 
 PERSON = hhperson.Person("colleague")  # Rocketbox Construction_Male_01, leaning across the bench, palm on the lid
 CRATE_GREY, LID_GREY = (0.36, 0.38, 0.40), (0.44, 0.46, 0.48)
-STEEL, FERRULE_BLACK, CORD_YELLOW = (0.72, 0.73, 0.75), (0.08, 0.08, 0.08), (0.95, 0.78, 0.10)
+# red plastic-coated hooks (common on bungee cords) instead of bare steel, so the hooks stand out on the grey lid at
+# the policy cameras' 320x176
+STEEL, FERRULE_BLACK, CORD_YELLOW = (0.85, 0.10, 0.08), (0.08, 0.08, 0.08), (0.95, 0.78, 0.10)
 
 CRATE = (0.30, 0.40, 0.100)  # a 40 x 30 cm tote, 11 cm tall with its lid (fixed)
 CRATE_XY = (0.30, 0.05)
