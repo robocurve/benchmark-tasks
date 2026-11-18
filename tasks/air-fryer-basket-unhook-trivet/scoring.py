@@ -1,4 +1,4 @@
-"""Scorer wrappers and trace logging for air_fryer_basket_release_button_v2."""
+"""Scorer wrappers and trace logging for the air fryer fry-basket task."""
 
 from __future__ import annotations
 
@@ -11,66 +11,50 @@ import numpy as np
 
 from display import DISPLAY
 from geometry import (
-    BASKET_CLEARED_DRAWER_Z,
+    BASKET_CLEARED_PAN_M,
     BASKET_LIFT_MIN_M,
-    BUTTON_CLEARANCE_DISPLACEMENT_M,
-    BYPASS_BAND_BUTTON_M,
-    BYPASS_ZONE_X_M,
-    BYPASS_ZONE_Y_M,
+    GUARD_OPEN_M,
+    LEVER_RELEASE_RAD,
     MAT_CENTRE,
+    PAN_LIFTED_M,
+    PAN_START_POS,
     STILL_WINDOW_STEPS,
-    TABLE_TOP,
-    TCP_BELOW_LINK_M,
+    UNLATCHED_LIFT_M,
 )
 import logic
 from logic import (
+    basket_rise_over_pan,
     evaluate_state,
     hot_contact,
     on_mat,
+    over_pan,
+    pan_home,
     released,
     still,
 )
 from mechkit import on_reset
 
+FACTS = ("hot_contact_ever", "released_in_air_ever", "unlatched_lift_ever", "dropped_ever", "cleared_pan_ever",
+         "unhook_lift_ever", "lever_used", "guard_opened", "hand_fail")
+
 # Latched run state across control steps
-_RUN = {
-    "hot_contact_ever": False,
-    "cleared_drawer_ever": False,
-    "unhook_lift_ever": False,
-    "button_used": False,
-    "band_checked": False,
-    "hand_fail": False,
-    "bypass_ever": False,
-    "dropped_ever": False,
-    "z_hist": [],
-    "basket_start_z": None,
-    "basket_start_xy": None,
-    "hist": [],
-    "step": 0,
-}
+_RUN: dict[str, Any] = {}
 
 
 def _reset_run() -> None:
-    _RUN["hot_contact_ever"] = False
-    _RUN["cleared_drawer_ever"] = False
-    _RUN["unhook_lift_ever"] = False
-    _RUN["button_used"] = False
-    _RUN["band_checked"] = False
-    _RUN["hand_fail"] = False
-    _RUN["bypass_ever"] = False
-    _RUN["dropped_ever"] = False
-    _RUN["z_hist"] = []
-    _RUN["basket_start_z"] = None
-    _RUN["basket_start_xy"] = None
-    _RUN["hist"] = []
-    _RUN["step"] = 0
+    _RUN.clear()
+    _RUN.update({k: False for k in FACTS})
+    _RUN.update({"z_hist": [], "pan_z_hist": [], "hist": [], "step": 0})
 
+
+_reset_run()
 
 
 def _org(st):
     """The Mech's body origin (MechState.pos is the bounding-box centre, which moves with the sliding parts)."""
     o = getattr(st, "origin", None)
     return st.pos if o is None or not np.any(np.asarray(o, dtype=float)) else o  # unset (zero) origin: fall back to pos
+
 
 _TILT = {"left": None, "right": None}  # hand tilt from vertical (deg), logged with the pads
 _RAW = {"left": None, "right": None}  # raw gripper quaternion (x, y, z, w as Isaac Lab 3 reports it) and body position, logged with the pads
@@ -94,59 +78,45 @@ def _to_numpy(val: Any) -> np.ndarray:
     return np.asarray(val, dtype=np.float64)
 
 
+def _fell(hist: list, z: float) -> bool:
+    """Append z; True if it fell more than 5 cm within the last 5 steps (0.25 s)."""
+    hist.append(z)
+    if len(hist) > 6:
+        del hist[:-6]
+    return len(hist) == 6 and hist[0] - min(hist[1:]) > 0.05
+
+
 def advance(
-    basket_pos: Sequence[float],
-    basket_quat: Sequence[float],
-    button_disp: float,
-    tcps: Sequence[Sequence[float]],
-    pads: Sequence[Sequence[float]],
-    drawer_slide: float = 0.0,
+    basket_pos, basket_quat, pan_pos, pan_quat, lever_angle: float, guard_slide: float, pads,
 ) -> None:
-    """Update latched facts from a single step."""
+    """Update the latched facts from one step."""
     _RUN["step"] += 1
-    bz = float(basket_pos[2])
-    if _RUN["basket_start_z"] is None:
-        _RUN["basket_start_z"] = bz
-        _RUN["basket_start_xy"] = (float(basket_pos[0]), float(basket_pos[1]))
+    rise = basket_rise_over_pan(basket_pos, pan_pos)
+    pressed = lever_angle >= LEVER_RELEASE_RAD
+    pan_up = float(pan_pos[2]) - PAN_START_POS[2]
 
-    # Check hot contact with both fingertip bodies against every hot box
-    if pads and hot_contact(pads, basket_pos, basket_quat, drawer_slide):
+    if pads and hot_contact(pads, basket_pos, basket_quat, pan_pos, pan_quat):
         _RUN["hot_contact_ever"] = True
-
-    # Cleared drawer
-    if bz >= BASKET_CLEARED_DRAWER_Z:
-        _RUN["cleared_drawer_ever"] = True
-
-    # Unhook lift: button pressed >= 8 mm and lifted >= 20 mm
-    if button_disp >= BUTTON_CLEARANCE_DISPLACEMENT_M and bz >= _RUN["basket_start_z"] + BASKET_LIFT_MIN_M:
+    if guard_slide >= GUARD_OPEN_M:
+        _RUN["guard_opened"] = True
+    if pressed:
+        _RUN["lever_used"] = True
+    # The manual's caution: the release is pressed only with both baskets resting on the heat-resistant surface. Pressing
+    # it with the outer basket lifted 1 cm or more off the trivet (carried by the latched handle) drops the hot outer basket.
+    if pressed and pan_up >= PAN_LIFTED_M:
+        _RUN["released_in_air_ever"] = True
+    # The latch holds the fry basket in the outer basket until the lever is pressed: a fry basket that rises 12 mm out of
+    # the outer basket (still over it) with the lever never pressed has defeated the latch.
+    # (Only while the outer basket is still on its trivet: a latched stack carried together tilts both baskets.)
+    if not _RUN["lever_used"] and rise >= UNLATCHED_LIFT_M and over_pan(basket_pos, pan_pos) and pan_up < PAN_LIFTED_M:
+        _RUN["unlatched_lift_ever"] = True
+    if rise >= BASKET_CLEARED_PAN_M:
+        _RUN["cleared_pan_ever"] = True
+    if pressed and rise >= BASKET_LIFT_MIN_M:
         _RUN["unhook_lift_ever"] = True
+    if _fell(_RUN["z_hist"], float(basket_pos[2])) or _fell(_RUN["pan_z_hist"], float(pan_pos[2])):
+        _RUN["dropped_ever"] = True
 
-    # Latch bypass: the catches only let the basket past the ledges (a lift of 8 to 14 mm) while the release button is held
-    # in at least 7 mm AT THAT MOMENT. A basket that passes the ledges with the button out (shoved back, or released after a
-    # tap) is a permanent zero.
-    if button_disp >= BUTTON_CLEARANCE_DISPLACEMENT_M:
-        _RUN["button_used"] = True
-    # The catches exist only in the drawer: the band applies while the basket is still in its drawer (within 7 cm of its
-    # start in x, which covers the 50 mm of play, and 5 cm in y), not when it is later lowered through the same heights
-    # onto the mat 32 cm away.
-    lift = bz - _RUN["basket_start_z"]
-    sx, sy = _RUN["basket_start_xy"]
-    over_ledges = abs(float(basket_pos[0]) - sx) <= BYPASS_ZONE_X_M and abs(float(basket_pos[1]) - sy) <= BYPASS_ZONE_Y_M
-    if over_ledges and lift >= 0.008 and not _RUN["band_checked"]:
-        _RUN["band_checked"] = True
-        if button_disp < BYPASS_BAND_BUTTON_M:
-            _RUN["bypass_ever"] = True
-    if over_ledges and 0.008 <= lift <= 0.014 and button_disp < BYPASS_BAND_BUTTON_M:
-        _RUN["bypass_ever"] = True
-
-    # Dropped: the basket fell more than 5 cm within 5 steps (0.25 s)
-    _RUN["z_hist"].append(bz)
-    if len(_RUN["z_hist"]) > 5:
-        _RUN["z_hist"] = _RUN["z_hist"][-6:]
-        if _RUN["z_hist"][0] - min(_RUN["z_hist"][1:]) > 0.05:
-            _RUN["dropped_ever"] = True
-
-    # History for stillness check
     _RUN["hist"].append(list(map(float, basket_pos)))
     if len(_RUN["hist"]) > STILL_WINDOW_STEPS * 2:
         _RUN["hist"] = _RUN["hist"][-STILL_WINDOW_STEPS:]
@@ -156,22 +126,20 @@ def _trace(record: dict) -> None:
     path = os.environ.get("TASK_TRACE")
     if not path:
         return
-    # Convert any numpy types to plain python floats/ints/bools
     clean = {}
     for k, v in record.items():
         if isinstance(v, (np.floating, float)):
             clean[k] = round(float(v), 5)
-        elif isinstance(v, (np.integer, int)):
-            clean[k] = int(v)
         elif isinstance(v, (np.bool_, bool)):
             clean[k] = bool(v)
+        elif isinstance(v, (np.integer, int)):
+            clean[k] = int(v)
         elif isinstance(v, (list, tuple)):
             clean[k] = [round(float(x), 5) if isinstance(x, (float, np.floating)) else x for x in v]
         else:
             clean[k] = v
     with open(path, "a", encoding="utf-8") as fh:
         fh.write(json.dumps(clean) + "\n")
-
 
 
 def _hand_data2(environment):
@@ -232,19 +200,16 @@ def _hand_data2(environment):
 
 def score(objects: dict[str, Any], environment: Any = None) -> float:
     """Score the task state."""
-    basket_st = objects.get("af2_basket")
-    housing_st = objects.get("af2_housing")
-
-    if basket_st is None:
+    basket_st = objects.get("af3_basket")
+    pan_st = objects.get("af3_pan")
+    if basket_st is None or pan_st is None:
         return 0.0
 
-    b_pos = list(_org(basket_st))
-    b_quat = list(basket_st.quat_xyzw)
-    button_disp = float(basket_st.joints.get("button", 0.0)) if hasattr(basket_st, "joints") else 0.0
-
-    drawer_slide = 0.0
-    if housing_st and hasattr(housing_st, "joints"):
-        drawer_slide = float(housing_st.joints.get("drawer", 0.0))
+    b_pos, b_quat = list(_org(basket_st)), list(basket_st.quat_xyzw)
+    p_pos, p_quat = list(_org(pan_st)), list(pan_st.quat_xyzw)
+    joints = getattr(basket_st, "joints", {}) or {}
+    lever = float(joints.get("lever", 0.0))
+    guard = float(joints.get("guard", 0.0))
 
     tcps, pads = _hand_data2(environment if environment is not None else _ENV[0])
     try:
@@ -254,23 +219,11 @@ def score(objects: dict[str, Any], environment: Any = None) -> float:
                 _fh.write(json.dumps({"p": [[round(float(v), 3) for v in q] for q in pads], "t": [[round(float(v), 3) for v in q] for q in tcps], "tilt": dict(_TILT), "raw": dict(_RAW)}) + "\n")
     except Exception:
         pass
-    advance(b_pos, b_quat, button_disp, tcps, pads, drawer_slide)
+    advance(b_pos, b_quat, p_pos, p_quat, lever, guard, pads)
 
-    rel = released(list(tcps) + list(pads), b_pos, b_quat) if tcps else False   # both gripper centres and every finger pad box
+    rel = released(list(tcps) + list(pads), b_pos, b_quat, lever, guard) if tcps else False
     stl = still(_RUN["hist"])
-
-    s, reason = evaluate_state(
-        b_pos,
-        b_quat,
-        button_disp,
-        _RUN["hot_contact_ever"],
-        _RUN["cleared_drawer_ever"],
-        _RUN["unhook_lift_ever"],
-        rel,
-        stl,
-        _RUN["bypass_ever"],
-        _RUN["dropped_ever"],
-    )
+    s, reason = evaluate_state(b_pos, b_quat, p_pos, p_quat, lever, _RUN, rel, stl)
     if _RUN["hand_fail"]:
         s, reason = 0.0, "hand poses could not be read (scores 0)"
 
@@ -278,14 +231,20 @@ def score(objects: dict[str, Any], environment: Any = None) -> float:
         "step": int(_RUN["step"]),
         "score": float(s),
         "reason": reason,
-        "basket_z": round(float(b_pos[2]), 4), "basket": [round(float(v), 4) for v in b_pos],
-        "button_disp": round(float(button_disp), 4), "basket_tilt": round(float(__import__("logic").tilt_deg(b_quat)), 1),
+        "basket": [round(float(v), 4) for v in b_pos],
+        "pan": [round(float(v), 4) for v in p_pos],
+        "lever": round(lever, 4),
+        "guard": round(guard, 4),
+        "rise": round(basket_rise_over_pan(b_pos, p_pos), 4),
+        "basket_tilt": round(float(logic.tilt_deg(b_quat)), 1),
+        "pan_tilt": round(float(logic.tilt_deg(p_quat)), 1),
         "hot_contact": bool(_RUN["hot_contact_ever"]),
         "on_mat": bool(on_mat(b_pos, b_quat)),
+        "pan_home": bool(pan_home(p_pos, p_quat)),
         "released": bool(rel),
         "still": bool(stl),
+        "facts": [k for k in FACTS if _RUN[k]],
     })
-
     return s
 
 
@@ -294,9 +253,8 @@ def success(objects: dict[str, Any], environment: Any = None) -> bool:
 
 
 def distance(objects: dict[str, Any]) -> float:
-    basket_st = objects.get("af2_basket")
+    basket_st = objects.get("af3_basket")
     if basket_st is None:
         return 1.0
-    dx = float(_org(basket_st)[0]) - MAT_CENTRE[0]
-    dy = float(_org(basket_st)[1]) - MAT_CENTRE[1]
-    return float(math.hypot(dx, dy))
+    o = _org(basket_st)
+    return float(math.hypot(float(o[0]) - MAT_CENTRE[0], float(o[1]) - MAT_CENTRE[1]))

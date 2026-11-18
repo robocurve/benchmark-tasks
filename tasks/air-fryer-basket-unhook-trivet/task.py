@@ -1,4 +1,5 @@
-"""Air fryer basket release button task: release and remove a hot air fryer basket onto a heat-proof mat."""
+"""Air fryer fry-basket task: on a heat-resistant trivet, slide the handle's button guard forward, press the release
+button on top of the handle while lifting the hot fry basket out of its outer basket by the grip, and set it on a mat."""
 
 from __future__ import annotations
 
@@ -13,32 +14,39 @@ from geometry import (
     BASKET_HANDLE_BOXES,
     BASKET_MASS,
     BASKET_START_POS,
-    BUTTON_AT,
-    BUTTON_BOXES,
-    BUTTON_DAMPING_NS_M,
-    BUTTON_MASS,
-    BUTTON_RATE_N_M,
-    BUTTON_TRAVEL_M,
     COLOR_BASKET,
     COLOR_BUTTON,
-    COLOR_DRAWER,
+    COLOR_GUARD,
     COLOR_HANDLE,
     COLOR_HOUSING,
     COLOR_MAT,
-    DRAWER_AT,
-    DRAWER_BOXES,
-    DRAWER_DAMPING_NS_M,
-    DRAWER_MASS,
-    DRAWER_RATE_N_M,
-    DRAWER_TRAVEL_M,
+    COLOR_PAN,
+    COLOR_TRIVET,
+    GUARD_AT,
+    GUARD_BOXES,
+    GUARD_DAMPING_NS_M,
+    GUARD_MASS,
+    GUARD_TRAVEL_M,
     HOUSING_BOXES,
-    STAND_BOX,
-    COLOR_STAND,
     HOUSING_FRICTION,
     HOUSING_POS,
+    LEVER_AT,
+    LEVER_BOXES,
+    LEVER_DAMPING,
+    LEVER_FRICTION,
+    LEVER_MASS,
+    LEVER_RATE_NM_RAD,
+    LEVER_TRAVEL_RAD,
     MAT_BOXES,
     MAT_CENTRE,
+    PAN_BOXES,
+    PAN_FRICTION,
+    PAN_MASS,
+    PAN_START_POS,
+    STAND_BOX,
     TABLE_TOP,
+    TRIVET_BOXES,
+    TRIVET_POS,
 )
 import demo_plan
 from mechkit import Joint, Mech, box
@@ -49,72 +57,64 @@ TOP = TABLE_TOP
 SUCCESS_HOLD_S = 1.0
 SCORE_OVER = "end"
 
-# 1. Housing (fixed to the bench) carrying the drawer on a prismatic slide
-housing_shapes = [box(c, s, COLOR_HOUSING) for c, s, _ in HOUSING_BOXES] + [box(STAND_BOX[0], STAND_BOX[1], COLOR_STAND)]
-drawer_shapes = [box(c, s, COLOR_DRAWER) for c, s, _ in DRAWER_BOXES]
-
-drawer_joint = Joint(
-    "drawer",
-    "slide",
-    axis="x",
-    at=DRAWER_AT,
-    low=0.0,
-    high=DRAWER_TRAVEL_M,
-    spring=DRAWER_RATE_N_M,
-    damping=DRAWER_DAMPING_NS_M,
-    mass=DRAWER_MASS,
-    shapes=drawer_shapes,
-)
-
+# 1. The appliance body (fixed, hot), its drawer bay empty
 HOUSING = Mech(
-    "af2_housing",
+    "af3_housing",
     pos=HOUSING_POS,
     mass=None,
     friction=HOUSING_FRICTION,
-    shapes=housing_shapes,
-    joints=[drawer_joint],
+    shapes=[box(c, s, COLOR_HOUSING) for c, s, _ in HOUSING_BOXES] + [box(STAND_BOX[0], STAND_BOX[1], COLOR_TRIVET)],
 )
 
-# 2. Basket (loose 300 g body) carrying the release button on a prismatic slide
-basket_shapes = (
-    [box(c, s, COLOR_BASKET) for c, s, _ in BASKET_BODY_BOXES]
-    + [box(c, s, COLOR_HANDLE) for c, s, _ in BASKET_HANDLE_BOXES]
-)
-button_shapes = [box(c, s, COLOR_BUTTON) for c, s, _ in BUTTON_BOXES]
+# 2. Heat-resistant trivet (fixed) under the outer basket
+TRIVET = Mech("af3_trivet", pos=TRIVET_POS, mass=None, friction=1.0,
+              shapes=[box(c, s, COLOR_TRIVET) for c, s, _ in TRIVET_BOXES])
 
-button_joint = Joint(
-    "button",
+# 3. Outer basket (loose 600 g steel pan) with the catch lip on its front wall
+PAN = Mech("af3_pan", pos=PAN_START_POS, mass=PAN_MASS, friction=PAN_FRICTION,
+           shapes=[box(c, s, COLOR_PAN) for c, s, _ in PAN_BOXES])
+
+# 4. Fry basket (loose 300 g) with its inverted-L handle, the sprung release lever and the sliding button guard
+lever_joint = Joint(
+    "lever",
+    "hinge",
+    axis="y",
+    at=LEVER_AT,
+    low=0.0,
+    high=LEVER_TRAVEL_RAD,
+    spring=LEVER_RATE_NM_RAD,
+    damping=LEVER_DAMPING,
+    mass=LEVER_MASS,
+    friction=LEVER_FRICTION,
+    shapes=[box(c, s, COLOR_BUTTON) for c, s, _ in LEVER_BOXES],
+)
+guard_joint = Joint(
+    "guard",
     "slide",
     axis="x",
-    at=BUTTON_AT,
+    at=GUARD_AT,
     low=0.0,
-    high=BUTTON_TRAVEL_M,
-    spring=BUTTON_RATE_N_M,
-    damping=BUTTON_DAMPING_NS_M,
-    mass=BUTTON_MASS,
-    shapes=button_shapes,
+    high=GUARD_TRAVEL_M,
+    spring=0.0,
+    damping=GUARD_DAMPING_NS_M,
+    mass=GUARD_MASS,
+    shapes=[box(c, s, COLOR_GUARD) for c, s, _ in GUARD_BOXES],
 )
-
 BASKET = Mech(
-    "af2_basket",
+    "af3_basket",
     pos=BASKET_START_POS,
     mass=BASKET_MASS,
     friction=BASKET_FRICTION,
-    shapes=basket_shapes,
-    joints=[button_joint],
+    shapes=[box(c, s, COLOR_BASKET) for c, s, _ in BASKET_BODY_BOXES]
+    + [box(c, s, COLOR_HANDLE) for c, s, _ in BASKET_HANDLE_BOXES],
+    joints=[lever_joint, guard_joint],
 )
 
-# 3. Heat-proof mat (fixed to the bench)
-mat_shapes = [box(c, s, COLOR_MAT) for c, s, _ in MAT_BOXES]
-MAT = Mech(
-    "af2_mat",
-    pos=MAT_CENTRE,
-    mass=None,
-    friction=1.2,
-    shapes=mat_shapes,
-)
+# 5. Heat-proof mat (fixed) for the fry basket
+MAT = Mech("af3_mat", pos=MAT_CENTRE, mass=None, friction=1.2,
+           shapes=[box(c, s, COLOR_MAT) for c, s, _ in MAT_BOXES])
 
-OBJECTS = [HOUSING, BASKET, MAT]
+OBJECTS = [HOUSING, TRIVET, PAN, BASKET, MAT]
 
 score = scoring.score
 success = scoring.success

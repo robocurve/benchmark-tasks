@@ -15,14 +15,14 @@ case "$mode" in
     steps=1500
     ;;
   ablation)
-    export ABLATION=1
+    export ABLATION=idle
     policy=yam_scripted
-    steps=1200
+    steps=900
     ;;
-  shove)
-    export ABLATION=shove
+  noguard)
+    export ABLATION=noguard
     policy=yam_scripted
-    steps=1200
+    steps=900
     ;;
   posecheck)
     export POSE_CHECK=1
@@ -34,7 +34,7 @@ case "$mode" in
     steps=1500
     ;;
   *)
-    echo "Unknown mode: $mode (use settle, demo, ablation, shove, posecheck, dream)" >&2
+    echo "Unknown mode: $mode (use settle, demo, ablation, noguard, posecheck, dream)" >&2
     exit 2
     ;;
 esac
@@ -46,5 +46,5 @@ export TASK_TRACE="$out/trace.jsonl"
 
 inspect-robots run --embodiment yam_arena --policy "$policy" \
   -E task="$PWD/task.py" -E object_jitter=0 -E control_hz=20 -E cam_width=320 -E cam_height=176 \
-  --instruction "Take the basket out of the air fryer drawer by its release button and handle, set it flat on the mat, and let go of everything; touch nothing hot." \
+  --instruction "Lift the fry basket out of its outer basket: slide the button guard forward, hold the release button on the handle while lifting by the grip, set the fry basket flat on the mat, and let go of everything; touch nothing hot." \
   --scorer task_score --max-steps "$steps" --store-frames --log-dir "$out"

@@ -1,41 +1,46 @@
-"""Geometry and physical specifications for air_fryer_basket_release_button_v2."""
+"""Geometry and physical specifications for the air fryer fry-basket task.
+
+Source appliance: the 5.3 qt Air Fryer, model CM1708 (owner's manual for QVC item K46295). Its fry basket has a handle
+shaped like an inverted L: a short arm out from the basket rim and a vertical grip hanging from the arm's outer end. The
+Basket Release Button sits on top of the arm, where the thumb rests, under a Sliding Button Guard that slides forward to
+expose it. Pressing the button lets the fry basket lift out of the outer basket; the manual says to do this only with the
+fry basket and outer basket "resting on a level, heat-resistant surface".
+
+Frames: x forward (away from the robot), y left, z up. Basket-frame positions are metres from the basket origin (the
+centre of its floor), with the handle on the -x side, toward the robot.
+"""
 
 from __future__ import annotations
-
-import math
-import numpy as np
 
 # Table surface in yam_arena
 TABLE_TOP = 0.7475
 
 # Colours (sRGB 0..1)
 COLOR_HOUSING = (0.369, 0.384, 0.408)    # #5E6268 heat-tinted grey
-COLOR_DRAWER = (0.784, 0.267, 0.122)     # #C8441F orange painted steel
-COLOR_BASKET = (0.824, 0.271, 0.118)     # #D2451E orange fry basket
-COLOR_HANDLE = (0.120, 0.120, 0.140)     # #1E1E24 cool-touch black rubber
-COLOR_BUTTON = (0.231, 0.435, 0.839)     # #3B6FD6 blue ABS release button
+COLOR_PAN = (0.784, 0.267, 0.122)        # #C8441F outer basket, orange painted steel
+COLOR_BASKET = (0.824, 0.271, 0.118)     # #D2451E fry basket
+COLOR_HANDLE = (0.120, 0.120, 0.140)     # #1E1E24 cool-touch black plastic handle
+COLOR_BUTTON = (0.231, 0.435, 0.839)     # #3B6FD6 blue release button (lever)
+COLOR_GUARD = (0.780, 0.860, 0.900)      # #C7DBE6 clear sliding button guard (shown pale blue-grey)
 COLOR_MAT = (0.478, 0.180, 0.180)        # #7A2E2E dark red silicone mat
+COLOR_TRIVET = (0.690, 0.545, 0.369)     # #B08B5E bamboo trivet board
 COLOR_AMBER = (0.950, 0.550, 0.100)      # amber glow tiles and heating lamp
 
-# Mat definition (fixed on table beside drawer)
-MAT_CENTRE = (0.414, 0.300, TABLE_TOP)   # a 30 x 30 cm silicone trivet mat on the left of the appliance; its -y edge (y 0.15) clears the housing board (y 0.11)
+# Mat for the fry basket (fixed on the bench, left of the appliance)
+MAT_CENTRE = (0.414, 0.335, TABLE_TOP)   # a 30 x 30 cm silicone mat; its -y edge (y 0.185) is 2 cm clear of the trivet (y 0.165)
 MAT_SIZE = (0.300, 0.300, 0.010)
 MAT_X_MIN = 0.264
 MAT_X_MAX = 0.564
-MAT_Y_MIN = 0.150
-MAT_Y_MAX = 0.450
+MAT_Y_MIN = 0.185
+MAT_Y_MAX = 0.485
 MAT_TOP_Z = TABLE_TOP + 0.010
 MAT_Z_TOL = 0.005
 TILT_MAX_DEG = 5.0
 
-# Housing definition (fixed, mass=None)
-HOUSING_POS = (0.650, -0.020, TABLE_TOP + 0.030)   # on a 3 cm stand so the handle and release button are within the arm's low reach
-HOUSING_MASS = 25.0
+# The appliance body (fixed, hot), its drawer bay empty: the outer basket has been pulled out onto the trivet
+HOUSING_POS = (0.700, 0.000, TABLE_TOP + 0.030)
 HOUSING_FRICTION = 1.2
-
-# Heat-resistant board the appliance stands on (part of the fixed housing, not hot): fills the 3 cm under the housing
-STAND_BOX = ((0.000, 0.000, -0.015), (0.260, 0.260, 0.030))
-COLOR_STAND = (0.690, 0.545, 0.369)     # #B08B5E bamboo board
+STAND_BOX = ((0.000, 0.000, -0.015), (0.260, 0.260, 0.030))   # 3 cm board under the appliance (not hot)
 
 # 5 Housing collision boxes (all hot: true) - relative to housing origin
 HOUSING_BOXES = [
@@ -46,73 +51,94 @@ HOUSING_BOXES = [
     ((0.000, -0.1235, 0.047), (0.260, 0.013, 0.086), True),  # right wall
 ]
 
-# Drawer slide definition (joint on housing)
-DRAWER_AT = (-0.235, 0.000, 0.006)   # relative to housing origin (pulled out at start; 15 mm of the drawer's rear wall stays inside the housing)
-DRAWER_MASS = 0.8
-DRAWER_TRAVEL_M = 0.225
-DRAWER_RATE_N_M = 0.0     # not sprung: the drawer stays where it is left (damping only)
-DRAWER_DAMPING_NS_M = 30.0
+# Heat-resistant trivet (fixed, not hot) the outer basket rests on, as the manual requires before the guard is moved
+TRIVET_POS = (0.350, 0.035, TABLE_TOP)
+TRIVET_BOXES = [((0.000, 0.000, 0.005), (0.260, 0.260, 0.010), False)]
+TRIVET_TOP_Z = TABLE_TOP + 0.010
 
-# 9 Drawer collision boxes (all hot: true) - relative to drawer origin
-DRAWER_BOXES = [
+# Outer basket (loose, hot): a steel pan with a catch lip on the outside of its front wall
+PAN_START_POS = (0.350, 0.035, TABLE_TOP + 0.010)   # origin = underside of its floor, resting on the trivet
+PAN_MASS = 0.60
+PAN_FRICTION = 1.0
+PAN_WALL_TOP = 0.066                                 # wall top above the pan origin
+PAN_BOXES = [
     ((0.000, 0.000, 0.003), (0.240, 0.224, 0.006), True),     # floor
-    ((0.000, 0.109, 0.041), (0.240, 0.006, 0.070), True),     # left wall
-    ((0.000, -0.109, 0.041), (0.240, 0.006, 0.070), True),    # right wall
-    ((0.117, 0.000, 0.041), (0.006, 0.224, 0.070), True),     # back wall
-    ((-0.117, 0.000, 0.019), (0.006, 0.224, 0.026), True),   # front bottom strip
-    ((-0.117, 0.106, 0.0565), (0.006, 0.012, 0.041), True),   # front left remnant
-    ((-0.117, -0.106, 0.0565), (0.006, 0.012, 0.041), True),  # front right remnant
-    ((-0.117, 0.095, 0.058), (0.006, 0.010, 0.008), True),    # catch ledge left
-    ((-0.117, -0.095, 0.058), (0.006, 0.010, 0.008), True),   # catch ledge right
+    ((0.000, 0.109, 0.036), (0.240, 0.006, 0.060), True),     # left wall
+    ((0.000, -0.109, 0.036), (0.240, 0.006, 0.060), True),    # right wall
+    ((0.117, 0.000, 0.036), (0.006, 0.212, 0.060), True),     # back wall
+    ((-0.117, 0.000, 0.036), (0.006, 0.212, 0.060), True),    # front wall (x -0.120 to -0.114)
+    ((-0.1225, 0.000, 0.049), (0.005, 0.024, 0.008), True),   # catch lip under the handle: x -0.125 to -0.120, z 4.5 to 5.3 cm
 ]
 
-# Basket definition (loose Mech)
-BASKET_START_POS = (0.414, -0.020, TABLE_TOP + 0.047)
-BASKET_MASS = 0.30       # an empty steel basket with a rubber-coated handle (real 0.25 to 0.45 kg)
-BASKET_FRICTION = 1.2    # one value for the whole basket: stands for the rubber-coated handle (rubber on a gripper finger is about 1.0 to 1.5)
+# Fry basket (loose): the basket origin sits 11 mm above the pan origin (on the pan floor)
+BASKET_START_POS = (0.350, 0.035, TABLE_TOP + 0.021)
+BASKET_ABOVE_PAN_M = 0.011
+BASKET_MASS = 0.25       # an empty steel basket with a plastic handle (real 0.25 to 0.45 kg)
+BASKET_FRICTION = 1.5    # one value for the whole basket: stands for the handle's rubber-coated grip
 
 # 5 Basket body collision boxes (all hot: true) - relative to basket origin
 BASKET_BODY_BOXES = [
-    ((-0.024, 0.000, 0.000), (0.178, 0.204, 0.010), True),   # floor (with 5 mm feet stand-in); x -0.113 to 0.065
+    ((-0.024, 0.000, 0.000), (0.178, 0.204, 0.010), True),   # floor; x -0.113 to 0.065
     ((-0.024, 0.100, 0.035), (0.178, 0.004, 0.060), True),   # left wall
     ((-0.024, -0.100, 0.035), (0.178, 0.004, 0.060), True),  # right wall
-    ((0.063, 0.000, 0.035), (0.004, 0.204, 0.060), True),    # back wall: 49 mm play to the drawer's back wall so the basket can pitch as it is lifted by its front handle (measured on the GPU: 17 mm jammed it at 11 deg)
-    ((-0.111, 0.000, 0.035), (0.004, 0.155, 0.060), True),   # front wall with a 20 mm slot at each side for the catch lugs
+    ((0.063, 0.000, 0.035), (0.004, 0.204, 0.060), True),    # back wall: 49 mm play to the pan's back wall so the basket can pitch as it is lifted by its front handle
+    ((-0.111, 0.000, 0.035), (0.004, 0.204, 0.060), True),   # front wall (x -0.113 to -0.109), 1 mm inside the pan's front wall
 ]
 
-# 5 Handle collision boxes (touchable, hot: false) - relative to basket origin. The grip is VERTICAL: an upright bar on a short stem.
+# 6 Handle collision boxes (cool-touch, hot: false) - relative to basket origin. Inverted L: an arm out from the rim and
+# a vertical grip hanging from its outer end; the arm's inner part is a slot between two rails that holds the release lever.
 BASKET_HANDLE_BOXES = [
-    ((-0.143, 0.065, 0.0575), (0.025, 0.022, 0.075), False),    # vertical cool-touch grip bar: 2.5 x 2.2 cm, 7.5 cm tall (x -0.1555 to -0.1305, z 0.020 to 0.095), gripped across y by the lifting hand; it sits where the old post was gripped so the two grippers stay 10 cm apart in x
-    ((-0.1455, -0.065, 0.0355), (0.065, 0.014, 0.025), False),  # right post, 6.5 cm long (x -0.178 to -0.113): the button's stem slides toward its front end
-    ((-0.12175, 0.065, 0.035), (0.0175, 0.016, 0.020), False),  # stem of the grip bar to the basket front wall, 1.75 cm long (x -0.1305 to -0.113, z 0.025 to 0.045: 4 mm above the drawer's front strip)
-    ((-0.1855, -0.0375, 0.0405), (0.025, 0.020, 0.050), False), # upright button pillar (y -0.0475 to -0.0275, z 0.0155 to 0.0655), 5 mm inboard of the button; the button's outer side is open
-    ((-0.143, -0.0375, 0.035), (0.060, 0.010, 0.020), False),   # stem of the button pillar to the basket front wall (x -0.173 to -0.113, z 0.025 to 0.045)
+    ((-0.111, 0.010, 0.0775), (0.004, 0.008, 0.025), False),   # left half of the mount on the basket front wall (z 6.5 to 9.0 cm; the lever passes between the halves)
+    ((-0.124, 0.010, 0.080), (0.022, 0.008, 0.020), False),    # left rail of the slot (x -0.135 to -0.113, z 7.0 to 9.0 cm), 6 mm above the pan's front wall
+    ((-0.124, -0.010, 0.080), (0.022, 0.008, 0.020), False),   # right rail
+    ((-0.15875, 0.000, 0.080), (0.0475, 0.024, 0.020), False), # solid outer arm (x -0.1825 to -0.135)
+    ((-0.170, 0.000, 0.030), (0.025, 0.024, 0.080), False),    # vertical grip, 8 cm (x -0.1825 to -0.1575, z -1.0 to 7.0 cm): the lifting hand closes across it
+    ((-0.111, -0.010, 0.0775), (0.004, 0.008, 0.025), False),  # right half of the mount
 ]
+GRIP_CENTRE = (-0.170, 0.000, 0.030)
 
-# Basket floor half extents for corner checks
+# Basket floor extents for corner checks
 BASKET_FLOOR_HALF_X = 0.113   # front half (handle side)
 BASKET_FLOOR_BACK_X = 0.065   # back edge of the floor (the basket is 17.8 cm long)
 BASKET_FLOOR_HALF_Y = 0.102
 
-# Release button definition (slide joint on basket)
-BUTTON_AT = (-0.2015, -0.065, 0.028)    # relative to basket origin
-BUTTON_MASS = 0.04
-BUTTON_TRAVEL_M = 0.014
-BUTTON_RATE_N_M = 8.0
-BUTTON_DAMPING_NS_M = 5.0
-BUTTON_CLEARANCE_DISPLACEMENT_M = 0.008 # the lugs clear the ledges' rear edge after 7 mm of travel; 8 mm is the scoring threshold
-BYPASS_BAND_BUTTON_M = 0.004            # while the basket passes the ledges (lift 8 to 14 mm) the button must be at least this far in (a deliberate press, 30 % of the stroke; measured on the GPU: a held press reads 5.6 to 14 mm during the lift)
-BYPASS_ZONE_X_M = 0.070                 # the bypass band applies while the basket is still in its drawer: within 7 cm of its start in x
-BYPASS_ZONE_Y_M = 0.050                 # (covers the 50 mm of play toward the drawer back) and 5 cm in y; the mat is 32 cm away in y
-BUTTON_OUT_THRESHOLD_M = 0.0014         # >= 90% extended (<= 1.4 mm displaced of the 14 mm stroke)
-
-# 3 Button collision boxes (touchable, hot: false) - relative to button joint origin
-BUTTON_BOXES = [
-    ((0.000, 0.000, 0.005), (0.005, 0.025, 0.025), False),    # the push button: 2.5 x 2.5 cm plate, front face 6 mm in front of the button pillar's front face
-    ((0.0055, 0.000, 0.005), (0.006, 0.012, 0.012), False),   # its stem: at a full 14 mm stroke it is 1 mm short of the right post front
-    ((0.0875, 0.155, 0.004), (0.012, 0.010, 0.010), False),   # catch lug left (y +0.09 on the basket): under its ledge at rest, 7 mm past its rear edge at full travel
-    ((0.0875, -0.025, 0.004), (0.012, 0.010, 0.010), False),  # catch lug right (y -0.09 on the basket)
+# Basket Release Button: a sprung lever pivoting across the slot (hinge about y). Its tooth hangs straight down from the
+# pivot outside the pan's front wall, and its foot points inward under the catch lip, so the outer basket's weight on the
+# foot passes through the pivot and cannot turn the lever (measured on the GPU: with the foot 2.3 cm inboard of the pivot,
+# a carried outer basket pried the lever open). The thumb pad sits 3 cm inboard of the pivot, over the basket rim, where
+# the thumb rests; pressing it down swings the foot out from under the lip.
+LEVER_AT = (-0.125, 0.000, 0.082)       # pivot, relative to basket origin
+LEVER_MASS = 0.015
+LEVER_TRAVEL_RAD = 0.28                 # end stop: the pad moves down 8 mm (a thumb button's 4 to 8 mm)
+LEVER_RATE_NM_RAD = 0.35                # spring back to rest: 1.3 N on the pad releases it, 2.9 N holds the stop
+LEVER_DAMPING = 0.02
+LEVER_RELEASE_RAD = 0.13                # the foot clears the lip once the lever turns 0.09 rad, by 1.5 mm at 0.12 (measured on the GPU: a 1 mm clearance still caught); 0.13 (pad 4 mm down) is the "pressed" threshold
+LEVER_FRICTION = 0.2                    # smooth plastic hook on the steel lip
+LEVER_OUT_RAD = 0.02                    # back at rest (<= 7 % of the stroke)
+# Lever boxes (hot: false) - relative to the pivot, at rest
+LEVER_BOXES = [
+    ((0.012, 0.000, 0.000), (0.036, 0.008, 0.008), False),     # beam in the slot, through the mount and over the rim to the pad
+    ((0.030, 0.000, 0.014), (0.008, 0.008, 0.020), False),     # stem up to the pad
+    ((0.030, 0.000, 0.027), (0.020, 0.022, 0.006), False),     # thumb pad 2.0 x 2.2 cm (basket x -0.105 to -0.085, z 10.6 to 11.2 cm)
+    ((-0.005, 0.000, -0.0295), (0.004, 0.008, 0.051), False),  # tooth hanging straight down outside the lip (basket x -0.132 to -0.128, z 2.7 to 7.8 cm)
+    ((-0.00125, 0.000, -0.052), (0.0115, 0.008, 0.006), False),# foot under the catch lip: 4.5 mm overlap, 1 mm below it, centred under the pivot
 ]
+PAD_CENTRE = (-0.095, 0.000, 0.109)     # basket frame, at rest
+
+# Sliding Button Guard: a clear cap over the pad that slides forward (+x, toward the basket) to expose it; its 6 cm
+# travel keeps its tab clear of a pressing finger (1.5 to 4 cm wide; measured on the GPU: at 4.5 cm the finger, drifting
+# 9 mm forward, rested on the tab at its stop and pinned the basket down)
+GUARD_AT = (0.000, 0.000, 0.000)
+GUARD_MASS = 0.008
+GUARD_TRAVEL_M = 0.060
+GUARD_DAMPING_NS_M = 3.0                # no spring: it stays where it is pushed
+GUARD_OPEN_M = 0.030                    # pad uncovered beyond 3 cm
+# Guard boxes (hot: false) - relative to the basket origin at rest (the joint origin is the basket origin)
+GUARD_BOXES = [
+    ((-0.095, 0.000, 0.116), (0.030, 0.028, 0.004), False),    # cap plate over the pad (x -0.110 to -0.080, z 11.4 to 11.8 cm)
+    ((-0.112, 0.000, 0.122), (0.004, 0.020, 0.016), False),    # ridged thumb tab at its back edge (x -0.114 to -0.110, z 11.4 to 13.0 cm): above the pad top (measured on the GPU: a tab reaching below it jammed on the pad)
+]
+GUARD_TAB_BACK_X = -0.114
 
 # Mat box (touchable, hot: false) - relative to mat origin
 MAT_BOXES = [
@@ -123,18 +149,22 @@ MAT_BOXES = [
 PAD_BOX_SIZE = (0.012, 0.012, 0.012)   # 12 mm cube
 PAD_BOX_HALF = (0.006, 0.006, 0.006)
 HOT_INFLATION_M = 0.002                # 2 mm inflation of hot boxes
-RELEASE_MIN_DIST_M = 0.030             # 3 cm clearance from basket/handle/button
+RELEASE_MIN_DIST_M = 0.030             # 3 cm clearance from basket, handle, lever and guard
 STILL_MOTION_M = 0.001                 # 1 mm peak-to-peak motion
 STILL_WINDOW_STEPS = 20                # 1.0 s at 20 Hz
-BASKET_CLEARED_DRAWER_Z = TABLE_TOP + 0.120  # 12 cm above table (basket origin; the floor underside is 11.5 cm up)
-BASKET_LIFT_MIN_M = 0.020              # 20 mm lift above start
+BASKET_CLEARED_PAN_M = 0.070           # basket risen 7 cm out of the pan: its floor clears the pan walls by 1 cm
+BASKET_LIFT_MIN_M = 0.020              # 20 mm lift above the pan
+UNLATCHED_LIFT_M = 0.012               # basket 12 mm up out of the pan without the lever ever pressed: latch defeated
+PAN_HOME_XY_M = 0.015                  # outer basket still on its trivet: within 1.5 cm of its start
+PAN_HOME_Z_M = 0.005
+PAN_LIFTED_M = 0.010                   # outer basket 1 cm or more off the trivet
 
 # TCP and ready poses
 TCP_BELOW_LINK_M = 0.134  # yam_arena TCP_OFFSET: the tool point sits 0.134 m below the gripper link (measured on the GPU)
 R_READY = (0.100, -0.220, TABLE_TOP + 0.120)
 L_READY = (0.100, 0.140, TABLE_TOP + 0.120)
 
-# Display markers (VisualizationMarkers, _Tiles pattern)
+# Display markers (VisualizationMarkers): heat cues on top of the appliance
 VENT_GLOW_TILES_LOCAL = [
     (0.040, 0.040, 0.281),
     (0.040, -0.040, 0.281),
