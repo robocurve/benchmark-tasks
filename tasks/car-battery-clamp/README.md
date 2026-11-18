@@ -30,6 +30,14 @@ Each trial starts differently: the seed moves the battery and its bay (up to 12 
 side), tips the clamp a different way as it sits 6 mm up on the post (up to 2.5 degrees, and turns it up to 4
 degrees), and moves the wrench stand (up to 15 mm and 10 mm). So a memorised motion cannot score.
 
+## Revision for review TK-3JJ2Q3
+| Review point | What changed |
+|---|---|
+| Real-trial peak torque was inferred from a modelled 1 N m per 30 degrees, never measured on the clamp | The angle estimate is gone. The wrench the robot uses is now instrumented: the same 13 mm combination wrench with two strain-gauge bridges on its shank, 3 cm and 7 cm from the box end's centre, logged at 100 Hz. The two bending readings, extended in a straight line to the box end's centre, give the torque at the nut wherever the handle is held. The 7 N m limit is checked from that log: over-tightened if the logged torque stayed above 7 N m for 0.15 s at any time in the trial. The setup lists the wrench, the reset gives its check against known weights and the dial torque wrench, and the scoring text uses the log. |
+| Update the simulation to match | The sim's wrench now records the torque passing through its box end into the nut every control step: 0 with the box end off, near 0 while it only rests on the nut, rising as the hand pushes, and the nut's full torque while the nut slips forward. The scorer takes the peak from that record with the same 0.15 s rule, and no longer from the nut's angle. `CLAMP_WRENCH_LOG=trace.csv` writes the record (seconds, N m; one trial per file). The modelled 1 N m per 30 degrees is still how the simulated nut resists; no real trial is scored from it. |
+| (Our own check) tightening the gauges cannot see | The nut turned clockwise more than 5 degrees with the box end off it (the open end, a finger) is not on the wrench's log, so it counts as not verified and is scored as over-tightened (the final torque goes on with the box end, which holds all 12 points where an open end can round the nut), on the bench (from the video) and in the sim. A trial with no log is void and is run again. |
+| Flag: the fender does not force the hand to detour | Considered and measured: a fender tall enough to block the straight path (over 36 cm) is beyond the arm's 37.5 cm reach, so it would also block the demonstrated path. The bay is kept as a reproducible obstacle the hand must clear by 2 to 3 cm, and that limit is stated under the previous revision below. |
+
 ## Revision for review TK-BM66SK
 | Review point | What changed |
 |---|---|
@@ -37,7 +45,7 @@ degrees), and moves the wrench stand (up to 15 mm and 10 mm). So a memorised mot
 | The full-score demo did not show that the robot can apply the torque | The demo was re-planned for the reacted torque and the new bay: six 30-degree strokes with the handle between level and 30 degrees down, where the arm's 7 N m wrist joints can push it, the grip moved out along the handle before the first stroke, and each stroke aimed past 30 degrees by the arm's measured lag. A feasibility check (`dev/feasibility_gate.py`) runs two strokes against the reacted torque and prints the peak torque the arm reached. New demo and Dream-1 recordings are below. |
 | Engine-bay surroundings that constrain access, reproducibly | The battery now stands in a mock bay, fixed to the bench and set out from the battery: an inner fender (18 mm plywood, 24.5 x 30.5 cm, 4.5 cm from the battery's right-hand end, its top at the hood line, 8 cm above the lid) and a hold-down bar across the back of the lid (25 x 6 mm steel flat on a rubber strip, on two 8 mm J-bolts). Sizes, materials and how to build them are in the setup and the Objects table. The right hand starts outside the fender, which stands between its arm and the battery, and comes in over its top. Measured limit of this bay: the front and the top are open, and a hand sent straight at the cable without the over-the-fender waypoints still gets in (it crosses 2 to 3 cm above the 30.5 cm top, and it glanced off and over a 35 cm top we tried). The arm's reach there ends 37.5 cm above the bench, so a taller fender would shut the right hand out; the bay is present and reproducible, but it does not force a detour. |
 | Flag: use an inert battery or insulate the negative post | The setup now uses an inert dummy battery (an empty BCI group 24 case with its lead posts, sand-ballasted to 18 kg, no acid, no charge). The reset says to fit a rubber boot on the negative post if a live battery is used instead. |
-| (Our own check) a nut taken past 7 N m and backed off could score 1.0 | The scorer now keeps the highest torque the nut reached in the trial (held for 0.15 s, so one solver step's jitter does not count). Past 7 N m at any time scores 0.25. On a real bench: the end reading plus 1 N m for every 30 degrees the nut was turned back from its furthest point (its paint line, from the video). |
+| (Our own check) a nut taken past 7 N m and backed off could score 1.0 | The scorer now keeps the highest torque the nut reached in the trial (held for 0.15 s, so one solver step's jitter does not count). Past 7 N m at any time scores 0.25. (The real-bench check is now the instrumented wrench's log: see the revision above.) |
 | (Our own check) the box end's ring did not collide | The ring now collides. Its 17 mm bore clears the nut's 15 mm corners, so it goes on only when it is centred on the nut within about 1 mm (the catch tolerance is 2 mm, down from 4 mm). The pinch bolt sits 13 mm out from the collar (was 4.8 mm), on 18 mm ears, so the 22.4 mm ring clears the collar and the battery's front edge. |
 
 ## Revision for review TK-GABW96
@@ -86,7 +94,7 @@ policy from a start with the clamp already seated and the nut at 4.5 N m, makes 
 
 ## Scoring
 Every check is a measurement a person can make on the real bench: a feeler gauge under the clamp, a dial torque wrench
-on the nut, a protractor or a photo for the lug, a close-up video (a phone on a stand) for the nut's paint line, and a tape for the battery.
+on the nut, a protractor or a photo for the lug, the instrumented wrench's logged torque for the peak, and a tape for the battery.
 
 | Outcome | Score |
 |---|---|
@@ -105,17 +113,24 @@ The numbers:
   start: run down by hand until it stops against the ear, the split still open. With the collar seated, the bore closes
   on the post after 30 degrees more; every millimetre the collar sits higher takes another 100 degrees. Past that point
   the torque rises 1 N m per 30 degrees.
-- **Never over-tightened:** the nut was never taken past 7 N m during the trial. On a real bench: the end reading plus
-  1 N m for every 30 degrees the nut was turned back (counter-clockwise) from its furthest point, read from the white
-  paint line on its face in a close-up video of the nut (a phone on a stand beside the clamp), is at most 7 N m. The sim keeps the highest modelled torque.
+- **Never over-tightened:** the nut was never taken past 7 N m during the trial. This is measured with the wrench the
+  robot uses, which is instrumented (Objects): its logged torque at the nut, in the tightening direction, never stayed
+  above 7 N m for 0.15 s (15 samples in a row at 100 Hz), and the dial wrench's end reading is at most 7 N m. Tightened
+  off the log counts as not verified, scored as over-tightened: the nut turned clockwise more than 5 degrees with the
+  box end off it (the open end or a finger on it; from the trial video, by the white line on the nut's face). The final
+  torque goes on with the box end, which holds all 12 points where an open end can round the nut, and it is the end
+  the gauges measure. A trial
+  with no log is void and is run again. The sim's wrench records the torque passing through its box end into the nut
+  every control step (20 Hz); the scorer takes the highest value held for 3 steps (0.15 s) and counts the nut's turn
+  with the box end off.
 - **Lug in line:** the cable lug points within 10 degrees of the cable's run (straight back to its clip).
 - **Still:** the clamp, the nut and the wrench each moved less than 1 cm and 0.1 rad (6 degrees) over the last second.
 - **Wrench away:** its box end at least 2 cm from the nut, and the wrench not on or against the battery: no part of it
   more than 3 cm above the bench within 1 cm of the battery's outline (lying on the bench beside the battery is fine).
 
 On a real bench: slide a 1 mm feeler gauge under the collar at the four points, turn a dial torque wrench clockwise
-on the nut until it starts to move and read 5 to 7 N m, check from the close-up video that the nut's paint line
-never turned back, check the lug's angle against the battery's edge, and tape the battery's position. The finger-pad clearance comes
+on the nut until it starts to move and read 5 to 7 N m, check in the wrench's log that the torque at the nut never stayed above 7 N m for 0.15 s (and in the video that the nut was
+not tightened with the box end off it), check the lug's angle against the battery's edge, and tape the battery's position. The finger-pad clearance comes
 from the arms' logged joint angles at the end (forward kinematics), or a photo with a scale beside the clamp; stillness
 and the 1 s hold from the video's last seconds.
 
@@ -133,8 +148,8 @@ and the wrench stand, within the ranges above; the setup screenshot and the demo
 | Hold-down | black steel flat bar 25 x 6 mm, 30 cm long, on a 2 mm rubber strip, on two 8 mm steel J-bolts (M8 threaded rod) standing in 5 x 5 cm steel foot plates clamped to the bench; nuts finger-tight, the bar just touching the lid | across the lid along its length, its centre line 1.65 cm in from the back face; the J-bolts 1.2 cm beyond each end of the battery; the cable passes over it |
 | Clamp | lead top-post clamp, 0.14 kg with its lug: 12-sided collar 31.1 mm across its flats, 16 mm tall, tapered bore like the post; two ears reaching 18 mm out from the collar's front face, with an M8 pinch bolt across them 13 mm out from the collar (carriage head on the right ear, nut on the left); crimp lug and red 4 AWG cable out the back; white paint mark on the left ear | on the positive post, 6 mm above its seat, held up by the cable |
 | Cable clip | black rubber-lined steel P-clip, 15 mm across, on a 25 x 6 mm steel flat-bar upright and a 10 x 6 cm steel base plate clamped to the bench | 1.5 cm behind the battery's back face, in line with the positive post; clip axis 24.3 cm above the bench |
-| Nut | M8 steel hex nut, 13 mm across flats, 6.5 mm thick, white paint line across its face (pointing up at the start) | on the bolt, left side |
-| Wrench | 13 mm combination wrench, chrome vanadium steel, 18.1 cm long, 0.105 kg, 12-point box end and open end | standing open end down in the holder |
+| Nut | M8 steel hex nut, 13 mm across flats, 6.5 mm thick, white paint line across its face (pointing up at the start; it shows in the video whether the nut was turned with the box end off) | on the bolt, left side |
+| Wrench | 13 mm combination wrench, chrome vanadium steel, 18.1 cm long, 0.105 kg, 12-point box end and open end. Instrumented: two strain-gauge bridges (each a pair of 350-ohm foil gauges, one on each narrow edge of the shank) 3 cm and 7 cm from the box end's centre, each a half bridge of 3 mm gauges bonded with cyanoacrylate under a thin protective coat (about 2 g in all); a slack 2 mm lead (6 g/m) leaves the shank 8 cm from the box end and hangs from a hook 60 cm above the tool stand, to a two-channel strain-gauge amplifier and data logger sampling both bridges at 100 Hz. Torque at the nut = (7 x M3 - 3 x M7) / 4, M3 and M7 the bending moments read at 3 cm and 7 cm; the two gains are set from the two weight checks in the reset notes. Any 13 mm combination wrench of this size that passes that check may be used | standing open end down in the holder |
 | Wrench stand | steel pedestal 6 x 7 x 12 cm with an orange-painted wooden holder on top, 5 x 4.4 x 3 cm, slot 9 mm wide along x; 2.5 kg | centre x 10.5, y 10 nominal (seed 0: x 11.45, y 9.4), in front of the battery's left half |
 
 ## Design notes
@@ -208,9 +223,15 @@ and the wrench stand, within the ranges above; the setup screenshot and the demo
   it is modelled, not measured on a clamp. The friction is a stiff spring (200 N m/rad) capped at that torque, whose
   anchor follows the nut as it slips, so whatever turns the nut feels the whole torque, and the nut stays where it is
   left (it gives back at most 2 degrees, under 0.1 N m, when the push stops). The scorer reads the nut's torque at its
-  final turn, as a dial torque wrench would on the real bench. It also keeps the highest torque the nut was held at
-  for 3 control steps (0.15 s) running: that drops one solver step's jitter, and a nut really taken past 7 N m stays
-  there until it is deliberately turned back, so it is still caught.
+  final turn, as a dial torque wrench would on the real bench. The instrumented wrench is the same rigid wrench: its
+  gauges and its lead (about 5 g hanging on it) are not modelled. Its reading in the sim is the torque the nut's
+  friction spring is wound to in the tightening direction while the box end is on the nut: near 0 while the wrench
+  only rests there, rising as the hand pushes, the nut's full torque while the nut slips forward, and 0 with the
+  box end off. The scorer keeps the highest reading held for 3 control steps (0.15 s), the rule the real log is
+  scored with. Why 0.15 s: the wrench's own weight adds at most 0.09 N m (0.105 kg, 9 cm out) and is zeroed out; a
+  real over-tightening lasts as long as the push that makes it, and the arm's commands change every 0.05 s, so
+  three commands in a row is the shortest push scored; a shorter spike that still left the nut over 7 N m is
+  caught by the dial wrench's end reading.
 - The wrench's box end goes on the nut when it is slid on square (within 2 mm of the bolt's axis, 4 degrees of its
   direction and 7 degrees of a flat) and pushed at least up against the nut's face (its mouth's chamfer takes the
   corners from up to 2 mm off centre; 7.5 mm out from the nut's centre, the ring's face touches the nut's at 6.75 mm).
@@ -225,7 +246,7 @@ and the wrench stand, within the ranges above; the setup screenshot and the demo
   J-bolts' foot plates are not drawn.
 
 ## Runtime and seeds
-- The scripted demo's plan is 82 s; the run ends at full score after about 1,573 control steps (20 Hz) of the 1,800 allowed. One trial takes a few
+- The scripted demo's plan is 82 s; the run ends at full score after about 1,567 control steps (20 Hz) of the 1,800 allowed. One trial takes a few
   minutes on an L40S, simulator start-up included.
 - `--seed 0` (the default) is the start the setup text and screenshot show. `--seed N` and `--epochs K` give other
   starts.
@@ -233,12 +254,12 @@ and the wrench stand, within the ranges above; the setup screenshot and the demo
 ## Results (scripted policy)
 One trial per start, scored by this folder's scorer. The demo plans from the first top-camera frame only.
 
-Measured 2026-11-18 on this folder's code (an L40S). Every run ended at full score after 1,571 to 1,573 control steps.
+Measured 2026-11-18 on this folder's code (an L40S). Every run ended at full score after 1,564 to 1,567 control steps.
 
-| Start (`--seed`) | Score | Nut turned | Torque at the end | Peak torque | Pads clear | What happened |
+| Start (`--seed`) | Score | Nut turned | Torque at the end | Peak in the wrench's log | Pads clear | What happened |
 |---|---|---|---|---|---|---|
-| 0 (the setup text and screenshot) | 1.0 | 188.2 degrees | 6.21 N m | 6.26 N m | 172.9 mm | Seated, held, six strokes, wrench back in its holder |
-| 1 | 1.0 | 187.4 degrees | 6.17 N m | 6.22 N m | 183.7 mm | Seated, held, six strokes, wrench back in its holder |
+| 0 (the setup text and screenshot) | 1.0 | 188.2 degrees | 6.21 N m | 6.25 N m | 172.9 mm | Seated, held, six strokes, wrench back in its holder |
+| 1 | 1.0 | 187.4 degrees | 6.17 N m | 6.21 N m | 183.7 mm | Seated, held, six strokes, wrench back in its holder |
 | 2 | 1.0 | 188.0 degrees | 6.19 N m | 6.23 N m | 174.1 mm | Seated, held, six strokes, wrench back in its holder |
 | 3 | 1.0 | 187.7 degrees | 6.16 N m | 6.20 N m | 179.9 mm | Seated, held, six strokes, wrench back in its holder |
 | 4 | 1.0 | 188.4 degrees | 6.19 N m | 6.24 N m | 180.1 mm | Seated, held, six strokes, wrench back in its holder |
@@ -252,7 +273,7 @@ Failure paths, start 0: the same plans with one hand changed (set `CLAMP_FAIL=re
 | Path | Score | Why |
 |---|---|---|
 | The right hand seats the clamp, then lets go before the nut is turned | 0 | The cable springs the clamp back up 6 mm (gap 5.95 mm at the end); the box end does not go on the nut there, and the nut is never turned |
-| Eight strokes instead of six | 0.25 | The nut is taken to 7.95 N m (peak 8.02): over-tightened, with the clamp seated and the wrench put away |
+| Eight strokes instead of six | 0.25 | The nut is taken to 7.95 N m (the wrench's log peaks at 7.99 N m): over-tightened, with the clamp seated and the wrench put away |
 | Four strokes instead of six | 0.25 | The nut stops at 4.11 N m (125.0 degrees): seated but loose |
 | Nothing holds the clamp; the left hand tightens alone | 0 | The clamp stays 5.9 mm high; the box end does not go on the nut there, and the nut is never turned |
 | Nothing moves | 0 | The clamp stays 5.9 mm above its seat |
@@ -262,11 +283,16 @@ went on (0.81 and 0.55 mm off centre), the nut turned 29.8 and 29.7 degrees for 
 the box end's spring gave at most 1.9 degrees, the nut turned at 0.61 rad/s at most, the peak was 6.55 N m, the left
 arm's wrist joints used at most 4.3 of their 7 N m, and the padded inertia took at most 0.033 N m.
 
+The wrench's log (`CLAMP_WRENCH_LOG`) in these runs reads 0 between strokes and rises through each push: the demo's
+peaks at 6.20 to 6.25 N m on starts 0 to 4, the eight-stroke run's at 7.99 N m. In every demo run the nut turned at most
+0.3 degrees with the box end off it (5 allowed). The feasibility check below was not re-run for this revision: it measures
+the physics, which this revision does not change (only what the scorer reads).
+
 Scorer probes, start 0 (throwaway copies of this folder with a few lines added to the task file; the scorer unchanged):
 
 | Probe | Score | Why |
 |---|---|---|
-| Eight strokes, then the nut's reading turned back 60 degrees once the peak passed 7.2 N m | 0.25 | End torque 5.26 N m, inside the band, but the peak (7.20 N m) is kept: over-tightened |
+| Eight strokes, then the nut turned back 60 degrees once the wrench's log had passed 7.2 N m | 0.25 | End torque 5.26 N m, inside the band, but the wrench's log peak (7.20 N m) is kept: over-tightened |
 | The box end put on the nut and the wrench left there, the nut never turned | 0 | The right hand lets go, the cable springs the clamp up 5.8 to 6.0 mm |
 | The right hand's up-and-over waypoints removed | 1.0 | The straight path from the ready pose also crosses above the fender's top (fingertips 2 to 3 cm over it), and the task is then done as in the demo: the fender does not force the detour. With the fender raised to 35 cm and its front end moved 4 cm forward the same probe again scored 1.0 (the hand glanced off the top edge and went over); the arm cannot cross a fender taller than about 36 cm at all |
 

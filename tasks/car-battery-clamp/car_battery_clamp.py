@@ -2,7 +2,8 @@
 right-hand end. The positive cable runs from a clip on a steel stand behind the battery, forward across the lid, to
 its clamp. The clamp has been set back over the positive post, but the cable, held in its clip, holds it up 6 mm
 above its seat, a little crooked; its pinch-bolt nut is run down by hand only (finger-tight against the ear). A
-13 mm combination wrench stands in a holder on a tool stand in front of the battery's left half. The battery stands in a
+13 mm combination wrench, strain-gauged to record its torque at the nut, stands in a holder on a tool stand in front
+of the battery's left half. The battery stands in a
 mock engine bay: an inner fender to the robot's right, up to the hood line, and a hold-down bar across the back of the
 lid.
 
@@ -437,7 +438,7 @@ _EP: dict = {}
 @bodykit.on_reset
 def _reset() -> None:
     _EP.update(turn=0.0, last=0.0, raw=0.0, nut_target=0.0, locked=False, bitten=False, bite_turn=None, cap=T_RUN,
-               peak=0.0, torques=[], caught=False, pads={}, poses=[], step=0, batt0=None, on_post=True, z_rest=None, cable_f=0.0,
+               peak=0.0, reading=0.0, unlogged=0.0, torques=[], caught=False, pads={}, poses=[], step=0, batt0=None, on_post=True, z_rest=None, cable_f=0.0,
                slide_target=S_SEATED + START_LIFT, min_clear=None, catches=0, catch_r=[], tilt_k=TILT_K)
 
 
@@ -505,11 +506,18 @@ def box_angle_deg(nut, wrench) -> float:
 
 
 PEAK_HOLD = 3  # control steps (0.15 s at 20 Hz)
+UNLOGGED_MAX = 5.0  # degrees: the nut tightened by more than this with the box end off it (the open end, a finger) is
+#                     a tightening the wrench's log does not show, and counts as over-tightened
+
+
+# CLAMP_WRENCH_LOG=/path/to/trace.csv writes the wrench's reading every control step (seconds, N m), as the real
+# wrench's logger does
+_WRENCH_LOG = pathlib.Path(os.environ["CLAMP_WRENCH_LOG"]).open("w") if os.environ.get("CLAMP_WRENCH_LOG") else None
 
 
 def peak_torque() -> float:
-    """The highest torque the nut has been taken to and held for PEAK_HOLD control steps this episode (N m), or the
-    torque now if that is higher: the end torque if it was never backed off."""
+    """The highest torque the instrumented wrench recorded at the nut and held for PEAK_HOLD control steps this episode
+    (N m), or the nut's torque now if that is higher (the end reading)."""
     return max(_EP["peak"], nut_torque())
 
 
@@ -548,6 +556,8 @@ def _watch(env) -> None:
     _EP["turn"] += step
     _EP["raw"] += step
     _EP["last"] = a
+    if not _EP["caught"] and step > 0.0:
+        _EP["unlogged"] += step  # the nut tightened by something the wrench's gauges do not see
     # the box end going on the nut, and coming off it
     radial, s, mis, flat = _ring_vs_nut(nut, wrench)
     if not _EP["caught"] and radial <= CATCH_R and -0.010 <= s <= CATCH_S and mis <= CATCH_MIS and flat <= 7.0:
@@ -574,10 +584,18 @@ def _watch(env) -> None:
     if abs(stretch) > give:
         _EP["nut_target"] = -_EP["raw"] - math.copysign(give, stretch)
         bodykit.set_turn_hold("nut_on_bolt", THREAD_K, _wrap180(_EP["nut_target"]))
-    # the peak counts a torque the nut was held at for PEAK_HOLD control steps (0.15 s): a nut taken past 7 N m stays
-    # there until it is deliberately turned back, so this only drops a single solver step's jitter
+    # the instrumented wrench's reading: the torque passing through its box end into the nut, 0 with the box end off.
+    # It is the torque the nut's friction spring is wound to in the tightening direction: nothing while the wrench only
+    # rests on the nut, rising as the hand pushes, and the nut's full torque while the nut slips forward. The peak is
+    # the highest reading held for PEAK_HOLD control steps (0.15 s), the rule the real wrench's logged trace is scored
+    # with
     hist = _EP.setdefault("torques", [])
-    hist.append(nut_torque())
+    wound = max(0.0, _EP["raw"] + _EP["nut_target"])  # degrees, tightening direction (at most ``give``)
+    _EP["reading"] = min(cap, THREAD_K * math.radians(wound)) if _EP["caught"] else 0.0
+    hist.append(_EP["reading"])
+    if _WRENCH_LOG is not None:
+        _WRENCH_LOG.write(f"{_EP['step'] / 20.0:.2f},{_EP['reading']:.3f}\n")
+        _WRENCH_LOG.flush()
     del hist[:-PEAK_HOLD]
     if len(hist) == PEAK_HOLD:
         _EP["peak"] = max(_EP["peak"], min(hist))
@@ -726,8 +744,9 @@ def _stage(objects) -> float:
         return 0.0  # not on the positive post
     if not _seated(clamp, battery):
         return 0.0  # high or crooked: tightened there it is a loose joint; not yet tightened it is no progress
-    if nut_torque() < T_MIN or peak_torque() > T_MAX:
-        return 0.25  # seated but under-tightened, or over-tightened (now, or at any time before: backed off after)
+    if nut_torque() < T_MIN or peak_torque() > T_MAX or _EP["unlogged"] > UNLOGGED_MAX:
+        return 0.25  # seated but under-tightened, or over-tightened (now, or at any time before: backed off after), or
+        #              tightened with something other than the instrumented box end (not on the wrench's log)
     lug = abs(lug_deg(clamp))
     if lug > LUG_HALF:
         return 0.25
@@ -743,7 +762,7 @@ def _end_flags(objects) -> str:
 def score(objects) -> float:
     """1.0: collar seated (every point under it within 1 mm of the boss, square within 2 degrees, on the post's axis
     within 3 mm), the nut's torque 5 to 7 N m (what a dial torque wrench reads as it starts to turn it further) and never
-    taken past 7 N m during the trial, lug
+    taken past 7 N m during the trial (the instrumented wrench's recorded peak), lug
     within 10 degrees of the cable's run, wrench off the nut and off the battery, every finger pad 4 cm from every part
     of the clamp and the wrench, all still. 0.75: the same with a hand or the wrench still on it or something moving.
     0.5: lug 10 to 30 degrees off. 0.25: seated but under 5 N m, or over 7 N m now or at any time, or lug over 30
