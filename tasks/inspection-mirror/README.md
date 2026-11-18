@@ -217,3 +217,7 @@ out the same.
 - With the mirror's light on, a 3-pixel-wide green sliver (the trace's edge) shows directly past the head; it does
   not show where along the gap the trace is, and it never counts as a look.
 - The deepest place's hand pose is 0.03 mm and 0.11 degrees outside the stock IK gate; it scored 1.0 in every run.
+
+## Fidelity (full)
+
+The mirror is an ideal flat reflector drawn by the path tracer on its glass side only (the back is matte steel); its swivel is fixed at 45 degrees; an added LED (as on the HTC-2LT) lights the face. The grip is modelled square in section. The trace is a 22 x 50 mm green film. Contact and release are checked as exact distances between whole convex solids (the mirror's head, shaft, grip and swivel, the marker, and each robot collision piece as its bounding box) and the bounded hidden face, touching meaning within 0.25 mm (the simulator holds resting contacts 0.06 to 0.10 mm apart); on a real bench the chalk witness shows any touch. The look is checked by reflection geometry from the wrist cameras' measured poses and lenses (no glare or focus model). Paint is a dot drawn where the tip touched the strip. Housing, wall, blocks and cup are fixed. Mirror and marker masses are estimates.
