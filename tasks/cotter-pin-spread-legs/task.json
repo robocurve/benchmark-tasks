@@ -1,0 +1,23 @@
+{
+  "title": "Secure a clevis pin with a cotter pin by bending its legs",
+  "category": "Impact on jobs",
+  "keywords": [
+    "heavy equipment repair",
+    "farm equipment",
+    "clevis pin",
+    "cotter pin",
+    "split pin",
+    "fastener locking",
+    "plastic bending",
+    "non-prehensile pushing"
+  ],
+  "instruction": "The clevis pin is back in the linkage. Secure it with the cotter pin from the white holder, then let go.",
+  "context": "A cotter (split) pin retains a clevis pin only once its legs are bent: a straight cotter shakes out of the cross-hole under vibration, the clevis pin walks out and the linkage comes apart. Practice (FAA AC 43.13-1B ch. 7; farm and heavy-equipment service manuals) is to push the cotter fully home, eye against the pin, then bend the prongs one each way round the pin, and never to straighten and re-bend a used cotter. The skill is fixing a fastener by deforming it after it is inserted: a small part put through a hole, then two pushes from opposite sides. Unlike PR #222 (slide a rigid retaining fork into a groove), PR #112 (squeeze sprung legs that spring back by themselves) and our sheet-brake task (form a sheet to a set angle with a machine), nothing locks unless the legs are bent by hand afterwards, and nothing in the instruction says so. Done by: farm equipment mechanics, mobile heavy equipment mechanics, industrial machinery mechanics (O*NET 49-3041.00, 49-3042.00, 49-9041.00).",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), everything square to the table. Clevis joint (fixed), centred at x 33, y 23.5: a dark painted steel stand (7 x 5.6 x 3 cm), a steel yoke of two horizontal cheeks (5 x 4.4 x 1 cm, tops at 4 and 7.4 cm) joined by a web on the near side, a yellow painted steel rod end (10.2 x 2.2 x 1.6 cm) between the cheeks, and a vertical 1.8 x 1.8 cm steel clevis pin through them from 3 to 11.5 cm above the table, with a 1.3 cm wide, 1.2 cm tall cross-hole along x centred 10 cm up. Cotter pin (loose, zinc-plated low-carbon steel, 45 g in all): an eye loop 1.6 x 2.4 x 0.8 cm, a 1.8 cm shank, a short leg (2.2 cm past the shank, 7 g) and a long leg (4 cm, 12 g), each 0.5 x 0.8 cm; each leg bends at its root against 0.01 N m of friction and stays bent. It lies along x on a white ABS holder block (7 x 1.4 x 3 cm) at x 24, y 23.5, eye toward the robot.",
+  "scoring": "From the parts' poses. Seated: the eye's seat face within 3 mm of the pin's near face, the shank's axis within 3 mm of the hole's centre line across and 6 mm vertically, and within 10 deg of the hole's axis. Let go: neither gripper's TCP within 2.5 cm of the cotter or either leg. A leg's bend is its angle to the shank. 0.25: seated and let go. 0.5: also one leg bent 45 deg or more. 1.0: both legs bent 45 deg or more (they can only bend one each way), and nothing moving (from one control step to the next the eye's seat face moves under 0.3 mm and each bend changes under 0.5 deg). If a leg is ever bent back 30 deg from its furthest bend after passing 45 deg (a re-bent cotter), the trial is capped at 0.25. Scored on the final state. Possible scores: 0, 0.25, 0.5, 1.0. Success: score 1, held 1 s.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Put a new, straight cotter pin on the holder, eye toward the robot; the clevis joint does not move.",
+  "fidelity": "Rigid boxes with one shared friction (1.2 static, 1.0 dynamic). Each leg is a rigid bar on a PhysX revolute joint at its root with Coulomb friction (mechkit.py, in this folder), so it stays where it is pushed like a yielded steel prong; there is no springback, work hardening or cracking. The legs and the cotter collide with each other and the pin. The cross-hole is square, not round. No contact-force cap.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-SE6L9Y"
+}
