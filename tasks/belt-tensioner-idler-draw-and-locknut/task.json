@@ -1,0 +1,23 @@
+{
+  "title": "Draw a belt-tensioner idler carriage to its calibrated tension mark and lock the clamp collar on its stud",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "belt tensioner",
+    "idler carriage",
+    "timing belt",
+    "calibration",
+    "clamp collar",
+    "setup gauge",
+    "linear actuator"
+  ],
+  "instruction": "Calibrate the idler carriage in its tension window using the setup gauge, clamp the stud collar down, return the gauge to its tray, and clear both grippers.",
+  "context": "Robot assembly cells and bench technicians tension belt-driven linear actuators thousands of times at initial build and routine service: the idler on its carriage takes the belt return spring, a setup gauge sets the calibrated preload, and a clamp collar on the stud is turned down to hold it. A hand pulling against a 3.36 N spring cannot simultaneously tighten the collar without the carriage creeping back.",
+  "setup": "A 360 g anodised actuator sub-frame sits unbolted on the bench with its front face against a fixed datum block: 320 x 340 mm foot, deck at 42 mm, slider travel along x. Its 95 g carriage plate carries a 42 mm timing-belt idler pulley, a belt clamp block, a draw grip at y = +0.088 and an index lug reaching toward a reference pocket; an M8 stud at y = -0.085 rises 30 mm from the deck with a 40 g knurled clamp collar 1.0 mm off the plate, held by a 160 N/m belt return spring giving 3.36 N at 21 mm draw. A 40 g acetal setup gauge (6 mm stem, 26 x 28 x 22 mm head with cap lip) rests in a tray 190 mm to the left. One fixed layout; arms start at ready.",
+  "scoring": "Judged at trial end from observable physical end-state using a caliper, ruler, and angle gauge; succeeds once full score holds for 3.0 s. Possible scores: 0.0, 0.4, 0.7, 1.0. 1.0: carriage inside the 18 to 24 mm window, collar turned >= 180 deg seated flush on the plate, setup gauge returned within 75 mm of its tray at least 60 mm from the frame pocket, sub-frame within 25 mm XY and 8 deg tilt, and both grippers >= 45 mm clear of post, collar, and gauge. 0.7: clamped in window, gauge unreturned or gripper within 45 mm. 0.4: in window without collar clamp. 0.0 otherwise. Shortcuts scoring 0: noop, pushing the sub-frame without drawing, releasing unclamped so spring recoils, and over-drawing.",
+  "run_limit": "1040 steps (52 s at 20 Hz)",
+  "real_trial_cost_usd": 22,
+  "reset_notes": "Slide the carriage back to 0 mm slack, spin the collar back off the plate, seat the setup gauge in its tray, dock the sub-frame against the datum block and open both grippers.",
+  "fidelity": "Isaac Sim 6.1 rigid-body simulation (PhysX, 20 Hz control). Carriage is a slide joint with a 160 N/m belt return spring giving 3.36 N at 21 mm; the collar couples a hinge to a 4 mm thread slide. Rule-driven pocket gauge-stop (2600 N/m at 21 mm when gauge is seated) and collar clamp lock (5200 N/m when >= 180 deg and seated) modulate joint drives. Belt creep and thread backlash are not modelled.",
+  "scores": "Dream-1 run: 0; demo: 1",
+  "media": "M-Y742C4"
+}
