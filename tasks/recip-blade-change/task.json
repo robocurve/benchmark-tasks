@@ -1,0 +1,25 @@
+{
+  "title": "Fit a reciprocating-saw blade into its tool-free clamp: push the tang in until the jaw's pin drops into its hole",
+  "category": "Impact on jobs",
+  "keywords": [
+    "reciprocating saw",
+    "sabre saw",
+    "blade change",
+    "tool-free clamp",
+    "spring jaw",
+    "tang hole",
+    "carpentry",
+    "electrical",
+    "maintenance",
+    "insertion"
+  ],
+  "instruction": "Fit the spare blade into the saw's clamp so it is locked, square and teeth down.",
+  "context": "Carpenters, electricians and general maintenance workers (O*NET 47-2031.00, 47-2111.00, 49-9071.00; about 2.9 million US workers) change a reciprocating-saw blade every time the material changes, from framing lumber to pipe to nails. On current cordless saws the blade is pushed straight into a tool-free clamp whose jaw rides up on the tang and drops into the tang's hole: the thin blade has to be picked up off its rests, turned tang-first, lined up with a slot only 3 mm tall and pushed home level and square.",
+  "setup": "Millimetres; x forward from the line through the two arm bases, y to the robot's left, z above the table top; arm bases at y +305 and -305. The layout is the same in every trial, as in the screenshot. (1) A cordless reciprocating saw, 12 kg, lying on its side, its blade clamp toward the arms: body 280 x 90 x 95 mm at x 330 to 610, y 5 to 95; steel shoe 60 x 110 x 12 mm on the table at x 300 to 360. The steel clamp block's front face is at x 300, centred on y 50: a blade slot 25 mm deep and 16 mm wide, its floor 48.2 mm above the table, 3.0 mm tall over its first 19 mm and 1.9 mm tall over its last 6 mm (a 15 degree step down), with 15 degree lead-ins at the mouth (5 mm tall and 20 mm wide at the face). (2) The clamp's jaw: a steel lever pivoted 2 mm in front of the clamp face, 68 mm above the table, carrying a 5 mm pin with a pointed end that reaches down through the block's roof 10 mm behind the face, its tip 1.1 mm above the slot's floor. The lever rests on a closed stop under a light spring; a tang pushed in lifts the pin by its point. (3) A 150 mm wood blade, 0.035 kg: a 130 x 19 x 1.6 mm body with a 0.4 mm tooth strip on one long edge, and a 21.5 x 13 mm tang with a 6.5 mm hole 10 mm behind the shoulder. It lies flat, teeth down, across two 25 x 30 x 30 mm wooden rests, from x 285 (tip) to 436.5 (tang end) on the line y 150, the tang toward +x; the rests are at x 290 to 315 and 400 to 425.",
+  "scoring": "Measured at the end of the trial with a ruler and a square. 0 if the saw shifted more than 3 mm at any time. The blade is seated when its shoulder is within 1.5 mm of the clamp face, its centreline within 1.5 mm of the slot's, its tang on the slot's floor (blade within 1.5 mm of that height), and it is square within 4 degrees in pitch and roll. It is locked when the jaw is within 0.9 degrees of its closed stop, which can only happen with the pin in the tang's hole. 1.0 (success, must hold for 1 s): seated and locked, every finger pad of both arms at least 30 mm from the blade and the jaw, and nothing moving more than 1 mm for 1 s; 0.75: seated and locked but a gripper is within 30 mm or something still moves; 0.5: seated with the jaw still open (the pin resting on the tang, off the hole) and every finger pad at least 30 mm from the blade and the jaw; 0.25: the tang is in the slot, shoulder up to 30 mm from the clamp face, or the blade is seated but still held; otherwise 0.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Lift the jaw's lever, slide the blade out of the clamp and lay it back across its two rests, teeth down, tang toward the saw's far side, tip at x 285 on the line y 150. Let the lever drop onto its stop; check with a ruler that the shoe sits flat on the table at x 300.",
+  "fidelity": "Rigid bodies from boxes at true size. The tool-free clamp is a hinged jaw on a closed stop with a pointed pin into the tang's hole, as on push-in clamps; a release lever is not modelled (the jaw is lifted by hand to reset). The blade is 1.6 mm stock with a 0.4 mm tooth strip, not cut teeth. The saw's body is a box behind the clamp. Blade flex and tooth sharpness are not modelled.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-CC3GKK"
+}
