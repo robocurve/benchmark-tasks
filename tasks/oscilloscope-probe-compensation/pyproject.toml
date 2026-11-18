@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "oscilloscope-probe-compensation-native"
+version = "0.1.0"
+description = "Native oscilloscope probe compensation task for Isaac Lab-Arena"
+requires-python = ">=3.12,<3.13"
+license = {file = "LICENSE"}
+dependencies = [
+  "yam-arena @ git+https://github.com/kairosiann/yam-isaac-lab-arena.git@bd62771e60320433893bd1d2df0fc79b5ddcd6d1",
+]
+
+[project.optional-dependencies]
+dream = ["inspect-robots-dream==0.1.0", "dreamlabs-client==1.0.14"]
+
+[project.entry-points."inspect_robots.embodiments"]
+oscilloscope_native = "resist_isaac:embodiment"
+
+[tool.setuptools]
+package-dir = {"" = "native"}
+
+[tool.setuptools.packages.find]
+where = ["native"]
+include = ["resist_isaac*"]
