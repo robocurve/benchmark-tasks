@@ -1,0 +1,22 @@
+{
+  "title": "Seat a hinged optical flip mount on its post, snug its collar clamp, and latch the filter flat in its detent",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "flip mount",
+    "filter holder",
+    "optical post",
+    "hinged mount",
+    "detent",
+    "optical bench"
+  ],
+  "instruction": "Seat the flip mount collar on the post shoulder, snug its clamp lever, latch the filter holder flat over the beam port, and clear both grippers.",
+  "context": "Every camera-calibration and vision-sensor characterization run on an embodied-AI evaluation bench switches neutral-density or bandpass filters reproducibly across the optical beam port without disturbing post registration. Because pressing the split collar past its 520 N/m staging detent onto the post flat, snugging the 0.32 N m cam lever, and pressing the cantilevered 90-degree hinged filter holder past the 110 N/m lower detent applies horizontal and overturning loads that shift or tip an unbraced 310 g post assembly out of its datum channel, stabilizing the rear pedestal boss while actuating the mount seats and latches the optic cleanly.",
+  "setup": "A fixed matte-black anodized optical breadboard (260 x 300 x 15 mm, on 3 mm rubber corner feet) sits on the station tabletop with a collimated vertical camera-calibration aperture at (0.265, -0.099) m and a precision pedestal registration channel at (0.265, -0.025) m. An unbolted 310 g optical post assembly (slotted stainless pedestal base with a rear 28 x 32 x 20 mm knurled stabilizer boss at (0.300, 0.135) m plus a vertical 12.7 mm stainless post with a machined gold reference shoulder flat 34 mm above the breadboard deck, a 28 g sprung brass post staging detent on -X, and a lower detent housing on -Y) rests in the registration channel. Pre-staged 11.2 mm above the post shoulder sits a 64 g anodized split-collar flip mount body (2.6 N sliding drag) carrying a 32 g horizontal brass cam-clamp lever open at 48 deg (0.32 N m snug drag) and a 44 g spring-loaded hinged 25.4 mm optical filter holder with a 36 x 42 x 20 mm knurled side actuator block standing upright at 88 deg (0.28 N m/rad upward return spring) clear of the beam port. A 32 g sprung brass lower detent plunger (110 N/m return spring, 16 deg cam ramp, and horizontal catch lip) captures the filter holder flat at 0 deg once pressed past the ramp. One fixed starting layout; arms start at ready pose.",
+  "scoring": "Judged from pure physical end-state geometry with a caliper, ruler, and digital protractor; the run succeeds once 1.0 holds continuously for 3.0 s (60 steps at 20 Hz). Possible scores 0.0, 0.25, 0.50, 0.75, 1.0. 1.0: the optical post pedestal stays within 16 mm horizontally and 6 mm vertically of its breadboard datum pocket tilted at most 5 deg, the split collar rests within 3 mm of the post shoulder flat with its cam-clamp lever snugged within 15 deg, the hinged filter holder is held flat within 6 deg by the lower detent with the filter centered within 16 mm of the calibration beam port, and both grippers are more than 120 mm clear of the post, rear stabilizer boss, collar, clamp lever, filter ring, and side actuator block. 0.75: post registered, collar seated, clamp snugged, and filter detented flat over the beam port, gripper within 120 mm. 0.50: post registered, collar seated within 3 mm, and clamp snugged within 15 deg, filter holder not detented flat over the beam port. 0.25: post registered and filter holder swung below 45 deg without collar seated and snugged. 0.0: otherwise (doing nothing, unbraced post tilted past 5 deg or shifted past 16 mm, or incomplete staging).",
+  "run_limit": "800 steps (40 s at 20 Hz)",
+  "real_trial_cost_usd": 89,
+  "reset_notes": "Slide the brass lower detent carriage toward -Y to release the filter holder back to its 88 deg upright stop, swing the horizontal cam-clamp lever back to 48 deg open, raise the flip mount collar 11.2 mm onto the post staging detent, and seat the 310 g post pedestal in the breadboard datum channel at (0.265, -0.025) m.",
+  "fidelity": "Rigid-body simulation (20 Hz control). Split-collar clamping on the 12.7 mm post uses a 28 g sprung brass staging detent (520 N/m) and a 2.6 N prismatic slider paired with a 0.32 N m horizontal cam-clamp hinge lever rather than elastic metal flexure; the lower beam-path latch uses a separate 32 g sprung brass plunger (110 N/m) with a 16 deg cam ramp and horizontal catch lip holding against the 0.28 N m/rad hinge return spring.",
+  "scores": "Dream-1 run: 0; demo: 1",
+  "media": "M-JZLRC7"
+}
