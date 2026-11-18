@@ -5,14 +5,20 @@ It reads only what a policy gets: the right wrist camera image and the joint ang
 
     1. right gripper: take the mirror by its grip, slide the head into the gap from its open end, stop it at each of
        the five places along the hidden face and count green pixels in the right wrist camera; the place with the
-       most is the leak; withdraw the mirror and lay it back on its supports;
+       most is the leak; go back to it and hold the mirror still on the trace; withdraw the mirror in one move and
+       lay it back on its supports;
     2. left gripper (meanwhile): take the paint marker out of its cup and wait clear of the right arm; once the leak
        is found and the mirror is out, touch the tip onto the cover strip directly above it, then put the marker back.
 It outputs ordinary 14-D joint targets through the stock IK; it never sets a part's pose.
 
 ``-P mode=demo`` (default). Checks (for the README):
 ``-P mode=guess``  skips the mirror and marks the middle place (what a blind policy does);
-``-P mode=touch``  sweeps with the head 9 mm toward the hidden face, so it rubs the face (the trace is smeared);
+``-P mode=sweepguess``  sweeps the mirror past every place, ignores the image, withdraws and marks the middle place;
+``-P mode=touch``  sweeps with the head 7 mm toward the hidden face (the hand 13 mm, less the 6 mm sag allowance), so
+                   it rubs the face (the trace is smeared);
+``-P mode=hover``  the demo, but the marker tip is aimed 3 mm above the strip instead of touching it (no mark);
+``-P mode=edge``   the demo, but first the head's rim is pressed onto the hidden face's near edge at the gap's mouth,
+                   its centre still outside the gap (a smear);
 ``-P mode=idle``   keeps both arms at the ready pose.
 ``-P aim_mm=<mm>`` shifts the mirror's path toward the face and the mark along the gap by that much (margin runs).
 """
@@ -40,7 +46,12 @@ HANDLE_TILT = math.radians(25.0)  # approach pitched down 25 degrees: the wrist 
 R_DAB = np.column_stack([[-1.0, 0, 0], [0, 0, -1.0], [0, -1.0, 0]])  # approach along -y, TCP y down
 P_TIP = np.array([0.0, 0.071 + 0.008, 0.007])  # the tip in the TCP frame (axis 7 mm past the TCP: pads straddle it)
 LOOK_S = 1.2  # hold at each place before reading the image
+HOVER = 0.003  # mode=hover: the tip aimed 3 mm above the strip (a 1.5 mm aim dipped onto it: the arm overshoots ~1.4 mm)
+EDGE_SHIFT = 0.016  # mode=edge: the head 16 mm toward the face at the mouth (its rim reaches the face's near edge)
+CONFIRM_S = 1.5  # back at the place found: hold the mirror on the trace before withdrawing (the view the mark uses)
 SAG_BIAS = 0.006  # the hanging head sagged 3 to 6 mm toward the face (tool rolls slightly in the hand; most at the deepest place); aim 6 mm wallward
+HEAD_LIFT = 0.008  # the tool pitches nose-down in the hand: the head hung 13 to 18 mm below its nominal height
+# (measured 2026-11-17), which put the top of the trace past the glass's edge; aim the hand 8 mm higher
 MARK_TRIM = 0.004  # the marks landed 4 mm short at every place (fixed in-hand offset of this grasp, measured 2026-11-16)
 CAMERA = "right_cam"
 READ_COL = 148  # count green only right of this image column: there the mirror shows the face straight across from the
@@ -72,7 +83,7 @@ class InspectionMirrorScriptedPolicy(YamScriptedPolicy):
             pass
         self.mode = str(mode)
         self.aim = float(aim_mm) / 1000.0
-        assert self.mode in ("demo", "guess", "touch", "idle", "peek"), self.mode
+        assert self.mode in ("demo", "guess", "sweepguess", "touch", "idle", "peek", "hover", "edge"), self.mode
 
     def reset(self, scene):
         self._built = False
@@ -96,44 +107,88 @@ class InspectionMirrorScriptedPolicy(YamScriptedPolicy):
             self.arms["right"].push(*self.peek_moves())
             self.peek_seen = {}
             return
-        if self.mode != "guess":
+        if self.mode == "sweepguess":  # the sweep with no reading and no return, then out
             self.arms["right"].push(*self.mirror_moves())
+        elif self.mode != "guess":
+            self.arms["right"].push(*self.sweep_moves())  # the return and withdrawal follow the reading
         self.arms["left"].push(*self.marker_pick_moves())
-        if self.mode == "guess":
+        if self.mode in ("guess", "sweepguess"):
             self.found = len(d.LEAK_X) // 2
 
-    def mirror_moves(self):
-        """Take the grip from above near its balance point (fingers across it), slide the head into the gap, stop it at each
-        place, withdraw it and lay the mirror back on its supports."""
+    def _mirror_geometry(self):
         rot = handle_rotation()
         end = d.TOOL_REST[0] - d.GRIP[0] / 2  # the grip's free end, toward the robot
         grip = np.array([end + HANDLE_IN, d.TOOL_REST[1], d.TOP + d.TOOL_REST[2]])
         reach = d.HEAD_REACH + d.GRIP[0] / 2 - HANDLE_IN  # hand point to head centre, along +x
         off = 0.013 if self.mode == "touch" else self.aim  # toward the hidden face (-y)
         gy = d.FACE_Y + d.GAP / 2 + SAG_BIAS - off
-        gz = d.TOP + d.LEAK_Z + d.HEAD_DROP  # the head hangs HEAD_DROP below the hand's axis
+        gz = d.TOP + d.LEAK_Z + d.HEAD_DROP + HEAD_LIFT  # the head hangs HEAD_DROP below the hand (and sags)
         hand = lambda head_x: np.array([head_x - reach, gy, gz])  # noqa: E731
-        outside = d.GAP_X[0] - 0.040  # head 40 mm short of the gap's open end
+        return rot, grip, hand, d.GAP_X[0] - 0.040  # last: the head 40 mm short of the gap's open end
+
+    @staticmethod
+    def _aside(hand, grip, outside):
+        """A hand pose in line with the supports with the head 10 mm short of the gap's open end: the mirror goes
+        between the supports and the line-up through it, so its head never swings across the housing's near corner
+        (a straight move did; 12 mm clearance this way, checked offline)."""
+        return np.array([hand(outside)[0] + 0.050, grip[1], grip[2] + 0.040])
+
+    def sweep_moves(self):
+        """Take the grip from above near its balance point (fingers across it), slide the head into the gap and stop it
+        at each place in turn (the image is read at each stop)."""
+        rot, grip, hand, outside = self._mirror_geometry()
         c = self._c
         m = [Move(2.5, c(grip + [0, 0, 0.050], rot), FINGER_OPEN, "mirror approach"),
              Move(1.0, c(grip + [0, 0, 0.050], rot), FINGER_OPEN, "mirror settle above the grip"),
              Move(1.5, c(grip, rot), FINGER_OPEN, "mirror down onto the grip"),
              Move(1.0, c(grip, rot), HANDLE_SQUEEZE, "mirror grip"),
              Move(2.0, c(grip + [0, 0, 0.040], rot), HANDLE_SQUEEZE, "mirror lift"),
-             Move(3.0, c(hand(outside), rot), HANDLE_SQUEEZE, "mirror lined up with the gap"),
+             Move(2.5, c(self._aside(hand, grip, outside), rot), HANDLE_SQUEEZE, "mirror back, clear of the housing"),
+             Move(2.5, c(hand(outside), rot), HANDLE_SQUEEZE, "mirror lined up with the gap"),
              Move(1.5, c(hand(outside), rot), HANDLE_SQUEEZE, "mirror settle"),
+             *self.edge_moves(hand, rot),
              Move(4.0, c(hand(d.GAP_X[0] + 0.005), rot), HANDLE_SQUEEZE, "mirror slowly into the gap"),
              Move(1.0, c(hand(d.GAP_X[0] + 0.005), rot), HANDLE_SQUEEZE, "mirror settle in the gap")]
         for k, x in enumerate(d.LEAK_X):
             m += [Move(1.5, c(hand(x), rot), HANDLE_SQUEEZE, f"mirror to {k}"),
                   Move(LOOK_S, c(hand(x), rot), HANDLE_SQUEEZE, f"look {k}")]
+        return m
+
+    def edge_moves(self, hand, rot):
+        """``mode=edge``: before going in, press the head's rim onto the hidden face's near edge at the gap's mouth,
+        its centre still outside the gap, then back out to the line-up pose."""
+        if self.mode != "edge":
+            return []
+        c = self._c
+        x = d.GAP_X[0] - 0.002
+        p_in = hand(x) + [0, -EDGE_SHIFT, 0]
+        return [Move(2.0, c(hand(x), rot), HANDLE_SQUEEZE, "edge: head centre at the mouth"),
+                Move(1.5, c(p_in, rot), HANDLE_SQUEEZE, "edge: rim onto the face's near edge"),
+                Move(1.0, c(p_in, rot), HANDLE_SQUEEZE, "edge: hold"),
+                Move(1.5, c(hand(x - 0.038), rot), HANDLE_SQUEEZE, "edge: back to the line-up")]
+
+    def withdraw_moves(self, back_to=None):
+        """Optionally go back to the place found and hold the mirror on the trace (the view the mark is made from),
+        then withdraw it in one move and lay it back on its supports."""
+        rot, grip, hand, outside = self._mirror_geometry()
+        c = self._c
+        m = []
+        if back_to is not None:
+            x = d.LEAK_X[back_to]
+            m += [Move(2.5, c(hand(x), rot), HANDLE_SQUEEZE, f"mirror back to {back_to}"),
+                  Move(CONFIRM_S, c(hand(x), rot), HANDLE_SQUEEZE, f"confirm {back_to}")]
         m += [Move(3.0, c(hand(outside), rot), HANDLE_SQUEEZE, "mirror out"),
+              Move(2.5, c(self._aside(hand, grip, outside), rot), HANDLE_SQUEEZE, "mirror aside, clear of the housing"),
               Move(3.0, c(grip + [0, 0, 0.040], rot), HANDLE_SQUEEZE, "mirror over its supports"),
               Move(1.5, c(grip + [0, 0, 0.002], rot), HANDLE_SQUEEZE, "mirror down"),
               Move(0.8, c(grip + [0, 0, 0.002], rot), FINGER_OPEN, "mirror let go"),
               Move(1.2, c(grip + [0, 0, 0.050], rot), FINGER_OPEN, "mirror withdraw"),
               Move(2.0, lambda sim: self.park["right"], FINGER_OPEN, "right park")]
         return m
+
+    def mirror_moves(self):
+        """The whole mirror plan with no reading (the sweep, then out): for the reach check and sweep-then-guess."""
+        return self.sweep_moves() + self.withdraw_moves()
 
     def peek_moves(self):
         """Control (no mirror): the empty right hand, fingers closed, at the gap's entrance looking in from the
@@ -176,6 +231,8 @@ class InspectionMirrorScriptedPolicy(YamScriptedPolicy):
         top = d.TOP + d.CAP_TOP
         above = self._marker_tcp([x, y, top + 0.030], R_DAB)
         dab = self._marker_tcp([x, y, top - 0.002], R_DAB)  # 2 mm into the strip: compliant arm, soft felt tip
+        if self.mode == "hover":
+            dab = self._marker_tcp([x, y, top + HOVER], R_DAB)  # the tip held just above the strip: no contact
         grasp = self._pick_tcp()
         c = self._c
         return [Move(2.5, c(above, R_DAB), MARKER_SQUEEZE, f"marker above place {place}"),
@@ -226,13 +283,15 @@ class InspectionMirrorScriptedPolicy(YamScriptedPolicy):
             if lab.startswith("look ") and t - right.t0 > LOOK_S * 0.6 and CAMERA in observation.images:
                 k = int(lab.split()[1])
                 self.seen[k] = max(self.seen[k], green_pixels(observation.images[CAMERA][:, READ_COL:]))
-            if self.found is None and lab == "mirror out":
+            if self.found is None and right.idle:  # the sweep is over: go back to the place with the most green
                 self.found = int(np.argmax(self.seen))
                 print(f"[inspect-demo] t={t:6.2f} green pixels per place {self.seen} -> place {self.found}",
                       flush=True)
+                right.push(*self.withdraw_moves(back_to=self.found))
             left = self.arms["left"]
             clear = self.mode == "guess" or lab in ("mirror over its supports", "mirror down", "mirror let go",
-                                                     "mirror withdraw", "right park", "hold")
+                                                     "mirror withdraw", "right park") \
+                or (right.idle and self.found is not None)  # idle after its plan (not between sweep and return)
             if self.found is not None and not self.mark_pushed and left.idle and clear:
                 self.mark_pushed = True
                 left.push(*self.mark_moves(self.found))

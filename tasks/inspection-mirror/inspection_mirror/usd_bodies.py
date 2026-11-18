@@ -80,8 +80,21 @@ class Body:
         self._mirror_next = True
         self.box(center, size, (0.95, 0.95, 0.95), yaw=yaw, collide=collide)
 
-    def mirror_disc(self, center, radius: float, thickness: float, yaw: float = 0.0, collide: bool = True):
-        """A round flat mirror: a thin disc (axis along body x before the yaw) with a perfectly smooth metal look."""
+    def mirror_disc(self, center, radius: float, thickness: float, yaw: float = 0.0, collide: bool = True,
+                    color=None):
+        """A round flat mirror: a thin disc (axis along body x before the yaw) with a perfectly smooth metal look.
+        With ``color``, the same disc with a plain matte look instead (a mirror's back)."""
+        if color is not None:
+            self._n += 1
+            shape = UsdGeom.Cylinder.Define(self.stage, f"/Part/cyl_{self._n}")
+            shape.CreateAxisAttr("X")
+            shape.CreateRadiusAttr(float(radius))
+            shape.CreateHeightAttr(float(thickness))
+            shape.AddTranslateOp().Set(Gf.Vec3d(*map(float, center)))
+            if yaw:
+                shape.AddRotateZOp().Set(math.degrees(yaw))
+            self._finish(shape.GetPrim(), color, collide)
+            return
         self._n += 1
         shape = UsdGeom.Cylinder.Define(self.stage, f"/Part/cyl_{self._n}")
         shape.CreateAxisAttr("X")
