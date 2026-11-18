@@ -1,0 +1,20 @@
+{
+  "title": "Hand a spirit level across a bench wider than either arm's reach and drop it into a deep, narrow caddy slot",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "handover",
+    "out of reach",
+    "occlusion",
+    "tool stowing"
+  ],
+  "instruction": "Put the spirit level away in the slot of the wooden tool caddy.",
+  "context": "On a wide workbench a tool often has to travel farther than one arm reaches, so it changes hands on the way, and tools are stowed in deep, narrow caddy slots an overhead camera sees only partly into. Here neither arm reaches both the level and the caddy, and the caddy's walls hide much of the slot from the top camera.",
+  "setup": "Positions are measured on the table from the point midway between the two arm bases, which stand 61 cm apart: forward means away from the arms, left and right as seen from behind the arms. The spirit level (spirit_level): an aluminium box-beam spirit level, 300 mm long, 25 mm thick and 50 mm tall, 300 g, painted yellow, standing on its 25 mm face on the tray with its length pointing forward, its centre 18 cm forward and 55 cm left (it spans 3 to 33 cm forward). In the simulation it is a yellow box of that size and mass. The inbound tray (inbound_tray): a flat grey plastic tray, 36 x 10 x 1.2 cm, its length pointing forward, its centre 18 cm forward and 55 cm left, taped to the table. The tool caddy (caddy_floor, caddy_wall_near, caddy_wall_far, caddy_wall_inner, caddy_wall_outer): 12 mm plywood; a floor 38.4 x 8.4 cm and, standing on it, four walls 10 cm tall around a slot 36 cm long and 6 cm wide inside; its length points forward and its centre is 18 cm forward and 55 cm right; it is taped to the table. Nothing else is on the table. Every part of the level on its tray is at least 84 cm from the right arm's base and every point inside the slot at least 82 cm from the left arm's base, beyond either arm's reach of about 79 cm.",
+  "scoring": "The highest milestone reached, each needing the ones before it: 0.25 when the level's lowest point is at least 3 cm above the tray's top (lifted); 0.5 when the level's centre is at least 30 cm right of the centre line between the arms while its lowest point is at least 1 cm above the table (carried across, not slid); 0.75 when the level's centre is over the slot's inside footprint and its lowest point below the rim (entering the slot); 1.0 when the whole level lies inside the slot seen from above (within 3 mm of the inner walls), entirely below the rim, still (under 1 cm/s and 0.5 rad/s) and released (neither gripper's tool point within 2.5 cm of it) for 1 s (stowed; the trial then ends). Leaning against a wall inside the slot counts as stowed if no part is above the rim; wedged upright or sticking out above the rim scores 0.75. The score is 0 if the level falls off the table (its lowest point more than 3 cm below the table top) at any time. Otherwise the score is the milestone held at the end of the trial.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Stand the level back on the tray inside its taped outline, on its 25 mm face, length pointing forward. The tray and the caddy stay taped down.",
+  "fidelity": "Approximate. The level is a solid rigid box with the real level's size and mass (no vials or end caps); the tray and caddy are fixed rigid boxes. Contacts and grasps are PhysX rigid-body contacts with default friction, not calibrated to aluminium, plastic or plywood.",
+  "scores": "Dream-1 run: 0.0 (2,400 steps, the run limit); demo: 1.0 (scripted, open loop, seed 0)",
+  "media": "M-JZ8XTB"
+}
