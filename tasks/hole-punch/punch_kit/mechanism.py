@@ -60,6 +60,10 @@ class MechanismEmbodiment(YamArenaEmbodiment):
     def make_joints(self, js: JointSet, origin: np.ndarray) -> None:
         raise NotImplementedError
 
+    def seeded_layout(self, seed: int | None) -> dict[str, np.ndarray]:
+        """The start layout for a trial seed (fixed unless overridden)."""
+        return self.layout()
+
     def on_reset(self) -> None:
         """After the start layout is restored: reset the scorer."""
 
@@ -125,6 +129,7 @@ class MechanismEmbodiment(YamArenaEmbodiment):
             self._trace = self.telemetry.open("a", buffering=1)
         if self._env is None:
             self._ensure_sim(None)
+        self.start = self.seeded_layout(seed)  # this trial's start layout, written by restore_layout below
         self.js.enable(False)
         super().reset(scene, seed=seed)
         self.js.enable(True)

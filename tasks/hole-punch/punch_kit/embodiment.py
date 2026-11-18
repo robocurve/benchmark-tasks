@@ -9,7 +9,7 @@ import numpy as np
 
 from . import geometry as g
 from .mechanism import MechanismEmbodiment
-from .scoring import PunchScore
+from .scoring import PunchScore, disc_depth, quat_rotate
 
 TASK_FILE = Path(__file__).resolve().parents[1] / "hole_punch.py"
 IDENT = np.array([0.0, 0.0, 0.0, 1.0])
@@ -27,17 +27,22 @@ class PunchEmbodiment(MechanismEmbodiment):
         from .assets import BUILDERS
         return BUILDERS
 
-    def layout(self):
-        card = g.CARD_START
+    def layout(self, seed=None):
+        """The start layout; the card's position and yaw are drawn from the trial seed (geometry.card_start)."""
+        card, yaw = g.card_start(seed)
+        q = g.yaw_quat(yaw)
         return {
             "punch": _pose((0.0, 0.0, 0.0)),
             "stand": _pose((0.0, 0.0, 0.0)),
             "head": _pose((g.PIN_X, 0.0, g.HEAD_REST_TIP)),
             "lever": _pose(g.LEVER_PIVOT),
-            "card": _pose(card),
-            "slug0": _pose(card + g.slug_offset(0)),
-            "slug1": _pose(card + g.slug_offset(1)),
+            "card": _pose(card, q),
+            "slug0": _pose(card + quat_rotate(q, g.slug_offset(0)), q),
+            "slug1": _pose(card + quat_rotate(q, g.slug_offset(1)), q),
         }
+
+    def seeded_layout(self, seed):
+        return self.layout(seed)
 
     def make_joints(self, js, origin):
         head0 = origin + np.array([g.PIN_X, 0.0, g.HEAD_REST_TIP])
@@ -45,8 +50,9 @@ class PunchEmbodiment(MechanismEmbodiment):
         js.drag("head_slide", g.SPRING_DAMP, kind="linear", stiffness=g.SPRING_K, target=g.SPRING_PRELOAD)
         js.revolute("lever_pivot", None, "lever", origin + g.LEVER_PIVOT, axis="Y", limits_deg=(-g.LEVER_LIMIT_DEG, 0.0))
         js.drag("lever_pivot", 1e-4)
-        for k in (0, 1):
-            js.fixed(f"disc{k}", "card", f"slug{k}", g.slug_offset(k))
+        for k in (0, 1):  # each disc slides along the card's normal against the cutting resistance
+            js.prismatic(f"disc{k}", "card", f"slug{k}", g.slug_offset(k), axis="Z", limits_m=(g.SLIDE_MIN, 0.0))
+            js.drag(f"disc{k}", g.CUT_DAMP, kind="linear", stiffness=g.CUT_STIFF, target=0.0, max_force=g.CUT_FORCE_N)
 
     SENSED = ("punch", "stand", "head", "lever")
 
@@ -69,14 +75,15 @@ class PunchEmbodiment(MechanismEmbodiment):
         tip_z = float(p["head"][2])
         t_now = (int(self._base.common_step_counter) - self.step0) * self.dt  # sim time since the start layout
         score, newly = self.scorer.update(t_now, p["card"], tip_z, [p["slug0"][:3], p["slug1"][:3]])
-        for k in newly:  # the punch has cut disc k free: switch off its joint
+        for k in newly:  # the punch has pushed disc k through the card: cut it free
             self.js.joints[f"disc{k}"].GetJointEnabledAttr().Set(False)
         lever = p["lever"][3:]
         lever_deg = float(np.degrees(2 * np.arctan2(lever[1], lever[3])))
         info = {"score": score, "best": self.scorer.best, "success": self.scorer.success,
                 "released": list(self.scorer.released), "released_at": list(self.scorer.released_at),
                 "head_travel_mm": (tip_z - g.HEAD_REST_TIP) * 1000.0, "lever_deg": lever_deg,
-                "card": p["card"], "slug0": p["slug0"][:3], "slug1": p["slug1"][:3]}
+                "disc_depth_mm": [round(disc_depth(p["card"], p[f"slug{k}"][:3], k) * 1000.0, 3) for k in (0, 1)],
+                "card": p["card"], "head": p["head"], "slug0": p["slug0"][:3], "slug1": p["slug1"][:3]}
         try:
             data = self._base.scene["card_contact"].data
             fm = data.force_matrix_w

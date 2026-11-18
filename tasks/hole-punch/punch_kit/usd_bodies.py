@@ -83,8 +83,9 @@ class Body:
             UsdShade.MaterialBindingAPI.Apply(prim).Bind(self.physics, materialPurpose="physics")
         UsdShade.MaterialBindingAPI.Apply(prim).Bind(self._look(color))
 
-    def box(self, center, size, color, yaw: float = 0.0, collide: bool = True):
-        """Axis-aligned box in the body frame, optionally turned ``yaw`` (rad) about the body's +z."""
+    def box(self, center, size, color, yaw: float = 0.0, collide: bool = True, visible: bool = True):
+        """Axis-aligned box in the body frame, optionally turned ``yaw`` (rad) about the body's +z. With
+        ``visible=False`` it is a collider only (not rendered)."""
         self._n += 1
         shape = UsdGeom.Cube.Define(self.stage, f"/Part/box_{self._n}")
         shape.CreateSizeAttr(1.0)
@@ -92,6 +93,8 @@ class Body:
         if yaw:
             shape.AddRotateZOp().Set(math.degrees(yaw))
         shape.AddScaleOp().Set(Gf.Vec3f(*map(float, size)))
+        if not visible:
+            shape.CreateVisibilityAttr(UsdGeom.Tokens.invisible)
         self._finish(shape.GetPrim(), color, collide)
 
     def cylinder(self, center, radius: float, height: float, color, axis: str = "Z", collide: bool = True):

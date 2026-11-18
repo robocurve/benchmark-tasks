@@ -58,11 +58,12 @@ def stand():
 def head():
     """Punch head: frame at the punch tips' midpoint (x PIN_X, y 0, tip height)."""
     b = Body("head", mass=g.HEAD_M, com=(0.0, 0.02, g.PIN_LEN + 0.003), inertia=(2e-4, 3e-5, 2e-4),
-             friction=(0.4, 0.3), contact_offset=CO, solver_iters=(32, 8))
+             friction=(0.4, 0.3), contact_offset=CO, solver_iters=(128, 32))
     bx0, bx1 = g.BAR_X[0] - g.PIN_X, g.BAR_X[1] - g.PIN_X
     b.box(((bx0 + bx1) / 2, sum(g.BAR_Y) / 2, g.PIN_LEN + 0.003), (bx1 - bx0, g.BAR_Y[1] - g.BAR_Y[0], 0.006), STEEL)
-    for s in (-1, 1):
-        b.cylinder((0.0, s * g.PIN_Y, g.PIN_LEN / 2), g.PIN_R, g.PIN_LEN, (0.75, 0.75, 0.78))
+    for s in (-1, 1):  # round 6 mm tips seen; square colliders (geometry.TIP_SIDE)
+        b.cylinder((0.0, s * g.PIN_Y, g.PIN_LEN / 2), g.PIN_R, g.PIN_LEN, (0.75, 0.75, 0.78), collide=False)
+        b.box((0.0, s * g.PIN_Y, g.PIN_LEN / 2), (g.TIP_SIDE, g.TIP_SIDE, g.PIN_LEN), STEEL, visible=False)
     return b.save()
 
 
@@ -78,12 +79,37 @@ def lever():
     return b.save()
 
 
+BLACK = (0.02, 0.02, 0.02)
+MARK_W = 0.0008               # printed line width
+MARK_HALF = 0.015             # crosshair lines 30 mm long, centred on the mark ...
+MARK_EDGE_GAP = 0.001         # ... except the arm toward the leading edge, which stops 1 mm short of it (11 mm)
+MARK_GAP = g.CUT / 2 + 0.0005  # the lines start just outside the opening, so they stay on the card after the punch
+
+
 def card():
-    """A6 card stock with two square openings where the pre-scored discs sit, and two black crosshair marks."""
+    """A6 card stock with two square openings where the pre-scored discs sit, and two black crosshair marks printed
+    on the card itself, long enough to stay visible around a punched hole."""
     b = Body("card", mass=g.CARD_M, com=(0, 0, 0), inertia=(g.CARD_M * g.CARD_Y ** 2 / 12, g.CARD_M * g.CARD_X ** 2 / 12,
              g.CARD_M * (g.CARD_X ** 2 + g.CARD_Y ** 2) / 12), friction=(0.4, 0.3), contact_offset=CO, solver_iters=(64, 16))
     holes = [tuple(g.slug_offset(k)[:2]) for k in (0, 1)]
-    _plate_with_holes(b, -g.CARD_X / 2, g.CARD_X / 2, -g.CARD_Y / 2, g.CARD_Y / 2, -g.T / 2, g.T / 2, holes, g.CUT, YELLOW)
+    # collider: card stock with CUT_CLEAR openings, so a tip up to 1.5 mm off its disc passes the card (see geometry)
+    _plate_with_holes(b, -g.CARD_X / 2, g.CARD_X / 2, -g.CARD_Y / 2, g.CARD_Y / 2, -g.T / 2, g.T / 2, holes,
+                      g.CUT_CLEAR, YELLOW)
+    ring = (g.CUT_CLEAR - g.CUT) / 2
+    mid = (g.CUT + g.CUT_CLEAR) / 4
+    z = g.T / 2 + 0.0001
+    for hx, hy in holes:
+        # visual card stock between the CUT opening and the collider's wider one: the card shows a CUT opening
+        for sx, sy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            size = (ring, g.CUT_CLEAR, g.T) if sx else (g.CUT, ring, g.T)
+            b.box((hx + sx * mid, hy + sy * mid, 0.0), size, YELLOW, collide=False)
+        # the crosshair: four arms from the opening's edge outward
+        x_edge = g.CARD_X / 2 - MARK_EDGE_GAP
+        b.box((hx, hy - (MARK_GAP + MARK_HALF) / 2, z), (MARK_W, MARK_HALF - MARK_GAP, 0.0002), BLACK, collide=False)
+        b.box((hx, hy + (MARK_GAP + MARK_HALF) / 2, z), (MARK_W, MARK_HALF - MARK_GAP, 0.0002), BLACK, collide=False)
+        b.box((hx - (MARK_GAP + MARK_HALF) / 2, hy, z), (MARK_HALF - MARK_GAP, MARK_W, 0.0002), BLACK, collide=False)
+        b.box((hx + MARK_GAP + (x_edge - hx - MARK_GAP) / 2, hy, z), (x_edge - hx - MARK_GAP, MARK_W, 0.0002), BLACK,
+              collide=False)
     from pxr import PhysxSchema
     PhysxSchema.PhysxContactReportAPI.Apply(b.stage.GetDefaultPrim()).CreateThresholdAttr(0.0)  # diagnostics sensor
     return b.save()
@@ -92,13 +118,15 @@ def card():
 def slug(k):
     def build():
         b = Body(f"slug{k}", mass=g.SLUG_M, com=(0, 0, 0), inertia=(g.SLUG_M * g.SLUG_R ** 2 / 4,) * 2 +
-                 (g.SLUG_M * g.SLUG_R ** 2 / 2,), friction=(0.4, 0.3), contact_offset=CO, solver_iters=(32, 8))
-        # its collider stops 0.3 mm above the card's underside, so a disc carried in the card never catches an edge
-        # it slides over (the stand-to-bed seam); once free it still falls through the 8 mm die
-        b.cylinder((0, 0, 0.00015), g.SLUG_R, g.T - 0.0003, YELLOW)
-        # the printed crosshair on the disc (visual)
-        b.box((0, 0, g.T / 2 + 0.0001), (0.009, 0.0008, 0.0002), (0.02, 0.02, 0.02), collide=False)
-        b.box((0, 0, g.T / 2 + 0.0001), (0.0008, 0.009, 0.0002), (0.02, 0.02, 0.02), collide=False)
+                 (g.SLUG_M * g.SLUG_R ** 2 / 2,), friction=(0.4, 0.3), contact_offset=CO, solver_iters=(64, 16))
+        # a round 6 mm disc seen; a 6 mm square collider (geometry.SLUG_SIDE). The collider stops 0.3 mm above the
+        # card's underside, so a disc carried in the card never catches an edge it slides over (the stand-to-bed
+        # seam); once free it still falls through the 10 mm die, up to 1.5 mm off the punch's axis
+        b.cylinder((0, 0, 0.00015), g.SLUG_R, g.T - 0.0003, YELLOW, collide=False)
+        b.box((0, 0, 0.00015), (g.SLUG_SIDE, g.SLUG_SIDE, g.T - 0.0003), YELLOW, visible=False)
+        # the crosshair's centre, printed on the disc (visual); it leaves with the disc
+        b.box((0, 0, g.T / 2 + 0.0001), (2 * g.SLUG_R - 0.001, MARK_W, 0.0002), BLACK, collide=False)
+        b.box((0, 0, g.T / 2 + 0.0001), (MARK_W, 2 * g.SLUG_R - 0.001, 0.0002), BLACK, collide=False)
         return b.save()
     return build
 
