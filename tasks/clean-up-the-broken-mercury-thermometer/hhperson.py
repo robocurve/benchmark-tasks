@@ -68,6 +68,8 @@ class Bead(Sphere):
 
     friction: tuple = (0.5, 0.4)
     damping: float = 1.5  # 1/s, linear and angular
+    metallic: float = 1.0  # look only (a mirror-like sphere reflects the dim scene and reads dark on camera)
+    roughness: float = 0.05
 
 
 @dataclass(frozen=True)
@@ -207,8 +209,8 @@ def _bead_object(spec: Bead, scene):
                                                 max_depenetration_velocity=0.5),
         mass_props=sim_utils.MassPropertiesCfg(mass=spec.mass),
         collision_props=PhysxCollisionPropertiesCfg(contact_offset=0.004, rest_offset=0.0), physics_material=mat,
-        visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=scene.linear_rgb(spec.color), roughness=0.05,
-                                                    metallic=1.0))
+        visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=scene.linear_rgb(spec.color),
+                                                    roughness=float(spec.roughness), metallic=float(spec.metallic)))
     return Object(name=spec.name, object_type=ObjectType.RIGID, spawner_cfg=cfg,
                   initial_pose=Pose(position_xyz=tuple(spec.pos), rotation_xyzw=(0.0, 0.0, 0.0, 1.0)))
 

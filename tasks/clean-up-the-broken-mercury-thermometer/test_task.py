@@ -73,7 +73,7 @@ def test_loads():
 
 def test_beads_are_mercury_sized_and_heavy():
     for (_, r), o in zip(M.BEADS, [o for o in M.OBJECTS if o.name.startswith("bead")]):
-        assert 0.0015 <= r <= 0.0025
+        assert 0.0030 <= r <= 0.0050  # 6-10 mm across: visible at 320 x 176
         assert o.mass == pytest.approx(13530 * 4 / 3 * np.pi * r ** 3)
 
 
