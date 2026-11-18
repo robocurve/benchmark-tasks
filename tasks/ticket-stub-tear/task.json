@@ -1,0 +1,24 @@
+{
+  "title": "Tear an event ticket's stub off along its perforation, put the stub in the stub box and leave the ticket in its stand",
+  "category": "Societal relatability",
+  "keywords": [
+    "ticket",
+    "theatre",
+    "event",
+    "stub",
+    "perforation",
+    "tear",
+    "usher",
+    "bimanual",
+    "breakable joint"
+  ],
+  "instruction": "Tear the stub off this ticket and put it in the stub box.",
+  "context": "Tearing the stub off a ticket at the door is the familiar moment of going to a show, a game or a cinema, done by ushers and ticket takers (O*NET 39-3031.00). The card parts only along its perforation and only when one part is held while the other is pulled, and the ticket must stay whole for the patron.",
+  "setup": "Millimetres; x forward from the line through the two arm bases, y to the robot's left, z above the table top; arm bases at y +305 and -305. The layout is the same in every trial, as in the screenshot. (1) A wooden ticket stand fixed to the counter at x 300, y 0: a 40 x 240 x 20 mm block with a 3 mm slot 8 mm deep along y. (2) A 2 x 8 in (51 x 203 mm) card event ticket, 3.3 g, standing on edge in the slot along y from y -101.5 to 101.5, a red band across its top; its 2 in stub is the right-hand end (y -101.5 to -50.5), joined to the ticket along a perforation at y -50.5. (3) The stub box, an open 90 x 90 x 50 mm box, at x 250, y -200.",
+  "scoring": "Measured at the end of the trial. 1.0 (success, must hold for 1 s) when the stub has been torn off along the perforation and lies in the stub box, the ticket is still standing in its stand (its lower edge in the slot, leaning under 25 degrees), both grippers are 30 mm or more from both and nothing moves more than 1 mm for 1 s; 0.75 when all that holds but a gripper is near or something still moves; 0.5 when the stub is torn off and in the box but the ticket is out of its stand; 0.25 when the stub was torn off at some point; else 0.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Each trial uses a new ticket: stand a fresh perforated card ticket in the slot, stub to the robot's right. Empty the stub box.",
+  "fidelity": "Rigid bodies at true size; the card is modelled 0.8 mm thick (the real one is 0.3 mm). The ticket and its stub are two rigid cards joined along the perforation by a fixed joint that the physics engine breaks for good when it carries more than 8 N or 0.04 N m, about what a perforated card ticket takes to tear; the paper's bending is not modelled.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-96A8WJ"
+}
