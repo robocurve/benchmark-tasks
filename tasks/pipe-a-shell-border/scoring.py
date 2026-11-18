@@ -108,8 +108,8 @@ def _ridge_length(surface, first, last, dx):
     return longest
 
 
-def assess(x,y,volume,*,dx,emitted_m3,lost_m3=0.,airborne_m3=0.,damage_depth_m=0.,
-           completed=False,tools_clear=False,other_tool_contact=False,_reverse_checked=False):
+def assess_segment(x,y,volume,*,dx,emitted_m3,lost_m3=0.,airborne_m3=0.,damage_depth_m=0.,
+           completed=False,tools_clear=False,other_tool_contact=False,_reverse_checked=False,length_m=.090):
     try:x,y,volume=(np.asarray(a,float) for a in (x,y,volume))
     except (ValueError,TypeError):return {"score":0.,"reason":"invalid numeric surface data"}
     numbers=(dx,emitted_m3,lost_m3,airborne_m3,damage_depth_m)
@@ -123,7 +123,7 @@ def assess(x,y,volume,*,dx,emitted_m3,lost_m3=0.,airborne_m3=0.,damage_depth_m=0
         return {"score":0.,"reason":"invalid or incomplete material telemetry"}
     h=volume/dx**2
     X,Y=np.meshgrid(x,y,indexing="ij")
-    target=(np.abs(X-.235)<=.009)&(Y>=-.047)&(Y<=.047)
+    target=(np.abs(X-.235)<=.009)&(Y>=-length_m/2-.002)&(Y<=length_m/2+.002)
     spill_area=float(((h>=.0005)&~target).sum()*dx**2)
     result={"score":0.,"status":"geometric assessment; complete trial and contact evidence required",
             "valid_shells":0,"shells":[],"spill_area_mm2":spill_area*1e6,
@@ -137,7 +137,7 @@ def assess(x,y,volume,*,dx,emitted_m3,lost_m3=0.,airborne_m3=0.,damage_depth_m=0
         result["reason"]="incomplete evidence, cake/tool damage, spill, or unobserved lost material"
         return result
     cross=np.abs(x-.235)<=.009
-    active=(y>=-.047)&(y<=.047)
+    active=(y>=-length_m/2-.002)&(y<=length_m/2+.002)
     if cross.sum()<3 or active.sum()<3:
         return {"score":0.,"reason":"material grid does not resolve the marked strip"}
     yy=y[active];a=h[cross][:,active]
@@ -185,17 +185,27 @@ def assess(x,y,volume,*,dx,emitted_m3,lost_m3=0.,airborne_m3=0.,damage_depth_m=0
         # A round mound also narrows beyond its centre. Require a visibly
         # elongated footprint so that taper alone cannot certify a shell.
         tapered=tapered and length>=1.25*head_w
+        # Straightness is the visible footprint midline, measured with a ruler.
+        offsets=[]
+        for col in range(beginning,tail+1):
+            occupied=np.flatnonzero(shape_surface[:,col]>=.0005)
+            if len(occupied): offsets.append(abs(float((x[cross][occupied[0]]+x[cross][occupied[-1]])/2-.235)))
+        deviation=max(offsets,default=float('inf'))
+        tapered=tapered and deviation<=.004+1e-10
         if tapered:covered_by_valid_shell[beginning:tail+1]=True
+        head_cells=np.flatnonzero(shape_surface[:,k]>=.0005)
+        head_x=float((x[cross][head_cells[0]]+x[cross][head_cells[-1]])/2)
         result["shells"].append({"valid":bool(tapered),"visible_ridges":bool(ridged),
+                                  "head_x_mm":head_x*1e3,
                                   "continuous_ridge_length_mm":ridge_length*1e3,
-                                  "head_y_mm":float(yy[k]*1e3),"head_height_mm":head_h*1e3,
+                                  "head_y_mm":float(yy[k]*1e3),"maximum_midline_error_mm":deviation*1000,"head_height_mm":head_h*1e3,
                                   "head_width_mm":head_w*1e3,"tail_height_mm":tail_h*1e3,
                                   "tail_width_mm":tail_w*1e3,"length_mm":length*1e3})
     count=sum(s["valid"] for s in result["shells"])
     valid_length=float(covered_by_valid_shell.sum()*dx)
     result["valid_shells"]=count
     result["valid_decorated_length_mm"]=valid_length*1e3
-    covered=(a>=.0005).any(axis=0)[(yy>=-.043)&(yy<=.043)]
+    covered=(a>=.0005).any(axis=0)[(yy>=-length_m/2+.002)&(yy<=length_m/2-.002)]
     longest=run=0
     for c in covered:
         run=0 if c else run+1;longest=max(longest,run)
@@ -209,14 +219,73 @@ def assess(x,y,volume,*,dx,emitted_m3,lost_m3=0.,airborne_m3=0.,damage_depth_m=0
     if not _reverse_checked:
         # The instruction permits either piping direction. Mirror the measured
         # surface around Y=0; neither its placement nor quality changes.
-        reversed_result=assess(x,-y[::-1],volume[:,::-1],dx=dx,emitted_m3=emitted_m3,
+        reversed_result=assess_segment(x,-y[::-1],volume[:,::-1],dx=dx,emitted_m3=emitted_m3,
                                lost_m3=lost_m3,airborne_m3=airborne_m3,damage_depth_m=damage_depth_m,
                                completed=completed,tools_clear=tools_clear,other_tool_contact=other_tool_contact,
-                               _reverse_checked=True)
-        if reversed_result['score']>result['score']:
+                               _reverse_checked=True,length_m=length_m)
+        rank=lambda r:(r['score'],r.get('valid_decorated_length_mm',0),r.get('valid_shells',0))
+        if rank(reversed_result)>rank(result):
+            for shell in reversed_result.get('shells',[]):shell['head_y_mm']*=-1
             reversed_result['piping_direction']='-Y'
             return reversed_result
     result['piping_direction']='+Y'
+    return result
+
+
+def assess(x,y,volume,*,dx,emitted_m3,lost_m3=0.,airborne_m3=0.,damage_depth_m=0.,
+           completed=False,tools_clear=False,other_tool_contact=False):
+    """Judge the complete 90 + 60 mm L-shaped border from its final surface."""
+    try:x,y,volume=(np.asarray(v,float) for v in (x,y,volume))
+    except (ValueError,TypeError):return dict(score=0.,reason='invalid final surface')
+    numbers=(dx,emitted_m3,lost_m3,airborne_m3,damage_depth_m)
+    if (x.ndim!=1 or y.ndim!=1 or len(x)<3 or len(y)<3
+        or not all(isinstance(v,(int,float)) and np.isfinite(v) and v>=0 for v in numbers)
+        or not all(type(v) is bool for v in (completed,tools_clear,other_tool_contact))
+        or volume.shape!=(len(x),len(y)) or dx<=0 or not np.isfinite(volume).all()
+        or not np.isfinite(x).all() or not np.isfinite(y).all() or np.any(volume<0)):
+        return dict(score=0.,reason='invalid final surface')
+    X,Y=np.meshgrid(x,y,indexing='ij');h=volume/dx**2
+    first=(abs(X-.235)<=.009)&(Y>=-.047)&(Y<=.047)
+    second=(abs(Y-.045)<=.009)&(X>=.233)&(X<=.297)
+    spill=float(((h>=.0005)&~(first|second)).sum()*dx**2)
+    balance=float(emitted_m3-volume.sum()-lost_m3-airborne_m3)
+    result=dict(score=0.,spill_area_mm2=spill*1e6,volume_balance_error_m3=balance)
+    if (not completed or damage_depth_m>.001 or spill>20e-6 or lost_m3>1e-9
+        or other_tool_contact or abs(balance)>1e-9):
+        return dict(result,reason='incomplete, damaged, spilled or inconsistent trial')
+    # Each section is measured in its own along/across coordinates. The
+    # second side is transposed, not resampled. At the shared corner, assign
+    # each cell to its nearer guide leg. The perpendicular incoming tail must
+    # not be mistaken for lateral drift of the outgoing shell.
+    v1=np.where(first & (~second | (abs(X-.235)<=abs(Y-.045))),volume,0.)
+    a=assess_segment(x,y,v1,dx=dx,emitted_m3=float(v1.sum()),completed=True,tools_clear=tools_clear)
+    v2=np.where(second & (~first | (abs(Y-.045)<abs(X-.235))),volume,0.).T
+    b=assess_segment(y+.190,x-.265,v2,dx=dx,emitted_m3=float(v2.sum()),completed=True,tools_clear=tools_clear,length_m=.060)
+    lengths=[r.get('valid_decorated_length_mm',0.) for r in (a,b)]
+    # Cap each section to its marked centreline length.
+    total=min(lengths[0],90.)+min(lengths[1],60.)
+    score=.75 if total>=110. else .5 if total>=70. else .25 if total>=35. else 0.
+    # A connected visible footprint must actually turn the corner. Merely
+    # completing two separated straight strips cannot earn full credit.
+    corner=False
+    roi=(X>=.226)&(X<=.248)&(Y>=.032)&(Y<=.054)
+    for c in _footprint_components((h>=.0005)&roi):
+        if np.any(c&(Y<=.041)&(abs(X-.235)<=.004)) and np.any(c&(X>=.239)&(abs(Y-.045)<=.004)):
+            corner=True;break
+    # A head on the shared corner is one shell, even if both projections see it.
+    shells=[];centres=[]
+    for section,r in enumerate((a,b)):
+        for s in r.get('shells',[]):
+            if not s['valid']:continue
+            centre=np.array([s['head_x_mm'],s['head_y_mm']]) if section==0 else np.array([s['head_y_mm']+265.,s['head_x_mm']-190.])
+            if any(np.linalg.norm(centre-c)<6.-1e-8 for c in centres):continue
+            centres.append(centre);shells.append(s)
+    full=(lengths[0]>=80. and lengths[1]>=50. and total>=135. and len(shells)>=9
+          and all(s['visible_ridges'] for s in shells) and corner and tools_clear
+          and airborne_m3<=1e-9 and max(r.get('largest_gap_mm',float('inf')) for r in (a,b))<=2.)
+    result.update(score=1. if full else score,sections=[a,b],valid_shells=len(shells),
+                  valid_decorated_length_mm=total,section_lengths_mm=lengths,
+                  corner_connected=corner,reason='Measured shell shapes, straightness and joined corner; released finish required.')
     return result
 
 

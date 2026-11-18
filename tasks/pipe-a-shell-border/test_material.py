@@ -2,7 +2,7 @@
 import unittest
 import numpy as np
 from material import Icing, surface_flux
-from scoring import assess, _ridge_length
+from scoring import assess_segment as assess, _ridge_length
 from native import Coupling
 from contact_audit import intersects_columns
 

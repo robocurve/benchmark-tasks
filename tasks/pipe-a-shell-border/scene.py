@@ -14,8 +14,9 @@ OBJECTS=[
     # Flat edible guide line and two end marks, visual purpose only. Their
     # 0.1 mm thickness is below the rubric's 0.5 mm icing threshold.
     Box('guide',pos=(.235,0.,.80055),size=(.0005,.090,.0001),color=(.3,.2,.1)),
+    Box('guide_second',pos=(.265,.045,.80055),size=(.060,.0005,.0001),color=(.3,.2,.1)),
     Box('guide_start',pos=(.235,-.045,.80055),size=(.010,.0005,.0001),color=(.3,.2,.1)),
-    Box('guide_end',pos=(.235,.045,.80055),size=(.010,.0005,.0001),color=(.3,.2,.1)),
+    Box('guide_end',pos=(.295,.045,.80055),size=(.0005,.010,.0001),color=(.3,.2,.1)),
 ]
 ROOTS={}
 COUPLING=Coupling()

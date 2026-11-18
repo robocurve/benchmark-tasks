@@ -1,0 +1,19 @@
+{
+  "title": "Pipe a shell border on a cake",
+  "category": "Societal relatability",
+  "keywords": [
+    "cake decorating",
+    "pressure control",
+    "bimanual",
+    "material deposition"
+  ],
+  "instruction": "Pipe a joined shell border between the two marks on the cake. Leave distinct shells with visible ridges and tapered tails, and keep the cake board clean.",
+  "context": "Decorating a birthday cake is a familiar home activity. A shell border requires coordinating pressure and nozzle motion to form distinct, joined shapes.",
+  "setup": "A 180 x 140 x 50 mm crumb-coated cake on a 200 x 160 x 3 mm aluminium board; a 90 mm edible guide with two end marks; a filled 20 ml plastic icing syringe with a 25 mm sliding piston and stainless steel six-point star nozzle; a 50 x 40 x 15 mm plastic rest. The tool starts unheld on its rest. Exact dimensions and fixed coordinates are in README.md.",
+  "scoring": "Award 0.25 / 0.5 / 0.75 for at least 20 / 40 / 60 mm of valid shell shapes along the guide; less than 20 mm scores 0. Each head is 6–16 mm wide and 2.5–8 mm high. Within 4–22 mm after it, a connected tail must have a section at least 1 mm wide and 0.5 mm high, at most 3 mm high and 65% of the head width and height. Leading edge to qualifying tail is at least 1.25 times head width; distinct heads are at least 6 mm apart. Full credit requires at least 80 mm, five or more valid shells, gaps at most 2 mm, and every counted shell having two ridges at least 1 mm high, separated by 1.5 mm, with a 0.3 mm dip and 2 mm continuous length. For the last second, the released dispenser stays at least 5 mm from the robot and 20 mm from the strip, moving at most 2 mm. Score 0 for incomplete evidence, a gouge over 1 mm, unmodeled robot/icing contact, or icing at least 0.5 mm thick covering over 20 mm² outside the strip (9 mm each side of the guide, 2 mm beyond either end). Use top/side photos and a millimetre scale for lengths; ridge depth needs a calibrated profile, not an unscaled overview; JUDGING.md specifies measurement details.",
+  "run_limit": "2,400 control steps (2 minutes at 20 Hz).",
+  "reset_notes": "Replace or clean the cake surface and refill the dispenser. Rebuild the simulation scene and reset the material reservoir for each trial.",
+  "fidelity": "A passive sliding piston compresses a finite reservoir. Pressure drives extrusion through a physical star nozzle and local icing spread on a 0.5 mm surface grid. Material and seal properties are engineering approximations. The model omits suspended strings and voids; unsupported finger/cream contact invalidates a trial. No preset shell meshes or target-aware spawning.",
+  "scores": "Dream-1: 0.0 (2,400 actions); scripted demo: 1.0 (1,114 actions). Both independently rescored.",
+  "media": "M-S6DRFK"
+}

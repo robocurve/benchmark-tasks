@@ -1,24 +1,17 @@
 # Pipe a shell border
 
-Pipe a joined row of ridged icing shells between two marks on a cake, then set
-the dispenser down. The task tests coordinated pressure and tool motion.
+Pipe a joined shell border along the L-shaped guide and around its corner,
+then set the dispenser down. The task tests coordinated pressure and tool motion.
 
-Native demo: **1.0**. Dream-1 baseline: **0.0**. Native trial 111 scores 1.0:
-six ridged shells covering 87 mm, with the dispenser released and no icing outside
-the permitted strip. Independent review of the native top, side and detail
-photographs agrees with the six-shell result.
-Dream completes the full 2,400-action episode and scores 0.0: it deposits no icing.
-The revised judging guide uses ordinary top/side close-up photographs and a ruler.
-Ridges are counted visually; no projected light, macro calibration or groove-depth
-measurement is required. The same recorded runs were rescored on 16 November
-2026. Videos and setup screenshot retain the media ID in `task.json`.
+The 18 November corner revision has a complete native full-score demonstration.
+The earlier straight-only result is retained only as a negative control.
 
 ## Setup
 
 The YAM station table is at Z = 0.7475 m. A 180 × 140 × 50 mm rectangular,
 crumb-coated cake has its centre at (0.300, 0, 0.7755) m. Its top is Z = 0.8005 m.
 A 200 × 160 × 3 mm aluminium cake board is centred at (0.300, 0, 0.749) m. The marked border is
-the 90 mm edible guide line from (0.235, −0.045) to (0.235, +0.045) m on the cake top.
+a 90 mm line from (0.235, −0.045) to (0.235, +0.045) m, then a 60 mm line to (0.295, +0.045) m on the cake top.
 The line is 0.5 mm wide; its two transverse end marks are 10 × 0.5 mm.
 All guide marks are 0.1 mm thick.
 
@@ -46,13 +39,17 @@ Before the session, trim a ready-made plain Madeira/pound cake to
 180 × 140 × 49 mm with a flat, level top. For each trial, brush off loose crumbs,
 spread white icing over the top and draw a straight spatula once across two
 1 mm spacer strips resting along its sides. Remove the spacers. The coated top
-is now 50 mm above the board. Draw the 90 mm guide and end marks with an edible
+is now 50 mm above the board. Draw both perpendicular guide sections and end marks with an edible
 pen using a ruler. This surface preparation takes a few minutes once the cake
 and icing are ready; no baking, chilling or crust-setting stage is required.
 
 For visible contrast, mix 0.10 g Wilton Pink gel icing colour into 100 g of the
-same icing for 30 seconds. Load 20 ml into the dispenser from the rear, tapping
-it gently to remove visible air pockets; fit its piston and wipe the nozzle.
+same icing for 30 seconds. Record the empty dispenser mass first. Load icing from the rear, tap out visible
+air, fit the piston, and prime onto a waste plate until a continuous star-shaped
+strand emerges. Adjust and re-prime until the loaded dispenser weighs
+**17.0 ± 0.5 g more than its empty mass**, using a kitchen scale reading 0.1 g.
+Wipe only the outside of the nozzle. The simulator uses a nominal 20 ml at its
+stated approximate 850 kg/m³ density (17 g); actual product density is uncalibrated.
 Pipe within 10 minutes of surface preparation, at 20–22°C. Keep unused icing
 covered. Between trials scrape the top flat, renew its 1 mm white coat and marks,
 or replace the cake if damaged. Do not reuse a gouged surface.
@@ -66,7 +63,7 @@ physical pressure control without pretending that a rigid handle is a soft bag.
 
 Use the Linux/NVIDIA stack pinned in `ENVIRONMENT.json`, with its YAM adapter
 installed. Run from the repository root, using the IsaacLab environment's Python.
-The saved plan includes the complete physical pickup, six shells and release:
+The saved plan includes the complete physical pickup, ten shells around the corner, and release:
 
 ```bash
 python tasks/pipe-a-shell-border/run.py --policy demo --joint-feedback --state-assisted-demo --plan tasks/pipe-a-shell-border/demo-plan.json --steps 2400 --tool-substep-trace --out artifacts/piping-demo
@@ -81,11 +78,13 @@ Use a new output directory for every run. The generic scene runner's placeholder
 score is not this task's score; `run.py` performs the material coupling and
 `audit_run.py` independently scores the saved physical record.
 
-Both policies get the same fixed layout,240 Hz physics,20 Hz controls, motor limits
+Both policies get the same fixed layout, 240 Hz physics, 20 Hz controls, motor limits
 and 2,400-action limit (120 simulated seconds). There is no object jitter or
-randomized scene seed. The demo ends after 1,114 actions (55.7 s); trial 111 took 502 s
-on an RTX 6000 Ada while another task shared the GPU. Dream takes 1,042 s on the same GPU: one session, 32 client preroll steps,
-296 successful eight-action requests and two transient server-error retries.
+randomized scene seed. The revised demo scores **1.0** in 1,648 actions;
+Dream-1 scores **0.0** after all 2,400 actions. On a shared A40, they took
+24.9 and 58.4 minutes respectively, including rendering and model waits.
+Dream used 296 requests across 133 response sessions;
+server-session recoveries are recorded, so this is not an uninterrupted baseline.
 
 The scripted demo openly uses native barrel/plunger poses and joint angles to
 command bounded ordinary joint targets. A fixed pressure/motion recipe and
@@ -110,36 +109,17 @@ actual raised heads, tapered tails and continuous ridges; a plain line or row of
 round blobs cannot pass. The scorer uses the final material surface, not intended
 shell locations. Full credit also requires a joined finish and released tool.
 
-Trial 111's independent audit finds 87 mm of valid decoration, six ridged shells,
-zero icing outside the permitted strip, no cake gouge, and more than 56 mm
-clearance from the border at release. Native top, side and close-up photographs
-show the raised heads and tapered, ridged tails. Ridge quality is checked from the close photographs, using the 90 mm guide
-and 10 mm end mark for scale. Numerical profiles are optional diagnostics,
-not required judging tools; the material surface is visibly faceted. See [the recorded evidence](evidence/native-six-shell-111.json).
-
-The preceding trial 099's exact 11,928-step input replay reproduces deposited
-volume to numerical precision. Trial 111 retains its shell-making motion and
-slows the return of the dispenser to prevent an unintended final pressure pulse.
-No scoring threshold or material parameter changed for this cleaner finish.
-
-The scorer originally treated a low tail shoulder as a separate head and
-truncated the last shell. Its correction applies the existing 2.5 mm head-height
-minimum before segmentation. Over-height and oversized mounds still obstruct a
-shell. A second correction measures each head and tail on the same connected
-visible footprint, so detached lateral blobs cannot inflate its width. Both final
-records were rescored: demo 1.0, Dream 0.0. No judging threshold changed.
+The top and close photographs must show the straight sections, joined corner,
+raised heads, tapered tails and ridges. Use the 90 mm and 60 mm guides for scale.
+Numerical profiles are optional diagnostics, not required judging tools.
 
 ```bash
 python -m unittest discover -s tasks/pipe-a-shell-border -p 'test_*.py'
 ```
 
-The CPU checks cover pressure causality, finite volume, physical contact,
-damage, negative shape controls, segmentation, released-tool evidence and
-ridge continuity. The old projected-section helper is retired and no longer
-part of judging. The revision removes the depth threshold, not the requirement
-for real raised, separated ridges; smooth blobs still cannot receive full credit.
-Older experiments remain in `evidence/` and `VALIDATION.json`; their scores are
-historical and should not be substituted for the final pair of runs.
+The checks cover pressure causality, finite volume, physical contact, damage,
+shape failures, straightness, corner completion and released-tool evidence.
+The old straight-only demo is retained as a negative control for the new rubric.
 
 ## Simulation limits
 
@@ -169,10 +149,20 @@ establish acceptance of this task. No other team's task code was copied.
 mkdir -p artifacts/cake-records
 tar xzf tasks/pipe-a-shell-border/evidence/demo-record.tar.gz -C artifacts/cake-records
 tar xzf tasks/pipe-a-shell-border/evidence/dream-record.tar.gz -C artifacts/cake-records
-python tasks/pipe-a-shell-border/audit_run.py artifacts/cake-records/demo --out artifacts/cake-records/demo-audit.json
-python tasks/pipe-a-shell-border/audit_run.py artifacts/cake-records/dream --out artifacts/cake-records/dream-audit.json
+python tasks/pipe-a-shell-border/audit_run.py artifacts/cake-records/demo-corner --out artifacts/cake-records/demo-audit.json
+python tasks/pipe-a-shell-border/audit_run.py artifacts/cake-records/dream-corner --out artifacts/cake-records/dream-audit.json
 ```
 
-The extracted records independently reproduce demo 1.0 and Dream 0.0. Videos and the setup screenshot are uploaded separately to Robocurve.
+The included archives contain the current complete corner trials. Videos and the setup screenshot are
+uploaded separately to Robocurve.
 `task.json` records their media ID. The native record archives provide reproducible
 geometry and contact evidence; they do not replace watching the videos.
+
+
+Current corner evidence is in `evidence/demo-record.tar.gz` and `dream-record.tar.gz`.
+Extract either archive and pass its `demo-corner` or `dream-corner` directory to
+`audit_run.py`. The archived code and action plan identify the actual run.
+See the [top photograph](evidence/demo-judging-top.png) and
+[second-side detail](evidence/demo-judging-last-detail.png) for the same final icing.
+Older numbered development summaries are historical diagnostics, not evidence
+for the revised corner task.

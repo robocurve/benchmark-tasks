@@ -34,7 +34,7 @@ def release_evidence(trace,paths):
     recent=trace[-21:]
     if recent[-1].get('time_s',0)-recent[0].get('time_s',0)<1.-1e-8:return result
     minimum_robot=minimum_border=float('inf');motion=0.;first=None
-    border=np.array(((.226,-.047,.8005),(.244,.047,.8085)))
+    border=np.array(((.226,-.047,.8005),(.297,.054,.8085)))
     for row in recent:
         bounds=row.get('rigid_bounds_m',{})
         if not all(p in bounds for p in paths.values()) or len(bounds)<20:return result
