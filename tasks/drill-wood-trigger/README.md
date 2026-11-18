@@ -1,14 +1,16 @@
-# Drill on a wood target using a second arm for the trigger
+# Drill a shallow hole in a marked wood block
 
-The right arm picks up a cordless drill, points its blunt bit vertically down,
-and places the bit on the red target on a secured wood block. The left arm
-presses the drill's separate, spring-loaded red trigger while the bit stays on
-the target. A hole does not form and the motor does not run.
+The right arm holds a cordless drill while the left arm operates its attached
+spring-return trigger. The robot feeds the rotating 6 mm bit into the marked
+wood, makes a 10–13 mm deep hole, withdraws the bit, and releases the trigger.
+The task is in **Societal relatability**: drilling a marked hole for a shelf,
+bracket or other home project is a familiar operation with a visible result.
 
-This is an independent task, authored in `task.py`. The task-local `runtime.py`
-adds the bit, physical trigger joint, and contact sensors to the YAM adapter
-inside this process. It does not modify the installed adapter or other tasks.
-Use `run.py` to include that extension when loading the task file.
+`task.py` specifies setup and scoring. `cutting.py` is the complete reduced
+material model; `runtime.py` applies its wrenches to the physical drill at each
+240 Hz substep. `geometry.py` renders the persistent bore from that same state.
+`demo.py` controls only the ordinary joint targets. Use `run.py` to load this
+extension; no installed adapter files or other tasks are changed.
 
 ## Runtime and installation
 
@@ -50,32 +52,27 @@ API; configure its credentials outside the repository as in the adapter docs.
 ```bash
 RUN_ROOT="$HOME/yam-eval/drill-wood-trigger"
 python run.py demo --log-dir "$RUN_ROOT/demo"
+python run.py dream --log-dir "$RUN_ROOT/dream"
 ```
 
-Add `--headless false` to see the Isaac Sim window on the local display. For a
-new trial choose a fresh log directory. The default creates a timestamped folder
-under `$YAM_LOG_ROOT/drill-wood-trigger` (or `~/yam-eval/drill-wood-trigger`).
-
-Both arms receive only ordinary 14-dimensional joint commands. The demo uses
-measured tool pose to align the drill and approach its trigger. The simulated
-drill and trigger move through gravity, friction, grasping, and joint/contact
-forces. The demonstration does not write object poses or trigger states.
-
-The run uses seed 0, no object jitter, 20 Hz control, 240 Hz physics, 320 x 176
-policy camera frames, and at most 1,600 control steps (80 simulated seconds).
-The demo requests a stop after 70 simulated seconds if it has not succeeded.
-Measured wall-clock runtime and scorer results belong in the results section
-below after a completed trial.
-
-Render a completed evaluation log into camera videos:
+Use fresh log directories. Add `--headless false` for the local Isaac Sim window.
+Simulation and rendering run on the local GPU; Dream-1 inference uses the Dream
+Labs API. Both trials use the same instruction and setup, seed 0, zero jitter,
+20 Hz control, 240 Hz physics and 320 x 176 policy camera frames. The limit is
+2,400 actions / 120 simulated seconds. The demo requests a stop at 110 s if needed.
+The default output is `$YAM_LOG_ROOT/drill-wood-trigger/<mode>-<timestamp>` or
+`~/yam-eval/drill-wood-trigger/<mode>-<timestamp>`.
 
 ```bash
 inspect-robots video /path/to/adhoc_LOG_ID.json
 ```
 
-Each trial stores its scorer result in the evaluation JSON, detailed geometric
-and force measurements in `measurements.jsonl`, and input-file hashes in
-`source_manifest.json`. The latter records the source files used by that trial.
+The evaluation JSON stores the scorer result. `measurements.jsonl` records the
+actual tip trajectory, contacts, spindle speed, material force/torque, permanent
+hole geometry and qualifying depth. `source_manifest.json` records input hashes.
+A reset starts with intact wood and an unpressed trigger; no demo stage, policy
+identity or target-coordinate test enables material removal. The scripted demo
+may read measured poses, contacts and depth for control, as permitted for demos.
 
 ## Shared station fixtures
 
@@ -93,103 +90,142 @@ The calibrated wrist cameras are fixed to the grippers. Exact stand rotations,
 lighting, camera intrinsics, robot meshes and wrist mounts come from
 `station.py`, `scene.py` and the bundled robot assets at the pinned adapter commit.
 
-## Setup and scoring
+## Physical task and scoring
 
-World X points forward, Y left, and Z up. The station table top is at 0.7475 m.
-The secured wood block is 180 x 140 x 30 mm, centred at XY (0.26, -0.08) m, so its
-top is at Z=0.7775 m. The red target radius is 10 mm. The position was checked
-against the YAM kinematics for both a vertical right-arm tool pose and a
-horizontal approach by the left arm.
+The block and drill dimensions, materials, poses, target, ready joints and shared
+station are specified in `task.json`. A fresh dry clear-pine coupon is
+180 x 140 x 30 mm. Secure it on the bench and mark a 20 mm red disk. The simulation
+approximates the workholding clamps by a fixed block; it does not render a clamp.
+The steel bit is approximated by a 35 mm long, 6 mm diameter cylinder with a
+rotating helical surface stripe. The drill has a spring-return trigger proxy
+at its trigger location, 14 x 20 x 40 mm with 5 mm travel; that enlarged proxy
+and its 150 N/m spring are approximations, not a claim about a measured switch.
 
-The 0.5 kg drill starts on its side at XY (0.25, -0.30) m with yaw 90 degrees.
-Its 35 mm long, 6 mm diameter blunt bit points along the model's -X axis. The
-red 14 x 20 x 40 mm trigger slides 5 mm along model +X, against a 150 N/m spring
-and 2 N s/m damping. A filtered contact sensor measures contact specifically
-between the trigger and the left arm's finger bodies.
+The hole entry is the bit's actual first cutting position. It must be within
+3 mm of the target centre, with its axis within 12 degrees of vertically down.
+The bore depth must be between 10 and 13 mm. At least 10 mm of material advance
+must happen while the right arm holds the handle and the left fingertips press
+the attached trigger at least 3 mm. A hole made with a trigger propped against
+another object cannot meet that two-arm cutting-history condition.
 
-The three filtered contact sensors update at each 240 Hz physics step. Their
-reported forces are the mean over the 12 physics steps in the current 20 Hz
-control interval, so a brief numerical contact bounce does not erase contact
-that occurred during that interval.
+Finish holding the drill, bit at least 15 mm above the wood top, trigger released
+(at most 1 mm stroke), for 0.5 seconds. Withdrawal happens before trigger release.
+Primary physical scoring uses a ruler for hole-centre error, a marked straight
+probe/depth gauge for hole depth, a protractor for direction, and trial video
+for grasp, trigger operation, withdrawal and the final hold. The result can be
+inspected after the drill is withdrawn; simulation-only force readings are not
+required from the physical evaluator.
 
-Full score requires all of these together for 0.5 seconds (10 control steps):
+Scores cover every trial:
 
-- The right TCP is within 55 mm of the handle point, the jaw gap is below 75 mm,
-  and EACH gripping finger contacts the drill with filtered mean force above
-  0.05 N. Contact from one finger or with a different object does not count.
-- The bit tip is within the target's 10 mm radius and within 4 mm vertically of
-  the top surface, with measured tool-to-wood normal force above 0.05 N.
-  Aiming from above the target is insufficient. The target is a visual marking
-  and does not add a separate collision surface.
-- The bit axis is within 12 degrees of vertically down.
-- The attached trigger travels 3 to 7 mm, including solver tolerance around its
-  5 mm stop, with transverse joint displacement below 3 mm.
-- The left fingertips apply more than 0.05 N to the trigger.
+- 0: no grasp/no actions, or a bore at least 2 mm deep outside the location/angle
+  limits, or any bore deeper than 13 mm.
+- 0.25: hold the drill without enough qualifying cutting progress.
+- 0.50: at least 2 mm of qualifying cutting at the correct position and angle.
+- 0.75: complete the qualifying hole, without the final withdrawal/release hold.
+- 1.0: complete the qualifying hole and the uninterrupted final 0.5 s hold.
 
-`task_score` awards 1.0 only after the uninterrupted hold. Final-state partial
-credit is 0.25 for holding the drill, 0.5 for holding it vertically, or 0.75 for
-also touching the target. Otherwise the score is zero. A detached or overtravelled
-trigger cannot finish the task. Pressing without target contact cannot finish it.
+The simulation's contact detectors require both right pads against the drill
+above 0.05 N each, TCP within 55 mm of the handle, gap below 75 mm, and left
+finger-to-trigger contact above 0.05 N. The attached trigger must have 3–7 mm
+stroke, including solver allowance, and under 3 mm transverse error. These are
+contact/attachment detectors, separate from the much larger drilling load.
 
-For physical reproduction, use an unpowered drill with a blunt contact probe
-and the documented mechanical trigger proxy. A ruler, protractor and calibrated
-top/side video at 20 fps or more can check capture between the right jaws, tip
-location, visible contact, trigger stroke and the half-second overlap. The low
-simulation force thresholds detect contact; calibrated force regulation is not
-the task. No powered drilling is needed for the scored interaction.
+## Reduced cutting model and fidelity
 
-The wood is fixed to approximate a secured workpiece. Contact materials and
-drill inertias are approximate. Motor operation, bit cutting, holes, chips, heat,
-and material deformation are omitted.
+The normal rigid bit/wood pair is replaced by the material law in `cutting.py`.
+The housing, chuck, fingers, trigger, table and wood retain ordinary PhysX
+collisions. Each physics substep reads the real drill pose and attached trigger,
+then applies reaction force at the bit tip plus reaction torque to the drill's
+public wrench buffer. No policy writes a drill pose, trigger state or hole depth.
+
+Trigger stroke drives a 0–900 rpm spindle with 0.12 s response time. With a
+spinning bit (at least 300 rpm), at least 8 N axial material reaction, and an
+actual bit advance into the current bore floor, material can be removed. Depth
+advance is bounded by measured penetration and 3 mm/s; its force-dependent rate
+is `0.0004 * (force_N - 8)` m/s. A stationary surface touch cannot accumulate a
+deep hole. The hole stays after withdrawal and cannot grow with the motor off.
+
+The material uses 16,000 N/m axial stiffness and 35 N s/m damping. Once a bore
+exists, its walls apply 500 N/m lateral resistance with 0.5 N s/m damping beyond 0.7 mm clearance;
+there is no guide before cutting. The bore starts at the actual entry pose,
+including off-target entries, rather than being placed at the red target. It
+models one top-entry bore per coupon, not arbitrary milling or multiple holes.
+The bore floor and walls are rendered from the permanent material state; no
+hole animation is triggered by an arm waypoint or a task success flag.
+
+Cutting torque opposes the bit axis, `0.035 * (feed_force/12)` N m, capped at
+0.12 N m. Axial and lateral force components are each capped at 55 N for numerical stability. Typical operating
+loads must be reported from the run diagnostics. This softwood force law is an
+engineering approximation **not calibrated against a physical drilling test**.
+No claim of validated cutting-force transfer to hardware is made. There is no
+fracture, chip transport, heat, motor stall model or detailed flute cutting.
+
+For a physical trial, select the bit/drill/coupon combination and check the feed
+and grip loads are within the rig's capacity before evaluations; preserve those
+materials and settings across trials. Use a secured workpiece and backing board,
+keep grippers clear of the rotating chuck/bit, and protect the shared rig from
+chips. Each physical trial consumes a fresh matching coupon; simulator reset
+restores the unbored material and clears cutting history and spindle state.
 
 ## Results
 
-Both recordings use the final two-finger grasp check, the same four Python source
-files, the same instruction and fixed setup, seed 0, and an 80-second run limit.
+All three trials use the same six Python source files, instruction, seed 0 and fixed
+layout, with a 2,400-step / 120-second limit.
 
-| Policy | Score | Control steps | Simulation time | Recorded wall time |
+| Policy | Score | Actions | Simulated time | Wall time |
 | --- | --- | --- | --- | --- |
-| Scripted reference (`wood_drill_demo`) | 1.0 | 764 | 38.20 s | 111.16 s |
-| Dream-1 beta (`dreamlabs/dream-1-beta`) | 0.0 | 1,600 | 80.00 s | 198.90 s |
+| Scripted demo with inspection (`wood_drill_demo`) | 1.0 | 1,562 | 78.10 s | 218.02 s |
+| Inspect Robots reference (`wood_drill_demo`) | 1.0 | 1,579 | 78.95 s | 233.22 s |
+| Dream-1 beta (`dreamlabs/dream-1-beta`) | 0.25 | 2,400 | 120.00 s | 270.21 s |
 
-The demo ended successfully after 10 consecutive qualifying control steps.
-Its final target error was 2.30 mm, tip height error was
-0.043 mm, tilt was 0.84 degrees, trigger travel was
-5.02 mm, and both right gripping fingers contacted the drill.
-The model trial ended at its step limit without an execution error.
+The submitted demo made an 11.57 mm deep hole, with entry error 1.34 mm and bore tilt
+0.80 degrees. Cutting samples show 8.02–11.47 N axial reaction, mean 10.17 N.
+It kept the right grasp, withdrew the bit, released the trigger, and met all
+finish conditions for ten consecutive control steps. Dream-1 picked up and
+held the drill but made no hole. Neither official trial had an execution error.
+These are individual fixed-layout trials, not success-rate estimates.
 
-`demo_result.json` and `dream_result.json` record the measured outcomes and source
-hashes. These are individual fixed-layout trials, not success-rate estimates.
-The submitted camera recordings and setup image are referenced by the media ID
-in `task.json`. Wall-clock runtime includes startup, rendering and inference;
-first-time asset downloads or shader compilation can take additional time.
+`demo_result.json`, `reference_demo_result.json` and `dream_result.json` contain
+the outcomes and source hashes. The uploaded demo is the inspection recording.
+The withdrawn contact-only version's scores and media do not apply.
 
-## CPU scoring checks
+To make a full demonstration video with a four-second post-trial inspection:
+
+```bash
+python tools/inspection_demo.py --log-dir "$HOME/yam-eval/drill-wood-trigger/inspection"
+```
+
+This runs the same scripted control and scorer, then changes only the rendering
+camera after successful termination. No additional physics steps or robot/material
+state edits occur during the inspection. The resulting `demo-with-inspection.mp4`
+shows the complete trial followed by a close view of the bore. Its score and
+control limit apply to the trial before that camera-only inspection.
+
+## CPU checks
 
 ```bash
 uv pip install --python "$(command -v python)" "pytest==9.1.1"
-PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q tests/test_scoring.py
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q tests
 ```
 
-The 21 checks cover both-arm and two-finger grasp requirements, hovering and off-target failures,
-penetration, tilt, trigger travel and attachment, and the continuous success hold.
-Disabling automatic pytest plugin loading avoids unrelated ROS plugins on the
-reference workstation.
+The checks cover trigger-only and light-touch shortcuts, motor-off penetration,
+stationary-bit depth, load/reaction and persistent depth, actual off-target entry,
+cutting without the required arm contacts, reset state, visible bore geometry,
+both gripping pads, bore-floor continuity during sidewall contact, re-entry into
+intact wood, depth/angle/position limits, withdrawal, trigger release,
+and the continuous final hold.
 
-## Model run and submission
+## Assets and licenses
 
-To repeat the model evaluation, run the model separately with the same task:
-
-```bash
-python run.py dream --log-dir "$HOME/yam-eval/drill-wood-trigger/dream"
-```
-
-Dream-1 inference uses the configured Dream Labs API. The simulator remains
-local. Record actual scores, render H.264 videos, capture the initial setup,
-upload media with the repository's `tools/upload_media.py`, and reference the
-returned ID in `task.json`. Commit only this folder in its own pull request.
-
-The drill model is loaded from Arena's `power_drill` asset library. The original
-asset retains NVIDIA's additional asset terms. The wood, target, blunt bit, and
-trigger are generated primitives. YAM geometry comes from the adapter's bundled
-I2RT robot assets. Keep the relevant dependency licenses when reproducing it.
+- Cordless-drill mesh: NVIDIA Isaac Lab-Arena `power_drill`,
+  `Arena/assets/object_library/power_drill_physics/power_drill_physics.usd`;
+  [NVIDIA Isaac Sim Additional Software and Materials License](https://www.nvidia.com/en-us/agreements/enterprise-software/isaac-sim-additional-software-and-materials-license/).
+  The asset is loaded from the official server rather than redistributed here.
+- YAM robot meshes and wrist mounts: I2RT geometry bundled by the pinned
+  YAM adapter, MIT License, with notice in `yam_arena/assets/yam/LICENSE.i2rt`.
+- Station dimensions, primitive fixtures, lights and cameras: pinned YAM adapter
+  and Isaac Lab-Arena sources; retain their repository license notices. Arena
+  source is Apache-2.0.
+- Wood, target, bit, helical stripe, bore and trigger: procedural geometry in
+  this folder, with no additional third-party texture or mesh downloads.

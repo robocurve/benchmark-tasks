@@ -29,6 +29,10 @@ class WoodDrillDemo(PolicyBase):
         self._bias = {side: np.zeros(6) for side in ('left','right')}
         self.last_ik = {}
         self._orientation_selected = False
+        self._feed_z = None
+        self._trigger_push = .014
+        self._contact_z = None
+        self._withdraw_z = None
 
     def bind(self, info):
         self.dt = 1. / info.control_hz
@@ -54,6 +58,10 @@ class WoodDrillDemo(PolicyBase):
         self._right_pos = self._right_rot = self._left_pos = self._left_rot = None
         self._bias = {side: np.zeros(6) for side in ('left','right')}
         self._orientation_selected = False
+        self._feed_z = None
+        self._trigger_push = .014
+        self._contact_z = None
+        self._withdraw_z = None
         self.left_rotation = rotation(np.array([1.,0,0]),np.pi/2) @ rotation(np.array([0.,0,1]),np.pi/2)
         self.drill_rotation = rotation(np.array([0.,1,0]),-np.pi/2)
 
@@ -100,7 +108,7 @@ class WoodDrillDemo(PolicyBase):
                     dr=rotation(np.array([0.,0,1]),yaw) @ rotation(np.array([0.,1,0]),-np.pi/2)
                     gr_goal=dr @ r.T @ gr
                     quality=0.
-                    for clearance in (0.,.060):
+                    for clearance in (-.014,0.,.060):
                         tip=np.array([*self.task.TARGET_XY,self.task.SURFACE_Z+clearance])
                         candidate=tip+dr@(local_tcp-self.task.BIT_TIP_LOCAL)
                         q,e,a=ik.solve(candidate,ik.matrix_to_quat_xyzw(gr_goal),rq,
@@ -116,10 +124,44 @@ class WoodDrillDemo(PolicyBase):
                 print('[demo] feasible tool yaws:',[round(np.degrees(item[1])) for item in feasible],flush=True)
                 print(f'[demo] selected vertical tool yaw={np.degrees(yaw):.1f}deg, reach cost={quality:.5f}',flush=True)
                 self._orientation_selected=True
-            desired_tip = np.array([*self.task.TARGET_XY,self.task.SURFACE_Z-0.004])
+            m = self.task.measure(objects,emb.robot_state())
+            if self.stage == 'press' and m['trigger_pressed'] and m.get('spindle_rpm',0)>300:
+                self.stage='recenter';self.stage_since=t
+                print('[demo] centre bit while holding trigger at a controlled stroke',flush=True)
+            if self.stage == 'recenter' and m['target_error_m']<.0012 and m['tilt_deg']<2 and t-self.stage_since>1.:
+                self.stage='feed';self.stage_since=t
+                self._feed_z=self.task.SURFACE_Z-.0007
+                print('[demo] feed rotating bit into wood against resistance',flush=True)
+            if self.stage == 'feed' and m.get('qualified_depth_m',0)>=.0105:
+                self.stage='withdraw';self.stage_since=t
+                self._withdraw_z=float(m['tip_m'][2])
+                print('[demo] hole depth reached; withdraw rotating bit',flush=True)
+            if self.stage == 'withdraw' and m['surface_error_m']>.026:
+                self.stage='release';self.stage_since=t
+                print('[demo] release trigger and leave hole visible',flush=True)
+            desired_tip = np.array([*self.task.TARGET_XY,self.task.SURFACE_Z-.0007])
+            if self._contact_z is None:
+                self._contact_z=desired_tip[2]
+            if self.stage in ('position','left_prepare','left_approach','press','recenter','feed'):
+                target_force=min(13.5,7.+.5*(t-self.stage_since)) if self.stage=='feed' else 7.0
+                delta=-.00035*(target_force-m.get('feed_force_n',0.))*self.dt
+                self._contact_z=np.clip(self._contact_z+np.clip(delta,-.0001,.0001),
+                                        self.task.SURFACE_Z-.025,self.task.SURFACE_Z+.001)
+                desired_tip[2]=self._contact_z
             if self.stage == 'orient':
                 desired_tip[2] += .060
+            elif self.stage=='withdraw':
+                self._withdraw_z=min(self.task.SURFACE_Z+.035,self._withdraw_z+.0025*self.dt)
+                desired_tip[2]=self._withdraw_z
+                entry=np.asarray(m['hole_entry_m'])
+                bore=np.asarray(m['bore_axis'])
+                desired_tip[:2]=entry[:2]+bore[:2]*((desired_tip[2]-entry[2])/bore[2])
+            elif self.stage=='release':
+                desired_tip[2]=self.task.SURFACE_Z+.045
+                desired_tip[0]+=.050
             desired_tcp = desired_tip + self.drill_rotation @ (local_tcp-self.task.BIT_TIP_LOCAL)
+            if self.stage in ('position','left_prepare','left_approach','press','recenter','feed','withdraw'):
+                desired_tcp += .65*(desired_tip-np.asarray(m['tip_m']))
             desired_gr = self.drill_rotation @ r.T @ gr
             # Limit per-tick position and orientation increments; all tool motion comes from contact physics.
             displacement = desired_tcp-tcp
@@ -130,31 +172,40 @@ class WoodDrillDemo(PolicyBase):
             angle = np.linalg.norm(ik._rot_error(desired_gr,self._right_rot))
             self._right_rot = ik.slerp_matrix(self._right_rot,desired_gr,min(1.,.035/max(angle,1e-9)))
             self._right_q,right=self._arm('right',self._right_pos,self._right_rot,self._right_q,0.)
-            m = self.task.measure(objects,emb.robot_state())
             if round(t / self.dt) % 40 == 0:
                 pe,re=self.last_ik['right']
                 print(f'[demo] stage={self.stage} right IK={pe*1000:.1f}mm/{np.degrees(re):.1f}deg bias={np.round(self._bias["right"],3)}',flush=True)
             if self.stage == 'orient' and m['tilt_deg']<6 and m['target_error_m']<.008 and abs(m['surface_error_m']-.056)<.010:
                 self.stage='position';self.stage_since=t
                 print('[demo] lower bit onto wood target',flush=True)
-            if self.stage == 'position' and m['tilt_deg']<8 and m['tip_on_target']:
+            if self.stage == 'position' and m['tilt_deg']<2 and m['target_error_m']<.0012 and 6.<m.get('feed_force_n',0.)<14.:
                 if self.contact_since is None: self.contact_since=t
                 if t-self.contact_since>1.:
                     self.stage='left_prepare';self.stage_since=t
                     print('[demo] approach trigger with left arm',flush=True)
             elif self.stage == 'position': self.contact_since=None
-            if self.stage in ('left_prepare','left_approach','press'):
-                trigger=np.asarray(objects['trigger'].pos)
+            if self.stage in ('left_prepare','left_approach','press','recenter','feed','withdraw','release'):
+                # Anchor to the unpressed switch position, rather than chasing
+                # the moving slider and continuously increasing its load.
+                trigger=origin+r@self.task.TRIGGER_LOCAL
                 # Horizontal gripper from +Y, with its lower closed finger below the trigger.
                 goal_left=trigger+np.array([0.,.020,-.023])
                 if self.stage=='left_prepare':
                     goal_left=trigger+np.array([0.,.120,.090])
                 elif self.stage=='left_approach':
                     goal_left[1]+=.070
-                else:
+                elif self.stage=='press':
                     fraction=min(1.,(t-self.stage_since)/4.)
                     goal_left[1]+=.070*(1.-fraction)
                     goal_left[2]+=.014*max(0.,min(1.,(t-self.stage_since-4.)/3.))
+                elif self.stage in ('recenter','feed','withdraw'):
+                    self._trigger_push=np.clip(self._trigger_push+.08*(.004-m['trigger_travel_m']),.008,.023)
+                    if m['trigger_contact_force_n']>2.:
+                        self._trigger_push-=.001*self.dt*(m['trigger_contact_force_n']-2.)
+                    goal_left[2]+=self._trigger_push
+                elif self.stage=='release':
+                    goal_left[1]+=.140
+                    goal_left[2]+=.014
                 lq=arm_q(left_robot)
                 lpos,lrot=ik.tcp_pose(lq,station.BASES['left'])
                 reached=np.linalg.norm(lpos-goal_left)<.012 and np.linalg.norm(ik._rot_error(self.left_rotation,lrot))<.08
@@ -174,5 +225,5 @@ class WoodDrillDemo(PolicyBase):
                 if round(t/self.dt)%40==0:
                     pe,re=self.last_ik['left']
                     print(f'[demo] left IK={pe*1000:.1f}mm/{np.degrees(re):.1f}deg target error={np.linalg.norm(lpos-goal_left)*1000:.1f}mm',flush=True)
-        meta={"request_stop":True} if t>70. else {}
+        meta={"request_stop":True} if t>110. else {}
         return ActionChunk(actions=[Action(data=np.r_[left,right],meta=meta)],control_hz=1./self.dt)

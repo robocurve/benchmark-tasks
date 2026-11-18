@@ -22,7 +22,7 @@ def run():
     parser.add_argument('mode',choices=['demo','dream'])
     parser.add_argument('--log-dir',type=Path)
     parser.add_argument('--headless',choices=['true','false'],default='true')
-    parser.add_argument('--max-steps',type=int,default=1600)
+    parser.add_argument('--max-steps',type=int,default=2400)
     args = parser.parse_args()
     output = args.log_dir or Path(os.environ.get('YAM_LOG_ROOT',str(Path.home()/'yam-eval'))) / 'drill-wood-trigger' / (args.mode+'-'+datetime.now().strftime('%Y%m%d-%H%M%S'))
     output.mkdir(parents=True,exist_ok=True)

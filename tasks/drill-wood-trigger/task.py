@@ -1,7 +1,8 @@
-"""A secured 180 x 140 x 30 mm wood block sits on the table with a red target on its top.
-A cordless drill with a 35 mm blunt bit lies beside it. The right arm must pick up the
-drill and place its bit vertically on the red target; the left arm must pull the red
-spring-loaded trigger while the bit stays on the target. No cutting or hole is simulated.
+"""Drill a shallow hole at the centre of the red target on a secured wood block.
+The right arm holds the drill; the left arm pulls its spring-loaded trigger.
+Feed the rotating 6 mm bit down to make a 10 to 13 mm deep hole, then withdraw
+the bit and release the trigger. Maintain alignment while pushing against the
+wood's resistance. The reduced cutting model and its limits are in the README.
 
 Run with this folder's run.py, which adds the physical trigger joint and robot-contact
 measurements to the standard yam_arena task-file interface.
@@ -27,6 +28,10 @@ TRIGGER_THRESHOLD = 0.003
 MAX_TILT_DEG = 12.0
 CONTACT_Z_TOLERANCE = 0.004
 SUCCESS_HOLD_S = 0.5
+HOLE_POSITION_TOLERANCE = 0.003
+HOLE_MIN_DEPTH = 0.010
+HOLE_MAX_DEPTH = 0.013
+WITHDRAW_CLEARANCE = 0.015
 
 # Match the original asset's horizontal extent exactly, keeping model coordinates in metres.
 DRILL = Asset("drill", asset="power_drill", xy=(0.25, -0.30), extent=0.18683595,
@@ -80,14 +85,26 @@ def measure(objects, robot=None):
                         and robot.get("bit_wood_contact", False))
     vertical = tilt <= MAX_TILT_DEG
     pressed = bool(attached and travel >= TRIGGER_THRESHOLD and left_pressing)
-    complete = right_holding and wood_contact and vertical and pressed
-    # Partial credit is conditional on the right arm actually holding the tool.
+    depth = float(robot.get('cut_depth_m',0.))
+    qualified_depth = float(robot.get('qualified_depth_m',0.))
+    entry = robot.get('hole_entry_m')
+    bore_axis = robot.get('bore_axis')
+    entry_error = None if entry is None else float(np.linalg.norm(np.asarray(entry)[:2]-TARGET_XY))
+    bore_tilt = None if bore_axis is None else float(np.degrees(np.arccos(np.clip(-np.asarray(bore_axis)[2],-1,1))))
+    hole_position_ok = entry_error is not None and entry_error <= HOLE_POSITION_TOLERANCE
+    hole_direction_ok = bore_tilt is not None and bore_tilt <= MAX_TILT_DEG
+    damaged = depth > HOLE_MAX_DEPTH or (depth >= .002 and not (hole_position_ok and hole_direction_ok))
+    hole_complete = bool(hole_position_ok and hole_direction_ok and HOLE_MIN_DEPTH <= depth <= HOLE_MAX_DEPTH
+                         and qualified_depth >= HOLE_MIN_DEPTH)
+    released = bool(attached and travel <= .001)
+    withdrawn = bool(z_error >= WITHDRAW_CLEARANCE)
+    complete = bool(right_holding and hole_complete and withdrawn and released and not damaged)
     partial = 0.0
-    if right_holding:
+    if right_holding and not damaged:
         partial = 0.25
-        if vertical:
+        if depth >= .002 and qualified_depth >= .002 and hole_position_ok and hole_direction_ok:
             partial = 0.5
-            if wood_contact:
+            if hole_complete:
                 partial = 0.75
     return {
         "tip_m": tip.tolist(), "drill_origin_m": origin.tolist(),
@@ -96,6 +113,9 @@ def measure(objects, robot=None):
         "right_holding": right_holding, "left_trigger_contact": left_pressing,
         "tip_on_target": wood_contact, "vertical": vertical,
         "trigger_pressed": pressed, "success_now": complete, "partial_score": partial,
+        "hole_entry_error_m": entry_error, "hole_tilt_deg": bore_tilt,
+        "hole_complete": hole_complete, "damaged_workpiece": bool(damaged),
+        "bit_withdrawn": withdrawn, "trigger_released": released,
         **{k: v for k, v in robot.items() if k not in ("right_holding", "left_trigger_contact")},
     }
 
@@ -113,4 +133,4 @@ def score(objects):
 
 def distance(objects):
     m = measure(objects, _robot)
-    return float(np.hypot(m["target_error_m"], m["surface_error_m"]))
+    return float(max(0.,HOLE_MIN_DEPTH-float(m.get('qualified_depth_m',0.))))
