@@ -160,6 +160,12 @@ loads must be reported from the run diagnostics. This softwood force law is an
 engineering approximation **not calibrated against a physical drilling test**.
 No claim of validated cutting-force transfer to hardware is made. There is no
 fracture, chip transport, heat, motor stall model or detailed flute cutting.
+Lateral reaming, bit bending and changes to bore diameter are omitted. The
+rendered 6 mm bore therefore does not establish physical hole quality under
+side loading. In the uploaded demo the largest transverse tip displacement
+while at least 1 mm below the top is 4.61 mm during withdrawal; this is a known
+limitation of the compliant single-bore model. The 1.0 result is the simulated
+scorer result, and physical withdrawal/hole quality remain unvalidated.
 
 For a physical trial, select the bit/drill/coupon combination and check the feed
 and grip loads are within the rig's capacity before evaluations; preserve those
