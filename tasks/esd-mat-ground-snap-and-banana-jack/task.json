@@ -1,0 +1,22 @@
+{
+  "title": "Press a ground cord snap onto a mat corner tab and seat its banana plug into a ground block",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "esd grounding",
+    "snap stud",
+    "banana jack",
+    "bimanual counterhold",
+    "cord routing",
+    "electronics assembly"
+  ],
+  "instruction": "Latch the mat corner tab flat, snap the ground cap onto its stud, route the cord clear of the work zone, seat the plug, and clear both grippers.",
+  "context": "In automated AI-accelerator and robotics compute-board manufacturing, ungrounded bench surfaces cause latent electrostatic discharge semiconductor failures unless each workmat is strapped to a grounded common-point block before board handling. Because the 50 g corner flap curls 14 deg upward under 0.35 N*m/rad spring return until locked flat beneath the bench corner retainer catch, one gripper must flatten and hold the tab while the other snaps the 10 mm stud, routes the coiled cord east of the work zone, and seats the banana plug.",
+  "setup": "A fixed static-dissipative bench mat (160 x 118 x 4 mm) sits centered at (0.228, -0.068) m on the station tabletop with a yellow-bordered keep-out PCB work zone (x = 155..255 mm, y = -120..-15 mm, 80 x 94 mm green PCB plate), a left staging pad (42 x 42 x 5 mm) at (0.115, -0.060) m, a front plug guide dock (66 x 86 x 1.4 mm) at (0.255, -0.225) m with 36 mm side guide rails, a bench ground block nest at (0.375, -0.205) m, and a 28 g corner retainer catch (14 N/m return) at (0.210, +0.1235) m. Articulated along +X at (0.220, +0.018) m, a 50 g mat corner flap (185 x 98 x 4 mm, 0.35 N*m/rad spring curled +14 deg up) carries a corner hold boss (36 x 26 x 24 mm) at (-65, +88) mm and a 10 mm brass snap stud (5 x 5 x 5.6 mm pin on a 13 x 13 mm collar) at (+75, +8) mm inside 55 deg funnel cheeks beside a 28 g beveled spring-jaw retainer (60 deg bevel, 22 N/m return). An articulated ground cord connects a 34 g female snap cap (36 x 36 mm brass flange, 23 x 50 mm shroud, 15 x 28 x 35 mm grip) at (0.115, -0.060) m via two 26 g strain boots and two 30 g coiled links around (0.145, -0.195) m to a 34 g banana plug (15 x 28 x 34 mm grip, locking brass neck and tip, pad-caging flanges) at (0.255, -0.225) m. A 120 g ground block (68 x 54 x 30 mm) with a 34 mm front mouth (face y = -0.178 m) and a 28 g socket latch (60 deg bevel, 6 N/m return, 58 mm indicator bar) sits cradled in the bench nest. Fixed starting layout.",
+  "scoring": "Judged at the end of the trial. The run succeeds once 1.0 holds for 3.0 s (60 steps). Measured at trial end with calipers and protractor. 1.0: corner flap curled at most 4.0 deg; snap cap centered within 5.0 mm radially and within -1.5 to 3.0 mm vertically above the stud base with retainer jaw residual gap at most 1.2 mm; both coiled cord links clear of the marked work zone (x = 155..255 mm, y = -120..-15 mm); ground block shifted at most 8.0 mm from its nest; banana plug shoulder seated within -3.0 to 3.0 mm of the block front face, laterally within 5.0 mm, misaligned at most 8.0 deg, with socket latch gap at most 1.2 mm; and both gripper TCPs at least 45 mm clear of tab, cap, cord, plug, and block. 0.85: fully grounded and cord clear, gripper within 45 mm. 0.60: stud snapped, cord clear, plug entered within -3.0 to 18.0 mm partial window and 8.0 mm lateral, not fully latched home. 0.50: stud snapped and plug latched home, cord crosses marked work zone. 0.25: stud snapped and block in nest only. 0.0: otherwise (snap unlatched, flap past 4.0 deg, block knocked past 8.0 mm, or 1-hand snap without corner hold). Possible scores 0.0, 0.25, 0.50, 0.60, 0.85, 1.0.",
+  "run_limit": "1000 steps (50 s at 20 Hz)",
+  "real_trial_cost_usd": 19,
+  "reset_notes": "Unplug the banana plug from the ground block, unlatch the snap cap from the stud, release the corner retainer catch so the mat flap springs back to +14 deg, and stage the snap cap at (0.115, -0.060) m and banana plug at (0.255, -0.225) m with the cord trailing around (0.145, -0.195) m clear of the mat.",
+  "fidelity": "Rigid-body simulation (PhysX, 20 Hz control). Simplified: elastomeric corner flap flex, molded PVC strain-relief boots, coiled wire compliance, and cantilevered snap catches are modelled as rigid multi-box bodies with lumped revolute hinges (0.35 N*m/rad flap curl) and 60 deg beveled spring sliders (6 to 22 N/m), dynamic bodies are scaled to at least 26 g, and internal electrical continuity is omitted.",
+  "scores": "Dream-1 run: 0; demo: 1",
+  "media": "M-JUB7V3"
+}
