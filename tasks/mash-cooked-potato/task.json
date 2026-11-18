@@ -1,0 +1,14 @@
+{
+  "title": "Mash cooked potato",
+  "category": "Societal relevance",
+  "instruction": "Mash the cooked potato in the bowl until no large lumps remain. Keep the potato in the bowl.",
+  "action_limit": 2400,
+  "setup": "About 60 g of peeled, cooked potato in twelve roughly 22 mm cubes, arranged in a 4 × 3 grid in a stainless-steel bowl (200 mm inside diameter, 75 mm deep). A 140 g wire masher has a 75 × 60 mm head and a 180 mm handle. The bowl is centred between the arms; the masher stands on its head 170 mm toward the right arm. Both hands start open.",
+  "scoring": "First weigh the retained potato and the lumps whose largest dimension exceeds 9 mm. Losing over 5% of the starting mass scores 0. Otherwise: 1.0 if at least 95% of retained mass is in lumps no larger than 9 mm and both hands have released for 3 seconds; 0.5 for at least 75%; 0.25 for at least 50%; otherwise 0. A qualifying result still held scores 0.5. Use a 0.1 g kitchen scale and a 9 mm reference grid.",
+  "fidelity": "Native robot, bowl and masher contacts act on cohesive potato particles. Contact-gated compression weakens force-limited bonds; fragments remain physical bodies. Scoring measures connected lump size and retained mass, not press count. This models breakup, not creamy paste, fluid flow or cooking. The material law is uncalibrated; particle damping and a 2 m/s speed cap regularize the coarse model. No object is attached to a hand or moved by the scorer.",
+  "run_limit": "2,400 control steps (120 seconds at 20 Hz).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "context": "Mashing cooked potato requires loaded pressing across the bowl, breaking down the pieces while keeping the food contained.",
+  "reset_notes": "Use peeled floury potato from one batch, cut into roughly 22 mm cubes, boiled until a fork passes through easily, drained and cooled to 18–22 °C. Weigh 60 ± 5 g per trial; add no milk, butter or oil. Use fresh pieces and clean the bowl, masher, work surface and food-safe gripper covers between trials. Place the twelve pieces as photographed.",
+  "media": "M-VF64XE"
+}
