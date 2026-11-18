@@ -1,0 +1,22 @@
+{
+  "title": "Set a circular saw's depth of cut to 25 mm for 3/4 in boards: free the depth lever, swing the foot plate, lock it",
+  "category": "Impact on jobs",
+  "keywords": [
+    "circular saw",
+    "depth of cut",
+    "foot plate",
+    "depth lever",
+    "carpentry",
+    "tool setup",
+    "adjust and lock"
+  ],
+  "instruction": "Set this saw to cut 25 mm deep and lock it there.",
+  "context": "Carpenters and construction laborers set a circular saw's depth of cut before every new stock thickness (O*NET 47-2031.00 Carpenters, 47-2061.00 Construction Laborers; about 1.7 million US workers together, BLS OEWS May 2024): the blade should stand only about 1/4 in (6 mm) past the board, here 19 mm boards, so 25 mm. The foot plate pivots at the front and the depth lever at the rear clamps it; it has to be freed, swung to the right depth, and clamped again.",
+  "setup": "Millimetres; x forward from the line through the two arm bases, y to the robot's left, z above the table top; arm bases at y +305 and -305. The layout is the same in every trial, as in the screenshot. A corded 7-1/4 in circular saw of the DEWALT DWE575 class, 4.0 kg, unplugged, lies on its motor side, blade side up, resting on its motor housing, the back of its main handle and its front bevel bracket: the 184 mm blade's arbor at x 300, y 40, the blade 125 mm above the bench, the 300 x 160 x 3 mm aluminium foot plate standing upright along y on the blade's far side (its outer face at x 327), pivoted 150 mm in front of the arbor. It is set to its full 65 mm depth of cut. The depth lever, 45 mm long with a thumb tab, lies along the rear of the upper guard pointing to the saw's back, home (clamped). The lower blade guard is shut on its spring.",
+  "scoring": "Measured at the end of the trial with a ruler square to the foot plate. 0 for the rest of the trial if the saw is moved 30 mm or turned 15 degrees. Otherwise: 1.0 (success, must hold for 1 s) when the blade stands 25 mm (within 1.5 mm) past the foot plate's outer face, the depth lever is home (within 8 degrees: clamped), both grippers are 30 mm or more from the saw and nothing moves more than 1 mm for 1 s; 0.75 when it is set to 25 mm and locked but a gripper is near or something still moves; 0.5 when it is set to 25 mm with the lever not home; 0.25 when the depth was changed by 10 mm at some point; else 0.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Swing the depth lever out, push the foot plate back against the guard to the full 65 mm depth, and push the lever home. Lay the saw back on its marks.",
+  "fidelity": "Rigid bodies at true size. The foot plate is a hinge on the saw at its front pivot; the depth clamp is task code on that hinge: freed, the plate sticks where it is put until pushed past 0.3 N m of friction; with the lever home it is held hard where it stood. The lever and the spring-shut lower guard are hinges. The saw is unplugged; no motor is simulated.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-4HSK7G"
+}
