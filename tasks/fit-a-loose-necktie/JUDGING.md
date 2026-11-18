@@ -1,34 +1,5 @@
-# Judging
+# Judge the finished tie
 
-Use the video, front and rear photographs, and a ruler. The collar's lower
-edge is z = 1.200 m; the black mark shows its centre. Score the final condition,
-after both grippers release for at least five seconds within the run limit.
-Before the trial, check the Simple (Oriental) threading and loose blade
-arrangement against [the reset procedure and diagram](README.md#prepared-knot-and-reset).
-The operator prepares this knot; tying it from scratch is outside the task.
+Judge after both hands release for 5 seconds. Award 0.5 if the intact threaded knot is at most 70 mm wide and high, with its top within 60 mm below the collar edge. Full credit also requires its top within 20 mm, its centre within 20 mm of the collar mark, the wide blade flat within 30 degrees of untwisted, its tip 350–440 mm below the collar edge, and the narrow blade behind it, within 15 mm laterally and with its tip at least 10 mm higher. Otherwise 0. Pulled-out ends, damaged fabric or added support score 0. Use front/rear photos, video and a ruler.
 
-| Final condition | Score |
-|---|---:|
-| An end pulled out, damaged fabric, added support, or no five-second released hold | 0 |
-| Knot remains threaded, no more than 70 mm wide or high, with its top within 60 mm below the collar's lower edge | 0.5 |
-| The above, plus all fitting conditions below | 1.0 |
-| Anything else, including leaving the starting wrap unchanged | 0 |
-
-Full-score fitting conditions:
-
-- Knot top no more than 20 mm below the collar's lower edge.
-- Knot centre within 20 mm horizontally of the collar mark.
-- Wide blade flat within 30 degrees of untwisted; use the stripe to see rotation.
-- Narrow blade behind the wide one, its tip at least 10 mm higher.
-- Wide tip 350–440 mm below the collar's lower edge.
-
-The tie is reversible, so either face may face out. A twist along the blade is
-still a twist. No particular arm sequence is required. A valid fit made by a
-different method earns the same credit. The starting knot is already threaded;
-retaining that loose wrap alone earns zero.
-
-`material.score()` applies the numeric rubric to the model's measurements.
-Reviewers should also check the video for an intact tie, the narrow blade's
-position, clearance from the form and a genuinely unsupported final hold.
-The rendered prepared knot is an approximation; it is not evidence of a
-simulated topological tying operation.
+The starting state scores zero. The task starts already threaded: it requires snugging, regrasping the narrow blade, raising and centring the knot, then leaving both blades neat. It does not demonstrate tying a complete knot from scratch.

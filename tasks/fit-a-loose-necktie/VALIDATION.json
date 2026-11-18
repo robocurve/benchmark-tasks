@@ -1,74 +1,80 @@
 {
   "status": "validated_revision",
-  "scores": {
-    "demo": 1.0,
+  "submission_ready": true,
+  "date": "2026-11-18",
+  "review_addressed": "Snug with the wide blade, release and regrasp the narrow blade, then slide and centre the knot; both stages shown.",
+  "demo": {
+    "score": 1.0,
+    "steps": 810,
+    "wall_seconds": 342.1022324789956,
+    "measurements": {
+      "knot_width_mm": 52.13262121547495,
+      "knot_height_mm": 52.03014118533522,
+      "knot_top_below_collar_mm": 5.98707007231614,
+      "knot_offset_mm": 0.26652451108847597,
+      "wide_tip_below_collar_mm": 357.7157994042992,
+      "narrow_tip_above_wide_mm": 73.86599958907003,
+      "narrow_lateral_offset_mm": 5.421010862427522e-17,
+      "wide_twist_deg": 0.1974234302357195,
+      "released_s": 7.549999999999981,
+      "failed": false,
+      "sliding_work_j": 1.8960293137820112,
+      "drawn_mm": 49.69858814664785,
+      "neckband_length_mm": 464.1674114424221,
+      "material_length_m": 1.26
+    },
+    "events": [
+      {
+        "event": "grasp",
+        "side": "left",
+        "part": "wide"
+      },
+      {
+        "event": "grasp",
+        "side": "right",
+        "part": "knot"
+      },
+      {
+        "event": "release",
+        "side": "left",
+        "part": "wide"
+      },
+      {
+        "event": "grasp",
+        "side": "left",
+        "part": "narrow"
+      },
+      {
+        "event": "release",
+        "side": "right",
+        "part": "knot"
+      },
+      {
+        "event": "release",
+        "side": "left",
+        "part": "narrow"
+      }
+    ]
+  },
+  "dream": {
+    "score": 0.0,
+    "steps": 1200,
+    "wall_seconds": 1318.9322649909955,
+    "dream_requests": 146,
+    "dream_sessions": {
+      "session_count": 29,
+      "transport": "loopback_ssh_bridge"
+    }
+  },
+  "independent_replay": {
+    "demo": 1.1368683772161603e-13,
     "dream": 0.0
   },
-  "control_hz": 20,
-  "demo_steps": 580,
-  "dream_steps": 1200,
-  "cpu_tests_passed": 5,
-  "material_model": "Reduced fixed-topology prepared knot, not full cloth or tying from scratch",
-  "runtime_sources_match": true,
-  "metadata_only_differences": "Final descriptive setup/fidelity, scores, media and documentation were completed after the runs. Instruction and all runtime Python/plan hashes match.",
-  "media_uploaded": true,
-  "requires_visual_review": true,
-  "wall_seconds": {
-    "demo": 238.6235411367379,
-    "dream": 523.5588454697281
+  "media_sha256": {
+    "tie-demo.mp4": "08ccacf0c8e23774dc73c79c10092094f1fc127eeae86cea208f45e62aa1e6d9",
+    "tie-dream.mp4": "485e348ded307853db8314ad326fda5d5627023bb3c5e98381880e1d9c2285c2",
+    "setup.png": "e781aff41d21355b9f69b31035b78c883cf50dfc226ad1b5e6f41eba01a7d9d4"
   },
-  "dream_requests": 146,
-  "dream_sessions": {
-    "session_count": 1
-  },
-  "sources_sha256": {
-    "task.py": "318513e8f55070f6403e4672009584a42c5129441cc2fc96688add31492c3be5",
-    "run.py": "4cca8a956d02069dea8d420b7873aa030d3af0219399ab43c621c0eae85e84da",
-    "material.py": "73637c0aab290c95e44bc4430a874eaa6badc0bc3bb07c98e45140219b4d98fb",
-    "test_material.py": "2b3d4e2bbbf3bbc9e0d53c1609bfcca956672a7f754b5d74fde92ed0e310f036",
-    "make_plan.py": "306d430787470598d5c170fd3b74f7fdac23195848db44507fe9edc92dd8d566",
-    "render_tie.py": "15c2ee07ca4fbd1159b4f48ce09a14759dd8b4251c4739e2e630e40395dd786a",
-    "joint_tracking.py": "f22bb7c34c8c4ba51859844f77fef8b29337b5b6353e7cc0b85cf0247866c453",
-    "dream_policy.py": "6a4690cc28fbebb04e372e39db41b4ba665ad2b7a2dcd1a7238228363846d67c",
-    "demo-plan.json": "9f107c3c6832e12951c45134dda34658f5b050b5ad195a35391f75ecb436bac4",
-    "review_views.py": "fe43ee4786cf39d9be76e56a849a548cf630e4c7dbaf5aa8a25662350b4811c9"
-  },
-  "evidence": [
-    "evidence/demo-run.json",
-    "evidence/dream-run.json",
-    "evidence/demo-trace.jsonl.gz",
-    "evidence/dream-trace.jsonl.gz",
-    "evidence/refused-wording-run.json"
-  ],
-  "checked_utc": "2026-11-15T20:12:49.476748+00:00",
-  "visual_review_passed": true,
-  "visual_review": {
-    "method": "Sampled front sequence at 0, 6, 12, 16, 20 and 29 seconds, front and side final photographs, and the Dream start policy view and final photograph.",
-    "result": "Demo tightens and fits the prepared knot, clears both hands and retains the fit. Dream leaves the initial loose tie unchanged.",
-    "model_limitations": "Idealized geometric grasp capture and a fixed-topology reduced tie; no full cloth or topological tying claim."
-  },
-  "prior_refusal": {
-    "record": "evidence/refused-wording-run.json",
-    "steps": 32,
-    "reason": "Dream interpreted the earlier instruction as tightening a tie on a person. The final instruction explicitly names the rigid plastic form and absence of a person; the resulting baseline completed normally."
-  },
-  "remaining_gates": [
-    "PR revision ingestion confirmation"
-  ],
-  "revision": {
-    "date": "2026-11-16",
-    "reason": "Clarity and reproducibility: specify the prepared Simple (Oriental) knot, threading diagram, blade lengths/poses and reset.",
-    "changes": "README, JUDGING, setup/reset metadata and a labelled setup diagram only. No runtime, instruction, scoring or video changes.",
-    "runtime_sources_unchanged": true,
-    "saved_runs_rescored": {
-      "demo": 1.0,
-      "dream": 0.0
-    },
-    "cpu_tests_passed": 5,
-    "physical_threading_reference": "https://www.ties.com/how-to-tie-a-tie/simple",
-    "physical_calibration_performed": false,
-    "media_id": "M-HUSZ3C",
-    "previous_media_id": "M-YCTY75",
-    "videos_unchanged": true
-  }
+  "limitations": "Prepared topology, finite-volume grasp and quasistatic drape; uncalibrated 3 N sliding resistance. Not full tying or a real-hardware validation.",
+  "visual_review": "Native start/end and intermediate front, side and rear views inspected; all frames retained in normal-speed media."
 }

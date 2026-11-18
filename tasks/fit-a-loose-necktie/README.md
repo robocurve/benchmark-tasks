@@ -1,129 +1,93 @@
-# Tighten and fit a loose necktie
+# Finish and fit a loose necktie
 
-Finish a prepared necktie on a collar form: hold the knot, draw the wide blade
-through, slide the knot up, and release both hands. The knot starts threaded
-but loose. This task does not claim to tie a knot from an untied strip.
+Snug a loose Simple knot, hold the narrow blade and slide the knot up to the
+collar, then release it neatly. This is the finishing sequence of an already
+threaded tie. The wide blade tightens the outer wrap; the narrow blade is the
+standing part used to fit the knot to the collar. They are separate grasps and
+motions in both the model and the new demonstration.
 
-## Prepared knot and reset
+The 18 November revision demonstrates both stages. The demo scores **1.0** in
+810 actions (40.5 seconds); Dream-1 scores **0.0** after its full 1,200-action limit.
+Both scores were independently replayed from measured native hand poses.
 
-The physical reference is a **Simple (Oriental) necktie knot**, with one front
-wrap. It is not a Four-in-Hand or Windsor knot. The simulator represents its
-prepared state with a sliding outer sleeve; it does not resolve the internal
-crossings. The diagram below specifies the physical threading that the earlier
-setup image left ambiguous. Its coloured routes identify two parts of the same
-continuous tie, not separate pieces.
+## Fixed setup and reset
 
-![Prepared Simple knot: threading, blade arrangement and collar position](prepared-knot.svg)
+Coordinates are metres: x away from the arms, y toward the left arm, z up.
+The table is z=0.7475. The rigid plastic neck is centred at (0.400,0,1.250),
+110 mm diameter and 100 mm high; its lower reference edge is z=1.200.
+Two white 50 × 55 × 8 mm collar flaps and a black centre mark define the fit.
+The steel stand uses a 180 × 160 × 12 mm base, 25 × 25 × 455 mm post and
+210 × 25 × 25 mm crosspiece. Their exact fixed poses are in task.py.
 
-**Threading.** All left/right directions below are from an observer facing the
-collar, as in the diagram. W is the wide end; N is the narrow end.
+Use a reversible woven polyester tie: 1.26 m long, about 1.2 mm thick,
+70 mm wide at its wide end and 35 mm at the narrow end. Prepare a loose
+Simple (Oriental) knot: facing the collar, reverse face outward, wide end W
+on the left and narrow end N on the right. Bring W behind N left-to-right,
+across its front right-to-left, up through the neck opening from underneath,
+then down behind the front band and in front of N. Leave it loose.
+See [prepared-knot.svg](prepared-knot.svg) for the threading order; it is a physical preparation
+diagram, not a claim of simulated internal cloth folds.
 
-1. Drape the tie around the form, W on the observer's left and N on the right.
-   Start with the reverse face outward. This tie is reversible; use the gold
-   stripe to keep track of twists.
-2. Take W **behind N**, from left to right.
-3. Bring W back **in front of N**, right to left, making one loose front band.
-4. Lift W through the neck opening from underneath, then feed it down **behind
-   that front band and in front of N**. Leave it loose; do not cinch it.
+Set the knot centre to (0.319,0.025,1.090), 74 mm wide and 57 mm high.
+Its top is 81.5 mm below the collar edge. The 250 mm exposed wide blade
+hangs vertically from (0.313,0.025,1.0615). The approximately 85.5 mm narrow
+blade emerges behind it at (0.327,0.025,1.0615), hanging vertically behind the wide blade. Neither blade is in a
+keeper loop. Match the front and side setup views to the nearest 5 mm using
+a ruler. If the chosen tie will not retain that loose reset after the preparer's
+hands are removed, use another reversible tie of the specified size; do not
+add clips or supports. All material properties remain uncalibrated assumptions.
 
-This is the Simple knot's under/over sequence, also illustrated in the
-[Ties.com Simple knot guide](https://www.ties.com/how-to-tie-a-tie/simple).
-The diagram here uses the facing observer's view rather than the wearer's
-left/right. Threading is preparation by the operator, outside the trial.
+Both hands start in the normal YAM ready pose, open. Inspect the tie and restore
+the same loose dimensions before each trial. No person is used.
 
-**Set the loose starting state.** Keep the knot centred on the black collar
-mark. Loosen and redistribute the material until the following ruler
-measurements match, to the nearest 5 mm. Measure blade lengths from their lower
-exit from the knot to the tip, along the straight, untwisted blade.
+## Run and score
 
-| Feature | Starting measurement |
-|---|---|
-| Knot envelope | 96 mm wide, 62 mm high |
-| Knot top / lower blade exits | 79 / 141 mm below the collar's lower edge |
-| Wide blade, exit to tip | 250 mm; tip 391 mm below the collar edge |
-| Narrow blade, exit to tip | 89 mm; tip 230 mm below the collar edge |
-| Blade alignment | Both hang straight down, centred; wide blade in front of narrow, no axial twist |
-| Free blade depth separation | 14 mm in the model, narrow blade closer to the form |
+Use the pinned environment in ENVIRONMENT.json with the task folder available.
 
-Keep the narrow blade free behind the wide one, outside any keeper loop. Do
-not use pins, tape, clips or hidden supports. Remove the operator's hands and
-check the front and side views before starting. If the knot has tightened,
-loosen it and repeat the measurements. Reset both robot arms to their normal
-ready poses with open fingers. After a trial, reverse the sliding adjustments
-or rethread the same knot; replace damaged fabric. The prepared state must
-score zero, even after a five-second released hold.
-
-**Exact simulated reset.** Coordinates are metres in the scene frame; the
-robot faces towards +x, +z is up, and the tie's broad faces lie in the yz plane.
-The collar's lower reference edge is z=1.200. Knot centre: (0.319, 0, 1.090).
-Wide blade exit: (0.313, 0, 1.059), tip: (0.313, 0, 0.809). Narrow blade exit:
-(0.327, 0, 1.059), tip: (0.327, 0, 0.969680). Both tip directions are (0, 0, -1),
-their width direction is (0, 1, 0), and initial twist is zero. The narrow blade
-is 0.089320 m long. The neckband follows a 64 mm-radius, 270-degree arc at
-z=1.250 around the 55 mm-radius form, with two front descents to
-(0.328, 0, 1.110). Its model length is 0.600680 m; the wrap uses 0.320 m, so
-neckband + wrap + both blades total 1.260 m. These are model dimensions,
-not measured cloth calibration. Each new run constructs `Tie()` with zero
-draw, no grips and no retained state from a previous trial.
-
-## Run
-
-Use Python 3.12 and the Isaac 6.1 / YAM environment pinned in `ENVIRONMENT.json`, including the public asset-root patch. An NVIDIA GPU renders the cameras; robot physics runs on the CPU. From the repository root:
-
-```sh
-python tasks/fit-a-loose-necktie/run.py --mode demo --out /tmp/tie-demo
-python tasks/fit-a-loose-necktie/run.py --mode dream --steps 1200 --out /tmp/tie-dream
+```bash
+python tasks/fit-a-loose-necktie/run.py --mode demo --out artifacts/tie-demo
+python tasks/fit-a-loose-necktie/run.py --mode dream --out artifacts/tie-dream
+python tasks/fit-a-loose-necktie/rescore.py artifacts/tie-demo --out artifacts/tie-demo/rescore.json
+python tasks/fit-a-loose-necktie/rescore.py artifacts/tie-dream --out artifacts/tie-dream/rescore.json
 python -m unittest discover -s tasks/fit-a-loose-necktie -p 'test_*.py'
 ```
 
-Dream uses its normal credential file or `DREAM_API_KEY`. Credentials are never
-included in the task or evidence. Both runs use the same scene and material
-model, normal joint limits and 20 Hz actions. The layout is fixed; no randomized
-seed is needed. The demo scores **1.0** in 580 actions (29 seconds), including a final hold.
-Dream-1 scores **0.0** after all 1,200 actions in one session. On an A40, the
-final demo took 239 wall seconds and Dream took 524 seconds, including startup
-and API latency. The earlier ambiguous instruction caused an API refusal; its
-record is included, and the final instruction explicitly names the plastic form.
-The model receives measured robot poses and finger openings, never policy
-labels, desired actions or a target score. The demo uses joint tracking only;
-it does not read the tie state. Dream receives its normal three cameras and
-joint observations. Run only one Dream trial at a time per shared API key.
+Both policies use the same reset, model and 1,200-action limit (60 seconds at
+20 Hz). The demo commands only bounded robot joint targets. It first holds the
+knot while drawing the wide blade, releases and regrips the narrow blade, then
+slides and centres the knot. JUDGING.md defines outcome-based partial credit
+using photographs, a ruler and a five-second released hold.
 
-Outputs include front/rear/side videos and photographs, the policy camera
-video, measured robot actions, material measurements and source hashes.
-`run.json` contains the computed score. To recompute it from a saved report:
+Each run records all measured hands, material state, actions, commanded reaction forces,
+source hashes, native front/rear/side video and policy-camera video. The submitted
+videos show all three judging views at normal speed. The released demo knot is
+52 mm wide, 6 mm below the collar and within 1 mm of its centre mark. It remains
+released for 7.55 seconds. The wide tip is 358 mm below the collar; the narrow tip
+is 74 mm higher. These measurements agree with the recorded views.
 
-```sh
-PYTHONPATH=tasks/fit-a-loose-necktie python -c 'import json; from material import score; print(score(json.load(open("/tmp/tie-demo/run.json"))["measurements"]))'
-```
+To audit the included records, pass `tasks/fit-a-loose-necktie/evidence/demo` or
+`evidence/dream` (under the same task folder) to `rescore.py`. The replay preserves
+the native float32 rotation precision; no scoring threshold changed for replay.
 
-Inspect the videos against `JUDGING.md`
-before treating that score as submission evidence.
+On one shared A40, the demo took 5.7 minutes and Dream took 22.0 minutes, including
+rendering and model waits. Dream request/session details are recorded in its run
+report and transcript; recovered sessions are not an uninterrupted baseline.
 
-The 16 November revision adds the physical threading/reset specification and
-the diagram to the setup image. Runtime code, policy instruction, scoring and
-both recorded videos are unchanged. Their source hashes still match, and the
-saved runs rescore to 1.0 and 0.0 respectively. No new simulation run is claimed.
+## Model and limitations
 
-## Material approximation
+The prepared knot keeps its topology. Finite jaw volumes capture visible
+material; grasped material can slip if the hand moves beyond it. Wide-blade
+feed changes wrap slack. A distinct narrow-blade grasp permits upward fitting;
+the old wide-blade-only fitting strategy cannot reach full credit. Total
+neckband, wrap and blade length stays 1.26 m. Released blades drape under a
+quasistatic approximation, and the knot remains in the front plane.
 
-This is a reduced model of a **prepared knot**, not full cloth physics. Its
-topology is fixed. Closing fingers around visible material captures a small
-patch; reopening releases it. This is idealized capture, not a resolved pinch:
-a material sample must lie between the closing pads with a gap no greater than
-30 mm (1.5 mm contact tolerance); opening beyond 40 mm releases it. Relative motion of a held knot and held wide
-blade feeds material through the wrap. Reversing that motion loosens it.
-Pulling the wide blade without supporting the knot moves the assembly instead
-of tightening it. The neckband, wrap and two tails share a fixed 1.26 m material
-budget. Pulling an end out invalidates the trial.
+A regularized 3 N sliding-friction approximation applies equal and opposite
+loads to the native grippers during relative feed. This is an engineering
+assumption for a loose polyester knot, not a measured tie calibration. Internal
+folds, arbitrary rethreading, detailed textile/finger contact and skin are not
+simulated. The model does not claim full knot tying or dressing a person.
 
-The wrap's displayed width follows the material left in it. The knot stays in
-the form's front plane; released blades approach their gravity drape. Internal
-folds, full cloth contact, reaction forces on the fingers, tearing and arbitrary
-untying/rethreading are not simulated. A displaced grasp slips after 25 mm of
-separation. Parameters are engineering approximations, not calibrated textile
-measurements. The robot and rigid collar still use native PhysX dynamics.
-
-These simplifications limit the task to finishing and adjusting the disclosed
-prepared necktie. They cannot establish an ability to tie a necktie from scratch.
-The real-world rubric judges the resulting tie with photographs and a ruler.
+The distinction between snugging and fitting follows the final steps of
+[Ties.com's Simple-knot instructions](https://www.ties.com/how-to-tie-a-tie/simple)
+and the [NHS dressing guide](https://rhc.nhsggc.org.uk/media/gnapxmrd/step-by-step-guide_right-handed.pdf).

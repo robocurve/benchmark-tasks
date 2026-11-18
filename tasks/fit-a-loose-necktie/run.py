@@ -58,7 +58,7 @@ def main():
                 rgb=views['judging_'+label];writers[label].append_data(rgb)
                 if step in [0,steps]:Image.fromarray(rgb).save(a.out/(label+('-start.png' if step==0 else '-final.png')))
             writers['policy'].append_data(np.asarray(obs.images['top_cam']))
-            row=dict(step=step,action14=list(map(float,action)),joints=np.asarray(obs.state['joint_pos']).tolist(),measurements=tie.measures(),grips={s:g['part'] for s,g in tie.grips.items()},events=tie.events)
+            row=dict(hands={s:{k:np.asarray(v).tolist() for k,v in h.items()} for s,h in hands().items()},reaction_forces_n={s:np.asarray(f).tolist() for s,f in tie.reaction_forces.items()},step=step,action14=list(map(float,action)),joints=np.asarray(obs.state['joint_pos']).tolist(),measurements=tie.measures(),grips={s:g['part'] for s,g in tie.grips.items()},events=tie.events)
             trace.write(json.dumps(row)+'\n');trace.flush()
         current=emb._ready.detach().cpu().numpy()[0].copy();capture(0,current)
         if a.mode=='dream':
@@ -78,6 +78,10 @@ def main():
             else:wanted=current.copy()
             if wanted.shape!=(14,) or not np.isfinite(wanted).all():raise ValueError('Invalid ordinary robot action')
             wanted=np.clip(wanted,emb._low,emb._high);current=current+np.clip(wanted-current,-limit,limit)
+            for side in ['left','right']:
+                robot=base.scene[side+'_robot'];idx=list(robot.body_names).index('gripper')
+                f=torch.as_tensor(tie.reaction_forces.get(side,np.zeros(3)),device=base.device,dtype=torch.float32).reshape(1,1,3)
+                robot.set_external_force_and_torque(f,torch.zeros_like(f),body_ids=[idx],is_global=True)
             emb._env.step(torch.as_tensor(current[None,:],device=base.device,dtype=torch.float32));emb._t=k/20
             tie.update(hands());drawing.update(tie);refresh();capture(k,current)
             report.update(steps=k,measurements=tie.measures(),score=score(tie.measures()))

@@ -11,7 +11,12 @@ def build():
     from yam_arena.constants import READY,SHOULDER,WRIST,GRIPPER,FINGER_OPEN
     t=Tie();left=t.wide_root+[0,0,-(t.wide_length-.06)];right=t.center+[-(.018+.06*t.slack),0,0]
     lr,rr=yaw(180),yaw(0);lp=left+.008*lr[:,2];rp=right+.008*rr[:,2]
-    lf=lp+[0,0,-.020];rf=rp+[0,0,.080]
+    lf=lp+[0,0,-.050]
+    compact=Tie(drawn=.05);narrow=compact.narrow_root+compact.narrow_direction*(compact.narrow_length-.025)
+    np0=narrow+.008*lr[:,2]
+    fitted=Tie(z=t.z+.08,y=0.,drawn=.05)
+    nfinal=fitted.narrow_root+np.array([0,0,-(fitted.narrow_length-.025)])+.008*lr[:,2]
+    rf=rp+[0,-.025,.080]
     a=np.r_[READY,1.,READY,1.];frames=[];audit=[]
     steps=[(3.,'approach the wide blade',{'left':(lp-.07*lr[:,2],lr,.8)},'joint'),
         (2.,'enclose the wide blade',{'left':(lp,lr,.8)},'cartesian'),
@@ -19,11 +24,17 @@ def build():
         (3.,'approach the loose knot',{'right':(rp-.08*rr[:,2],rr,.8)},'joint'),
         (2.,'enclose the outer wrap',{'right':(rp,rr,.8)},'cartesian'),
         (1.,'hold the knot',{'right':(rp,rr,.1)},'cartesian'),
-        (6.,'draw through and slide the knot up',{'left':(lf,lr,.1),'right':(rf,rr,.1)},'cartesian'),
-        (1.,'release the knot',{'right':(rf+[-.035,0,0],rr,.8)},'cartesian'),
-        (2.,'withdraw from the knot',{'right':(rf+[-.035,-.10,0],rr,.8)},'cartesian'),
-        (1.,'release the wide blade',{'left':(lf,lr,.8)},'cartesian'),
-        (2.,'withdraw from the blade',{'left':(lf+.10*-lr[:,2],lr,.8)},'cartesian'),
+        (4.,'snug the outer wrap with wide blade',{'left':(lf,lr,.1)},'cartesian'),
+        (1.,'release wide blade',{'left':(lf,lr,.8)},'cartesian'),
+        (2.,'clear the wide blade',{'left':(lf-.08*lr[:,2],lr,.8)},'cartesian'),
+        (2.,'approach the exposed narrow blade',{'left':(np0-.06*lr[:,2],lr,.8)},'cartesian'),
+        (1.5,'enclose the narrow blade',{'left':(np0,lr,.8)},'cartesian'),
+        (1.,'grasp narrow blade',{'left':(np0,lr,.1)},'cartesian'),
+        (6.,'hold narrow blade and slide knot to collar',{'left':(nfinal,lr,.1),'right':(rf,rr,.1)},'cartesian'),
+        (1.,'release fitted knot',{'right':(rf+[-.035,0,0],rr,.8)},'cartesian'),
+        (2.,'withdraw from knot',{'right':(rf+[-.035,-.10,0],rr,.8)},'cartesian'),
+        (1.,'release narrow blade behind wide blade',{'left':(nfinal,lr,.8)},'cartesian'),
+        (2.,'withdraw from blade',{'left':(nfinal-.10*lr[:,2],lr,.8)},'cartesian'),
         (5.,'hands clear for judging',{},'cartesian')]
     for sec,label,targets,mode in steps:
         b=a.copy();poses={s:ik.tcp_pose(a[o:o+6],station.BASES[s]) for s,o in [('left',0),('right',7)]};goals={};errors=[0,0]
