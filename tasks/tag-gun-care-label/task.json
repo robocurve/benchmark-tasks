@@ -1,0 +1,21 @@
+{
+  "title": "Ticket a shirt through its care label only: lift the label clear, push a tagging gun's needle through it alone, fire",
+  "category": "Impact on jobs",
+  "instruction": "Put the price ticket on this shirt through its care label only: lift the label clear of the shirt with one hand, push the tagging gun's needle through the label alone with the other, fire one fastener, draw the needle back, then let the label down and let go of it.",
+  "context": "Stores ticket clothes with a tagging gun, which pushes a plastic fastener through a hollow needle, and they put it through the care label or a seam so the fabric is not holed. Retail salespersons (O*NET 41-2031.00, about 4.0 million US jobs) have the core task 'Ticket, arrange, and display merchandise to promote sales'; stockers and order fillers (53-7065.00, about 2.8 million) have 'Mark stock items, using identification tags, stamps, electric marking tools, or other labeling equipment' (O*NET, USDOL/ETA, CC BY 4.0; O*NET is a trademark of USDOL/ETA). The label, sewn along one edge and lying on the shirt, has to be lifted clear of the body fabric and held there while the needle is aimed through the label alone and the trigger squeezed once it is through. A needle into the shirt's body at any moment is the fault the task scores.",
+  "setup": "Two YAM arms at the near edge of a table; positions are (x forward from the arm bases, y left) in cm, heights above the table. A cotton T-shirt folded to 24 x 30 cm and 1.6 cm thick lies flat with its middle at (32, -4), its hem turned back at its +y side seam so the woven care label (30 x 60 mm, satin, 2 g) lies on top, sewn along its 30 mm edge at (32, 0.5) and free toward +y, its free edge curled up about 8 mm. A tagging gun (Avery Dennison Mark III class: 125 x 25 x 130 mm, 100 g, a 25 mm needle about 2 mm across, a squeeze trigger along the grip's front) lies on its side with its grip's middle at (12, -16), the needle toward +y, a 30 x 50 mm card price ticket on the needle and a clip of standard 50 mm fasteners loaded. The arms start at their ready pose. Avery Dennison and Mark III are named for identification only.",
+  "scoring": "Read from the poses (real trial: a top camera, both wrist cameras and a side camera level with the shirt film it; afterwards the label and the shirt are checked by hand). Only the first squeeze counts. 1.0: one fastener fired while the needle was through the label alone (pushed in through the label's face inside its outline, its tip and base either side of the face, crossing it where the label stood at least 2 cm clear of the shirt, read on the side camera against a 2 cm mark), the shirt never pierced, the needle drawn back (its tip 4 cm or more from the label's middle), the label let down under 30 degrees and let go (every fingertip of both hands 5 cm from the label's middle), held 1 s. 0.5: the needle through the label alone, but no fastener fired while it was through, not drawn back, or the label not let go. 0.25: the label lifted 2 cm at its free edge. 0 at any time: the needle's tip inside the shirt's body or within 4 mm above its top face (a hole), the label pulled past 110 degrees (torn from its seam) or the needle dragged sideways out through its edge, or the gun dropped off the table.",
+  "run_limit": "2,400 steps (120 s at 20 Hz)",
+  "fidelity": "Rigid bodies at 240 Hz. Cloth is not simulated: the shirt is a stiff panel, the label a hinged flap. The needle has no collider: it is through once its tip crosses the label's face inside the outline, 2 cm clear (never slid in sideways); a pierce is its tip in the body or within 4 mm above it. The trigger fires at 2.5 mm: with the needle through, the fastener shows; otherwise it is spent. Approximated: the label's 8 mm curl, the trigger's 25 N preload and 4 mm travel, the ticket on the needle.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "keywords": [
+    "tagging gun",
+    "price ticket",
+    "care label",
+    "retail",
+    "needle",
+    "garment"
+  ],
+  "reset_notes": "One fixed layout; no seed changes the scene.",
+  "media": "M-HQMDMH"
+}
