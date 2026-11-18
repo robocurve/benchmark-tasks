@@ -2,14 +2,17 @@
 right-hand end. The positive cable runs from a clip on a steel stand behind the battery, forward across the lid, to
 its clamp. The clamp has been set back over the positive post, but the cable, held in its clip, holds it up 6 mm
 above its seat, a little crooked; its pinch-bolt nut is run down by hand only (finger-tight against the ear). A
-13 mm combination wrench stands in a holder on a tool stand in front of the battery's left half.
+13 mm combination wrench stands in a holder on a tool stand in front of the battery's left half. The battery stands in a
+mock engine bay: an inner fender to the robot's right, up to the hood line, and a hold-down bar across the back of the
+lid.
 
 The positive post is a lead cone, 19.5 mm across at its base and 17.5 mm at its top, 18 mm tall, on a 4 mm boss. The
 clamp is a lead collar (16 mm tall, its bore tapered like the post) with two ears and an M8 pinch bolt on its front
 side (the nut on the left) and the cable lug on its back side. Seated on the boss, the bore closes on the post after
 30 degrees of the nut's turn; every millimetre higher on the taper takes another 100 degrees (the bore is that much
 looser there), and a collar pinched there is pinched high. Past that point the nut's torque rises 1 N m every 30
-degrees: the joint is tight at 5 to 7 N m, the usual torque for a top-post clamp's pinch nut.
+degrees: the joint is tight at 5 to 7 N m, the usual torque for a top-post clamp's pinch nut. That torque resists
+whatever turns the nut, so the wrench, and the hand on it, has to push it.
 
 Run it:  inspect-robots run --embodiment yam_arena -E task=car_battery_clamp.py \\
            --instruction "Reconnect the positive battery cable to the battery." --scorer task_score ...
@@ -112,9 +115,10 @@ BORE_R = 0.01005  # 20.1 mm bore: 0.3 mm a side over the post's base, 1.3 mm ove
 WALL = 0.0055
 R_OUT = BORE_R + WALL
 SIDES = 12
-EAR = (0.012, 0.006, 0.014)  # x (out from the collar), y (thickness), z
+EAR = (0.020, 0.006, 0.014)  # x (out from the collar), y (thickness), z
 EAR_Y = 0.005  # ear centres either side of the 4 mm split
-BOLT_X = -(R_OUT + 0.0048)  # pinch-bolt axis, along y, in the clamp frame
+BOLT_X = -(R_OUT + 0.0130)  # pinch-bolt axis, along y, in the clamp frame: far enough out that the wrench's box end
+#                             (22.4 mm across) clears the collar and the battery's front edge
 NUT_Y = EAR_Y + EAR[1] / 2 + 0.00325  # nut centre: on the +y ear, toward the left arm
 NUT_AF, NUT_T = 0.013, 0.0065  # 13 mm across flats, 6.5 mm thick
 CLAMP_KG, NUT_KG = 0.14, 0.030  # the clamp with its lug and the cable stub; the nut (7 g real) is 30 g for the solver
@@ -172,8 +176,21 @@ CLAMP = Body.build("clamp", pos=CLAMP_START, mass=CLAMP_KG, shapes=_clamp_shapes
                    start_xyzw=CLAMP_Q0, friction=(1.1, 0.9), com=(0.012, 0.0, 0.002))
 _R0 = bodykit.rotation(CLAMP_Q0)
 NUT_START = tuple((np.asarray(CLAMP_START) + _R0 @ np.array([BOLT_X, NUT_Y, 0.0])).tolist())
+# Solver aids for the nut (none of them changes the torque it takes to turn it). A real 7 g M8 nut has about 2e-7 kg m^2
+# of inertia: held between the wrench's stiff box end and the bolt's friction spring, it rings at tens of kHz, far above
+# the 240 Hz physics step, and the solver let it spin at over 1,000 rad/s for half a second at each catch (gate runs,
+# README Fidelity). So: its inertia is padded (2e-4 kg m^2 about the bolt, 1e-4 across it), its turning speed is capped
+# at NUT_W_MAX (the strokes turn it at under 1 rad/s), and the nut and the wrench get 64 solver iterations, not 16.
+# Turning the padded nut at the strokes' rate takes I x (its angular acceleration): at most 0.04 N m in the gate runs,
+# under 1 % of the 5 N m it must reach. Across the bolt the nut is locked to the clamp, so that padding only adds to the
+# clamp's own inertia (0.14 kg, about 6e-5 kg m^2), which is moved slowly (pushed down by hand over 1.5 s).
+NUT_I_AXIS = 2e-4  # kg m^2
+NUT_I_OFF = 1e-4  # kg m^2
+SOLVER_IT = 64
+NUT_W_MAX = 20.0  # rad/s
 NUT = Body.build("nut", pos=NUT_START, mass=NUT_KG, shapes=_nut_shapes(), start_xyzw=CLAMP_Q0,
-                 color=(0.62, 0.62, 0.64), ignore=("clamp",))
+                 color=(0.62, 0.62, 0.64), ignore=("clamp",), inertia=(NUT_I_OFF, NUT_I_AXIS, NUT_I_OFF),
+                 max_ang_vel=NUT_W_MAX, solver_iterations=SOLVER_IT)
 
 # -- the cable's clip: fixed to the bench behind the battery -----------------------------------------------------------
 # The clip holds the cable where it lies with the clamp riding 6 mm high (tipped 1.5 degrees, the middle of the seeded
@@ -205,6 +222,35 @@ def _clip_shapes() -> list:
 CABLE_CLIP = Body.build("cable_clip", pos=(*CLIP_XY, TOP), mass=2.0, shapes=_clip_shapes(), color=STEEL,
                         kinematic=True, friction=(0.8, 0.7))
 
+# -- the engine bay round the battery: fixed to the bench, it moves with the battery --------------------------------------
+# The inner fender (to the robot's right), standing to the hood line, and a hold-down bar across the back of the lid on
+# two J-bolts. The front of the bay is open (the robot works over it, as a technician does over the radiator support).
+# Sizes in m; the bay's frame is the battery's centre on the bench. Nothing here moves: it is one fixed body.
+FENDER_GAP = 0.045  # the fender's inner face this far out from the battery's right-hand end
+FENDER = (0.245, 0.018, 0.305)  # x (along the battery), y (thickness: 18 mm plywood), z (to the hood line)
+FENDER_X0 = -BATT[0] / 2 - 0.020  # its front end, 2 cm in front of the battery's front face (bay frame)
+HOOD_LINE = FENDER[2]  # the bay's rim: the fender's top, 8 cm above the lid
+HOLD_BAR = (0.025, 0.300, 0.008)  # steel flat bar 25 x 6 mm on a 2 mm rubber strip: x, y (across the lid), z
+HOLD_X = BATT[0] / 2 - 0.0165  # its centre, 16.5 mm in from the battery's back face (bay frame)
+HOLD_GAP = 0.001  # it is drawn this far above the lid (on the bench it rests on it, J-bolt nuts finger-tight)
+J_BOLT_R, J_BOLT_Y = 0.004, BATT[1] / 2 + 0.012  # the J-bolts: 8 mm rods at each end of the bar
+BAY_GREY = (0.62, 0.63, 0.64)  # grey primer
+BLACK_STEEL = (0.12, 0.12, 0.13)
+
+
+def _bay_shapes() -> list:
+    y_fender = -(BATT[1] / 2 + FENDER_GAP + FENDER[1] / 2)
+    return [
+        BoxShape((FENDER_X0 + FENDER[0] / 2, y_fender, FENDER[2] / 2), FENDER, color=BAY_GREY),
+        BoxShape((HOLD_X, 0.0, BATT[2] + HOLD_GAP + HOLD_BAR[2] / 2), HOLD_BAR, color=BLACK_STEEL),
+        *[CylShape((HOLD_X, sy * J_BOLT_Y, (BATT[2] + HOLD_GAP + HOLD_BAR[2]) / 2), J_BOLT_R,
+                   BATT[2] + HOLD_GAP + HOLD_BAR[2], color=STEEL_ZINC) for sy in (-1, 1)],
+    ]
+
+
+BAY = Body.build("bay", pos=(*BATT_XY, TOP), mass=10.0, shapes=_bay_shapes(), color=BAY_GREY, kinematic=True,
+                 friction=(0.8, 0.7))
+
 # -- the wrench: 13 mm combination wrench, 183 mm long, standing open end down in a wooden rack ----------------------
 RING_R_IN, RING_R_OUT, RING_T = 0.0085, 0.0112, 0.007
 HANDLE = (0.138, 0.005, 0.014)  # along -x from the ring, 5 mm thick along the ring's axis (y), 14 mm wide
@@ -214,12 +260,13 @@ CHROME = (0.80, 0.81, 0.83)
 
 def _wrench_shapes() -> list:
     shapes = []
-    for i in range(12):  # the box end: a 12-point ring round the y axis (drawn only: the catch joint holds the nut)
+    for i in range(12):  # the box end: a 12-point ring round the y axis; it collides (its 17 mm bore clears the nut's
+        #                  15 mm corners, so it slides on only when centred on the nut within about 1 mm)
         t = 2 * math.pi * (i + 0.5) / 12
         r = (RING_R_IN + RING_R_OUT) / 2
         side = 2 * RING_R_OUT * math.tan(math.pi / 12)
         shapes.append(BoxShape((r * math.cos(t), 0.0, r * math.sin(t)), (RING_R_OUT - RING_R_IN, RING_T, side),
-                               color=CHROME, collide=False, quat_xyzw=_quat_axis((0, 1, 0), -t)))
+                               color=CHROME, quat_xyzw=_quat_axis((0, 1, 0), -t)))
     shapes.append(BoxShape((-(RING_R_OUT + HANDLE[0] / 2 - 0.001), 0.0, 0.0), HANDLE, color=CHROME))
     head_x = -(RING_R_OUT + HANDLE[0] - 0.001)
     for sz in (-1, 1):  # the open end's two jaws
@@ -229,7 +276,7 @@ def _wrench_shapes() -> list:
 
 
 WRENCH_TIP = RING_R_OUT + HANDLE[0] - 0.001 + 0.022  # ring centre to the open end's tip (m)
-RACK_XY = (0.105, 0.070)  # the tool stand, in front of the battery's left half, clear of the hand's swing on the nut
+RACK_XY = (0.105, 0.100)  # the tool stand, in front of the battery's left half, clear of the hand's swing on the nut
 STAND = (0.060, 0.070, 0.120)  # steel pedestal: x, y, z
 RACK = (0.050, 0.044, 0.030)  # the wooden holder on top: x, y, z; the slot runs along x through its middle
 SLOT_W = 0.009
@@ -244,14 +291,17 @@ RACK_BODY = Body.build(
 WRENCH_Q0 = _quat_axis((0, 1, 0), -math.pi / 2)  # handle straight down, ring up, ring axis along y
 WRENCH_START = (RACK_XY[0], RACK_XY[1], TOP + STAND[2] + WRENCH_TIP + 0.0008)
 WRENCH = Body.build("wrench", pos=WRENCH_START, mass=WRENCH_KG, shapes=_wrench_shapes(), start_xyzw=WRENCH_Q0,
-                    color=CHROME, friction=(0.8, 0.7), com=(-0.075, 0.0, 0.0))
+                    color=CHROME, friction=(0.8, 0.7), com=(-0.075, 0.0, 0.0),
+                    solver_iterations=SOLVER_IT)
 
-OBJECTS = [BATTERY, RACK_BODY, CABLE_CLIP, CLAMP, NUT, WRENCH]
+OBJECTS = [BATTERY, BAY, RACK_BODY, CABLE_CLIP, CLAMP, NUT, WRENCH]
 
 # -- joints -----------------------------------------------------------------------------------------------------------
 # The nut on the bolt: free to turn about the bolt axis against its torque, otherwise fixed to the clamp. The torque is
-# a friction (a capped spring, re-anchored whenever the nut slips): it turns only when turned harder than that, and
-# stays where it is left. Turn 0 is the start: run down by hand until it stops against the ear, the split open.
+# a friction: a stiff spring capped at nut_torque(), whose anchor trails the nut by exactly the cap once it slips, so a
+# nut being turned pushes back with the full nut_torque() and a nut left alone stays where it is. It acts the same with
+# the wrench on or off: whatever turns the nut (the wrench, so the hand on its handle) has to supply that torque. Turn 0
+# is the start: run down by hand until it stops against the ear, the split open.
 T_RUN = 1.0  # N m: the nut running on the bolt before the bore closes on the post (fingers do not reach it)
 SNUG_SEATED = 30.0  # degrees of turn until the bore closes on the post, with the collar seated on the boss
 SNUG_PER_MM = 100.0  # degrees more per mm the collar sits higher (the taper: 0.11 mm looser across, per mm up;
@@ -260,18 +310,34 @@ K_TORQUE = 1.0 / 30.0  # N m per degree past that point: the collar squeezing th
 T_MIN, T_MAX = 5.0, 7.0  # N m: tight, and not over-tightened (a top-post clamp's pinch nut: 5 to 7 N m)
 THREAD_K = 200.0  # N m/rad: the friction's spring
 THREAD_DAMPING = 0.2  # N m s/rad
-BOX_HOLD_T = 20.0  # N m: with the box end on, the nut is held to the wrench's angle (the box end grips its flats)
-CATCH_R = 0.004  # the box end finds the nut (its chamfer) within this of the bolt's axis
-CATCH_MIS = 10.0  # degrees: and within this of its direction
+BOX_K = 300.0  # N m/rad: the box end on the nut's flats, a stiff spring about the bolt (1.3 degrees of give at 7 N m)
+BOX_DAMPING = 1.0  # N m s/rad
+CATCH_R = 0.002  # the box end goes on the nut within this of the bolt's axis (1 mm corner clearance and its chamfer)
+CATCH_MIS = 4.0  # degrees: and within this of its direction (the 7 mm ring tilts at most about 4 degrees on the nut)
+CATCH_S = 0.0075  # m: and pushed against the nut's face (ring face 6.75 mm out from the nut's centre at contact): its
+#                   chamfered mouth takes the corners within CATCH_R of centre, so it goes on even when 1 to 2 mm off
 bodykit.thread("nut_on_bolt", "clamp", "nut", anchor0=(BOLT_X, NUT_Y, 0.0), axis0=(0.0, 1.0, 0.0),
                anchor1=(0.0, 0.0, 0.0), axis1=(0.0, 1.0, 0.0), slide_limits=(-0.0001, 0.0001),
                turn_damping=THREAD_DAMPING, slide_stiffness=0.0, slide_damping=0.0, slide_max_force=0.0,
                always_on=True)
 # The wrench's box end on the nut: switched on when the ring is slid over the nut square to it, off once it is pulled
-# back off. It turns with the nut (its turn damping is far above the thread's) and slides freely along the bolt.
+# back off. While it is on, the wrench and the nut turn together through a stiff spring (BOX_K: the box end's points on
+# the nut's flats), so the nut's whole torque comes back through the wrench into the hand; it slides along the bolt.
+# It is locked square on the nut (no sideways play, no tilt): a catch up to CATCH_R off centre and CATCH_MIS crooked
+# is pulled square, as the box end's chamfer does. The ring also collides with the nut's corners (1 mm clearance),
+# so off centre by more than that it cannot go on. Gate runs with 1 to 2.5 mm of play and 4 to 15 degrees of tilt
+# let the hand twist the wrench crooked on the nut until it jammed or fell off. Along the bolt it is held by
+# BOX_HOLD_F only: a real box end on a nut is held by nothing but its fit's friction, and the hand must be able to
+# slide it off (at 4 N the hand's grip slipped on the handle and the box end stayed on).
+BOX_PLAY = 0.0  # m
+BOX_TILT = 0.0  # degrees
+BOX_TILT_K = 0.0  # N m/rad
+BOX_HOLD_F = 0.8  # N
 bodykit.thread("box_end", "nut", "wrench", anchor0=(0.0, 0.0, 0.0), axis0=(0.0, 1.0, 0.0),
                anchor1=(0.0, 0.0, 0.0), axis1=(0.0, 1.0, 0.0), slide_limits=(-0.012, 0.040),
-               turn_damping=300.0, slide_stiffness=300.0, slide_damping=2.0, slide_max_force=4.0)
+               turn_damping=BOX_DAMPING, slide_stiffness=300.0, slide_damping=2.0, slide_max_force=BOX_HOLD_F,
+               play=BOX_PLAY, tilt_deg=BOX_TILT, tilt_stiffness=BOX_TILT_K)
+BOX_SEAT = 0.0003  # m: where the box end sits along the bolt, out from the nut's centre (its 7 mm ring just off the ear)
 # The collar on the tapered post: it can tilt a little in the bore and turn about the post, and it slides along the
 # post against the taper's grip, a friction force of F_SLIDE: it stays wherever it is left and goes down only when
 # pushed with more than that. on_step re-anchors the slide drive after every slip (Coulomb friction from a capped
@@ -284,6 +350,11 @@ CABLE_K = 4000.0  # N/m: 12 N for 3 mm, as a push gauge on the cable 6 cm behind
 CABLE_AT = 0.060  # m behind the post's axis, where the cable's push is measured and acts (the hand holds it there)
 TILT_FREE = (5.0, 0.8)  # degrees the collar can rock in the bore: front to back (about the bolt), side to side
 TILT_K = 15.0  # N m/rad: the bore's fit centres the collar (the pinch-bolt torque rocks it about 5 degrees)
+# Down on the boss (within SEAT_BAND of its seat), the collar's bottom face rests on it and cannot rock: one side would
+# have to go into the boss. The collar and the battery do not collide (the joint between them), so that support is
+# a stiff centring spring, TILT_SEAT_K (the nut's 1 N m running torque then rocks it 0.3 degrees, not 4).
+TILT_SEAT_K = 200.0  # N m/rad
+SEAT_BAND = 0.0003  # m
 SLIDE_K = 20000.0  # N/m
 S_SEATED = H / 2  # the slide coordinate (clamp origin above the boss top) when the collar is down on the boss
 S_OFF = H / 2 + POST_H - 0.004  # above this the collar's bottom is clear of the post's top: it comes free
@@ -365,9 +436,9 @@ _EP: dict = {}
 
 @bodykit.on_reset
 def _reset() -> None:
-    _EP.update(turn=0.0, last=0.0, raw=0.0, nut_target=0.0, wa=0.0, wa_last=0.0, grip=(0.0, 0.0), locked=False, bitten=False, bite_turn=None, cap=T_RUN,
-               caught=False, pads={}, poses=[], step=0, batt0=None, on_post=True, z_rest=None, cable_f=0.0,
-               slide_target=S_SEATED + START_LIFT, min_clear=None)
+    _EP.update(turn=0.0, last=0.0, raw=0.0, nut_target=0.0, locked=False, bitten=False, bite_turn=None, cap=T_RUN,
+               peak=0.0, torques=[], caught=False, pads={}, poses=[], step=0, batt0=None, on_post=True, z_rest=None, cable_f=0.0,
+               slide_target=S_SEATED + START_LIFT, min_clear=None, catches=0, catch_r=[], tilt_k=TILT_K)
 
 
 def snug_turn(s: float) -> float:
@@ -426,6 +497,22 @@ def _seated(clamp, battery) -> bool:
                 and off_axis(clamp, battery) <= ON_POST)
 
 
+def box_angle_deg(nut, wrench) -> float:
+    """The wrench's turn about the nut's axis (the bolt's) relative to the nut, degrees in (-180, 180]: the box-end
+    joint's own coordinate, in the same convention as the nut's hold on the bolt."""
+    rel = nut.rotation().T @ wrench.rotation()
+    return math.degrees(math.atan2(rel[0, 2], rel[0, 0]))
+
+
+PEAK_HOLD = 3  # control steps (0.15 s at 20 Hz)
+
+
+def peak_torque() -> float:
+    """The highest torque the nut has been taken to and held for PEAK_HOLD control steps this episode (N m), or the
+    torque now if that is higher: the end torque if it was never backed off."""
+    return max(_EP["peak"], nut_torque())
+
+
 def _ring_vs_nut(nut, wrench):
     """(radial offset, slide along the bolt out from the nut, axis misalignment deg, flat misalignment deg)."""
     axis_n = nut.rotation() @ np.array([0.0, 1.0, 0.0])
@@ -454,7 +541,6 @@ def _watch(env) -> None:
     if _EP["batt0"] is None:
         _EP["batt0"] = np.asarray(battery.pos, float).copy()
         _EP["last"] = _EP["raw"] = nut_rel_deg(clamp, nut)
-        _EP["wa_last"] = _EP["wa"] = wrench_rel_deg(clamp, wrench)
         _EP["nut_target"] = -_EP["raw"]
     # the nut's turn, unwrapped
     a = nut_rel_deg(clamp, nut)
@@ -462,41 +548,48 @@ def _watch(env) -> None:
     _EP["turn"] += step
     _EP["raw"] += step
     _EP["last"] = a
-    # the wrench's angle about the bolt (unwrapped), for the box end's grip on the nut
-    w_now = wrench_rel_deg(clamp, wrench)
-    _EP["wa"] += (w_now - _EP["wa_last"] + 180.0) % 360.0 - 180.0
-    _EP["wa_last"] = w_now
-    # the box end catching the nut, and coming off it
+    # the box end going on the nut, and coming off it
     radial, s, mis, flat = _ring_vs_nut(nut, wrench)
-    if not _EP["caught"] and radial <= CATCH_R and -0.010 <= s <= 0.006 and mis <= CATCH_MIS and flat <= 7.0:
-        bodykit.set_slide_target("box_end", 0.0)  # it sits on the nut until pulled off
+    if not _EP["caught"] and radial <= CATCH_R and -0.010 <= s <= CATCH_S and mis <= CATCH_MIS and flat <= 7.0:
+        bodykit.set_slide_target("box_end", BOX_SEAT)  # it sits on the nut until pulled off
+        bodykit.set_turn_hold("box_end", BOX_K, box_angle_deg(nut, wrench))  # its points on the nut's flats
         bodykit.set_thread_on("box_end", True)
         _EP["caught"] = True
-        _EP["grip"] = (_EP["wa"], -_EP["raw"])  # the wrench's angle and the nut's turn (joint frame) when it caught
-        bodykit.set_turn_cap("nut_on_bolt", BOX_HOLD_T)
+        _EP["catches"] += 1
+        _EP["catch_r"].append(radial)
     elif _EP["caught"] and s > 0.009:
         bodykit.set_thread_on("box_end", False)
+        bodykit.set_turn_hold("box_end", 0.0, 0.0)
         _EP["caught"] = False
-        _EP["nut_target"] = -_EP["raw"]
-        _EP["cap"] = -1.0  # the nut's own friction is set again below
+        _EP["nut_target"] = -_EP["raw"]  # the nut stays where the wrench left it
         bodykit.set_turn_hold("nut_on_bolt", THREAD_K, _wrap180(_EP["nut_target"]))
+    # the nut's torque, a friction, with the wrench on or off: turned harder than that it slips, and the spring's
+    # anchor trails it by the cap, so whatever turns it keeps feeling the full torque; left alone it stays put
     cap = nut_torque()
-    if _EP["caught"]:
-        # a box end grips the flats: the nut turns with the wrench (driven to the wrench's angle)
-        _EP["nut_target"] = _EP["grip"][1] + (_EP["wa"] - _EP["grip"][0])
+    if abs(cap - _EP["cap"]) > 0.005:
+        bodykit.set_turn_cap("nut_on_bolt", cap)
+        _EP["cap"] = cap
+    stretch = -_EP["raw"] - _EP["nut_target"]  # degrees past the anchor, in the joint's frame
+    give = math.degrees(cap / THREAD_K)
+    if abs(stretch) > give:
+        _EP["nut_target"] = -_EP["raw"] - math.copysign(give, stretch)
         bodykit.set_turn_hold("nut_on_bolt", THREAD_K, _wrap180(_EP["nut_target"]))
-    else:
-        # the nut's torque, a friction: turned harder than that it slips, and stays where it went
-        if abs(cap - _EP["cap"]) > 0.005:
-            bodykit.set_turn_cap("nut_on_bolt", cap)
-            _EP["cap"] = cap
-        if abs(-_EP["raw"] - _EP["nut_target"]) > 0.8 * math.degrees(cap / THREAD_K):
-            _EP["nut_target"] = -_EP["raw"]
-            bodykit.set_turn_hold("nut_on_bolt", THREAD_K, _wrap180(_EP["nut_target"]))
+    # the peak counts a torque the nut was held at for PEAK_HOLD control steps (0.15 s): a nut taken past 7 N m stays
+    # there until it is deliberately turned back, so this only drops a single solver step's jitter
+    hist = _EP.setdefault("torques", [])
+    hist.append(nut_torque())
+    del hist[:-PEAK_HOLD]
+    if len(hist) == PEAK_HOLD:
+        _EP["peak"] = max(_EP["peak"], min(hist))
     # the cable's spring-back
     _cable_push(env, clamp)
     # the collar sliding on the post against the taper's grip; off the top of the post it is free
     s_now = slide(clamp, battery)
+    if _EP["on_post"] and not _EP["bitten"]:
+        k = TILT_SEAT_K if s_now <= S_SEATED + SEAT_BAND else TILT_K
+        if k != _EP["tilt_k"]:
+            bodykit.set_tilt_spring("collar_on_post", k)
+            _EP["tilt_k"] = k
     if _EP["on_post"]:
         if s_now > S_OFF:
             bodykit.set_thread_on("collar_on_post", False)
@@ -545,6 +638,8 @@ def _watch(env) -> None:
                                          (("clamp", clamp), ("nut", nut), ("wrench", wrench))})
     del _EP["poses"][:-(STILL_STEPS + 1)]
     _EP["step"] += 1
+    if GATE:
+        _gate_log(base, clamp, nut, wrench, radial, mis)
     if _DBG is not None:
         _debug(battery, clamp, nut, wrench, radial, s, mis, flat)
 
@@ -631,9 +726,8 @@ def _stage(objects) -> float:
         return 0.0  # not on the positive post
     if not _seated(clamp, battery):
         return 0.0  # high or crooked: tightened there it is a loose joint; not yet tightened it is no progress
-    torque = nut_torque()
-    if not T_MIN <= torque <= T_MAX:
-        return 0.25  # seated but under-tightened, or over-tightened
+    if nut_torque() < T_MIN or peak_torque() > T_MAX:
+        return 0.25  # seated but under-tightened, or over-tightened (now, or at any time before: backed off after)
     lug = abs(lug_deg(clamp))
     if lug > LUG_HALF:
         return 0.25
@@ -648,10 +742,12 @@ def _end_flags(objects) -> str:
 
 def score(objects) -> float:
     """1.0: collar seated (every point under it within 1 mm of the boss, square within 2 degrees, on the post's axis
-    within 3 mm), the nut's torque 5 to 7 N m (what a dial torque wrench reads as it starts to turn it further), lug
+    within 3 mm), the nut's torque 5 to 7 N m (what a dial torque wrench reads as it starts to turn it further) and never
+    taken past 7 N m during the trial, lug
     within 10 degrees of the cable's run, wrench off the nut and off the battery, every finger pad 4 cm from every part
     of the clamp and the wrench, all still. 0.75: the same with a hand or the wrench still on it or something moving.
-    0.5: lug 10 to 30 degrees off. 0.25: seated but under 5 N m or over 7 N m, or lug over 30 degrees off. 0: not on
+    0.5: lug 10 to 30 degrees off. 0.25: seated but under 5 N m, or over 7 N m now or at any time, or lug over 30
+    degrees off. 0: not on
     the positive post, high or crooked, or the battery moved over 5 mm."""
     base = _stage(objects)
     if _DBG is not None:
@@ -696,11 +792,15 @@ def layout(seed: int | None) -> dict:
         q_tilt = _quat_axis((math.cos(axis_dir), math.sin(axis_dir), 0.0), tilt)
         q_clamp = _quat_mul(q_tilt, _quat_axis((0, 0, 1), math.radians(u(-VARY_YAW, VARY_YAW))))
         lift = u(*VARY_LIFT)
+    if GATE:  # the feasibility gate starts with the clamp seated square (its heading still seeded)
+        q_clamp = _quat_axis((0, 0, 1), math.radians(u(-VARY_YAW, VARY_YAW))) if rng is not None else (0, 0, 0, 1.0)
+        lift = 0.0
     batt = np.array([*BATT_XY, BATT_CZ]) + db
     clamp = np.array([POS_XY[0], POS_XY[1], SEATED_Z + lift]) + db
     nut = clamp + bodykit.rotation(q_clamp) @ np.array([BOLT_X, NUT_Y, 0.0])
     return {"battery": (batt, (0.0, 0.0, 0.0, 1.0)), "clamp": (clamp, q_clamp), "nut": (nut, q_clamp),
             "cable_clip": (np.array([*CLIP_XY, TOP]) + db, (0.0, 0.0, 0.0, 1.0)),
+            "bay": (np.array([*BATT_XY, TOP]) + db, (0.0, 0.0, 0.0, 1.0)),
             "rack": (np.array([*RACK_XY, TOP]) + dr, (0.0, 0.0, 0.0, 1.0)),
             "wrench": (np.array(WRENCH_START) + dr, WRENCH_Q0)}
 
@@ -739,6 +839,11 @@ def _lay_out(emb, seed):
     target = _EP["slide_target"]
     _reset()
     _EP["slide_target"] = target
+    if GATE:  # seated and pinched, the nut already at GATE_T0 N m
+        _EP.update(bitten=True, bite_turn=-(GATE_T0 - T_RUN) / K_TORQUE, locked=True, on_post=False)
+        bodykit.set_slide_target("collar_grip", target)
+        bodykit.set_thread_on("collar_grip", True)
+        bodykit.set_thread_on("collar_on_post", False)
     return emb._observation()
 
 
@@ -754,20 +859,52 @@ PUSH_DOWN = 0.012  # then pushes it this far down (m): past the seat, so the col
 SIDE = _rot("x", -math.pi / 2) @ DOWN  # approaching along -y (from the left), fingers closing along z
 
 
+GRIP_PSI = math.radians(float(os.environ.get("CLAMP_GRIP_PSI_DEG", "-30")))  # the hand turned this far on the
+#   handle about the fingers' closing line (0: square across it, approaching along -y): it puts the nut's push on the
+#   handle nearer the line of the wrist's joints, which have 7 N m
+
+
 def wrench_grip_rot(a: float) -> np.ndarray:
     """Left hand on the wrench's handle when the handle points toward the robot, ``a`` rad above level."""
-    return _rot("y", a) @ SIDE  # the fingers close across the handle's width
+    return _rot("y", a) @ _rot("z", GRIP_PSI) @ SIDE  # the fingers close across the handle's width
 
 
-GRIP_R = 0.110  # the left hand grips the handle this far from the ring centre
-# The swing: tightening (clockwise seen from the nut's end, the left) pushes the handle down. STROKES strokes of 60
-# degrees: the box end goes on at A_ON, is pushed down to A_END, comes off, goes back on at A_REFIT (60 degrees up: the
-# 12-point box end fits every 30 degrees) and is pushed down to A_END again. A_END keeps the handle clear of the
-# battery's front edge. If the box end sits off the flats on a refit, it is slid on anyway and catches them as it is
-# swung down (the box end is drawn only, so on the nut but off its flats it turns freely until a flat lines up).
-A_ON, A_END = math.radians(28.0), math.radians(-32.0)
-A_REFIT = math.radians(float(os.environ.get("CLAMP_REFIT_DEG", "28")))
-STROKES = int(os.environ.get("CLAMP_STROKES", "3"))
+GRIP_R = 0.120  # the left hand takes the wrench out of its holder, and puts it back, gripping it this far from the ring
+GRIP_TURN = float(os.environ.get("CLAMP_GRIP_TURN", "0.135"))  # and turns the nut gripping it this far out: 6 N m is
+#   44 N on the handle there (the gripper holds 50 N)
+# The swing: tightening (clockwise seen from the nut's end, the left) pushes the handle down. STROKES strokes of 30
+# degrees: the box end goes on at A_ON (level), is pushed down to A_END, comes off, goes back on at A_REFIT (30 degrees
+# up: the 12-point box end fits every 30 degrees) and is pushed down to A_END again. This is where the wrist can push
+# the nut's 5 to 7 N m: with the handle above level the push falls across the wrist's 7 N m joints, and lower down the
+# open hand meets the battery's front face and the tool stand. If the box end sits off the flats on a refit, it is slid on anyway and catches them as it is
+# swung down (its bore clears the nut's corners, so on the nut but off its flats it turns freely until a flat lines up).
+A_ON = math.radians(float(os.environ.get("CLAMP_A_ON_DEG", "0")))
+# The hand aims past the 30 degrees (A_END): against the nut the arm lags its target, and the gate measured the
+# wrench reaching about 31 degrees down for a 40 degree target. It lets go and takes the handle again at A_RELEASE,
+# where the wrench really is, so it takes it square in the fingers, then slides the box end off there.
+A_END = math.radians(float(os.environ["CLAMP_A_END_DEG"])) if os.environ.get("CLAMP_A_END_DEG") else None
+# Without CLAMP_A_END_DEG, each stroke aims past 30 degrees by the lag the gate measured for the torque it pushes: about
+# LAG0 + LAG_PER_NM x (the nut's torque mid-stroke) degrees (10.4 at 5 N m, 12.4 at 6, 2 to 3 at the 1 N m running torque).
+LAG0, LAG_PER_NM = 0.4, 2.0  # degrees, degrees per N m
+
+
+def stroke_end(t_mid: float) -> float:
+    """The handle's target at the end of a stroke pushing the nut at about ``t_mid`` N m (rad)."""
+    if A_END is not None:
+        return A_END
+    return math.radians(-(30.0 + LAG0 + LAG_PER_NM * t_mid))
+
+
+A_RELEASE = math.radians(float(os.environ.get("CLAMP_RELEASE_DEG", "-30.5")))
+A_REFIT = math.radians(float(os.environ.get("CLAMP_REFIT_DEG", str(math.degrees(A_ON)))))
+STROKES = int(os.environ.get("CLAMP_STROKES", "6"))
+EASE = math.radians(float(os.environ.get("CLAMP_EASE_DEG", "0")))  # the handle's target eased back up after a stroke
+REGRIP = os.environ.get("CLAMP_REGRIP", "0") == "1"  # let go of the handle after every stroke and take it again
+# Feasibility gate (dev/feasibility_gate.py; unset for the demo and every recorded run): the clamp starts seated and
+# pinched with the nut already at GATE_T0 N m, the right hand stays clear, and the left hand makes GATE_STROKES strokes.
+GATE = os.environ.get("CLAMP_GATE", "") == "1"
+GATE_T0 = float(os.environ.get("CLAMP_GATE_T0", "4.5"))
+GATE_STROKES = int(os.environ.get("CLAMP_GATE_STROKES", "2"))
 
 
 def _handle_point(ring, a: float, r: float = GRIP_R) -> tuple[float, float, float]:
@@ -782,8 +919,12 @@ def hold_plan(post_xy, t_release: float) -> list[Waypoint]:
     c = level + np.array([0.0, 0.0, GRIP_ABOVE])  # where the cable is gripped: at or above where it rides at the start
     pre = c - 0.06 * HOLD_APPROACH
     down = np.array([0.0, 0.0, PUSH_DOWN])  # c - down: past the seated level; the collar stops on the boss
+    over = np.array([post_xy[0] + 0.02, post_xy[1] - 0.06, TOP + HOOD_LINE + 0.07])  # above the fender's top
     plan = [
-        Waypoint(3.0, tuple(pre), FINGER_OPEN, "over the clamp", HOLD_ROT),
+        Waypoint(1.5, (float(over[0]), float(over[1]) - 0.08, float(over[2])), FINGER_OPEN, "up, clear of the fender",
+                 HOLD_ROT),
+        Waypoint(1.5, tuple(over), FINGER_OPEN, "over the fender", HOLD_ROT),
+        Waypoint(2.0, tuple(pre), FINGER_OPEN, "over the clamp", HOLD_ROT),
         Waypoint(1.5, tuple(c), FINGER_OPEN, "round the cable", HOLD_ROT),
         Waypoint(1.0, tuple(c), FINGER_CLOSED, "grip the cable", HOLD_ROT),
         Waypoint(1.5, tuple(c - down), FINGER_CLOSED, "push the clamp down onto the boss", HOLD_ROT),
@@ -795,23 +936,26 @@ def hold_plan(post_xy, t_release: float) -> list[Waypoint]:
         Waypoint(1.0, tuple(c - down), FINGER_OPEN, "let go", HOLD_ROT),
         Waypoint(1.5, tuple(c + 0.02 * np.array([0, 0, 1.0]) - 0.07 * HOLD_APPROACH), FINGER_OPEN, "back away",
                  HOLD_ROT),
+        Waypoint(2.0, tuple(over), FINGER_OPEN, "up over the fender", HOLD_ROT),
     ]
     return plan
 
 
-def wrench_plan(post_xy, rack_xy) -> tuple[list[Waypoint], float]:
-    """Left hand: the wrench out of its holder, onto the nut, and round in STROKES strokes (the wrist turns only so far,
-    so between them the box end comes off, swings back and goes on again, as with any box-end wrench in a tight spot;
-    before each comes off the hand lets go and takes the handle again, the box end still holding the wrench square on
-    the nut, which is what a soft grip needs after the nut's torque has crept the handle round in it), off, and back
-    into its holder. Returns the plan and the time at which the box end is off the nut for good."""
+def wrench_plan(post_xy, rack_xy, strokes: int | None = None) -> tuple[list[Waypoint], float]:
+    """Left hand: the wrench out of its holder, onto the nut, and round in ``strokes`` strokes (STROKES; the wrist pushes
+    the nut's torque only over a short swing, so between them the box end comes off, swings back and goes on
+    again, as with any box-end wrench in a tight spot). After the first stroke, with the box end holding the wrench on
+    the nut, the hand lets go and takes the handle again further out (GRIP_TURN), where the nut's rising torque needs
+    less push; after the last it moves back in (GRIP_R) for the holder. Then the box end comes off and the wrench goes
+    back into its holder. Returns the plan and the time at which the box end is off the nut for good."""
+    strokes = STROKES if strokes is None else strokes
     nut_seated = np.array([post_xy[0] + BOLT_X, post_xy[1] + NUT_Y, SEATED_Z])  # the nut with the clamp seated
     rack_ring = np.array([rack_xy[0], rack_xy[1], WRENCH_START[2]])
     a_rack = -math.pi / 2
-    grip = np.array(_handle_point(rack_ring, a_rack))
+    grip = np.array(_handle_point(rack_ring, a_rack, GRIP_R))
     lift = np.array([0.0, 0.0, 0.075])
-    back = np.array([0.0, 0.045, 0.0])  # the left hand comes in from the left
-    off = np.array([0.0, 0.045, 0.0])  # the box end slid off the nut, along the bolt
+    back = -0.045 * wrench_grip_rot(a_rack)[:, 2]  # back out along the hand's approach
+    off = np.array([0.0, 0.030, 0.0])  # the box end slid off the nut, along the bolt (clear of it by 2.3 cm)
     plan = [
         Waypoint(2.5, tuple(grip + back), FINGER_OPEN, "beside the wrench", wrench_grip_rot(a_rack)),
         Waypoint(1.5, tuple(grip), FINGER_OPEN, "fingers round the handle", wrench_grip_rot(a_rack)),
@@ -819,42 +963,70 @@ def wrench_plan(post_xy, rack_xy) -> tuple[list[Waypoint], float]:
         Waypoint(1.5, tuple(grip + lift), FINGER_CLOSED, "lift it out of the rack", wrench_grip_rot(a_rack)),
     ]
 
-    on = nut_seated + np.array([0.0, 0.001, 0.0])  # the box end slid on to the nut's face
+    # the box end pushed on 1.8 mm past its seat (the ear stops the ring): the hand stops short along the bolt, 4 to 8 mm
+    # in the demo runs, so aimed at the seat it stops before the nut's face
+    on = nut_seated + np.array([0.0, -0.0015, 0.0])
+    r_now = [GRIP_R]
 
     def fit(a, seconds, settle=1.0):
-        plan.append(Waypoint(seconds, _handle_point(nut_seated + off, a), FINGER_CLOSED, "box end lined up with the nut",
-                             wrench_grip_rot(a)))
-        plan.append(Waypoint(settle, _handle_point(nut_seated + off, a), FINGER_CLOSED, "settle", wrench_grip_rot(a)))
-        plan.append(Waypoint(1.5, _handle_point(on, a), FINGER_CLOSED, "slide the box end onto the nut",
+        r = r_now[0]
+        plan.append(Waypoint(seconds, _handle_point(nut_seated + off, a, r), FINGER_CLOSED,
+                             "box end lined up with the nut", wrench_grip_rot(a)))
+        plan.append(Waypoint(settle, _handle_point(nut_seated + off, a, r), FINGER_CLOSED, "settle", wrench_grip_rot(a)))
+        plan.append(Waypoint(1.5, _handle_point(on, a, r), FINGER_CLOSED, "slide the box end onto the nut",
                              wrench_grip_rot(a)))
 
-    def regrip(a):
-        # The box end stays on the nut and holds the wrench square while the hand lets go and takes the handle
-        # again. Under the nut's torque the handle creeps round in the soft grip; taking it again here, with the
-        # nut still pinning the box end square, is what lets the next fit go on.
-        for seconds, finger, label in ((0.8, FINGER_OPEN, "let go to re-seat the grip"),
-                                       (0.6, FINGER_OPEN, "settle"),
-                                       (0.8, FINGER_CLOSED, "grip the handle square")):
-            plan.append(Waypoint(seconds, _handle_point(on, a), finger, label, wrench_grip_rot(a)))
+    def regrip(a, r_new):
+        # The box end stays on the nut and holds the wrench while the hand lets go, moves along the handle to r_new
+        # and takes it again.
+        r = r_now[0]
+        plan.append(Waypoint(0.8, _handle_point(on, a, r), FINGER_OPEN, "let go of the handle", wrench_grip_rot(a)))
+        if r_new != r:
+            plan.append(Waypoint(1.0, _handle_point(on, a, r_new), FINGER_OPEN, "along the handle", wrench_grip_rot(a)))
+        plan.append(Waypoint(0.8, _handle_point(on, a, r_new), FINGER_CLOSED, "grip the handle", wrench_grip_rot(a)))
+        r_now[0] = r_new
 
-    def stroke(a0, a1, n=7):
+    def stroke(a0, a1, r_after, n=4):
+        r = r_now[0]
         for k in range(1, n + 1):
             a = a0 + (a1 - a0) * k / n
-            plan.append(Waypoint(0.45, _handle_point(on, a), FINGER_CLOSED, "push the wrench round",
+            plan.append(Waypoint(0.45, _handle_point(on, a, r), FINGER_CLOSED, "push the wrench round",
                                  wrench_grip_rot(a)))
-        plan.append(Waypoint(0.5, _handle_point(on, a1), FINGER_CLOSED, "push the wrench round",
+        plan.append(Waypoint(0.5, _handle_point(on, a1, r), FINGER_CLOSED, "push the wrench round",
                              wrench_grip_rot(a1)))
-        regrip(a1)
-        plan.append(Waypoint(1.2, _handle_point(nut_seated + off, a1), FINGER_CLOSED, "slide the box end off",
+        # stop pushing before the box end comes off: the arm lags its target by the push it makes (its wrist is a
+        # spring, and the demo's sag correction builds up the push), so pulled off still pushing, it would spring on
+        # and fling the wrench. The demo lets go of the handle (REGRIP; the nut's friction holds the nut and the
+        # wrench where they are) and the correction runs down; EASE (off by default) eases the target back instead.
+        if EASE:
+            a1 = a1 + EASE
+            plan.append(Waypoint(0.6, _handle_point(on, a1, r), FINGER_CLOSED, "ease off the push", wrench_grip_rot(a1)))
+        if REGRIP:  # open the hand where it is, then move it, open, to where the wrench is
+            plan.append(Waypoint(0.6, _handle_point(on, a1, r), FINGER_OPEN, "let go of the handle",
+                                 wrench_grip_rot(a1)))
+        else:  # still holding it, bring the hand's target back to where the wrench is while the push runs down
+            plan.append(Waypoint(0.8, _handle_point(on, A_RELEASE, r), FINGER_CLOSED, "ease off the push",
+                                 wrench_grip_rot(A_RELEASE)))
+        a1 = A_RELEASE
+        if r_after != r or REGRIP:
+            regrip(a1, r_after)
+        r = r_now[0]
+        plan.append(Waypoint(1.2, _handle_point(nut_seated + off, a1, r), FINGER_CLOSED, "slide the box end off",
                              wrench_grip_rot(a1)))
-        plan.append(Waypoint(0.6, _handle_point(nut_seated + off, a1), FINGER_CLOSED, "box end off",
+        plan.append(Waypoint(0.6, _handle_point(nut_seated + off, a1, r), FINGER_CLOSED, "box end off",
                              wrench_grip_rot(a1)))
 
     fit(A_ON, 3.0, settle=2.0)  # the clamp is pushed fully down before the nut is turned
-    stroke(A_ON, A_END)
-    for _ in range(STROKES - 1):
-        fit(A_REFIT, 1.5)
-        stroke(A_REFIT, A_END)
+    # with the box end on and the clamp held, the hand lets go and takes the handle further out (GRIP_TURN), where the
+    # push needed is smaller, before the first stroke: it then keeps that grip until the last stroke is done
+    regrip(A_ON, GRIP_TURN)
+    for k in range(strokes):
+        if k:
+            fit(A_REFIT, 1.5)
+        # the nut's torque mid-stroke: from GATE_T0 in the gate; in the demo 1 N m until the bore closes after the first
+        # 30 degrees, then 1 N m more per stroke
+        t_mid = GATE_T0 + 0.5 + k if GATE else (T_RUN if k == 0 else T_RUN + k - 0.5)
+        stroke(A_REFIT if k else A_ON, stroke_end(t_mid), GRIP_R if k == strokes - 1 else GRIP_TURN)
     t_off = sum(w.duration for w in plan)
     # put it back in its holder: the pickup in reverse (open end down into the slot), then let go and clear
     up = np.array([0.0, 0.0, 0.12])
@@ -866,18 +1038,18 @@ def wrench_plan(post_xy, rack_xy) -> tuple[list[Waypoint], float]:
                  wrench_grip_rot(a_rack)),
         Waypoint(1.0, tuple(grip + np.array([0.0, 0.0, 0.004])), FINGER_OPEN, "let go", wrench_grip_rot(a_rack)),
         Waypoint(1.5, tuple(grip + back), FINGER_OPEN, "back away", wrench_grip_rot(a_rack)),
-        Waypoint(2.0, tuple(grip + back + up), FINGER_OPEN, "clear", wrench_grip_rot(a_rack)),
-        Waypoint(2.5, tuple(grip + back + up), FINGER_OPEN, "wait for it all to settle", wrench_grip_rot(a_rack)),
+        Waypoint(2.0, tuple(grip + back + up / 2), FINGER_OPEN, "clear", wrench_grip_rot(a_rack)),
+        Waypoint(2.5, tuple(grip + back + up / 2), FINGER_OPEN, "wait for it all to settle", wrench_grip_rot(a_rack)),
     ]
     return plan, t_off
 
 
-
-
 def plans(post_xy, rack_xy) -> dict[str, list[Waypoint]]:
     """Both hands' plans for a post and a rack at these positions."""
-    left, t_off = wrench_plan(post_xy, rack_xy)
+    left, t_off = wrench_plan(post_xy, rack_xy, GATE_STROKES if GATE else None)
     right = hold_plan(post_xy, t_off + 0.5)
+    if GATE:  # the clamp is already seated and pinched: the right hand stays clear
+        return {"right": [Waypoint(t_off + 20.0, right[0].pos, FINGER_OPEN, "stay clear", HOLD_ROT)], "left": left}
     # Failure paths for the README (CLAMP_FAIL; unset for the demo): the same plans with one hand changed.
     fail = os.environ.get("CLAMP_FAIL", "")
     if fail == "release":  # the right hand seats the clamp, then lets go before the nut is turned
@@ -902,6 +1074,37 @@ clampdemo.install()
 plan_from_image_hook = True  # tells clampdemo this task plans from the first camera frame
 
 
+# -- feasibility gate log: one line per control step (dev/feasibility_gate.py reads it) -------------------------------
+_GATE_LOG = None
+
+
+def _gate_log(base, clamp, nut, wrench, radial, mis) -> None:
+    global _GATE_LOG
+    from bodykit import as_numpy
+
+    if _GATE_LOG is None:
+        _GATE_LOG = open(os.environ.get("CLAMP_GATE_LOG", "clamp_gate.log"), "w")
+    robot = base.scene["left_robot"]
+    q = as_numpy(robot.data.joint_pos)[0][:6]
+    try:
+        q_target = as_numpy(robot.data.joint_pos_target)[0][:6]
+    except Exception:
+        q_target = q
+    try:
+        effort = as_numpy(robot.data.applied_torque)[0][:6]
+    except Exception:
+        effort = np.zeros(6)
+    w_rel = clamp.rotation().T @ (np.asarray(nut.ang_vel, float) - np.asarray(clamp.ang_vel, float))
+    _GATE_LOG.write(f"{_EP['step']} turn={_EP['turn']:.2f} torque={nut_torque():.3f} peak={peak_torque():.3f} "
+                    f"caught={int(_EP['caught'])} catches={_EP['catches']} ring_r={radial * 1000:.2f} "
+                    f"wrench={wrench_rel_deg(clamp, wrench):.2f} box={box_angle_deg(nut, wrench):.2f} "
+                    f"nut_w={w_rel[1]:.3f} nut_w_off={math.hypot(w_rel[0], w_rel[2]):.3f} mis={mis:.2f} "
+                    f"nut_tilt={math.degrees(math.acos(min(1.0, float((clamp.rotation() @ np.array([0, 1.0, 0])) @ (nut.rotation() @ np.array([0, 1.0, 0])))))):.2f} "
+                    f"q_err={','.join(f'{v:.3f}' for v in (q_target - q))} "
+                    f"effort={','.join(f'{v:.2f}' for v in effort)}\n")
+    _GATE_LOG.flush()
+
+
 # -- debug: CLAMP_DEBUG=/path/to/log writes the state after every step ------------------------------------------------
 _DBG = open(os.environ["CLAMP_DEBUG"], "w") if os.environ.get("CLAMP_DEBUG") else None
 
@@ -912,6 +1115,7 @@ def _debug(battery, clamp, nut, wrench, radial, s, mis, flat) -> None:
     _DBG.write(f"{_EP['step']:4d} c=({clamp.pos[0]:.4f},{clamp.pos[1]:.4f},{clamp.pos[2]:.4f}) "
                f"gap={g.min():6.2f}..{g.max():6.2f} tilt={tilt_deg(clamp):5.2f} lug={lug_deg(clamp):6.1f} "
                f"off={off_axis(clamp, battery) * 1000:5.1f} turn={_EP['turn']:6.1f} T={nut_torque():4.2f} "
+               f"Tpk={peak_torque():4.2f} "
                f"snug={snug_turn(slide(clamp, battery)):6.1f} lock={int(_EP['locked'])} "
                f"clr={(_EP.get('min_clear') or 0) * 1000:5.1f} "
                f"catch={int(_EP['caught'])} ring r={radial * 1000:5.1f} s={s * 1000:6.1f} mis={mis:5.1f} "

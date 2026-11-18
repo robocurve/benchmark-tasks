@@ -97,7 +97,8 @@ def _edge(gray, h, w, p_from, p_to, z, level=None) -> np.ndarray | None:
 
 def find_battery(img: np.ndarray, m, avoid_y=()) -> np.ndarray:
     """The battery case's centre (x, y), from the two lid edges that no shadow touches: the front edge, where the lid
-    meets the darker front face (seen from above and behind), and the right-hand end, where the lid meets the bench.
+    meets the darker front face (seen from above and behind), and the left-hand end, where the lid meets the bench (the
+    right-hand end has the clamp at its front corner and the fender beside it, whose tall face leans into the view).
     Each is found to a fraction of a pixel along many short scan lines cut with the lid's plane; ``avoid_y`` lists
     y positions (m) where something stands in front of the front edge (the clamp, the wrench)."""
     h, w = img.shape[:2]
@@ -112,16 +113,17 @@ def find_battery(img: np.ndarray, m, avoid_y=()) -> np.ndarray:
         q = _edge(gray, h, w, (nx - hx + 0.035, y), (nx - hx - 0.035, y), z)
         if q is not None:
             fronts.append(q)
-    rights = []
-    for x in np.linspace(nx - hx + 0.03, nx + hx - 0.03, 15):
-        q = _edge(gray, h, w, (x, ny - hy - 0.04), (x, ny - hy + 0.04), z)
+    ends = []
+    for x in np.linspace(nx - hx + 0.03, nx + hx - 0.04, 15):  # clear of the hold-down's J-bolt at the back
+        # from the bench into the lid, +-25 mm about the nominal edge (the seeded edge is within 15 mm of it)
+        q = _edge(gray, h, w, (x, ny + hy + 0.025), (x, ny + hy - 0.025), z)
         if q is not None:
-            rights.append(q)
-    if len(fronts) < 6 or len(rights) < 6:
-        raise RuntimeError(f"clampdemo: battery edges not found ({len(fronts)} front, {len(rights)} end)")
+            ends.append(q)
+    if len(fronts) < 6 or len(ends) < 6:
+        raise RuntimeError(f"clampdemo: battery edges not found ({len(fronts)} front, {len(ends)} end)")
     front = float(np.median([q[0] for q in fronts]))
-    right = float(np.median([q[1] for q in rights]))
-    return np.array([front + hx, right + hy])
+    left = float(np.median([q[1] for q in ends]))
+    return np.array([front + hx, left - hy])
 
 
 def _bilinear(img: np.ndarray, u: float, v: float) -> float:
@@ -184,7 +186,7 @@ def find_rack(img: np.ndarray, m) -> np.ndarray:
 
 # Edge-finding bias, measured once on the first frames of five seeded starts against their known layouts (the half-
 # pixel convention of the resize and the soft edges of the render): subtracted from every estimate (m).
-BATTERY_BIAS = np.array([0.0015, 0.0015])
+BATTERY_BIAS = np.array([0.0015, 0.0019])  # y: the left end, measured on seeds 0 to 3 (1.6 to 2.4 mm)
 RACK_BIAS = np.array([-0.0005, 0.0010])  # re-measured on four seeded starts: the old value left it 1.7 mm short in x
 
 
@@ -203,12 +205,69 @@ def plan_from_image(img: np.ndarray, m) -> dict:
 # an integral correction, bounded.
 SAG_GAIN = 0.08  # of the remaining error added to the offset per control step
 SAG_GAIN_CART = float(os.environ.get("CLAMP_SAG_GAIN", "0.25"))  # of the TCP pose error per step
-SAG_MAX = float(os.environ.get("CLAMP_SAG_MAX", "0.6"))  # rad: room to push the wrench against the nut's 5 to 7 N m
-#                                                            (the wrist's gain is 10 N m/rad)
+SAG_MAX = float(os.environ.get("CLAMP_SAG_MAX", "0.7"))  # rad: room to push the wrench against the nut's 5 to 7 N m
+#                                                            (the wrist's gain is 10 N m/rad: 0.7 rad is its 7 N m)
 SAG_ARMS = os.environ.get("CLAMP_SAG_ARMS", "both")  # "both", "right" (hold the clamp down) or "left" (turn the nut)
 SAG_MODE = os.environ.get("CLAMP_SAG_MODE", "cart")  # "cart": correct the TCP's full pose (position and
 #                                                       orientation) through the Jacobian; "joint": the old per-joint
 #                                                       integral (it rolls the wrist)
+# The correction is also what pushes the nut round: against the nut's torque the wrench stops short of the planned
+# angle, and the correction builds up to push it there. Left built up, it would fling the wrench as the box end comes
+# off. So once the hand lets go of the handle the left arm's correction runs down, and while the box end is taken off
+# it is held where it is (no new push).
+UNWIND = ("ease off the push", "let go of the handle", "along the handle")
+UNWIND_RATE = 0.7  # of the correction kept per control step
+HOLD_OFF = ("grip the handle", "slide the box end off", "box end off")
+
+
+# Where the hand holds the wrench. While the box end is on the nut, the nut holds the ring centred, so at the end of a
+# push the hand's measured distance from the bolt (its joint angles; the hand still holds the handle) is where it must
+# be for the ring to be centred. The plan assumed its own grip radius and the camera's nut estimate; the difference
+# (a millimetre or two, more than the ring's 1 mm clearance on the nut's corners) is added along the handle to the rest
+# of the left hand's plan, so the next fits go on centred.
+_ALONG_LABELS = ("ease off the push", "let go of the handle", "along the handle", "grip the handle",
+                 "slide the box end off", "box end off", "box end lined up with the nut", "settle",
+                 "slide the box end onto the nut", "push the wrench round")
+
+
+def _register_grip(self, observation, t: float) -> None:
+    from dataclasses import replace
+
+    from inspect_robots_yam.packing import STATE_KEY
+    from yam_arena import ik
+
+    plan = self._plans["left"]
+    label = plan.target(t)[3]
+    prev = getattr(self, "_cb_label", None)
+    self._cb_label = label
+    if not (label == "ease off the push" and prev == "push the wrench round") or "post" not in _EST:
+        return
+    m = self._task.module
+    post = _EST["post"]
+    pivot = np.array([post[0] + m.BOLT_X, post[1] + m.NUT_Y, m.SEATED_Z])
+    q = np.asarray(observation.state[STATE_KEY], float)[0:6]
+    p_meas = ik.tcp_pose(q, self._bases["left"])[0]
+    p_plan = plan.target(t)[0]
+
+    def radius(p):
+        d = np.asarray(p, float) - pivot
+        return math.hypot(d[0], d[2])
+
+    shift = radius(p_meas) - radius(p_plan)
+    ends = np.cumsum([w.duration for w in plan.waypoints])
+    i = int(np.searchsorted(ends, t, side="right"))
+    wps = list(plan.waypoints)
+    for k in range(i, len(wps)):
+        if wps[k].label not in _ALONG_LABELS:
+            break
+        p = np.asarray(wps[k].pos, float)
+        d = p - pivot
+        r = math.hypot(d[0], d[2])
+        u = np.array([d[0] / r, 0.0, d[2] / r])
+        wps[k] = replace(wps[k], pos=tuple(float(v) for v in p + shift * u))
+    plan.waypoints = wps
+    print(f"clampdemo: hand {shift * 1000:+.1f} mm along the handle from the plan; the rest of this stroke follows",
+          flush=True)
 
 
 def install() -> None:
@@ -267,10 +326,14 @@ def install() -> None:
         if self._task is None or not hasattr(self._task.module, "plan_from_image_hook"):
             return plain_act(self, observation)
         t = float(observation.state_time)
+        if self._plans and "left" in self._plans:
+            _register_grip(self, observation, t)
+        labels = {}
         if self._plans:
             parts = []
             for arm, plan in self._plans.items():
                 pos, _, finger, label = plan.target(t)
+                labels[arm] = label
                 if _PLAN_LOG is not None:
                     parts.append(f"{arm}=({pos[0]:.4f},{pos[1]:.4f},{pos[2]:.4f}) f={finger:.4f} [{label}]")
             if _PLAN_LOG is not None:
@@ -293,6 +356,11 @@ def install() -> None:
             if SAG_MODE == "cart":
                 for arm, idx in (("left", np.r_[0:6]), ("right", np.r_[7:13])):
                     if not np.all(np.isin(idx, arm_idx)):
+                        continue
+                    if labels.get(arm) in UNWIND:  # the hand has let go: its built-up push runs down
+                        self._clamp_off[idx] *= UNWIND_RATE
+                        continue
+                    if labels.get(arm) in HOLD_OFF:  # taking the wrench off the nut: no new push
                         continue
                     base = self._bases[arm]
                     p_plan, r_plan = ik.tcp_pose(planned[idx], base)

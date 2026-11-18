@@ -147,6 +147,9 @@ class Body(Box):
     start_xyzw: tuple[float, float, float, float] | None = None  # the starting orientation, if not just ``yaw``
     ignore: tuple[str, ...] = ()  # names of bodies (earlier in OBJECTS) this one never collides with
     slick: bool = False  # True: contacts with this body take the lower of the two frictions (a smooth, slick surface)
+    inertia: tuple[float, float, float] | None = None  # principal moments (kg m^2) about the body's x, y, z axes;
+    #                                                    None: PhysX computes them from the shapes
+    max_ang_vel: float | None = None  # rad/s: PhysX caps the body's angular speed here (None: its default)
 
     @staticmethod
     def build(name: str, pos, mass: float, shapes, yaw: float = 0.0, color: Color = (0.6, 0.6, 0.6), **kw) -> "Body":
@@ -744,6 +747,9 @@ def _spawn_body(prim_path: str, cfg, translation=None, orientation=None, **kwarg
     mass_api.CreateMassAttr(float(spec.mass))
     if spec.com is not None:
         mass_api.CreateCenterOfMassAttr(Gf.Vec3f(*[float(v) for v in spec.com]))
+    if spec.inertia is not None:
+        mass_api.CreateDiagonalInertiaAttr(Gf.Vec3f(*[float(v) for v in spec.inertia]))
+        mass_api.CreatePrincipalAxesAttr(Gf.Quatf(1.0, 0.0, 0.0, 0.0))
     if spec.ignore:  # a joint's own collisionEnabled=False is not applied to a joint switched on while running
         parent = prim_path.rsplit("/", 1)[0]
         pairs = UsdPhysics.FilteredPairsAPI.Apply(prim).CreateFilteredPairsRel()
@@ -754,6 +760,8 @@ def _spawn_body(prim_path: str, cfg, translation=None, orientation=None, **kwarg
     rb.CreateSolverPositionIterationCountAttr(int(spec.solver_iterations))
     rb.CreateLinearDampingAttr(float(spec.damping[0]))
     rb.CreateAngularDampingAttr(float(spec.damping[1]))
+    if spec.max_ang_vel is not None:
+        rb.CreateMaxAngularVelocityAttr(math.degrees(float(spec.max_ang_vel)))  # USD takes deg/s
 
     for i, shape in enumerate(spec.shapes):
         if isinstance(shape, BoxShape):
