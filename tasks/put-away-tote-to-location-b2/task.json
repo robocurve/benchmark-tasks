@@ -1,0 +1,21 @@
+{
+  "title": "Put a tote away in rack location B2, read from the rack's row tape and bay dots",
+  "category": "Impact on jobs",
+  "keywords": [
+    "warehouse",
+    "put-away",
+    "storage location",
+    "bin rack",
+    "location label",
+    "hidden rule"
+  ],
+  "instruction": "Put the tote away in location B2 of the bin rack.",
+  "context": "Put-away, carrying received stock to the storage location its label calls for and setting it into that location, is a warehouse put-away associate's core operation; stock put away in the wrong location is lost to the inventory system until found. The location code must be read from the rack's own markings, as associates do: rows are marked by coloured tape along the bins' front edges (row A red, row B blue) and bays by tape dots on the floor in front of them (one, two, three). Neighbouring locations are empty and look the same.",
+  "setup": "Positions are measured on the table from the point midway between the two arm bases, which stand 61 cm apart: forward means away from the arms, left and right as seen from behind the arms. Bin rack (rack_step, row_*): blue plastic bins in two rows of three bays, each bin 9 cm forward x 8.5 cm across inside, with 6 mm walls 3 cm tall above a 1 cm floor, fixed to the table. Row A stands on the table, centred 22 cm forward; row B stands on a 4 cm grey steel step directly behind it, centred 31.6 cm forward. Bays are centred 9.1 cm left (bay 1), on the centre line (bay 2) and 9.1 cm right (bay 3). Row tape (row_A_tape red, row_B_tape blue) runs along the top of each row's front wall. Bay dots (bay_N_dot_*): yellow 1 cm squares on the table 1.5 cm in front of row A: one in front of bay 1, two in front of bay 2, three in front of bay 3. Stored totes (stored_A1, stored_B3): grey, already in locations A1 and B3. Tote to put away (tote): orange, 60 (forward) x 55 x 50 mm tall, 250 g, standing on the table at 14 cm forward and 27 cm left. Nothing else is on the table.",
+  "scoring": "The tote is in a location when its centre lies inside that bin's inside rectangle seen from above less than 1.5 cm above where it would rest on the bin floor; still means its centre moved less than 5 mm over the last 0.3 s. Score at the end of the trial: 0.25 once the tote has been lifted 3 cm off the table, plus 0.25 once it has been over B2 (centre inside B2's rectangle seen from above, at any height), plus 0.25 while it is in B2 and still (0 to 0.75). 1.0 when the tote is in B2, still, no gripper tool point within 4 cm of its centre and both stored totes are in their locations, held for 1 s (the trial then ends; completed less than 1 s before the run limit scores 0.75). 0 if the tote ever rests in a wrong location (in any other location and still), a stored tote is knocked out of its location, or any tote falls off the table.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Stand the orange tote back on its marked receiving spot, and the two grey totes in A1 and B3; the rack stays fixed.",
+  "fidelity": "Approximate. The rack and bins are fixed rigid boxes; location labels are modelled as coloured tape and dots rather than printed codes. Totes are rigid boxes with real small-parts-tote proportions scaled to the gripper. Contacts and grasps are PhysX rigid-body contacts with default friction.",
+  "scores": "Dream-1 run: 0.0 (tote not lifted; hit the 120 s step limit); demo: 1.0 (tote put away in B2, stored totes undisturbed)",
+  "media": "M-VJTCSG"
+}
