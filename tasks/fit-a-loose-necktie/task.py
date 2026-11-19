@@ -5,7 +5,7 @@ FEM. Run with run.py so every policy receives the same model and reset.
 """
 from yam_arena.task_file import Box,Cylinder
 SCENE='station'
-INSTRUCTION='Finish the loose necktie: snug the knot, slide it up to the collar using the narrow blade, and leave both blades neat with your hands clear. The collar form is rigid plastic; there is no person.'
+INSTRUCTION='Finish the pre-wrapped necktie: pass the wide blade down through the front loop, snug the knot, slide it up using the narrow blade, and leave both blades neat with hands clear. The collar is a rigid practice form, not a person.'
 SCORE_OVER='end'
 OBJECTS=[
     Cylinder('neck',pos=(.40,0.,1.25),radius=.055,height=.10,color=(.92,.92,.90)),

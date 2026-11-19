@@ -1,7 +1,8 @@
-"""Reduced sliding-friction model of an ALREADY THREADED necktie.
+"""Reduced ribbon-threading and sliding-friction model of a pre-wrapped necktie.
 
-This is not a knot-tying or full cloth solver. The prepared knot keeps its
-topology. Closing fingers can capture visible material, and relative motion
+The loose wide blade must pass through the open front sleeve. This is not
+a full cloth solver. Only after that passage does the prepared wrap keep its
+threaded topology. Closing fingers can capture visible material, and relative motion
 between a held knot and wide blade snugs the wrap. Holding the narrow blade
 then allows the knot to slide up; pulling the wide blade cannot perform that step.
 The neckband, wrap and two tails share a fixed 1.26 m material budget. Pulling
@@ -11,6 +12,7 @@ No target pose, score, action label or elapsed trial time drives this model.
 """
 from dataclasses import dataclass, field
 import numpy as np
+from ribbon_thread import LooseBlade,N
 
 NECK=np.array([.40,0.,1.25]);RADIUS=.064;LENGTH=1.26
 KNOT_X=.319;KNOT_Z=1.09;WIDE_LENGTH=.25;WRAP_LENGTH=.32
@@ -41,6 +43,17 @@ class Tie:
     events: list=field(default_factory=list)
     reaction_forces: dict=field(default_factory=dict)
     sliding_work_j: float=0.
+    threaded: bool=False
+    wide_base: float=.33
+    wrap_base: float=.24
+    loose: object=None
+
+    def __post_init__(self):
+        if self.loose is None:
+            self.loose=LooseBlade(self.center)
+            if not self.threaded:
+                for _ in range(80):self.loose.advance()
+
 
     @property
     def slack(self):return max(0.,.05-self.drawn)
@@ -49,11 +62,11 @@ class Tie:
     @property
     def center(self):return np.array([KNOT_X,self.y,self.z])
     @property
-    def wide_length(self):return WIDE_LENGTH+self.drawn
+    def wide_length(self):return self.wide_base+self.drawn
     @property
-    def narrow_length(self):return LENGTH-neck_length(self.z,self.y)-(WRAP_LENGTH-self.drawn)-self.wide_length
+    def narrow_length(self):return LENGTH-neck_length(self.z,self.y)-(self.wrap_base-self.drawn)-self.wide_length
     @property
-    def wide_root(self):return self.center+[-.006,0.,-self.half_height]
+    def wide_root(self):return self.center+[-.006,0.,-self.half_height] if self.threaded else self.loose.root
     @property
     def narrow_root(self):return self.center+[.008,0.,-self.half_height]
 
@@ -61,6 +74,9 @@ class Tie:
         """Visible sample points used for contact, independent of the policy."""
         angle=np.linspace(0,2*np.pi,64,endpoint=False);rx=.018+.06*self.slack;ry=.026+.22*self.slack
         knot=np.array([self.center+[rx*np.cos(t),ry*np.sin(t),h] for h in [-.012,0.,.012] for t in angle])
+        if not self.threaded:
+            points,distances,ids=self.loose.samples()
+            return knot,np.repeat(points,5,axis=0)+np.tile([[0,y,0] for y in [-.012,-.006,0,.006,.012]],(len(points),1)),np.repeat(distances,5)
         # Material coordinate is distance from the tip, retained by a grasp.
         samples=[];coordinates=[]
         for distance in np.linspace(.02,max(.021,self.wide_length-.03),48):
@@ -102,6 +118,9 @@ class Tie:
             self.grips[side]=dict(part=part,local=local.copy(),last=point.copy(),distance=float(coordinates[i]) if part!='knot' else None,
                 offset=point-self.center if part=='knot' else point-(root+direction*(length-coordinates[i])),
                 last_angle=float(np.arctan2(h['rotation'][1,0],h['rotation'][0,0])))
+            if part=='wide' and not self.threaded:
+                node=int(np.clip(round((.33-self.grips[side]['distance'])/(.33/(N-1))),1,N-1))
+                self.grips[side]['offset']=point-self.loose.points[node]
             self.events.append(dict(event='grasp',side=side,part=part))
         motions={}
         for side,g in list(self.grips.items()):
@@ -126,6 +145,25 @@ class Tie:
                         f=-3.*np.tanh(speed/.002)*relative/np.linalg.norm(relative)
                         self.reaction_forces[side]+=f;self.reaction_forces[ks]-=f
                         self.sliding_work_j+=float(-f@relative)
+        if not self.threaded:
+            grip=None;wide_motion=motions.get('wide')
+            if wide_motion:
+                delta,target,g,h=wide_motion[0]
+                index=int(np.clip(round((.33-g['distance'])/(.33/(N-1))),1,N-1))
+                grip=(index,target-g['offset'])
+            complete=self.loose.advance(grip,dt)
+            if self.loose.max_stretch>1.15:
+                self.failed=True;self.grips.clear();self.events.append(dict(event="threading_constraint_overload"));return
+            if complete and grip is not None:
+                exit_point=self.center+[-.006,0.,-self.half_height]
+                vector=grip[1]-exit_point
+                self.wide_base=float(np.linalg.norm(vector)+g['distance'])
+                self.wrap_base=.57-self.wide_base
+                self.wide_direction=vector/np.linalg.norm(vector)
+                self.threaded=True
+                self.events.append(dict(event='wide_blade_passed_through_front_loop',free_length_m=self.wide_base))
+            self.released_s=self.released_s+dt if not self.grips else 0.
+            return
         dz=0.
         if motions.get('knot'):
             delta=np.mean([v[0] for v in motions['knot']],axis=0)
@@ -177,18 +215,18 @@ class Tie:
         self.released_s=self.released_s+dt if not self.grips else 0.
 
     def measures(self):
-        wide_tip=self.wide_root+self.wide_direction*self.wide_length
+        wide_tip=self.wide_root+self.wide_direction*self.wide_length if self.threaded else self.loose.points[-1]
         narrow_tip=self.narrow_root+self.narrow_direction*self.narrow_length
-        return dict(knot_width_mm=(.052+.44*self.slack)*1000,
+        return dict(threaded=self.threaded,threading_entered=self.loose.entered,threading_exited=self.loose.exited,threading_max_stretch=self.loose.max_stretch,knot_width_mm=(.052+.44*self.slack)*1000,
             knot_height_mm=2*self.half_height*1000,knot_top_below_collar_mm=max(0.,1.2-self.z-self.half_height)*1000,
             knot_offset_mm=abs(self.y)*1000,wide_tip_below_collar_mm=(1.2-wide_tip[2])*1000,
             narrow_tip_above_wide_mm=(narrow_tip[2]-wide_tip[2])*1000,narrow_lateral_offset_mm=abs(narrow_tip[1]-wide_tip[1])*1000,
             wide_twist_deg=abs(np.degrees(self.wide_twist)),released_s=self.released_s,
             failed=self.failed,sliding_work_j=self.sliding_work_j,drawn_mm=self.drawn*1000,neckband_length_mm=neck_length(self.z,self.y)*1000,
-            material_length_m=neck_length(self.z,self.y)+WRAP_LENGTH-self.drawn+self.wide_length+self.narrow_length)
+            material_length_m=neck_length(self.z,self.y)+self.wrap_base-self.drawn+self.wide_length+self.narrow_length)
 
 def score(m):
-    if m['failed'] or m['released_s']<5.-1e-8:return 0.
+    if not m['threaded'] or m['failed'] or m['released_s']<5.-1e-8:return 0.
     if m['knot_width_mm']>70. or m['knot_height_mm']>70. or m['knot_top_below_collar_mm']>60.:return 0.
     fitted=(m['knot_top_below_collar_mm']<=20. and m['knot_offset_mm']<=20.
             and 350.<=m['wide_tip_below_collar_mm']<=440.

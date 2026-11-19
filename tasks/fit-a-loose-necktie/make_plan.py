@@ -9,12 +9,13 @@ def yaw(degrees):
 def build():
     from yam_arena import ik,station
     from yam_arena.constants import READY,SHOULDER,WRIST,GRIPPER,FINGER_OPEN
-    t=Tie();left=t.wide_root+[0,0,-(t.wide_length-.06)];right=t.center+[-(.018+.06*t.slack),0,0]
+    t=Tie();left=t.loose.points[30].copy();right=t.center+[-(.018+.06*t.slack),0,0]
     lr,rr=yaw(180),yaw(0);lp=left+.008*lr[:,2];rp=right+.008*rr[:,2]
-    lf=lp+[0,0,-.050]
-    compact=Tie(drawn=.05);narrow=compact.narrow_root+compact.narrow_direction*(compact.narrow_length-.025)
+    thread_finish=np.array([.319,.025,.832])+.008*lr[:,2]
+    lf=thread_finish+[0,0,-.050]
+    compact=Tie(drawn=.05,threaded=True,wide_base=.25,wrap_base=.32);narrow=compact.narrow_root+compact.narrow_direction*(compact.narrow_length-.025)
     np0=narrow+.008*lr[:,2]
-    fitted=Tie(z=t.z+.08,y=0.,drawn=.05)
+    fitted=Tie(z=t.z+.08,y=0.,drawn=.05,threaded=True,wide_base=.25,wrap_base=.32)
     nfinal=fitted.narrow_root+np.array([0,0,-(fitted.narrow_length-.025)])+.008*lr[:,2]
     rf=rp+[0,-.025,.080]
     a=np.r_[READY,1.,READY,1.];frames=[];audit=[]
@@ -24,6 +25,10 @@ def build():
         (3.,'approach the loose knot',{'right':(rp-.08*rr[:,2],rr,.8)},'joint'),
         (2.,'enclose the outer wrap',{'right':(rp,rr,.8)},'cartesian'),
         (1.,'hold the knot',{'right':(rp,rr,.1)},'cartesian'),
+        (5.,'lift the free wide blade outside the loop',{'left':(np.array([.249,.025,1.20])+.008*lr[:,2],lr,.1)},'cartesian'),
+        (3.,'bring the free tip over the front loop',{'left':(np.array([.319,.025,1.20])+.008*lr[:,2],lr,.1)},'cartesian'),
+        (4.,'feed the wide tip down through the front loop',{'left':(np.array([.319,.025,1.03])+.008*lr[:,2],lr,.1)},'cartesian'),
+        (5.,'draw the wide blade through the loop',{'left':(thread_finish,lr,.1)},'cartesian'),
         (4.,'snug the outer wrap with wide blade',{'left':(lf,lr,.1)},'cartesian'),
         (1.,'release wide blade',{'left':(lf,lr,.8)},'cartesian'),
         (2.,'clear the wide blade',{'left':(lf-.08*lr[:,2],lr,.8)},'cartesian'),

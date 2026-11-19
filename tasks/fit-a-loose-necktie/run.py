@@ -7,8 +7,8 @@ HERE=Path(__file__).resolve().parent
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--mode',choices=['demo','dream','hold'],default='demo');p.add_argument('--steps',type=int);p.add_argument('--out',type=Path,required=True);a=p.parse_args()
-    plan=json.loads((HERE/'demo-plan.json').read_text());steps=a.steps or (len(plan['frames']) if a.mode=='demo' else 1200)
-    if not 1<=steps<=1200 or (a.mode=='demo' and steps>len(plan['frames'])):p.error('Invalid action count')
+    plan=json.loads((HERE/'demo-plan.json').read_text());steps=a.steps or (len(plan['frames']) if a.mode=='demo' else 1800)
+    if not 1<=steps<=1800 or (a.mode=='demo' and steps>len(plan['frames'])):p.error('Invalid action count')
     a.out.mkdir(parents=True,exist_ok=False)
     source=a.out/'source';source.mkdir()
     import shutil

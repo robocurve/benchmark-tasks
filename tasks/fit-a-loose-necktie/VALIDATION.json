@@ -1,27 +1,38 @@
 {
-  "status": "validated_revision",
+  "status": "validated_submission",
   "submission_ready": true,
-  "date": "2026-11-18",
-  "review_addressed": "Snug with the wide blade, release and regrasp the narrow blade, then slide and centre the knot; both stages shown.",
+  "date": "2026-11-19",
+  "review_addressed": "Start before wide-blade passage; require actual entry, exit and draw-through before snugging and narrow-blade fitting.",
+  "runtime_sources_match": true,
+  "visual_review_passed": true,
+  "media_uploaded": true,
+  "independent_replay": {
+    "demo": 0.0,
+    "dream": 0.0
+  },
   "demo": {
     "score": 1.0,
-    "steps": 810,
-    "wall_seconds": 342.1022324789956,
+    "steps": 1150,
+    "wall_seconds": 846.4180697339762,
     "measurements": {
-      "knot_width_mm": 52.13262121547495,
-      "knot_height_mm": 52.03014118533522,
-      "knot_top_below_collar_mm": 5.98707007231614,
-      "knot_offset_mm": 0.26652451108847597,
-      "wide_tip_below_collar_mm": 357.7157994042992,
-      "narrow_tip_above_wide_mm": 73.86599958907003,
-      "narrow_lateral_offset_mm": 5.421010862427522e-17,
-      "wide_twist_deg": 0.1974234302357195,
+      "threaded": true,
+      "threading_entered": true,
+      "threading_exited": true,
+      "threading_max_stretch": 1.1458696884186175,
+      "knot_width_mm": 52.0,
+      "knot_height_mm": 52.0,
+      "knot_top_below_collar_mm": 4.415590443355845,
+      "knot_offset_mm": 1.436782326701823,
+      "wide_tip_below_collar_mm": 357.82852803672347,
+      "narrow_tip_above_wide_mm": 73.19013551389497,
+      "narrow_lateral_offset_mm": 0.0,
+      "wide_twist_deg": 1.2152545778853487,
       "released_s": 7.549999999999981,
       "failed": false,
-      "sliding_work_j": 1.8960293137820112,
-      "drawn_mm": 49.69858814664785,
-      "neckband_length_mm": 464.1674114424221,
-      "material_length_m": 1.26
+      "sliding_work_j": 5.529327043572715,
+      "drawn_mm": 71.32872474092633,
+      "neckband_length_mm": 461.77719792052744,
+      "material_length_m": 1.2600000000000002
     },
     "events": [
       {
@@ -33,6 +44,10 @@
         "event": "grasp",
         "side": "right",
         "part": "knot"
+      },
+      {
+        "event": "wide_blade_passed_through_front_loop",
+        "free_length_m": 0.2300842128524413
       },
       {
         "event": "release",
@@ -58,23 +73,21 @@
   },
   "dream": {
     "score": 0.0,
-    "steps": 1200,
-    "wall_seconds": 1318.9322649909955,
-    "dream_requests": 146,
+    "steps": 1800,
+    "wall_seconds": 1232.812987176003,
+    "dream_requests": 221,
     "dream_sessions": {
-      "session_count": 29,
-      "transport": "loopback_ssh_bridge"
+      "session_count": 1
     }
   },
-  "independent_replay": {
-    "demo": 1.1368683772161603e-13,
-    "dream": 0.0
-  },
   "media_sha256": {
-    "tie-demo.mp4": "08ccacf0c8e23774dc73c79c10092094f1fc127eeae86cea208f45e62aa1e6d9",
-    "tie-dream.mp4": "485e348ded307853db8314ad326fda5d5627023bb3c5e98381880e1d9c2285c2",
-    "setup.png": "e781aff41d21355b9f69b31035b78c883cf50dfc226ad1b5e6f41eba01a7d9d4"
+    "dream.mp4": "b9292050e0102b9971c213c72e9f933498f97aa9afd257bc8ac4f173d24a4c55",
+    "demo.mp4": "4539d3c7c303af46ff9da71229eb697a110005b14f73be8654b1d454edcb39b7",
+    "setup.png": "2f28eb52f677bc19e28629031cfaf74f4065535c8d8ab158e3c1ad64c622d29d"
   },
-  "limitations": "Prepared topology, finite-volume grasp and quasistatic drape; uncalibrated 3 N sliding resistance. Not full tying or a real-hardware validation.",
-  "visual_review": "Native start/end and intermediate front, side and rear views inspected; all frames retained in normal-speed media."
+  "limitations": "Prepared front wrap, gravity centreline and reduced sliding model; approximate finite grasps and 3 N resistance. No full cloth simulation or real-hardware validation.",
+  "visual_review": "Native front, side and rear views checked at reset, threading, snugging, fitting and released finish; complete normal-speed videos retained.",
+  "remaining_gates": [
+    "PR ingestion confirmation"
+  ]
 }
