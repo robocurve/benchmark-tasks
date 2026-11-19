@@ -1,0 +1,23 @@
+{
+  "title": "Scrape diced carrot off a cutting board into a sheet pan: one arm holds the board, the other drives the bench scraper",
+  "category": "Impact on jobs",
+  "keywords": [
+    "food prep",
+    "kitchen",
+    "cutting board",
+    "bench scraper",
+    "sheet pan",
+    "two arms",
+    "tool use",
+    "holding"
+  ],
+  "instruction": "Scrape all the diced carrot off the cutting board into the sheet pan with the bench scraper, holding the board still, then put the scraper back in its holder and let go of the board.",
+  "context": "Moving chopped vegetables from the board to a sheet pan with a bench scraper is a core, repeated prep operation for restaurant cooks (about 1.4 million US workers, BLS OEWS May 2024). The difficulty is physical and two-handed: the 3.8 cm board slides on the worktop when the scraper is dragged across it pressed down, so one arm must press it down and hold it while the other drags a 15 cm bench scraper through 20 scattered pieces and off the board's edge into the pan, keeping the blade's edge down so no piece slips under it. Full-size objects: an end-grain board, a quarter sheet pan, a bench scraper.",
+  "setup": "Positions are measured on the table from the point midway between the two arm bases, which stand 61 cm apart: forward means away from the arms, left and right as seen from behind the arms. Cutting board (cutting_board, loose, 1600 g): end-grain maple, 23 cm (forward) x 30 cm x 3.8 cm thick, lying flat, centred 27 cm forward, 6 cm left; its right edge 9 cm right; friction on the table 0.25. Sheet pan (sheet_pan, loose, 400 g): a quarter sheet pan, 33 cm (forward) x 23 cm outside with a 2.5 cm rim, butted against the board's right edge, centred 27 cm forward, 20.9 cm right. Bench scraper (bench_scraper, loose, 200 g): a stainless blade 15 cm long x 7.5 cm tall with a wooden handle along its top edge, standing blade down in a utensil holder (utensil_holder, fixed: a 4 cm block with a 6 mm slot whose top 2 cm flares to 3 cm) 22 cm forward, 38.5 cm right, its blade running forward. Diced carrot (carrot_00 to carrot_19, loose): 20 pieces of 10 mm, 1 g each, scattered on the board between 21.9 and 32.4 cm forward and 0.5 cm left and 7.1 cm right, at least 1.7 cm apart (exact positions in task.py). Nothing else is on the table.",
+  "scoring": "A piece is in the pan when its centre, in the pan's own frame, lies inside the pan's walls and no higher than 1 cm above the rim. The bench scraper is back in its holder when its bottom is within 2.5 cm of the slot's middle along the slot and 1 cm across it, below the holder's top, and it stands within 15 degrees of upright. Score at the end of the trial: 0.6 x (pieces in the pan) / 20 (0 to 0.6). 1.0 when at least 18 of the 20 pieces are in the pan, the scraper is back in its holder, the board, the pan, the scraper and every piece have stopped moving (under 5 mm over the last 0.3 s), and no gripper tool point is within 5 cm of the scraper's handle or the board's top surface, held for 1 s (the trial then ends; completed less than 1 s before the run limit, the partial score stands).",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lay the board and pan back in place, the carrot pieces back on the template, and the scraper in its holder.",
+  "fidelity": "Close to real. Full-size rigid board, pan and scraper; the carrot pieces are rigid 10 mm cubes (real dice are slightly moist and can stick to the blade). PhysX rigid-body contacts, board-to-table friction 0.25.",
+  "scores": "Dream-1 run: 0.0 (task not completed; hit the 120 s step limit); demo: 1.0 (one arm held the board down while the other scraped at least 18 of 20 carrot pieces into the sheet pan and stood the scraper back in its holder; held 1 s)",
+  "media": "M-HYS9TA"
+}
