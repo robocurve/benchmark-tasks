@@ -1,0 +1,21 @@
+{
+  "title": "Pack the sound apples into a pocket tray, one per pocket, leaving the bruised one out",
+  "category": "Impact on jobs",
+  "keywords": [
+    "packhouse",
+    "fruit packing",
+    "grading",
+    "pocket tray",
+    "look-alike",
+    "quality defect"
+  ],
+  "instruction": "Pack the good apples into the pocket tray, one per pocket.",
+  "context": "Grading fruit by eye and packing sound fruit into pocket trays is a packhouse packer's core operation; a bruised apple in a retail pack is the quality defect packing lines exist to prevent. The bruised apple here differs from the sound ones only in colour.",
+  "setup": "Positions are measured on the table from the point midway between the two arm bases, which stand 61 cm apart: forward means away from the arms, left and right as seen from behind the arms. Field crate (crate_floor, crate_lip_*): wood, inside 32 cm forward x 22 cm across, a 2 cm lip around a 1 cm floor, centre 25 cm forward and 23 cm left, fixed to the table. Sound apples (apple_1 to apple_4): red, 70 mm diameter, 180 g each, resting on the crate floor at 15 cm forward and 18 cm left, 15 forward and 28 left, 25 forward and 28 left, and 35 forward and 28 left. Bruised apple (bruised_apple, the cull): dull brown-red, same size and mass, at 25 cm forward and 18 cm left. Pocket tray (tray_floor, tray_wall_*, tray_divider_*): pulp, 21 x 21 cm, a 1 cm floor with 1 cm-thick walls and dividers 3 cm tall forming four 9 cm square pockets, centre 25 cm forward on the centre line between the arms, fixed to the table. Nothing else is on the table.",
+  "scoring": "A sound apple is packed when its centre lies inside a pocket's 9 cm square seen from above, it rests on the tray floor (its centre less than 5 cm above it), it is still (under 1 cm/s and 0.5 rad/s), and no other apple shares that pocket. Score at the end of the trial: 0.2 per packed sound apple (0 to 0.8). 1.0 when all four sound apples are packed one per pocket, none is still held (no gripper tool point within 2 cm of any of them) and the bruised apple is not over the tray, held for 1 s (the trial then ends; a pack completed less than 1 s before the run limit scores 0.8). 0 if the bruised apple is ever over the tray (packed as a cull) or any apple falls off the table.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Return the five apples to their marked spots in the crate (the bruised one in the middle of the near row); the crate and tray stay fixed. Use the same five apples so the bruised one stays the only cull.",
+  "fidelity": "Approximate. Apples are rigid spheres with real apples' size and mass (no stems, no give); the bruise is shown as a colour difference over the whole apple; the crate and pulp tray are fixed rigid boxes with flat pocket floors instead of moulded cups. Contacts and grasps are PhysX rigid-body contacts with default friction.",
+  "scores": "Dream-1 run: 0.0 (no apple packed; hit the 120 s step limit); demo: 1.0 (all four good apples packed, bruised apple left in the crate)",
+  "media": "M-GTP6W6"
+}
