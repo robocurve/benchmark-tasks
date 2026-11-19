@@ -64,6 +64,14 @@ STANDOFF_M = 0.04  # robot parts at least this far from the patient
 SUCCESS_HOLD_S = 1.0
 
 
+# the take-back container's printed sign: a white card with a blue band (as pharmacy take-back boxes carry), lying flat
+# on the shelf just behind it (x beyond its far wall); 1.6 x 8 cm, 2 mm thick, fixed
+TAKEBACK_SIGN = [Box("takeback_sign", pos=(CAN_XY[0] + CAN_IN[0] / 2 + WALL + 0.0095, CAN_XY[1], PT + 0.001),
+                     size=(0.016, 0.08, 0.002), color=(0.96, 0.96, 0.95)),
+                 Box("takeback_sign_band", pos=(CAN_XY[0] + CAN_IN[0] / 2 + WALL + 0.0095, CAN_XY[1], PT + 0.0022),
+                     size=(0.007, 0.08, 0.0005), color=(0.10, 0.30, 0.75))]
+
+
 def _walls(tag, xy, inner, h, color):
     out = []
     for n, (dx, dy, sx, sy) in {"n": (0, inner[1] / 2 + WALL / 2, inner[0] + 2 * WALL, WALL),
@@ -74,7 +82,8 @@ def _walls(tag, xy, inner, h, color):
     return out
 
 
-OBJECTS = [PATCH, Box("shelf", pos=(*SHELF_XY, TOP + SHELF[2] / 2), size=SHELF, color=(0.72, 0.58, 0.42)),
+OBJECTS = [PATCH, Box("shelf", pos=(*SHELF_XY, TOP + SHELF[2] / 2), size=SHELF, color=(0.45, 0.30, 0.18)),
+           *TAKEBACK_SIGN,
            *_walls("takeback", CAN_XY, CAN_IN, CAN_H, (0.95, 0.80, 0.10)),
            *_walls("trash", BIN_XY, BIN_IN, BIN_H, (0.35, 0.36, 0.38)),
            PERSON.spec]
