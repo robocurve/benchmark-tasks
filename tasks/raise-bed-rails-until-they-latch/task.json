@@ -1,0 +1,22 @@
+{
+  "title": "Raise both hospital bed side rails until their sprung latch pins snap under them",
+  "category": "Impact on jobs",
+  "keywords": [
+    "nursing",
+    "patient safety",
+    "hospital bed",
+    "side rail",
+    "spring latch",
+    "two arms",
+    "slide"
+  ],
+  "instruction": "Raise both bed rails until they latch, then let go of them.",
+  "context": "Raising both side rails until they latch is a core safety operation for nursing assistants (about 1.35 million US workers, BLS OEWS May 2023). The difficulty is physical: each 400 g rail is lifted straight up 6.5 cm by its top bar past a sprung latch pin whose bevelled underside it pushes back on the way up; only when the rail's bottom edge is above the pin does the pin spring out beneath it, and the rail must then be let down onto the pin rather than released early. Both arms, one rail each, at once.",
+  "setup": "Positions are measured on the table from the point midway between the two arm bases, which stand 61 cm apart: forward means away from the arms, left and right as seen from behind the arms. Bed (bed, fixed): a table-scale training model of a hospital bed, 16 cm forward x 18 cm, frame 5 cm tall with a 3 cm mattress, centred 27 cm forward on the centre line, with four rail guide posts. Side rails (rail_left, rail_right joints): 12 cm long, 5 cm tall, 1 cm thick with a 14 mm top bar, 10 cm either side of the centre line, sliding straight up 6.5 cm, starting down with their tops level with the mattress (slide friction 0.2 N, 400 g). Latch pins (latch_left, latch_right joints): red sprung pins (30 N/m) with a bevelled underside under each rail's raised position, 9 cm up, retracting 1.6 cm. Nothing else is on the table.",
+  "scoring": "A rail is latched when it is up (its travel between 5.9 and 7.2 cm) and its latch pin is sprung out under it (within 3 mm of fully out). Score at the end of the trial: 0.3 per rail latched (0 to 0.6). 1.0 when both rails are latched, nothing moves (under 5 mm or 0.03 over the last 0.3 s) and no gripper tool point is within 4 cm of either rail's top bar, so the pins alone hold the rails, held for 1 s (the trial then ends; completed less than 1 s before the run limit scores 0.6).",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Push each latch pin in and lower its rail to the bottom; the bed stays fixed.",
+  "fidelity": "Approximate. A table-scale training model: the rails are sprung-latch slides on a fixed rigid bed frame; the latch works by contact between the rail and the pin's bevelled tip. No patient. PhysX rigid-body contacts with friction 0.3.",
+  "scores": "Dream-1 run: 0.0 (neither rail lifted; hit the 120 s step limit); demo: 1.0 (both rails lifted past their sprung latch pins and lowered onto them, pins sprung out under both rails, hands clear, held 1 s)",
+  "media": "M-7AWS5B"
+}
