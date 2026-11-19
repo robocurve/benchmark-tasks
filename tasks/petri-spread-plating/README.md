@@ -1,6 +1,5 @@
 # Spread a liquid sample and close an agar plate
 
-Locally completed implementation and model evaluation. Media upload and PR submission are pending.
 Spread plating is a routine manual preparation step in research microbiology. The task isolates handling the lid and standard T-spreader while distributing a finite liquid sample without gouging the gel. A coloured nonliving stand-in permits repeated physical trials; microbial growth and sterile technique are outside this task.
 
 ## Reproduction
@@ -36,12 +35,13 @@ alone is not a successful task result. Preserve every failed attempt separately.
 
 ## Setup and grading
 
-One92×16mm nominal Petri dish:base outer diameter89mm with1mm floor and15mm wall, lid92mm with1mm roof and12mm skirt;86.8mm diameter,5mm thick agar;100µL dyed water initially at its centre. One140×35mm nominal T-spreader with4mm shaft/bar diameter, on three passive rests. Dish centre(330,40,747.5)mm; tool shaft centre(430,-120,803.5)mm. Base28g,lid8g,tool2.1g.
+One92×16mm nominal Petri dish:base outer diameter89mm with1mm floor and15mm wall, lid92mm with1mm roof and12mm skirt;86.8mm diameter,5mm thick agar;100 µL of 2.00 mg/mL Brilliant Blue FCF in water at the centre of the 1.50% w/w plain agar gel. One140×35mm nominal T-spreader with4mm shaft/bar diameter, on three passive rests. Dish centre(330,40,747.5)mm; tool shaft centre(430,-120,803.5)mm. Base28g,lid8g,tool2.1g.
 
 Released closed dish upright on the table and spreader released on its rack, all still for1s:1.0 for at least85% wet coverage of the central80mm circle and at least75% in each quadrant;0.5 for50% overall;0.25 for25%;otherwise0. Any gouged area of1mm² or more, or interarm collision,gives0. Final state.
 
-See `SCORING.md`, `MATERIAL_MODEL.md` and the local review package. The independent copied-source demo, original-image checks and raw score replay
-have passed. The model result is recorded below; the uploaded media ID is intentionally unset until publication.
+For physical trials use NOW Real Food 6410 plain agar in distilled water and Supelco 80717 Brilliant Blue FCF. For each trial use one fresh plate from the timed batch, a dry spreader and a fresh tracer aliquot at 22 ± 1 °C. Apply the central drop and start 10 ± 2 s later with the lid closed. Photograph the opened plate within 10 s after the final hold.
+
+See [physical specimen, tracer preparation and timed reset](PHYSICAL_GRADING.md), [scoring](SCORING.md) and [material model](MATERIAL_MODEL.md).
 
 ## Sources
 
