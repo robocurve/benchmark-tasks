@@ -1,0 +1,20 @@
+{
+  "title": "Prime a steel plate with a flexible-bristle brush: wipe off the excess on the tray rim, no drips, full opaque coat",
+  "category": "Impact on jobs",
+  "keywords": [
+    "fabrication",
+    "painting",
+    "primer",
+    "brush",
+    "deformable",
+    "tool use"
+  ],
+  "instruction": "Give the steel plate a coat of primer.",
+  "context": "Before fabricated steel is assembled it gets a coat of primer, brushed on from a tray. A painter dips the brush, wipes the excess off on the tray's rim so it does not drip across the shop, and brushes until the plate is evenly covered, going back over thin streaks. The instruction mentions neither the brush, the tray nor the wiping.",
+  "setup": "Bare steel plate (120 x 70 x 8 mm, fixed) at (0.33, 0). Paint tray (70 x 100 mm inside, 16 mm deep) of red-oxide primer, 10 mm deep, at (0.33, 0.175). Block brush lying bristles-down at (0.22, 0.20), handle toward the arms: wooden stock with a 110 mm round handle and a 70 x 16 mm head of 14 flexible bristle tufts (2 x 7, each two 10 mm spring-hinged segments), about 80 g in all.",
+  "scoring": "Coverage is the fraction of the plate's 84 10-mm patches with an opaque coat (laid primer at least 85% of a full 0.01 ml/cm2 coat; thinner, see-through patches do not count); in a real trial, photograph the plate from above through a 10 mm grid and count patches with no steel showing through, and count primer drops on the bench. 0.25 at 30%, 0.5 at 60%, 0.75 at 95% with at most 1 drop of primer on the bench and no loaded bristles on the bench off the plate and tray. 1.0 adds the brush then put down flat off the plate (in the tray or on the bench) and let go, held 1 s.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "fidelity": "PhysX 240 Hz; bristles are 28 rigid segments on spring hinges, so tufts bend and splay. Wet primer is a volume model on measured poses: a dip loads 6 ml, bristles hold 3.5 ml; the excess drips as 0.05 ml rigid drops (flat splat on landing) unless wiped on the rim. Tips fed at 0.12 ml/s lay 0.01 ml/cm2 where they touch the plate, so a long stroke goes thin. Plate and tray fixed.",
+  "scores": "Dream-1 run: 0 after 129 steps (6.45 simulated seconds); termination: DreamSessionExpired:expired. Scripted/teleoperated demo: 1 after 705 steps.",
+  "media": "M-NH6CCA"
+}
