@@ -1,0 +1,20 @@
+{
+  "title": "Get exactly one candy out of a PEZ dispenser into a dish: stem held head-down, head tipped back, dispenser put down",
+  "category": "Societal relatability",
+  "keywords": [
+    "candy dispenser",
+    "spring-loaded lid",
+    "hold and push with opposed hands",
+    "light free object",
+    "pour one item"
+  ],
+  "instruction": "Get exactly one candy out of the PEZ dispenser into the white dish, then put the dispenser back down on the table.",
+  "context": "Taking a candy from a PEZ dispenser is a familiar gesture for children and adults: hold the stem and tip the head back with the thumb. The head is a lid on a spring hinge (patent US 2,620,061: \"the lid is automatically returned to the closed position by the spring\"), so the top candy comes out only while the head is held open. The dispenser weighs 22 g: a push on its head with nobody holding the stem just shoves it away, and lying on its back the head cannot open at all. So one hand must lift the stem and hold it tilted head-down over the dish while the other pushes the head back 50 degrees or more and keeps it there until the 15 x 8 x 5 mm candy slides out over the open head and drops; let go early and the spring snaps the head shut on it. Then the head is let go and the dispenser set down.",
+  "setup": "Positions in cm from the midpoint between the arm bases: x forward, y to the robot's left, z up from the table top. (1) PEZ dispenser (plastic, 22 g, loaded with 12 candies), loose, lying on its back along y with its face up: stem 7.8 cm long, 1.9 cm wide, 1.2 cm deep, its foot at y 11.5 and its top at y 3.7, centred on x 15.0; head (3.3 cm wide, 2.4 cm deep, 3.0 cm tall) on a spring hinge at the back of the stem's top, its crown at y 0.7. Candies 15 x 8 x 5 mm, 0.71 g each; the top one sits in its seat under the closed head. (2) White ceramic sauce dish, loose: 10 cm across, 2.5 cm tall, 4 mm walls and floor, 120 g, centred at (15.0, -7.0). Both arms start at the ready pose, grippers open. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Read every control step: the dispenser's pose and head angle, the candy's and the dish's poses, and each finger's collision-hull points. 0 for the rest of the run if the dispenser is dropped (it moves down faster than 0.5 m/s with no finger within 1 cm of it). At the end, a candy counts as in the dish when its centre is within 4.2 cm of the dish's centre, within 1.2 cm above its floor, and it is still. One candy in the dish: 1.0 when the dispenser is set down (its lowest point within 5 mm of the table top), let go (every finger point 2 cm or more from it) and still (under 1 mm of movement in 1 s), otherwise 0.5. Two or more candies: 0.5 when set down and let go, otherwise 0.25. No candy in the dish: 0.1 if the head was tipped back 45 deg or more while the dispenser was 2 cm or more above the table, otherwise 0. A candy on the table counts for nothing. 1.0 is success (held 1 s). Real trial: count the candies in the dish after the run; the head angle, a drop and the set-down are read from the video.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Put back the candy that came out (or reload the stem to 12 with the head tipped back), let the head close, lay the dispenser on its back with its foot at y 11.5 and its axis on x 15, put the empty dish back at (15, -7). Simulation: each trial starts the simulator afresh.",
+  "fidelity": "Rigid bodies, 20 Hz control. The dispenser is boxes with a plain head (no character moulding). Only the top candy is loose: the 11 below and the spring follower are part of the stem body, so in simulation at most one candy can come out (the score for two or more is for real trials). The patent's thrust member is not modelled: the candy slides out under gravity over the open head. Head spring 0.03 N m/rad, candy friction 0.22 (estimates).",
+  "scores": "Dream-1 run: 0.0 (the arms rose and the right gripper hovered over the dish near the dispenser's head; neither gripper touched the dispenser, which stayed on the table with its candy inside); demo: 1.0",
+  "media": "M-Q6KGF4"
+}
