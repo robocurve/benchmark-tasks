@@ -1,0 +1,20 @@
+{
+  "title": "Open a wire dog crate's door: lift and slide back its two slide-bolt latches, then swing it open",
+  "category": "Societal relatability",
+  "keywords": [
+    "dog crate",
+    "slide-bolt latch",
+    "locking tip",
+    "door opening",
+    "pet care"
+  ],
+  "instruction": "Open the dog crate's front door fully, at least 90 degrees, and let go of it.",
+  "context": "Wire crates are where many dogs sleep and travel, and dog owners, kennel and shelter staff and animal caretakers (O*NET 39-2021.00) open them many times a day. The door is held by slide-bolt latches whose locking tip stops a dog from working them open. The maker's instructions (MidWest wire crates): \"Lift the handle 90° so the locking tip will clear the wire on the front panel, then slide the bolt to the left and swing the door open.\" Here an 18-inch crate's door has two such latches, near its top and bottom. Each 3 cm wire-loop handle hangs 1 cm in front of the door: the gripper must pinch it, swing it up through most of a right angle about the bolt (less than about 67 degrees and the bolt will not move), slide it 2 cm or more while keeping it up, do the same 21 cm higher or lower, and then swing the door through 90 degrees about a hinge 25 cm away. Pulled without both latches drawn, the door does not move.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Positions are in cm from the midpoint between the arm bases: x forward, y to the robot's left; heights above the table. An 18-inch folding wire dog crate (45.7 x 30.5 x 35.6 cm, black steel wire, 5 mm frame wires, 3 mm mesh 2.5 cm apart, on a 3 cm grey plastic pan), fixed, its front at x 31, centred on y 0, back at x 76.7. Its front door (0.40 kg steel wire, 25 x 29 cm, 4 to 33 cm up) faces the robot, shut, hinged on its left edge at y 12.8, opening outward to 120 degrees. Two slide-bolt latches on its right edge, 8.5 and 29.5 cm up: each a 4.5 mm steel bolt (25 g) 1 cm in front of the door, its end in a wire keeper on the front frame (y -16.5 to -15); a wire-loop handle (legs 3 cm long, 1.7 cm apart) hangs down at y -8.8. Lifting a handle about 67 degrees or more swings its locking tip clear of the frame wire; the bolt then slides up to 3.2 cm toward the hinge. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Each bolt's slide and turn and the door's angle are read from the simulation (a real trial: ruler and protractor or a top photo), each gripper's centre from the arm's joints. 0 for the rest of the run if the door swings out past 8 degrees while a bolt was still in its keeper (slid back less than 18 mm) when the door was last shut, within 2 degrees (a forced door). Otherwise the best stage reached: 0.25 one bolt slid back 20 mm or more (out of its keeper); 0.5 both; 0.75 the door open 45 degrees or more. 1.0: the door open 90 degrees or more, both grippers' centres 4 cm or more from the door and its handles, the door turning less than 0.5 degrees over 1 s, for 1 s. Doing nothing, or pulling the door with its latches shut, scores 0.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Shut the door, slide both bolts fully into their keepers and let both handles hang down, as in the screenshot. In the simulation each trial starts the simulator afresh (each inspect-robots run does).",
+  "fidelity": "Rigid bodies in Isaac Sim 6.1 (PhysX), 20 Hz control, true size. The bolts slide and turn on joints to the door (guides drawn, not collided) with 120 N s/m drag standing for guide friction; a stub of the door's edge bar beside each bolt catches the dropped tip, so a slid-back bolt stays back. The door size of the 18-inch crate is not published (25 x 29 cm modelled); the latch's plastic Paw Block cover is left out.",
+  "scores": "Dream-1 run: 0.0 (the right gripper went to the latches on the door's right edge again and again but never lifted a handle; the left arm stayed back); demo: 1.0",
+  "media": "M-LW43C7"
+}
