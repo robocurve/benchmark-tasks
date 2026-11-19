@@ -1,0 +1,22 @@
+{
+  "title": "Crack an egg into a bowl: hold it by both ends, tap it on the rim, pull the shell apart over the bowl, tray the shells",
+  "category": "Societal relevance",
+  "keywords": [
+    "bimanual",
+    "kitchen",
+    "cooking",
+    "egg",
+    "pulling apart",
+    "liquid stand-in",
+    "beads"
+  ],
+  "instruction": "Crack the egg into the white bowl: tap its middle on the bowl's rim to crack it, then pull the two halves of the shell apart over the bowl so the yolk and the white drop in. Put both shell halves in the steel scraps tray, none in the bowl, and take both arms back to where they started.",
+  "context": "Cracking an egg is one of the first two-handed jobs in any kitchen: a cracked shell still holds together until both halves are pulled apart, and doing it over the bowl, without dropping shell in, is what a cooking or care robot has to get right.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) A brown hen's egg, 7.1 cm long and 4.8 cm across, lying on its side along the left-right line on a beech egg rest (two rails and an end stop at each end), its middle 27 cm forward and 17 cm right of the centre line. Inside: a 2.1 cm yolk and six 11 mm drops of white. (2) A white glazed ceramic mixing bowl, 15.6 cm across at the rim and 6.5 cm deep, 30 cm forward on the centre line. (3) A stainless-steel scraps tray, 34 x 8.5 cm and 1.6 cm deep, 18 cm forward, centred. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Cracked: at some point the egg's middle came down onto the bowl's rim (within 2 cm of the rim's middle line, its underside within 8 mm of the rim's top, coming down at 3 cm/s or faster); opened: after that, the two shell halves were pulled 8 mm apart, which lets them go. Judged at the end: 1.0 when it was cracked and opened, the yolk and at least 5 of the 6 drops of white are in the bowl (within 7 cm of its middle, below its rim), both shell halves are in the scraps tray, neither is in the bowl, and both arms are back where they started (each TCP within 5 cm of its start); 0.5 when it was cracked and opened and the yolk is in the bowl; 0.25 when it was cracked; else 0.0. The trial ends at the run limit, or once the full score has held for 1 s with the yolk, the white and both shell halves still.",
+  "run_limit": "700 steps (35 s at 20 Hz)",
+  "reset_notes": "A whole egg on its rest; bowl and tray empty.",
+  "fidelity": "Rigid-body simulation (Isaac Sim 6.1, PhysX, 20 Hz control). Simplified: the shell is two rigid halves (80 g each, heavier than a real shell) joined by two prismatic joints along the egg: a stiff one that the task file switches off once the egg's middle is tapped down on the rim, and a membrane that holds with at most 4 N until the halves are 8 mm apart. Yolk and white are a sphere and six beads. Cameras 1280 x 704 (Dream-1 sees 320 x 176).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-LT339M"
+}
