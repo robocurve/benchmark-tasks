@@ -1,0 +1,22 @@
+{
+  "title": "Isolate and drain a filter housing: close both line ball valves, then open the drain valve",
+  "category": "Impact on jobs",
+  "keywords": [
+    "maintenance",
+    "plumbing",
+    "ball valve",
+    "isolation",
+    "lockout",
+    "two arms",
+    "order"
+  ],
+  "instruction": "Isolate the filter for a cartridge change: close both line valves, then open the drain valve.",
+  "context": "Isolating and draining a filter housing before a cartridge change is a core operation for general maintenance and repair workers (about 1.6 million US workers in 2024, BLS employment projections). The difficulty is physical: three quarter-turn ball valves, each with a stiff lever (stem friction 0.15 N m) pushed through a 90-degree arc about its vertical stem, in the order that keeps the drain safe: both isolation valves before the drain. Both arms close one isolation valve each at the same time; the left arm then opens the drain.",
+  "setup": "Positions are measured on the table from the point midway between the two arm bases, which stand 61 cm apart: forward means away from the arms, left and right as seen from behind the arms. Filter line (filter_line, fixed): a copper water line 30 cm long, 2.2 cm across, 5 cm up, running across the table 29 cm forward on two stands, with a blue filter housing (5.6 cm across, 6 cm tall) on the centre line and a drain branch running 5.5 cm from it towards the arms. Line valves (valve_left, valve_right joints): brass quarter-turn ball valves 10 cm either side of the housing with 6.5 cm levers (red grips) along the pipe: open; closing turns a lever 90 degrees about its vertical stem to point at the arms. Drain valve (drain joint): on the branch, its 6.5 cm lever (blue grip) across the branch: closed; opening turns it 90 degrees to point along the branch, at the arms. Stem friction 0.15 N m on all three. Nothing else is on the table.",
+  "scoring": "A valve is turned when its lever has moved at least 80 degrees of its quarter turn: the line valves are then closed, the drain open. Score at the end of the trial: 0.2 per line valve closed plus 0.2 for the drain open (0 to 0.6). 1.0 when all three hold, nothing moves (under 0.03 rad over the last 0.3 s) and no gripper tool point is within 4 cm of a lever's grip, held for 1 s (the trial then ends; completed less than 1 s before the run limit scores 0.6). 0 if the drain is ever opened more than 30 degrees while either line valve is less than 80 degrees closed (draining a live line).",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Turn both line levers back along the pipe (open) and the drain lever back across its branch (closed).",
+  "fidelity": "Approximate. Valves are friction-held hinged levers on a fixed rigid line; the water, its pressure and the ball valves' detents are not modelled, so 'live line' is a scoring rule. PhysX rigid-body contacts with default friction.",
+  "scores": "Dream-1 run: 0.0 (no valve moved; hit the 120 s step limit); demo: 1.0 (both line valves closed before the drain valve was opened, all three levers turned fully, held 1 s)",
+  "media": "M-UGSH8B"
+}
