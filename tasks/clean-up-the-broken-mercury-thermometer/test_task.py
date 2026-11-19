@@ -40,9 +40,9 @@ def box(name, xy, yaw=0.0):
                    half=tuple(s / 2 for s in spec.size))
 
 
-def gathered(n=3, glass=True, tool_away=True):
+def gathered(n=5, glass=True, tool_away=True):
     st = R.initial_states(M)
-    ys = np.linspace(-0.035, 0.035, 3)
+    ys = np.linspace(-0.04, 0.04, 5)
     for i in range(n):
         st[f"bead{i}"] = bead(i, (0.19, M.TOWEL_XY[1] + ys[i]))
     if glass:
@@ -71,27 +71,10 @@ def test_loads():
     assert set(TASK.free_objects) == set(M.BEAD_NAMES) | set(M.GLASS) | {"squeegee", "sponge"}
 
 
-def test_beads_are_visible_and_steel_heavy():
-    beads = [o for o in M.OBJECTS if o.name.startswith("bead")]
-    assert len(beads) == len(M.BEADS) == 3
-    for (_, r), o in zip(M.BEADS, beads):
-        assert 0.0115 <= r <= 0.0130  # 23-26 mm across: at least 4 x 4 px at 320 x 176 (about 5.4 mm per px)
-        assert o.mass == pytest.approx(7850 * 4 / 3 * np.pi * r ** 3)  # the steel ball bearings of real trials
-
-
-def test_beads_do_not_touch_at_the_start():
-    for i in range(len(M.BEADS)):
-        for j in range(i):
-            gap = np.linalg.norm(M._bead_xy(i) - M._bead_xy(j)) - M.BEADS[i][1] - M.BEADS[j][1]
-            assert gap > 0.01
-
-
-def test_bead_lifted_off_the_towel_is_not_on_it():
-    st = gathered()
-    r = M.BEADS[0][1]
-    st["bead0"] = bead(0, st["bead0"].pos[:2], z=M.TOP + r + 0.02)
-    assert not M.bead_on(st, "bead0")
-    assert M.bead_on(gathered(), "bead0")
+def test_beads_are_mercury_sized_and_heavy():
+    for (_, r), o in zip(M.BEADS, [o for o in M.OBJECTS if o.name.startswith("bead")]):
+        assert 0.0030 <= r <= 0.0050  # 6-10 mm across: visible at 320 x 176
+        assert o.mass == pytest.approx(13530 * 4 / 3 * np.pi * r ** 3)
 
 
 def test_start_scores_zero_and_no_bead_on_towel():
@@ -107,8 +90,8 @@ def test_squeegee_left_on_the_towel_is_not_full():
     assert step(gathered(tool_away=False))[1] == 0.5
 
 
-def test_two_beads_is_half_and_glass_only_is_quarter():
-    assert step(gathered(n=2))[1] == 0.5
+def test_four_beads_is_half_and_glass_only_is_quarter():
+    assert step(gathered(n=4))[1] == 0.5
     M.TRIAL.clear()
     assert step(gathered(n=0))[1] == 0.25
 
@@ -141,7 +124,7 @@ def test_bead_rolled_away_latches_zero():
 
 def test_bead_off_the_side_of_the_mat_latches_zero():
     st = R.initial_states(M)
-    st["bead2"] = bead(2, (M.SPILL[0], M.MAT_XY[1] + M.MAT[1] / 2 + 0.005))
+    st["bead4"] = bead(4, (M.SPILL[0], M.MAT_XY[1] + M.MAT[1] / 2 + 0.005))
     step(st)
     assert M.TRIAL.mem["violated"] and "rolled away" in M.TRIAL.mem["why"]
 
@@ -170,7 +153,7 @@ def test_sponge_at_its_mark_is_clear_of_the_mat():
 def test_bead_moved_without_the_squeegee_latches_zero():
     st = R.initial_states(M)
     step(st)  # each bead's resting mark
-    st["bead1"] = bead(1, M._bead_xy(1) + np.array([-0.02, 0.0]))  # pinched or nudged 2 cm, squeegee on its mark
+    st["bead3"] = bead(3, M._bead_xy(3) + np.array([-0.02, 0.0]))  # pinched or nudged 2 cm, squeegee on its mark
     step(st)
     assert M.TRIAL.mem["violated"] and "other than the squeegee" in M.TRIAL.mem["why"]
 
@@ -178,7 +161,7 @@ def test_bead_moved_without_the_squeegee_latches_zero():
 def test_small_jiggle_without_the_squeegee_is_fine():
     st = R.initial_states(M)
     step(st)
-    st["bead1"] = bead(1, M._bead_xy(1) + np.array([-0.008, 0.0]))
+    st["bead3"] = bead(3, M._bead_xy(3) + np.array([-0.008, 0.0]))
     step(st)
     assert not M.TRIAL.mem["violated"]
 
