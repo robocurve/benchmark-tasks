@@ -8,7 +8,21 @@ Use a firm-ripe Hass avocado half, about 100 × 65 × 35 mm, with its 35–40 mm
 
 The simulated board is centred at `(0.34, 0, 0.7565)` metres and the dish at `(0.34, -0.18, 0.7495)`. `geometry.py` specifies the remaining fixed coordinates. Restore the photographed layout with both hands open.
 
-Use a fresh half at 18–22 °C for each trial, from the same grocery batch. Record its size and ripeness. Reject split, overripe or already loose-stoned halves. Clean the board, dish and covers between trials.
+Use a fresh screened half at **18–22 °C**, within **10 minutes of cutting**. Accept fruit halves 95–105 mm long, 60–70 mm wide and 30–40 mm high, with a 35–40 mm stone. Cut around the equator without scoring the stone; separate the halves gently and retain the half in which the stone stays attached. Do not loosen and reseat it. Reject split skin, brown/mushy flesh, a visibly detached stone or a gap around the stone exceeding 1 mm.
+
+### Quick mechanical screening
+
+The evaluator prepares fruit before the robot trial. Use a 0–20 N digital push/pull gauge (0.1 N resolution), a flat-ended 8 mm diameter probe, ruler, a padded cradle and a small silicone-lined stone clamp. These are preparation tools, removed before frame zero. Check the gauge with a 100 g weight (approximately 0.98 N).
+
+1. **Flesh, on the discarded companion half:** support its skin in the cradle. At two locations halfway between skin and empty stone socket, press the probe 3 mm into exposed flesh over 3 seconds. A 3 mm collar on the probe limits depth. Accept peak force **2–5 N at both locations**, with readings differing by at most **1.5 N**. The probed half is discarded; the trial half is not indented. Record both readings.
+2. **Attachment, on three sacrificial fruit per batch:** apply the same flesh and size screen, support the skin without squeezing the flesh, grip only the protruding stone and pull straight out over about 5 seconds. Accept the batch only if all three peak extraction forces are **5–9 N**, no flesh patch over 1 cm² tears away, and the maximum/minimum force ratio is at most **1.5**. Discard these fruit; never reuse their loosened stones. Repeat after two hours or any change of supplier batch, storage temperature or firmness range.
+3. **Each trial stone, without extracting it:** support the fruit in the cradle and clamp only the exposed stone. Ramp an outward **1.0 ± 0.1 N** load over 2 seconds, hold for 1 second, then unload. Watch a close side view with a ruler. Reject a stone that moves over **1 mm**, separates visibly, or does not return to its initial position within **1 mm**. Release the clamp without twisting. Do not probe beneath the stone or cycle this load repeatedly. A rejected half is not reseated or used for a trial.
+
+Steps 1 and 3 take less than a minute per prepared fruit; qualified spare halves can be queued within the ten-minute cut-to-trial window. Keep the uncut batch at the same temperature. Record batch ID, temperature, size, the two firmness readings, the three batch extraction forces and the per-stone proof result. Wash the board, dish, preparation tools and removable food-safe pad covers between fruit.
+
+These numeric windows define a reproducible selection protocol, not universal ripeness constants. **A nondestructive proof load establishes a lower bound, not the exact release force of that stone.** The 5–9 N range is checked on sacrificial batch samples; the companion-half check reduces within-batch variation without touching trial flesh. Real-fruit qualification of these chosen windows has not been measured by the authors. Do not claim that passing the screen proves an individual stone will release at 7 N. If a batch cannot meet the windows, reject it rather than adjusting limits during a comparison.
+
+Testing exposed flesh with an 8 mm probe follows ordinary avocado firmness measurement practice ([World Avocado Congress study](https://www.avocadosource.com/wac3/wac3_p331.pdf)); our shallower depth, force windows and paired-half protocol are task specifications, not results from that study. The study also cautions that even nominally nondestructive compression can soften ripe fruit, which is why the firmness test is confined to the discarded half.
 
 ## Judging
 
