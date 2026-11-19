@@ -1,0 +1,21 @@
+{
+  "title": "Close a vehicle's hood off its prop rod: hold the hood up, stow the rod, then let the hood down and press it shut",
+  "category": "Impact on jobs",
+  "keywords": [
+    "automotive service",
+    "hood",
+    "prop rod",
+    "hold and act",
+    "two arms",
+    "hinge"
+  ],
+  "instruction": "Close the hood: lift it off the prop rod, stow the rod, then let the hood down and press it shut.",
+  "context": "Closing the hood after service is a core, many-times-a-day operation for automotive service technicians and mechanics (about 0.8 million US workers in 2024, BLS employment projections). The difficulty is physical and bimanual: the hood rests on its prop rod, so the rod cannot be stowed until the hood is lifted off it and held; one arm grips the hood's front edge and raises it about 10 degrees while the other pushes the rod over and down through a 90-degree arc onto the fender; then the hood is let down and pressed shut.",
+  "setup": "Positions are measured on the table from the point midway between the two arm bases, which stand 61 cm apart: forward means away from the arms, left and right as seen from behind the arms. Front end (front_end, fixed): a service-training mock-up of a car's engine bay, 18 cm forward x 20 cm x 4 cm, centred 30 cm forward on the centre line, with an engine block inside and a fender ledge along its right side. Hood (hood joint): red, 17 x 19 cm, hinged along the bay's far top edge, standing 30 degrees open, with a chrome handle bar 14 mm across at its front edge 4 cm left and a side tab over the fender (hinge friction 0.01 N m, damping 0.05). Prop rod (prop_rod joint): yellow, 7 cm, pivoting on the fender ledge 28 cm forward and 11.7 cm right, standing straight up under the hood's side tab; it stows lying along the fender towards the arms. Nothing else is on the table.",
+  "scoring": "The rod is stowed when it lies within 9 degrees of flat along the fender; the hood is shut within 3 degrees of closed. Score at the end of the trial: 0.3 for the rod stowed plus 0.3 for the hood shut (0 to 0.6). 1.0 when both hold, nothing moves (under 0.03 rad over the last 0.3 s) and no gripper tool point is within 4 cm of the hood's front edge or middle, held for 1 s (the trial then ends; completed less than 1 s before the run limit scores 0.6).",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Stand the prop rod up and rest the hood's side tab on it, 30 degrees open.",
+  "fidelity": "Approximate. A table-scale training mock-up: the hood is a rigid hinged panel and the prop rod a friction-held hinged rod; the hood latch is not modelled (shut is judged by hinge angle). Contact between the rod's top and the hood's side tab holds the hood up. PhysX rigid-body contacts with default friction.",
+  "scores": "Dream-1 run: 0.0 (hood and prop rod not moved; hit the 120 s step limit); demo: 1.0 (one arm lifted the hood off the rod and held it while the other pushed the rod down flat along the fender; hood lowered and pressed shut, held 1 s)",
+  "media": "M-Q7QK7G"
+}
