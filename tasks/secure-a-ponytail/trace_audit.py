@@ -3,7 +3,8 @@ import hashlib,json
 from pathlib import Path
 import numpy as np
 from model import Model
-from geometry import BODIES,JOINTS,EDGES,REST_LENGTHS
+from geometry import BODIES,JOINTS,EDGES,REST_LENGTHS,M,ELASTIC
+from retention import fresh,advance
 
 LOW=np.tile([-2.61799,0.,0.,-1.69297,-1.5708,-2.0944,0.],2)
 HIGH=np.tile([3.14159,3.66519,3.14159,1.5708,1.5708,2.0944,1.],2)
@@ -21,7 +22,7 @@ def compare(a,b,label):
  else:assert a==b,label
 
 def audit(rows,report):
- m=Model();previous=None;broken=set();release=0.;count=0;peaks=None
+ m=Model();previous=None;broken=set();release=0.;count=0;peaks=None;proof=fresh()
  joints={j['name'] for j in JOINTS};dynamic=[i for i,b in enumerate(BODIES) if not b.get('fixed')]
  for row in rows:
   assert row['step']==count,'Trace skipped/duplicated a control step'
@@ -37,6 +38,9 @@ def audit(rows,report):
   if peaks is None:assert m.peak_stretch+1e-5>=observed,'Initial surface strain'
   else:assert abs(m.peak_stretch-max(peaks,observed))<1e-5,'Surface strain history'
   peaks=m.peak_stretch
+  if count:
+   centre=m.nodes[M:2*M].mean(axis=0);proof,force=advance(proof,centre,release,np.linalg.norm(centre-ELASTIC)>.05)
+   compare(proof,m.retention,'retention history');compare(force,m.proof_force_n,'retention force')
   compare(m.measure(),row['measurements'],'measurements')
   if not count:assert m.score()==0. and not m.failed,'Invalid initial state'
   previous=a;broken=m.broken.copy();count+=1

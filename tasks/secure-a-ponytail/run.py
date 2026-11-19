@@ -32,7 +32,7 @@ def main():
    raise RuntimeError('Use the offline reach audit; native contact dynamics are required for this task.')
   else:
    from isaaclab.app import AppLauncher
-   app=AppLauncher(headless=True,enable_cameras=True).app
+   app=AppLauncher(headless=True,enable_cameras=True,limit_cpu_threads=8).app
    import torch,omni.usd,imageio.v2 as imageio
    from PIL import Image
    from yam_arena import inspect_embodiment as wrapper,scene

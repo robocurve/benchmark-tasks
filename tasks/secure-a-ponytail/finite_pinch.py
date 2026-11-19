@@ -57,7 +57,7 @@ class FinitePinch:
     if j in held:continue
     length=np.linalg.norm(self.m.nodes[M+j]-p)
     rest=np.linalg.norm(POINTS[M+j]-POINTS[M+index])
-    loads.append(3e5*np.pi*.0015**2*max(0.,length/rest-1.))
+    loads.append(4e5*np.pi*.0015**2*max(0.,length/rest-1.))
   return max(loads,default=0.)
  def update(self,hands):
   from pxr import Sdf,Vt,UsdPhysics

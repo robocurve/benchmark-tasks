@@ -40,7 +40,7 @@ BAND_CONTACT_INDICES=list(range(0,M,4))
 for i in BAND_CONTACT_INDICES:
  tangent=(vertices[(i+1)%M]-vertices[i])/lengths[i];radial=centres[i]-ELASTIC;radial/=np.linalg.norm(radial);rot=Rotation.from_matrix(np.column_stack([radial,np.cross(tangent,radial),tangent]))
  shape=dict(kind='capsule',radius=.0015,length=float(lengths[i]),pos=[0,0,0],quat=[0,0,0,1])
- BODIES.append(body(f'band_segment_{i:03d}',centres[i],[shape],mass=.0004/len(BAND_CONTACT_INDICES),quat=rot.as_quat().tolist(),color=(.64,.12,.27),friction=1.2,contact_offset=.0002,torsional_patch_radius=.0015,min_torsional_patch_radius=.001,exclude=['elastic'],visible=False))
+ BODIES.append(body(f'band_segment_{i:03d}',centres[i],[shape],mass=.0004/len(BAND_CONTACT_INDICES),quat=rot.as_quat().tolist(),color=(.64,.12,.27),friction=1.2,contact_offset=.0002,torsional_patch_radius=.0015,min_torsional_patch_radius=.001,exclude=['elastic'],visible=False,external_force=True))
 radial=centres-ELASTIC;radial/=np.linalg.norm(radial,axis=1)[:,None]
 POINTS=np.vstack([centres+offset*radial for offset in [-.0015,0,.0015]])
 TRIS=[]
@@ -74,7 +74,7 @@ def spawn_surface(stage,root):
  UsdPhysics.CollisionAPI.Apply(p);col=PhysxSchema.PhysxCollisionAPI.Apply(p);col.CreateContactOffsetAttr(.002);col.CreateRestOffsetAttr(.0015)
  mat=UsdShade.Material.Define(stage,root+'/elasticMaterial');q=mat.GetPrim()
  for api in ['OmniPhysicsBaseMaterialAPI','OmniPhysicsDeformableMaterialAPI','OmniPhysicsSurfaceDeformableMaterialAPI','PhysxSurfaceDeformableMaterialAPI']:q.ApplyAPI(api)
- for key,value in {'omniphysics:dynamicFriction':.9,'omniphysics:density':1100.,'omniphysics:youngsModulus':3e5,'omniphysics:poissonsRatio':.45,'omniphysics:surfaceThickness':.003,'omniphysics:surfaceBendStiffness':3e5/(12*(1-.45**2)),'physxDeformableMaterial:elasticityDamping':.02,'physxDeformableMaterial:bendDamping':.01}.items():
+ for key,value in {'omniphysics:dynamicFriction':.9,'omniphysics:density':1100.,'omniphysics:youngsModulus':4e5,'omniphysics:poissonsRatio':.45,'omniphysics:surfaceThickness':.003,'omniphysics:surfaceBendStiffness':4e5/(12*(1-.45**2)),'physxDeformableMaterial:elasticityDamping':.02,'physxDeformableMaterial:bendDamping':.01}.items():
   attr=q.GetAttribute(key)
   if not attr:raise RuntimeError('Required elastic material attribute unavailable: '+key)
   attr.Set(value)

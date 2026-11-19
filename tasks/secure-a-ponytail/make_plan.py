@@ -16,5 +16,5 @@ p.add(3,'let the elastic gather the ponytail',{'left':([.300,.026,HEAD[2]-.100],
 p.add(2,'release the elastic',{'left':([.300,.026,HEAD[2]-.100],RL,.18),'right':([.300,-.026,HEAD[2]-.100],RR,.18)})
 p.add(3,'withdraw from the ponytail',{'left':([.25,.11,HEAD[2]-.08],RL,.18),'right':([.25,-.11,HEAD[2]-.08],RR,.18)})
 p.add(1,'open clear of the head',{'left':([.25,.11,HEAD[2]-.08],RL,.6),'right':([.25,-.11,HEAD[2]-.08],RR,.6)})
-p.add(4,'released inspection',{})
+p.add(9,'released inspection and gentle retention test',{})
 print(json.dumps(p.save(Path(__file__).with_name('demo-plan.json'))))
