@@ -1,0 +1,77 @@
+#usda 1.0
+(
+    defaultPrim = "pick"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "pick" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxRigidBodyAPI"]
+)
+{
+    float physics:mass = 0.002
+    custom bool physxRigidBody:enableCCD = 1
+
+    def "Looks"
+    {
+        def Material "plastic"
+        {
+            token outputs:surface.connect = </pick/Looks/plastic/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.42, 0.8, 0.72)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.4
+                token outputs:surface
+            }
+        }
+    }
+
+    def Mesh "handle" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+        int[] faceVertexIndices = [6, 0, 2, 6, 4, 0, 5, 0, 4, 5, 1, 0, 5, 4, 6, 5, 6, 7, 3, 2, 0, 3, 0, 1, 3, 6, 2, 3, 7, 6, 3, 1, 5, 3, 5, 7]
+        rel material:binding = </pick/Looks/plastic>
+        uniform token physics:approximation = "convexHull"
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        point3f[] points = [(-0.0655, -0.003, 0.01), (-0.0655, -0.003, 0.02), (-0.0655, 0.003, 0.01), (-0.0655, 0.003, 0.02), (0.0095, -0.003, 0.01), (0.0095, -0.003, 0.02), (0.0095, 0.003, 0.01), (0.0095, 0.003, 0.02)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "front_arm" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+        int[] faceVertexIndices = [1, 3, 2, 1, 0, 4, 1, 4, 3, 6, 0, 1, 6, 5, 0, 6, 1, 2, 6, 2, 7, 8, 2, 3, 8, 7, 2, 9, 5, 6, 9, 6, 7, 9, 7, 8, 9, 4, 0, 9, 0, 5, 9, 3, 4, 9, 8, 3]
+        rel material:binding = </pick/Looks/plastic>
+        uniform token physics:approximation = "convexHull"
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        point3f[] points = [(-0.0075, -0.001, -0.0005), (-0.0081, -0.001, -0.0005), (-0.0095, -0.001, 0.001), (-0.0095, -0.001, 0.0105), (-0.0075, -0.001, 0.0105), (-0.0075, 0.001, -0.0005), (-0.0081, 0.001, -0.0005), (-0.0095, 0.001, 0.001), (-0.0095, 0.001, 0.0105), (-0.0075, 0.001, 0.0105)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "back_arm" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+        int[] faceVertexIndices = [1, 2, 3, 1, 4, 0, 1, 3, 4, 6, 1, 0, 6, 0, 5, 6, 2, 1, 6, 7, 2, 8, 3, 2, 8, 2, 7, 9, 6, 5, 9, 7, 6, 9, 8, 7, 9, 0, 4, 9, 5, 0, 9, 4, 3, 9, 3, 8]
+        rel material:binding = </pick/Looks/plastic>
+        uniform token physics:approximation = "convexHull"
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        point3f[] points = [(0.0075, -0.001, -0.0005), (0.0081, -0.001, -0.0005), (0.0095, -0.001, 0.001), (0.0095, -0.001, 0.0105), (0.0075, -0.001, 0.0105), (0.0075, 0.001, -0.0005), (0.0081, 0.001, -0.0005), (0.0095, 0.001, 0.001), (0.0095, 0.001, 0.0105), (0.0075, 0.001, 0.0105)]
+        uniform token subdivisionScheme = "none"
+    }
+}
+
