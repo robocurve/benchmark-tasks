@@ -67,8 +67,9 @@ PLATE_XY = np.array([0.30, -0.19])
 PLATE = part("plate", pos=(PLATE_XY[0], PLATE_XY[1], TOP), mass=0.60, friction=0.35, color=CERAMIC,
              cylinders=_PLATE_CYL)
 
-# Sponge cake, 152 mm (6 in) across and 60 mm tall, 0.50 kg, on its plate's centre (rigid in the simulation).
-C_R, C_H = 0.076, 0.060
+# The cake: a 6 x 2.4 in polystyrene cake dummy (152 x 60 mm) under a 1.5 mm skin of non-drying modelling clay, so
+# 155 mm across and 61.5 mm tall, ballasted to 0.50 kg; on its plate's centre (rigid in the simulation).
+C_R, C_H = 0.0775, 0.0615
 CAKE = part("cake", pos=(PLATE_XY[0], PLATE_XY[1], TOP + P_T), mass=0.50, friction=1.0, color=SPONGE,
             cylinders=[((0.0, 0.0, C_H / 2), C_R, C_H, SPONGE, "Z")])
 OBJECTS = [EMPTY, PLATE, CAKE, DOME]
@@ -535,7 +536,7 @@ _DM_RIM = [np.array([_rm * math.cos(a), _rm * math.sin(a), 0.0]) for a in np.lin
 
 
 def _cake_gap_hand(ck, pts):
-    """Smallest distance from any of the finger points to the cake (a 152 x 60 mm cylinder)."""
+    """Smallest distance from any of the finger points to the cake (a 155 x 61.5 mm cylinder)."""
     best = float("inf")
     for q in pts:
         v = np.asarray(ck.to_local(np.asarray(q, float)), float)

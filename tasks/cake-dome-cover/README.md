@@ -10,14 +10,37 @@ moving the dome across afterwards is also allowed.
 Why it matters: covering a cake under a cake dome is an everyday kitchen and party chore, and cafe counters do the same
 with display domes many times a day. The dome hangs from its small knob about 130 mm above its rim, so it sways and the
 arm sags under it while it is held; the plates have to trade places on one spot; and the dome has to come down square
-round the cake, where the rounded wall leaves about 15 mm at the cake's top edge. A touch by a finger or by the dome's
+round the cake, where the rounded wall leaves about 12.5 mm at the cake's top edge. A touch by a finger or by the dome's
 wall marks the icing, so the trial scores 0.
 
 Instruction given to the policy:
 
 `Put the cake where the empty plate is, under the dome, and cover it with the dome. Don't touch the cake.`
 
-## This revision
+## Revision 2 (this push)
+
+The review of this task (TK-LUDCH8, robocurve/benchmark-tasks#2790) asked for three things; each is addressed:
+
+1. **Feasibility: loose icing sugar on the cake can contaminate the shared grippers or rig.** The icing sugar is gone.
+   - **The cake now wears a skin of white non-drying modelling clay** (oil-based plasticine, 1.5 mm thick), rolled
+     between 1.5 mm guide strips and wrapped over the cake dummy's top and side. It is smoothed before each trial.
+   - **Any touch leaves a dent,** as it would in buttercream. The clay neither sheds nor stains, so nothing loose
+     reaches the grippers, plates or table.
+   - **The real-trial check:** photos from above and from the front under a low side light, before and after, plus
+     the video. Any new dent or mark scores 0.
+   - **The simulation matches the skinned cake:** 155 mm across and 61.5 mm tall, not 152 x 60. The steel ballast
+     disc is thinner (3 mm), so the cake is still 0.50 kg. The dome now clears the cake's top edge by about 12.5 mm.
+   - **Both the demo and Dream-1 were rerun** on this geometry (Scores, below).
+2. **Declare the licence for the reused scene and other reused assets.** See Licence and reuse, below.
+3. **Flags.**
+   - *"Duplicate of another team's task: verify its review time and 48-hour ownership window."* TK-QTH3SB was
+     reviewed (not accepted) at 2026-11-16 21:42 UTC, so its revision window closed at 2026-11-18 21:42 UTC. It was
+     not revised by then. This task was submitted after that, at 2026-11-19 00:53 UTC. The program's FAQ opens such an
+     idea to other teams with clear credit to the original, which is given here and in the pull request.
+   - *"Move source attribution out of the policy-facing context."* Done: task.json's `context` no longer names the
+     earlier task or pull request. The credit is in this README and the pull request.
+
+## Revision 1
 
 This task revises board task TK-QTH3SB (robocurve/benchmark-tasks#2318), whose authors did not revise it within the
 48 h window, after which the program opens the idea to other teams. Its scene, demo and `labkit.py` are reused and
@@ -35,11 +58,10 @@ credited to that pull request. The review of TK-QTH3SB asked for four things; ea
 3. **Scoring: the movement-only check could award full credit after a damaging contact.** It cannot now: see 2. Tests
    cover a finger 3 mm from the cake's side (touch), 5 mm above its top (clear), the dome 10 mm off centre (clear), 20 mm
    off centre (touch) and the dome's rim set down on the cake's top (touch).
-4. **Clarity: the perishable sponge cake had no repeatable source or handling.** The cake is now a repeatable stand-in
-   with the same size and mass: a 6 x 2.4 in (152 x 60 mm) round polystyrene cake dummy, as sold for bakery display and
-   cake practice, ballasted to 0.50 kg by a 140 mm steel disc 4 mm thick (0.48 kg) glued under it. Before each trial its
-   top and side are dusted evenly with icing sugar through a sieve, so any touch leaves a visible mark; it is photographed
-   from above and the front before and after. The real-trial touch check is that photo pair and the video.
+4. **Clarity: the perishable sponge cake had no repeatable source or handling.** The cake is a repeatable stand-in of
+   the same mass: a 6 x 2.4 in (152 x 60 mm) round polystyrene cake dummy, as sold for bakery display and cake
+   practice, ballasted to 0.50 kg. Revision 1 dusted it with icing sugar to show touches; revision 2 replaces that with
+   the clay skin above.
 
 The instruction is unchanged. The scripted demo is unchanged apart from two negative variants (below).
 
@@ -88,9 +110,9 @@ centres it as seen and lowers it until the rim is seen resting on the plate befo
 
 ## Scores
 
-- Scripted demo: 1.0 (success at step 1,162 of 1,500).
+- Scripted demo: 1.0 (success at step 1,162 of 1,500), on the clay-skinned cake.
 - Negative variants: fingertips down on the cake's top 0.0; cake plate never pushed in 0.0.
-- Dream-1 run (1,500 steps): 0.0.
+- Dream-1 run (1,500 steps), on the clay-skinned cake: 0.0.
 
 ## Runtime and seeds
 
@@ -101,14 +123,31 @@ centres it as seen and lowers it until the rim is seen resting on the plate befo
 
 Rigid bodies. The dome's rounded top is drawn as five rings of flat panels (within 1.3 mm of the sphere) and the knob as
 stacked discs; knob sizes are scaled from the product photo and the mass from the wall's area. The cake is a rigid
-cylinder; touches are found geometrically, as the dusted sugar shows them in a real trial.
+cylinder; touches are found geometrically, as the clay skin shows them in a real trial.
 
 ## Real-world build
 
 - Dome: American Metalcraft LFTD8 polycarbonate display dome (8 in class: 206 mm rim, 168 mm tall), 0.43 kg.
 - Plates: two flat glazed ceramic plates, 250 mm across, 12 mm thick, 0.60 kg each (weigh them; 0.55 to 0.65 kg).
-- Cake: 6 x 2.4 in round polystyrene cake dummy, a 140 mm x 4 mm steel disc glued centrally underneath (0.50 kg in all),
-  icing sugar dusted on before every trial; brush clean between trials.
+- Cake: 6 x 2.4 in round polystyrene cake dummy covered on its top and side with a 1.5 mm skin of white non-drying
+  modelling clay (oil-based plasticine, about 0.10 kg; roll it between two 1.5 mm guide strips, wrap it on, trim it
+  at the base). Glue a 140 mm x 3 mm steel disc (0.36 kg) centrally underneath; weigh it and add or trim clay ballast
+  under the base to 0.50 kg in all. Finished size 155 mm across, 61.5 mm tall.
+  - Before each trial, smooth the skin with a palette knife (warm it in the hand first) and photograph it from above
+    and from the front under a low side light.
+  - Re-skin the cake when a dent will not smooth out.
 - Table: smooth laminate counter. Mark the display spot (x 0.30, y 0.10 m from the arm-base midpoint) and the cake
   plate's start (x 0.30, y -0.19 m) with tape crosses.
-- Scoring: a ruler for the plate's position, the photo pair for touches, the video for stillness and release.
+- Scoring: a ruler for the plate's position, the before and after photos of the clay skin for touches, the video for
+  stillness and release.
+
+## Licence and reuse
+
+- **Reused from TK-QTH3SB (robocurve/benchmark-tasks#2318, credited):** `labkit.py`, `arena_assets_fix.py`, the
+  scene's dimensions and the scripted demo in `task.py`. Their authors contributed them to the benchmark-tasks
+  repository without a separate licence notice; they are reused under the program's rule that an idea not revised
+  within its 48 h window may be revised by another team with clear credit.
+- **This task's own changes** (the touch checks, scorer changes, `demo.py`, the negative variants and this text) are
+  released under the MIT licence.
+- **No third-party assets.** There are no library assets, meshes, textures or downloaded models: every part (dome,
+  plates, cake) is built in code from boxes, cylinders and flat panels.
