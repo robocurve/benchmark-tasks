@@ -1,0 +1,23 @@
+{
+  "title": "Four-Point Kelvin Probe Stepped-Coupon Contact Head",
+  "category": "Other",
+  "keywords": [
+    "kelvin probe",
+    "four-point probe",
+    "stepped coupon",
+    "transit clip",
+    "sheet resistance",
+    "autonomous materials lab",
+    "bimanual"
+  ],
+  "instruction": "Lower the Kelvin probe head onto the stepped coupon while releasing its counterbalanced transit clip.",
+  "context": "Every batch in an autonomous self-driving materials-characterization laboratory sweeps sheet resistance across stepped thin-film coupons, requiring the four-point Kelvin probe head to land evenly while its weighted transit clip is disengaged. Because the unbolted ceramic stage shifts and a 25 N/m return spring pulls an unlatched coupon off the datum, both grippers must coordinate before leaving the assembly hands-free.",
+  "setup": "A fixed 480 by 440 by 4 mm ESD rubber bench mat (0.80 friction) carries a +Y clip rest bay at (0.292, 0.175) m. An unbolted 720 g ceramic and anodized carrier stage sits at (0.270, 0.000) m with guide rails, an asymmetric -Y polarity keyway rail, a 56 g compliant V-anvil datum fence on a 5 mm +X stop, and 46 mm trunnion towers at X = 0.208 m. A 68 g two-step coupon (70 by 46 mm, 16 mm upper rear step and 8 mm lower front step, four copper pads, arched -Y caging handle lug) rides a 44 mm +X slider with a 25 N/m return spring toward 0 mm and 0.02 N friction. A 130 g counterbalanced rotary arm pivots about +Y (-26 to +4 deg stop range, -22 deg raised start to 0 deg seated, 0.080 N*m detent friction), carrying a 55 g four-pin Kelvin probe head on a +-4 mm Z compliance slider (650 N/m) with a rear step-locking shoulder. A 56 g amber transit clip sits bonded (3.5 N breakaway force) beside the stage under the raised arm until lifted into the rest bay.",
+  "scoring": "Judged at trial end with a caliper, ruler, and digital protractor; succeeds once 1.0 holds continuously for 3.0 s. 0.0: carrier stage shifts > 15 mm in 3D or tilts > 8 deg, coupon reversed (facing < 0.85), transit clip outside the +Y bay (+-32 mm XY of (0.292, 0.175) m, <= 12 mm above mat, tilt <= 20 deg, >= 30 mm from dock), or alignment error > 12 mm / head tilt > 12 deg. 0.4: clip seated in bay and coupon upright, max error <= 12 mm and tilt <= 12 deg. 0.7: max error <= 8 mm and tilt <= 9 deg. 1.0: clip in bay, max alignment error <= 6 mm, head tilt <= 6 deg, stage stable, and both grippers >= 45 mm clear of every dynamic body. Possible scores: 0.0, 0.4, 0.7, 1.0.",
+  "run_limit": "900 steps (45 s at 20 Hz)",
+  "real_trial_cost_usd": 76,
+  "reset_notes": "Lift the probe arm to -22 deg, seat the weighted transit clip back onto the +Y carrier dock bond, return the stepped coupon to 0 mm on its slide against the start stop, align the carrier stage on the bench mat mark, and reset both arms to ready poses.",
+  "fidelity": "Rigid-body simulation (PhysX, 20 Hz): six bodies >= 55 g over a fixed ESD mat (0.80 friction): 720 g carrier stage, 56 g datum fence (5 mm slide, 240 N/m), 68 g stepped coupon (44 mm +X slide, 25 N/m return spring toward 0, 0.02 N friction), 130 g counterbalanced arm (-22 to 0 deg, 0.080 N*m detent), 55 g four-pin head (+-4 mm Z slider, 650 N/m), and 56 g transit clip on a 3.5 N breakaway bond. Four-wire electrical sweeps omitted.",
+  "scores": "Dream-1 run: 0; demo: 1",
+  "media": "M-QUFUY2"
+}
