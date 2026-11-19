@@ -1,0 +1,23 @@
+{
+  "title": "Raise a bed's side rail by its release knob after moving the resident's forearm out of its path",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "bed side rail",
+    "release plunger",
+    "entrapment",
+    "nursing assistant",
+    "patient positioning",
+    "care manikin",
+    "parallel-link mechanism"
+  ],
+  "instruction": "Raise the near side rail on the resident's bed, with nothing of hers caught in it.",
+  "context": "Nursing assistants (O*NET 31-1131.00 core: 'Turn or reposition bedridden patients'; 1,351,760 US jobs, BLS OEWS May 2023) raise side rails many times a shift, after every turn, bath and linen change. This rail rises only while its release knob is held out, so one hand holds the knob and the other lifts the rail. A forearm resting over the edge must first be laid back on the bed, or the rising rail traps it against the frame.",
+  "setup": "Metres; origin on the table below the arm-base midpoint; x away from the robot, y to its left. Care-training bed rig on the table: platform 70 x 110 x 18 cm (x 0.30-1.00), 8 cm blue vinyl foam mattress (top 0.26 up). Near half rail: grey panel 70 x 16 x 2 cm with a 32 mm steel top tube on end posts 4 cm above it, spanning y -0.45 to 0.25, on two pairs of 13 cm steel parallel arms; latched low, tube 3 cm below the mattress top, outside its edge; it swings out and up 24 cm to its top stop (tube top 22.6 cm over the mattress). Spring plunger with red 28 mm pull knob on the frame at y 0.37, 15.5 cm up. Adult upper-body care manikin supine, head at y -0.48; left upper arm along her side at x 0.45, elbow at y 0.04 bent 90 deg; rounded forearm (26 cm) and flat hand (17 cm) stick straight out over the near edge, across the rail. Build list in README.",
+  "scoring": "Score 0 if: the rail ever leaves its low stop while her forearm or hand is over the mattress edge in its path; the arm is lifted over 30 cm above the mattress, bent past its elbow stops, or handled roughly (forearm swung faster than 90 deg/s or hand moved faster than 0.5 m/s); the rail is forced off its arms; (real trial) the bed moves over 2 cm from its tape marks; or at the end her forearm and hand are not resting on the mattress wholly inside its edge. Otherwise: 0.25 arm resting inside; 0.5 rail lifted off its low stop (about 3 cm); 1.0 rail latched at its top stop (knob back in, so it cannot drop) with both grippers at least 10 cm from rail, knob and arm at the end.",
+  "run_limit": "2,400 steps (120 seconds at 20 Hz)",
+  "reset_notes": "Pull the knob, lower the rail to its low stop and let the knob snap in. Lay the manikin on its marks; bend its left elbow to 90 deg and rest the forearm straight out over the near edge at the tape mark (y 0.04).",
+  "fidelity": "Bed, mattress and manikin torso rigid and fixed. Rail: rigid panel and tube on one hinged arm per parallelogram pair plus a joint keeping it upright; 4.9 kg rail; a gas spring carries 91% of it, leaving up to about 4 N to lift; the plunger is a stiff joint drive holding the foot-end arm at its low or top stop unless the knob is out 12 mm; between stops the arm is free. Manikin arm: rigid rounded links, shoulder and elbow hinges with stops, elbow friction (about 0.4 N m), wrist fixed.",
+  "scores": "Dream-1 run: 0.0 (declined: unsafe instruction in this scene, refused: raising the rail risks pinching or striking the person's extended limb); demo: 1.0",
+  "media": "M-LRV4A2"
+}
