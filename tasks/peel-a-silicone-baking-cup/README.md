@@ -6,11 +6,21 @@ The native demo scores 1.0 in 640 actions (32 seconds). Its frozen-source audit 
 
 ## Setup and reset
 
-One cooled plain muffin, 72 mm across and 64 mm high, inside a flexible silicone baking cup (60 mm rim, 52 mm base, 38 mm wall height) with two 16 × 24 × 1.5 mm moulded pull tabs. It rests at the centre of a 320 × 280 × 4 mm stainless-steel tray fixed to the tabletop between the arms. Both hands start open. The cup has not been loosened. The fixed dimensions and coordinates are in geometry.py.
+One cooled plain muffin (nominally 72 mm across, 64 mm high and 45 g) sits inside a flexible silicone cup: 60 mm rim, 52 mm base and 38 mm wall, with two 16 × 24 × 1.5 mm moulded pull tabs. The cup is centred on a fixed 320 × 280 × 4 mm stainless-steel tray, 340 mm forward of the station origin. Both hands start open. Fit clean, snug, food-safe removable silicone covers over the gripping pads; no loose folds or exposed adhesive. Wash and dry these covers and the tray between trials.
 
-The muffin is 45 g and the cup is approximately 27 g in the native scene. The tray centre is 340 mm forward of the station origin. `geometry.py` fixes every part and coordinate. This is a generic dimensioned tabbed cup, not a scan of a specific product. [OXO's reusable cups](https://www.oxo.com/silicone-baking-cups-12-pack.html) provide an example of the ordinary pull-tab design.
+`geometry.py` fixes the nominal geometry and coordinates. The cup is a generic dimensioned tabbed cup, not a product scan. [OXO's reusable cups](https://www.oxo.com/silicone-baking-cups-12-pack.html) illustrate the ordinary pull-tab design; a substitute must match the stated dimensions within 2 mm and be used throughout a comparison.
 
-Use plain muffins from one batch, cooled to 18–22 °C in the same washed and dried cup model. Use a fresh muffin each trial and do not pre-peel or oil the cup. Inspect the cup for tears and wash the tray and removable covers between trials.
+### Prepare a batch ahead
+
+Use the plain, all-purpose-flour and vegetable-oil version of [King Arthur's basic muffin recipe](https://www.kingarthurbaking.com/recipes/mix-and-match-basic-muffins-recipe), with no flavourings, toppings or additions. Weigh 240 g flour, 100 g sugar, 14 g baking powder, 3 g salt, 227 g whole milk, 50 g vegetable oil and 100 g beaten egg without shell. Keep ingredients at 18–22 °C. Combine the dry and wet mixtures separately, then fold them together for about 20 seconds; do not beat smooth.
+
+Our portion/cup protocol differs from the recipe's greased-pan instructions: use clean, dry, **ungreased** silicone cups, with no paper liner or release spray. Tare each empty cup and record its mass. Add **52 ± 1 g batter**, put cups on one metal baking sheet and bake on the middle shelf of a preheated **220 °C conventional oven** for **15–20 minutes**. Check one sacrificial muffin from the centre of the batch with a wooden skewer; stop when it comes out without wet batter. Record the actual bake time and use it for subsequent batches in that oven.
+
+Cool on a rack **inside the cups**, uncovered, for at least 60 minutes to **18–22 °C**. Do not flex, peel or lift trial muffins. Weigh each filled cup and subtract its recorded tare. Accept **40–50 g**, **68–76 mm maximum diameter** and **58–68 mm overall height** (ruler beside the muffin, including the portion inside the cup). Reject visible cracks, a collapsed centre or a cup wall already separated over more than one quarter of its circumference. These are preparation acceptance ranges, not measured results from a physical bake.
+
+Check one extra muffin per batch by peeling it normally: it must remain intact and the wall must require peeling rather than falling away. If this fails, reject the batch. This check is performed on the spare, never on a trial muffin. Recipe, cup model, portion, oven, bake time and cooling interval stay fixed for the comparison. Use accepted muffins **2–4 hours after baking**, held in their cups in a covered tray after cooling. Do not refrigerate or freeze them for these trials. Prepare enough accepted cups ahead; resetting is a fresh muffin/cup swap, followed by cleaning the tray and covers. Replace torn cups.
+
+The simulation uses the nominal dimensions and 45 g mass within these ranges. This revision specifies physical preparation; it does not claim that the coarse adhesion/crumb coefficients have been calibrated to the recipe. The recorded native demo, baseline, scorer and media are unchanged.
 
 ## Scoring
 
