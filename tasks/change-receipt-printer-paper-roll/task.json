@@ -1,0 +1,22 @@
+{
+  "title": "Change a receipt printer's paper roll: lift out the spent core, drop in the new roll, push the lid shut",
+  "category": "Impact on jobs",
+  "keywords": [
+    "retail",
+    "cashier",
+    "point of sale",
+    "receipt printer",
+    "paper roll",
+    "hinged lid",
+    "two arms"
+  ],
+  "instruction": "Change the printer's paper roll: put the empty core in the waste tray, drop in the new roll and shut the lid.",
+  "context": "Changing the receipt printer's paper roll is a core, repeated operation for cashiers (about 3.3 million US workers, BLS OEWS May 2023). The difficulty is physical: the spent core is lifted out of a pocket only 1 cm wider on each side than a fresh roll, the 60 mm roll is lowered into it lying on its side, and the hinged lid, standing 110 degrees open towards the arms, is pushed over and down through its arc; the lid only closes over a seated roll with the core gone. Both arms work.",
+  "setup": "Positions are measured on the table from the point midway between the two arm bases, which stand 61 cm apart: forward means away from the arms, left and right as seen from behind the arms. Receipt printer (printer, fixed): black body 14 cm forward x 12 cm x 7 cm tall centred 26 cm forward on the centre line; roll pocket 8 x 7.5 cm, 6.2 cm deep; lid (lid joint) hinged along the near top edge, standing 110 degrees open towards the arms (hinge friction 0.04 N m). Spent core (spent_core): brown cardboard tube 22 mm across, 58 mm long, 10 g, lying across the pocket floor. New roll (paper_roll): white thermal roll 60 mm across, 58 mm wide, 150 g, lying across a supply tray (supply_tray) at 16 cm forward, 24 cm left. Waste tray (waste_tray): grey, inside 10 x 10 cm, 2 cm walls, at 18 cm forward, 25 cm right. Nothing else is on the table.",
+  "scoring": "The core is binned when its centre lies inside the waste tray less than 2 cm above its floor. The roll is loaded when its centre lies inside the pocket seen from above, less than 1 cm above where it rests on the pocket floor, lying on its side (axis within 10 degrees of across). The lid is shut within 3 degrees of flat. Still: moved under 5 mm over the last 0.3 s. Score at the end of the trial: 0.2 for the core binned and still, 0.2 for the roll loaded and still, 0.2 for the lid shut (0 to 0.6). 1.0 when all three hold, nothing moves and no gripper tool point is within 4 cm of the lid's middle, held for 1 s (the trial then ends; completed less than 1 s before the run limit scores 0.6). 0 if the roll or the core falls off the table.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lay the spent core back across the pocket floor, the new roll in the supply tray, and stand the lid 110 degrees open.",
+  "fidelity": "Approximate. The paper's free end, the tear bar and the lid's snap latch are not modelled (the lid is a friction-held hinge); the roll and core are rigid cylinders with real sizes and masses. PhysX rigid-body contacts with default friction.",
+  "scores": "Dream-1 run: 0.0 (lid pushed partway down over the spent core; core not removed, no roll loaded; hit the 120 s step limit); demo: 1.0 (spent core lifted out to the waste tray, new roll laid in the pocket on its side, lid pushed shut from 110 degrees open, held 1 s)",
+  "media": "M-HBA2HJ"
+}
