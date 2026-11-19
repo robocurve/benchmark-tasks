@@ -1,0 +1,21 @@
+{
+  "title": "Change parts in a swing-clamp fixture: swing the clamp off, unload, load the blank, swing it back over",
+  "category": "Impact on jobs",
+  "keywords": [
+    "assembly fixture",
+    "swing clamp",
+    "changeover",
+    "pivot",
+    "two arms",
+    "order"
+  ],
+  "instruction": "Swing the clamp open, put the finished part in the output tray, load the blank into the nest and swing the clamp back over it.",
+  "context": "Changing parts in a swing-clamp fixture is a core, repeated operation for miscellaneous assemblers and fabricators (about 1.46 million US workers, BLS OEWS May 2024): swing the clamp off, unload the finished part, load the blank into the nest and swing the clamp back over it; loading over the finished part or leaving the blank unclamped scraps the next part. The difficulty is physical: the clamp is a working swing arm on a stiff pivot that lies just over the part, so it must be pushed round 90 degrees by its knob before a part can come out, and back over the new blank afterwards; parts go in and out of a nest with 6 mm of play.",
+  "setup": "Positions are measured on the table from the point midway between the two arm bases, which stand 61 cm apart: forward means away from the arms, left and right as seen from behind the arms. Fixture (fixture): steel plate 12 x 24 cm x 1.5 cm centred 22 cm forward on the centre line, fixed; a part nest (inside 52 x 62 mm, 12 mm walls) centred 4 cm right; a swing clamp (clamp joint) on a vertical pivot post 3.5 cm left: a blue arm 7.5 cm long lying 3 mm over the nested part, with a pad at its end and a red knob 3 cm tall standing on it 5 cm from the pivot. Pushed round, the arm swings forward up to 92 degrees; pivot friction 0.12 N m holds it where it is left. Finished part (finished_part): bright machined block 40 (forward) x 50 x 30 mm, 120 g, in the nest under the clamp. Blank (blank): the same block, dull grey, on the table at 13 cm forward, 20 cm right. Output tray (output_tray): green, inside 11 x 11 cm, 1.5 cm lip, centred 27 cm forward and 25 cm right, fixed. Nothing else is on the table.",
+  "scoring": "A part is in the nest when its centre lies inside the nest's inside rectangle seen from above and less than 1.5 cm above where it rests on the plate; in the tray likewise for the tray. Still: moved under 5 mm over the last 0.3 s. Score at the end of the trial: 0.2 once the clamp has been swung open past 60 degrees, plus 0.2 for the finished part in the tray and still, plus 0.2 for the blank in the nest and still with the finished part out, plus 0.2 for the clamp closed over the blank (arm back within 5 degrees of lying over the nest) (0 to 0.8). 1.0 when all four hold, nothing moves and no gripper tool point is within 4 cm of the blank, the finished part, the clamp pad or its knob, held for 1 s (the trial then ends; completed less than 1 s before the run limit scores 0.8). 0 if the blank and the finished part are ever in the nest at the same time, or a part falls off the table.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Put the finished (bright) part back in the nest and swing the clamp back over it; lay the blank (dull) on its marked spot; the fixture and tray stay fixed.",
+  "fidelity": "Approximate. The swing clamp is a rigid arm on a friction-held vertical pivot that holds the part by lying 3 mm over it; the screw or cam that would press it down is not modelled. Parts are rigid blocks. PhysX rigid-body contacts with default friction.",
+  "scores": "Dream-1 run: 0.0 (clamp never swung off the part, so nothing could be unloaded; hit the 120 s step limit); demo: 1.0 (one arm pushed the swing clamp open by its knob, the other moved the finished part to the output tray and set the blank in the nest, then the clamp was pushed back over the blank; hands clear, held 1 s)",
+  "media": "M-3P64PN"
+}
