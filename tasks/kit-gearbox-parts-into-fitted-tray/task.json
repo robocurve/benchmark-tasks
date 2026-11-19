@@ -1,0 +1,21 @@
+{
+  "title": "Kit gearbox parts into a fitted kit tray, with look-alike shafts",
+  "category": "Impact on jobs",
+  "keywords": [
+    "assembly line",
+    "kitting",
+    "kit tray",
+    "look-alike parts",
+    "shafts",
+    "two arms"
+  ],
+  "instruction": "Kit the gearbox parts into the kit tray, each part in its own fitted pocket.",
+  "context": "Kitting, picking a product's parts and placing each into its own fitted pocket of a kit tray so the assembler receives a complete and correct kit, is an assembly-line kitter's core operation; a part in the wrong pocket is a kitting error that reaches the line. The two shafts here look alike (same section, same colour) and differ only in length, and the short shaft also fits the long shaft's pocket, so putting it there leaves the long shaft nowhere to go.",
+  "setup": "Positions are measured on the table from the point midway between the two arm bases, which stand 61 cm apart: forward means away from the arms, left and right as seen from behind the arms. Kit tray (tray_floor, pocket_*): blue foam, a 1 cm floor carrying four fitted pockets with 1 cm walls 2 cm tall, all centred 27 cm forward and fixed to the table: long-shaft pocket 13.5 x 4 cm (long side forward) centred 14 cm left; short-shaft pocket 10.5 x 4 cm centred 6 cm left; bearing pocket 5 x 5 cm centred 2 cm right; gear pocket 7.5 x 7.5 cm centred 11 cm right. Parts, all lying on the table: long_shaft, a steel-grey square bar 120 x 25 x 25 mm, 200 g, lying along the forward direction at 20 cm forward and 30 cm left; short_shaft, the same bar 90 mm long, 150 g, at 20 cm forward and 21 cm left; gear, a dark-grey disc 60 mm across and 20 mm thick, 70 g, at 20 cm forward and 30 cm right; bearing, a silver disc 35 mm across and 12 mm thick, 60 g, at 20 cm forward and 20 cm right. Nothing else is on the table.",
+  "scoring": "A part is in a pocket when its centre lies inside the pocket's inside rectangle seen from above and is less than 1.5 cm above where it would rest on the tray floor. A part is kitted when it is in its own pocket, still (its centre moved less than 5 mm over the last 0.3 s), and no other part is in that pocket. Score at the end of the trial: 0.2 per kitted part (0 to 0.8). 1.0 when all four parts are kitted and none is still held (no gripper tool point within 4 cm of a kitted part's centre), held for 1 s (the trial then ends; a kit completed less than 1 s before the run limit scores 0.8). 0 if any part falls off the table.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lay the four parts back on their marked spots on the table (the long shaft outermost on the left, the short shaft inside it; the gear outermost on the right, the bearing inside it); the kit tray stays fixed.",
+  "fidelity": "Approximate. The shafts are rigid square bars (real gearbox shafts are round, with steps and keyways), the gear and bearing are plain rigid discs, and the foam tray is a fixed rigid box with square pockets. Masses are those of aluminium and nylon parts of these sizes. Contacts and grasps are PhysX rigid-body contacts with default friction.",
+  "scores": "Dream-1 run: 0.2 (one part kitted; hit the 120 s step limit); demo: 1.0 (all four parts in their own pockets)",
+  "media": "M-CNHGWZ"
+}
