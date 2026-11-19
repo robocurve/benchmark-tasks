@@ -64,12 +64,13 @@ STANDOFF_M = 0.04  # robot parts at least this far from the patient
 SUCCESS_HOLD_S = 1.0
 
 
-# the take-back container's printed sign: a white card with a blue band (as pharmacy take-back boxes carry), lying flat
-# on the shelf just behind it (x beyond its far wall); 1.6 x 8 cm, 2 mm thick, fixed
-TAKEBACK_SIGN = [Box("takeback_sign", pos=(CAN_XY[0] + CAN_IN[0] / 2 + WALL + 0.0095, CAN_XY[1], PT + 0.001),
-                     size=(0.016, 0.08, 0.002), color=(0.96, 0.96, 0.95)),
-                 Box("takeback_sign_band", pos=(CAN_XY[0] + CAN_IN[0] / 2 + WALL + 0.0095, CAN_XY[1], PT + 0.0022),
-                     size=(0.007, 0.08, 0.0005), color=(0.10, 0.30, 0.75))]
+# the take-back container's printed sign: a white label with a blue band (as pharmacy take-back boxes carry) on the
+# container's front face (the side facing the robot and its cameras); 6 x 3.5 cm, 2 mm proud of the wall, fixed
+_FRONT_X = CAN_XY[0] - CAN_IN[0] / 2 - WALL  # the front wall's outer face
+TAKEBACK_SIGN = [Box("takeback_sign", pos=(_FRONT_X - 0.001, CAN_XY[1], PT + CAN_H / 2 + 0.008),
+                     size=(0.002, 0.06, 0.035), color=(0.96, 0.96, 0.95)),
+                 Box("takeback_sign_band", pos=(_FRONT_X - 0.0025, CAN_XY[1], PT + CAN_H / 2 + 0.010),
+                     size=(0.001, 0.06, 0.010), color=(0.10, 0.30, 0.75))]
 
 
 def _walls(tag, xy, inner, h, color):
