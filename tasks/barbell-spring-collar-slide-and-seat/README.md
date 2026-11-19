@@ -1,63 +1,82 @@
-# Squeeze a spring collar open and slide it past the sleeve shoulder flush against the outer weight plate
+# Thread a spring clip collar onto a loadable dumbbell sleeve and seat it flush against the weight plate
 
-Instruction: "Seat the spring collar past the sleeve shoulder flush against the outer plate clamped onto the barbell sleeve without shifting the bar, and clear both grippers."
+Instruction: "Squeeze the spring clip collar open, thread it onto the dumbbell sleeve, slide it flush against the outer weight plate, release it so the wire jaws grip the sleeve, and clear both grippers."
 
 Files in this folder: `task.json`, `barbell_spring_collar_slide_and_seat.py`, `labkit.py`, `mechkit.py`, `pitch_demo.py`, `arena_assets_fix.py`, `test_barbell_spring_collar_slide_and_seat.py`, `README.md`, `DEVIATIONS.md`.
 
 ## Environment
-Isaac Lab-Arena 0.3.1 on Isaac Sim 6.1 (Brev launchable), `inspect-robots` with the `yam_arena` embodiment, `station` scene.
-Task file SHA-256 (first 12): see freeze log.
+Isaac Lab-Arena 0.3.1 on Isaac Sim 6.1, `inspect-robots` with the `yam_arena` embodiment, `station` scene.
+
+## What the task is
+A 1.20 kg loadable dumbbell sits in a benchtop cradle stand. The near 49 mm chrome sleeve is loaded with two rubber-coated fractional plates; the outer plate face is the axial stop. A stock 0.320 kg three-turn spring clip collar stands upright on its coil in a felt-lined timber holster 150 mm off the sleeve axis, **off the bar** — the collar starts exactly where a person would set it down. Because a spring clip collar is a closed ring whose crossed wire jaws are preloaded 4 mm inside the sleeve at rest, it cannot be pushed onto the sleeve unsqueezed and cannot be brought on from the side: the robot must squeeze both handles open, carry the collar to the bar's axis, thread it over the free end, slide it home against the plate face, and release so the wire jaws grip the sleeve. The retention test in a real trial is a spring-scale pull; in simulation it is the released, out-of-contact end state (below).
+
+## Scoring
+Judged from physical end-state geometry with a caliper, ruler and digital protractor. Possible scores **0.0, 0.25, 0.50, 1.0** (no 0.75 rung: this revision merges the old "clamped but a gripper still in the way" rung into 0.50).
+
+| Score | What holds | Real-trial reading |
+|---|---|---|
+| **1.0** | dumbbell seated (<= 12 mm horizontal, <= 8 mm vertical, <= 6 deg tilt); collar coaxial (<= 10 mm, <= 12 deg); foremost surface **flush <= 3 mm** of the outer plate face; **both grippers > 120 mm clear** | feeler gauge or ruler between the collar's foremost part and the plate: gap <= 3 mm; protractor: bar and collar square; both hands off and away |
+| **0.50** | as 1.0 but gap up to 8 mm, **or** a gripper still within 120 mm | seated and squared but not quite home, or a hand still on it |
+| **0.25** | dumbbell seated and collar coaxial and slid >= 30 mm in along the sleeve, not yet within 8 mm of the plate | collar on the sleeve, not yet at the plate |
+| **0.0** | otherwise: nothing done, collar left in the holster, unsqueezed collar stopped at the sleeve end, collar dropped off-axis or cocked, dumbbell knocked out of its cradle | any failure to get it on and home |
+
+The run succeeds once 1.0 holds continuously for 3 s (60 steps at 20 Hz). `run_limit` is 900 steps / 45 s; the scripted demo's plan is 28.9 s (578 steps), so the plan plus the required 3 s hold finishes well inside the limit.
+
+## Why the check can fail (power, not just a threshold)
+The scored quantities are pure end-state geometry read from the two object poses, with no joint displacement, no step-accumulated state and no code-held target. The retention evidence was verified load-bearing by a reviewer-side one-variable ablation run against this task file with the offline pre-check: play the shipped demo, then partway through the plan's own retention pull either leave the collar's wire spring live or zero its actuator force and let the tug finish. The kill instant is derived from the plan's retention-pull waypoint (21.4 s on this plan), never hardcoded: a fixed second stops testing the retention phase as soon as the plan's waypoints move, and it then silently prints 1.0 on both arms.
+- spring live: gap 1.3 mm, radial 6.4 mm, 8.62 N in the wire, score **1.0** (the released jaws grip the sleeve and
+  the collar stays at the plate)
+- spring killed: the same plan drags the collar to a 14.0 mm gap with the radial error growing to 7.4 mm and no
+  force in the jaws, score **0.25**
+
+Both numbers are from this tree; the kill instant used was 21.40 s, the pull starting at 20.90 s.
+
+The two answers differ, so the retention evidence has power. A separate closed-loop negative run on the same task file shows an unsqueezed collar never reaches the sleeve: with the squeeze replaced by a light touch the collar stays in the holster and the run ends at 0.0.
+
+The flush gate is proved the same way, on the bench reading a person makes, by three unit cases in `test_barbell_spring_collar_slide_and_seat.py`: a collar stopped 5 mm short of contact scores 0.50; a collar that reaches the plate but whose jaws do not grip, so the retention tug walks it 20 mm back out, scores 0.25; seated and gripping scores 1.0. Three different answers for the same collar, bar and grippers, so the gate is load-bearing. A fourth test measures the geometry the gate rests on: the collar's collision hull is 33.0 mm along the sleeve, its foremost plate-side surface is the two plastic squeeze handles at 16.5 mm, the coil face is 13.5 mm, and the gap is read from the handles.
 
 ## Offline check (no GPU)
-Run `PYTHONDONTWRITEBYTECODE=1 pytest -q -p no:cacheprovider test_barbell_spring_collar_slide_and_seat.py` with `yam_arena` on `PYTHONPATH`: verifies initial state scores 0.0, all pure end-state scoring tiers (0.0 / 0.25 / 0.50 / 0.75 / 1.0), 1-hand unbraced bar-shift ablation, unsqueezed shoulder-blocked failure, left-gripper-on-stabilizer-handle clearance gate, shortcuts scoring 0.0, top-camera occlusion proxy clearance, scoring numeric parity, demo purity, and IK reachability.
+```
+PYTHONDONTWRITEBYTECODE=1 pytest -q -p no:cacheprovider test_barbell_spring_collar_slide_and_seat.py
+```
+with `yam_arena` on `PYTHONPATH` (17 tests, all passing). Covers: the tray start scores 0.0; every ladder rung (0.0 / 0.25 / 0.50 / 1.0) is reachable from `components()` and matches `task.json`; the single-hand bar-shift ablation; the unsqueezed-collar failure; off-axis / cocked collar failures; the jaw spring geometry is a real preloaded interference fit that clears at full stroke; no code-held scored state; plan purity and IK reach < 2 mm; `run_limit` headroom; threshold + rung parity between the scorer, `task.json` and this table; top-camera sight lines clear at the demo end.
 
 ## Run and score one Dream-1 trial
 ```
 inspect-robots run --embodiment yam_arena -E task=barbell_spring_collar_slide_and_seat.py -E object_jitter=0 -E control_hz=20 \
   -E cam_width=320 -E cam_height=176 --policy dream \
-  --instruction "Seat the spring collar past the sleeve shoulder flush against the outer plate clamped onto the barbell sleeve without shifting the bar, and clear both grippers." \
-  --scorer task_score --max-steps 440 --seed 0
+  --instruction "Squeeze the spring clip collar open, thread it onto the dumbbell sleeve, slide it flush against the outer weight plate, release it so the wire jaws grip the sleeve, and clear both grippers." \
+  --scorer task_score --max-steps 900 --seed 0
 ```
 
 ## Scripted demo
 ```
 inspect-robots run --embodiment yam_arena -E task=barbell_spring_collar_slide_and_seat.py -E object_jitter=0 -E control_hz=20 \
   -E cam_width=320 -E cam_height=176 --policy yam_scripted \
-  --instruction "Seat the spring collar past the sleeve shoulder flush against the outer plate clamped onto the barbell sleeve without shifting the bar, and clear both grippers." \
-  --scorer task_score --max-steps 440 --seed 0
+  --instruction "Squeeze the spring clip collar open, thread it onto the dumbbell sleeve, slide it flush against the outer weight plate, release it so the wire jaws grip the sleeve, and clear both grippers." \
+  --scorer task_score --max-steps 900 --seed 0
 ```
-`demo()` reads scene geometry constants only (never simulator state). The left gripper clamps the radial 28 mm knurled stabilizer handle along world X at `(0.330, 0.135) m` (`yaw = -90 deg`), while the right gripper straddles the 320 g spring collar handles at `(0.187, -0.025) m`, squeezes both crossed wire jaws open past the 58 mm sleeve shoulder against 35 N preload, slides the collar flush against the outer weight plate hub while the left gripper braces the 780 g barbell assembly in its cradle, opens in place so the spring jaws clamp the 50 mm sleeve, retracts both grippers clear, and parks. Open-loop plan duration is 13.9 s (`278` steps); live runs complete once `1.0` holds continuously for 3 s (`run_limit` is 440 steps / 22 s at 20 Hz).
+`demo()` reads scene geometry constants only (never simulator state). The left gripper clamps the far 134 mm plate across its faces 60 mm off the axis and holds the dumbbell for the whole operation, its hold derived from the other arm's own schedule so it always covers the retention pull; the right gripper straddles the collar's two vinyl squeeze handles in the holster, squeezes them open against the jaw preload, lifts the open collar out, carries it round the bar's free end, threads it over the end and along the sleeve to the plate, opens its fingers over a full second while still holding the collar pressed against the plate so the released jaws clamp onto the sleeve with the collar home, retracts clear, applies the retention pull on the coil (a light friction-limited pinch, the spring-scale tug of the real trial) so the collar must hold its place, then retracts and parks. Measured end state: gap 1.3 mm, radial 6.4 mm, jaws +3.9 / -3.4 mm on the sleeve with 8.62 N in the wire, both grippers clear.
 
-## Scoring
-Judged at the end of the trial from pure observable end-state geometry (verified in real trials with a caliper, ruler, and digital protractor); succeeds once 1.0 holds continuously for 3 s:
-- `1.0`: barbell within 12 mm horizontally and 8 mm vertically of its stand cradle and tilted <= 6 deg; collar coaxial within 10 mm and <= 12 deg of sleeve; collar rests past the shoulder flush within 8 mm of the outer plate hub; both spring jaws clamped <= 4 mm on the sleeve; both grippers > 120 mm clear of the collar, barbell sleeve, and radial stabilizer handle.
-- `0.75`: collar flush within 8 mm of the outer plate past the shoulder and clamped <= 4 mm with bar in cradle, gripper within 120 mm.
-- `0.50`: collar flush within 8 mm of the outer plate past the shoulder with bar in cradle, spring jaws not clamped <= 4 mm.
-- `0.25`: barbell seated and collar coaxial and slid >= 30 mm inward along sleeve, not yet flush within 8 mm of the outer plate past the shoulder.
-- `0.0`: otherwise (noop, unsqueezed push blocked behind the 58 mm shoulder, off-axis drop, or unbraced bar shifted > 12 mm).
-Possible scores 0.0, 0.25, 0.50, 0.75, 1.0.
+## Real-trial build (stock parts)
+Loadable dumbbell with 49 mm plain round chrome sleeves and a 28 mm knurled centre handle, two rubber-coated fractional plates per sleeve, a stock 50 mm (2-inch) three-turn spring clip collar with crossed wire stirrup jaws and vinyl-dipped shoes, a timber bench cradle with UHMW saddle tape, and a felt-lined timber collar holster (scrap timber; no custom machining). The same bench test uses a caliper for the plate gap and a spring scale for the retention pull; no fixture in this task is custom to the simulation.
 
 ## Runtime per trial
-Runtime per trial: 440 control steps at 20 Hz (22 s of simulated time, about 3 min wall clock on one A10 GPU); scripted demo completes once the 3 s continuous hold finishes (~255 steps / 12.8 s).
+Runtime per trial: 900 control steps at 20 Hz (45 s simulated, about 4 min wall clock on one A10 GPU); the scripted demo finishes once the 3 s continuous hold completes (593 steps / 29.7 s in the offline pre-check at 20 Hz).
 
 ## Seeds
 Seeds: 0 (`object_jitter=0`, fixed starting layout).
 
 ## Reset between trials
-Seat the 780 g barbell sleeve assembly on the two stand saddles at `(0.295, -0.025) m` with the outer plate hub at `x = 0.285 m`, squeeze the 320 g spring collar open, slide it back outside the 58 mm shoulder to `x = 0.187 m`, and release so it clamps the outer pilot.
+Set the dumbbell level in the cradle and stand the spring collar upright in the timber holster 150 mm off the sleeve axis, jaws at rest (`COLLAR_HALF_X` = 16.5 mm each side of the seat, seat centre 26.5 mm inboard of the plate face).
 
 ## Mechanism and sources
-| part | real item | model | precedent |
-|---|---|---|---|
-| cradle stand | steel benchtop barbell V-cradle 310 x 240 mm with polymer channel liners and 3 mm rubber feet (~$5 shop fixture) | fixed 17-box compound stand (`friction=0.10`) with 282 mm saddle wheelbase | benchtop cradle fixtures |
-| barbell sleeve assembly | 50 mm (2-inch) standard loadable sleeve + 118 mm and 134 mm fractional rubber plates + 28 mm radial grip handle, 780 g (~$12 retail reference: https://www.amazon.com/dp/B07B42BV29) | 23-geom compound rigid body (`780 g`): 128 mm chrome sleeve, 26 mm anti-rotation flats, 58 mm shoulder lugs, two color-coded plates, 72 mm flange, 160 mm radial knurled handle | loadable sleeve hardware |
-| spring clip collar | 50 mm (2-inch) standard three-turn chrome spring barbell collar with red vinyl handles, 320 g (~$8 retail reference: https://www.amazon.com/dp/B017763GQE) | 43-geom articulated assembly (`250 g` 3-turn 8-gon coil + 50 mm concentric guide bushings + two `35 g` crossed spring-wire `slide` jaws at `2200 N/m`, `35 N` at `8 mm` stroke, `63 mm` open span) | crossed spring-clip mechanism |
-
-## Real-world build
-Parts: 50 mm (2-inch) standard loadable short sleeve adapter with two fractional rubber plates (~$12, https://www.amazon.com/dp/B07B42BV29) + 50 mm dual-handle chrome spring clip collar (~$8, https://www.amazon.com/dp/B017763GQE) on a 310 x 240 mm low-friction polymer-lined bench cradle (~$5, ~$25 total BOM). Place the stand at `(0.295, -0.025) m` with the sleeve centerline 76 mm above the tabletop and pre-mount the collar on the outer pilot at `x = 0.187 m`.
-
-## Fidelity
-Rigid-body simulation (Isaac Sim 6.1, 20 Hz control). Simplified: helical three-coil torsion is represented as two crossed prismatic spring-wire stirrup jaws (`2200 N/m` per leg, `0.0` joint friction, non-overlapping handles) inside an 8-sided three-turn coil housing with 50 mm concentric guide skids and 26 mm sleeve anti-rotation flats. Pushing without squeezing blocks behind the 58 mm shoulder; pushing with one hand only slides the unbraced 780 g barbell past 12 mm out of its cradle (`score = 0.0`).
+| part | real item | model |
+|---|---|---|
+| cradle stand | steel benchtop dumbbell V-cradle, polymer channel liners, rubber feet (~$5 shop fixture) | fixed compound stand (`friction=0.10`), two saddles 120 mm apart on the 28 mm handle |
+| loadable dumbbell | 49 mm (2-inch) plain round chrome loading sleeves + 118 mm and 134 mm fractional rubber plates + 28 mm knurled centre handle, 1.20 kg (no verified listing: a 2-inch loadable dumbbell handle of this class is sold by several vendors; the part is stock, the exact SKU is a gap) | rigid primitive cylinders, two mirrored sleeves about the centre handle |
+| spring clip collar | 50 mm (2-inch) three-turn chrome spring barbell collar with red vinyl handles, 320 g (verified listing: https://www.amazon.com/dp/B07B6FMH2V, ProsourceFit Olympic Barbell Spring Clip Collar 2-inch Pair; also CAP B000BJKWXK) | 3-turn 8-gon coil + two crossed spring-wire `slide` jaws at 2200 N/m, 4 mm preload, 12.5 mm stroke |
+| timber holster | felt-lined timber slot on the bench | fixed 5-box timber part, 38 mm walls |
 
 ## Licence
 All shapes are procedural primitives authored in `barbell_spring_collar_slide_and_seat.py`; no external third-party mesh, texture, or font files are included (original own work).
