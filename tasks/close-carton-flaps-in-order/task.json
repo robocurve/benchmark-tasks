@@ -1,0 +1,22 @@
+{
+  "title": "Close a filled shipping carton's top flaps in overlap order: short flaps first, long flaps over them",
+  "category": "Impact on jobs",
+  "keywords": [
+    "packing",
+    "shipping carton",
+    "regular slotted carton",
+    "flaps",
+    "hinge",
+    "two arms",
+    "order"
+  ],
+  "instruction": "Close the carton's top: the two short flaps first, then the two long flaps over them.",
+  "context": "Closing a regular slotted carton's top before taping is a core, repeated operation for hand packers and for stockers and order fillers (about 2.9 million US workers, BLS OEWS May 2023). The short flaps must go down first and the long flaps over them; a long flap closed first blocks the short flap under it. The difficulty is physical: four hinged board flaps pushed through 85-degree arcs with closed fingers, both arms at once, in the order the flaps overlap.",
+  "setup": "Positions are measured on the table from the point midway between the two arm bases, which stand 61 cm apart: forward means away from the arms, left and right as seen from behind the arms. Carton (carton): kraft corrugated board, 13 cm forward x 22 cm across x 6 cm tall, 4 mm walls, centred 25 cm forward on the centre line, fixed against the packing bench's back stop. Its four top flaps are hinged at the tops of its walls and start 85 degrees open, leaning slightly in, held by hinge friction (0.02 N m): two short flaps (minor_left, minor_right, darker, 10 x 6.5 cm) on the left and right walls, and two long flaps (major_near, major_far, 22 x 6.5 cm) on the near and far walls, hinged 4 mm higher so they close over the short flaps. Nothing else is on the table.",
+  "scoring": "A flap is closed when its hinge is within 7 degrees of flat. Score at the end of the trial: 0.15 per closed flap (0 to 0.6). 1.0 when all four flaps are closed (the board only allows this with the short flaps under the long ones), the carton is still (no flap moving more than 0.03 rad over the last 0.3 s) and no gripper tool point is within 4 cm of a flap's centre, held for 1 s (the trial then ends; closed less than 1 s before the run limit scores 0.6).",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Stand the four flaps back up to 85 degrees open (leaning slightly in); the carton stays fixed.",
+  "fidelity": "Approximate. Corrugated flaps are rigid hinged panels with hinge friction standing in for the board's crease stiffness (no bending or springback); the carton is fixed against a bench stop and its contents are not modelled. Flaps collide with each other, so their overlap order is enforced by contact. PhysX rigid-body contacts with default friction.",
+  "scores": "Dream-1 run: 0.0 (no flap closed; hit the 120 s step limit); demo: 1.0 (both short flaps pushed flat first, then both long flaps over them; all four within 7 degrees of closed with the grippers clear, held 1 s)",
+  "media": "M-BHAT4H"
+}
