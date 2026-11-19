@@ -1,0 +1,22 @@
+{
+  "title": "Transplant seedling plugs into the empty cells of a part-planted cell strip",
+  "category": "Impact on jobs",
+  "keywords": [
+    "greenhouse",
+    "horticulture",
+    "transplanting",
+    "seedling plugs",
+    "cell strip",
+    "partial state",
+    "two arms"
+  ],
+  "instruction": "Transplant the seedling plugs into the empty cells of the strip, one plug per cell.",
+  "context": "Transplanting, lifting seedling plugs out of a propagation flat and setting each into its own cell of a cell pack or strip, is a greenhouse grower's core operation. The strip here is already part-planted, as happens when gaps are filled after a first pass, so the four empty cells must be found: a plug set into an occupied cell wastes both seedlings, and knocking out a plant that is already in wastes it. The strip spans both arms' workspaces, so each arm fills its own half.",
+  "setup": "Positions are measured on the table from the point midway between the two arm bases, which stand 61 cm apart: forward means away from the arms, left and right as seen from behind the arms. Cell strip (strip_floor, strip_wall_*, strip_divider_*): black plastic, one row of six 52 mm square cells 3 cm deep with 6 mm walls (35.4 cm long, 6.4 cm wide), running left to right with its centre 27 cm forward on the centre line between the arms, fixed to the table. Cell centres are 5.8 cm apart, at 14.5, 8.7 and 2.9 cm left and 2.9, 8.7 and 14.5 cm right. Original plants (planted_2, planted_5): seedling plugs standing on the floors of cells 2 and 5 counting from the left (8.7 cm left and 8.7 cm right). Seedling plugs (all six): upright cylinders of growing medium, 36 mm diameter, 55 mm tall, 40 g, dark brown. Seedling flats (flat_left_*, flat_right_*): green plastic, inside 24 cm forward x 9 cm, a 1.5 cm lip around a 1 cm floor, centred 20 cm forward and 30 cm left, and 20 cm forward and 30 cm right, fixed to the table. New plugs (plug_1 to plug_4) stand on the flat floors: plug_1 and plug_2 in the left flat at 15 and 25 cm forward, 30 cm left; plug_3 and plug_4 in the right flat at 15 and 25 cm forward, 30 cm right. Nothing else is on the table.",
+  "scoring": "A plug is in a cell when its centre lies inside that cell's 5.8 cm square seen from above and is less than 3 cm above where a standing plug's centre would be. A new plug is planted when it is in one of the four empty cells (1, 3, 4, 6 from the left), seated on the cell floor (its centre less than 2 cm above a standing plug's, so a plug leaning on a cell wall counts), still (its centre moved less than 5 mm over the last 0.3 s), and no other plug is in that cell. Score at the end of the trial: 0.2 per planted new plug (0 to 0.8). 1.0 when all four new plugs are planted, one per empty cell, none is still held (no gripper tool point within 4.75 cm of a planted plug's centre) and both original plants are in their cells, held for 1 s (the trial then ends; completed less than 1 s before the run limit scores 0.8). 0 if an original plant is ever knocked out (its centre leaves its cell or rises more than 3 cm) or any plug falls off the table.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Stand plug_1 to plug_4 back on their marked spots in the two flats, and the two original plants upright on the floors of cells 2 and 5; the strip and flats stay fixed.",
+  "fidelity": "Approximate. Seedlings are modelled as their plugs (rigid cylinders of growing medium with real plug size and mass; no leaves or roots, no crumbling); the strip and flats are fixed rigid boxes with flat cell floors. Contacts and grasps are PhysX rigid-body contacts with default friction.",
+  "scores": "Dream-1 run: 0.0 (no plug planted; hit the 120 s step limit); demo: 1.0 (all four plugs planted in the empty cells, original plants undisturbed)",
+  "media": "M-93WUXB"
+}
