@@ -41,7 +41,8 @@ INSTRUCTION = "Close the liquid nitrogen flask."
 F_XY = (0.33, 0.16)
 F_RIN, F_ROUT, F_H, F_FLOOR = 0.020, 0.048, 0.110, 0.015
 N_STAVE = 12
-STEEL = (0.70, 0.71, 0.73)
+STEEL = (0.62, 0.64, 0.67)  # brushed stainless
+COLLAR, COLLAR_H = (0.10, 0.10, 0.11), 0.012  # the black plastic neck collar
 
 
 def _flask():
@@ -49,11 +50,15 @@ def _flask():
     out = [Cylinder("flask_floor", pos=(x0, y0, TOP + F_FLOOR / 2), color=STEEL, radius=F_ROUT, height=F_FLOOR)]
     rm, t = (F_RIN + F_ROUT) / 2, F_ROUT - F_RIN
     w = 2 * F_ROUT * math.tan(math.pi / N_STAVE) + 0.002  # staves meet at the outer face
-    h = F_H - F_FLOOR
+    h = F_H - F_FLOOR - COLLAR_H
     for i in range(N_STAVE):
         a = 2 * math.pi * i / N_STAVE
         out.append(Box(f"flask_wall_{i}", pos=(x0 + rm * math.cos(a), y0 + rm * math.sin(a), TOP + F_FLOOR + h / 2),
                        size=(t, w, h), yaw=a, color=STEEL))
+        out.append(Box(f"flask_collar_{i}", pos=(x0 + rm * math.cos(a), y0 + rm * math.sin(a),
+                                                 TOP + F_H - COLLAR_H / 2), size=(t, w, COLLAR_H), yaw=a, color=COLLAR))
+    # the carrying handle: a black loop bracket on the far side (+x), away from the arms
+    out.append(Box("flask_handle", pos=(x0 + F_ROUT + 0.008, y0, TOP + 0.065), size=(0.016, 0.040, 0.012), color=COLLAR))
     return out
 
 
