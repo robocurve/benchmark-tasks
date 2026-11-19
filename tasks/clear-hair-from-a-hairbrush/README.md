@@ -94,9 +94,7 @@ The model used the official loopback bridge over SSH; its credential remained
 on the client computer. Adapter versions and the public request transcript
 are in `evidence/`. No server session IDs or credentials are published.
 
-To audit the published traces on CPU with NumPy and SciPy:
-
-```sh
-python tasks/clear-hair-from-a-hairbrush/replay_evidence.py demo
-python tasks/clear-hair-from-a-hairbrush/replay_evidence.py dream
-```
+The complete traces were audited locally and are retained with their SHA-256
+checksums in `evidence/trace-manifest.json`. They are omitted from this PR to
+meet the 25 MB task archive limit. The audit reports and request transcript
+are included. A fresh run saves a full trace for `rescore.py`.
