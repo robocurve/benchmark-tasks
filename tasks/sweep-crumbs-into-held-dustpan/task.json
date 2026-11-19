@@ -1,0 +1,23 @@
+{
+  "title": "Sweep scattered croutons into a hand-held dustpan: one arm holds the pan down, the other sweeps with the brush",
+  "category": "Impact on jobs",
+  "keywords": [
+    "cleaning",
+    "janitorial",
+    "sweeping",
+    "dustpan",
+    "hand brush",
+    "two arms",
+    "tool use",
+    "holding"
+  ],
+  "instruction": "Sweep all the croutons into the dustpan with the brush, holding the dustpan steady, then put the brush down and let go of both.",
+  "context": "Sweeping debris into a dustpan is a core, repeated duty of janitors and building cleaners (about 2.2 million US workers, BLS OEWS May 2024, 37-2011). The difficulty is physical and two-handed: the light pan slides under the brush's push, so one arm must hold it by its handle with the lip pressed to the table while the other drives an 28 cm hand brush through 20 scattered croutons and up over the lip; a pan that slides back or lifts leaves a gap the croutons fall through, and a brush pushed too fast scatters them round its ends. Full-size objects: a standard hand-brush-and-dustpan set.",
+  "setup": "Positions are measured on the table from the point midway between the two arm bases, which stand 61 cm apart: forward means away from the arms, left and right as seen from behind the arms. Dustpan (dustpan, loose, 150 g, grey plastic): 23 cm wide (forward) x 18 cm deep, lying flat with its lip on the centre line facing right, centred 27 cm forward; a 2 cm lip ramps up 2 mm onto its floor; 4 cm side walls, a 7 cm back wall, and a flat handle fin 11 cm long, 3 cm tall and 12 mm thick standing on edge behind the back wall, at the top. Hand brush (brush, loose, 120 g): a bristle block 18 cm long (forward) x 4.5 cm x 3.5 cm under a wooden stock, with a 10 cm wooden handle (22 mm square) off its far end; lying bristles down, centred 23 cm forward, 21 cm right. Croutons (crouton_00 to crouton_19, loose): 20 cubes of 10 mm, 1 g each, scattered between 20.1 and 31.9 cm forward and 5.7 and 15 cm right, at least 1.8 cm apart (exact positions in task.py). Nothing else is on the table.",
+  "scoring": "A crouton is in the pan when its centre, in the pan's own frame, lies over the pan's floor (between the side walls and between the top of the lip and the back wall) and no more than 2.5 cm above the floor. Score at the end of the trial: 0.6 x (croutons in the pan) / 20 (0 to 0.6). 1.0 when at least 18 of the 20 croutons are in the pan, the pan stands upright (tilted under 10 degrees), the pan, the brush and every crouton have stopped moving (under 5 mm over the last 0.3 s), and no gripper tool point is within 5 cm of the pan's handle or the brush's handle, held for 1 s (the trial then ends; completed less than 1 s before the run limit, the partial score stands).",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lay the pan and brush back at their positions and the croutons back on the template.",
+  "fidelity": "Close to real. Full-size rigid pan and brush; the bristles are a rigid block (real bristles flex and trap some debris); the croutons are rigid 10 mm cubes. PhysX rigid-body contacts, pan-to-table friction 0.4.",
+  "scores": "Dream-1 run: 0.0 (task not completed; hit the 120 s step limit); demo: 1.0 (one arm held the dustpan down while the other swept at least 18 of 20 croutons up its lip, then set the brush down; hands clear, held 1 s)",
+  "media": "M-5NJBRL"
+}
