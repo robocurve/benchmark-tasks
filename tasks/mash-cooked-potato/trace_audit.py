@@ -30,7 +30,9 @@ def audit(rows,report):
   assert np.allclose(a,READY,atol=1e-5) if previous is None else np.all(abs(a-previous)<=DELTA+1e-5),'Action-rate limit'
   m.restore(row['state'])
   candidates=m.strain_candidates()
-  for key,value in m.damage.items():assert prior_damage[key]-1e-7<=value<=max(prior_damage[key],candidates[key])+1e-5,'Softening without recorded loaded compression'
+  for key,value in m.damage.items():
+   expected=min(1.,max(candidates[key],prior_damage[key]+(.05 if count else 0.)*candidates[key]))
+   assert abs(value-expected)<1e-5,'Softening differs from recorded loaded compression history'
   prior_damage=m.damage.copy()
   for name in m.disabled:assert name.startswith('cohesion_') and m.damage[name.split('_')[1]]>=1.-1e-6,'Cohesion removed without complete loaded failure'
   assert set(m.broken)<=joints and broken<=m.broken,'Unknown or healed joint'

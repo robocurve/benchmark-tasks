@@ -31,7 +31,7 @@ def main():
    raise RuntimeError('Use the offline reach audit; native contact dynamics are required for this task.')
   else:
    from isaaclab.app import AppLauncher
-   app=AppLauncher(headless=True,enable_cameras=True).app
+   app=AppLauncher(headless=True,enable_cameras=True,limit_cpu_threads=8).app
    import torch,omni.usd,imageio.v2 as imageio
    from PIL import Image
    from yam_arena import inspect_embodiment as wrapper,scene
@@ -56,7 +56,7 @@ def main():
     out={}
     for side in ['left','right']:
      robot=base.scene[side+'_robot'];idx=list(robot.body_names).index('gripper');pose=array(robot.data.body_link_pose_w)[0,idx];R=rotation(pose[3:]);ids=robot.find_joints(list(FINGER_JOINTS),preserve_order=True)[0];opening=float(np.abs(array(robot.data.joint_pos)[0,ids]).sum()/.094)
-     out[side]=dict(tcp=pose[:3]+R@np.asarray(TCP_OFFSET),rotation=R,opening=opening)
+     out[side]=dict(tcp=pose[:3]+R@np.asarray(TCP_OFFSET),rotation=R,opening=opening,finger_joint_positions=array(robot.data.joint_pos)[0,ids])
     return out
    m.time=-1.
    for _ in range(20):
@@ -89,6 +89,7 @@ def main():
   return_start=next(i for i,f in enumerate(plan['frames']) if f['stage']=='release masher') if a.mode=='demo' else None
   finishing_at=None
   for k in range(1,steps+1):
+   if (a.out/'stop-requested').exists():raise RuntimeError('Diagnostic stopped by operator request; preserve evidence.')
    if a.mode=='demo':
     measured=m.measure()
     if finishing_at is None and k>300 and measured['small_lump_mass_fraction']>=.95 and measured['retained_mass_fraction']>=.95:finishing_at=k
