@@ -158,16 +158,17 @@ class BoxSpec:
     at: tuple = (0.0, 0.0, 0.0)
     color: tuple | None = None
     quat: tuple = (0.0, 0.0, 0.0, 1.0)
+    collide: bool = True  # False: visual only (no collider in Isaac, contype 0 offline), e.g. a blade that passes through
 
 
-def box(size, at=(0.0, 0.0, 0.0), color=None, yaw: float = 0.0, quat=None) -> BoxSpec:
+def box(size, at=(0.0, 0.0, 0.0), color=None, yaw: float = 0.0, quat=None, collide: bool = True) -> BoxSpec:
     """One box of a part: edge lengths ``size`` (m), centre ``at`` in the part frame, turned ``yaw`` (rad) about
-    the part's z (or by ``quat`` xyzw); ``color`` overrides the part's."""
+    the part's z (or by ``quat`` xyzw); ``color`` overrides the part's; ``collide=False`` makes it visual only."""
     size = tuple(float(s) for s in size)
     if len(size) != 3 or min(size) <= 0:
         raise ValueError(f"box size must be 3 positive lengths, got {size!r}")
     q = tuple(float(c) for c in (quat if quat is not None else yaw_quat(yaw)))
-    return BoxSpec(size, tuple(float(c) for c in at), None if color is None else tuple(color), q)
+    return BoxSpec(size, tuple(float(c) for c in at), None if color is None else tuple(color), q, bool(collide))
 
 
 @dataclass(frozen=True)
@@ -753,7 +754,7 @@ def _spawn_part_fn(mod):
             color = b.color if b.color is not None else spec.color
             bcfg = sim_utils.CuboidCfg(
                 size=tuple(b.size),
-                collision_props=coll,
+                collision_props=coll if b.collide else None,  # visual-only boxes get no collider
                 physics_material=mod._grippy(),
                 visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=mod.linear_rgb(color), roughness=0.4),
             )
