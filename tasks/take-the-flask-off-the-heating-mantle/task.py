@@ -59,7 +59,7 @@ M_SEAT = TOP + M_SIZE[2] + RING_H  # the rim's top
 
 # -- the cork ring on the bench: 6.8 cm across, its hole 4.4 cm, 1.2 cm tall --------------------------------------------
 C_XY = (0.21, 0.27)
-CORK = _ring("cork", C_XY, TOP, (0.72, 0.55, 0.36))
+CORK = _ring("cork", C_XY, TOP, (0.56, 0.38, 0.20))  # natural cork, darker than the bench
 C_SEAT = TOP + RING_H
 
 # -- the flask: 100 ml round-bottomed, a 6.4 cm bulb and a 1.9 cm neck 5 cm long, 11.2 cm tall; 0.15 kg with solvent --
