@@ -27,7 +27,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import numpy as np  # noqa: E402
 from yam_arena.constants import FINGER_CLOSED  # noqa: E402
 from yam_arena.demo import Waypoint  # noqa: E402
-from yam_arena.task_file import TABLE_TOP, Box  # noqa: E402
+from yam_arena.task_file import TABLE_TOP, Box, Cylinder  # noqa: E402
 
 import hhcarry  # noqa: E402
 import hhdebug  # noqa: E402
@@ -42,6 +42,11 @@ STEEL = (0.78, 0.80, 0.82)
 
 # -- the bench centrifuge (closed), where the cup came from; fixed --------------------------------------------------
 CENTRIFUGE = Box("centrifuge", pos=(0.20, 0.06, TOP + 0.035), size=(0.10, 0.10, 0.07), color=(0.88, 0.89, 0.90))
+CENTRIFUGE_TOP = [  # its round lid over the rotor well, the lid's dark viewing window, and the front control strip
+    Cylinder("centrifuge_lid", pos=(0.21, 0.06, TOP + 0.071), radius=0.040, height=0.002, color=(0.55, 0.58, 0.62)),
+    Cylinder("centrifuge_window", pos=(0.21, 0.06, TOP + 0.0725), radius=0.020, height=0.001, color=(0.15, 0.17, 0.20)),
+    Box("centrifuge_panel", pos=(0.158, 0.06, TOP + 0.0705), size=(0.012, 0.08, 0.001), color=(0.20, 0.22, 0.26)),
+    Box("centrifuge_open_key", pos=(0.158, 0.035, TOP + 0.0715), size=(0.008, 0.012, 0.001), color=(0.20, 0.60, 0.30))]
 
 # -- the biological safety cabinet: work surface x 0.28-0.43, y 0.125-0.335; air grille along its front edge ---------
 GRILLE_X0, GRILLE_X1 = 0.255, 0.280
@@ -68,7 +73,7 @@ LID = hhcarry.Bottle("lid", pos=(*C_XY, TOP + C_H + L_H / 2), mass=0.02, color=(
 TILT_MAX_DEG = 30.0
 SUCCESS_HOLD_S = 1.0
 
-OBJECTS = [CENTRIFUGE, *CABINET, CUP, LID]
+OBJECTS = [CENTRIFUGE, *CENTRIFUGE_TOP, *CABINET, CUP, LID]
 
 
 def base(s, part) -> np.ndarray:
