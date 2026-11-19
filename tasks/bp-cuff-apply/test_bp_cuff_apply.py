@@ -5,6 +5,7 @@ just outside the skin) placed so the artery arrow sits on the artery line, then 
 the scorer can return is documented in task.json), the closure's overlap measure, the listed shortcuts scoring 0, the scoring-text
 numbers in the scorer, demo reach and purity.
 """
+import inspect
 import json
 import math
 import pathlib
@@ -91,7 +92,7 @@ def test_engage_gate():
     st = wrap()
     segs = t.segments(st.pos, st.quat_xyzw, st.joints)
     i = t.N_SEG - 2  # a lying loop segment
-    on = _loop_face_point(segs, i)
+    on = _loop_face_point(segs, i, out=0.0005)  # pad ON the face (within 2 mm)
     far = _loop_face_point(segs, i, out=0.010)
     assert t.engages(segs, [on, PARK[1]], (True, False))  # closed fist on 60+ mm of lying overlap
     assert not t.engages(segs, [on, PARK[1]], (False, False))  # fingers open on it (a pinch reads open)
@@ -152,7 +153,9 @@ def test_half_wrap_scores_zero():
 
 def test_scoring_numbers_are_in_the_code():
     assert (t.SNUG_GAP, t.LOOSE_GAP, t.MARK_ARC, t.EDGE_ABOVE, t.HAND_CLEAR) == (0.010, 0.030, 0.020, (0.020, 0.040), 0.030)
-    assert (t.ENGAGE_OVERLAP, t.ENGAGE_GAP, t.FIST, t.PRESS_DIST) == (0.060, 0.006, 0.0015, 0.004)
+    assert (t.ENGAGE_OVERLAP, t.ENGAGE_GAP, t.FIST) == (0.060, 0.006, 0.0015)
+    assert (t.PRESS_CONTACT, t.PRESS_DWELL_S, t.CONTROL_HZ) == (0.0020, 0.30, 20.0)
+    assert (t.PRESS_DEPTH, t.RELEASE_STEPS) == (0.00015, 2)
     assert (t.PEEL_LIFT, t.PEEL_FORCE, t.SHEAR_FORCE, t.SUCCESS_HOLD_S) == (0.015, 4.0, 10.0, 1.0)
     text = json.loads((HERE / "task.json").read_text())["scoring"]
     for s in ("10 mm", "20 mm", "20 to 40 mm", "3 cm", "30 mm", "60 mm", "6 mm", "1 s"):
@@ -269,3 +272,222 @@ def test_occlusion_proxy_negative_control_hand_on_a_ray():
         on_ray = CAM + 0.8 * (pt - CAM)
         assert _occluded((tuple(on_ray), _demo_final_tcps()[1]), cu)
     assert _occluded(((t.CUFF_X, 0.040, t.TOP + 0.145 + t.PAD_TIP_PAST_TCP), _demo_final_tcps()[1]), cu)
+
+
+# -- revision-1: the closure is contact-gated and fastens only the overlapping hinges --------------------------------
+
+def test_no_press_no_closure():
+    """No gripper touching the lying loop face: the gate never opens, however long the cuff lies there."""
+    st = wrap()
+    segs = t.segments(st.pos, st.quat_xyzw, st.joints)
+    lying = [i for i, g in t.loop_gaps(segs).items() if abs(g) <= t.ENGAGE_GAP]
+    assert lying and t.SEG * len(lying) >= t.ENGAGE_OVERLAP
+    parked = [PARK[1], PARK[1]]
+    assert not t.engages(segs, parked, (True, True))  # fingers closed, but 32 cm away
+    assert not t.engages(segs, parked, (False, False))
+
+
+def test_pad_stand_off_or_hover_does_not_close():
+    """The old rule engaged from 4 mm away. 3.5 and 4.5 mm off the face are non-events; within 2 mm the prefilter passes (the
+    Isaac fingertip mesh rests the modelled tip 1.0-1.4 mm from the face), but without the cuff being pushed there is no press."""
+    st = wrap()
+    segs = t.segments(st.pos, st.quat_xyzw, st.joints)
+    i = t.N_SEG - 2
+    at_face = _loop_face_point(segs, i, out=0.0005)
+    at_1mm = _loop_face_point(segs, i, out=0.0015)
+    off_3mm = _loop_face_point(segs, i, out=0.0035)
+    off_4mm = _loop_face_point(segs, i, out=0.0045)
+    assert t.engages(segs, [at_face, PARK[1]], (True, False))  # on the face: the proximity prefilter passes ...
+    assert t.engages(segs, [at_1mm, PARK[1]], (True, False))
+    assert not t.engages(segs, [off_3mm, PARK[1]], (True, False))
+    assert not t.engages(segs, [off_4mm, PARK[1]], (True, False))
+    # ... but a pad hovering at 1.5 mm that does not push the cuff is NOT a press: zero displacement, no closure, ever
+    t._EP.update(t._fresh())
+    assert t.press_depth(segs, at_1mm) == 0.0
+    assert t._EP["anchor"] is not None
+    assert t.press_depth(segs, at_1mm) == 0.0
+    assert not t.PRESS_DEPTH <= 0.0
+    assert not _closure(st, 40, touching=True, pressed=t.press_depth(segs, at_1mm) >= t.PRESS_DEPTH)
+    # the same pad with the cuff pushed PRESS_DEPTH toward the arm under it is a press
+    pushed = wrap(lift=-2 * t.PRESS_DEPTH)
+    segs_p = t.segments(pushed.pos, pushed.quat_xyzw, pushed.joints)
+    d = t.press_depth(segs_p, at_1mm)
+    assert d >= t.PRESS_DEPTH - 1e-9
+    assert _closure(pushed, 10, touching=True, pressed=d >= t.PRESS_DEPTH)
+    t._EP.update(t._fresh())
+
+
+def test_no_overlap_no_closure():
+    """Contact on a cuff that has no loop face lying over the hook face cannot fasten anything."""
+    st = flat()  # unrolled: no overlap at all
+    segs = t.segments(st.pos, st.quat_xyzw, st.joints)
+    assert not t.loop_gaps(segs) or max(abs(g) for g in t.loop_gaps(segs).values()) > t.ENGAGE_GAP
+    assert t.bonded_hinges(segs) == []
+    touch_any = t.cuff_apply_face_point(segs, t.N_SEG - 2) if hasattr(t, "cuff_apply_face_point") else _loop_face_point(segs, t.N_SEG - 2, out=0.0005)
+    assert not t.engages(segs, [touch_any, PARK[1]], (True, False))
+
+
+def test_bond_is_the_overlap_hinges_only_and_leaves_every_other_hinge_passive():
+    """The fastening is the minimal hinge set spanning the overlap; every other hinge keeps its build-time stiffness."""
+    st = wrap()
+    segs = t.segments(st.pos, st.quat_xyzw, st.joints)
+    bond = t.bonded_hinges(segs)
+    lying = sorted(i for i, g in t.loop_gaps(segs).items() if abs(g) <= t.ENGAGE_GAP)
+    assert bond and set(bond) <= set(lying)
+    assert len(bond) < t.N_SEG - 1  # not every hinge
+    passive = {j.name: (j.stiffness, j.target) for j in t.CUFF.joints}
+    assert passive == t._PASSIVE  # the passive table is the build-time definition, never rewritten
+    assert all(passive[f"s{i:02d}"][0] < t.K_LOCK for i in range(t.N_SEG) if i != t.ROOT)
+
+
+def _joint_vec(st):
+    """(names in the runtime's order, q array, segment -> joint index) for a cuff state."""
+    names = sorted(st.joints)
+    return names, np.array([st.joints[n] for n in names]), {int(n[1:3]): k for k, n in enumerate(names)}
+
+
+def _closure(st, steps, touching, lift=None, pressed=None):
+    """Drive closure_step on the shared _EP for ``steps`` control steps from cuff state ``st`` (a touching fist presses
+    unless ``pressed`` says otherwise)."""
+    segs = t.segments(st.pos, st.quat_xyzw, st.joints)
+    _, l = t.overlap(segs)
+    names, q, col = _joint_vec(st)
+    pressed = touching if pressed is None else pressed
+    for _ in range(steps):
+        t.closure_step(q, l if lift is None else lift, t.bonded_hinges(segs) if pressed else [], col, touching, pressed)
+    return t._EP["engaged"]
+
+
+def _peeled(st, d):
+    """The wrap with its five loop hinges unbent by ``d`` rad (positive = the loop face lifted off the hook face)."""
+    j = dict(st.joints)
+    for i in range(t.N_SEG - t.N_LOOP, t.N_SEG):
+        if f"s{i:02d}" in j:
+            j[f"s{i:02d}"] += d
+    return cuff(st.pos, 0.0, j)
+
+
+def test_dwell_gate_has_power():
+    """No fist on the closure: never engages, however long; a fist on it engages exactly at the dwell, and a fist
+    that leaves before the dwell resets the count."""
+    t._EP.update(t._fresh())
+    assert not _closure(wrap(), 40, touching=False)
+    assert t._EP["press_s"] == 0.0
+    # a fist ON the closure that is not pressing (hover within 2 mm, or resting without pushing) never engages
+    assert not _closure(wrap(), 40, touching=True, pressed=False)
+    assert t._EP["press_s"] == 0.0
+    t._EP.update(t._fresh())
+    n = int(round(t.PRESS_DWELL_S * t.CONTROL_HZ))
+    assert not _closure(wrap(), n - 1, touching=True)
+    assert not _closure(wrap(), 1, touching=False)
+    assert t._EP["press_s"] == 0.0
+    assert not _closure(wrap(), n - 1, touching=True)
+    assert _closure(wrap(), 1, touching=True)
+    assert t._EP["bonded"] == t.bonded_hinges(t.segments(*[getattr(wrap(), a) for a in ("pos", "quat_xyzw", "joints")]))
+    assert t._EP["bond_idx"] == sorted(_joint_vec(wrap())[2][i] for i in t._EP["bonded"])
+
+
+def test_press_gate_depth_term_is_load_bearing():
+    """The press is proximity AND displacement: dropping the depth term (the earlier proximity-only semantics,
+    ``pressed = bool(hands)``) must fail this test, both at the gate itself and where the closure calls it."""
+    assert t.press_gate([], 1.0) is False                      # no hand: no press, however far the cuff moved
+    assert t.press_gate([0], 0.0) is False                     # a hover/rest inside 2 mm that pushes nothing
+    assert t.press_gate([0], t.PRESS_DEPTH * 0.9) is False     # a light touch below the threshold
+    assert t.press_gate([0], t.PRESS_DEPTH) is True            # the press exactly at the threshold
+    assert t.press_gate([0, 1], 0.001) is True                 # either hand, real displacement
+    # wiring: the closure's one decision point must go through the gate (a call-site mutant that drops the depth
+    # term -- ``pressed = bool(hands)`` -- leaves every other test green, so pin the call here).
+    src = inspect.getsource(t._rules)
+    assert "press_gate(" in src
+    assert re.search(r"pressed\s*=\s*bool\(hands\)", src) is None
+
+
+def test_close_then_peel_releases_and_a_small_lift_does_not():
+    """Release after closure: a peel over PEEL_LIFT with over PEEL_FORCE opens the bond (after RELEASE_STEPS steps);
+    a 2 mm lift does not; and a hand on the closure is a press, never a peel."""
+    t._EP.update(t._fresh())
+    st = wrap()
+    assert _closure(st, 10, touching=True)
+    lock = t._EP["lock"].copy()
+    # the release rule itself, disabled vs enabled on the same lock
+    names, q, col = _joint_vec(st)
+    assert not t.release_due(q, lock, t._EP["bond_idx"], 0.0)
+    peel = _peeled(st, 0.2)
+    segs_p = t.segments(peel.pos, peel.quat_xyzw, peel.joints)
+    _, lift_p = t.overlap(segs_p)
+    assert lift_p > t.PEEL_LIFT  # the fixture really lifts the loop face
+    _, qp, _ = _joint_vec(peel)
+    assert t.K_LOCK * float(np.abs(qp - lock)[t._EP["bond_idx"]].max()) / t.SEG > t.PEEL_FORCE
+    assert t.release_due(qp, lock, t._EP["bond_idx"], lift_p)
+    # fist still on it while peeled: no release, however long
+    assert _closure(peel, 20, touching=True)
+    assert t._EP["release_n"] == 0
+    # hand off: hysteresis, then release
+    assert _closure(peel, t.RELEASE_STEPS - 1, touching=False)
+    assert not _closure(peel, 1, touching=False)
+    assert t._EP["bonded"] == [] and t._EP["lock"] is None
+    # re-close, then a 2 mm lift with no hand on it holds
+    t._EP.update(t._fresh())
+    assert _closure(st, 10, touching=True)
+    small = _peeled(st, 0.01)
+    _, lift_s = t.overlap(t.segments(small.pos, small.quat_xyzw, small.joints))
+    assert lift_s < t.PEEL_LIFT
+    assert _closure(small, 40, touching=False)
+    t._EP.update(t._fresh())
+
+
+def test_release_reads_bonded_hinges_only():
+    """A passive hinge bent hard (0.6 rad, as a hand or the arm would) with no hand on the closure must NOT open the bond:
+    the release rule reads the bonded hinges only (reading every joint released the bond 0.5 s after the fist left)."""
+    t._EP.update(t._fresh())
+    st = wrap()
+    assert _closure(st, 10, touching=True)
+    j = dict(st.joints)
+    passive = next(f"s{i:02d}" for i in range(t.N_SEG) if f"s{i:02d}" in j and i not in t._EP["bonded"] and i != t.ROOT)
+    j[passive] += 0.6
+    bent = cuff(st.pos, 0.0, j)
+    names, qb, _ = _joint_vec(bent)
+    assert t.K_LOCK * 0.6 / t.contact_radius() > t.SHEAR_FORCE  # read over every joint this WOULD release
+    assert not t.release_due(qb, t._EP["lock"], t._EP["bond_idx"], 0.0)
+    assert _closure(bent, 6, touching=False)
+    t._EP.update(t._fresh())
+
+
+class _Drives:
+    def __init__(self):
+        self.writes = []
+        self.device = "cpu"
+
+    def write_joint_stiffness_to_sim(self, a):
+        self.writes.append(("k", np.asarray(a)[0].tolist()))
+
+    def set_joint_position_target(self, a):
+        self.writes.append(("q", np.asarray(a)[0].tolist()))
+
+
+def test_joint_arrays_are_written_on_state_edges_only():
+    """The drives are a latch: one write pair on the first step, one on engage, one on release -- never per step."""
+    t._EP.update(t._fresh())
+    st = wrap()
+    names, q, col = _joint_vec(st)
+    cu = _Drives()
+    joint_names = [n + "_joint" for n in names]
+    assert t.write_drives(cu, joint_names) and len(cu.writes) == 2  # first step: the passive table
+    for _ in range(20):
+        assert not t.write_drives(cu, joint_names)
+    assert len(cu.writes) == 2
+    assert _closure(st, 10, touching=True)
+    assert t.write_drives(cu, joint_names) and len(cu.writes) == 4  # engage edge
+    k = cu.writes[2][1]
+    assert [i for i, v in enumerate(k) if v == t.K_LOCK] == t._EP["bond_idx"]
+    assert all(k[i] < t.K_LOCK for i in range(len(k)) if i not in t._EP["bond_idx"])
+    for _ in range(20):
+        assert not t.write_drives(cu, joint_names)
+    assert len(cu.writes) == 4
+    peel = _peeled(st, 0.2)
+    assert not _closure(peel, t.RELEASE_STEPS, touching=False)
+    assert t.write_drives(cu, joint_names) and len(cu.writes) == 6  # release edge: back to the passive table
+    assert all(v < t.K_LOCK for v in cu.writes[4][1])
+    assert not t.write_drives(cu, joint_names)
+    t._EP.update(t._fresh())
+
