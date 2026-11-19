@@ -36,7 +36,7 @@ import numpy as np
 from yam_arena import task_file
 from yam_arena.task_file import Box, ObjectState
 
-__all__ = ["Part", "PartState", "Slider", "on_reset", "on_step", "env", "write_pose", "install"]
+__all__ = ["Part", "PartState", "Slider", "on_reset", "on_step", "env", "gripper_points", "write_pose", "install"]
 
 Color = tuple[float, float, float]
 BoxSpec = tuple  # (centre, size, colour[, yaw]) in the part frame (m; yaw in radians about the part's z, default 0)
@@ -59,6 +59,8 @@ class Slider:
     mass: float = 0.002
     axis: str = "Z"
     sign: int = -1
+    friction: float | None = None   # this slider's own friction (None: the part's)
+    prisms: tuple = ()              # convex wedges: (three (x, y) corners, z0, z1, colour), in the part frame
 
 
 @dataclass(frozen=True)
@@ -175,15 +177,15 @@ def _spawn_part(prim_path: str, cfg, translation=None, orientation=None, **kwarg
         rb.CreateAngularDampingAttr(1.0)  # light damping: small stiff parts otherwise chatter in tight fits
         return prim
 
-    def collide(prim, color):
+    def collide(prim, color, material=phys):
         UsdPhysics.CollisionAPI.Apply(prim)
         cp = PhysxSchema.PhysxCollisionAPI.Apply(prim)
         cp.CreateContactOffsetAttr(0.0005)  # below the 1 mm fits, so tight parts do not touch on every face at once
         cp.CreateRestOffsetAttr(0.0)
-        bind_physics_material(str(prim.GetPath()), phys, stage=stage)
+        bind_physics_material(str(prim.GetPath()), material, stage=stage)
         bind_visual_material(str(prim.GetPath()), look(color), stage=stage)
 
-    def boxes(path: str, specs, offset=(0.0, 0.0, 0.0)):
+    def boxes(path: str, specs, offset=(0.0, 0.0, 0.0), material=phys):
         for i, spec in enumerate(specs):
             centre, size, color = spec[:3]
             cube = UsdGeom.Cube.Define(stage, f"{path}/box_{i}")
@@ -192,7 +194,7 @@ def _spawn_part(prim_path: str, cfg, translation=None, orientation=None, **kwarg
             if len(spec) > 3 and spec[3]:
                 cube.AddRotateZOp().Set(math.degrees(spec[3]))
             cube.AddScaleOp().Set(Gf.Vec3f(*size))
-            collide(cube.GetPrim(), color)
+            collide(cube.GetPrim(), color, material)
 
     def cylinders(path: str, specs, offset=(0.0, 0.0, 0.0)):
         for i, spec in enumerate(specs):
@@ -204,6 +206,19 @@ def _spawn_part(prim_path: str, cfg, translation=None, orientation=None, **kwarg
             cyl.AddTranslateOp().Set(Gf.Vec3d(*(np.array(centre) - np.array(offset))))
             collide(cyl.GetPrim(), color)
 
+    def prisms(path: str, specs, offset=(0.0, 0.0, 0.0), material=phys):
+        """Triangular prisms (a wedge, such as a latch's ramped nose), each one convex collider."""
+        for i, (tri, z0, z1, color) in enumerate(specs):
+            pts = [Gf.Vec3f(float(x - offset[0]), float(y - offset[1]), float(z - offset[2]))
+                   for z in (z0, z1) for (x, y) in tri]
+            mesh = UsdGeom.Mesh.Define(stage, f"{path}/prism_{i}")
+            mesh.CreatePointsAttr(pts)
+            mesh.CreateFaceVertexCountsAttr([3, 3, 4, 4, 4])
+            mesh.CreateFaceVertexIndicesAttr([0, 2, 1, 3, 4, 5, 0, 1, 4, 3, 1, 2, 5, 4, 2, 0, 3, 5])
+            mesh.CreateSubdivisionSchemeAttr("none")
+            collide(mesh.GetPrim(), color, material)
+            UsdPhysics.MeshCollisionAPI.Apply(mesh.GetPrim()).CreateApproximationAttr("convexHull")
+
     main = f"{prim_path}/body"
     body(main, (0.0, 0.0, 0.0), None if spec.fixed else spec.mass)
     boxes(main, spec.boxes)
@@ -211,7 +226,13 @@ def _spawn_part(prim_path: str, cfg, translation=None, orientation=None, **kwarg
     for s in spec.sliders:
         path = f"{prim_path}/{s.name}"
         body(path, s.rest, s.mass)
-        boxes(path, s.boxes, offset=s.rest)
+        mat = phys
+        if s.friction is not None:   # a slider of another material than the part (a nylon latch in a vinyl sash)
+            mat = f"{prim_path}/Looks/physics_{s.name}"
+            pms = sim_utils.RigidBodyMaterialCfg(static_friction=s.friction, dynamic_friction=s.friction)
+            pms.func(mat, pms)
+        boxes(path, s.boxes, offset=s.rest, material=mat)
+        prisms(path, s.prisms, offset=s.rest, material=mat)
         cylinders(path, s.cylinders, offset=s.rest)
         j = UsdPhysics.PrismaticJoint.Define(stage, f"{path}/{s.name}_slide")
         j.CreateAxisAttr(s.axis)
@@ -318,6 +339,37 @@ def write_pose(environment, name: str, pos, quat_xyzw, lin_vel=(0, 0, 0), ang_ve
     asset.write_root_pose_to_sim_index(root_pose=pose)
     v = torch.tensor([*lin_vel, *ang_vel], dtype=origin.dtype, device=origin.device).unsqueeze(0)
     asset.write_root_velocity_to_sim_index(root_velocity=v)
+
+
+PALM_BACK, FINGER_THICK = 0.065, 0.012   # the palm behind the grasp point, and a finger's thickness (m)
+
+
+def gripper_points(environment) -> list:
+    """Points on each gripper that could touch something between or beside its fingers, left gripper then right
+    (world, relative to the env origin): along both fingers' inner and outer faces, from their tips back to the palm,
+    and the palm's middle. The fingers' opening is read from their joints."""
+    from yam_arena.constants import PAD_TIP_PAST_TCP, TCP_OFFSET
+
+    base = environment.unwrapped
+    origin = _np(base.scene.env_origins[0])
+    out = []
+    for arm in ("left_robot", "right_robot"):
+        robot = base.scene[arm]
+        pose = _np(robot.data.body_link_pose_w)[0][list(robot.body_names).index("gripper")]
+        x, y, z, w = (float(v) for v in pose[3:7])
+        rot = np.array([[1 - 2 * (y * y + z * z), 2 * (x * y - w * z), 2 * (x * z + w * y)],
+                        [2 * (x * y + w * z), 1 - 2 * (x * x + z * z), 2 * (y * z - w * x)],
+                        [2 * (x * z - w * y), 2 * (y * z + w * x), 1 - 2 * (x * x + y * y)]])
+        tcp = pose[:3] + rot @ np.array(TCP_OFFSET, float) - origin
+        q, names = _np(robot.data.joint_pos)[0], list(robot.joint_names)
+        pts = [tcp - PALM_BACK * rot[:, 2]]
+        for side, joint in ((-1.0, "joint7"), (1.0, "joint8")):
+            half = abs(float(q[names.index(joint)]))
+            for depth in (PAD_TIP_PAST_TCP, 0.0, -PALM_BACK / 2, -PALM_BACK):
+                for face in (0.0, FINGER_THICK):
+                    pts.append(tcp + side * (half + face) * rot[:, 0] + depth * rot[:, 2])
+        out.append(pts)
+    return out
 
 
 # -- hooking yam_arena -------------------------------------------------------------------------------------------
