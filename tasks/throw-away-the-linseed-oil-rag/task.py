@@ -30,6 +30,7 @@ from yam_arena.task_file import TABLE_TOP, Box, Cylinder  # noqa: E402
 
 import hhdebug  # noqa: E402
 import hhkit  # noqa: E402
+import hhperson  # noqa: E402  (TrimBox: a loose box drawn as visual parts)
 
 SCENE = "station"
 TOP = TABLE_TOP[SCENE]
@@ -78,7 +79,14 @@ def _can():
 # -- the rag: wadded, 6 x 4 x 3 cm, 40 g, lying along x on the bench --------------------------------------------------------
 R_SIZE = (0.060, 0.040, 0.030)
 R_XY = (0.19, 0.26)
-RAG = Box("oily_rag", pos=(*R_XY, TOP + R_SIZE[2] / 2), size=R_SIZE, mass=0.04, color=(0.78, 0.62, 0.35))
+# drawn as a crumpled cotton wad: a flattened fold, two lumps and an oil stain, within the collider (scoring unchanged)
+RAG_TRIM = (("fold", (0.060, 0.040, 0.016), (0.0, 0.0, -0.007), (0.74, 0.62, 0.42)),
+            ("lump_a", (0.034, 0.030, 0.014), (-0.010, 0.004, 0.008), (0.66, 0.52, 0.32)),
+            ("lump_b", (0.024, 0.022, 0.011), (0.017, -0.008, 0.0045), (0.82, 0.71, 0.50)),
+            ("corner", (0.014, 0.012, 0.006), (0.022, 0.012, 0.004), (0.70, 0.58, 0.38)),
+            ("oil_stain", (0.018, 0.014, 0.001), (-0.012, 0.006, 0.0145), (0.48, 0.34, 0.16)))
+RAG = hhperson.TrimBox("oily_rag", pos=(*R_XY, TOP + R_SIZE[2] / 2), size=R_SIZE, mass=0.04, color=(0.78, 0.62, 0.35),
+                       trim=RAG_TRIM)
 
 OBJECTS = [BOARD, *_basket(), *_can(), RAG]
 
