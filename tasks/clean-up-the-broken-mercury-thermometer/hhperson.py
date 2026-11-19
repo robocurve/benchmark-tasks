@@ -45,11 +45,15 @@ class UsdBody(Box):
 
 @dataclass(frozen=True)
 class TrimBox(Box):
-    """A loose box (its collider) drawn as ``trim``: visual-only boxes riding on it, each (name, size, offset from the
+    """A loose box (its collider) drawn as ``trim``: visual-only parts riding on it, each (name, size, offset from the
     box centre in its own frame, sRGB colour). The collider box itself is hidden. Used for a knife or a tool whose
-    blade and handle must be told apart on camera; scoring treats it as the plain box it is."""
+    blade and handle must be told apart on camera; scoring treats it as the plain box it is. A part whose name starts
+    with ``rod`` is drawn as a cylinder along its own x axis and one starting with ``bulb`` as an ellipsoid (both
+    filling ``size``); every other part is a box. ``friction`` (static, dynamic) replaces the scene's rubber-like
+    default when given."""
 
     trim: tuple = ()
+    friction: tuple | None = None
 
 
 @dataclass(frozen=True)
@@ -153,13 +157,24 @@ def _trim_object(spec: TrimBox, scene):
             UsdGeom.Imageable(mesh).MakeInvisible()
         for name, size, off, color in trim:
             path = f"{prim_path}/trim/{name}"
-            cube = UsdGeom.Cube.Define(stage, path)
-            cube.CreateSizeAttr(1.0)
+            if name.startswith("rod"):  # a glass rod: a cylinder along the part's x axis
+                cube = UsdGeom.Cylinder.Define(stage, path)
+                cube.CreateAxisAttr("X")
+                cube.CreateRadiusAttr(0.5)
+                cube.CreateHeightAttr(1.0)
+            elif name.startswith("bulb"):  # a thermometer bulb: an ellipsoid
+                cube = UsdGeom.Sphere.Define(stage, path)
+                cube.CreateRadiusAttr(0.5)
+            else:
+                cube = UsdGeom.Cube.Define(stage, path)
+                cube.CreateSizeAttr(1.0)
             cube.AddTranslateOp().Set(Gf.Vec3d(*[float(v) for v in off]))
             cube.AddScaleOp().Set(Gf.Vec3f(*[float(v) for v in size]))
             if name.startswith("beam"):  # a laser's light: glowing and see-through, visual only
                 look = sim_utils.PreviewSurfaceCfg(diffuse_color=scene.linear_rgb(color),
                                                    emissive_color=scene.linear_rgb(color), opacity=0.35)
+            elif name.startswith("bulb") or name.startswith("hg"):  # mercury: glossy but mostly diffuse, reads bright
+                look = sim_utils.PreviewSurfaceCfg(diffuse_color=scene.linear_rgb(color), roughness=0.15, metallic=0.25)
             else:
                 look = sim_utils.PreviewSurfaceCfg(diffuse_color=scene.linear_rgb(color), roughness=0.35,
                                                    metallic=0.8 if name.startswith("blade") or name.startswith("steel") else 0.0)
@@ -170,7 +185,9 @@ def _trim_object(spec: TrimBox, scene):
     cfg = sim_utils.CuboidCfg(
         size=tuple(spec.size), func=_spawn,
         rigid_props=PhysxRigidBodyPropertiesCfg(), mass_props=sim_utils.MassPropertiesCfg(mass=spec.mass),
-        collision_props=scene._contact_props(), physics_material=scene._grippy(),
+        collision_props=scene._contact_props(),
+        physics_material=scene._grippy() if spec.friction is None else sim_utils.RigidBodyMaterialCfg(
+            static_friction=float(spec.friction[0]), dynamic_friction=float(spec.friction[1])),
         visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=scene.linear_rgb(spec.color), roughness=0.4))
     return Object(name=spec.name, object_type=ObjectType.RIGID, spawner_cfg=cfg,
                   initial_pose=Pose(position_xyz=tuple(spec.pos), rotation_xyzw=scene._yaw_xyzw(spec.yaw)))
