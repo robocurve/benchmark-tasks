@@ -72,7 +72,6 @@ def evaluate_waveform(time_s, voltage_v, *, frequency_hz=1000.0, expected_vpp=5.
 
     Use at least two rising and two falling edges with the scale fixed.
     Normalize the largest early-plateau error by the measured plateau span.
-    The 3%, 6%, 12%, and 20% cutoffs are provisional pending bench captures.
     """
     invalid = WaveformResult(0.0, None, None, None)
     if not (isfinite(frequency_hz) and isfinite(expected_vpp) and frequency_hz > 0 and expected_vpp > 0):

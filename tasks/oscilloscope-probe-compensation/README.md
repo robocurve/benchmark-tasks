@@ -6,7 +6,7 @@
 
 ## Setup
 
-Use the calibrated bimanual YAM station. Coordinates are metres, with x forward from the arms, y left, and z above the floor. The table surface is at z = 0.7475 m. Both arms begin at READY with open grippers. The layout is fixed.
+Use the calibrated bimanual YAM station. Coordinates are metres, with x forward from the arms, y left, and z above the floor. The table surface is at z = 0.7475 m. Both arms begin at READY with open grippers. The table below describes the recorded simulation. For a physical trial, the [OWON kit](#lower-cost-physical-trial) is a lower-cost alternative.
 
 | Object | Dimensions, material, and starting position |
 | --- | --- |
@@ -20,6 +20,17 @@ Use the calibrated bimanual YAM station. Coordinates are metres, with x forward 
 
 Set the instrument's CH1 and probe to 10×, with DC coupling. Connect the tip and ground clip to the scope's PROBE COMP output and return as specified in the [manufacturer procedure](https://download.tek.com/manual/071181702web.pdf). Use the built-in nominal 5 V, 1 kHz reference. Display live CH1 alone in Sample acquisition mode. Use a CH1 rising-edge trigger at the midpoint of the two plateaus, 250 μs/div, and 2 V/div with both plateaus visible. Reset by turning the trimmer until both edges are rounded and the measured error is between 27% and 35%, the band containing the simulator's 30.9% reset. Check the reset error using the exported CH1 CSV. Restore the tool to its starting pose and reset the arms. Nothing is consumed.
 
+### Lower-cost physical trial
+
+Use the **OWON SDS1102 benchtop kit** with one bundled switchable 1×/10× passive BNC probe, its hook and ground clip, and the supplied trim driver. On November 19, 2026, the kit was listed at **US$249** and **€219 including VAT**, respectively, before any shipping or additional taxes. The listings identify the included probe and adjustment tool. A USB flash drive is used to collect the score. [Buy from Newegg (US)](https://www.newegg.com/p/0AF-00HU-00010?Item=9SIA305BJG8038) · [Buy from Elektor (EU)](https://www.elektor.com/products/owon-sds1102-2-ch-oscilloscope-100-mhz)
+
+The SDS1102 supplies its own nominal **5 V peak-to-peak, 1 kHz square wave**, has a **1 MΩ input with nominal 20 pF** and displays the live CH1 trace. Figure 3-7 shows the factory adjustment opening on the probe's BNC housing and the driver entering it from the side. The robot still has to seat the loose blade through that opening and keep it engaged as it turns in response to the trace. The probe and tool come with the scope, and its USB waveform export provides the trace for the same score. [OWON product specifications and kit contents](https://www.owontech.com/digital-oscilloscopes/benchtop-oscilloscopes/sds1000-series-super-economical-type-digital.html) · [OWON user manual, printed pp. 9–11, 27–31 and 57–60](https://www.owontechnology.eu/_downloads/45431c4b2958db6f367835ffcbfc183d)
+
+1. **Layout.** Put the 301 × 152 × 70 mm scope (about 1.1 kg) on its feet, with the front facing the arms at x = 0.485 m and its lateral centre at y = 0.154 m. Lock the probe onto CH1 with its stock access opening facing up where the connector permits. Keep the opening and blade approach clear, and route the cable with slack. Hook the tip to the front-panel compensation output and clip the ground lead to its return. Place the free driver at x = 0.287 m, y = 0.140 m at the grip centre, tip along −y, and start both arms in READY. Record the actual port orientation and layout with a reset photo so they can be repeated.
+2. **Acquisition.** Set the probe switch and CH1 attenuation to 10×. Use CH1 alone, DC coupling, **Acquire → Sample**, persistence off, normal CH1 rising-edge trigger at the midpoint of the two plateaus, and RUN. Use **500 μs/div** on the OWON and **2 V/div**. Centre the trace vertically so both plateaus and their transients stay visible. Keep these settings fixed during the trial.
+3. **Export and score.** With a FAT32 USB drive inserted, select **Utility → Function → Save**, then **Type: Wave**, **Source: CH1**, **Next Page**, **File Format: CSV** and **Storage: External**. Save a fresh waveform after the final hold. Keep the original export. Copy the time and CH1 probe-tip voltage samples into a two-column CSV headed `time_s,voltage_v`, converting the exported units to seconds and volts as needed. If the file stores sample indices, use the actual sample interval recorded for that capture to obtain the timestamps. Preserve every sample in order. Verify that the record spans several periods with successive samples at most 26 μs apart. Run `judge_waveform.py` on that CSV and apply the same video checks and score bands below.
+4. **Reset.** Before each trial turn the trimmer by hand until the edges are visibly rounded and the exported trace shows **27–35%** normalized error. Use the same settings as for scoring and return the tool and arms to their start poses.
+
 ## Scoring
 
 Grade the CH1 trace at the fixed calibration settings. The evaluator estimates late high and low plateau levels from samples 34–46% of a period after each edge, skipping the next transition. Error is the largest deviation from the corresponding plateau over 2–34% of a period after the edge, divided by the plateau span. Use a fresh waveform with at least two rising and two falling edges, each half-cycle between 0.40 and 0.60 ms, each measured period between 0.95 and 1.05 ms, and a plateau span between 4.0 and 6.0 V. An invalid or missing trace earns zero. See [waveform.py](waveform.py) for exact sample checks.
@@ -32,13 +43,13 @@ Grade the CH1 trace at the fixed calibration settings. The evaluator estimates l
 | >3% to 6% | 0.75 |
 | ≤3% | 1.0 when the trace and placement conditions hold together for one second |
 
-Use the trial video to confirm that the tool adjusted the trimmer and the scope acquired a live, unclipped CH1 trace throughout. A compensated trace while the tool is still held or in the slot earns 0.75. For full credit, the tool must rest flat on the bare tabletop for one second with the grip centre at 0.01 < x < 0.68 m and |y| < 0.52 m, and both gripper centres more than 8 cm from the centre of the grip. The last partial score remains until that hold completes. Keep acquisition in RUN. After the hold, use SAVE/RECALL → Save Waveform → CH1 → File to export the fresh CSV to USB.
+Use the trial video to confirm that the tool adjusted the trimmer and the scope acquired a live, unclipped CH1 trace throughout. A compensated trace while the tool is still held or in the slot earns 0.75. For full credit, the tool must rest flat on the bare tabletop for one second with the grip centre at 0.01 < x < 0.68 m and |y| < 0.52 m, and both gripper centres more than 8 cm from the centre of the grip. The last partial score remains until that hold completes. Keep acquisition in RUN. After the hold, export the fresh CSV to USB using SAVE/RECALL → Save Waveform → CH1 → File on the Tektronix, or the [OWON menu above](#lower-cost-physical-trial).
 
 ```bash
 python judge_waveform.py /path/to/CH1.csv
 ```
 
-This command reports the waveform component. A trace CSV cannot establish the visible tool outcome. The current cutoffs are prototype choices awaiting scope captures.
+This command reports the waveform component. Use the trial video to score the visible tool outcome.
 
 ## Fidelity
 
