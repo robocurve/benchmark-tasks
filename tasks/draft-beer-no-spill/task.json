@@ -1,0 +1,20 @@
+{
+  "title": "Serve ale with a UK hand-pull beer engine without spilling",
+  "category": "Societal relatability",
+  "keywords": [
+    "bimanual",
+    "cask ale",
+    "hand-pull beer engine",
+    "positive displacement",
+    "liquid containment"
+  ],
+  "instruction": "Use the hand-pull beer engine to serve at least 400 mL of ale in the glass without spilling any beer outside it.",
+  "context": "Cask ale is served by pulling and returning a hand pump. Each pull delivers a finite amount, so the robot must coordinate repeated strokes with the glass position as it fills.",
+  "setup": "Standard calibrated bimanual YAM station, unchanged cameras, tabletop Z=0.7475 m. Empty 350 g glass mug, 36 mm inner radius, 40 mm outer radius, 8 mm base, 131 mm rim height, approximately 500 mL capacity, 400 mL mark; base (0.26,0.16,0.7475), handle +Y. Original dimensioned Angram CQ reconstruction on fixed portable wooden counter frame with 25 mm board at Z=1.0125; pump mount (0.18,-0.10,1.0125), yaw -0.9. Approximate published engine height 412.75 mm above and 257.175 mm below mount. Brass/steel body, wood-effect hood, cream handle, native crank/rocking-cylinder/piston. Primed cylinder, handle upright. Estimated outlet (0.011913,0.047468,0.9725), drip tray below; tray liquid is spilled. Native water-like amber PBD liquid, no foam; packed-plane source calibrated at 0.0187 mL/sample. Left READY; right joints [0,0.8,1,-0.6,0,0] rad, both grippers open. Exact meshes, solids and dimensions in code/README.",
+  "scoring": "Score 0 if liquid spills outside the glass at any time, even if recaptured. Liquid escaping the glass footprint or wetting the tray or liner counts as spilled. A splash that stays over the mouth and falls back earns no credit while airborne. Otherwise score min(final retained mL / 400, 1). Use trial video, a dry witness liner and tray, and a tared 1 g scale with the water stand-in. In simulation, each retained particle represents 0.0187 mL. Wall contact and airborne particles are uncredited. Missing or invalid native readback invalidates the run.",
+  "run_limit": "1,400 policy actions at 20 Hz (70 s), followed by 40 held controls (2 s observation tail). Fixed layout, seed 0.",
+  "reset_notes": "Prime three full pulls into a waste jug until visibly air-free; remove jug. Empty/dry mug and tray, replace dry witness liner, restore declared poses. Use same noncarbonated water batch at 20±2 C, waterproof deck/catch pan and loose wrist sleeves, pads dry and uncovered; fresh simulation process.",
+  "fidelity": "Original full-size Angram CQ reconstruction with estimated internals, spout routing and loads. Measured native piston travel supplies water-like PhysX liquid. Final geometric volume estimate: 413 mL. Dense liquid under-transfers weight. Pump loads are uncalibrated against hardware. Priming is idealized and foam and carbonation are omitted.",
+  "scores": "Dream-1: 0.0 (no delivery). Scripted demo: 1.0 (421.22 mL retained, zero recorded spill). Both finished the 72 s trial.",
+  "media": "M-MN2QM2"
+}

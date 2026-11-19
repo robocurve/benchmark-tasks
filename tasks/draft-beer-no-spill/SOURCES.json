@@ -1,0 +1,140 @@
+{
+  "references": [
+    {
+      "name": "Brewers Association: Draught Beer Quality for Retailers",
+      "url": "https://cdn.brewersassociation.org/wp-content/uploads/2019/06/Draught-Beer-Quality-for-Retailers.pdf",
+      "supports": "Glass positioning and gradual upright pouring as plausible strategies. These are not score gates."
+    },
+    {
+      "name": "NVIDIA PhysX particles documentation",
+      "url": "https://docs.omniverse.nvidia.com/kit/docs/omni_physics/latest/dev_guide/particles/particles.html",
+      "supports": "Native particle-fluid authoring APIs. Does not establish this implementation works."
+    },
+    {
+      "name": "NVIDIA native particle-set mass implementation",
+      "url": "https://github.com/NVIDIA-Omniverse/PhysX/blob/main/ovphysx/ovruntime/source/omni.physx/plugins/usdInterface/UsdInterfaceParticle.cpp",
+      "supports": "The importer uses positive total mass if provided; otherwise it infers per-particle mass from density with a float32 rest-volume floor. Normalized set density compensates that floor. Native amplified single-particle calibration, rather than this public source alone, validates the installed mass route."
+    },
+    {
+      "name": "NVIDIA explanation of PBD particle-to-rigid load-transfer limits",
+      "url": "https://forums.developer.nvidia.com/t/particle-set-total-mass-not-fully-transferred-to-rigid-body/373127",
+      "supports": "Native finite-iteration contact coupling can under-transfer load; recommends solver budget and mass-ratio checks. Our own calibration receipts remain the evidence for this task."
+    },
+    {
+      "name": "NVIDIA TightPack3D rest-density calibration",
+      "url": "https://github.com/NVIDIA-Omniverse/PhysX/blob/main/physx/source/gpusimulationcontroller/src/PxgParticleSystemCore.cpp",
+      "supports": "Packed lattice coordinates and nominal unit-cell volume; finite-volume/convergence checks remain empirical."
+    },
+    {
+      "name": "NVIDIA coupled GPU iteration scheduler",
+      "url": "https://github.com/NVIDIA-Omniverse/PhysX/blob/main/physx/source/gpusolver/src/PxgContext.cpp",
+      "supports": "Rigid, articulation and particle iteration requests contribute to common solver maxima; particle-only changes can be masked by high rigid-body requests."
+    }
+  ],
+  "assets": [
+    {
+      "name": "Original hollow mug, fill markings, CQ reconstruction and portable counter frame",
+      "path": "geometry.py, cq_assets.py, assets/cq/",
+      "license": "MIT",
+      "provenance": "Original reproducibly generated meshes, metal materials and procedural mahogany texture; no third-party CAD or product images bundled. Published approximate CQ dimensions inform the original reconstruction; internals, routing, mass and passive loads are estimates."
+    },
+    {
+      "name": "Task implementation and documentation",
+      "path": ".",
+      "license": "MIT",
+      "provenance": "Original code and documentation; external dependencies retain their licenses."
+    },
+    {
+      "name": "I2RT YAM arm and linear parallel-gripper robot description, meshes and converted USD",
+      "paths": [
+        "yam_arena/assets/yam/yam_arm.urdf",
+        "yam_arena/assets/yam/assets/base.stl",
+        "yam_arena/assets/yam/assets/link1.stl",
+        "yam_arena/assets/yam/assets/link2.stl",
+        "yam_arena/assets/yam/assets/link3.stl",
+        "yam_arena/assets/yam/assets/link4.stl",
+        "yam_arena/assets/yam/assets/link5.stl",
+        "yam_arena/assets/yam/assets/gripper.stl",
+        "yam_arena/assets/yam/assets/tip_left.stl",
+        "yam_arena/assets/yam/assets/tip_right.stl",
+        "yam_arena/assets/yam/collision/",
+        "yam_arena/assets/yam/usd/yam_arm/"
+      ],
+      "upstream": "https://github.com/i2rt-robotics/i2rt",
+      "source_commit": "120c3c81400171174604e503943f8d1ebc891058",
+      "provenance": "I2RT YAM robot assets loaded twice for the bimanual station; yam-arena supplies the converted PhysX USD and derived convex collision meshes.",
+      "license": "MIT",
+      "copyright": "Copyright (c) I2RT Robotics",
+      "dependency": "yam-arena",
+      "dependency_commit": "bd62771e60320433893bd1d2df0fc79b5ddcd6d1",
+      "license_file": "yam_arena/assets/yam/LICENSE.i2rt",
+      "license_url": "https://github.com/i2rt-robotics/i2rt/blob/120c3c81400171174604e503943f8d1ebc891058/LICENSE",
+      "license_sha256": "7cd0a0224a287ebd6c45703eb6623d264c7810f8958d65de8f99e87ccd9f4891",
+      "terms": "Permits use, copying, modification, redistribution, sublicensing and sale; preserve copyright and permission notices in copies or substantial portions. Warranty and liability are disclaimed.",
+      "bundled_in_task": false
+    },
+    {
+      "name": "I2RT-derived black/white link2 and link3 station visuals",
+      "paths": [
+        "yam_arena/assets/yam/dream/link2_black.stl",
+        "yam_arena/assets/yam/dream/link2_white.stl",
+        "yam_arena/assets/yam/dream/link3_black.stl",
+        "yam_arena/assets/yam/dream/link3_white.stl"
+      ],
+      "provenance_file": "yam_arena/assets/yam/dream/SOURCE",
+      "provenance": "I2RT link2/link3 split meshes from the dreamlabs 1.0.23 wheel (dream_examples/yam_mujoco/assets); packaged SOURCE explicitly identifies MIT and points to LICENSE.i2rt. These are visuals in native Isaac simulation, not a MuJoCo execution.",
+      "license": "MIT",
+      "copyright": "Copyright (c) I2RT Robotics",
+      "dependency": "yam-arena",
+      "dependency_commit": "bd62771e60320433893bd1d2df0fc79b5ddcd6d1",
+      "license_file": "yam_arena/assets/yam/LICENSE.i2rt",
+      "license_url": "https://github.com/i2rt-robotics/i2rt/blob/120c3c81400171174604e503943f8d1ebc891058/LICENSE",
+      "license_sha256": "7cd0a0224a287ebd6c45703eb6623d264c7810f8958d65de8f99e87ccd9f4891",
+      "terms": "Permits use, copying, modification, redistribution, sublicensing and sale; preserve copyright and permission notices in copies or substantial portions. Warranty and liability are disclaimed.",
+      "bundled_in_task": false
+    },
+    {
+      "name": "Original wooden counter fixture fabrication diagram",
+      "path": "assets/cq/fixture-plan.svg",
+      "license": "MIT",
+      "provenance": "Original vector top/side views and cut list derived from geometry.py; not manufacturer CAD."
+    }
+  ],
+  "license_note": "Product references support design research only. No manufacturer materials or trademarks are relicensed. NVIDIA simulation software remains subject to its own license.",
+  "handpull_reconstruction": {
+    "asset_status": "Original dimensioned reconstruction explicitly authorized by user; generated assets/cq. Not manufacturer CAD.",
+    "product": "Angram CQ quarter-pint cylinder handpump",
+    "manufacturer": "https://shop.angram.com/product/model-cq-hand-pump",
+    "nominal_cylinder": "https://shop.angram.com/product/cq-cylinder",
+    "dimension_reference": "https://www.ukbrewing.com/v/vspfiles/assets/images/schemcq.jpg",
+    "mechanism_references": [
+      "https://www.ukbrewing.com/v/vspfiles/assets/images/CQassem.jpg",
+      "https://www.ukbrewing.com/v/vspfiles/assets/images/CQcylin.jpg"
+    ],
+    "rights": "Reference drawings do not establish a model redistribution license. They are not bundled or relicensed as MIT.",
+    "asset_search": "handpull-asset-search.json",
+    "design_review": "handpull-review.json",
+    "metadata": "assets/cq/DIMENSIONS.json",
+    "generator": "cq_assets.py",
+    "original_asset_license": "MIT",
+    "nominal_stroke_ml": 142.0653125
+  },
+  "real_hardware_sourcing": {
+    "checked_on": "2026-11-19",
+    "cq": {
+      "url": "https://shop.angram.com/categories/hand-pumps",
+      "price_gbp_ex_vat_from": 318,
+      "availability": "Made to order; published lead time not confirmed; shipping and ancillaries additional."
+    },
+    "lower_cost_commercial_comparison": {
+      "product": "RLBS Paragon Plus 1/4 pt",
+      "sku": "1412111111",
+      "url": "https://rlbs.ltd.uk/paragon-beer-engine-pump-rlbs-cask-ale-cider-handpull.html",
+      "price_gbp_ex_vat": 162.68,
+      "price_gbp_inc_vat": 195.22,
+      "availability": "Live product metadata said in stock on check date.",
+      "qualification": "Genuine full-size cylinder handpump; not a verified geometric or force-equivalent drop-in for the CQ simulation."
+    },
+    "force_qualification": "No numerical manufacturer pull-force specification found; native spring/damping remain estimates. No claim of measured real-engine force validation."
+  }
+}

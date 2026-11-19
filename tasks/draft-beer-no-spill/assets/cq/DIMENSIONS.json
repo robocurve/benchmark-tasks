@@ -1,0 +1,104 @@
+{
+  "provenance": "Original dimensioned Angram CQ reconstruction. Not manufacturer CAD; no copyrighted reference images or brand marks bundled.",
+  "license": "MIT",
+  "units": "metres",
+  "source_drawings": [
+    "https://www.ukbrewing.com/v/vspfiles/assets/images/schemcq.jpg",
+    "https://www.ukbrewing.com/v/vspfiles/assets/images/CQassem.jpg",
+    "https://www.ukbrewing.com/v/vspfiles/assets/images/CQcylin.jpg"
+  ],
+  "published_approximate": {
+    "handle_top_above_bar": 0.41275,
+    "body_below_bar": 0.257175,
+    "outlet_to_tray": 0.180975,
+    "clamp_clearance_max": 0.0508,
+    "front_body_width": 0.142875,
+    "front_overall_width": 0.2159
+  },
+  "estimated": {
+    "lever_pivot": [
+      0.0,
+      0.0,
+      -0.035
+    ],
+    "cylinder_pivot": [
+      0.0,
+      0.0,
+      -0.23
+    ],
+    "crank_pin_in_lever": [
+      0.055,
+      0.0,
+      0.0
+    ],
+    "nozzle": [
+      -0.22,
+      -0.04,
+      -0.04
+    ],
+    "tray_top": -0.220975,
+    "neck_outer_radius": 0.008,
+    "neck_inner_radius": 0.0065,
+    "neck_routing": {
+      "case_port": [
+        -0.064,
+        -0.04,
+        -0.03
+      ],
+      "lateral_offset": -0.04,
+      "basis": "The front-view drawing shows an off-centre neck but gives no lateral dimension. The 40 mm offset and below-hood route are original clearance estimates, not claimed factory measurements. The tray remains centred."
+    },
+    "hood_depth": 0.21,
+    "hood_width": 0.18415,
+    "hood_height": 0.038,
+    "barrel_outer_diameter": 0.078,
+    "hood_clearance_aperture": {
+      "type": "open-front U",
+      "rear_x": 0.056,
+      "half_width_y": 0.04,
+      "upper_bevel_expansion": 0.004,
+      "basis": "Original undimensioned clearance estimate for the retained crank and ferrule over the estimated 60 degree stroke; not a claimed factory cutout."
+    },
+    "piston_rod_length": 0.18,
+    "pull_angle_degrees": 60,
+    "clamp_panel_thickness": 0.025,
+    "clamp_studs": [
+      [
+        0.115,
+        -0.078,
+        -0.025
+      ],
+      [
+        0.115,
+        0.078,
+        -0.025
+      ]
+    ]
+  },
+  "frames": {
+    "frame": "bar-surface origin; nozzle points toward -X; width along Y",
+    "lever": "origin at lever pivot; object local +Z points up in rest pose",
+    "cylinder": "origin at lower pivot; local +Z points toward crank pin",
+    "piston": "origin at upper crank pin; same orientation as cylinder; rod extends along -Z"
+  },
+  "grasp_region": {
+    "body": "lever",
+    "product_z_range_m": [
+      0.14,
+      0.35
+    ],
+    "diameter_m": [
+      0.028,
+      0.034
+    ],
+    "note": "Actual cream handgrip. The scripted demo grasps near product Z=0.300 m; exact contact geometry is retained in the OBJ."
+  },
+  "fidelity_notes": [
+    "Functional exterior silhouette follows public drawings; undimensioned profiles and hardware are estimates.",
+    "The plain outlet is hollow and has no sparkler. Internal hydraulic valves and invisible spring wires are not visualized.",
+    "The open-front U hood aperture is an original swept-clearance estimate; factory cutout dimensions are unavailable. External envelope dimensions are preserved.",
+    "The off-centre neck is estimated at Y=-40 mm and joins the case below the hood; the published drawings do not dimension that routing.",
+    "Meshes are visual surfaces. Supply matching compound colliders; do not convex-hull the hollow neck, tray or wood slot.",
+    "Mahogany is a deterministic original procedural texture, not a photo or manufacturer material."
+  ]
+}

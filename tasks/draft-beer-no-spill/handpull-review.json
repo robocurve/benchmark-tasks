@@ -1,0 +1,135 @@
+{
+  "task": "draft-beer-no-spill",
+  "title": "Serve ale with a UK hand-pull beer engine without spilling",
+  "instruction": "Use the hand-pull beer engine to serve at least 400 mL of ale in the glass without spilling any beer outside it.",
+  "starting_state": "Calibrated YAM station, unchanged cameras. Original portable open counter frame with 25 mm mounting board at table +265 mm; original full-size CQ reconstruction at mount (0.18,-0.10,1.0125), yaw -0.9 rad. Pump primed and lever upright. Empty 500 mL mug at (0.26,0.16,0.7475), handle +Y; left arm READY, right arm joints [0,0.8,1,-0.6,0,0] rad, both grippers open. Nozzle local(-0.220,-0.040,-0.040); new body and mounting dimensions are documented in the asset metadata.",
+  "physical_challenge": "Coordinate glass interception/support with repeated resisted lever pull and return strokes. A static forward handle must not act as a continuously open tap.",
+  "hazard": "Resolved ale escapes the glass. This is a dispensing quality/waste task, with no claimed hazard to people.",
+  "distinct_contribution": "Manual positive-displacement dispensing with finite stroke volume and repeated two-arm coordination, rather than a timed open faucet. Novelty is not established merely by choosing another dispenser.",
+  "supported_product_facts": {
+    "nominal_full_stroke_ml": 142.0653125,
+    "imperial_pint_ml": 568.26125,
+    "source": "https://shop.angram.com/product/cq-cylinder",
+    "approximate_dimensions_from_cq_drawing": {
+      "handle_top_above_mount_m": 0.41275,
+      "body_below_mount_m": 0.257175,
+      "outlet_to_tray_m": 0.180975,
+      "maximum_clamp_clearance_m": 0.0508,
+      "front_body_width_m": 0.142875,
+      "front_overall_width_m": 0.2159,
+      "source": "https://www.ukbrewing.com/v/vspfiles/assets/images/schemcq.jpg",
+      "qualification": "The drawing labels dimensions approximate. Other spans have ambiguous datums and are not used as CAD dimensions."
+    },
+    "mechanism_evidence": [
+      "CQ assembly drawing shows a rocking crank/shaft, cylinder connection and tension springs; it does not establish a rack-and-pinion mechanism.",
+      "Cylinder drawing identifies a piston, rod, inlet valve and ball/socket mounting.",
+      "Replacement spring supplier confirms cylinder-to-body tension springs and that failure lets the handle fall forward. Spring rate and preload are not published."
+    ],
+    "assembly_reference": "https://www.ukbrewing.com/v/vspfiles/assets/images/CQassem.jpg",
+    "cylinder_reference": "https://www.ukbrewing.com/v/vspfiles/assets/images/CQcylin.jpg",
+    "spring_reference": "https://rlbs.ltd.uk/replacement-angram-1-4pt-cylinder-tension-spring.html"
+  },
+  "unknown_or_estimated_until_geometry_is_available": [
+    "Lever stroke angle (60 degrees), crank radius (55 mm), cylinder pivot and internal bore are reconstruction estimates, not factory measurements.",
+    "Absolute outlet position, masses/inertias, collision proxies, spring rate/preload and piston damping are disclosed reconstruction estimates.",
+    "Upstream check-valve pressure, priming and compliance are replaced by an ideal primed single-acting volumetric boundary."
+  ],
+  "alternative_strategies": [
+    "Use steady full pulls and adjust the glass to intercept the stream.",
+    "Use physically valid partial strokes and returns.",
+    "Either arm may support the glass or operate the lever; no arm assignment earns credit."
+  ],
+  "overlap_check": {
+    "public_github_search": "No matches for handpump or the exact beer-engine phrase in repository PR search on 2026-11-16. This is not proof of uniqueness.",
+    "related": [
+      {
+        "url": "https://github.com/robocurve/benchmark-tasks/pull/1831",
+        "subject": "Sankey D keg coupler; different assembly mechanism."
+      },
+      {
+        "url": "https://github.com/robocurve/benchmark-tasks/pull/925",
+        "subject": "Rejected ordinary beer service plus wasp event; importance risk remains."
+      },
+      {
+        "url": "https://github.com/robocurve/benchmark-tasks/pull/2636",
+        "id": "TK-CUUV9V",
+        "origin_utc": "2026-11-18T10:54:05Z",
+        "status": "Still pending in public PR on 2026-11-19; no review feedback or merge.",
+        "subject": "Pressure-fed spring-return faucet, foam-head and coaster serving. Closest same-setting task; serious overlap risk. Our crank/piston requires reciprocal physical work, but changing dispensers alone is not a novelty argument."
+      },
+      {
+        "url": "https://github.com/robocurve/benchmark-tasks/pull/1887",
+        "subject": "Lever soda fountain, rejected for BEHAVIOR make-a-cream-soda overlap. Holding a valve and intercepting a stream alone is well covered."
+      },
+      {
+        "url": "https://github.com/robocurve/benchmark-tasks/pull/1560",
+        "subject": "Pitcher-pump priming, rejected for reduced scale and rule-based priming. Full-size reciprocal pumping alone does not establish importance."
+      },
+      {
+        "id": "TK-DCERXH",
+        "url": "https://github.com/robocurve/benchmark-tasks/pull/2395",
+        "subject": "Accepted rotary metering of cereal into a bowl. Shared coordination and finite dosing, with granular discharge and rotary manipulation."
+      },
+      {
+        "id": "TK-K5QQHN",
+        "subject": "Pending soft-serve swirl. Holding the valve while circling and lowering a cup tests continuous flow and shaping."
+      },
+      {
+        "id": "TK-8HST9N",
+        "subject": "Hand-pumped chamber pressure. Reciprocating strokes are shared, with a sealed circuit and pressure target."
+      }
+    ],
+    "task_board": "Authenticated task board searched on 2026-11-19. Screened 292 accepted, 427 pending, 1077 revision and 1955 rejected records for beverage service, pump and dispenser terms.",
+    "checked_on": "2026-11-19",
+    "external": [
+      {
+        "suite": "RoboCasa",
+        "title": "FillBlenderJug",
+        "url": "https://github.com/robocasa/robocasa/blob/main/robocasa/environments/kitchen/composite/making_juice/fill_blender_jug.py",
+        "difference": "Faucet on and jug under a stream, no finite-displacement crank/piston work."
+      },
+      {
+        "suite": "BEHAVIOR-1K",
+        "title": "pour_beer",
+        "url": "https://github.com/StanfordVL/BEHAVIOR-1K/blob/main/bddl3/bddl/activity_definitions/pour_beer/problem0.bddl",
+        "difference": "Bottle-to-glass pouring, no manual pumping."
+      },
+      {
+        "suite": "RoboDyna",
+        "title": "Pour Beer",
+        "url": "https://github.com/RoboDyna/robodyna/blob/main/envs/pour_beer.py",
+        "difference": "Push-button continuous delivery, not reciprocal cylinder actuation."
+      }
+    ],
+    "readiness": "The closest pending task uses a pressure-fed beer tap held open during glass positioning. The CQ task requires recurring loaded strokes and return, with dose tied to piston displacement."
+  },
+  "rejection_criteria": [
+    "Unlicensed/unavailable model, or a generic faucet represented as a real British beer engine",
+    "Continuous delivery at a held lever angle, invented full-home interlock or silently lost stroke volume",
+    "Unreachable motion, apparatus/table interpenetration or hidden camera/scale changes",
+    "No native full-score demonstration or unresolved fluid/source behavior",
+    "Use of historical tower recordings as evidence for the new mechanism"
+  ],
+  "domain": "Societal relatability, as in the current upstream task schema examples; recognizable manual cask-ale service. No claim that over500,000 USworkers regularly operate this specificpump.",
+  "real_trial_preparation": "Noncarbonated potable water stand-in at 20 ±2 C, same batch; optional one food-color drop/litre. Prime three full cycles into waste jug until air-free, remove jug, empty/dry mug and tray, fresh dry white witness liner. Waterproof deck/catch-pan and wrist sleeves protect the shared rig without covering pads or assisting grasp. This is not a beverage-quality test.",
+  "force_budget": "Native finger effort capped at 40 N per finger, matching the review prompt conservatively; default pinned YAM model permits 50 N. Joint loads and pump spring/damping remain disclosed estimates. Full native demo must use the 40 N cap.",
+  "native_plan": "Use the existing native40N grasps and validated yaw-1.5 deep receiving path. Raise98mm initially (outlet20mm above empty internal base); lower according to native bulk q99 in12..34.5mm annulus to maintain10mm outlet gap, bounded by the validated0..98mm range. Keep6/6/12/12second45-degree deliveries,2secondreturns and72secondhorizon; stopdeliveryat420calibratedmL. Read-only state planning, robot joint commands only. No liquid-aware birth positions, object-pose writes or hidden attachments.",
+  "status": "Native full demo and actual Dream-1 completed. Scripted:1.0,421.2175 calibrated mL,0spill; Dream-1:0.0,no delivery,30 inference requests. Both finish1440controls/72s.",
+  "scoring": "Zero after any resolved exterior escape or wet witness surface, even if recaptured. Otherwise min(final retained mL/400,1). Central airborne splashes are pending and uncredited; liquid returning inside counts normally. Current quantum0.0187mL. Final endpoint is1400policyactions plus40heldcontrols.",
+  "revision_prompt": "Version 24, effective 2026-11-19 06:43:53 GMT.",
+  "native_evidence": {
+    "demo": "evidence/demo.mp4",
+    "receipt": "evidence/demo-receipt.json",
+    "replay": "evidence/demo-replay.json",
+    "media": "evidence/demo-media-audit.json",
+    "source_integrity": "evidence/demo-source-integrity.json",
+    "summary": "All34560 native samples reproduce frozen scoring. Original119 inputfiles unchanged; rawreceipt source_unchanged=false arose solely from3 generated temporaryUSD files. Preserve raw flag; use an external writable TMPDIR.",
+    "dream": "evidence/dream-audit.json"
+  },
+  "remaining_qualifications": [
+    "Dense-fluid weight transfer is approximate; pump loads and internal dimensions are estimates, not measured CQ force calibration.",
+    "Particle amount calibration is approximate; final geometric proxy413.16mL and final-secondmean418.23mL independently support the400mL endpoint.",
+    "Original product reconstruction and native simulation do not establish a real-world YAM demonstration.",
+    "Historical and failed diagnostics are preserved in evidence/development-validation.json.gz and evidence/design-review-history.json.gz; their settings/results are not current task results."
+  ]
+}

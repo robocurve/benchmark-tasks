@@ -1,0 +1,198 @@
+{
+  "scope": "Actual completed Dream-1 task run; audit and CPU encoding only",
+  "canonical_json": "inspect/adhoc_45eb7346.json",
+  "process": {
+    "status": "process_completed",
+    "returncode": 0,
+    "elapsed_wall_s": 601.2459077930544,
+    "source_unchanged": true
+  },
+  "inspect": {
+    "status": "success",
+    "error": null,
+    "results": {
+      "errored_trials": 0,
+      "metrics": {
+        "task_score": 0.0
+      },
+      "total_scenes": 1,
+      "total_trials": 1
+    },
+    "sample_status": "success",
+    "sample_error": null,
+    "epochs": [
+      {
+        "task_score": 0.0
+      }
+    ],
+    "termination_reasons": [
+      "max_steps"
+    ]
+  },
+  "model": {
+    "name": "dreamlabs/dream-1-beta",
+    "dry_run": false,
+    "server_url": null,
+    "control_hz": 20.0,
+    "preroll_steps": 32,
+    "inference_requests": 30,
+    "all_session_ids_nonempty": true,
+    "unique_sessions": 30,
+    "first_request_step": 32,
+    "last_request_step": 1424,
+    "total_attempts": 60,
+    "all_rows_48": true,
+    "rows_beyond_limits": 0,
+    "tracking_error_rad": {
+      "max": 0.053640093836750835,
+      "mean": 0.015918540996728573
+    }
+  },
+  "actions": {
+    "path": "inspect/actions/20261119_025214_7ad542b7/scene-0-e0.jsonl",
+    "count": 1440,
+    "finite": true,
+    "maximum_target_change_from_initial": 1.0,
+    "policy_budget": 1400,
+    "observation_tail_steps": 40,
+    "tail_note": "Action file contains submitted SDK rows. Native runtime applies first 1400 commands, then repeats command 1400 during the 40-step observation tail; later submitted rows are not applied."
+  },
+  "native": {
+    "rows": 34560,
+    "maxima": {
+      "particles": 0.0,
+      "retained_ml": 0.0,
+      "spilled_ml": 0.0,
+      "emitted_ml": 0.0,
+      "pump_supplied_ml": 0.0
+    },
+    "final": {
+      "time_s": 72.00000375509262,
+      "physics_step": 34800,
+      "particles": 0,
+      "glass_position": [
+        0.25999999046325684,
+        0.1600000262260437,
+        0.7475000023841858
+      ],
+      "glass_rotation": [
+        [
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "score": 0.0,
+      "retained_ml": 0.0,
+      "spilled_ml": 0.0,
+      "emitted_ml": 0.0,
+      "pending_particles": 0,
+      "spill_latched": false,
+      "handle_angle_rad": 0.0,
+      "piston_extension_m": -6.858906692608358e-08,
+      "crank_closure_error_m": 6.121965760729437e-08,
+      "slider_lateral_error_m": 8.33000246558413e-09,
+      "native_liquid_motion_observed": false,
+      "pump_supplied_ml": 0.0,
+      "accepted_piston_extension_m": -2.055757436503214e-08,
+      "next_step_displacement_ml": 0.0,
+      "inlet_pending_ml": 0.0
+    }
+  },
+  "source": {
+    "files_checked": 57,
+    "all_original_hashes_match": true,
+    "mismatches": [],
+    "provenance": {
+      "revision": "d31588b6e8c2da620a126c8cbc04558c7a03407f",
+      "dirty": false
+    }
+  },
+  "frames": {
+    "top_cam": {
+      "count": 1441,
+      "first_id": 0,
+      "last_id": 1440,
+      "uniform_or_near_uniform_frames": [],
+      "minimum_max_channel_std": 68.97412809286023,
+      "ordered_rgb_sha256": "2832e7df8bc3bf6546999c95980fc8ab0902d4e53414fad2f0785a35da6f417e"
+    },
+    "left_cam": {
+      "count": 1441,
+      "first_id": 0,
+      "last_id": 1440,
+      "uniform_or_near_uniform_frames": [],
+      "minimum_max_channel_std": 47.22176755088272,
+      "ordered_rgb_sha256": "892794e4c9e98ed8524549a447343ad5510314fc28f1c2b64fe030b6b5763694"
+    },
+    "right_cam": {
+      "count": 1441,
+      "first_id": 0,
+      "last_id": 1440,
+      "uniform_or_near_uniform_frames": [],
+      "minimum_max_channel_std": 56.88257204274382,
+      "ordered_rgb_sha256": "d766a0577678d247fe8af76c18abd998be3d7402b3955793f1b46079577af6c7"
+    }
+  },
+  "video": {
+    "camera": "top_cam",
+    "fps": 20,
+    "frames": 1441,
+    "duration_s": 72.05,
+    "timing": "Frame 0 is the actual reset observation. Result of action 1 is shown at 0.05 s. All actual observations retained, with no omitted, duplicated or replacement frames.",
+    "transformations": "H.264/yuv420p encoding only; no overlays, cropping, resizing, interpolation or timing changes.",
+    "ffprobe": {
+      "programs": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 640,
+          "height": 360,
+          "pix_fmt": "yuv420p",
+          "r_frame_rate": "20/1",
+          "nb_read_frames": "1441"
+        }
+      ],
+      "format": {
+        "duration": "72.050000",
+        "size": "1882568"
+      }
+    },
+    "sha256": "2834a3321fffce035a1d2aa1d2009e584d74d6d6519881fccbbd37b918c3f4d5"
+  },
+  "credential_scan": {
+    "known_credential_values_found": false,
+    "credential_like_patterns_found": false,
+    "model_log_copied": false,
+    "nonempty_sensitive_json_fields_found": false
+  },
+  "interpretation": "Actual model inference completed the full action limit with score 0.0. No ale was supplied, emitted or spilled. This is neither a refusal nor a successful serving.",
+  "artifacts": {
+    "receipt.json": {
+      "sha256": "84492d08b138a8cacb83a40f6d246ccb55bfce14f4ccde9ee3f32d421e6cbf3f",
+      "bytes": 7505
+    },
+    "inspect/adhoc_45eb7346.json": {
+      "sha256": "13408436411a9c564a8924cc322786f90a9c8e80ecaa734b77e67a069e587951",
+      "bytes": 11278
+    },
+    "inspect/actions/20261119_025214_7ad542b7/scene-0-e0.jsonl": {
+      "sha256": "2c8a676757c5000ec5bc43fddd39bfc24c1774c2f71632101c013936f391ca65",
+      "bytes": 448536
+    },
+    "evidence-export-041/dream-041-top.mp4": {
+      "sha256": "2834a3321fffce035a1d2aa1d2009e584d74d6d6519881fccbbd37b918c3f4d5",
+      "bytes": 1882568
+    }
+  }
+}
