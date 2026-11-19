@@ -92,13 +92,22 @@ class StencilPaste:
     def metrics(self):
         if self.metrics_cache is not None:return self.metrics_cache
         coverage=np.zeros(len(self.data['pads']));on_area=0.;total_area=0.;bridges=0
+        board_volume = 0.
         if np.any(self.deposit):
             from shapely.geometry import box
             from shapely.ops import unary_union
             from shapely.strtree import STRtree
+            board_center = np.array([330., -65.])  # world xy in millimetres
+            board_half = np.asarray(self.data['board_bbox_m'][:2]) * 500.
+            # The balance weighs only paste on the board. Each material cell
+            # has uniform thickness across its rendered rectangular footprint.
+            lo = np.maximum(self.deposit_xy - self.width/2, board_center - board_half)
+            hi = np.minimum(self.deposit_xy + self.width/2, board_center + board_half)
+            on_board = np.maximum(hi - lo, 0.).prod(axis=1) / self.area
+            board_volume = float(self.deposit @ np.clip(on_board, 0., 1.))
             pads=[]
             for p in self.data['pads']:
-                c=np.array(p['xy_m'])*1000+[330,-65];h=np.array(p['size_m'])*500
+                c=np.array(p['xy_m'])*1000+board_center;h=np.array(p['size_m'])*500
                 pads.append(box(*(c-h),*(c+h)))
             # The same visible-deposit cutoff is used by the native material mesh.
             # Grade planar coverage from the union, never sum overlapping footprints
@@ -106,18 +115,21 @@ class StencilPaste:
             mask=self.deposit>=.010*self.area
             polys=[box(*(c-w/2),*(c+w/2)) for c,w in zip(self.deposit_xy[mask],self.width[mask])]
             union=unary_union(polys)
-            coverage=np.array([union.intersection(p).area/p.area for p in pads])
+            patches = [union.intersection(pad) for pad in pads]
+            coverage=np.array([patch.area/pad.area for patch,pad in zip(patches,pads)])
             on_area=union.intersection(unary_union(pads)).area;total_area=union.area
             bridges=0
             if self.released and not union.is_empty:
-                tree=STRtree(pads)
+                tree=STRtree(patches)
                 # A nanometre numerical join only removes floating-point seams
                 # between adjacent material cells; real inter-pad gaps remain open.
                 connected=union.buffer(.000001)
                 for part in getattr(connected,'geoms',[connected]):
-                    touching=[int(j) for j in tree.query(part) if part.intersection(pads[int(j)]).area>.01]
+                    # Only the unbuffered paste can wet a pad. The buffer is
+                    # used for connectivity, never to create pad coverage.
+                    touching=[int(j) for j in tree.query(part) if part.intersection(patches[int(j)]).area>0.]
                     bridges+=len(set(touching))>1
-        m=dict(pad_coverage=coverage.tolist(),all_pads_nonempty=bool(np.all(coverage>=.5)),qualified_pad_fraction=float(np.mean(coverage>=.75)),mean_pad_coverage=float(coverage.mean()),on_pad_fraction=float(on_area/total_area) if total_area else 0.,bridges=int(bridges),deposited_ul=float(self.deposit.sum()),deposited_mass_mg=float(self.deposit.sum()*4.2),reservoir_ul=float(self.reservoir.sum()),in_apertures_ul=float(self.fill.sum()),retained_ul=float(self.retained.sum()),released=self.released,normal_force_N=self.normal_force,conservation_error_ul=float(abs(self.fill.sum()+self.deposit.sum()+self.retained.sum()+self.reservoir.sum()+self.lost-self.initial)))
+        m=dict(pad_coverage=coverage.tolist(),all_pads_nonempty=bool(np.all(coverage>=.5)),qualified_pad_fraction=float(np.mean(coverage>=.75)),mean_pad_coverage=float(coverage.mean()),on_pad_fraction=float(on_area/total_area) if total_area else 0.,bridges=int(bridges),deposited_ul=float(self.deposit.sum()),deposited_mass_mg=board_volume*4.2,reservoir_ul=float(self.reservoir.sum()),in_apertures_ul=float(self.fill.sum()),retained_ul=float(self.retained.sum()),released=self.released,normal_force_N=self.normal_force,conservation_error_ul=float(abs(self.fill.sum()+self.deposit.sum()+self.retained.sum()+self.reservoir.sum()+self.lost-self.initial)))
         if self.released:self.metrics_cache=m
         return m
 

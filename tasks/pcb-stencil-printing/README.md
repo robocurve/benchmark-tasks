@@ -1,6 +1,5 @@
 # Register a PCB stencil and print solder paste
 
-Locally completed implementation and model evaluation. Media upload and PR submission are pending.
 Stencil printing prepares motor-controller PCBs for component placement during robot hardware assembly. This scene uses the real Adafruit Motor Shield v2.3 pad layout. The task ends at visible deposit registration and separation; it does not claim reflow, electrical testing or production solder-joint qualification.
 
 ## Reproduction
@@ -37,10 +36,11 @@ alone is not a successful task result. Preserve every failed attempt separately.
 
 One68.58×53.34×1.6mm Motor Shield PCB fixed on a printing bed; one loose125µm steel stencil with117 real apertures, a104×90mm rigid frame and passive PCB-outline registering skirt; an80×25×0.5mm steel blade with25×18×20mm handle. Stencil55g,blade65g;120µL finite paste bead preloaded on the stencil. PCB centre(330,-65,779.7)mm;resting stencil(330,75,791)mm;blade(440,-140,807.5)mm;separate rests.
 
-Return and release the stencil on its supports and clear the PCB for1s.1.0 requires at least90% of117pads to have75% coverage, every pad at least50% coverage, at least80% of deposit area on pads,and no paste bridges, with at least50mg deposited.0.5 at50% qualifying pads and25mg;0.25 at25% and12.5mg;otherwise0. Interarm collision gives0. Coverage is judged by visible footprint; deposit mass by a1mg-resolution balance. Details in SCORING.md.
+For the final 1 s, the stencil must rest released and still on its supports. The blade and handle may park beside the PCB at any height; any portion over it must clear its top by >2 mm. A bridge or interarm collision gives 0. A pad qualifies at ≥75% coverage. Score 1 for ≥90% qualifying, ≥50% on every pad, ≥80% of deposit area on pads and ≥50 mg on the PCB; 0.5 for ≥50% qualifying and ≥25 mg on the PCB; 0.25 for ≥25% and ≥12.5 mg on the PCB; otherwise 0.
 
-See `SCORING.md`, `MATERIAL_MODEL.md` and the local review package. The independent copied-source demo, original-image checks and raw score replay
-have passed. The model result is recorded below; the uploaded media ID is intentionally unset until publication.
+The physical reference uses a Chip Quik SMD291SNL10T4 syringe (SAC305, Type 4). Store at 3–8 °C, condition capped for four hours at 20–25 °C and dispense as supplied. Prime the tip and lay a 120 µL bead along the stencil from x = −38 to +38 mm at y = −24 mm.
+
+See [physical setup, paste preparation and photo grading](PHYSICAL_GRADING.md), [scoring](SCORING.md) and [material model](MATERIAL_MODEL.md).
 
 ## Sources
 
@@ -63,3 +63,5 @@ time; initialization, rendering, archiving and validation add wall time.
 ## Formal model evaluation
 
 Dream-1: 0.0/2400 actions/120 s; scripted demo: 1.0/2040 actions/102 s. Both episodes use the same archived runtime, scene, instruction and scorer. Dream receives the original three RGB cameras and joint state at20Hz, with record=false and no scripted plan. The fullscore script is a separate feasibility demonstration. All original frames and exact scoring replays were verified. Material-model approximations and physical grading are documented in the accompanying files.
+
+The revised blade-clearance scorer was replayed on the archived physics for both submitted videos. Scores match at every recorded observation (demo 2,041, Dream 2,401). The videos show the original episodes. `test_blade_clearance.py` exercises low parking, tilted-tool interference and interrupted holds.

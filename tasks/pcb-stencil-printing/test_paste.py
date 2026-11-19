@@ -12,6 +12,38 @@ def print_case(force=8.,volume=120.,gap=0.,shift=0.):
   b=s[:3]+[0,y,.0000625+gap]-R.apply([0,-.00025,-.0325]);m.step(s,np.r_[b,R.as_quat()],force,.025)
  s[2]+=.005;m.step(s,np.r_[b+[0,0,.01],R.as_quat()],0,.05)
  return m
+class PhysicalGradingTests(unittest.TestCase):
+    def setUp(self):
+        # Adjacent 0.2 mm pads separated by a 0.2 mm gap. The visible
+        # deposit elements are each 0.1 mm square.
+        data = dict(board_bbox_m=[.06858, .05334, .0016], pads=[
+            dict(xy_m=[x, 0.], size_m=[.0002, .0001]) for x in [-.0002, .0002]
+        ])
+        self.paste = StencilPaste(data)
+        self.paste.released = True
+
+    def deposit_at(self, offsets):
+        m = self.paste
+        m.deposit[:] = 0.
+        for i, offset in enumerate(offsets):
+            m.deposit[i] = m.capacity[i]
+            m.deposit_xy[i] = np.array([330., -65.]) + offset
+        m.metrics_cache = None
+        return m.metrics()
+
+    def test_narrow_visible_bridge_counts_but_two_isolated_spots_do_not(self):
+        # Only 0.005 mm² of each pad is wetted by this continuous filament.
+        bridged = self.deposit_at([[-.1, 0], [0, 0], [.1, 0]])
+        self.assertEqual(bridged['bridges'], 1)
+        self.assertEqual(self.deposit_at([[-.1, 0], [.1, 0]])['bridges'], 0)
+
+    def test_mass_on_scale_excludes_fully_and_partly_off_board_paste(self):
+        mass = self.paste.capacity[0] * 4.2
+        for x, expected in [(0., mass), (34.29, mass/2), (35., 0.)]:
+            with self.subTest(x=x):
+                self.assertAlmostEqual(self.deposit_at([[x, 0.]])['deposited_mass_mg'], expected)
+
+
 class PasteTests(unittest.TestCase):
  def test_loaded_contact_prints_conservatively(self):
   m=print_case();v=m.metrics();self.assertGreater(v['qualified_pad_fraction'],.9);self.assertGreater(v['deposited_mass_mg'],50);self.assertEqual(v['bridges'],0);self.assertLess(v['conservation_error_ul'],1e-7)

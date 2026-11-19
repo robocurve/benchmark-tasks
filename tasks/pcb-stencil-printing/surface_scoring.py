@@ -5,8 +5,35 @@ validate them. No arm role, trajectory, angle-of-approach or camera-use credit.
 """
 import numpy as np
 from scipy.spatial.transform import Rotation
+from geometry import DATA, PCB
 
 CURRENT=None
+
+# The board itself and the first 2 mm of space above its printed face.
+_GUARD_CENTER = PCB + [0, 0, .001]
+_GUARD_HALF = np.asarray(DATA['board_bbox_m']) / 2 + [0, 0, .001]
+_WORLD_AXES = np.eye(3)
+# Local centres and half extents of the two squeegee colliders in geometry.build.
+_SQUEEGEE_BOXES = (
+    (np.array([0., 0., 0.]), np.array([.0125, .009, .010])),
+    (np.array([0., 0., -.020]), np.array([.040, .00025, .0125])),
+)
+
+def blade_clear_of_pcb(pose):
+    """Exact box separation, including a tilted blade that passes a PCB corner."""
+    rotation = Rotation.from_quat(pose[3:]).as_matrix()
+    for offset, half in _SQUEEGEE_BOXES:
+        delta = pose[:3] + rotation @ offset - _GUARD_CENTER
+        # World face normals usually separate a parked tool immediately.
+        if np.any(np.abs(delta) > _GUARD_HALF + np.abs(rotation) @ half + 1e-12):
+            continue
+        # Remaining separating axes: tool face normals and the nine edge pairs.
+        cross = np.cross(_WORLD_AXES[:, None, :], rotation.T[None, :, :])
+        axes = np.vstack((rotation.T, cross.reshape(9, 3)))
+        span = np.abs(axes) @ _GUARD_HALF + np.abs(axes @ rotation) @ half
+        if not np.any(np.abs(axes @ delta) > span + 1e-12):
+            return False
+    return True
 
 class ScoreState:
     def __init__(self,kind,paths,filters,sensors,model):
@@ -37,8 +64,8 @@ class ScoreState:
             ready=closed and level and upright and on_table and support(l,'petri_base') and returned and all(free(i) and still(i) for i in [b,l,t])
         elif self.kind=='stencil_paste':
             returned=any(support(0,f) for f in ['stencil_support0','stencil_support1'])
-            clear=np.linalg.norm(poses[0,:2]-[.33,-.065])>.08 and poses[1,2]>.82
-            ready=returned and clear and free(0) and still(0)
+            frame_away = np.linalg.norm(poses[0,:2] - PCB[:2]) > .08
+            ready = returned and frame_away and free(0) and still(0) and blade_clear_of_pcb(poses[1])
         else:ready=False
         self.hold=self.hold+dt if ready else 0.
     def update(self):
