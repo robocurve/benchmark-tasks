@@ -72,11 +72,12 @@ def _hotplate():
         shapes.append(BoxShape((px + (D_R - w / 2) * np.cos(a), py + (D_R - w / 2) * np.sin(a), sz + D_H / 2),
                                (w, 2 * D_R * np.tan(np.pi / 16) + 0.001, D_H), GLASS, yaw=float(a)))
     shapes.append(CylShape((px, py, sz + D_FLOOR + 0.014), D_R - w - 0.0005, 0.028, OIL, collide=False))  # the oil
-    # the stand, visual: a rod behind the dish, an arm out over it, the boss clamp round the probe
-    rx, ry = PROBE_XY[0] - HP_XY[0], PROBE_XY[1] - HP_XY[1] + 0.095
+    # the stand, visual: a rod just beyond the hotplate's far edge (clear of the left arm), an arm out over the dish
+    # towards the robot, the boss clamp round the probe
+    rx, ry = PROBE_XY[0] - HP_XY[0] + 0.105, PROBE_XY[1] - HP_XY[1]
     zc = TIP0 - TOP + ROD_L - 0.010
     shapes += [CylShape((rx, ry, 0.15 - 0.0), 0.006, 0.30, STEEL, collide=False),
-               BoxShape((rx, (ry + PROBE_XY[1] - HP_XY[1]) / 2, zc), (0.012, 0.095, 0.012), STEEL, collide=False),
+               BoxShape(((rx + PROBE_XY[0] - HP_XY[0]) / 2, ry, zc), (0.105, 0.012, 0.012), STEEL, collide=False),
                BoxShape((rx, PROBE_XY[1] - HP_XY[1], zc), (0.022, 0.022, 0.016), DARK, collide=False)]
     shapes.append(CylShape((KEY_XY[0] - HP_XY[0], KEY_XY[1] - HP_XY[1], sz + 0.0005), KEY_R + 0.004, 0.001, DARK,
                            collide=False))  # the key's bezel
