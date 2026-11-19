@@ -46,6 +46,9 @@ The plug counts as on while its foot is inside the neck within 6 mm of the axis,
 - **Real-world analogue.** Sealed or ice-plugged Dewars and flasks of liquid nitrogen have burst in labs; the BCGA code exists because of them, and university safety offices repeat "never seal a cryogen" in every induction.
 - **Honest limits.** No liquid, gas, cold or pressure is simulated: sealing is judged by which closure is in the neck. The foam plug is a rigid body and the bung is not squeezed in; it seals by its taper and head seating in the neck (1.5 mm clearance). The neck clearances are generous because light objects land up to 1 cm off target in this sim; the scripted bung placement uses a measured 1.2 cm offset. The Dewar is smaller than most bench Dewars so the arm can reach over it, and it is fixed to the bench.
 
+## Licences
+Licences: all task geometry is built in task-local Python from primitive shapes (no third-party meshes or textures); the YAM arms and table station come from the benchmark's own yam_arena environment.
+
 ## Reset
 Take whatever is in the neck out; stand the foam plug on its mark at x 22, y 10, plug end down, and the rubber bung on its mark at x 19, y 26, narrow end down. Run with -E object_jitter=0.
 
