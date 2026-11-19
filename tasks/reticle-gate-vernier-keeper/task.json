@@ -1,0 +1,22 @@
+{
+  "title": "Inspect and index the keyed optical reticle carriage past the beam gate to conformance",
+  "category": "Other",
+  "keywords": [
+    "quality control",
+    "optical comparator",
+    "reticle stage",
+    "beam gate",
+    "vernier keeper",
+    "bimanual"
+  ],
+  "instruction": "Inspect and index the polarity-keyed reticle carriage to its conformance datum while holding the beam gate clear and engaging the perpendicular vernier keeper.",
+  "context": "Every lot changeover, an automated dimensional-inspection cell re-indexes its optical-comparator reticle against the datum before the next part can be measured, and the cell is expected to run between setups without a person at the bench, so the sequence is carried out by the robot arms: hold the spring-return rotary beam gate clear, index the keyed reticle carriage to its stepped datum, ease the gate closed behind the seated carriage, and slide the perpendicular vernier keeper to lock both. The unbolted 1.25 kg comparator stage can move under slide loads. The left arm must hold the spring-return crossing gate open while the right arm indexes the carriage and sets the vernier keeper.",
+  "setup": "A fixed 480 by 460 mm pebbled rubber mat rests on the station bench carrying an unbolted 1.25 kg anodized aluminium comparator stage centered at (0.268, 0.000) m. A 120 g spring-return crossing-barrier beam gate pivots about a horizontal X axis at (0.252, +0.035, 0.020) m against a 0.10 N*m/rad closing spring (0.003 N*m friction, 52 deg limit, zero open detent), lowering an optical shutter tooth across the reticle track at 0 deg. An 82 g polarity-keyed reticle carriage starts 90 mm short of its stepped datum along +X at (0.218, -0.090) m, and a 65 g perpendicular vernier keeper starts 54 mm south along +Y at (0.308, -0.181) m. Fixed starting layout; grippers start at ready.",
+  "scoring": "Measured at the end of the trial with a caliper/ruler and digital protractor; full score must hold continuously for 3.0 s. 0.0: stage 3D displacement > 15 mm, vertical shift > 10 mm, or tilt > 8 deg; or reticle travel < 76 mm. 0.4: reticle seated >= 76 mm and stage steady, but reticle < 84 mm, keeper < 48 mm, or beam gate angle > 7 deg from 0 deg. 0.7: reticle >= 84 mm, keeper >= 48 mm, gate within 7 deg, and stage steady, while either gripper tool point is < 45 mm from any scored dynamic body or fewer than two tool points are tracked. 1.0: same locked geometry with both grippers >= 45 mm clear of every scored body across the 3.0 s hold. Possible scores 0.0, 0.4, 0.7, 1.0.",
+  "run_limit": "2400 steps (120 s at 20 Hz)",
+  "real_trial_cost_usd": 84,
+  "reset_notes": "Withdraw the perpendicular vernier keeper to 0 mm, tilt the crossing beam gate clear past 40 deg, retract the keyed reticle carriage 90 mm back to 0 mm, allow the spring beam gate to settle closed at 0 deg, and square the stage at (0.268, 0.000) m.",
+  "fidelity": "1:1 rigid-body simulation (PhysX, 20 Hz control): 58-mm comparator reticle dovetail aperture, 90-mm X stroke, 54-mm Y vernier keeper, 0.10 N*m/rad X-hinged crossing return spring (zero +X camming torque) over zero-penetration rigid colliders without deformable seals or active joint drives; calibrated optical reticle markings rendered cosmetically.",
+  "scores": "Dream-1 run: 0; demo: 1",
+  "media": "M-END568"
+}
