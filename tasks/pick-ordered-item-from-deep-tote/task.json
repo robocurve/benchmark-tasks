@@ -1,0 +1,21 @@
+{
+  "title": "Pick the ordered item from a deep tote into the order bin, leaving its look-alike",
+  "category": "Impact on jobs",
+  "keywords": [
+    "warehouse",
+    "order picking",
+    "each picking",
+    "mis-pick",
+    "occlusion",
+    "look-alike"
+  ],
+  "instruction": "Pick the red item from the tote into the order bin.",
+  "context": "Each picking is a warehouse order picker's core operation: exactly the ordered item goes from the storage tote into the order bin, and a mis-pick of a look-alike is the costly error. Here the tote's tall walls hide part of the ordered item from the overhead camera.",
+  "setup": "Positions are measured on the table from the point midway between the two arm bases, which stand 61 cm apart: forward means away from the arms, left and right as seen from behind the arms. Tote (tote_floor, tote_wall_*): grey polypropylene, inside 24 cm forward x 18 cm across, walls 12 cm tall and 12 mm thick on a 1 cm floor, centre 25.5 cm forward and 28 cm left, fixed to the table. Red item (red_item, the ordered item): a red cardboard product carton, 80 x 50 x 30 mm, 150 g, lying flat with its 80 mm side across, centre 20 cm forward and 23.5 cm left, near the tote's front-right corner, 4 cm from the front wall and 5 mm from the right wall. Orange item (orange_item, the look-alike): an orange carton of the same size and mass in the same orientation, centre 32 cm forward and 23.5 cm left. Order bin (order_bin_floor, order_bin_wall_*): blue polypropylene, inside 16 cm forward x 12 cm across, walls 6 cm tall on a 1 cm floor, centre 20 cm forward on the centre line between the arms, fixed to the table. Nothing else is on the table.",
+  "scoring": "The highest milestone the red item reaches, each needing the ones before it: 0.25 when its lowest point is at least 3 cm above the tote floor (lifted); 0.5 when its lowest point is above the tote's rim and its centre is outside the tote's inside footprint (out of the tote); 0.75 when its centre is over the order bin's inside footprint and its lowest point below the bin's rim (in the bin); 1.0 when it lies entirely inside the order bin seen from above (within 3 mm of the inner walls), entirely below the bin's rim, still (under 1 cm/s and 0.5 rad/s) and released (no gripper tool point within 2.5 cm of it), with the orange item still in the tote, held for 1 s (picked; the trial then ends; a pick completed less than 1 s before the run limit scores 0.75). The score is 0 (mis-pick) if the orange item is ever over the order bin, or is taken out of the tote and left resting outside it, and 0 if the red item falls off the table. Otherwise the score is the milestone held at the end of the trial.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Put both cartons back in their taped outlines on the tote floor; the tote and the order bin stay fixed.",
+  "fidelity": "Approximate. The cartons are solid rigid boxes with the real cartons' size and mass; the tote and bin are fixed rigid boxes. Contacts and grasps are PhysX rigid-body contacts with default friction, not calibrated to cardboard or polypropylene.",
+  "scores": "Dream-1 run: 0.0 (2,400-step run limit); demo: 1.0 (scripted, open loop)",
+  "media": "M-26J8EH"
+}
