@@ -1,0 +1,23 @@
+{
+  "title": "Unload the finished part from a CNC vise, then load the blank against both stops",
+  "category": "Impact on jobs",
+  "keywords": [
+    "CNC",
+    "machine tending",
+    "machinist",
+    "vise",
+    "fixture stops",
+    "order",
+    "precision",
+    "two arms"
+  ],
+  "instruction": "Unload the finished part to the output tray, then load the blank into the vise against both stops.",
+  "context": "Between cycles, a CNC machine operator unloads the finished part from the vise and loads the next blank seated against the vise's fixed jaw and side stop, the datum the program machines from; this changeover is the operator's core, repeated operation. A blank loaded off its stops is machined out of position (scrap), and loading with the finished part still in the vise crashes the cycle. The task tests order (unload before load) and precision (the blank within 2 mm of both stops).",
+  "setup": "Positions are measured on the table from the point midway between the two arm bases, which stand 61 cm apart: forward means away from the arms, left and right as seen from behind the arms. Machine vise (vise_body, vise_fixed_jaw, vise_side_stop): dark grey iron, a 14 x 14 cm body 4 cm tall whose top is the vise floor, centred 30 cm forward and 3 cm right, with a fixed jaw 2 cm thick along its far edge and a side stop 2 cm thick along its left edge, both 15 mm tall, fixed to the table. The jaw's face is 35 cm forward; the side stop's face is 2 cm left of the centre line. Finished part (finished_part): a bright machined aluminium block 50 mm (forward) x 40 mm x 30 mm tall, 150 g, seated in the vise against the fixed jaw and the side stop (centre 32.5 cm forward, on the centre line). Blank (blank): the same block, saw-cut dull grey, lying on the table at 22 cm forward and 27 cm left, its 50 mm side forward. Output tray (tray_floor, tray_lip_*): green, inside 12 x 12 cm, a 1.5 cm lip around a 1 cm floor, centred 24 cm forward and 27 cm right, fixed to the table. Nothing else is on the table.",
+  "scoring": "A part is in the vise when its centre lies over the vise floor inside the jaw and side stop (seen from above) less than 1.5 cm above where it would rest on it; in the tray when its centre lies inside the tray's inside square less than 1.5 cm above where it would rest on the tray floor. Still means its centre moved less than 5 mm over the last 0.3 s. The blank is seated when it is in the vise, its far face is within 2 mm of the fixed jaw and its left face within 2 mm of the side stop, and it is square (its footprint no more than 3 mm larger than its own size either way, about 3 degrees). Score at the end of the trial: 0.25 for the finished part out of the vise, plus 0.25 for it in the tray and still, plus 0.25 for the blank in the vise and still with the finished part out (0 to 0.75). 1.0 when the finished part is in the tray, the blank is seated, both are still and no gripper tool point is within 4 cm of either, held for 1 s (the trial then ends; completed less than 1 s before the run limit scores 0.75). 0 if the blank and the finished part are ever in the vise at the same time (loading over an unloaded part), or either part falls off the table.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Seat the finished (bright) part back in the vise against the fixed jaw and the side stop, and lay the blank (dull) on its marked spot on the table, 50 mm side forward; the vise and tray stay fixed.",
+  "fidelity": "Approximate. The vise is a fixed rigid body with its jaws open: the fixed jaw and side stop are modelled, the moving jaw and clamping are not. Parts are rigid aluminium-sized blocks. Contacts and grasps are PhysX rigid-body contacts with default friction.",
+  "scores": "Dream-1 run: 0.0 (finished part not unloaded; hit the 120 s step limit); demo: 1.0 (part unloaded to the tray, blank seated within 2 mm of both stops)",
+  "media": "M-Z63KCJ"
+}
