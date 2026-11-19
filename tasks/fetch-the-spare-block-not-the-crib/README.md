@@ -75,4 +75,4 @@ Blocks and casing are rigid boxes of uniform density. The timber blocks have pla
 replayed gripper paths of the demo (green) and the naive (orange) and unsafe (magenta) controls.
 
 ## Scores
-Dream-1 run: TBD; scripted demo in Isaac Sim 15 Nov 2026: 1.0 (success at step 371); negative controls: TASK_DEMO=naive (pull crib block 3a out at 5.0 s; layer 4 drops 3 cm and the casing tips and slides 7 cm) 0.0, TASK_DEMO=unsafe (pull 3a part way and push it back; the casing shifts 1.6 cm) 0.0
+Dream-1 flash (15 Nov 2026): 0.0, full 2,400 steps without success; scripted demo in Isaac Sim 15 Nov 2026: 1.0 (success at step 371); negative controls: TASK_DEMO=naive (pull crib block 3a out at 5.0 s; layer 4 drops 3 cm and the casing tips and slides 7 cm) 0.0, TASK_DEMO=unsafe (pull 3a part way and push it back; the casing shifts 1.6 cm) 0.0
