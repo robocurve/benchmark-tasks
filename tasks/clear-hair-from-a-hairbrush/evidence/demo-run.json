@@ -1,0 +1,310 @@
+{
+  "status": "complete",
+  "mode": "demo",
+  "steps": 1960,
+  "requested_steps": 1960,
+  "source_sha256": {
+    "native_contact_audit.py": "7be0ccd32cfacc01728499683678626b949f73d05c6d5f8fb2a7c6ec337c8fdf",
+    "demo_control.py": "f2a411af2b4c45ded33ae86f44902b051bec28491de186e6c073a0704ad6fb05",
+    "planner.py": "a07575e29756312523217c85c072f8a12e647605cd3296151542aad1adb0ba72",
+    "task.py": "27362a63e67427da1f18b358d8c345a87b6ebf707be97c64a4b768388d640afd",
+    "run.py": "6fcd0bda4b76202873407481d9d41ad5b31c1710496f1641a10599e77f190aea",
+    "rescore.py": "fdd31f571f9405809be2324360ec837d2cbe6057b515ec38f737f4fab5f4d205",
+    "LICENSE": "a71ddeb012ff1961bf252489309b565ffd0443632819aa9c88eef4377f9f9f7a",
+    "task.json": "da1d8a23b7cd0917dcc9b37595c4ba97b8faa505a4068750fc60257af60a817f",
+    "make_plan.py": "c3e80ef873c5bcdfb373d5c240532d504223aec0efa786819b0257bbcd21a64d",
+    "model.py": "8dd18d332d30b2d07028c72128cbc61b5e66789df50adeb687df24e504017771",
+    "README.md": "1f662c86ba237358821cc67a2beaf99bb0c7cd657958cf92c563f916be310524",
+    "finite_pinch.py": "0c04ec11324ffec21bf663e38823ec5e4e4adaa47dc98962caaef27d8de07cbe",
+    "geometry_helpers.py": "16ecb0dca6663617c7e23f691e291492452ff267e8d9986417c55eb7b709ca68",
+    "common.py": "0ac4a388f8658e5b08ad345c9d3c921529bd094e1cedacb7bc2b1e89a10566d8",
+    "native_model.py": "3e932cb35e17ef8320665d213f3a07643c89dea99d61c466fae41a6d991e56e3",
+    "joint_tracking.py": "f22bb7c34c8c4ba51859844f77fef8b29337b5b6353e7cc0b85cf0247866c453",
+    "geometry.py": "05bb7aaeced0726785b0f957ba4ce801b9fcb563c7bea0665c154ff2fc09069e",
+    "VALIDATION.json": "1d1bb1e773f339f9d907f3f99b63faa66139bbaaaade876f25e5ad3df1f30d3f",
+    "dream_policy.py": "c6727b995f2ec372d6e50a4d675a9b3e1dd12c0748f648708454a30f4e453091",
+    "pad_covers.py": "77ede77721aeb097cf94b6f903fb897ff733837c074953901829a06033f021e0",
+    "hair_visual.py": "d140700af561e083a2e61863ad8b788dd9d5c0915fe87052c3ca9f1ef49043b6",
+    "demo-plan.json": "42f7ccf7fca68cdab21b3934faa010bccabecdb0117e2f02a184619c8c253f23",
+    "ENVIRONMENT.json": "1ad559b6d44d840ffc7815e4a38b3f3a777b684866b2abfd04b7b0a07d5fb33d",
+    "native_physics.py": "60f5208034e423d86c22b1cf9fdba0feb659d00457c90a3381d12ff40d45799b",
+    "review_views.py": "b9d204021843ca126e8521caac4293e9185377cd816951b8b425852cb2d988ef",
+    "trace_audit.py": "967cd3ba5e2d41cd143b837d71f8a71dfde315132aaf7b59b9bdaf8f8bbb6646"
+  },
+  "control_hz": 20,
+  "score": 1.0,
+  "cpu_preview": false,
+  "submission_evidence": true,
+  "capture_every": 1,
+  "wall_seconds": 2246.873068365996,
+  "initial_measurements": {
+    "removed_fraction": 0.0,
+    "comb_cleared_fraction": 0.0,
+    "comb_touched_locks": 0,
+    "comb_loosened_locks": 0,
+    "directly_handled_trapped_locks": 0,
+    "remaining_contact_snags": 10,
+    "intact": true,
+    "released_seconds": 0.0,
+    "failed": false
+  },
+  "measurements": {
+    "removed_fraction": 1.0,
+    "comb_cleared_fraction": 0.9,
+    "comb_touched_locks": 10,
+    "comb_loosened_locks": 9,
+    "directly_handled_trapped_locks": 0,
+    "remaining_contact_snags": 0,
+    "intact": true,
+    "released_seconds": 7.549999999999981,
+    "failed": false
+  },
+  "events": [
+    {
+      "event": "pinch_captured",
+      "side": "right",
+      "body": "comb",
+      "time": 5.999999999999987,
+      "force_limit_n": 18.0,
+      "torque_limit_nm": 0.24,
+      "local_point": [
+        0.00037983786319953936,
+        0.0007774424304109961,
+        0.011460841022957986
+      ],
+      "opening": 0.17639657855033875
+    },
+    {
+      "event": "pinch_captured",
+      "side": "left",
+      "body": "brush",
+      "time": 6.149999999999986,
+      "force_limit_n": 18.0,
+      "torque_limit_nm": 0.24,
+      "local_point": [
+        -8.065394367536765e-05,
+        -0.1047493511393934,
+        0.009792325835385318
+      ],
+      "opening": 0.2827584147453308
+    },
+    {
+      "event": "comb_hair_contact",
+      "lock": 0,
+      "body": "hair_0_7",
+      "impulse_ns": 1.2023966216171781e-06,
+      "force_n": 0.0005771503783762455,
+      "time": 14.500000000000071,
+      "source": "native filtered contact-force matrix"
+    },
+    {
+      "event": "comb_hair_contact",
+      "lock": 3,
+      "body": "hair_3_8",
+      "impulse_ns": 9.142019553110004e-06,
+      "force_n": 0.004388169385492802,
+      "time": 14.600000000000072,
+      "source": "native filtered contact-force matrix"
+    },
+    {
+      "event": "comb_hair_contact",
+      "lock": 2,
+      "body": "hair_2_8",
+      "impulse_ns": 9.566785289886563e-08,
+      "force_n": 4.59205693914555e-05,
+      "time": 14.650000000000073,
+      "source": "native filtered contact-force matrix"
+    },
+    {
+      "event": "comb_hair_contact",
+      "lock": 1,
+      "body": "hair_1_6",
+      "impulse_ns": 3.206458253165086e-06,
+      "force_n": 0.0015390999615192413,
+      "time": 14.800000000000075,
+      "source": "native filtered contact-force matrix"
+    },
+    {
+      "event": "native_joint_break",
+      "joint": "hair_snag_4_1",
+      "time": 14.950000000000077
+    },
+    {
+      "event": "comb_hair_contact",
+      "lock": 4,
+      "body": "hair_4_6",
+      "impulse_ns": 6.0908806820710496e-06,
+      "force_n": 0.002923622727394104,
+      "time": 15.000000000000078,
+      "source": "native filtered contact-force matrix"
+    },
+    {
+      "event": "comb_hair_contact",
+      "lock": 6,
+      "body": "hair_6_6",
+      "impulse_ns": 8.827771428817262e-07,
+      "force_n": 0.0004237330285832286,
+      "time": 15.000000000000078,
+      "source": "native filtered contact-force matrix"
+    },
+    {
+      "event": "comb_loosened_snag",
+      "lock": 4,
+      "joint": "hair_snag_4_1",
+      "time": 15.000000000000078,
+      "last_comb_contact": 15.000000000000078
+    },
+    {
+      "event": "native_joint_break",
+      "joint": "hair_snag_5_1",
+      "time": 15.000000000000078
+    },
+    {
+      "event": "native_joint_break",
+      "joint": "hair_snag_6_1",
+      "time": 15.050000000000079
+    },
+    {
+      "event": "comb_hair_contact",
+      "lock": 7,
+      "body": "hair_7_5",
+      "impulse_ns": 4.915132012683898e-06,
+      "force_n": 0.002359263366088271,
+      "time": 15.10000000000008,
+      "source": "native filtered contact-force matrix"
+    },
+    {
+      "event": "comb_loosened_snag",
+      "lock": 6,
+      "joint": "hair_snag_6_1",
+      "time": 15.10000000000008,
+      "last_comb_contact": 15.050000000000079
+    },
+    {
+      "event": "native_joint_break",
+      "joint": "hair_snag_3_1",
+      "time": 15.10000000000008
+    },
+    {
+      "event": "comb_loosened_snag",
+      "lock": 3,
+      "joint": "hair_snag_3_1",
+      "time": 15.15000000000008,
+      "last_comb_contact": 15.15000000000008
+    },
+    {
+      "event": "native_joint_break",
+      "joint": "hair_snag_2_1",
+      "time": 15.15000000000008
+    },
+    {
+      "event": "native_joint_break",
+      "joint": "hair_snag_1_1",
+      "time": 15.15000000000008
+    },
+    {
+      "event": "comb_loosened_snag",
+      "lock": 2,
+      "joint": "hair_snag_2_1",
+      "time": 15.200000000000081,
+      "last_comb_contact": 15.15000000000008
+    },
+    {
+      "event": "comb_loosened_snag",
+      "lock": 1,
+      "joint": "hair_snag_1_1",
+      "time": 15.200000000000081,
+      "last_comb_contact": 15.200000000000081
+    },
+    {
+      "event": "comb_hair_contact",
+      "lock": 5,
+      "body": "hair_5_7",
+      "impulse_ns": 4.534313144783179e-05,
+      "force_n": 0.02176470309495926,
+      "time": 15.450000000000085,
+      "source": "native filtered contact-force matrix"
+    },
+    {
+      "event": "comb_hair_contact",
+      "lock": 8,
+      "body": "hair_8_7",
+      "impulse_ns": 1.2517459254013374e-06,
+      "force_n": 0.000600838044192642,
+      "time": 16.950000000000106,
+      "source": "native filtered contact-force matrix"
+    },
+    {
+      "event": "comb_hair_contact",
+      "lock": 9,
+      "body": "hair_9_7",
+      "impulse_ns": 1.8959368238332294e-08,
+      "force_n": 9.1004967543995e-06,
+      "time": 17.400000000000112,
+      "source": "native filtered contact-force matrix"
+    },
+    {
+      "event": "native_joint_break",
+      "joint": "hair_snag_9_1",
+      "time": 31.750000000000316
+    },
+    {
+      "event": "native_joint_break",
+      "joint": "hair_snag_8_1",
+      "time": 31.750000000000316
+    },
+    {
+      "event": "native_joint_break",
+      "joint": "hair_snag_7_1",
+      "time": 31.750000000000316
+    },
+    {
+      "event": "comb_loosened_snag",
+      "lock": 9,
+      "joint": "hair_snag_9_1",
+      "time": 31.800000000000317,
+      "last_comb_contact": 31.750000000000316
+    },
+    {
+      "event": "comb_loosened_snag",
+      "lock": 7,
+      "joint": "hair_snag_7_1",
+      "time": 31.800000000000317,
+      "last_comb_contact": 31.750000000000316
+    },
+    {
+      "event": "comb_loosened_snag",
+      "lock": 8,
+      "joint": "hair_snag_8_1",
+      "time": 31.800000000000317,
+      "last_comb_contact": 31.800000000000317
+    },
+    {
+      "event": "native_joint_break",
+      "joint": "hair_snag_0_1",
+      "time": 31.850000000000318
+    },
+    {
+      "event": "comb_loosened_snag",
+      "lock": 0,
+      "joint": "hair_snag_0_1",
+      "time": 31.90000000000032,
+      "last_comb_contact": 31.850000000000318
+    },
+    {
+      "event": "pinch_released",
+      "side": "right",
+      "body": "comb",
+      "time": 50.399999999999274
+    },
+    {
+      "event": "pinch_released",
+      "side": "left",
+      "body": "brush",
+      "time": 90.24999999999702
+    }
+  ],
+  "requires_visual_review": true,
+  "dream_requests": 0,
+  "dream_sessions": {}
+}
