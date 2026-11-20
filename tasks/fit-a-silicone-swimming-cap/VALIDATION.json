@@ -1,0 +1,34 @@
+{
+  "status": "validated_submission",
+  "submission_ready": true,
+  "current_task_runtime_verified": true,
+  "runtime_sources_match": true,
+  "visual_review_passed": true,
+  "independent_trace_audits_passed": true,
+  "media_uploaded": true,
+  "checked_utc": "2026-11-20T03:51:09.793214+00:00",
+  "scores": {
+    "demo": 1.0,
+    "dream": 0.0
+  },
+  "steps": {
+    "demo": 600,
+    "dream": 1800
+  },
+  "wall_seconds": {
+    "demo": 1126.9541438930028,
+    "dream": 3661.3311610009987
+  },
+  "dream_sessions": {
+    "session_count": 37,
+    "expiry_count": 37
+  },
+  "audit_only_addition": {
+    "file": "rescore_native_precision.py",
+    "sha256": "04d7a9fd4780509bc035325d9dc9f94280b87c4c5ebccbfe219a5ed232b8ff42",
+    "reason": "JSON loses native array dtype. This CPU reader restores float32 coordinates before invoking the unchanged frozen audit, with its original tolerances. No runtime physics or scoring source changed."
+  },
+  "remaining_gates": [
+    "PR ingestion confirmation"
+  ]
+}
