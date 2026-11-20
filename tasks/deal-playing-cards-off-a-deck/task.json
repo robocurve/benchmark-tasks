@@ -1,0 +1,23 @@
+{
+  "title": "Deal a card to each of three places off a deck: slide the top card off by fingertip friction, one at a time, face down",
+  "category": "Societal relatability",
+  "keywords": [
+    "taking one sheet off a stack",
+    "friction",
+    "sliding",
+    "thin object",
+    "playing cards",
+    "dealing",
+    "fingertip",
+    "two arms"
+  ],
+  "instruction": "Deal one card to each place, in turn: left, then near, then right. Slide each card off the top of the deck, one card at a time, and leave it face down at its place. Leave the rest of the deck squared on its mark.",
+  "context": "Dealing cards is something nearly everyone has done or watched: the top card comes off the deck and goes to each player in turn. A playing card is 0.29 mm thick and lies flush on 51 others, so it cannot be gripped. It is taken by friction: a fingertip presses on its back and slides it off, and the card under it has to stay where it is. The task is that act with a full 52-card deck on a smooth dealing board: slide exactly one card off the top, over the deck's edge and on across the board to a place, three times, in turn to three places. The deck is in a known order, so the card found at each place at the end shows whether the cards came off one at a time and in turn: two that come off together end up at the same place, and every place after it then holds the wrong card. Nothing has to be worked out; the order of the places is in the instruction. The difficulty is in the hands: pressing on a 15 mm pile with the right force, and keeping one card under the fingertip from deck to board.",
+  "setup": "Cm from the midpoint between the arm bases, x away from the robot, y left; heights above the board. Dealing board: laminate-faced, green, 47 x 66 x 0.3, fixed to the table, centred at (32.5, 0). Deck: a standard 52-card poker-size deck, each card 6.35 x 8.89 x 0.029, 1.55 g, the pile 1.5 high. It lies face down and squared on a blue outline of its own size centred at (24, 0), its long sides across (along y). It is in a known order: from the top, the ace, two and three of one suit, then the rest. Places: three blue crosses 3 x 3: left at (33, 22.5), near at (20, -19), right at (34.5, -22.5). Both arms start in their ready pose. Layout B (CARDS_LOT=B): the deck on the same mark; the places at (30.5, 20.5), (21.5, -17) and (36, -20.5).",
+  "scoring": "Scored at the end, from where the cards lie and which cards they are (the dealt cards are turned over and read). A card is at a place if its centre is within 7 cm of the place's mark. A place's own card is, counting from the top of the deck at the start, the 1st for the left place, the 2nd for the near place, the 3rd for the right place. A place is complete if exactly one card is at it and it is its own, lying flat (within 10 degrees) and face down. 0.25 for each complete place. 1.0 if all three are complete and also: every other card is still on the deck (centre within 4 cm of the middle of the outline) with no corner more than 1 cm outside the outline; no card is face up or on edge; every card is at rest (under 2 cm/s); both grippers are at least 3 cm from every card. So: 0 if no place holds its own card; 0.25, 0.5 or 0.75 for one, two or three complete places; 1.0 with the deck left square and the hands away.",
+  "run_limit": "1,000 steps (50 s at 20 Hz)",
+  "reset_notes": "Gather the three dealt cards, put them back on top of the deck in order (ace on top, then two, then three), square the deck and set it on its outline, face down.",
+  "fidelity": "Rigid cards at full size and weight; they do not bend. Sourced: card 63.5 x 88.9 mm (a card printer's page); 52 cards 15.15 mm thick and ten cards 15.5 g (a measured deck). Estimates: friction, card on card 0.26, fingertip on card 0.38, card on board 0.18. The board is added so that cards slide on a known smooth surface. Solver: each card is solved with 255 position iterations (at 64 the pile sank 4 mm into itself). Marks are drawn only. Not tried on a physical rig.",
+  "scores": "Dream-1 run: 0.0 (both arms drew back and folded over their own bases with their grippers open, and stayed there; neither reached the deck and no card moved); demo: 1.0 (the trial ended with full score at step 715 of 1,000)",
+  "media": "M-67QXMN"
+}
