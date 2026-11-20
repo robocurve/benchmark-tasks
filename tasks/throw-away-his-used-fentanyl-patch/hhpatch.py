@@ -1,15 +1,18 @@
-"""hhpatch: a used transdermal patch for a yam_arena task file, as two thin rigid halves joined by a hinge.
+"""hhpatch: a used transdermal patch for a yam_arena task file, as a thin, floppy film.
 
-A real patch is a thin flexible film. Here it is two rigid halves (``half_a`` and ``half_b``, each half the patch)
-joined along their shared edge by a free hinge that lies in the adhesive face, so ``half_b`` can be folded over onto
-``half_a`` until the two adhesive faces meet (the hinge's 180 degree limit; the halves do not collide with each
-other). Once folded within ``180 - stick_deg`` of shut the faces stick: from then on a joint drive holds the hinge
-fully shut (the adhesive), as a folded patch stays shut. The pair is one PhysX
-articulation (root link ``half_a``), spawned the way the accepted cable task's cablekit spawns its cable.
+A real patch is a thin flexible film. Here it is a strip of ``n`` thin rigid slats (0.8 mm thick) side by side across
+its width, each joined to the next along its long edge by a hinge in the adhesive face, with a weak spring (the film's
+own bending stiffness) and a little damping: it bends, sags and flops anywhere across its width, at 8 mm spacing, and
+must be folded by moving one half over the other, as a real film is. The slats collide with each other (self-collision),
+so the folded half lies on the other half rather than passing through it. The film counts as folded shut once every
+slat of the folded half lies face down over its mirror slat of the other half (within ``align_m`` across the film,
+within ``flip_deg`` of face to face, touching): then the adhesive faces stick, and from then on stiff drives hold every
+hinge where it is (a stuck patch stays folded). The strip is one PhysX articulation (root link ``s0``), spawned the way
+the accepted cable task's cablekit spawns its cable.
 
 Importing this module hooks ``yam_arena.scene`` so a :class:`Patch` in ``OBJECTS`` is spawned as that articulation and
-``success()/score()`` receive a :class:`PatchState` (an ObjectState for the whole patch plus the hinge angle and each
-half's pose). yam_arena is not modified. Pure Python at import time.
+``success()/score()`` receive a :class:`PatchState` (an ObjectState for the whole patch plus each slat's pose). yam_arena
+is not modified. Pure Python at import time.
 """
 
 from __future__ import annotations
@@ -27,15 +30,20 @@ from yam_arena.task_file import Box, ObjectState
 
 @dataclass(frozen=True)
 class Patch(Box):
-    """A patch lying flat, adhesive face up, its hinge (the fold line) through ``pos`` along its own y; ``half_a`` on
-    its own -x side, ``half_b`` on its own +x side (own axes = world axes turned ``yaw`` about the vertical).
-    ``size`` = (whole width along its own x, length along its own y, thickness)."""
+    """A patch lying flat, adhesive face up, centred on ``pos``; its slats run along its own y and follow one another
+    along its own x (own axes = world axes turned ``yaw`` about the vertical). The fold line is its own y axis through
+    ``pos``: the slats on its own +x side are the half that folds over. ``size`` = (width along its own x, length along
+    its own y, thickness)."""
 
-    mass_half: float = 0.002
+    n: int = 6  # slats (even: the fold line falls between two)
+    mass_total: float = 0.004
     friction: float = 0.9
-    stick_deg: float = 172.0  # folded at least this far: the adhesive faces meet and stick
-    k_stick: float = 0.05  # N m/rad: the adhesive holding a stuck patch shut (a drive to fully folded)
-    damping: float = 2e-5  # N m s/rad, the film's own resistance to folding (tiny; otherwise the hinge is free)
+    k_bend: float = 2e-5  # N m/rad per hinge: the film's own springiness (floppy: a slat sags under its own weight)
+    damping: float = 2e-5  # N m s/rad per hinge
+    k_stick: float = 0.05  # N m/rad: the adhesive holding a stuck patch's shape
+    align_m: float = 0.009  # a folded slat this close (across the film and along it) to its mirror slat ...
+    flip_deg: float = 25.0  # ... and within this of face to face, touching: the faces meet
+    gap: float = 0.0003  # between neighbouring slats
     face_color: tuple = (0.92, 0.88, 0.80)  # the adhesive face (translucent beige)
     back_color: tuple = (0.80, 0.55, 0.30)  # the printed backing
 
@@ -44,25 +52,73 @@ class Patch(Box):
         return False
 
     @property
-    def half(self) -> tuple:
-        return (self.size[0] / 2, self.size[1], self.size[2])
+    def slat(self) -> tuple:
+        """(width across, length along, thickness) of one slat."""
+        return ((self.size[0] - (self.n - 1) * self.gap) / self.n, self.size[1], self.size[2])
+
+    def slat_x(self, k: int) -> float:
+        """Slat k's centre along the patch's own x, from its centre (flat)."""
+        w = self.slat[0]
+        return -self.size[0] / 2 + w / 2 + k * (w + self.gap)
 
 
 @dataclass(frozen=True)
 class PatchState(ObjectState):
-    hinge_deg: float = 0.0  # 0 flat, 180 folded shut (adhesive faces together)
+    hinge_deg: float = 0.0  # angle between the first and the last slat's faces: 0 flat, 180 folded over
     stuck: bool = False
-    a_pos: np.ndarray = None
+    slat_pos: np.ndarray = None  # (n, 3)
+    slat_quat: np.ndarray = None  # (n, 4) xyzw
+    a_pos: np.ndarray = None  # the middles of the unfolded half (own -x) and the folding half (own +x)
     b_pos: np.ndarray = None
-    a_quat: np.ndarray = None
-    b_quat: np.ndarray = None
-    a_vel: np.ndarray = None
-    b_vel: np.ndarray = None
 
 
 _SPECS: dict = {}
 STUCK: dict = {}  # name -> True once the faces have met
-MODE: dict = {}  # name -> 0 free, 1 stuck (-1: rewrite the drive)
+MODE: dict = {}  # name -> 0 free, 1 stuck (-1: rewrite the drives)
+
+
+def _rot(q) -> np.ndarray:
+    x, y, z, w = q
+    return np.array([[1 - 2 * (y * y + z * z), 2 * (x * y - z * w), 2 * (x * z + y * w)],
+                     [2 * (x * y + z * w), 1 - 2 * (x * x + z * z), 2 * (y * z - x * w)],
+                     [2 * (x * z - y * w), 2 * (y * z + x * w), 1 - 2 * (x * x + y * y)]])
+
+
+def _quat(m) -> np.ndarray:
+    """xyzw quaternion of a rotation matrix."""
+    tr = m[0, 0] + m[1, 1] + m[2, 2]
+    if tr > 0:
+        S = math.sqrt(tr + 1.0) * 2
+        q = [(m[2, 1] - m[1, 2]) / S, (m[0, 2] - m[2, 0]) / S, (m[1, 0] - m[0, 1]) / S, 0.25 * S]
+    elif m[0, 0] > m[1, 1] and m[0, 0] > m[2, 2]:
+        S = math.sqrt(1.0 + m[0, 0] - m[1, 1] - m[2, 2]) * 2
+        q = [0.25 * S, (m[0, 1] + m[1, 0]) / S, (m[0, 2] + m[2, 0]) / S, (m[2, 1] - m[1, 2]) / S]
+    elif m[1, 1] > m[2, 2]:
+        S = math.sqrt(1.0 + m[1, 1] - m[0, 0] - m[2, 2]) * 2
+        q = [(m[0, 1] + m[1, 0]) / S, 0.25 * S, (m[1, 2] + m[2, 1]) / S, (m[0, 2] - m[2, 0]) / S]
+    else:
+        S = math.sqrt(1.0 + m[2, 2] - m[0, 0] - m[1, 1]) * 2
+        q = [(m[0, 2] + m[2, 0]) / S, (m[1, 2] + m[2, 1]) / S, 0.25 * S, (m[1, 0] - m[0, 1]) / S]
+    return np.array(q)
+
+
+def folded_shut(spec: Patch, pos, quat) -> bool:
+    """Every slat of the folding half lies face down on its mirror slat of the other half."""
+    n, t = spec.n, spec.size[2]
+    for i in range(n // 2, n):
+        j = n - 1 - i
+        Rj, Ri = _rot(quat[j]), _rot(quat[i])
+        d = Rj.T @ (np.asarray(pos[i], float) - np.asarray(pos[j], float))
+        if (Rj.T @ Ri)[2, 2] > -math.cos(math.radians(spec.flip_deg)):
+            return False
+        if abs(d[0]) > spec.align_m or abs(d[1]) > spec.align_m or not (0.0 < d[2] < 3 * t + 0.002):
+            return False
+    return True
+
+
+def fold_angle(quat) -> float:
+    za, zb = _rot(quat[0])[:, 2], _rot(quat[-1])[:, 2]
+    return float(math.degrees(math.acos(max(-1.0, min(1.0, float(za @ zb))))))
 
 
 def _spawn_patch(prim_path: str, cfg, translation=None, orientation=None, **kwargs):
@@ -87,62 +143,55 @@ def _spawn_patch(prim_path: str, cfg, translation=None, orientation=None, **kwar
         looks[k] = f"{prim_path}/Looks/{k}"
         lk = sim_utils.PreviewSurfaceCfg(diffuse_color=linear_rgb(c), roughness=0.6)
         lk.func(looks[k], lk)
-    hw, L, t = spec.half
-    gap = 0.0004  # 0.4 mm between the halves at the fold line
-    paths = {}
-    for name, lx in (("half_a", 0.0), ("half_b", hw + gap)):  # half_a centred on the root frame (root link)
-        path = f"{prim_path}/{name}"
+    sw, L, t = spec.slat
+    paths = []
+    for k in range(spec.n):  # s0 centred on the root frame (the root link)
+        path = f"{prim_path}/s{k}"
         xf = UsdGeom.Xform.Define(stage, path)
-        xf.AddTranslateOp(precision=UsdGeom.XformOp.PrecisionDouble).Set(Gf.Vec3d(lx, 0.0, 0.0))
+        xf.AddTranslateOp(precision=UsdGeom.XformOp.PrecisionDouble).Set(
+            Gf.Vec3d(spec.slat_x(k) - spec.slat_x(0), 0.0, 0.0))
         xf.AddOrientOp(precision=UsdGeom.XformOp.PrecisionDouble).Set(Gf.Quatd(1, 0, 0, 0))
         prim = xf.GetPrim()
         UsdPhysics.RigidBodyAPI.Apply(prim)
-        UsdPhysics.MassAPI.Apply(prim).CreateMassAttr(spec.mass_half)
+        UsdPhysics.MassAPI.Apply(prim).CreateMassAttr(spec.mass_total / spec.n)
         rb = PhysxSchema.PhysxRigidBodyAPI.Apply(prim)
-        rb.CreateMaxDepenetrationVelocityAttr(0.5)
+        rb.CreateMaxDepenetrationVelocityAttr(0.3)
         rb.CreateSolverPositionIterationCountAttr(32)
-        rb.CreateLinearDampingAttr(0.2)
-        rb.CreateAngularDampingAttr(0.5)
-        geom = UsdGeom.Cube.Define(stage, f"{path}/geom")
-        geom.CreateSizeAttr(1.0)
-        geom.AddScaleOp().Set(Gf.Vec3f(hw, L, t * 0.6))
-        geom.AddTranslateOp().Set(Gf.Vec3d(0.0, 0.0, -t * 0.2))
-        UsdPhysics.CollisionAPI.Apply(geom.GetPrim())
-        cp = PhysxSchema.PhysxCollisionAPI.Apply(geom.GetPrim())
-        cp.CreateContactOffsetAttr(0.0015)
-        cp.CreateRestOffsetAttr(0.0)
-        bind_physics_material(str(geom.GetPrim().GetPath()), phys, stage=stage)
-        bind_visual_material(str(geom.GetPrim().GetPath()), looks["back"], stage=stage)
-        face = UsdGeom.Cube.Define(stage, f"{path}/face")  # the adhesive layer (visual; part of the collider above)
-        face.CreateSizeAttr(1.0)
-        face.AddTranslateOp().Set(Gf.Vec3d(0.0, 0.0, t * 0.3))
-        face.AddScaleOp().Set(Gf.Vec3f(hw, L, t * 0.4))
-        UsdPhysics.CollisionAPI.Apply(face.GetPrim())
-        cp2 = PhysxSchema.PhysxCollisionAPI.Apply(face.GetPrim())
-        cp2.CreateContactOffsetAttr(0.0015)
-        cp2.CreateRestOffsetAttr(0.0)
-        bind_physics_material(str(face.GetPrim().GetPath()), phys, stage=stage)
-        bind_visual_material(str(face.GetPrim().GetPath()), looks["face"], stage=stage)
-        paths[name] = path
-    j = UsdPhysics.RevoluteJoint.Define(stage, f"{paths['half_b']}/fold")
-    j.CreateBody0Rel().SetTargets([Sdf.Path(paths["half_a"])])
-    j.CreateBody1Rel().SetTargets([Sdf.Path(paths["half_b"])])
-    j.CreateAxisAttr("Y")
-    # the fold line: the adhesive face's edge, in each half's frame
-    j.CreateLocalPos0Attr(Gf.Vec3f(hw / 2 + gap / 2, 0, t / 2))
-    j.CreateLocalRot0Attr(Gf.Quatf(1, 0, 0, 0))
-    j.CreateLocalPos1Attr(Gf.Vec3f(-hw / 2 - gap / 2, 0, t / 2))
-    j.CreateLocalRot1Attr(Gf.Quatf(1, 0, 0, 0))
-    j.CreateLowerLimitAttr(-180.0)  # half_b folded up and over onto half_a turns it -180 deg about +y
-    j.CreateUpperLimitAttr(3.0)
-    drv = UsdPhysics.DriveAPI.Apply(j.GetPrim(), "angular")
-    drv.CreateTypeAttr("force")
-    drv.CreateStiffnessAttr(0.0)
-    drv.CreateDampingAttr(spec.damping * math.pi / 180)
-    root_link = stage.GetPrimAtPath(paths["half_a"])
+        rb.CreateLinearDampingAttr(0.3)
+        rb.CreateAngularDampingAttr(0.8)
+        for part, zc, frac, look in (("geom", -0.2, 0.6, "back"), ("face", 0.3, 0.4, "face")):
+            g = UsdGeom.Cube.Define(stage, f"{path}/{part}")
+            g.CreateSizeAttr(1.0)
+            g.AddTranslateOp().Set(Gf.Vec3d(0.0, 0.0, t * zc))
+            g.AddScaleOp().Set(Gf.Vec3f(sw, L, t * frac))
+            UsdPhysics.CollisionAPI.Apply(g.GetPrim())
+            cp = PhysxSchema.PhysxCollisionAPI.Apply(g.GetPrim())
+            cp.CreateContactOffsetAttr(0.0006)
+            cp.CreateRestOffsetAttr(0.0)
+            bind_physics_material(str(g.GetPrim().GetPath()), phys, stage=stage)
+            bind_visual_material(str(g.GetPrim().GetPath()), looks[look], stage=stage)
+        paths.append(path)
+    for k in range(spec.n - 1):
+        j = UsdPhysics.RevoluteJoint.Define(stage, f"{paths[k + 1]}/bend{k}")
+        j.CreateBody0Rel().SetTargets([Sdf.Path(paths[k])])
+        j.CreateBody1Rel().SetTargets([Sdf.Path(paths[k + 1])])
+        j.CreateAxisAttr("Y")
+        # the hinge: the adhesive face's shared edge, in each slat's frame
+        j.CreateLocalPos0Attr(Gf.Vec3f(sw / 2 + spec.gap / 2, 0, t / 2))
+        j.CreateLocalRot0Attr(Gf.Quatf(1, 0, 0, 0))
+        j.CreateLocalPos1Attr(Gf.Vec3f(-sw / 2 - spec.gap / 2, 0, t / 2))
+        j.CreateLocalRot1Attr(Gf.Quatf(1, 0, 0, 0))
+        j.CreateLowerLimitAttr(-180.0)  # folding up and over towards s0 turns the next slat about -y
+        j.CreateUpperLimitAttr(90.0)  # and the film can sag the other way
+        drv = UsdPhysics.DriveAPI.Apply(j.GetPrim(), "angular")
+        drv.CreateTypeAttr("force")
+        drv.CreateStiffnessAttr(spec.k_bend * math.pi / 180)
+        drv.CreateDampingAttr(spec.damping * math.pi / 180)
+        drv.CreateTargetPositionAttr(0.0)
+    root_link = stage.GetPrimAtPath(paths[0])
     UsdPhysics.ArticulationRootAPI.Apply(root_link)
     art = PhysxSchema.PhysxArticulationAPI.Apply(root_link)
-    art.CreateEnabledSelfCollisionsAttr(False)
+    art.CreateEnabledSelfCollisionsAttr(True)  # the folded half lies on the other half
     art.CreateSolverPositionIterationCountAttr(32)
     art.CreateSolverVelocityIterationCountAttr(4)
     return root.GetPrim()
@@ -167,17 +216,16 @@ def _arena_object(spec: Patch):
         def _generate_articulation_cfg(self):
             cfg = ArticulationCfg(
                 prim_path=self.prim_path, spawn=self.spawner_cfg,
-                actuators={"fold": ImplicitActuatorCfg(joint_names_expr=[".*"], stiffness=0.0, damping=spec.damping,
-                                                       armature=2e-6)})
+                actuators={"bend": ImplicitActuatorCfg(joint_names_expr=[".*"], stiffness=spec.k_bend,
+                                                       damping=spec.damping, armature=2e-6)})
             return self._add_initial_pose_to_cfg(cfg)
 
-    hw = spec.half[0]
     c, s = math.cos(spec.yaw), math.sin(spec.yaw)
-    d = -(hw / 2 + 0.0002)  # half_a's centre from the fold line along the patch's own x (gap 0.4 mm)
-    a_xyz = (spec.pos[0] + c * d, spec.pos[1] + s * d, spec.pos[2])
+    d = spec.slat_x(0)  # s0's centre from the patch's centre along its own x
+    s0 = (spec.pos[0] + c * d, spec.pos[1] + s * d, spec.pos[2])
     return PatchObject(name=spec.name, object_type=ObjectType.ARTICULATION,
                        spawner_cfg=PatchSpawnerCfg(patch_name=spec.name),
-                       initial_pose=Pose(position_xyz=a_xyz,
+                       initial_pose=Pose(position_xyz=s0,
                                          rotation_xyzw=(0.0, 0.0, math.sin(spec.yaw / 2), math.cos(spec.yaw / 2))))
 
 
@@ -197,6 +245,14 @@ def _corners(p, q, size) -> np.ndarray:
     return p + c @ rot(q).T
 
 
+def _state(spec: Patch, pos, quat, vel, angv, stuck) -> PatchState:
+    n = spec.n
+    pts = np.vstack([_corners(pos[k], quat[k], spec.slat) for k in range(n)])
+    return PatchState(pos=pos.mean(0), quat_xyzw=quat[0], lin_vel=vel.mean(0), ang_vel=angv.mean(0), low=pts.min(0),
+                      high=pts.max(0), hinge_deg=fold_angle(quat), stuck=stuck, slat_pos=pos, slat_quat=quat,
+                      a_pos=pos[: n // 2].mean(0), b_pos=pos[n // 2:].mean(0))
+
+
 def _patch_state(env, spec: Patch) -> PatchState:
     import torch
 
@@ -204,46 +260,47 @@ def _patch_state(env, spec: Patch) -> PatchState:
     art = base.scene[spec.name]
     origin = _np(base.scene.env_origins)[0]
     names = list(art.body_names)
-    ia, ib = names.index("half_a"), names.index("half_b")
-    pos = _np(art.data.body_pos_w)[0] - origin
-    quat = _np(art.data.body_quat_w)[0]  # Isaac Lab here gives (x, y, z, w)
-    vel = _np(art.data.body_lin_vel_w)[0]
-    angv = _np(art.data.body_ang_vel_w)[0]
-    qa, qb = quat[ia], quat[ib]
-    ang = float(-math.degrees(_np(art.data.joint_pos)[0][0]))  # 0 flat .. 180 folded
-    if ang >= spec.stick_deg:
+    idx = [names.index(f"s{k}") for k in range(spec.n)]
+    pos = (_np(art.data.body_pos_w)[0] - origin)[idx]
+    quat = _np(art.data.body_quat_w)[0][idx]  # Isaac Lab here gives (x, y, z, w)
+    vel = _np(art.data.body_lin_vel_w)[0][idx]
+    angv = _np(art.data.body_ang_vel_w)[0][idx]
+    if not STUCK.get(spec.name) and folded_shut(spec, pos, quat):
         STUCK[spec.name] = True
     stuck = STUCK.get(spec.name, False)
-    mode = 1 if stuck else 0  # 0 free hinge, 1 stuck shut (the adhesive: a drive holding it fully folded)
+    mode = 1 if stuck else 0  # 0 the film's own springiness, 1 stuck (the adhesive: every hinge held where it is)
     if MODE.get(spec.name, 0) != mode:
         MODE[spec.name] = mode
-        art.write_joint_stiffness_to_sim(torch.tensor([[spec.k_stick if mode else 0.0]], device=art.device))
-        art.set_joint_position_target(torch.tensor([[-math.pi if mode else 0.0]], device=art.device))
-    pts = np.vstack([_corners(pos[ia], qa, spec.half), _corners(pos[ib], qb, spec.half)])
-    return PatchState(pos=(pos[ia] + pos[ib]) / 2, quat_xyzw=qa, lin_vel=(vel[ia] + vel[ib]) / 2,
-                      ang_vel=(angv[ia] + angv[ib]) / 2, low=pts.min(0), high=pts.max(0), hinge_deg=ang, stuck=stuck,
-                      a_pos=pos[ia], b_pos=pos[ib], a_quat=qa, b_quat=qb, a_vel=vel[ia], b_vel=vel[ib])
+        nj = art.num_joints
+        art.write_joint_stiffness_to_sim(torch.full((1, nj), spec.k_stick if mode else spec.k_bend, device=art.device))
+        q = art.data.joint_pos.clone() if mode else torch.zeros((1, nj), device=art.device)
+        art.set_joint_position_target(q)
+    return _state(spec, pos, quat, vel, angv, stuck)
 
 
 def offline_state(spec: Patch, hinge_deg: float = 0.0, pos=None, vel=(0.0, 0.0, 0.0)) -> PatchState:
-    """A PatchState without the simulator (offline tests): the patch flat, or folded ``hinge_deg``, with its fold line's
-    middle at ``pos`` (default: where it starts), turned ``spec.yaw``."""
-    p = np.asarray(pos if pos is not None else spec.pos, float)
-    hw, t = spec.half[0], spec.size[2]
+    """A PatchState without the simulator (offline tests): the patch flat, or folded ``hinge_deg`` at its middle hinge
+    (the folding half kept flat), its centre (flat: its middle) at ``pos`` (default: where it starts), turned
+    ``spec.yaw``."""
+    p0 = np.asarray(pos if pos is not None else spec.pos, float)
+    n, t = spec.n, spec.size[2]
     th = math.radians(hinge_deg)
-    a_l = np.array([-hw / 2, 0.0, 0.0])  # in the patch's own frame, from the fold line's middle at mid-thickness
-    b_l = np.array([hw / 2 * math.cos(th) + t / 2 * math.sin(th), 0.0,
-                    t / 2 + hw / 2 * math.sin(th) - t / 2 * math.cos(th)])
     c, s_ = math.cos(spec.yaw), math.sin(spec.yaw)
     rz = np.array([[c, -s_, 0.0], [s_, c, 0.0], [0.0, 0.0, 1.0]])
-    a, b = p + rz @ a_l, p + rz @ b_l
-    qa = np.array([0.0, 0.0, math.sin(spec.yaw / 2), math.cos(spec.yaw / 2)])
-    qb = qa  # (orientation of half_b is not used by the scoring)
-    pts = np.vstack([_corners(a, qa, spec.half), _corners(b, qa, spec.half)])
-    v = np.asarray(vel, float)
-    return PatchState(pos=(a + b) / 2, quat_xyzw=qa, lin_vel=v, ang_vel=np.zeros(3), low=pts.min(0), high=pts.max(0),
-                      hinge_deg=hinge_deg, stuck=hinge_deg >= spec.stick_deg, a_pos=a, b_pos=b, a_quat=qa, b_quat=qb,
-                      a_vel=v, b_vel=v)
+    hinge = np.array([0.0, 0.0, t / 2])  # the middle hinge, in the patch's own frame (from its centre)
+    ry = np.array([[math.cos(-th), 0.0, math.sin(-th)], [0.0, 1.0, 0.0], [-math.sin(-th), 0.0, math.cos(-th)]])
+    q0 = np.array([0.0, 0.0, math.sin(spec.yaw / 2), math.cos(spec.yaw / 2)])
+    qf = _quat(rz @ ry)
+    P, Q = [], []
+    for k in range(n):
+        local = np.array([spec.slat_x(k), 0.0, 0.0])
+        if k >= n // 2:
+            local = hinge + ry @ (local - hinge)
+        P.append(p0 + rz @ local)
+        Q.append(qf if k >= n // 2 else q0)
+    P, Q = np.array(P), np.array(Q)
+    v = np.tile(np.asarray(vel, float), (n, 1))
+    return _state(spec, P, Q, v, np.zeros((n, 3)), folded_shut(spec, P, Q))
 
 
 def _patch_scene(scene) -> None:

@@ -42,8 +42,8 @@ def run(states, grips=None, n=1):
     return out
 
 
-def in_can():
-    return (M.CAN_XY[0], M.CAN_XY[1], M.PT + 2 * M.T)
+def in_box():
+    return (M.BOX_XY[0] + 0.02, M.BOX_XY[1], M.PT + 2 * M.T)
 
 
 def in_bin():
@@ -54,7 +54,8 @@ def test_loads():
     assert TASK.scene == "station"
     names = [o.name for o in M.OBJECTS]
     assert {"patch", "shelf", "patient"} <= set(names) and len(names) == len(set(names))
-    assert "takeback_n" in names and "trash_n" in names
+    assert "dropbox_front" in names and "dropbox_padlock" in names and "trash_n" in names
+    assert sum(n.startswith("label_") for n in names) > 10
 
 
 def test_geometry():
@@ -62,44 +63,82 @@ def test_geometry():
     assert M.X0 - M.L / 2 < M.XE < M.X0
     assert M.SHELF_XY[1] - M.SHELF[1] / 2 < M.HY - M.W / 2 and M.HY + M.W / 2 < M.SHELF_XY[1] + M.SHELF[1] / 2
     s = patch()["patch"]
-    assert abs(s.a_pos[1] - (M.HY + M.W / 4)) < 1e-3 and abs(s.b_pos[1] - (M.HY - M.W / 4)) < 1e-3  # B on the right
-    # the containers stand on the shelf, apart, clear of the patch
-    for xy, inner in ((M.CAN_XY, M.CAN_IN), (M.BIN_XY, M.BIN_IN)):
-        assert M.XE < xy[0] - inner[0] / 2 and xy[0] + inner[0] / 2 < M.XE + M.SHELF[0]
-        assert not M.inside(s.pos, xy, inner)
-    assert M.CAN_XY[1] + M.CAN_IN[1] / 2 < M.BIN_XY[1] - M.BIN_IN[1] / 2
+    assert abs(s.a_pos[1] - (M.HY + M.W / 4)) < 2e-3 and abs(s.b_pos[1] - (M.HY - M.W / 4)) < 2e-3  # B on the right
+    # the box and the bin stand on the shelf, apart, clear of the patch and of the fingers pinching it
+    sx0, sx1 = M.XE, M.XE + M.SHELF[0]
+    sy0, sy1 = M.SHELF_XY[1] - M.SHELF[1] / 2, M.SHELF_XY[1] + M.SHELF[1] / 2
+    for xy, out in ((M.BOX_XY, M.BOX_OUT), (M.BIN_XY, (M.BIN_IN[0] + 2 * M.WALL, M.BIN_IN[1] + 2 * M.WALL))):
+        assert sx0 < xy[0] - out[0] / 2 and xy[0] + out[0] / 2 < sx1 and sy0 < xy[1] - out[1] / 2 and xy[1] + out[1] / 2 < sy1
+    assert M.BOX_XY[0] - M.BOX_OUT[0] / 2 > M.PIN_X + M.PAD_TIP + 0.02
+    assert M.BOX_XY[1] + M.BOX_OUT[1] / 2 < M.BIN_XY[1] - M.BIN_IN[1] / 2 - M.WALL
+    assert not M.in_drop_box(s)
     # the patient is clear of the shelf and the robot at rest
     lo, hi = M.PERSON.bounds
     assert lo[1] > M.SHELF_XY[1] + M.SHELF[1] / 2
     assert run([patch()]) == (False, 0.0)
 
 
-def test_folded_in_takeback_scores_1():
-    ok, sc = run([patch(180.0, in_can())], n=25)
+def test_slot_and_label_fit():
+    # the slot is in the lid, inside the walls, clear of the label; a folded patch (L x W/2) passes, a flat one does not
+    bx, by = M.BOX_XY
+    assert abs(M.SLOT_XY[0] - bx) + M.SLOT[0] / 2 < M.BOX_IN[0] / 2 and abs(M.SLOT_XY[1] - by) + M.SLOT[1] / 2 < M.BOX_IN[1] / 2
+    assert M.SLOT[0] > M.L + 0.015 and M.SLOT[1] > M.W / 2 + 0.005 and M.SLOT[1] < M.W
+    assert M.SLOT[1] < 0.035  # narrower than a toddler's hand
+    gap_y = (M.LABEL_XY[1] + M.LABEL[1] / 2) - (M.SLOT_XY[1] - M.SLOT[1] / 2)
+    assert gap_y < 0 or abs(M.LABEL_XY[0] - M.SLOT_XY[0]) > (M.LABEL[0] + M.SLOT[0]) / 2
+    for o in M.OBJECTS:
+        if o.name.startswith("label_"):  # every letter stroke lies on the white label
+            assert abs(o.pos[0] - M.LABEL_XY[0]) + o.size[0] / 2 <= M.LABEL[0] / 2 + 1e-9
+            assert abs(o.pos[1] - M.LABEL_XY[1]) + o.size[1] / 2 <= M.LABEL[1] / 2 + 1e-9
+
+
+def test_folded_in_the_drop_box_scores_1():
+    ok, sc = run([patch(180.0, in_box())], n=25)
     assert sc == 1.0 and ok
 
 
-def test_success_needs_it_to_rest():
-    ok, sc = run([patch(180.0, in_can(), vel=(0.0, 0.0, -0.3))], n=25)
-    assert sc == 1.0 and not ok
+def test_score_needs_it_let_go_and_at_rest_for_a_second():
+    assert run([patch(180.0, in_box(), vel=(0.0, 0.0, -0.3))], n=25) == (False, 0.0)
+    M.TRIAL.clear()
+    c = np.array(in_box())
+    held = [{"tcp": c, "tips": [c + np.array([0.0, 0.0, 0.002]), c - np.array([0.0, 0.0, 0.002])]}, FAR[1]]
+    assert run([patch(180.0, in_box())], grips=held, n=40) == (False, 0.0)
+    M.TRIAL.grippers_override = FAR
+    assert run([patch(180.0, in_box())], n=10) == (False, 0.0)
+    assert run([patch(180.0, in_box())], n=12) == (True, 1.0)
 
 
-def test_unfolded_in_takeback_scores_0():
-    assert run([patch(0.0, in_can())], n=25) == (False, 0.0)
-    assert run([patch(150.0, in_can())], n=25) == (False, 0.0)  # half folded, sticky faces not together
+def test_unfolded_in_the_drop_box_scores_0():
+    assert run([patch(0.0, in_box())], n=25) == (False, 0.0)
+    assert run([patch(150.0, in_box())], n=25) == (False, 0.0)  # half folded, sticky faces not together
+
+
+def test_on_the_lid_or_in_the_slot_is_not_inside():
+    on_lid = (M.LABEL_XY[0], M.LABEL_XY[1], M.LID_TOP + 2 * M.T)
+    assert run([patch(180.0), patch(180.0, on_lid)], n=25) == (False, 0.0)
+    in_slot = (*M.SLOT_XY, M.LID_TOP - 0.002)
+    assert not M.in_drop_box(patch(180.0, in_slot)["patch"])
 
 
 def test_folded_into_trash_scores_0():
     assert run([patch(180.0), patch(180.0, in_bin())], n=25) == (False, 0.0)
 
 
-def test_folded_but_left_on_shelf_scores_half():
-    assert run([patch(180.0)], n=5) == (False, 0.5)
+def test_folded_but_left_on_the_shelf_scores_0():
+    assert run([patch(180.0)], n=40) == (False, 0.0)
+    assert M.TRIAL.mem["stuck"] and M.TRIAL.mem["on_shelf"]
+
+
+def test_shelf_check_needs_it_lying_on_the_shelf():
+    held_above = (M.X0, M.HY, M.PT + 0.05)
+    beside = (M.XE - 0.05, M.HY, M.PT + 2 * M.T)
+    assert M.on_shelf(patch(180.0)["patch"])
+    assert not M.on_shelf(patch(180.0, held_above)["patch"]) and not M.on_shelf(patch(180.0, beside)["patch"])
 
 
 def test_stuck_stays_stuck():
     # once the faces met, the patch counts as stuck even if read back a little open
-    assert run([patch(180.0), patch(170.0, in_can())], n=25)[1] == 1.0
+    assert run([patch(180.0), patch(165.0, in_box())], n=25)[1] == 1.0
 
 
 def test_dropped_off_the_shelf_scores_0():
@@ -113,7 +152,7 @@ def test_robot_near_patient_is_0():
     near = [FAR[0], {"tcp": p, "tips": [p, p]}]
     run([patch()], grips=near)
     M.TRIAL.grippers_override = FAR
-    assert run([patch(180.0, in_can())], n=25) == (False, 0.0)
+    assert run([patch(180.0, in_box())], n=25) == (False, 0.0)
     assert M.TRIAL.mem["violated"]
 
 
