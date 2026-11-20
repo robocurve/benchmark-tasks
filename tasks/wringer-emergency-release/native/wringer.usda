@@ -1,0 +1,300 @@
+#usda 1.0
+(
+    defaultPrim = "Wringer"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Wringer"
+{
+    def Material "rubber" (
+        prepend apiSchemas = ["PhysicsMaterialAPI"]
+    )
+    {
+        float physics:dynamicFriction = 0.75
+        float physics:restitution = 0
+        float physics:staticFriction = 0.9
+    }
+
+    def Xform "frame" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxContactReportAPI"]
+    )
+    {
+        bool physics:kinematicEnabled = 1
+        custom float physxContactReport:threshold = 0
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cube "foot" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </Wringer/rubber>
+            color3f[] primvars:displayColor = [(0.38, 0.47, 0.54)]
+            double size = 1
+            float3 xformOp:scale = (0.12, 0.19, 0.016)
+            double3 xformOp:translate = (0, 0, 0.008)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "cheek_R" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </Wringer/rubber>
+            color3f[] primvars:displayColor = [(0.43, 0.56, 0.62)]
+            double size = 1
+            float3 xformOp:scale = (0.036, 0.008, 0.084)
+            double3 xformOp:translate = (0, -0.069, 0.049)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "cheek_L" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </Wringer/rubber>
+            color3f[] primvars:displayColor = [(0.43, 0.56, 0.62)]
+            double size = 1
+            float3 xformOp:scale = (0.036, 0.008, 0.084)
+            double3 xformOp:translate = (0, 0.069, 0.049)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Xform "lower"
+        {
+            double3 xformOp:translate = (0, 0, 0.043)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+
+            def Cylinder "roller" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+            )
+            {
+                uniform token axis = "Y"
+                double height = 0.12
+                rel material:binding:physics = </Wringer/rubber>
+                color3f[] primvars:displayColor = [(0.23, 0.29, 0.33)]
+                double radius = 0.0325
+            }
+        }
+    }
+
+    def Xform "yoke" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"]
+    )
+    {
+        bool physics:kinematicEnabled = 0
+        float physics:mass = 0.21
+        custom float physxContactReport:threshold = 0
+        double3 xformOp:translate = (0, 0, 0.111)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cylinder "roller" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "Y"
+            double height = 0.12
+            rel material:binding:physics = </Wringer/rubber>
+            color3f[] primvars:displayColor = [(0.23, 0.29, 0.33)]
+            double radius = 0.0325
+        }
+
+        def Cube "stem_left" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </Wringer/rubber>
+            color3f[] primvars:displayColor = [(0.87, 0.58, 0.12)]
+            double size = 1
+            float3 xformOp:scale = (0.015, 0.052, 0.014)
+            double3 xformOp:translate = (0, 0.084, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "tab_left" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </Wringer/rubber>
+            color3f[] primvars:displayColor = [(0.98, 0.67, 0.08)]
+            double size = 1
+            float3 xformOp:scale = (0.031, 0.018, 0.033)
+            double3 xformOp:translate = (0, 0.10416, 0.01)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "lip_left" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </Wringer/rubber>
+            color3f[] primvars:displayColor = [(0.98, 0.67, 0.08)]
+            double size = 1
+            float3 xformOp:scale = (0.037, 0.028, 0.004)
+            double3 xformOp:translate = (0, 0.10416, 0.028)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "stem_right" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </Wringer/rubber>
+            color3f[] primvars:displayColor = [(0.87, 0.58, 0.12)]
+            double size = 1
+            float3 xformOp:scale = (0.015, 0.052, 0.014)
+            double3 xformOp:translate = (0, -0.084, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "tab_right" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </Wringer/rubber>
+            color3f[] primvars:displayColor = [(0.98, 0.67, 0.08)]
+            double size = 1
+            float3 xformOp:scale = (0.031, 0.018, 0.033)
+            double3 xformOp:translate = (0, -0.10416, 0.01)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "lip_right" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </Wringer/rubber>
+            color3f[] primvars:displayColor = [(0.98, 0.67, 0.08)]
+            double size = 1
+            float3 xformOp:scale = (0.037, 0.028, 0.004)
+            double3 xformOp:translate = (0, -0.10416, 0.028)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def PhysicsPrismaticJoint "compression" (
+        prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+    )
+    {
+        float drive:linear:physics:damping = 4
+        float drive:linear:physics:maxForce = 100
+        float drive:linear:physics:stiffness = 1250
+        float drive:linear:physics:targetPosition = -0.012
+        uniform token drive:linear:physics:type = "force"
+        uniform token physics:axis = "Z"
+        rel physics:body0 = </Wringer/frame>
+        rel physics:body1 = </Wringer/yoke>
+        point3f physics:localPos0 = (0, 0, 0.111)
+        point3f physics:localPos1 = (0, 0, 0)
+        float physics:lowerLimit = 0
+        float physics:upperLimit = 0.036
+    }
+
+    def Xform "sleeve" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"]
+    )
+    {
+        bool physics:kinematicEnabled = 0
+        float physics:mass = 0.026
+        custom float physxContactReport:threshold = 0
+        double3 xformOp:translate = (-0.041, 0, 0.0785)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cube "coupon" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </Wringer/rubber>
+            color3f[] primvars:displayColor = [(0.2, 0.53, 0.77)]
+            double size = 1
+            float3 xformOp:scale = (0.136, 0.035, 0.006)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def PhysicsPrismaticJoint "sleeve_guide" (
+        prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+    )
+    {
+        float drive:linear:physics:damping = 1
+        float drive:linear:physics:maxForce = 0.25
+        float drive:linear:physics:stiffness = 0
+        float drive:linear:physics:targetPosition = 0
+        float drive:linear:physics:targetVelocity = 0
+        uniform token drive:linear:physics:type = "force"
+        uniform token physics:axis = "X"
+        rel physics:body0 = </Wringer/frame>
+        rel physics:body1 = </Wringer/sleeve>
+        point3f physics:localPos0 = (-0.041, 0, 0.0785)
+        point3f physics:localPos1 = (0, 0, 0)
+        float physics:lowerLimit = -0.135
+        float physics:upperLimit = 0.006
+    }
+
+    def Xform "arm" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"]
+    )
+    {
+        bool physics:kinematicEnabled = 0
+        float physics:mass = 0.145
+        custom float physxContactReport:threshold = 0
+        double3 xformOp:translate = (-0.131, 0, 0.0785)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cube "dummy" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </Wringer/rubber>
+            color3f[] primvars:displayColor = [(0.82, 0.47, 0.32)]
+            double size = 1
+            float3 xformOp:scale = (0.05, 0.044, 0.027)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "grip" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </Wringer/rubber>
+            color3f[] primvars:displayColor = [(0.92, 0.53, 0.29)]
+            double size = 1
+            float3 xformOp:scale = (0.028, 0.026, 0.028)
+            double3 xformOp:translate = (0, -0.035, 0.002)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "grip_left" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </Wringer/rubber>
+            color3f[] primvars:displayColor = [(0.92, 0.53, 0.29)]
+            double size = 1
+            float3 xformOp:scale = (0.028, 0.026, 0.028)
+            double3 xformOp:translate = (0, 0.035, 0.002)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def PhysicsPrismaticJoint "wrist_spring" (
+        prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+    )
+    {
+        float drive:linear:physics:damping = 0.04
+        float drive:linear:physics:maxForce = 100
+        float drive:linear:physics:stiffness = 350
+        float drive:linear:physics:targetPosition = 0
+        uniform token drive:linear:physics:type = "force"
+        uniform token physics:axis = "X"
+        rel physics:body0 = </Wringer/sleeve>
+        rel physics:body1 = </Wringer/arm>
+        point3f physics:localPos0 = (-0.09, 0, 0)
+        point3f physics:localPos1 = (0, 0, 0)
+        float physics:lowerLimit = -0.08
+        float physics:upperLimit = 0.006
+    }
+}
