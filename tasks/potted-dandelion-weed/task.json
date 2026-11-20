@@ -1,0 +1,21 @@
+{
+  "title": "Hold a potted planting down by its rim and pull a dandelion out by its crown, root and all, onto the tarp",
+  "category": "Societal relatability",
+  "keywords": [
+    "home gardening",
+    "container weeding",
+    "bimanual hold-and-pull",
+    "rim pinch",
+    "taproot",
+    "breakable root"
+  ],
+  "instruction": "Weed the pot: pull the dandelion out with its whole root and put it on the tarp. Leave the pot standing where it is.",
+  "context": "Weeding pots is one of the most common garden chores: about 81% of US households took part in lawn and garden activities in 2023 (National Gardening Association, National Gardening Survey 2024 edition, as reported by Garden Center Magazine), and many garden in pots and planters on patios, balconies and doorsteps, where wind-blown dandelions come up and are pulled by hand. A dandelion grows back from any piece of taproot left behind, so it must come out whole. The root holds harder (10 N) than the pot and mix weigh (7.8 N), so one hand pinches the rim and holds the pot down while the other grips the crown at the soil (pulling the leaves tears them off) and pulls straight up and steadily (a sideways yank snaps the root at its neck).",
+  "setup": "Bench top z = 0.7475 m; x away from the arm bases, y left. An 8 in black plastic bulb pan (203 mm top, 171 mm base, 102 mm tall, ribbed, 7 mm rolled rim) of lightly moist peat/perlite potting mix (0.80 kg in all) stands centred at x 0.22, y -0.03; soil 84 mm above the bench, 18 mm below the rim. 40 mm from its centre (at x 0.22, y 0.01) is a young dandelion: a 22 mm crown standing 15 mm above the soil, six toothed leaves (about 85 mm) round it with gaps on +-x, a yellow flower on a stalk leaning to +y, and a 63 mm taproot (upper 28 mm, lower 35 mm) down a 16 mm hole in the mix. A blue poly tarp folded to 320 x 240 x 6 mm lies at x 0.28, y 0.25. Both arms start at READY, grippers open.",
+  "scoring": "Read from body poses every 20 Hz step. Score 0, and it stays 0, if the root never loosens, if the root neck snapped at any time (neck gap over 3 mm or bend over 25 deg), or if the pot was lifted more than 10 mm off the bench at any time (what a one-hand pull does, since the root holds harder than the pot weighs). Leaves torn off the crown are tolerated and do not change the score; the weed counts by its crown and root. 0.25 if the root has risen 5 mm in the mix, intact. 0.5 if the whole weed is out (root tip 3 mm above the soil or outside the pot), intact. 1.0 if it is out and intact, lying on the tarp (crown and root tip inside the outline less 5 mm, below 6 cm), still (under 3 cm/s) and let go (finger pads 30 mm or more from the crown), with the pot never lifted, upright within 10 deg and within 40 mm of its start. Real trial: taped tarp outline and pot ring, a ruler with a 10 mm mark beside the pot, and video.",
+  "run_limit": "900 control steps (45 seconds at 20 Hz); the scripted two-hand demo succeeds at step 343.",
+  "reset_notes": "Re-seat the prop's magnets (neck, soil grip, leaves), push the root back down its tube onto the steel disc in the centre-left of the pot, level the mix, put the pot back in its ring and clear the tarp. Nothing is consumed.",
+  "fidelity": "Rigid bodies, native PhysX contacts; nothing scripted. Soil grip on the root (10 N), root neck (40 N, 0.60 N m bend) and each leaf (4.5 N) are breakable fixed joints. The mix is rigid with a root hole and does not crumble; leaves are rigid plates; the stalk is visual only. Strengths match a magnet-jointed prop (K&J D62/D42/D31-N52) set by spring-scale pull-off checks (README). Meshes are procedural, written for this task; no textures or third-party assets.",
+  "scores": "Dream-1 run: 0 after 129 steps (6.45 simulated seconds); termination: DreamSessionExpired:expired. Scripted/teleoperated demo: 1 after 343 steps.",
+  "media": "M-3N6PTX"
+}
