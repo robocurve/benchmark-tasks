@@ -1,0 +1,39 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    kilogramsPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Asset"
+{
+    def Xform "witness" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        float physics:mass = 0.01
+        bool physics:kinematicEnabled = true
+        def Cube "FerruleEnvelope"
+        {
+            double size = 1
+            double3 xformOp:translate = (0, 0, 0)
+            float3 xformOp:scale = (0.0012, 0.007, 0.003)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.84, 0.78, 0.61)]
+        }
+        def Cube "ProtectedOpticalArea" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00012
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (0, 0, 0)
+            float3 xformOp:scale = (0.0012, 0.0032, 0.003)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.84, 0.78, 0.61)]
+        }
+    }
+}
