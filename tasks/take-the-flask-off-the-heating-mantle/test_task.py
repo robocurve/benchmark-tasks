@@ -128,3 +128,51 @@ def test_plans():
             assert let_go.pos[2] - (CORK[2] + M.Z_GRIP) > 0.05
         elif v == "demo":
             assert abs(let_go.pos[0] - M.C_XY[0]) < 0.01 and let_go.pos[2] - (CORK[2] + M.Z_GRIP) < 0.005
+
+
+def holding(centre):
+    """One gripper closed on the flask's neck (TCP on its axis, pads on the glass), the other far away."""
+    c = np.asarray(centre, float)
+    tcp = c + np.array([0.0, 0.0, M.Z_GRIP])
+    tips = [tcp + np.array([0.0, M.F_NECK_R, 0.0]), tcp - np.array([0.0, M.F_NECK_R, 0.0])]
+    return [{"tcp": tcp, "tips": tips}, FAR[1]]
+
+
+def test_held_in_the_ring_never_counts():
+    M.TRIAL.grippers_override = holding(CORK)
+    assert run([flask(CORK)], n=M.TRIAL.frames(3.0)) == (False, 0.0)
+    assert M.TRIAL.mem["cork"] and not M.TRIAL.mem["released"]
+
+
+def test_held_above_the_ring_never_counts():
+    above = (*M.C_XY, M.C_SEAT + M.F_DROP + 0.02)
+    M.TRIAL.grippers_override = holding(above)
+    assert run([flask(above)], n=M.TRIAL.frames(3.0)) == (False, 0.0)
+    M.TRIAL.clear()
+    M.TRIAL.grippers_override = FAR  # even let go and somehow hovering: not resting at the ring's height
+    assert run([flask(above)], n=M.TRIAL.frames(3.0)) == (False, 0.0)
+
+
+def test_let_go_in_the_ring_needs_one_second_at_rest():
+    M.TRIAL.grippers_override = holding(CORK)
+    run([flask(CORK)], n=M.TRIAL.frames(1.0))
+    M.TRIAL.grippers_override = FAR
+    assert run([flask(CORK)], n=M.TRIAL.frames(0.5)) == (False, 0.0)
+    assert run([flask(CORK)], n=M.TRIAL.frames(0.6)) == (True, 1.0)
+
+
+def test_score_is_the_current_state_not_a_past_success():
+    run([flask(CORK)], n=M.TRIAL.frames(1.2))
+    assert run([flask(CORK)]) == (True, 1.0)
+    assert run([flask(START)]) == (False, 0.0)  # put back in the mantle afterwards: no credit
+
+
+def test_mantle_cues_are_fixed_and_clear_of_the_flask_paths():
+    names = {o.name: o for o in M.OBJECTS}
+    for n in ("mantle_bowl", "mantle_panel", "mantle_dial", "mantle_lamp"):
+        assert names[n].mass is None
+    panel = names["mantle_panel"]
+    assert panel.pos[0] - panel.size[0] / 2 > M.BENCH_XY[0] + M.F_R  # the naive set-down spot is clear of it
+    assert panel.pos[1] + panel.size[1] / 2 < M.M_XY[1] - M.F_R  # and so is the flask's lift out of the mantle
+    bowl = names["mantle_bowl"]
+    assert bowl.pos[2] + bowl.size[2] / 2 < M.F_START_C - M.F_R  # under the seated bulb

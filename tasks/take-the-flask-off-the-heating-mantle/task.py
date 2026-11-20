@@ -53,7 +53,17 @@ def _ring(prefix, xy, z_base, color):
 
 # -- the heating mantle: a 10 cm grey block, 3.5 cm tall, its bowl rim a ring on top; hot, switched off -------------
 M_XY, M_SIZE = (0.31, 0.15), (0.10, 0.10, 0.035)
-MANTLE = [Box("mantle", pos=(*M_XY, TOP + M_SIZE[2] / 2), size=M_SIZE, color=(0.35, 0.37, 0.40))] + \
+# Visual cues (all fixed, clear of every scripted path): the bowl's heating fabric, scorched orange-brown from use;
+# a black control box along the mantle's -y side with an orange power-regulator dial and a red heater lamp (off: the
+# mantle is switched off, but its bowl is still hot).
+MANTLE = [Box("mantle", pos=(*M_XY, TOP + M_SIZE[2] / 2), size=M_SIZE, color=(0.62, 0.64, 0.66)),
+          Box("mantle_bowl", pos=(*M_XY, TOP + M_SIZE[2] + 0.0005), size=(0.044, 0.044, 0.001), color=(0.72, 0.36, 0.14)),
+          Box("mantle_panel", pos=(M_XY[0], M_XY[1] - M_SIZE[1] / 2 - 0.0125, TOP + 0.015), size=(0.10, 0.025, 0.030),
+              color=(0.08, 0.08, 0.09)),
+          Box("mantle_dial", pos=(M_XY[0] - 0.02, M_XY[1] - M_SIZE[1] / 2 - 0.0125, TOP + 0.033),
+              size=(0.020, 0.020, 0.006), color=(0.95, 0.55, 0.10)),
+          Box("mantle_lamp", pos=(M_XY[0] + 0.025, M_XY[1] - M_SIZE[1] / 2 - 0.0125, TOP + 0.032),
+              size=(0.012, 0.012, 0.004), color=(0.55, 0.06, 0.05))] + \
     _ring("mantle_rim", M_XY, TOP + M_SIZE[2], (0.55, 0.45, 0.35))
 M_SEAT = TOP + M_SIZE[2] + RING_H  # the rim's top
 
@@ -81,6 +91,7 @@ DROP_VZ = 0.45  # m/s downward: the flask was let fall, not set down
 CENTRE_M = 0.012
 REST_EPS_M = 0.006
 SUCCESS_HOLD_S = 1.0
+RELEASE_GAP_M = 0.015  # let go: no gripper centre or fingertip within this of the flask's surface
 
 OBJECTS = [*MANTLE, *CORK, FLASK]
 
@@ -98,6 +109,19 @@ def in_cork(s) -> bool:
                 and hhkit.tilt_deg(s) < UPRIGHT_DEG)
 
 
+def flask_gap(s, p) -> float:
+    """Distance (m) from point ``p`` to the flask's surface (bulb sphere or neck cylinder); negative inside."""
+    R = hhkit.rot(s.quat_xyzw)
+    c, ax, p = bulb_centre(s), R @ np.array([0.0, 0.0, 1.0]), np.asarray(p, float)
+    neck = hhkit.point_segment(p, c + ax * (F_HEIGHT - 2 * F_R - F_NECK_H + F_R), c + ax * (F_HEIGHT - F_R)) - F_NECK_R
+    return float(min(np.linalg.norm(p - c) - F_R, neck))
+
+
+def released(s) -> bool:
+    """No gripper is holding or touching the flask: every gripper centre and fingertip is clear of its surface."""
+    return all(flask_gap(s, q) > RELEASE_GAP_M for g in TRIAL.grippers() for q in (g["tcp"], *g["tips"]))
+
+
 def in_mantle(s) -> bool:
     c = bulb_centre(s)
     return bool(np.linalg.norm(c[:2] - np.asarray(M_XY)) < 0.02 and float(c[2]) < M_SEAT + F_DROP + 0.01)
@@ -113,7 +137,7 @@ def on_bare_bench(s) -> bool:
 
 
 def _clear(mem):
-    mem.update(violated=False, why="", cork=False, held=0, max_tilt=0.0, min_vz=0.0)
+    mem.update(violated=False, why="", cork=False, released=True, held=0, max_tilt=0.0, min_vz=0.0)
 
 
 TRIAL = hhkit.Trial(on_clear=_clear)
@@ -142,7 +166,8 @@ def _track(objects) -> None:
         _violate(m, "flask set down on the bare bench")
     if float(f.low[2]) < TOP - 0.03:
         _violate(m, "flask fell off the bench")
-    done = m["cork"] and float(np.linalg.norm(f.lin_vel)) < 0.02
+    m["released"] = released(f)
+    done = m["cork"] and m["released"] and float(np.linalg.norm(f.lin_vel)) < 0.02
     m["held"] = m["held"] + 1 if done else 0
     c = bulb_centre(f)
     m["fx"], m["fy"], m["fz"] = (round(float(v), 4) for v in (c[0], c[1], c[2] - TOP))
@@ -159,7 +184,7 @@ def success(objects) -> bool:
 def score(objects) -> float:
     _track(objects)
     m = TRIAL.mem
-    return 1.0 if (not m["violated"] and m["cork"]) else 0.0
+    return 1.0 if (not m["violated"] and m["held"] >= TRIAL.frames(SUCCESS_HOLD_S)) else 0.0
 
 
 def distance(objects) -> float:
