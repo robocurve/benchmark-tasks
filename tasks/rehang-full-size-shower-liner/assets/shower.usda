@@ -1,0 +1,91 @@
+#usda 1.0
+(defaultPrim = "Asset"
+ metersPerUnit = 1
+ upAxis = "Z")
+def Xform "Asset"
+{
+    def Xform "shower" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        float physics:mass = 12.0
+        bool physics:kinematicEnabled = true
+        def Cylinder "Tube" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.0127
+            double height = 1.93
+            uniform token axis = "Y"
+            double3 xformOp:translate = (0.414, 0, 1.978)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Cube "BackWall" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (0.72, 0, 1.085)
+            float3 xformOp:scale = (0.055, 2.05, 2.17)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.78, 0.78, 0.73)]
+        }
+        def Cube "ReturnWall0" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (0.43, -0.989, 1.085)
+            float3 xformOp:scale = (0.65, 0.055, 2.17)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.78, 0.78, 0.73)]
+        }
+        def Cylinder "Flange0" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.032
+            double height = 0.016
+            uniform token axis = "Y"
+            double3 xformOp:translate = (0.414, -0.955, 1.978)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Cube "ReturnWall1" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (0.43, 0.989, 1.085)
+            float3 xformOp:scale = (0.65, 0.055, 2.17)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.78, 0.78, 0.73)]
+        }
+        def Cylinder "Flange1" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.032
+            double height = 0.016
+            uniform token axis = "Y"
+            double3 xformOp:translate = (0.414, 0.955, 1.978)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+    }
+}
