@@ -1,0 +1,21 @@
+{
+  "title": "Unlock a door reinforcement lock: slide the sprung block off its stop, then swing it 90 degrees clear",
+  "category": "Societal relatability",
+  "keywords": [
+    "door lock",
+    "reinforcement lock",
+    "spring interlock",
+    "coupled motion",
+    "home security",
+    "single-arm"
+  ],
+  "instruction": "Unlock the door reinforcement lock: slide the block off its stop, swing it fully clear of the door, then let go.",
+  "context": "Millions of apartments, hotels, and homes mount a Prime-Line U 10827 lock above the deadbolt for kick-in and child security. Pulling straight back jams on its stop; you must pinch its grooves, slide sideways against the spring, and swing 90 deg clear. Unlike single-axis latches or gates, it couples spring retraction with 90-deg rotation.",
+  "setup": "Positions in cm from arm-base midpoint (x forward, y left, heights above oak table at z 74.75 cm). Fixed door-and-jamb mock-up with door face at x 37.5, junction at y +5.0: matte slate-blue painted wood 1-3/4 in exterior door slab (4.45 x 16.0 x 22.0 cm, x 37.5..41.95, y +3.0..+19.0, look-only moulding and brass deadbolt thumb-turn at y +11.0, z 4.8); 0.3 cm dark reveal seam (y +2.7..+3.0); warm-white painted wood jamb post (6.0 x 10.7 x 22.0 cm, x 37.5..43.5, y -8.0..+2.7), proud casing (0.6 x 7.4 x 22.0 cm, x 36.9..37.5, y -8.0..-0.6), and rear foot (8.0 x 27.0 x 1.6 cm, x 41.9..49.9). Mounted across the reveal at z 12.5 is a full-size satin-nickel extruded aluminum Prime-Line U 10827 door reinforcement lock (~170 g total): jamb flange (5.56 x 2.5 x 7.62 cm) and dark-steel bridge/retainer arc (r 0.6..2.55 cm, 111..159 deg) around a vertical hinge pin at x 36.3, y +1.4, z 12.5; spring-loaded stop block (120 g hollowed aluminum, 2.5 x 3.5 x 7.62 cm, 0.3 cm door gap, 400 N/m return spring, 1.5 cm slide travel, 6.62 cm span across dark 0.5 cm recessed top/bottom finger grooves with 0.3 cm rear shoulders) and steel catch lug behind the retainer arc.",
+  "scoring": "Checked every step; final score at episode end (real: top photo with protractor and mm rule on jamb, plus 20 fps video; open grippers before measuring). Let theta be hinge angle (0 deg locked, 90 deg open) and s slide retraction (0..15 mm). Forced fault (latched whole-run 0.0): catch lug penetrates retainer arc >2.0 mm or theta in 15..75 deg with s <9.0 mm (real: lock bent/forced/damaged). Milestone C (latched, needed for nonzero score): theta >=20.0 deg without forcing (real: clears 20 deg mark undamaged). End gate (needed for nonzero score): grippers >=30 mm clear and |dtheta/dt| <2.0 deg/s, |ds/dt| <3.0 mm/s for final 1.0 s continuous. Then: 1.00 if theta >=84.0 deg and s <=3.0 mm (seated open); 0.50 if theta >=78.0 deg; 0.25 if Milestone C latched; else 0.00. Scores: 0, 0.25, 0.5, 1.0.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Between trials (<5 s, nothing consumed): swing the aluminum stop block back over the closed door face until the return spring snaps the catch lug behind the locked stop. Verify the jamb mock-up stays clamped at x 37.5, y +5.0 cm.",
+  "fidelity": "Chained hinge->slide_block (400 N/m spring, 6.0 N at 15 mm, 0.03 N m vertical hinge hold, no gravity creep) and externalized retainer arc (111..159 deg) model the U 10827 internal anti-swing lip and open rest pocket; 3 mm gaps aid contact settling. Fixed door-edge mock-up avoids a miniature leaf; moulding and deadbolt are look-only. Sim scores final step without opening grippers; >=30 mm release check prevents held credit.",
+  "scores": "Dream-1 run: 0.0 (curled both arms back near their bases without reaching the lock); demo: 1.0 (slid the lock block sideways off its stop, swung it open, and released)",
+  "media": "M-D5YJDV"
+}
