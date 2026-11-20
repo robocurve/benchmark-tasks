@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "robocurve-load-page-protector"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = ["inspect-robots==1.0.0", "inspect-robots-yam==0.38.0", "yam-arena @ git+https://github.com/kairosiann/yam-isaac-lab-arena.git@0059d02a1a91bc6834c1d0846022891df0c78730"]
+[project.entry-points."inspect_robots.embodiments"]
+page_protector = "page_protector.environment:embodiment"
+[project.entry-points."inspect_robots.policies"]
+page_protector_scripted = "page_protector.controller:policy"
+[tool.setuptools.packages.find]
+include = ["page_protector*"]
