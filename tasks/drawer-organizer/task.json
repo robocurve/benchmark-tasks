@@ -1,0 +1,22 @@
+{
+  "title": "Seat an organizer tray in a drawer and close it, past a pen hidden at the back of the drawer",
+  "category": "Societal relatability",
+  "keywords": [
+    "household",
+    "tidying",
+    "drawer",
+    "hidden obstruction",
+    "active perception",
+    "seating",
+    "bimanual"
+  ],
+  "instruction": "Put the organizer in the drawer, fully seated, and close the drawer.",
+  "context": "Fitting an insert into a drawer, bin or case is everyday home and office work. Things left at the back of a drawer, out of sight under the unit's top, stop the insert sitting flat, and a robot that only follows the prompt jams the drawer. It has to notice, look and clear the way.",
+  "setup": "Distances from the robot: x away from the arm bases, y to the left (+) or right (-), heights above the table top; the arm bases are at y = +0.305 (left) and -0.305 m (right). Drawer unit (fixed): light grey polypropylene, 300 mm wide (y -0.150 to +0.150), x 0.377 (front face) to 0.605, 87 mm tall; opening 54 mm tall above the drawer floor. Drawer: inside 200 mm deep, 260 mm wide, walls 50 mm tall, 3 mm thick; front 12 x 266 x 78 mm with a 10 mm round bar pull, 100 mm long, 30 mm proud, its axis 66 mm up. It slides out 205 mm to a stop, with 4 N of friction, and starts pulled out 90 mm. Pen (loose): black whiteboard marker, 14 mm across, 130 mm long, 15 g, with a 35 mm pocket clip on its cap, lying on the drawer floor along y, rolled onto its clip, its axis 56 mm in front of the drawer's back wall, hidden under the unit's top; at y -0.060, 0 or +0.060, shuffled for each trial (README). Organizer tray (loose): white polypropylene, 180 x 240 x 45 mm, 100 g, 3 mm walls and floor, a full-height divider down its middle along its 180 mm length and two cross dividers 31 mm tall; on the table, centred at (0.250, +0.262), its 240 mm side along y.",
+  "scoring": "Scored at the end of the trial. In: the tray's whole footprint inside the drawer's walls (3 mm allowance) and its underside below the walls' tops. Flat: its underside within 2 mm of the drawer floor and tilted under 1.5 degrees. Closed: the drawer within 5 mm of fully shut. Score 1.0: in, flat and closed. 0.5: in and flat, drawer not closed. 0.25: in but not flat (on the pen, or tipped). 0 otherwise. The pen may end up anywhere, in the tray included. The trial ends early, at 1.0, once that has held for 2 s with the tray at rest.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Take the tray out, lay the pen back at its place for the trial (README), and pull the drawer out to 90 mm.",
+  "fidelity": "Rigid primitives in PhysX at true size. The drawer is a damped slide with 4 N of friction and a stop; the pen is a plain cylinder with a box for its clip; the tray is rigid. Nothing is soft or flexes.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-GGBYDL"
+}
