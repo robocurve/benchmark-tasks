@@ -1,0 +1,355 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    kilogramsPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Asset" (
+    prepend apiSchemas = ["PhysicsArticulationRootAPI"]
+)
+{
+    def Xform "base" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        float physics:mass = 0.5
+        def Cube "ServicePlate" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.0002
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (0, 0, 0.004)
+            float3 xformOp:scale = (0.145, 0.172, 0.008)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.055, 0.082, 0.112)]
+        }
+        def Cylinder "StageAdapter" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.0002
+        float physxCollision:restOffset = 0
+            double radius = 0.024
+            double height = 0.008
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0, 0, 0.012)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Cube "GaugeUpright" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.0002
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (0.033, 0, 0.029)
+            float3 xformOp:scale = (0.01, 0.017, 0.042)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Cube "GaugeDatum" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.0002
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (0.024, 0, 0.051)
+            float3 xformOp:scale = (0.025, 0.019, 0.002)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.92, 0.43, 0.12)]
+        }
+    }
+    def PhysicsFixedJoint "bench_mount"
+    {
+        rel physics:body1 = </Asset/base>
+    }
+    def Xform "pillar" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        float physics:mass = 0.07
+        def Cylinder "ThreadedPillarEnvelope" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.0002
+        float physxCollision:restOffset = 0
+            double radius = 0.005
+            double height = 0.018
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0, 0, 0.024)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Cylinder "M4SpecimenMount" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.0002
+        float physxCollision:restOffset = 0
+            double radius = 0.0075
+            double height = 0.01
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0, 0, 0.037)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Cube "Coupon" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.0002
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (0, 0, 0.0395)
+            float3 xformOp:scale = (0.011, 0.004, 0.0035)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.04, 0.38, 0.62)]
+        }
+        def Cube "SteadyingArm" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.0002
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (0, 0.053, 0.032)
+            float3 xformOp:scale = (0.008, 0.099, 0.005)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Cube "SteadyingGrip" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.0002
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (0, 0.103, 0.039)
+            float3 xformOp:scale = (0.024, 0.027, 0.023)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.04, 0.38, 0.62)]
+        }
+    }
+    def Xform "locknut" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        float physics:mass = 0.05
+        def Mesh "Locknut00" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.0002
+        float physxCollision:restOffset = 0
+            point3f[] points = [(0.0058, 0, 0.017), (0.0085, 0, 0.017), (0.0073612159, 0.00425, 0.017), (0.0050229473, 0.0029, 0.017), (0.0058, 0, 0.023), (0.0085, 0, 0.023), (0.0073612159, 0.00425, 0.023), (0.0050229473, 0.0029, 0.023)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+            uniform token physics:approximation = "convexHull"
+        }
+        def Mesh "Locknut01" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.0002
+        float physxCollision:restOffset = 0
+            point3f[] points = [(0.0050229473, 0.0029, 0.017), (0.0073612159, 0.00425, 0.017), (0.00425, 0.0073612159, 0.017), (0.0029, 0.0050229473, 0.017), (0.0050229473, 0.0029, 0.023), (0.0073612159, 0.00425, 0.023), (0.00425, 0.0073612159, 0.023), (0.0029, 0.0050229473, 0.023)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+            uniform token physics:approximation = "convexHull"
+        }
+        def Mesh "Locknut02" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.0002
+        float physxCollision:restOffset = 0
+            point3f[] points = [(0.0029, 0.0050229473, 0.017), (0.00425, 0.0073612159, 0.017), (5.2047489e-19, 0.0085, 0.017), (3.5514757e-19, 0.0058, 0.017), (0.0029, 0.0050229473, 0.023), (0.00425, 0.0073612159, 0.023), (5.2047489e-19, 0.0085, 0.023), (3.5514757e-19, 0.0058, 0.023)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+            uniform token physics:approximation = "convexHull"
+        }
+        def Mesh "Locknut03" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.0002
+        float physxCollision:restOffset = 0
+            point3f[] points = [(3.5514757e-19, 0.0058, 0.017), (5.2047489e-19, 0.0085, 0.017), (-0.00425, 0.0073612159, 0.017), (-0.0029, 0.0050229473, 0.017), (3.5514757e-19, 0.0058, 0.023), (5.2047489e-19, 0.0085, 0.023), (-0.00425, 0.0073612159, 0.023), (-0.0029, 0.0050229473, 0.023)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+            uniform token physics:approximation = "convexHull"
+        }
+        def Mesh "Locknut04" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.0002
+        float physxCollision:restOffset = 0
+            point3f[] points = [(-0.0029, 0.0050229473, 0.017), (-0.00425, 0.0073612159, 0.017), (-0.0073612159, 0.00425, 0.017), (-0.0050229473, 0.0029, 0.017), (-0.0029, 0.0050229473, 0.023), (-0.00425, 0.0073612159, 0.023), (-0.0073612159, 0.00425, 0.023), (-0.0050229473, 0.0029, 0.023)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+            uniform token physics:approximation = "convexHull"
+        }
+        def Mesh "Locknut05" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.0002
+        float physxCollision:restOffset = 0
+            point3f[] points = [(-0.0050229473, 0.0029, 0.017), (-0.0073612159, 0.00425, 0.017), (-0.0085, 1.0409498e-18, 0.017), (-0.0058, 7.1029514e-19, 0.017), (-0.0050229473, 0.0029, 0.023), (-0.0073612159, 0.00425, 0.023), (-0.0085, 1.0409498e-18, 0.023), (-0.0058, 7.1029514e-19, 0.023)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+            uniform token physics:approximation = "convexHull"
+        }
+        def Mesh "Locknut06" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.0002
+        float physxCollision:restOffset = 0
+            point3f[] points = [(-0.0058, 7.1029514e-19, 0.017), (-0.0085, 1.0409498e-18, 0.017), (-0.0073612159, -0.00425, 0.017), (-0.0050229473, -0.0029, 0.017), (-0.0058, 7.1029514e-19, 0.023), (-0.0085, 1.0409498e-18, 0.023), (-0.0073612159, -0.00425, 0.023), (-0.0050229473, -0.0029, 0.023)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+            uniform token physics:approximation = "convexHull"
+        }
+        def Mesh "Locknut07" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.0002
+        float physxCollision:restOffset = 0
+            point3f[] points = [(-0.0050229473, -0.0029, 0.017), (-0.0073612159, -0.00425, 0.017), (-0.00425, -0.0073612159, 0.017), (-0.0029, -0.0050229473, 0.017), (-0.0050229473, -0.0029, 0.023), (-0.0073612159, -0.00425, 0.023), (-0.00425, -0.0073612159, 0.023), (-0.0029, -0.0050229473, 0.023)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+            uniform token physics:approximation = "convexHull"
+        }
+        def Mesh "Locknut08" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.0002
+        float physxCollision:restOffset = 0
+            point3f[] points = [(-0.0029, -0.0050229473, 0.017), (-0.00425, -0.0073612159, 0.017), (-1.5614247e-18, -0.0085, 0.017), (-1.0654427e-18, -0.0058, 0.017), (-0.0029, -0.0050229473, 0.023), (-0.00425, -0.0073612159, 0.023), (-1.5614247e-18, -0.0085, 0.023), (-1.0654427e-18, -0.0058, 0.023)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+            uniform token physics:approximation = "convexHull"
+        }
+        def Mesh "Locknut09" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.0002
+        float physxCollision:restOffset = 0
+            point3f[] points = [(-1.0654427e-18, -0.0058, 0.017), (-1.5614247e-18, -0.0085, 0.017), (0.00425, -0.0073612159, 0.017), (0.0029, -0.0050229473, 0.017), (-1.0654427e-18, -0.0058, 0.023), (-1.5614247e-18, -0.0085, 0.023), (0.00425, -0.0073612159, 0.023), (0.0029, -0.0050229473, 0.023)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+            uniform token physics:approximation = "convexHull"
+        }
+        def Mesh "Locknut10" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.0002
+        float physxCollision:restOffset = 0
+            point3f[] points = [(0.0029, -0.0050229473, 0.017), (0.00425, -0.0073612159, 0.017), (0.0073612159, -0.00425, 0.017), (0.0050229473, -0.0029, 0.017), (0.0029, -0.0050229473, 0.023), (0.00425, -0.0073612159, 0.023), (0.0073612159, -0.00425, 0.023), (0.0050229473, -0.0029, 0.023)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+            uniform token physics:approximation = "convexHull"
+        }
+        def Mesh "Locknut11" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.0002
+        float physxCollision:restOffset = 0
+            point3f[] points = [(0.0050229473, -0.0029, 0.017), (0.0073612159, -0.00425, 0.017), (0.0085, -2.0818996e-18, 0.017), (0.0058, -1.4205903e-18, 0.017), (0.0050229473, -0.0029, 0.023), (0.0073612159, -0.00425, 0.023), (0.0085, -2.0818996e-18, 0.023), (0.0058, -1.4205903e-18, 0.023)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+            uniform token physics:approximation = "convexHull"
+        }
+        def Cube "WrenchHandle" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.0002
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (0, -0.058, 0.024)
+            float3 xformOp:scale = (0.008, 0.104, 0.005)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Cube "HandlePad" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.0002
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (0, -0.104, 0.031)
+            float3 xformOp:scale = (0.018, 0.02, 0.012)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.92, 0.43, 0.12)]
+        }
+    }
+    def PhysicsPrismaticJoint "height"
+    {
+        rel physics:body0 = </Asset/base>
+        rel physics:body1 = </Asset/pillar>
+        point3f physics:localPos0 = (0, 0, 0)
+        point3f physics:localPos1 = (0, 0, 0)
+        bool physics:collisionEnabled = false
+        uniform bool physics:excludeFromArticulation = false
+        uniform token physics:axis = "Z"
+        float physics:lowerLimit = 0
+        float physics:upperLimit = 0.008
+    }
+    def PhysicsRevoluteJoint "nut"
+    {
+        rel physics:body0 = </Asset/base>
+        rel physics:body1 = </Asset/locknut>
+        point3f physics:localPos0 = (0, 0, 0)
+        point3f physics:localPos1 = (0, 0, 0)
+        bool physics:collisionEnabled = false
+        uniform bool physics:excludeFromArticulation = false
+        uniform token physics:axis = "Z"
+        float physics:lowerLimit = 0
+        float physics:upperLimit = 26
+    }
+}
