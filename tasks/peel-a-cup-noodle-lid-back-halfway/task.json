@@ -1,0 +1,22 @@
+{
+  "title": "Peel a cup-noodle lid back halfway, as its directions say, without the light cup lifting or the peel running on",
+  "category": "Societal relatability",
+  "keywords": [
+    "instant noodles",
+    "peel-back lid",
+    "heat-sealed lid",
+    "bimanual",
+    "force control",
+    "visual feedback",
+    "household"
+  ],
+  "instruction": "Peel back the lid of the cup noodles halfway, ready for the hot water.",
+  "context": "Cup noodles are eaten everywhere, and the directions on every cup start the same way: peel the lid back halfway, add boiling water, then press the lid down again while the noodles steep. The lid is heat-sealed only on the rim, so it holds hardest at the tab, where the seal runs along the rim's curve, then gives with a jolt and runs easily across the middle. A pull hard enough to start it keeps going unless it eases off at once, and peeled past about 85 % the lid can no longer be closed down. The cup weighs 75 g, far less than the pull, so it lifts or tips unless the other hand holds it. The skill is to pull until the seal gives, ease off, and stop the peel front, not the hand, at the middle. Nothing happens in the trial that the robot doesn't cause.",
+  "setup": "Cm from the midpoint between the arm bases (x forward, y to the robot's left). One unopened Nissin Cup Noodles, Chicken (2.25 oz / 64 g, paper cup: rim 9.4 cm across, 10.6 cm tall, base 6.6 cm; 75 g), dry, room temperature, standing upright on the bare table, base centred at (36, -2), its tab pointing to the robot's right (-y). Before the trial the tab is bent up to 30 +-5 deg at the rim's edge (once, with a finger; no part of the seal may open). Both arms at the ready pose. One fixed layout, as in the screenshot.",
+  "scoring": "d = how far the heat seal is peeled, along the line from the tab through the cup's centre, from the rim's edge to the peel front, as a % of the rim's diameter (top photo with a ruler laid on the rim after the trial). 0, latched: the cup's base rises over 1 cm or it tips past 30 deg (side video), its wall is dented or creased (sim: a grip over 20 N per finger), the lid tears, or d passes 85 %. At the end: 1.0 if 40 <= d <= 60 %, the cup upright (within 10 deg) and let go (no gripper within 6.5 cm of its axis or 4 cm of the tab) for 1 s; 0.5 if 16 <= d < 40 % or 60 < d <= 85 %, or 40-60 % still held; 0.25 if the seal opened but d < 16 %; else 0.",
+  "run_limit": "1,200 steps (60 s at 20 Hz) per trial",
+  "reset_notes": "Each trial uses a new unopened cup from one case (opened cups can be resealed with tape and eaten later). Real trials stay dry: no water is poured. Once per session, pull one cup's tab straight up with a luggage scale and note the opening and running forces (the model uses about 6 N to open, then 1-3 N).",
+  "fidelity": "Rigid bodies. The lid is 19 rigid 5 mm strips hinged across the cup, with a paper tab on a limp hinge at the rim. A sealed strip is held flat; it lets go when the pull reaching it (lift plus outward pull at its hinge) exceeds its seal: 3 N per 15 mm of sealed rim the front crosses, x1.5 at the tab: about 6 N to start, 1.2 N mid-cup; up to 30 cm/s. Peeled strips stay folded back up on the tab's side. The cup is rigid; a squeeze is read from the finger servos.",
+  "scores": "Dream-1 (1 trial, 1,200 steps): 0; its right gripper neared the cup late but never took the tab; lid still sealed. Demo (holds the cup down, pulls until the seal gives, eases off, stops past the middle): 1.0 in 304 steps. Controls, all 0: no hold, clamping grip, steady pull, open-loop pose, idle.",
+  "media": "M-37A4F2"
+}
