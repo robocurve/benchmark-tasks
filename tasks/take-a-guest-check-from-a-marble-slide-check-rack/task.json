@@ -1,0 +1,20 @@
+{
+  "title": "Take a guest check from a marble slide rack: lift and angle off its ball wedge, neighbour undisturbed",
+  "category": "Impact on jobs",
+  "keywords": [
+    "food service",
+    "check rack",
+    "gravity wedge",
+    "angled withdrawal",
+    "contact-rich"
+  ],
+  "instruction": "Take the green guest check out of the check rack and lay it flat on the black tray, leaving the tan check hanging.",
+  "context": "Restaurant cooks (O*NET 35-2014.00, 1.4M US workers), waiters (35-3031.00, 2.3M) and dining attendants (35-9011.00, 0.5M) pull checks from marble racks; industry surveys put KDS near 37%, leaving over 1.5M workers using paper rails. Unlike sideways ticket sliding, breaking a self-locking ball wedge requires lifting up and angling forward.",
+  "setup": "Coordinates are cm from the midpoint between arm bases (x forward, y left, z up from table TOP 74.75 cm). Table: oak top, 110 x 130 cm, arm bases at y +-30.5 cm. Pass stand and check rack (fixed): stainless shelf (10.5 x 32 x 1.5 cm at x 39.75, y 0, z +23.85), front apron (1 x 30.5 x 5.1 cm at x 34.0, z +22.05), two 2.2 cm diameter stainless rear legs at (43.0, +-14.0) on a dark grey base (7 x 32 x 1.2 cm at x 42.5, z +0.6). Mounted on apron front: anodized aluminum San Jamar CK6512A check rack (30.5 cm long with black ABS end caps, 5.1 cm tall, z +19.5..+24.6, 2.6 cm sim depth vs 1.9 cm real), 1.4 cm bottom slot, internal 16-deg ramp holding four free 16 mm aqua glass marbles (5.5 g each) at y +9, +5, -3, -7 cm (x 32.5, z +21.2). Checks (free): two 8.9 x 17.1 cm board checks (NCCO G3632 green target, NCCO T3624-SP tan neighbour; 2 mm rigid sim plates, 12 g) at x 33.4, z +13.55 (top 2.6 cm in rack, bottom +5.0 cm), y +7.0 cm (green) and y -5.0 cm (tan, 3.1 cm gap). Check tray (fixed): clipless black melamine Winco WDM018-301 (19.7 x 12.7 x 1.4 cm, 8 mm floor, 6 mm rim, 4 mm walls), centred at x 18.0, y +12.5 cm (inner floor x 8.55..27.45, y +6.55..+18.45).",
+  "scoring": "From ruler, protractor, photos and 20 Hz video after the first 1 s settle. D (tan dropped): tan top < TOP+195 mm for >=0.5 s. V (tan disturbed): without D, tan shifted >=25 mm or tilted >=15 deg for >=0.5 s. F (fault): green bottom < TOP-20 mm or any marble falls out of the rack (centre < TOP+170 mm) for >=0.2 s. E (extracted, latched): green top <= TOP+190 mm for >=0.5 s with no D/V up to then. End (last 1.0 s): Released (all finger pads >=30 mm from green), Still (green <10 mm/s, <0.5 rad/s), H (home): green flat on tray (face tilt <=10 deg, bottom within 3 mm of TOP+8 mm, outline inside inner floor x 85.5..274.5, y 65.5..184.5 mm). 1.0: H, E, no V/D/F, Released, Still. 0.5: E, green flat on table/tray (<=15 deg, bottom <= TOP+18 mm), no V/D/F, Released, Still. 0.25: E with no V/D/F otherwise; or H with V, no D/F, Released, Still. 0.0: D, F, or not extracted.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Push both checks straight up 26 mm into the rack against the back wall at tape marks 31 mm apart (y +7.0 and -5.0 cm); verify the marbles rest evenly against each check. Replace any creased check between real trials.",
+  "fidelity": "Real trials use off-the-shelf 19 mm San Jamar CK6512A and 0.3 mm NCCO board checks; sim uses 2.0 mm rigid plates and a 26 mm channel solely for collision stability while preserving straight-down jam vs angled release. Four active 16 mm marbles use smooth cylinder colliders in recessed ribs. Real paper tears if yanked down; sim jams rigidly. Sim scores the last step without opening grippers; score() enforces release and non-airborne placement.",
+  "scores": "Dream-1 run: 0.0 (reached toward the left end of the rack, leaving both checks hanging inside); demo: 1.0 (pulled the green check from the rack and laid it flat on the tray)",
+  "media": "M-KY7299"
+}
