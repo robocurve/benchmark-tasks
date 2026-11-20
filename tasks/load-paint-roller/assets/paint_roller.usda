@@ -1,0 +1,524 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    kilogramsPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Asset"
+{
+    def Xform "Frame" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsArticulationRootAPI"]
+    )
+    {
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        float physics:mass = 0.115
+        def Cylinder "HandleTail" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double radius = 0.012
+            double height = 0.057
+            uniform token axis = "X"
+            double3 xformOp:translate = (-0.169, -0.018, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.04, 0.38, 0.62)]
+        }
+        def Cube "GripFlats" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (-0.111, -0.018, 0)
+            float3 xformOp:scale = (0.059, 0.024, 0.024)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.04, 0.38, 0.62)]
+        }
+        def Cube "ThumbRestNeck" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (-0.111, -0.018, 0.014)
+            float3 xformOp:scale = (0.045, 0.02, 0.006)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.04, 0.38, 0.62)]
+        }
+        def Cube "ThumbRest" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (-0.111, -0.018, 0.017)
+            float3 xformOp:scale = (0.045, 0.034, 0.003)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.04, 0.38, 0.62)]
+        }
+        def Cylinder "Shank" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double radius = 0.003
+            double height = 0.065
+            uniform token axis = "X"
+            double3 xformOp:translate = (-0.061, -0.018, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Cylinder "Bend" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double radius = 0.003
+            double height = 0.077
+            uniform token axis = "Y"
+            double3 xformOp:translate = (-0.028, 0.019, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Cylinder "AxleArm" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double radius = 0.003
+            double height = 0.028
+            uniform token axis = "X"
+            double3 xformOp:translate = (-0.014, 0.057, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+    }
+    def Xform "Sleeve" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        float physics:mass = 0.049
+        def Cylinder "Collider" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double radius = 0.021
+            double height = 0.1
+            uniform token axis = "Y"
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+            token visibility = "invisible"
+        }
+        def Mesh "Band0_Sector00"
+        {
+            point3f[] points = [(0, -0.05, 0.021), (0.0105, -0.05, 0.018186533), (0.0105, -0.025, 0.018186533), (0, -0.025, 0.021)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band0_Sector01"
+        {
+            point3f[] points = [(0.0105, -0.05, 0.018186533), (0.018186533, -0.05, 0.0105), (0.018186533, -0.025, 0.0105), (0.0105, -0.025, 0.018186533)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band0_Sector02"
+        {
+            point3f[] points = [(0.018186533, -0.05, 0.0105), (0.021, -0.05, 1.2858791e-18), (0.021, -0.025, 1.2858791e-18), (0.018186533, -0.025, 0.0105)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band0_Sector03"
+        {
+            point3f[] points = [(0.021, -0.05, 1.2858791e-18), (0.018186533, -0.05, -0.0105), (0.018186533, -0.025, -0.0105), (0.021, -0.025, 1.2858791e-18)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band0_Sector04"
+        {
+            point3f[] points = [(0.018186533, -0.05, -0.0105), (0.0105, -0.05, -0.018186533), (0.0105, -0.025, -0.018186533), (0.018186533, -0.025, -0.0105)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band0_Sector05"
+        {
+            point3f[] points = [(0.0105, -0.05, -0.018186533), (2.5717583e-18, -0.05, -0.021), (2.5717583e-18, -0.025, -0.021), (0.0105, -0.025, -0.018186533)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band0_Sector06"
+        {
+            point3f[] points = [(2.5717583e-18, -0.05, -0.021), (-0.0105, -0.05, -0.018186533), (-0.0105, -0.025, -0.018186533), (2.5717583e-18, -0.025, -0.021)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band0_Sector07"
+        {
+            point3f[] points = [(-0.0105, -0.05, -0.018186533), (-0.018186533, -0.05, -0.0105), (-0.018186533, -0.025, -0.0105), (-0.0105, -0.025, -0.018186533)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band0_Sector08"
+        {
+            point3f[] points = [(-0.018186533, -0.05, -0.0105), (-0.021, -0.05, -3.8576374e-18), (-0.021, -0.025, -3.8576374e-18), (-0.018186533, -0.025, -0.0105)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band0_Sector09"
+        {
+            point3f[] points = [(-0.021, -0.05, -3.8576374e-18), (-0.018186533, -0.05, 0.0105), (-0.018186533, -0.025, 0.0105), (-0.021, -0.025, -3.8576374e-18)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band0_Sector10"
+        {
+            point3f[] points = [(-0.018186533, -0.05, 0.0105), (-0.0105, -0.05, 0.018186533), (-0.0105, -0.025, 0.018186533), (-0.018186533, -0.025, 0.0105)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band0_Sector11"
+        {
+            point3f[] points = [(-0.0105, -0.05, 0.018186533), (-5.1435166e-18, -0.05, 0.021), (-5.1435166e-18, -0.025, 0.021), (-0.0105, -0.025, 0.018186533)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band1_Sector00"
+        {
+            point3f[] points = [(0, -0.025, 0.021), (0.0105, -0.025, 0.018186533), (0.0105, 0, 0.018186533), (0, 0, 0.021)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band1_Sector01"
+        {
+            point3f[] points = [(0.0105, -0.025, 0.018186533), (0.018186533, -0.025, 0.0105), (0.018186533, 0, 0.0105), (0.0105, 0, 0.018186533)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band1_Sector02"
+        {
+            point3f[] points = [(0.018186533, -0.025, 0.0105), (0.021, -0.025, 1.2858791e-18), (0.021, 0, 1.2858791e-18), (0.018186533, 0, 0.0105)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band1_Sector03"
+        {
+            point3f[] points = [(0.021, -0.025, 1.2858791e-18), (0.018186533, -0.025, -0.0105), (0.018186533, 0, -0.0105), (0.021, 0, 1.2858791e-18)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band1_Sector04"
+        {
+            point3f[] points = [(0.018186533, -0.025, -0.0105), (0.0105, -0.025, -0.018186533), (0.0105, 0, -0.018186533), (0.018186533, 0, -0.0105)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band1_Sector05"
+        {
+            point3f[] points = [(0.0105, -0.025, -0.018186533), (2.5717583e-18, -0.025, -0.021), (2.5717583e-18, 0, -0.021), (0.0105, 0, -0.018186533)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band1_Sector06"
+        {
+            point3f[] points = [(2.5717583e-18, -0.025, -0.021), (-0.0105, -0.025, -0.018186533), (-0.0105, 0, -0.018186533), (2.5717583e-18, 0, -0.021)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band1_Sector07"
+        {
+            point3f[] points = [(-0.0105, -0.025, -0.018186533), (-0.018186533, -0.025, -0.0105), (-0.018186533, 0, -0.0105), (-0.0105, 0, -0.018186533)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band1_Sector08"
+        {
+            point3f[] points = [(-0.018186533, -0.025, -0.0105), (-0.021, -0.025, -3.8576374e-18), (-0.021, 0, -3.8576374e-18), (-0.018186533, 0, -0.0105)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band1_Sector09"
+        {
+            point3f[] points = [(-0.021, -0.025, -3.8576374e-18), (-0.018186533, -0.025, 0.0105), (-0.018186533, 0, 0.0105), (-0.021, 0, -3.8576374e-18)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band1_Sector10"
+        {
+            point3f[] points = [(-0.018186533, -0.025, 0.0105), (-0.0105, -0.025, 0.018186533), (-0.0105, 0, 0.018186533), (-0.018186533, 0, 0.0105)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band1_Sector11"
+        {
+            point3f[] points = [(-0.0105, -0.025, 0.018186533), (-5.1435166e-18, -0.025, 0.021), (-5.1435166e-18, 0, 0.021), (-0.0105, 0, 0.018186533)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band2_Sector00"
+        {
+            point3f[] points = [(0, 0, 0.021), (0.0105, 0, 0.018186533), (0.0105, 0.025, 0.018186533), (0, 0.025, 0.021)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band2_Sector01"
+        {
+            point3f[] points = [(0.0105, 0, 0.018186533), (0.018186533, 0, 0.0105), (0.018186533, 0.025, 0.0105), (0.0105, 0.025, 0.018186533)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band2_Sector02"
+        {
+            point3f[] points = [(0.018186533, 0, 0.0105), (0.021, 0, 1.2858791e-18), (0.021, 0.025, 1.2858791e-18), (0.018186533, 0.025, 0.0105)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band2_Sector03"
+        {
+            point3f[] points = [(0.021, 0, 1.2858791e-18), (0.018186533, 0, -0.0105), (0.018186533, 0.025, -0.0105), (0.021, 0.025, 1.2858791e-18)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band2_Sector04"
+        {
+            point3f[] points = [(0.018186533, 0, -0.0105), (0.0105, 0, -0.018186533), (0.0105, 0.025, -0.018186533), (0.018186533, 0.025, -0.0105)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band2_Sector05"
+        {
+            point3f[] points = [(0.0105, 0, -0.018186533), (2.5717583e-18, 0, -0.021), (2.5717583e-18, 0.025, -0.021), (0.0105, 0.025, -0.018186533)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band2_Sector06"
+        {
+            point3f[] points = [(2.5717583e-18, 0, -0.021), (-0.0105, 0, -0.018186533), (-0.0105, 0.025, -0.018186533), (2.5717583e-18, 0.025, -0.021)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band2_Sector07"
+        {
+            point3f[] points = [(-0.0105, 0, -0.018186533), (-0.018186533, 0, -0.0105), (-0.018186533, 0.025, -0.0105), (-0.0105, 0.025, -0.018186533)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band2_Sector08"
+        {
+            point3f[] points = [(-0.018186533, 0, -0.0105), (-0.021, 0, -3.8576374e-18), (-0.021, 0.025, -3.8576374e-18), (-0.018186533, 0.025, -0.0105)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band2_Sector09"
+        {
+            point3f[] points = [(-0.021, 0, -3.8576374e-18), (-0.018186533, 0, 0.0105), (-0.018186533, 0.025, 0.0105), (-0.021, 0.025, -3.8576374e-18)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band2_Sector10"
+        {
+            point3f[] points = [(-0.018186533, 0, 0.0105), (-0.0105, 0, 0.018186533), (-0.0105, 0.025, 0.018186533), (-0.018186533, 0.025, 0.0105)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band2_Sector11"
+        {
+            point3f[] points = [(-0.0105, 0, 0.018186533), (-5.1435166e-18, 0, 0.021), (-5.1435166e-18, 0.025, 0.021), (-0.0105, 0.025, 0.018186533)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band3_Sector00"
+        {
+            point3f[] points = [(0, 0.025, 0.021), (0.0105, 0.025, 0.018186533), (0.0105, 0.05, 0.018186533), (0, 0.05, 0.021)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band3_Sector01"
+        {
+            point3f[] points = [(0.0105, 0.025, 0.018186533), (0.018186533, 0.025, 0.0105), (0.018186533, 0.05, 0.0105), (0.0105, 0.05, 0.018186533)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band3_Sector02"
+        {
+            point3f[] points = [(0.018186533, 0.025, 0.0105), (0.021, 0.025, 1.2858791e-18), (0.021, 0.05, 1.2858791e-18), (0.018186533, 0.05, 0.0105)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band3_Sector03"
+        {
+            point3f[] points = [(0.021, 0.025, 1.2858791e-18), (0.018186533, 0.025, -0.0105), (0.018186533, 0.05, -0.0105), (0.021, 0.05, 1.2858791e-18)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band3_Sector04"
+        {
+            point3f[] points = [(0.018186533, 0.025, -0.0105), (0.0105, 0.025, -0.018186533), (0.0105, 0.05, -0.018186533), (0.018186533, 0.05, -0.0105)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band3_Sector05"
+        {
+            point3f[] points = [(0.0105, 0.025, -0.018186533), (2.5717583e-18, 0.025, -0.021), (2.5717583e-18, 0.05, -0.021), (0.0105, 0.05, -0.018186533)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band3_Sector06"
+        {
+            point3f[] points = [(2.5717583e-18, 0.025, -0.021), (-0.0105, 0.025, -0.018186533), (-0.0105, 0.05, -0.018186533), (2.5717583e-18, 0.05, -0.021)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band3_Sector07"
+        {
+            point3f[] points = [(-0.0105, 0.025, -0.018186533), (-0.018186533, 0.025, -0.0105), (-0.018186533, 0.05, -0.0105), (-0.0105, 0.05, -0.018186533)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band3_Sector08"
+        {
+            point3f[] points = [(-0.018186533, 0.025, -0.0105), (-0.021, 0.025, -3.8576374e-18), (-0.021, 0.05, -3.8576374e-18), (-0.018186533, 0.05, -0.0105)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band3_Sector09"
+        {
+            point3f[] points = [(-0.021, 0.025, -3.8576374e-18), (-0.018186533, 0.025, 0.0105), (-0.018186533, 0.05, 0.0105), (-0.021, 0.05, -3.8576374e-18)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band3_Sector10"
+        {
+            point3f[] points = [(-0.018186533, 0.025, 0.0105), (-0.0105, 0.025, 0.018186533), (-0.0105, 0.05, 0.018186533), (-0.018186533, 0.05, 0.0105)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Mesh "Band3_Sector11"
+        {
+            point3f[] points = [(-0.0105, 0.025, 0.018186533), (-5.1435166e-18, 0.025, 0.021), (-5.1435166e-18, 0.05, 0.021), (-0.0105, 0.05, 0.018186533)]
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Cylinder "EndLeft"
+        {
+            double radius = 0.0207
+            double height = 0.001
+            uniform token axis = "Y"
+            double3 xformOp:translate = (0, -0.05, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Cylinder "EndRight"
+        {
+            double radius = 0.0207
+            double height = 0.001
+            uniform token axis = "Y"
+            double3 xformOp:translate = (0, 0.05, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+    }
+    def PhysicsRevoluteJoint "Axle"
+    {
+        rel physics:body0 = </Asset/Frame>
+        rel physics:body1 = </Asset/Sleeve>
+        point3f physics:localPos0 = (0, 0, 0)
+        point3f physics:localPos1 = (0, 0, 0)
+        bool physics:collisionEnabled = false
+        uniform bool physics:excludeFromArticulation = false
+        uniform token physics:axis = "Y"
+    }
+}

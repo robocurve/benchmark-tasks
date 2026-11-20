@@ -1,0 +1,29 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    kilogramsPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Asset"
+{
+    def Xform "rest" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        float physics:mass = 0.5
+        bool physics:kinematicEnabled = true
+        def Cube "Crib" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (0, 0, 0.034)
+            float3 xformOp:scale = (0.032, 0.04, 0.068)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.6, 0.37, 0.2)]
+        }
+    }
+}

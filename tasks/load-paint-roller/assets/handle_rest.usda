@@ -1,0 +1,50 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    kilogramsPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Asset"
+{
+    def Xform "rest" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        float physics:mass = 0.5
+        bool physics:kinematicEnabled = true
+        def Cube "Block" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (0, 0, 0.018)
+            float3 xformOp:scale = (0.052, 0.034, 0.036)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.6, 0.37, 0.2)]
+        }
+        def Cube "AngledSeat" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (0, 0, 0.044167707)
+            float3 xformOp:rotateXYZ = (0, 22, 0)
+            float3 xformOp:scale = (0.055, 0.034, 0.012)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.6, 0.37, 0.2)]
+        }
+        def Cube "FrontStop" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (0.035, 0, 0.0225)
+            float3 xformOp:scale = (0.005, 0.034, 0.045)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.6, 0.37, 0.2)]
+        }
+    }
+}
