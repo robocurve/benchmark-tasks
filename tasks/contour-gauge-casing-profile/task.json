@@ -1,0 +1,22 @@
+{
+  "title": "Scribe a floor board to a door casing: copy its profile with a contour gauge, then lay the gauge flat on the board",
+  "category": "Impact on jobs",
+  "keywords": [
+    "contour gauge",
+    "scribing",
+    "profile copy",
+    "friction-held fingers",
+    "door casing",
+    "flooring",
+    "marking"
+  ],
+  "instruction": "Push the contour gauge flat against the door casing where it meets the wall to copy its profile, then lay the gauge flat on the floor board with the copied wall line on the board's pencilled wall line and the casing's inner edge at the board's side edge, ready to trace the cut, and let go.",
+  "context": "Fitting flooring or a board end around a door casing (scribing) is a routine step for carpenters (SOC 47-2031, 670,090 US workers; BLS OEWS https://www.bls.gov/oes/current/oes472031.htm). The O*NET core tasks (https://www.onetonline.org/link/summary/47-2031.00) include \"Measure and mark cutting lines on materials, using a ruler, pencil, chalk, and marking gauge.\" The carpenter lays a contour gauge flat on the floor, pushes it against the casing and wall, then lays it on the board at the wall line and traces the cut. The fingers are held only by friction: the gauge must be pushed square and carried flat or the cut will not fit. Gauge USD 22, casing made from a USD 5 pine 1x3 (real_trial_cost_usd = 30).",
+  "setup": "Bench = floor. Positions in metres, x forward, y to the robot's left. Fixed wall section (drywall on a 2x4, cropped 150 mm tall), room face at x = 0.40, from y = -0.0345 (the door jamb's face; the opening beyond, on the right) to y = 0.17. Pine casing nailed to it, centred on y = 0, inner (bead) edge toward the opening with a 6 mm reveal, standing on the floor: 57 mm wide, from its inner edge a bead 12 mm proud x 10 mm, a field 6 mm x 18 mm, a bevel rising to 12 mm over 12 mm, a 5.5 mm step to a 17.5 mm outer band 17 mm wide. A 10 in contour gauge (254 mm frame, 22 mm thick, 31 fingers at 8 mm pitch, 76 mm long, 32 mm usable depth, held by friction, all fully out; 140 g with an L-shaped hardwood grip handle taped to each frame end: a bridge past the last finger, then a 58 x 25 x 54 mm block sticking back) lies flat on the floor, centred on y = 0, finger tips at x = 0.30 pointing at the wall. A pine 1x6 floor board (300 x 140 x 19 mm) is fixed nearest the robot, long axis along x, far end at x = 0.20, its right side edge in line with the casing's inner edge (y = -0.0285), with a pencilled wall line across it 30 mm from its far end.",
+  "scoring": "Judged at the end. 0 unless the copied outline matches the casing laid back against it at some offset and face (candidates screened against every gate, then lowest RMS): at least 5 fingers at least 1 mm onto the casing within RMS 1.5 mm and worst 3.0 mm of its heights, the wall fingers within 30 mm of its outer edge within a peak-to-peak spread of 2.5 mm about one straight line, and that line (how square the push was) within 3 deg. Then 0.4; 1.0 if the gauge also lies flat (within 3 deg) on the board, its bottom within 3 mm of the board's top, its fingers pointing at the board's far end (within 5 deg), the copied wall line on the pencilled line (wall fingers' tips within 2 mm on average and 3 mm each), the copied inner edge of the casing within 3 mm of the board's side edge with the outer band over the board, and each hand's tool point more than 20 cm from the gauge centre in plan or more than 15 cm above the board. Possible: 0, 0.4, 1.0. Real trials: copy checked against a printed profile template, placement by steel rule and feeler, hands by video (README).",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "fidelity": "Rigid-body sim, 20 Hz. Each finger is a slide joint held by a 200 N/m drive re-latched each step, slipping past 0.5 N (estimate, as are finger mass 1.6 g and the authored profile, made to drawing). Fingers 8 mm apart (real gauge about 1.5 mm), so 7-8 read the casing. Wall and casing fixed and cropped; the trace itself is not drawn.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "reset_notes": "Push every finger of the gauge fully out and lay it flat on the floor at its mark (finger tips 100 mm in front of the wall, centred on the casing). The casing, wall and board stay fixed; erase nothing (no trace is drawn).",
+  "media": "M-MKT3R6"
+}
