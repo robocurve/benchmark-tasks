@@ -29,7 +29,7 @@ SAG_MAX = 0.30
 UNWIND = ("let go",)
 UNWIND_RATE = 0.8
 FREEZE = ("search",)  # labels during which the correction is held (a light push)
-FAIL = os.environ.get("MIX_FAIL", "")  # wrong on purpose: fixed, nobrace, swap, holding
+FAIL = os.environ.get("MIX_FAIL", "")  # wrong on purpose: fixed, nobrace, swap, holding, nothing
 
 N_STAGES = 9
 OPEN_PICK = -0.020  # finger target: 40 mm opening
@@ -479,6 +479,12 @@ def install() -> None:
     def act(self, observation):
         if not _mine(self):
             return plain_act(self, observation)
+        if FAIL == "nothing":  # the "nothing done" run: both arms hold their start pose to the end
+            if getattr(self, "_mix_hold", None) is None:
+                self._mix_hold = np.asarray(observation.state[STATE_KEY], float).copy()
+            chunk = plain_act(self, observation)
+            return ActionChunk(actions=[Action(data=self._mix_hold.copy(), meta=chunk.actions[0].meta)],
+                               control_hz=chunk.control_hz)
         m = self._task.module
         t = float(observation.state_time)
         if 0 <= self._mix_stage < m.LOOKS and t + 1e-6 >= self._end - 0.05:

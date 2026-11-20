@@ -162,7 +162,7 @@ FIN_R = 0.0050  # fins 10 mm across
 COLLAR_R = 0.0065  # 13 mm collar: too wide for the 11.8 mm opening
 SHOULDER_R = 0.0050
 CAGE_X = (-0.190, -0.120)
-CAGE_R = 0.020
+CAGE_R = 0.0165  # wire centres: 38 mm across the wires (suppliers: about 1-1/2 in across)
 GRIP_X = -0.105  # the gripper takes the stem here, just ahead of the blades (the hand keeps clear of the mixer)
 BEATER_MASS = {"collared": 0.060, "plain": 0.055}
 
@@ -196,7 +196,7 @@ MIXER0 = (0.300, 0.020)  # footprint centre (world x, y) of the nominal start
 MIXER_YAW0 = 90.0  # degrees: the sockets face the right arm (-y), the handle the left arm
 BEATER_LANES = (0.185, 0.115)  # stem lines (world x) of the two beaters; which beater lies in which is random
 BEATER_TIP_Y = -0.065  # the beaters lie pointing +y (toward the mixer), tips here
-REST_Z = 0.0160  # stem axis height at the cage when lying (blades at 45 degrees on the table)
+REST_Z = 0.0140  # stem axis height at the cage when lying (blades at 45 degrees on the table)
 
 SOCKETS = ("large", "small")
 SOCKET_OF = {"collared": "large", "plain": "small"}
@@ -397,7 +397,8 @@ def report(objects) -> dict:
     start = _EP.get("start") or MIXER0
     moved = float(np.hypot(mixer.pos[0] - start[0], mixer.pos[1] - start[1]))
     tilt = math.degrees(mixer.tilt())
-    standing = tilt <= MIXER_TILT and moved <= MIXER_MOVE
+    a_stem_in = out["collared"]["entered"] or out["plain"]["entered"]
+    standing = tilt <= MIXER_TILT and moved <= MIXER_MOVE and a_stem_in  # the untouched scene earns nothing
     out["mixer"] = {"moved_mm": round(1000 * moved, 1), "tilt_deg": round(tilt, 2), "standing": bool(standing)}
     clr = clearance_mm(objects)
     out["clearance_mm"] = None if clr is None else round(clr, 1)
@@ -411,8 +412,8 @@ def report(objects) -> dict:
 def score(objects) -> float:
     """Per beater (collared: counted in the larger socket only; plain: in either socket): 0.1 stem entered (tip 6 mm past the
     face, on the axis), +0.1 fins in the slots (tip at least 30 mm deep), +0.2 clipped (tip within 1.5 mm of full
-    depth and the clip ball back in the groove). +0.2 if the mixer stands on its heel rest (tilt at most 5 degrees)
-    within 5 mm of where it started. 0 for the trial unless both grippers end at least 20 mm from the mixer and the
+    depth and the clip ball back in the groove). +0.2 if a stem has entered a socket and the mixer stands on its heel rest
+    (tilt at most 5 degrees) within 5 mm of where it started. 0 for the trial unless both grippers end at least 20 mm from the mixer and the
     beaters."""
     rep = report(objects)
     _EP["report"] = rep
