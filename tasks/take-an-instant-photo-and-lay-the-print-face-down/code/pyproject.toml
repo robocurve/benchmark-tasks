@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "remember-to-act"
+version = "0.1.0"
+description = "Remember to Act: bimanual YAM memory tasks for Isaac Lab-Arena, evaluated through Inspect Robots."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = { text = "MIT" }
+dependencies = ["inspect-robots>=0.60", "inspect-robots-yam>=0.6", "yam-arena>=0.1.0", "numpy>=1.26"]
+
+[project.entry-points."inspect_robots.embodiments"]
+yam_memory = "rta.embodiment:yam_memory_embodiment"
+
+[project.entry-points."inspect_robots.policies"]
+rta_oracle = "rta.oracle:rta_oracle_policy"
+rta_teleop = "rta.teleop:rta_teleop_policy"
+
+[project.entry-points."inspect_robots.scorers"]
+q_score = "rta.scoring:q_score"
+rta_success = "rta.scoring:rta_success"
+
+[project.entry-points."inspect_robots.tasks"]
+"rta/box_retrieval" = "rta.tasks:box_retrieval"
+"rta/box_retrieval_two" = "rta.tasks:box_retrieval_two"
+"rta/remember_sort" = "rta.tasks:remember_sort"
+"rta/button_sequence" = "rta.tasks:button_sequence"
+"rta/lockout" = "rta.tasks:lockout"
+"rta/who_ordered" = "rta.tasks:who_ordered"
+"rta/incubation_order" = "rta.tasks:incubation_order"
+"rta/hot_hob" = "rta.tasks:hot_hob"
+"rta/teach_points" = "rta.tasks:teach_points"
+"rta/sprayed_lanes" = "rta.tasks:sprayed_lanes"
+"rta/empty_cans" = "rta.tasks:empty_cans"
+"rta/cooling_iron" = "rta.tasks:cooling_iron"
+"rta/slide_staining" = "rta.tasks:slide_staining"
+"rta/memory_module" = "rta.tasks:memory_module"
+"rta/drive_bays" = "rta.tasks:drive_bays"
+"rta/restock" = "rta.tasks:restock"
+"rta/dropped_cell" = "rta.tasks:dropped_cell"
+"rta/fetch_shown" = "rta.tasks:fetch_shown"
+"rta/rejected_gear" = "rta.tasks:rejected_gear"
+"rta/memory_game" = "rta.tasks:memory_game"
+"rta/lunch_boxes" = "rta.tasks:lunch_boxes"
+"rta/desk_restore" = "rta.tasks:desk_restore"
+"rta/reach_probe" = "rta.tasks:reach_probe"
+"rta/bulb_change" = "rta.tasks:bulb_change"
+"rta/bluetooth_pairing" = "rta.tasks:bluetooth_pairing"
+"rta/magnet_notice" = "rta.tasks:magnet_notice"
+"rta/dj_mix" = "rta.tasks:dj_mix"
+"rta/instant_photo" = "rta.tasks:instant_photo"
+"rta/sketch" = "rta.tasks:sketch"
+
+[tool.setuptools.packages.find]
+include = ["rta*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
