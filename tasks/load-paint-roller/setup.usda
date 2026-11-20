@@ -1,0 +1,46 @@
+#usda 1.0
+(
+    defaultPrim = "Scene"
+    metersPerUnit = 1
+    kilogramsPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Scene"
+{
+    def Xform "Tray" (
+        prepend references = @./assets/paint_tray.usda@
+    )
+    {
+        double3 xformOp:translate = (0.345, -0.047, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+    def Xform "Roller" (
+        prepend references = @./assets/paint_roller.usda@
+    )
+    {
+        double3 xformOp:translate = (0.324, -0.225, 0.7695)
+        float3 xformOp:rotateXYZ = (0, 22, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+    }
+    def Xform "Witness" (
+        prepend references = @./assets/witness.usda@
+    )
+    {
+        double3 xformOp:translate = (0.347, 0.197, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+    def Xform "HandleRest" (
+        prepend references = @./assets/handle_rest.usda@
+    )
+    {
+        double3 xformOp:translate = (0.22108259, -0.243, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+    def Xform "ParkHandleRest" (
+        prepend references = @./assets/park_handle_rest.usda@
+    )
+    {
+        double3 xformOp:translate = (0.0055971932, -0.065, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+}
