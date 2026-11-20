@@ -1,0 +1,18 @@
+{
+  "title": "Fit and verify a robot linear-axis homing flag",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "commissioning",
+    "homing",
+    "optical fork",
+    "linear carriage"
+  ],
+  "instruction": "Fit the homing flag to the carriage. Slide the carriage toward the sensor to verify that the flag triggers home, then let go.",
+  "context": "A linear axis on a robotic workcell needs a repeatable home datum. Installing the flag in its carrier and sweeping it through a real-size fork tests mechanical alignment and commissioning.",
+  "setup": "Fixed 141 × 181 mm aluminum bed holding a 155 mm guide, 63 mm passive Y carriage and 5 mm slot optical fork. A 2 mm steel flag with blue polymer handle starts on a 22 × 36 × 23 mm open-sided rest. Relative to the top of the table, the fixture origin is (278, −119, 0) mm and the flag foot starts at (229, −224, 23) mm. The fork center is 50 mm along the carriage travel.",
+  "scoring": "0.30 with the flag seated within 4.5 mm in the table plane and 4 mm vertically, with tilt under 9.3°. A new optical crossing at 36–61 mm of carriage travel raises the score to 0.65. A crossing while unseated or outside that travel window sets the score to zero. Full credit after one continuous second beyond 54 mm with the flag seated and neither the flag nor the carriage touched.",
+  "run_limit": "930 steps at 20 Hz (46.5 s)",
+  "reset_notes": "Return carriage to zero, move the flag back to the rest and clear the trigger history.",
+  "fidelity": "A buildable bench fixture pairs an Omron slot geometry with a working physical prismatic carriage. The optical output is calculated from metal flag pose. It does not simulate electronics. Carriage and mounting brackets are custom and the source generator fixes their dimensions.",
+  "scores": "Dream-1 run: 0.0; scripted demo: 1.0"
+}
