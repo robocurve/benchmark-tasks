@@ -1,0 +1,17 @@
+#usda 1.0
+(
+    defaultPrim = "Scene"
+    metersPerUnit = 1
+    kilogramsPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Scene"
+{
+    def Xform "rig" (
+        prepend references = @./assets/rig.usda@
+    )
+    {
+        double3 xformOp:translate = (0.29, 0, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+}

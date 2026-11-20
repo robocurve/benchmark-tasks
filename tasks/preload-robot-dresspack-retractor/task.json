@@ -1,0 +1,12 @@
+{
+  "title": "Set a two-link preload and check travel of a robot dresspack retractor",
+  "category": "Impact on AI timelines",
+  "instruction": "Advance the spring-loaded carrier by two links. Close the protector while holding that position, then push the wrist mount through its travel and release it.",
+  "context": "Commission cable and hose delivery for a research manipulator.",
+  "setup": "Bench rig at (290, 0) mm. A six-link moving segment with chosen 13 mm pitch runs on a 70 mm guide. Orange captive protector control at Y +72 mm and blue wrist-side carriage pad at Y -101 mm.",
+  "scoring": "0.25 within 2.5 mm of 26 mm. 0.50 when the protector closes at least 9 mm during supported preload. 0.75 after 24 mm additional travel while leaving at least 10 mm reserve. 1.00 after return within 5 mm of preload and both hands clear for one second. Overtravel invalidates.",
+  "run_limit": "900 steps at 20 Hz (45 s)",
+  "reset_notes": "Return the carriage and protector to zero, check the six-link marker alignment and clear the trial history.",
+  "fidelity": "Original kinematic-envelope CAD and spring-loaded guide. The active carrier section moves as one rigid segment and the split protector uses a captive slide. The 13 mm pitch and 70 mm bench travel are stand-in dimensions pending selection of an RSE and carrier pair.",
+  "scores": "Dream-1 run: 0.0; scripted demo: 1.0"
+}
