@@ -1,0 +1,18 @@
+{
+  "title": "Seat and lock the DGX H100/H200 PSU-end power cord",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "data-center",
+    "connector",
+    "locking ring",
+    "DGX"
+  ],
+  "instruction": "On the de-energized DGX power-supply fixture, seat the loose system-end cord with its gray ring unlocked, then turn the ring to locked. Release both hands.",
+  "context": "NVIDIA documents seating the system-end cable unlocked and then turning the independent ring to lock during PSU service.",
+  "setup": "Use a de-energized face-up PSU bench fixture with one C19/C20 mating position and two adjacent plugs. The target face is (300, 10, 36) mm from the table origin. The loose cord starts nose-down in a fixed open cradle, with seat datum (222, -168, 23.3) mm and gray collar unlocked.",
+  "scoring": "0.25 for keyed entry. 0.60 for seating after unlocked entry. 1.0 after seating and lock with both hands clear and the plug still for one second. Force-through, a locked entry, or extracting a confirmed lock returns zero.",
+  "run_limit": "1,200 control steps (60 seconds at 20 Hz)",
+  "reset_notes": "Restore the cord with its nose in the open cradle, reset the ring to unlocked, keep the fixture and neighboring plugs fixed and clear the trial state.",
+  "fidelity": "The C19-style mating face is 28 × 20 mm based on a published commercial C19 drawing. NVIDIA's images ground the tapered backshell, gray collar and three-port bench slice. Model-specific dimensions, contact and retention geometry, collar travel and torque, the face-up bench pose and the short cable are approximations pending a check against a DGX OEM cord and inlet.",
+  "scores": "Dream-1 run: 0.0; scripted demo: 1.0"
+}
