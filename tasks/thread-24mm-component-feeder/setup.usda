@@ -1,0 +1,38 @@
+#usda 1.0
+(
+    defaultPrim = "Scene"
+    metersPerUnit = 1
+    kilogramsPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Scene"
+{
+    def Xform "rig" (
+        prepend references = @./assets/rig.usda@
+    )
+    {
+        double3 xformOp:translate = (0.294, -0.119, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+    def Xform "chip0" (
+        prepend references = @./assets/chip0.usda@
+    )
+    {
+        double3 xformOp:translate = (0.3, -0.119, 0.7625)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+    def Xform "chip1" (
+        prepend references = @./assets/chip1.usda@
+    )
+    {
+        double3 xformOp:translate = (0.284, -0.119, 0.7625)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+    def Xform "chip2" (
+        prepend references = @./assets/chip2.usda@
+    )
+    {
+        double3 xformOp:translate = (0.268, -0.119, 0.7625)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+}
