@@ -660,6 +660,14 @@ def Xform "Asset" (
         float physics:lowerLimit = 0
         float physics:upperLimit = 0.0011111111111111111
     }
+    def Cube "ReleaseWitness0"
+    {
+        double size = 1
+        double3 xformOp:translate = (-0.047, -0.0155, 0.047)
+        float3 xformOp:scale = (0.008, 0.008, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.85, 0.08, 0.035)]
+    }
     def Xform "head_0" (
         prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
     )
@@ -883,6 +891,14 @@ def Xform "Asset" (
         uniform token physics:axis = "Z"
         float physics:lowerLimit = 0
         float physics:upperLimit = 0.0011111111111111111
+    }
+    def Cube "ReleaseWitness1"
+    {
+        double size = 1
+        double3 xformOp:translate = (-0.047, 0.0155, 0.047)
+        float3 xformOp:scale = (0.008, 0.008, 0.002)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        color3f[] primvars:displayColor = [(0.85, 0.08, 0.035)]
     }
     def Xform "head_1" (
         prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]

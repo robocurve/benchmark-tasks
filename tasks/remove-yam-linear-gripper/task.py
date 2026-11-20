@@ -4,6 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 import json
 import math
+import os
 from pathlib import Path
 import sys
 
@@ -35,13 +36,28 @@ HEAD_DIAMETER = 0.0055
 BIT_ACROSS_FLATS = 0.0025
 GRIPPER_MASS = 0.553219 + 2 * 0.0710042
 BOLT_DAMPING = 0.00005
-REQUIRED_TURN = math.radians(800)
+THREAD_TURNS_TO_CLEAR = 2
+REQUIRED_TURN = math.radians(800)  # Captive stop includes 80 degrees of clearance.
+DRIVER_CAPACITY = 1.30
+BREAKAWAY = float(os.environ.get("YAM_BREAKAWAY_NM", ".50"))
+
+
+def drive_torque(angle, omega, engaged, breakaway=BREAKAWAY, capacity=DRIVER_CAPACITY):
+    """Reduced hex coupling with static preload and Coulomb running resistance."""
+    if not engaged or angle >= REQUIRED_TURN - RELEASE_STOP_SLOP:
+        return 0.0, 0.0
+    resistance = breakaway if angle < math.radians(5) else .20 * breakaway
+    output = min(capacity, resistance + max(0.0, .35 * (3.6 - omega)))
+    # Resist initial breakaway as well as running rotation, without reversing
+    # an unloaded joint when the motor cannot overcome static friction.
+    return output, max(0.0, output - resistance)
 TIGHT_AT = math.radians(670)
-OPEN_AT = math.radians(670)
+RELEASE_STOP_SLOP = math.radians(1)
+CASE = os.environ.get("FAILSAFE_CASE", "demo")
 THREAD_PITCH = 0.0005
 MAX_RISE = REQUIRED_TURN * THREAD_PITCH / math.tau
 ENGAGE_RADIUS = 0.0010
-SPINDLE_TORQUE = 0.004
+SPINDLE_INDEXING_TORQUE = 0.004
 FULL_HOLD = 1.0
 
 
@@ -110,6 +126,7 @@ class Trial:
     opened: list = field(default_factory=lambda: [False] * len(FASTENERS))
     prior: tuple | None = None
     invalid: bool = False
+    separated: bool = False
     hold: float = 0.0
 
     @property
@@ -121,15 +138,19 @@ class Trial:
         return sum(x >= TIGHT_AT for x in self.tight)
 
     def step(self, old, new, driver, dt):
-        if old.aligned_at_mount():
-            for i, angle in enumerate(driver.heads):
-                if angle < OPEN_AT - math.radians(20):
-                    self.opened[i] = False
-                elif self.loose[i] >= OPEN_AT and angle >= OPEN_AT and driver.lifts[i] >= 0.00085:
-                    # The head can reach its full rise as the bit's preload comes off.
-                    self.opened[i] = True
+        # The authored captive mechanism disengages at its mechanical end stop.
+        # Driver motion alone cannot open a fastener. Require actual head motion
+        # under engagement and revoke release if the joint moves off its stop.
+        for i, angle in enumerate(driver.heads):
+            self.opened[i] = (
+                angle >= REQUIRED_TURN - RELEASE_STOP_SLOP and self.loose[i] >= THREAD_TURNS_TO_CLEAR * math.tau
+            )
+        pulled = old.xyz[0] - MOUNT[0]
         if not self.old_released and old.distance(MOUNT) > 0.010:
             self.invalid = True
+        if not self.separated and pulled > 0.006:
+            self.invalid |= old.free
+            self.separated = pulled >= 0.026 and not old.free
         if min(old.xyz[2], new.xyz[2]) < TABLE - 0.02:
             self.invalid = True
         if self.secured and new.distance(MOUNT) > 0.010:
@@ -145,13 +166,9 @@ class Trial:
         engaged = (mode, socket) if mode is not None and socket is not None else None
         if engaged is not None and self.prior is not None and engaged == self.prior[:2]:
             actual = wrapped_delta(driver.heads[socket], self.prior[3])
-            tool = wrapped_delta(driver.yaw, self.prior[2])
-            move = (
-                actual
-                if actual * tool > 0 and abs(actual) <= abs(tool) + 0.065
-                else 0.0
-            )
-            # The bit and head must actually turn together. Reverse motion undoes progress.
+            move = max(0.0, actual) if mode == "remove" else min(0.0, actual)
+            # Count the measured screw motion only while the bit is seated.
+            # Returning below the mechanical stop also revokes the release.
             if abs(move) < math.radians(23):
                 turns = self.loose if mode == "remove" else self.tight
                 direction = 1 if mode == "remove" else -1
@@ -166,7 +183,7 @@ class Trial:
         if REMOVAL_ONLY:
             done = (
                 self.old_released and old.stowed() and not driver.held
-                and min(driver.heads) >= OPEN_AT and min(driver.lifts) >= 0.00085
+                and self.separated
                 and not self.invalid
             )
             self.hold = self.hold + dt if done else 0.0
@@ -356,6 +373,11 @@ def telemetry():
         "quill_mm": round(driver.compression * 1000, 2),
         "driver_tilt_deg": round(math.degrees(driver.tilt), 1),
         "socket": driver.socket(),
+        "hex_transmitted_nm": _physics.transmitted_nm if _physics else 0.,
+        "hex_resisted_nm": _physics.resisted_nm if _physics else 0.,
+        "fasteners_released": _trial.opened,
+        "supported_separation": _trial.separated,
+        "module_contact": not _old.free,
         "heads_deg": np.round(np.rad2deg(driver.heads), 1).tolist(),
         "loosened_deg": np.round(np.rad2deg(_trial.loose), 1).tolist(),
         "tightened_deg": np.round(np.rad2deg(_trial.tight), 1).tolist(),
@@ -387,12 +409,9 @@ class WristClamp:
         ]
         self.fixture.write_joint_velocity_limit_to_sim_index(limits=5.0, joint_ids=self.bolts)
         bolts = tensor(self.fixture.data.joint_pos)[:, self.bolts]
-        self.fixture.write_joint_friction_coefficient_to_sim_index(
-            joint_friction_coeff=bolts.new_full(bolts.shape, 0.0007),
-            joint_dynamic_friction_coeff=bolts.new_full(bolts.shape, 0.00045),
-            joint_viscous_friction_coeff=bolts.new_full(bolts.shape, 0.00005),
-            joint_ids=self.bolts,
-        )
+        self.engaged_socket = None
+        self.transmitted_nm = 0.0
+        self.resisted_nm = 0.0
         self.drivers = {}
         self.feed_joints = {}
         self.motor_commands = {}
@@ -416,6 +435,18 @@ class WristClamp:
             # the thread advancing by one pitch per actual turn of the head.
             force = (1200.0 * (goal - height) - 1.4 * speed + 0.0125 * 9.81).clamp(-1.6, 1.6)
             self.fixture.set_joint_effort_target(force, joint_ids=self.lifts)
+            bolt_load = angles.new_zeros(angles.shape)
+            index = self.engaged_socket
+            self.transmitted_nm = self.resisted_nm = 0.
+            if index is not None:
+                # Apply the net torque to the actual head joint. This explicit
+                # coupling is used in place of resolving high hex contact stress
+                # at rigid-mesh corners.
+                omega = tensor(self.fixture.data.joint_vel)[0, self.bolts[index]]
+                output, net = drive_torque(float(angles[0, index]), float(omega), True)
+                self.transmitted_nm, self.resisted_nm = output, output - net
+                bolt_load[0, index] = net
+            self.fixture.set_joint_effort_target(bolt_load, joint_ids=self.bolts)
             fixture_write()
 
         self.fixture.write_data_to_sim = write_threads
@@ -498,9 +529,12 @@ class WristClamp:
             # A seated bit can close the modeled switch before compressing the spring.
             torque = torch.where(
                 pressed & upright & ((compression > 0.0006) | seated_bit),
-                SPINDLE_TORQUE * direction,
+                SPINDLE_INDEXING_TORQUE * direction,
                 torque,
             )
+        if CASE == "free-spin" and self.held[name]:
+            # Deliberately power the raised tool during the no-engagement control.
+            torque.fill_(SPINDLE_INDEXING_TORQUE * direction)
         self.motor_commands[name] = torque
         unit.set_joint_effort_target(torque, joint_ids=[spin])
 
@@ -620,6 +654,7 @@ def _register_runtime():
         ):
             _physics = WristClamp(environment)
         _physics.held = dict.fromkeys(ACTIVE_DRIVERS, False)
+        _physics.engaged_socket = None
 
     @on_step
     def monitor(environment):
@@ -632,7 +667,22 @@ def _register_runtime():
         if not REMOVAL_ONLY:
             _new = read_gripper(states["new_gripper"], not contact["new_gripper"])
         _driver = _physics.read_driver(contact)
+        _physics.engaged_socket = _driver.socket() if CASE != "free-spin" else None
+        previous = tuple(_trial.opened)
         _trial.step(_old, _new, _driver, float(environment.unwrapped.step_dt))
+        if previous != tuple(_trial.opened):
+            from isaaclab.sim.utils.stage import get_current_stage
+            from pxr import Gf, UsdGeom
+
+            stage = get_current_stage()
+            for index, released in enumerate(_trial.opened):
+                matches = [
+                    prim for prim in stage.Traverse()
+                    if prim.GetName() == f"ReleaseWitness{index}"
+                ]
+                for prim in matches:
+                    color = (0.06, 0.8, 0.16) if released else (0.85, 0.08, 0.035)
+                    UsdGeom.Gprim(prim).GetDisplayColorAttr().Set([Gf.Vec3f(*color)])
 
     return [wrist, *modules, *tools, *cradles, *stands]
 
@@ -665,10 +715,15 @@ def tracks():
         right.go(above_stand, tool_grip, "confirm bit clears the stand", 0.8)
         verb = "loosen" if direction > 0 else "tighten"
         for i, offset in enumerate(FASTENERS):
+            if CASE == "one-engaged" and i == 1:
+                continue
             x, y, z = MOUNT + offset
             top = (x, y, drive_hover)
             seat = (x, y, z + hand_above_bit + 0.0080)
             right.go(top, tool_grip, f"above collar screw {i+1}", 1.55)
+            if CASE == "free-spin":
+                right.go(top, tool_grip, "spin above the socket without engagement", 7.0)
+                continue
             right.go(
                 (x, y, z + hand_above_bit + 0.023),
                 tool_grip,
@@ -750,6 +805,13 @@ def demo():
 
 
 def self_test(run_ik=False):
+    for assumed in (.25, .50, 1.0):
+        applied, net = drive_torque(0., 0., True, assumed)
+        assert applied > assumed and net > 0.
+        applied, net = drive_torque(.2, 3., True, assumed)
+        assert math.isclose(applied - net, assumed * .20)
+        assert drive_torque(0., 0., True, assumed, assumed * .8)[1] == 0.
+        assert drive_torque(0., 0., False, assumed) == (0., 0.)
     t = Trial()
     installed = GripperReading(tuple(MOUNT), 0, True, True)
     old_stowed = GripperReading(tuple(REMOVED), 0, True, True)
@@ -791,13 +853,26 @@ def self_test(run_ik=False):
     sweep(0, 1, installed, new_start, slips=True)
     assert t.loose == [0, 0]
     sweep(0, 1, installed, new_start)
-    assert not t.old_released and t.loose[0] >= OPEN_AT
+    assert not t.old_released and t.opened[0]
     sweep(1, 1, installed, new_start)
     if REMOVAL_ONLY:
         assert t.old_released and t.score(old_stowed, new_start) == 0.5
         clear = DriverReading((0, 0, 1), 0, 0, False, (REQUIRED_TURN,) * 2, (MAX_RISE,) * 2)
+        t.step(GripperReading(tuple(MOUNT + (0.028, 0, 0)), 0, False, True),
+               new_start, clear, 0.05)
         t.step(old_stowed, new_start, clear, 1.0)
         assert t.score(old_stowed, new_start) == 1.0
+        unsupported = Trial(loose=[REQUIRED_TURN] * 2)
+        unsupported.step(GripperReading(tuple(MOUNT + (.028, 0, 0)), 0, True, True),
+                         new_start, clear, .05)
+        assert unsupported.invalid
+        dropped = Trial(loose=[REQUIRED_TURN] * 2, separated=True)
+        dropped.step(GripperReading((REMOVED[0], REMOVED[1], TABLE - .03), 0, True, True),
+                     new_start, clear, .05)
+        assert dropped.invalid
+        held = Trial(loose=[REQUIRED_TURN] * 2, separated=True)
+        held.step(GripperReading(tuple(REMOVED), 0, False, True), new_start, clear, 2.)
+        assert held.score(old_stowed, new_start) == .5
         check_tracks(tracks(), MAX_STEPS, ik=run_ik)
         print("YAM module removal and released-stow checks passed.")
         return
