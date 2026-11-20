@@ -1,0 +1,144 @@
+#usda 1.0
+(
+    defaultPrim = "pan"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "pan" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+)
+{
+    float physics:mass = 0.3
+
+    def "Looks"
+    {
+        def Material "steel"
+        {
+            token outputs:surface.connect = </pan/Looks/steel/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.42, 0.42, 0.43)
+                float inputs:metallic = 0.6
+                float inputs:roughness = 0.45
+                token outputs:surface
+            }
+        }
+    }
+
+    def Cube "bottom" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </pan/Looks/steel>
+        custom float physxCollision:contactOffset = 0.002
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.195, 0.25, 0.003)
+        double3 xformOp:translate = (0.0975, 0, 0.0015)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "front" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </pan/Looks/steel>
+        custom float physxCollision:contactOffset = 0.002
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.003, 0.25, 0.02)
+        double3 xformOp:translate = (0.0015, 0, 0.01)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "back" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </pan/Looks/steel>
+        custom float physxCollision:contactOffset = 0.002
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.003, 0.25, 0.02)
+        double3 xformOp:translate = (0.1935, 0, 0.01)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "side_a" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </pan/Looks/steel>
+        custom float physxCollision:contactOffset = 0.002
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.189, 0.003, 0.02)
+        double3 xformOp:translate = (0.0975, -0.1235, 0.01)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "side_b" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </pan/Looks/steel>
+        custom float physxCollision:contactOffset = 0.002
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.189, 0.003, 0.02)
+        double3 xformOp:translate = (0.0975, 0.1235, 0.01)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Capsule "bead_xa" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.19
+        rel material:binding = </pan/Looks/steel>
+        double radius = 0.0025
+        double3 xformOp:translate = (0.0975, -0.1235, 0.02)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Capsule "bead_ya" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.245
+        rel material:binding = </pan/Looks/steel>
+        double radius = 0.0025
+        double3 xformOp:translate = (0.0015000000000000013, 0, 0.02)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Capsule "bead_xb" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.19
+        rel material:binding = </pan/Looks/steel>
+        double radius = 0.0025
+        double3 xformOp:translate = (0.0975, 0.1235, 0.02)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Capsule "bead_yb" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Y"
+        double height = 0.245
+        rel material:binding = </pan/Looks/steel>
+        double radius = 0.0025
+        double3 xformOp:translate = (0.1935, 0, 0.02)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+}
+
