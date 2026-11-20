@@ -1,0 +1,20 @@
+{
+  "title": "Roll five dice from a dice cup into the game-box lid: every die tumbles out, lands flat and stays in the lid",
+  "category": "Societal relatability",
+  "keywords": [
+    "dice cup",
+    "rolling dice",
+    "Yahtzee",
+    "loose parts in a held container",
+    "wrist turn"
+  ],
+  "instruction": "Roll the five dice out of the dice cup into the box lid.",
+  "context": "Rolling dice from a dice cup starts every turn of Yahtzee, Farkle or Liar's dice; most people have done it. A roll counts only when each die tumbles out and comes to rest flat on one face inside the tray: a die that slides out without turning over is not rolled, and a cocked die (\"a rolled die that has not landed cleanly on one of its faces\") or one off the tray is re-rolled. The hand skill: one hand holds the round cup by its side, fingers off the dice, lifts it over the lid and turns it mouth-down in one quick wrist turn, so the five dice fall out together and tumble. Tipped slowly and low, as when pouring, they only slide out and lie as they were; turned less than about 120 deg, some stay in the felt-lined cup; dropped in a heap, a die can rest cocked on another. One arm is enough.",
+  "setup": "Positions in cm from the midpoint between the arm bases: x forward, y to the robot's left. (1) Box lid of a square board game, cardboard 2 mm thick, open side up, fixed (taped down): 25.4 x 25.4 cm outside, 3.0 cm tall, 25.0 x 25.0 cm inside, centred at x 25.0, y 7.5. (2) Dice cup, loose, upright at x 27.0, y -16.5: felt-lined bicast leather, 83 mm across, 95 mm tall, 75 g. (3) Five 16 mm acrylic dice with rounded corners (4.5 g each), inside the cup in one layer, 1 face up: one in the middle and four around it, 19.5 mm apart along x and y. Both arms start at the ready pose, grippers open. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Every control step the scorer reads the cup's and each die's pose and the fingers' collision points. A die scores 0.2 when it has left the cup; no finger came within 1.5 mm of it at any time (latched for that die); after leaving the cup it turned over by 90 deg or more at some moment (spinning flat does not count); and it rests flat on the lid floor (lowest point within 1.5 mm of it, faces within 5 deg of level, so not cocked on a die or wall), inside the lid, 14 mm or more from the cup, still (under 1 mm in 1 s). Score: 0.2 x such dice. 1.0 (success, held 1 s): all five. Doing nothing scores 0. Real trial: the video (each die left the cup untouched and turned over at least once) and an overhead photo at the end (each die flat in the lid, not touching the cup; a die a second die would slide off is cocked).",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Put the five dice back in the cup, 1 face up, one in the middle and four around it, and stand the cup on its circle (tape) at x 27.0, y -16.5. Simulation: each trial starts the simulator afresh.",
+  "fidelity": "Rigid bodies, 20 Hz control. The dice are 16 mm cubes with 2 mm rounded edges, pips drawn on; the cup's wall is 24 flat panels with the felt drawn on; the lid is fixed and does not flex. Restitution (estimates): dice and lid 0.30, cup felt 0.05 (PhysX averages them). Friction (static/sliding): dice 0.40/0.35, lid 0.40/0.35, cup 0.60/0.50. The rattle before the roll is only for show.",
+  "scores": "Dream-1 run: 0.0 (the right gripper reached the cup and nudged it about beside the lid for the whole run, never lifting or tipping it; no die left the cup); demo: 1.0",
+  "media": "M-QRZ6SP"
+}
