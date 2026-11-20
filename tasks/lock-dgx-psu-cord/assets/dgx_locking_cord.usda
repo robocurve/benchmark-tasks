@@ -15,83 +15,99 @@ def Xform "Asset"
         double3 xformOp:translate = (0, 0, 0)
         uniform token[] xformOpOrder = ["xformOp:translate"]
         float physics:mass = 0.095
-        def Mesh "MatingNose" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
+        def Xform "RearOrientation"
         {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(0.014, 0.0065, -0.018), (0.013733578, 0.007839392, -0.018), (0.012974874, 0.0089748737, -0.018), (0.011839392, 0.0097335784, -0.018), (0.0105, 0.01, -0.018), (-0.0105, 0.01, -0.018), (-0.011839392, 0.0097335784, -0.018), (-0.012974874, 0.0089748737, -0.018), (-0.013733578, 0.007839392, -0.018), (-0.014, 0.0065, -0.018), (-0.014, -0.0065, -0.018), (-0.013733578, -0.007839392, -0.018), (-0.012974874, -0.0089748737, -0.018), (-0.011839392, -0.0097335784, -0.018), (-0.0105, -0.01, -0.018), (0.0105, -0.01, -0.018), (0.011839392, -0.0097335784, -0.018), (0.012974874, -0.0089748737, -0.018), (0.013733578, -0.007839392, -0.018), (0.014, -0.0065, -0.018), (0.014, 0.0065, 0), (0.013733578, 0.007839392, 0), (0.012974874, 0.0089748737, 0), (0.011839392, 0.0097335784, 0), (0.0105, 0.01, 0), (-0.0105, 0.01, 0), (-0.011839392, 0.0097335784, 0), (-0.012974874, 0.0089748737, 0), (-0.013733578, 0.007839392, 0), (-0.014, 0.0065, 0), (-0.014, -0.0065, 0), (-0.013733578, -0.007839392, 0), (-0.012974874, -0.0089748737, 0), (-0.011839392, -0.0097335784, 0), (-0.0105, -0.01, 0), (0.0105, -0.01, 0), (0.011839392, -0.0097335784, 0), (0.012974874, -0.0089748737, 0), (0.013733578, -0.007839392, 0), (0.014, -0.0065, 0)]
-            int[] faceVertexCounts = [20, 20, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 0, 1, 21, 20, 1, 2, 22, 21, 2, 3, 23, 22, 3, 4, 24, 23, 4, 5, 25, 24, 5, 6, 26, 25, 6, 7, 27, 26, 7, 8, 28, 27, 8, 9, 29, 28, 9, 10, 30, 29, 10, 11, 31, 30, 11, 12, 32, 31, 12, 13, 33, 32, 13, 14, 34, 33, 14, 15, 35, 34, 15, 16, 36, 35, 16, 17, 37, 36, 17, 18, 38, 37, 18, 19, 39, 38, 19, 0, 20, 39]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.041, 0.046, 0.049)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Cylinder "Core" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            double radius = 0.013
-            double height = 0.023
-            uniform token axis = "Z"
-            double3 xformOp:translate = (0, 0, 0.0115)
-            uniform token[] xformOpOrder = ["xformOp:translate"]
-            color3f[] primvars:displayColor = [(0.041, 0.046, 0.049)]
-        }
-        def Mesh "NoseShoulder" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(0.016, 0.0085, 0), (0.015695518, 0.010030734, 0), (0.014828427, 0.011328427, 0), (0.013530734, 0.012195518, 0), (0.012, 0.0125, 0), (-0.012, 0.0125, 0), (-0.013530734, 0.012195518, 0), (-0.014828427, 0.011328427, 0), (-0.015695518, 0.010030734, 0), (-0.016, 0.0085, 0), (-0.016, -0.0085, 0), (-0.015695518, -0.010030734, 0), (-0.014828427, -0.011328427, 0), (-0.013530734, -0.012195518, 0), (-0.012, -0.0125, 0), (0.012, -0.0125, 0), (0.013530734, -0.012195518, 0), (0.014828427, -0.011328427, 0), (0.015695518, -0.010030734, 0), (0.016, -0.0085, 0), (0.016, 0.0085, 0.003), (0.015695518, 0.010030734, 0.003), (0.014828427, 0.011328427, 0.003), (0.013530734, 0.012195518, 0.003), (0.012, 0.0125, 0.003), (-0.012, 0.0125, 0.003), (-0.013530734, 0.012195518, 0.003), (-0.014828427, 0.011328427, 0.003), (-0.015695518, 0.010030734, 0.003), (-0.016, 0.0085, 0.003), (-0.016, -0.0085, 0.003), (-0.015695518, -0.010030734, 0.003), (-0.014828427, -0.011328427, 0.003), (-0.013530734, -0.012195518, 0.003), (-0.012, -0.0125, 0.003), (0.012, -0.0125, 0.003), (0.013530734, -0.012195518, 0.003), (0.014828427, -0.011328427, 0.003), (0.015695518, -0.010030734, 0.003), (0.016, -0.0085, 0.003)]
-            int[] faceVertexCounts = [20, 20, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 0, 1, 21, 20, 1, 2, 22, 21, 2, 3, 23, 22, 3, 4, 24, 23, 4, 5, 25, 24, 5, 6, 26, 25, 6, 7, 27, 26, 7, 8, 28, 27, 8, 9, 29, 28, 9, 10, 30, 29, 10, 11, 31, 30, 11, 12, 32, 31, 12, 13, 33, 32, 13, 14, 34, 33, 14, 15, 35, 34, 15, 16, 36, 35, 16, 17, 37, 36, 17, 18, 38, 37, 18, 19, 39, 38, 19, 0, 20, 39]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.041, 0.046, 0.049)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "TaperedBackshell" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(0.013, 0.0075, 0.022), (0.012695518, 0.0090307337, 0.022), (0.011828427, 0.010328427, 0.022), (0.010530734, 0.011195518, 0.022), (0.009, 0.0115, 0.022), (-0.009, 0.0115, 0.022), (-0.010530734, 0.011195518, 0.022), (-0.011828427, 0.010328427, 0.022), (-0.012695518, 0.0090307337, 0.022), (-0.013, 0.0075, 0.022), (-0.013, -0.0075, 0.022), (-0.012695518, -0.0090307337, 0.022), (-0.011828427, -0.010328427, 0.022), (-0.010530734, -0.011195518, 0.022), (-0.009, -0.0115, 0.022), (0.009, -0.0115, 0.022), (0.010530734, -0.011195518, 0.022), (0.011828427, -0.010328427, 0.022), (0.012695518, -0.0090307337, 0.022), (0.013, -0.0075, 0.022), (0.018, 0.009, 0.027), (0.017543277, 0.011296101, 0.027), (0.016242641, 0.013242641, 0.027), (0.014296101, 0.014543277, 0.027), (0.012, 0.015, 0.027), (-0.012, 0.015, 0.027), (-0.014296101, 0.014543277, 0.027), (-0.016242641, 0.013242641, 0.027), (-0.017543277, 0.011296101, 0.027), (-0.018, 0.009, 0.027), (-0.018, -0.009, 0.027), (-0.017543277, -0.011296101, 0.027), (-0.016242641, -0.013242641, 0.027), (-0.014296101, -0.014543277, 0.027), (-0.012, -0.015, 0.027), (0.012, -0.015, 0.027), (0.014296101, -0.014543277, 0.027), (0.016242641, -0.013242641, 0.027), (0.017543277, -0.011296101, 0.027), (0.018, -0.009, 0.027), (0.018, 0.009, 0.043), (0.017543277, 0.011296101, 0.043), (0.016242641, 0.013242641, 0.043), (0.014296101, 0.014543277, 0.043), (0.012, 0.015, 0.043), (-0.012, 0.015, 0.043), (-0.014296101, 0.014543277, 0.043), (-0.016242641, 0.013242641, 0.043), (-0.017543277, 0.011296101, 0.043), (-0.018, 0.009, 0.043), (-0.018, -0.009, 0.043), (-0.017543277, -0.011296101, 0.043), (-0.016242641, -0.013242641, 0.043), (-0.014296101, -0.014543277, 0.043), (-0.012, -0.015, 0.043), (0.012, -0.015, 0.043), (0.014296101, -0.014543277, 0.043), (0.016242641, -0.013242641, 0.043), (0.017543277, -0.011296101, 0.043), (0.018, -0.009, 0.043)]
-            int[] faceVertexCounts = [20, 20, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 0, 1, 21, 20, 1, 2, 22, 21, 2, 3, 23, 22, 3, 4, 24, 23, 4, 5, 25, 24, 5, 6, 26, 25, 6, 7, 27, 26, 7, 8, 28, 27, 8, 9, 29, 28, 9, 10, 30, 29, 10, 11, 31, 30, 11, 12, 32, 31, 12, 13, 33, 32, 13, 14, 34, 33, 14, 15, 35, 34, 15, 16, 36, 35, 16, 17, 37, 36, 17, 18, 38, 37, 18, 19, 39, 38, 19, 0, 20, 39, 20, 21, 41, 40, 21, 22, 42, 41, 22, 23, 43, 42, 23, 24, 44, 43, 24, 25, 45, 44, 25, 26, 46, 45, 26, 27, 47, 46, 27, 28, 48, 47, 28, 29, 49, 48, 29, 30, 50, 49, 30, 31, 51, 50, 31, 32, 52, 51, 32, 33, 53, 52, 33, 34, 54, 53, 34, 35, 55, 54, 35, 36, 56, 55, 36, 37, 57, 56, 37, 38, 58, 57, 38, 39, 59, 58, 39, 20, 40, 59]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.041, 0.046, 0.049)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Cylinder "AxialStrainRelief" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            double radius = 0.0065
-            double height = 0.01
-            uniform token axis = "Z"
-            double3 xformOp:translate = (0, 0, 0.047)
-            uniform token[] xformOpOrder = ["xformOp:translate"]
-            color3f[] primvars:displayColor = [(0.041, 0.046, 0.049)]
-        }
-        def Cube "Index"
-        {
-            double size = 1
-            double3 xformOp:translate = (0.014, 0, 0.0432)
-            float3 xformOp:scale = (0.003, 0.004, 0.0008)
-            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
-            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
-        }
-        def Xform "SeatDatum"
-        {
-            double3 xformOp:translate = (0, 0, 0)
-            uniform token[] xformOpOrder = ["xformOp:translate"]
+            double xformOp:rotateX = 90
+            uniform token[] xformOpOrder = ["xformOp:rotateX"]
+            def Mesh "MatingNose"
+            {
+                point3f[] points = [(0.014, 0.0065, -0.018), (0.013733578, 0.007839392, -0.018), (0.012974874, 0.0089748737, -0.018), (0.011839392, 0.0097335784, -0.018), (0.0105, 0.01, -0.018), (-0.0105, 0.01, -0.018), (-0.011839392, 0.0097335784, -0.018), (-0.012974874, 0.0089748737, -0.018), (-0.013733578, 0.007839392, -0.018), (-0.014, 0.0065, -0.018), (-0.014, -0.0065, -0.018), (-0.013733578, -0.007839392, -0.018), (-0.012974874, -0.0089748737, -0.018), (-0.011839392, -0.0097335784, -0.018), (-0.0105, -0.01, -0.018), (0.0105, -0.01, -0.018), (0.011839392, -0.0097335784, -0.018), (0.012974874, -0.0089748737, -0.018), (0.013733578, -0.007839392, -0.018), (0.014, -0.0065, -0.018), (0.014, 0.0065, 0), (0.013733578, 0.007839392, 0), (0.012974874, 0.0089748737, 0), (0.011839392, 0.0097335784, 0), (0.0105, 0.01, 0), (-0.0105, 0.01, 0), (-0.011839392, 0.0097335784, 0), (-0.012974874, 0.0089748737, 0), (-0.013733578, 0.007839392, 0), (-0.014, 0.0065, 0), (-0.014, -0.0065, 0), (-0.013733578, -0.007839392, 0), (-0.012974874, -0.0089748737, 0), (-0.011839392, -0.0097335784, 0), (-0.0105, -0.01, 0), (0.0105, -0.01, 0), (0.011839392, -0.0097335784, 0), (0.012974874, -0.0089748737, 0), (0.013733578, -0.007839392, 0), (0.014, -0.0065, 0)]
+                int[] faceVertexCounts = [20, 20, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 0, 1, 21, 20, 1, 2, 22, 21, 2, 3, 23, 22, 3, 4, 24, 23, 4, 5, 25, 24, 5, 6, 26, 25, 6, 7, 27, 26, 7, 8, 28, 27, 8, 9, 29, 28, 9, 10, 30, 29, 10, 11, 31, 30, 11, 12, 32, 31, 12, 13, 33, 32, 13, 14, 34, 33, 14, 15, 35, 34, 15, 16, 36, 35, 16, 17, 37, 36, 17, 18, 38, 37, 18, 19, 39, 38, 19, 0, 20, 39]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.041, 0.046, 0.049)]
+            }
+            def Cylinder "Core"
+            {
+                double radius = 0.013
+                double height = 0.023
+                uniform token axis = "Z"
+                double3 xformOp:translate = (0, 0, 0.0115)
+                uniform token[] xformOpOrder = ["xformOp:translate"]
+                color3f[] primvars:displayColor = [(0.041, 0.046, 0.049)]
+            }
+            def Mesh "NoseShoulder"
+            {
+                point3f[] points = [(0.016, 0.0085, 0), (0.015695518, 0.010030734, 0), (0.014828427, 0.011328427, 0), (0.013530734, 0.012195518, 0), (0.012, 0.0125, 0), (-0.012, 0.0125, 0), (-0.013530734, 0.012195518, 0), (-0.014828427, 0.011328427, 0), (-0.015695518, 0.010030734, 0), (-0.016, 0.0085, 0), (-0.016, -0.0085, 0), (-0.015695518, -0.010030734, 0), (-0.014828427, -0.011328427, 0), (-0.013530734, -0.012195518, 0), (-0.012, -0.0125, 0), (0.012, -0.0125, 0), (0.013530734, -0.012195518, 0), (0.014828427, -0.011328427, 0), (0.015695518, -0.010030734, 0), (0.016, -0.0085, 0), (0.016, 0.0085, 0.003), (0.015695518, 0.010030734, 0.003), (0.014828427, 0.011328427, 0.003), (0.013530734, 0.012195518, 0.003), (0.012, 0.0125, 0.003), (-0.012, 0.0125, 0.003), (-0.013530734, 0.012195518, 0.003), (-0.014828427, 0.011328427, 0.003), (-0.015695518, 0.010030734, 0.003), (-0.016, 0.0085, 0.003), (-0.016, -0.0085, 0.003), (-0.015695518, -0.010030734, 0.003), (-0.014828427, -0.011328427, 0.003), (-0.013530734, -0.012195518, 0.003), (-0.012, -0.0125, 0.003), (0.012, -0.0125, 0.003), (0.013530734, -0.012195518, 0.003), (0.014828427, -0.011328427, 0.003), (0.015695518, -0.010030734, 0.003), (0.016, -0.0085, 0.003)]
+                int[] faceVertexCounts = [20, 20, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 0, 1, 21, 20, 1, 2, 22, 21, 2, 3, 23, 22, 3, 4, 24, 23, 4, 5, 25, 24, 5, 6, 26, 25, 6, 7, 27, 26, 7, 8, 28, 27, 8, 9, 29, 28, 9, 10, 30, 29, 10, 11, 31, 30, 11, 12, 32, 31, 12, 13, 33, 32, 13, 14, 34, 33, 14, 15, 35, 34, 15, 16, 36, 35, 16, 17, 37, 36, 17, 18, 38, 37, 18, 19, 39, 38, 19, 0, 20, 39]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.041, 0.046, 0.049)]
+            }
+            def Mesh "TaperedBackshell"
+            {
+                point3f[] points = [(0.013, 0.0075, 0.022), (0.012695518, 0.0090307337, 0.022), (0.011828427, 0.010328427, 0.022), (0.010530734, 0.011195518, 0.022), (0.009, 0.0115, 0.022), (-0.009, 0.0115, 0.022), (-0.010530734, 0.011195518, 0.022), (-0.011828427, 0.010328427, 0.022), (-0.012695518, 0.0090307337, 0.022), (-0.013, 0.0075, 0.022), (-0.013, -0.0075, 0.022), (-0.012695518, -0.0090307337, 0.022), (-0.011828427, -0.010328427, 0.022), (-0.010530734, -0.011195518, 0.022), (-0.009, -0.0115, 0.022), (0.009, -0.0115, 0.022), (0.010530734, -0.011195518, 0.022), (0.011828427, -0.010328427, 0.022), (0.012695518, -0.0090307337, 0.022), (0.013, -0.0075, 0.022), (0.018, 0.009, 0.027), (0.017543277, 0.011296101, 0.027), (0.016242641, 0.013242641, 0.027), (0.014296101, 0.014543277, 0.027), (0.012, 0.015, 0.027), (-0.012, 0.015, 0.027), (-0.014296101, 0.014543277, 0.027), (-0.016242641, 0.013242641, 0.027), (-0.017543277, 0.011296101, 0.027), (-0.018, 0.009, 0.027), (-0.018, -0.009, 0.027), (-0.017543277, -0.011296101, 0.027), (-0.016242641, -0.013242641, 0.027), (-0.014296101, -0.014543277, 0.027), (-0.012, -0.015, 0.027), (0.012, -0.015, 0.027), (0.014296101, -0.014543277, 0.027), (0.016242641, -0.013242641, 0.027), (0.017543277, -0.011296101, 0.027), (0.018, -0.009, 0.027), (0.018, 0.009, 0.043), (0.017543277, 0.011296101, 0.043), (0.016242641, 0.013242641, 0.043), (0.014296101, 0.014543277, 0.043), (0.012, 0.015, 0.043), (-0.012, 0.015, 0.043), (-0.014296101, 0.014543277, 0.043), (-0.016242641, 0.013242641, 0.043), (-0.017543277, 0.011296101, 0.043), (-0.018, 0.009, 0.043), (-0.018, -0.009, 0.043), (-0.017543277, -0.011296101, 0.043), (-0.016242641, -0.013242641, 0.043), (-0.014296101, -0.014543277, 0.043), (-0.012, -0.015, 0.043), (0.012, -0.015, 0.043), (0.014296101, -0.014543277, 0.043), (0.016242641, -0.013242641, 0.043), (0.017543277, -0.011296101, 0.043), (0.018, -0.009, 0.043)]
+                int[] faceVertexCounts = [20, 20, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 0, 1, 21, 20, 1, 2, 22, 21, 2, 3, 23, 22, 3, 4, 24, 23, 4, 5, 25, 24, 5, 6, 26, 25, 6, 7, 27, 26, 7, 8, 28, 27, 8, 9, 29, 28, 9, 10, 30, 29, 10, 11, 31, 30, 11, 12, 32, 31, 12, 13, 33, 32, 13, 14, 34, 33, 14, 15, 35, 34, 15, 16, 36, 35, 16, 17, 37, 36, 17, 18, 38, 37, 18, 19, 39, 38, 19, 0, 20, 39, 20, 21, 41, 40, 21, 22, 42, 41, 22, 23, 43, 42, 23, 24, 44, 43, 24, 25, 45, 44, 25, 26, 46, 45, 26, 27, 47, 46, 27, 28, 48, 47, 28, 29, 49, 48, 29, 30, 50, 49, 30, 31, 51, 50, 31, 32, 52, 51, 32, 33, 53, 52, 33, 34, 54, 53, 34, 35, 55, 54, 35, 36, 56, 55, 36, 37, 57, 56, 37, 38, 58, 57, 38, 39, 59, 58, 39, 20, 40, 59]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.041, 0.046, 0.049)]
+            }
+            def Cylinder "AxialStrainRelief"
+            {
+                double radius = 0.0065
+                double height = 0.01
+                uniform token axis = "Z"
+                double3 xformOp:translate = (0, 0, 0.047)
+                uniform token[] xformOpOrder = ["xformOp:translate"]
+                color3f[] primvars:displayColor = [(0.041, 0.046, 0.049)]
+            }
+            def Cube "Index"
+            {
+                double size = 1
+                double3 xformOp:translate = (0.014, 0, 0.0432)
+                float3 xformOp:scale = (0.003, 0.004, 0.0008)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+            }
+            def Cylinder "RearCableWitness"
+            {
+                double radius = 0.0048
+                double height = 0.044
+                uniform token axis = "Z"
+                double3 xformOp:translate = (0, 0, 0.073)
+                uniform token[] xformOpOrder = ["xformOp:translate"]
+                color3f[] primvars:displayColor = [(0.033, 0.038, 0.042)]
+            }
+            def Xform "SeatDatum"
+            {
+                double3 xformOp:translate = (0, 0, 0)
+                uniform token[] xformOpOrder = ["xformOp:translate"]
+            }
+            def Cube "NoseContact" (
+                prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+            )
+            {
+                float physxCollision:contactOffset = 0.00025
+                float physxCollision:restOffset = 0
+                double size = 1
+                double3 xformOp:translate = (0, 0, -0.009)
+                float3 xformOp:scale = (0.025, 0.017, 0.018)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.045, 0.05, 0.06)]
+            }
+
+            def Cube "BackshellContact" (
+                prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+            )
+            {
+                float physxCollision:contactOffset = 0.00025
+                float physxCollision:restOffset = 0
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0.03)
+                float3 xformOp:scale = (0.033, 0.024, 0.034)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.045, 0.05, 0.06)]
+            }
         }
     }
     def Xform "ring" (
@@ -101,515 +117,375 @@ def Xform "Asset"
         double3 xformOp:translate = (0, 0, 0)
         uniform token[] xformOpOrder = ["xformOp:translate"]
         float physics:mass = 0.018
-        def Mesh "RingSect00" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
+        point3f physics:centerOfMass = (0, 0, 0)
+        float3 physics:diagonalInertia = (0.000012, 0.000017, 0.000012)
+        def Xform "RearOrientation"
         {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(0.0142, 0, 0.004), (0.0185, 0, 0.004), (0.0185, 0, 0.022), (0.0142, 0, 0.022), (0.013716147, 0.0036752304, 0.004), (0.017869628, 0.0047881523, 0.004), (0.017869628, 0.0047881523, 0.022), (0.013716147, 0.0036752304, 0.022)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "RingSect01" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(0.013716147, 0.0036752304, 0.004), (0.017869628, 0.0047881523, 0.004), (0.017869628, 0.0047881523, 0.022), (0.013716147, 0.0036752304, 0.022), (0.012297561, 0.0071, 0.004), (0.01602147, 0.00925, 0.004), (0.01602147, 0.00925, 0.022), (0.012297561, 0.0071, 0.022)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "RingSect02" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(0.012297561, 0.0071, 0.004), (0.01602147, 0.00925, 0.004), (0.01602147, 0.00925, 0.022), (0.012297561, 0.0071, 0.022), (0.010040916, 0.010040916, 0.004), (0.013081475, 0.013081475, 0.004), (0.013081475, 0.013081475, 0.022), (0.010040916, 0.010040916, 0.022)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "RingSect03" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(0.010040916, 0.010040916, 0.004), (0.013081475, 0.013081475, 0.004), (0.013081475, 0.013081475, 0.022), (0.010040916, 0.010040916, 0.022), (0.0071, 0.012297561, 0.004), (0.00925, 0.01602147, 0.004), (0.00925, 0.01602147, 0.022), (0.0071, 0.012297561, 0.022)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "RingSect04" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(0.0071, 0.012297561, 0.004), (0.00925, 0.01602147, 0.004), (0.00925, 0.01602147, 0.022), (0.0071, 0.012297561, 0.022), (0.0036752304, 0.013716147, 0.004), (0.0047881523, 0.017869628, 0.004), (0.0047881523, 0.017869628, 0.022), (0.0036752304, 0.013716147, 0.022)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "RingSect05" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(0.0036752304, 0.013716147, 0.004), (0.0047881523, 0.017869628, 0.004), (0.0047881523, 0.017869628, 0.022), (0.0036752304, 0.013716147, 0.022), (8.6949923e-19, 0.0142, 0.004), (1.1327983e-18, 0.0185, 0.004), (1.1327983e-18, 0.0185, 0.022), (8.6949923e-19, 0.0142, 0.022)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "RingSect06" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(8.6949923e-19, 0.0142, 0.004), (1.1327983e-18, 0.0185, 0.004), (1.1327983e-18, 0.0185, 0.022), (8.6949923e-19, 0.0142, 0.022), (-0.0036752304, 0.013716147, 0.004), (-0.0047881523, 0.017869628, 0.004), (-0.0047881523, 0.017869628, 0.022), (-0.0036752304, 0.013716147, 0.022)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "RingSect07" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(-0.0036752304, 0.013716147, 0.004), (-0.0047881523, 0.017869628, 0.004), (-0.0047881523, 0.017869628, 0.022), (-0.0036752304, 0.013716147, 0.022), (-0.0071, 0.012297561, 0.004), (-0.00925, 0.01602147, 0.004), (-0.00925, 0.01602147, 0.022), (-0.0071, 0.012297561, 0.022)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "RingSect08" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(-0.0071, 0.012297561, 0.004), (-0.00925, 0.01602147, 0.004), (-0.00925, 0.01602147, 0.022), (-0.0071, 0.012297561, 0.022), (-0.010040916, 0.010040916, 0.004), (-0.013081475, 0.013081475, 0.004), (-0.013081475, 0.013081475, 0.022), (-0.010040916, 0.010040916, 0.022)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "RingSect09" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(-0.010040916, 0.010040916, 0.004), (-0.013081475, 0.013081475, 0.004), (-0.013081475, 0.013081475, 0.022), (-0.010040916, 0.010040916, 0.022), (-0.012297561, 0.0071, 0.004), (-0.01602147, 0.00925, 0.004), (-0.01602147, 0.00925, 0.022), (-0.012297561, 0.0071, 0.022)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "RingSect10" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(-0.012297561, 0.0071, 0.004), (-0.01602147, 0.00925, 0.004), (-0.01602147, 0.00925, 0.022), (-0.012297561, 0.0071, 0.022), (-0.013716147, 0.0036752304, 0.004), (-0.017869628, 0.0047881523, 0.004), (-0.017869628, 0.0047881523, 0.022), (-0.013716147, 0.0036752304, 0.022)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "RingSect11" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(-0.013716147, 0.0036752304, 0.004), (-0.017869628, 0.0047881523, 0.004), (-0.017869628, 0.0047881523, 0.022), (-0.013716147, 0.0036752304, 0.022), (-0.0142, 1.7389985e-18, 0.004), (-0.0185, 2.2655966e-18, 0.004), (-0.0185, 2.2655966e-18, 0.022), (-0.0142, 1.7389985e-18, 0.022)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "RingSect12" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(-0.0142, 1.7389985e-18, 0.004), (-0.0185, 2.2655966e-18, 0.004), (-0.0185, 2.2655966e-18, 0.022), (-0.0142, 1.7389985e-18, 0.022), (-0.013716147, -0.0036752304, 0.004), (-0.017869628, -0.0047881523, 0.004), (-0.017869628, -0.0047881523, 0.022), (-0.013716147, -0.0036752304, 0.022)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "RingSect13" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(-0.013716147, -0.0036752304, 0.004), (-0.017869628, -0.0047881523, 0.004), (-0.017869628, -0.0047881523, 0.022), (-0.013716147, -0.0036752304, 0.022), (-0.012297561, -0.0071, 0.004), (-0.01602147, -0.00925, 0.004), (-0.01602147, -0.00925, 0.022), (-0.012297561, -0.0071, 0.022)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "RingSect14" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(-0.012297561, -0.0071, 0.004), (-0.01602147, -0.00925, 0.004), (-0.01602147, -0.00925, 0.022), (-0.012297561, -0.0071, 0.022), (-0.010040916, -0.010040916, 0.004), (-0.013081475, -0.013081475, 0.004), (-0.013081475, -0.013081475, 0.022), (-0.010040916, -0.010040916, 0.022)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "RingSect15" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(-0.010040916, -0.010040916, 0.004), (-0.013081475, -0.013081475, 0.004), (-0.013081475, -0.013081475, 0.022), (-0.010040916, -0.010040916, 0.022), (-0.0071, -0.012297561, 0.004), (-0.00925, -0.01602147, 0.004), (-0.00925, -0.01602147, 0.022), (-0.0071, -0.012297561, 0.022)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "RingSect16" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(-0.0071, -0.012297561, 0.004), (-0.00925, -0.01602147, 0.004), (-0.00925, -0.01602147, 0.022), (-0.0071, -0.012297561, 0.022), (-0.0036752304, -0.013716147, 0.004), (-0.0047881523, -0.017869628, 0.004), (-0.0047881523, -0.017869628, 0.022), (-0.0036752304, -0.013716147, 0.022)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "RingSect17" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(-0.0036752304, -0.013716147, 0.004), (-0.0047881523, -0.017869628, 0.004), (-0.0047881523, -0.017869628, 0.022), (-0.0036752304, -0.013716147, 0.022), (-2.6084977e-18, -0.0142, 0.004), (-3.3983949e-18, -0.0185, 0.004), (-3.3983949e-18, -0.0185, 0.022), (-2.6084977e-18, -0.0142, 0.022)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "RingSect18" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(-2.6084977e-18, -0.0142, 0.004), (-3.3983949e-18, -0.0185, 0.004), (-3.3983949e-18, -0.0185, 0.022), (-2.6084977e-18, -0.0142, 0.022), (0.0036752304, -0.013716147, 0.004), (0.0047881523, -0.017869628, 0.004), (0.0047881523, -0.017869628, 0.022), (0.0036752304, -0.013716147, 0.022)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "RingSect19" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(0.0036752304, -0.013716147, 0.004), (0.0047881523, -0.017869628, 0.004), (0.0047881523, -0.017869628, 0.022), (0.0036752304, -0.013716147, 0.022), (0.0071, -0.012297561, 0.004), (0.00925, -0.01602147, 0.004), (0.00925, -0.01602147, 0.022), (0.0071, -0.012297561, 0.022)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "RingSect20" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(0.0071, -0.012297561, 0.004), (0.00925, -0.01602147, 0.004), (0.00925, -0.01602147, 0.022), (0.0071, -0.012297561, 0.022), (0.010040916, -0.010040916, 0.004), (0.013081475, -0.013081475, 0.004), (0.013081475, -0.013081475, 0.022), (0.010040916, -0.010040916, 0.022)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "RingSect21" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(0.010040916, -0.010040916, 0.004), (0.013081475, -0.013081475, 0.004), (0.013081475, -0.013081475, 0.022), (0.010040916, -0.010040916, 0.022), (0.012297561, -0.0071, 0.004), (0.01602147, -0.00925, 0.004), (0.01602147, -0.00925, 0.022), (0.012297561, -0.0071, 0.022)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "RingSect22" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(0.012297561, -0.0071, 0.004), (0.01602147, -0.00925, 0.004), (0.01602147, -0.00925, 0.022), (0.012297561, -0.0071, 0.022), (0.013716147, -0.0036752304, 0.004), (0.017869628, -0.0047881523, 0.004), (0.017869628, -0.0047881523, 0.022), (0.013716147, -0.0036752304, 0.022)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "RingSect23" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(0.013716147, -0.0036752304, 0.004), (0.017869628, -0.0047881523, 0.004), (0.017869628, -0.0047881523, 0.022), (0.013716147, -0.0036752304, 0.022), (0.0142, -3.4779969e-18, 0.004), (0.0185, -4.5311932e-18, 0.004), (0.0185, -4.5311932e-18, 0.022), (0.0142, -3.4779969e-18, 0.022)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Cube "Rib0" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            double size = 1
-            double3 xformOp:translate = (0.018159406, 0.004865798, 0.013)
-            float3 xformOp:rotateXYZ = (0, 0, 15)
-            float3 xformOp:scale = (0.0012, 0.002, 0.015)
-            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-        }
-        def Cube "Rib1" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            double size = 1
-            double3 xformOp:translate = (0.013293607, 0.013293607, 0.013)
-            float3 xformOp:rotateXYZ = (0, 0, 45)
-            float3 xformOp:scale = (0.0012, 0.002, 0.015)
-            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-        }
-        def Cube "Rib2" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            double size = 1
-            double3 xformOp:translate = (0.004865798, 0.018159406, 0.013)
-            float3 xformOp:rotateXYZ = (0, 0, 75)
-            float3 xformOp:scale = (0.0012, 0.002, 0.015)
-            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-        }
-        def Cube "Rib3" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            double size = 1
-            double3 xformOp:translate = (-0.004865798, 0.018159406, 0.013)
-            float3 xformOp:rotateXYZ = (0, 0, 105)
-            float3 xformOp:scale = (0.0012, 0.002, 0.015)
-            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-        }
-        def Cube "Rib4" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            double size = 1
-            double3 xformOp:translate = (-0.013293607, 0.013293607, 0.013)
-            float3 xformOp:rotateXYZ = (0, 0, 135)
-            float3 xformOp:scale = (0.0012, 0.002, 0.015)
-            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-        }
-        def Cube "Rib5" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            double size = 1
-            double3 xformOp:translate = (-0.018159406, 0.004865798, 0.013)
-            float3 xformOp:rotateXYZ = (0, 0, 165)
-            float3 xformOp:scale = (0.0012, 0.002, 0.015)
-            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-        }
-        def Cube "Rib6" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            double size = 1
-            double3 xformOp:translate = (-0.018159406, -0.004865798, 0.013)
-            float3 xformOp:rotateXYZ = (0, 0, 195)
-            float3 xformOp:scale = (0.0012, 0.002, 0.015)
-            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-        }
-        def Cube "Rib7" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            double size = 1
-            double3 xformOp:translate = (-0.013293607, -0.013293607, 0.013)
-            float3 xformOp:rotateXYZ = (0, 0, 225)
-            float3 xformOp:scale = (0.0012, 0.002, 0.015)
-            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-        }
-        def Cube "Rib8" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            double size = 1
-            double3 xformOp:translate = (-0.004865798, -0.018159406, 0.013)
-            float3 xformOp:rotateXYZ = (0, 0, 255)
-            float3 xformOp:scale = (0.0012, 0.002, 0.015)
-            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-        }
-        def Cube "Rib9" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            double size = 1
-            double3 xformOp:translate = (0.004865798, -0.018159406, 0.013)
-            float3 xformOp:rotateXYZ = (0, 0, 285)
-            float3 xformOp:scale = (0.0012, 0.002, 0.015)
-            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-        }
-        def Cube "Rib10" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            double size = 1
-            double3 xformOp:translate = (0.013293607, -0.013293607, 0.013)
-            float3 xformOp:rotateXYZ = (0, 0, 315)
-            float3 xformOp:scale = (0.0012, 0.002, 0.015)
-            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-        }
-        def Cube "Rib11" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            double size = 1
-            double3 xformOp:translate = (0.018159406, -0.004865798, 0.013)
-            float3 xformOp:rotateXYZ = (0, 0, 345)
-            float3 xformOp:scale = (0.0012, 0.002, 0.015)
-            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-        }
-        def Mesh "CaptureTab0" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(0.0033050307, 0.017185074, 0.006), (0.0040604662, 0.021113091, 0.006), (0.0040604662, 0.021113091, 0.01), (0.0033050307, 0.017185074, 0.01), (-0.0033050307, 0.017185074, 0.006), (-0.0040604662, 0.021113091, 0.006), (-0.0040604662, 0.021113091, 0.01), (-0.0033050307, 0.017185074, 0.01)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "CaptureTab1" (
-            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-        )
-        {
-            float physxCollision:contactOffset = 0.00027
-            float physxCollision:restOffset = 0
-            point3f[] points = [(-0.0033050307, -0.017185074, 0.006), (-0.0040604662, -0.021113091, 0.006), (-0.0040604662, -0.021113091, 0.01), (-0.0033050307, -0.017185074, 0.01), (0.0033050307, -0.017185074, 0.006), (0.0040604662, -0.021113091, 0.006), (0.0040604662, -0.021113091, 0.01), (0.0033050307, -0.017185074, 0.01)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
-            uniform token physics:approximation = "convexHull"
-        }
-        def Mesh "UnlockedWitness"
-        {
-            point3f[] points = [(0.018458492, -0.0012385729, 0.0075), (0.018757819, -0.0012586578, 0.0075), (0.018757819, -0.0012586578, 0.014), (0.018458492, -0.0012385729, 0.014), (0.018458492, 0.0012385729, 0.0075), (0.018757819, 0.0012586578, 0.0075), (0.018757819, 0.0012586578, 0.014), (0.018458492, 0.0012385729, 0.014)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
-        }
-        def Mesh "LockedWitness"
-        {
-            point3f[] points = [(0.014205219, -0.011851656, 0.0075), (0.014435574, -0.012043845, 0.0075), (0.014435574, -0.012043845, 0.014), (0.014205219, -0.011851656, 0.014), (0.015661249, -0.0098476031, 0.0075), (0.015915215, -0.010007294, 0.0075), (0.015915215, -0.010007294, 0.014), (0.015661249, -0.0098476031, 0.014)]
-            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
-            int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
-            uniform token subdivisionScheme = "none"
-            color3f[] primvars:displayColor = [(0.92, 0.43, 0.12)]
+            double xformOp:rotateX = 90
+            uniform token[] xformOpOrder = ["xformOp:rotateX"]
+            def Cube "PrototypeLever"
+            {
+                float physxCollision:contactOffset = 0.00025
+                float physxCollision:restOffset = 0
+                double size = 1
+                double3 xformOp:translate = (-0.050, 0.025, 0.062)
+                float3 xformOp:scale = (0.015, 0.014, 0.016)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.05, 0.38, 0.65)]
+            }
+            def Mesh "RingSect00"
+            {
+                point3f[] points = [(0.0142, 0, 0.004), (0.0185, 0, 0.004), (0.0185, 0, 0.022), (0.0142, 0, 0.022), (0.013716147, 0.0036752304, 0.004), (0.017869628, 0.0047881523, 0.004), (0.017869628, 0.0047881523, 0.022), (0.013716147, 0.0036752304, 0.022)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "RingSect01"
+            {
+                point3f[] points = [(0.013716147, 0.0036752304, 0.004), (0.017869628, 0.0047881523, 0.004), (0.017869628, 0.0047881523, 0.022), (0.013716147, 0.0036752304, 0.022), (0.012297561, 0.0071, 0.004), (0.01602147, 0.00925, 0.004), (0.01602147, 0.00925, 0.022), (0.012297561, 0.0071, 0.022)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "RingSect02"
+            {
+                point3f[] points = [(0.012297561, 0.0071, 0.004), (0.01602147, 0.00925, 0.004), (0.01602147, 0.00925, 0.022), (0.012297561, 0.0071, 0.022), (0.010040916, 0.010040916, 0.004), (0.013081475, 0.013081475, 0.004), (0.013081475, 0.013081475, 0.022), (0.010040916, 0.010040916, 0.022)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "RingSect03"
+            {
+                point3f[] points = [(0.010040916, 0.010040916, 0.004), (0.013081475, 0.013081475, 0.004), (0.013081475, 0.013081475, 0.022), (0.010040916, 0.010040916, 0.022), (0.0071, 0.012297561, 0.004), (0.00925, 0.01602147, 0.004), (0.00925, 0.01602147, 0.022), (0.0071, 0.012297561, 0.022)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "RingSect04"
+            {
+                point3f[] points = [(0.0071, 0.012297561, 0.004), (0.00925, 0.01602147, 0.004), (0.00925, 0.01602147, 0.022), (0.0071, 0.012297561, 0.022), (0.0036752304, 0.013716147, 0.004), (0.0047881523, 0.017869628, 0.004), (0.0047881523, 0.017869628, 0.022), (0.0036752304, 0.013716147, 0.022)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "RingSect05"
+            {
+                point3f[] points = [(0.0036752304, 0.013716147, 0.004), (0.0047881523, 0.017869628, 0.004), (0.0047881523, 0.017869628, 0.022), (0.0036752304, 0.013716147, 0.022), (8.6949923e-19, 0.0142, 0.004), (1.1327983e-18, 0.0185, 0.004), (1.1327983e-18, 0.0185, 0.022), (8.6949923e-19, 0.0142, 0.022)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "RingSect06"
+            {
+                point3f[] points = [(8.6949923e-19, 0.0142, 0.004), (1.1327983e-18, 0.0185, 0.004), (1.1327983e-18, 0.0185, 0.022), (8.6949923e-19, 0.0142, 0.022), (-0.0036752304, 0.013716147, 0.004), (-0.0047881523, 0.017869628, 0.004), (-0.0047881523, 0.017869628, 0.022), (-0.0036752304, 0.013716147, 0.022)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "RingSect07"
+            {
+                point3f[] points = [(-0.0036752304, 0.013716147, 0.004), (-0.0047881523, 0.017869628, 0.004), (-0.0047881523, 0.017869628, 0.022), (-0.0036752304, 0.013716147, 0.022), (-0.0071, 0.012297561, 0.004), (-0.00925, 0.01602147, 0.004), (-0.00925, 0.01602147, 0.022), (-0.0071, 0.012297561, 0.022)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "RingSect08"
+            {
+                point3f[] points = [(-0.0071, 0.012297561, 0.004), (-0.00925, 0.01602147, 0.004), (-0.00925, 0.01602147, 0.022), (-0.0071, 0.012297561, 0.022), (-0.010040916, 0.010040916, 0.004), (-0.013081475, 0.013081475, 0.004), (-0.013081475, 0.013081475, 0.022), (-0.010040916, 0.010040916, 0.022)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "RingSect09"
+            {
+                point3f[] points = [(-0.010040916, 0.010040916, 0.004), (-0.013081475, 0.013081475, 0.004), (-0.013081475, 0.013081475, 0.022), (-0.010040916, 0.010040916, 0.022), (-0.012297561, 0.0071, 0.004), (-0.01602147, 0.00925, 0.004), (-0.01602147, 0.00925, 0.022), (-0.012297561, 0.0071, 0.022)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "RingSect10"
+            {
+                point3f[] points = [(-0.012297561, 0.0071, 0.004), (-0.01602147, 0.00925, 0.004), (-0.01602147, 0.00925, 0.022), (-0.012297561, 0.0071, 0.022), (-0.013716147, 0.0036752304, 0.004), (-0.017869628, 0.0047881523, 0.004), (-0.017869628, 0.0047881523, 0.022), (-0.013716147, 0.0036752304, 0.022)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "RingSect11"
+            {
+                point3f[] points = [(-0.013716147, 0.0036752304, 0.004), (-0.017869628, 0.0047881523, 0.004), (-0.017869628, 0.0047881523, 0.022), (-0.013716147, 0.0036752304, 0.022), (-0.0142, 1.7389985e-18, 0.004), (-0.0185, 2.2655966e-18, 0.004), (-0.0185, 2.2655966e-18, 0.022), (-0.0142, 1.7389985e-18, 0.022)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "RingSect12"
+            {
+                point3f[] points = [(-0.0142, 1.7389985e-18, 0.004), (-0.0185, 2.2655966e-18, 0.004), (-0.0185, 2.2655966e-18, 0.022), (-0.0142, 1.7389985e-18, 0.022), (-0.013716147, -0.0036752304, 0.004), (-0.017869628, -0.0047881523, 0.004), (-0.017869628, -0.0047881523, 0.022), (-0.013716147, -0.0036752304, 0.022)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "RingSect13"
+            {
+                point3f[] points = [(-0.013716147, -0.0036752304, 0.004), (-0.017869628, -0.0047881523, 0.004), (-0.017869628, -0.0047881523, 0.022), (-0.013716147, -0.0036752304, 0.022), (-0.012297561, -0.0071, 0.004), (-0.01602147, -0.00925, 0.004), (-0.01602147, -0.00925, 0.022), (-0.012297561, -0.0071, 0.022)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "RingSect14"
+            {
+                point3f[] points = [(-0.012297561, -0.0071, 0.004), (-0.01602147, -0.00925, 0.004), (-0.01602147, -0.00925, 0.022), (-0.012297561, -0.0071, 0.022), (-0.010040916, -0.010040916, 0.004), (-0.013081475, -0.013081475, 0.004), (-0.013081475, -0.013081475, 0.022), (-0.010040916, -0.010040916, 0.022)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "RingSect15"
+            {
+                point3f[] points = [(-0.010040916, -0.010040916, 0.004), (-0.013081475, -0.013081475, 0.004), (-0.013081475, -0.013081475, 0.022), (-0.010040916, -0.010040916, 0.022), (-0.0071, -0.012297561, 0.004), (-0.00925, -0.01602147, 0.004), (-0.00925, -0.01602147, 0.022), (-0.0071, -0.012297561, 0.022)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "RingSect16"
+            {
+                point3f[] points = [(-0.0071, -0.012297561, 0.004), (-0.00925, -0.01602147, 0.004), (-0.00925, -0.01602147, 0.022), (-0.0071, -0.012297561, 0.022), (-0.0036752304, -0.013716147, 0.004), (-0.0047881523, -0.017869628, 0.004), (-0.0047881523, -0.017869628, 0.022), (-0.0036752304, -0.013716147, 0.022)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "RingSect17"
+            {
+                point3f[] points = [(-0.0036752304, -0.013716147, 0.004), (-0.0047881523, -0.017869628, 0.004), (-0.0047881523, -0.017869628, 0.022), (-0.0036752304, -0.013716147, 0.022), (-2.6084977e-18, -0.0142, 0.004), (-3.3983949e-18, -0.0185, 0.004), (-3.3983949e-18, -0.0185, 0.022), (-2.6084977e-18, -0.0142, 0.022)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "RingSect18"
+            {
+                point3f[] points = [(-2.6084977e-18, -0.0142, 0.004), (-3.3983949e-18, -0.0185, 0.004), (-3.3983949e-18, -0.0185, 0.022), (-2.6084977e-18, -0.0142, 0.022), (0.0036752304, -0.013716147, 0.004), (0.0047881523, -0.017869628, 0.004), (0.0047881523, -0.017869628, 0.022), (0.0036752304, -0.013716147, 0.022)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "RingSect19"
+            {
+                point3f[] points = [(0.0036752304, -0.013716147, 0.004), (0.0047881523, -0.017869628, 0.004), (0.0047881523, -0.017869628, 0.022), (0.0036752304, -0.013716147, 0.022), (0.0071, -0.012297561, 0.004), (0.00925, -0.01602147, 0.004), (0.00925, -0.01602147, 0.022), (0.0071, -0.012297561, 0.022)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "RingSect20"
+            {
+                point3f[] points = [(0.0071, -0.012297561, 0.004), (0.00925, -0.01602147, 0.004), (0.00925, -0.01602147, 0.022), (0.0071, -0.012297561, 0.022), (0.010040916, -0.010040916, 0.004), (0.013081475, -0.013081475, 0.004), (0.013081475, -0.013081475, 0.022), (0.010040916, -0.010040916, 0.022)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "RingSect21"
+            {
+                point3f[] points = [(0.010040916, -0.010040916, 0.004), (0.013081475, -0.013081475, 0.004), (0.013081475, -0.013081475, 0.022), (0.010040916, -0.010040916, 0.022), (0.012297561, -0.0071, 0.004), (0.01602147, -0.00925, 0.004), (0.01602147, -0.00925, 0.022), (0.012297561, -0.0071, 0.022)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "RingSect22"
+            {
+                point3f[] points = [(0.012297561, -0.0071, 0.004), (0.01602147, -0.00925, 0.004), (0.01602147, -0.00925, 0.022), (0.012297561, -0.0071, 0.022), (0.013716147, -0.0036752304, 0.004), (0.017869628, -0.0047881523, 0.004), (0.017869628, -0.0047881523, 0.022), (0.013716147, -0.0036752304, 0.022)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "RingSect23"
+            {
+                point3f[] points = [(0.013716147, -0.0036752304, 0.004), (0.017869628, -0.0047881523, 0.004), (0.017869628, -0.0047881523, 0.022), (0.013716147, -0.0036752304, 0.022), (0.0142, -3.4779969e-18, 0.004), (0.0185, -4.5311932e-18, 0.004), (0.0185, -4.5311932e-18, 0.022), (0.0142, -3.4779969e-18, 0.022)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Cube "Rib0"
+            {
+                double size = 1
+                double3 xformOp:translate = (0.018159406, 0.004865798, 0.013)
+                float3 xformOp:rotateXYZ = (0, 0, 15)
+                float3 xformOp:scale = (0.0012, 0.002, 0.015)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Cube "Rib1"
+            {
+                double size = 1
+                double3 xformOp:translate = (0.013293607, 0.013293607, 0.013)
+                float3 xformOp:rotateXYZ = (0, 0, 45)
+                float3 xformOp:scale = (0.0012, 0.002, 0.015)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Cube "Rib2"
+            {
+                double size = 1
+                double3 xformOp:translate = (0.004865798, 0.018159406, 0.013)
+                float3 xformOp:rotateXYZ = (0, 0, 75)
+                float3 xformOp:scale = (0.0012, 0.002, 0.015)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Cube "Rib3"
+            {
+                double size = 1
+                double3 xformOp:translate = (-0.004865798, 0.018159406, 0.013)
+                float3 xformOp:rotateXYZ = (0, 0, 105)
+                float3 xformOp:scale = (0.0012, 0.002, 0.015)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Cube "Rib4"
+            {
+                double size = 1
+                double3 xformOp:translate = (-0.013293607, 0.013293607, 0.013)
+                float3 xformOp:rotateXYZ = (0, 0, 135)
+                float3 xformOp:scale = (0.0012, 0.002, 0.015)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Cube "Rib5"
+            {
+                double size = 1
+                double3 xformOp:translate = (-0.018159406, 0.004865798, 0.013)
+                float3 xformOp:rotateXYZ = (0, 0, 165)
+                float3 xformOp:scale = (0.0012, 0.002, 0.015)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Cube "Rib6"
+            {
+                double size = 1
+                double3 xformOp:translate = (-0.018159406, -0.004865798, 0.013)
+                float3 xformOp:rotateXYZ = (0, 0, 195)
+                float3 xformOp:scale = (0.0012, 0.002, 0.015)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Cube "Rib7"
+            {
+                double size = 1
+                double3 xformOp:translate = (-0.013293607, -0.013293607, 0.013)
+                float3 xformOp:rotateXYZ = (0, 0, 225)
+                float3 xformOp:scale = (0.0012, 0.002, 0.015)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Cube "Rib8"
+            {
+                double size = 1
+                double3 xformOp:translate = (-0.004865798, -0.018159406, 0.013)
+                float3 xformOp:rotateXYZ = (0, 0, 255)
+                float3 xformOp:scale = (0.0012, 0.002, 0.015)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Cube "Rib9"
+            {
+                double size = 1
+                double3 xformOp:translate = (0.004865798, -0.018159406, 0.013)
+                float3 xformOp:rotateXYZ = (0, 0, 285)
+                float3 xformOp:scale = (0.0012, 0.002, 0.015)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Cube "Rib10"
+            {
+                double size = 1
+                double3 xformOp:translate = (0.013293607, -0.013293607, 0.013)
+                float3 xformOp:rotateXYZ = (0, 0, 315)
+                float3 xformOp:scale = (0.0012, 0.002, 0.015)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Cube "Rib11"
+            {
+                double size = 1
+                double3 xformOp:translate = (0.018159406, -0.004865798, 0.013)
+                float3 xformOp:rotateXYZ = (0, 0, 345)
+                float3 xformOp:scale = (0.0012, 0.002, 0.015)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "CaptureTab0"
+            {
+                point3f[] points = [(0.0033050307, 0.017185074, 0.006), (0.0040604662, 0.021113091, 0.006), (0.0040604662, 0.021113091, 0.01), (0.0033050307, 0.017185074, 0.01), (-0.0033050307, 0.017185074, 0.006), (-0.0040604662, 0.021113091, 0.006), (-0.0040604662, 0.021113091, 0.01), (-0.0033050307, 0.017185074, 0.01)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "CaptureTab1"
+            {
+                point3f[] points = [(-0.0033050307, -0.017185074, 0.006), (-0.0040604662, -0.021113091, 0.006), (-0.0040604662, -0.021113091, 0.01), (-0.0033050307, -0.017185074, 0.01), (0.0033050307, -0.017185074, 0.006), (0.0040604662, -0.021113091, 0.006), (0.0040604662, -0.021113091, 0.01), (0.0033050307, -0.017185074, 0.01)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.34, 0.37, 0.4)]
+            }
+            def Mesh "UnlockedWitness"
+            {
+                point3f[] points = [(0.018458492, -0.0012385729, 0.0075), (0.018757819, -0.0012586578, 0.0075), (0.018757819, -0.0012586578, 0.014), (0.018458492, -0.0012385729, 0.014), (0.018458492, 0.0012385729, 0.0075), (0.018757819, 0.0012586578, 0.0075), (0.018757819, 0.0012586578, 0.014), (0.018458492, 0.0012385729, 0.014)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+            }
+            def Mesh "LockedWitness"
+            {
+                point3f[] points = [(0.014205219, -0.011851656, 0.0075), (0.014435574, -0.012043845, 0.0075), (0.014435574, -0.012043845, 0.014), (0.014205219, -0.011851656, 0.014), (0.015661249, -0.0098476031, 0.0075), (0.015915215, -0.010007294, 0.0075), (0.015915215, -0.010007294, 0.014), (0.015661249, -0.0098476031, 0.014)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+                int[] faceVertexIndices = [0, 1, 2, 3, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0, 7, 6, 5, 4]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.92, 0.43, 0.12)]
+            }
+            def Cube "RotaryPadArm"
+            {
+                double size = 1
+                double3 xformOp:translate = (-0.031, 0.020, 0.040)
+                float3 xformOp:rotateXYZ = (0, -38, 0)
+                float3 xformOp:scale = (0.006, 0.006, 0.068)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.05, 0.38, 0.65)]
+            }
+            def Cube "ActuatorContact" (
+                prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+            )
+            {
+                float physxCollision:contactOffset = 0.00025
+                float physxCollision:restOffset = 0
+                double size = 1
+                double3 xformOp:translate = (-0.050, 0.025, 0.062)
+                float3 xformOp:scale = (0.015, 0.014, 0.016)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.03, 0.3, 0.55)]
+            }
         }
     }
     def PhysicsRevoluteJoint "lock_ring"
@@ -620,206 +496,10 @@ def Xform "Asset"
         point3f physics:localPos1 = (0, 0, 0)
         bool physics:collisionEnabled = false
         uniform bool physics:excludeFromArticulation = false
+        quatf physics:localRot0 = (0.70710678, 0.70710678, 0, 0)
+        quatf physics:localRot1 = (0.70710678, 0.70710678, 0, 0)
         uniform token physics:axis = "Z"
         float physics:lowerLimit = -1
         float physics:upperLimit = 37
-    }
-    def Xform "lead0" (
-        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
-    )
-    {
-        double3 xformOp:translate = (-0.009, 0, 0.0615)
-        float3 xformOp:rotateXYZ = (0, -133.45184, 0)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
-        float physics:mass = 0.006019676071019104
-        float3 physics:diagonalInertia = (7.5245951e-08, 3.8124615e-07, 3.8124615e-07)
-        def Cylinder "Jacket" (
-            prepend apiSchemas = ["PhysicsCollisionAPI"]
-        )
-        {
-            double radius = 0.005
-            double height = 0.026172504656604798
-            uniform token axis = "X"
-            double3 xformOp:translate = (0, 0, 0)
-            uniform token[] xformOpOrder = ["xformOp:translate"]
-            color3f[] primvars:displayColor = [(0.041, 0.046, 0.049)]
-        }
-    }
-    def PhysicsRevoluteJoint "bend0"
-    {
-        rel physics:body0 = </Asset/plug>
-        rel physics:body1 = </Asset/lead0>
-        point3f physics:localPos0 = (0, 0, 0.052)
-        point3f physics:localPos1 = (-0.013086252, 0, 0)
-        bool physics:collisionEnabled = false
-        uniform bool physics:excludeFromArticulation = false
-        quatf physics:localRot0 = (0.39512995, 0, -0.91862524, 0)
-        uniform token physics:axis = "Y"
-        float physics:lowerLimit = -18
-        float physics:upperLimit = 18
-    }
-    def Xform "lead1" (
-        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
-    )
-    {
-        double3 xformOp:translate = (-0.0375, 0, 0.067)
-        float3 xformOp:rotateXYZ = (0, 168.40782, 0)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
-        float physics:mass = 0.009156773449201417
-        float3 physics:diagonalInertia = (1.1445967e-07, 1.266687e-06, 1.266687e-06)
-        def Cylinder "Jacket" (
-            prepend apiSchemas = ["PhysicsCollisionAPI"]
-        )
-        {
-            double radius = 0.005
-            double height = 0.03981205847478877
-            uniform token axis = "X"
-            double3 xformOp:translate = (0, 0, 0)
-            uniform token[] xformOpOrder = ["xformOp:translate"]
-            color3f[] primvars:displayColor = [(0.041, 0.046, 0.049)]
-        }
-        def Sphere "JacketJoint"
-        {
-            double radius = 0.005
-            double3 xformOp:translate = (-0.019906029, 0, 0)
-            uniform token[] xformOpOrder = ["xformOp:translate"]
-            color3f[] primvars:displayColor = [(0.041, 0.046, 0.049)]
-        }
-    }
-    def PhysicsRevoluteJoint "bend1"
-    {
-        rel physics:body0 = </Asset/lead0>
-        rel physics:body1 = </Asset/lead1>
-        point3f physics:localPos0 = (0.013086252, 0, 0)
-        point3f physics:localPos1 = (-0.019906029, 0, 0)
-        bool physics:collisionEnabled = false
-        uniform bool physics:excludeFromArticulation = false
-        quatf physics:localRot0 = (-0.87402534, 0, 0.48588035, 0)
-        uniform token physics:axis = "Z"
-        float physics:lowerLimit = -36
-        float physics:upperLimit = 36
-    }
-    def Xform "lead2" (
-        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
-    )
-    {
-        double3 xformOp:translate = (-0.084, 0, 0.042)
-        float3 xformOp:rotateXYZ = (0, 142.12502, 0)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
-        float physics:mass = 0.0157344208663681
-        float3 physics:diagonalInertia = (1.9668026e-07, 6.2347643e-06, 6.2347643e-06)
-        def Cylinder "Jacket" (
-            prepend apiSchemas = ["PhysicsCollisionAPI"]
-        )
-        {
-            double radius = 0.005
-            double height = 0.06841052550594827
-            uniform token axis = "X"
-            double3 xformOp:translate = (0, 0, 0)
-            uniform token[] xformOpOrder = ["xformOp:translate"]
-            color3f[] primvars:displayColor = [(0.041, 0.046, 0.049)]
-        }
-        def Sphere "JacketJoint"
-        {
-            double radius = 0.005
-            double3 xformOp:translate = (-0.034205263, 0, 0)
-            uniform token[] xformOpOrder = ["xformOp:translate"]
-            color3f[] primvars:displayColor = [(0.041, 0.046, 0.049)]
-        }
-    }
-    def PhysicsRevoluteJoint "bend2"
-    {
-        rel physics:body0 = </Asset/lead1>
-        rel physics:body1 = </Asset/lead2>
-        point3f physics:localPos0 = (0.019906029, 0, 0)
-        point3f physics:localPos1 = (-0.034205263, 0, 0)
-        bool physics:collisionEnabled = false
-        uniform bool physics:excludeFromArticulation = false
-        quatf physics:localRot0 = (0.97381193, 0, -0.22735508, 0)
-        uniform token physics:axis = "Y"
-        float physics:lowerLimit = -36
-        float physics:upperLimit = 36
-    }
-    def Xform "lead3" (
-        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
-    )
-    {
-        double3 xformOp:translate = (-0.1425, 0, 0.00185)
-        float3 xformOp:rotateXYZ = (0, 148.70305, 0)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
-        float physics:mass = 0.01695755232927205
-        float3 physics:diagonalInertia = (2.119694e-07, 7.7876005e-06, 7.7876005e-06)
-        def Cylinder "Jacket" (
-            prepend apiSchemas = ["PhysicsCollisionAPI"]
-        )
-        {
-            double radius = 0.005
-            double height = 0.07372848838813935
-            uniform token axis = "X"
-            double3 xformOp:translate = (0, 0, 0)
-            uniform token[] xformOpOrder = ["xformOp:translate"]
-            color3f[] primvars:displayColor = [(0.041, 0.046, 0.049)]
-        }
-        def Sphere "JacketJoint"
-        {
-            double radius = 0.005
-            double3 xformOp:translate = (-0.036864244, 0, 0)
-            uniform token[] xformOpOrder = ["xformOp:translate"]
-            color3f[] primvars:displayColor = [(0.041, 0.046, 0.049)]
-        }
-    }
-    def PhysicsRevoluteJoint "bend3"
-    {
-        rel physics:body0 = </Asset/lead2>
-        rel physics:body1 = </Asset/lead3>
-        point3f physics:localPos0 = (0.034205263, 0, 0)
-        point3f physics:localPos1 = (-0.036864244, 0, 0)
-        bool physics:collisionEnabled = false
-        uniform bool physics:excludeFromArticulation = false
-        quatf physics:localRot0 = (0.99835283, 0, 0.057372693, 0)
-        uniform token physics:axis = "Z"
-        float physics:lowerLimit = -36
-        float physics:upperLimit = 36
-    }
-    def Xform "lead4" (
-        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
-    )
-    {
-        double3 xformOp:translate = (-0.212, 0, -0.0178)
-        float3 xformOp:rotateXYZ = (0, 179.24615, 0)
-        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
-        float physics:mass = 0.01748151309240708
-        float3 physics:diagonalInertia = (2.1851891e-07, 8.5251512e-06, 8.5251512e-06)
-        def Cylinder "Jacket" (
-            prepend apiSchemas = ["PhysicsCollisionAPI"]
-        )
-        {
-            double radius = 0.005
-            double height = 0.07600657866263948
-            uniform token axis = "X"
-            double3 xformOp:translate = (0, 0, 0)
-            uniform token[] xformOpOrder = ["xformOp:translate"]
-            color3f[] primvars:displayColor = [(0.041, 0.046, 0.049)]
-        }
-        def Sphere "JacketJoint"
-        {
-            double radius = 0.005
-            double3 xformOp:translate = (-0.038003289, 0, 0)
-            uniform token[] xformOpOrder = ["xformOp:translate"]
-            color3f[] primvars:displayColor = [(0.041, 0.046, 0.049)]
-        }
-    }
-    def PhysicsRevoluteJoint "bend4"
-    {
-        rel physics:body0 = </Asset/lead3>
-        rel physics:body1 = </Asset/lead4>
-        point3f physics:localPos0 = (0.036864244, 0, 0)
-        point3f physics:localPos1 = (-0.038003289, 0, 0)
-        bool physics:collisionEnabled = false
-        uniform bool physics:excludeFromArticulation = false
-        quatf physics:localRot0 = (0.96468833, 0, 0.26339404, 0)
-        uniform token physics:axis = "Y"
-        float physics:lowerLimit = -36
-        float physics:upperLimit = 36
     }
 }
