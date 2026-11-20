@@ -1,10 +1,8 @@
-"""Which of the task's bodies a robot link touches, from PhysX contacts (for "released": no gripper touches the handle).
-A name is a scene object, or "object/link" for one link of an articulation.
+"""Find robot links touching each named eyelet through PhysX contact reports.
 
-Isaac Lab turns PhysX contact processing off unless a ContactSensor exists (this embodiment builds none); importing
-this module switches it back on when the physics is configured, as Isaac Lab's own ContactSensor does. The robot's
-links already report contacts. `touching(environment, names)` reads, after the last physics step, whether any robot
-link is within TOUCH_SEP of each named body.
+The plain YAM camera embodiment has no explicit contact sensor. Enable contact
+processing when PhysX is configured so its existing robot link reporters can
+provide the separation witness used by the released-state scorer.
 """
 
 from __future__ import annotations

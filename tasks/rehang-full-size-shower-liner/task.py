@@ -28,11 +28,12 @@ HOOKS = tuple(f"hook_{i:02}" for i in range(COUNT))
 PLANTED = np.array([(X, y, Z) for y in CENTERS])
 HOOK_POSITIONS = PLANTED.copy()
 if MODE == "wrong-hook":
-    # Slide the empty neighboring hook along the rod, within the liner's
-    # reachable span, so this control can physically hook the wrong return.
+    # The negative fixture keeps the wrong return within the liner's reach.
     HOOK_POSITIONS[6, 1] = CENTERS[5] + .0245
 INITIAL = PLANTED + (.006, 0., .008)
 INITIAL[list(TARGETS)] = PLANTED[list(TARGETS)] + (-.052, 0., -.057)
+if MODE == "wrong-hook":
+    INITIAL[5] = HOOK_POSITIONS[6] + (.006, 0., .008)
 OPEN = -.04695
 PINCH = -.001
 GRASP_OFFSET = np.array((-.028, 0., .011))
@@ -113,7 +114,6 @@ class Membrane:
         self.torques = None
         self.drag = torch.tensor((.035, .012, .010), device=self.scene.device)
         self.contact_view = None
-        self.strain = 0.
         self.rest = torch.tensor([STRIP] * (ROWS + 1), device=self.scene.device)
         self.stiffness = torch.tensor([90.] + [39.] * ROWS, device=self.scene.device)
         for i, unit in enumerate(self.strips):
@@ -203,6 +203,12 @@ def initialize_environment(environment):
     _physics = Membrane(environment)
 
 
+def release_environment():
+    global _physics
+    reset_touch()
+    _physics = None
+
+
 def setup():
     objects = [UsdBody("room_shower", usd="assets/shower.usda", pos=(0.,0.,0.),
                        size=(.65,2.,2.17), mass=None)]
@@ -282,10 +288,7 @@ def tracks():
         else:
             high += (.010, .007, .019)
             low += (.007, .008, 0.)
-        if MODE == "wrong-hook" and i == 5:
-            high[1] = HOOK_POSITIONS[6, 1] - .005
-            low[1] = HOOK_POSITIONS[6, 1] - .006
-        if MODE == "settle" or (MODE == "original-hook-displacement" and arm == "left"):
+        if MODE in ("settle", "wrong-hook") or (MODE == "original-hook-displacement" and arm == "left"):
             paths[arm] = [ShowerWaypoint(4.,(.17,park,2.04),OPEN,"settle without contact")]
             continue
         park_pos = (.17,park,2.045)
@@ -296,7 +299,7 @@ def tracks():
         lifted = np.array((start[0] - .025, y, Z + .015))
         front_high = np.array((.302, high[1], high[2]))
         first = i == 5
-        one_eye_control = MODE in ("partial", "wrong-hook")
+        one_eye_control = MODE == "partial"
         if one_eye_control and not first:
             # This hand supports the loose hem without bringing the second
             # grommet past a cap. Leave it loose when the hand withdraws.

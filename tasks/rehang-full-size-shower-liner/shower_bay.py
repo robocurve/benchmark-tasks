@@ -56,13 +56,18 @@ class ShowerBay(adapter.YamArenaEmbodiment):
         self.info = replace(self.info, name="yam_shower_bay", environment_id=eid)
         task_file.register(eid, self.task)
 
-    def step(self, action):
-        try:
-            return super().step(action)
-        except Exception:
-            import traceback
-            traceback.print_exc()
-            raise
+    def reset(self, scene, *, seed=None):
+        if self._env is not None:
+            from isaaclab_arena.utils.isaaclab_utils.simulation_app import teardown_simulation_app
+
+            # Reconstruct the contact scene between trials. Retaining the GPU
+            # contact state changed the settling pose of these small eyelets.
+            self.task.module.release_environment()
+            self._base.sim._disable_app_control_on_stop_handle = True
+            self._env.close()
+            self._env = self._base = None
+            teardown_simulation_app(make_new_stage=True)
+        return super().reset(scene, seed=seed)
 
     def _ensure_sim(self, goal):
         if self._env is not None:
