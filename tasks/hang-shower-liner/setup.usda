@@ -1,0 +1,31 @@
+#usda 1.0
+(
+    defaultPrim = "Scene"
+    metersPerUnit = 1
+    kilogramsPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Scene"
+{
+    def Xform "shower_rail" (
+        prepend references = @./assets/shower_rail.usda@
+    )
+    {
+        double3 xformOp:translate = (0.34, 0, 0.8695)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+    def Xform "liner" (
+        prepend references = @./assets/liner.usda@
+    )
+    {
+        double3 xformOp:translate = (0.19, -0.039, 0.7795)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+    def Xform "liner_rest" (
+        prepend references = @./assets/stage.usda@
+    )
+    {
+        double3 xformOp:translate = (0.19, -0.039, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+}

@@ -1,0 +1,55 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    kilogramsPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Asset"
+{
+    def Xform "fixture" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        float physics:mass = 0.22
+        bool physics:kinematicEnabled = true
+        def Cube "Rest" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00048
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (-0.012, 0, 0.002)
+            float3 xformOp:scale = (0.075, 0.254, 0.004)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.91, 0.91, 0.87)]
+        }
+        def Cube "FingerClearanceRail0" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00048
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (-0.017, -0.087, 0.0175)
+            float3 xformOp:scale = (0.042, 0.01, 0.027)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.055, 0.082, 0.112)]
+        }
+        def Cube "FingerClearanceRail1" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00048
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (-0.017, 0.087, 0.0175)
+            float3 xformOp:scale = (0.042, 0.01, 0.027)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.055, 0.082, 0.112)]
+        }
+    }
+}
