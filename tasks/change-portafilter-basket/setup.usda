@@ -1,0 +1,38 @@
+#usda 1.0
+(
+    defaultPrim = "Scene"
+    metersPerUnit = 1
+    kilogramsPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Scene"
+{
+    def Xform "rig" (
+        prepend references = @./assets/rig.usda@
+    )
+    {
+        double3 xformOp:translate = (0.283, -0.023, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+    def Xform "single_basket" (
+        prepend references = @./assets/single_basket.usda@
+    )
+    {
+        double3 xformOp:translate = (0.283, -0.023, 0.8155)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+    def Xform "double_basket" (
+        prepend references = @./assets/double_basket.usda@
+    )
+    {
+        double3 xformOp:translate = (0.229, -0.225, 0.7785)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+    def Xform "basket_tray" (
+        prepend references = @./assets/basket_tray.usda@
+    )
+    {
+        double3 xformOp:translate = (0.253, 0.193, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+}

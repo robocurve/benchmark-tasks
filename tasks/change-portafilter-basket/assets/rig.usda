@@ -1,0 +1,488 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    kilogramsPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Asset" (
+    prepend apiSchemas = ["PhysicsArticulationRootAPI"]
+)
+{
+    def Xform "base" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        float physics:mass = 0.48
+        def Cube "BenchCradle" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00043
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (-0.025, 0, 0.004)
+            float3 xformOp:scale = (0.28, 0.114, 0.008)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.055, 0.082, 0.112)]
+        }
+        def Mesh "PortafilterMouth00"
+        {
+            point3f[] points = [(0.0281, 0, 0.035), (0.032, 0, 0.035), (0.031385129, 0.0062428903, 0.035), (0.027560066, 0.005482038, 0.035), (0.0281, 0, 0.065), (0.032, 0, 0.065), (0.031385129, 0.0062428903, 0.065), (0.027560066, 0.005482038, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth01"
+        {
+            point3f[] points = [(0.027560066, 0.005482038, 0.035), (0.031385129, 0.0062428903, 0.035), (0.029564145, 0.01224587, 0.035), (0.025961015, 0.010753404, 0.035), (0.027560066, 0.005482038, 0.065), (0.031385129, 0.0062428903, 0.065), (0.029564145, 0.01224587, 0.065), (0.025961015, 0.010753404, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth02"
+        {
+            point3f[] points = [(0.025961015, 0.010753404, 0.035), (0.029564145, 0.01224587, 0.035), (0.026607028, 0.017778247, 0.035), (0.023364296, 0.015611524, 0.035), (0.025961015, 0.010753404, 0.065), (0.029564145, 0.01224587, 0.065), (0.026607028, 0.017778247, 0.065), (0.023364296, 0.015611524, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth03"
+        {
+            point3f[] points = [(0.023364296, 0.015611524, 0.035), (0.026607028, 0.017778247, 0.035), (0.022627417, 0.022627417, 0.035), (0.019869701, 0.019869701, 0.035), (0.023364296, 0.015611524, 0.065), (0.026607028, 0.017778247, 0.065), (0.022627417, 0.022627417, 0.065), (0.019869701, 0.019869701, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth04"
+        {
+            point3f[] points = [(0.019869701, 0.019869701, 0.035), (0.022627417, 0.022627417, 0.035), (0.017778247, 0.026607028, 0.035), (0.015611524, 0.023364296, 0.035), (0.019869701, 0.019869701, 0.065), (0.022627417, 0.022627417, 0.065), (0.017778247, 0.026607028, 0.065), (0.015611524, 0.023364296, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth05"
+        {
+            point3f[] points = [(0.015611524, 0.023364296, 0.035), (0.017778247, 0.026607028, 0.035), (0.01224587, 0.029564145, 0.035), (0.010753404, 0.025961015, 0.035), (0.015611524, 0.023364296, 0.065), (0.017778247, 0.026607028, 0.065), (0.01224587, 0.029564145, 0.065), (0.010753404, 0.025961015, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth06"
+        {
+            point3f[] points = [(0.010753404, 0.025961015, 0.035), (0.01224587, 0.029564145, 0.035), (0.0062428903, 0.031385129, 0.035), (0.005482038, 0.027560066, 0.035), (0.010753404, 0.025961015, 0.065), (0.01224587, 0.029564145, 0.065), (0.0062428903, 0.031385129, 0.065), (0.005482038, 0.027560066, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth07"
+        {
+            point3f[] points = [(0.005482038, 0.027560066, 0.035), (0.0062428903, 0.031385129, 0.035), (1.9594349e-18, 0.032, 0.035), (1.7206288e-18, 0.0281, 0.035), (0.005482038, 0.027560066, 0.065), (0.0062428903, 0.031385129, 0.065), (1.9594349e-18, 0.032, 0.065), (1.7206288e-18, 0.0281, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth08"
+        {
+            point3f[] points = [(1.7206288e-18, 0.0281, 0.035), (1.9594349e-18, 0.032, 0.035), (-0.0062428903, 0.031385129, 0.035), (-0.005482038, 0.027560066, 0.035), (1.7206288e-18, 0.0281, 0.065), (1.9594349e-18, 0.032, 0.065), (-0.0062428903, 0.031385129, 0.065), (-0.005482038, 0.027560066, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth09"
+        {
+            point3f[] points = [(-0.005482038, 0.027560066, 0.035), (-0.0062428903, 0.031385129, 0.035), (-0.01224587, 0.029564145, 0.035), (-0.010753404, 0.025961015, 0.035), (-0.005482038, 0.027560066, 0.065), (-0.0062428903, 0.031385129, 0.065), (-0.01224587, 0.029564145, 0.065), (-0.010753404, 0.025961015, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth10"
+        {
+            point3f[] points = [(-0.010753404, 0.025961015, 0.035), (-0.01224587, 0.029564145, 0.035), (-0.017778247, 0.026607028, 0.035), (-0.015611524, 0.023364296, 0.035), (-0.010753404, 0.025961015, 0.065), (-0.01224587, 0.029564145, 0.065), (-0.017778247, 0.026607028, 0.065), (-0.015611524, 0.023364296, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth11"
+        {
+            point3f[] points = [(-0.015611524, 0.023364296, 0.035), (-0.017778247, 0.026607028, 0.035), (-0.022627417, 0.022627417, 0.035), (-0.019869701, 0.019869701, 0.035), (-0.015611524, 0.023364296, 0.065), (-0.017778247, 0.026607028, 0.065), (-0.022627417, 0.022627417, 0.065), (-0.019869701, 0.019869701, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth12"
+        {
+            point3f[] points = [(-0.019869701, 0.019869701, 0.035), (-0.022627417, 0.022627417, 0.035), (-0.026607028, 0.017778247, 0.035), (-0.023364296, 0.015611524, 0.035), (-0.019869701, 0.019869701, 0.065), (-0.022627417, 0.022627417, 0.065), (-0.026607028, 0.017778247, 0.065), (-0.023364296, 0.015611524, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth13"
+        {
+            point3f[] points = [(-0.023364296, 0.015611524, 0.035), (-0.026607028, 0.017778247, 0.035), (-0.029564145, 0.01224587, 0.035), (-0.025961015, 0.010753404, 0.035), (-0.023364296, 0.015611524, 0.065), (-0.026607028, 0.017778247, 0.065), (-0.029564145, 0.01224587, 0.065), (-0.025961015, 0.010753404, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth14"
+        {
+            point3f[] points = [(-0.025961015, 0.010753404, 0.035), (-0.029564145, 0.01224587, 0.035), (-0.031385129, 0.0062428903, 0.035), (-0.027560066, 0.005482038, 0.035), (-0.025961015, 0.010753404, 0.065), (-0.029564145, 0.01224587, 0.065), (-0.031385129, 0.0062428903, 0.065), (-0.027560066, 0.005482038, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth15"
+        {
+            point3f[] points = [(-0.027560066, 0.005482038, 0.035), (-0.031385129, 0.0062428903, 0.035), (-0.032, 3.9188698e-18, 0.035), (-0.0281, 3.4412575e-18, 0.035), (-0.027560066, 0.005482038, 0.065), (-0.031385129, 0.0062428903, 0.065), (-0.032, 3.9188698e-18, 0.065), (-0.0281, 3.4412575e-18, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth16"
+        {
+            point3f[] points = [(-0.0281, 3.4412575e-18, 0.035), (-0.032, 3.9188698e-18, 0.035), (-0.031385129, -0.0062428903, 0.035), (-0.027560066, -0.005482038, 0.035), (-0.0281, 3.4412575e-18, 0.065), (-0.032, 3.9188698e-18, 0.065), (-0.031385129, -0.0062428903, 0.065), (-0.027560066, -0.005482038, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth17"
+        {
+            point3f[] points = [(-0.027560066, -0.005482038, 0.035), (-0.031385129, -0.0062428903, 0.035), (-0.029564145, -0.01224587, 0.035), (-0.025961015, -0.010753404, 0.035), (-0.027560066, -0.005482038, 0.065), (-0.031385129, -0.0062428903, 0.065), (-0.029564145, -0.01224587, 0.065), (-0.025961015, -0.010753404, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth18"
+        {
+            point3f[] points = [(-0.025961015, -0.010753404, 0.035), (-0.029564145, -0.01224587, 0.035), (-0.026607028, -0.017778247, 0.035), (-0.023364296, -0.015611524, 0.035), (-0.025961015, -0.010753404, 0.065), (-0.029564145, -0.01224587, 0.065), (-0.026607028, -0.017778247, 0.065), (-0.023364296, -0.015611524, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth19"
+        {
+            point3f[] points = [(-0.023364296, -0.015611524, 0.035), (-0.026607028, -0.017778247, 0.035), (-0.022627417, -0.022627417, 0.035), (-0.019869701, -0.019869701, 0.035), (-0.023364296, -0.015611524, 0.065), (-0.026607028, -0.017778247, 0.065), (-0.022627417, -0.022627417, 0.065), (-0.019869701, -0.019869701, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth20"
+        {
+            point3f[] points = [(-0.019869701, -0.019869701, 0.035), (-0.022627417, -0.022627417, 0.035), (-0.017778247, -0.026607028, 0.035), (-0.015611524, -0.023364296, 0.035), (-0.019869701, -0.019869701, 0.065), (-0.022627417, -0.022627417, 0.065), (-0.017778247, -0.026607028, 0.065), (-0.015611524, -0.023364296, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth21"
+        {
+            point3f[] points = [(-0.015611524, -0.023364296, 0.035), (-0.017778247, -0.026607028, 0.035), (-0.01224587, -0.029564145, 0.035), (-0.010753404, -0.025961015, 0.035), (-0.015611524, -0.023364296, 0.065), (-0.017778247, -0.026607028, 0.065), (-0.01224587, -0.029564145, 0.065), (-0.010753404, -0.025961015, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth22"
+        {
+            point3f[] points = [(-0.010753404, -0.025961015, 0.035), (-0.01224587, -0.029564145, 0.035), (-0.0062428903, -0.031385129, 0.035), (-0.005482038, -0.027560066, 0.035), (-0.010753404, -0.025961015, 0.065), (-0.01224587, -0.029564145, 0.065), (-0.0062428903, -0.031385129, 0.065), (-0.005482038, -0.027560066, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth23"
+        {
+            point3f[] points = [(-0.005482038, -0.027560066, 0.035), (-0.0062428903, -0.031385129, 0.035), (-5.8783046e-18, -0.032, 0.035), (-5.1618863e-18, -0.0281, 0.035), (-0.005482038, -0.027560066, 0.065), (-0.0062428903, -0.031385129, 0.065), (-5.8783046e-18, -0.032, 0.065), (-5.1618863e-18, -0.0281, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth24"
+        {
+            point3f[] points = [(-5.1618863e-18, -0.0281, 0.035), (-5.8783046e-18, -0.032, 0.035), (0.0062428903, -0.031385129, 0.035), (0.005482038, -0.027560066, 0.035), (-5.1618863e-18, -0.0281, 0.065), (-5.8783046e-18, -0.032, 0.065), (0.0062428903, -0.031385129, 0.065), (0.005482038, -0.027560066, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth25"
+        {
+            point3f[] points = [(0.005482038, -0.027560066, 0.035), (0.0062428903, -0.031385129, 0.035), (0.01224587, -0.029564145, 0.035), (0.010753404, -0.025961015, 0.035), (0.005482038, -0.027560066, 0.065), (0.0062428903, -0.031385129, 0.065), (0.01224587, -0.029564145, 0.065), (0.010753404, -0.025961015, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth26"
+        {
+            point3f[] points = [(0.010753404, -0.025961015, 0.035), (0.01224587, -0.029564145, 0.035), (0.017778247, -0.026607028, 0.035), (0.015611524, -0.023364296, 0.035), (0.010753404, -0.025961015, 0.065), (0.01224587, -0.029564145, 0.065), (0.017778247, -0.026607028, 0.065), (0.015611524, -0.023364296, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth27"
+        {
+            point3f[] points = [(0.015611524, -0.023364296, 0.035), (0.017778247, -0.026607028, 0.035), (0.022627417, -0.022627417, 0.035), (0.019869701, -0.019869701, 0.035), (0.015611524, -0.023364296, 0.065), (0.017778247, -0.026607028, 0.065), (0.022627417, -0.022627417, 0.065), (0.019869701, -0.019869701, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth28"
+        {
+            point3f[] points = [(0.019869701, -0.019869701, 0.035), (0.022627417, -0.022627417, 0.035), (0.026607028, -0.017778247, 0.035), (0.023364296, -0.015611524, 0.035), (0.019869701, -0.019869701, 0.065), (0.022627417, -0.022627417, 0.065), (0.026607028, -0.017778247, 0.065), (0.023364296, -0.015611524, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth29"
+        {
+            point3f[] points = [(0.023364296, -0.015611524, 0.035), (0.026607028, -0.017778247, 0.035), (0.029564145, -0.01224587, 0.035), (0.025961015, -0.010753404, 0.035), (0.023364296, -0.015611524, 0.065), (0.026607028, -0.017778247, 0.065), (0.029564145, -0.01224587, 0.065), (0.025961015, -0.010753404, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth30"
+        {
+            point3f[] points = [(0.025961015, -0.010753404, 0.035), (0.029564145, -0.01224587, 0.035), (0.031385129, -0.0062428903, 0.035), (0.027560066, -0.005482038, 0.035), (0.025961015, -0.010753404, 0.065), (0.029564145, -0.01224587, 0.065), (0.031385129, -0.0062428903, 0.065), (0.027560066, -0.005482038, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Mesh "PortafilterMouth31"
+        {
+            point3f[] points = [(0.027560066, -0.005482038, 0.035), (0.031385129, -0.0062428903, 0.035), (0.032, -7.8377395e-18, 0.035), (0.0281, -6.882515e-18, 0.035), (0.027560066, -0.005482038, 0.065), (0.031385129, -0.0062428903, 0.065), (0.032, -7.8377395e-18, 0.065), (0.0281, -6.882515e-18, 0.065)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Cube "BayoLug0"
+        {
+            double size = 1
+            double3 xformOp:translate = (0.032, 0, 0.056)
+            float3 xformOp:scale = (0.012, 0.008, 0.004)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Cube "BayoLug1"
+        {
+            double size = 1
+            double3 xformOp:translate = (-0.016, 0.027712813, 0.056)
+            float3 xformOp:scale = (0.012, 0.008, 0.004)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Cube "BayoLug2"
+        {
+            double size = 1
+            double3 xformOp:translate = (-0.016, -0.027712813, 0.056)
+            float3 xformOp:scale = (0.012, 0.008, 0.004)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Cylinder "PortafilterHandle" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00043
+        float physxCollision:restOffset = 0
+            double radius = 0.012
+            double height = 0.134
+            uniform token axis = "X"
+            double3 xformOp:translate = (0.095, 0, 0.048)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cube "CradlePost0" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00043
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (0, -0.035, 0.024)
+            float3 xformOp:scale = (0.026, 0.011, 0.035)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.055, 0.082, 0.112)]
+        }
+        def Cube "CradlePost1" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00043
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (0, 0.035, 0.024)
+            float3 xformOp:scale = (0.026, 0.011, 0.035)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.055, 0.082, 0.112)]
+        }
+        def Cube "RimSupport0" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00043
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (0.0305, 0, 0.0615)
+            float3 xformOp:rotateXYZ = (0, 0, 0)
+            float3 xformOp:scale = (0.008, 0.013, 0.007)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Cube "RimSupport1" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00043
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (1.8675864e-18, 0.0305, 0.0615)
+            float3 xformOp:rotateXYZ = (0, 0, 90)
+            float3 xformOp:scale = (0.008, 0.013, 0.007)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Cube "RimSupport2" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00043
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (-0.0305, 3.7351727e-18, 0.0615)
+            float3 xformOp:rotateXYZ = (0, 0, 180)
+            float3 xformOp:scale = (0.008, 0.013, 0.007)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Cube "RimSupport3" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00043
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (-5.6027591e-18, -0.0305, 0.0615)
+            float3 xformOp:rotateXYZ = (0, 0, 270)
+            float3 xformOp:scale = (0.008, 0.013, 0.007)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Cube "SteelEjectionFence0" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00043
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (-0.033, 0, 0.0715)
+            float3 xformOp:scale = (0.004, 0.031, 0.021)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Cube "SteelEjectionFence1" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00043
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (0.033, 0, 0.0715)
+            float3 xformOp:scale = (0.004, 0.031, 0.021)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+    }
+    def PhysicsFixedJoint "table_mount"
+    {
+        rel physics:body1 = </Asset/base>
+    }
+    def Xform "lever_body" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        double3 xformOp:translate = (-0.046, 0, 0.035)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        point3f physics:centerOfMass = (0, 0, 0)
+        float physics:mass = 0.068
+        float3 physics:diagonalInertia = (4e-05, 0.00012, 0.00013)
+        def Cube "Lever" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00043
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (-0.004, 0, 0)
+            float3 xformOp:scale = (0.126, 0.012, 0.007)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Cube "RubberHandle" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00043
+        float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (-0.067, 0, 0.012)
+            float3 xformOp:scale = (0.03, 0.026, 0.015)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "UnderBasketPusher" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00043
+        float physxCollision:restOffset = 0
+            double radius = 0.01
+            double height = 0.006
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.046, 0, -0.0045)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+    }
+    def PhysicsRevoluteJoint "lever"
+    {
+        rel physics:body0 = </Asset/base>
+        rel physics:body1 = </Asset/lever_body>
+        point3f physics:localPos0 = (-0.046, 0, 0.035)
+        point3f physics:localPos1 = (0, 0, 0)
+        bool physics:collisionEnabled = false
+        uniform bool physics:excludeFromArticulation = false
+        uniform token physics:axis = "Y"
+        float physics:lowerLimit = -21
+        float physics:upperLimit = 1
+    }
+}

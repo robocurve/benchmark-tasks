@@ -1,0 +1,836 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    kilogramsPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Asset"
+{
+    def Xform "basket" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        point3f physics:centerOfMass = (0, 0, -0.0145)
+        float physics:mass = 0.061
+        float3 physics:diagonalInertia = (2.9e-05, 2.9e-05, 3.8e-05)
+        def Mesh "BasketWall00"
+        {
+            point3f[] points = [(0.0225, 0, -0.029), (0.0262, 0, -0.029), (0.025307257, 0.006781059, -0.029), (0.021733331, 0.0058234285, -0.029), (0.0225, 0, -0.003), (0.0262, 0, -0.003), (0.025307257, 0.006781059, -0.003), (0.021733331, 0.0058234285, -0.003)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "BasketWall01"
+        {
+            point3f[] points = [(0.021733331, 0.0058234285, -0.029), (0.025307257, 0.006781059, -0.029), (0.022689866, 0.0131, -0.029), (0.019485572, 0.01125, -0.029), (0.021733331, 0.0058234285, -0.003), (0.025307257, 0.006781059, -0.003), (0.022689866, 0.0131, -0.003), (0.019485572, 0.01125, -0.003)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "BasketWall02"
+        {
+            point3f[] points = [(0.019485572, 0.01125, -0.029), (0.022689866, 0.0131, -0.029), (0.018526198, 0.018526198, -0.029), (0.015909903, 0.015909903, -0.029), (0.019485572, 0.01125, -0.003), (0.022689866, 0.0131, -0.003), (0.018526198, 0.018526198, -0.003), (0.015909903, 0.015909903, -0.003)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "BasketWall03"
+        {
+            point3f[] points = [(0.015909903, 0.015909903, -0.029), (0.018526198, 0.018526198, -0.029), (0.0131, 0.022689866, -0.029), (0.01125, 0.019485572, -0.029), (0.015909903, 0.015909903, -0.003), (0.018526198, 0.018526198, -0.003), (0.0131, 0.022689866, -0.003), (0.01125, 0.019485572, -0.003)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "BasketWall04"
+        {
+            point3f[] points = [(0.01125, 0.019485572, -0.029), (0.0131, 0.022689866, -0.029), (0.006781059, 0.025307257, -0.029), (0.0058234285, 0.021733331, -0.029), (0.01125, 0.019485572, -0.003), (0.0131, 0.022689866, -0.003), (0.006781059, 0.025307257, -0.003), (0.0058234285, 0.021733331, -0.003)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "BasketWall05"
+        {
+            point3f[] points = [(0.0058234285, 0.021733331, -0.029), (0.006781059, 0.025307257, -0.029), (1.6042873e-18, 0.0262, -0.029), (1.3777276e-18, 0.0225, -0.029), (0.0058234285, 0.021733331, -0.003), (0.006781059, 0.025307257, -0.003), (1.6042873e-18, 0.0262, -0.003), (1.3777276e-18, 0.0225, -0.003)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "BasketWall06"
+        {
+            point3f[] points = [(1.3777276e-18, 0.0225, -0.029), (1.6042873e-18, 0.0262, -0.029), (-0.006781059, 0.025307257, -0.029), (-0.0058234285, 0.021733331, -0.029), (1.3777276e-18, 0.0225, -0.003), (1.6042873e-18, 0.0262, -0.003), (-0.006781059, 0.025307257, -0.003), (-0.0058234285, 0.021733331, -0.003)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "BasketWall07"
+        {
+            point3f[] points = [(-0.0058234285, 0.021733331, -0.029), (-0.006781059, 0.025307257, -0.029), (-0.0131, 0.022689866, -0.029), (-0.01125, 0.019485572, -0.029), (-0.0058234285, 0.021733331, -0.003), (-0.006781059, 0.025307257, -0.003), (-0.0131, 0.022689866, -0.003), (-0.01125, 0.019485572, -0.003)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "BasketWall08"
+        {
+            point3f[] points = [(-0.01125, 0.019485572, -0.029), (-0.0131, 0.022689866, -0.029), (-0.018526198, 0.018526198, -0.029), (-0.015909903, 0.015909903, -0.029), (-0.01125, 0.019485572, -0.003), (-0.0131, 0.022689866, -0.003), (-0.018526198, 0.018526198, -0.003), (-0.015909903, 0.015909903, -0.003)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "BasketWall09"
+        {
+            point3f[] points = [(-0.015909903, 0.015909903, -0.029), (-0.018526198, 0.018526198, -0.029), (-0.022689866, 0.0131, -0.029), (-0.019485572, 0.01125, -0.029), (-0.015909903, 0.015909903, -0.003), (-0.018526198, 0.018526198, -0.003), (-0.022689866, 0.0131, -0.003), (-0.019485572, 0.01125, -0.003)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "BasketWall10"
+        {
+            point3f[] points = [(-0.019485572, 0.01125, -0.029), (-0.022689866, 0.0131, -0.029), (-0.025307257, 0.006781059, -0.029), (-0.021733331, 0.0058234285, -0.029), (-0.019485572, 0.01125, -0.003), (-0.022689866, 0.0131, -0.003), (-0.025307257, 0.006781059, -0.003), (-0.021733331, 0.0058234285, -0.003)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "BasketWall11"
+        {
+            point3f[] points = [(-0.021733331, 0.0058234285, -0.029), (-0.025307257, 0.006781059, -0.029), (-0.0262, 3.2085746e-18, -0.029), (-0.0225, 2.7554553e-18, -0.029), (-0.021733331, 0.0058234285, -0.003), (-0.025307257, 0.006781059, -0.003), (-0.0262, 3.2085746e-18, -0.003), (-0.0225, 2.7554553e-18, -0.003)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "BasketWall12"
+        {
+            point3f[] points = [(-0.0225, 2.7554553e-18, -0.029), (-0.0262, 3.2085746e-18, -0.029), (-0.025307257, -0.006781059, -0.029), (-0.021733331, -0.0058234285, -0.029), (-0.0225, 2.7554553e-18, -0.003), (-0.0262, 3.2085746e-18, -0.003), (-0.025307257, -0.006781059, -0.003), (-0.021733331, -0.0058234285, -0.003)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "BasketWall13"
+        {
+            point3f[] points = [(-0.021733331, -0.0058234285, -0.029), (-0.025307257, -0.006781059, -0.029), (-0.022689866, -0.0131, -0.029), (-0.019485572, -0.01125, -0.029), (-0.021733331, -0.0058234285, -0.003), (-0.025307257, -0.006781059, -0.003), (-0.022689866, -0.0131, -0.003), (-0.019485572, -0.01125, -0.003)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "BasketWall14"
+        {
+            point3f[] points = [(-0.019485572, -0.01125, -0.029), (-0.022689866, -0.0131, -0.029), (-0.018526198, -0.018526198, -0.029), (-0.015909903, -0.015909903, -0.029), (-0.019485572, -0.01125, -0.003), (-0.022689866, -0.0131, -0.003), (-0.018526198, -0.018526198, -0.003), (-0.015909903, -0.015909903, -0.003)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "BasketWall15"
+        {
+            point3f[] points = [(-0.015909903, -0.015909903, -0.029), (-0.018526198, -0.018526198, -0.029), (-0.0131, -0.022689866, -0.029), (-0.01125, -0.019485572, -0.029), (-0.015909903, -0.015909903, -0.003), (-0.018526198, -0.018526198, -0.003), (-0.0131, -0.022689866, -0.003), (-0.01125, -0.019485572, -0.003)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "BasketWall16"
+        {
+            point3f[] points = [(-0.01125, -0.019485572, -0.029), (-0.0131, -0.022689866, -0.029), (-0.006781059, -0.025307257, -0.029), (-0.0058234285, -0.021733331, -0.029), (-0.01125, -0.019485572, -0.003), (-0.0131, -0.022689866, -0.003), (-0.006781059, -0.025307257, -0.003), (-0.0058234285, -0.021733331, -0.003)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "BasketWall17"
+        {
+            point3f[] points = [(-0.0058234285, -0.021733331, -0.029), (-0.006781059, -0.025307257, -0.029), (-4.8128619e-18, -0.0262, -0.029), (-4.1331829e-18, -0.0225, -0.029), (-0.0058234285, -0.021733331, -0.003), (-0.006781059, -0.025307257, -0.003), (-4.8128619e-18, -0.0262, -0.003), (-4.1331829e-18, -0.0225, -0.003)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "BasketWall18"
+        {
+            point3f[] points = [(-4.1331829e-18, -0.0225, -0.029), (-4.8128619e-18, -0.0262, -0.029), (0.006781059, -0.025307257, -0.029), (0.0058234285, -0.021733331, -0.029), (-4.1331829e-18, -0.0225, -0.003), (-4.8128619e-18, -0.0262, -0.003), (0.006781059, -0.025307257, -0.003), (0.0058234285, -0.021733331, -0.003)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "BasketWall19"
+        {
+            point3f[] points = [(0.0058234285, -0.021733331, -0.029), (0.006781059, -0.025307257, -0.029), (0.0131, -0.022689866, -0.029), (0.01125, -0.019485572, -0.029), (0.0058234285, -0.021733331, -0.003), (0.006781059, -0.025307257, -0.003), (0.0131, -0.022689866, -0.003), (0.01125, -0.019485572, -0.003)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "BasketWall20"
+        {
+            point3f[] points = [(0.01125, -0.019485572, -0.029), (0.0131, -0.022689866, -0.029), (0.018526198, -0.018526198, -0.029), (0.015909903, -0.015909903, -0.029), (0.01125, -0.019485572, -0.003), (0.0131, -0.022689866, -0.003), (0.018526198, -0.018526198, -0.003), (0.015909903, -0.015909903, -0.003)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "BasketWall21"
+        {
+            point3f[] points = [(0.015909903, -0.015909903, -0.029), (0.018526198, -0.018526198, -0.029), (0.022689866, -0.0131, -0.029), (0.019485572, -0.01125, -0.029), (0.015909903, -0.015909903, -0.003), (0.018526198, -0.018526198, -0.003), (0.022689866, -0.0131, -0.003), (0.019485572, -0.01125, -0.003)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "BasketWall22"
+        {
+            point3f[] points = [(0.019485572, -0.01125, -0.029), (0.022689866, -0.0131, -0.029), (0.025307257, -0.006781059, -0.029), (0.021733331, -0.0058234285, -0.029), (0.019485572, -0.01125, -0.003), (0.022689866, -0.0131, -0.003), (0.025307257, -0.006781059, -0.003), (0.021733331, -0.0058234285, -0.003)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "BasketWall23"
+        {
+            point3f[] points = [(0.021733331, -0.0058234285, -0.029), (0.025307257, -0.006781059, -0.029), (0.0262, -6.4171492e-18, -0.029), (0.0225, -5.5109106e-18, -0.029), (0.021733331, -0.0058234285, -0.003), (0.025307257, -0.006781059, -0.003), (0.0262, -6.4171492e-18, -0.003), (0.0225, -5.5109106e-18, -0.003)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "RolledRim00"
+        {
+            point3f[] points = [(0.024, 0, -0.003), (0.029, 0, -0.003), (0.028011849, 0.0075057523, -0.003), (0.02318222, 0.0062116571, -0.003), (0.024, 0, 0.002), (0.029, 0, 0.002), (0.028011849, 0.0075057523, 0.002), (0.02318222, 0.0062116571, 0.002)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "RolledRim01"
+        {
+            point3f[] points = [(0.02318222, 0.0062116571, -0.003), (0.028011849, 0.0075057523, -0.003), (0.025114737, 0.0145, -0.003), (0.02078461, 0.012, -0.003), (0.02318222, 0.0062116571, 0.002), (0.028011849, 0.0075057523, 0.002), (0.025114737, 0.0145, 0.002), (0.02078461, 0.012, 0.002)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "RolledRim02"
+        {
+            point3f[] points = [(0.02078461, 0.012, -0.003), (0.025114737, 0.0145, -0.003), (0.020506097, 0.020506097, -0.003), (0.016970563, 0.016970563, -0.003), (0.02078461, 0.012, 0.002), (0.025114737, 0.0145, 0.002), (0.020506097, 0.020506097, 0.002), (0.016970563, 0.016970563, 0.002)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "RolledRim03"
+        {
+            point3f[] points = [(0.016970563, 0.016970563, -0.003), (0.020506097, 0.020506097, -0.003), (0.0145, 0.025114737, -0.003), (0.012, 0.02078461, -0.003), (0.016970563, 0.016970563, 0.002), (0.020506097, 0.020506097, 0.002), (0.0145, 0.025114737, 0.002), (0.012, 0.02078461, 0.002)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "RolledRim04"
+        {
+            point3f[] points = [(0.012, 0.02078461, -0.003), (0.0145, 0.025114737, -0.003), (0.0075057523, 0.028011849, -0.003), (0.0062116571, 0.02318222, -0.003), (0.012, 0.02078461, 0.002), (0.0145, 0.025114737, 0.002), (0.0075057523, 0.028011849, 0.002), (0.0062116571, 0.02318222, 0.002)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "RolledRim05"
+        {
+            point3f[] points = [(0.0062116571, 0.02318222, -0.003), (0.0075057523, 0.028011849, -0.003), (1.7757379e-18, 0.029, -0.003), (1.4695762e-18, 0.024, -0.003), (0.0062116571, 0.02318222, 0.002), (0.0075057523, 0.028011849, 0.002), (1.7757379e-18, 0.029, 0.002), (1.4695762e-18, 0.024, 0.002)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "RolledRim06"
+        {
+            point3f[] points = [(1.4695762e-18, 0.024, -0.003), (1.7757379e-18, 0.029, -0.003), (-0.0075057523, 0.028011849, -0.003), (-0.0062116571, 0.02318222, -0.003), (1.4695762e-18, 0.024, 0.002), (1.7757379e-18, 0.029, 0.002), (-0.0075057523, 0.028011849, 0.002), (-0.0062116571, 0.02318222, 0.002)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "RolledRim07"
+        {
+            point3f[] points = [(-0.0062116571, 0.02318222, -0.003), (-0.0075057523, 0.028011849, -0.003), (-0.0145, 0.025114737, -0.003), (-0.012, 0.02078461, -0.003), (-0.0062116571, 0.02318222, 0.002), (-0.0075057523, 0.028011849, 0.002), (-0.0145, 0.025114737, 0.002), (-0.012, 0.02078461, 0.002)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "RolledRim08"
+        {
+            point3f[] points = [(-0.012, 0.02078461, -0.003), (-0.0145, 0.025114737, -0.003), (-0.020506097, 0.020506097, -0.003), (-0.016970563, 0.016970563, -0.003), (-0.012, 0.02078461, 0.002), (-0.0145, 0.025114737, 0.002), (-0.020506097, 0.020506097, 0.002), (-0.016970563, 0.016970563, 0.002)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "RolledRim09"
+        {
+            point3f[] points = [(-0.016970563, 0.016970563, -0.003), (-0.020506097, 0.020506097, -0.003), (-0.025114737, 0.0145, -0.003), (-0.02078461, 0.012, -0.003), (-0.016970563, 0.016970563, 0.002), (-0.020506097, 0.020506097, 0.002), (-0.025114737, 0.0145, 0.002), (-0.02078461, 0.012, 0.002)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "RolledRim10"
+        {
+            point3f[] points = [(-0.02078461, 0.012, -0.003), (-0.025114737, 0.0145, -0.003), (-0.028011849, 0.0075057523, -0.003), (-0.02318222, 0.0062116571, -0.003), (-0.02078461, 0.012, 0.002), (-0.025114737, 0.0145, 0.002), (-0.028011849, 0.0075057523, 0.002), (-0.02318222, 0.0062116571, 0.002)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "RolledRim11"
+        {
+            point3f[] points = [(-0.02318222, 0.0062116571, -0.003), (-0.028011849, 0.0075057523, -0.003), (-0.029, 3.5514757e-18, -0.003), (-0.024, 2.9391523e-18, -0.003), (-0.02318222, 0.0062116571, 0.002), (-0.028011849, 0.0075057523, 0.002), (-0.029, 3.5514757e-18, 0.002), (-0.024, 2.9391523e-18, 0.002)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "RolledRim12"
+        {
+            point3f[] points = [(-0.024, 2.9391523e-18, -0.003), (-0.029, 3.5514757e-18, -0.003), (-0.028011849, -0.0075057523, -0.003), (-0.02318222, -0.0062116571, -0.003), (-0.024, 2.9391523e-18, 0.002), (-0.029, 3.5514757e-18, 0.002), (-0.028011849, -0.0075057523, 0.002), (-0.02318222, -0.0062116571, 0.002)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "RolledRim13"
+        {
+            point3f[] points = [(-0.02318222, -0.0062116571, -0.003), (-0.028011849, -0.0075057523, -0.003), (-0.025114737, -0.0145, -0.003), (-0.02078461, -0.012, -0.003), (-0.02318222, -0.0062116571, 0.002), (-0.028011849, -0.0075057523, 0.002), (-0.025114737, -0.0145, 0.002), (-0.02078461, -0.012, 0.002)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "RolledRim14"
+        {
+            point3f[] points = [(-0.02078461, -0.012, -0.003), (-0.025114737, -0.0145, -0.003), (-0.020506097, -0.020506097, -0.003), (-0.016970563, -0.016970563, -0.003), (-0.02078461, -0.012, 0.002), (-0.025114737, -0.0145, 0.002), (-0.020506097, -0.020506097, 0.002), (-0.016970563, -0.016970563, 0.002)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "RolledRim15"
+        {
+            point3f[] points = [(-0.016970563, -0.016970563, -0.003), (-0.020506097, -0.020506097, -0.003), (-0.0145, -0.025114737, -0.003), (-0.012, -0.02078461, -0.003), (-0.016970563, -0.016970563, 0.002), (-0.020506097, -0.020506097, 0.002), (-0.0145, -0.025114737, 0.002), (-0.012, -0.02078461, 0.002)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "RolledRim16"
+        {
+            point3f[] points = [(-0.012, -0.02078461, -0.003), (-0.0145, -0.025114737, -0.003), (-0.0075057523, -0.028011849, -0.003), (-0.0062116571, -0.02318222, -0.003), (-0.012, -0.02078461, 0.002), (-0.0145, -0.025114737, 0.002), (-0.0075057523, -0.028011849, 0.002), (-0.0062116571, -0.02318222, 0.002)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "RolledRim17"
+        {
+            point3f[] points = [(-0.0062116571, -0.02318222, -0.003), (-0.0075057523, -0.028011849, -0.003), (-5.3272136e-18, -0.029, -0.003), (-4.4087285e-18, -0.024, -0.003), (-0.0062116571, -0.02318222, 0.002), (-0.0075057523, -0.028011849, 0.002), (-5.3272136e-18, -0.029, 0.002), (-4.4087285e-18, -0.024, 0.002)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "RolledRim18"
+        {
+            point3f[] points = [(-4.4087285e-18, -0.024, -0.003), (-5.3272136e-18, -0.029, -0.003), (0.0075057523, -0.028011849, -0.003), (0.0062116571, -0.02318222, -0.003), (-4.4087285e-18, -0.024, 0.002), (-5.3272136e-18, -0.029, 0.002), (0.0075057523, -0.028011849, 0.002), (0.0062116571, -0.02318222, 0.002)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "RolledRim19"
+        {
+            point3f[] points = [(0.0062116571, -0.02318222, -0.003), (0.0075057523, -0.028011849, -0.003), (0.0145, -0.025114737, -0.003), (0.012, -0.02078461, -0.003), (0.0062116571, -0.02318222, 0.002), (0.0075057523, -0.028011849, 0.002), (0.0145, -0.025114737, 0.002), (0.012, -0.02078461, 0.002)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "RolledRim20"
+        {
+            point3f[] points = [(0.012, -0.02078461, -0.003), (0.0145, -0.025114737, -0.003), (0.020506097, -0.020506097, -0.003), (0.016970563, -0.016970563, -0.003), (0.012, -0.02078461, 0.002), (0.0145, -0.025114737, 0.002), (0.020506097, -0.020506097, 0.002), (0.016970563, -0.016970563, 0.002)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "RolledRim21"
+        {
+            point3f[] points = [(0.016970563, -0.016970563, -0.003), (0.020506097, -0.020506097, -0.003), (0.025114737, -0.0145, -0.003), (0.02078461, -0.012, -0.003), (0.016970563, -0.016970563, 0.002), (0.020506097, -0.020506097, 0.002), (0.025114737, -0.0145, 0.002), (0.02078461, -0.012, 0.002)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "RolledRim22"
+        {
+            point3f[] points = [(0.02078461, -0.012, -0.003), (0.025114737, -0.0145, -0.003), (0.028011849, -0.0075057523, -0.003), (0.02318222, -0.0062116571, -0.003), (0.02078461, -0.012, 0.002), (0.025114737, -0.0145, 0.002), (0.028011849, -0.0075057523, 0.002), (0.02318222, -0.0062116571, 0.002)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Mesh "RolledRim23"
+        {
+            point3f[] points = [(0.02318222, -0.0062116571, -0.003), (0.028011849, -0.0075057523, -0.003), (0.029, -7.1029514e-18, -0.003), (0.024, -5.8783046e-18, -0.003), (0.02318222, -0.0062116571, 0.002), (0.028011849, -0.0075057523, 0.002), (0.029, -7.1029514e-18, 0.002), (0.024, -5.8783046e-18, 0.002)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token subdivisionScheme = "none"
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Cylinder "RimCollision" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00042
+        float physxCollision:restOffset = 0
+            double radius = 0.029
+            double height = 0.006
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+            token visibility = "invisible"
+        }
+        def Cylinder "PerforatedBase" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00042
+        float physxCollision:restOffset = 0
+            double radius = 0.023
+            double height = 0.002
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0, 0, -0.028)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.55, 0.59, 0.63)]
+        }
+        def Cylinder "FilterHole0_1"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (-0.0135, -0.009, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole0_2"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (-0.0135, -0.0045, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole0_3"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (-0.0135, 0, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole0_4"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (-0.0135, 0.0045, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole0_5"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (-0.0135, 0.009, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole1_0"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (-0.009, -0.0135, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole1_1"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (-0.009, -0.009, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole1_2"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (-0.009, -0.0045, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole1_3"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (-0.009, 0, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole1_4"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (-0.009, 0.0045, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole1_5"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (-0.009, 0.009, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole1_6"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (-0.009, 0.0135, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole2_0"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (-0.0045, -0.0135, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole2_1"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (-0.0045, -0.009, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole2_2"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (-0.0045, -0.0045, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole2_3"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (-0.0045, 0, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole2_4"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (-0.0045, 0.0045, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole2_5"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (-0.0045, 0.009, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole2_6"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (-0.0045, 0.0135, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole3_0"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0, -0.0135, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole3_1"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0, -0.009, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole3_2"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0, -0.0045, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole3_3"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0, 0, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole3_4"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0, 0.0045, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole3_5"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0, 0.009, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole3_6"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0, 0.0135, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole4_0"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.0045, -0.0135, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole4_1"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.0045, -0.009, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole4_2"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.0045, -0.0045, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole4_3"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.0045, 0, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole4_4"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.0045, 0.0045, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole4_5"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.0045, 0.009, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole4_6"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.0045, 0.0135, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole5_0"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.009, -0.0135, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole5_1"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.009, -0.009, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole5_2"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.009, -0.0045, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole5_3"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.009, 0, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole5_4"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.009, 0.0045, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole5_5"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.009, 0.009, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole5_6"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.009, 0.0135, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole6_1"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.0135, -0.009, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole6_2"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.0135, -0.0045, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole6_3"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.0135, 0, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole6_4"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.0135, 0.0045, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+        def Cylinder "FilterHole6_5"
+        {
+            double radius = 0.00062
+            double height = 0.00011
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.0135, 0.009, -0.0269)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.13, 0.15, 0.17)]
+        }
+    }
+}
