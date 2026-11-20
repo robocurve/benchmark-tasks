@@ -1,0 +1,20 @@
+{
+  "title": "Capture three calibration impressions on an optical robot fingertip",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "optical tactile sensor",
+    "robot hardware",
+    "calibration",
+    "ball indentation",
+    "bimanual"
+  ],
+  "instruction": "Stabilize the loose optical fingertip and use the steel ball probe to capture a clean impression in each of the three marked calibration regions.",
+  "context": "Commissioning a newly assembled optical robot fingertip or replacing its silicone cartridge calls for fresh photometric calibration before tactile data collection. A known-radius sphere gives reference surface normals from its contact patch. One arm counterholds the free sensor while the other records stable impressions across its view.",
+  "setup": "A 42 × 36 × 42 mm nylon optical fingertip with a 26 × 30 × 4 mm silicone pad stands face up on a 100 mm high open rack. The physical build uses an Arducam B0520 USB camera, a replaceable cast Solaris pad with a thin reflective coating, and fixed red, green and blue illumination. The 8 mm steel calibration ball on a 6 mm stem and polymer handle stands upright in a low peg holder. The capture program is armed with an unloaded reference. The three pad-frame targets are (-6, -5), (6, -5) and (0, 6) mm. Both grippers start open and clear. Dimensions and the build are documented in the README and physical/BUILD.md.",
+  "scoring": "Award one third per distinct region with a single rounded contact patch centered within 2.3 mm of its mark and an area-equivalent diameter of 4.7–6.5 mm for 0.4 s of uninterrupted valid frames. The physical recorder measures the patch in the calibrated camera image, checks elapsed frame timestamps, and automatically saves the image and qualifying hold evidence. Each region counts once. Three captures score 1.0 and no captures score 0. Either arm may support the enclosure.",
+  "run_limit": "620 actions (31 seconds at 20 Hz)",
+  "reset_notes": "Clean the steel ball and silicone. Return both free tools to their stands and both open grippers to the home pose. Start the recorder in a fresh output directory while the pad is unloaded. Begin the trial when it reports Armed.",
+  "fidelity": "The free tools and silicone-window load use native collision and spring deflection. A diffuse three-channel lighting model renders the spherical contact patch from measured ball placement and window deflection. It approximates compliant silicone as a lumped spring and omits shear, spatial light falloff and camera noise. The captures are calibration inputs.",
+  "scores": "Demo: 1.0 after 449 actions. Dream-1: 0 after 620 actions.",
+  "media": "M-D9625S"
+}
