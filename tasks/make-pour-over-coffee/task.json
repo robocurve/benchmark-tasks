@@ -1,0 +1,23 @@
+{
+  "title": "Make a mug of pour-over coffee: pour only as fast as the filter drains, never over the cone's rim, and stop at a mugful",
+  "category": "Societal relatability",
+  "keywords": [
+    "pour-over coffee",
+    "kettle",
+    "filter cone",
+    "pouring",
+    "drain rate",
+    "pause and resume",
+    "household",
+    "cafe"
+  ],
+  "instruction": "Make a mug of coffee with the pour-over.",
+  "context": "Making a mug of filter coffee by hand is a daily routine at home, in offices and in cafes. The paper filter drains far more slowly than a kettle pours, so you pour, watch the coffee rise in the cone, tilt the kettle back before it reaches the rim (over it, water and grounds run round the paper into the mug), let it drain, and pour again, keeping the stream on the grounds. What is still in the cone drips through after you stop, so you stop pouring a little before the mug is full. One hand holds the kettle by its handle and tilts it, watching the cone and the mug. Nothing happens in the trial that the robot does not cause.",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y to the robot's left); heights above the table top. A clear heat-resistant glass mug without a handle (8.0 cm across, 8.5 cm tall, 6 mm base, about 340 mL to the brim) with a thin black line drawn round it at 220 mL (5.7 cm above its underside), base centred at (38, 0) on a 24 x 16 cm grey plastic drip tray (5 mm thick) centred at (40, 1). On the mug, a white Hario V60 size 01 plastic dripper (VD-01W, 11.5 x 10 x 8.2 cm), handle tab to the robot's left, with one Hario V60 01 paper filter (VCF-01) holding 15 g of Folgers Classic Roast ground coffee (medium grind, for drip makers; from a freshly opened canister), levelled with one shake. A Hario V60 Drip Kettle Air (VKA-35-TB, clear resin, 17.7 x 7.8 x 12.8 cm) filled to its 350 mL mark with room-temperature water, base centred at (34, -12), spout pointing 28 deg left of straight ahead (away from the right arm), handle towards the right arm. Both arms start at the ready pose. Real trials only: an absorbent pad covers the table under the tray and the kettle, and each gripper pad wears a nitrile finger cover.",
+  "scoring": "0, latched for the trial: the water rises over the cone's rim; water lands outside the dripper (more than about 1 mL, some 20 drops, on the tray, the mug's rim, the pad or the table; checked on the video and with a paper towel after the trial); the dripper is lifted or knocked off the mug while it holds water; or the mug tips past 12 deg. Otherwise the brew is weighed once the cone has stopped dripping (after the trial, outside the run limit; mug minus its tare, on a 1 g kitchen scale; in simulation, the mug's content plus the water still in the cone): 1.0 if it is 200 to 240 g and, at the end of the trial, the kettle stands upright (within 10 deg) on the table, released (no gripper within 7 cm of its handle), for 2 s; 0.5 if it is 150 to under 200 g, over 240 g, or 200 to 240 g with the kettle not put down; 0.25 if it is 40 to under 150 g; 0 otherwise.",
+  "run_limit": "4,800 steps (4 minutes at 20 Hz) per trial",
+  "reset_notes": "Real trials use room-temperature water (no hot water near the robot; the pour and the drainage are the same), and nothing is drunk. Discard the filter and grounds; empty, rinse and dry the mug and dripper; fit a new filter with 15 g of coffee from the same canister (opened that session), levelled with one shake; refill the kettle to its 350 mL mark; dry the tray. Check once per session: poured in one go at full flow (kettle tilted to about 45 deg), the cone overflows within about 25 s; with the cone filled to 1 cm below its rim (about 150 mL standing), the mug gains 75 g in 30 to 50 s. If a check is out of range, use a freshly opened canister and check again.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. Water is a model (brew.py): the kettle's outflow follows the head of water over its spout tip as it tilts; the stream falls from the tip and counts as in the cone only if it crosses the rim inside it; the grounds soak up 30 mL, then water above them drains in proportion to its depth (2.7 mL/s with the cone full; the cone holds 158 mL above the grounds). Water is drawn as shapes; the kettle is drawn opaque, its mass fixed at 0.35 kg.",
+  "scores": "Dream-1 run: 0 (reaches to the kettle and over the dripper, never lifts the kettle; nothing poured). Demo (three pours, tilting back when the cone is two-thirds full, waiting for it to drain): 1.0 in 2,441 steps. Controls: full flow, no stopping 0 (overflow); one cone-full, then stop 0.5; idle 0.",
+  "media": "M-PF37DH"
+}
