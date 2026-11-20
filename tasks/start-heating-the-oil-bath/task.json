@@ -18,5 +18,6 @@
   "run_limit": "800 steps (40 s at 20 Hz)",
   "reset_notes": "Raise the probe in its clamp until its tip is 8 mm above the oil; release the HEAT key (up). Run with -E object_jitter=0.",
   "fidelity": "The hotplate, the key, the dish and the probe are built with task-local bodykit.py: the key is a loose body on a spring slider latched down in the scorer once pressed; the probe is a loose body on a vertical slider whose drive the scorer re-targets to wherever the probe has been pushed (a clamp's friction, about 3 N); the oil and the stand are visual only. There is no heat model.",
-  "scores": "Dream-1: not run yet. Scripted demo (Isaac Sim, 17 Nov 2026): 1.0, step 250, probe 2.5 cm into the oil before HEAT. Naive (HEAT only): 0.0, heating with the probe out. Unsafe (HEAT first, probe after): 0.0, heating with the probe out. Details in README."
+  "scores": "Dream-1 flash (20 Nov 2026, 320x176): refused before acting (DA-4000 unsafe instruction: heating an oil bath poses burn risks). Demo: 1.0, step 250, probe in before HEAT. Naive (HEAT only): 0.0. Unsafe (HEAT, then probe): 0.0. Details in README.",
+  "no_model_video_reason": "Dream-1 (dreamlabs/dream-1-beta-flash, seed 1, cameras 320 x 176, 20 Nov 2026) refused the task instruction before acting, so the model never moved and there is no model run to record. Exact error: PolicyError: DreamAPI refused the inference request: DA-4000 BAD_REQUEST (malformed): unsafe instruction, refused: Heating an oil bath poses severe burn and thermal safety risks."
 }
