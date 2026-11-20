@@ -1,0 +1,22 @@
+{
+  "title": "Fit and proof-lift a glass vacuum filter holder",
+  "category": "Other",
+  "keywords": [
+    "vacuum filtration",
+    "membrane filter holder",
+    "spring clamp",
+    "wet lab",
+    "glassware",
+    "bimanual",
+    "functional proof lift"
+  ],
+  "instruction": "Seat the glass funnel over the membrane on the fritted base. Hold it steady while fitting the spring clamp around both flanges. Take the other hand clear. Grasp only the upper funnel and lift the entire dry assembly until the bottom of the flask clears the bench by at least 20 mm for one second. Lower it upright onto its mark, release it and withdraw both hands.",
+  "context": "A spring clamp can look seated while gripping only one flange. This dry assembly test checks whether both glass flanges stay captured when the upper funnel carries the weight of the empty flask and base.",
+  "setup": "Units mm; x forward from the line through the two arm bases, y left (+), z up from the table top. Two YAM arms with parallel grippers (pads 94 apart open), bases at (0, +305) and (0, -305), ready pose, grippers open; an overhead camera and one camera on each wrist. Lab bench. 1) MilliporeSigma XX1014700 47 mm glass vacuum filter holder (borosilicate; 23.5 cm assembled, holder 7.6 cm across, 300 mL funnel, anodised aluminium spring clamp XX1014703; maker's guide): its fritted base in a size 8 silicone stopper in a 1 L heavy-wall filtering flask (about 125 across at the foot, 205 to the rim, side-arm pointing away from the robot), standing free with its axis at (330, -30). A new dry 47 mm white membrane (0.45 um mixed cellulose ester, any maker) lies centred on the frit; the base's ground flange (76 across, bevelled back edge) has its top 288 above the table. 2) The holder's funnel, a graduated glass cylinder 64 across and 125 tall with a 76 flange at its foot, about 200 g, standing on its flange on a clean wipe at (270, 175). 3) The holder's spring clamp, shut, lying flat at (300, -215) with its open mouth away from the robot and its two handles toward it: two blue anodised jaws (90 across, 18 tall) on a pin with a torsion spring; pressing the handles together (about 17 N, estimate) opens the mouth to just over 76. Same layout every trial. A stationary 24 mm wide, 26 mm high gauge at (330, -109) has a blue stripe whose upper edge is 20 mm above the bench. The flask starts empty and dry. Flange, funnel and spring details are estimates.",
+  "scoring": "0.5 if assembled: funnel face gap within 3 mm of zero at its low edge, centres within 4 mm and axes within 5 degrees; clamp closed on both flanges (each jaw opening -0.5 to 7 degrees), centre within 5 mm horizontally and 4 mm vertically of the joint, tilt within 7 degrees. For 1.0, start assembled on the bench. Lift with both pads of a single gripper on the cylindrical upper funnel. The other arm stays off all parts and neither arm touches the flask, base or clamp from takeoff through the hold. Keep the lowest part of the flask foot at least 20 mm above the bench for 1 s continuously. Return it assembled and upright within 3 degrees, foot within 2 mm of the bench, both arms off every part and both fingertip centres at least 100 mm horizontally from the flask axis or 50 mm above the funnel top for 0.5 s. Breaking the joint cancels the lift. Otherwise 0. Permanently 0 if the flask tips past 10 degrees or its foot centre moves more than 30 mm sideways, the funnel tips past 45 degrees or falls 50 mm below the bench, or the clamp tips past 60 degrees, falls 50 mm below the bench, or drops below 20 mm while more than 50 mm horizontally from its start.",
+  "run_limit": "2,400 steps (120 s at 20 Hz)",
+  "reset_notes": "Take the clamp off (press the handles), lift the funnel off, replace the membrane with a new dry one centred on the frit, stand the funnel on its wipe and lay the clamp shut at its mark; check the flask stands on its mark. In simulation: seed 0, zero object jitter; holder, funnel and clamp return to their start poses and the scorer's memory starts fresh.",
+  "fidelity": "PhysX, 240 Hz physics and 20 Hz control. The 0.72 kg flask, stopper and base form one free body. The funnel is separate and the two spring-driven jaws physically capture the flange bevels. The proof load passes through finger and jaw contacts. Spring strength, friction and part masses are estimates. The membrane and 20 mm gauge are visual geometry. See REFERENCE-SPEC.json and TECHNICAL.md.",
+  "scores": "Dream-1 run: 0 (2,400 steps). Scripted demo: 1.0 (1,205 steps).",
+  "media": "M-JZ8C9K"
+}
