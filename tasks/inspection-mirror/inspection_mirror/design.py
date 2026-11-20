@@ -3,11 +3,11 @@
 Units: metres, kilograms, radians; quaternions xyzw. Station frame: x forward from the line between the arm bases,
 y left, z up; TOP is the table top. Heights are above the table top.
 
-A steel machine housing stands 55 mm from a wall, both running straight away from the robot. The gap between them is
+A steel machine housing stands 60 mm from a wall, both running straight away from the robot. The gap between them is
 open at its near end (facing the robot) and closed at its far end, at the bottom, and on top by a steel cover strip.
 A coolant leak has left a bright green trace on the housing's side face, inside the gap, at one of five places along
 it (drawn per trial from the episode seed). Looking into the open end, that face is seen edge-on, so nothing shows the
-trace. An Ullman HTC-2 inspection mirror (57 mm round glass head, set at 45 degrees on its swivel) slid into the gap
+trace. An Ullman HTC-2LT lighted inspection mirror (60 mm round glass head, set at 45 degrees on its swivel) slid into the gap
 shows the face to a camera behind the handle. The robot then marks the leak's place on the cover strip, directly
 above the trace, with an oil-based paint marker, so the repair goes to the right spot.
 """
@@ -22,8 +22,8 @@ TOP = 0.7475  # station table top
 
 # -- housing, wall, gap (the gap runs along x) ----------------------------------------------------------
 GAP_X = (0.225, 0.405)  # open end at x 0.225 (facing the robot), closed end at 0.405
-GAP = 0.055  # housing side face to wall: the 57 mm head at 45 degrees is 43 mm across, so 6 mm each side
-FACE_Y = -0.0275  # the hidden face: the housing's side face, facing +y; the wall's inner face is at FACE_Y + GAP
+GAP = 0.060  # housing side face to wall: the 60.3 mm, 8 mm thick head at 45 degrees is 48 mm across, so 6 mm each side
+FACE_Y = -0.030  # the hidden face: the housing's side face, facing +y; the wall's inner face is at FACE_Y + GAP
 PANEL_T = 0.005
 HEIGHT = 0.130
 CAP_T = 0.005
@@ -46,18 +46,19 @@ def leak_index(seed: int | None) -> int:
     return int(np.random.default_rng(int(seed)).integers(len(LEAK_X)))
 
 
-# -- inspection mirror (Ullman HTC-2, free tool): the handle along the tool's +x, the head at the +x end ---------
-# 2-1/4 in (57 mm) round glass mirror; 6-1/2 in (165 mm) collapsed, 36-3/8 in extended (Ullman listings).
+# -- inspection mirror (Ullman HTC-2LT, free tool): the handle along the tool's +x, the head at the +x end -------
+# Maker's product page (opened 2026-11-19): 2-3/8 in (60.3 mm) round mirror, built-in LED (two CR2016 cells in a
+# black plastic case behind the glass), telescopes 10 to 37 in (254 to 940 mm), 4.5 oz (128 g).
 GRIP = (0.100, 0.0127)  # vinyl grip: length, diameter (diameter [estimate])
 SHAFT = (0.120, 0.0050)  # the telescoped steel shaft past the grip: length set for this job, diameter [estimate]
-HEAD_D = 0.057
-HEAD_T = 0.004  # glass and its steel back
+HEAD_D = 0.0603
+HEAD_T = 0.008  # glass and the black plastic battery case behind it [estimate]
 HEAD_YAW = math.radians(45.0)  # set on the swivel: a ray travelling +x is turned toward -y (onto the hidden face)
 # The swivel sits on the head's rim at its top, so the head hangs below the shaft's axis:
 HEAD_DROP = HEAD_D / 2 + SHAFT[1] / 2  # shaft axis to head centre
 HEAD_REACH = GRIP[0] / 2 + SHAFT[0]  # tool origin (grip centre) to head centre, along the tool's +x
-TOOL_MASS = 0.090  # [estimate]
-LED_INTENSITY = 1.5e5  # the HTC-2LT's LED (render units)
+TOOL_MASS = 0.128  # the maker's published 4.5 oz
+LED_INTENSITY = 1.5e5  # the HTC-2LT's built-in LED (render units)
 TOOL_REST = np.array([0.165, -0.130, 0.100])  # grip centre at rest, the free end of the grip toward the robot
 SUPPORT = (0.012, 0.030, 0.094)  # each support block (x, y, z) under the grip, clear of the hand at its free end
 SUPPORT_DX = (-0.040, 0.060)  # under the grip and under the shaft's root; the hand takes the grip between them

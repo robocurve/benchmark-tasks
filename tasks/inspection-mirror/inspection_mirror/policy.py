@@ -9,7 +9,8 @@ It reads only what a policy gets: the right wrist camera image and the joint ang
        lay it back on its supports;
     2. left gripper (meanwhile): take the paint marker out of its cup and wait clear of the right arm; once the leak
        is found and the mirror is out, touch the tip onto the cover strip directly above it, then put the marker back.
-It outputs ordinary 14-D joint targets through the stock IK; it never sets a part's pose.
+It outputs ordinary 14-D joint targets through the stock IK; it never sets a part's pose. One privileged read: before
+the put-back it reads the marker's pose from the simulator (twice, over the cup) to stand it upright over the bore.
 
 ``-P mode=demo`` (default). Checks (for the README):
 ``-P mode=guess``  skips the mirror and marks the middle place (what a blind policy does);
@@ -53,6 +54,9 @@ SAG_BIAS = 0.006  # the hanging head sagged 3 to 6 mm toward the face (tool roll
 HEAD_LIFT = 0.008  # the tool pitches nose-down in the hand: the head hung 13 to 18 mm below its nominal height
 # (measured 2026-11-17), which put the top of the trace past the glass's edge; aim the hand 8 mm higher
 MARK_TRIM = 0.004  # the marks landed 4 mm short at every place (fixed in-hand offset of this grasp, measured 2026-11-16)
+DAB_PRESS = 0.001  # the tip aimed 1 mm into the strip (2 mm tipped the marker up to 1.5 degrees in the fingers)
+CUP_HOVER = 0.060  # the hand over the cup with the tip 8 mm above its rim: the re-measure is made here
+RELEASE_UP = 0.004  # let go with the tip 4 mm above the cup's floor: the barrel is 48 mm down the bore by then
 CAMERA = "right_cam"
 READ_COL = 148  # count green only right of this image column: there the mirror shows the face straight across from the
 # head; a trace at the neighbouring place shows nearer the mirror's near edge (left of it), measured 2026-11-16
@@ -230,21 +234,57 @@ class InspectionMirrorScriptedPolicy(YamScriptedPolicy):
         y = d.FACE_Y + d.GAP / 2
         top = d.TOP + d.CAP_TOP
         above = self._marker_tcp([x, y, top + 0.030], R_DAB)
-        dab = self._marker_tcp([x, y, top - 0.002], R_DAB)  # 2 mm into the strip: compliant arm, soft felt tip
+        dab = self._marker_tcp([x, y, top - DAB_PRESS], R_DAB)  # just into the strip: compliant arm, soft felt tip
         if self.mode == "hover":
             dab = self._marker_tcp([x, y, top + HOVER], R_DAB)  # the tip held just above the strip: no contact
         grasp = self._pick_tcp()
         c = self._c
+        self._cup_hand = (grasp + [0, 0, CUP_HOVER], R_DAB)  # nominal hand pose over the cup; the re-measure corrects it
         return [Move(2.5, c(above, R_DAB), MARKER_SQUEEZE, f"marker above place {place}"),
                 Move(1.0, c(above, R_DAB), MARKER_SQUEEZE, "marker settle"),
-                Move(1.5, c(dab, R_DAB), MARKER_SQUEEZE, "marker touch"),
+                Move(2.0, c(dab, R_DAB), MARKER_SQUEEZE, "marker touch"),
                 Move(0.6, c(dab, R_DAB), MARKER_SQUEEZE, "marker hold"),
                 Move(1.2, c(above + [0, 0, 0.010], R_DAB), MARKER_SQUEEZE, "marker lift"),
-                Move(3.0, c(grasp + [0, 0, 0.075], R_DAB), MARKER_SQUEEZE, "marker over its cup"),
-                Move(2.0, c(grasp + [0, 0, 0.004], R_DAB), MARKER_SQUEEZE, "marker into the cup"),
-                Move(0.8, c(grasp + [0, 0, 0.004], R_DAB), FINGER_OPEN, "marker let go"),
-                Move(1.5, c(grasp + [0, 0, 0.094], R_DAB), FINGER_OPEN, "marker withdraw, up"),
+                Move(3.0, c(grasp + [0, 0, CUP_HOVER], R_DAB), MARKER_SQUEEZE, "marker over its cup"),
+                Move(1.0, None, MARKER_SQUEEZE, "marker settle over its cup"),
+                Move(1.2, self._cup_upright, MARKER_SQUEEZE, "marker upright over the bore"),
+                Move(1.0, None, MARKER_SQUEEZE, "marker settle upright"),
+                Move(0.8, self._cup_upright, MARKER_SQUEEZE, "marker upright again"),
+                Move(0.8, None, MARKER_SQUEEZE, "marker settle upright again"),
+                Move(3.0, self._cup_down, MARKER_SQUEEZE, "marker straight down into the cup"),
+                Move(0.5, None, MARKER_SQUEEZE, "marker settle in the cup"),
+                Move(0.8, None, FINGER_OPEN, "marker let go"),
+                Move(1.5, lambda sim: (self._cup_hand[0] + [0, 0, 0.090], self._cup_hand[1]), FINGER_OPEN,
+                     "marker withdraw, up"),
                 Move(2.0, lambda sim: self.park["left"], FINGER_OPEN, "left park")]
+
+    # -- put-back re-measure (privileged: the marker's pose from the simulator) ----------------------------------
+    def _cup_upright(self, sim):
+        """Read the marker's pose and turn and shift the hand so the barrel stands upright with its axis on the bore's
+        centre line, at the height it has now. The grasp holds the marker 2 to 4 degrees off upright (the dab adds
+        up to 1.5), which puts the barrel's bottom 3 to 4 mm off centre; the bore leaves 1 mm round the barrel."""
+        p_h, r_h = self._cup_hand
+        m = marker_pose()
+        if m is None:  # offline (reach check): the nominal pose
+            return p_h, r_h
+        p_m, axis = m[:3], d.rot(m[3:])[:, 2]
+        r_new = rotation_between(axis, np.array([0.0, 0.0, 1.0])) @ r_h
+        g = r_h.T @ (p_m - p_h)  # the marker's centre in the commanded hand frame (holds the arm's tracking offset)
+        want = np.array([d.HOLDER_XY[0], d.HOLDER_XY[1], p_m[2]])
+        self._cup_hand = (want - r_new @ g, r_new)
+        print(f"[inspect-demo] put-back re-measure: marker {math.degrees(math.acos(min(1.0, axis[2]))):.1f} deg off "
+              f"upright, axis {1000 * (p_m[0] - d.HOLDER_XY[0]):+.1f}/{1000 * (p_m[1] - d.HOLDER_XY[1]):+.1f} mm "
+              f"off the bore", flush=True)
+        return self._cup_hand
+
+    def _cup_down(self, sim):
+        """Straight down until the tip is RELEASE_UP above the cup's floor (measured), keeping the upright hold."""
+        p_h, r_h = self._cup_hand
+        m = marker_pose()
+        seated = d.TOP + d.HOLDER_STAND + d.HOLDER_FLOOR + d.MARKER_TIP[0] + d.MARKER[0] / 2  # centre, tip on floor
+        dz = -(CUP_HOVER - RELEASE_UP) if m is None else (seated + RELEASE_UP) - m[2]
+        self._cup_hand = (p_h + [0, 0, dz], r_h)
+        return self._cup_hand
 
     def waypoints(self):
         """Every (arm, label, position, rotation) target of the plan, for the offline reach check."""
@@ -301,6 +341,29 @@ class InspectionMirrorScriptedPolicy(YamScriptedPolicy):
                 print(f"[inspect-demo] t={t:6.2f} procedure finished", flush=True)
         meta = {"request_stop": True} if self._end is not None and t > self._end else {}
         return ActionChunk(actions=[Action(data=pack(*out), meta=meta)], control_hz=1.0 / self._dt)
+
+
+def marker_pose():
+    """The paint marker's pose (xyz in the env frame + quat xyzw) from the live simulator; None offline."""
+    try:
+        from . import mechanism
+    except Exception:  # noqa: BLE001 - no simulator here (reach check, tests)
+        return None
+    if mechanism.ACTIVE is None:
+        return None
+    return np.asarray(mechanism.ACTIVE.poses()["marker"], float)
+
+
+def rotation_between(a, b) -> np.ndarray:
+    """The smallest rotation taking unit vector ``a`` onto unit vector ``b``."""
+    a = np.asarray(a, float) / np.linalg.norm(a)
+    b = np.asarray(b, float) / np.linalg.norm(b)
+    v, c = np.cross(a, b), float(np.dot(a, b))
+    s = float(np.linalg.norm(v))
+    if s < 1e-9:
+        return np.eye(3)
+    k = np.array([[0, -v[2], v[1]], [v[2], 0, -v[0]], [-v[1], v[0], 0]])
+    return np.eye(3) + k + k @ k * ((1 - c) / s ** 2)
 
 
 def dim_green_pixels(img) -> int:

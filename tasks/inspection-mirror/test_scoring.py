@@ -88,7 +88,7 @@ def test_smear_after_scored_rest_forces_zero():
 def test_head_clearance_geometry():
     centred = np.array([0.3, d.FACE_Y + d.GAP / 2, 0.85, 0, 0, 0, 1.0])
     clear = d.head_face_clearance(centred)
-    # 57 mm head at 45 degrees is 43 mm across in a 55 mm gap: about 6 mm each side
+    # the 60.3 x 8 mm head at 45 degrees is 48 mm across in a 60 mm gap: about 6 mm each side
     assert clear == pytest.approx((d.GAP - d.HEAD_D * math.sin(d.HEAD_YAW) - d.HEAD_T * math.cos(d.HEAD_YAW)) / 2,
                                   abs=1e-4)
     shifted = centred.copy()
@@ -191,7 +191,7 @@ def test_any_contact_with_the_bounded_face_smears():
     # (a sampled disc read 0.28 mm here and missed the touch; the review's case)
     yaw = math.radians(-45.0)
     q = np.array([0.0, 0.0, math.sin(yaw / 2), math.cos(yaw / 2)])
-    pose = np.r_[np.array([0.222930, -0.001877, 0.8225]) - d.rot(q) @ d.HEAD_POINT, q]
+    pose = np.r_[np.array([0.222930, 0.000220, 0.8225]) - d.rot(q) @ d.HEAD_POINT, q]
     assert d.mirror_face_clearance(pose) == pytest.approx(0.00007, abs=2e-6)
     assert d.mirror_face_clearance(pose) <= d.CONTACT
     marker = np.array([0.30, d.FACE_Y + d.MARKER[1] / 2, d.TOP + 0.08, 0, 0, 0, 1.0])  # the marker laid on the face

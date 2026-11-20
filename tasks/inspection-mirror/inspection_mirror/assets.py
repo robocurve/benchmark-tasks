@@ -3,8 +3,8 @@
     housing  kinematic, origin at the station origin on the table top: the housing's side, the wall, the cover strip,
              the far end and and the floor of the gap.
     leak     kinematic, visual only: the green coolant trace, placed on the hidden face at reset (one of five places).
-    mirror   the Ullman HTC-2 inspection mirror, a free tool: grip along its +x, telescoped shaft, round head hanging
-             from its rim swivel at 45 degrees, LED. Origin at the grip's centre.
+    mirror   the Ullman HTC-2LT lighted inspection mirror, a free tool: grip along its +x, telescoped shaft, round head
+             hanging from its rim swivel at 45 degrees, built-in LED. Origin at the grip's centre.
     marker   the paint marker, a free tool standing tip down in a steel pen cup (part of the housing body). Origin at the barrel's centre.
     dot_i    kinematic, visual only: paint dots, moved to where the marker's tip touched the cover strip.
 """
@@ -57,20 +57,20 @@ def mirror() -> Path:
     hx, dz = d.HEAD_REACH, -d.HEAD_DROP
     # mass: the grip end is heavier; centre of mass about 30 mm ahead of the grip's centre [estimate]
     b = Body("mirror", mass=d.TOOL_MASS, friction=(0.9, 0.8), com=(0.03, 0.0, -0.004),
-             inertia=(1.5e-5, 6e-4, 6e-4), contact_offset=0.001,
+             inertia=(2.1e-5, 8.5e-4, 8.5e-4), contact_offset=0.001,
              torsional_patch=0.004)  # a pad's contact patch: point contacts alone let the held tool pivot
     b.box((0.0, 0.0, 0.0), (gl, gd, gd), BLACK)  # vinyl grip, modelled square in section so it sits flat (a round one rolls under the closing fingers)
     b.cylinder((gl / 2 + sl / 2, 0.0, 0.0), sd / 2, sl, STEEL, axis="X")  # telescoped shaft
     b.box((hx, 0.0, -sd / 2 - 0.002), (0.008, 0.006, 0.006), STEEL)  # rim swivel
-    # the head: a 57 mm disc, its plane vertical and turned 45 degrees. The glass (1 mm) faces the robot and the
-    # hidden face (-n); behind it, the 3 mm steel back is matte, so a wrong-facing head shows no reflection
+    # the head: a 60.3 mm disc, its plane vertical and turned 45 degrees. The glass (1 mm) faces the robot and the
+    # hidden face (-n); behind it, the 7 mm black plastic battery case is matte, so a wrong-facing head shows no reflection
     nx, ny = math.cos(d.HEAD_YAW), math.sin(d.HEAD_YAW)
     glass, back = 0.001, d.HEAD_T - 0.001
     off = d.HEAD_T / 2 - glass / 2
     b.mirror_disc((hx - nx * off, -ny * off, dz), d.HEAD_D / 2, glass, yaw=d.HEAD_YAW)
     off = d.HEAD_T / 2 - back / 2
     b.mirror_disc((hx + nx * off, ny * off, dz), d.HEAD_D / 2 - 0.0005, back, yaw=d.HEAD_YAW, color=DARK)
-    # the LED (HTC-2LT style): in front of the glass on the far side, lighting the face; hidden from direct view
+    # the HTC-2LT's built-in LED: at the head's rim on the far side, lighting the face; hidden from direct view
     b.light((hx + 0.024, -0.014, dz + 0.030), d.LED_INTENSITY)
     return b.save()
 

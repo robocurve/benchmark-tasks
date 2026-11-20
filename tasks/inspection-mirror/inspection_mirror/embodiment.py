@@ -2,7 +2,7 @@
 
 Robot, cameras, 14-D joint action and observations are the stock adapter's (``yam_arena``), unchanged. This module
 adds the fixed housing with its wall and cover strip, the leak trace on the hidden face (placed at reset at one of
-five places, drawn from the episode seed), the Ullman HTC-2 inspection mirror and the paint marker (free tools), and
+five places, drawn from the episode seed), the Ullman HTC-2LT lighted inspection mirror and the paint marker (free tools), and
 up to four paint dots. No joints. Measured each step, from the bodies' poses and the robot's link poses:
 
 - contact with the hidden face (the whole bounded face, exact convex-solid distances): the mirror, the marker or any
