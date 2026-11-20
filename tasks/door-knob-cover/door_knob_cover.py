@@ -82,6 +82,7 @@ COVER_MASS, PAD_MASS = 0.030, 0.010
 WHITE, OFFWHITE = (0.93, 0.93, 0.91), (0.86, 0.85, 0.80)
 NICKEL, BRASS = (0.74, 0.74, 0.72), (0.78, 0.62, 0.30)
 COVER_C, PAD_C = (0.95, 0.95, 0.93), (0.45, 0.62, 0.78)
+INK = (0.08, 0.08, 0.08)  # the far side's dial marks and the knob's index line
 
 
 def _box(lo, hi, color, collide: bool = True) -> BoxShape:
@@ -139,15 +140,37 @@ def _frame_shapes() -> list:
 DOOR_POS = (XL + DOOR_W / 2, YD, DOOR_ZC)
 
 
+DIAL_DEG = (0.0, 15.0, -15.0, 45.0, -45.0)  # marks on the far side's printed dial (degrees from level)
+DIAL_R = 0.045  # the marks' radius on the dial (m), outside the 67 mm rose
+
+
+def _dial_marks(y: float, kx: float, kz: float) -> list:
+    """Square marks of the printed dial round the far side's rose (the 0, 15 and 45 degree lines), door frame."""
+    out = []
+    for a in DIAL_DEG:
+        x, z = kx + DIAL_R * math.sin(math.radians(a)), kz + DIAL_R * math.cos(math.radians(a))
+        out.append(_box((x - 0.002, y - 0.0005, z - 0.002), (x + 0.002, y, z + 0.002), INK, collide=False))
+    return out
+
+
+def _far_knob_shapes() -> list:
+    """The far side's knob, on the same spindle as the covered one (no cover), with a paint-pen index line on its end
+    face that points at the dial's 0 mark when the knob is level. Visual only: nothing touches it."""
+    y = -DOOR_T  # the far face, in the knob body's frame (its origin is on the robot-side face)
+    end = y - KNOB_Y[1]
+    return [_ycyl(y - ROSE_T, y - KNOB_Y[0], NECK_R, NICKEL, collide=False),
+            _ycyl(y - KNOB_Y[0], end, KNOB_R, NICKEL, collide=False),
+            _box((-0.0015, end - 0.0005, 0.0), (0.0015, end, KNOB_R - 0.002), INK, collide=False)]
+
+
 def _door_shapes() -> list:
     kx, kz = KNOB_X - DOOR_POS[0], KNOB_Z - DOOR_ZC
     t = DOOR_T / 2
     return [
         _box((-DOOR_W / 2, -t, -DOOR_H / 2), (DOOR_W / 2, t, DOOR_H / 2), WHITE),
         _ycyl(t, t + ROSE_T, ROSE_R, NICKEL, kx, kz),  # rose on the robot's side
-        _ycyl(-t, -t - ROSE_T, ROSE_R, NICKEL, kx, kz, collide=False),  # the far side's knob (visual)
-        _ycyl(-t - ROSE_T, -t - KNOB_Y[0], NECK_R, NICKEL, kx, kz, collide=False),
-        _ycyl(-t - KNOB_Y[0], -t - KNOB_Y[1], KNOB_R, NICKEL, kx, kz, collide=False),
+        _ycyl(-t, -t - ROSE_T, ROSE_R, NICKEL, kx, kz, collide=False),  # the far side's rose (visual)
+        *_dial_marks(-t, kx, kz),  # the printed dial taped round the far rose (visual)
         _box((-DOOR_W / 2, -0.0125, kz - 0.0143), (-DOOR_W / 2 + 0.0008, 0.0125, kz + 0.0143), BRASS,
              collide=False),  # latch faceplate
     ]
@@ -166,7 +189,7 @@ def _build() -> list:
     bolt = Body.build("bolt", pos=BOLT_POS, mass=0.02, color=BRASS, friction=(0.3, 0.25), solver_iterations=32,
                       shapes=[_box((-THROW, -0.0055, -0.0125), (0.012, 0.0055, 0.0125), BRASS)], ignore=("door",))
     knob = Body.build("knob", pos=KNOB_POS, mass=0.20, color=NICKEL, friction=(0.5, 0.45), solver_iterations=32,
-                      shapes=[_ycyl(*NECK_Y, NECK_R, NICKEL), _ycyl(*KNOB_Y, KNOB_R, NICKEL)],
+                      shapes=[_ycyl(*NECK_Y, NECK_R, NICKEL), _ycyl(*KNOB_Y, KNOB_R, NICKEL), *_far_knob_shapes()],
                       ignore=("door", "bolt"))
     cover = Body.build("cover", pos=KNOB_POS, mass=COVER_MASS, color=COVER_C, friction=(0.45, 0.4),
                        solver_iterations=32, shapes=[_ycyl(*SHELL_Y, SHELL_R, COVER_C), _ycyl(*WAIST_Y, WAIST_R, COVER_C),
@@ -262,7 +285,7 @@ def bolt_target(knob: float) -> float:
 _EP: dict = {}
 _DBG = open(os.environ["KNOB_DEBUG"], "w") if os.environ.get("KNOB_DEBUG") else None
 POINTS = ((100.0, 1.0), (20.0, 0.6))  # latch edge open at least this far (mm): score
-BOLT_FULL_MM, KNOB_MIN_DEG = 12.0, 15.0
+KNOB_DRAWN_DEG, KNOB_MIN_DEG = KNOB_FULL, 15.0  # read on the far side's dial: bolt fully drawn (45); first turn
 
 
 def _blank() -> None:
@@ -305,7 +328,7 @@ def report(objects=None) -> dict:
         s = 1.0
     elif e["open_max"] >= POINTS[1][0]:
         s = 0.6
-    elif e["bolt_max"] >= BOLT_FULL_MM:
+    elif e["knob_max"] >= KNOB_DRAWN_DEG:
         s = 0.3
     elif e["knob_max"] >= KNOB_MIN_DEG:
         s = 0.1
@@ -315,8 +338,9 @@ def report(objects=None) -> dict:
 
 
 def score(objects) -> float:
-    """1.0: the latch edge opened at least 100 mm; 0.6: at least 20 mm (unlatched); 0.3: the bolt drawn fully in (12 mm
-    of its 12.7 mm); 0.1: the knob turned at least 15 degrees; otherwise 0. The best reached during the trial."""
+    """1.0: the latch edge opened at least 100 mm; 0.6: at least 20 mm (unlatched); 0.3: the knob turned at least 45
+    degrees (the bolt fully drawn), as the far side's knob shows on its dial; 0.1: at least 15 degrees; otherwise 0.
+    The best reached during the trial."""
     rep = report(objects)
     _EP["report"] = rep
     return float(rep["score"])
