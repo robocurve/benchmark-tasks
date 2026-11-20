@@ -1,0 +1,23 @@
+{
+  "title": "Shake exactly two mints out of a flip-top mint box into a dish, then snap the lid shut and put the box down",
+  "category": "Societal relatability",
+  "keywords": [
+    "dispensing a count",
+    "shaking",
+    "flip-top lid",
+    "snap lid",
+    "loose small parts",
+    "one at a time",
+    "mints",
+    "two hands"
+  ],
+  "instruction": "Shake two mints out of the mint box into the dish, then close the box and put it back on the table.",
+  "context": "Pocket boxes of mints, sweeteners and small tablets all dispense the same way: a small opening that passes one piece at a time, and a snap lid over it. The pieces jam behind the opening, so tipping the box gives nothing or one piece, and shaking it on gives too many. People get the count they want by shaking in short strokes and stopping when enough have come out. The task is that act at full size: flick a 2 cm lid open with a fingertip while the other hand holds a 4.7 cm wide box, hold the open box over a dish, shake out two mints of half a gram each and no more, snap the lid shut and put the box down. The count is given in the instruction and is the same in both layouts. Counting is not what is hard; letting out two and stopping is.",
+  "setup": "Cm from the midpoint between the arm bases, x away from the robot, y left; heights above the table. Mint box: a flip-top pocket box, clear plastic with a white top end, 4.7 wide x 1.7 thick x 7.3 long, 9 g empty. It lies on a big face centred at (30, 3), its lid end toward the robot. In the lid end, at the corner on the robot's right, is the dispensing opening, 12 x 10 mm, covered by a white hinged flap 22.5 x 15 mm whose lip overhangs the box's side by 2.5 mm. The flap is shut; it snaps shut and, pushed 14 degrees open, springs open to 110 degrees. In the box: 30 loose white mints, rounded oblongs 11.5 x 6.5 mm, 0.5 g each, in one layer. Dish: a square stoneware dish, dark blue, 12 x 12 outside, 11 x 11 inside, 2.5 tall, floor 0.5 thick, fixed to the table, centred at (20, 19). Both arms start in their ready pose. Layout B (MINT_LOT=B): the box at (31.5, 0), turned 10 degrees anticlockwise seen from above, holding 24 mints; the dish at (21.5, 16.5).",
+  "scoring": "Scored at the end, from where things are then. A mint is in the box if its centre is inside the box's outline; in the dish if its centre is over the dish's floor and below the top of its rim; otherwise spilled. The lid is shut within 3 degrees of closed. The box is down when its lowest point is within 3 mm of the table, no part of it is over the dish, it is at rest (under 2 cm/s and 0.5 rad/s) and both grippers are at least 3 cm from it. With any mint spilled: 0.25 if exactly two are in the dish, otherwise 0. With none spilled: 1.0 for exactly two in the dish, 0.5 for one or three, 0 for none or for four or more; each of these is halved unless the lid is shut and the box is down. So: 1.0 two in the dish, nothing spilled, lid shut, box down; 0.5 the same with the lid open or the box not down, or one or three in the dish with lid shut and box down; 0.25 one or three with the lid open or the box not down, or two in the dish and a spill; 0 otherwise.",
+  "run_limit": "1,500 steps (75 s at 20 Hz)",
+  "reset_notes": "Tip the two mints from the dish back into the box (or top it up to the count), shut the lid, and lay the box on its mark. Mints that touched the table should be replaced if they are to be eaten.",
+  "fidelity": "Rigid parts at full size; a mint is a capsule. Sourced: the pack's 47 x 17 x 73 mm (a retailer's listing) and 0.5 g a mint (the maker). Estimates: the mint's size, the 12 x 10 mm opening, flap, lip, walls, the box's 9 g, friction, bounce, and the snap (0.9 N at the lip), a torque law on the hinge. Solver aids: the flap weighs 2 g; the box has a 60 g body's inertia, 51 g of its weight carried by a force; grippers meet it as a solid block. The dish is fixed. Not tried on a physical rig.",
+  "scores": "Dream-1 run: 0.0 (both arms folded down with their grippers closed, low over the table in front of their own bases; neither reached the box); demo: 1.0 (the demo video shows the overhead camera beside the left wrist camera)",
+  "media": "M-BJC4DG"
+}
