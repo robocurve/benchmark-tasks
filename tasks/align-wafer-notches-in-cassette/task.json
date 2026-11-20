@@ -1,0 +1,12 @@
+{
+  "title": "Align three 200 mm wafer notches in a cassette using a common roller",
+  "category": "Impact on AI timelines",
+  "instruction": "Press the blue crank to turn the shared roller and align the three notches. Keep both hands off the wafers and release the crank.",
+  "context": "Find a consistent wafer orientation before semiconductor handling or processing.",
+  "setup": "Three 200 mm silicon dummy disks of 0.75 mm modeled thickness in slots at 27 mm intervals on a bench fixture. Initial notch errors are 4°, 7° and 9°. Common 48 mm roller with a side-mounted downstroke crank.",
+  "scoring": "0.25 per notch within ±2° of the comb. Final 0.25 for one second released with all three aligned and zero robot contact with any wafer throughout.",
+  "run_limit": "780 steps at 20 Hz (39 s)",
+  "reset_notes": "Restore the three assigned slots, initial notch angles and roller angle, then clear contact history.",
+  "fidelity": "Original three-slot surrogate. A physical crank, edge ratio and spring catch torque approximate the roller and comb. Wafer axes are captive, so crossed slots are physically excluded. Dummy thickness, spacing, handle and clearances are prototype choices.",
+  "scores": "Dream-1 run: 0.0; scripted demo: 1.0"
+}
