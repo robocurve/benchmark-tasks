@@ -1,0 +1,271 @@
+#usda 1.0
+(
+    defaultPrim = "battery_new"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "battery_new" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+)
+{
+    point3f physics:centerOfMass = (0, 0, 0)
+    float3 physics:diagonalInertia = (0.000003781875, 0.000009048975, 0.000010533975)
+    float physics:mass = 0.045
+
+    def "Looks"
+    {
+        def Material "case"
+        {
+            token outputs:surface.connect = </battery_new/Looks/case/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.11, 0.12, 0.14)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.4
+                token outputs:surface
+            }
+        }
+
+        def Material "copper"
+        {
+            token outputs:surface.connect = </battery_new/Looks/copper/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.69, 0.41, 0.18)
+                float inputs:metallic = 0.4
+                float inputs:roughness = 0.35
+                token outputs:surface
+            }
+        }
+
+        def Material "label"
+        {
+            token outputs:surface.connect = </battery_new/Looks/label/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor.connect = </battery_new/Looks/label/texture.outputs:rgb>
+                float inputs:metallic = 0
+                float inputs:roughness = 0.4
+                token outputs:surface
+            }
+
+            def Shader "st"
+            {
+                uniform token info:id = "UsdPrimvarReader_float2"
+                token inputs:varname = "st"
+                float2 outputs:result
+            }
+
+            def Shader "texture"
+            {
+                uniform token info:id = "UsdUVTexture"
+                asset inputs:file = @./textures/battery_label.png@
+                float2 inputs:st.connect = </battery_new/Looks/label/st.outputs:result>
+                float3 outputs:rgb
+            }
+        }
+
+        def Material "steel"
+        {
+            token outputs:surface.connect = </battery_new/Looks/steel/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.75, 0.75, 0.77)
+                float inputs:metallic = 0.9
+                float inputs:roughness = 0.25
+                token outputs:surface
+            }
+        }
+
+        def Material "tape"
+        {
+            token outputs:surface.connect = </battery_new/Looks/tape/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.8, 0.08, 0.06)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.35
+                token outputs:surface
+            }
+        }
+    }
+
+    def Cube "case" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </battery_new/Looks/case>
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.0459, 0.0265, 0.0175)
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Mesh "label_top" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </battery_new/Looks/label>
+        point3f[] points = [(-0.02295, -0.01325, 0.00895), (0.02295, -0.01325, 0.00895), (0.02295, 0.01325, 0.00895), (-0.02295, 0.01325, 0.00895)]
+        texCoord2f[] primvars:st = [(1, 0), (0, 0), (0, 1), (1, 1)] (
+            interpolation = "vertex"
+        )
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "label_bottom" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [3, 2, 1, 0]
+        rel material:binding = </battery_new/Looks/label>
+        point3f[] points = [(-0.02295, -0.01325, -0.00895), (0.02295, -0.01325, -0.00895), (0.02295, 0.01325, -0.00895), (-0.02295, 0.01325, -0.00895)]
+        texCoord2f[] primvars:st = [(1, 1), (0, 1), (0, 0), (1, 0)] (
+            interpolation = "vertex"
+        )
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Cube "band" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </battery_new/Looks/copper>
+        uniform token purpose = "default"
+        double size = 1
+        float3 xformOp:scale = (0.012, 0.0269, 0.0177)
+        double3 xformOp:translate = (0.01645, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "top_plate" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </battery_new/Looks/steel>
+        uniform token purpose = "default"
+        double size = 1
+        float3 xformOp:scale = (0.0007, 0.0255, 0.0165)
+        double3 xformOp:translate = (0.0228, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cylinder "snap_pos" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.0026
+        rel material:binding = </battery_new/Looks/steel>
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        double radius = 0.0028
+        double3 xformOp:translate = (0.02425, 0.00635, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "snap_neg" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.0026
+        rel material:binding = </battery_new/Looks/steel>
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        double radius = 0.0042
+        double3 xformOp:translate = (0.02425, -0.00635, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "hex_0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.0026
+        rel material:binding = </battery_new/Looks/steel>
+        double radius = 0.0006
+        double3 xformOp:translate = (0.02425, -0.0020499999999999997, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "hex_1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.0026
+        rel material:binding = </battery_new/Looks/steel>
+        double radius = 0.0006
+        double3 xformOp:translate = (0.02425, -0.004199999999999999, 0.003723909236273086)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "hex_2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.0026
+        rel material:binding = </battery_new/Looks/steel>
+        double radius = 0.0006
+        double3 xformOp:translate = (0.02425, -0.008499999999999999, 0.0037239092362730862)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "hex_3" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.0026
+        rel material:binding = </battery_new/Looks/steel>
+        double radius = 0.0006
+        double3 xformOp:translate = (0.02425, -0.01065, 5.2659812363336185e-19)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "hex_4" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.0026
+        rel material:binding = </battery_new/Looks/steel>
+        double radius = 0.0006
+        double3 xformOp:translate = (0.02425, -0.0085, -0.003723909236273085)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "hex_5" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "X"
+        double height = 0.0026
+        rel material:binding = </battery_new/Looks/steel>
+        double radius = 0.0006
+        double3 xformOp:translate = (0.02425, -0.004199999999999999, -0.003723909236273086)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+}
+

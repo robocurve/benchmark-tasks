@@ -1,0 +1,193 @@
+#usda 1.0
+(
+    defaultPrim = "bracket"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "bracket" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI"]
+)
+{
+    bool physics:kinematicEnabled = 1
+
+    def "Looks"
+    {
+        def Material "white"
+        {
+            token outputs:surface.connect = </bracket/Looks/white/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.93, 0.93, 0.91)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.45
+                token outputs:surface
+            }
+        }
+
+        def Material "grey"
+        {
+            token outputs:surface.connect = </bracket/Looks/grey/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.62, 0.62, 0.6)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.55
+                token outputs:surface
+            }
+        }
+
+        def Material "dark"
+        {
+            token outputs:surface.connect = </bracket/Looks/dark/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.2, 0.2, 0.21)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.6
+                token outputs:surface
+            }
+        }
+    }
+
+    def Cylinder "ring" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.01
+        rel material:binding = </bracket/Looks/white>
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        double radius = 0.055
+        double3 xformOp:translate = (0, 0, 0.005)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "face" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.0003
+        rel material:binding = </bracket/Looks/grey>
+        double radius = 0.045
+        double3 xformOp:translate = (0, 0, -0.0002)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cube "slot_0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </bracket/Looks/dark>
+        double size = 1
+        quatf xformOp:orient = (1, 0, 0, 0)
+        float3 xformOp:scale = (0.006, 0.014, 0.0004)
+        double3 xformOp:translate = (0.047, 0, -0.0004)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def Cube "slot_1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </bracket/Looks/dark>
+        double size = 1
+        quatf xformOp:orient = (0.8660254, 0, 0, 0.5)
+        float3 xformOp:scale = (0.006, 0.014, 0.0004)
+        double3 xformOp:translate = (0.023500000000000007, 0.04070319397786861, -0.0004)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def Cube "slot_2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </bracket/Looks/dark>
+        double size = 1
+        quatf xformOp:orient = (0.5, 0, 0, 0.8660254)
+        float3 xformOp:scale = (0.006, 0.014, 0.0004)
+        double3 xformOp:translate = (-0.02349999999999999, 0.04070319397786862, -0.0004)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def Cube "slot_3" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </bracket/Looks/dark>
+        double size = 1
+        quatf xformOp:orient = (6.123234e-17, 0, 0, 1)
+        float3 xformOp:scale = (0.006, 0.014, 0.0004)
+        double3 xformOp:translate = (-0.047, 5.7558399559925604e-18, -0.0004)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def Cube "slot_4" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </bracket/Looks/dark>
+        double size = 1
+        quatf xformOp:orient = (-0.5, 0, 0, 0.8660254)
+        float3 xformOp:scale = (0.006, 0.014, 0.0004)
+        double3 xformOp:translate = (-0.02350000000000002, -0.040703193977868604, -0.0004)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def Cube "slot_5" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </bracket/Looks/dark>
+        double size = 1
+        quatf xformOp:orient = (-0.8660254, 0, 0, 0.5)
+        float3 xformOp:scale = (0.006, 0.014, 0.0004)
+        double3 xformOp:translate = (0.02349999999999997, -0.04070319397786863, -0.0004)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+
+    def Cylinder "screw_0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.0004
+        rel material:binding = </bracket/Looks/grey>
+        double radius = 0.004
+        double3 xformOp:translate = (0.02598076211353316, 0.014999999999999998, -0.0005)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "screw_1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.0004
+        rel material:binding = </bracket/Looks/grey>
+        double radius = 0.004
+        double3 xformOp:translate = (-0.02598076211353316, 0.014999999999999998, -0.0005)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "screw_2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.0004
+        rel material:binding = </bracket/Looks/grey>
+        double radius = 0.004
+        double3 xformOp:translate = (-5.510910596163089e-18, -0.03, -0.0005)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+}
+
