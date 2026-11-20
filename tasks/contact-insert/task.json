@@ -1,0 +1,25 @@
+{
+  "title": "Pin a crimped contact into cavity 3 until the locking fingers click, prove it with a tug, then fit the secondary lock",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "wire harness",
+    "crimp contact",
+    "sealed connector",
+    "contact retention",
+    "secondary lock",
+    "snap fit",
+    "deformable wire",
+    "pinout",
+    "electrical assembly"
+  ],
+  "instruction": "Push the crimped contact into cavity 3 of the connector, as on the pinout card, from the wire side, until it clicks; hold the housing with one hand and push the wire close behind the crimp with the other. Tug the wire lightly to check it is locked, then press the secondary lock fully into the slot on top of the housing. Then let go of everything.",
+  "context": "Wire-harness assembly (O*NET 51-2022.00, Electrical and Electronic Equipment Assemblers). A contact that has not clicked in looks inserted but backs out when the connector is mated: a classic harness fault, caught by a tug and by the secondary lock, which only goes in when every contact is seated.",
+  "setup": "All positions from the arm bases' midline (x forward, y left). On the table: a black sealed 4-way connector housing (glass-filled nylon, 24 mm wide x 40 mm long x 24 mm tall) lying on its side, loose, its rear face (wire side) at x 0.30 m, y 0.02 m facing -y (toward the right arm); four square cavities 3.9 mm across, 10 mm apart, numbered 1-4 by moulded dots as seen from the rear (1 top left, 2 top right, 3 bottom right, 4 bottom left), each with a 6 mm lead-in funnel; a 2.2 mm slot across the top, 18-20 mm from the rear face. A crimped size-16 socket contact (gold, 21 mm, shoulder 3.8 mm across) on a red 1.0 mm2 wire (2.6 mm across, 140 mm, free end) lies on a grey two-block rest (20 mm tall, a 38 mm gap behind the crimp) at x 0.305 m, its crimp end at y -0.09 m, nose toward the housing. An orange secondary lock (a comb: a 24 x 5 x 8 mm grip tab with four prongs 0.8 x 1.3 x 19 mm) stands prongs-down in a grey 40 x 16 x 22 mm holder at x 0.20 m, y -0.06 m. A white 50 x 36 mm pinout card at x 0.19 m, y 0.10 m shows the cavities as seen from the rear, cavity 3 red.",
+  "scoring": "In cavity 3 = the contact's nose at least 5 mm into cavity 3 from the rear, on its axis (within 1 mm), pointing in (within 20 degrees). Locked = the crimp end within 0.3 mm of its seated depth (11.1 mm in) with the cavity's locking fingers snapped in behind the shoulder, checked by a tug: once no fingertip has been within 25 mm of the contact or the first 60 mm of wire for 1 s, 30 N on the wire against the housing (ramped 1 s, held 0.5 s); it holds if the contact moves under 1 mm. Lock in = the secondary lock's tab down on the housing (within 0.3 mm) over the slot, every finger closed. Score: 1.0 (success) = in cavity 3, locked, lock in, no fingertip within 20 mm of housing, contact, wire or lock for 1 s, all still; 0.75 = same, still touched; 0.5 = in cavity 3 and locked, lock not in; 0.25 = in cavity 3 only; 0 = otherwise, or (latched) the contact ever locked in another cavity, or the lock pressed down to the fingers' height (tab within 13 mm of the top) while a contact was in but not clicked (housing damaged).",
+  "run_limit": "3,000 steps (2.5 minutes at 20 Hz)",
+  "reset_notes": "Pull the contact out with an extraction tool (the fingers hold it), take the secondary lock out of the slot and stand it back in its holder; housing, contact on its rest and card as in the screenshot. A housing with a forced secondary lock must be replaced.",
+  "fidelity": "CPU PhysX 240 Hz. Own simplified parts, no third-party CAD. Wire: 10 mm links with bending springs. Each cavity: two sprung fingers (4 N/mm) that click behind the contact's shoulder. Simplified: once clicked, the task holds the fingers shut; the simulated tug is 8 N (a held contact counts as passing 30 N); forcing the lock is judged by position. Parts heavier than real for the solver.",
+  "scores": "Dream-1 run: 0.0; scripted demo: 1.0 (success at step 1,809); hand left on the lock: 0.75; no secondary lock: 0.5; pushed in short of the click: 0.25; lock forced over a contact short of the click: 0.0; contact clicked into cavity 2: 0.0",
+  "media": "M-CDS847"
+}
