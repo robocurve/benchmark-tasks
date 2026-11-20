@@ -1,0 +1,18 @@
+{
+  "title": "Set and verify a parallel gripper's closing stop",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "robot gripper",
+    "mechanical stop",
+    "stroke calibration",
+    "commissioning"
+  ],
+  "instruction": "Fit the blue closing-stop block. Close the spring-loaded jaw to the stop, then let it reopen.",
+  "context": "Gripper setup often limits travel to stop overclosure into the part or fixture. Choose the correct gauge, fit it as a hard stop, and test both the closing stroke and spring return.",
+  "setup": "De-energized 151 × 98 mm guide bed with a passive jaw, keyed stop shelf and visible stroke scale. The blue gauge stem is 26 × 22 × 24 mm, and the gray stem is 14 × 22 × 24 mm. The bed origin is (294, −82, 0) mm relative to the tabletop. The blue and gray blocks start upright at (221, −209, 0) and (362, −209, 0) mm.",
+  "scoring": "0.30 for the blue block within 4 mm in the table plane and 4 mm vertically with tilt under 8.9°. 0.65 after the robot touches the moving jaw while it is at 26–32 mm of measured stroke and PhysX reports contact with the seated block. Full credit with the block still seated and the jaw below 3 mm of stroke, with neither touched for one second. Travel beyond 33 mm with blue seated sets the score to zero.",
+  "run_limit": "850 steps at 20 Hz (42.5 s)",
+  "reset_notes": "Open the jaw to zero and return both blocks to their marked starts.",
+  "fidelity": "This de-energized fabrication fixture models a removable hard stop and manual spring-return carriage. It represents documented industrial travel adjustment. The replaceable block is a custom bench mechanism and does not reproduce SMC's screw adjuster.",
+  "scores": "Dream-1 run: 0.0; scripted demo: 1.0"
+}

@@ -1,0 +1,31 @@
+#usda 1.0
+(
+    defaultPrim = "Scene"
+    metersPerUnit = 1
+    kilogramsPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Scene"
+{
+    def Xform "rig" (
+        prepend references = @./assets/rig.usda@
+    )
+    {
+        double3 xformOp:translate = (0.294, -0.082, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+    def Xform "blue_stop" (
+        prepend references = @./assets/blue_stop.usda@
+    )
+    {
+        double3 xformOp:translate = (0.221, -0.209, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+    def Xform "gray_stop" (
+        prepend references = @./assets/gray_stop.usda@
+    )
+    {
+        double3 xformOp:translate = (0.362, -0.209, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+}
