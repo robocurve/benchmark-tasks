@@ -1,0 +1,21 @@
+{
+  "title": "Seat a switch line card by swinging both ejector levers shut together",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "data center",
+    "network switch",
+    "line card",
+    "ejector lever",
+    "bimanual",
+    "leverage"
+  ],
+  "instruction": "Install the line card: seat it fully in its slot and lock both of its ejector levers shut.",
+  "context": "Data-center technicians install line cards in modular switches. The card's connectors take more force to mate than a push gives, so the two ejector levers on its faceplate are swung shut to draw it in, and they must close together: an end drawn in alone cocks the card and bends backplane pins.",
+  "setup": "Positions in cm from the midpoint between the two arm bases, on the table (x forward, y left). Switch chassis slot, sheet steel, fixed to the table: mouth (chassis face) at x 33, centred on y 0, floor 1 cm above the table, 40.3 cm between its guide walls, 52 cm deep, 5 cm tall under a roof; 2.7 cm front flanges. Two steel ejector pins, 0.8 cm diameter, 4 cm tall, stand on floor tabs in front of the face at x 30.17, y +-20.5. At the back, two backplane connectors (y +-15) mate over the last 0.8 cm of insertion, each against a 50 N/cm spring (40 N each at home). Line card, steel carrier with circuit board and heat sinks, 40 x 46 x 3.5 cm, 4 kg, faceplate 37.2 x 4 cm; it stands in the slot's guides with its faceplate 6 cm short of home (home: faceplate 0.1 cm proud of the chassis face). Two yellow ejector levers, 80 g each, pivot on vertical axes 1.6 cm in front of the faceplate at y +-19.2: a handle 11 cm long toward the card's middle with a 6.1 cm-tall finger tab at its end, and a claw 3 cm long outward, which wraps behind its pin (1.3 cm from the pivot) when the lever is shut. Both levers start swung 85 degrees open, claws pointing into the slot. A lever within 2.5 degrees of shut, its end of the card within 0.15 cm of home, snaps into a spring catch that holds it shut.",
+  "scoring": "Each end gap: how far the faceplate is short of home, measured 18 cm either side of its middle. 0 if at any point, with both end gaps 8 mm or less, they differ by more than 1.5 mm (bent backplane pins). Otherwise 1.0 if both end gaps are 1 mm or less, both levers within 3 degrees of shut and no gripper finger within 3 cm of either finger tab, for 1 s; 0.75 if both end gaps were ever 1 mm or less; 0.5 if both were ever 8 mm or less; 0.25 if both were ever 25 mm or less; else 0.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Press each lever's catch and swing both levers fully open (the card comes out with them), pull the card out to 6 cm short of home.",
+  "fidelity": "Rigid bodies at full size. Card, levers (hinges) and pins are modelled as parts; each connector is a sprung plunger, 80 N in all, lighter than a real high-density backplane, which the arms could not mate even with the levers. The catch is a stiff joint spring that engages within 2.5 degrees of shut. The chassis is a one-slot section; its other slots, the card's components and port optics are not modelled. Friction 0.12.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-GGS66Q"
+}
