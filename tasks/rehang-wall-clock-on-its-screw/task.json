@@ -1,0 +1,20 @@
+{
+  "title": "Hang a wall clock back on its screw by the keyhole hanger hidden behind it",
+  "category": "Societal relatability",
+  "keywords": [
+    "wall clock",
+    "keyhole hanger",
+    "blind alignment",
+    "two-hand",
+    "hanging"
+  ],
+  "instruction": "Hang the clock on its screw.",
+  "context": "A wall clock comes off its screw for each battery change and, in most of the US, twice a year to reset it for daylight saving time. Hanging it back is a blind job: the clock's keyhole hanger is on its back and the screw is behind it, so neither can be seen. People hold the clock flat against the wall, press it on the screw's head and slide it until the head drops through the hanger's round hole, then let the shank ride up the slot into its narrow end. A robot that only sets the clock against the wall, or balances it on the screw's head, leaves it to fall.",
+  "setup": "Positions in cm from the midpoint between the arm bases, x forward, y to the robot's left, heights above the table top. Wall: a painted plywood panel standing on the table, its face at x 42.5. Screw: a #8 pan-head screw (head 7.9 mm across, shank 4.17 mm) at y 0, its axis 31.75 cm above the table, driven level so its head's face stands 5 mm proud of the wall. Clock: an Amazon Basics Classic 12 in round wall clock, ASIN B07PXWTYWL (305 mm across, 44 mm deep, 0.64 kg per its listing), with a steel keyhole hanger flush in its back (estimated from maker photos: a hole 11 mm across, a slot 5 mm wide whose narrow end is 11 mm above the hole and 3.5 cm below the clock's top edge, a 6 mm pocket behind it). It stands upright on its rim on the table under the screw, its back 3 mm off the wall. Arms start at the ready pose, grippers open.",
+  "scoring": "1.0: the clock hangs on the screw: the screw's head behind the hanger plate and its shank in the slot's narrow end (within 3 mm of the end), the clock clear of the table by at least 1 cm, no arm touching it (in simulation every arm link at least 5 mm clear) and still (under 1 cm/s) for 2 s. 0.5: at the end, the head through the hanger (in the hole or the slot) but the clock not hanging free for 2 s (still held). 0.25: at the end, the clock lifted with its back within about 13 mm of the wall (1 cm past the end of the screw's shank) over the screw, the head not through. 0: anything else, including doing nothing, or, at any moment, the clock's face tipped more than 30 degrees off the wall's plane while no arm link touches it (it tipped over with the hands off it; latched; tilting it while holding it is allowed, and a clock that slips down upright onto its rim can be hung again). Hanging off level is not penalized: on one screw the clock swings plumb by itself. Real trial, from the video: hung and staying up with the hands off it for 2 s (1.0), on the screw but still held (0.5), held flat on the wall over the screw (0.25), otherwise or tipped over with the hands off it (0); 0.5 and 0.25 are told apart at the end by pulling the clock's top gently out from the wall, a hand ready under it: caught on the screw 0.5, comes away 0.25. Possible scores: 0, 0.25, 0.5, 1.0.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Lift the clock off its screw and stand it on its rim on the tape mark under the screw, back to the wall. Under a minute. In simulation the reset is exact.",
+  "fidelity": "Rigid bodies, real size and mass. The hanger is a 1 mm steel plate with the keyhole cut out and a pocket behind it; the screw is a fixed head and shank. Every hold is contact, with the friction values stated in the README; nothing captures or pulls the clock onto the screw. The clock's movement is a lumped mass.",
+  "scores": "Dream-1 run: 0 (2,400 steps); demo: 1.0 (637 steps)",
+  "media": "M-42QWLY"
+}
