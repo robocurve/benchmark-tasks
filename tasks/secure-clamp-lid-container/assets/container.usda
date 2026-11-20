@@ -1,0 +1,166 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    kilogramsPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Asset"
+{
+    def Xform "fixture" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        float physics:mass = 0.56
+        bool physics:kinematicEnabled = true
+        def Material "Glass"
+        {
+            token outputs:surface.connect = </Asset/fixture/Glass/Surface.outputs:surface>
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.68, 0.85, 0.89)
+                float inputs:opacity = 0.20
+                float inputs:ior = 1.47
+                float inputs:roughness = 0.095
+                token outputs:surface
+            }
+        }
+        def Xform "ClearVessel" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </Asset/fixture/Glass>
+            def Mesh "GlassShell"
+            {
+                point3f[] points = [(0.06, 0.043, 0), (0.058705952, 0.049505618, 0), (0.055020815, 0.055020815, 0), (0.049505618, 0.058705952, 0), (0.043, 0.06, 0), (-0.043, 0.06, 0), (-0.049505618, 0.058705952, 0), (-0.055020815, 0.055020815, 0), (-0.058705952, 0.049505618, 0), (-0.06, 0.043, 0), (-0.06, -0.043, 0), (-0.058705952, -0.049505618, 0), (-0.055020815, -0.055020815, 0), (-0.049505618, -0.058705952, 0), (-0.043, -0.06, 0), (0.043, -0.06, 0), (0.049505618, -0.058705952, 0), (0.055020815, -0.055020815, 0), (0.058705952, -0.049505618, 0), (0.06, -0.043, 0), (0.0735, 0.0545, 0.057), (0.072053711, 0.061770985, 0.057), (0.067935029, 0.067935029, 0.057), (0.061770985, 0.072053711, 0.057), (0.0545, 0.0735, 0.057), (-0.0545, 0.0735, 0.057), (-0.061770985, 0.072053711, 0.057), (-0.067935029, 0.067935029, 0.057), (-0.072053711, 0.061770985, 0.057), (-0.0735, 0.0545, 0.057), (-0.0735, -0.0545, 0.057), (-0.072053711, -0.061770985, 0.057), (-0.067935029, -0.067935029, 0.057), (-0.061770985, -0.072053711, 0.057), (-0.0545, -0.0735, 0.057), (0.0545, -0.0735, 0.057), (0.061770985, -0.072053711, 0.057), (0.067935029, -0.067935029, 0.057), (0.072053711, -0.061770985, 0.057), (0.0735, -0.0545, 0.057), (0.0735, 0.0545, 0.063), (0.072053711, 0.061770985, 0.063), (0.067935029, 0.067935029, 0.063), (0.061770985, 0.072053711, 0.063), (0.0545, 0.0735, 0.063), (-0.0545, 0.0735, 0.063), (-0.061770985, 0.072053711, 0.063), (-0.067935029, 0.067935029, 0.063), (-0.072053711, 0.061770985, 0.063), (-0.0735, 0.0545, 0.063), (-0.0735, -0.0545, 0.063), (-0.072053711, -0.061770985, 0.063), (-0.067935029, -0.067935029, 0.063), (-0.061770985, -0.072053711, 0.063), (-0.0545, -0.0735, 0.063), (0.0545, -0.0735, 0.063), (0.061770985, -0.072053711, 0.063), (0.067935029, -0.067935029, 0.063), (0.072053711, -0.061770985, 0.063), (0.0735, -0.0545, 0.063), (0.069, 0.053, 0.063), (0.067782073, 0.059122935, 0.063), (0.064313708, 0.064313708, 0.063), (0.059122935, 0.067782073, 0.063), (0.053, 0.069, 0.063), (-0.053, 0.069, 0.063), (-0.059122935, 0.067782073, 0.063), (-0.064313708, 0.064313708, 0.063), (-0.067782073, 0.059122935, 0.063), (-0.069, 0.053, 0.063), (-0.069, -0.053, 0.063), (-0.067782073, -0.059122935, 0.063), (-0.064313708, -0.064313708, 0.063), (-0.059122935, -0.067782073, 0.063), (-0.053, -0.069, 0.063), (0.053, -0.069, 0.063), (0.059122935, -0.067782073, 0.063), (0.064313708, -0.064313708, 0.063), (0.067782073, -0.059122935, 0.063), (0.069, -0.053, 0.063), (0.055, 0.041, 0.005), (0.053934313, 0.046357568, 0.005), (0.050899495, 0.050899495, 0.005), (0.046357568, 0.053934313, 0.005), (0.041, 0.055, 0.005), (-0.041, 0.055, 0.005), (-0.046357568, 0.053934313, 0.005), (-0.050899495, 0.050899495, 0.005), (-0.053934313, 0.046357568, 0.005), (-0.055, 0.041, 0.005), (-0.055, -0.041, 0.005), (-0.053934313, -0.046357568, 0.005), (-0.050899495, -0.050899495, 0.005), (-0.046357568, -0.053934313, 0.005), (-0.041, -0.055, 0.005), (0.041, -0.055, 0.005), (0.046357568, -0.053934313, 0.005), (0.050899495, -0.050899495, 0.005), (0.053934313, -0.046357568, 0.005), (0.055, -0.041, 0.005)]
+                int[] faceVertexCounts = [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices = [0, 1, 21, 20, 1, 2, 22, 21, 2, 3, 23, 22, 3, 4, 24, 23, 4, 5, 25, 24, 5, 6, 26, 25, 6, 7, 27, 26, 7, 8, 28, 27, 8, 9, 29, 28, 9, 10, 30, 29, 10, 11, 31, 30, 11, 12, 32, 31, 12, 13, 33, 32, 13, 14, 34, 33, 14, 15, 35, 34, 15, 16, 36, 35, 16, 17, 37, 36, 17, 18, 38, 37, 18, 19, 39, 38, 19, 0, 20, 39, 20, 21, 41, 40, 21, 22, 42, 41, 22, 23, 43, 42, 23, 24, 44, 43, 24, 25, 45, 44, 25, 26, 46, 45, 26, 27, 47, 46, 27, 28, 48, 47, 28, 29, 49, 48, 29, 30, 50, 49, 30, 31, 51, 50, 31, 32, 52, 51, 32, 33, 53, 52, 33, 34, 54, 53, 34, 35, 55, 54, 35, 36, 56, 55, 36, 37, 57, 56, 37, 38, 58, 57, 38, 39, 59, 58, 39, 20, 40, 59, 40, 41, 61, 60, 41, 42, 62, 61, 42, 43, 63, 62, 43, 44, 64, 63, 44, 45, 65, 64, 45, 46, 66, 65, 46, 47, 67, 66, 47, 48, 68, 67, 48, 49, 69, 68, 49, 50, 70, 69, 50, 51, 71, 70, 51, 52, 72, 71, 52, 53, 73, 72, 53, 54, 74, 73, 54, 55, 75, 74, 55, 56, 76, 75, 56, 57, 77, 76, 57, 58, 78, 77, 58, 59, 79, 78, 59, 40, 60, 79, 60, 61, 81, 80, 61, 62, 82, 81, 62, 63, 83, 82, 63, 64, 84, 83, 64, 65, 85, 84, 65, 66, 86, 85, 66, 67, 87, 86, 67, 68, 88, 87, 68, 69, 89, 88, 69, 70, 90, 89, 70, 71, 91, 90, 71, 72, 92, 91, 72, 73, 93, 92, 73, 74, 94, 93, 74, 75, 95, 94, 75, 76, 96, 95, 76, 77, 97, 96, 77, 78, 98, 97, 78, 79, 99, 98, 79, 60, 80, 99, 0, 2, 1, 0, 3, 2, 0, 4, 3, 0, 5, 4, 0, 6, 5, 0, 7, 6, 0, 8, 7, 0, 9, 8, 0, 10, 9, 0, 11, 10, 0, 12, 11, 0, 13, 12, 0, 14, 13, 0, 15, 14, 0, 16, 15, 0, 17, 16, 0, 18, 17, 0, 19, 18, 80, 81, 82, 80, 82, 83, 80, 83, 84, 80, 84, 85, 80, 85, 86, 80, 86, 87, 80, 87, 88, 80, 88, 89, 80, 89, 90, 80, 90, 91, 80, 91, 92, 80, 92, 93, 80, 93, 94, 80, 94, 95, 80, 95, 96, 80, 96, 97, 80, 97, 98, 80, 98, 99]
+                uniform token subdivisionScheme = "none"
+                color3f[] primvars:displayColor = [(0.65, 0.82, 0.85)]
+            }
+        }
+        def Xform "GlassColliders"
+        {
+            token visibility = "invisible"
+            def Cube "Bottom" (
+                prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+            )
+            {
+        float physxCollision:contactOffset = 0.0006
+        float physxCollision:restOffset = 0
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0.0025)
+                float3 xformOp:scale = (0.12, 0.12, 0.005)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.65, 0.82, 0.85)]
+            }
+            def Cube "SideX0" (
+                prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+            )
+            {
+        float physxCollision:contactOffset = 0.0006
+        float physxCollision:restOffset = 0
+                double size = 1
+                double3 xformOp:translate = (-0.067, 0, 0.029)
+                float3 xformOp:scale = (0.005, 0.11, 0.055)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.65, 0.82, 0.85)]
+            }
+            def Cube "SideY0" (
+                prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+            )
+            {
+        float physxCollision:contactOffset = 0.0006
+        float physxCollision:restOffset = 0
+                double size = 1
+                double3 xformOp:translate = (0, -0.067, 0.029)
+                float3 xformOp:scale = (0.11, 0.005, 0.055)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.65, 0.82, 0.85)]
+            }
+            def Cube "RimX0" (
+                prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+            )
+            {
+        float physxCollision:contactOffset = 0.0006
+        float physxCollision:restOffset = 0
+                double size = 1
+                double3 xformOp:translate = (-0.0705, 0, 0.0608)
+                float3 xformOp:scale = (0.007, 0.111, 0.004)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.65, 0.82, 0.85)]
+            }
+            def Cube "RimY0" (
+                prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+            )
+            {
+        float physxCollision:contactOffset = 0.0006
+        float physxCollision:restOffset = 0
+                double size = 1
+                double3 xformOp:translate = (0, -0.0705, 0.0608)
+                float3 xformOp:scale = (0.111, 0.007, 0.004)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.65, 0.82, 0.85)]
+            }
+            def Cube "SideX1" (
+                prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+            )
+            {
+        float physxCollision:contactOffset = 0.0006
+        float physxCollision:restOffset = 0
+                double size = 1
+                double3 xformOp:translate = (0.067, 0, 0.029)
+                float3 xformOp:scale = (0.005, 0.11, 0.055)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.65, 0.82, 0.85)]
+            }
+            def Cube "SideY1" (
+                prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+            )
+            {
+        float physxCollision:contactOffset = 0.0006
+        float physxCollision:restOffset = 0
+                double size = 1
+                double3 xformOp:translate = (0, 0.067, 0.029)
+                float3 xformOp:scale = (0.11, 0.005, 0.055)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.65, 0.82, 0.85)]
+            }
+            def Cube "RimX1" (
+                prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+            )
+            {
+        float physxCollision:contactOffset = 0.0006
+        float physxCollision:restOffset = 0
+                double size = 1
+                double3 xformOp:translate = (0.0705, 0, 0.0608)
+                float3 xformOp:scale = (0.007, 0.111, 0.004)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.65, 0.82, 0.85)]
+            }
+            def Cube "RimY1" (
+                prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+            )
+            {
+        float physxCollision:contactOffset = 0.0006
+        float physxCollision:restOffset = 0
+                double size = 1
+                double3 xformOp:translate = (0, 0.0705, 0.0608)
+                float3 xformOp:scale = (0.111, 0.007, 0.004)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                color3f[] primvars:displayColor = [(0.65, 0.82, 0.85)]
+            }
+        }
+        def Cube "PrepMat"
+        {
+            double size = 1
+            double3 xformOp:translate = (0, 0, -0.0014)
+            float3 xformOp:scale = (0.201, 0.199, 0.003)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.18, 0.24, 0.28)]
+        }
+    }
+}
