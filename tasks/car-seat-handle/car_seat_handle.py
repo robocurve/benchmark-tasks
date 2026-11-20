@@ -1,12 +1,14 @@
 """An empty infant car seat (carrier) stands on the station table, foot end toward the robot, carry handle upright.
 
-The carrier is a rigid plastic tub on two runners. Its U-shaped carry handle turns on a hub at each side. Each handle
-arm carries a release button on its outer face, 10 cm up from the hub. The button, its stem and a lock pin are one
-sprung part: at rest the pin sits in a hole of the fixed hub cap, and the handle cannot turn. Pressed in 6 mm, the pin
-is clear. The hub cap has holes at 0 (carry), 35, 65 and 85 degrees (rear). A pin that is let go between holes rides
-the cap's face and drops into the next hole it reaches.
-The task: turn the handle back from carry to the rear position (85 degrees, toward the head end), leave it locked
-there, do not move the seat, and move both grippers clear.
+Laid out after the Graco SnugRide 35 Lite LX (owner's manual NWL0000993719A, sections 2-A and 2-D). The carrier is a
+rigid plastic tub on two runners. Its U-shaped carry handle turns on a round hub at each side. As in the manual's
+drawings, each handle arm has its release tab on the arm's front (foot-end) edge where the arm meets its hub; pressing
+the tab rearward, toward the head end, releases that side. Inside, the tab is one arm of a small sprung lever whose
+other arm carries a lock tooth; the tooth sits in a notch of a ring on the shell's hub boss. Pressed 4 mm, the tooth
+lifts clear; at rest it drops into the next notch it meets. Notches at 0 (A, carry), 35 (B), 65 (C) and 100 (D, rear)
+degrees back from upright, read from the manual's drawing of the four positions.
+The task: turn the handle back from carry to the rear position D, leave it locked there, do not move the seat, and move
+both grippers clear.
 
 Frame: x forward from the arm bases, y left, z up, metres.
 """
@@ -37,32 +39,43 @@ CONTROL_HZ = 20.0
 FAIL = os.environ.get("CSH_FAIL", "")  # a wrong outcome on purpose (README): fixed, early, nopress, holding
 
 # -- geometry (shell frame: origin on the hub axis midway between the hubs; x toward the head end, y left, z up) -------
+# Handle frame (upright): x toward the head end (the arm's rear edge), z up the arm. Each side is the mirror in y.
 HX, HZ = 0.290, 0.280  # nominal hub axis: 29 cm in front of the arm bases, 28 cm above the table
 SHELL_X = (-0.300, 0.400)  # foot end to head end (70 cm)
 SHELL_HALF_W = 0.185  # side walls' outer faces; with the hubs and handle the seat is 44 cm wide
-ARM_Y, ARM_T, ARM_W = 0.211, 0.016, 0.035  # handle arm: centre plane, thickness (y), width
+ARM_Y, ARM_T, ARM_W = 0.211, 0.016, 0.035  # handle arm: centre plane, thickness (y), width (x)
+HUB_R = 0.025  # the handle's round hub at the end of each arm
 HANDLE_R = 0.300  # hub axis to the middle of the top bar
-BTN_R = 0.100  # button cap centre, up the arm from the hub axis
-PIN_R = 0.045  # lock pin centre, from the hub axis
-CAP_Y = (0.2245, 0.2285)  # the fixed hub cap's inner and outer faces (|y|)
-CAP_R = (0.039, 0.051)  # its notched ring (the pin's track)
-PIN = (0.005, 0.006, 0.005)  # tangential, along the hub axis, radial (m)
-BTN = (0.015, 0.006, 0.025)  # cap: across the arm, proud of it, along it
-BTN_TRAVEL = 0.0065  # the button's stop (it unlocks at 4 mm: the pin's 4 mm engagement)
-BTN_K, BTN_PRELOAD = 1500.0, 0.001  # N/m, and the spring's pull 1 mm past the rest stop (1.5 N at rest, 11 N pressed)
-NOTCHES = (0.0, 35.0, 65.0, 85.0)  # degrees back from upright
+TAB = (0.006, 0.012, 0.018)  # release tab: proud of the arm's front edge, across the arm, along it
+PIVOT = (-ARM_W / 2, 0.045)  # the lever's pivot (handle frame, x and z), in the arm at its front edge
+TAB_ARM, TOOTH_ARM = 0.015, 0.017  # pivot down to the tab's centre, pivot back to the tooth's centre
+TAB_X, TAB_Z = -ARM_W / 2 - TAB[0] / 2, PIVOT[1] - TAB_ARM  # tab centre (handle frame): front edge, just above the hub
+TAB_FACE = -ARM_W / 2 - TAB[0]  # the tab's front face at rest
+TOOTH = (0.005, 0.013, 0.010)  # tangential, along the hub axis, radial
+TOOTH_Y = 0.1995  # its centre (|y|): it reaches in from the arm to the ring
+RING_R = (0.042, 0.052)  # the hub boss's notched ring (the tooth's track); the tooth sits 4 mm below its rim
+RING_Y = (0.192, 0.199)  # the ring's inner and outer faces (|y|)
+NOTCHES = (0.0, 35.0, 65.0, 100.0)  # degrees back from upright: positions A, B, C and D (rear)
 REAR = NOTCHES[-1]
-HOLE_W = 0.007  # hole width at the pin's radius (pin 5 mm)
-HOLE_HALF = math.degrees(math.asin(HOLE_W / 2 / PIN_R))
-LIMITS = (-5.0, 86.0)  # the handle's stops: the shell rim in front, the head end behind
+NOTCH_W = 0.008  # notch width at the rim (tooth 5 mm)
+NOTCH_HALF = math.degrees(math.asin(NOTCH_W / 2 / 0.050))
+LIMITS = (-5.0, 100.8)  # the handle's stops: the shell rim in front, the head end behind (D rests on it)
 HINGE_DAMPING = 0.004  # N m s per degree
-MASS = {"shell": 4.30, "handle": 0.45, "button": 0.040}  # button: cap, stem and pin in one part
+TAB_TRAVEL = 0.0065  # the tab's stop (it unlocks at 4 mm: the tooth's 4 mm engagement)
+TAB_REST_N, TAB_FULL_N = 1.0, 4.0  # spring force at the tab, at rest and pressed 6 mm
+LEVER_MAX = math.degrees(TAB_TRAVEL / TAB_ARM)  # the lever's turn at the tab's stop
+LEVER_K = (TAB_FULL_N - TAB_REST_N) * TAB_ARM / math.degrees(0.006 / TAB_ARM)  # N m per degree
+LEVER_PRE = TAB_REST_N * TAB_ARM / LEVER_K  # degrees: the spring's target beyond the rest stop
+# The tooth's working face is 3-7 mm above the pivot: a load on the handle presses the tooth against a notch wall and
+# its friction holds the lever shut harder than that load's turning effect opens it, so pushing the arm cannot force
+# the lock; the tab's own lever arm can.
+MASS = {"shell": 2.80, "handle": 0.42, "button": 0.020}  # 3.3 kg in all: the 7.2 lb carrier (retail listings)
 
 SHELL_C = (0.30, 0.31, 0.33)  # dark grey plastic
 PAD_C = (0.16, 0.17, 0.19)
 HANDLE_C = (0.20, 0.21, 0.23)
 GRIP_C = (0.10, 0.10, 0.11)
-BTN_C = (0.80, 0.35, 0.10)  # orange buttons
+BTN_C = (0.80, 0.35, 0.10)  # orange tabs
 CAP_C = (0.55, 0.56, 0.58)
 
 
@@ -83,9 +96,9 @@ def _zquat(a: float) -> tuple[float, float, float, float]:
 
 
 def _ring_spans() -> list[tuple[float, float]]:
-    """Angular spans (degrees) of the hub cap's solid ring between its holes."""
+    """Angular spans (degrees) of the ring's solid rim between its notches."""
     lo, hi = LIMITS[0] - 8.0, LIMITS[1] + 8.0
-    cuts = [(n - HOLE_HALF, n + HOLE_HALF) for n in NOTCHES]
+    cuts = [(n - NOTCH_HALF, n + NOTCH_HALF) for n in NOTCHES]
     spans, a = [], lo
     for c0, c1 in cuts:
         spans.append((a, c0))
@@ -95,19 +108,19 @@ def _ring_spans() -> list[tuple[float, float]]:
 
 
 def _ring_boxes(s: float) -> list:
-    """The notched ring as boxes of at most 4 degrees each, on the side ``s`` (+1 left, -1 right)."""
+    """The notched rim as boxes of at most 4 degrees each, on the side ``s`` (+1 left, -1 right)."""
     out = []
-    y = s * (CAP_Y[0] + CAP_Y[1]) / 2
-    rm = (CAP_R[0] + CAP_R[1]) / 2
+    y = s * (RING_Y[0] + RING_Y[1]) / 2
+    rm = (RING_R[0] + RING_R[1]) / 2
     for a0, a1 in _ring_spans():
         n = max(1, int(math.ceil((a1 - a0) / 4.0)))
         for k in range(n):
             b0, b1 = a0 + (a1 - a0) * k / n, a0 + (a1 - a0) * (k + 1) / n
             mid = math.radians((b0 + b1) / 2)
             half = math.radians((b1 - b0) / 2)
-            width = 2 * PIN_R * math.tan(half) + (0.0006 if (k > 0 and k < n - 1) else 0.0)
+            width = 2 * RING_R[1] * math.sin(half) + (0.0006 if (k > 0 and k < n - 1) else 0.0)
             out.append(BoxShape((rm * math.sin(mid), y, rm * math.cos(mid)),
-                                (width, CAP_Y[1] - CAP_Y[0], CAP_R[1] - CAP_R[0]), CAP_C, quat_xyzw=_yquat(mid)))
+                                (width, RING_Y[1] - RING_Y[0], RING_R[1] - RING_R[0]), CAP_C, quat_xyzw=_yquat(mid)))
     return out
 
 
@@ -121,10 +134,9 @@ def _shell_shapes() -> list:
     for s in (1, -1):
         sh.append(BoxShape((xc, s * (SHELL_HALF_W - 0.0075), (z_tab + 0.030 + wall_top) / 2),
                            (L, 0.015, wall_top - z_tab - 0.030), SHELL_C))  # side wall
-        sh.append(BoxShape((0.0, s * 0.1935, -0.045), (0.100, 0.017, 0.090), SHELL_C))  # hub boss mount
-        sh.append(CylShape((0.0, s * 0.1935, 0.0), 0.050, 0.017, SHELL_C, axis="Y"))  # hub boss
-        sh.append(CylShape((0.0, s * (CAP_Y[0] + CAP_Y[1]) / 2, 0.0), CAP_R[0], CAP_Y[1] - CAP_Y[0], CAP_C, axis="Y"))
-        sh.append(CylShape((0.0, s * 0.207, 0.0), 0.008, 0.036, CAP_C, axis="Y", collide=False))  # axle
+        sh.append(BoxShape((0.0, s * 0.192, -0.070), (0.060, 0.014, 0.050), SHELL_C))  # hub boss mount
+        sh.append(CylShape((0.0, s * 0.192, 0.0), RING_R[0], 0.014, SHELL_C, axis="Y"))  # hub boss
+        sh.append(CylShape((0.0, s * 0.207, 0.0), 0.008, 0.030, CAP_C, axis="Y", collide=False))  # axle
         sh += _ring_boxes(s)
     sh.append(BoxShape((x0 + 0.0075, 0.0, (z_tab + 0.030 - 0.070) / 2), (0.015, 0.340, -0.070 - z_tab - 0.030),
                        SHELL_C))  # foot wall
@@ -139,28 +151,25 @@ def _shell_shapes() -> list:
 def _handle_shapes() -> list:
     sh = []
     for s in (1, -1):
-        r0 = 0.030
+        r0 = 0.015
         sh.append(BoxShape((0.0, s * ARM_Y, (r0 + HANDLE_R) / 2), (ARM_W, ARM_T, HANDLE_R - r0), HANDLE_C))
-        sh.append(CylShape((0.0, s * ARM_Y, 0.0), 0.040, ARM_T, HANDLE_C, axis="Y"))
+        sh.append(CylShape((0.0, s * ARM_Y, 0.0), HUB_R, ARM_T, HANDLE_C, axis="Y"))
     sh.append(CylShape((0.0, 0.0, HANDLE_R), 0.016, 2 * ARM_Y + ARM_T, HANDLE_C, axis="Y"))
     sh.append(CylShape((0.0, 0.0, HANDLE_R), 0.019, 0.160, GRIP_C, axis="Y"))  # rubber grip
     return sh
 
 
-def _btn_rest(s: float) -> np.ndarray:
-    """The button's origin (cap centre) at rest, upright handle, shell frame."""
-    return np.array([0.0, s * (ARM_Y + ARM_T / 2 + BTN[1] / 2), BTN_R])
+def _lever_origin(s: float) -> np.ndarray:
+    """The lever's origin (its pivot), upright handle, shell frame."""
+    return np.array([PIVOT[0], s * ARM_Y, PIVOT[1]])
 
 
 def _button_shapes(s: float) -> list:
-    c = _btn_rest(s)
-    face = ARM_Y + ARM_T / 2  # the arm's outer face (|y|)
-    stem_y = face + 0.0005 + 0.0015
-    pin_y = CAP_Y[1] - PIN[1] / 2
-    return [BoxShape((0.0, 0.0, 0.0), BTN, BTN_C),
-            BoxShape((0.0, s * stem_y - c[1], (PIN_R + BTN_R) / 2 - BTN_R), (0.008, 0.003, BTN_R - PIN_R + 0.005),
-                     BTN_C),
-            BoxShape((0.0, s * pin_y - c[1], PIN_R - BTN_R), PIN, BTN_C)]
+    """Tab, lever link and tooth, relative to the pivot."""
+    px, pz = PIVOT
+    return [BoxShape((TAB_X - px, 0.0, TAB_Z - pz), TAB, BTN_C),
+            BoxShape((TOOTH_ARM / 2, 0.0, 0.006), (TOOTH_ARM + 0.004, 0.008, 0.008), BTN_C),
+            BoxShape((TOOTH_ARM, s * TOOTH_Y - s * ARM_Y, RING_R[1] + 0.001 - pz), TOOTH, BTN_C)]
 
 
 SIDES = {"l": 1.0, "r": -1.0}
@@ -175,12 +184,11 @@ def _build() -> list:
     bodykit.hinge("hub", "shell", "handle", anchor=tuple(HUB0.tolist()), axis="Y", limits_deg=LIMITS, spring=0.0,
                   damping=HINGE_DAMPING)
     for k, s in SIDES.items():
-        p = HUB0 + _btn_rest(s)
+        p = HUB0 + _lever_origin(s)
         objs.append(Body.build(f"button_{k}", pos=tuple(p.tolist()), mass=MASS["button"], shapes=_button_shapes(s),
-                               color=BTN_C, friction=(0.8, 0.7), solver_iterations=64, ignore=("handle",)))
-        lim = (-BTN_TRAVEL, 0.0) if s > 0 else (0.0, BTN_TRAVEL)
-        bodykit.slider(f"button_slide_{k}", "handle", f"button_{k}", anchor=tuple(p.tolist()), axis="Y", limits=lim,
-                       stiffness=BTN_K, damping=2.0, target=s * BTN_PRELOAD, max_force=60.0)
+                               color=BTN_C, friction=(0.6, 0.5), solver_iterations=64, ignore=("handle",)))
+        bodykit.hinge(f"lever_{k}", "handle", f"button_{k}", anchor=tuple(p.tolist()), axis="Y",
+                      limits_deg=(-LEVER_MAX, 0.0), spring=LEVER_K, damping=1.0e-5, target_deg=LEVER_PRE)
     return objs
 
 
@@ -197,10 +205,9 @@ def handle_deg(shell, handle) -> float:
 
 
 def button_travel(handle, button, k: str) -> float:
-    """How far button ``k`` is pressed in (m), 0 at rest."""
-    local = handle.rotation().T @ (np.asarray(button.pos, float) - np.asarray(handle.pos, float))
-    s = SIDES[k]
-    return float(s * (_btn_rest(s)[1] - local[1]))
+    """How far tab ``k`` is pressed in (m), 0 at rest: the lever's turn times its arm."""
+    rel = handle.rotation().T @ button.rotation()
+    return float(-math.atan2(rel[0, 2], rel[2, 2]) * TAB_ARM)
 
 
 def shell_yaw(shell) -> float:
@@ -300,11 +307,11 @@ REAR_TOL = 3.0  # degrees
 OUT_MM = 1.0  # a button pressed in less than this is out (its pin in a hole)
 MOVE_MM, TURN_DEG, TILT_DEG = 30.0, 5.0, 5.0
 POINTS = {"angle": 0.5, "locked": 0.3, "seat_still": 0.2}
-# Forced lock: a pin at least 2 mm into the hub cap (button in less than 2 mm of its 6) can only sit in a hole, within
-# 1.3 degrees of a lock position. A handle turned more than 2.5 degrees off one with a pin that deep has been forced
-# past the lock (a real hub would break): the trial scores 0.
-ENGAGED, FORCED_DEG = 0.002, 2.5
-ANGLE_FROM = 5.0  # angle credit starts here (a locked handle has 1.3 degrees of play at carry)
+# Diagnostic only (not scored): a tooth at least 2 mm deep (tab in less than 2 mm) with the handle more than 4 degrees
+# off every notch would mean the lock was forced. The rigid ring cannot be damaged in simulation; the real trial checks
+# the locks after the trial instead (README).
+ENGAGED, FORCED_DEG = 0.002, 4.0
+ANGLE_FROM = 5.0  # angle credit starts here (a locked handle has about 2 degrees of play at carry)
 
 
 def _shape_boxes(spec: Body, state) -> list[tuple[np.ndarray, np.ndarray, np.ndarray]]:
@@ -354,10 +361,7 @@ def report(objects) -> dict:
     still = moved < MOVE_MM and turned < TURN_DEG and tilt < TILT_DEG
     total = angle_part + POINTS["locked"] * locked + POINTS["seat_still"] * (locked and still)
     clear = clr is None or clr >= CLEAR_MM
-    forced = _EP.get("forced")
-    if forced is not None:
-        total = 0.0
-    out = {"forced": forced, "handle_deg": round(q, 2), "button_mm": {k: round(v * 1000, 2) for k, v in travel.items()},
+    out = {"forced_seen": _EP.get("forced"), "handle_deg": round(q, 2), "button_mm": {k: round(v * 1000, 2) for k, v in travel.items()},
            "locked_rear": bool(locked), "shell_moved_mm": round(moved, 1), "shell_turned_deg": round(turned, 2),
            "shell_tilt_deg": round(tilt, 2), "clearance_mm": None if clr is None else round(clr, 1),
            "grippers_clear": bool(clear), "score": round(total if clear else 0.0, 3)}
@@ -365,10 +369,10 @@ def report(objects) -> dict:
 
 
 def score(objects) -> float:
-    """0.5 x (handle angle back - 5) / 80 degrees, full 0.5 within 3 degrees of the rear position; +0.3 if the handle is
-    at the rear position with both buttons out (each pin in its rear hole); +0.2 if, also, the seat moved under 30 mm,
-    turned under 5 degrees and tilts under 5 degrees. 0 if the handle was ever forced past a lock; 0 unless both grippers end at least 10 mm from the handle and
-    its buttons."""
+    """0.5 x (handle angle back - 5) / 95 degrees, full 0.5 within 3 degrees of the rear position D; +0.3 if the handle
+    is at D with both tabs out (each tooth in its D notch: the handle is locked there); +0.2 if, also, the seat moved
+    under 30 mm, turned under 5 degrees and tilts under 5 degrees. 0 unless both grippers end at least 10 mm from the
+    handle and its tabs."""
     rep = report(objects)
     _EP["report"] = rep
     return float(rep["score"])
@@ -388,11 +392,11 @@ VARY_X, VARY_Y, VARY_YAW = 0.040, 0.006, 6.0  # the seat moves up to this in x a
 MIN_OFF = 0.025  # and the draw is repeated until one grip point is at least this far off its nominal place in x
 
 
-def grip_point(s: float, hub, yaw: float, q_deg: float, y: float = 0.212) -> np.ndarray:
-    """World point 10 cm up the arm on side ``s``, between its inner face and the button, for the handle at
+def grip_point(s: float, hub, yaw: float, q_deg: float, y: float = ARM_Y, push: float = 0.0, z: float = TAB_Z
+               ) -> np.ndarray:
+    """World point on the front face of side ``s``'s tab (at rest; ``push`` m further back), for the handle at
     ``q_deg``, the seat's hub centre at ``hub`` turned ``yaw``."""
-    a = math.radians(q_deg)
-    return np.asarray(hub, float) + _rz(yaw) @ np.array([BTN_R * math.sin(a), s * y, BTN_R * math.cos(a)])
+    return np.asarray(hub, float) + _rz(yaw) @ _ry(math.radians(q_deg)) @ np.array([TAB_FACE + push, s * y, z])
 
 
 def draw(seed: int | None) -> tuple[np.ndarray, float]:
@@ -414,7 +418,7 @@ def layout(seed: int | None) -> dict:
     q = _zquat(yaw)
     pose = {"shell": (hub, q), "handle": (hub, q)}
     for k, s in SIDES.items():
-        pose[f"button_{k}"] = (hub + _rz(yaw) @ _btn_rest(s), q)
+        pose[f"button_{k}"] = (hub + _rz(yaw) @ _lever_origin(s), q)
     pose["_hub"] = (hub, yaw)
     return pose
 
@@ -450,19 +454,23 @@ def _lay_out(emb, seed):
 
 
 # -- the scripted demo (reads the seat's pose from the simulator to plan; moves the handle only through the grippers) ---
+# Each hand, fingers closed, pushes its tab rearward with its fingertips: the push presses the tab in (releasing that
+# side) and then carries the handle round. Past position C the hands let go and the handle drops back to D by its own
+# weight, where both teeth fall into their D notches.
 DOWN = grip_rotation(0.0)  # straight down; the fingers close along world y
-OPEN = -0.024  # finger joint target: 48 mm opening (arm and button are 22 mm)
-GRIP = -0.002  # 4 mm opening target: the pads stop at 16 mm (button in) and squeeze about 30 N
-APPROACH = 0.050  # the hand comes in (and backs off) this far along its own axis
-Q_END = 85.5  # the handle is carried to here (the stop is at 86)
-Q_EARLY = 45.0  # "early": both hands let go here
-SEC_PER_DEG = 0.075
-UP_LIFT = float(os.environ.get("CSH_UP_LIFT", "0.015"))  # after backing off, the hand rises this far
-UP_OUT = float(os.environ.get("CSH_UP_OUT", "0.09"))  # and moves this far outward, over the handle arm
+CLOSED = 0.0  # finger joint target: fingers together
+TIP = 0.013  # the finger pads' tips are this far beyond the TCP along the hand's axis
+PUSH = 0.0075  # the fingertips go this far behind the tab's rest face: the tab's 6 mm and 1.5 mm onto the arm
+TCP_Y = ARM_Y + 0.003  # the closed fingers' centre line, a little outboard of the arm's centre plane
+Q_PUSH = 72.0  # the hands carry the handle to here, past C, then let go
+Q_EARLY = 45.0  # "early": both hands let go here (between B and C)
+SEC_PER_DEG = 0.06
+UP_LIFT = float(os.environ.get("CSH_UP_LIFT", "0.03"))  # after backing off, the hand rises this far
+UP_OUT = float(os.environ.get("CSH_UP_OUT", "0.09"))  # and moves this far outward
 
 
 def lag(q: float) -> float:
-    """Degrees the hand's axis trails the arm's normal (keeps the wrist in reach near the rear position)."""
+    """Degrees the hand's axis trails the arm's normal (keeps the wrist in reach late in the swing)."""
     return -min(28.0, max(0.0, (q - 55.0) * 0.9))
 
 
@@ -498,46 +506,42 @@ LOOKS = 1
 def arm_plan(arm: str, hub, yaw: float, fail: str = "") -> list[Waypoint]:
     s = 1.0 if arm == "left" else -1.0
 
-    def at(q, back=0.0, lift=0.0, y=0.212):
+    def at(q, push=0.0, back=0.0, lift=0.0, out=0.0, z=TAB_Z):
         r = hand_rot(yaw, q)
-        p = grip_point(s, hub, yaw, q, y) - back * r[:, 2] + np.array([0.0, 0.0, lift])
+        p = (grip_point(s, hub, yaw, q, TCP_Y + out, push, z) - (TIP + back) * r[:, 2]
+             + np.array([0.0, 0.0, lift]))
         return tuple(p.tolist()), r
 
     out = []
 
-    def go(sec, q, finger, label, back=0.0, lift=0.0, y=0.212):
-        p, r = at(q, back, lift, y)
+    def go(sec, q, label, finger=CLOSED, **kw):
+        p, r = at(q, **kw)
         out.append(Waypoint(sec, p, finger, label, r))
 
-    # up beside the seat first, outboard of the hubs (straight from the ready pose, a hand clipped a hub on seed 2)
-    go(2.0, 0.0, OPEN, "up beside the seat", back=APPROACH, lift=0.06, y=0.212 + 0.09)
-    go(1.5, 0.0, OPEN, "in front of the handle arm", back=APPROACH, lift=0.02)
-    go(1.0, 0.0, OPEN, "line up with the arm", back=APPROACH)
-    if fail == "nopress":  # wrong on purpose: closed hands push the arms back above the buttons, buttons untouched
-        go(0.8, 0.0, 0.0, "close the hand", back=APPROACH, lift=0.10)
-        go(1.5, 0.0, 0.0, "fingertips behind the arm", back=0.02, lift=0.10)
+    go(2.0, 0.0, "up beside the seat", back=0.05, lift=0.06, out=0.09)
+    go(1.5, 0.0, "in front of the tab", back=0.04)
+    if fail == "nopress":  # wrong on purpose: the closed hands push the arms 6 cm above the tabs, tabs untouched
+        go(1.0, 0.0, "fingertips on the arm", z=TAB_Z + 0.06, push=0.006)
         for k in range(1, 9):
-            go(0.6, 10.0 * k, 0.0, "push the handle back", back=0.02, lift=0.10)
-        go(1.0, 80.0, 0.0, "ease off", back=APPROACH, lift=0.10)
+            go(0.5, 5.0 * k, "push the handle back", z=TAB_Z + 0.06, push=0.006)
+        go(1.0, 40.0, "ease off", z=TAB_Z + 0.06, back=0.04)
         out.append(park(arm, 2.5))
         out.append(park(arm, 1.0, label="look"))
         return out
-    go(1.5, 0.0, OPEN, "round the arm and button")
-    go(1.0, 0.0, GRIP, "squeeze: button in")
-    go(0.5, 0.0, GRIP, "hold the squeeze")
-    q_to = Q_EARLY if fail == "early" else Q_END
+    go(1.0, 0.0, "fingertips on the tab")
+    go(1.0, 0.0, "press the tab in", push=PUSH)
+    go(0.5, 0.0, "hold the tab in", push=PUSH)
+    q_to = Q_EARLY if fail == "early" else Q_PUSH
     n = int(math.ceil(q_to / 5.0))
     for k in range(1, n + 1):
-        go(q_to / n * SEC_PER_DEG, q_to * k / n, GRIP, "swing the handle back, button in")
-    go(0.6, q_to, GRIP, "at the rear position")
-    if fail == "holding":  # wrong on purpose: the hands stay on the handle
-        go(4.0, q_to, GRIP, "hold the squeeze")
+        go(q_to / n * SEC_PER_DEG, q_to * k / n, "swing the handle back, tab in", push=PUSH)
+    if fail == "holding":  # wrong on purpose: the hands stay on the tabs
+        go(6.0, q_to, "hold the tab in", push=PUSH)
         return out
-    go(0.8, q_to, OPEN, "let go")
-    go(1.5, q_to, OPEN, "back off the arm", back=0.035)
-    go(1.2, q_to, OPEN, "out over the handle arm", back=0.035, lift=UP_LIFT, y=0.212 + UP_OUT)
+    go(0.8, q_to, "let go", back=0.04)
+    go(1.2, q_to, "back off the arm", back=0.04, lift=UP_LIFT, out=UP_OUT)
     out.append(park(arm, 2.5))
-    out.append(park(arm, 1.0, label="look"))
+    out.append(park(arm, 1.5, label="look"))
     return out
 
 
