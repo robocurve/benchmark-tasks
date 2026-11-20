@@ -62,8 +62,9 @@ MANTLE = [Box("mantle", pos=(*M_XY, TOP + M_SIZE[2] / 2), size=M_SIZE, color=(0.
               color=(0.08, 0.08, 0.09)),
           Box("mantle_dial", pos=(M_XY[0] - 0.02, M_XY[1] - M_SIZE[1] / 2 - 0.0125, TOP + 0.033),
               size=(0.020, 0.020, 0.006), color=(0.95, 0.55, 0.10)),
+          # the lamp is oversized (real: about 1 cm) to show at 320 x 176
           Box("mantle_lamp", pos=(M_XY[0] + 0.025, M_XY[1] - M_SIZE[1] / 2 - 0.0125, TOP + 0.032),
-              size=(0.012, 0.012, 0.004), color=(0.55, 0.06, 0.05))] + \
+              size=(0.018, 0.018, 0.004), color=(0.55, 0.06, 0.05))] + \
     _ring("mantle_rim", M_XY, TOP + M_SIZE[2], (0.55, 0.45, 0.35))
 M_SEAT = TOP + M_SIZE[2] + RING_H  # the rim's top
 
