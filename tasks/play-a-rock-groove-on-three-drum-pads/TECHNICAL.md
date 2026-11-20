@@ -299,7 +299,8 @@ python tools/reach_scan.py layout --name P   # the reach scan (numpy and yam_are
 - Drum sounds: synthesized by `tools/soundtrack.py` (this package's code, MIT); no samples or recordings.
 - Robot, station and cameras: `yam-arena` ([yam-isaac-lab-arena](https://github.com/kairosiann/yam-isaac-lab-arena);
   its README states no license yet; the YAM arm model in it is MIT). Not bundled.
-- Isaac Lab-Arena and Isaac Lab: Apache 2.0. Not bundled.
+- Isaac Lab-Arena (Apache 2.0) and Isaac Lab (BSD-3-Clause). Not bundled. The full list, with each robot, station and
+  camera asset and its license, is in README.md, "Third-party assets and licenses".
 - This folder's code and scene: MIT, see `LICENSE`.
 
 ## Sources
