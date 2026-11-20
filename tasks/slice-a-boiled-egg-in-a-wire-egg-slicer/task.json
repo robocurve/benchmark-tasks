@@ -1,0 +1,20 @@
+{
+  "title": "Slice a peeled boiled egg in a hinged wire egg slicer, laid lengthwise in its cradle, and swing the frame back open",
+  "category": "Societal relatability",
+  "keywords": [
+    "egg slicer",
+    "hard-boiled egg",
+    "hinged wire frame",
+    "cutting force",
+    "food preparation"
+  ],
+  "instruction": "Slice the peeled egg in the egg slicer, then swing the slicer's frame back open, leaving the slices in it.",
+  "context": "Slicing a boiled egg in a wire egg slicer is an everyday kitchen job (egg salad, sandwiches, salads) that most people have done or watched. The maker (Westmark Justus egg slicer): it cuts \"the hard-boiled egg quickly and cleanly into round or oval slices without breaking the yolk\"; for round slices the egg lies lengthwise in the cradle's egg-shaped hollow, the wire frame is pressed down through it in one stroke and swung open again to free the slices. The hand skill: the slick egg lies crosswise on a saucer and must be turned a quarter turn and set lengthwise and centred in a 6 mm deep hollow (an egg not lying in it is crushed); the frame is taken by its small tab, swung over 95 deg along its arc and driven down through the egg against the wires' resistance (about 9 N at the tab) until it closes, then swung back open past upright without knocking the 11 loose slices out. Two arms are not required.",
+  "setup": "Positions in cm from the midpoint between the arm bases: x forward, y to the robot's left, z up from the table top. (1) Hinged wire egg slicer (like the Westmark Justus, 140 x 80 x 30 mm, die-cast aluminium, 10 stainless-steel wires 5.5 mm apart), fixed on a non-slip mat: cradle 8 cm (x) by 14 cm (y), 2.2 cm tall, centred at x 21, y 4, an egg-shaped hollow 6 mm deep at its centre with its long axis along y; the frame (40 g, bars round an opening 8.4 x 12.6 cm, a 3.0 x 3.2 cm tab bent up at its free end) hinged across the +y end (axis along x, 2.45 cm up, at y 10.4), starting swung open 95 deg, resting on its stop. (2) Peeled hard-boiled US large egg, 5.7 x 4.3 cm, 50 g, lying on (3) a loose saucer 10 cm across at x 13, y -10, the egg's long axis along x. Both arms start at the ready pose, grippers open. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Every control step: the frame's angle, each slice's pose and speed, the fingers' collision points. 0.25 the egg has lain in the hollow lengthwise and centred (axis within 20 deg, centre within 6 mm, within 4 mm of its seat); 0.5 the egg cut into its 11 slices (frame closed over it in the hollow); 1.0 (held 1 s) also the frame back open (85 deg or more), all 11 slices in the cradle (centre over its top, at most 4.5 cm up), every finger point 1 cm or more from every slice, all still (under 2 cm/s). An egg not lying in the hollow when a wire reaches it is crushed: 0 for the rest of the trial. Real trial: video (egg in the hollow, frame fully closed) and an end photo (frame open, 11 clean slices in the cradle).",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Clear the slices out, wipe the cradle and the finger pads, swing the frame open past upright onto its stop, and lay a fresh peeled boiled egg (from the fridge) on the saucer lengthwise along x. One egg per trial. Simulation: each trial starts the simulator afresh.",
+  "fidelity": "Rigid bodies, 20 Hz control. The egg is 11 rigid convex slices (cut at the wires' planes) welded until cut; the wires do not collide: from the egg's top down the hinge resists closing with 1.2 N m (about 9 N at the tab, our estimate of the cutting force), and on closing the welds become a light cling (0.3 N, 0.8 mN m). Crushing a misplaced egg is a rule. The egg white's softness is not modelled. The cradle is fixed (on a mat).",
+  "scores": "Dream-1 run: 0.0 (the right gripper came down over the egg on the saucer early on but did not pick it up, then both arms drew back; the egg never reached the slicer); demo: 1.0",
+  "media": "M-UUFANF"
+}
