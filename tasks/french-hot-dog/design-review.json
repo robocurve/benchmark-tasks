@@ -1,0 +1,33 @@
+{
+  "task": "french-hot-dog",
+  "instruction": "Use the spike to make a hole in the end of the bun. Put the bun in the stand, then insert the sausage into the hole.",
+  "condition": "Societal relatability",
+  "what_is_tested": "Create a blind axial opening in an unsplit soft roll by pressing it on a fixed spike. Remove the roll, release it in the sloped cradle, and align and insert the sausage against the supported roll.",
+  "references": {
+    "workflow_clip": "https://www.youtube.com/shorts/Wac1SEai_E0",
+    "deployed_station": "https://www.zabka.pl/kultowy-hot-dog-z-zabki-serwowany-przez-robota/",
+    "actual_piercing_practice": "https://patents.google.com/patent/EP4723940A1/en",
+    "commercial_spike_dimensions": "https://www.hendi.eu/de/wrstchen-und-hotdog-brtchenwrmer-657564.html",
+    "nearby_rejected_task": "https://github.com/robocurve/benchmark-tasks/pull/661"
+  },
+  "distinction": "The source video already shows a bore before the overhead tool. This task adds the real preparatory piercing operation. The simulation must start with resistance in the centre of the bun and require native contact work to form the cavity. A preformed free hole would lose the defining difference from existing sausage placement and skewer tasks.",
+  "scoring": "0 before qualified piercing or on exterior breakout. 0.25 for a blind hole at least 100 mm deep after withdrawal. 0.50 after the bun is released in the stand before the sausage begins entry. 1 after at least 95 mm inserted while the bun is intact and both pieces stay released and stable in the stand for one second.",
+  "bench_check": "Use a fresh trimmed roll from a matched batch, an unheated rounded rod and a fixed cradle. Use video for order, a marked rod for 100 mm depth, and ruler measurement of exposed sausage length for 95 mm insertion. Measure physical penetration load before interpreting the force approximation.",
+  "sim_limitations": "Sliding crumb plug approximates irreversible compression with estimated 4 N breakaway and 3 N sliding resistance. No thermal effects, explicit bread tearing or calibration against a force gauge. Native PhysX must provide the contact response and retained geometry. Record force or joint-load evidence and plug displacement through the press.",
+  "native_gate": "Pass reset, prove a contact-driven downward-facing spike stroke and check cradle placement before beginning full native demo. Log a false-positive check for a sausage outside the bun, a pre-insertion bun held by a gripper, and intentional release without penetration. Demonstrate full score within 1600 controls at 20 Hz, seed 0. Capture native evidence and Dream-1 separately before calling it ready.",
+  "status": "Native hold control scored 0.0. Native scripted demonstration scored 1.0 in 1469 controls, with a retained 108 mm passage and 108 mm of sausage inside. Dream-1 scored 0.0 after 1600 controls and 33 live requests.",
+  "review_prompt": "https://tasks.robocurve.org/review-prompt (version 24, effective 2026-11-20 12:54:47 GMT)",
+  "overlap": {
+    "coverage": "A refreshed signed-in board screen on 2026-11-20 covered 337 accepted, 512 pending, 1,183 revision and 2,139 rejected records for hot dog, bread, sausage, piercing and skewer terms. No matching bun-piercing then filling task surfaced.",
+    "nearest": "TK-CD4WS8 routes a tagged hot dog off a roller grill with tongs. TK-HJCXKV cuts portions off a sausage. TK-H6DL8U removes pre-skewered vegetables. TK-GM8BGV was rejected for predrilled rigid food.",
+    "external": "Magma Hot Dog Assembly places sausage into a bun; the current task also forms the axial passage under measured native contact. https://openaccess.thecvf.com/content/CVPR2025/supplemental/Yang_Magma_A_Foundation_CVPR_2025_supplemental.pdf"
+  },
+  "loopholes": [
+    "Touching the pike and moving the plug later with the sausage cannot qualify previously unobserved depth.",
+    "Hovering the roll over the stand does not establish released seating.",
+    "The sausage must pass the real annular wall and overlap the qualified cavity for credit. A nearby sausage, side contact, or early insertion fails the full score."
+  ],
+  "valid_strategies": [
+    "Either arm can carry or pierce the roll. One or both arms can align the bun and sausage. The stand must support the released roll before the sausage is inserted."
+  ]
+}
