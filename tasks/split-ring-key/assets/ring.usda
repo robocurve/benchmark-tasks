@@ -1,0 +1,3279 @@
+#usda 1.0
+(
+    defaultPrim = "hardware"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "hardware" (
+    prepend apiSchemas = ["PhysicsArticulationRootAPI", "PhysxArticulationAPI"]
+)
+{
+    custom bool physxArticulation:enabledSelfCollisions = 1
+
+    def "looks"
+    {
+        def Material "steel"
+        {
+            token outputs:surface.connect = </hardware/looks/steel/shader.outputs:surface>
+
+            def Shader "shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.48, 0.52, 0.56)
+                float inputs:metallic = 0.7
+                float inputs:roughness = 0.35
+                token outputs:surface
+            }
+        }
+
+        def Material "brass"
+        {
+            token outputs:surface.connect = </hardware/looks/brass/shader.outputs:surface>
+
+            def Shader "shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.72, 0.46, 0.12)
+                float inputs:metallic = 0.65
+                float inputs:roughness = 0.35
+                token outputs:surface
+            }
+        }
+
+        def Material "blue"
+        {
+            token outputs:surface.connect = </hardware/looks/blue/shader.outputs:surface>
+
+            def Shader "shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.045, 0.2, 0.3)
+                float inputs:metallic = 0.15
+                float inputs:roughness = 0.35
+                token outputs:surface
+            }
+        }
+
+        def Material "dark"
+        {
+            token outputs:surface.connect = </hardware/looks/dark/shader.outputs:surface>
+
+            def Shader "shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.055, 0.065, 0.075)
+                float inputs:metallic = 0.1
+                float inputs:roughness = 0.35
+                token outputs:surface
+            }
+        }
+
+        def Material "orange"
+        {
+            token outputs:surface.connect = </hardware/looks/orange/shader.outputs:surface>
+
+            def Shader "shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.83, 0.27, 0.035)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.7
+                token outputs:surface
+            }
+        }
+    }
+
+    def Xform "base" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, 0)
+        float3 physics:diagonalInertia = (0.02, 0.02, 0.02)
+        float physics:mass = 2
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        quatf xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Cube "foot" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </hardware/looks/blue>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double size = 1
+            quatf xformOp:orient = (0.5, 0.5, 0.5, -0.5)
+            float3 xformOp:scale = (0.3, 0.2, 0.016)
+            double3 xformOp:translate = (0, 0.23199999999999998, -0.13)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+        }
+
+        def Cube "splitter_foot" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </hardware/looks/blue>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double size = 1
+            quatf xformOp:orient = (0.5, 0.5, 0.5, -0.5)
+            float3 xformOp:scale = (0.07, 0.21, 0.016)
+            double3 xformOp:translate = (0.168, 0.23199999999999998, -0.235)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+        }
+
+        def Cube "upright" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </hardware/looks/blue>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double size = 1
+            quatf xformOp:orient = (0.5, 0.5, 0.5, -0.5)
+            float3 xformOp:scale = (0.025, 0.03, 0.224)
+            double3 xformOp:translate = (0, 0.12, -0.25)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+        }
+
+        def Capsule "bearing" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.034
+            rel material:binding = </hardware/looks/dark>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.015
+            quatf xformOp:orient = (-0.5, 0.5, 0.5, 0.5)
+            double3 xformOp:translate = (0, 0, -0.25)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Cube "splitter_post" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </hardware/looks/dark>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double size = 1
+            quatf xformOp:orient = (0.5, 0.5, 0.5, -0.5)
+            float3 xformOp:scale = (0.01, 0.014, 0.41121256)
+            double3 xformOp:translate = (0.24451688522026407, 0.034393716874606364, -0.25)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+        }
+
+        def Cube "splitter_bridge" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </hardware/looks/blue>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double size = 1
+            quatf xformOp:orient = (0.5, 0.5, 0.5, -0.5)
+            float3 xformOp:scale = (0.23944445, 0.014, 0.01)
+            double3 xformOp:translate = (0.24451688522026407, -0.17121256625078726, -0.13027777777777777)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+        }
+
+        def Capsule "withdrawal_rail" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.13
+            rel material:binding = </hardware/looks/blue>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.004
+            quatf xformOp:orient = (0.95371693, -0, 0, -0.3007058)
+            double3 xformOp:translate = (0.20765504322725942, -0.14540162661499018, -0.012555555555555556)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Cube "splitter_guide" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </hardware/looks/blue>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double size = 1
+            float3 xformOp:scale = (0.025, 0.025, 0.012)
+            double3 xformOp:translate = (0.24451688522026407, -0.17121256625078726, -0.018555555555555554)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def "joints"
+    {
+        def PhysicsFixedJoint "world_fixed"
+        {
+            rel physics:body1 = </hardware/base>
+        }
+
+        def PhysicsRevoluteJoint "turn" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.0013962634
+            float drive:angular:physics:maxForce = 30
+            float drive:angular:physics:stiffness = 0
+            float drive:angular:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/base>
+            rel physics:body1 = </hardware/rotor>
+            point3f physics:localPos0 = (0, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (-0.5, 0.5, 0.5, 0.5)
+            quatf physics:localRot1 = (-0.5, 0.5, 0.5, 0.5)
+            float physics:lowerLimit = -900
+            float physics:upperLimit = 900
+            custom float physxJoint:maxJointVelocity = 180
+        }
+
+        def PhysicsRevoluteJoint "knob_spin0" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 3.4906584e-8
+            float drive:angular:physics:maxForce = 30
+            float drive:angular:physics:stiffness = 0
+            float drive:angular:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/rotor>
+            rel physics:body1 = </hardware/knob>
+            point3f physics:localPos0 = (0.085, 0, -0.1)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (-0.5, 0.5, 0.5, 0.5)
+            quatf physics:localRot1 = (-0.5, 0.5, 0.5, 0.5)
+            float physics:lowerLimit = -18000
+            float physics:upperLimit = 18000
+            custom float physxJoint:maxJointVelocity = 180
+        }
+
+        def PhysicsRevoluteJoint "knob_spin1" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 3.4906584e-8
+            float drive:angular:physics:maxForce = 30
+            float drive:angular:physics:stiffness = 0
+            float drive:angular:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/rotor>
+            rel physics:body1 = </hardware/knob1>
+            point3f physics:localPos0 = (5.204749e-18, 0.085, -0.1)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (-0.5, 0.5, 0.5, 0.5)
+            quatf physics:localRot1 = (-0.5, 0.5, 0.5, 0.5)
+            float physics:lowerLimit = -18000
+            float physics:upperLimit = 18000
+            custom float physxJoint:maxJointVelocity = 180
+        }
+
+        def PhysicsRevoluteJoint "knob_spin2" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 3.4906584e-8
+            float drive:angular:physics:maxForce = 30
+            float drive:angular:physics:stiffness = 0
+            float drive:angular:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/rotor>
+            rel physics:body1 = </hardware/knob2>
+            point3f physics:localPos0 = (-0.085, 1.0409498e-17, -0.1)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (-0.5, 0.5, 0.5, 0.5)
+            quatf physics:localRot1 = (-0.5, 0.5, 0.5, 0.5)
+            float physics:lowerLimit = -18000
+            float physics:upperLimit = 18000
+            custom float physxJoint:maxJointVelocity = 180
+        }
+
+        def PhysicsRevoluteJoint "knob_spin3" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 3.4906584e-8
+            float drive:angular:physics:maxForce = 30
+            float drive:angular:physics:stiffness = 0
+            float drive:angular:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/rotor>
+            rel physics:body1 = </hardware/knob3>
+            point3f physics:localPos0 = (-1.5614247e-17, -0.085, -0.1)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (-0.5, 0.5, 0.5, 0.5)
+            quatf physics:localRot1 = (-0.5, 0.5, 0.5, 0.5)
+            float physics:lowerLimit = -18000
+            float physics:upperLimit = 18000
+            custom float physxJoint:maxJointVelocity = 180
+        }
+
+        def PhysicsRevoluteJoint "flex04" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.00017453292
+            float drive:angular:physics:maxForce = 30
+            float drive:angular:physics:stiffness = 0.02443461
+            float drive:angular:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/rotor>
+            rel physics:body1 = </hardware/wire04>
+            point3f physics:localPos0 = (-0.01846039, 0.0012099579, -0.000016666667)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.032719083, 0, 0, 0.9994646)
+            quatf physics:localRot1 = (0.5904152, -0.0056428574, -0.004128057, 0.8070694)
+            float physics:lowerLimit = -25
+            float physics:upperLimit = 25
+            custom float physxJoint:maxJointVelocity = 180
+        }
+
+        def PhysicsRevoluteJoint "flex03" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.00017453292
+            float drive:angular:physics:maxForce = 30
+            float drive:angular:physics:stiffness = 0.02443461
+            float drive:angular:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/wire04>
+            rel physics:body1 = </hardware/wire03>
+            point3f physics:localPos0 = (0.011204169, 9.5534346e-20, -2.0996878e-20)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.8070694, -0.004128057, -0.0056428574, 0.5904152)
+            quatf physics:localRot1 = (0.5904152, -0.0056428574, -0.004128057, 0.8070694)
+            float physics:lowerLimit = -25
+            float physics:upperLimit = 25
+            custom float physxJoint:maxJointVelocity = 180
+        }
+
+        def PhysicsRevoluteJoint "flex02" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.00017453292
+            float drive:angular:physics:maxForce = 30
+            float drive:angular:physics:stiffness = 0.02443461
+            float drive:angular:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/wire03>
+            rel physics:body1 = </hardware/wire02>
+            point3f physics:localPos0 = (0.011204169, -4.9655037e-19, -2.1002177e-20)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.8070694, -0.004128057, -0.0056428574, 0.5904152)
+            quatf physics:localRot1 = (0.5904152, -0.0056428574, -0.004128057, 0.8070694)
+            float physics:lowerLimit = -25
+            float physics:upperLimit = 25
+            custom float physxJoint:maxJointVelocity = 180
+        }
+
+        def PhysicsRevoluteJoint "flex01" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.00017453292
+            float drive:angular:physics:maxForce = 30
+            float drive:angular:physics:stiffness = 0.02443461
+            float drive:angular:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/wire02>
+            rel physics:body1 = </hardware/wire01>
+            point3f physics:localPos0 = (0.011204169, -1.2296615e-20, 2.3501671e-20)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.8070694, -0.004128057, -0.0056428574, 0.5904152)
+            quatf physics:localRot1 = (0.5904152, -0.0056428574, -0.004128057, 0.8070694)
+            float physics:lowerLimit = -25
+            float physics:upperLimit = 25
+            custom float physxJoint:maxJointVelocity = 180
+        }
+
+        def PhysicsRevoluteJoint "flex00" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.00017453292
+            float drive:angular:physics:maxForce = 30
+            float drive:angular:physics:stiffness = 0.02443461
+            float drive:angular:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/wire01>
+            rel physics:body1 = </hardware/wire00>
+            point3f physics:localPos0 = (0.011204169, -1.8406601e-19, -3.6033833e-21)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.8070694, -0.004128057, -0.0056428574, 0.5904152)
+            quatf physics:localRot1 = (0.5904152, -0.0056428574, -0.004128057, 0.8070694)
+            float physics:lowerLimit = -25
+            float physics:upperLimit = 25
+            custom float physxJoint:maxJointVelocity = 180
+        }
+
+        def PhysicsRevoluteJoint "flex05" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.00017453292
+            float drive:angular:physics:maxForce = 30
+            float drive:angular:physics:stiffness = 0.02443461
+            float drive:angular:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/rotor>
+            rel physics:body1 = </hardware/wire05>
+            point3f physics:localPos0 = (-0.01846039, 0.0012099579, -0.000016666667)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.032719083, 0, 0, 0.9994646)
+            quatf physics:localRot1 = (-0.5904152, 0.0056428574, -0.004128057, 0.8070694)
+            float physics:lowerLimit = -25
+            float physics:upperLimit = 25
+            custom float physxJoint:maxJointVelocity = 180
+        }
+
+        def PhysicsRevoluteJoint "flex06" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.00017453292
+            float drive:angular:physics:maxForce = 30
+            float drive:angular:physics:stiffness = 0.02443461
+            float drive:angular:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/wire05>
+            rel physics:body1 = </hardware/wire06>
+            point3f physics:localPos0 = (0.011204169, 3.1119212e-19, 1.1290617e-20)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.8070694, -0.004128057, 0.0056428574, -0.5904152)
+            quatf physics:localRot1 = (-0.5904152, 0.0056428574, -0.004128057, 0.8070694)
+            float physics:lowerLimit = -25
+            float physics:upperLimit = 25
+            custom float physxJoint:maxJointVelocity = 180
+        }
+
+        def PhysicsRevoluteJoint "flex07" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.00017453292
+            float drive:angular:physics:maxForce = 30
+            float drive:angular:physics:stiffness = 0.02443461
+            float drive:angular:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/wire06>
+            rel physics:body1 = </hardware/wire07>
+            point3f physics:localPos0 = (0.011204169, -3.8395232e-19, 3.6086833e-21)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.8070694, -0.004128057, 0.0056428574, -0.5904152)
+            quatf physics:localRot1 = (-0.5904152, 0.0056428574, -0.004128057, 0.8070694)
+            float physics:lowerLimit = -25
+            float physics:upperLimit = 25
+            custom float physxJoint:maxJointVelocity = 180
+        }
+
+        def PhysicsRevoluteJoint "flex08" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.00017453292
+            float drive:angular:physics:maxForce = 30
+            float drive:angular:physics:stiffness = 0.02443461
+            float drive:angular:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/wire07>
+            rel physics:body1 = </hardware/wire08>
+            point3f physics:localPos0 = (0.011204169, -2.976197e-20, -1.3784811e-20)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.8070694, -0.004128057, 0.0056428574, -0.5904152)
+            quatf physics:localRot1 = (-0.5904152, 0.0056428574, -0.004128057, 0.8070694)
+            float physics:lowerLimit = -25
+            float physics:upperLimit = 25
+            custom float physxJoint:maxJointVelocity = 180
+        }
+
+        def PhysicsRevoluteJoint "flex09" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.00017453292
+            float drive:angular:physics:maxForce = 30
+            float drive:angular:physics:stiffness = 0.02443461
+            float drive:angular:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/wire08>
+            rel physics:body1 = </hardware/wire09>
+            point3f physics:localPos0 = (0.011204169, 5.011905e-20, -6.1187766e-21)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.8070694, -0.004128057, 0.0056428574, -0.5904152)
+            quatf physics:localRot1 = (-0.5904152, 0.0056428574, -0.004128057, 0.8070694)
+            float physics:lowerLimit = -25
+            float physics:upperLimit = 25
+            custom float physxJoint:maxJointVelocity = 180
+        }
+
+        def PhysicsRevoluteJoint "flex10" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.00017453292
+            float drive:angular:physics:maxForce = 30
+            float drive:angular:physics:stiffness = 0.02443461
+            float drive:angular:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/wire09>
+            rel physics:body1 = </hardware/wire10>
+            point3f physics:localPos0 = (0.011204169, 2.0682501e-19, 3.613983e-21)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.8070694, -0.004128057, 0.0056428574, -0.5904152)
+            quatf physics:localRot1 = (-0.5904152, 0.0056428574, -0.004128057, 0.8070694)
+            float physics:lowerLimit = -25
+            float physics:upperLimit = 25
+            custom float physxJoint:maxJointVelocity = 180
+        }
+
+        def PhysicsRevoluteJoint "flex11" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.00017453292
+            float drive:angular:physics:maxForce = 30
+            float drive:angular:physics:stiffness = 0.02443461
+            float drive:angular:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/wire10>
+            rel physics:body1 = </hardware/wire11>
+            point3f physics:localPos0 = (0.011204169, 3.3487022e-21, -6.1081767e-21)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.8070694, -0.004128057, 0.0056428574, -0.5904152)
+            quatf physics:localRot1 = (-0.5904152, 0.0056428574, -0.004128057, 0.8070694)
+            float physics:lowerLimit = -25
+            float physics:upperLimit = 25
+            custom float physxJoint:maxJointVelocity = 180
+        }
+
+        def PhysicsRevoluteJoint "flex12" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.00017453292
+            float drive:angular:physics:maxForce = 30
+            float drive:angular:physics:stiffness = 0.02443461
+            float drive:angular:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/wire11>
+            rel physics:body1 = </hardware/wire12>
+            point3f physics:localPos0 = (0.011204169, 6.276608e-19, 1.1285317e-20)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.8070694, -0.004128057, 0.0056428574, -0.5904152)
+            quatf physics:localRot1 = (-0.5904152, 0.0056428574, -0.004128057, 0.8070694)
+            float physics:lowerLimit = -25
+            float physics:upperLimit = 25
+            custom float physxJoint:maxJointVelocity = 180
+        }
+
+        def PhysicsRevoluteJoint "flex13" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.00017453292
+            float drive:angular:physics:maxForce = 30
+            float drive:angular:physics:stiffness = 0.02443461
+            float drive:angular:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/wire12>
+            rel physics:body1 = </hardware/wire13>
+            point3f physics:localPos0 = (0.011204169, 2.7416023e-19, -1.3768911e-20)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.8070694, -0.004128057, 0.0056428574, -0.5904152)
+            quatf physics:localRot1 = (-0.5904152, 0.0056428574, -0.004128057, 0.8070694)
+            float physics:lowerLimit = -25
+            float physics:upperLimit = 25
+            custom float physxJoint:maxJointVelocity = 180
+        }
+
+        def PhysicsRevoluteJoint "flex14" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.00017453292
+            float drive:angular:physics:maxForce = 30
+            float drive:angular:physics:stiffness = 0.02443461
+            float drive:angular:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/wire13>
+            rel physics:body1 = </hardware/wire14>
+            point3f physics:localPos0 = (0.011204169, 7.779899e-19, 3.6033833e-21)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.8070694, -0.004128057, 0.0056428574, -0.5904152)
+            quatf physics:localRot1 = (-0.5904152, 0.0056428574, -0.004128057, 0.8070694)
+            float physics:lowerLimit = -25
+            float physics:upperLimit = 25
+            custom float physxJoint:maxJointVelocity = 180
+        }
+
+        def PhysicsRevoluteJoint "flex15" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.00017453292
+            float drive:angular:physics:maxForce = 30
+            float drive:angular:physics:stiffness = 0.02443461
+            float drive:angular:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/wire14>
+            rel physics:body1 = </hardware/wire15>
+            point3f physics:localPos0 = (0.011204169, 1.0664305e-20, 3.6033833e-21)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.8070694, -0.004128057, 0.0056428574, -0.5904152)
+            quatf physics:localRot1 = (-0.5904152, 0.0056428574, -0.004128057, 0.8070694)
+            float physics:lowerLimit = -25
+            float physics:upperLimit = 25
+            custom float physxJoint:maxJointVelocity = 180
+        }
+
+        def PhysicsRevoluteJoint "flex16" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.00017453292
+            float drive:angular:physics:maxForce = 30
+            float drive:angular:physics:stiffness = 0.02443461
+            float drive:angular:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/wire15>
+            rel physics:body1 = </hardware/wire16>
+            point3f physics:localPos0 = (0.011204169, -2.5072783e-19, -1.3768911e-20)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.8070694, -0.004128057, 0.0056428574, -0.5904152)
+            quatf physics:localRot1 = (-0.5904152, 0.0056428574, -0.004128057, 0.8070694)
+            float physics:lowerLimit = -25
+            float physics:upperLimit = 25
+            custom float physxJoint:maxJointVelocity = 180
+        }
+
+        def PhysicsRevoluteJoint "flex17" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.00017453292
+            float drive:angular:physics:maxForce = 30
+            float drive:angular:physics:stiffness = 0.02443461
+            float drive:angular:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/wire16>
+            rel physics:body1 = </hardware/wire17>
+            point3f physics:localPos0 = (0.011204169, 5.619293e-19, 3.5609843e-21)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.8070694, -0.004128057, 0.0056428574, -0.5904152)
+            quatf physics:localRot1 = (-0.5904152, 0.0056428574, -0.004128057, 0.8070694)
+            float physics:lowerLimit = -25
+            float physics:upperLimit = 25
+            custom float physxJoint:maxJointVelocity = 180
+        }
+
+        def PhysicsRevoluteJoint "flex18" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.00017453292
+            float drive:angular:physics:maxForce = 30
+            float drive:angular:physics:stiffness = 0.02443461
+            float drive:angular:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/wire17>
+            rel physics:body1 = </hardware/wire18>
+            point3f physics:localPos0 = (0.011204169, -3.141927e-19, -6.1081767e-21)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.8070694, -0.004128057, 0.0056428574, -0.5904152)
+            quatf physics:localRot1 = (-0.5904152, 0.0056428574, -0.004128057, 0.8070694)
+            float physics:lowerLimit = -25
+            float physics:upperLimit = 25
+            custom float physxJoint:maxJointVelocity = 180
+        }
+
+        def PhysicsRevoluteJoint "flex19" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0.00017453292
+            float drive:angular:physics:maxForce = 30
+            float drive:angular:physics:stiffness = 0.02443461
+            float drive:angular:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/wire18>
+            rel physics:body1 = </hardware/wire19>
+            point3f physics:localPos0 = (0.011204169, 8.681785e-20, 3.624583e-21)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.8070694, -0.004128057, 0.0056428574, -0.5904152)
+            quatf physics:localRot1 = (-0.5904152, 0.0056428574, -0.004128057, 0.8070694)
+            float physics:lowerLimit = -25
+            float physics:upperLimit = 25
+            custom float physxJoint:maxJointVelocity = 180
+        }
+
+        def PhysicsPrismaticJoint "retract_slide" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 1
+            float drive:linear:physics:maxForce = 30
+            float drive:linear:physics:stiffness = 5
+            float drive:linear:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/base>
+            rel physics:body1 = </hardware/carriage>
+            point3f physics:localPos0 = (0.1298356, -0.090911865, 0.0014444444)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.95371693, 0, 0, -0.3007058)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -0.1405
+            float physics:upperLimit = 0
+            custom float physxJoint:maxJointVelocity = 5
+        }
+
+        def PhysicsPrismaticJoint "splitter_slide" (
+            prepend apiSchemas = ["PhysxJointAPI", "PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 1
+            float drive:linear:physics:maxForce = 30
+            float drive:linear:physics:stiffness = 35
+            float drive:linear:physics:targetPosition = 0
+            uniform token physics:axis = "X"
+            rel physics:body0 = </hardware/carriage>
+            rel physics:body1 = </hardware/splitter>
+            point3f physics:localPos0 = (0, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (-0.6272114, 0.32650557, 0.6272114, 0.32650557)
+            quatf physics:localRot1 = (-0.6272114, 0.32650557, 0.6272114, 0.32650557)
+            float physics:lowerLimit = 0
+            float physics:upperLimit = 0.008
+            custom float physxJoint:maxJointVelocity = 5
+        }
+    }
+
+    def Xform "rotor" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.0000022380702, -2.946485e-7, -0.1588514)
+        float3 physics:diagonalInertia = (0.00074482424, 0.0021533498, 0.0021545247)
+        prepend rel physics:filteredPairs = </hardware/base>
+        float physics:mass = 0.3955771
+        quatf physics:principalAxes = (0.48406157, 0.51750934, 0.48185658, -0.51544416)
+        quatf xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "shaft" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.25
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.006
+            quatf xformOp:orient = (-0.5, 0.5, 0.5, 0.5)
+            double3 xformOp:translate = (0, 0, -0.14)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Cube "spoke0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </hardware/looks/blue>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double size = 1
+            quatf xformOp:orient = (1, 0, 0, 0)
+            float3 xformOp:scale = (0.085, 0.012, 0.008)
+            double3 xformOp:translate = (0.0425, 0, -0.214)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+        }
+
+        def Cube "spoke1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </hardware/looks/blue>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double size = 1
+            quatf xformOp:orient = (0.70710677, 0, 0, 0.70710677)
+            float3 xformOp:scale = (0.085, 0.012, 0.008)
+            double3 xformOp:translate = (2.6023744481881256e-18, 0.0425, -0.214)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+        }
+
+        def Cube "spoke2" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </hardware/looks/blue>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double size = 1
+            quatf xformOp:orient = (6.123234e-17, 0, 0, 1)
+            float3 xformOp:scale = (0.085, 0.012, 0.008)
+            double3 xformOp:translate = (-0.0425, 5.204748896376251e-18, -0.214)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+        }
+
+        def Cube "spoke3" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </hardware/looks/blue>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double size = 1
+            quatf xformOp:orient = (-0.70710677, 0, 0, 0.70710677)
+            float3 xformOp:scale = (0.085, 0.012, 0.008)
+            double3 xformOp:translate = (-7.807123344564376e-18, -0.0425, -0.214)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+        }
+
+        def Capsule "clamp_stalk" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.023806517548305497
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.002
+            quatf xformOp:orient = (0.03084195, 0.33366394, -0.010923026, 0.9421241)
+            double3 xformOp:translate = (-0.009230195039957081, 0.0006049789453788238, -0.010508333333333333)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Cube "jaw_lower" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </hardware/looks/blue>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double size = 1
+            float3 xformOp:scale = (0.005, 0.005, 0.0037)
+            double3 xformOp:translate = (-0.018460390079914162, 0.0012099578907576476, -0.0025166666666666666)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "jaw_inner" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </hardware/looks/blue>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double size = 1
+            float3 xformOp:scale = (0.003, 0.004, 0.0017)
+            double3 xformOp:translate = (-0.01576039007991416, 0.0012099578907576476, -0.0010166666666666666)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Capsule "knob_pin0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.11399999999999999
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.0025
+            quatf xformOp:orient = (-0.5, 0.5, 0.5, 0.5)
+            double3 xformOp:translate = (0.085, 0, -0.157)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "knob_pin1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.11399999999999999
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.0025
+            quatf xformOp:orient = (-0.5, 0.5, 0.5, 0.5)
+            double3 xformOp:translate = (5.204748896376251e-18, 0.085, -0.157)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "knob_pin2" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.11399999999999999
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.0025
+            quatf xformOp:orient = (-0.5, 0.5, 0.5, 0.5)
+            double3 xformOp:translate = (-0.085, 1.0409497792752502e-17, -0.157)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "knob_pin3" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.11399999999999999
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.0025
+            quatf xformOp:orient = (-0.5, 0.5, 0.5, 0.5)
+            double3 xformOp:translate = (-1.5614246689128753e-17, -0.085, -0.157)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Cube "balance_slug" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double size = 1
+            float3 xformOp:scale = (0.005335618, 0.005335618, 0.005335618)
+            double3 xformOp:translate = (0.025518200288545182, -0.0017294478883394257, -0.207)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def Xform "knob" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, 0)
+        float3 physics:diagonalInertia = (6.4492625e-8, 2.8797297e-7, 2.8797297e-7)
+        prepend rel physics:filteredPairs = </hardware/rotor>
+        float physics:mass = 0.0038000704
+        quatf physics:principalAxes = (0.6900922, -0.1541842, -0.6900922, -0.1541842)
+        quatf xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0.085, 0, -0.1)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "grip" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.02
+            rel material:binding = </hardware/looks/orange>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.006
+            quatf xformOp:orient = (-0.5, 0.5, 0.5, 0.5)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "knob1" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, 0)
+        float3 physics:diagonalInertia = (6.4492625e-8, 2.8797297e-7, 2.8797297e-7)
+        prepend rel physics:filteredPairs = </hardware/rotor>
+        float physics:mass = 0.0038000704
+        quatf physics:principalAxes = (0.6900922, -0.1541842, -0.6900922, -0.1541842)
+        quatf xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (5.204748896376251e-18, 0.085, -0.1)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "grip" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.02
+            rel material:binding = </hardware/looks/orange>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.006
+            quatf xformOp:orient = (-0.5, 0.5, 0.5, 0.5)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "knob2" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, 0)
+        float3 physics:diagonalInertia = (6.4492625e-8, 2.8797297e-7, 2.8797297e-7)
+        prepend rel physics:filteredPairs = </hardware/rotor>
+        float physics:mass = 0.0038000704
+        quatf physics:principalAxes = (0.6900922, -0.1541842, -0.6900922, -0.1541842)
+        quatf xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (-0.085, 1.0409497792752502e-17, -0.1)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "grip" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.02
+            rel material:binding = </hardware/looks/orange>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.006
+            quatf xformOp:orient = (-0.5, 0.5, 0.5, 0.5)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "knob3" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, 0)
+        float3 physics:diagonalInertia = (6.4492625e-8, 2.8797297e-7, 2.8797297e-7)
+        prepend rel physics:filteredPairs = </hardware/rotor>
+        float physics:mass = 0.0038000704
+        quatf physics:principalAxes = (0.6900922, -0.1541842, -0.6900922, -0.1541842)
+        quatf xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (-1.5614246689128753e-17, -0.085, -0.1)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "grip" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.02
+            rel material:binding = </hardware/looks/orange>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.006
+            quatf xformOp:orient = (-0.5, 0.5, 0.5, 0.5)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "wire04" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.0056020846, 0, 0)
+        float3 physics:diagonalInertia = (2.4818758e-11, 1.2290269e-9, 1.2290269e-9)
+        prepend rel physics:filteredPairs = </hardware/rotor>
+        float physics:mass = 0.000117485244
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        quatf xformOp:orient = (0.82595515, -0.003941218, 0.0057749026, 0.5636925)
+        double3 xformOp:translate = (-0.018460390079914162, 0.0012099578907576476, -0.00001666666666666661)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "steel0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400634
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, -0.000015557089, 0.000120722514, 0.12780964)
+            double3 xformOp:translate = (0.0009171750685024177, 0.00024037816989915436, -2.3081954530400573e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400727
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, 0.0000018582923, -0.000024118586, 0.07682046)
+            double3 xformOp:translate = (0.002771311115167023, 0.0006260007800405951, -4.1576737634454154e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel2" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400634
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, 0.0000024996423, -0.00009749867, 0.025629284)
+            double3 xformOp:translate = (0.004655178262700842, 0.0008198301595581948, -1.8494783104053428e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel3" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400653
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, -0.0000024996423, -0.00009749867, -0.025629284)
+            double3 xformOp:translate = (0.006548990601444107, 0.0008198301595581947, 1.8494783104050654e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel4" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400712
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, -0.0000018582923, -0.000024118586, -0.07682046)
+            double3 xformOp:translate = (0.008432857748977927, 0.0006260007800405945, 4.157673763444884e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel5" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400657
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, 0.000015557089, 0.000120722514, -0.12780964)
+            double3 xformOp:translate = (0.010286993795642532, 0.00024037816989915396, 2.3081954530397288e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "wire03" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.0056020846, 0, 0)
+        float3 physics:diagonalInertia = (2.4818758e-11, 1.2290269e-9, 1.2290269e-9)
+        prepend rel physics:filteredPairs = </hardware/wire04>
+        float physics:mass = 0.000117485244
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        quatf xformOp:orient = (0.9578618, -0.0020076535, 0.0066971653, 0.28714454)
+        double3 xformOp:translate = (-0.01437720028695396, 0.01164242723442199, -0.00017333333333333334)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "steel0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400647
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, -0.000015557089, 0.000120722514, 0.12780964)
+            double3 xformOp:translate = (0.0009171750685024186, 0.00024037816989915355, -2.3081954530395999e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.001896303587640072
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, 0.0000018582923, -0.000024118586, 0.07682046)
+            double3 xformOp:translate = (0.002771311115167024, 0.0006260007800405943, -4.157673763444619e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel2" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400638
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, 0.0000024996423, -0.00009749867, 0.025629284)
+            double3 xformOp:translate = (0.004655178262700844, 0.0008198301595581932, -1.849478310405275e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel3" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400642
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, -0.0000024996423, -0.00009749867, -0.025629284)
+            double3 xformOp:translate = (0.006548990601444109, 0.0008198301595581934, 1.8494783104052006e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel4" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.001896303587640067
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, -0.0000018582923, -0.000024118586, -0.07682046)
+            double3 xformOp:translate = (0.008432857748977927, 0.0006260007800405954, 4.157673763445561e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel5" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400712
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, 0.000015557089, 0.000120722514, -0.12780964)
+            double3 xformOp:translate = (0.010286993795642532, 0.00024037816989915404, 2.3081954530399995e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "wire02" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.0056020846, 0, 0)
+        float3 physics:diagonalInertia = (2.4818758e-11, 1.2290269e-9, 1.2290269e-9)
+        prepend rel physics:filteredPairs = </hardware/wire03>
+        float physics:mass = 0.000117485244
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        quatf xformOp:orient = (0.9998417, 0.00011439495, 0.00699068, -0.016361332)
+        double3 xformOp:translate = (-0.005021648322503875, 0.017805421874392473, -0.00033)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "steel0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.001896303587640067
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, -0.000015557089, 0.000120722514, 0.12780964)
+            double3 xformOp:translate = (0.0009171750685024199, 0.00024037816989915363, -2.308195453039653e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400683
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, 0.0000018582923, -0.000024118586, 0.07682046)
+            double3 xformOp:translate = (0.002771311115167025, 0.0006260007800405939, -4.1576737634446435e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel2" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400631
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, 0.0000024996423, -0.00009749867, 0.025629284)
+            double3 xformOp:translate = (0.004655178262700842, 0.000819830159558193, -1.849478310404593e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel3" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400688
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, -0.0000024996423, -0.00009749867, -0.025629284)
+            double3 xformOp:translate = (0.006548990601444109, 0.0008198301595581927, 1.849478310405641e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel4" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.001896303587640066
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, -0.0000018582923, -0.000024118586, -0.07682046)
+            double3 xformOp:translate = (0.008432857748977928, 0.0006260007800405935, 4.1576737634454207e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel5" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400707
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, 0.000015557089, 0.000120722514, -0.12780964)
+            double3 xformOp:translate = (0.010286993795642534, 0.00024037816989915344, 2.3081954530402947e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "wire01" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.0056020846, 0, 0)
+        float3 physics:diagonalInertia = (2.4818758e-11, 1.2290269e-9, 1.2290269e-9)
+        prepend rel physics:filteredPairs = </hardware/wire02>
+        float physics:mass = 0.000117485244
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        quatf xformOp:orient = (0.9479538, 0.0022257036, 0.006627891, -0.31833115)
+        double3 xformOp:translate = (0.006175426895824761, 0.0174388675852053, -0.0004866666666666667)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "steel0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400688
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, -0.000015557089, 0.000120722514, 0.12780964)
+            double3 xformOp:translate = (0.0009171750685024207, 0.00024037816989915366, -2.3081954530395514e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400625
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, 0.0000018582923, -0.000024118586, 0.07682046)
+            double3 xformOp:translate = (0.002771311115167024, 0.0006260007800405936, -4.157673763444576e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel2" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400688
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, 0.0000024996423, -0.00009749867, 0.025629284)
+            double3 xformOp:translate = (0.004655178262700841, 0.0008198301595581921, -1.8494783104051689e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel3" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400688
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, -0.0000024996423, -0.00009749867, -0.025629284)
+            double3 xformOp:translate = (0.006548990601444111, 0.0008198301595581912, 1.8494783104052345e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel4" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400677
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, -0.0000018582923, -0.000024118586, -0.07682046)
+            double3 xformOp:translate = (0.00843285774897793, 0.0006260007800405917, 4.1576737634456917e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel5" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400668
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, 0.000015557089, 0.000120722514, -0.12780964)
+            double3 xformOp:translate = (0.010286993795642536, 0.00024037816989915247, 2.3081954530402947e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "wire00" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.0056020846, 0, 0)
+        float3 physics:diagonalInertia = (2.4818758e-11, 1.2290269e-9, 1.2290269e-9)
+        prepend rel physics:filteredPairs = </hardware/wire01>
+        float physics:mass = 0.000117485244
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        quatf xformOp:orient = (0.8070694, 0.004128057, 0.0056428574, -0.5904152)
+        double3 xformOp:translate = (0.01510786877049106, 0.010677186015688822, -0.0006433333333333334)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "steel0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400666
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, -0.000015557089, 0.000120722514, 0.12780964)
+            double3 xformOp:translate = (0.0009171750685024196, 0.0002403781698991536, -2.3081954530398008e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.001896303587640067
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, 0.0000018582923, -0.000024118586, 0.07682046)
+            double3 xformOp:translate = (0.0027713111151670237, 0.000626000780040593, -4.1576737634448156e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel2" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400668
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, 0.0000024996423, -0.00009749867, 0.025629284)
+            double3 xformOp:translate = (0.004655178262700842, 0.0008198301595581925, -1.8494783104047718e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel3" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.001896303587640068
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, -0.0000024996423, -0.00009749867, -0.025629284)
+            double3 xformOp:translate = (0.006548990601444111, 0.0008198301595581934, 1.8494783104052345e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel4" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400653
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, -0.0000018582923, -0.000024118586, -0.07682046)
+            double3 xformOp:translate = (0.008432857748977928, 0.0006260007800405934, 4.1576737634446176e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel5" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400688
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, 0.000015557089, 0.000120722514, -0.12780964)
+            double3 xformOp:translate = (0.010286993795642532, 0.0002403781698991529, 2.3081954530395694e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "wire05" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.0056020846, 0, 0)
+        float3 physics:diagonalInertia = (2.4818758e-11, 1.2290269e-9, 1.2290269e-9)
+        prepend rel physics:filteredPairs = </hardware/rotor>
+        float physics:mass = 0.000117485244
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        quatf xformOp:orient = (0.7873195, -0.004310476, -0.00550477, -0.6165056)
+        double3 xformOp:translate = (-0.018460390079914162, 0.0012099578907576476, -0.00001666666666666661)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "steel0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400642
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, -0.000015557089, -0.000120722514, -0.12780964)
+            double3 xformOp:translate = (0.000917175068502418, -0.00024037816989915488, 2.3081954530401904e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400725
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, 0.0000018582923, 0.000024118586, -0.07682046)
+            double3 xformOp:translate = (0.0027713111151670237, -0.0006260007800405965, 4.1576737634454424e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel2" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400722
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, 0.0000024996423, 0.00009749867, -0.025629284)
+            double3 xformOp:translate = (0.0046551782627008475, -0.0008198301595581962, 1.849478310405009e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel3" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400644
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, -0.0000024996423, 0.00009749867, 0.025629284)
+            double3 xformOp:translate = (0.006548990601444116, -0.000819830159558196, -1.84947831040537e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel4" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400642
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, -0.0000018582923, 0.000024118586, 0.07682046)
+            double3 xformOp:translate = (0.008432857748977932, -0.0006260007800405963, -4.1576737634446176e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel5" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400731
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, 0.000015557089, -0.000120722514, 0.12780964)
+            double3 xformOp:translate = (0.01028699379564254, -0.0002403781698991548, -2.308195453039434e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "wire06" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.0056020846, 0, 0)
+        float3 physics:diagonalInertia = (2.4818758e-11, 1.2290269e-9, 1.2290269e-9)
+        prepend rel physics:filteredPairs = </hardware/wire05>
+        float physics:mass = 0.000117485244
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        quatf xformOp:orient = (0.93703073, -0.0024413704, -0.0065515195, -0.34917688)
+        double3 xformOp:translate = (-0.0157738430405507, -0.009666223447245059, 0.00014000000000000004)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "steel0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400627
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, -0.000015557089, -0.000120722514, -0.12780964)
+            double3 xformOp:translate = (0.0009171750685024175, -0.0002403781698991539, 2.3081954530401443e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400642
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, 0.0000018582923, 0.000024118586, -0.07682046)
+            double3 xformOp:translate = (0.0027713111151670185, -0.0006260007800405934, 4.1576737634457447e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel2" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400623
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, 0.0000024996423, 0.00009749867, -0.025629284)
+            double3 xformOp:translate = (0.004655178262700834, -0.0008198301595581923, 1.8494783104063547e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel3" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.001896303587640067
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, -0.0000024996423, 0.00009749867, 0.025629284)
+            double3 xformOp:translate = (0.006548990601444099, -0.0008198301595581932, -1.849478310403676e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel4" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400545
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, -0.0000018582923, 0.000024118586, 0.07682046)
+            double3 xformOp:translate = (0.008432857748977911, -0.0006260007800405953, -4.157673763443659e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel5" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400718
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, 0.000015557089, -0.000120722514, 0.12780964)
+            double3 xformOp:translate = (0.010286993795642511, -0.00024037816989915726, -2.3081954530389394e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "wire07" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.0056020846, 0, 0)
+        float3 physics:diagonalInertia = (2.4818758e-11, 1.2290269e-9, 1.2290269e-9)
+        prepend rel physics:filteredPairs = </hardware/wire06>
+        float physics:mass = 0.000117485244
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        quatf xformOp:orient = (0.9987711, -0.00034306233, -0.0069831945, -0.049066477)
+        double3 xformOp:translate = (-0.00730276134310894, -0.01699763738775462, 0.0002966666666666667)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "steel0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400722
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, -0.000015557089, -0.000120722514, -0.12780964)
+            double3 xformOp:translate = (0.0009171750685024061, -0.0002403781698991489, 2.3081954530407558e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400716
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, 0.0000018582923, 0.000024118586, -0.07682046)
+            double3 xformOp:translate = (0.0027713111151670155, -0.0006260007800405905, 4.1576737634459723e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel2" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400722
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, 0.0000024996423, 0.00009749867, -0.025629284)
+            double3 xformOp:translate = (0.004655178262700839, -0.0008198301595581912, 1.8494783104053674e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel3" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400558
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, -0.0000024996423, 0.00009749867, 0.025629284)
+            double3 xformOp:translate = (0.006548990601444104, -0.0008198301595581923, -1.8494783104046583e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel4" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.001896303587640071
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, -0.0000018582923, 0.000024118586, 0.07682046)
+            double3 xformOp:translate = (0.008432857748977918, -0.0006260007800405941, -4.1576737634440607e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel5" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400725
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, 0.000015557089, -0.000120722514, 0.12780964)
+            double3 xformOp:translate = (0.010286993795642529, -0.0002403781698991541, -2.308195453039641e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "wire08" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.0056020846, 0, 0)
+        float3 physics:diagonalInertia = (2.4818758e-11, 1.2290269e-9, 1.2290269e-9)
+        prepend rel physics:filteredPairs = </hardware/wire07>
+        float physics:mass = 0.000117485244
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        quatf xformOp:orient = (0.966744, 0.0017874534, -0.006759268, 0.25565043)
+        double3 xformOp:translate = (0.003846366280128549, -0.018095730613575403, 0.00045333333333333337)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "steel0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.001896303587640073
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, -0.000015557089, -0.000120722514, -0.12780964)
+            double3 xformOp:translate = (0.000917175068502423, -0.0002403781698991532, 2.3081954530399217e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400555
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, 0.0000018582923, 0.000024118586, -0.07682046)
+            double3 xformOp:translate = (0.002771311115167025, -0.0006260007800405922, 4.1576737634448733e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel2" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400714
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, 0.0000024996423, 0.00009749867, -0.025629284)
+            double3 xformOp:translate = (0.00465517826270084, -0.0008198301595581914, 1.8494783104052072e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel3" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400714
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, -0.0000024996423, 0.00009749867, 0.025629284)
+            double3 xformOp:translate = (0.006548990601444113, -0.0008198301595581912, -1.8494783104052687e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel4" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400542
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, -0.0000018582923, 0.000024118586, 0.07682046)
+            double3 xformOp:translate = (0.008432857748977927, -0.0006260007800405927, -4.157673763445764e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel5" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400742
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, 0.000015557089, -0.000120722514, 0.12780964)
+            double3 xformOp:translate = (0.010286993795642529, -0.0002403781698991539, -2.3081954530402709e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "wire09" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.0056020846, 0, 0)
+        float3 physics:diagonalInertia = (2.4818758e-11, 1.2290269e-9, 1.2290269e-9)
+        prepend rel physics:filteredPairs = </hardware/wire08>
+        float physics:mass = 0.000117485244
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        quatf xformOp:orient = (0.8439564, 0.003750158, -0.0059007634, 0.53636616)
+        double3 xformOp:translate = (0.013584966424560183, -0.012557813792359422, 0.0006100000000000002)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "steel0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400722
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, -0.000015557089, -0.000120722514, -0.12780964)
+            double3 xformOp:translate = (0.0009171750685024226, -0.00024037816989915336, 2.3081954530393312e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400564
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, 0.0000018582923, 0.000024118586, -0.07682046)
+            double3 xformOp:translate = (0.0027713111151670246, -0.0006260007800405927, 4.1576737634440845e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel2" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400705
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, 0.0000024996423, 0.00009749867, -0.025629284)
+            double3 xformOp:translate = (0.00465517826270084, -0.0008198301595581904, 1.8494783104050333e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel3" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400722
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, -0.0000024996423, 0.00009749867, 0.025629284)
+            double3 xformOp:translate = (0.006548990601444112, -0.0008198301595581893, -1.8494783104050312e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel4" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400562
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, -0.0000018582923, 0.000024118586, 0.07682046)
+            double3 xformOp:translate = (0.008432857748977927, -0.0006260007800405916, -4.157673763445895e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel5" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400722
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, 0.000015557089, -0.000120722514, 0.12780964)
+            double3 xformOp:translate = (0.010286993795642529, -0.0002403781698991532, -2.3081954530405657e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "wire10" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.0056020846, 0, 0)
+        float3 physics:diagonalInertia = (2.4818758e-11, 1.2290269e-9, 1.2290269e-9)
+        prepend rel physics:filteredPairs = </hardware/wire09>
+        float physics:mass = 0.000117485244
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        quatf xformOp:orient = (0.6419359, 0.0053607877, -0.004488279, 0.76672643)
+        double3 xformOp:translate = (0.018341729935415493, -0.002414734556070956, 0.0007666666666666668)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "steel0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400725
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, -0.000015557089, -0.000120722514, -0.12780964)
+            double3 xformOp:translate = (0.0009171750685024226, -0.0002403781698991538, 2.308195453039278e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400558
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, 0.0000018582923, 0.000024118586, -0.07682046)
+            double3 xformOp:translate = (0.0027713111151670246, -0.0006260007800405931, 4.157673763445009e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel2" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400727
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, 0.0000024996423, 0.00009749867, -0.025629284)
+            double3 xformOp:translate = (0.0046551782627008405, -0.0008198301595581921, 1.8494783104046993e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel3" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400733
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, -0.0000024996423, 0.00009749867, 0.025629284)
+            double3 xformOp:translate = (0.006548990601444114, -0.0008198301595581906, -1.8494783104067592e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel4" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400551
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, -0.0000018582923, 0.000024118586, 0.07682046)
+            double3 xformOp:translate = (0.00843285774897793, -0.000626000780040591, -4.157673763446103e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel5" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.001896303587640072
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, 0.000015557089, -0.000120722514, 0.12780964)
+            double3 xformOp:translate = (0.010286993795642532, -0.00024037816989915312, -2.308195453040406e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "wire11" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.0056020846, 0, 0)
+        float3 physics:diagonalInertia = (2.4818758e-11, 1.2290269e-9, 1.2290269e-9)
+        prepend rel physics:filteredPairs = </hardware/wire10>
+        float physics:mass = 0.000117485244
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        quatf xformOp:orient = (0.37964872, 0.006468132, -0.002654423, 0.9251043)
+        double3 xformOp:translate = (0.016372271293066277, 0.008613868626014558, 0.0009233333333333335)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "steel0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400735
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, -0.000015557089, -0.000120722514, -0.12780964)
+            double3 xformOp:translate = (0.0009171750685024231, -0.00024037816989915382, 2.3081954530399363e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400716
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, 0.0000018582923, 0.000024118586, -0.07682046)
+            double3 xformOp:translate = (0.0027713111151670333, -0.0006260007800405952, 4.157673763444375e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel2" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400553
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, 0.0000024996423, 0.00009749867, -0.025629284)
+            double3 xformOp:translate = (0.004655178262700848, -0.0008198301595581946, 1.8494783104034504e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel3" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400731
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, -0.0000024996423, 0.00009749867, 0.025629284)
+            double3 xformOp:translate = (0.006548990601444113, -0.000819830159558194, -1.8494783104064542e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel4" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400705
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, -0.0000018582923, 0.000024118586, 0.07682046)
+            double3 xformOp:translate = (0.008432857748977937, -0.0006260007800405949, -4.157673763444821e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel5" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400744
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, 0.000015557089, -0.000120722514, 0.12780964)
+            double3 xformOp:translate = (0.010286993795642546, -0.00024037816989915358, -2.3081954530392984e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "wire12" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.0056020846, 0, 0)
+        float3 physics:diagonalInertia = (2.4818758e-11, 1.2290269e-9, 1.2290269e-9)
+        prepend rel physics:filteredPairs = </hardware/wire11>
+        float physics:mass = 0.000117485244
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        quatf xformOp:orient = (0.08171908, 0.006968231, -0.0005713624, 0.9966309)
+        double3 xformOp:translate = (0.008398824245181605, 0.01648362069748481, 0.0010800000000000002)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "steel0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400707
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, -0.000015557089, -0.000120722514, -0.12780964)
+            double3 xformOp:translate = (0.0009171750685024219, -0.00024037816989915298, 2.3081954530394863e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400566
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, 0.0000018582923, 0.000024118586, -0.07682046)
+            double3 xformOp:translate = (0.0027713111151670233, -0.0006260007800405925, 4.1576737634450236e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel2" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.001896303587640071
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, 0.0000024996423, 0.00009749867, -0.025629284)
+            double3 xformOp:translate = (0.004655178262700839, -0.0008198301595581912, 1.849478310406655e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel3" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400722
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, -0.0000024996423, 0.00009749867, 0.025629284)
+            double3 xformOp:translate = (0.006548990601444111, -0.0008198301595581906, -1.8494783104022866e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel4" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400555
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, -0.0000018582923, 0.000024118586, 0.07682046)
+            double3 xformOp:translate = (0.008432857748977927, -0.0006260007800405916, -4.157673763441892e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel5" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.001896303587640072
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, 0.000015557089, -0.000120722514, 0.12780964)
+            double3 xformOp:translate = (0.010286993795642529, -0.0002403781698991528, -2.3081954530385567e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "wire13" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.0056020846, 0, 0)
+        float3 physics:diagonalInertia = (2.4818758e-11, 1.2290269e-9, 1.2290269e-9)
+        prepend rel physics:filteredPairs = </hardware/wire12>
+        float physics:mass = 0.000117485244
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        quatf xformOp:orient = (-0.22388257, 0.006814133, 0.0015653393, 0.9745911)
+        double3 xformOp:translate = (-0.002654613506836826, 0.018308550656163897, 0.0012366666666666667)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "steel0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400725
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, -0.000015557089, -0.000120722514, -0.12780964)
+            double3 xformOp:translate = (0.0009171750685024225, -0.00024037816989915415, 2.3081954530403476e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400386
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, 0.0000018582923, 0.000024118586, -0.07682046)
+            double3 xformOp:translate = (0.0027713111151670155, -0.0006260007800405934, 4.1576737634466595e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel2" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400718
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, 0.0000024996423, 0.00009749867, -0.025629284)
+            double3 xformOp:translate = (0.004655178262700822, -0.0008198301595581917, 1.849478310406863e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel3" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.001896303587640074
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, -0.0000024996423, 0.00009749867, 0.025629284)
+            double3 xformOp:translate = (0.006548990601444096, -0.000819830159558193, -1.8494783104036082e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel4" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400378
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, -0.0000018582923, 0.000024118586, 0.07682046)
+            double3 xformOp:translate = (0.008432857748977904, -0.0006260007800405971, -4.157673763444607e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel5" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400714
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, 0.000015557089, -0.000120722514, 0.12780964)
+            double3 xformOp:translate = (0.010286993795642498, -0.00024037816989916174, -2.3081954530405652e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "wire14" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.0056020846, 0, 0)
+        float3 physics:diagonalInertia = (2.4818758e-11, 1.2290269e-9, 1.2290269e-9)
+        prepend rel physics:filteredPairs = </hardware/wire13>
+        float physics:mass = 0.000117485244
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        quatf xformOp:orient = (-0.5084655, 0.006020306, 0.0035550827, 0.86105394)
+        double3 xformOp:translate = (-0.012734559650334452, 0.013419425863727316, 0.0013933333333333334)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "steel0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400714
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, -0.000015557089, -0.000120722514, -0.12780964)
+            double3 xformOp:translate = (0.000917175068502391, -0.00024037816989914637, 2.3081954530404064e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400738
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, 0.0000018582923, 0.000024118586, -0.07682046)
+            double3 xformOp:translate = (0.0027713111151670003, -0.0006260007800405898, 4.157673763446677e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel2" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400696
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, 0.0000024996423, 0.00009749867, -0.025629284)
+            double3 xformOp:translate = (0.004655178262700824, -0.0008198301595581914, 1.849478310405779e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel3" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.001896303587640073
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, -0.0000024996423, 0.00009749867, 0.025629284)
+            double3 xformOp:translate = (0.006548990601444095, -0.0008198301595581934, -1.8494783104056406e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel4" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.001896303587640072
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, -0.0000018582923, 0.000024118586, 0.07682046)
+            double3 xformOp:translate = (0.00843285774897792, -0.0006260007800405956, -4.157673763444539e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel5" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.001896303587640073
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, 0.000015557089, -0.000120722514, 0.12780964)
+            double3 xformOp:translate = (0.010286993795642529, -0.00024037816989915458, -2.308195453039346e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "wire15" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.0056020846, 0, 0)
+        float3 physics:diagonalInertia = (2.4818758e-11, 1.2290269e-9, 1.2290269e-9)
+        prepend rel physics:filteredPairs = </hardware/wire14>
+        float physics:mass = 0.000117485244
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        quatf xformOp:orient = (0.74531233, -0.004661276, -0.005211065, -0.6666788)
+        double3 xformOp:translate = (-0.018144527687459763, 0.0036091709572983674, 0.0015500000000000002)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "steel0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.001896303587640072
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, -0.000015557089, -0.000120722514, -0.12780964)
+            double3 xformOp:translate = (0.0009171750685024224, -0.00024037816989915399, 2.3081954530405364e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400718
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, 0.0000018582923, 0.000024118586, -0.07682046)
+            double3 xformOp:translate = (0.0027713111151670316, -0.0006260007800405957, 4.1576737634460395e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel2" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400722
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, 0.0000024996423, 0.00009749867, -0.025629284)
+            double3 xformOp:translate = (0.004655178262700855, -0.0008198301595581958, 1.849478310406553e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel3" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400402
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, -0.0000024996423, 0.00009749867, 0.025629284)
+            double3 xformOp:translate = (0.006548990601444113, -0.0008198301595581956, -1.8494783104033708e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel4" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400703
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, -0.0000018582923, 0.000024118586, 0.07682046)
+            double3 xformOp:translate = (0.00843285774897792, -0.0006260007800405967, -4.1576737634427726e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel5" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400731
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, 0.000015557089, -0.000120722514, 0.12780964)
+            double3 xformOp:translate = (0.010286993795642529, -0.0002403781698991554, -2.3081954530384212e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "wire16" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.0056020846, 0, 0)
+        float3 physics:diagonalInertia = (2.4818758e-11, 1.2290269e-9, 1.2290269e-9)
+        prepend rel physics:filteredPairs = </hardware/wire15>
+        float physics:mass = 0.000117485244
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        quatf xformOp:orient = (0.9121872, -0.0028646332, -0.006377819, -0.409714)
+        double3 xformOp:translate = (-0.016900590966388112, -0.007524627896902307, 0.0017066666666666667)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "steel0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400718
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, -0.000015557089, -0.000120722514, -0.12780964)
+            double3 xformOp:translate = (0.000917175068502422, -0.00024037816989915464, 2.3081954530400258e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400727
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, 0.0000018582923, 0.000024118586, -0.07682046)
+            double3 xformOp:translate = (0.0027713111151670316, -0.0006260007800405957, 4.157673763445456e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel2" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.001896303587640038
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, 0.0000024996423, 0.00009749867, -0.025629284)
+            double3 xformOp:translate = (0.004655178262700839, -0.0008198301595581935, 1.8494783104049653e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel3" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400722
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, -0.0000024996423, 0.00009749867, 0.025629284)
+            double3 xformOp:translate = (0.006548990601444094, -0.0008198301595581923, -1.84947831040598e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel4" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400718
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, -0.0000018582923, 0.000024118586, 0.07682046)
+            double3 xformOp:translate = (0.008432857748977918, -0.0006260007800405935, -4.157673763445692e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel5" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.001896303587640071
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, 0.000015557089, -0.000120722514, 0.12780964)
+            double3 xformOp:translate = (0.010286993795642527, -0.00024037816989915333, -2.3081954530401597e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "wire17" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.0056020846, 0, 0)
+        float3 physics:diagonalInertia = (2.4818758e-11, 1.2290269e-9, 1.2290269e-9)
+        prepend rel physics:filteredPairs = </hardware/wire16>
+        float physics:mass = 0.000117485244
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        quatf xformOp:orient = (0.9934235, -0.0007990506, -0.0069458056, -0.11428417)
+        double3 xformOp:translate = (-0.009458922092425463, -0.015899018612776875, 0.0018633333333333338)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "steel0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.001896303587640073
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, -0.000015557089, -0.000120722514, -0.12780964)
+            double3 xformOp:translate = (0.000917175068502423, -0.00024037816989915287, 2.3081954530381432e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400731
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, 0.0000018582923, 0.000024118586, -0.07682046)
+            double3 xformOp:translate = (0.0027713111151670337, -0.0006260007800405932, 4.1576737634421125e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel2" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400712
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, 0.0000024996423, 0.00009749867, -0.025629284)
+            double3 xformOp:translate = (0.004655178262700857, -0.0008198301595581925, 1.8494783104033438e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel3" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.00189630358764004
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, -0.0000024996423, 0.00009749867, 0.025629284)
+            double3 xformOp:translate = (0.006548990601444114, -0.0008198301595581925, -1.8494783104068947e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel4" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400705
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, -0.0000018582923, 0.000024118586, 0.07682046)
+            double3 xformOp:translate = (0.00843285774897792, -0.0006260007800405936, -4.1576737634465096e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel5" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400735
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, 0.000015557089, -0.000120722514, 0.12780964)
+            double3 xformOp:translate = (0.01028699379564253, -0.0002403781698991533, -2.3081954530402706e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "wire18" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.0056020846, 0, 0)
+        float3 physics:diagonalInertia = (2.4818758e-11, 1.2290269e-9, 1.2290269e-9)
+        prepend rel physics:filteredPairs = </hardware/wire17>
+        float physics:mass = 0.000117485244
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        quatf xformOp:orient = (0.98139447, 0.001341549, -0.006861701, 0.19187498)
+        double3 xformOp:translate = (0.0014514932709651317, -0.018442970674062868, 0.0020200000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "steel0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400722
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, -0.000015557089, -0.000120722514, -0.12780964)
+            double3 xformOp:translate = (0.0009171750685024226, -0.00024037816989915323, 2.308195453038332e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400714
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, 0.0000018582923, 0.000024118586, -0.07682046)
+            double3 xformOp:translate = (0.0027713111151670324, -0.0006260007800405925, 4.157673763442713e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel2" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400408
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, 0.0000024996423, 0.00009749867, -0.025629284)
+            double3 xformOp:translate = (0.00465517826270084, -0.0008198301595581917, 1.8494783104022215e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel3" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400694
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, -0.0000024996423, 0.00009749867, 0.025629284)
+            double3 xformOp:translate = (0.006548990601444095, -0.0008198301595581932, -1.8494783104087576e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel4" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.001896303587640072
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, -0.0000018582923, 0.000024118586, 0.07682046)
+            double3 xformOp:translate = (0.008432857748977918, -0.000626000780040595, -4.1576737634470464e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel5" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400727
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, 0.000015557089, -0.000120722514, 0.12780964)
+            double3 xformOp:translate = (0.010286993795642529, -0.00024037816989915417, -2.3081954530404302e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "wire19" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.0056020846, 0, 0)
+        float3 physics:diagonalInertia = (2.4818758e-11, 1.2290269e-9, 1.2290269e-9)
+        prepend rel physics:filteredPairs = </hardware/wire18>
+        float physics:mass = 0.000117485244
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        quatf xformOp:orient = (0.87722945, 0.0033562004, -0.0061334018, 0.4800204)
+        double3 xformOp:translate = (0.011829621536640815, -0.014223573893359001, 0.002176666666666667)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "steel0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400718
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, -0.000015557089, -0.000120722514, -0.12780964)
+            double3 xformOp:translate = (0.0009171750685024223, -0.00024037816989915404, 2.3081954530383828e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.001896303587640073
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, 0.0000018582923, 0.000024118586, -0.07682046)
+            double3 xformOp:translate = (0.002771311115167032, -0.0006260007800405952, 4.1576737634427636e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel2" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400731
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, 0.0000024996423, 0.00009749867, -0.025629284)
+            double3 xformOp:translate = (0.004655178262700857, -0.0008198301595581943, 1.8494783104041863e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel3" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.001896303587640039
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9996715, -0.0000024996423, 0.00009749867, 0.025629284)
+            double3 xformOp:translate = (0.0065489906014441135, -0.0008198301595581947, -1.8494783104068605e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel4" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.0018963035876400699
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9970449, -0.0000018582923, 0.000024118586, 0.07682046)
+            double3 xformOp:translate = (0.00843285774897792, -0.0006260007800405948, -4.1576737634472497e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "steel5" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.001896303587640074
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.00065
+            quatf xformOp:orient = (0.9917987, 0.000015557089, -0.000120722514, 0.12780964)
+            double3 xformOp:translate = (0.010286993795642529, -0.00024037816989915287, -2.3081954530405657e-7)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "carriage" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.12, 0, -0.01)
+        float3 physics:diagonalInertia = (0.00001, 0.00001, 0.00001)
+        prepend rel physics:filteredPairs = </hardware/base>
+        float physics:mass = 0.03
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        quatf xformOp:orient = (0.95371693, 0, 0, -0.3007058)
+        double3 xformOp:translate = (0.1298355990198052, -0.0909118651616408, 0.0014444444444444444)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Cube "slide_block" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </hardware/looks/blue>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double size = 1
+            float3 xformOp:scale = (0.025, 0.02, 0.01)
+            double3 xformOp:translate = (0.12000000000000001, 0, -0.01)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Capsule "slide_rod" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.06999999999999999
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.002
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:translate = (0.155, 0, -0.014)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "splitter" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.07, 0, 0)
+        float3 physics:diagonalInertia = (0.00001, 0.00001, 0.00001)
+        prepend rel physics:filteredPairs = </hardware/carriage>
+        float physics:mass = 0.025
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        quatf xformOp:orient = (0.95371693, 0, 0, -0.3007058)
+        double3 xformOp:translate = (0.1298355990198052, -0.0909118651616408, 0.0014444444444444444)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Cube "tooth" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double size = 1
+            float3 xformOp:scale = (0.004, 0.001, 0.00018)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "tooth_neck" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double size = 1
+            float3 xformOp:scale = (0.002, 0.001, 0.00018)
+            double3 xformOp:translate = (0.003, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "arm" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double size = 1
+            float3 xformOp:scale = (0.136, 0.006, 0.003)
+            double3 xformOp:translate = (0.07200000000000001, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Capsule "grip_standoff" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.035
+            rel material:binding = </hardware/looks/steel>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double radius = 0.003
+            quatf xformOp:orient = (-0.5, 0.5, 0.5, 0.5)
+            double3 xformOp:translate = (0.14, 0, 0.0175)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Cube "grip" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </hardware/looks/orange>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double size = 1
+            float3 xformOp:scale = (0.016, 0.016, 0.016)
+            double3 xformOp:translate = (0.14, 0, 0.035)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+}
+
