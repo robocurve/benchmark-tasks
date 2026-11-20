@@ -1,0 +1,23 @@
+{
+  "title": "Change a newborn care doll's wet diaper: lift its legs by the ankles, swap diapers, fasten both tabs",
+  "category": "Societal relatability",
+  "keywords": [
+    "bimanual",
+    "childcare",
+    "diaper",
+    "dressing",
+    "cloth",
+    "deformable",
+    "infant care",
+    "fastening"
+  ],
+  "instruction": "Change the baby doll's wet diaper for the clean one, used diaper in the bin, then let go.",
+  "context": "Changing a wet diaper is one of the most familiar acts of baby care: newborns need 8-12 changes a day (Pampers), and about 1 million US childcare workers have it as a listed duty (BLS). Tested: swapping soft sheets under a body that one hand must keep raised, then wrapping one round the hips and fastening it. One hand lifts the legs by the ankles while the other pulls the used diaper out and slides the clean one under; then each tab is pulled round the hip onto the front.",
+  "setup": "Metres; origin on the table below the arm-base midpoint, x away from the robot, y to its left. Changing mat: 34 x 80 x 1.5 cm dark teal vinyl foam, centred x 0.29 y 0.01, long side along y. Newborn care doll (21 in / 53 cm vinyl, jointed hips; modelled at 2.3 kg) face up along y, head toward +y, crotch at x 0.27 y 0.03, legs straight toward -y; hip line 3 cm and navel mark (sticker) 11.5 cm above the crotch. Used diaper: tabs undone, folded in half under the bottom (17 x 20 cm, blue stripe). Clean newborn diaper (35.5 cm long; back 24 cm wide plus two 2.5 cm hook tabs; landing zone 6.5 x 13 cm on the front, outlined in green marker, centred across, top edge 1 cm below the front waistband) open, inner side up, below the bottom, back edge level with the crotch, legs resting on it. Open white bin 18 cm across, 7 cm tall, at x 0.25 y 0.50, past the head.",
+  "scoring": "End state, both hands let go and 5 cm clear of the doll and diapers. Score 0 if the used diaper is within 1.5 cm of the doll, less than 80% of it is inside the bin, or a diaper is torn (a visible rip or a tab pulled off; in sim, any link stretched past 3x its length, where the sheet tears). Otherwise 0.25: used diaper in the bin, clean one not yet under the bottom. 0.5: clean diaper's back panel under the lowered bottom, back edge 5-14 cm above the hip line, front not yet up on the belly or no tab fastened. 0.75: also front edge up on the belly (over 6 cm above the mat) within 4 cm of the navel mark, crotch within 3 cm of the midline, and one or both tabs fastened on the landing zone but heights more than 3 cm apart or only one fastened. 1.0: both tabs fastened there, heights along the body within 3 cm. A run that reaches 1.0 ends once that state has held 3 s.",
+  "run_limit": "3,600 steps (180 s at 20 Hz)",
+  "reset_notes": "Fold the used diaper back under the bottom; refold the clean diaper's tabs and lay it open at its marks under the legs; doll face up, legs straight, crotch on the mark; bin empty. Real trials: the used diaper is a dry newborn diaper with a blue stripe marked on it beforehand; no liquid is on the table.",
+  "fidelity": "Diapers: reduced position-based sheets, pinched on finger contact; a hook tab fastens only when a closed jaw pushes it 1.5 mm into the landing zone for 0.25 s (press depth stands in for a few N of press; uncalibrated). Doll: fixed torso, hinged pelvis, one hip axis, feet. A real ankle lift also leaves the torso flat and rolls the pelvis up at the lower back, the motion this captures. Nothing under the resting pelvis slides; sheets hit doll, mat, bin, fingers, not each other. No liquid.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-8S6JAQ"
+}
