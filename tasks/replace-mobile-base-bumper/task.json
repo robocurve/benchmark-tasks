@@ -1,0 +1,18 @@
+{
+  "title": "Fit and verify a mobile robot's front bumper",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "mobile base",
+    "bumper",
+    "contact sensor",
+    "mechanical test"
+  ],
+  "instruction": "Fit the replacement front bumper to the mobile-base fixture. Push the center of the bumper to verify the switch, then let it return.",
+  "context": "A mobile robot needs a freely returning bumper to detect physical obstacles. Correct replacement aligns both keyed mounting points so that the center contact switch triggers and clears after release.",
+  "setup": "De-energized 171 × 174 mm base plate with a spring-return X sled and two keyed sockets spaced 84 mm apart. The moving fascia has a central 88 mm-wide pad and two 14 × 15 mm mounting posts. With table height as Z zero, the base origin is (304, −70, 0) mm and the loose fascia datum is (210, −224, 5.4) mm.",
+  "scoring": "0.30 with both posts within 5 mm in the table plane and 4 mm vertically of their respective sockets. The upright-facing checks require the local Z and X axis dot products with the fixture axes to exceed 0.986 and 0.980. 0.65 after a robot touch on the mounted fascia during 4.8–11 mm of compression. Full credit with the fascia still mounted, the sled below 1.3 mm of residual stroke, and both released for one second.",
+  "run_limit": "800 steps at 20 Hz (40 s)",
+  "reset_notes": "Return the sled to zero and move the fascia to its tabletop marker. Clear the actuation test.",
+  "fidelity": "A custom fabricated rigid bench section grounded in iRobot bumper reseating and Kobuki contact detection. It does not reproduce either OEM fastening pattern. Sled motion is physical and switch logic is derived from travel.",
+  "scores": "Dream-1 run: 0.0; scripted demo: 1.0"
+}
