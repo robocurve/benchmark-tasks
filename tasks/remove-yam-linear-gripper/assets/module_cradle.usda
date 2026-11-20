@@ -1,0 +1,55 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    kilogramsPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Asset"
+{
+    def Xform "tray" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        float physics:mass = 0.12
+        bool physics:kinematicEnabled = true
+        def Cube "Liner" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (0.059, 0, 0.004)
+            float3 xformOp:scale = (0.173, 0.112, 0.008)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.11, 0.13, 0.15)]
+        }
+        def Cube "NearStop" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (0.059, -0.042, 0.0065)
+            float3 xformOp:scale = (0.16, 0.007, 0.013)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.055, 0.082, 0.112)]
+        }
+        def Cube "FarStop" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (0.059, 0.042, 0.0065)
+            float3 xformOp:scale = (0.16, 0.007, 0.013)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.055, 0.082, 0.112)]
+        }
+        def Xform "Saddle"
+        {
+            double3 xformOp:translate = (0, 0, 0.008)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+}
