@@ -1,0 +1,34 @@
+{
+  "python": "3.12",
+  "installed_packages": {
+    "inspect-robots": "1.0.0",
+    "inspect-robots-dream": "0.1.0",
+    "isaaclab": "17.0.2",
+    "isaaclab_arena": "0.3.0 (release/0.3.1 checkout)",
+    "isaacsim": "6.1.0.0",
+    "numpy": "2.3.1",
+    "scipy": "1.17.0",
+    "trimesh": "4.11.1",
+    "torch": "2.11.0+cu128"
+  },
+  "yam_adapter": {
+    "url": "https://github.com/kairosiann/yam-isaac-lab-arena",
+    "commit": "0059d02a1a91bc6834c1d0846022891df0c78730",
+    "source_license": "None declared by upstream at this revision; external installed dependency, not bundled"
+  },
+  "i2rt_assets": {
+    "url": "https://github.com/i2rt-robotics/i2rt",
+    "commit": "120c3c81400171174604e503943f8d1ebc891058",
+    "license": "MIT"
+  },
+  "offline_tests": "NumPy, SciPy, trimesh; no GPU needed. Physics episodes require installed Isaac Sim and converted YAM assets.",
+  "isaaclab_arena": {
+    "branch": "release/0.3.1",
+    "commit": "c7edf3a9d5d8276565208f72422f8f8a0806d6cf",
+    "note": "official environment; the installed YAM adapter runs as is"
+  },
+  "compatibility_overlay": {
+    "applied": false,
+    "when": "only if launch.py detects a newer Arena API (Embodiment.registry_name, no GroundPlane); then prepare_runtime.py renames Embodiment name -> registry_name and replaces GroundPlane with a static box floor"
+  }
+}

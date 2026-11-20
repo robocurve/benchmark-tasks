@@ -1,0 +1,21 @@
+{
+  "title": "Take out the trash: cinch and remove a loaded drawstring liner",
+  "category": "Societal relatability",
+  "keywords": [
+    "household chores",
+    "trash removal",
+    "bimanual",
+    "drawstring",
+    "deformable liner",
+    "string grasping"
+  ],
+  "instruction": "Pull both drawstrings to close the full bag, lift it out of the bin by the drawstrings, and set it down upright on the table beside the bin without spilling any contents.",
+  "context": "Taking out a small kitchen or bathroom bin at home: pull the liner's two drawstring loops so the mouth closes, lift the loaded bag out by the strings and put it down without spilling. Uses an unmodified commercial drawstring liner and its normal closure; no knot, lock, clip or added handle.",
+  "setup": "simplehuman Code A drawstring liner (4.5 L, about 29 x 40 cm flat, white) fitted in an IKEA NYPON 15 cm pot (art. 603.956.16; 17.1 cm outside / 15.9 cm inside diameter, 15.2 cm tall, polypropylene, taped to the mat) centred at (0.22, 0) m, surplus folded down over the rim so the hem hangs about 2 cm above the mat. The two exposed drawstring loops (flat film tape, about 20 mm wide) are hooked out of their cut-outs and laid on the mat as narrow U shapes on edge, about 85 mm long, pointing outward and turned 30 degrees toward +x. Three clean 70 x 100 x 45 mm, 50 g mock-waste blocks inside, long side along y: two standing side by side on a 45 x 100 mm face (x = 0.1965/0.2435, y = 0), one lying flat on top (x = 0.22). Two YAM arms at (0, +/-0.305, 0.750), table top z = 0.7475, 800 x 1000 x 2.5 mm mat. Full layout, sources and a hand preflight of liner and closure in PHYSICAL_PROTOCOL.md.",
+  "scoring": "Highest level met; failures latch. 0: not cinched as below, any block leaves the bag, bag destroyed, or invalid simulation. 0.25: opening <= 80 mm (under a block's 83 mm smallest-face diagonal), three blocks inside, while each gripper holds one loop between its fingers, string drawn out of the cut-outs >= 100 mm in total and taut, no film ever pinched. 0.5: then the whole bag clears the rim by 20 mm with opening <= 80 mm, both loops held, string taut, no finger touching film. 0.75: at the end upright on the table (mouth >= 150 mm up), >= 20 mm clear of pot and table edges, opening <= 80 mm. 1.0: that state for the final 2 s, grippers >= 60 mm from film and loops, bag still (<= 10 mm). See PHYSICAL_PROTOCOL.md.",
+  "run_limit": "4,000 control steps at 20 Hz (200 simulated seconds); requested CLI seed 0, installed adapter environment seed 42, no object jitter.",
+  "reset_notes": "Fresh unmodified liner each trial: bottom flat in the pot, surplus folded over the rim, cut-outs facing the arms, each loop hooked out and laid on the mat at its marked spot as a narrow U, tape on edge, without gathering the mouth. Three blocks in place, arms at ready, tabletop beside the pot clear.",
+  "fidelity": "PhysX deformable film folded over the rim, rigid blocks, standard robot and gripper, contact grasps, no scripted poses. Each loop is a flexible strap: 15 jointed 20 x 10 x 2 mm links (4 g), pinched across the doubled tape; twist spring stiffer than real tape, thickness/mass numerical. String: force-only routed spring on the strap ends, no lock, 0.7 N cap. Containment checked every step (8 mm centres, 20 mm corners). 0.10 mm film; straight pot. No physical trial.",
+  "scores": "Scripted demo, official Arena 0.3.1, strap loops: 1.0 (LP4_a, replay 1.0); same source 1.0 in 1 of 10 runs (strap slips out of the fingers). Negatives: loops held, not pulled 0.0; film pinched after cinch 0.25, no carry. Dream-1: 0.0 (valid run, all 4,000 steps).",
+  "media": "M-87JG3Q"
+}
