@@ -1,0 +1,18 @@
+{
+  "title": "Start and zip a baby jacket",
+  "category": "Societal relatability",
+  "keywords": [
+    "zipper",
+    "garment",
+    "bimanual"
+  ],
+  "instruction": "Hold the blue jacket steady and start its zipper. Grasp the reinforced blue tape behind the loose silver insertion pin at the hem. Align the pin with the opening beside the orange slider and insert it fully into the retaining box. Then grasp the orange pull and zip the jacket all the way to the collar. Regrasp if needed, and release the jacket and zipper when finished.",
+  "context": "Closing a separating jacket zipper begins by aligning its loose insertion pin with the slider and retaining box. The two hands must stabilize the flexible garment while inserting the pin, and then guide the slider to the collar.",
+  "setup": "Use the standard RoboCurve YAM Arena station with two YAM parallel-gripper arms and its fixed table/camera calibration. Lay a blue padded baby jacket front up, hem toward the arms: 240 mm long, 370 mm sleeve span, woven polyester shell/lining and quilted polyester batting, 8 mm uncompressed thickness. Fit a 180 mm one-way separating zipper: molded acetal teeth, polyester tape, zinc-alloy slider, pin and retaining box. Use a 10×2.5×2.5 mm pin and 10×7×4.5 mm box (10 mm pair in PandaHall FIND-PH0028-52). The simulated internal passage is a simplified 3.2×3.2 mm channel. Origin (145,0) mm on the table, +x toward collar, +y robot-left. Start slider at hem, pin fully outside box: +28 mm axial and -25 mm lateral offset. After 0.5 s settling, recorded offsets are (+24.3,-24.6,-4.0) mm from seated. Blue tape grip: custom PETG attachment, 14×10×6 mm assembled, long axis along zipper; center 18 mm collarward and 2 mm above pin center. Sandwich the reinforced tape between two 14×10×2.8 mm printed plates, with a 0.4 mm combined tape/bond gap, clamped to 6 mm total thickness. Orange pull: 18×16×24 mm PETG block bonded to the slider. Print both attachments at 0.2 mm layer height and 40% infill. Use J-B Weld PlasticBonder Tan (50133): clean/lightly sand PETG and metal mating surfaces, mix equal parts, bond and hold for at least one hour at room temperature. Keep adhesive out of the pin channel, slider and teeth. Print files are included.",
+  "scoring": "Score zero until the pin is fully seated in the retaining box with the slider at the hem. Once inserted, score 0.25 plus 0.70 times the closed fraction of the 180 mm zipper. Award 1.00 when the slider is within 3 mm of the top, the pin remains seated, and both gripper tool-center points are more than 40 mm from jacket mesh vertices and the two grip centers. Otherwise cap the score at 0.95. Withdrawing the pin returns the score to zero. The simulated full-seat check allows 0.5 mm error along each axis.",
+  "run_limit": "1,200 control steps (60 simulated seconds at 20 Hz)",
+  "reset_notes": "Set the slider at the hem, fully remove the insertion pin, and restore the documented offset. Settle the jacket before starting. Resetting clears the insertion latch.",
+  "fidelity": "Deformable padded jacket with rigid tape rails. Pin/box outer sizes follow a commercial reference; internal channel, masses and friction are approximate. Pin rotation is fixed; pin and blue grip form one rigid body. Orange (18×16×24 mm) and blue (14×10×6 mm) solids represent custom printed PETG attachments bonded with J-B Weld, not standard pulls. Measured insertion unlocks sliding; teeth animate with the slider. Tooth meshing, tape buckling at the grip and cloth snags are omitted.",
+  "scores": "Dream-1: 0.0 after 1,200 actions; scripted expert: 1.0 in 1,178 actions (58.9 seconds). Both recordings use the same corrected-size scene and seed 0.",
+  "media": "M-CH6J7K"
+}
