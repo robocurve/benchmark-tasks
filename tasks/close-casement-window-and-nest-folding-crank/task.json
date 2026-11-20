@@ -1,0 +1,21 @@
+{
+  "title": "Close a casement window with its folding crank, index the handle to the cover pocket, and fold it flush",
+  "category": "Societal relatability",
+  "keywords": [
+    "casement window",
+    "folding crank handle",
+    "nesting cover",
+    "geared operator",
+    "over-centre detent",
+    "bimanual"
+  ],
+  "instruction": "Crank the casement window shut with the folding handle, then fold the handle flush into its cover pocket and let go.",
+  "context": "People with crank-out casement windows crank the sash onto its seal and fold the handle into its cover so blinds hang clear. It folds in at only one phase of the turn, so the hand must stop the crank there and flip the arm over its detent without turning it. Board casement and flip-over tasks have no geared crank.",
+  "setup": "Positions are in cm from the midpoint between the arm bases: x forward, y to the robot's left, z above the table. Window stool: painted pine board, 13.2 x 50 x 3.2 cm, spanning x 25.0 to 38.2, centred y 0, on the table. Window section behind it: white painted pine frame 49 x 7.3 cm (x 38.2 to 45.5), top 40.9 cm up, with a 9 mm room-side stop lip; sash 43.2 x 30 x 3.8 cm (white pine, 3 mm pale-blue acrylic pane), about 1.2 kg, hinged at its left (+y) edge on x 43.8, y +21.6, bottom 8 cm above the table, standing 9 degrees open (6.8 cm at the lock edge); 6 mm black EPDM weatherstrip on the stop. Operator on the stool, spline axis at x 29.5, y -3.0: bronze die-cast nesting cover 4.1 x 13.6 x 3.8 cm (y -5.5 to +8.1, rim 7.0 cm up) with a 2.2 cm channel and a 2.8 cm knob well running from the spline toward +y, pocket floor 4.2 cm above the table; 11/32 in zinc spline and clevis; die-cast zinc full-flip crank, arm 7.8 x 1.0 x 0.9 cm, satin knob 1.4 cm across, 1.8 cm tall, 7.8 cm from the spline; it starts unfolded, 3 mm above the cover, pointing +y, knob at x 29.5, y +4.8. Half a turn of the crank (180 degrees, through the room side) closes the sash; the crank can turn on to 200 degrees.",
+  "scoring": "Measured from the last 1.0 s of the run, after both hands are 3 cm clear of the operator and nothing moves (under 1 degree per second). Sealed: the sash's lock edge within 3 mm of the weatherstrip (sash at most 0.150 rad from its start toward closed, past 8.6 degrees). Indexed: the crank within 5 degrees of the cover pocket's phase (180 degrees from its start). Nested: the handle folded at least 175 degrees, its arm top at or below the cover rim. Score 1.0 if sealed, indexed and nested; 0.5 if sealed and indexed but not nested; 0.25 if sealed only (for example over-cranked or folded onto the cover walls); 0 otherwise (sash more than 3 mm open, a hand still on the handle, or still moving). Score 0 for the whole run if any finger pad ever touches the sash or pane (simulator contact over 0.05 N; real trial: video).",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Flip the handle out, turn it back half a turn to the start mark (handle pointing +y, unfolded) and check the sash stands 6.8 cm open at the lock edge with a gauge block. Nothing is consumed; the parts are dry and rigid.",
+  "fidelity": "Approximate. The operator's worm and arm are a joint coupling (-0.050 rad of sash per rad of crank), not meshing teeth, so it does not self-lock: touching the sash scores 0. The fold detent is a spring with two rests; the crank shaft has 0.12 N m of joint friction. The seal is look-only; the crank's 200 degree stop sets compression. The sim scores without opening the grippers; a hand within 3 cm of the operator scores 0.",
+  "scores": "Dream-1 run: 0.0 (reached the right arm over the window, left the sash open and crank unfolded); demo: 1.0 (turned the crank shut with the left arm, then folded the handle flat with the right)",
+  "media": "M-DJ92VL"
+}
