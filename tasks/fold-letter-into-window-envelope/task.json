@@ -1,0 +1,23 @@
+{
+  "title": "Fold a printed letter in thirds and put it in a #10 window envelope with the address in the window",
+  "category": "Societal relatability",
+  "keywords": [
+    "bimanual",
+    "household",
+    "office",
+    "mail",
+    "paper folding",
+    "letter fold",
+    "window envelope",
+    "sheet"
+  ],
+  "instruction": "Put the letter in the envelope so the address shows in the window.",
+  "context": "Mailing a bill payment, a form or a printed letter means folding a US-letter sheet in thirds to fit a #10 envelope. With a window envelope the fold order matters: the bottom third goes up first and the top third, which carries the address, comes over it face out, so the address sits behind the window. Folded the other way round, the letter fits but the window shows blank paper. The packet is then slid in through the mouth and pushed flush.",
+  "setup": "Origin: desk top below the arm-base midpoint; x forward, y left (cm). US-letter 80 g/m2 copy paper (21.6 x 27.9 cm), laser printed: letterhead, a 3-line address block 6-7.3 cm below the top edge and 2.5 cm in from the left, body text. It lies face down as it came off the printer, centred on y 0 from x 14 (bottom edge) to 41.9 (top edge). A white #10 window envelope (10.5 x 24.1 cm, window 2.9 x 11.4 cm, 2.2 cm from its left edge and 1.3 cm from its bottom edge) lies front up beyond it, centred on y 0, its open mouth along x 44.5 facing the robot, flap open flat on the desk, its edge under the letter's top edge; it is taped to the desk at its bottom corners.",
+  "scoring": "Score 0 if the letter tears, a gripper still holds it, or the grippers are not both open (2 cm gap or more) and 3 cm clear of the paper for the last 2 s. Otherwise the score is the highest tier below whose conditions all hold through the whole of those final 2 s: 0.25 if the letter is folded in thirds: exactly two creases across its length, each within 1.5 cm of a one-third line, no other fold or crumple, the packet at most 10.5 x 24.1 cm; 0.5 if also inside the envelope (none of it over 2 mm out of the mouth or past the other edges, none lying on the front panel); 0.75 if also at least half the address block shows in the window, print facing out, no paper over it; 1.0 if all of it does. Real trial: photo of the front, ruler at the mouth; afterwards unfold and measure the creases.",
+  "run_limit": "2,400 steps (120 seconds at 20 Hz)",
+  "reset_notes": "Fresh flat printed letter face down, top edge away from the robot, as in the screenshot; empty envelope front up with its flap open, taped at its bottom corners.",
+  "fidelity": "Envelope fixed, real size, 5 mm inside room; its paper front panel yields within 3 cm of the mouth. Letter: reduced position-based sheet, stiff in tension, light bending with fold memory, friction (holds on the desk while folding). Gripped only when a jaw's pads close to 1.2 mm across its edge. No self-collision (folds stack in fold order) and no force back on the fingers; 80 g paper is too light to resist the arms and here only lies in flat layers. Uncalibrated.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-CMN2SD"
+}
