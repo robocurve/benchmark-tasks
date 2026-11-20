@@ -1,0 +1,23 @@
+{
+  "title": "Hang a push mower's rear grass bag on its coupling hooks under the spring-loaded ejector flap",
+  "category": "Societal relatability",
+  "keywords": [
+    "lawn mower",
+    "grass bag",
+    "spring-loaded flap",
+    "bimanual",
+    "hold open while fitting",
+    "rod into hooks",
+    "household chore",
+    "safety shield"
+  ],
+  "instruction": "Fit the grass bag to the back of the mower, ready to mow, with the ejector flap resting on it.",
+  "context": "Bagging clippings with a walk-behind mower is how most people with a lawn mow it, and the bag comes off to be emptied every few minutes. The manual's steps are: raise the spring-loaded ejector flap, set the bag's rod over the two coupling hooks, release the flap onto the bag. The flap is the mower's shield against stones thrown out of the rear opening, so a bag left on one hook falls off mid-mow, and a flap left propped up or dropped on a hand defeats it.",
+  "setup": "Station table; positions in cm from the midpoint between the arm bases (x forward, y to the robot's left), arm bases at y +-30.5. Mower: a 14 in corded electric push mower (Sun Joe MJ401E: 16.5 in (41.9 cm) wide, 29 lb (13.2 kg)), green (sRGB 41, 140, 51), standing on the bench on four black 7 in (17.8 cm) wheels, rear toward the robots, handle folded forward over the deck; free on the bench, 13.2 kg. Rear face (discharge housing 26 cm wide) at x 43, centred on y 0; deck 33 cm wide and 42 cm long behind it. Two steel (140, 143, 148) coupling hooks stand out from the rear face at y +-8, each an open-topped slot 21 mm wide (between the rear face and an outer lip whose top flares outward at 40 deg) with its floor 32.5 cm above the table. Ejector flap: dark (51, 54, 56) plastic, 24 cm wide, 15 cm long, 4 mm thick, 0.15 kg, with a 2 cm lip bent outward along its lower edge, hinged across the top of the opening at x 38.8, 39 cm above the table, outside the hooks; a torsion spring (0.25 N m/rad, 0.6 rad preload, 0.15 N m closed) holds it hanging closed over the hooks; it opens up to 125 deg. Grass bag (part MJ401E-10, 10.6 gal), one rigid body, 1.0 kg: black fabric (31, 33, 31) bag 38 cm long, 36 cm wide, 29 cm tall under a dark hard top, a grey (89, 92, 94) mouth frame, and a 10 mm steel support rod 30 cm long across the front of the top, held 3.2 cm ahead of the bag on two arms; a grey carry handle (16 mm bar, 9 cm long, along the bag, on two dark posts) 8 cm above the hard top, 24 cm behind the rod, over the centre of mass. The bag lies on the bench between the arms, mouth toward the mower: rod at x 24.45 (0 to 0.6 cm further back per trial) and 28.5 cm above the table, centre line on y 0 (+-1 cm), square to the mower (+-2 deg). Hung on the hooks, its bottom is 4.6 cm above the table.",
+  "scoring": "Score 0 if at any point the mower tips more than 15 deg (a wheel off the bench), the bag falls off the bench or the bag tips past 60 deg. At the end, with the mower within 5 cm of where it started: 0.5 when the bag's 30 cm rod rests in both coupling hooks (the rod itself spans each hook's full 16 mm width, and there its axis lies inside the hook's 21 mm slot with 0.5 mm slack, from 2 mm below to 4 mm above resting on the slot floor), the bag moves slower than 1 cm/s and 0.05 rad/s, and no fingertip is within 3 cm of the bag. 1.0 (success, held 1 s): that, and the ejector flap lies 40 to 88 deg open on the bag with no fingertip within 6 cm of it. Otherwise 0, including doing nothing, the rod on one hook only, or the bag still held.",
+  "run_limit": "2,400 steps (2 min 00 s at 20 Hz)",
+  "reset_notes": "Lift the bag off the hooks and let the flap close. Lay the bag on the bench between the arms, mouth toward the mower, rod 17.5 to 18.1 cm short of the hooks (x 23.85 to 24.45 cm), centre line within 1 cm of the mower's and square to it within 2 deg (the seed draws the offset). Put the mower back with its rear face at x 43 on y 0.",
+  "fidelity": "PhysX at 240 Hz. The fabric bag, its wire frame and hard top are one rigid body (38 x 36 x 29 cm, 1.0 kg, sized from the 10.6 gal capacity). The flap is a revolute joint with a linear torsion spring. The rod stays in the hooks only by contact under gravity. Hook shape and height, flap size, spring and hinge height, wheel size and handle position are estimates; the mower's width and weight and the bag's capacity are published. The seed draws the bag's start offset.",
+  "scores": "Dream-1 run: 0.0 (2,400 steps, seed 0); scripted demo: 1.0 (seeds 0-7, success at steps 864-873); do nothing, random joints, random reaches: 0.0",
+  "media": "M-6DZPBK"
+}

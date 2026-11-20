@@ -1,0 +1,249 @@
+# Scripted demo: fit the rear grass bag to the mower under its spring-loaded ejector flap.
+#
+# Inputs, all observable: the first top-camera image (to find where the bag was set down), the arms' own joint
+# angles (forward kinematics: where each fingertip and wrist really are) and the mower's fixed layout from the task's
+# setup text (rear face, coupling hooks, flap hinge and size). It never reads the simulator's object poses or the
+# flap's joint.
+#
+# 1. Find the bag on the top-camera image: its side edges against the bench give its centre line and heading; its
+#    handle bar gives how far forward it lies.
+# 2. Left arm: pinch the flap near its free corner and swing it up along the hinge arc to 110 deg; hold it there.
+# 3. Right arm: grip the handle (it sits over the centre of mass), lift the bag 6 cm so its rod clears the hooks,
+#    square it to the mower and carry it forward until the rod is 4.5 cm over the hook slots. The soft wrist sags and
+#    turns under the load, so the bag's pose is worked out from the measured joints and corrected (up to four times,
+#    stopping if a step makes it worse). Lower until the rod is 8 mm above the slot floors and let go: the rod drops
+#    into both hooks.
+# 4. Left arm: lower the flap along the arc. The flap's angle is read from the left fingertip's measured position;
+#    when the fingertip's lag behind its command grows 4 deg over its free-swing lag, the flap is lying on the bag:
+#    open the fingers, back off.
+import math
+import numpy as np
+
+
+def Ry(t):
+    c, s = math.cos(t), math.sin(t)
+    return np.array([[c, 0, s], [0, 1, 0], [-s, 0, c]])
+
+
+def Rz(t):
+    c, s = math.cos(t), math.sin(t)
+    return np.array([[c, -s, 0], [s, c, 0], [0, 0, 1]])
+
+
+def side_rot(psi, pitch):
+    a = np.array([math.cos(psi) * math.cos(pitch), math.sin(psi) * math.cos(pitch), -math.sin(pitch)])
+    x = np.array([-math.sin(psi), math.cos(psi), 0.0])
+    return np.column_stack([x, np.cross(a, x), a])
+
+
+def frame(a, axis=np.array([1.0, 0, 0])):
+    a = a / np.linalg.norm(a)
+    c = np.cross(a, axis)
+    c /= np.linalg.norm(c)
+    return np.column_stack([c, np.cross(a, c), a])
+
+
+def _yaw(R):
+    return math.atan2(R[1, 0], R[0, 0])
+
+
+def locate_bag(task, img):
+    """(x of the rod, y of the centre line, heading) of the bag from one top-camera RGB image."""
+    from yam_arena import station
+    from yam_arena.urdf import quat_xyzw_to_matrix
+
+    cam = station.top_camera("calibrated")
+    ln = cam.lens
+    H, W = img.shape[:2]
+    sx, sy = W / ln.width, H / ln.height
+    R = quat_xyzw_to_matrix(np.array(cam.rot_xyzw))
+    p0 = np.array(cam.pos)
+    vv, uu = np.mgrid[0:H, 0:W]
+    u, v = (uu + 0.5) / sx, (vv + 0.5) / sy
+    d = np.stack([(u - ln.cx) / ln.fx, -(v - ln.cy) / ln.fy, -np.ones_like(u)], -1) @ R.T
+
+    def cast(z):
+        t = (z - p0[2]) / d[..., 2]
+        return p0 + t[..., None] * d
+
+    g = img.astype(float)
+    table = (g[..., 0] - g[..., 2] > 25) & (g[..., 0] > 110)          # the oak bench top
+    neutral = (g.max(-1) - g.min(-1) < 18) & ~table                  # black fabric, dark plastic, grey steel
+    P = cast(task.TOP + (task.Z_TOP - task.Z_BOT) + 0.001)           # plane of the hard top
+    body = neutral & (P[..., 0] > -0.06) & (P[..., 0] < 0.17) & (np.abs(P[..., 1]) < 0.21)
+    pts = P[body][:, :2]
+    if len(pts) < 1000:
+        raise RuntimeError(f"bag not found on the top image ({len(pts)} px)")
+    xs, cs = [], []
+    for xb in np.arange(-0.06, 0.17, 0.01):
+        sl = pts[(pts[:, 0] >= xb) & (pts[:, 0] < xb + 0.01)][:, 1]
+        if len(sl) > 20:
+            xs.append(xb + 0.005)
+            cs.append(0.5 * (np.percentile(sl, 99.7) + np.percentile(sl, 0.3)))
+    b, a = np.polyfit(xs, cs, 1)                               # centre line y = a + b x
+    yaw = math.atan(b)
+    Q = cast(task.TOP + (task.HANDLE_Z + 0.008 - task.Z_BOT) + 0.001)   # plane of the handle's top
+    grey = (g.min(-1) > 120) & (g.max(-1) - g.min(-1) < 20)
+    hb = grey & (Q[..., 0] > -0.12) & (Q[..., 0] < 0.12) & (np.abs(Q[..., 1] - (a + b * Q[..., 0])) < 0.03)
+    hp = Q[hb][:, :2]
+    if len(hp) < 30:
+        raise RuntimeError(f"handle not found on the top image ({len(hp)} px)")
+    # the bar's front end (its rear end smears toward the camera, which looks from behind): 45 mm ahead of its middle
+    hx = np.percentile(hp[:, 0], 99) - 0.045
+    hy = a + b * hx
+    return hx - task.HANDLE_X * math.cos(yaw), hy - task.HANDLE_X * math.sin(yaw), yaw, len(pts)
+
+
+def script(task, ctx):
+    from yam_arena import ik
+
+    ctx.notes = []
+    L, R = ctx.left, ctx.right
+    L.offset = np.zeros(3)
+    R.offset = np.zeros(3)
+    T = task.TOP
+
+    def fk(arm):
+        rob = ctx.emb._env.unwrapped.scene[f"{arm.name}_robot"]
+        qa = np.asarray(getattr(rob.data.joint_pos, "torch", rob.data.joint_pos)[0].detach().cpu())[:6]
+        return ik.tcp_pose(qa, arm.base)
+
+    # --- 1. where is the bag? -----------------------------------------------------------------------------------
+    x0, y0, yaw, npx = locate_bag(task, np.asarray(ctx.obs.images["top_cam"]))
+    ctx.notes.append(f"camera: rod x {x0*1000:.1f} mm, centre y {y0*1000:.1f} mm, heading {math.degrees(yaw):.2f} deg ({npx} px)")
+    origin0 = np.array([x0, y0, T - task.Z_BOT + 0.001])
+    Rb0 = Rz(yaw)
+    handle = origin0 + Rb0 @ np.array([task.HANDLE_X, 0.0, task.HANDLE_Z])
+
+    # --- 2. left arm opens the flap ------------------------------------------------------------------------------
+    hx = task.XF + task.HINGE_X
+    hz = T + task.HZ
+    RAD = task.FLAP_L - 0.02
+    GY = task.FLAP_W / 2 - 0.025
+    R0 = side_rot(-math.pi / 2, 0.0) @ Rz(math.pi)
+
+    def gpose(th):
+        return np.array([hx - RAD * math.sin(th), GY, hz - RAD * math.cos(th)]), Ry(th) @ R0
+
+    def flap_angle():                         # from where the left fingertip really is
+        p = fk(L)[0]
+        return math.atan2(hx - p[0], hz - p[2])
+
+    p0, r0 = gpose(0.0)
+    yield from L.set_grip(0.35, 0.4)
+    yield from goto(ctx, L, p0 + np.array([0, 0.07, 0]), r0, 2.5)
+    yield from L.move(p0 + L.offset, r0, 1.2)
+    yield from L.set_grip(0.0, 0.8)
+    OPEN = math.radians(110)
+    n = 40
+    for k in range(1, n + 1):
+        p, r = gpose(OPEN * k / n)
+        yield from L.move(p + L.offset, r, 0.1)
+    yield from wait(0.5)
+    ctx.notes.append(f"flap held at {math.degrees(flap_angle()):.1f} deg (fingertip)")
+
+    # --- 3. right arm hangs the bag on the hooks -----------------------------------------------------------------
+    # rod centre resting in the hooks, aimed 4 mm toward the mower's rear face: the rod drops along the face, and the
+    # outer lips are lower than the face
+    seat = np.array([task.SEAT_X + 0.004, 0.0, T + task.R_HOOK])
+    LIFT = 0.06
+    over = seat + np.array([0.0, 0.0, 0.045])
+    hz_over = over + np.array([task.HANDLE_X, 0.0, task.HANDLE_Z])
+    best = None
+    for psi in (90, 75, 105, 60, 45):            # from the right side, nearly level: the lower finger goes under the bar
+        for pit in (25, 30, 20, 35):
+            a = np.array([math.cos(math.radians(psi)) * math.cos(math.radians(pit)),
+                          math.sin(math.radians(psi)) * math.cos(math.radians(pit)), -math.sin(math.radians(pit))])
+            for fl in (1, -1):
+                Rf = frame(a) @ np.diag([fl, fl, 1])     # grip on the squared bag
+                Rh = Rz(yaw) @ Rf                          # the same grip on the bag as it lies
+                worst = 0
+                for p, Rr in ((handle, Rh), (handle + [0, 0, LIFT], Rh), (hz_over, Rf), (hz_over - [0, 0, 0.037], Rf)):
+                    _, pe, re = ik.solve(p, ik.matrix_to_quat_xyzw(Rr), R.q, base_pos=R.base, iters=150)
+                    worst = max(worst, pe * 1000 + 100 * re)
+                if best is None or worst < best[0]:
+                    best = (worst, psi, pit, fl, Rh, Rf, a)
+            if best[0] < 2.5:
+                break
+        if best[0] < 2.5:
+            break
+    _, psi, pit, fl, Rh, Rf, a = best
+    ctx.notes.append(f"handle grip psi {psi} pitch {pit} flip {fl} ik worst {best[0]:.1f}")
+    yield from R.set_grip(1.0, 0.4)
+    # rise clear of the bag's top before reaching across it
+    yield from R.move(np.array([R.pos[0], R.pos[1], T + 0.48]), R.rot, 1.2)
+    pre_g = handle - 0.08 * a
+    yield from R.move(np.array([pre_g[0], pre_g[1], max(pre_g[2], T + 0.48)]), Rh, 2.0)
+    yield from goto(ctx, R, pre_g, Rh, 1.0)
+    yield from R.move(handle + R.offset, Rh, 1.2)
+    yield from R.set_grip(0.0, 0.8)
+    yield from wait(0.3)
+    # the bag in the fingertip's frame, from where the fingertip really is when it closes
+    pg, Rg = fk(R)
+    rel_p = Rg.T @ (origin0 - pg)
+    rel_R = Rg.T @ Rb0
+
+    def bag_now():
+        pa, Ra = fk(R)
+        return pa + Ra @ rel_p, Ra @ rel_R
+
+    up = handle + np.array([0.0, 0.0, LIFT])
+    yield from R.move(up + R.offset, Rh, 2.0)
+    yield from goto(ctx, R, up, Rh, 0.5)
+    # square it and carry it forward over the hooks, then correct from the measured joints
+    cmd_p, cmd_R = hz_over + R.offset, Rf
+    yield from R.move(cmd_p, cmd_R, 2.5)
+
+    def correct(target, rounds=3, gain=0.6):
+        nonlocal cmd_p, cmd_R
+        best_e = None
+        for it in range(rounds):
+            yield from wait(0.8)
+            o, Rb = bag_now()
+            e = target - o
+            dyaw = -_yaw(Rb)
+            size = float(np.linalg.norm(e[:2])) + 0.1 * abs(dyaw)
+            ctx.notes.append(f"align {it}: rod error x {e[0]*1000:.1f} y {e[1]*1000:.1f} z {e[2]*1000:.1f} mm, yaw {math.degrees(dyaw):.2f} deg")
+            if size < 0.002 or (best_e is not None and size > best_e):
+                break                                    # close enough, or the last step made it worse
+            best_e = size
+            pa, _ = fk(R)
+            turn = Rz(gain * dyaw)
+            cmd_R = turn @ cmd_R
+            shift = (turn @ (pa - o) + o) - pa            # turning about the rod's centre moves the fingertip
+            cmd_p = cmd_p + gain * e + shift
+            yield from R.move(cmd_p, cmd_R, 0.8)
+
+    yield from correct(over, rounds=4)
+    # straight down until the rod is 8 mm above the slot floors (well inside the slots), and let go
+    drop = seat + np.array([0.0, 0.0, 0.008])
+    cmd_p = cmd_p + (drop - over)
+    yield from R.move(cmd_p, cmd_R, 2.0)
+    yield from wait(0.6)
+    o, Rb = bag_now()
+    ctx.notes.append(f"at release: rod {((o - seat) * 1000).round(1).tolist()} mm from its seat")
+    yield from R.set_grip(1.0, 0.6)
+    yield from R.move(R.pos - 0.10 * cmd_R[:, 2] + np.array([0, 0, 0.04]), cmd_R, 1.2)
+    yield from wait(0.8)
+
+    # --- 4. left arm lowers the flap onto the bag ----------------------------------------------------------------
+    th = flap_angle()
+    LOW = math.radians(20)
+    landed = None
+    lags = []
+    while th > LOW:
+        th -= math.radians(2.0)
+        p, r = gpose(th)
+        yield from L.move(p + L.offset, r, 0.12)
+        lags.append(flap_angle() - th)
+        # the fingertip trails its command by a steady amount while the flap swings freely; when the flap lands
+        # on the bag the gap opens by 4 deg over that steady lag, two steps running
+        if len(lags) > 6 and min(lags[-2:]) - float(np.median(lags[2:6])) > math.radians(4.0):
+            landed = flap_angle()
+            break
+    ctx.notes.append(f"flap came to rest on the bag at {math.degrees(landed) if landed else float('nan'):.1f} deg (fingertip)")
+    yield from L.set_grip(0.35, 0.6)
+    yield from L.move(L.pos + np.array([0, 0.10, 0]), L.rot, 1.0)
+    yield from L.move(L.pos + np.array([-0.10, 0.05, 0.10]), L.rot, 1.0)
+    yield from R.move(R.pos + np.array([-0.08, -0.05, 0.05]), R.rot, 1.0)
+    yield from wait(2.0)
