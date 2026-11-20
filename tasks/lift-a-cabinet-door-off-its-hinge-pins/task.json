@@ -1,0 +1,20 @@
+{
+  "title": "Take a cabinet door off its loose-pin hinges, holding it while the last pin comes out, and lay it flat",
+  "category": "Impact on jobs",
+  "keywords": [
+    "cabinet door",
+    "loose-pin butt hinge",
+    "hinge pin removal",
+    "supporting a load",
+    "carpentry"
+  ],
+  "instruction": "Take the cabinet door off its hinges and lay it flat across the two battens, with the hinge pin in the dish.",
+  "context": "Carpenters (O*NET 47-2031.00: \"Build or repair cabinets, doors, frameworks, floors, or other wooden fixtures used in buildings\") and general maintenance and repair workers (49-9071.00: \"Paint or repair roofs, windows, doors, floors, woodwork...\") take doors off their hinges to repair, plane or refinish them. The usual procedure: \"Working from the bottom up keeps the top hinge carrying the load until the very end. Remove the top pin last. ... hold the door with one hand while tapping the top pin free\" (Residence Supply). Here the bottom pin is out and the door hangs on its top hinge. Pulled with nobody holding the door, that pin binds under the door's weight; once it is out, a door no one holds swings off its knuckles and drops onto the bench. So one hand takes the door's weight while the other draws the 51 mm pin up by its ball tip; then both lift the door off and lower it face down onto two battens.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Positions in cm from the midpoint between the arm bases: x forward, y to the robot's left; heights above the table. A small white wall cabinet (30 x 15 x 20 cm, 15 mm panels), fixed on a plywood wall panel, at x 24.4 to 54.4, y -12.5 to -27.5, its bottom 2.5 cm above the table, open side facing left. Its door (painted pine, 30 x 20 cm, 18 mm thick, 0.55 kg, loose) stands open 90 degrees at x 21.1 to 22.9, y -11.1 to 18.9, on two 2 in. (51 mm) steel loose-pin butt hinges (five 8 mm knuckles each, vertical axis at x 23.6, y -11.8). The top hinge's pin (51 mm shank, 11 mm ball tip, 8 g) is in; the bottom hinge's pin lies in a steel parts dish (12 cm across, 1.5 cm deep, 0.2 kg, loose) centred at x 13, y -19. Two pine battens (1.9 x 3.8 x 32 cm) are taped flat along y (y -10.5 to 21.5) at x 11.9 and 26.2. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Poses are read from the simulation and finger points from the arms' joints. 0 for the rest of the run once the door falls: its centre moves down faster than 0.30 m/s, or its lowest point hits the table top moving down faster than 0.10 m/s (real trial: judged from the video). Otherwise the best stage reached: 0.25 the top pin out of the hinge (its lower end above the top knuckle); 0.5 the door also off the hinges (knuckles 15 mm or more from the hinge axis); 0.75 the door also lying flat across both battens (within 5 deg of level, underside within 3 mm of the batten tops, overlapping each by 15 mm or more). 1.0: that, with both pins in the dish, every finger point 2 cm or more from the door and the door still (under 1 mm in 1 s), held 1 s. Doing nothing scores 0.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Hang the door back on its hinges, drop the top pin in, take the bottom pin out and lay it in the dish, as in the screenshot. In the simulation each trial starts the simulator afresh (each inspect-robots run does).",
+  "fidelity": "Rigid bodies in Isaac Sim 6.1 (PhysX), 20 Hz control, true size. The pin's shank is 3.8 mm square (drawn round) in 4.4 mm square bores so it bears on flat faces; friction about 0.4. The pin runs free once the door's weight is off it, like an oiled loose pin (a stiff one is first tapped up with a nail set). Nothing else holds the door: no joint. Hinge screws are not modelled (the knuckles are part of the door and the cabinet). The cabinet is fixed; the battens are taped down.",
+  "scores": "Dream-1 run: 0.0 (both arms stayed near their bases at the front of the bench, opening and closing their grippers; neither touched the door or the pin); demo: 1.0",
+  "media": "M-5B6YPJ"
+}
