@@ -1118,7 +1118,35 @@ def _patch_embodiment(module) -> None:
     cls._bodykit_patched = True
 
 
-_TARGETS = {"yam_arena.scene": _patch_scene, "yam_arena.inspect_embodiment": _patch_embodiment}
+# fn(stage, robot_prim_path, link_paths) run after each arm is spawned, to add visual-only extras under its links
+# (they move with the links): ``link_paths`` maps link name -> prim path below the robot's prim.
+ROBOT_AUTHORS: list = []
+
+
+def _patch_robot(module) -> None:
+    """Wrap yam_arena.robot's spawner for the station's arms so ROBOT_AUTHORS can dress the arms."""
+    if getattr(module, "_bodykit_patched", False) or not hasattr(module, "spawn_in_dream_look"):
+        return
+    from isaaclab.sim.utils import clone
+
+    plain = module.spawn_in_dream_look
+    raw = getattr(plain, "__wrapped__", plain)
+
+    @clone
+    def spawn_in_dream_look(prim_path, cfg, *args, **kwargs):
+        prim = raw(prim_path, cfg, *args, **kwargs)
+        if ROBOT_AUTHORS:
+            links = module.asset_link_paths()
+            for fn in ROBOT_AUTHORS:
+                fn(prim.GetStage(), str(prim_path), links)
+        return prim
+
+    module.spawn_in_dream_look = spawn_in_dream_look
+    module._bodykit_patched = True
+
+
+_TARGETS = {"yam_arena.scene": _patch_scene, "yam_arena.inspect_embodiment": _patch_embodiment,
+            "yam_arena.robot": _patch_robot}
 
 
 class _Finder(importlib.abc.MetaPathFinder):

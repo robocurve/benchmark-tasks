@@ -87,6 +87,7 @@ def test_submerged_outlet_fills():
 def _episode(litres=0.0, missed=0.0, overflow=0.0, off_s=5.0, tipped=False):
     ep = T.Episode()
     ep.tank.in_bucket, ep.tank.missed, ep.tank.overflow, ep.tank.off_s = litres, missed, overflow, off_s
+    ep.tank.delivered = litres + missed + overflow  # the meter: everything that left the nozzle
     ep.tipped = tipped
     return ep
 
@@ -143,7 +144,7 @@ def test_fill_then_overflow_and_puddle():
     while ep.tank.level < w.DEPTH - 0.010:
         T.advance(ep, dt, pos, rot, rot @ _trigger(22.0), bucket_pos, UP)
         steps += 1
-    assert ep.tank.missed == 0.0 and ep.tank.overflow == 0.0
+    assert ep.tank.missed == 0.0 and ep.tank.overflow == 0.0 and ep.tank.spilled == pytest.approx(0.0)
     assert steps * dt == pytest.approx(w.volume_at(w.DEPTH - 0.010) / w.FLOW_MAX, abs=0.1)
     assert T.score_of(ep) == 0.75  # still running
     for _ in range(20):  # let go: the water stops
@@ -152,6 +153,7 @@ def test_fill_then_overflow_and_puddle():
     for _ in range(80):  # squeeze again for 4 s: about 0.4 L runs over the brim
         T.advance(ep, dt, pos, rot, rot @ _trigger(22.0), bucket_pos, UP)
     assert ep.tank.overflow > 0.3 and ep.puddles.spots
+    assert ep.tank.spilled == pytest.approx(ep.tank.delivered - ep.tank.in_bucket)
     for _ in range(20):
         T.advance(ep, dt, pos, rot, rot, bucket_pos, UP)
     assert T.score_of(ep) == 0.75
@@ -165,6 +167,17 @@ def test_aiming_off_the_pail_spills():
         T.advance(ep, 0.05, pos, rot, rot @ _trigger(22.0), np.array(BUCKET.pos), UP)
     assert ep.tank.in_bucket == 0.0 and ep.tank.missed == pytest.approx(0.4, abs=1e-6)
     assert len(ep.puddles.spots) >= 1
+
+
+def test_spill_is_metered_minus_pail():
+    tank = w.Tank()
+    tank.add(4.0, True)
+    tank.add(0.3, False)  # missed the pail
+    tank.add(2.5, True)  # 0.2 L of it runs over the brim
+    assert tank.delivered == pytest.approx(6.8)
+    assert tank.in_bucket == pytest.approx(w.BRIM_L)
+    assert tank.spilled == pytest.approx(6.8 - w.BRIM_L)
+    assert tank.spilled == pytest.approx(tank.missed + tank.overflow)
 
 
 def test_tipping_the_pail_fails():

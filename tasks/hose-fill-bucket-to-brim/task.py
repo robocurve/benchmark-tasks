@@ -1,14 +1,16 @@
-"""A back-yard patio. A 6.3 L blue plastic pail (22 cm across the brim inside, 20 cm deep) stands empty on the
-pavers in front of the robot. A green 5/8 inch garden hose, about 1 m of it, runs from a brass tap on a brick pillar
-at the back left across the pavers to a pistol-grip spray nozzle lying on its side on the ground at the front left.
-The tap is open: water comes out only while the nozzle's trigger is squeezed, more the further it is squeezed, up to
-12 L a minute.
+"""A back-yard patio, laid in a shallow drip tray. A 6.3 L blue plastic pail (22 cm across the brim inside, 20 cm
+deep) stands empty on the pavers in front of the robot. A green 5/8 inch garden hose, about 1 m of it, runs from a
+digital water meter screwed onto a brass tap on a brick pillar at the back left, across the pavers to a pistol-grip
+spray nozzle lying on its side on the ground at the front left. The tap is open: water comes out only while the
+nozzle's trigger is squeezed, more the further it is squeezed, up to 12 L a minute (set by a flow regulator). The
+arms and their bases wear clear plastic splash sleeves.
 
 Job: pick the nozzle up, aim it into the pail and squeeze the trigger until the pail is full to the brim, then let
 go of the trigger. The robot holds the nozzle with one hand and squeezes the trigger with the other. Water that
 misses the pail or runs over its brim is spilled.
 
-Scored by the water: what is in the pail, how much was spilled, and whether the water is off at the end.
+Scored by accounting for the water: what the meter says left the hose, what is in the pail (a real trial weighs it),
+and the difference, which is what was spilled; and whether the water is off at the end.
 """
 
 import math
@@ -48,7 +50,7 @@ SCORE_OVER = "end"
 # -- scoring rules -------------------------------------------------------------------------------------------------
 
 FULL_GAP = 0.015  # full: the water's surface within 15 mm of the brim
-SPILL_OK_L = 0.25  # at most this much spilled (missed or run over) for full credit
+SPILL_OK_L = 0.25  # at most this much spilled (metered out of the hose but not in the pail) for full credit
 SPILL_FAIL_L = 1.0  # more than this spilled: 0
 TIP_FAIL_DEG = 15.0  # the pail tipped this far at any moment: 0 (water sloshes out)
 OFF_S = 1.0  # the water must have been off this long to count as stopped
@@ -279,7 +281,8 @@ def _observe(env):
 
         _TRACE.write(json.dumps({
             "t": round(EP.t, 3), "trigger_deg": round(EP.trigger_deg, 2), "flow_lps": round(EP.flow, 4),
-            "landing": EP.landing, "in_bucket_l": round(EP.tank.in_bucket, 4), "missed_l": round(EP.tank.missed, 4),
+            "landing": EP.landing, "metered_l": round(EP.tank.delivered, 4), "in_bucket_l": round(EP.tank.in_bucket, 4),
+            "spilled_l": round(EP.tank.spilled, 4), "missed_l": round(EP.tank.missed, 4),
             "overflow_l": round(EP.tank.overflow, 4), "level_mm": round(EP.tank.level * 1000, 1),
             "tilt_deg": round(EP.max_tilt, 2), "score": score_of(EP),
             "nozzle": [round(v, 4) for v in noz.pos.tolist()], "bucket": [round(v, 4) for v in buck.pos.tolist()],

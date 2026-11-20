@@ -13,6 +13,12 @@ The bucket is a straight-sided tapered pail: inner radius ``R_BOTTOM`` at its in
 ``R_TOP`` at the brim, ``DEPTH`` deep. The volume below level ``h`` is the frustum's. Water above the brim runs
 over it and counts as spilled (overflow).
 
+Spilled water is counted the way a real trial measures it: by difference. A water meter between the tap and the
+hose totals every litre that leaves the nozzle (``Tank.delivered``), the pail's water is what it holds
+(``Tank.in_bucket``, which a real trial weighs), and spilled = delivered - in the pail. The hose is full and under the
+tap's pressure at the start and at the end (nozzle closed), so all the metered water left through the nozzle.
+``missed`` and ``overflow`` split the spill by cause, for the trace only.
+
 The model leaves out splashing, the stream breaking up, its hitting the robot, and sloshing; the bucket is scored
 upright (a tipped bucket fails the trial outright).
 """
@@ -134,6 +140,7 @@ def trace(outlet, direction, speed, bucket_floor, bucket_rot, level: float, grou
 class Tank:
     """What happened to the water over an episode (litres)."""
 
+    delivered: float = 0.0  # the water meter's running total: every litre that has left the nozzle
     in_bucket: float = 0.0
     missed: float = 0.0  # landed outside the bucket
     overflow: float = 0.0  # ran over the brim
@@ -143,7 +150,8 @@ class Tank:
 
     @property
     def spilled(self) -> float:
-        return self.missed + self.overflow
+        """Litres delivered that are not in the pail (meter total - pail's water)."""
+        return max(0.0, self.delivered - self.in_bucket)
 
     @property
     def level(self) -> float:
@@ -152,6 +160,7 @@ class Tank:
     def add(self, litres: float, into_bucket: bool) -> None:
         if litres <= 0.0:
             return
+        self.delivered += litres
         if into_bucket:
             self.in_bucket += litres
             if self.in_bucket > BRIM_L:

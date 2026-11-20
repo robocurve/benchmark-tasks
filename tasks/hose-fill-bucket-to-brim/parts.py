@@ -1,5 +1,6 @@
-"""The scene's parts, built procedurally in this file: a paver patio (the ground), a 6.3 L plastic pail, a garden tap
-on a brick pillar, a 5/8 inch garden hose and a pistol-grip spray nozzle with a sprung trigger. NumPy only at import
+"""The scene's parts, built procedurally in this file: a paver patio (the ground) laid in a drip tray, a 6.3 L plastic
+pail, a garden tap on a brick pillar with a digital water meter screwed onto it, a 5/8 inch garden hose, a pistol-grip
+spray nozzle with a sprung trigger, and clear plastic splash sleeves over the arms and their bases. NumPy only at import
 (the kit authors them in Isaac Sim later).
 
 World frame: x forward from the arm bases, y left, z up, metres. The arm bases stand at (0, +-0.305, 0.75).
@@ -46,18 +47,56 @@ kit.FINISH.update({
     NOZZLE_DIAL: (0.55, 0.0), TRIGGER_METAL: (0.25, 1.0), BRASS: (0.32, 1.0), VALVE_RED: (0.45, 0.0),
     BRICK: (0.85, 0.0), MORTAR: (0.95, 0.0),
 })
+TRAY_BLACK = (0.07, 0.07, 0.075)  # black HDPE drip tray
+METER_GREY = (0.20, 0.21, 0.22)  # the meter's housing
+METER_LCD = (0.55, 0.62, 0.52)  # its LCD window
+METER_BLUE = (0.10, 0.28, 0.55)  # its swivel nut and buttons
+SLEEVE = (0.88, 0.91, 0.93)  # clear polyethylene splash sleeves
+kit.FINISH.update({TRAY_BLACK: (0.55, 0.0), METER_GREY: (0.40, 0.0), METER_LCD: (0.15, 0.0), METER_BLUE: (0.40, 0.0),
+                   SLEEVE: (0.20, 0.0)})
+kit.OPACITY.update({SLEEVE: 0.28})
 FOAM = (0.90, 0.93, 0.94)
 WET = (0.30, 0.30, 0.29)  # wet concrete
 kit.FINISH.update({FOAM: (0.55, 0.0), WET: (0.12, 0.0)})
 # water renders as clear glass (refractive index 1.333); the flood stream is partly aerated, so slightly frosted
 kit.GLASS.update({WATER: ((0.86, 0.95, 0.96), 1.333, 0.0), STREAM: ((0.95, 0.98, 0.99), 1.333, 0.18)})
 
-# -- the ground: a concrete paver patio laid on the table --------------------------------------------------------------
+# -- the drip tray: a shallow black HDPE tray on the table that the patio is laid in -------------------------------
+
+TRAY_X = (0.092, 0.908)  # outside
+TRAY_Y = (-0.612, 0.612)
+TRAY_FLOOR = 0.002
+TRAY_WALL = 0.004
+TRAY_H = 0.035  # the walls' height above the table
+
+
+def _tray_shapes():
+    cx, cy = (TRAY_X[0] + TRAY_X[1]) / 2, (TRAY_Y[0] + TRAY_Y[1]) / 2
+    sx, sy = TRAY_X[1] - TRAY_X[0], TRAY_Y[1] - TRAY_Y[0]
+    t, h = TRAY_WALL, TRAY_H
+    return [
+        BoxShape((cx, cy, TRAY_FLOOR / 2), (sx, sy, TRAY_FLOOR), TRAY_BLACK),
+        BoxShape((TRAY_X[0] + t / 2, cy, h / 2), (t, sy, h), TRAY_BLACK),
+        BoxShape((TRAY_X[1] - t / 2, cy, h / 2), (t, sy, h), TRAY_BLACK),
+        BoxShape((cx, TRAY_Y[0] + t / 2, h / 2), (sx - 2 * t, t, h), TRAY_BLACK),
+        BoxShape((cx, TRAY_Y[1] - t / 2, h / 2), (sx - 2 * t, t, h), TRAY_BLACK),
+        # the rolled-over top edge of the walls
+        *[CylShape((x, cy, h), 0.003, sy, TRAY_BLACK, collide=False, axis="Y") for x in (TRAY_X[0] + t / 2,
+                                                                                          TRAY_X[1] - t / 2)],
+        *[CylShape((cx, y, h), 0.003, sx, TRAY_BLACK, collide=False, axis="X") for y in (TRAY_Y[0] + t / 2,
+                                                                                          TRAY_Y[1] - t / 2)],
+    ]
+
+
+TRAY = Body.build("drip_tray", pos=(0.0, 0.0, TOP), mass=4.0, kinematic=True, friction=(0.8, 0.7),
+                  shapes=_tray_shapes())
+
+# -- the ground: a concrete paver patio laid in the tray ---------------------------------------------------------------
 
 PATIO_X = (0.10, 0.90)
 PATIO_Y = (-0.60, 0.60)
 PAVER_T = 0.012
-GROUND = TOP + PAVER_T  # the ground's surface
+GROUND = TOP + TRAY_FLOOR + PAVER_T  # the ground's surface
 
 
 def _patio_shapes():
@@ -82,7 +121,7 @@ def _patio_shapes():
     return shapes
 
 
-PATIO = Body.build("patio", pos=(0.0, 0.0, TOP), mass=50.0, kinematic=True, friction=(0.9, 0.8),
+PATIO = Body.build("patio", pos=(0.0, 0.0, TOP + TRAY_FLOOR), mass=50.0, kinematic=True, friction=(0.9, 0.8),
                    shapes=_patio_shapes())
 
 # -- the pail -----------------------------------------------------------------------------------------------------------
@@ -170,8 +209,16 @@ kit.dynamic_mesh("water_body", "bucket", WATER)
 # -- the garden tap on its brick pillar ----------------------------------------------------------------------------------
 
 TAP_XY = (0.66, 0.50)
-PILLAR = (0.115, 0.115, 0.16)  # x, y, height above the ground
-SPOUT_Z = 0.095  # the tap's outlet above the ground
+HOSE_IN_Z = 0.095  # where the hose's coupling screws on (the meter's outlet), above the ground
+# A digital water meter screws onto the tap's nose, the hose onto the meter (top to bottom: the meter's blue swivel
+# nut, holding a 12 L/min flow-regulator washer, its housing with the LCD toward the robot, its male outlet).
+METER_NUT = 0.016  # the swivel nut's height
+METER_BODY = 0.058  # the housing's height
+METER_OUT = 0.010  # the male outlet's height
+METER_R = 0.024  # the housing's radius
+METER_STACK = METER_NUT + METER_BODY + METER_OUT
+SPOUT_Z = HOSE_IN_Z + METER_STACK  # the tap's own outlet above the ground
+PILLAR = (0.115, 0.115, SPOUT_Z + 0.065)  # x, y, height above the ground
 SPOUT_X = -PILLAR[0] / 2 - 0.055  # the outlet, in front of the pillar's -x face (tap frame)
 
 
@@ -212,7 +259,33 @@ def _pillar_shapes():
     shapes += wheel
     shapes.append(MeshShape(*_np(m.transform(rim, None, (SPOUT_X + 0.022, 0, SPOUT_Z + 0.088))), VALVE_RED,
                             collide=False, smooth=True))
-    return shapes
+    return shapes + _meter_shapes()
+
+
+def _meter_shapes():
+    """The digital water meter (tap frame), hanging from the tap's nose: swivel nut, housing, LCD, outlet."""
+    x = SPOUT_X
+    z_nut = SPOUT_Z + 0.004 - METER_NUT  # the nut's foot (the tap's nose ends at SPOUT_Z + 0.004 - 0.009)
+    z_body = z_nut - METER_BODY
+    z_out = HOSE_IN_Z - 0.005  # the outlet reaches into the hose's coupling and up into the housing
+    nut = m.lathe([(0.0, 0.0), (0.0165, 0.0), (0.0175, 0.002), (0.0175, METER_NUT - 0.002), (0.0165, METER_NUT),
+                   (0.0, METER_NUT)], 12)  # a 12-sided grip
+    housing = m.lathe([(0.0, 0.0), (0.012, 0.0), (METER_R - 0.004, 0.004), (METER_R, 0.012),
+                       (METER_R, METER_BODY - 0.012), (METER_R - 0.004, METER_BODY - 0.004), (0.014, METER_BODY),
+                       (0.0, METER_BODY)], 40)
+    out_h = METER_OUT + 0.011
+    outlet = m.lathe([(0.0, 0.0), (0.0120, 0.0), (0.0125, 0.002), (0.0125, out_h), (0.0, out_h)], 24)
+    return [
+        MeshShape(*_np(m.transform(nut, None, (x, 0, z_nut))), METER_BLUE, collide=False, smooth=False),
+        MeshShape(*_np(m.transform(housing, None, (x, 0, z_body))), METER_GREY, collide=False, smooth=True),
+        MeshShape(*_np(m.transform(outlet, None, (x, 0, z_out))), BRASS, collide=False, smooth=True),
+        # the LCD window and its button on the housing's -x face (toward the robot)
+        BoxShape((x - METER_R + 0.0005, 0.0, z_body + 0.034), (0.003, 0.026, 0.016), METER_LCD, collide=False),
+        BoxShape((x - METER_R + 0.0002, 0.0, z_body + 0.034), (0.003, 0.030, 0.020), (0.03, 0.03, 0.03),
+                 collide=False),
+        CylShape((x - METER_R + 0.0005, 0.0, z_body + 0.016), 0.004, 0.003, METER_BLUE, collide=False, axis="X"),
+        CylShape((x, 0, z_body + METER_BODY / 2), METER_R, METER_BODY, None),  # its collider
+    ]
 
 
 TAP = Body.build("tap", pos=(*TAP_XY, GROUND), mass=20.0, kinematic=True, shapes=_pillar_shapes())
@@ -328,7 +401,7 @@ HOSE_BEND = 0.010  # N m per degree at each link joint: the hose's bending stiff
 def _hose_path() -> np.ndarray:
     """The hose's centre line as it lies at the start: down from the tap's nose, a loop over the patio and into the
     nozzle's coupling."""
-    nose = np.array([TAP_XY[0] + SPOUT_X, TAP_XY[1], GROUND + SPOUT_Z - 0.006])
+    nose = np.array([TAP_XY[0] + SPOUT_X, TAP_XY[1], GROUND + HOSE_IN_Z - 0.006])  # the meter's outlet
     low = GROUND + HOSE_R
     start = NOZZLE_POS0 + NOZZLE_ROT0 @ COUPLING_END
     start[2] = max(start[2], low)
@@ -420,4 +493,62 @@ kit.dynamic_mesh("stream", "fx", STREAM)
 kit.dynamic_mesh("foam", "fx", FOAM)  # where the stream strikes the water
 kit.dynamic_mesh("puddles", "fx", WET)  # wet patches where water has landed on the ground
 
-OBJECTS = [PATIO, BUCKET, TAP, NOZZLE, TRIGGER, *HOSE_LINKS, FX]
+# -- splash protection on the arms: a clear polyethylene sleeve over each link and the base ---------------------------
+# Visual only (no collision, no mass): each sleeve is a rounded box SLEEVE_GAP larger than the link's own visual
+# geometry, authored under the link so it moves with it. The fingers, the wrist cameras' lenses and the cable
+# exits are left uncovered, as on the real arms.
+
+SLEEVE_LINKS = ("base", "link1", "link2", "link3", "link4", "link5", "gripper")
+SLEEVE_GAP = 0.006
+
+
+def _sleeve_mesh(lo, hi):
+    lo, hi = np.asarray(lo, float) - SLEEVE_GAP, np.asarray(hi, float) + SLEEVE_GAP
+    size = hi - lo
+    axis = int(np.argmax(size))
+    a, b = [k for k in range(3) if k != axis]
+    unit = np.eye(3)
+    centre = (lo + hi) / 2
+    path = np.array([centre + unit[axis] * t for t in np.linspace(-size[axis] / 2, size[axis] / 2, 9)])
+    # loose plastic: the section swells a little between the ends
+    swell = 1.0 + 0.04 * np.sin(np.linspace(0, math.pi, len(path)))
+    return m.superellipse_sweep(path, size[a] / 2 * swell, size[b] / 2 * swell, 3.0, 28, up_hint=unit[a])
+
+
+def _author_sleeves(stage, robot_path, links):
+    import isaaclab.sim as sim_utils
+    from pxr import Gf, Usd, UsdGeom, UsdPhysics, Vt
+
+    from yam_arena.station import linear_rgb
+
+    look = f"{robot_path}/SleeveLook"
+    surface = kit.material_cfg(SLEEVE, linear_rgb)
+    surface.func(look, surface)
+    cache = UsdGeom.BBoxCache(Usd.TimeCode.Default(), [UsdGeom.Tokens.default_, UsdGeom.Tokens.render])
+    for name in SLEEVE_LINKS:
+        if name not in links:
+            continue
+        link = stage.GetPrimAtPath(robot_path + links[name])
+        box = None
+        for child in link.GetChildren():
+            if child.HasAPI(UsdPhysics.RigidBodyAPI) or child.GetName().startswith("sleeve"):
+                continue
+            r = cache.ComputeRelativeBound(child, link).ComputeAlignedRange()
+            if not r.IsEmpty():
+                box = r if box is None else box.UnionWith(r)
+        if box is None:
+            continue
+        pts, faces = _sleeve_mesh(box.GetMin(), box.GetMax())
+        geom = UsdGeom.Mesh.Define(stage, f"{link.GetPath()}/sleeve")
+        geom.CreatePointsAttr(Vt.Vec3fArray.FromNumpy(pts.astype(np.float32)))
+        geom.CreateFaceVertexCountsAttr(Vt.IntArray([3] * len(faces)))
+        geom.CreateFaceVertexIndicesAttr(Vt.IntArray.FromNumpy(faces.reshape(-1).astype(np.int32)))
+        geom.CreateSubdivisionSchemeAttr(UsdGeom.Tokens.none)
+        geom.CreateDoubleSidedAttr(True)
+        geom.CreateExtentAttr([Gf.Vec3f(*map(float, pts.min(0))), Gf.Vec3f(*map(float, pts.max(0)))])
+        sim_utils.bind_visual_material(str(geom.GetPath()), look, stage=stage)
+
+
+kit.ROBOT_AUTHORS.append(_author_sleeves)
+
+OBJECTS = [TRAY, PATIO, BUCKET, TAP, NOZZLE, TRIGGER, *HOSE_LINKS, FX]
