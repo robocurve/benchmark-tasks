@@ -1,0 +1,22 @@
+{
+  "title": "Scoop a urine clump out of a cat's litter box, sift the loose litter back and tip the clump into the bin",
+  "category": "Societal relatability",
+  "keywords": [
+    "cat litter box",
+    "litter scoop",
+    "granular media",
+    "sifting",
+    "tool use",
+    "bimanual",
+    "pet care"
+  ],
+  "instruction": "Scoop the clump out of the litter box with the scoop, sift the loose litter back into the box, and tip the clump into the bin.",
+  "context": "Scooping the litter box is a routine chore in the 53 million US households with a cat (APPA 2026 Cat Report). The difficulty is physical: the clump sits half-buried in loose litter that gives way and flows, so the scoop's lip has to go in beside it and under it, come up with the clump on its slotted floor while the litter runs off, and the clump has to stay on the scoop until it is tipped into the bin.",
+  "setup": "Positions in cm from the midpoint between the two arm bases (x forward, y to the robot's left). Litter pan: Van Ness small cat pan, 14.4 x 10.75 x 4 in, blue plastic, centred at (30.0, 4.0) with its long side across the table, on a rubber mat; the pan and the mat are taped to the table. Litter: Happy & Polly Clumping Natural Tofu Cat Litter (pea fibre and corn starch with 2% baking soda; strips 2 mm across, 1-2 cm long), about 1.7 kg, levelled 2 in deep. Clump: one fresh urine clump of that litter, about 4.4 cm across and 3.4 cm tall, about 35 g, centred at (33.5, 10.0) with its top 0.6 cm above the litter. Scoop: Van Ness plastic litter scoop (regular, 11 x 4.88 x 2.25 in, five 1/2 in slots in its floor), its basket lying on the litter centred at (30.0, -3.0) and pointing to the robot's left, its handle resting on the pan's right-hand rim. Bin: mDesign 1.25 gal round plastic wastebasket (7.74 in across the top, 9.12 in tall), empty, centred at (30.0, 32.5) and taped to the table.",
+  "scoring": "Tools: a kitchen scale reading to 1 g and a phone video of the trial. Touched: a finger touches the clump at any time (video). Pan moved: the pan is lifted, tipped or shifted at any time (video). Scooped: at some moment the clump rests on the scoop's floor with its bottom 1 cm or more above the litter's surface (video). In the bin: at the end the clump lies inside the bin. Bin litter: the loose litter in the bin, weighed (everything in the bin minus the clump). Spilled: litter anywhere but the pan and the bin (table, mat, scoop), swept up and weighed. Score at the end: 0 if a finger touched the clump, if the pan moved, or if the clump was never scooped. Otherwise: 1.0 the clump in the bin with at most 15 g of bin litter and at most 15 g spilled, held for 1 s; 0.5 the clump in the bin with more bin litter or more spilled; 0.25 the clump not in the bin.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Each trial uses a fresh clump: pour 23 ml of water onto the levelled litter at the clump's place and let it set 15 minutes (tofu litter clumps within seconds but stays sticky for about 15 minutes), check that it lifts out whole and weigh it (about 35 g), then set it back in its place. Between trials tip the bin out, take out any clump, return loose litter to the pan, level it 2 in deep and lay the scoop back.",
+  "fidelity": "Rigid-body PhysX at 240 Hz. The litter is about 54,000 rigid spheres 3.9-4.9 mm across, each a tofu strip's volume (700 kg/m3, friction 0.6, no cohesion); they pile at about 20 deg (real pellets about 40 deg). The clump is a rigid 44 x 34 mm puck; wet, it sticks to plastic (friction 0.9). The scoop is rigid, its handle (modelled 22 x 12 mm: not published) a separate body welded to the basket. Pan and bin walls are straight fixed boxes.",
+  "scores": "Dream-1 run: 0.0 (2,400 steps; the arms moved over the bin and the pan but never took hold of the scoop); demo: 1.0",
+  "media": "M-9TLSQS"
+}
