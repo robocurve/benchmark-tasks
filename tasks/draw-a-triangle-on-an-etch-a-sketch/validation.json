@@ -1,0 +1,28 @@
+{
+  "seed": 0,
+  "object_jitter": 0,
+  "control_hz": 20,
+  "physics_hz": 240,
+  "max_steps": 3000,
+  "scripted": {
+    "score": 1.0,
+    "steps": 1980,
+    "wall_seconds": 364.24
+  },
+  "dream_1": {
+    "model": "dreamlabs/dream-1-beta",
+    "score": 0.0,
+    "steps": 3000,
+    "wall_seconds": 410.93
+  },
+  "scope": "One recorded trial per policy on the fixed simulation scene. These are not hardware results or a success-rate estimate.",
+  "model_observation": "Overhead and two wrist RGB images at 320 x 176, plus the standard 14 joint/gripper position readings. The extra side camera is for review only.",
+  "evidence_hash_scope": "The two original trials recorded matching fixed-scene, USD, layout, stylus and scorer hashes. The current grader exposes the same drawing calculations for the photo tool, so its source hash changed. The comparison below is against the current package. The recordings did not hash the whole source tree.",
+  "recorded_hashes_match": {
+    "scene_sha256": true,
+    "grader_sha256": false,
+    "asset_sha256": true,
+    "layout_sha256": true,
+    "stylus_sha256": true
+  }
+}

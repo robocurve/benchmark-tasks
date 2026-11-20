@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "yam-etch-triangle"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = ["inspect-robots==1.0.0", "inspect-robots-yam==0.38.0", "yam-arena==0.1.0", "numpy>=1.26", "scipy>=1.11", "pillow>=10", "imageio[ffmpeg]"]
+
+[project.entry-points."inspect_robots.embodiments"]
+yam_etch_triangle = "rdb_etch_triangle.adapter:make_embodiment"
+
+[project.entry-points."inspect_robots.policies"]
+etch_triangle_scripted = "rdb_etch_triangle.adapter:make_scripted"
+
+[project.entry-points."inspect_robots.scorers"]
+etch_triangle_score = "rdb_etch_triangle.grading:make_scorer"
+
+[tool.setuptools.packages.find]
+include = ["rdb_etch_triangle*"]
+
+[tool.setuptools.package-data]
+rdb_etch_triangle = ["etch_a_sketch.usda"]
