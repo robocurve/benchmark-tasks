@@ -1,0 +1,20 @@
+{
+  "title": "Set a drop-in expansion anchor in concrete with its setting tool and a hammer",
+  "category": "Impact on jobs",
+  "instruction": "Set the drop-in anchor in the concrete hole with its setting tool and the hammer, then lay the setting tool on its V rest and the hammer on its cradle.",
+  "setup": "Stock two-arm rig, table top z=0.7475 m. A 120x120x80 mm concrete block is clamped to the table with a 1/2 in (12.7 mm) hole 1-9/16 in (39.7 mm) deep at x=0.30, y=0 m. In the hole, flush with the surface, sits an unset Simpson Strong-Tie DIAB37 3/8 in drop-in anchor (zinc-plated carbon steel, 1-9/16 in long, 3/8-16 thread, preassembled expansion plug), fresh from the box. Its hand setting tool DIABST37 (carbon steel, 93 g; modelled as a 12 mm x 131.5 mm punch with a 6 mm pin) stands in the anchor on the plug, its shoulder 1.8 mm above the anchor top. A 413 g club hammer (steel head 60x30x30 mm, ash handle 280x20x14 mm) lies on a two-block wooden cradle, handle end at x=0.14, head at x=0.39-0.42, y=-0.21 m. Two wooden V blocks at x=0.200 and 0.315, y=0.250 m are the tool rest. Nothing is powered or pressurised. Exact solids, masses and poses: SETUP-INVENTORY.json.",
+  "scoring": "0.5: anchor set, by the maker's check: the setting tool's shoulder met the anchor top (gap -0.20 to +0.15 mm, within 0.4 mm and 2 deg of the anchor axis) with the plug at least 1.4 mm down, at least 0.7 mm of that travel made while the hammer bore on the tool with 10 N or more, all four sleeve petals touching the concrete, and the anchor still within 0.8 mm and 2 deg of its start. 0.75: also the whole tool at least 10 mm clear of the anchor, anchor and plug at rest 0.55 s (11 steps). 1.0: also the tool on its V rest (level within 5.7 deg), the hammer on its cradle within 10 mm and 5 deg of its start pose, every robot link at least 20 mm from tools and anchor, all at rest 1.05 s (21 steps; under 5 mm/s and 0.1 rad/s). 0 otherwise: untouched, plug pushed down without the hammer, or anchor displaced. Exact zones: README.",
+  "run_limit": "1,440 steps (72 s at 20 Hz). The scripted demo uses 1,013 steps.",
+  "fidelity": "The anchor copies the Simpson Strong-Tie DIAB37 catalogue dimensions (1/2 in hole, 1-9/16 in long, 3/8 in bore). Unpublished internals are modelled: four rigid sleeve petals on elastic-plastic root hinges (250 N*m/rad, yield 1.25 N*m), a free cone plug, a smooth bore for the thread. Concrete is rigid; friction is estimated. Setting force is uncalibrated and far below the real part's: one light blow seats the tool shoulder. No load rating is implied. Robot and gripper are stock.",
+  "scores": "Dream-1 run: 0.0 (1,440 steps); scripted demo: 1.0 (1,013 steps, two runs); wrong-path controls: 0.0 (no blows), 0.5 (tool left in anchor).",
+  "media": "M-5A8EHR",
+  "context": "Electricians (SOC 47-2111; 712,580 US jobs, BLS OEWS May 2023) set drop-in anchors in concrete ceilings and walls to hang conduit, strut and boxes. The anchor only holds once the setting tool has driven its plug home, which the installer checks by the tool's shoulder meeting the anchor. The task ends with the anchor set and both tools put away; it does not measure load capacity.",
+  "reset_notes": "A set anchor stays expanded in its hole. Each trial uses a fresh DIAB37 from the box (box of 50 for $14 to $28, $0.28 to $0.57 each) in a fresh 1/2 in x 1-9/16 in hole: drill the next hole at least 50 mm from a used one and clamp the block so the new hole is at x=0.30, y=0, or use a new block. The DIABST37 setting tool (about $5) and the hammer are reused. Stand the tool in the anchor and put the hammer on its cradle at the listed poses. No reset during a trial.",
+  "keywords": [
+    "bimanual",
+    "contact",
+    "impact",
+    "anchor",
+    "tool-use"
+  ]
+}
