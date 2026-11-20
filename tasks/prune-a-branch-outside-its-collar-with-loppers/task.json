@@ -1,0 +1,22 @@
+{
+  "title": "Prune a branch off just outside its collar with two-handed bypass loppers",
+  "category": "Impact on jobs",
+  "keywords": [
+    "landscaping",
+    "pruning",
+    "branch collar",
+    "loppers",
+    "two-handed tool",
+    "ANSI A300",
+    "bimanual"
+  ],
+  "instruction": "Prune this branch off the log with the loppers.",
+  "context": "Landscaping and groundskeeping workers (O*NET 37-3011.00; about 940,000 US jobs, BLS May 2024) prune shrubs and small trees as a core part of the job. The pruning standard (ANSI A300 Part 1) calls for a removal cut just outside the branch collar: a flush cut into the collar wounds the trunk and lets decay in, and a cut further out leaves a stub that dies back. Loppers need both hands, one on each handle, and where the closed jaws land on the branch is the skill.",
+  "setup": "Positions are in cm from the midpoint between the two arm bases, with x forward, y to the robot's left and the table top at z 0. (1) Log: a bark-covered hardwood log section 9 cm across and 30 cm long, lying along y, centered at x 52, y 0, fixed; its top is 9 cm up. (2) Branch: 2 cm across, growing straight up from the log's top at x 52, y 0, with a small side twig near its top; at its base a branch collar (a bark-covered swelling 3.4 cm across, 1.2 cm tall) whose top edge, 10.2 cm above the table, is where the swelling meets the branch (no painted mark). The branch stands 20 cm above the collar. Real-trial stock: a 20 mm beech dowel from one batch, kiln-dried (about 12% moisture) then soaked in tap water for 24 h and used within 2 h, glued 25 mm into a socket in the log, with a turned beech collar ring (34 mm across, 12 mm tall) glued round its base. (3) Bypass loppers, loose on the table: 45 cm (18 in) long, 0.54 kg, a dark hook and a polished curved blade (8 cm jaws, 6 mm thick) on a pivot bolt, aluminum shafts with green rubber grips (12 cm long, 2.8 x 2.0 cm oval section; their middles 30 cm from the pivot); each handle bends 14 degrees off its jaw's line, so the grips are 14.5 cm apart with the jaws shut. They lie flat, jaws open 35 degrees, pivot at x 38, y 0.4, jaws toward +x (short of the log), the hook's handle toward the robot's left arm (grip at about x 12, y 16) and the blade's handle toward the right (about x 12, y -15).",
+  "scoring": "The first cut counts: the jaws closing (below 4 degrees open) with the branch in the throat (1.5 to 7.5 cm from the pivot, between the hook and the blade), the jaws' plane within 30 degrees of square to the branch and crossing the branch itself (closing above its tip is not a cut). The blade meets a constant resistance (4 N at the grip) from first contact (jaws 26 degrees open) to the close. The score is the stub left above the collar's top edge (where the swelling meets the branch), measured with a ruler on the stub: 1.0 for 0 to 1.5 cm (just outside the collar, a proper removal cut); 0.5 for over 1.5 to 3 cm (a short stub); 0.25 for over 3 cm (a stub that will die back); 0 for a cut below that edge (into the collar, a flush cut) or no cut. Later cuts do not change the score, since a stub cut first and trimmed after is not a removal cut. Where the loppers and the arms end up does not count. Possible scores: 0, 0.25, 0.5, 1.0.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "The branch is consumed. Fit a new dowel (beech, 20 mm, soaked 24 h, used within 2 h) into the log's socket for each trial with its turned collar ring glued at its base, and lay the loppers back open at their marks. Before a session, measure the force at the grip needed to cut one dowel of the batch with a luggage scale and record it.",
+  "fidelity": "The loppers are a free two-body articulation at real size and mass. The branch has no collider in the jaws' path: the cut is read where the jaws' plane crosses the branch's axis when the jaws close with it in the throat, and the blade arm's joint resists closing with a constant 4 N at the grip while biting (scaled to the arm; a 2 cm hardwood branch needs about thirty times that). Once cut, the branch falls over the log on a hinge at the collar.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-N9M4PG"
+}
