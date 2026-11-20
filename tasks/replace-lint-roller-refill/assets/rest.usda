@@ -1,0 +1,103 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    kilogramsPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Asset"
+{
+    def Xform "fixture" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        float physics:mass = 0.2
+        bool physics:kinematicEnabled = true
+        def Cube "NonslipBase" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (0, -0.057, 0.002)
+            float3 xformOp:scale = (0.071, 0.349, 0.004)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.055, 0.082, 0.112)]
+        }
+        def Cube "AxialCradleRail0" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (-0.012, -0.11, 0.0065)
+            float3 xformOp:scale = (0.003, 0.22, 0.007)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Cube "AxialCradleRail1" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (0.012, -0.11, 0.0065)
+            float3 xformOp:scale = (0.003, 0.22, 0.007)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Cube "Handle0" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (-0.013, 0.044, 0.013)
+            float3 xformOp:rotateXYZ = (0, -26, 0)
+            float3 xformOp:scale = (0.017, 0.021, 0.01)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Cube "Handle1" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (0.013, 0.044, 0.013)
+            float3 xformOp:rotateXYZ = (0, 26, 0)
+            float3 xformOp:scale = (0.017, 0.021, 0.01)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Cube "Heel0" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (-0.013, 0.092, 0.012)
+            float3 xformOp:rotateXYZ = (0, -26, 0)
+            float3 xformOp:scale = (0.017, 0.013, 0.01)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Cube "Heel1" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (0.013, 0.092, 0.012)
+            float3 xformOp:rotateXYZ = (0, 26, 0)
+            float3 xformOp:scale = (0.017, 0.013, 0.01)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Cube "HandleTravelStop" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (0, 0.124, 0.027)
+            float3 xformOp:scale = (0.045, 0.008, 0.052)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.055, 0.082, 0.112)]
+        }
+    }
+}

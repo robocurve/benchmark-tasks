@@ -1,0 +1,51 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    kilogramsPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Asset"
+{
+    def Xform "fixture" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        float physics:mass = 0.2
+        bool physics:kinematicEnabled = true
+        def Cube "Base" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (0, -0.048, 0.002)
+            float3 xformOp:scale = (0.071, 0.112, 0.004)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.055, 0.082, 0.112)]
+        }
+        def Cube "Refill0" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (-0.013, -0.046, 0)
+            float3 xformOp:rotateXYZ = (0, -26, 0)
+            float3 xformOp:scale = (0.017, 0.049, 0.01)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+        def Cube "Refill1" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (0.013, -0.046, 0)
+            float3 xformOp:rotateXYZ = (0, 26, 0)
+            float3 xformOp:scale = (0.017, 0.049, 0.01)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.56, 0.62, 0.66)]
+        }
+    }
+}

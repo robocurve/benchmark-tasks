@@ -1,0 +1,52 @@
+#usda 1.0
+(
+    defaultPrim = "Scene"
+    metersPerUnit = 1
+    kilogramsPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Scene"
+{
+    def Xform "roller_handle" (
+        prepend references = @./assets/roller_handle.usda@
+    )
+    {
+        double3 xformOp:translate = (0.275, 0.029, 0.7775)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+    def Xform "spent" (
+        prepend references = @./assets/spent.usda@
+    )
+    {
+        double3 xformOp:translate = (0.275, 0.029, 0.7775)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+    def Xform "fresh" (
+        prepend references = @./assets/fresh.usda@
+    )
+    {
+        double3 xformOp:translate = (0.362, -0.148, 0.7775)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+    def Xform "rest" (
+        prepend references = @./assets/rest.usda@
+    )
+    {
+        double3 xformOp:translate = (0.275, 0.029, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+    def Xform "refill_rest" (
+        prepend references = @./assets/refill_rest.usda@
+    )
+    {
+        double3 xformOp:translate = (0.362, -0.148, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+    def Xform "discard" (
+        prepend references = @./assets/discard.usda@
+    )
+    {
+        double3 xformOp:translate = (0.172, -0.154, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+}
