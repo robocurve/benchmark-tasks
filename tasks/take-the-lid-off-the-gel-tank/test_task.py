@@ -118,3 +118,37 @@ def test_plans_order():
         p = labels.index("press it in") if "press it in" in labels else None
         lift = labels.index("lift the lid straight up")
         assert (p is not None and p < lift) == (v == "demo")
+
+
+def test_score_needs_the_one_second_hold():
+    step(B_DOWN, SEAT, 2)
+    step(B_DOWN, UP, 2)
+    assert step(B_DOWN, BENCH, HOLD - 5) == (False, 0.0)  # off, lid down and let go, but under 1 s
+    assert step(B_DOWN, BENCH, 5) == (True, 1.0)
+    assert step(B_DOWN, UP) == (False, 0.0)  # picked up again: no credit
+
+
+def test_leads_belong_to_the_lid_and_reach_the_supply_sockets():
+    from bodykit import BoxShape
+    for body in (M.PS, M.TANK):
+        assert not [sh for sh in body.shapes if getattr(sh, "quat_xyzw", None) is not None]  # no leads there
+    for t, col in ((M.T_RED, M.RED), (M.T_BLACK, M.BLACK)):
+        segs = [sh for sh in M.LID.shapes if isinstance(sh, BoxShape) and sh.color == col]
+        assert len(segs) == 3 and not any(sh.collide for sh in segs)
+        ends = []
+        for sh in segs:
+            half = M.rotation(sh.quat()) @ np.array([0.0, 0.0, sh.size[2] / 2])
+            ends += [np.array(sh.centre) + half, np.array(sh.centre) - half]
+        world = [e + np.array([*M.K_XY, M.K_TOP]) for e in ends]
+        sock = np.array([t[0] + 0.006, t[1], M.TOP + 0.03])
+        assert min(np.linalg.norm(w - sock) for w in world) < 1e-6  # plugged into the supply at the start
+        post = np.array([M.POST_X, M.POST_DY if col == M.BLACK else -M.POST_DY])
+        assert min(np.linalg.norm(e[:2] - post) for e in ends) < 1e-6  # and leaving the lid's connector
+
+
+def test_stop_key_symbol_and_display_cue():
+    assert M.STOP_SQ < 2 * M.BTN_R * 0.7071 and 2 * M.BTN_R >= 0.03
+    assert M.DISP.mass is not None and set(M.DISP.ignore) >= {"power_supply"}
+    assert M.DISP_DROP > 0.003 + 0.001  # the lit panel sinks fully below the display window
+    d = np.linalg.norm(np.array(M.DISP_XY) - np.array(M.BTN_XY))
+    assert d > M.BTN_R + 0.03  # clear of the fingers pressing STOP
