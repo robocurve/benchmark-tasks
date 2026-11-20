@@ -1,0 +1,138 @@
+#usda 1.0
+(
+    defaultPrim = "cup"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "cup" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI"]
+)
+{
+    bool physics:kinematicEnabled = 1
+
+    def "Looks"
+    {
+        def Material "pink"
+        {
+            token outputs:surface.connect = </cup/Looks/pink/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.93, 0.45, 0.62)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.4
+                token outputs:surface
+            }
+        }
+
+        def Material "teal"
+        {
+            token outputs:surface.connect = </cup/Looks/teal/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.18, 0.7, 0.72)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.4
+                token outputs:surface
+            }
+        }
+    }
+
+    def Cylinder "body" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.115
+        rel material:binding = </cup/Looks/pink>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double radius = 0.0375
+        double3 xformOp:translate = (0, 0, 0.0575)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "collar" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.024
+        rel material:binding = </cup/Looks/teal>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double radius = 0.0395
+        double3 xformOp:translate = (0, 0, 0.127)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cube "spout" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </cup/Looks/teal>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.032, 0.024, 0.021)
+        double3 xformOp:translate = (0.005999999999999999, 0, 0.14950000000000002)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "handle_r" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </cup/Looks/teal>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.016, 0.03, 0.01)
+        double3 xformOp:translate = (0, -0.052500000000000005, 0.055)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "grip_r" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </cup/Looks/teal>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.016, 0.01, 0.055)
+        double3 xformOp:translate = (0, -0.0595, 0.0775)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "handle_l" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </cup/Looks/teal>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.016, 0.03, 0.01)
+        double3 xformOp:translate = (0, 0.052500000000000005, 0.055)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "grip_l" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </cup/Looks/teal>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.016, 0.01, 0.055)
+        double3 xformOp:translate = (0, 0.0595, 0.0775)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+}
+

@@ -1,0 +1,367 @@
+#usda 1.0
+(
+    defaultPrim = "wall"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "wall" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI"]
+)
+{
+    bool physics:kinematicEnabled = 1
+
+    def "Looks"
+    {
+        def Material "board"
+        {
+            token outputs:surface.connect = </wall/Looks/board/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.59, 0.42, 0.26)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.85
+                token outputs:surface
+            }
+        }
+
+        def Material "face"
+        {
+            token outputs:surface.connect = </wall/Looks/face/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor.connect = </wall/Looks/face/texture.outputs:rgb>
+                float inputs:metallic = 0
+                float inputs:roughness = 0.85
+                token outputs:surface
+            }
+
+            def Shader "st"
+            {
+                uniform token info:id = "UsdPrimvarReader_float2"
+                token inputs:varname = "st"
+                float2 outputs:result
+            }
+
+            def Shader "texture"
+            {
+                uniform token info:id = "UsdUVTexture"
+                asset inputs:file = @./textures/mb_atlas_1.png@
+                float2 inputs:st.connect = </wall/Looks/face/st.outputs:result>
+                float3 outputs:rgb
+            }
+        }
+
+        def Material "paper"
+        {
+            token outputs:surface.connect = </wall/Looks/paper/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.86, 0.84, 0.79)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.9
+                token outputs:surface
+            }
+        }
+
+        def Material "dung"
+        {
+            token outputs:surface.connect = </wall/Looks/dung/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.05, 0.04, 0.035)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.9
+                token outputs:surface
+            }
+        }
+    }
+
+    def Cube "board" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </wall/Looks/board>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.9, 0.45)
+        double3 xformOp:translate = (0.003, 0, 0.225)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Mesh "face" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4]
+        int[] faceVertexIndices = [0, 1, 2, 3]
+        rel material:binding = </wall/Looks/face>
+        point3f[] points = [(-0.0003, 0.45, 0), (-0.0003, -0.45, 0), (-0.0003, -0.45, 0.45), (-0.0003, 0.45, 0.45)]
+        texCoord2f[] primvars:st = [(0, 0.5), (1, 0.5), (1, 1), (0, 1)] (
+            interpolation = "vertex"
+        )
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Cube "strip" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </wall/Looks/paper>
+        double size = 1
+        float3 xformOp:scale = (0.02, 0.4, 0.001)
+        double3 xformOp:translate = (-0.010000000000000009, 0, 0.0005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Mesh "dropping_00" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </wall/Looks/dung>
+        point3f[] points = [(-0.007257069, -0.18226832, 0.001), (-0.0015667718, -0.17800961, 0.001), (-0.0031246585, -0.17592804, 0.001), (-0.008814955, -0.18018673, 0.001), (-0.007257069, -0.18226832, 0.0032), (-0.0015667718, -0.17800961, 0.0032), (-0.0031246585, -0.17592804, 0.0032), (-0.008814955, -0.18018673, 0.0032)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "dropping_01" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </wall/Looks/dung>
+        point3f[] points = [(-0.010596975, -0.16703516, 0.001), (-0.0074018934, -0.16060168, 0.001), (-0.009730532, -0.1594452, 0.001), (-0.012925613, -0.16587868, 0.001), (-0.010596975, -0.16703516, 0.0032), (-0.0074018934, -0.16060168, 0.0032), (-0.009730532, -0.1594452, 0.0032), (-0.012925613, -0.16587868, 0.0032)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "dropping_02" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </wall/Looks/dung>
+        point3f[] points = [(-0.008745769, -0.1423378, 0.001), (-0.015034556, -0.13783488, 0.001), (-0.016548205, -0.13994884, 0.001), (-0.010259419, -0.14445177, 0.001), (-0.008745769, -0.1423378, 0.0032), (-0.015034556, -0.13783488, 0.0032), (-0.016548205, -0.13994884, 0.0032), (-0.010259419, -0.14445177, 0.0032)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "dropping_03" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </wall/Looks/dung>
+        point3f[] points = [(-0.012757745, -0.14407976, 0.001), (-0.01208096, -0.1375605, 0.001), (-0.014667062, -0.13729204, 0.001), (-0.015343847, -0.14381129, 0.001), (-0.012757745, -0.14407976, 0.0032), (-0.01208096, -0.1375605, 0.0032), (-0.014667062, -0.13729204, 0.0032), (-0.015343847, -0.14381129, 0.0032)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "dropping_04" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </wall/Looks/dung>
+        point3f[] points = [(-0.010503082, -0.13744237, 0.001), (-0.016999694, -0.13523959, 0.001), (-0.017834578, -0.1377019, 0.001), (-0.011337966, -0.13990468, 0.001), (-0.010503082, -0.13744237, 0.0032), (-0.016999694, -0.13523959, 0.0032), (-0.017834578, -0.1377019, 0.0032), (-0.011337966, -0.13990468, 0.0032)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "dropping_05" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </wall/Looks/dung>
+        point3f[] points = [(-0.010752091, -0.13585345, 0.001), (-0.014070259, -0.13037564, 0.001), (-0.016294083, -0.13172272, 0.001), (-0.012975915, -0.13720053, 0.001), (-0.010752091, -0.13585345, 0.0032), (-0.014070259, -0.13037564, 0.0032), (-0.016294083, -0.13172272, 0.0032), (-0.012975915, -0.13720053, 0.0032)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "dropping_06" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </wall/Looks/dung>
+        point3f[] points = [(-0.007520296, -0.08830404, 0.001), (-0.002811794, -0.08447936, 0.001), (-0.004451082, -0.08246126, 0.001), (-0.0091595845, -0.08628594, 0.001), (-0.007520296, -0.08830404, 0.0032), (-0.002811794, -0.08447936, 0.0032), (-0.004451082, -0.08246126, 0.0032), (-0.0091595845, -0.08628594, 0.0032)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "dropping_07" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </wall/Looks/dung>
+        point3f[] points = [(-0.013457987, -0.05345773, 0.001), (-0.010225991, -0.047318712, 0.001), (-0.012526633, -0.046107497, 0.001), (-0.01575863, -0.05224651, 0.001), (-0.013457987, -0.05345773, 0.0032), (-0.010225991, -0.047318712, 0.0032), (-0.012526633, -0.046107497, 0.0032), (-0.01575863, -0.05224651, 0.0032)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "dropping_08" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </wall/Looks/dung>
+        point3f[] points = [(-0.0029402967, -0.0022367833, 0.001), (-0.006820975, 0.0031987098, 0.001), (-0.008937016, 0.0016879587, 0.001), (-0.005056338, -0.0037475342, 0.001), (-0.0029402967, -0.0022367833, 0.0032), (-0.006820975, 0.0031987098, 0.0032), (-0.008937016, 0.0016879587, 0.0032), (-0.005056338, -0.0037475342, 0.0032)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "dropping_09" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </wall/Looks/dung>
+        point3f[] points = [(-0.017708749, 0.0012653053, 0.001), (-0.01070241, 0.0051120203, 0.001), (-0.011953707, 0.0073911115, 0.001), (-0.018960046, 0.003544396, 0.001), (-0.017708749, 0.0012653053, 0.0032), (-0.01070241, 0.0051120203, 0.0032), (-0.011953707, 0.0073911115, 0.0032), (-0.018960046, 0.003544396, 0.0032)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "dropping_10" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </wall/Looks/dung>
+        point3f[] points = [(-0.0076048058, 0.0029186625, 0.001), (-0.011055252, 0.00796033, 0.001), (-0.013200874, 0.0064918958, 0.001), (-0.00975043, 0.0014502282, 0.001), (-0.0076048058, 0.0029186625, 0.0032), (-0.011055252, 0.00796033, 0.0032), (-0.013200874, 0.0064918958, 0.0032), (-0.00975043, 0.0014502282, 0.0032)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "dropping_11" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </wall/Looks/dung>
+        point3f[] points = [(-0.010878875, 0.01812919, 0.001), (-0.017229933, 0.021469198, 0.001), (-0.01844012, 0.019168014, 0.001), (-0.012089062, 0.015828006, 0.001), (-0.010878875, 0.01812919, 0.0032), (-0.017229933, 0.021469198, 0.0032), (-0.01844012, 0.019168014, 0.0032), (-0.012089062, 0.015828006, 0.0032)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "dropping_12" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </wall/Looks/dung>
+        point3f[] points = [(-0.01249779, 0.03526918, 0.001), (-0.009144318, 0.040458377, 0.001), (-0.011328015, 0.041869573, 0.001), (-0.014681487, 0.036680374, 0.001), (-0.01249779, 0.03526918, 0.0032), (-0.009144318, 0.040458377, 0.0032), (-0.011328015, 0.041869573, 0.0032), (-0.014681487, 0.036680374, 0.0032)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "dropping_13" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </wall/Looks/dung>
+        point3f[] points = [(-0.017000671, 0.044723403, 0.001), (-0.0093453135, 0.04531588, 0.001), (-0.009545937, 0.047908127, 0.001), (-0.017201293, 0.047315653, 0.001), (-0.017000671, 0.044723403, 0.0032), (-0.0093453135, 0.04531588, 0.0032), (-0.009545937, 0.047908127, 0.0032), (-0.017201293, 0.047315653, 0.0032)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "dropping_14" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </wall/Looks/dung>
+        point3f[] points = [(-0.013275808, 0.05922793, 0.001), (-0.0063865515, 0.06213757, 0.001), (-0.0073981285, 0.06453271, 0.001), (-0.014287384, 0.06162307, 0.001), (-0.013275808, 0.05922793, 0.0032), (-0.0063865515, 0.06213757, 0.0032), (-0.0073981285, 0.06453271, 0.0032), (-0.014287384, 0.06162307, 0.0032)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "dropping_15" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </wall/Looks/dung>
+        point3f[] points = [(-0.0163227, 0.062765956, 0.001), (-0.009261654, 0.06415712, 0.001), (-0.009764244, 0.06670809, 0.001), (-0.016825289, 0.06531692, 0.001), (-0.0163227, 0.062765956, 0.0032), (-0.009261654, 0.06415712, 0.0032), (-0.009764244, 0.06670809, 0.0032), (-0.016825289, 0.06531692, 0.0032)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "dropping_16" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </wall/Looks/dung>
+        point3f[] points = [(-0.0097240275, 0.107838, 0.001), (-0.0021410026, 0.1084814, 0.001), (-0.0023608173, 0.11107209, 0.001), (-0.009943843, 0.11042869, 0.001), (-0.0097240275, 0.107838, 0.0032), (-0.0021410026, 0.1084814, 0.0032), (-0.0023608173, 0.11107209, 0.0032), (-0.009943843, 0.11042869, 0.0032)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "dropping_17" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </wall/Looks/dung>
+        point3f[] points = [(-0.015614582, 0.11824646, 0.001), (-0.009833912, 0.11998319, 0.001), (-0.010582018, 0.12247323, 0.001), (-0.016362688, 0.1207365, 0.001), (-0.015614582, 0.11824646, 0.0032), (-0.009833912, 0.11998319, 0.0032), (-0.010582018, 0.12247323, 0.0032), (-0.016362688, 0.1207365, 0.0032)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "dropping_18" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </wall/Looks/dung>
+        point3f[] points = [(-0.008801134, 0.16092989, 0.001), (-0.013373555, 0.16621214, 0.001), (-0.015339364, 0.16451049, 0.001), (-0.010766944, 0.15922824, 0.001), (-0.008801134, 0.16092989, 0.0032), (-0.013373555, 0.16621214, 0.0032), (-0.015339364, 0.16451049, 0.0032), (-0.010766944, 0.15922824, 0.0032)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Mesh "dropping_19" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        rel material:binding = </wall/Looks/dung>
+        point3f[] points = [(-0.008223764, 0.1672652, 0.001), (-0.0030781487, 0.17144664, 0.001), (-0.0047178366, 0.17346442, 0.001), (-0.009863451, 0.16928299, 0.001), (-0.008223764, 0.1672652, 0.0032), (-0.0030781487, 0.17144664, 0.0032), (-0.0047178366, 0.17346442, 0.0032), (-0.009863451, 0.16928299, 0.0032)]
+        uniform token subdivisionScheme = "none"
+    }
+}
+
