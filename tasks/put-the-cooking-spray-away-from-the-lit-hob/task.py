@@ -219,8 +219,9 @@ def move_can(via, to_xy, to_z, label):
     return plan + [Waypoint(2.2, (*to_xy, zc), FINGER_CLOSED, label, yaw=DOWN),
                    Waypoint(1.2, (*to_xy, tz), FINGER_CLOSED, "set it down", yaw=DOWN),
                    Waypoint(0.6, (*to_xy, tz), FINGER_PART, "let go", yaw=DOWN),
-                   Waypoint(0.8, (*to_xy, tz + 0.05), FINGER_PART, "up off it", yaw=DOWN),
-                   Waypoint(1.5, REST, FINGER_PART, "back to rest", yaw=0.0)]
+                   Waypoint(1.0, (*to_xy, tz + 0.10), FINGER_PART, "straight up, clear of its cap", yaw=DOWN),
+                   Waypoint(1.5, REST, FINGER_PART, "back to rest", yaw=0.0),
+                   Waypoint(1.2, REST, FINGER_PART, "wait (the can at rest, let go, for 1 s)", yaw=0.0)]
 
 
 def demo():
