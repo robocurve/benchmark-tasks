@@ -1,0 +1,23 @@
+{
+  "title": "Price three spice bottles with a price gun: feed one label per bottle and wipe it flat onto the cap",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "retail",
+    "price gun",
+    "labelling",
+    "trigger tool",
+    "adhesive label",
+    "hold while applying",
+    "stocking"
+  ],
+  "instruction": "Put one price label on the cap of each bottle with the price gun, then put the gun down.",
+  "context": "Marking prices on merchandise is core work for stockers and order fillers (O*NET 53-7065.00, about 2.8 million US jobs): O*NET lists \"Stamp, attach, or change price tags on merchandise, referring to price list\" among the occupation's core tasks. The hand labeller, or price gun, is the standard tool: each full squeeze of its trigger prints and feeds one label, which is then wiped onto the item with the roller at the gun's nose. Shops use it to price items and mark them down, and kitchens and stockrooms use the same gun to date-code stock for first-in, first-out rotation. Small items are priced on the cap. A 90 g spice bottle tips over at a touch on its cap, so one hand holds it while the other squeezes and wipes. Tested: working a trigger tool held in one gripper, feeding exactly one label at a time, and wiping it flat onto a 44 mm cap while the other gripper holds the bottle still.",
+  "setup": "Station table (top 0.7475 m). Robot base frame: x forward from the line between the arm bases, y to the robots' left; arm bases at y +0.305 and -0.305 m. (1) Three spice bottles, loose: McCormick Ground Cinnamon, 2.37 oz, full and sealed: a plastic bottle 111 mm (4.38 in) tall and 46 mm across, about 90 g, with a red flip-top cap whose flat top is 44 mm across. They stand upright in a row at x 0.36 m and y +0.13, 0.00 and -0.13 m. (2) Price gun, loose: a Monarch 1131 one-line hand labeller (plastic body, about 0.41 kg with its label roll), loaded with a roll of white 11 x 20 mm (0.44 x 0.78 in) paper labels, inked and set to print 1.29. It lies on its right side with its nose pointing to the robots' left (+y) and its handle toward the robots; the handle's centre is at x 0.22 m, y -0.34 m. Squeezing the trigger fully toward the handle and letting it go feeds one label, which hangs adhesive side down under the roller at the nose; wiping the roller across a surface sticks it down. The trigger's tip travels about 23 mm and takes about 8 N to start moving and about 13 N at full squeeze. A partial squeeze feeds nothing. Squeezing again before the hanging label is applied feeds a second label onto the first. Nothing else on the table. Both arms start at the ready pose with their grippers open. One fixed layout, as in the screenshot.",
+  "scoring": "Judged at the end of the trial, once everything has been at rest for 1 s, from an overhead photo of the caps, the videos and a check of each label by hand. A bottle is priced if it stands upright on the table and exactly one label is on its cap: the whole label on the cap's flat top, stuck down over its whole area (no corner or edge lifted more than 2 mm, not folded or creased), and applied with the gun's roller. A cap with two labels, or a label over the cap's edge or on the bottle's side, does not count. A label peeled off the gun, carried or first stuck down by a gripper finger does not count; pressing down a label the roller has already applied is allowed. 0.25: one bottle priced. 0.5: two bottles priced. 0.75: all three bottles priced. 1.0: also no stray label (none on the table, a bottle's side or a gripper, and no more than one unused label left waiting at the gun's nose), the gun rests on the table and is let go, and both grippers are at least 3 cm from the gun and from every bottle. Otherwise 0.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Labels are consumed: 4 to 6 per trial from a roll of 2,500. Peel every label off the caps, the table and the gun's nose, and wipe adhesive residue from the caps or swap in fresh bottles. Stand the bottles on their marks and lay the gun on its mark. About 1 minute.",
+  "fidelity": "Rigid PhysX bodies. The gun is made of boxes, with a sprung trigger hinge and a roller; its size, trigger travel and force, and the bottle's width and cap size are estimated, not measured. Labels are state, not film: a full stroke and release feeds one; a second before use doubles it. Where the roller first touches a cap, the label is laid back along the wipe as four cells, each stuck only when the roller passes over it. Only the roller lays labels. Printing, liner and curl are not modelled.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-H4MSSC"
+}
