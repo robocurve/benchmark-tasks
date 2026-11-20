@@ -49,6 +49,12 @@ CORE_INERTIA = (7e-6, 7e-6, 4e-8)  # kg m^2: across a 150 mm wire as it is; abou
 RING_MASS, RING_INERTIA = 2e-4, (8e-9, 8e-9, 8e-9)  # a jacket ring: heavier than its 0.01 g, so the solver holds it against the blade
 SQUARE_DEG = 30.0  # the wire's axis within this of the tool's normal
 DEBUG = bool(os.environ.get("WIRE_DEBUG"))
+LEAD_ITERS = int(os.environ.get("LEAD_ITERS", "64"))  # solver position iterations for a wire with a lead
+LEAD_ARMATURE = float(os.environ.get("LEAD_ARMATURE", "2e-4"))  # kg m^2 per lead joint: keeps its springs on light links stable
+WIRE_PATCH = float(os.environ.get("WIRE_PATCH", "0.004"))  # m: torsional patch on the wire's colliders, about a quarter of a 16 mm pad contact
+LEAD_YIELD = float(os.environ.get("LEAD_YIELD", "0.05"))  # N m: the bending moment at which the lead's copper yields and stays bent
+# (annealed copper, about 70 MPa, times a 1.63 mm conductor's plastic section modulus d^3/6, 0.72 mm^3)
+_LEAD_K: dict[str, float] = {}  # each wire's lead-joint spring, N m/rad
 
 
 @dataclass(frozen=True)
@@ -70,7 +76,12 @@ class Pigtail(Box):
     strip_hold: int = 3
     friction: float = 0.9
     stripper: str = "stripper"  # the scene name of the mechkit stripper
-    holes: tuple = ()  # push-in holes it can latch in: (name, mouth centre (env frame), unit axis into the hole)
+    holes: tuple = ()  # push-in holes it can latch in: (name, mouth centre, unit axis into the hole), in hole_body's frame
+    hole_body: str | None = None  # the scene name of the (mechkit) body that carries the holes; None: the world
+    lead: tuple = ()  # the conductor between its anchor (first point, in a box) and the core's far end (last point), world frame
+    lead_mass: float = float(os.environ.get("LEAD_MASS", "0.001"))  # kg per link: heavier than the copper, so the solver holds the stiff bends
+    bend_k: float = 0.0  # N m/rad per link joint for bending: copper's EI over the link length; 0: EI / link length
+    lead_ei: float = 0.040  # N m^2: 14 AWG solid copper (E 117 GPa, 1.63 mm); the jacket adds little
     latch_depth: float = 0.012  # copper this far in engages the push-in clamp ...
     bottom_depth: float = 0.0175  # ... and can go no further than the hole's bottom
     latch_step: float = 0.0005  # the clamp holds the wire within this of the deepest it has been pushed
@@ -130,6 +141,7 @@ class PigtailState(ObjectState):
     ring_pos: np.ndarray = None
     latched: str | None = None  # the hole whose clamp holds it
     depth: float = 0.0  # how far the copper's tip is in that hole (m)
+    lead_pos: np.ndarray = None  # the lead's links' centres
     crushed: bool = False
 
 
@@ -208,7 +220,7 @@ def _spawn(prim_path: str, cfg, translation=None, orientation=None, **kwargs):
             mapi.CreateDiagonalInertiaAttr(Gf.Vec3f(*inertia))
         rb = PhysxSchema.PhysxRigidBodyAPI.Apply(prim)
         rb.CreateMaxDepenetrationVelocityAttr(0.5)
-        rb.CreateSolverPositionIterationCountAttr(32)
+        rb.CreateSolverPositionIterationCountAttr(LEAD_ITERS if s.lead else 32)
         rb.CreateSolverVelocityIterationCountAttr(4)
         rb.CreateLinearDampingAttr(0.1)
         rb.CreateAngularDampingAttr(0.5)
@@ -225,6 +237,8 @@ def _spawn(prim_path: str, cfg, translation=None, orientation=None, **kwargs):
             col = PhysxSchema.PhysxCollisionAPI.Apply(c.GetPrim())
             col.CreateContactOffsetAttr(0.0008)
             col.CreateRestOffsetAttr(0.0)
+            col.CreateTorsionalPatchRadiusAttr(WIRE_PATCH)  # a pad pinches the wire along a line, which resists the wire turning about the pinch
+            col.CreateMinTorsionalPatchRadiusAttr(WIRE_PATCH / 2)
             bind_physics_material(str(c.GetPath()), material, stage=stage)
         if look:
             bind_visual_material(str(c.GetPath()), looks[look], stage=stage)
@@ -280,12 +294,16 @@ def _spawn(prim_path: str, cfg, translation=None, orientation=None, **kwargs):
         drive.CreateMaxForceAttr(1e6)
         if k > 0:
             joint(f"ring_joint_{k - 1:02d}", rings[k - 1], path, s.pitch / 2, -s.pitch / 2, enabled=False)
+    links = _spawn_lead(stage, prim_path, s, core, body, cylinder, Gf, Sdf, UsdPhysics, PhysxSchema)
+    hole_body = None if s.hole_body is None else f"{prim_path.rsplit('/', 1)[0]}/{s.hole_body}"
     for name, mouth, axis_in in s.holes:  # a push-in clamp per hole: a ratchet of slides along the hole, each holding the wire in to its depth
         a = np.asarray(axis_in, float) / np.linalg.norm(axis_in)
         qa = np.r_[1.0 + a[2], np.cross((0.0, 0.0, 1.0), a)]  # w, x, y, z: turns +z onto the hole's axis
         qa = qa / np.linalg.norm(qa) if np.linalg.norm(qa) > 1e-9 else np.array([0.0, 1.0, 0.0, 0.0])
         for i, depth in enumerate(s.latch_depths):
             j = UsdPhysics.PrismaticJoint.Define(stage, f"{prim_path}/latch_{name}_{i:02d}")
+            if hole_body is not None:
+                j.CreateBody0Rel().SetTargets([Sdf.Path(hole_body)])
             j.CreateBody1Rel().SetTargets([Sdf.Path(core)])
             j.CreateLocalPos0Attr(Gf.Vec3f(*map(float, mouth)))
             j.CreateLocalRot0Attr(Gf.Quatf(*map(float, qa)))
@@ -298,8 +316,130 @@ def _spawn(prim_path: str, cfg, translation=None, orientation=None, **kwargs):
             j.CreateJointEnabledAttr(False)
     if not os.environ.get("WIRE_NO_FILTER"):  # rings never touch the core: they sit round its copper, joined to it or (a slug) sliding off it
         pairs = UsdPhysics.FilteredPairsAPI.Apply(stage.GetPrimAtPath(core))
-        pairs.CreateFilteredPairsRel().SetTargets([Sdf.Path(p) for p in rings])
+        pairs.CreateFilteredPairsRel().SetTargets([Sdf.Path(p) for p in rings] + ([Sdf.Path(links[-1])] if links else []))
     return root.GetPrim()
+
+
+def _quat_wxyz_from_z(d) -> np.ndarray:
+    """w, x, y, z of the rotation taking +z onto the unit vector d."""
+    d = np.asarray(d, float) / np.linalg.norm(d)
+    q = np.r_[1.0 + d[2], np.cross((0.0, 0.0, 1.0), d)]
+    if np.linalg.norm(q) < 1e-9:
+        return np.array([0.0, 1.0, 0.0, 0.0])
+    return q / np.linalg.norm(q)
+
+
+def _quat_mat(wxyz) -> np.ndarray:
+    w, x, y, z = wxyz
+    return quat_to_matrix((x, y, z, w))
+
+
+def _spawn_lead(stage, prim_path, s, core, body_fn, cyl_fn, Gf, Sdf, UsdPhysics, PhysxSchema) -> list:
+    """The conductor from its anchor to the core: rigid links along s.lead, each joined to the next (and the first to the world
+    at the anchor, the last to the core's far end) by a joint free to bend and twist on springs that hold the authored shape,
+    as solid copper holds the shape it was bent to. Returns the links' prim paths."""
+    if len(s.lead) < 2:
+        return []
+    pts = [np.asarray(p, float) for p in s.lead]
+    links = []
+    for i, (a, b) in enumerate(zip(pts, pts[1:])):
+        d = b - a
+        L = float(np.linalg.norm(d))
+        q = _quat_wxyz_from_z(d)
+        path = f"{prim_path}/lead_{i:02d}"
+        xf = __import__("pxr").UsdGeom.Xform.Define(stage, path)
+        dbl = __import__("pxr").UsdGeom.XformOp.PrecisionDouble
+        xf.AddTranslateOp(precision=dbl).Set(Gf.Vec3d(*((a + b) / 2)))
+        xf.AddOrientOp(precision=dbl).Set(Gf.Quatd(*map(float, q)))
+        prim = xf.GetPrim()
+        UsdPhysics.RigidBodyAPI.Apply(prim)
+        mapi = UsdPhysics.MassAPI.Apply(prim)
+        mapi.CreateMassAttr(s.lead_mass)
+        it = s.lead_mass * L * L / 12 + 1e-7
+        mapi.CreateDiagonalInertiaAttr(Gf.Vec3f(it, it, 2e-8))
+        rb = PhysxSchema.PhysxRigidBodyAPI.Apply(prim)
+        rb.CreateSolverPositionIterationCountAttr(LEAD_ITERS)
+        rb.CreateSolverVelocityIterationCountAttr(4)
+        rb.CreateLinearDampingAttr(0.5)
+        rb.CreateAngularDampingAttr(2.0)
+        rb.CreateMaxDepenetrationVelocityAttr(0.5)
+        cyl_fn(path, "jacket", s.r_ins, -L / 2 + 0.0004, L / 2 - 0.0004, "jacket")
+        links.append((path, a, b, q, L))
+
+    def frame(link_q, link_c, point):
+        """A joint frame at `point`, given in a link's frame (pos, rot w x y z)."""
+        R = _quat_mat(link_q)
+        return R.T @ (point - link_c)
+
+    counter = [0]
+
+    def d6(name, b0, b1, pos0, rot0, pos1, rot1, L):
+        """A hinge at the shared point, its axis alternating along the lead between the world's y and z, on a spring that holds
+        the authored bend (angular drives act on hinges; the generic six-axis joint's drives did not)."""
+        j = UsdPhysics.RevoluteJoint.Define(stage, f"{prim_path}/{name}")
+        if b0 is not None:
+            j.CreateBody0Rel().SetTargets([Sdf.Path(b0)])
+        j.CreateBody1Rel().SetTargets([Sdf.Path(b1)])
+        j.CreateLocalPos0Attr(Gf.Vec3f(*map(float, pos0)))
+        j.CreateLocalRot0Attr(Gf.Quatf(*map(float, rot0)))
+        j.CreateLocalPos1Attr(Gf.Vec3f(*map(float, pos1)))
+        j.CreateLocalRot1Attr(Gf.Quatf(*map(float, rot1)))
+        j.CreateAxisAttr("Y" if counter[0] % 2 == 0 else "Z")
+        counter[0] += 1
+        j.CreateExcludeFromArticulationAttr(False)
+        PhysxSchema.PhysxJointAPI.Apply(j.GetPrim()).CreateArmatureAttr(LEAD_ARMATURE)
+        k = (s.bend_k or s.lead_ei / L)
+        _LEAD_K[s.name] = float(k)
+        drv = UsdPhysics.DriveAPI.Apply(j.GetPrim(), "angular")
+        drv.CreateTypeAttr(os.environ.get("LEAD_DRIVE", "force"))
+        drv.CreateStiffnessAttr(float(k * math.pi / 180.0))  # USD angular drives are per degree
+        drv.CreateDampingAttr(float(0.05 * k * math.pi / 180.0))
+        drv.CreateTargetPositionAttr(0.0)
+        drv.CreateMaxForceAttr(1e3)
+
+    # each joint's frame sits at the shared point with the world's orientation, written in each body's own frame
+    ident = np.array([1.0, 0.0, 0.0, 0.0])
+
+    def rot_in(link_q):
+        R = _quat_mat(link_q)
+        from_world = R.T  # world -> link
+        # quaternion of from_world
+        m = from_world
+        w = math.sqrt(max(0.0, 1 + m[0, 0] + m[1, 1] + m[2, 2])) / 2
+        x = math.copysign(math.sqrt(max(0.0, 1 + m[0, 0] - m[1, 1] - m[2, 2])) / 2, m[2, 1] - m[1, 2])
+        y = math.copysign(math.sqrt(max(0.0, 1 - m[0, 0] + m[1, 1] - m[2, 2])) / 2, m[0, 2] - m[2, 0])
+        z = math.copysign(math.sqrt(max(0.0, 1 - m[0, 0] - m[1, 1] + m[2, 2])) / 2, m[1, 0] - m[0, 1])
+        return np.array([w, x, y, z])
+
+    p0, a0, b0, q0, L0 = links[0]
+    base = f"{prim_path}/lead_base"  # the articulation's root, fixed in the box where the cable clamp holds the cable
+    bx = __import__("pxr").UsdGeom.Xform.Define(stage, base)
+    bx.AddTranslateOp(precision=__import__("pxr").UsdGeom.XformOp.PrecisionDouble).Set(Gf.Vec3d(*a0))
+    bprim = bx.GetPrim()
+    UsdPhysics.RigidBodyAPI.Apply(bprim)
+    bm = UsdPhysics.MassAPI.Apply(bprim)
+    bm.CreateMassAttr(0.01)
+    bm.CreateDiagonalInertiaAttr(Gf.Vec3f(1e-6, 1e-6, 1e-6))
+    UsdPhysics.ArticulationRootAPI.Apply(bprim)
+    art = PhysxSchema.PhysxArticulationAPI.Apply(bprim)
+    art.CreateEnabledSelfCollisionsAttr(False)
+    art.CreateSolverPositionIterationCountAttr(64)
+    art.CreateSolverVelocityIterationCountAttr(4)
+    fj = UsdPhysics.FixedJoint.Define(stage, f"{prim_path}/lead_root")
+    fj.CreateBody1Rel().SetTargets([Sdf.Path(base)])
+    fj.CreateLocalPos0Attr(Gf.Vec3f(*map(float, a0)))
+    fj.CreateLocalPos1Attr(Gf.Vec3f(0.0, 0.0, 0.0))
+    d6("lead_anchor", base, p0, (0.0, 0.0, 0.0), ident, frame(q0, (a0 + b0) / 2, a0), rot_in(q0), L0)
+    for i in range(len(links) - 1):
+        pa, aa, ba, qa, La = links[i]
+        pb, ab, bb, qb, Lb = links[i + 1]
+        d6(f"lead_joint_{i:02d}", pa, pb, frame(qa, (aa + ba) / 2, ba), rot_in(qa), frame(qb, (ab + bb) / 2, ab), rot_in(qb), min(La, Lb))
+    pl, al, bl, ql, Ll = links[-1]
+    R = quat_to_matrix(s.quat_xyzw)
+    core_q = np.array([s.quat_xyzw[3], *s.quat_xyzw[:3]])
+    core_c = np.asarray(s.pos, float)
+    d6("lead_core", pl, core, frame(ql, (al + bl) / 2, bl), rot_in(ql), frame(core_q, core_c, bl), rot_in(core_q), Ll)
+    return [p for p, *_ in links]
 
 
 def _arena_object(spec: Pigtail):
@@ -320,6 +460,18 @@ def _arena_object(spec: Pigtail):
 
 
 # -- runtime ---------------------------------------------------------------------------------------------------
+
+
+def _like(ref, data, dtype=np.float32):
+    """`data` as the kind of array a PhysX view gave in `ref` (a torch tensor or a warp array), on its device."""
+    data = np.ascontiguousarray(data, dtype=dtype)
+    if hasattr(ref, "detach"):
+        import torch
+
+        return torch.tensor(data, device=ref.device)
+    import warp as wp
+
+    return wp.array(data, dtype=wp.int32 if dtype == np.int32 else wp.float32, device=getattr(ref, "device", None))
 
 
 def _arr(x) -> np.ndarray:
@@ -344,9 +496,22 @@ class _Runtime:
         root = _PATHS[spec.name]
         self.stage = get_current_stage()
         n = spec.n_rings
-        self.names = ["core"] + [f"ring_{k:02d}" for k in range(n)]
+        self.names = ["core"] + [f"ring_{k:02d}" for k in range(n)] + [f"lead_{i:02d}" for i in range(max(0, len(spec.lead) - 1))]
         view = PhysxManager.get_physics_sim_view()
-        self.bodies = view.create_rigid_body_view([f"{root}/{nm}" for nm in self.names])
+        self.n_lead = max(0, len(spec.lead) - 1)
+        if self.n_lead:  # the core and the lead are an articulation; the rings are loose bodies
+            self.art = view.create_articulation_view(f"{root}/lead_base")
+            names = [p.rsplit("/", 1)[-1] for p in self.art.shared_metatype.link_names] if hasattr(self.art.shared_metatype, "link_names") else []
+            if not names or "core" not in names:
+                names = list(self.art.shared_metatype.link_names)
+            self.art_names = [n.rsplit("/", 1)[-1] for n in names]
+            self.art_idx = [self.art_names.index(nm) for nm in ["core"] + [f"lead_{i:02d}" for i in range(self.n_lead)]]
+            self.rings_view = view.create_rigid_body_view([f"{root}/ring_{k:02d}" for k in range(n)])
+            self.bodies = _Composite(self)
+            self.yield_rad = LEAD_YIELD / _LEAD_K.get(spec.name, 1.0)  # how far a lead joint bends elastically before its copper yields
+            self.rest = None  # each lead joint's rest angle, which follows the joint once its spring passes the yield moment
+        else:
+            self.bodies = view.create_rigid_body_view([f"{root}/{nm}" for nm in self.names])
         self.has_tool = spec.stripper in base.scene.keys()
         self.contact = None
         if self.has_tool:
@@ -396,25 +561,68 @@ class _Runtime:
             self.core_joints[k].GetJointEnabledAttr().Set(not on)
         self.break_joints[b].GetJointEnabledAttr().Set(on)
 
+    def _reset_composite(self) -> None:
+        """Rings back to their start poses; the articulation (lead and core) back to its authored shape, at rest."""
+        n = self.spec.n_rings
+        ref = self.rings_view.get_transforms()
+        idx = _like(ref, np.arange(n), np.int32)
+        self.rings_view.set_transforms(_like(ref, self.start[1:1 + n]), idx)
+        self.rings_view.set_velocities(_like(ref, np.zeros((n, 6))), idx)
+        aref = self.art.get_dof_positions()
+        dofs = self.art.max_dofs
+        aidx = _like(aref, np.zeros(1), np.int32)
+        self.art.set_dof_positions(_like(aref, np.zeros((1, dofs))), aidx)
+        self.art.set_dof_velocities(_like(aref, np.zeros((1, dofs))), aidx)
+        self.rest = np.zeros(dofs)
+        self._set_rest()
+
+    def _yield_lead(self) -> None:
+        """Perfectly plastic copper: a lead joint bent further than its elastic range from its rest angle takes a new rest angle
+        that far behind it, so the wire stays where a hand bends it and springs back only by the elastic part."""
+        q_t = self.art.get_dof_positions()
+        q = _arr(q_t).reshape(-1)
+        if self.rest is None:
+            self.rest = np.zeros_like(q)
+        over = q - self.rest
+        bent = np.abs(over) > self.yield_rad
+        if not bent.any():
+            return
+        self.rest[bent] = q[bent] - np.sign(over[bent]) * self.yield_rad
+        self._set_rest()
+
+    def _set_rest(self) -> None:
+        ref = self.art.get_dof_positions()
+        self.art.set_dof_position_targets(_like(ref, self.rest.reshape(1, -1)), _like(ref, np.zeros(1), np.int32))
+
+    def _holes_world(self) -> list:
+        """(name, mouth, axis) of each push-in hole in the env frame, from where its body is now."""
+        s = self.spec
+        if s.hole_body is None:
+            return [(n, np.asarray(m_, float), np.asarray(a, float) / np.linalg.norm(a)) for n, m_, a in s.holes]
+        import mechkit as m
+
+        st = m.state(self.base, s.hole_body)
+        R = st.rotation()
+        return [(n, st.pos + R @ np.asarray(m_, float), R @ (np.asarray(a, float) / np.linalg.norm(a))) for n, m_, a in s.holes]
+
     def _latch_check(self, end, axis) -> None:
         """The copper's tip in a push-in hole, past the latch depth and square in it: the clamp takes it. Once taken, it holds
         the wire at the deepest it has been pushed (to within latch_step)."""
         s, st = self.spec, self.strip
         if not s.holes:
             return
+        holes = self._holes_world()
         if st.latched is not None:
-            name, mouth, axis_in = next(h for h in s.holes if h[0] == st.latched)
-            a = np.asarray(axis_in, float) / np.linalg.norm(axis_in)
-            depth = float((end - np.asarray(mouth, float)) @ a)
+            name, mouth, a = next(h for h in holes if h[0] == st.latched)
+            depth = float((end - mouth) @ a)
             i = max(k for k, d in enumerate(s.latch_depths) if d <= depth + 1e-9) if depth >= s.latch_depth else 0
             if i > st.latch_i:
                 self.latches[name][i].GetJointEnabledAttr().Set(True)
                 self.latches[name][st.latch_i].GetJointEnabledAttr().Set(False)
                 st.latch_i = i
             return
-        for name, mouth, axis_in in s.holes:
-            a = np.asarray(axis_in, float) / np.linalg.norm(axis_in)
-            d = end - np.asarray(mouth, float)
+        for name, mouth, a in holes:
+            d = end - mouth
             depth = float(d @ a)
             off = float(np.linalg.norm(d - depth * a))
             tilt = math.degrees(math.acos(min(1.0, float(axis @ a))))
@@ -427,6 +635,8 @@ class _Runtime:
     def physics_step(self) -> None:
         s, S, st = self.spec, self.S, self.strip
         self.t += self.dt
+        if self.n_lead:
+            self._yield_lead()
         if s.holes:
             tr0 = _arr(self.bodies.get_transforms())[0]
             ax = quat_to_matrix(tr0[3:7])[:, 2]
@@ -435,7 +645,7 @@ class _Runtime:
             return
         if st.pending_on:
             tool_p, tool_R, _ = self._tool()
-            rings = _arr(self.bodies.get_transforms())[1:, :3] - self.origin
+            rings = _arr(self.bodies.get_transforms())[1:1 + s.n_rings, :3] - self.origin
             back = []
             for k in st.pending_on:
                 if abs(float((rings[k] - tool_p) @ tool_R[:, 2])) > CLEAR_OF_BLADE:
@@ -530,6 +740,11 @@ class _Runtime:
             j.GetJointEnabledAttr().Set(False)
         for c in self.ring_cols:
             c.GetCollisionEnabledAttr().Set(True)
+        if self.n_lead:
+            self._reset_composite()
+            self.strip = Strip()
+            self.t = 0.0
+            return
         idx = np.arange(len(self.names), dtype=np.int32)
         cur = self.bodies.get_transforms()
         if hasattr(cur, "detach"):
@@ -564,13 +779,35 @@ class _Runtime:
                     clear = False
         depth = 0.0
         if self.strip.latched is not None:
-            name, mouth, axis_in = next(h for h in s.holes if h[0] == self.strip.latched)
-            a = np.asarray(axis_in, float) / np.linalg.norm(axis_in)
-            depth = float((end - np.asarray(mouth, float)) @ a)
+            name, mouth, a = next(h for h in self._holes_world() if h[0] == self.strip.latched)
+            depth = float((end - mouth) @ a)
         lo, hi = p.min(0), p.max(0)
         return PigtailState(pos=p[0], quat_xyzw=tr[0, 3:7], lin_vel=vel[0, :3], ang_vel=vel[0, 3:], low=lo, high=hi, end=end, axis=axis,
-                            bare=bare, nicked=self.strip.nicked, slug_clear=clear, bites=tuple(self.strip.bites), ring_pos=p[1:],
-                            latched=self.strip.latched, depth=depth, crushed=self.strip.crushed)
+                            bare=bare, nicked=self.strip.nicked, slug_clear=clear, bites=tuple(self.strip.bites), ring_pos=p[1:1 + s.n_rings],
+                            latched=self.strip.latched, depth=depth, crushed=self.strip.crushed,
+                            lead_pos=p[1 + s.n_rings:])
+
+
+class _Composite:
+    """Poses and velocities of the core, the rings and the lead in one array (core, rings, lead), read from the articulation
+    (core and lead) and the rings' rigid-body view, as one rigid-body view would give them."""
+
+    def __init__(self, rt):
+        self.rt = rt
+
+    def get_transforms(self):
+        rt = self.rt
+        links = _arr(rt.art.get_link_transforms()).reshape(-1, len(rt.art_names), 7)[0]
+        rings = _arr(rt.rings_view.get_transforms()).reshape(-1, 7)
+        art = links[rt.art_idx]
+        return np.vstack([art[:1], rings, art[1:]])
+
+    def get_velocities(self):
+        rt = self.rt
+        links = _arr(rt.art.get_link_velocities()).reshape(-1, len(rt.art_names), 6)[0]
+        rings = _arr(rt.rings_view.get_velocities()).reshape(-1, 6)
+        art = links[rt.art_idx]
+        return np.vstack([art[:1], rings, art[1:]])
 
 
 _RT: dict[str, _Runtime] = {}

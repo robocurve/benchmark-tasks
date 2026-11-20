@@ -124,5 +124,39 @@ class WireGeometry(unittest.TestCase):
         self.assertGreaterEqual(T.CH_DEPTH, T.BARE_FULL[1] - T.EXPOSED_MAX)
 
 
+class Layout(unittest.TestCase):
+    def lead_lengths(self):
+        pts = np.array(T.LEAD)
+        return np.linalg.norm(np.diff(pts, axis=0), axis=1)
+
+    def test_box_is_a_b118a(self):
+        inch = 0.0254
+        self.assertAlmostEqual(T.BOX_HT, 3.75 * inch, places=3)
+        self.assertAlmostEqual(T.BOX_W, 2.25 * inch, places=3)
+        self.assertAlmostEqual(T.BOX_D, 2.875 * inch, places=3)
+
+    def test_conductor_meets_the_box_fill_rules(self):
+        d = self.lead_lengths()
+        outside = d[1:].sum() + T.CORE_L  # from the box's front to the end
+        self.assertGreater(d.sum() + T.CORE_L, 0.150)  # NEC 300.14: at least 6 in of free conductor
+        self.assertGreater(outside, 0.075)  # and at least 3 in outside the box's opening
+        self.assertGreater(T.LEAD[0][0], T.WALL_X)  # anchored inside the box
+        self.assertLess(T.LEAD[1][0], T.WALL_X)  # and out through its front
+
+    def test_lead_joins_the_end_and_stays_above_the_table(self):
+        self.assertTrue(np.allclose(T.LEAD[-1], T.CORE_C - [0, 0, T.CORE_L / 2]))
+        self.assertTrue(all(p[2] > T.TOP + T.WIRE_R for p in T.LEAD))
+
+    def test_receptacle_on_its_tray_brass_on_minus_y(self):
+        self.assertAlmostEqual(T.REC_START[2], T.TRAY_TOP + 0.0005)
+        self.assertTrue(all(dy < 0 for n, (_, dy) in T.HOLES.items() if n.startswith("brass")))
+        self.assertTrue(all(dy > 0 for n, (_, dy) in T.HOLES.items() if n.startswith("silver")))
+        self.assertTrue(all(h[1] == "receptacle" for h in [(None, T.OBJECTS[3].hole_body)]))
+
+    def test_copper_yield_moment(self):
+        d = 0.00163  # 14 AWG conductor
+        self.assertAlmostEqual(70e6 * d ** 3 / 6, wk.LEAD_YIELD, delta=0.01)  # annealed copper, plastic section modulus
+
+
 if __name__ == "__main__":
     unittest.main()
