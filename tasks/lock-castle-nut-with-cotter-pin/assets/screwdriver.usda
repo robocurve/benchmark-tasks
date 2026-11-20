@@ -1,0 +1,99 @@
+#usda 1.0
+(
+    defaultPrim = "Screwdriver"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Screwdriver" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+)
+{
+    rel material:binding:physics = </Screwdriver/Material> (
+        bindMaterialAs = "weakerThanDescendants"
+    )
+    point3f physics:centerOfMass = (0, 0, 0.08)
+    float physics:mass = 0.03
+
+    def Mesh "tip_visual"
+    {
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(-0.00125, -0.0002, 0), (0.00125, -0.0002, 0), (0.00125, 0.0002, 0), (-0.00125, 0.0002, 0), (-0.00125, -0.0002, 0.008), (0.00125, -0.0002, 0.008), (0.00125, 0.0002, 0.008), (-0.00125, 0.0002, 0.008)]
+        color3f[] primvars:displayColor = [(0.26840952, 0.27926317, 0.30167657)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def "collision"
+    {
+        def Mesh "tip" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.0002
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(-0.00125, -0.0002, 0), (0.00125, -0.0002, 0), (0.00125, 0.0002, 0), (-0.00125, 0.0002, 0), (-0.00125, -0.0002, 0.008), (0.00125, -0.0002, 0.008), (0.00125, 0.0002, 0.008), (-0.00125, 0.0002, 0.008)]
+            uniform token subdivisionScheme = "none"
+            token visibility = "invisible"
+        }
+
+        def Mesh "blade" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.0002
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(-0.00125, -0.0002, 0.008), (0.00125, -0.0002, 0.008), (0.00125, 0.0002, 0.008), (-0.00125, 0.0002, 0.008), (-0.002, -0.0015, 0.04), (0.002, -0.0015, 0.04), (0.002, 0.0015, 0.04), (-0.002, 0.0015, 0.04)]
+            uniform token subdivisionScheme = "none"
+            token visibility = "invisible"
+        }
+
+        def Cube "handle" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0002
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:scale = (0.018, 0.018, 0.08)
+            double3 xformOp:translate = (0, 0, 0.08)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def Mesh "blade_visual"
+    {
+        int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+        int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+        point3f[] points = [(-0.00125, -0.0002, 0.008), (0.00125, -0.0002, 0.008), (0.00125, 0.0002, 0.008), (-0.00125, 0.0002, 0.008), (-0.002, -0.0015, 0.04), (0.002, -0.0015, 0.04), (0.002, 0.0015, 0.04), (-0.002, 0.0015, 0.04)]
+        color3f[] primvars:displayColor = [(0.26840952, 0.27926317, 0.30167657)]
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Cube "handle_visual"
+    {
+        color3f[] primvars:displayColor = [(0.6120656, 0.0063095735, 0.0063095735)]
+        double size = 1
+        float3 xformOp:scale = (0.018, 0.018, 0.08)
+        double3 xformOp:translate = (0, 0, 0.08)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Material "Material" (
+        prepend apiSchemas = ["PhysicsMaterialAPI"]
+    )
+    {
+        float physics:dynamicFriction = 0.5
+        float physics:restitution = 0
+        float physics:staticFriction = 0.6
+    }
+}
+

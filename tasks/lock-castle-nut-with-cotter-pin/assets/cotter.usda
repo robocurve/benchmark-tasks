@@ -1,0 +1,385 @@
+#usda 1.0
+(
+    defaultPrim = "Cotter"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Cotter" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxArticulationAPI", "PhysicsArticulationRootAPI", "MaterialBindingAPI"]
+)
+{
+    rel material:binding:physics = </Cotter/Material> (
+        bindMaterialAs = "weakerThanDescendants"
+    )
+    point3f physics:centerOfMass = (-0.007145, 0, 0)
+    float3 physics:diagonalInertia = (3.2e-8, 3.2e-8, 3.2e-8)
+    float physics:mass = 0.0008
+    custom bool physxArticulation:enabledSelfCollisions = 0
+    custom float physxArticulation:sleepThreshold = 0
+    custom int physxArticulation:solverPositionIterationCount = 32
+    custom int physxArticulation:solverVelocityIterationCount = 4
+    custom float physxArticulation:stabilizationThreshold = 0
+
+    def Scope "visual"
+    {
+        def Cylinder "shankn"
+        {
+            uniform token axis = "X"
+            double height = 0.014289999999999999
+            color3f[] primvars:displayColor = [(0.5789061, 0.5789061, 0.48543546)]
+            double radius = 1
+            float3 xformOp:scale = (1, 0.000375, 0.00075)
+            double3 xformOp:translate = (-0.0071449999999999994, -0.000725, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cylinder "shankp"
+        {
+            uniform token axis = "X"
+            double height = 0.014289999999999999
+            color3f[] primvars:displayColor = [(0.5789061, 0.5789061, 0.48543546)]
+            double radius = 1
+            float3 xformOp:scale = (1, 0.000375, 0.00075)
+            double3 xformOp:translate = (-0.0071449999999999994, 0.000725, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cylinder "eye0"
+        {
+            uniform token axis = "X"
+            double height = 0.0012649780829385702
+            color3f[] primvars:displayColor = [(0.5789061, 0.5789061, 0.48543546)]
+            double radius = 1
+            float xformOp:rotateZ = 105
+            float3 xformOp:scale = (1, 0.000375, 0.00075)
+            double3 xformOp:translate = (-0.014807348008479033, 0.0005312499999999999, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+        }
+
+        def Cylinder "eye1"
+        {
+            uniform token axis = "X"
+            double height = 0.0012649780829385702
+            color3f[] primvars:displayColor = [(0.5789061, 0.5789061, 0.48543546)]
+            double radius = 1
+            float xformOp:rotateZ = 135
+            float3 xformOp:scale = (1, 0.000375, 0.00075)
+            double3 xformOp:translate = (-0.015338598008479034, 0.0014514019915209662, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+        }
+
+        def Cylinder "eye2"
+        {
+            uniform token axis = "X"
+            double height = 0.0012649780829385702
+            color3f[] primvars:displayColor = [(0.5789061, 0.5789061, 0.48543546)]
+            double radius = 1
+            float xformOp:rotateZ = 165
+            float3 xformOp:scale = (1, 0.000375, 0.00075)
+            double3 xformOp:translate = (-0.01625875, 0.0019826519915209662, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+        }
+
+        def Cylinder "eye3"
+        {
+            uniform token axis = "X"
+            double height = 0.0012649780829385698
+            color3f[] primvars:displayColor = [(0.5789061, 0.5789061, 0.48543546)]
+            double radius = 1
+            float xformOp:rotateZ = 195
+            float3 xformOp:scale = (1, 0.000375, 0.00075)
+            double3 xformOp:translate = (-0.01732125, 0.0019826519915209662, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+        }
+
+        def Cylinder "eye4"
+        {
+            uniform token axis = "X"
+            double height = 0.0012649780829385709
+            color3f[] primvars:displayColor = [(0.5789061, 0.5789061, 0.48543546)]
+            double radius = 1
+            float xformOp:rotateZ = 225
+            float3 xformOp:scale = (1, 0.000375, 0.00075)
+            double3 xformOp:translate = (-0.018241401991520967, 0.0014514019915209662, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+        }
+
+        def Cylinder "eye5"
+        {
+            uniform token axis = "X"
+            double height = 0.0012649780829385698
+            color3f[] primvars:displayColor = [(0.5789061, 0.5789061, 0.48543546)]
+            double radius = 1
+            float xformOp:rotateZ = 255
+            float3 xformOp:scale = (1, 0.000375, 0.00075)
+            double3 xformOp:translate = (-0.018772651991520964, 0.0005312500000000001, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+        }
+
+        def Cylinder "eye6"
+        {
+            uniform token axis = "X"
+            double height = 0.0012649780829385694
+            color3f[] primvars:displayColor = [(0.5789061, 0.5789061, 0.48543546)]
+            double radius = 1
+            float xformOp:rotateZ = 285
+            float3 xformOp:scale = (1, 0.000375, 0.00075)
+            double3 xformOp:translate = (-0.018772651991520964, -0.0005312499999999996, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+        }
+
+        def Cylinder "eye7"
+        {
+            uniform token axis = "X"
+            double height = 0.0012649780829385694
+            color3f[] primvars:displayColor = [(0.5789061, 0.5789061, 0.48543546)]
+            double radius = 1
+            float xformOp:rotateZ = 315
+            float3 xformOp:scale = (1, 0.000375, 0.00075)
+            double3 xformOp:translate = (-0.018241401991520967, -0.0014514019915209655, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+        }
+
+        def Cylinder "eye8"
+        {
+            uniform token axis = "X"
+            double height = 0.0012649780829385709
+            color3f[] primvars:displayColor = [(0.5789061, 0.5789061, 0.48543546)]
+            double radius = 1
+            float xformOp:rotateZ = 345
+            float3 xformOp:scale = (1, 0.000375, 0.00075)
+            double3 xformOp:translate = (-0.01732125, -0.001982651991520966, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+        }
+
+        def Cylinder "eye9"
+        {
+            uniform token axis = "X"
+            double height = 0.0012649780829385709
+            color3f[] primvars:displayColor = [(0.5789061, 0.5789061, 0.48543546)]
+            double radius = 1
+            float xformOp:rotateZ = 375
+            float3 xformOp:scale = (1, 0.000375, 0.00075)
+            double3 xformOp:translate = (-0.01625875, -0.0019826519915209662, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+        }
+
+        def Cylinder "eye10"
+        {
+            uniform token axis = "X"
+            double height = 0.0012649780829385687
+            color3f[] primvars:displayColor = [(0.5789061, 0.5789061, 0.48543546)]
+            double radius = 1
+            float xformOp:rotateZ = 405
+            float3 xformOp:scale = (1, 0.000375, 0.00075)
+            double3 xformOp:translate = (-0.015338598008479034, -0.0014514019915209666, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+        }
+
+        def Cylinder "eye11"
+        {
+            uniform token axis = "X"
+            double height = 0.0012649780829385709
+            color3f[] primvars:displayColor = [(0.5789061, 0.5789061, 0.48543546)]
+            double radius = 1
+            float xformOp:rotateZ = 435
+            float3 xformOp:scale = (1, 0.000375, 0.00075)
+            double3 xformOp:translate = (-0.014807348008479033, -0.0005312500000000008, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+        }
+    }
+
+    def "collision"
+    {
+        def Cube "shankn" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0002
+            custom float physxCollision:minTorsionalPatchRadius = 0.0012
+            custom float physxCollision:restOffset = 0
+            custom float physxCollision:torsionalPatchRadius = 0.0015
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:scale = (0.01429, 0.00075, 0.0015)
+            double3 xformOp:translate = (-0.0071449999999999994, -0.0007250000000000001, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "shankp" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0002
+            custom float physxCollision:minTorsionalPatchRadius = 0.0012
+            custom float physxCollision:restOffset = 0
+            custom float physxCollision:torsionalPatchRadius = 0.0015
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:scale = (0.01429, 0.00075, 0.0015)
+            double3 xformOp:translate = (-0.0071449999999999994, 0.0007250000000000001, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "eye" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0002
+            custom float physxCollision:minTorsionalPatchRadius = 0.0012
+            custom float physxCollision:restOffset = 0
+            custom float physxCollision:torsionalPatchRadius = 0.0015
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:scale = (0.005, 0.005, 0.0015)
+            double3 xformOp:translate = (-0.01679, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def Material "Material" (
+        prepend apiSchemas = ["PhysicsMaterialAPI"]
+    )
+    {
+        float physics:dynamicFriction = 0.3
+        float physics:restitution = 0
+        float physics:staticFriction = 0.4
+    }
+
+    def Xform "prong_p" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </Cotter/prong_p/Material> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        point3f physics:centerOfMass = (0.005555, 0.000725, 0)
+        float3 physics:diagonalInertia = (8e-9, 8e-9, 8e-9)
+        float physics:mass = 0.0002
+
+        def Cylinder "visual"
+        {
+            uniform token axis = "X"
+            double height = 0.01111
+            color3f[] primvars:displayColor = [(0.5789061, 0.5789061, 0.48543546)]
+            double radius = 1
+            float3 xformOp:scale = (1, 0.000375, 0.00075)
+            double3 xformOp:translate = (0.005555, 0.000725, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def "collision"
+        {
+            def Capsule "capsule" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                uniform token axis = "X"
+                double height = 0.01036
+                custom float physxCollision:contactOffset = 0.0002
+                custom float physxCollision:restOffset = 0
+                double radius = 0.000375
+                token visibility = "invisible"
+                double3 xformOp:translate = (0.005555, 0.000725, 0)
+                uniform token[] xformOpOrder = ["xformOp:translate"]
+            }
+        }
+
+        def Material "Material" (
+            prepend apiSchemas = ["PhysicsMaterialAPI"]
+        )
+        {
+            float physics:dynamicFriction = 0.3
+            float physics:restitution = 0
+            float physics:staticFriction = 0.4
+        }
+    }
+
+    def PhysicsRevoluteJoint "prong_p_joint" (
+        prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+    )
+    {
+        custom float cotter:plastic_moment = 0.044803284
+        float drive:angular:physics:damping = 0.000044803284
+        float drive:angular:physics:stiffness = 0.022401642
+        float drive:angular:physics:targetPosition = 0
+        uniform token drive:angular:physics:type = "force"
+        uniform token physics:axis = "Z"
+        rel physics:body0 = </Cotter>
+        rel physics:body1 = </Cotter/prong_p>
+        point3f physics:localPos0 = (0, 0.000725, 0)
+        point3f physics:localPos1 = (0, 0.000725, 0)
+        float physics:lowerLimit = -2
+        float physics:upperLimit = 100
+    }
+
+    def Xform "prong_n" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </Cotter/prong_n/Material> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        point3f physics:centerOfMass = (0.006055, -0.000725, 0)
+        float3 physics:diagonalInertia = (8e-9, 8e-9, 8e-9)
+        float physics:mass = 0.0002
+
+        def Cylinder "visual"
+        {
+            uniform token axis = "X"
+            double height = 0.01211
+            color3f[] primvars:displayColor = [(0.5789061, 0.5789061, 0.48543546)]
+            double radius = 1
+            float3 xformOp:scale = (1, 0.000375, 0.00075)
+            double3 xformOp:translate = (0.006055, -0.000725, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def "collision"
+        {
+            def Capsule "capsule" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                uniform token axis = "X"
+                double height = 0.011359999999999999
+                custom float physxCollision:contactOffset = 0.0002
+                custom float physxCollision:restOffset = 0
+                double radius = 0.000375
+                token visibility = "invisible"
+                double3 xformOp:translate = (0.006055, -0.000725, 0)
+                uniform token[] xformOpOrder = ["xformOp:translate"]
+            }
+        }
+
+        def Material "Material" (
+            prepend apiSchemas = ["PhysicsMaterialAPI"]
+        )
+        {
+            float physics:dynamicFriction = 0.3
+            float physics:restitution = 0
+            float physics:staticFriction = 0.4
+        }
+    }
+
+    def PhysicsRevoluteJoint "prong_n_joint" (
+        prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+    )
+    {
+        custom float cotter:plastic_moment = 0.044803284
+        float drive:angular:physics:damping = 0.000044803284
+        float drive:angular:physics:stiffness = 0.022401642
+        float drive:angular:physics:targetPosition = 0
+        uniform token drive:angular:physics:type = "force"
+        uniform token physics:axis = "Z"
+        rel physics:body0 = </Cotter>
+        rel physics:body1 = </Cotter/prong_n>
+        point3f physics:localPos0 = (0, -0.000725, 0)
+        point3f physics:localPos1 = (0, -0.000725, 0)
+        float physics:lowerLimit = -100
+        float physics:upperLimit = 2
+    }
+}
+

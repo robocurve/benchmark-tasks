@@ -1,0 +1,23 @@
+{
+  "title": "Lock a castle nut with a cotter pin: push it through the slot and the stud's cross-hole, then spread its prongs",
+  "category": "Impact on jobs",
+  "keywords": [
+    "cotter pin",
+    "castle nut",
+    "blind alignment",
+    "bimanual",
+    "tool use",
+    "screwdriver",
+    "plastic bending",
+    "auto repair"
+  ],
+  "instruction": "Lock the castle nut with the cotter pin: push it through the nut's slot and the stud's hole, then spread its prongs apart.",
+  "context": "Automotive service technicians (about 826,000 US jobs, BLS 2025) pin castle nuts when they rebuild steering linkages (O*NET 49-3023.00: \"Tear down, repair, and rebuild faulty assemblies, such as power systems, steering systems, and linkages\"), and service manuals call for a new pin, bent once the nut is tightened (Suzuki RA410: \"bend new split pin\"). The difficulty is physical: a 2.2 mm pin has to go in square through a 2.8 mm hole hidden under the nut's slot, a thin blade has to get between prongs 0.7 mm apart and lever each one round past its yield (about 6 N, 8 mm out), and meanwhile the pin's head has to be held home.",
+  "setup": "Positions in cm from the midpoint between the two arm bases (x forward, y to the robot's left); heights above the table top. Fixture, its stud at (30.0, 0.0): a steel block 5 x 4 x 3 cm (x 26.5 to 31.5) carrying a steel plate 6 x 4 x 1 cm (x 26.0 to 32.0, its top 4.0 cm up), an upright 3/8-24 steel stud (9.5 mm) through the plate, and a zinc-plated 3/8-24 slotted hex nut on the plate: 9/16 in (14.3 mm) across flats, its flats facing front and back, 8.3 mm thick, six slots 3.0 mm wide and 3.2 mm deep, one running front to back over the stud's 2.8 mm cross-hole (the hole's centre 46.5 mm up). Cotter pin: a 1/16 x 1 in low-carbon steel cotter pin (ASME B18.8.1: half-round prongs 0.75 x 1.5 mm, 25.4 mm from under the eye to the short prong's end, the other prong 1 mm longer, eye 5 mm across, about 1.2 g), its prongs opened 0.7 mm apart along their length, lying flat in a groove 3.0 mm wide and 1.0 mm deep along the top of an aluminium block 6 x 2 x 2 cm (x 24.6 to 30.6, centred on y -12.0), prongs pointing at the robot, the eye and 8 mm of shank sticking out past the block's far end (the eye's centre at (31.7, -12.0)). Screwdriver: a precision flat-head 120 mm long, 30 g: a steel blade 2.5 x 0.4 mm for its first 8 mm, widening evenly to 4 x 3 mm 40 mm up, then a red plastic handle 18 mm square and 80 mm long; it stands tip down in a grey plastic rack (a 3 x 3 cm block 2.8 cm tall with a 4 mm square hole) centred at (22.0, 18.0).",
+  "scoring": "Tools: a phone camera held straight above the nut, a protractor and a 1 mm feeler gauge. Through: the pin passes through the stud's cross-hole along the slot (its axis within 15 degrees of the slot's), the prongs' roots out past the stud. Prong angle: in the photo, the angle between the pin's axis and a line from the prong's root, where it leaves the nut, to its tip, counted outwards; the prongs are that far apart in all (the sum of the two). Home: the feeler gauge does not go in between the pin's eye and the nut. At the end: 0 if the pin is not through; 0.25 through, the prongs less than 45 degrees apart; 0.5 at least 45 but less than 90 degrees apart, or one prong less than 30 degrees out; 0.75 at least 90 degrees apart and each prong at least 30 degrees out, but the eye not home, or the robot touching the pin, or the screwdriver's tip within 2 cm of the prongs' roots; 1.0 the same with the eye home, the robot off the pin and the screwdriver away, held for 1 s.",
+  "run_limit": "3,600 steps (3 minutes at 20 Hz)",
+  "reset_notes": "A spread cotter pin is not reused: each trial takes a new straight pin, its prongs opened 0.7 mm apart with a 0.7 mm shim pressed between them, laid in the block's groove as in the setup. Stand the screwdriver back in its rack.",
+  "fidelity": "Rigid-body PhysX. Each prong is a rigid link hinged where it leaves the nut; past the prong's plastic moment (45 N mm, low-carbon steel) the hinge keeps its bend, so levering a prong takes about the real force, but it bends there only, not along its length. The prongs stand 0.7 mm apart all along (a real pin's touch) so a blade fits between them. The steering arm is a steel plate on a block; nut, stud and screwdriver are simple solids.",
+  "scores": "Dream-1 run: 0.0 (3,600 steps; the right arm hovered over the pin in its block and came down close to it, but never took hold of it; the left arm moved about over the nut; the pin and the screwdriver never moved); demo: 1.0",
+  "media": "M-DRAJX6"
+}
