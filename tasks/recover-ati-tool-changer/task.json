@@ -1,0 +1,12 @@
+{
+  "title": "Recover a depressurized ATI QC-001 tool plate with support",
+  "category": "Impact on AI timelines",
+  "instruction": "Support the tool plate. Use the handled ball-end key to press the release piston while supporting the plate. Withdraw the tool and park it in the stand.",
+  "context": "Recover an end effector on a research robot when pneumatic unlock is unavailable.",
+  "setup": "Unpowered, depressurized QC-001 envelope on a bench, fitting removed. Captive guided 1.5 mm ball-end-key surrogate, aluminum tool body with blue grip and a separate ABS rest. Master datum (286, 0) mm and stand datum (286, 197) mm. Tool plate starts 22 mm above the bench.",
+  "scoring": "0.25 for 0.20 s continuous support before unlock. 0.65 after at least 7 mm piston stroke through the key with support and no more than 2 mm drop over the first 0.30 s. 1.00 after one second stably released in the stand. Unlock without support or a drop above 2 mm sets score to zero.",
+  "run_limit": "800 steps at 20 Hz (40 s)",
+  "reset_notes": "Recouple the plate, reset release piston and guided key, clear the stand, and check that stroke starts at zero.",
+  "fidelity": "Original drawing-inspired envelope. Captive key and force-based recoupled latch model an 11 mm bench stroke. OEM travel and access need measurement.",
+  "scores": "Dream-1 run: 0.0; scripted demo: 1.0"
+}
