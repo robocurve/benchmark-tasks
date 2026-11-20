@@ -1,0 +1,68 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    kilogramsPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Asset"
+{
+    def Xform "cradle" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        float physics:mass = 0.15
+        bool physics:kinematicEnabled = true
+        def Cube "StagingSlide" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+            float physxCollision:contactOffset = 0.00025
+            float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (0, -0.0055, 0.08)
+            float3 xformOp:scale = (0.06, 0.129, 0.006)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.18, 0.26, 0.33)]
+        }
+        def Cube "Support" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+            float physxCollision:contactOffset = 0.00025
+            float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (0, -0.024, 0.0375)
+            float3 xformOp:scale = (0.044, 0.083, 0.075)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.18, 0.26, 0.33)]
+        }
+        def Cube "Guide1" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+            float physxCollision:contactOffset = 0.00025
+            float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (-0.022, -0.015, 0.085)
+            float3 xformOp:scale = (0.004, 0.093, 0.004)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.18, 0.26, 0.33)]
+        }
+        def Cube "Guide3" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+            float physxCollision:contactOffset = 0.00025
+            float physxCollision:restOffset = 0
+            double size = 1
+            double3 xformOp:translate = (0.022, -0.015, 0.085)
+            float3 xformOp:scale = (0.004, 0.093, 0.004)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.18, 0.26, 0.33)]
+        }
+    }
+}

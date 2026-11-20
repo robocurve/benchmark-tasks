@@ -1,0 +1,18 @@
+{
+  "title": "Seat and lock a rotary C19 cord on a rear service panel",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "data-center",
+    "connector",
+    "locking ring",
+    "DGX"
+  ],
+  "instruction": "On the de-energized rear service panel, seat the target C19 cord with its rotary lock open. Turn the collar to its lock indication and release both hands.",
+  "context": "Models the workflow of a data-center PSU replacement using a reproducible SSEMCO 620890 and Schurter 4798.9000 reference pair.",
+  "setup": "Rear-facing slice of the lower PSU row. The target is flanked by two occupied bays with rear-exiting cords. The loose connector starts horizontal in a staging support.",
+  "scoring": "0.25 for keyed insertion. 0.60 for alignment with the authored seating witness after unlocked entry. 1.00 for matching the modeled lock indication while retaining the seat witness with both hands clear for one second. Premature lock indication, forced insertion, or losing the witness after confirmed lock invalidates the trial.",
+  "run_limit": "1,200 control steps (60 seconds at 20 Hz)",
+  "reset_notes": "Restore the cord with its nose in the open cradle, reset the ring to unlocked, keep the fixture and neighboring plugs fixed and clear the trial state.",
+  "fidelity": "NVIDIA H100/H200 access arrangement and service sequence. SSEMCO 620890 rotary C19 and Schurter 4798.9000 C20 are the commercial bench references. The simulated 36-degree detent, internal geometry and rotary/retention resistance are approximations.",
+  "scores": "Revised Lambda simulation: scripted demo 1.00, partially seated with collar turned 0.00, seated and unlocked 0.60, and backout after indicated lock 0.00."
+}

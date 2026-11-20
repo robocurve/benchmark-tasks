@@ -1,0 +1,32 @@
+#usda 1.0
+(
+    defaultPrim = "Scene"
+    metersPerUnit = 1
+    kilogramsPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Scene"
+{
+    def Xform "Bay" (
+        prepend references = @./assets/dgx_psu_bay.usda@
+    )
+    {
+        double3 xformOp:translate = (0.235, 0.081, 0.8425)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+    def Xform "Cradle" (
+        prepend references = @./assets/dgx_plug_cradle.usda@
+    )
+    {
+        double3 xformOp:translate = (0.235, -0.042, 0.7475)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+    def Xform "Cord" (
+        prepend references = @./assets/dgx_locking_cord.usda@
+    )
+    {
+        double3 xformOp:translate = (0.235, -0.005, 0.8425)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+}
