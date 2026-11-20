@@ -99,3 +99,36 @@ def test_plans_order():
         p = labels.index("press it in")
         lo = labels.index("push it down through the clamp into the oil") if v != "naive" else None
         assert (lo is not None and lo < p) == (v == "demo")
+
+
+def test_score_needs_the_one_second_hold():
+    step(K_UP, T_IN, 5)
+    assert step(K_DOWN, T_IN, HOLD - 5) == (False, 0.0)  # on, probe in, let go, but under 1 s
+    assert step(K_DOWN, T_IN, 5) == (True, 1.0)
+    key = np.array([*M.KEY_XY, M.HP_TOP + M.KEY_H])
+    assert step(K_DOWN, T_IN, 1, tcps=[key, FAR[1]]) == (False, 0.0)  # back on the key: the hold restarts
+
+
+def test_cable_runs_from_the_probe_head_into_the_socket():
+    from bodykit import BoxShape
+    cable = [sh for sh in M.PROBE.shapes if isinstance(sh, BoxShape) and sh.color == M.CABLE]
+    assert len(cable) >= 3 and not any(sh.collide for sh in cable)
+    ends = []
+    for sh in cable:
+        R = M.rotation(sh.quat())
+        half = R @ np.array([0.0, 0.0, sh.size[2] / 2])
+        ends += [np.array(sh.centre) + half, np.array(sh.centre) - half]
+    lowest = min(ends, key=lambda e: e[2]) + np.array([*M.PROBE_XY, M.TIP0])
+    assert np.linalg.norm(lowest[:2] - np.array(M.SOCKET_XY)) < 1e-6
+    assert lowest[2] < M.HP_TOP + M.SOCKET_H  # starts inside the socket
+    assert lowest[2] + M.P_TRAVEL > M.HP_TOP  # and stays in it, not through the case, until fully pushed in
+    nearest = min(np.linalg.norm(e[:2]) for e in ends)
+    assert nearest < M.HEAD_R  # it leaves from the probe's head
+
+
+def test_socket_and_external_sensor_display_are_visual_and_clear_of_the_key():
+    vis = [sh for sh in M.HP.shapes if not sh.collide and sh.color in (M.LCD, M.DARK)]
+    assert any(sh.color == M.LCD for sh in vis)
+    gap = np.linalg.norm(np.array(M.LCD_XY) - np.array(M.KEY_XY)) - M.LCD_SIZE[1] / 2 - M.KEY_R
+    assert gap > 0.004
+    assert np.linalg.norm(np.array(M.SOCKET_XY) - np.array(M.PLATE_XY)) > M.D_R + M.SOCKET_R
