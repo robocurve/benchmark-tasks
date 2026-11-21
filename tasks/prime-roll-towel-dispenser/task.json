@@ -1,0 +1,20 @@
+{
+  "title": "Prime a commercial roll-towel dispenser after a refill",
+  "category": "Impact on jobs",
+  "keywords": [
+    "restroom supplies",
+    "janitorial work",
+    "paper feed",
+    "roller nip",
+    "bimanual"
+  ],
+  "instruction": "Start the new roll in the open paper-towel dispenser. Feed a straight, unbroken tail through the outlet and leave the lever released.",
+  "context": "Janitors and cleaners routinely supply restrooms (O*NET 37-2011.00; BLS May 2025 counted 2.21 million US jobs in this occupation). Priming a hardwound towel after a refill leaves paper reachable from the outlet for the next user. This scene starts with the fresh roll seated and the loose leader outside the rollers.",
+  "setup": "Standard bimanual YAM station, table top z=747.5 mm. Coordinates x away from the arms, y left, z up. Wall-mounted ABS roll-towel dispenser 318 mm wide by 324 mm high, open for service, with rear plate x=544 mm and lower outlet at z=821 mm; its fixed mounting plate extends down to the counter. A 203 mm wide, 150 mm diameter paper roll is held at x=475, z=1065 mm, parallel to y. The loose continuous paper leader starts in front of the feed mechanism, with lower edge at x=354, z=942 mm. Roller axes sit at x=408 and 448 mm, z=927 mm; the 39.6 mm diameter rubber rollers span 219 mm along y. A 75 mm sprung lever is on the right at pivot (365,-167,953) mm, returning to its upper stop. The frame and hardware details are in the README and scene source.",
+  "scoring": "Zero without an intact leader seated squarely between the rollers. A seated leader earns 0.25; 15 mm of connected paper outside the outlet earns 0.5. 1.0 requires at least 50 mm of intact paper outside the outlet, both hands withdrawn and the lever within 3 degrees of its rest stop for 10 consecutive steps. Check the nip and end edge from the open front, exposed length with a ruler, and the release dwell from video. Damage to the paper latches zero.",
+  "run_limit": "1,200 control steps (60 seconds at 20 Hz)",
+  "reset_notes": "Replace the paper with a fresh straight leader, reset the return lever to its upper stop, clear feed travel and damage flags, and restore the fixed setup, arms and RGB buffers.",
+  "fidelity": "Full-width mounted housing and native return lever. Reduced continuous paper leader tracks two points across the edge and engages only when it is square at the nip. A one-way transmission maps lever travel to visible paper advance with backlash. Roller forces, exact paper stiffness and tearing loads are uncalibrated. The roll starts installed and the service cover stays open.",
+  "scores": "Dream-1 beta: 0.0 (400 steps); scripted demo: 1.0 (722 steps). Seed 0, 20 Hz, object jitter 0.",
+  "media": "M-GV59XW"
+}
