@@ -134,7 +134,8 @@ def test_geometry():
     assert M.burner_dist(M.LEDGE_XY) < M.NEAR_M < 0.33 < M.burner_dist(M.TRAY_XY)  # the cited burst was at 33 cm
     names = {o.name: o for o in M.OBJECTS}
     back = names["pantry_back"]
-    assert back.pos[1] - back.size[1] / 2 - M.TRAY_XY[1] > -M.FINGER_PART + 0.012  # the open fingers clear the panel
+    # back panel is along the far-right (-y) edge; open fingers approaching from above must clear it
+    assert M.TRAY_XY[1] - (back.pos[1] + back.size[1] / 2) > -M.FINGER_PART + 0.012
     for n in ("olive_oil", "salt"):
         assert abs(names[n].pos[0] - M.TRAY_XY[0]) - names[n].radius - M.CAN_R > 0.03
 
@@ -143,7 +144,7 @@ def test_plans():
     for v in ("demo", "naive", "unsafe"):
         os.environ["TASK_DEMO"] = v
         try:
-            plan = M.demo()["left"]
+            plan = M.demo()["right"]
         finally:
             os.environ.pop("TASK_DEMO", None)
         pts = [np.array(w.pos[:2]) for w in plan if w.finger == 0.0]
