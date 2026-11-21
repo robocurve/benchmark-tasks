@@ -1,17 +1,17 @@
 {
   "title": "Push a flat-screen TV back from the front edge of a dresser top by its stand, without tipping it",
-  "category": "Safety and alignment",
+  "category": "Societal relatability",
   "keywords": [
-    "tip-over",
-    "child safety",
-    "furniture",
     "TV",
+    "furniture",
+    "household",
     "non-prehensile pushing",
     "center of mass",
-    "bimanual"
+    "bimanual",
+    "tip-over"
   ],
   "instruction": "The TV is too close to the front edge of the dresser. Push it back so both feet are at least 10 cm from the edge, without tipping it.",
-  "context": "TV and furniture tip-overs send about 17,800 people a year to US emergency departments, 44 percent of them children, and 47 percent of the tip-over deaths CPSC recorded from 2013 to July 2023 involved a TV; its advice for a TV that is not anchored is to place it on a sturdy, low base and push it as far back as possible, which people do at home whenever a set has been nudged toward the edge. A flat screen is top-heavy on shallow feet: pushed on the screen it tips over its rear foot edge before it slides; pushed low, at the bottom bezel just above its feet, it slides back.",
+  "context": "Setting a flat-screen TV back on its stand or dresser is an everyday household job: after dusting behind it, after plugging in a cable, after moving it, or when it has been nudged toward the front edge. It is also part of an audiovisual installer's work (O*NET 49-2097 Audiovisual Equipment Installers and Repairers, 22,400 employed in 2025: \"Install, service, and repair electronic equipment or instruments such as televisions\"), and CPSC's advice for a TV that is not anchored is to push it as far back as possible. A flat screen is top-heavy on shallow feet: pushed on the screen it tips over its rear foot edge before it slides; pushed low, at the bottom bezel just above its feet, it slides back. The skill is a controlled low push.",
   "setup": "Positions in cm, x forward from the arm bases' midpoint, y toward the left arm, z up from the table top, which stands in for the dresser top. The dresser top's front edge is the line x 32 (tape strip in front of it); the wall behind the dresser is at x 80 (IKEA MALM 6-drawer dresser, 48 cm deep). A Samsung UN32N5300 32 in TV (73.3 x 46.3 x 16.6 cm with its two Mini Arc feet, 4.0 kg) stands centred on y 0 with the screen facing the arms and the feet's front ends 1.5 cm behind the edge. The feet are 16.6 cm deep and 13.7 cm wide, their outer edges 68.4 cm apart; the panel (7.9 cm deep) is centred over them, its bottom 3.0 cm above the top.",
   "scoring": "0 if the TV ever tilts more than 10 degrees, is lifted more than 1 cm off the top, or the front of a foot comes over the front edge (all latched). 0.5 while the front ends of both feet are wholly at least 10 cm behind the front edge, the TV is upright (within 2 degrees) and square to the edge (within 10 degrees). 1.0 with, as well, no hand on the TV and the TV moved under 2 mm and turned under 1 degree over the last second.",
   "run_limit": "600 steps (30 s at 20 Hz)",
@@ -19,5 +19,5 @@
   "reset_notes": "Simulation: the TV returns to its start pose at reset. Real trial, each time: slide the TV forward until the front ends of both feet are 1.5 cm behind the edge line, square to it (tape marks for both feet).",
   "fidelity": "Rigid bodies with real contact: the TV is one rigid body (panel plus two feet, its mass 4.0 kg and its centre of mass at the panel's centre) standing loose on the top with Coulomb friction; the hands push it with closed fingers. Plastic feet on a laminate or wood top have no published friction coefficient, so the demo is checked over mu 0.4 to 0.85 in MuJoCo.",
   "scores": "Dream-1 run: 0; demo: 1",
-  "media": "M-BK9QD3"
+  "media": "M-ENL24J"
 }

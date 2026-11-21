@@ -13,23 +13,20 @@ without tipping it.
 
 The instruction gives the goal only; where to push is left for the robot to work out.
 
-## Why the task matters (category Safety and alignment)
+## Why the task matters (category Societal relatability)
 
-- TV and furniture tip-overs injure about 17,800 people a year in the US, and "children under age 18 suffered 44
-  percent of injuries ... a child being treated in an emergency department (ED-treated) every 53 minutes"; "Of the 217
-  reported tip-over fatalities from 2013 through July 2023 to all ages, 47 percent involved a television" (CPSC news
-  release, 8 February 2024, on its 2023 annual tip-over report).
-- CPSC's advice for a TV that is not anchored is exactly this operation: "always place TVs on a sturdy, low base, push
-  the TV back as far as possible" (same release; the Anchor It! campaign gives the same line).
-- Moving a TV back on its stand is an everyday household operation (after dusting, after a child or pet has nudged it
-  forward, after plugging in a cable behind it). Doing it safely needs a physical judgement, not only a reach: where to
-  push so the set slides instead of tipping toward or away from the person pushing.
+Setting a flat-screen TV back on its stand after dusting, cabling or moving is a recognizable household job, and part of
+an audiovisual installer's work (O*NET 49-2097: "Install, service, and repair electronic equipment or
+instruments such as televisions, radios, and videocassette recorders"; 22,400 employed in 2025), and the skill is the
+controlled low push that slides a top-heavy set back instead of tipping it.
 
-Limits: no source gives how often a TV is pushed back on its stand, or how many tip-overs start with a TV near the
-front edge.
+Background: CPSC's advice for a TV that is not anchored is to "push the TV back as far as possible" (news release,
+8 February 2024), which is what people are told to do at home.
 
-Sources: https://www.cpsc.gov/Newsroom/News-Releases/2024/Ahead-of-Sundays-Game-CPSC-Reminds-Families-to-Tackle-the-Deadly-Hazard-of-TV-and-Furniture-Tip-Overs ;
-https://www.anchorit.gov
+Limits: no source gives how often a TV is pushed back on its stand.
+
+Sources: https://www.onetonline.org/link/summary/49-2097.00 ;
+https://www.cpsc.gov/Newsroom/News-Releases/2024/Ahead-of-Sundays-Game-CPSC-Reminds-Families-to-Tackle-the-Deadly-Hazard-of-TV-and-Furniture-Tip-Overs
 
 ## What is new here
 
@@ -79,7 +76,7 @@ centre is 24.7 cm up; the demo pushes at 4.8 cm.
 - The real set is unplugged and has no cable attached (a cable would hold it back).
 - Before a trial session, tilt-test the friction: lay a board with the same top finish under one foot and raise it until
   the foot slides (mu = tan of the angle); the task holds over mu 0.4 to 0.85 (Fidelity).
-- Safety: the TV is pushed back, toward the wall; a tipped set falls against the wall, away from the robot and the
+- Operator note: the TV is pushed back, toward the wall; a tipped set falls against the wall, away from the robot and the
   operator. A foam pad on the wall at screen height protects the panel.
 
 ## Real trial hardware
@@ -151,3 +148,18 @@ only appears to move up; the scorer latches 0 if the TV is ever lifted more than
 ## Licence
 
 MIT (LICENSE).
+
+## Revision 1
+
+Reviewer (Importance, not met): "The instruction explicitly forbids tipping and presents no person endangered by the
+robot's choice, but positioning a TV is a recognizable household task requiring controlled low pushing."
+
+Reviewer (what to change): "Change the category to societal relatability and explain the task's relevance as a
+recognizable household manipulation. The current safety and alignment category does not fit because the instruction
+already says not to tip the TV, and avoiding a manipulation accident is a capability test."
+
+This version: the category is Societal relatability (task.json "category"); "Why the task matters" now explains the
+task as a recognizable household manipulation (setting a TV back on its stand) with an occupational source (O*NET
+49-2097) and why the low controlled push is the skill, in one line; the tip-over statistics are no longer used as the category
+argument (CPSC's "push the TV back" advice stays as background). task.json "context" and "keywords" follow. The
+instruction, scene, scoring, demo and tests are unchanged.
