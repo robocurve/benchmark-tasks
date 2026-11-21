@@ -1,0 +1,357 @@
+#usda 1.0
+(
+    defaultPrim = "Rig"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Rig"
+{
+    def Material "material" (
+        prepend apiSchemas = ["PhysicsMaterialAPI"]
+    )
+    {
+        float physics:dynamicFriction = 1
+        float physics:restitution = 0
+        float physics:staticFriction = 1
+    }
+
+    def Xform "gearbox" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxContactReportAPI"]
+    )
+    {
+        bool physics:kinematicEnabled = 1
+        custom float physxContactReport:threshold = 0
+        quatf xformOp:orient = (6.123233996e-17, 0, 0, 1)
+        double3 xformOp:translate = (0.744628, -0.26, 0.91)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "extension" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI", "PhysicsFilteredPairsAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.565
+            rel material:binding:physics = </Rig/material>
+            rel physics:filteredPairs = </Rig/crank>
+            custom float physxCollision:contactOffset = 0.0006
+            color3f[] primvars:displayColor = [(0.3, 0.35, 0.4)]
+            double radius = 0.019
+            quatf xformOp:orient = (0.70710677, 0, -0.70710677, 0)
+            double3 xformOp:translate = (-0.3275, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Cube "outer_leg" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </Rig/material>
+            custom float physxCollision:contactOffset = 0.0006
+            color3f[] primvars:displayColor = [(0.21, 0.26, 0.29)]
+            double size = 1
+            quatf xformOp:orient = (1, 0, 0, 0)
+            float3 xformOp:scale = (0.126, 0.13, 0.48)
+            double3 xformOp:translate = (-0.61, 0, -0.18)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+        }
+
+        def Capsule "keeper_stay" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.20500975586542217
+            rel material:binding:physics = </Rig/material>
+            custom float physxCollision:contactOffset = 0.0006
+            color3f[] primvars:displayColor = [(0.3, 0.35, 0.4)]
+            double radius = 0.009
+            quatf xformOp:orient = (0.7071064633, 0.707066379, -0.007559621641, 0.0006613811937)
+            double3 xformOp:translate = (-0.589, 0.1025, -3.0741798e-12)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "keeper_support" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.52
+            rel material:binding:physics = </Rig/material>
+            custom float physxCollision:contactOffset = 0.0006
+            color3f[] primvars:displayColor = [(0.3, 0.35, 0.4)]
+            double radius = 0.009
+            quatf xformOp:orient = (0.7044160264, -0.06162841676, -0.7044160264, 0.06162841676)
+            double3 xformOp:translate = (-0.328, 0.205, -2.744292293e-11)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "keeper_back" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.046000000000000006
+            rel material:binding:physics = </Rig/material>
+            custom float physxCollision:contactOffset = 0.0006
+            color3f[] primvars:displayColor = [(0.17, 0.62, 0.42)]
+            double radius = 0.006
+            quatf xformOp:orient = (1, 1.063572413e-09, 0, 0)
+            double3 xformOp:translate = (-0.068, 0.205, -2.744292293e-11)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "keeper_rail_1"
+        {
+            uniform token axis = "Z"
+            double height = 0.047
+            color3f[] primvars:displayColor = [(0.17, 0.62, 0.42)]
+            double radius = 0.004
+            quatf xformOp:orient = (0.7044160264, -0.06162841676, -0.7044160264, 0.06162841676)
+            double3 xformOp:translate = (-0.0395, 0.205, 0.02299999999)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "keeper_rail1"
+        {
+            uniform token axis = "Z"
+            double height = 0.047
+            color3f[] primvars:displayColor = [(0.17, 0.62, 0.42)]
+            double radius = 0.004
+            quatf xformOp:orient = (0.7044160264, -0.06162841676, -0.7044160264, 0.06162841676)
+            double3 xformOp:translate = (-0.0395, 0.205, -0.02300000005)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "shoe" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"]
+    )
+    {
+        float physics:mass = 40
+        custom float physxContactReport:threshold = 0
+        quatf xformOp:orient = (6.123233996e-17, 0, 0, 1)
+        double3 xformOp:translate = (1.354628, -0.2600000909, 0.56)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Cube "inner_leg"
+        {
+            color3f[] primvars:displayColor = [(0.47, 0.5, 0.53)]
+            double size = 1
+            quatf xformOp:orient = (1, 0, 0, 0)
+            float3 xformOp:scale = (0.096, 0.1, 0.6995)
+            double3 xformOp:translate = (0, 0, -0.18975)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+        }
+
+        def Cube "foot_plate" (prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"])
+        {
+            custom float physxCollision:contactOffset = 0.000008
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.25, 0.28, 0.32)]
+            double size = 1
+            quatf xformOp:orient = (1, 0, 0, 0)
+            float3 xformOp:scale = (0.23, 0.21, 0.026)
+            double3 xformOp:translate = (0, 0, -0.5395)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+        }
+    }
+
+    def Cube "ground_pad" (prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"])
+        {
+            custom float physxCollision:contactOffset = 0.000008
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.38, 0.38, 0.02)
+            double3 xformOp:translate = (1.354628, -0.2600000908, -0.0025)
+            color3f[] primvars:displayColor = [(0.22, 0.38, 0.47)]
+            uniform token[] xformOpOrder = ["xformOp:translate","xformOp:scale"]
+    }
+
+    def Xform "slider" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, 0)
+        float3 physics:diagonalInertia = (0.000125275, 0.000125275, 0.00009375)
+        float physics:mass = 0.3
+        quatf physics:principalAxes = (0.70710677, 0, 0.70710677, 0)
+        custom float physxContactReport:threshold = 0
+        quatf xformOp:orient = (6.123233996e-17, 0, 0, 1)
+        double3 xformOp:translate = (0.744628, -0.26, 0.91)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Cylinder "part656"
+        {
+            uniform token axis = "Z"
+            double height = 0.056
+            color3f[] primvars:displayColor = [(0.5, 0.5, 0.5)]
+            double radius = 0.025
+            quatf xformOp:orient = (0.70710677, 0, 0.70710677, 0)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def Xform "spindle" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, 0)
+        float3 physics:diagonalInertia = (0.002, 0.002, 0.002)
+        float physics:mass = 0.35
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        custom float physxContactReport:threshold = 0
+        quatf xformOp:orient = (5.839832055e-17, 1.841291974e-17, 0.3007057995, 0.9537169507)
+        double3 xformOp:translate = (0.744628, -0.26, 0.91)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+    }
+
+    def Xform "crank" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.21941174097, 0, 0.12904839129)
+        float3 physics:diagonalInertia = (0.0022202427838, 0.013127456653, 0.015312980736)
+        float physics:mass = 0.62
+        quatf physics:principalAxes = (0.37666094477, -0.37666094477, 0.59843674075, 0.59843674075)
+        custom float physxContactReport:threshold = 0
+        quatf xformOp:orient = (5.839832055e-17, 1.841291974e-17, 0.3007057995, 0.9537169507)
+        double3 xformOp:translate = (0.744628, -0.26, 0.91)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "shaft" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.262128
+            rel material:binding:physics = </Rig/material>
+            custom float physxCollision:contactOffset = 0.0006
+            color3f[] primvars:displayColor = [(0.74, 0.43, 0.13)]
+            double radius = 0.011
+            quatf xformOp:orient = (0.70710677, 0, -0.70710677, 0)
+            double3 xformOp:translate = (0.131064, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "web" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.3556
+            rel material:binding:physics = </Rig/material>
+            custom float physxCollision:contactOffset = 0.0006
+            color3f[] primvars:displayColor = [(0.94, 0.33, 0.055)]
+            double radius = 0.011
+            quatf xformOp:orient = (0, 1, 0, 0)
+            double3 xformOp:translate = (0.262128, 0, 0.1778)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "axle" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.094
+            rel material:binding:physics = </Rig/material>
+            custom float physxCollision:contactOffset = 0.0006
+            color3f[] primvars:displayColor = [(0.55, 0.6, 0.64)]
+            double radius = 0.006
+            quatf xformOp:orient = (0.70710677, 0, -0.70710677, 0)
+            double3 xformOp:translate = (0.309128, 0, 0.3556)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+
+    }
+
+    def PhysicsPrismaticJoint "selector"
+    {
+        uniform token physics:axis = "X"
+        rel physics:body0 = </Rig/gearbox>
+        rel physics:body1 = </Rig/slider>
+        point3f physics:localPos0 = (0, 0, 0)
+        point3f physics:localPos1 = (0, 0, 0)
+        quatf physics:localRot0 = (-8.7667405e-18, 0, 0, 1)
+        quatf physics:localRot1 = (-8.7667405e-18, 0, 0, 1)
+        float physics:lowerLimit = 0
+        float physics:upperLimit = 0.028
+    }
+
+    def PhysicsRevoluteJoint "rotation"
+    {
+        uniform token physics:axis = "X"
+        rel physics:body0 = </Rig/slider>
+        rel physics:body1 = </Rig/spindle>
+        point3f physics:localPos0 = (0, 0, 0)
+        point3f physics:localPos1 = (0, 0, 0)
+        quatf physics:localRot0 = (1, 0, 0, 0)
+        quatf physics:localRot1 = (1, -1.528226e-17, -3.7103e-18, 2.0041193e-17)
+    }
+
+    def PhysicsRevoluteJoint "fold_joint"
+    {
+        uniform token physics:axis = "Y"
+        rel physics:body0 = </Rig/spindle>
+        rel physics:body1 = </Rig/crank>
+        point3f physics:localPos0 = (0, 0, 0)
+        point3f physics:localPos1 = (0, 0, 0)
+        quatf physics:localRot0 = (1, -1.528226e-17, -3.7103e-18, 2.0041193e-17)
+        quatf physics:localRot1 = (1, -1.528226e-17, -3.7103e-18, 2.0041193e-17)
+        float physics:lowerLimit = 0
+        float physics:upperLimit = 91
+    }
+
+    def PhysicsPrismaticJoint "screw_output"
+    {
+        uniform token physics:axis = "Z"
+        rel physics:body0 = </Rig/gearbox>
+        rel physics:body1 = </Rig/shoe>
+        point3f physics:localPos0 = (-0.61, -2.7755576e-17, -0.35)
+        point3f physics:localPos1 = (0, 0, 0)
+        quatf physics:localRot0 = (1, 0, 0, 2.040134e-17)
+        quatf physics:localRot1 = (1, 0, 0, 2.040134e-17)
+        float physics:lowerLimit = -0.003
+        float physics:upperLimit = 0.306
+    }
+    def Xform "roller" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0,0,0)
+        float3 physics:diagonalInertia = (0.00001014, 0.000086, 0.000086)
+        float physics:mass = 0.12
+        quatf physics:principalAxes = (1,0,0,0)
+        custom float physxContactReport:threshold = 0
+        quatf xformOp:orient = (5.839832055e-17, 1.841291974e-17, 0.3007057995, 0.9537169507)
+        double3 xformOp:translate = (0.34, -0.056036219227, 1.2012904669)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Capsule "grip" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.085
+            rel material:binding:physics = </Rig/material>
+            custom float physxCollision:contactOffset = 0.0006
+            color3f[] primvars:displayColor = [(0.13, 0.115, 0.105)]
+            double radius = 0.013
+            quatf xformOp:orient = (0.70710677, 0, -0.70710677, 0)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+
+    def PhysicsRevoluteJoint "roller_bearing"
+    {
+        uniform token physics:axis = "X"
+        rel physics:body0 = </Rig/crank>
+        rel physics:body1 = </Rig/roller>
+        point3f physics:localPos0 = (0.404628, 0, 0.3556)
+        point3f physics:localPos1 = (0, 0, 0)
+    }
+}
