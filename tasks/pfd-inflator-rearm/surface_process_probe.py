@@ -36,7 +36,7 @@ def body(stage,path,position,mass):
     return p
 
 
-def install(geometry, out, plan):
+def install(geometry, out, plan, stock_order):
     import disposition_score as grading
     from yam_arena import inspect_embodiment as official
     initial=official.YamArenaEmbodiment._ensure_sim;observe0=official.YamArenaEmbodiment._observation
@@ -87,7 +87,7 @@ def install(geometry, out, plan):
                 if spec.name=='build_anchor':
                     @clone
                     def spawn(path,cfg,*a,**kw):
-                        p=spawn_cuboid.__wrapped__(path,cfg,*a,**kw);geometry.build(p.GetStage());return p
+                        p=spawn_cuboid.__wrapped__(path,cfg,*a,**kw);geometry.build(p.GetStage(), stock_order);return p
                     obj.spawner_cfg.func=spawn;obj.object_cfg.spawn=obj.spawner_cfg
                 return obj
             scene.task_object=task_object;installed=True

@@ -17,6 +17,8 @@ def main():
     parser.add_argument('--mode', choices=('demo','dream','setup'), required=True)
     parser.add_argument('--log-dir', type=Path, required=True)
     parser.add_argument('--gpu', choices=('auto','0','1'), default='auto')
+    parser.add_argument('--stock-order', choices=('intact-first','pierced-first'), default='intact-first',
+                        help='Identity of the cartridge at stand A. Visible to the scene builder only.')
     parser.add_argument('--config-only', action='store_true')
     args = parser.parse_args()
     out = args.log_dir.resolve()
@@ -55,7 +57,7 @@ def main():
                '-P','rows_per_request=48','-P','preroll_steps=32','-P','timeout_s=300']
     else:
         argv+=['-P',f'hold_s={steps/20+5}']
-    config=dict(mode=args.mode,steps=steps,canonical_instruction=instruction,argv=argv,
+    config=dict(mode=args.mode,stock_order=args.stock_order,steps=steps,canonical_instruction=instruction,argv=argv,
                 config_only=args.config_only,controller_installed=plan is not None,physics_hz=240,control_hz=20)
     (out/'configuration.json').write_text(json.dumps(config,indent=2))
     with ZipFile(out/'source.zip','w',ZIP_DEFLATED) as archive:
@@ -78,7 +80,7 @@ def main():
     import probe_geometry as geometry
     from surface_process_probe import install
     from image_health import install as guard_cameras
-    save=install(geometry,out,plan)
+    save=install(geometry,out,plan,args.stock_order)
     save_images=guard_cameras(out)
     sys.argv=argv
     try:

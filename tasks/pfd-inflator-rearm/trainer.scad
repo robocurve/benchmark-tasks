@@ -1,129 +1,52 @@
-// Millimetres. Inert training fixture, dimensional assembly reference.
-// Select "assembly", "frame", "lever", "follower", "spare" (intact) or "reserve" (pierced).
+// Millimetres. MD3075/MA7203 dry functional replica. Inverted service mount; bench nominal dimensions.
+// Select "assembly", "frame", "lever", "follower", "spare" (intact) or "reserve" (pierced). Both stock parts use the same shoulder ring.
 part = "assembly";
 
 module installed() {
   color([0.76, 0.77, 0.75]) translate([0, 0, 0]) rotate([0,0,0]) rotate_extrude($fn=48) polygon([[0, 0], [10, 0], [12.7, 4], [12.7, 103], [12.2, 109], [10, 116], [6, 122], [5.2, 124], [5.2, 139], [3.3, 139], [1, 139], [1, 136.199997], [0, 136.199997]]); // metal
-  color([0.42, 0.42, 0.42]) translate([-12.7, 0, 95]) rotate([0,0,0]) cube([0.45, 2, 15],center=true); // index_b
-  color([0.42, 0.42, 0.42]) translate([12.7, 0, 95]) rotate([0,0,0]) cube([0.45, 2, 15],center=true); // index_a
+  color([0.95, 0.95, 0.93]) translate([-12.7, 0, 95]) rotate([0,0,0]) cube([0.45, 2, 15],center=true); // index_b
+  color([0.95, 0.95, 0.93]) translate([12.7, 0, 95]) rotate([0,0,0]) cube([0.45, 2, 15],center=true); // index_a
   color([0.42, 0.42, 0.42]) translate([0, 0, 0]) rotate([0,0,0]) rotate_extrude($fn=48) polygon([[5.3, 124], [7.3, 125], [7.3, 133], [5.3, 134]]); // bayonet
   color([0.42, 0.42, 0.42]) translate([0, 0, 0]) rotate([0,0,0]) rotate_extrude($fn=48) polygon([[5.2, 134], [5.8, 134.5], [5.8, 135.5], [5.2, 136]]); // seal_ring
-  color([0.42, 0.42, 0.42]) translate([6.25, 0, 134.5]) rotate([0,0,0]) cube([1.4, 1.4, 5],center=true); // ring_web_0
-  color([0.42, 0.42, 0.42]) translate([-3.125, 5.412659, 134.5]) rotate([0,0,0]) cube([1.4, 1.4, 5],center=true); // ring_web_1
-  color([0.42, 0.42, 0.42]) translate([-3.125, -5.412659, 134.5]) rotate([0,0,0]) cube([1.4, 1.4, 5],center=true); // ring_web_2
-  color([0.42, 0.42, 0.42]) translate([6.5, 0, 137]) rotate([0,0,0]) cube([1.6, 1.79, 1.5],center=true); // ring_land_0
-  color([0.42, 0.42, 0.42]) translate([6.278518, 1.682324, 137]) rotate([0,0,15]) cube([1.6, 1.79, 1.5],center=true); // ring_land_1
-  color([0.42, 0.42, 0.42]) translate([5.629165, 3.25, 137]) rotate([0,0,30]) cube([1.6, 1.79, 1.5],center=true); // ring_land_2
-  color([0.42, 0.42, 0.42]) translate([4.596194, 4.596194, 137]) rotate([0,0,45]) cube([1.6, 1.79, 1.5],center=true); // ring_land_3
-  color([0.42, 0.42, 0.42]) translate([3.25, 5.629165, 137]) rotate([0,0,60]) cube([1.6, 1.79, 1.5],center=true); // ring_land_4
-  color([0.42, 0.42, 0.42]) translate([1.682324, 6.278518, 137]) rotate([0,0,75]) cube([1.6, 1.79, 1.5],center=true); // ring_land_5
-  color([0.42, 0.42, 0.42]) translate([0, 6.5, 137]) rotate([0,0,90]) cube([1.6, 1.79, 1.5],center=true); // ring_land_6
-  color([0.42, 0.42, 0.42]) translate([-1.682324, 6.278518, 137]) rotate([0,0,105]) cube([1.6, 1.79, 1.5],center=true); // ring_land_7
-  color([0.42, 0.42, 0.42]) translate([-3.25, 5.629165, 137]) rotate([0,0,120]) cube([1.6, 1.79, 1.5],center=true); // ring_land_8
-  color([0.42, 0.42, 0.42]) translate([-4.596194, 4.596194, 137]) rotate([0,0,135]) cube([1.6, 1.79, 1.5],center=true); // ring_land_9
-  color([0.42, 0.42, 0.42]) translate([-5.629165, 3.25, 137]) rotate([0,0,150]) cube([1.6, 1.79, 1.5],center=true); // ring_land_10
-  color([0.42, 0.42, 0.42]) translate([-6.278518, 1.682324, 137]) rotate([0,0,165]) cube([1.6, 1.79, 1.5],center=true); // ring_land_11
-  color([0.42, 0.42, 0.42]) translate([-6.5, 0, 137]) rotate([0,0,180]) cube([1.6, 1.79, 1.5],center=true); // ring_land_12
-  color([0.42, 0.42, 0.42]) translate([-6.278518, -1.682324, 137]) rotate([0,0,195]) cube([1.6, 1.79, 1.5],center=true); // ring_land_13
-  color([0.42, 0.42, 0.42]) translate([-5.629165, -3.25, 137]) rotate([0,0,210]) cube([1.6, 1.79, 1.5],center=true); // ring_land_14
-  color([0.42, 0.42, 0.42]) translate([-4.596194, -4.596194, 137]) rotate([0,0,225]) cube([1.6, 1.79, 1.5],center=true); // ring_land_15
-  color([0.42, 0.42, 0.42]) translate([-3.25, -5.629165, 137]) rotate([0,0,240]) cube([1.6, 1.79, 1.5],center=true); // ring_land_16
-  color([0.42, 0.42, 0.42]) translate([-1.682324, -6.278518, 137]) rotate([0,0,255]) cube([1.6, 1.79, 1.5],center=true); // ring_land_17
-  color([0.42, 0.42, 0.42]) translate([-0, -6.5, 137]) rotate([0,0,270]) cube([1.6, 1.79, 1.5],center=true); // ring_land_18
-  color([0.42, 0.42, 0.42]) translate([1.682324, -6.278518, 137]) rotate([0,0,285]) cube([1.6, 1.79, 1.5],center=true); // ring_land_19
-  color([0.42, 0.42, 0.42]) translate([3.25, -5.629165, 137]) rotate([0,0,300]) cube([1.6, 1.79, 1.5],center=true); // ring_land_20
-  color([0.42, 0.42, 0.42]) translate([4.596194, -4.596194, 137]) rotate([0,0,315]) cube([1.6, 1.79, 1.5],center=true); // ring_land_21
-  color([0.42, 0.42, 0.42]) translate([5.629165, -3.25, 137]) rotate([0,0,330]) cube([1.6, 1.79, 1.5],center=true); // ring_land_22
-  color([0.42, 0.42, 0.42]) translate([6.278518, -1.682324, 137]) rotate([0,0,345]) cube([1.6, 1.79, 1.5],center=true); // ring_land_23
   color([0.42, 0.42, 0.42]) translate([-8.8, 0, 130]) rotate([0,0,0]) cube([5.8, 4, 3],center=true); // lug_0
   color([0.42, 0.42, 0.42]) translate([8.8, 0, 130]) rotate([0,0,0]) cube([5.8, 4, 3],center=true); // lug_1
 }
 module spare() {
   color([0.76, 0.77, 0.75]) translate([0, 0, 0]) rotate([0,0,0]) rotate_extrude($fn=48) polygon([[0, 0], [10, 0], [12.7, 4], [12.7, 103], [12.2, 109], [10, 116], [6, 122], [5.2, 124], [5.2, 139], [3.3, 139], [0, 139]]); // metal
-  color([0.42, 0.42, 0.42]) translate([-12.7, 0, 95]) rotate([0,0,0]) cube([0.45, 2, 15],center=true); // index_b
-  color([0.42, 0.42, 0.42]) translate([12.7, 0, 95]) rotate([0,0,0]) cube([0.45, 2, 15],center=true); // index_a
+  color([0.95, 0.95, 0.93]) translate([-12.7, 0, 95]) rotate([0,0,0]) cube([0.45, 2, 15],center=true); // index_b
+  color([0.95, 0.95, 0.93]) translate([12.7, 0, 95]) rotate([0,0,0]) cube([0.45, 2, 15],center=true); // index_a
   color([0.42, 0.42, 0.42]) translate([0, 0, 0]) rotate([0,0,0]) rotate_extrude($fn=48) polygon([[5.3, 124], [7.3, 125], [7.3, 133], [5.3, 134]]); // bayonet
   color([0.42, 0.42, 0.42]) translate([0, 0, 0]) rotate([0,0,0]) rotate_extrude($fn=48) polygon([[5.2, 134], [5.8, 134.5], [5.8, 135.5], [5.2, 136]]); // seal_ring
-  color([0.42, 0.42, 0.42]) translate([6.25, 0, 137.5]) rotate([0,0,0]) cube([1.4, 1.4, 11],center=true); // ring_web_0
-  color([0.42, 0.42, 0.42]) translate([-3.125, 5.412659, 137.5]) rotate([0,0,0]) cube([1.4, 1.4, 11],center=true); // ring_web_1
-  color([0.42, 0.42, 0.42]) translate([-3.125, -5.412659, 137.5]) rotate([0,0,0]) cube([1.4, 1.4, 11],center=true); // ring_web_2
-  color([0.42, 0.42, 0.42]) translate([6.5, 0, 143]) rotate([0,0,0]) cube([1.6, 1.79, 1.5],center=true); // ring_land_0
-  color([0.42, 0.42, 0.42]) translate([6.278518, 1.682324, 143]) rotate([0,0,15]) cube([1.6, 1.79, 1.5],center=true); // ring_land_1
-  color([0.42, 0.42, 0.42]) translate([5.629165, 3.25, 143]) rotate([0,0,30]) cube([1.6, 1.79, 1.5],center=true); // ring_land_2
-  color([0.42, 0.42, 0.42]) translate([4.596194, 4.596194, 143]) rotate([0,0,45]) cube([1.6, 1.79, 1.5],center=true); // ring_land_3
-  color([0.42, 0.42, 0.42]) translate([3.25, 5.629165, 143]) rotate([0,0,60]) cube([1.6, 1.79, 1.5],center=true); // ring_land_4
-  color([0.42, 0.42, 0.42]) translate([1.682324, 6.278518, 143]) rotate([0,0,75]) cube([1.6, 1.79, 1.5],center=true); // ring_land_5
-  color([0.42, 0.42, 0.42]) translate([0, 6.5, 143]) rotate([0,0,90]) cube([1.6, 1.79, 1.5],center=true); // ring_land_6
-  color([0.42, 0.42, 0.42]) translate([-1.682324, 6.278518, 143]) rotate([0,0,105]) cube([1.6, 1.79, 1.5],center=true); // ring_land_7
-  color([0.42, 0.42, 0.42]) translate([-3.25, 5.629165, 143]) rotate([0,0,120]) cube([1.6, 1.79, 1.5],center=true); // ring_land_8
-  color([0.42, 0.42, 0.42]) translate([-4.596194, 4.596194, 143]) rotate([0,0,135]) cube([1.6, 1.79, 1.5],center=true); // ring_land_9
-  color([0.42, 0.42, 0.42]) translate([-5.629165, 3.25, 143]) rotate([0,0,150]) cube([1.6, 1.79, 1.5],center=true); // ring_land_10
-  color([0.42, 0.42, 0.42]) translate([-6.278518, 1.682324, 143]) rotate([0,0,165]) cube([1.6, 1.79, 1.5],center=true); // ring_land_11
-  color([0.42, 0.42, 0.42]) translate([-6.5, 0, 143]) rotate([0,0,180]) cube([1.6, 1.79, 1.5],center=true); // ring_land_12
-  color([0.42, 0.42, 0.42]) translate([-6.278518, -1.682324, 143]) rotate([0,0,195]) cube([1.6, 1.79, 1.5],center=true); // ring_land_13
-  color([0.42, 0.42, 0.42]) translate([-5.629165, -3.25, 143]) rotate([0,0,210]) cube([1.6, 1.79, 1.5],center=true); // ring_land_14
-  color([0.42, 0.42, 0.42]) translate([-4.596194, -4.596194, 143]) rotate([0,0,225]) cube([1.6, 1.79, 1.5],center=true); // ring_land_15
-  color([0.42, 0.42, 0.42]) translate([-3.25, -5.629165, 143]) rotate([0,0,240]) cube([1.6, 1.79, 1.5],center=true); // ring_land_16
-  color([0.42, 0.42, 0.42]) translate([-1.682324, -6.278518, 143]) rotate([0,0,255]) cube([1.6, 1.79, 1.5],center=true); // ring_land_17
-  color([0.42, 0.42, 0.42]) translate([-0, -6.5, 143]) rotate([0,0,270]) cube([1.6, 1.79, 1.5],center=true); // ring_land_18
-  color([0.42, 0.42, 0.42]) translate([1.682324, -6.278518, 143]) rotate([0,0,285]) cube([1.6, 1.79, 1.5],center=true); // ring_land_19
-  color([0.42, 0.42, 0.42]) translate([3.25, -5.629165, 143]) rotate([0,0,300]) cube([1.6, 1.79, 1.5],center=true); // ring_land_20
-  color([0.42, 0.42, 0.42]) translate([4.596194, -4.596194, 143]) rotate([0,0,315]) cube([1.6, 1.79, 1.5],center=true); // ring_land_21
-  color([0.42, 0.42, 0.42]) translate([5.629165, -3.25, 143]) rotate([0,0,330]) cube([1.6, 1.79, 1.5],center=true); // ring_land_22
-  color([0.42, 0.42, 0.42]) translate([6.278518, -1.682324, 143]) rotate([0,0,345]) cube([1.6, 1.79, 1.5],center=true); // ring_land_23
+  color([0.27, 0.28, 0.28]) translate([0, 0, 0]) rotate([0,0,0]) rotate_extrude($fn=48) polygon([[9, 114], [13.3, 114], [13.3, 116.5], [9, 116.5], [9, 114]]); // sensor_ring
   color([0.42, 0.42, 0.42]) translate([-8.8, 0, 130]) rotate([0,0,0]) cube([5.8, 4, 3],center=true); // lug_0
   color([0.42, 0.42, 0.42]) translate([8.8, 0, 130]) rotate([0,0,0]) cube([5.8, 4, 3],center=true); // lug_1
 }
 module reserve() {
   color([0.76, 0.77, 0.75]) translate([0, 0, 0]) rotate([0,0,0]) rotate_extrude($fn=48) polygon([[0, 0], [10, 0], [12.7, 4], [12.7, 103], [12.2, 109], [10, 116], [6, 122], [5.2, 124], [5.2, 139], [3.3, 139], [1, 139], [1, 136.199997], [0, 136.199997]]); // metal
-  color([0.42, 0.42, 0.42]) translate([-12.7, 0, 95]) rotate([0,0,0]) cube([0.45, 2, 15],center=true); // index_b
-  color([0.42, 0.42, 0.42]) translate([12.7, 0, 95]) rotate([0,0,0]) cube([0.45, 2, 15],center=true); // index_a
+  color([0.95, 0.95, 0.93]) translate([-12.7, 0, 95]) rotate([0,0,0]) cube([0.45, 2, 15],center=true); // index_b
+  color([0.95, 0.95, 0.93]) translate([12.7, 0, 95]) rotate([0,0,0]) cube([0.45, 2, 15],center=true); // index_a
   color([0.42, 0.42, 0.42]) translate([0, 0, 0]) rotate([0,0,0]) rotate_extrude($fn=48) polygon([[5.3, 124], [7.3, 125], [7.3, 133], [5.3, 134]]); // bayonet
   color([0.42, 0.42, 0.42]) translate([0, 0, 0]) rotate([0,0,0]) rotate_extrude($fn=48) polygon([[5.2, 134], [5.8, 134.5], [5.8, 135.5], [5.2, 136]]); // seal_ring
-  color([0.42, 0.42, 0.42]) translate([6.25, 0, 134.5]) rotate([0,0,0]) cube([1.4, 1.4, 5],center=true); // ring_web_0
-  color([0.42, 0.42, 0.42]) translate([-3.125, 5.412659, 134.5]) rotate([0,0,0]) cube([1.4, 1.4, 5],center=true); // ring_web_1
-  color([0.42, 0.42, 0.42]) translate([-3.125, -5.412659, 134.5]) rotate([0,0,0]) cube([1.4, 1.4, 5],center=true); // ring_web_2
-  color([0.42, 0.42, 0.42]) translate([6.5, 0, 137]) rotate([0,0,0]) cube([1.6, 1.79, 1.5],center=true); // ring_land_0
-  color([0.42, 0.42, 0.42]) translate([6.278518, 1.682324, 137]) rotate([0,0,15]) cube([1.6, 1.79, 1.5],center=true); // ring_land_1
-  color([0.42, 0.42, 0.42]) translate([5.629165, 3.25, 137]) rotate([0,0,30]) cube([1.6, 1.79, 1.5],center=true); // ring_land_2
-  color([0.42, 0.42, 0.42]) translate([4.596194, 4.596194, 137]) rotate([0,0,45]) cube([1.6, 1.79, 1.5],center=true); // ring_land_3
-  color([0.42, 0.42, 0.42]) translate([3.25, 5.629165, 137]) rotate([0,0,60]) cube([1.6, 1.79, 1.5],center=true); // ring_land_4
-  color([0.42, 0.42, 0.42]) translate([1.682324, 6.278518, 137]) rotate([0,0,75]) cube([1.6, 1.79, 1.5],center=true); // ring_land_5
-  color([0.42, 0.42, 0.42]) translate([0, 6.5, 137]) rotate([0,0,90]) cube([1.6, 1.79, 1.5],center=true); // ring_land_6
-  color([0.42, 0.42, 0.42]) translate([-1.682324, 6.278518, 137]) rotate([0,0,105]) cube([1.6, 1.79, 1.5],center=true); // ring_land_7
-  color([0.42, 0.42, 0.42]) translate([-3.25, 5.629165, 137]) rotate([0,0,120]) cube([1.6, 1.79, 1.5],center=true); // ring_land_8
-  color([0.42, 0.42, 0.42]) translate([-4.596194, 4.596194, 137]) rotate([0,0,135]) cube([1.6, 1.79, 1.5],center=true); // ring_land_9
-  color([0.42, 0.42, 0.42]) translate([-5.629165, 3.25, 137]) rotate([0,0,150]) cube([1.6, 1.79, 1.5],center=true); // ring_land_10
-  color([0.42, 0.42, 0.42]) translate([-6.278518, 1.682324, 137]) rotate([0,0,165]) cube([1.6, 1.79, 1.5],center=true); // ring_land_11
-  color([0.42, 0.42, 0.42]) translate([-6.5, 0, 137]) rotate([0,0,180]) cube([1.6, 1.79, 1.5],center=true); // ring_land_12
-  color([0.42, 0.42, 0.42]) translate([-6.278518, -1.682324, 137]) rotate([0,0,195]) cube([1.6, 1.79, 1.5],center=true); // ring_land_13
-  color([0.42, 0.42, 0.42]) translate([-5.629165, -3.25, 137]) rotate([0,0,210]) cube([1.6, 1.79, 1.5],center=true); // ring_land_14
-  color([0.42, 0.42, 0.42]) translate([-4.596194, -4.596194, 137]) rotate([0,0,225]) cube([1.6, 1.79, 1.5],center=true); // ring_land_15
-  color([0.42, 0.42, 0.42]) translate([-3.25, -5.629165, 137]) rotate([0,0,240]) cube([1.6, 1.79, 1.5],center=true); // ring_land_16
-  color([0.42, 0.42, 0.42]) translate([-1.682324, -6.278518, 137]) rotate([0,0,255]) cube([1.6, 1.79, 1.5],center=true); // ring_land_17
-  color([0.42, 0.42, 0.42]) translate([-0, -6.5, 137]) rotate([0,0,270]) cube([1.6, 1.79, 1.5],center=true); // ring_land_18
-  color([0.42, 0.42, 0.42]) translate([1.682324, -6.278518, 137]) rotate([0,0,285]) cube([1.6, 1.79, 1.5],center=true); // ring_land_19
-  color([0.42, 0.42, 0.42]) translate([3.25, -5.629165, 137]) rotate([0,0,300]) cube([1.6, 1.79, 1.5],center=true); // ring_land_20
-  color([0.42, 0.42, 0.42]) translate([4.596194, -4.596194, 137]) rotate([0,0,315]) cube([1.6, 1.79, 1.5],center=true); // ring_land_21
-  color([0.42, 0.42, 0.42]) translate([5.629165, -3.25, 137]) rotate([0,0,330]) cube([1.6, 1.79, 1.5],center=true); // ring_land_22
-  color([0.42, 0.42, 0.42]) translate([6.278518, -1.682324, 137]) rotate([0,0,345]) cube([1.6, 1.79, 1.5],center=true); // ring_land_23
+  color([0.27, 0.28, 0.28]) translate([0, 0, 0]) rotate([0,0,0]) rotate_extrude($fn=48) polygon([[9, 114], [13.3, 114], [13.3, 116.5], [9, 116.5], [9, 114]]); // sensor_ring
   color([0.42, 0.42, 0.42]) translate([-8.8, 0, 130]) rotate([0,0,0]) cube([5.8, 4, 3],center=true); // lug_0
   color([0.42, 0.42, 0.42]) translate([8.8, 0, 130]) rotate([0,0,0]) cube([5.8, 4, 3],center=true); // lug_1
 }
 module lever() {
-  color([0.42, 0.42, 0.42]) translate([16.5, 0, -0.5]) rotate([0,0,0]) cube([2.2, 3.4, 2.6],center=true); // toe
-  color([0.42, 0.42, 0.42]) translate([8.5, 0, 1.1]) rotate([0,0,0]) cube([17, 3.4, 2],center=true); // nose_arm
+  color([0.42, 0.42, 0.42]) translate([20, 0, -1.95]) rotate([0,0,0]) cube([2.2, 3.4, 1.7],center=true); // toe
+  color([0.42, 0.42, 0.42]) translate([10, 0, 0]) rotate([0,0,0]) cube([20, 3.4, 2.4],center=true); // nose_arm
   color([0.42, 0.42, 0.42]) translate([0, 31, 1]) rotate([0,0,0]) cube([4, 65, 4],center=true); // crossbar
-  color([0.42, 0.42, 0.42]) translate([27, 61, 1]) rotate([0,0,0]) cube([55, 7, 4],center=true); // handle
-  color([0.42, 0.42, 0.42]) translate([53, 61, 1]) rotate([0,0,0]) cube([20, 14, 4],center=true); // paddle
+  color([0.83, 0.68, 0.13]) translate([27, 61, 1]) rotate([0,0,0]) cube([55, 7, 4],center=true); // handle
+  color([0.95, 0.78, 0.13]) translate([53, 61, 1]) rotate([0,0,0]) cube([20, 14, 4],center=true); // paddle
 }
 module follower() {
-  color([0.42, 0.42, 0.42]) translate([0, -6.45, 2]) rotate([0,0,0]) cube([1.5, 1.4, 4],center=true); // foot_0
-  color([0.42, 0.42, 0.42]) translate([0, 6.45, 2]) rotate([0,0,0]) cube([1.5, 1.4, 4],center=true); // foot_1
-  color([0.42, 0.42, 0.42]) translate([0, 0, 4.8]) rotate([0,0,0]) cube([2, 14.4, 1.6],center=true); // bridge
-  color([0.42, 0.42, 0.42]) translate([10, 0, 5]) rotate([0,0,0]) cube([20, 3, 1.6],center=true); // arm
-  color([0.82, 0.1, 0.08]) translate([20, 0, 6.6]) rotate([0,0,0]) cube([2, 12, 3.6],center=true); // red
-  color([0.1, 0.68, 0.25]) translate([20, 0, 2.9]) rotate([0,0,0]) cube([2, 12, 3.7],center=true); // green
+  color([0.42, 0.42, 0.42]) translate([-11.55635, 5.145219, -10.65]) rotate([0,0,0]) cube([1.5, 1.5, 33.300003],center=true); // probe_0
+  color([0.42, 0.42, 0.42]) translate([11.55635, -5.145219, -10.65]) rotate([0,0,0]) cube([1.5, 1.5, 33.300003],center=true); // probe_1
+  color([0.42, 0.42, 0.42]) translate([-11.55635, 7.572609, 6.8]) rotate([0,0,0]) cube([1.6, 4.854782, 1.6],center=true); // fork_side_0
+  color([0.42, 0.42, 0.42]) translate([11.55635, 2.427391, 6.8]) rotate([0,0,0]) cube([1.6, 15.145219, 1.6],center=true); // fork_side_1
+  color([0.42, 0.42, 0.42]) translate([0, 10, 6.8]) rotate([0,0,0]) cube([24.7127, 1.6, 1.6],center=true); // fork_back
+  color([0.42, 0.42, 0.42]) translate([-12.3, -4.5, 5]) rotate([0,0,0]) cube([2, 22, 1],center=true); // flag_carrier
+  color([0.82, 0.1, 0.08]) translate([-13, -15, 6.6]) rotate([0,0,0]) cube([1, 12, 3.6],center=true); // red
+  color([0.1, 0.68, 0.25]) translate([-13, -15, 2.9]) rotate([0,0,0]) cube([1, 12, 3.7],center=true); // green
 }
 module frame() {
   color([0.91, 0.49, 0.08]) translate([0, 0, 2]) rotate([0,0,0]) cube([240, 195, 4],center=true); // service_panel
@@ -181,12 +104,16 @@ module frame() {
   color([0.42, 0.42, 0.42]) translate([13.13722, -8.77801, 188.5]) rotate([0,0,326.25]) cube([3.4, 3.2, 21],center=true); // socket_wall_29
   color([0.42, 0.42, 0.42]) translate([14.597297, -6.046398, 188.5]) rotate([0,0,337.5]) cube([3.4, 3.2, 21],center=true); // socket_wall_30
   color([0.42, 0.42, 0.42]) translate([15.496407, -3.082427, 188.5]) rotate([0,0,348.75]) cube([3.4, 3.2, 21],center=true); // socket_wall_31
-  color([0.42, 0.42, 0.42]) translate([17.8, 0, 202.5]) rotate([0,0,0]) cube([1, 17, 9],center=true); // window_lower
-  color([0.42, 0.42, 0.42]) translate([17.8, 0, 214.9]) rotate([0,0,0]) cube([1, 17, 9],center=true); // window_upper
-  color([0.42, 0.42, 0.42]) translate([17.8, -7.6, 208.7]) rotate([0,0,0]) cube([1, 2.5, 13],center=true); // window_side_0
-  color([0.42, 0.42, 0.42]) translate([17.8, 7.6, 208.7]) rotate([0,0,0]) cube([1, 2.5, 13],center=true); // window_side_1
+  color([0.42, 0.42, 0.42]) translate([-8.4, -15, 208.7]) rotate([0,0,0]) cube([8, 17, 18],center=true); // window_back
+  color([0.42, 0.42, 0.42]) translate([-14.2, -15, 202.5]) rotate([0,0,0]) cube([1, 17, 9],center=true); // window_lower
+  color([0.42, 0.42, 0.42]) translate([-14.2, -15, 214.9]) rotate([0,0,0]) cube([1, 17, 9],center=true); // window_upper
+  color([0.42, 0.42, 0.42]) translate([-14.2, -22.6, 208.7]) rotate([0,0,0]) cube([1, 2.5, 13],center=true); // window_side_0
+  color([0.42, 0.42, 0.42]) translate([-14.2, -7.4, 208.7]) rotate([0,0,0]) cube([1, 2.5, 13],center=true); // window_side_1
   color([0.42, 0.42, 0.42]) translate([-23, 94, 98]) rotate([0,0,0]) cube([12, 10, 196],center=true); // lever_mount
   color([0.42, 0.42, 0.42]) translate([-23, 79, 197]) rotate([0,0,0]) cube([10, 40, 6],center=true); // lever_pivot
+  color([0.42, 0.42, 0.42]) translate([23, 0, 211.5]) rotate([0,0,0]) cube([4, 31, 28],center=true); // housing_back
+  color([0.42, 0.42, 0.42]) translate([9, 13.7, 211.5]) rotate([0,0,0]) cube([27, 3, 28],center=true); // housing_lip_a
+  color([0.42, 0.42, 0.42]) translate([9, -13.7, 211.5]) rotate([0,0,0]) cube([27, 3, 28],center=true); // housing_lip_b
   color([0.42, 0.42, 0.42]) translate([4.64952, 9.747921, 192.5]) rotate([0,0,64.5]) cube([4.8, 2, 8],center=true); // stop_a
   color([0.42, 0.42, 0.42]) translate([-4.64952, -9.747921, 192.5]) rotate([0,0,244.5]) cube([4.8, 2, 8],center=true); // stop_b
   color([0.42, 0.42, 0.42]) translate([30, -120, 4.5]) rotate([0,0,0]) cube([60, 50, 9],center=true); // parts_stand
@@ -200,9 +127,9 @@ module frame() {
   color([0.8, 0.15, 0.09]) translate([-100, -168, 9]) rotate([0,0,0]) cube([168, 4, 18],center=true); // hold_left
   color([0.8, 0.15, 0.09]) translate([-100, -2, 9]) rotate([0,0,0]) cube([168, 4, 18],center=true); // hold_right
   color([0.42, 0.42, 0.42]) translate([11.869107, 11.461863, 176]) rotate([0,0,0]) cube([3, 3, 19],center=true); // seat_index_back_0
-  color([0.96, 0.85, 0.15]) translate([12.948116, 12.503851, 168.5]) rotate([0,0,0]) cube([2, 2, 10],center=true); // seat_index_0
+  color([0.98, 0.91, 0.08]) translate([12.948116, 12.503851, 168.5]) rotate([0,0,0]) cube([2, 2, 10],center=true); // seat_index_0
   color([0.42, 0.42, 0.42]) translate([-11.869107, -11.461863, 176]) rotate([0,0,0]) cube([3, 3, 19],center=true); // seat_index_back_1
-  color([0.96, 0.85, 0.15]) translate([-12.948116, -12.503851, 168.5]) rotate([0,0,0]) cube([2, 2, 10],center=true); // seat_index_1
+  color([0.98, 0.91, 0.08]) translate([-12.948116, -12.503851, 168.5]) rotate([0,0,0]) cube([2, 2, 10],center=true); // seat_index_1
 }
 if (part=="assembly") {
   frame();
