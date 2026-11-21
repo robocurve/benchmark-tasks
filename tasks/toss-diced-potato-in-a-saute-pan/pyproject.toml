@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robocurve-pan-toss"
+version = "0.0.1"
+
+[project.entry-points."inspect_robots.embodiments"]
+yam_pan = "pan_toss.embodiment:make_embodiment"
+
+[tool.setuptools.packages.find]
+include = ["pan_toss*"]
