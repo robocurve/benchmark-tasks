@@ -1,0 +1,18 @@
+{
+  "title": "Apply threadlocker around a machinery mounting bolt",
+  "category": "Impact on jobs",
+  "keywords": [
+    "maintenance",
+    "threadlocker",
+    "material application"
+  ],
+  "instruction": "Prepare the M16 mounting bolt for reassembly. Apply the blue threadlocker around the three-thread engagement band, 4 to 10 mm from its tip, including the thread roots. Keep the head clean and keep the wet band clear of fingers, supports and the carrier. Finish with the applicator withdrawn; the bolt may be held by its clean head.",
+  "context": "Applying threadlocker prevents vibration from loosening fasteners in pumps, gearboxes and other machinery. This task covers application before assembly and curing.",
+  "setup": "A fixed 1100 x 1300 mm workbench has its top 500 mm above ground. An uncoated steel M16 x 80 mm bolt (2 mm pitch; 24 mm hex flats; 10 mm head; 146.45 g) stands tip-down at (320,150,504) mm in a fixed 17.4 mm-bore nest. A 50 g, 80 x 24 x 24 mm rectangular ABS-plastic carrier lies lengthwise along X at (280,-200,540) mm on two fixed rests. A fresh blue 8 x 10 x 10 mm wax plug projects 8 mm beyond its +X face. Two YAM arms stand at (0,+/-305,750) mm, with 75 mm grippers open and raised. All loose parts start still. README and scene.py specify the remaining fixed supports, camera mounts and geometry.",
+  "scoring": "The lower of visible engagement-band and root coverage determines the grade: below one-third is 0.0; at least one-third is 0.25; at least two-thirds is 0.5. For 1.0, both must reach 95%, applicator clearance from the whole bolt must be at least 5 mm, and finger clearance from the band at least 5 mm. These conditions must hold for 10 steps at 20 Hz after motion settles within 2 mm and 2 degrees over 10 observations. Holding the clean head is allowed. Head rubbing, non-wax contact with wet coated threads, workspace escape or damage permanently scores zero. Judge coverage with close photographs through a full turn and a millimetre scale; inspect contact and stability on video.",
+  "run_limit": "1600 control steps (80 seconds at 20 Hz)",
+  "reset_notes": "Fresh clean bolt, fresh exposed wax, zero film/source counters, all object and robot states and camera buffers restored.",
+  "fidelity": "Real-size M16 helical thread geometry in the application zone, native contacts and 40 N finger limits. Finite semi-solid material transfers locally only through contact and sliding, with visible band/root coverage. Rectangular carrier, wax compliance, friction and transfer law are specified approximations without hardware calibration. No curing or achieved locking strength is simulated.",
+  "scores": "Dream-1 beta: 0.0 (1,200 steps); scripted RGB-only demo: 1.0 (1,404 steps, 10-step dwell). Seed 0, object jitter 0, 20 Hz.",
+  "media": "M-2QE45R"
+}
