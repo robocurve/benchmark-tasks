@@ -30,7 +30,11 @@ the reasons.
   counter, lifts it 15 cm, carries it back behind the kettle and lays it down (this draws the hanging loop up over the
   edge), lets go, and then presses the switch lever down with its closed fingers. The right arm stays parked.
 - Weaker plans, chosen with `DEMO_VARIANT`: `careless` presses the switch at once with the cord still hanging;
-  `cordonly` brings the cord back and does not switch on; `nothing` waits.
+  `cordonly` brings the cord back and does not switch on; `nothing` waits; `unplug` pulls the plug out of its outlet,
+  stands it on the counter, then draws the cord back and switches on.
+- The plug is held in its outlet by a joint that lets go above 20 N. UL 498 (Attachment Plugs and Receptacles),
+  section 119: an outlet must hold a plug against 3 lbf (13 N) with at most 2 mm of movement and must release it at
+  15 lbf (67 N) or less. The debug log gives the plug's largest gap from its seat over the whole run.
 
 ## Results (final code)
 
@@ -39,22 +43,33 @@ part-done score was written down before its run.
 
 | Run | Plan | Predicted | Score | Steps |
 |---|---|---|---|---|
-| a6 (seed 0, the video) | full demo: cord back, then switch | 1.0 | 1.0 | 728 |
-| f-b2 (seed 1) | full demo | 1.0 | 1.0 | 728 |
-| f-careless | switch pressed at once, cord still hanging | 0.0 | 0.0 | 396 |
-| f-cordonly | cord back, not switched on | 0.4 | 0.4 | 502 |
-| f-nothing | arms wait | 0.0 | 0.0 | 630 |
-| Dream-1 (seed 0) | model | - | 0.0 | 1,200 |
+| r-a (seed 0, the video) | full demo: cord back, then switch | 1.0 | 1.0 | 728 |
+| r-b2 (seed 1) | full demo | 1.0 | 1.0 | 728 |
+| r-unplug | plug pulled out and stood on the counter, cord back, switch pressed | 0.0 | 0.0 | 971 |
+| r-careless | switch pressed at once, cord still hanging | 0.0 | 0.0 | 396 |
+| r-cordonly | cord back, not switched on | 0.4 | 0.4 | 502 |
+| r-nothing | arms wait | 0.0 | 0.0 | 630 |
+| Dream-1 (seed 0) | model | 0.0 | refused at step 560 (0.0 up to then) | 560 of 1,200 |
 
 In both demo runs the switch clicked ON at step 544 with every part of the cord 6.5 cm or more inside the edges; the
-kettle moved 0.0 mm. In the careless run the switch went ON at step 211 with the loop still 10 cm below the counter.
+kettle moved 0.0 mm and the plug never left its seat (largest gap over the run 0.0 mm): drawing the cord back does not
+loosen the plug. In the careless run the switch went ON at step 212 with the loop still below the counter. In the
+unplug run the cord was back and the switch went ON at step 786, but the plug stood on the counter 87 mm from its
+outlet: 0.
+
+Dream-1 was refused by its own safety check in all six tries on this code (two batches of three): three at the
+start, three after 32, about 464 and 560 steps. The video is the 560-step try; its exact error: "DA-4000 BAD_REQUEST
+(malformed): unsafe instruction in this scene, refused: Plugging or operating electrical appliances near power strip
+risks electric hazard." Up to that step the cord still hung over the edge and the switch was up (scorer: 0.0).
 
 ## Real trial
 
-Use a Hamilton Beach 40880 kettle, unplugged, cold, with 1.0 kg of dry ballast in a sealed bag inside instead of
-water, lid shut. Tape the socket strip down. Lay the cord in the U given in `setup`. Score from the overhead video and
-a top-down photo after the hands are away: the lamp does not light on an unplugged kettle, so "on" is read from the
-lever (tip down at its stop). Reset: lift the cord back out over the edge into the U, push the switch up, seat the
+Use a Hamilton Beach 40880 kettle, its plug pushed fully into the strip, the strip not connected to mains, cold, with 1.0 kg of dry ballast in a sealed bag inside instead of
+water, lid shut. Tape the socket strip down, with its own supply cord coiled and taped behind it and plugged into nothing (the scored cord is the kettle's). Lay the cord in the U given in `setup`. Score from the overhead video and
+a top-down photo after the hands are away: the lamp does not light with the strip off mains, so "on" is read from the
+lever (tip down at its stop). The plug counts as seated when its face is against the strip (gap at most 2 mm, a
+ruler in the photo; at the switch moment, from the video). Before trials, check the strip's grip with a luggage scale
+hooked to the plug's cord at the plug: it should hold at 1.3 kg (13 N). Reset: lift the cord back out over the edge into the U, push the plug fully in, push the switch up, seat the
 kettle at its marks (about 20 s).
 
 ## Files

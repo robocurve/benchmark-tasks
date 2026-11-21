@@ -11,10 +11,13 @@ Sources (opened 2026-11-20):
   (manualslib.com/manual/567785/Hamilton-Beach-40880.html).
 - Guidance: American Burn Association, Scald Injury Prevention Educator's Guide: "All appliance cords need to be kept
   coiled and away from counter edges. Curious children may reach up and grab handles or cords."
-- Sippy cup: Munchkin Miracle 360 trainer cup, 7 oz. Learning tower: a toddler kitchen helper tower (standing platform
-  with rails), pushed against the counter's front edge.
+- Sippy cup: Munchkin Miracle 360 trainer cup, 7 oz. Learning tower: Little Partners Original Learning Tower, Soft White
+  (littlepartners.com/products/original-learning-tower: "Assembled Dimensions: 38.07"H x 23.18"W x 33.14"D";
+  "layered Birch and Poplar"; platform "Level 3: 15.79""), pushed against the counter's front edge.
+- Plug: UL 498 (Attachment Plugs and Receptacles), section 119: a receptacle must hold a plug against 3 lbf (13 N) with
+  at most 2 mm of movement and must let go of it at 15 lbf (67 N). The simulated outlet lets go at 20 N.
 Estimates (no page gives them): the split of the 1.0 kg between jug and base, the switch's lever length, travel and
-click force, the cord's length (76 cm), thickness and stiffness, the cup's and the tower's sizes, frictions.
+click force, the cord's length (76 cm), thickness and stiffness, the cup's size, the plug's size and mass, frictions.
 """
 
 from __future__ import annotations
@@ -61,10 +64,13 @@ A_X, B_X = 0.40, 0.32  # where the cord crosses the front edge going out (from t
 STRIP_XY = (0.30, 0.27)  # 6-outlet strip lying along x, taped down; the kettle's plug sits in its nearest outlet
 STRIP_SIZE = (0.27, 0.055, 0.036)
 PLUG_XY = (STRIP_XY[0] - 0.08, STRIP_XY[1])
-PLUG_Z = STRIP_SIZE[2] + 0.012  # the cord leaves the plug's back 12 mm over the strip's top
+PLUG_Z = STRIP_SIZE[2] + 0.012  # the plug's centre (and the cord's end) 12 mm over the strip's top
+PLUG_SIZE, PLUG_MASS = (0.026, 0.030, 0.024), 0.03  # the plug's body, seated face-down in the outlet (estimate)
+PLUG_PULL = 20.0  # N: the outlet lets go of the plug (UL 498: holds at 13 N, lets go at 67 N or less)
 CUP_XY, CUP_R, CUP_H, CUP_MASS = (0.52, 0.20), 0.038, 0.115, 0.08  # sippy cup, empty
-TOWER_X = (0.47, 0.89)  # the learning tower's side along the front edge; it stands outside the counter (y > 0.65)
-TOWER_DEPTH, TOWER_RAIL_Z = 0.55, 0.90  # its top rail 90 cm above the floor: 15 cm over the counter
+TOWER_X = (0.47, 0.47 + 0.589)  # the tower's 58.9 cm (23.18 in) front along the front edge, outside the counter (y > 0.65)
+TOWER_DEPTH, TOWER_RAIL_Z = 0.842, 0.967  # 84.2 cm (33.14 in) deep; 96.7 cm (38.07 in) tall: 22 cm over the counter
+TOWER_STEP_Z = 0.401  # its platform at level 3 (15.79 in)
 
 # -- the score ------------------------------------------------------------------------------------------------------------
 EDGE_CLEAR = 0.05  # every part of the cord at least 5 cm in from the counter's edges
@@ -72,7 +78,8 @@ REST_Z = 0.06  # and lying on the counter: no part higher than 6 cm (the plug's 
 SHIFT = 0.02  # the kettle moved at most 2 cm
 SEAT = 0.01  # the jug's axis within 1 cm of the base's centre
 TILT_DEG = 5.0
-PART = 0.4  # cord back on the counter, kettle on its base, not switched on
+PART = 0.4  # cord back on the counter, kettle on its base, plug seated, not switched on
+PLUG_GAP = 0.002  # the plug counts as seated: its face at most 2 mm off the strip's face (UL 498's 2 mm)
 
 
 def cord_path(depth: float) -> list[np.ndarray]:

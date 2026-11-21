@@ -10,7 +10,8 @@ Mechanism: the jug, its base and the power switch are rigid bodies. The switch i
 foot, between two stops (OFF tip up, ON tip down) with an over-centre spring: it pulls toward whichever stop is nearer,
 so the lever clicks ON when pushed past its middle, about 4 N at the tip, and stays there. ON lights the power lamp (a
 rendered colour). The cord is a chain of rigid capsule links joined by ball joints with bending springs (straight at
-rest, no twist stiffness), its first link welded to the base and its last to the plug, which sits in the fixed strip.
+rest, no twist stiffness), its first link welded to the base and its last to the plug. The plug is a separate body held
+in the fixed strip's outlet by a joint that breaks at 20 N (UL 498: an outlet holds a plug at 13 N and lets go at 67 N).
 Heat, water and steam are not simulated.
 
 Frame: x forward from the arm bases, y left, z up, metres. All sizes, masses and places: layout.py.
@@ -46,7 +47,7 @@ CONTROL_HZ = 20.0
 STEEL_C, BLACK_C, CORD_C = (0.78, 0.79, 0.80), (0.08, 0.08, 0.09), (0.10, 0.10, 0.11)
 LAMP_OFF_C, LAMP_ON_C = (0.20, 0.22, 0.26), (0.10, 0.55, 1.00)
 STRIP_C, CUP_C, LID_C = (0.95, 0.95, 0.93), (0.20, 0.65, 0.95), (0.95, 0.45, 0.10)
-TOWER_C, STEP_C = (0.96, 0.96, 0.94), (0.55, 0.80, 0.45)
+TOWER_C, STEP_C = (0.96, 0.96, 0.94), (0.86, 0.86, 0.84)  # Soft White, the platform a shade darker to read
 
 
 def _q_axis(axis, ang: float) -> tuple[float, float, float, float]:
@@ -111,8 +112,6 @@ def _strip_shapes() -> list:
     for k in range(6):
         out.append(BoxShape((-0.10 + 0.04 * k, 0.0, sz + 0.0005), (0.022, 0.022, 0.001), (0.6, 0.6, 0.6), collide=False))
     out.append(BoxShape((0.115, 0.0, sz + 0.001), (0.018, 0.012, 0.004), (0.85, 0.10, 0.10), collide=False))  # switch
-    px = L.PLUG_XY[0] - L.STRIP_XY[0]
-    out.append(BoxShape((px, 0.0, sz + 0.012), (0.026, 0.030, 0.024), BLACK_C))  # the kettle's plug, pushed in
     return out
 
 
@@ -138,7 +137,7 @@ def _tower_shapes() -> list:
         out.append(BoxShape((0.0, y, rail - 0.015), (w, 0.03, 0.03), TOWER_C))
     for x in (-w / 2 + 0.02, w / 2 - 0.02):
         out.append(BoxShape((x, d / 2, rail - 0.015), (0.03, d, 0.03), TOWER_C))
-    out.append(BoxShape((0.0, d / 2, TOP - 0.33), (w - 0.04, d - 0.04, 0.02), STEP_C))  # standing platform
+    out.append(BoxShape((0.0, d / 2, L.TOWER_STEP_Z), (w - 0.04, d - 0.04, 0.02), STEP_C))  # standing platform
     out.append(BoxShape((0.0, d / 2, 0.25), (w - 0.04, d - 0.04, 0.02), STEP_C))  # bottom step
     return out
 
@@ -154,6 +153,7 @@ BASE_POS = np.array([L.BASE_XY[0], L.BASE_XY[1], TOP])
 JUG_POS = BASE_POS + np.array([0.0, 0.0, L.BASE_H + 0.0005])
 LEVER_POS = JUG_POS + np.array(L.LEVER_PIVOT)
 STRIP_POS = np.array([L.STRIP_XY[0], L.STRIP_XY[1], TOP])
+PLUG_POS = np.array([L.PLUG_XY[0], L.PLUG_XY[1], TOP + L.PLUG_Z])  # seated
 TOWER_POS = np.array([(L.TOWER_X[0] + L.TOWER_X[1]) / 2, L.EDGE_Y + 0.005, 0.0])
 # the hinge turns about +x; a positive hinge angle takes the tip (at -y) DOWN. OFF = tip up = hinge -LEVER_UP.
 OFF_DEG, ON_DEG = -L.LEVER_UP, -L.LEVER_DOWN
@@ -171,13 +171,15 @@ def _build() -> list:
     bodykit.hinge(LEVER_HINGE, "kettle", "switch", anchor=tuple(LEVER_POS), axis="X",
                   limits_deg=(OFF_DEG, ON_DEG), spring=L.LEVER_SPRING, damping=0.0003, target_deg=OFF_DEG)
     strip = Body.build("strip", pos=tuple(STRIP_POS), mass=0.4, shapes=_strip_shapes(), color=STRIP_C, kinematic=True)
+    plug = Body.build("plug", pos=tuple(PLUG_POS), mass=L.PLUG_MASS, shapes=[BoxShape((0.0, 0.0, 0.0), L.PLUG_SIZE, BLACK_C)],
+                      color=BLACK_C, friction=(0.8, 0.7), solver_iterations=32, ignore=("strip",))
     cup = Body.build("sippy_cup", pos=(L.CUP_XY[0], L.CUP_XY[1], TOP), mass=L.CUP_MASS, shapes=_cup_shapes(),
                      color=CUP_C, friction=(0.7, 0.6), solver_iterations=16, com=(0.0, 0.0, 0.04))
     tower = Body.build("tower", pos=tuple(TOWER_POS), mass=8.0, shapes=_tower_shapes(), color=TOWER_C, kinematic=True)
-    out = [base, jug, lever, strip, cup, tower]
+    out = [base, jug, lever, strip, plug, cup, tower]
     for i, n in enumerate(LINKS):
         c, q, ln = LINK_POSE[n]
-        ign = ("base",) if i < 2 else (("strip",) if i >= len(LINKS) - 2 else ())
+        ign = ("base",) if i < 2 else (("strip", "plug") if i >= len(LINKS) - 2 else ())
         out.append(Body.build(n, pos=tuple(c), mass=L.LINK_MASS, shapes=_link_shapes(ln), color=CORD_C,
                               friction=L.CORD_FRICTION, solver_iterations=32, start_xyzw=q, ignore=ign,
                               damping=(0.05, 0.2), contact_offset=0.002))
@@ -202,8 +204,10 @@ def _cord_joints() -> list[dict]:
             out.append(dict(kind="bend", body0=LINKS[i - 1], body1=n, pos0=(pl / 2, 0.0, 0.0), rot0=(0, 0, 0, 1),
                             pos1=(-ln / 2, 0.0, 0.0)))
     c, q, ln = LINK_POSE[LINKS[-1]]
-    out.append(dict(kind="weld", body0="strip", body1=LINKS[-1], pos0=CORD_NODES[-1] - STRIP_POS, rot0=q,
+    out.append(dict(kind="weld", body0="plug", body1=LINKS[-1], pos0=CORD_NODES[-1] - PLUG_POS, rot0=q,
                     pos1=(ln / 2, 0.0, 0.0)))
+    out.append(dict(kind="outlet", body0="strip", body1="plug", pos0=PLUG_POS - STRIP_POS, rot0=(0, 0, 0, 1),
+                    pos1=(0.0, 0.0, 0.0)))  # the plug in its outlet: lets go for good above L.PLUG_PULL
     return out
 
 
@@ -220,8 +224,11 @@ def _author_cord(stage, prim_path: str, spec) -> None:
         if j["body1"] != spec.name:
             continue
         x, y, z, w = j["rot0"]
-        if j["kind"] == "weld":
+        if j["kind"] in ("weld", "outlet"):
             joint = UsdPhysics.FixedJoint.Define(stage, f"{prim_path}/cordjoint{k}")
+            if j["kind"] == "outlet":
+                joint.CreateBreakForceAttr(float(L.PLUG_PULL))
+                bodykit._BREAKABLE_PATHS.append(f"{prim_path}/cordjoint{k}")  # whole again at every reset
         else:
             joint = UsdPhysics.Joint.Define(stage, f"{prim_path}/cordjoint{k}")
         joint.CreateBody0Rel().SetTargets([f"{parent}/{j['body0']}/body"])
@@ -283,6 +290,17 @@ def cord_back(c: dict) -> bool:
     return c["inside"] >= L.EDGE_CLEAR and c["low"] > -0.01 and c["high"] <= L.REST_Z
 
 
+def plug_gap(st) -> float:
+    """How far the plug is from its seated place in the outlet (m): its face's gap off the strip's face, or how far it
+    is off the outlet sideways, whichever is more."""
+    p = np.asarray(st["plug"].pos, float) - np.asarray(st["strip"].pos, float) - (PLUG_POS - STRIP_POS)
+    return float(max(abs(p[2]), np.linalg.norm(p[:2]), 0.03 * math.sin(st["plug"].tilt())))
+
+
+def plug_in(st) -> bool:
+    return plug_gap(st) <= L.PLUG_GAP
+
+
 def kettle_state(st, start) -> dict:
     j, b = st["kettle"], st["base"]
     jp, bp = np.asarray(j.pos, float), np.asarray(b.pos, float)
@@ -301,7 +319,8 @@ _EP: dict = {}
 
 def _blank() -> None:
     _EP.clear()
-    _EP.update(step=0, st=None, start=None, on=False, on_step=None, on_cord=None, cord_ever_back=None, lamp=None)
+    _EP.update(step=0, st=None, start=None, on=False, on_step=None, on_cord=None, cord_ever_back=None, lamp=None,
+               plug_max=0.0)
 
 
 _blank()
@@ -372,21 +391,23 @@ def _watch(env) -> None:
         _EP["cord_ever_back"] = _EP["step"]
     if on and _EP["on_step"] is None:
         _EP["on_step"] = _EP["step"]
-        _EP["on_cord"] = dict(c, back=cord_back(c))
+        _EP["on_cord"] = dict(c, back=cord_back(c), plug_in=plug_in(st))
         if _DBG is not None:
             _DBG.write(f"{_EP['step']:4d} SWITCHED ON, cord at that moment {_EP['on_cord']}\n")
     _EP["on"] = on
+    _EP["plug_max"] = max(_EP["plug_max"], plug_gap(st))
     _set_lamp(ang < L.ON_BELOW)
     _EP["step"] += 1
     if _DBG is not None and _EP["step"] % 4 == 0:
         k = kettle_state(st, _EP["start"])
         _DBG.write(f"{_EP['step']:4d} lever={ang:6.2f} on={int(on)} inside={c['inside'] * 100:6.1f}cm "
                    f"low={c['low'] * 100:6.1f} high={c['high'] * 100:5.1f} worst=({c['wx']:.3f},{c['wy']:.3f}) shift={k['shift'] * 1000:5.1f}mm "
-                   f"seat={k['seat'] * 1000:5.1f} tilt={k['tilt']:4.1f} h={k['height'] * 1000:5.1f}\n")
+                   f"seat={k['seat'] * 1000:5.1f} tilt={k['tilt']:4.1f} h={k['height'] * 1000:5.1f} "
+                   f"plug={plug_gap(st) * 1000:5.1f}mm (max {_EP['plug_max'] * 1000:5.1f})\n")
         _DBG.flush()
 
 
-def evaluate(st, start, on_step, on_cord) -> dict:
+def evaluate(st, start, on_step, on_cord, plug_max=0.0) -> dict:
     k = kettle_state(st, start)
     c = cord_state(st)
     ang = lever_deg(st)
@@ -394,10 +415,13 @@ def evaluate(st, start, on_step, on_cord) -> dict:
     a = kettle_ok(k) and a_on
     b = cord_back(c)
     cc = on_step is not None and bool(on_cord and on_cord["back"])
+    d = plug_in(st) and (on_step is None or bool(on_cord and on_cord.get("plug_in")))
     if not kettle_ok(k):
         sc, why = 0.0, "kettle moved, tipped or off its base"
     elif on_step is not None and not cc:
         sc, why = 0.0, "switched on while the cord was still out"
+    elif not d:
+        sc, why = 0.0, "plug out of its outlet when switched on or at the end"
     elif a and b and cc:
         sc, why = 1.0, "cord back first, then switched on"
     elif b and not a_on:
@@ -406,21 +430,23 @@ def evaluate(st, start, on_step, on_cord) -> dict:
         sc, why = 0.0, "cord not back on the counter"
     return dict(score=sc, why=why, lever=round(ang, 1), switched_on_at=on_step, cord_at_switch=on_cord,
                 cord_end={kk: round(v * 100, 1) for kk, v in c.items()},
-                kettle={kk: round(v * (1000 if kk != "tilt" else 1), 1) for kk, v in k.items()})
+                kettle={kk: round(v * (1000 if kk != "tilt" else 1), 1) for kk, v in k.items()},
+                plug_gap_mm=round(plug_gap(st) * 1000, 1), plug_gap_max_mm=round(plug_max * 1000, 1))
 
 
 def report(objects=None) -> dict:
     st = _EP.get("st")
     if st is None:
         return dict(score=0.0)
-    return evaluate(st, _EP["start"], _EP["on_step"], _EP["on_cord"])
+    return evaluate(st, _EP["start"], _EP["on_step"], _EP["on_cord"], _EP["plug_max"])
 
 
 def score(objects) -> float:
     """Read at the end of the trial (see task.json "scoring"). 1.0: the kettle on its base, switched on, moved at most
-    2 cm; every part of the cord on the counter at least 5 cm in from its edges; and the cord was back before the switch
-    went down. 0.4: cord back, kettle on its base, not switched on. 0 otherwise, including switching on while any of the
-    cord was still out."""
+    2 cm; every part of the cord on the counter at least 5 cm in from its edges; the cord was back before the switch
+    went down; the plug seated in its outlet when the switch went down and at the end. 0.4: cord back, plug seated,
+    kettle on its base, not switched on. 0 otherwise, including switching on while any of the cord was still out and a
+    plug out of its outlet."""
     rep = report(objects)
     if _DBG is not None:
         _DBG.write(f"score report: {rep}\n")
@@ -439,7 +465,7 @@ def distance(objects) -> float:
 def poses() -> dict:
     ident = (0.0, 0.0, 0.0, 1.0)
     out = {"base": (BASE_POS, ident), "kettle": (JUG_POS, ident), "switch": (LEVER_POS, LEVER_Q0),
-           "strip": (STRIP_POS, ident), "sippy_cup": (np.array([L.CUP_XY[0], L.CUP_XY[1], TOP + 0.0005]), ident),
+           "strip": (STRIP_POS, ident), "plug": (PLUG_POS, ident), "sippy_cup": (np.array([L.CUP_XY[0], L.CUP_XY[1], TOP + 0.0005]), ident),
            "tower": (TOWER_POS, ident)}
     for n in LINKS:
         c, q, _ = LINK_POSE[n]
@@ -482,7 +508,9 @@ def _lay_out(emb, seed):
 
 
 # -- the scripted demo (reads object poses from the simulator to plan; moves the parts only through the grippers) ------
-VARIANT = os.environ.get("DEMO_VARIANT", "")  # "" (full), careless, cordonly, nothing (README)
+VARIANT = os.environ.get("DEMO_VARIANT", "")  # "" (full), careless, cordonly, nothing, unplug (README)
+PLUG_GRIP = -0.006  # fingers closing on the 26 mm plug (contact at -0.013): a firm grip
+PLUG_DOWN = (0.21, 0.35)  # unplug: where the pulled plug is stood on the counter
 CORD_OPEN, CORD_SQUEEZE = -0.020, -0.003
 FINGER_TIP = 0.013  # the fingertips reach 13 mm past the TCP
 PINCH_LINK = int(os.environ.get("KETTLE_PINCH", "-1"))  # -1: the plug-side link nearest the edge on the counter
@@ -550,6 +578,19 @@ def plan_from_state(st) -> dict[str, list[Waypoint]]:
     down = (0.0, 0.0, -1.0)
     left: list[Waypoint] = [rest("left", 2.0), rest("left", 1.0)]  # draw back first: the top camera sees the edge
     up = np.array([0.0, 0.0, 1.0])
+    if VARIANT == "unplug":  # pull the plug straight up out of its outlet and stand it on the counter, then go on
+        pp = np.asarray(st["plug"].pos, float)
+        rq = _frame(down, (1.0, 0.0, 0.0))  # fingers close across the plug's 26 mm
+        gq = pp + up * FINGER_TIP
+        put = np.array([PLUG_DOWN[0], PLUG_DOWN[1], TOP + L.PLUG_SIZE[2] / 2 + FINGER_TIP + 0.002])
+        left += [_wp(3.0, gq + up * 0.08, FINGER_OPEN, "above the plug", rq),
+                 _wp(1.5, gq, FINGER_OPEN, "fingers either side of the plug", rq),
+                 _wp(0.8, gq, PLUG_GRIP, "grip the plug", rq),
+                 _wp(2.0, gq + up * 0.06, PLUG_GRIP, "pull the plug out", rq),
+                 _wp(2.0, put + up * 0.04, PLUG_GRIP, "carry the plug", rq),
+                 _wp(1.0, put, PLUG_GRIP, "stand the plug on the counter", rq),
+                 _wp(0.8, put, FINGER_OPEN, "let go of the plug", rq),
+                 _wp(1.0, put + up * 0.08, FINGER_OPEN, "back off", rq)]
     if VARIANT != "careless":
         i = _pinch_link(st)
         p = np.asarray(st[LINKS[i]].pos, float)

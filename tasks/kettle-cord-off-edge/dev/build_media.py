@@ -1,7 +1,7 @@
 """Build the H.264 demo video (top camera, left wrist camera, right wrist camera side by side) from a run's stored
-frames, and optionally the setup image (the top camera's first frame).
+frames, and optionally the setup image (the top camera's frame SETUP_FRAME, default the first).
 usage: build_media.py <run folder> <out.mp4> [setup.png]"""
-import glob, struct, subprocess, sys, zlib
+import glob, os, struct, subprocess, sys, zlib
 import numpy as np
 
 run, out = sys.argv[1], sys.argv[2]
@@ -29,7 +29,7 @@ p.stdin.close()
 p.wait()
 print(out, n, "frames", f"{3 * w}x{h}", "exit", p.returncode)
 if len(sys.argv) > 3:
-    img = first
+    img = load(cams[0][int(os.environ.get("SETUP_FRAME", "0"))])  # SETUP_FRAME=55: 2.75 s in, the left arm drawn back
     raw = b"".join(b"\x00" + row.tobytes() for row in img)
     chunk = lambda t, d: struct.pack(">I", len(d)) + t + d + struct.pack(">I", zlib.crc32(t + d))
     open(sys.argv[3], "wb").write(b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", img.shape[1], img.shape[0], 8, 2, 0, 0, 0))
