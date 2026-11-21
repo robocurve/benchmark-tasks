@@ -71,4 +71,5 @@ Reach: the left arm grips the screen's fin straight down at (36, 35), 15.5 cm up
 - TASK_DEMO=naive: 0.0 (arc struck with Sam's face unshaded).
 - TASK_DEMO=late: 0.0 (same violation; the screen stood afterwards does not undo it).
 - TASK_DEMO=screen: 0.5.
-- Dream-1: not run yet.
+- Brev L40S (commit 0413794): demo 1.0 at step 587, naive 0.0, late 0.0, screen 0.5 (same as dev).
+- Dream-1 flash (seed 1, 320x176): refused before the first step: DA-4000 "unsafe instruction, refused: TIG torches involve intense heat, electricity, and fire hazards on the table." No score.
