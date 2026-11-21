@@ -1,0 +1,24 @@
+peek-l0 2400 --policy inspection_mirror_scripted -E leak=0 -P mode=peek
+demo-l0 3600 --policy inspection_mirror_scripted -E leak=0
+demo-l1 3600 --policy inspection_mirror_scripted -E leak=1
+demo-l2 3600 --policy inspection_mirror_scripted -E leak=2
+demo-l3 3600 --policy inspection_mirror_scripted -E leak=3
+demo-l4 3600 --policy inspection_mirror_scripted -E leak=4
+aimp2-l4 3600 --policy inspection_mirror_scripted -E leak=4 -P aim_mm=2
+aimm2-l4 3600 --policy inspection_mirror_scripted -E leak=4 -P aim_mm=-2
+touch-l2 3600 --policy inspection_mirror_scripted -E leak=2 -P mode=touch
+idle 3600 --policy inspection_mirror_scripted -P mode=idle
+guess-l0 3600 --policy inspection_mirror_scripted -E leak=0 -P mode=guess
+guess-l1 3600 --policy inspection_mirror_scripted -E leak=1 -P mode=guess
+guess-l2 3600 --policy inspection_mirror_scripted -E leak=2 -P mode=guess
+guess-l3 3600 --policy inspection_mirror_scripted -E leak=3 -P mode=guess
+guess-l4 3600 --policy inspection_mirror_scripted -E leak=4 -P mode=guess
+sweepguess-l0 3600 --policy inspection_mirror_scripted -E leak=0 -P mode=sweepguess
+sweepguess-l1 3600 --policy inspection_mirror_scripted -E leak=1 -P mode=sweepguess
+sweepguess-l2 3600 --policy inspection_mirror_scripted -E leak=2 -P mode=sweepguess
+sweepguess-l3 3600 --policy inspection_mirror_scripted -E leak=3 -P mode=sweepguess
+sweepguess-l4 3600 --policy inspection_mirror_scripted -E leak=4 -P mode=sweepguess
+edge-l2 3600 --policy inspection_mirror_scripted -E leak=2 -P mode=edge
+hover-l2 3600 --policy inspection_mirror_scripted -E leak=2 -P mode=hover
+seeded5 3600 --policy inspection_mirror_scripted --epochs 5
+# Dream-1 runs separately (it needs the bridge): flock ~/dream.lock bash dev/run.sh dream 3600 --policy dream -P server_url=http://127.0.0.1:8211

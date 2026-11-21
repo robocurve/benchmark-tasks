@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "inspection-mirror"
+version = "0.1.0"
+description = "Find a hidden coolant leak with a hand-held inspection mirror and paint-mark the spot above it, YAM arms"
+requires-python = ">=3.11"
+dependencies = ["numpy", "yam-arena"]
+
+[project.entry-points."inspect_robots.embodiments"]
+yam_inspection_mirror = "inspection_mirror.embodiment:InspectionMirrorEmbodiment"
+
+[project.entry-points."inspect_robots.policies"]
+inspection_mirror_scripted = "inspection_mirror.policy:InspectionMirrorScriptedPolicy"
+
+[tool.setuptools.packages.find]
+include = ["inspection_mirror*"]
