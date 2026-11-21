@@ -1,0 +1,636 @@
+#usda 1.0
+(
+    defaultPrim = "hardware"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "hardware"
+{
+    def "looks"
+    {
+        def Material "steel"
+        {
+            token outputs:surface.connect = </hardware/looks/steel/shader.outputs:surface>
+
+            def Shader "shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.48, 0.52, 0.56)
+                float inputs:metallic = 0.7
+                float inputs:roughness = 0.35
+                token outputs:surface
+            }
+        }
+
+        def Material "brass"
+        {
+            token outputs:surface.connect = </hardware/looks/brass/shader.outputs:surface>
+
+            def Shader "shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.72, 0.46, 0.12)
+                float inputs:metallic = 0.65
+                float inputs:roughness = 0.35
+                token outputs:surface
+            }
+        }
+
+        def Material "blue"
+        {
+            token outputs:surface.connect = </hardware/looks/blue/shader.outputs:surface>
+
+            def Shader "shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.045, 0.2, 0.3)
+                float inputs:metallic = 0.15
+                float inputs:roughness = 0.35
+                token outputs:surface
+            }
+        }
+
+        def Material "dark"
+        {
+            token outputs:surface.connect = </hardware/looks/dark/shader.outputs:surface>
+
+            def Shader "shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.055, 0.065, 0.075)
+                float inputs:metallic = 0.1
+                float inputs:roughness = 0.35
+                token outputs:surface
+            }
+        }
+
+        def Material "orange"
+        {
+            token outputs:surface.connect = </hardware/looks/orange/shader.outputs:surface>
+
+            def Shader "shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.83, 0.27, 0.035)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.7
+                token outputs:surface
+            }
+        }
+    }
+
+    def Xform "key" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0.02, 0, 0)
+        float3 physics:diagonalInertia = (1e-7, 0.000002, 0.000002)
+        float physics:mass = 0.009
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        quatf xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Mesh "bow00" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(0.0035, -0.001, 0), (0.0055, -0.001, 0), (0.005394319, -0.001, 0.0010729968), (0.0034327484, -0.001, 0.00068281614), (0.0035, 0.001, 0), (0.0055, 0.001, 0), (0.005394319, 0.001, 0.0010729968), (0.0034327484, 0.001, 0.00068281614)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow01" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(0.0034327484, -0.001, 0.00068281614), (0.005394319, -0.001, 0.0010729968), (0.0050813374, -0.001, 0.002104759), (0.0032335783, -0.001, 0.001339392), (0.0034327484, 0.001, 0.00068281614), (0.005394319, 0.001, 0.0010729968), (0.0050813374, 0.001, 0.002104759), (0.0032335783, 0.001, 0.001339392)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow02" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(0.0032335783, -0.001, 0.001339392), (0.0050813374, -0.001, 0.002104759), (0.004573083, -0.001, 0.0030556363), (0.0029101437, -0.001, 0.0019444958), (0.0032335783, 0.001, 0.001339392), (0.0050813374, 0.001, 0.002104759), (0.004573083, 0.001, 0.0030556363), (0.0029101437, 0.001, 0.0019444958)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow03" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(0.0029101437, -0.001, 0.0019444958), (0.004573083, -0.001, 0.0030556363), (0.0038890874, -0.001, 0.0038890874), (0.0024748738, -0.001, 0.0024748738), (0.0029101437, 0.001, 0.0019444958), (0.004573083, 0.001, 0.0030556363), (0.0038890874, 0.001, 0.0038890874), (0.0024748738, 0.001, 0.0024748738)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow04" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(0.0024748738, -0.001, 0.0024748738), (0.0038890874, -0.001, 0.0038890874), (0.0030556363, -0.001, 0.004573083), (0.0019444958, -0.001, 0.0029101437), (0.0024748738, 0.001, 0.0024748738), (0.0038890874, 0.001, 0.0038890874), (0.0030556363, 0.001, 0.004573083), (0.0019444958, 0.001, 0.0029101437)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow05" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(0.0019444958, -0.001, 0.0029101437), (0.0030556363, -0.001, 0.004573083), (0.002104759, -0.001, 0.0050813374), (0.001339392, -0.001, 0.0032335783), (0.0019444958, 0.001, 0.0029101437), (0.0030556363, 0.001, 0.004573083), (0.002104759, 0.001, 0.0050813374), (0.001339392, 0.001, 0.0032335783)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow06" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(0.001339392, -0.001, 0.0032335783), (0.002104759, -0.001, 0.0050813374), (0.0010729968, -0.001, 0.005394319), (0.00068281614, -0.001, 0.0034327484), (0.001339392, 0.001, 0.0032335783), (0.002104759, 0.001, 0.0050813374), (0.0010729968, 0.001, 0.005394319), (0.00068281614, 0.001, 0.0034327484)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow07" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(0.00068281614, -0.001, 0.0034327484), (0.0010729968, -0.001, 0.005394319), (3.3677788e-19, -0.001, 0.0055), (2.1431319e-19, -0.001, 0.0035), (0.00068281614, 0.001, 0.0034327484), (0.0010729968, 0.001, 0.005394319), (3.3677788e-19, 0.001, 0.0055), (2.1431319e-19, 0.001, 0.0035)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow08" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(2.1431319e-19, -0.001, 0.0035), (3.3677788e-19, -0.001, 0.0055), (-0.0010729968, -0.001, 0.005394319), (-0.00068281614, -0.001, 0.0034327484), (2.1431319e-19, 0.001, 0.0035), (3.3677788e-19, 0.001, 0.0055), (-0.0010729968, 0.001, 0.005394319), (-0.00068281614, 0.001, 0.0034327484)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow09" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(-0.00068281614, -0.001, 0.0034327484), (-0.0010729968, -0.001, 0.005394319), (-0.002104759, -0.001, 0.0050813374), (-0.001339392, -0.001, 0.0032335783), (-0.00068281614, 0.001, 0.0034327484), (-0.0010729968, 0.001, 0.005394319), (-0.002104759, 0.001, 0.0050813374), (-0.001339392, 0.001, 0.0032335783)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow10" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(-0.001339392, -0.001, 0.0032335783), (-0.002104759, -0.001, 0.0050813374), (-0.0030556363, -0.001, 0.004573083), (-0.0019444958, -0.001, 0.0029101437), (-0.001339392, 0.001, 0.0032335783), (-0.002104759, 0.001, 0.0050813374), (-0.0030556363, 0.001, 0.004573083), (-0.0019444958, 0.001, 0.0029101437)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow11" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(-0.0019444958, -0.001, 0.0029101437), (-0.0030556363, -0.001, 0.004573083), (-0.0038890874, -0.001, 0.0038890874), (-0.0024748738, -0.001, 0.0024748738), (-0.0019444958, 0.001, 0.0029101437), (-0.0030556363, 0.001, 0.004573083), (-0.0038890874, 0.001, 0.0038890874), (-0.0024748738, 0.001, 0.0024748738)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow12" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(-0.0024748738, -0.001, 0.0024748738), (-0.0038890874, -0.001, 0.0038890874), (-0.004573083, -0.001, 0.0030556363), (-0.0029101437, -0.001, 0.0019444958), (-0.0024748738, 0.001, 0.0024748738), (-0.0038890874, 0.001, 0.0038890874), (-0.004573083, 0.001, 0.0030556363), (-0.0029101437, 0.001, 0.0019444958)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow13" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(-0.0029101437, -0.001, 0.0019444958), (-0.004573083, -0.001, 0.0030556363), (-0.0050813374, -0.001, 0.002104759), (-0.0032335783, -0.001, 0.001339392), (-0.0029101437, 0.001, 0.0019444958), (-0.004573083, 0.001, 0.0030556363), (-0.0050813374, 0.001, 0.002104759), (-0.0032335783, 0.001, 0.001339392)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow14" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(-0.0032335783, -0.001, 0.001339392), (-0.0050813374, -0.001, 0.002104759), (-0.005394319, -0.001, 0.0010729968), (-0.0034327484, -0.001, 0.00068281614), (-0.0032335783, 0.001, 0.001339392), (-0.0050813374, 0.001, 0.002104759), (-0.005394319, 0.001, 0.0010729968), (-0.0034327484, 0.001, 0.00068281614)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow15" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(-0.0034327484, -0.001, 0.00068281614), (-0.005394319, -0.001, 0.0010729968), (-0.0055, -0.001, 6.7355575e-19), (-0.0035, -0.001, 4.2862638e-19), (-0.0034327484, 0.001, 0.00068281614), (-0.005394319, 0.001, 0.0010729968), (-0.0055, 0.001, 6.7355575e-19), (-0.0035, 0.001, 4.2862638e-19)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow16" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(-0.0035, -0.001, 4.2862638e-19), (-0.0055, -0.001, 6.7355575e-19), (-0.005394319, -0.001, -0.0010729968), (-0.0034327484, -0.001, -0.00068281614), (-0.0035, 0.001, 4.2862638e-19), (-0.0055, 0.001, 6.7355575e-19), (-0.005394319, 0.001, -0.0010729968), (-0.0034327484, 0.001, -0.00068281614)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow17" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(-0.0034327484, -0.001, -0.00068281614), (-0.005394319, -0.001, -0.0010729968), (-0.0050813374, -0.001, -0.002104759), (-0.0032335783, -0.001, -0.001339392), (-0.0034327484, 0.001, -0.00068281614), (-0.005394319, 0.001, -0.0010729968), (-0.0050813374, 0.001, -0.002104759), (-0.0032335783, 0.001, -0.001339392)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow18" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(-0.0032335783, -0.001, -0.001339392), (-0.0050813374, -0.001, -0.002104759), (-0.004573083, -0.001, -0.0030556363), (-0.0029101437, -0.001, -0.0019444958), (-0.0032335783, 0.001, -0.001339392), (-0.0050813374, 0.001, -0.002104759), (-0.004573083, 0.001, -0.0030556363), (-0.0029101437, 0.001, -0.0019444958)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow19" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(-0.0029101437, -0.001, -0.0019444958), (-0.004573083, -0.001, -0.0030556363), (-0.0038890874, -0.001, -0.0038890874), (-0.0024748738, -0.001, -0.0024748738), (-0.0029101437, 0.001, -0.0019444958), (-0.004573083, 0.001, -0.0030556363), (-0.0038890874, 0.001, -0.0038890874), (-0.0024748738, 0.001, -0.0024748738)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow20" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(-0.0024748738, -0.001, -0.0024748738), (-0.0038890874, -0.001, -0.0038890874), (-0.0030556363, -0.001, -0.004573083), (-0.0019444958, -0.001, -0.0029101437), (-0.0024748738, 0.001, -0.0024748738), (-0.0038890874, 0.001, -0.0038890874), (-0.0030556363, 0.001, -0.004573083), (-0.0019444958, 0.001, -0.0029101437)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow21" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(-0.0019444958, -0.001, -0.0029101437), (-0.0030556363, -0.001, -0.004573083), (-0.002104759, -0.001, -0.0050813374), (-0.001339392, -0.001, -0.0032335783), (-0.0019444958, 0.001, -0.0029101437), (-0.0030556363, 0.001, -0.004573083), (-0.002104759, 0.001, -0.0050813374), (-0.001339392, 0.001, -0.0032335783)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow22" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(-0.001339392, -0.001, -0.0032335783), (-0.002104759, -0.001, -0.0050813374), (-0.0010729968, -0.001, -0.005394319), (-0.00068281614, -0.001, -0.0034327484), (-0.001339392, 0.001, -0.0032335783), (-0.002104759, 0.001, -0.0050813374), (-0.0010729968, 0.001, -0.005394319), (-0.00068281614, 0.001, -0.0034327484)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow23" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(-0.00068281614, -0.001, -0.0034327484), (-0.0010729968, -0.001, -0.005394319), (-1.0103336e-18, -0.001, -0.0055), (-6.4293957e-19, -0.001, -0.0035), (-0.00068281614, 0.001, -0.0034327484), (-0.0010729968, 0.001, -0.005394319), (-1.0103336e-18, 0.001, -0.0055), (-6.4293957e-19, 0.001, -0.0035)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow24" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(-6.4293957e-19, -0.001, -0.0035), (-1.0103336e-18, -0.001, -0.0055), (0.0010729968, -0.001, -0.005394319), (0.00068281614, -0.001, -0.0034327484), (-6.4293957e-19, 0.001, -0.0035), (-1.0103336e-18, 0.001, -0.0055), (0.0010729968, 0.001, -0.005394319), (0.00068281614, 0.001, -0.0034327484)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow25" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(0.00068281614, -0.001, -0.0034327484), (0.0010729968, -0.001, -0.005394319), (0.002104759, -0.001, -0.0050813374), (0.001339392, -0.001, -0.0032335783), (0.00068281614, 0.001, -0.0034327484), (0.0010729968, 0.001, -0.005394319), (0.002104759, 0.001, -0.0050813374), (0.001339392, 0.001, -0.0032335783)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow26" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(0.001339392, -0.001, -0.0032335783), (0.002104759, -0.001, -0.0050813374), (0.0030556363, -0.001, -0.004573083), (0.0019444958, -0.001, -0.0029101437), (0.001339392, 0.001, -0.0032335783), (0.002104759, 0.001, -0.0050813374), (0.0030556363, 0.001, -0.004573083), (0.0019444958, 0.001, -0.0029101437)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow27" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(0.0019444958, -0.001, -0.0029101437), (0.0030556363, -0.001, -0.004573083), (0.0038890874, -0.001, -0.0038890874), (0.0024748738, -0.001, -0.0024748738), (0.0019444958, 0.001, -0.0029101437), (0.0030556363, 0.001, -0.004573083), (0.0038890874, 0.001, -0.0038890874), (0.0024748738, 0.001, -0.0024748738)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow28" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(0.0024748738, -0.001, -0.0024748738), (0.0038890874, -0.001, -0.0038890874), (0.004573083, -0.001, -0.0030556363), (0.0029101437, -0.001, -0.0019444958), (0.0024748738, 0.001, -0.0024748738), (0.0038890874, 0.001, -0.0038890874), (0.004573083, 0.001, -0.0030556363), (0.0029101437, 0.001, -0.0019444958)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow29" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(0.0029101437, -0.001, -0.0019444958), (0.004573083, -0.001, -0.0030556363), (0.0050813374, -0.001, -0.002104759), (0.0032335783, -0.001, -0.001339392), (0.0029101437, 0.001, -0.0019444958), (0.004573083, 0.001, -0.0030556363), (0.0050813374, 0.001, -0.002104759), (0.0032335783, 0.001, -0.001339392)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow30" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(0.0032335783, -0.001, -0.001339392), (0.0050813374, -0.001, -0.002104759), (0.005394319, -0.001, -0.0010729968), (0.0034327484, -0.001, -0.00068281614), (0.0032335783, 0.001, -0.001339392), (0.0050813374, 0.001, -0.002104759), (0.005394319, 0.001, -0.0010729968), (0.0034327484, 0.001, -0.00068281614)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "bow31" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [3, 2, 1, 0, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(0.0034327484, -0.001, -0.00068281614), (0.005394319, -0.001, -0.0010729968), (0.0055, -0.001, -1.3471115e-18), (0.0035, -0.001, -8.5725276e-19), (0.0034327484, 0.001, -0.00068281614), (0.005394319, 0.001, -0.0010729968), (0.0055, 0.001, -1.3471115e-18), (0.0035, 0.001, -8.5725276e-19)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "shoulder" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [8, 8, 4, 4, 4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [7, 6, 5, 4, 3, 2, 1, 0, 8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 9, 8, 1, 2, 10, 9, 2, 3, 11, 10, 3, 4, 12, 11, 4, 5, 13, 12, 5, 6, 14, 13, 6, 7, 15, 14, 7, 0, 8, 15]
+            rel material:binding = </hardware/looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            point3f[] points = [(0.004, -0.001, -0.004), (0.008, -0.001, -0.009), (0.016, -0.001, -0.008), (0.018, -0.001, -0.004), (0.018, -0.001, 0.004), (0.016, -0.001, 0.008), (0.008, -0.001, 0.009), (0.004, -0.001, 0.004), (0.004, 0.001, -0.004), (0.008, 0.001, -0.009), (0.016, 0.001, -0.008), (0.018, 0.001, -0.004), (0.018, 0.001, 0.004), (0.016, 0.001, 0.008), (0.008, 0.001, 0.009), (0.004, 0.001, 0.004)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Cube "blade" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </hardware/looks/brass>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double size = 1
+            float3 xformOp:scale = (0.026, 0.002, 0.006)
+            double3 xformOp:translate = (0.029, 0, 0.0005)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "tooth0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </hardware/looks/brass>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double size = 1
+            float3 xformOp:scale = (0.0024, 0.002, 0.0015)
+            double3 xformOp:translate = (0.019, 0, -0.0032500000000000003)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "tooth1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </hardware/looks/brass>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double size = 1
+            float3 xformOp:scale = (0.0024, 0.002, 0.0005)
+            double3 xformOp:translate = (0.0235, 0, -0.00275)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "tooth2" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </hardware/looks/brass>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double size = 1
+            float3 xformOp:scale = (0.0024, 0.002, 0.002)
+            double3 xformOp:translate = (0.027999999999999997, 0, -0.0035)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "tooth3" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </hardware/looks/brass>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double size = 1
+            float3 xformOp:scale = (0.0024, 0.002, 0.001)
+            double3 xformOp:translate = (0.0325, 0, -0.003)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "tooth4" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </hardware/looks/brass>
+            custom float physxCollision:contactOffset = 0.00008
+            custom float physxCollision:restOffset = 0.00003
+            double size = 1
+            float3 xformOp:scale = (0.0024, 0.002, 0.0018)
+            double3 xformOp:translate = (0.037, 0, -0.0034000000000000002)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+}
+

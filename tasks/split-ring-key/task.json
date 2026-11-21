@@ -1,0 +1,20 @@
+{
+  "title": "Thread a household key onto a split ring",
+  "category": "Societal relatability",
+  "keywords": [
+    "bimanual",
+    "split ring",
+    "spring opening",
+    "threading",
+    "household key"
+  ],
+  "instruction": "Thread the brass house key fully onto the steel split ring. Use the orange spring-return splitter and unpowered crank as needed. Release the key and splitter, with both overlapping turns retained and both grippers clear of the key and ring. You may keep holding the crank.",
+  "context": "Adding or sharing a house key requires opening the steel spring end and feeding the closed key hole around the overlapping spiral without dropping or deforming the hardware.",
+  "setup": "A vertical 38.3 mm OD steel split ring (1.3 mm wire, 1.6 mm pitch, 705-degree spiral) is held by a visible lower-coil vise on a blue aluminum and steel bench fixture. It has an unpowered 85 mm-radius four-spoke handwheel with four freely spinning orange knobs and passive bearing damping, and a passive orange splitter grip with a 140 mm radial parking slide and 8 mm axial opening slide. A 47.5 x 18 x 2 mm brass house key with a 7 mm empty hole starts flat and unthreaded on a separate blue support. Standard two-arm YAM station; fixed layout, seed 0.",
+  "scoring": "0 for no captured strand or invalid mechanics; 0.25 for one strand within 10 mm of an end; 0.5 for one strand farther along; 0.75 for two distinct turns at least 12 mm from both ends. Full score requires the closed ring to retain the released key, gripper/finger collision bounds at least 20 mm clear of key and ring, key speed <=15 mm/s, key spin <=0.35 rad/s and ring spin <=0.03 rad/s for 2 seconds. task.py defines the geometry and integrity checks.",
+  "run_limit": "2,400 robot actions (120 seconds at 20 Hz).",
+  "reset_notes": "Restore the complete native articulation and key root state. The key starts separate; splitter slides return to their spring rest positions and crank angle returns to zero. Nothing is consumed.",
+  "fidelity": "Steel spiral: 20 curved links with permanent radial bending springs; torsion/yield simplified. Real collision hole and passive fixture contacts; no key attachment or callback forces. A visible unpowered rotary vise and retractable splitter aid handling. Resting turns have 0.3 mm surface clearance. Spring gains are approximate. Uniform 30 µm rest/80 µm contact offsets, 1 ms physics and numerical damping stabilize small contacts.",
+  "scores": "Dream-1 beta: 0.0 in 2400 actions (max_steps); scripted native demo: 1.0 in 2302 actions. Partial-route control: 0.5; direct-placement and wrong-hole controls: 0 and 0.",
+  "media": "M-FNNFPU"
+}
