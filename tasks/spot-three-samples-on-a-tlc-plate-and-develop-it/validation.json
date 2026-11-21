@@ -1,0 +1,1120 @@
+{
+  "status": "Scripted demonstration run natively in Isaac Sim with the final code: score 1.0, run twice with byte-identical scorer traces. Dream-1 (dreamlabs/dream-1-beta) run natively once on the final code (hashes as recorded_hashes), with the same scene, instruction, scorer and control settings: score 0.0; the trial was voided at step 4,770 of 4,800 when capillary 1, lifted from its rack, slipped from the grip and tipped over.",
+  "seed": 0,
+  "object_jitter": 0,
+  "control_hz": 20,
+  "physics_hz": 240,
+  "max_steps": 4800,
+  "runs": {
+    "scripted": {
+      "score": 1.0,
+      "executed_steps": 3033,
+      "step_limit": 4800,
+      "elapsed_s": 1428.23,
+      "termination_reason": "success",
+      "variant": "full",
+      "result": "out/scripted-11/RESULT.json",
+      "grader_trace": "out/scripted-11/media/grader-trace.jsonl",
+      "videos": {
+        "overhead": "out/scripted-11/media/top_cam.mp4",
+        "side": "out/scripted-11/media/side_cam.mp4",
+        "combined": "out/scripted-11/demo.mp4"
+      },
+      "combined_video_sha256": "d5cfa4a6429c5cd4a85f28ea6c6968fae333152bb835ed9fe6b62fcf2e407f36",
+      "setup_image": "out/scripted-11/setup.png",
+      "setup_image_sha256": "4be9ea06577dceac3822b3637e511f816f681f333aa9e05be51ae425b6c05f69",
+      "setup_image_is": "the first frame of the combined video (overhead camera scaled to 1280 x 704, beside the side review camera)",
+      "stills": [
+        "out/scripted-11/media/setup.png",
+        "out/scripted-11/media/end_top_cam.png",
+        "out/scripted-11/media/end_side_cam.png"
+      ],
+      "machine": "one NVIDIA A10 (24 GB), Ubuntu 22.04, Isaac Sim window shown (--live), GPU shared with one other simulation process",
+      "inspect_robots": "1.0.0",
+      "yam_arena": "0.1.0"
+    },
+    "dream": {
+      "model": "dreamlabs/dream-1-beta",
+      "status": "run",
+      "score": 0.0,
+      "executed_steps": 4770,
+      "step_limit": 4800,
+      "elapsed_s": 1333.14,
+      "termination_reason": "void",
+      "void": "spotter 1 dropped",
+      "dream_action_requests": 177,
+      "request_cap": 300,
+      "list_price_estimate_usd": 0.236,
+      "result": "out/dream/RESULT.json",
+      "grader_trace": "out/dream/media/grader-trace.jsonl",
+      "video": "out/dream/model_run.mp4",
+      "videos": {
+        "overhead": "out/dream/media/top_cam.mp4",
+        "side": "out/dream/media/side_cam.mp4",
+        "combined": "out/dream/model_run.mp4"
+      },
+      "combined_video": "2560 x 704, 10 fps, 2,386 frames (238.6 s): the overhead recording scaled to 1280 x 704 beside the side recording, made with the same ffmpeg command as demo.mp4",
+      "combined_video_sha256": "07784ec6f13a5f8c9b993b68b5a67a20f5f04bb64c211366195f481e9b2cecbc",
+      "stills": [
+        "out/dream/media/setup.png",
+        "out/dream/media/end_top_cam.png",
+        "out/dream/media/end_side_cam.png"
+      ],
+      "what_it_did": "Moved both arms over the bench, opening and closing both grippers, for about 4,700 steps without touching anything (the plate, the lid, the tank and the three capillaries unmoved). From about step 4,730 the left gripper pinched capillary 1 (up to 3.5 N on its pads) and lifted it from its rack, its tip about 20 mm up by step 4,760; the pinch then slipped (no pad force by step 4,770) and the capillary tipped more than 60 degrees from upright, which the scorer counts as dropped: the trial was voided at step 4,770 with 0 of 12 checks. No capillary was filled and no spot was made, and no force above 0.31 N reached any capillary from anything but the pads (the breaking limit is 3 N).",
+      "final_grade": {
+        "score": 0.0,
+        "points": 0,
+        "void": "spotter 1 dropped",
+        "racked": [
+          null,
+          1,
+          2
+        ],
+        "grippers_clear": true,
+        "touches": 0
+      },
+      "peaks": {
+        "spotter_plate_n": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "spotter_other_n": [
+          0.303,
+          0.02,
+          0.02
+        ],
+        "spotter_pads_n": [
+          3.49,
+          0.0,
+          0.0
+        ],
+        "plate_fingers_n": [
+          0.0,
+          0.0
+        ],
+        "plate_tank_n": 0.0,
+        "lid_fingers_n": [
+          0.0,
+          0.0
+        ]
+      },
+      "dream_chunk_anchor": "executed_target_blend_v2",
+      "client": {
+        "dreamlabs-client": "1.0.14",
+        "inspect-robots-dream": "git+https://github.com/kairosiann/inspect-robots-dream@b5e936a201cec66c54c297e522c920d98445e339"
+      },
+      "audit": {
+        "action_trace": "out/dream/dream-action-trace.jsonl",
+        "input_frames": "out/dream/dream-input-rgb.zip",
+        "input_frames_sha256": "bf21ffd1c3a73305dfdca035c9b7452929e90948b9ce858893b963a7f8f31c8f",
+        "usage": "out/dream/DREAM_USAGE.json"
+      },
+      "code_hashes_match_recorded": true,
+      "machine": "one NVIDIA A10 (24 GB), Ubuntu 22.04, headless, the GPU not shared; elapsed_s includes Isaac Sim start-up and scene creation",
+      "inspect_robots": "1.0.0",
+      "yam_arena": "0.1.0",
+      "superseded_trial": {
+        "result": "out/dream-oldcode/RESULT.json",
+        "note": "An earlier Dream-1 trial, run on the code of out/scripted-10 before the changes of 20 November (scene, layout, rules, grader and adapter hashes differ from recorded_hashes): 0.0, voided at step 2,022 when capillary 1 took 3.6 N from something other than the pads (broken); 63 requests. Kept for the record; the trial above is the one on the final code."
+      }
+    }
+  },
+  "recorded_hashes": {
+    "scene_sha256": "e31741ace4c3018172897519f27609a4c282715eb669722fa69973e029bc31b1",
+    "layout_sha256": "a55ea36170cf76ec60b11e15c7f7f8d177e184f83a62cec4609886c38021b1dc",
+    "rules_sha256": "1ecedb3a1cba916fdbb71254984235084d1c228585849c5485e226f310507d35",
+    "grader_sha256": "472579543a6322ba4c143b6b30cafaa74837da8552ac3f49d359541521094ebe",
+    "adapter_sha256": "7ecc860c29c7f7e43a7ae18a5b720ffb1c80400cac77a0f08e9378b176c9114c",
+    "scripted_sha256": "bbe3b81a2bc61b1cb37ef4a1f899a27b80b9366f275128c5a6d255686314d00e",
+    "asset_sha256": "39930c9fcdc6a8a8599d14b8756f091a23bc62d47bafb2701a5efbdde654f415"
+  },
+  "scripted_final_grade": {
+    "score": 1.0,
+    "points": 12,
+    "lanes": [
+      {
+        "covered": true,
+        "small": true,
+        "clean": true,
+        "spots": 1,
+        "diameter_mm": 2.57,
+        "offset_mm": 0.26,
+        "sample": 0,
+        "gouged": false
+      },
+      {
+        "covered": true,
+        "small": true,
+        "clean": true,
+        "spots": 1,
+        "diameter_mm": 2.57,
+        "offset_mm": 0.39,
+        "sample": 1,
+        "gouged": false
+      },
+      {
+        "covered": true,
+        "small": true,
+        "clean": true,
+        "spots": 1,
+        "diameter_mm": 2.57,
+        "offset_mm": 0.9,
+        "sample": 2,
+        "gouged": false
+      }
+    ],
+    "spots": [
+      {
+        "x": -27.25,
+        "y": 6.08,
+        "sample": 0,
+        "seconds": 0.35,
+        "spotter": 0,
+        "diameter_mm": 2.57
+      },
+      {
+        "x": -27.75,
+        "y": -0.3,
+        "sample": 1,
+        "seconds": 0.35,
+        "spotter": 1,
+        "diameter_mm": 2.57
+      },
+      {
+        "x": -27.93,
+        "y": -5.2,
+        "sample": 2,
+        "seconds": 0.35,
+        "spotter": 2,
+        "diameter_mm": 2.57
+      }
+    ],
+    "gouges": [],
+    "plate": {
+      "inside": true,
+      "bottom_wet": true,
+      "baseline_above_mm": 4.88,
+      "lean_deg": 28.17,
+      "face_out": true,
+      "on_wall": true,
+      "right_way_up": true
+    },
+    "lid": {
+      "off_centre_mm": 1.43,
+      "tilt_deg": 0.0,
+      "yaw_deg": 0.3,
+      "height_error_mm": -0.0,
+      "on": true
+    },
+    "racked": [
+      0,
+      1,
+      2
+    ],
+    "tidy": true,
+    "grippers_clear": true,
+    "clearance_mm": [
+      429.9,
+      81.6
+    ],
+    "void": null
+  },
+  "scripted_course": {
+    "phases": [
+      [
+        0,
+        "lane 1: pick spotter 1"
+      ],
+      [
+        156,
+        "lane 1: fill"
+      ],
+      [
+        344,
+        "lane 1: spot"
+      ],
+      [
+        489,
+        "lane 1: return spotter 1"
+      ],
+      [
+        687,
+        "lane 2: pick spotter 2"
+      ],
+      [
+        817,
+        "lane 2: fill"
+      ],
+      [
+        1000,
+        "lane 2: spot"
+      ],
+      [
+        1145,
+        "lane 2: return spotter 2"
+      ],
+      [
+        1367,
+        "lane 3: pick spotter 3"
+      ],
+      [
+        1497,
+        "lane 3: fill"
+      ],
+      [
+        1685,
+        "lane 3: spot"
+      ],
+      [
+        1833,
+        "lane 3: return spotter 3"
+      ],
+      [
+        2057,
+        "left hand back"
+      ],
+      [
+        2097,
+        "plate: pinch its top end"
+      ],
+      [
+        2233,
+        "plate: lift, it swings down"
+      ],
+      [
+        2305,
+        "plate: straighten it against the bar's end"
+      ],
+      [
+        2549,
+        "plate: carry it over the tank"
+      ],
+      [
+        2621,
+        "plate: lower it in"
+      ],
+      [
+        2705,
+        "plate: let go"
+      ],
+      [
+        2754,
+        "lid: pinch it across its width"
+      ],
+      [
+        2908,
+        "lid: onto the tank"
+      ],
+      [
+        3019,
+        "right hand back"
+      ]
+    ],
+    "events": [
+      {
+        "tick": 0,
+        "event": "start"
+      },
+      {
+        "tick": 85,
+        "event": "settled",
+        "arm": "left",
+        "error_mm": [
+          -0.0624,
+          0.1759,
+          -0.1376
+        ],
+        "offset_mm": [
+          0.7961,
+          -0.4202,
+          0.199
+        ]
+      },
+      {
+        "tick": 108,
+        "event": "spotter pinched",
+        "lane": 1.0,
+        "pads_mm": 1.3195
+      },
+      {
+        "tick": 201,
+        "event": "aligned",
+        "arm": "left",
+        "error_mm": [
+          -0.5945,
+          0.4856,
+          -47.4619
+        ]
+      },
+      {
+        "tick": 238,
+        "event": "aligned",
+        "arm": "left",
+        "error_mm": [
+          -0.287,
+          0.1144,
+          -39.9706
+        ]
+      },
+      {
+        "tick": 294,
+        "event": "dipped",
+        "lane": 1.0,
+        "tip_mm": [
+          235.2553,
+          179.9184,
+          6.9798
+        ],
+        "load": "0"
+      },
+      {
+        "tick": 430,
+        "event": "aligned",
+        "arm": "left",
+        "error_mm": [
+          -0.2211,
+          0.1479,
+          -4.6185
+        ]
+      },
+      {
+        "tick": 475,
+        "event": "aligned",
+        "arm": "left",
+        "error_mm": [
+          0.0577,
+          -0.4656,
+          -0.1321
+        ]
+      },
+      {
+        "tick": 489,
+        "event": "dab",
+        "lane": 1.0,
+        "forces_n": [
+          0.0,
+          0.0,
+          0.7609,
+          0.7422,
+          0.7122,
+          0.6633,
+          0.6931,
+          0.6684
+        ],
+        "tip_off_tick_mm": [
+          2.9101,
+          -3.1382,
+          8.8642
+        ]
+      },
+      {
+        "tick": 489,
+        "event": "spot",
+        "lane": 1.0,
+        "diameter_mm": 2.57,
+        "offset_mm": 0.26
+      },
+      {
+        "tick": 583,
+        "event": "aligned",
+        "arm": "left",
+        "error_mm": [
+          -0.7953,
+          1.0521,
+          -32.3624
+        ]
+      },
+      {
+        "tick": 618,
+        "event": "aligned",
+        "arm": "left",
+        "error_mm": [
+          0.1409,
+          -0.0417,
+          -21.9146
+        ]
+      },
+      {
+        "tick": 687,
+        "event": "returned",
+        "lane": 1.0,
+        "racked": "0"
+      },
+      {
+        "tick": 746,
+        "event": "settled",
+        "arm": "left",
+        "error_mm": [
+          -0.3041,
+          -0.3621,
+          0.0795
+        ],
+        "offset_mm": [
+          0.7961,
+          -0.4202,
+          0.199
+        ]
+      },
+      {
+        "tick": 769,
+        "event": "spotter pinched",
+        "lane": 2.0,
+        "pads_mm": 1.3005
+      },
+      {
+        "tick": 857,
+        "event": "aligned",
+        "arm": "left",
+        "error_mm": [
+          0.0088,
+          0.0774,
+          -48.4191
+        ]
+      },
+      {
+        "tick": 894,
+        "event": "aligned",
+        "arm": "left",
+        "error_mm": [
+          -0.923,
+          0.7129,
+          -38.9136
+        ]
+      },
+      {
+        "tick": 950,
+        "event": "dipped",
+        "lane": 2.0,
+        "tip_mm": [
+          234.8033,
+          140.1175,
+          7.1686
+        ],
+        "load": "1"
+      },
+      {
+        "tick": 1086,
+        "event": "aligned",
+        "arm": "left",
+        "error_mm": [
+          -0.1886,
+          -0.065,
+          -4.3551
+        ]
+      },
+      {
+        "tick": 1131,
+        "event": "aligned",
+        "arm": "left",
+        "error_mm": [
+          0.6123,
+          -0.0554,
+          -0.1483
+        ]
+      },
+      {
+        "tick": 1145,
+        "event": "dab",
+        "lane": 2.0,
+        "forces_n": [
+          0.0,
+          0.0,
+          0.5509,
+          0.5921,
+          0.6316,
+          0.6679,
+          0.6962,
+          0.7236
+        ],
+        "tip_off_tick_mm": [
+          2.3401,
+          -3.507,
+          8.466
+        ]
+      },
+      {
+        "tick": 1145,
+        "event": "spot",
+        "lane": 2.0,
+        "diameter_mm": 2.57,
+        "offset_mm": 0.39
+      },
+      {
+        "tick": 1239,
+        "event": "aligned",
+        "arm": "left",
+        "error_mm": [
+          -0.1421,
+          0.2476,
+          -31.7715
+        ]
+      },
+      {
+        "tick": 1297,
+        "event": "aligned",
+        "arm": "left",
+        "error_mm": [
+          0.1905,
+          -0.0617,
+          -22.4917
+        ]
+      },
+      {
+        "tick": 1367,
+        "event": "returned",
+        "lane": 2.0,
+        "racked": "1"
+      },
+      {
+        "tick": 1426,
+        "event": "settled",
+        "arm": "left",
+        "error_mm": [
+          -0.4696,
+          -0.4986,
+          0.1746
+        ],
+        "offset_mm": [
+          0.7961,
+          -0.4202,
+          0.199
+        ]
+      },
+      {
+        "tick": 1449,
+        "event": "spotter pinched",
+        "lane": 3.0,
+        "pads_mm": 1.2676
+      },
+      {
+        "tick": 1542,
+        "event": "aligned",
+        "arm": "left",
+        "error_mm": [
+          -0.4831,
+          0.4944,
+          -48.1895
+        ]
+      },
+      {
+        "tick": 1579,
+        "event": "aligned",
+        "arm": "left",
+        "error_mm": [
+          -0.7764,
+          0.6707,
+          -39.0726
+        ]
+      },
+      {
+        "tick": 1635,
+        "event": "dipped",
+        "lane": 3.0,
+        "tip_mm": [
+          234.8337,
+          100.2239,
+          7.1609
+        ],
+        "load": "2"
+      },
+      {
+        "tick": 1771,
+        "event": "aligned",
+        "arm": "left",
+        "error_mm": [
+          -0.7261,
+          0.679,
+          -2.9191
+        ]
+      },
+      {
+        "tick": 1816,
+        "event": "aligned",
+        "arm": "left",
+        "error_mm": [
+          0.6856,
+          -1.23,
+          -1.7696
+        ]
+      },
+      {
+        "tick": 1833,
+        "event": "dab",
+        "lane": 3.0,
+        "forces_n": [
+          0.0,
+          0.0,
+          0.0,
+          0.1726,
+          0.0,
+          0.3596,
+          0.3604,
+          0.3581,
+          0.3576,
+          0.3585,
+          0.3577
+        ],
+        "tip_off_tick_mm": [
+          1.6491,
+          -1.8241,
+          9.2877
+        ]
+      },
+      {
+        "tick": 1833,
+        "event": "spot",
+        "lane": 3.0,
+        "diameter_mm": 2.57,
+        "offset_mm": 0.9
+      },
+      {
+        "tick": 1927,
+        "event": "aligned",
+        "arm": "left",
+        "error_mm": [
+          0.308,
+          -0.2009,
+          -31.4827
+        ]
+      },
+      {
+        "tick": 1985,
+        "event": "aligned",
+        "arm": "left",
+        "error_mm": [
+          -0.3392,
+          0.5635,
+          -23.1434
+        ]
+      },
+      {
+        "tick": 2057,
+        "event": "returned",
+        "lane": 3.0,
+        "racked": "2"
+      },
+      {
+        "tick": 2175,
+        "event": "settled",
+        "arm": "right",
+        "error_mm": [
+          0.4843,
+          -1.3416,
+          -0.2797
+        ],
+        "offset_mm": [
+          -0.0701,
+          0.6701,
+          0.8478
+        ]
+      },
+      {
+        "tick": 2215,
+        "event": "settled",
+        "arm": "right",
+        "error_mm": [
+          -0.5823,
+          0.8199,
+          -0.2531
+        ],
+        "offset_mm": [
+          0.7293,
+          1.1747,
+          0.6322
+        ]
+      },
+      {
+        "tick": 2233,
+        "event": "plate pinched",
+        "pads_mm": 24.695
+      },
+      {
+        "tick": 2305,
+        "event": "plate hanging",
+        "lean_deg": 22.5143,
+        "bottom_mm": [
+          270.9648,
+          18.7543,
+          34.6752
+        ]
+      },
+      {
+        "tick": 2347,
+        "event": "aligned",
+        "arm": "right",
+        "error_mm": [
+          -0.1518,
+          -0.7602,
+          -33.6375
+        ]
+      },
+      {
+        "tick": 2465,
+        "event": "plate straightened",
+        "tilt_before_deg": 21.3533,
+        "tilt_deg": 3.4259,
+        "moved_mm": 22.8,
+        "bottom_mm": [
+          303.0232,
+          18.5603,
+          0.5835
+        ]
+      },
+      {
+        "tick": 2493,
+        "event": "plate lifted",
+        "tilt_deg": 3.739
+      },
+      {
+        "tick": 2621,
+        "event": "aligned",
+        "arm": "right",
+        "error_mm": [
+          -0.0643,
+          0.1857,
+          -113.7262
+        ]
+      },
+      {
+        "tick": 2621,
+        "event": "plate over the tank",
+        "tilt_deg": 3.9892,
+        "bottom_to_wall_mm": 34.202
+      },
+      {
+        "tick": 2705,
+        "event": "plate stands",
+        "tilt_deg": 4.2013,
+        "bottom_to_wall_mm": 36.4786,
+        "tool_to_wall_mm": 22.6554
+      },
+      {
+        "tick": 2738,
+        "event": "plate leans",
+        "lean_deg": 28.16,
+        "baseline_above_mm": 4.88,
+        "face_out": 1.0,
+        "on_wall": 1.0,
+        "tank_mm": [
+          0.0034,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "tick": 2837,
+        "event": "settled",
+        "arm": "right",
+        "error_mm": [
+          -0.1357,
+          -0.143,
+          -0.324
+        ],
+        "offset_mm": [
+          1.2086,
+          -0.2564,
+          0.3079
+        ]
+      },
+      {
+        "tick": 2858,
+        "event": "settled",
+        "arm": "right",
+        "error_mm": [
+          -0.1163,
+          -0.0758,
+          -0.2578
+        ],
+        "offset_mm": [
+          1.2086,
+          -0.2564,
+          0.3079
+        ]
+      },
+      {
+        "tick": 2876,
+        "event": "lid pinched",
+        "pads_mm": 86.9109
+      },
+      {
+        "tick": 2957,
+        "event": "aligned",
+        "arm": "right",
+        "error_mm": [
+          0.3083,
+          0.681,
+          -129.8684
+        ]
+      },
+      {
+        "tick": 3003,
+        "event": "lid on",
+        "off_centre_mm": 1.43,
+        "tilt_deg": 0.0,
+        "yaw_deg": 0.3,
+        "height_error_mm": -0.0
+      }
+    ],
+    "first_step_at_each_score": [
+      [
+        5,
+        0.0
+      ],
+      [
+        479,
+        0.25
+      ],
+      [
+        1135,
+        0.5
+      ],
+      [
+        1824,
+        0.75
+      ],
+      [
+        2665,
+        0.8333
+      ],
+      [
+        2715,
+        0.9167
+      ],
+      [
+        3015,
+        1.0
+      ]
+    ],
+    "peaks": {
+      "spotter_plate_n": [
+        1.377,
+        0.726,
+        0.36
+      ],
+      "spotter_other_n": [
+        0.375,
+        0.32,
+        0.266
+      ],
+      "spotter_pads_n": [
+        6.628,
+        6.47,
+        6.254
+      ],
+      "plate_fingers_n": [
+        0.0,
+        3.905
+      ],
+      "plate_tank_n": 2.2,
+      "lid_fingers_n": [
+        0.0,
+        9.416
+      ]
+    }
+  },
+  "reference_reads_simulator_state": true,
+  "model_observations": "Overhead and two wrist RGB at 320 x 176, plus the 14 joint and gripper position readings. No poses, forces or rule state.",
+  "scripted_repeat": {
+    "run": "out/scripted-12/RESULT.json",
+    "score": 1.0,
+    "executed_steps": 3033,
+    "elapsed_s": 1420.57,
+    "grader_trace_identical_to_recorded_run": true,
+    "hashes_differing_from_recorded_run": []
+  },
+  "earlier_runs_before_the_changes_of_20_november": [
+    {
+      "run": "out/scripted-10/RESULT.json",
+      "score": 1.0,
+      "executed_steps": 3033,
+      "grader_trace_identical_to_recorded_run": true,
+      "hashes_differing_from_recorded_run": [
+        "scene_sha256",
+        "layout_sha256",
+        "rules_sha256",
+        "grader_sha256",
+        "adapter_sha256"
+      ]
+    },
+    {
+      "run": "out/scripted-9/RESULT.json",
+      "score": 1.0,
+      "executed_steps": 3033,
+      "grader_trace_identical_to_recorded_run": true,
+      "hashes_differing_from_recorded_run": [
+        "scene_sha256",
+        "layout_sha256",
+        "rules_sha256",
+        "grader_sha256",
+        "adapter_sha256",
+        "scripted_sha256"
+      ]
+    },
+    {
+      "run": "out/scripted-8/RESULT.json",
+      "score": 1.0,
+      "executed_steps": 3033,
+      "grader_trace_identical_to_recorded_run": true,
+      "hashes_differing_from_recorded_run": [
+        "scene_sha256",
+        "layout_sha256",
+        "rules_sha256",
+        "grader_sha256",
+        "adapter_sha256",
+        "scripted_sha256"
+      ]
+    }
+  ],
+  "what_changed_on_20_november": "the instruction did not yet state the left-to-right pairing, a spotter past 60 degrees counted as dropped even in a hand, a plate lying face up was a zero, and `adapter.py` and `tlc.py` had two stale descriptions",
+  "controls_native": {
+    "control-press_hard-2": {
+      "result": "out/control-press_hard-2/RESULT.json",
+      "variant": "press_hard",
+      "score": 0.6667,
+      "points": 8,
+      "executed_steps": 2000,
+      "capped_after_all_three_touches": true,
+      "lanes": [
+        {
+          "covered": true,
+          "small": true,
+          "clean": true,
+          "spots": 1,
+          "diameter_mm": 2.57,
+          "offset_mm": 0.26,
+          "sample": 0,
+          "gouged": false
+        },
+        {
+          "covered": true,
+          "small": true,
+          "clean": false,
+          "spots": 1,
+          "diameter_mm": 2.05,
+          "offset_mm": 0.94,
+          "sample": 1,
+          "gouged": true
+        },
+        {
+          "covered": true,
+          "small": true,
+          "clean": true,
+          "spots": 1,
+          "diameter_mm": 2.57,
+          "offset_mm": 0.91,
+          "sample": 2,
+          "gouged": false
+        }
+      ],
+      "gouges": [
+        {
+          "x": -27.3,
+          "y": -0.93,
+          "length": 1.5,
+          "why": "pressed"
+        }
+      ],
+      "void": null,
+      "peaks": {
+        "spotter_plate_n": [
+          1.377,
+          1.851,
+          0.527
+        ],
+        "spotter_other_n": [
+          0.375,
+          0.32,
+          0.318
+        ],
+        "spotter_pads_n": [
+          6.628,
+          6.623,
+          6.459
+        ],
+        "plate_fingers_n": [
+          0.0,
+          0.0
+        ],
+        "plate_tank_n": 0.0,
+        "lid_fingers_n": [
+          0.0,
+          0.0
+        ]
+      },
+      "full_demo_points_at_the_same_step": 9,
+      "same_hashes_as_recorded_run": true
+    },
+    "control-no_dip-2": {
+      "result": "out/control-no_dip-2/RESULT.json",
+      "variant": "no_dip",
+      "score": 0.0,
+      "points": 0,
+      "executed_steps": 2000,
+      "capped_after_all_three_touches": true,
+      "lanes": [
+        {
+          "covered": false,
+          "small": false,
+          "clean": false,
+          "spots": 0,
+          "diameter_mm": null,
+          "offset_mm": null,
+          "sample": null,
+          "gouged": false
+        },
+        {
+          "covered": false,
+          "small": false,
+          "clean": false,
+          "spots": 0,
+          "diameter_mm": null,
+          "offset_mm": null,
+          "sample": null,
+          "gouged": false
+        },
+        {
+          "covered": false,
+          "small": false,
+          "clean": false,
+          "spots": 0,
+          "diameter_mm": null,
+          "offset_mm": null,
+          "sample": null,
+          "gouged": false
+        }
+      ],
+      "gouges": [],
+      "void": null,
+      "peaks": {
+        "spotter_plate_n": [
+          0.487,
+          0.461,
+          1.716
+        ],
+        "spotter_other_n": [
+          0.375,
+          0.331,
+          0.255
+        ],
+        "spotter_pads_n": [
+          6.822,
+          6.47,
+          6.384
+        ],
+        "plate_fingers_n": [
+          0.0,
+          4.002
+        ],
+        "plate_tank_n": 0.0,
+        "lid_fingers_n": [
+          0.0,
+          0.0
+        ]
+      },
+      "full_demo_points_at_the_same_step": 9,
+      "same_hashes_as_recorded_run": true
+    }
+  },
+  "checked_without_the_simulator": "Standard-library unit tests (tests/). Kinematic dry run (tools/dryrun_demo.py, tests/test_demo.py, needs yam_arena)."
+}
