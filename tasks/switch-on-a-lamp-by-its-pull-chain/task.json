@@ -1,0 +1,20 @@
+{
+  "title": "Switch on a banker's desk lamp by its pull chain: catch the swinging bell pull, one straight pull down past the click",
+  "category": "Societal relatability",
+  "keywords": [
+    "desk lamp",
+    "pull-chain switch",
+    "swinging small pull",
+    "one full pull, exactly once",
+    "loose light object"
+  ],
+  "instruction": "Switch the desk lamp on and leave it standing where it is.",
+  "context": "Many table and desk lamps, the green-shaded banker's lamp among them, are switched by a pull chain hanging from the bulb socket: one pull turns the light on, the next turns it off. Replacement lamp sockets are sold that way: an on-off pull-chain socket \"With a 6.3-inch chain on the side for easy on/off performance\" (a lamp-parts retailer). The pull here is a brass bell 11 mm across on 128 mm of 2.4 mm ball chain, hanging under the shade 16 cm above the desk, over the lamp's base. It swings away when bumped, so the hand has to come in under the shade's lip and close on the bell; the switch needs 3 N to start and 6 N at its click 10 mm down, so a short pull does nothing and a second full pull turns the lamp off again. The pull must go straight down along the chain (more than 30 degrees off, the chain binds on the socket's bushing); pulled out toward the robot, the loose 1.6 kg lamp lifts onto its front edge. Then the chain is let back up and released.",
+  "setup": "Positions in cm from the midpoint between the arm bases on the table top: x forward, y left. A banker's desk lamp (1.6 kg, loose, felt feet), 38 cm tall: brass base 13 x 22 cm (long side along y), 2.6 cm tall, centred at (31, 0); brass stem at x 36 rising to 37 cm, a yoke over the shade. Green glass shade: half a cylinder (open side down), radius 6.5 cm, 25 cm long along y, axis at x 29, 30 cm up (front lip at x 22.5, 30 cm up). Inside it a brass pull-chain socket (35 mm across, axis along y, 32.5 cm up) with a 60 mm bulb. The brass ball chain (2.4 mm beads, 128 mm) leaves the socket through a bushing at (28.5, 6.0), 30.75 cm up, and hangs straight down; a brass bell pull (11 mm across, 16 mm long) on its end, its bottom 16.25 cm up. The lamp is off. Arms at the ready pose, grippers open. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "0 if the lamp ever tips over (tilted over 25 degrees at any moment; video). Else at the end: 1.0 when the lamp is on after exactly one click, the chain let go (no finger within 1 cm of chain or bell), the lamp upright (under 5 degrees), within 2 cm of its tape marks and still for 1 s; 0.5 when on otherwise (three or more clicks, chain still held, or moved over 2 cm); 0.3 when off after two or more clicks; 0 when it never clicked. Real trial: the lamp's light and the clicks heard in the trial video.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "If the lamp is on, pull the chain once to switch it off; let the chain hang still; stand the lamp back in its tape marks (base corners) with the chain hanging at the front left under the shade. Simulation: each trial starts the simulator afresh.",
+  "fidelity": "Rigid bodies, 20 Hz control. Chain: five rigid 25.6 mm lengths of 8 beads on ball joints (a real chain bends at every bead), 2 g each and 8 g with the bell (heavier than real, for the solver). Switch: a plunger on a slide with a spring (300 N/m, 3 N preload; estimates); the click at 10 mm and the binding over 30 degrees are rules on its travel and the chain's angle. The light is the shade's and bulb's glow, switched by the rule.",
+  "scores": "Dream-1 run: 0.0 (the right gripper hovered by the shade's right end and the left arm stayed near its start; neither touched the chain, the lamp stayed off); scripted demo: 1.0",
+  "media": "M-EF5Z3N"
+}

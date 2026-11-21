@@ -1,0 +1,23 @@
+{
+  "title": "Throw out the empty bottles, leave the full ones: they look the same",
+  "category": "Societal relatability",
+  "keywords": [
+    "bimanual",
+    "household",
+    "recycling",
+    "hidden property",
+    "weight",
+    "negation",
+    "nothing to do",
+    "test by lifting"
+  ],
+  "instruction": "Put the empty bottles into the recycling bin. Leave the full ones on the table.",
+  "context": "Sorting bottles for recycling is an everyday chore at home and at work: the empties go in the bin, the full ones stay. With opaque bottles and their caps on, empty and full look the same, so the only way to tell is the one people use: pick each bottle up and feel its weight. Here the difference is 0.55 kg against 40 g, nothing in the camera images shows it, and which two bottles are full is drawn afresh before every trial, so it cannot be memorised. The robot has to grip each bottle, lift it, sense the load through its own arm and act on it: set a full bottle straight back down upright without tipping it, or carry an empty one to the bin and stand it on the bin floor. Binning a full bottle, or tipping any bottle over, scores 0. The instruction states only the goal.",
+  "setup": "Positions in cm from the midpoint between the two arm bases, on the table top (x forward, y left, z up). Arms start in the ready pose. Four identical opaque white HDPE bottles, 0.5 l, 7 cm across, 15 cm tall, caps on, stand upright in a row at x 32, y 15, 5, -5 and -15 (spots 1 to 4). Two of them, drawn afresh before every trial (reset notes), are full of water (0.55 kg); the other two are empty (40 g). A low green plastic recycling bin, 24 x 16 cm inside, 4 cm walls, stands centred at x 18, y 0, long side along y, in a taped outline. Nothing else on the table.",
+  "scoring": "Whole trial, from the video: 0 if any bottle at any moment tilts more than 30 degrees from upright (tipped over) or falls off the table, even if it is set back up later. At the end of the episode, from a photo: 0 if a full bottle is in the recycling bin. Otherwise 0.5 for each empty bottle resting in the bin: centre inside the walls, base on the bin floor (no gap under it; sim: within 3 mm), upright (30 degrees or less), still, and let go (neither gripper touching it; sim: both grippers' centres at least 9 cm from its axis). 0, 0.5 or 1.0.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Before every trial, draw two of four slips numbered 1 to 4 from a cup, out of the cameras' view. Stand the two full bottles (weigh them: 0.55 kg) at those spots and the two empty ones (40 g) at the other two, caps on, in the taped row; put the slips back; empty the bin.",
+  "fidelity": "Approximate. Bottles are rigid 16-sided prisms with a fixed mass (no sloshing); the bin is fixed. Every reset draws the two full bottles afresh and sets the four masses (FULL=0,2 fixes the draw). Details in README.",
+  "scores": "Dream-1 run: 0.0 (1,200 steps, bottles 1 and 4 full; no bottle is gripped); scripted demo: 1.0 (838 steps, random draw: bottles 1 and 3 full; also 1.0 with bottles 2 and 4 full)",
+  "media": "M-LBNSD3"
+}
