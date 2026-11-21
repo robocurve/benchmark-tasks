@@ -1,0 +1,20 @@
+{
+  "title": "Release a car's handbrake: raise it off its pawl, hold the button in, lower the lever all the way to its stop",
+  "category": "Societal relatability",
+  "keywords": [
+    "handbrake",
+    "parking brake",
+    "ratchet and pawl",
+    "release button held",
+    "two-hand lever"
+  ],
+  "instruction": "Release the handbrake fully.",
+  "context": "Releasing a hand-operated parking brake is something every driver of a car with a centre-console lever does at the start of every trip. Toyota Yaris owner's manual, \"Parking brake\", to release: \"Slightly raise the lever\", \"Press the button\", \"Lower it completely\". Under the cable's load the ratchet's pawl is pressed into its tooth, so the button will not go in until the lever is lifted off the pawl; the button must then stay pressed the whole way down, or the pawl drops into the next tooth and the lever stops part-way. A person does it with one hand, thumb on the button. A parallel gripper that holds the lever cannot also push the button along the lever's axis at its end, so one arm raises and lowers the lever while the other keeps the button pressed, following the lever's end round its 16 degree arc.",
+  "setup": "Positions in cm from the midpoint between the arm bases: x forward, y to the robot's left, z up from the table top. (1) A car's hand parking-brake lever sub-assembly (true size, e.g. from a small hatchback such as a 2007-2011 Toyota Yaris; steel bar, black grip, chrome release button), bolted through its own bracket to a board, with a low console trim 18 x 43 x 1.2 cm (dark plastic, a 6 cm slot along the lever) centred at x 22, y -1; fixed. The lever lies in the plane x 22, pivot at y -15, 4.0 cm up, axis along x; pivot to the button's end 29.7 cm; steel bar 12 mm thick and 26 mm deep to 17 cm; grip 35 mm across from 17 to 27.2 cm; a 25 mm end cap; the button 15 mm across, standing 8 mm out (8 mm travel, about 8 N fully in, est.). The lever moves 0.5 kg; fully down it lies level on its stop. Ratchet teeth every 4 deg up to 32 deg. A tension spring from the cable end to the board stands in for the brake cable: 0.6 N m pulling the lever down at the 4th click. Start: the lever applied, pulled up to its 4th click (16 deg, tip 12.2 cm up). Both arms start at the ready pose, grippers open. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Score at the end of the run, from the lever's angle above its bottom stop; released = every point of both grippers' fingers 3 cm or more from the lever. 1.0 (success, held 1 s): the lever within 2 deg of its bottom stop (resting on it), released. 0.75: on its bottom stop but still held. 0.5: lowered at least one tooth (14 deg or lower) but caught on a tooth above the bottom. 0: at its 4th click or higher (pushed down without the button, or raised and let go). Doing nothing scores 0. Real trial: the end of the video and a photo against a protractor mark on the bracket (bottom stop, then one mark per tooth).",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Pull the lever up until it has clicked 4 times and let it settle on the 4th tooth; check the button has sprung back out. Simulation: each trial starts the simulator afresh.",
+  "fidelity": "Rigid bodies, 20 Hz control. Lever and console are boxes and cylinders at true size. The ratchet is not contact geometry: a stop under the lever is held on the highest tooth below it unless the button is in 5 mm or more; while the lever rests on the pawl (within 0.6 deg) the button goes in only 1 mm (the jam). The cable is a spring at a fraction of a car's load, so the arms can lift the lever; tooth pitch, button force and the jam are estimates.",
+  "scores": "Dream-1 run: 0.0 (both arms hung back low beside the console most of the run; about two thirds of the way in both reached over the lever but never raised it or pressed the button, and it stayed on its 4th click); demo: 1.0",
+  "media": "M-PEFZWA"
+}
