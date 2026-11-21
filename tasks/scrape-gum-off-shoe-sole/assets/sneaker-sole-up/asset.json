@@ -1,0 +1,112 @@
+{
+ "name": "sneaker-sole-up",
+ "title": "Sneaker, sole up",
+ "kind": "rigid",
+ "visual": [
+  {
+   "mesh": "visual/part0.obj",
+   "rgba": [
+    0.149,
+    0.2275,
+    0.4314,
+    1.0
+   ],
+   "area_m2": 0.08001366,
+   "specular": 0.3,
+   "shininess": 0.3
+  },
+  {
+   "mesh": "visual/part1.obj",
+   "rgba": [
+    0.9412,
+    0.9412,
+    0.9216,
+    1.0
+   ],
+   "area_m2": 0.05244788,
+   "specular": 0.3,
+   "shininess": 0.3
+  },
+  {
+   "mesh": "visual/part2.obj",
+   "rgba": [
+    0.1804,
+    0.1804,
+    0.1961,
+    1.0
+   ],
+   "area_m2": 0.04796376,
+   "specular": 0.3,
+   "shininess": 0.3
+  }
+ ],
+ "collision": {
+  "hull": [
+   "collision/hull.obj"
+  ],
+  "decomposition": [
+   "collision/part_000.obj",
+   "collision/part_001.obj",
+   "collision/part_002.obj",
+   "collision/part_003.obj",
+   "collision/part_004.obj",
+   "collision/part_005.obj",
+   "collision/part_006.obj",
+   "collision/part_007.obj",
+   "collision/part_008.obj",
+   "collision/part_009.obj",
+   "collision/part_010.obj",
+   "collision/part_011.obj",
+   "collision/part_012.obj",
+   "collision/part_013.obj",
+   "collision/part_014.obj",
+   "collision/part_015.obj",
+   "collision/part_016.obj",
+   "collision/part_017.obj"
+  ]
+ },
+ "bbox_m": [
+  0.285,
+  0.099897,
+  0.098
+ ],
+ "size_m": 0.285,
+ "physics": {
+  "mass_kg": 0.35,
+  "friction_static": 0.2,
+  "friction_dynamic": 0.15,
+  "restitution": 0.1,
+  "linear_damping": 0.0,
+  "angular_damping": 0.05,
+  "scale": 1.0,
+  "collision": "decomposition"
+ },
+ "recommended": {
+  "physics": {
+   "mass_kg": 0.35,
+   "friction_static": 0.2,
+   "friction_dynamic": 0.15,
+   "restitution": 0.1,
+   "linear_damping": 0.0,
+   "angular_damping": 0.05,
+   "scale": 1.0,
+   "collision": "decomposition"
+  },
+  "why": {
+   "mass_kg": "A men's size 9 canvas sneaker weighs 300 to 400 g.",
+   "friction_static": "Sole-up, the shoe lies on its canvas upper, and canvas slides on a table at about 0.35. Friction is averaged with the table's 0.5, so 0.2 here gives 0.35 there.",
+   "friction_dynamic": "A little below Grip, as sliding friction is: 0.15 here gives about 0.33 on the table.",
+   "restitution": "A shoe lands with almost no bounce.",
+   "linear_damping": "Air barely slows a hand-sized object at the speeds the arms move it, so no extra drag (PhysX's default is 0 too).",
+   "angular_damping": "PhysX's default spin drag (0.05 per second); raise it if a round object rolls away too easily.",
+   "scale": "1 keeps the size given at import (28.5 cm across), which should be the real object's.",
+   "collision": "Decomposition keeps the sole's outline and the dip at the toe; one hull would fill them in."
+  },
+  "by": "Claude",
+  "date": "2026-11-19"
+ },
+ "source": "shoe_sole_up.glb",
+ "license": "CC0 (procedural, made for this task)",
+ "credit": "",
+ "created": "2026-11-19T19:18:27+00:00"
+}

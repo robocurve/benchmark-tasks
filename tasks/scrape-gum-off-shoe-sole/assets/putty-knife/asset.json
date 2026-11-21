@@ -1,0 +1,84 @@
+{
+  "name": "putty-knife",
+  "title": "Plastic putty knife",
+  "kind": "rigid",
+  "visual": [
+    {
+      "mesh": "visual/part0.obj",
+      "rgba": [
+        0.9216,
+        0.9216,
+        0.8824,
+        1.0
+      ],
+      "area_m2": 0.00775492,
+      "specular": 0.3,
+      "shininess": 0.3
+    },
+    {
+      "mesh": "visual/part1.obj",
+      "rgba": [
+        0.7843,
+        0.2353,
+        0.1569,
+        1.0
+      ],
+      "area_m2": 0.010136,
+      "specular": 0.3,
+      "shininess": 0.3
+    }
+  ],
+  "collision": {
+    "hull": [
+      "collision/hull.obj"
+    ],
+    "decomposition": [
+      "collision/part_000.obj",
+      "collision/part_001.obj"
+    ]
+  },
+  "bbox_m": [
+    0.195,
+    0.05,
+    0.016
+  ],
+  "size_m": 0.195,
+  "physics": {
+    "mass_kg": 0.04,
+    "friction_static": 0.4,
+    "friction_dynamic": 0.3,
+    "restitution": 0.1,
+    "linear_damping": 0.0,
+    "angular_damping": 0.05,
+    "scale": 1.0,
+    "collision": "decomposition"
+  },
+  "recommended": {
+    "physics": {
+      "mass_kg": 0.04,
+      "friction_static": 0.4,
+      "friction_dynamic": 0.3,
+      "restitution": 0.1,
+      "linear_damping": 0.0,
+      "angular_damping": 0.05,
+      "scale": 1.0,
+      "collision": "decomposition"
+    },
+    "why": {
+      "mass_kg": "A 2 in plastic putty knife weighs 30 to 50 g.",
+      "friction_static": "Smooth hard plastic: about 0.4.",
+      "friction_dynamic": "A little below Grip, as for smooth plastic.",
+      "restitution": "Light plastic lands with little bounce.",
+      "linear_damping": "Air barely slows a hand-sized object at the speeds the arms move it, so no extra drag (PhysX's default is 0 too).",
+      "angular_damping": "PhysX's default spin drag (0.05 per second); raise it if a round object rolls away too easily.",
+      "scale": "1 keeps the size given at import (19.5 cm across), which should be the real object's.",
+      "collision": "Decomposition keeps the thin blade separate from the handle; one hull would fill the space above the blade."
+    },
+    "by": "Claude",
+    "date": "2026-11-19"
+  },
+  "source": "putty_knife.glb",
+  "license": "CC0 (procedural, made for this task)",
+  "credit": "",
+  "created": "2026-11-19T19:18:29+00:00"
+}

@@ -1,0 +1,134 @@
+#usda 1.0
+(
+    defaultPrim = "putty_knife"
+    doc = "Library asset 'putty-knife' frozen for a task folder (this file sits next to the asset's asset.json and files), written by kit/sim/isaac/assets_isaac.py: Size 1 baked in, mass 0.04, friction 0.4/0.3 (combine average), restitution 0.1 (combine max), damping 0/0.05, collision decomposition (convexHull, at most 64 vertices)"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "putty_knife" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxRigidBodyAPI"]
+)
+{
+    float physics:mass = 0.04
+    float physxRigidBody:angularDamping = 0.05
+    float physxRigidBody:linearDamping = 0
+
+    def Scope "Looks"
+    {
+        def Material "physics_material" (
+            prepend apiSchemas = ["PhysicsMaterialAPI", "PhysxMaterialAPI"]
+        )
+        {
+            float physics:dynamicFriction = 0.3
+            float physics:restitution = 0.1
+            float physics:staticFriction = 0.4
+            uniform token physxMaterial:frictionCombineMode = "average"
+            uniform token physxMaterial:restitutionCombineMode = "max"
+        }
+
+        def Material "visual_part0"
+        {
+            token outputs:surface.connect = </putty_knife/Looks/visual_part0/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.8308339, 0.8308339, 0.7530329)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.7
+                token outputs:surface
+            }
+        }
+
+        def Material "visual_part1"
+        {
+            token outputs:surface.connect = </putty_knife/Looks/visual_part1/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.57755774, 0.0451884, 0.021227967)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.7
+                token outputs:surface
+            }
+        }
+    }
+
+    def Xform "visuals"
+    {
+        def Mesh "part0" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            float3[] extent = [(0.0035, -0.025, -0.008), (0.0975, 0.025, -0.0055)]
+            int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+            int[] faceVertexIndices = [2, 1, 0, 3, 2, 0, 6, 7, 4, 5, 6, 4, 5, 4, 0, 1, 5, 0, 6, 2, 3, 7, 6, 3, 7, 3, 0, 4, 7, 0, 6, 5, 1, 2, 6, 1]
+            rel material:binding = </putty_knife/Looks/visual_part0>
+            normal3f[] normals = [(0, 0, -1), (0, 0, -1), (0.01808, 0, 0.99984), (0.01808, 0, 0.99984), (0, 0, -1), (0, 0, -1), (0.01808, 0, 0.99984), (0.01808, 0, 0.99984)] (
+                interpolation = "vertex"
+            )
+            point3f[] points = [(0.0035, -0.014, -0.008), (0.0035, 0.014, -0.008), (0.0035, 0.014, -0.0055), (0.0035, -0.014, -0.0055), (0.0975, -0.025, -0.008), (0.0975, 0.025, -0.008), (0.0975, 0.025, -0.0072), (0.0975, -0.025, -0.0072)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "part1" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            float3[] extent = [(-0.0975, -0.014, -0.008), (0.0075, 0.014, 0.008)]
+            int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+            int[] faceVertexIndices = [1, 3, 0, 4, 1, 0, 0, 3, 2, 2, 4, 0, 1, 7, 3, 5, 1, 4, 5, 7, 1, 3, 7, 2, 6, 4, 2, 2, 7, 6, 6, 5, 4, 7, 5, 6]
+            rel material:binding = </putty_knife/Looks/visual_part1>
+            normal3f[] normals = [(0, 0, -1), (0, 0, 1), (0, 0, -1), (0, 0, 1), (0, 0, -1), (0, 0, 1), (0, 0, -1), (0, 0, 1)] (
+                interpolation = "vertex"
+            )
+            point3f[] points = [(-0.0975, -0.014, -0.008), (-0.0975, -0.014, 0.008), (-0.0975, 0.014, -0.008), (-0.0975, 0.014, 0.008), (0.0075, -0.014, -0.008), (0.0075, -0.014, 0.008), (0.0075, 0.014, -0.008), (0.0075, 0.014, 0.008)]
+            uniform token subdivisionScheme = "none"
+        }
+    }
+
+    def Xform "collisions"
+    {
+        def Mesh "part_000" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            float3[] extent = [(-0.0975, -0.014, -0.008), (0.0075, 0.014, 0.008)]
+            int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+            int[] faceVertexIndices = [0, 2, 1, 0, 3, 2, 4, 5, 6, 4, 6, 7, 0, 1, 5, 0, 5, 4, 1, 2, 6, 1, 6, 5, 2, 3, 7, 2, 7, 6, 3, 0, 4, 3, 4, 7]
+            rel material:binding:physics = </putty_knife/Looks/physics_material> (
+                bindMaterialAs = "strongerThanDescendants"
+            )
+            uniform token physics:approximation = "convexHull"
+            float physxCollision:contactOffset = 0.005
+            float physxCollision:restOffset = 0
+            int physxConvexHullCollision:hullVertexLimit = 64
+            point3f[] points = [(-0.0975, -0.014, -0.008), (-0.0975, 0.014, -0.008), (-0.0975, 0.014, 0.008), (-0.0975, -0.014, 0.008), (0.0075, -0.014, -0.008), (0.0075, 0.014, -0.008), (0.0075, 0.014, 0.008), (0.0075, -0.014, 0.008)]
+            uniform token purpose = "guide"
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "part_001" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            float3[] extent = [(0.0035, -0.025, -0.008), (0.0975, 0.025, -0.0055)]
+            int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+            int[] faceVertexIndices = [0, 2, 1, 0, 3, 2, 4, 5, 6, 4, 6, 7, 0, 1, 5, 0, 5, 4, 1, 2, 6, 1, 6, 5, 2, 3, 7, 2, 7, 6, 3, 0, 4, 3, 4, 7]
+            rel material:binding:physics = </putty_knife/Looks/physics_material> (
+                bindMaterialAs = "strongerThanDescendants"
+            )
+            uniform token physics:approximation = "convexHull"
+            float physxCollision:contactOffset = 0.005
+            float physxCollision:restOffset = 0
+            int physxConvexHullCollision:hullVertexLimit = 64
+            point3f[] points = [(0.0035, -0.014, -0.008), (0.0035, 0.014, -0.008), (0.0035, 0.014, -0.0055), (0.0035, -0.014, -0.0055), (0.0975, -0.025, -0.008), (0.0975, 0.025, -0.008), (0.0975, 0.025, -0.0072), (0.0975, -0.025, -0.0072)]
+            uniform token purpose = "guide"
+            uniform token subdivisionScheme = "none"
+        }
+    }
+}
+
