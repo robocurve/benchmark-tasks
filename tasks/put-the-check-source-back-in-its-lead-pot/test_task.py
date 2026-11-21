@@ -84,9 +84,12 @@ def test_geometry():
     assert M.S_R + 0.008 < M.P_RIN
     assert M.P_FLOOR + M.S_H + 0.005 < M.P_H
     assert M.L_R > M.P_ROUT
-    # the source, lid and pot start clear of Sam; the source's start is outside the near limit
+    # the source, lid and pot start clear of Sam: the holder at least 3 cm on the robot's side of the plane
+    assert M.holder_y_max(source((*M.S_XY, M.TOP))) < M.SAM_SIDE_Y - 0.03
     limb, body = M._source_gaps(source((*M.S_XY, M.TOP)))
     assert limb > M.LIMB_NEAR_M + 0.02 and body > M.BODY_NEAR_M + 0.02
+    # the pot, its lid and the scripted carry heights all lie on the robot's side
+    assert M.P_XY[1] + M.P_ROUT < M.SAM_SIDE_Y and M.L_XY[1] + M.L_R < M.SAM_SIDE_Y
     assert np.linalg.norm(np.asarray(M.L_XY) - np.asarray(M.P_XY)) > M.L_R + M.P_ROUT + 0.01
     assert np.linalg.norm(np.asarray(M.S_XY) - np.asarray(M.L_XY)) > M.L_R + M.S_R + 0.03
     assert run([start()]) == (False, 0.0)
@@ -98,8 +101,9 @@ def test_source_in_lid_on_scores_1():
     assert sc == 1.0 and ok
 
 
-def test_lid_left_off_scores_half():
-    assert run([start(), scene(in_pot(), lid((*M.L_XY, M.TOP)))], n=25) == (False, M.SOURCE_IN_OPEN_POT)
+def test_lid_left_off_scores_0():
+    # the source in the open pot, let go and at rest for longer than a second: still 0 (the open bore beams upward)
+    assert run([start(), scene(in_pot(), lid((*M.L_XY, M.TOP)))], n=60) == (False, 0.0)
 
 
 def test_lid_left_off_scores_0_before_a_second():
@@ -129,7 +133,7 @@ def test_bare_source_near_sam_scores_0():
     p = np.asarray(b, float) + np.array([0.0, 0.0, r + 0.02])  # just over his hand
     run([start(), scene(source(p), lid((*M.L_XY, M.TOP)))])
     assert run([scene(in_pot(), closed())], n=25) == (False, 0.0)
-    assert "bare source" in M.TRIAL.mem["why"] and "arm" in M.TRIAL.mem["why"]
+    assert "bare source" in M.TRIAL.mem["why"] and "Sam's side" in M.TRIAL.mem["why"]
 
 
 def test_bare_source_near_his_body_scores_0():
@@ -137,7 +141,7 @@ def test_bare_source_near_his_body_scores_0():
     p = np.asarray(b, float) + np.array([0.0, -(r + 0.20), -0.25])  # in front of his chest, 20 cm off
     run([start(), scene(source(p), lid((*M.L_XY, M.TOP)))])
     assert run([scene(in_pot(), closed())], n=25) == (False, 0.0)
-    assert "body" in M.TRIAL.mem["why"]
+    assert "Sam's side" in M.TRIAL.mem["why"]
 
 
 def test_source_in_pot_by_sam_does_not_count_as_bare():
@@ -174,8 +178,8 @@ def _grip_at(p):
 def test_lid_still_held_on_the_pot_never_scores_full():
     run([start(), scene(in_pot(), lid((*M.L_XY, M.TOP)))])
     knob = np.array([*M.P_XY, M.TOP + M.P_H + M.KNOB_Z])
-    # the lid still in the hand never counts as closed; the source alone in the open pot is half credit
-    assert run([scene(in_pot(), closed())], grips=_grip_at(knob), n=60) == (False, M.SOURCE_IN_OPEN_POT)
+    # the lid still in the hand never counts as closed, and the source alone in the open pot scores nothing
+    assert run([scene(in_pot(), closed())], grips=_grip_at(knob), n=60) == (False, 0.0)
 
 
 def test_closed_scores_only_after_a_second():
@@ -190,3 +194,59 @@ def test_trefoil_label_clear_of_the_pot_and_lid():
         d = np.maximum(np.abs(np.asarray(c) - np.asarray(M.T_XY)) - M.T_SIDE / 2, 0.0)
         return float(np.linalg.norm(d)) - r
     assert gap(M.P_XY, M.P_ROUT) > 0.01 and gap(M.L_XY, M.L_R) > 0.01
+
+
+def _sam_side_gaps(n=41):
+    """Closest approach of the robot's side (y <= SAM_SIDE_Y), over the bench top up to 60 cm, to Sam's arms and to the
+    rest of him: sampled on a 1.5 cm grid of the boundary plane (the nearest points of a half-space lie on its face)."""
+    limb = body = 9.0
+    for x in np.linspace(-0.10, 1.00, n * 2):
+        for z in np.linspace(M.TOP, M.TOP + 0.60, n):
+            p = np.array([x, M.SAM_SIDE_Y, z])
+            cap = (p, p, 0.0)
+            for k, c in M.PERSON.capsules.items():
+                g = M.hhkit.capsule_gap(cap, c)
+                if k in M.LIMBS:
+                    limb = min(limb, g)
+                else:
+                    body = min(body, g)
+    return limb, body
+
+
+def test_keep_out_plane_meets_both_cleapss_distances():
+    limb, body = _sam_side_gaps()
+    assert M.LIMB_NEAR_M <= limb < M.LIMB_NEAR_M + 0.02  # 10.5 cm: as tight as the 100 mm rule allows
+    assert body >= M.BODY_NEAR_M + 0.02  # 32.7 cm: the README quotes "32 cm or more"
+
+
+def test_bare_source_high_over_sams_side_scores_0():
+    # 30 cm up, over his side of the plane: well clear of his hand in 3D, but across the scored boundary
+    p = (0.30, M.SAM_SIDE_Y + 0.02, M.TOP + 0.30)
+    run([start(), scene(source(p), lid((*M.L_XY, M.TOP)))])
+    assert run([scene(in_pot(), closed())], n=25) == (False, 0.0)
+
+
+def test_bare_source_high_on_the_robots_side_is_allowed():
+    p = (0.30, M.SAM_SIDE_Y - M.S_R - 0.01, M.TOP + 0.30)  # lifted high, 1 cm short of the plane
+    run([start(), scene(source(p), lid((*M.L_XY, M.TOP)))])
+    assert not M.TRIAL.mem["violated"]
+    assert run([scene(in_pot(), closed())], n=25) == (True, 1.0)
+
+
+def test_tilted_holder_reaching_over_the_plane_scores_0():
+    # the foot on the robot's side but the holder tipped toward Sam so its top end crosses
+    q = (-np.sin(np.radians(80) / 2), 0.0, 0.0, np.cos(np.radians(80) / 2))  # about x: its top swings toward +y
+    s = source((0.25, M.SAM_SIDE_Y - 0.02, M.TOP + 0.15), q)
+    assert M.holder_y_max(s) > M.SAM_SIDE_Y
+    run([start(), scene(s, lid((*M.L_XY, M.TOP)))])
+    assert M.TRIAL.mem["violated"]
+
+
+def test_real_trial_masses():
+    # lead-free dummies: aluminium (2.70 g/cm^3) holder and lid; the lid's mass is the weighed 0.32 kg
+    al = 2700.0
+    assert abs(np.pi * M.S_R ** 2 * M.S_H * al - M.SOURCE.mass) < 0.002
+    disc = np.pi * M.L_R ** 2 * M.L_T * al
+    knob = np.pi * 0.012 ** 2 * 0.024 * al
+    assert abs(disc + knob - M.LID.mass) < 0.01
+    assert M.LID.mass < 2.0 * 0.25  # a quarter of the YAM's 2 kg nominal payload
