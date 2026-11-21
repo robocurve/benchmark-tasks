@@ -1,0 +1,541 @@
+#usda 1.0
+(
+    defaultPrim = "Shutter"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Shutter"
+{
+    def Xform "frame" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxContactReportAPI"]
+    )
+    {
+        bool physics:kinematicEnabled = 1
+        custom float physxContactReport:threshold = 0
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cube "base" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.39, 0.5, 0.58)]
+            double size = 1
+            float3 xformOp:scale = (0.195, 0.262, 0.01)
+            double3 xformOp:translate = (-0.025, 0, 0.005)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "left_post" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.39, 0.5, 0.58)]
+            double size = 1
+            float3 xformOp:scale = (0.02, 0.012, 0.186)
+            double3 xformOp:translate = (0.012, 0.119, 0.102)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "left_test_mark"
+        {
+            color3f[] primvars:displayColor = [(0.92, 0.91, 0.8)]
+            double size = 1
+            float3 xformOp:scale = (0.035, 0.003, 0.001)
+            double3 xformOp:translate = (-0.07, 0.066, 0.0106)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "right_post" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.39, 0.5, 0.58)]
+            double size = 1
+            float3 xformOp:scale = (0.02, 0.012, 0.186)
+            double3 xformOp:translate = (0.012, -0.119, 0.102)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "right_test_mark"
+        {
+            color3f[] primvars:displayColor = [(0.92, 0.91, 0.8)]
+            double size = 1
+            float3 xformOp:scale = (0.035, 0.003, 0.001)
+            double3 xformOp:translate = (-0.07, -0.066, 0.0106)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "travel_mark"
+        {
+            color3f[] primvars:displayColor = [(0.92, 0.91, 0.8)]
+            double size = 1
+            float3 xformOp:scale = (0.023, 0.013, 0.003)
+            double3 xformOp:translate = (0.001, 0.119, 0.09)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "scale_0"
+        {
+            color3f[] primvars:displayColor = [(0.92, 0.91, 0.8)]
+            double size = 1
+            float3 xformOp:scale = (0.003, 0.013, 0.001)
+            double3 xformOp:translate = (-0.002, 0.119, 0.06)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "scale_1"
+        {
+            color3f[] primvars:displayColor = [(0.92, 0.91, 0.8)]
+            double size = 1
+            float3 xformOp:scale = (0.003, 0.013, 0.001)
+            double3 xformOp:translate = (-0.002, 0.119, 0.075)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "scale_2"
+        {
+            color3f[] primvars:displayColor = [(0.92, 0.91, 0.8)]
+            double size = 1
+            float3 xformOp:scale = (0.003, 0.013, 0.001)
+            double3 xformOp:translate = (-0.002, 0.119, 0.09)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "scale_3"
+        {
+            color3f[] primvars:displayColor = [(0.92, 0.91, 0.8)]
+            double size = 1
+            float3 xformOp:scale = (0.003, 0.013, 0.001)
+            double3 xformOp:translate = (-0.002, 0.119, 0.105)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "scale_4"
+        {
+            color3f[] primvars:displayColor = [(0.92, 0.91, 0.8)]
+            double size = 1
+            float3 xformOp:scale = (0.003, 0.013, 0.001)
+            double3 xformOp:translate = (-0.002, 0.119, 0.12)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "scale_5"
+        {
+            color3f[] primvars:displayColor = [(0.92, 0.91, 0.8)]
+            double size = 1
+            float3 xformOp:scale = (0.003, 0.013, 0.001)
+            double3 xformOp:translate = (-0.002, 0.119, 0.135)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "scale_6"
+        {
+            color3f[] primvars:displayColor = [(0.92, 0.91, 0.8)]
+            double size = 1
+            float3 xformOp:scale = (0.003, 0.013, 0.001)
+            double3 xformOp:translate = (-0.002, 0.119, 0.15)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "operator_station" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.39, 0.5, 0.58)]
+            double size = 1
+            float3 xformOp:scale = (0.06, 0.055, 0.024)
+            double3 xformOp:translate = (-0.155, 0.21, 0.012)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def Xform "door" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxContactReportAPI"]
+    )
+    {
+        bool physics:kinematicEnabled = 1
+        custom float physxContactReport:threshold = 0
+        double3 xformOp:translate = (0, 0, 0.15)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cube "shutter" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.11, 0.35, 0.58)]
+            double size = 1
+            float3 xformOp:scale = (0.016, 0.222, 0.047)
+            double3 xformOp:translate = (0, 0, 0.026)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "register"
+        {
+            color3f[] primvars:displayColor = [(0.92, 0.91, 0.8)]
+            double size = 1
+            float3 xformOp:scale = (0.018, 0.029, 0.003)
+            double3 xformOp:translate = (-0.017, -0.066, 0.026)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def Xform "cassette" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxRigidBodyAPI", "PhysxContactReportAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (-0.035, 0, 0.005)
+        float3 physics:diagonalInertia = (0.000012, 0.000045, 0.000045)
+        bool physics:kinematicEnabled = 0
+        float physics:mass = 0.034
+        custom float physxContactReport:threshold = 0
+        custom int physxRigidBody:solverPositionIterationCount = 128
+        custom int physxRigidBody:solverVelocityIterationCount = 4
+        double3 xformOp:translate = (0.048, -0.066, 0.15)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cube "handle" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.99, 0.43, 0.08)]
+            double size = 1
+            float3 xformOp:scale = (0.018, 0.02, 0.027)
+            double3 xformOp:translate = (-0.091, 0, 0.014)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "spine"
+        {
+            color3f[] primvars:displayColor = [(0.99, 0.43, 0.08)]
+            double size = 1
+            float3 xformOp:scale = (0.081, 0.014, 0.008)
+            double3 xformOp:translate = (-0.047, 0, 0.01)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def PhysicsPrismaticJoint "cassette_guide" (
+        prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+    )
+    {
+        float drive:linear:physics:damping = 2.5
+        float drive:linear:physics:maxForce = 30
+        float drive:linear:physics:stiffness = 0
+        float drive:linear:physics:targetPosition = 0
+        float drive:linear:physics:targetVelocity = 0
+        uniform token drive:linear:physics:type = "force"
+        uniform token physics:axis = "X"
+        rel physics:body0 = </Shutter/door>
+        rel physics:body1 = </Shutter/cassette>
+        point3f physics:localPos0 = (0, -0.066, 0)
+        point3f physics:localPos1 = (0, 0, 0)
+        float physics:lowerLimit = 0
+        float physics:upperLimit = 0.048
+    }
+
+    def Xform "left" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"]
+    )
+    {
+        bool physics:kinematicEnabled = 0
+        float physics:mass = 0.022
+        custom float physxContactReport:threshold = 0
+        double3 xformOp:translate = (0, 0.066, 0.136)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cube "toe" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.18, 0.72, 0.45)]
+            double size = 1
+            float3 xformOp:scale = (0.015, 0.1108, 0.012)
+            double3 xformOp:translate = (0, -0.0105, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def PhysicsPrismaticJoint "left_switch" (
+        prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+    )
+    {
+        float drive:linear:physics:damping = 1.2
+        float drive:linear:physics:maxForce = 30
+        float drive:linear:physics:stiffness = 300
+        float drive:linear:physics:targetPosition = 0
+        float drive:linear:physics:targetVelocity = 0
+        uniform token drive:linear:physics:type = "force"
+        uniform token physics:axis = "Z"
+        rel physics:body0 = </Shutter/door>
+        rel physics:body1 = </Shutter/left>
+        point3f physics:localPos0 = (0, 0.066, -0.014)
+        point3f physics:localPos1 = (0, 0, 0)
+        float physics:lowerLimit = 0
+        float physics:upperLimit = 0.009
+    }
+
+    def Xform "right" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxRigidBodyAPI", "PhysxContactReportAPI"]
+    )
+    {
+        bool physics:kinematicEnabled = 0
+        float physics:mass = 0.022
+        custom float physxContactReport:threshold = 0
+        custom int physxRigidBody:solverPositionIterationCount = 128
+        custom int physxRigidBody:solverVelocityIterationCount = 4
+        double3 xformOp:translate = (0.048, -0.066, 0.136)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cube "toe" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.18, 0.72, 0.45)]
+            double size = 1
+            float3 xformOp:scale = (0.015, 0.1108, 0.012)
+            double3 xformOp:translate = (0, 0.0105, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def PhysicsPrismaticJoint "right_switch" (
+        prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+    )
+    {
+        float drive:linear:physics:damping = 1.2
+        float drive:linear:physics:maxForce = 30
+        float drive:linear:physics:stiffness = 300
+        float drive:linear:physics:targetPosition = 0
+        float drive:linear:physics:targetVelocity = 0
+        uniform token drive:linear:physics:type = "force"
+        uniform token physics:axis = "Z"
+        rel physics:body0 = </Shutter/cassette>
+        rel physics:body1 = </Shutter/right>
+        point3f physics:localPos0 = (0, 0, -0.014)
+        point3f physics:localPos1 = (0, 0, 0)
+        float physics:lowerLimit = 0
+        float physics:upperLimit = 0.009
+    }
+
+    def Xform "sled" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"]
+    )
+    {
+        bool physics:kinematicEnabled = 0
+        float physics:mass = 0.052
+        custom float physxContactReport:threshold = 0
+        double3 xformOp:translate = (0, 0.066, 0.02)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cube "foot" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.39, 0.5, 0.58)]
+            double size = 1
+            float3 xformOp:scale = (0.044, 0.046, 0.012)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def PhysicsPrismaticJoint "test_rail" (
+        prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+    )
+    {
+        float drive:linear:physics:damping = 2
+        float drive:linear:physics:maxForce = 30
+        float drive:linear:physics:stiffness = 0
+        float drive:linear:physics:targetPosition = 0
+        float drive:linear:physics:targetVelocity = 0
+        uniform token drive:linear:physics:type = "force"
+        uniform token physics:axis = "Y"
+        rel physics:body0 = </Shutter/frame>
+        rel physics:body1 = </Shutter/sled>
+        point3f physics:localPos0 = (0, 0, 0.02)
+        point3f physics:localPos1 = (0, 0, 0)
+        float physics:lowerLimit = -0.068
+        float physics:upperLimit = 0.068
+    }
+
+    def Xform "guide" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"]
+    )
+    {
+        bool physics:kinematicEnabled = 0
+        float physics:mass = 0.012
+        custom float physxContactReport:threshold = 0
+        double3 xformOp:translate = (0, 0.066, 0.036)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cube "bushing"
+        {
+            color3f[] primvars:displayColor = [(0.39, 0.5, 0.58)]
+            double size = 1
+            float3 xformOp:scale = (0.014, 0.014, 0.008)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def PhysicsPrismaticJoint "pickup_travel" (
+        prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+    )
+    {
+        float drive:linear:physics:damping = 0.2
+        float drive:linear:physics:maxForce = 30
+        float drive:linear:physics:stiffness = 0
+        float drive:linear:physics:targetPosition = 0
+        float drive:linear:physics:targetVelocity = 0
+        uniform token drive:linear:physics:type = "force"
+        uniform token physics:axis = "Z"
+        rel physics:body0 = </Shutter/sled>
+        rel physics:body1 = </Shutter/guide>
+        point3f physics:localPos0 = (0, 0, 0.016)
+        point3f physics:localPos1 = (0, 0, 0)
+        float physics:lowerLimit = 0
+        float physics:upperLimit = 0.016
+    }
+
+    def Xform "block" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"]
+    )
+    {
+        bool physics:kinematicEnabled = 0
+        float physics:mass = 0.025
+        custom float physxContactReport:threshold = 0
+        double3 xformOp:translate = (0, 0.066, 0.054)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cube "cap" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.99, 0.43, 0.08)]
+            double size = 1
+            float3 xformOp:scale = (0.044, 0.044, 0.01)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "neck" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.99, 0.43, 0.08)]
+            double size = 1
+            float3 xformOp:scale = (0.14, 0.009, 0.006)
+            double3 xformOp:translate = (-0.0825, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "pickup" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.99, 0.43, 0.08)]
+            double size = 1
+            float3 xformOp:scale = (0.024, 0.024, 0.024)
+            double3 xformOp:translate = (-0.161, 0, 0.006)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "witness"
+        {
+            color3f[] primvars:displayColor = [(0.99, 0.43, 0.08)]
+            double size = 1
+            float3 xformOp:scale = (0.009, 0.009, 0.018)
+            double3 xformOp:translate = (-0.015, 0, -0.012)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def PhysicsPrismaticJoint "crush_spring" (
+        prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+    )
+    {
+        float drive:linear:physics:damping = 1
+        float drive:linear:physics:maxForce = 30
+        float drive:linear:physics:stiffness = 200
+        float drive:linear:physics:targetPosition = 0
+        float drive:linear:physics:targetVelocity = 0
+        uniform token drive:linear:physics:type = "force"
+        uniform token physics:axis = "Z"
+        rel physics:body0 = </Shutter/guide>
+        rel physics:body1 = </Shutter/block>
+        point3f physics:localPos0 = (0, 0, 0.018)
+        point3f physics:localPos1 = (0, 0, 0)
+        float physics:lowerLimit = -0.022
+        float physics:upperLimit = 0
+    }
+
+    def Xform "button" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"]
+    )
+    {
+        bool physics:kinematicEnabled = 0
+        float physics:mass = 0.022
+        custom float physxContactReport:threshold = 0
+        double3 xformOp:translate = (-0.155, 0.21, 0.042)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cube "push" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.18, 0.72, 0.45)]
+            double size = 1
+            float3 xformOp:scale = (0.029, 0.027, 0.012)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def PhysicsPrismaticJoint "button_return" (
+        prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+    )
+    {
+        float drive:linear:physics:damping = 1
+        float drive:linear:physics:maxForce = 30
+        float drive:linear:physics:stiffness = 240
+        float drive:linear:physics:targetPosition = 0
+        float drive:linear:physics:targetVelocity = 0
+        uniform token drive:linear:physics:type = "force"
+        uniform token physics:axis = "Z"
+        rel physics:body0 = </Shutter/frame>
+        rel physics:body1 = </Shutter/button>
+        point3f physics:localPos0 = (-0.155, 0.21, 0.042)
+        point3f physics:localPos1 = (0, 0, 0)
+        float physics:lowerLimit = -0.011
+        float physics:upperLimit = 0
+    }
+}
+
