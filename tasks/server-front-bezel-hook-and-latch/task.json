@@ -1,0 +1,20 @@
+{
+  "title": "Fit a security bezel on a 1U rack server: seat the right tabs, then click the left latch shut",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "server maintenance",
+    "rack server",
+    "security bezel",
+    "bimanual assembly",
+    "spring latch"
+  ],
+  "instruction": "Fit the security bezel on the front of the server so it sits flush and clicks shut.",
+  "context": "Data-centre technicians racking servers, and electrical and electronic equipment assemblers (O*NET 51-2022.00; about 261,400 US workers, O*NET 2024), fit a front security bezel to each 1U server. Lenovo's SR655 manual: \"Carefully insert the tabs on the security bezel into the slots on the right rack latch. Then, press and hold the release latch and pivot the security bezel inward until the other side clicks into place.\" It is hard for hands: the 430 mm bezel is held at its thin top edge, the tabs slide into slots with only 3.8 mm of side play, and the left end must be pushed in with the right force to ride a ramp and spring back behind its catch.",
+  "setup": "Positions in metres from the midpoint between the two YAM arm bases (x out, y left); heights above the table. Server front (fixed steel): 482.6 mm wide, 43.2 mm high (1U), 66 mm deep, front datum x 0.420; its two chassis ears are 437 mm apart on their inner faces and the steel panel between them is recessed 26 mm behind the ears' front faces. Right ear: two slots, each 20.8 mm wide and 12 mm high, centred 10.5 and 32.5 mm above the table, open toward the bezel and closed by a 2 mm outer wall. Left ear: a steel wedge catch, 28 mm long, 13 mm wide, 10 mm high with a 25 degree ramp, flush with the ear's inner face, and a 14 mm high window behind it for the latch. Security bezel (loose, black plastic, 0.350 kg including the latch): 430 mm wide, 41 mm high, 25 mm deep, with a 4 mm front sheet, full-depth 5 mm top and bottom rails, three ribs, two 15 x 17 x 6 mm tabs at its right end and a 12 x 12 x 10 mm acetal latch at its left end that slides 14 mm on a 350 N/m spring. It stands upright with its centre at (0.255, 0), with its front face 177.5 mm in front of the ears' front plane. Latch and catch use friction 0.25 (acetal on steel); every other contact uses the simulator's default 1.2. No other objects.",
+  "scoring": "Score 0 if the bezel falls more than 20 cm below the table top, if any robot link feels more than 100 N of contact force at any time, or while a gripper fingertip is within 25 mm of the bezel. Otherwise: 0.25 when both right tab centres are inside their slots (within 3 mm of the slot's centre height, 1 mm clear of both slot walls); 0.25 when the bezel's front face is within 2 mm of the ears' front plane at both ends and the middle, its yaw is at most 2 degrees, and it has been at rest for the last 2 seconds (a 2 mm feeler gauge and a square); 0.50 when the left latch has returned to within 2 mm of its extended position, its nose overlaps the steel catch by at least 1.5 mm, and both tabs are still seated. Success is 1.00 held for 1 second.",
+  "run_limit": "600 steps (30 seconds at 20 Hz)",
+  "reset_notes": "Pull the left latch inward, swing the bezel out from the left, remove the right tabs from the slots, then set the bezel upright at its marked starting location.",
+  "fidelity": "Rigid pieces at 1U size (EIA 19 in, 43.2 mm); the bezel, tab, catch and latch sizes, spring rate and 3.5 mm side play are assumed, not one vendor's. The right slots are open toward the bezel, so the tabs slide in and nothing locks that end against a straight pull-out. Real bezels flex a plastic latch and lock with a key; here the latch is a rigid sliding block on a spring joint, with no key lock or release button. The bezel is solid; server electronics are omitted.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-F6D9D7"
+}
