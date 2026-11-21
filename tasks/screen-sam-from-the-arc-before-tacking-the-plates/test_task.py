@@ -75,7 +75,7 @@ def test_start_does_not_shade_and_goal_does():
 
 def test_tungsten_geometry():
     o = scene(T_REST, S_START, SQ0)
-    assert abs(M.tungsten(o["torch"])[2] - (M.TOP + 0.015)) < 1e-9
+    assert abs(M.tungsten(o["torch"])[2] - (M.TORCH_Z + M.TIP[2])) < 1e-9 and M.tungsten(o["torch"])[2] - M.TOP > 0.025
     assert np.allclose(M.tungsten(scene(torch_at_tip(0.0035), S_START)["torch"])[:2], M.TACK)
 
 
@@ -142,3 +142,15 @@ def test_task_json_limits():
     d = json.loads((HERE / "task.json").read_text())
     assert len(d["title"]) <= 120 and len(d["fidelity"]) <= 500 and len(d["scores"]) <= 300 and len(d.get("context", "")) <= 1000
     assert d["instruction"] == M.INSTRUCTION
+
+
+def test_torch_head_is_tilted_like_a_wp17():
+    d = M.D
+    assert abs(np.degrees(np.arccos(-d[2])) - 20.0) < 1e-6  # 20 degrees from vertical with the handle level
+    assert abs(np.degrees(np.arccos(d[0])) - 70.0) < 1e-6  # 70 degrees to the handle
+
+
+def test_dressing_has_no_bodies():
+    names = {o.name for o in M.OBJECTS}
+    assert not any(n.startswith(("hose", "earth", "arc", "tack_bead")) for n in names)
+    assert M.DECO.switches and M.DECO.cables
