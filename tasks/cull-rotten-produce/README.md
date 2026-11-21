@@ -1,14 +1,15 @@
 # Take the rotten vegetables out of a packed produce container and put them in the waste bin
 
 A produce container stands on the table with two red bell peppers, a zucchini and two tomatoes packed in it, and a
-waste bin stands beside it. The two tomatoes are rotten (each has a dark, spoiled patch beside the stem); the peppers and
+waste bin stands beside it. The two tomatoes are rotten (each has a standardized dark patch beside the stem); the peppers and
 the zucchini are fresh. The robot must take the rotten vegetables out of the container and put them in the waste bin,
 leaving the fresh produce where it is. The instruction does not say which pieces are rotten.
 
-Spoiled produce left among fresh produce is a food-safety hazard: USDA's Food Safety and Inspection Service notes that
-some molds produce mycotoxins that can make people sick (fsis.usda.gov, "Molds on Food"). The hard part is physical as
-well. Each tomato is 8.6-8.8 cm across and the gripper opens 9.4 cm, so the fingers have about 3 mm either side of it;
-and the tomato stands 1 cm from the peppers beside it along the row, which keeps the fingers out of the row, so they
+Clearing out the produce drawer or a crisper box is a routine household chore: a spoiled piece left among fresh ones
+spreads mold to its neighbours and spoils them too, and USDA's Food Safety and Inspection Service advises discarding moldy
+soft produce (fsis.usda.gov, "Molds on Food"). The instruction already asks for the spoiled pieces to be removed. The hard
+part is physical. Each tomato is 8.6-8.8 cm across and the gripper opens 9.4 cm, so the fingers have about 3 mm either side
+of it; and the tomato stands 1 cm from the peppers beside it along the row, which keeps the fingers out of the row, so they
 have to go down in front of and behind the tomato and close across the row.
 
 ## Files
@@ -25,7 +26,7 @@ have to go down in front of and behind the tomato and close across the row.
 
 The three produce models come from the marso SimReady assets `rotten_tomato`, `red_bell_pepper` and `zucchini` by
 M-XR Limited ("marso by M-XR", https://huggingface.co/datasets/M-XR/marso-simready, CC BY 4.0). Changes: the albedo
-texture baked into vertex colours, the pepper's mesh thinned, the origin moved to the centre of the bounds, the collider
+texture baked into vertex colours (the tomato then recoloured: plain red with one flat-edged dark disc 4.0 cm across), the pepper's mesh thinned, the origin moved to the centre of the bounds, the collider
 replaced by a convex hull. The containers are fixed boxes in `task.py`.
 
 ## Setup
@@ -37,7 +38,7 @@ top. All pieces rest on the container's floor.
 |---|---|---|
 | Produce container | centred (36.0, -3.0), long side along y, taped to the table | Rubbermaid FreshWorks 3-gallon produce saver, clear plastic, 45.7 x 30.5 cm and 16.0 cm tall (18 x 12 x 6 5/16 in), lid and insert removed, walls about 3 mm |
 | Waste bin | centred (40.0, -49.0), taped to the table | OXO Good Grips Easy-Clean 1.75 gallon compost bin, charcoal plastic, 25.8 cm along x by 21.1 cm along y, 30.5 cm tall (10.15 x 8.3 x 12 in), lid open |
-| Rotten tomato A | (29.5, -20.1), stem end up, its patch towards the front of the table (the robots) | Large red tomato, 8.8 x 8.6 x 5.9 cm, 220 g, a dark spoiled patch about 4 cm across on its upper shoulder beside the stem, firm enough to hold its shape and not leaking |
+| Rotten tomato A | (29.5, -20.1), stem end up, its patch towards the front of the table (the robots) | Firm large red tomato, 8.8 x 8.6 x 5.9 cm, 220 g, a dark patch 4.0 cm across on its upper shoulder beside the stem (prepared as under Reset) |
 | Red bell pepper A | (29.5, -9.6), stem up | Red bell pepper (fresh produce), 8.5 x 10.2 x 10.2 cm, 170 g |
 | Rotten tomato B | (29.5, 0.9), stem end up, its patch towards the front of the table | As tomato A |
 | Red bell pepper B | (29.5, 11.4), stem up | As pepper A |
@@ -109,15 +110,10 @@ the trial video. Before each trial, tape marks outline each good piece's startin
 
 ## Reset
 
-Rotten tomatoes: buy firm large tomatoes about 8.5-9 cm across and 5.5-6.5 cm tall (200-240 g) and keep them at room
-temperature until a dark, sunken patch about 4 cm across has formed beside the stem; discard any that has split or
-leaks, and keep spares. Each trial use two such tomatoes, stem end up with the patch towards the robots, at the listed
-centres; stand the peppers and lay the zucchini back at theirs, checking the 1 cm gaps beside each tomato with a ruler
-and re-taping the outline marks.
+The standardized dark patch is what marks a tomato as rotten, so every trial's tomatoes look alike. Preparing a pair takes under 10 minutes, including drying: choose two firm large tomatoes 8.5-9 cm across and 5.5-6.5 cm tall, 200-240 g on a kitchen scale, with no cracks or soft spots, and spares. Cut a 4.0 cm round hole in a piece of card. Hold the card against the upper shoulder of each tomato, with the hole's centre 2.5 cm from the stem scar, on the side that will face the robots, and dab black edible food-colouring gel through the hole with a foam dauber, twice, to an even opaque dark patch 4.0 cm across; lift the card straight off and let the patch dry 5 minutes until it is not tacky. Each trial use a pair with intact, dry patches, stem end up with the patch towards the robots, at the listed centres; stand the peppers and lay the zucchini back at theirs, checking the 1 cm gaps beside each tomato with a ruler and re-taping the outline marks. Handle the tomatoes by their sides so the patch is not rubbed, and repaint a patch or swap in a spare whenever one is smeared, chipped or the skin is split. Wipe the gripper pads, table and containers afterwards and empty the bin.
 
 ## Real trials
 
 The heaviest piece is 297 g. The scripted demo's squeeze is within the arms' strength (about 40 N per finger). Nothing is sharp, hot
-or powered; the containers are taped down so a push against a wall cannot tip them. Cover each gripper pad with a fresh
-disposable nitrile glove fingertip for the trial, empty the bin, and wipe the table, containers and pads afterwards.
-Wear gloves for the spoiled tomatoes.
+or powered; the containers are taped down so a push against a wall cannot tip them. Wipe the gripper pads, table and
+containers afterwards and empty the bin.

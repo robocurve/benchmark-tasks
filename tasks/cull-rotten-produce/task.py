@@ -3,7 +3,7 @@
 On the station table stand two fixed open containers: a produce container (a Rubbermaid FreshWorks 3-gallon produce
 saver, 18 x 12 x 6 5/16 in, its lid off) and, to the right of it, a waste bin (an OXO Good Grips Easy-Clean 1.75
 gallon compost bin, 8.3 x 10.15 x 12 in, its lid open). In the produce container, packed with about 10 mm between
-neighbours, lie two red bell peppers, a zucchini and two rotten tomatoes (the stem end blackened and sunken, its patch facing
+neighbours, lie two red bell peppers, a zucchini and two rotten tomatoes (a dark patch beside the stem, facing
 the front of the table). One rotten
 tomato is wedged between the two peppers, the other between a pepper and the container's right wall.
 
