@@ -1,0 +1,20 @@
+{
+  "title": "Untangle a balloon whisk, wooden spoon, and silicone spatula",
+  "category": "Societal relatability",
+  "keywords": [
+    "kitchen utensils",
+    "untangling",
+    "bimanual",
+    "compliant contact",
+    "utensil holder"
+  ],
+  "instruction": "Separate the whisk, wooden spoon, and spatula, then put them in the holder so I can take any one out on its own.",
+  "context": "Utensils can thread through a balloon whisk in a kitchen drawer. Sorting them into individual slots makes each one available without lifting its neighbors.",
+  "setup": "On the YAM worktop, a 298 mm four-loop steel balloon whisk lies handle toward the arms. A 293 mm beech spoon runs bowl-left through two opposite wire gaps. A 288 mm silicone spatula enters the right gap above the shaft, in the path of the flared wooden handle end. A fixed 322 x 339 x 29 mm three-slot polymer drawer holder sits just beyond the whisk tip. The README gives the assembly order, dimensions, and reset coordinates.",
+  "scoring": "0 while both utensils are caught in the whisk. 0.5 once either is free. 1.0 when all three released utensils rest in distinct slots, the four whisk loops remain intact, and each passes a 100 mm removal from the same saved state with at most 5 mm of neighbor motion. Any slot assignment and release order count.",
+  "run_limit": "1,000 bimanual joint targets at 20 Hz (50 seconds)",
+  "reset_notes": "Fixed layout, seed 0. Thread the spoon first, insert the blade above the shaft through the right gap, then lower the assembly onto the table. The simulation settles for one second.",
+  "fidelity": "Contact-driven MuJoCo simulation of the calibrated two-arm YAM station. Spring hinges model wire and blade bending. Point constraints close each continuous wire loop. The whisk springs recover elastically. Material constants are estimates and plastic yield and fracture are outside the model.",
+  "scores": "Dream-1 scored 0.0 in 1,000 actions. Scripted demo scored 1.0 in 641 actions. Untouched setup 0.0. One utensil free 0.5.",
+  "media": "M-6A3385"
+}
