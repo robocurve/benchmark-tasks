@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "failsafe-shower-bay"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+
+[project.entry-points."inspect_robots.embodiments"]
+yam_shower_bay = "shower_bay:yam_shower_bay"
+
+[project.entry-points."inspect_robots.policies"]
+shower_scripted = "shower_bay:shower_scripted"
+
+[tool.setuptools]
+py-modules = ["shower_bay", "geometry", "usd_geometry"]

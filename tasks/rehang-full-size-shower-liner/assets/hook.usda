@@ -1,0 +1,401 @@
+#usda 1.0
+(defaultPrim = "Asset"
+ metersPerUnit = 1
+ upAxis = "Z")
+def Xform "Asset"
+{
+    def Xform "hook" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        float physics:mass = 0.026
+        bool physics:kinematicEnabled = true
+        def Capsule "Wire0" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.001778
+            double height = 0.008631338250816035
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.00075, 0, 0.01225)
+            float3 xformOp:rotateXYZ = (0, 169.99202, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Capsule "Wire1" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.001778
+            double height = 0.007382411530116701
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.00325, 0, 0.00475)
+            float3 xformOp:rotateXYZ = (0, 151.69924, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Capsule "Wire2" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.001778
+            double height = 0.006946221994724901
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.008, 0, -0.00025)
+            float3 xformOp:rotateXYZ = (0, 120.25644, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Capsule "Wire3" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.001778
+            double height = 0.006000000000000002
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.014, 0, -0.002)
+            float3 xformOp:rotateXYZ = (0, 90, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Capsule "Wire4" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.001778
+            double height = 0.0064031242374328464
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.0195, 0, 0)
+            float3 xformOp:rotateXYZ = (0, 51.340192, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Capsule "Wire5" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.001778
+            double height = 0.00894427190999916
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.024, 0, 0.006)
+            float3 xformOp:rotateXYZ = (0, 26.565051, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Capsule "Wire6" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.001778
+            double height = 0.008062257748298548
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.0265, 0, 0.014)
+            float3 xformOp:rotateXYZ = (0, 7.1250163, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Capsule "Wire7" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.001778
+            double height = 0.018027756377319945
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.0265, 0, 0.027)
+            float3 xformOp:rotateXYZ = (0, -3.1798301, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Capsule "Wire8" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.001778
+            double height = 0.012165525060596443
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.025, 0, 0.042)
+            float3 xformOp:rotateXYZ = (0, -9.4623222, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Capsule "Wire9" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.001778
+            double height = 0.0070710678118654745
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.0235, 0, 0.0515)
+            float3 xformOp:rotateXYZ = (0, -8.1301024, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Capsule "Wire10" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.001778
+            double height = 0.00848528137423857
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.026, 0, 0.058)
+            float3 xformOp:rotateXYZ = (0, 45, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Capsule "Wire11" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.001778
+            double height = 0.00854400374531753
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.033, 0, 0.0625)
+            float3 xformOp:rotateXYZ = (0, 69.443955, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Capsule "Wire12" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.001778
+            double height = 0.009055385138137417
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.0415, 0, 0.0635)
+            float3 xformOp:rotateXYZ = (0, 96.340192, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Capsule "Wire13" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.001778
+            double height = 0.008944271909999161
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.05, 0, 0.061)
+            float3 xformOp:rotateXYZ = (0, 116.56505, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Capsule "Wire14" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.001778
+            double height = 0.008246211251235322
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.055, 0, 0.055)
+            float3 xformOp:rotateXYZ = (0, 165.96376, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Capsule "Wire15" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.001778
+            double height = 0.008246211251235322
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.055, 0, 0.047)
+            float3 xformOp:rotateXYZ = (0, -165.96376, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Capsule "Wire16" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.001778
+            double height = 0.009219544457292882
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.053, 0, 0.0385)
+            float3 xformOp:rotateXYZ = (0, -167.47119, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Capsule "Wire17" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.001778
+            double height = 0.008246211251235326
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.053, 0, 0.03)
+            float3 xformOp:rotateXYZ = (0, 165.96376, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Capsule "Wire18" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.001778
+            double height = 0.008485281374238568
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.057, 0, 0.023)
+            float3 xformOp:rotateXYZ = (0, 135, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Capsule "Wire19" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.001778
+            double height = 0.007071067811865481
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.0635, 0, 0.0195)
+            float3 xformOp:rotateXYZ = (0, 98.130102, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Capsule "Wire20" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.001778
+            double height = 0.006403124237432843
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.069, 0, 0.0215)
+            float3 xformOp:rotateXYZ = (0, 38.659808, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Capsule "Wire21" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.001778
+            double height = 0.010065907808041957
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.070425, 0, 0.029)
+            float3 xformOp:rotateXYZ = (0, -6.5601964, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Sphere "LinerCap" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.004445
+            double3 xformOp:translate = (0, 0, 0.0165)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Sphere "CurtainCap" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.004445
+            double3 xformOp:translate = (0.06985, 0, 0.034)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Sphere "Roller0" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.004445
+            double3 xformOp:translate = (0.022, 0, 0.054)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Sphere "Roller1" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.004445
+            double3 xformOp:translate = (0.029, 0, 0.061)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Sphere "Roller2" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.004445
+            double3 xformOp:translate = (0.037, 0, 0.064)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Sphere "Roller3" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.004445
+            double3 xformOp:translate = (0.046, 0, 0.063)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+        def Sphere "Roller4" (
+            prepend apiSchemas = ["PhysxCollisionAPI", "PhysicsCollisionAPI"]
+        )
+        {
+        float physxCollision:contactOffset = 0.00065
+        float physxCollision:restOffset = 0
+            double radius = 0.004445
+            double3 xformOp:translate = (0.054, 0, 0.058)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+            color3f[] primvars:displayColor = [(0.68, 0.71, 0.75)]
+        }
+    }
+}
