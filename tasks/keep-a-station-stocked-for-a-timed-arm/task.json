@@ -1,0 +1,22 @@
+{
+  "title": "Keep a hand-off tray stocked for a second robot arm that empties it on a fixed clock",
+  "category": "Impact on jobs",
+  "keywords": [
+    "shared workspace",
+    "multi-robot",
+    "fixed routine",
+    "timing",
+    "hand-off station",
+    "working around a coworker"
+  ],
+  "instruction": "Keep the white tray stocked with one wood block at a time from the table, so the other arm can crate all five.",
+  "context": "Many times every shift, hand laborers and stock movers (O*NET 53-7062.00 Laborers and Freight, Stock, and Material Movers, Hand; 2,940,300 employees in 2025, BLS data per O*NET OnLine) keep stations stocked; their core task is to \"Move freight, stock, or other materials to and from storage or production areas\". Keeping a station stocked for a machine or a coworker that takes parts on a fixed cycle means each part must be there in time, put down only when the station is empty and the taker's hand is clear, without getting in the taker's way. This checks that a policy can keep pace with a second arm on a fixed clock without colliding with it.",
+  "setup": "Station table, both YAM arms at the back edge, 61 cm apart. The left arm is the arm under test; the right arm is the coworker and runs a fixed routine whatever the policy sends to it. A white square weigh boat (89 x 89 x 25 mm) at (0.28, -0.04) m is the hand-off tray and holds one 1.2 in (30.5 mm) unfinished wood cube (block_1). Five more wood cubes lie on the table around (0.30, 0.22) m like the five on a die, corners 65 mm off the centre. A clear 6 x 6 x 2 in organizer bin (152 x 152 x 51 mm) at (0.30, -0.30) m, in front of the coworker, is the crate. At 4 s and every 11 s after, eight times, the coworker closes its fingers in the tray, lifts whatever is there and drops it in the crate; if the tray is empty it goes back empty-handed. It does the same in every trial and never waits.",
+  "scoring": "Judged at the end of the trial; a run succeeds once 1.0 holds for 1.0 s. The score is the share of the five blocks the tested arm must supply (the five from the table) whose centres end inside the crate's walls and below its 51 mm rim. The block that starts on the tray is never credited, so an arm that holds still scores 0.0. 0.0 if the two arms ever come within 50 mm of each other (link 4, link 5, gripper and fingertip origins, checked every control step). Possible scores: 0.0, 0.2, 0.4, 0.6, 0.8, 1.0.",
+  "run_limit": "2,200 steps (110 s at 20 Hz)",
+  "real_trial_cost_usd": 111.96,
+  "reset_notes": "Put one wood block on the tray and five on the table in the die-five pattern, empty the crate, and send both arms to ready pose.",
+  "fidelity": "Rigid-body simulation (PhysX, 20 Hz). Blocks are 30.5 mm rigid cubes of 16 g (estimated from wood density; no listed mass); the tray and bin are thin-walled square boxes of the listed outside sizes. The coworker's routine is planned once from the fixed layout and replayed open loop on the embodiment clock, replacing the right half of every action. A touch is judged from body origins within 50 mm, not contact.",
+  "scores": "Dream-1 run: 0; demo: 1",
+  "media": "M-4CAMK3"
+}
