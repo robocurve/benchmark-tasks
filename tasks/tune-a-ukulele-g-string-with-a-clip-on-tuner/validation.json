@@ -1,0 +1,312 @@
+{
+  "status": "Scripted demonstration run natively in Isaac Sim (headless): score 1.0, repeated once; the wrong-button control scores 0. Dream-1 (dreamlabs/dream-1-beta) run natively once with the same scene, instruction, scorer and control settings: score 0.0 at the 2,400-step limit; it never touched the ukulele.",
+  "seed": 0,
+  "object_jitter": 0,
+  "control_hz": 20,
+  "physics_hz": 240,
+  "max_steps": 2400,
+  "runs": {
+    "scripted": {
+      "score": 1.0,
+      "executed_steps": 675,
+      "step_limit": 2400,
+      "elapsed_s": 489.47,
+      "termination_reason": "success",
+      "variant": "full",
+      "result": "out/scripted-1/RESULT.json",
+      "grader_trace": "out/scripted-1/media/grader-trace.jsonl",
+      "videos": {
+        "overhead": "out/scripted-1/media/top_cam.mp4",
+        "side": "out/scripted-1/media/side_cam.mp4",
+        "combined": "out/scripted-1/demo.mp4"
+      },
+      "combined_video": "2560 x 704, 10 fps, 339 frames (33.9 s): the overhead recording scaled to 1280 x 704 beside the side recording; every second control step plus the first and last",
+      "combined_video_sha256": "5bbd125b0a4b9e527ac68adfc04a888fa65e08757dc65f6a14a21476daa0c36a",
+      "stills": [
+        "out/scripted-1/media/setup.png",
+        "out/scripted-1/media/end_top_cam.png",
+        "out/scripted-1/media/end_side_cam.png"
+      ],
+      "machine": "one NVIDIA A10 (24 GB), Ubuntu 22.04, headless, the GPU shared with two other Isaac Sim processes; elapsed_s includes Isaac Sim start-up and scene creation, not Python start-up or shutdown",
+      "inspect_robots": "1.0.0",
+      "yam_arena": "0.1.0"
+    },
+    "dream": {
+      "model": "dreamlabs/dream-1-beta",
+      "score": 0.0,
+      "executed_steps": 2400,
+      "step_limit": 2400,
+      "elapsed_s": 725.94,
+      "termination_reason": "max_steps",
+      "status": "run",
+      "result": "out/dream/RESULT.json",
+      "grader_trace": "out/dream/media/grader-trace.jsonl",
+      "videos": {
+        "overhead": "out/dream/media/top_cam.mp4",
+        "side": "out/dream/media/side_cam.mp4",
+        "combined": "out/dream/model_run.mp4"
+      },
+      "combined_video": "2560 x 704, 10 fps, 1,201 frames (120.1 s): the overhead recording scaled to 1280 x 704 beside the side recording; every second control step plus the first and last",
+      "combined_video_sha256": "0a42a655337e170dc6eef79997be6146819e5164bca945184125aaea8bba03c7",
+      "stills": [
+        "out/dream/media/setup.png",
+        "out/dream/media/end_top_cam.png",
+        "out/dream/media/end_side_cam.png"
+      ],
+      "what_it_did": "Closed both grippers (the right one from about step 215) and moved both arms above the table. No arm contact with the ukulele, tuner or buttons was recorded; no pluck was counted and all four buttons stayed at 0 degrees, so G stayed at -100 cents. Closest approach: the right gripper, 29.5 mm from the ukulele at step 910; the left gripper never came closer than 73.2 mm.",
+      "action_requests": 73,
+      "request_cap": 128,
+      "list_price_estimate_usd": 0.097333,
+      "dream_chunk_anchor": "executed_target_blend_v2",
+      "client": {
+        "dreamlabs-client": "1.0.14",
+        "inspect-robots-dream": "git+https://github.com/kairosiann/inspect-robots-dream@b5e936a201cec66c54c297e522c920d98445e339"
+      },
+      "audit": {
+        "action_trace": "out/dream/dream-action-trace.jsonl",
+        "input_frames": "out/dream/dream-input-rgb.zip",
+        "input_frames_sha256": "cbb9b2994e8ae9e31d4b9aa525fc032b7a5229358e4e85d4d1b068d1c1b4f731",
+        "usage": "out/dream/DREAM_USAGE.json"
+      },
+      "code_hashes_match_recorded": true,
+      "machine": "one NVIDIA A10 (24 GB), Ubuntu 22.04, headless; the GPU shared with one other Isaac Sim process for the first part of the trial; elapsed_s includes Isaac Sim start-up and scene creation",
+      "inspect_robots": "1.0.0",
+      "yam_arena": "0.1.0"
+    }
+  },
+  "recorded_hashes": {
+    "scene_sha256": "c782739e8e7e3d35a7a75652bfbbb57c882f0cbc064a58a4a0a5a5a3d2710271",
+    "layout_sha256": "7835dd4fdb7a080d19d7b3b1aa3f88f378ffc3eb03679f46994ced2923c5ac60",
+    "tuning_sha256": "6097e609aa1816ebb4fc060879d67e4bf73912b6c4c32046d7306dbaf03b7484",
+    "grader_sha256": "6a8007dc1e502ee18d3ef6fe41819d3ef153d765be8db228b7cd221652a01cfc",
+    "adapter_sha256": "7fcf4b5a648bce65b940629dabb199246b0bb2608ce09a2fccddd362baeb1e8a",
+    "scripted_sha256": "b285bd902e76aa64e6e50696ed8e0e103dd79d75efaca1b09f5bfd328b350b3e",
+    "asset_sha256": "e69cb45898ec96e2db89ab5ffdbe25abb8fcdfe2444e13e9103a907c78d20566"
+  },
+  "scripted_final_grade": {
+    "score": 1.0,
+    "g_cents": 0.049,
+    "g_start_cents": -100.0,
+    "moved_cents": {
+      "c": 0.0,
+      "e": 0.0,
+      "a": 0.0
+    },
+    "grippers_clear": true,
+    "clearance_mm": [
+      84.3,
+      149.4
+    ],
+    "final_check": true,
+    "last_pluck_step": 593,
+    "g_turned_since_pluck_deg": 0.0,
+    "success_ticks": 21,
+    "void": null,
+    "plucks": 3,
+    "lamps_lit": [],
+    "tuner": {
+      "active": false,
+      "note": null,
+      "cents_from_note": null,
+      "needle_deg": -45.0
+    }
+  },
+  "scripted_course": {
+    "phases": [
+      [
+        0,
+        "reach"
+      ],
+      [
+        80,
+        "pinch the button 1"
+      ],
+      [
+        128,
+        "pluck 1"
+      ],
+      [
+        189,
+        "turn +455.0 degrees"
+      ],
+      [
+        210,
+        "regrip 1"
+      ],
+      [
+        300,
+        "regrip 2"
+      ],
+      [
+        390,
+        "regrip 3"
+      ],
+      [
+        458,
+        "pluck 2"
+      ],
+      [
+        520,
+        "let go of the button"
+      ],
+      [
+        546,
+        "pluck 3"
+      ],
+      [
+        607,
+        "let go"
+      ],
+      [
+        667,
+        "rest"
+      ]
+    ],
+    "plucks": [
+      {
+        "tick": 175,
+        "peak_mm": 5.2,
+        "g_cents": -100.0
+      },
+      {
+        "tick": 506,
+        "peak_mm": 5.3,
+        "g_cents": 0.04
+      },
+      {
+        "tick": 593,
+        "peak_mm": 5.19,
+        "g_cents": 0.05
+      }
+    ],
+    "first_step_at_score": {
+      "0.0": 1,
+      "0.25": 290,
+      "0.5": 364,
+      "0.75": 376,
+      "1.0": 655
+    },
+    "regrips": 3,
+    "cycles": 3,
+    "joint6_at_each_grip_deg": [
+      26.7,
+      -72.2,
+      -70.8,
+      -70.8
+    ],
+    "pads_apart_at_each_grip_mm": [
+      5.89,
+      5.89,
+      5.89,
+      5.89
+    ],
+    "button_turn_deg": {
+      "wanted": 454.96,
+      "after_each_check": [
+        444.89,
+        454.51
+      ],
+      "cents_after_each_check": [
+        -2.214,
+        -0.098
+      ],
+      "after_letting_go": 454.77
+    },
+    "peaks": {
+      "arm_on_button_g_n": 29.085,
+      "arm_on_button_c_n": 0.0,
+      "arm_on_buttons_e_a_n": 0.0,
+      "arm_on_pluck_n": 2.593,
+      "arm_on_instrument_n": 0.0,
+      "pluck_mm": 5.303,
+      "needle_error_deg": 61.05
+    },
+    "peak_interarm_contact_n": 0.0,
+    "state_after_reset": {
+      "buttons_deg": {
+        "g": 0.0,
+        "c": 0.0,
+        "e": 0.0,
+        "a": 0.0
+      },
+      "pluck_mm": -0.043,
+      "needle_deg": 45.0,
+      "mass_check": "passed"
+    },
+    "note": "peak needle_error_deg is the one control step when the display goes from a reading to blank: the needle's target is set after the reading, so it lags the display by one step (display only).",
+    "first_step_at_score_source": "grader-trace.jsonl (every step); 1.0 needs both grippers clear and the final check"
+  },
+  "reference_reads_simulator_state": true,
+  "model_observations": "Overhead and two wrist RGB at 320 x 176, plus the 14 joint and gripper position readings. No pitch, tuner state or side camera.",
+  "checked_without_the_simulator": "Standard-library unit tests in tests/ (pitch, free play, pluck rule, tuner display, scoring, the scene file against layout.py, Kala's published sizes, which post each string reaches, task.json and this file against the code). Kinematic dry run (tools/dryrun_demo.py, tests/test_demo.py, needs yam_arena), the YAM's collision hulls sampled over their surfaces about 2 mm apart and checked by position: nominal 1.0 in 636 steps (left hand: body 4.9 mm, C string over the soundhole 3.0 mm; right hand: C button 18.2 mm, headstock, neck, posts and gear boxes 6.7 mm, strings between the nut and the posts 27.4 mm, tuner 30 mm or more); slower sagging arm 1.0 in 703 (body 2.8, C string 0.8, C button 15.6, headstock parts 2.7 mm); C button turned instead 0; blind 0.75; never letting go 0.75. Wrist roll per grip (nominal): joint 6 from 26.7 to 111.5 degrees, then twice from -68.5 to 111.7, then from -68.4 to -58.5; its limits are +-120 degrees.",
+  "controls_native": {
+    "wrong_button": {
+      "result": "out/control-wrong_button/RESULT.json",
+      "env": "RDB_UKULELE_DEMO=wrong_button",
+      "score": 0.0,
+      "executed_steps": 2400,
+      "elapsed_s": 1298.67,
+      "termination_reason": "max_steps",
+      "first_step_at_zero_after_moving_c": 208,
+      "what_happened": "one pluck (F#, centred), then the C string's button, beside the G string's and farther from the nut, pinched (up to 29 N; the G button untouched) and turned by the G string's error (3 regrips), then let go: C +100.1 cents, G still -100; score 0 from step 208 (C past 15 cents) to the step limit; both grippers clear at the end",
+      "final_grade": {
+        "score": 0.0,
+        "g_cents": -100.0,
+        "g_start_cents": -100.0,
+        "moved_cents": {
+          "c": 100.063,
+          "e": 0.0,
+          "a": 0.0
+        },
+        "grippers_clear": true,
+        "clearance_mm": [
+          84.0,
+          149.3
+        ],
+        "final_check": true,
+        "last_pluck_step": 175,
+        "g_turned_since_pluck_deg": 0.0,
+        "success_ticks": 0,
+        "void": "the C string moved 100.1 cents from its start",
+        "plucks": 1,
+        "lamps_lit": [],
+        "tuner": {
+          "active": false,
+          "note": null,
+          "cents_from_note": null,
+          "needle_deg": -45.0
+        }
+      },
+      "plucks": [
+        {
+          "tick": 175,
+          "peak_mm": 5.2,
+          "g_cents": -100.0
+        }
+      ],
+      "regrips": 3,
+      "peaks": {
+        "arm_on_button_g_n": 0.0,
+        "arm_on_button_c_n": 29.109,
+        "arm_on_buttons_e_a_n": 0.0,
+        "arm_on_pluck_n": 2.542,
+        "arm_on_instrument_n": 0.0,
+        "pluck_mm": 5.195,
+        "needle_error_deg": 45.0
+      },
+      "same_hashes_as_recorded_run": true
+    },
+    "blind_and_hold_on": "dry run only"
+  },
+  "scripted_repeat": {
+    "run": "out/scripted-2/RESULT.json",
+    "score": 1.0,
+    "executed_steps": 675,
+    "elapsed_s": 448.29,
+    "termination_reason": "success",
+    "grader_trace_identical_to_recorded_run": true,
+    "diagnostic_samples_identical": true,
+    "same_hashes_as_recorded_run": true,
+    "differences": "None in the scorer trace or the diagnostic samples. Elapsed time differs (448.3 s against 489.5 s; the GPU was shared) and the MP4 files differ byte for byte (path-traced rendering)."
+  }
+}
