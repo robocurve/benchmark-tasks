@@ -1,0 +1,18 @@
+{
+  "title": "Transfer bare dies between keyed trays for backside inspection",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "bare die handling",
+    "tray turnover",
+    "pocket registration"
+  ],
+  "instruction": "Prepare the receiving tray in its holder for backside inspection. Transfer the four dies with their plain backs up, preserving the source pocket pattern relative to the matching tray keys. Leave the receiver open, stable and released.",
+  "context": "Backside inspection requires turning over unpackaged chips while keeping a known pocket map. Matching clipped corners preserves the correspondence when the receiving tray is uncovered. Here the inspected outcome is the prepared tray.",
+  "setup": "Two 50.8 mm stepped, clipped-corner 3 by 3 trays, four 9 by 9 by 0.5 mm silicon training coupons, a passive hinged turnover jig, and a staging pedestal. The source tray is fastened to its carrier and loaded pattern-side up, the other tray is empty on the pedestal at a quarter turn. Colored corner marks identify the keys.",
+  "scoring": "During the final second the receiver must be level, supported in its holder, released and uncovered. Award 0.25 per expected keyed pocket containing exactly one released, supported die, plain back up with all four back corners recessed at least 0.40 mm. Identical coupons are interchangeable.",
+  "run_limit": "2,400 actions at 20 Hz (120 seconds).",
+  "reset_notes": "Use a fresh process for the single fixed layout. Reset the receiver on its quarter-turn pedestal and load the asymmetric source map shown in the grading guide.",
+  "fidelity": "Free rigid silicon coupons and receiver, a source tray bolted to its carrier (fixed joint), passive hinges, contact-driven sprung catch and rotating handles. This is a custom training fixture modeled on tray-to-tray inversion. Coupon markings aid face recognition. Breakage, electrostatics, contamination and defect inspection are outside the model.",
+  "scores": "Dream-1: 0.00 after 2,400 actions / 120 s. Scripted demonstration: 1.00 in 1,251 actions / 62.55 s. One uninterrupted simulation episode; the SDK retried 49 expired sessions across 50 returned action chunks.",
+  "media": "M-FQH5G6"
+}
