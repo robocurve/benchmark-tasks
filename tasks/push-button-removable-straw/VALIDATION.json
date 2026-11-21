@@ -1,0 +1,164 @@
+{
+  "engine": "MuJoCo 3.11.0 CPU",
+  "model_dimensions": {
+    "estimated_straw_length_mm": 148,
+    "reset_straw_tip_above_vessel_base_mm": 9,
+    "assembly_mass_g": 244,
+    "minimum_held_axial_stroke_mm": 120
+  },
+  "scripted": {
+    "score": 1.0,
+    "actions": 564,
+    "time_s": 28.20000000001148,
+    "wall_seconds": 10.270803941995837,
+    "lid_deg": 109.47041000310477,
+    "hold_s": 3.0179999999997786,
+    "peak_tilt_deg": 0.9611855606323009,
+    "held_axial_lift_mm": 139.82059074714175,
+    "tip_clearance_mm": 9.03004389368453,
+    "peak_button_n": 4.384939135010025,
+    "peak_cross_arm_n": 0.0,
+    "peak_joint_effort_nm": [
+      [
+        4.62557110124331,
+        6.45506360662867,
+        4.3583047649734965,
+        7.0,
+        0.8169419372379454,
+        0.5414234419568813
+      ],
+      [
+        10.599819717057883,
+        3.599666634662782,
+        5.817148190491082,
+        5.507654650635182,
+        7.0,
+        7.0
+      ]
+    ],
+    "peak_finger_effort_n": [
+      [
+        12.967413316259787,
+        11.208958962854105
+      ],
+      [
+        4.069644117615254,
+        4.084605965719535
+      ]
+    ],
+    "peak_joint_speed_rads": [
+      [
+        0.85683197028014,
+        1.1437006523666358,
+        0.7996423903890233,
+        1.3723401460705313,
+        0.06338504408483205,
+        0.029709393854281237
+      ],
+      [
+        1.8786856415740407,
+        0.7397629602183607,
+        0.8791258636499226,
+        0.9708045599281104,
+        1.3586367749025208,
+        1.7399600274521265
+      ]
+    ],
+    "events": [
+      [
+        "button pressed beyond release travel",
+        6.253000000000423
+      ],
+      [
+        "held straw lower tip cleared wide spout",
+        14.405999999997455
+      ]
+    ],
+    "faults": []
+  },
+  "determinism": {
+    "generated_and_replayed_states_identical": true,
+    "copied_package_replay_identical": true,
+    "both_jaw_targets_normalized": true,
+    "joint_and_finger_effort_caps_verified": true
+  },
+  "scoring_controls": {
+    "open_only": {
+      "score": 0.3,
+      "actions": 298,
+      "lid_deg": 109.4715287570241,
+      "extracted": false,
+      "straw_separated": false,
+      "peak_button_travel_mm": 6.686822297017875,
+      "hold_s": 0.0,
+      "faults": []
+    },
+    "withdrawn_but_held": {
+      "score": 0.75,
+      "actions": 359,
+      "lid_deg": 109.45247707963185,
+      "extracted": true,
+      "straw_separated": true,
+      "peak_button_travel_mm": 6.686822297017875,
+      "hold_s": 0.0,
+      "faults": []
+    },
+    "no_manipulation_full_limit": {
+      "score": 0.0,
+      "actions": 750,
+      "lid_deg": 0.4730314880009347,
+      "extracted": false,
+      "straw_separated": false,
+      "peak_button_travel_mm": 0.02914552620416635,
+      "hold_s": 0.0,
+      "faults": []
+    },
+    "press_with_ring_locked": {
+      "score": 0.0,
+      "actions": 268,
+      "lid_deg": 0.47313102142711766,
+      "extracted": false,
+      "straw_separated": false,
+      "peak_button_travel_mm": 0.3564980833300194,
+      "hold_s": 0.0,
+      "faults": []
+    }
+  },
+  "offline_policy_check": {
+    "status": "complete",
+    "actions": 8,
+    "requests": 0,
+    "model_attempted": false,
+    "offline_check": true
+  },
+  "policy_and_scripted_setup_images_identical": true,
+  "video": {
+    "codec": "h264",
+    "width": 1360,
+    "height": 720,
+    "fps": 20,
+    "decoded_frame_count": 565,
+    "first_frame_is_reset": true,
+    "black_intervals_detected": false,
+    "sha256": "106f218fdc9856de20848279b6694f8ccb1debbe958e9575b41ae65d79bc8a6c"
+  },
+  "setup_png_sha256": "79294d21a5fc0dba625ff26b561a827d604dcf1cc7c770aa2e9046220998d3dc",
+  "scripted_action_sha256": "f02ddda41e2a7e8d36d8c1e2800728cde98ee7d9197f3bc7b36a657774bc2e96",
+  "task_json_sha256": "2ce3bd836311f8bfb353e8153b0edfc8224c2f15914581705007d15e50f47c28",
+  "source_sha256": {
+    "dream_bottle.py": "f33b5c44d17c8ab5171a7aa51127288f34e8aac2fee479157cb2fbc4cd7c9743",
+    "dream_episode.py": "17e7a010955bab833b3e75d745b1e1cba7ecf41080349f7c04c7f0e66b33db99",
+    "motion.py": "1e679f60242f953f797540367ab9ee50d27dd7bb58ffc2452f35b8aaabcf3fd3",
+    "render.py": "4dd065c84786f42f0dc06c0061eb0c76ff4e724807cf6c76bf4484e091999a83",
+    "review_media.py": "cf367024a0baae0f010dbf69239607476a178e0ff13c46d14461e93e8141051d",
+    "run.py": "c23a9748f920354d212ab5ae03f35de180d0f2273ea9daf8fdc371bcd95248a8",
+    "scene.py": "68ca1ee70afb779978bdb4fa755d6f170c0a674abb9be0d52a35e95aee674ed9"
+  },
+  "dream_1": {
+    "score": 0.0,
+    "actions": 750,
+    "inference_requests": 82,
+    "sha256": "95c3b1d505f2a1c48d3ba26a19ce1d9054ff8fd79252162e45f2d10b7552a868",
+    "matching_geometry": "148 mm complete straw"
+  }
+}

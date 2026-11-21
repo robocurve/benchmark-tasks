@@ -1,0 +1,29 @@
+{
+  "engine": {"name": "MuJoCo", "version": "3.11.0", "control_hz": 20, "physics_hz": 1000},
+  "python": "3.12.12",
+  "libraries": {
+    "numpy": "2.3.1",
+    "scipy": "1.17.0",
+    "opencv-python-headless-noffmpeg": "4.14.0.94rc1"
+  },
+  "station": {
+    "package": "dreamlabs",
+    "version": "1.0.23",
+    "path": "dream_examples/yam_mujoco",
+    "wheel_sha256": "63f47170aff86927f7bb0d66e77db5c2a721598e89885abe87fe051f7fe6f547",
+    "calibration": "https://github.com/ARISE-Initiative/yamlab/tree/ec0455d2b4ce35f21fc126418ea5e74ac567133d"
+  },
+  "policy": {
+    "inspect-robots": "0.60.0",
+    "inspect-robots-yam": "0.37.0",
+    "inspect-robots-dream": "0.1.0",
+    "inspect-robots-dream_commit": "b5e936a201cec66c54c297e522c920d98445e339",
+    "dreamlabs-client": "1.0.14",
+    "request_rows": 8,
+    "preroll_steps": 100,
+    "policy_camera_width_height": [320, 176]
+  },
+  "rendering": "Mesa EGL software rendering, FFmpeg H.264 yuv420p, 1360x720 at 20 Hz",
+  "seed": null,
+  "reset": "Fixed poses, object masses and material parameters. No random sampling."
+}
