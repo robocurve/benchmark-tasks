@@ -1,0 +1,23 @@
+{
+  "title": "Cap a glue stick lying on the desk, winding its glue down first",
+  "category": "Societal relatability",
+  "keywords": [
+    "glue stick",
+    "twist knob",
+    "screw",
+    "cap",
+    "snap fit",
+    "bimanual",
+    "regrasp",
+    "desk"
+  ],
+  "instruction": "Put the cap back on the glue stick.",
+  "context": "Henkel makes more than 120 million Pritt sticks a year: \"With more than 120 million sticks produced every year, Pritt is the leading glue stick brand in the world\" (https://www.henkel.com/our-businesses/pritt-26288). What is hard for a robot: a parallel gripper turns the 27 mm knob only about a quarter turn per stroke, so the two and a half turns take about ten regrasps while the other hand keeps the loose round barrel from rolling; then the cap must be lined up and clicked on over a 16 mm neck without touching the glue. A lipstick, a lip balm and a stick deodorant close the same way.",
+  "setup": "A Pritt Stick 43 g glue stick (listed 31 x 31 x 113 mm, 59 g with 43 g of glue) and its cap lie on the bare table at fixed places, both axes along the line between the arms. Stick: white polypropylene barrel, 30 mm across and 78 mm long; a red ribbed knob, 27 mm across and 12 mm long, at its left end (toward the left arm); a 26 mm neck, 16 mm long, at its right end. The glue (21 mm across) stands 12 mm out past the rim of the neck. From the midpoint between the arm bases: the barrel's shoulder (where the cap's rim seats) is at x 36 cm, y -3.5 cm; the knob's end at y +5.5 cm; the glue's tip at y -6.3 cm. The red cap, 31 mm across and 21 mm long, lies on its side on the same line, its open end toward the stick, its rim at y -11 cm. Turning the knob clockwise as seen from its end winds the glue out, anticlockwise winds it in, about 6 mm per turn; the glue can go 25 mm out. The cap is a snap fit: it slides freely over the first 10 mm of the neck, resists the last 6 mm with about 8 N, clicks home and then holds. Seated, its inner end is 3 mm past the rim, so it cannot seat while the glue stands further out; pushed on, it presses the glue's tip. Both grippers start open in the ready pose.",
+  "scoring": "Read at the end with both hands away, from a photo and a ruler; then the tester takes the cap off to look at the glue. 1.0: the cap is seated (gap between its rim and the barrel's shoulder at most 1 mm); the glue's tip is at or below the rim with no dent from the cap, that is not flattened or flared (in simulation: the cap's inner end never came within 0.5 mm of the tip); the stick rests on the table (lowest point within 4 mm of it), with every finger 3 cm or more from the stick and the cap. 0.5: the same, but the cap is not seated (anywhere else, on the table included). 0: the cap pressed on the glue at any time (a dented or flared tip); the glue's tip ends above the rim (not wound down, or wound the wrong way); the stick is held, touched or off the table. Untouched, the glue stands 12 mm out: 0.",
+  "run_limit": "1,800 steps (90 s at 20 Hz)",
+  "reset_notes": "Take the cap off, wind the glue out until its tip is 12 mm past the rim (ruler), lay the stick and the cap on their taped outlines: under 30 s. A failed trial squashes the glue's tip: wind it out and slice the dented end off, or swap in a new stick (under 2 dollars).",
+  "fidelity": "Rigid barrel, knob, glue and cap at the listed size and mass; the part lengths are estimates. There is no thread: the glue slides on the axis and follows the knob at 6 mm per turn, an estimate (check it on a real stick with a ruler: two full turns, measure the tip's travel). The cap's 8 N click is an estimate (check: press the cap home with the stick standing on a kitchen scale). The simulated glue is rigid: the cap stops on it, where real glue squashes and dents.",
+  "scores": "Dream-1 run: 0.0; scripted demo, reads object poses from the simulator: 1.0 (twice, 1,462 steps each)",
+  "media": "M-RNZSK2"
+}
