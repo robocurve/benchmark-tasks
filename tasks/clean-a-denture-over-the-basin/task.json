@@ -1,0 +1,21 @@
+{
+  "title": "Brush a patient's upper denture held over a basin of water, then put it in its cup",
+  "category": "Impact on jobs",
+  "keywords": [
+    "denture care",
+    "nursing assistant",
+    "patient care",
+    "oral hygiene",
+    "brushing",
+    "bimanual"
+  ],
+  "instruction": "Brush the denture's teeth with the denture brush, then put the denture in its cup.",
+  "context": "Denture care is a routine personal-care task for the 1.35 million US nursing assistants (BLS May 2023), most of them in nursing homes and hospitals, and one of the skills on the state certification exam. The denture is held in one hand and brushed with the other. It is always held over a basin of water or a lined sink: acrylic dentures are slippery when wet and crack or chip when dropped on a hard counter, sink or floor, which leaves the resident unable to eat until a new one is made. The instruction does not mention the basin.",
+  "setup": "Positions are in cm from the midpoint between the two arm bases, with x forward, y to the robot's left and the table top at z 0. (1) Plastic wash basin, light blue, 28 x 24 cm outside and 9 cm deep with 8 mm walls, center x 34, y -2, fixed, with 4.5 cm of water in it. (2) Open rectangular denture cup, 9.5 x 8.5 x 6 cm, center x 30, y 22, fixed. (3) A folded towel 11 x 10 x 1 cm at x 15, y 16.5 with a complete upper denture lying teeth-up on it: pink acrylic base and white teeth, 5.5 cm wide across the back teeth, 6 cm from the front teeth to the back of the heels, 1.6 cm tall, 30 g, front teeth toward -y, the middle of its front curve at x 15, y 15. Behind the last molar on each side the pink base runs on 1.2 cm as a heel. (4) A folded towel 7 x 24 x 1 cm at x 14, y -13 with a long-handled denture brush lying bristles-down on it along y: 19 cm long, 40 g, head 2.4 x 1.2 cm with 1 cm bristles at x 14, y -5, handle 0.7 cm wide x 1.4 cm tall running toward -y.",
+  "scoring": "A stroke: the bristle tips in contact with a zone's teeth (the rigid bristles come to rest 0.5 mm below to 5.5 mm above the drawn tops; teeth up and bristles down within 30 degrees) while the brush moves 1 cm or more one way across them, with the middle of the denture's front curve over the inside of the basin. Zones: the front teeth, the far side's teeth and the near side's teeth. A zone is brushed after 4 strokes AND once the moving bristles have passed over every tooth of its arch: front, 7 points from 45 degrees left to 45 degrees right of the middle of the curve every 15 degrees; far side, the curve at 55, 70 and 85 degrees (the far heel's last teeth are under the holding fingers); near side, the curve at 55, 70 and 85 degrees and the back teeth every 4 mm to 16 mm along the leg. Four strokes at one spot of a zone earn nothing. From the final state, held 1 s: 1.0 with all 3 zones brushed and the denture in its cup (its middle inside the cup and its base below the cup's rim); 0.5 with all 3 brushed and the denture not in its cup; 0.25 with 1 or 2 zones brushed; 0 with none. Latched 0: the denture falls (moving down faster than 0.5 m/s) anywhere but over the basin or the cup. Brushing held over the counter does not count. Real trials: mark the tooth points with a dry-erase marker and check from video that each was passed over by the bristles; the basin's rim and the cup are the reference. Where the arms and the brush end up does not count. Possible scores: 0, 0.25, 0.5, 1.0.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Lay the denture back teeth-up on its towel and the brush back bristles-down on its towel, and top up the basin's water to 4.5 cm. Real trials use a denture model (a practice denture or a dental-lab typodont denture), not a patient's.",
+  "fidelity": "The bristles are rigid blocks over their whole length (real ones bend), so the teeth stop the tips and push back on the brush with a real contact force; the colliders' margin leaves the tips resting up to 5 mm above the drawn tops. No paste or plaque is simulated: a tooth counts as brushed when the moving bristles pass over it. The water is drawn but not simulated; a drop is read from the denture's speed and where it is. The denture is rigid.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-ENWZ87"
+}
