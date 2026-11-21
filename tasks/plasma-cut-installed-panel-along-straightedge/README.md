@@ -13,6 +13,51 @@ pan, then lays the torch back on its rest, and both hands move away.
 Cut the overhanging strip off the skid's deck plate along the white line with the plasma torch, guiding the torch along
 the straightedge, then put the torch and the straightedge back where they were and move both hands away.
 
+## Revision 1 (reply to review TK-CK3CZ3)
+
+> Feasibility (not met): "The live plasma arc operates close to unprotected robot hands and wrists, exposing the shared
+> rig to heat and molten spatter."
+>
+> What to change: "Protect the robot hands, wrists and other exposed rig surfaces from the plasma arc, heat and molten
+> spatter. Specify the protective materials and their placement, and ensure they do not prevent the required torch and
+> straightedge handling."
+>
+> Flag: "Confirm the real deflector dimensions and guide offset match the specified cut line."
+
+**Protection, by part.** Clearances are the smallest distance from the arc (the shield rim centre on the line) to the
+part's surface over every arc-on step of the scripted demo (229 of 858 steps; joint targets of the GPU-simulator demo
+run, forward kinematics; links as 30 mm and fingers as 10 mm capsules).
+
+| Part | Material (listed product) | Placement and coverage | Clearance to the arc |
+|---|---|---|---|
+| Both forearms and wrists (from the elbow joint to the gripper housing) | Split cowhide leather welding sleeve, Kevlar-thread seams, rated by the maker for sparks and spatter: Tillman 5218, 18 in (457 mm), one sleeve per arm | Over the forearm and wrist links (about 400 mm), snap cuff closed on the gripper housing at least 20 mm behind the finger slides; the fingers and pads stay bare | left gripper housing 185 mm, left wrist 203 mm; right gripper housing 214 mm, right wrist 247 mm; forearms 292 mm or more |
+| Fingers and pads | none: the pads must grip the torch's nylon block and the straightedge's handle block | The torch hand's pad tips are 107 mm from the arc (fixed by the torch: the grip block sits 59 mm beside and 80 mm above the shield rim); the other hand's nearest fingertip is 133 mm away and the scorer zeroes the trial if it comes within 45 mm of the nozzle while the arc is on | 107 mm (torch hand), 133 mm (other hand) |
+| Torch lead and the arms' exposed cabling at the wrists | Silicone-coated fiberglass fire sleeve, 1 in ID, 260 C continuous, 1250 C peak, VW-1 (Electriduct Thermo Armor) | The torch lead's first 0.9 m from the handle, and any cable or connector left outside the leather sleeves | about 170 mm (geometry: the lead leaves the handle's far end, 19 cm along the handle from the head) |
+| Table, skid surroundings and pan | 24 oz acrylic-coated fiberglass welding blanket (already specified) and 10 mm of dry sand in the pan | Over the table round the skid and pan, as before | under the cut |
+| Cameras | Shade 5 glass filters (already specified) | Over every camera lens | wrist cameras ride on the gripper housing (185 mm or more, as above); top camera about 0.9 m above the deck |
+
+Why spatter mostly stays below the plate: the cutter's manual says to drag the tip on the work and "make sure that sparks
+exit from the bottom of the workpiece ... If sparks spray up, you are not cutting all the way through", and the cut here
+starts from the plate's edge, so there is no pierce (Powermax30 AIR operator manual 808840, hand torch cutting
+guidelines and "Pierce a workpiece"). The scorer counts a segment as cut only within the cutter's speed window, where
+the manual's cut chart gives a full cut.
+
+**Handling is not blocked.** The sleeves stop at the gripper housing and the fire sleeve stays on the lead and the
+cabling, so neither touches the finger pads, the torch's grip block, the straightedge's handle block or its working
+edge, and nothing is added between the shield and the straightedge. The robot presses no trigger (a supervisor's
+hold-to-run switch replaces it). Because the covers change no contact, they are not modelled in the simulator (see
+Fidelity).
+
+**Deflector and guide offset.** The Powermax30 AIR uses the copper deflector 420399 on its retaining cap for drag
+cutting. Hypertherm publishes the consumable stack's outer diameter, 25 mm (1.0 in), and its length, 51 mm (2.0 in)
+(manual 808840, Torch dimensions), but not the deflector tip's diameter. The part that bears on the 6.35 mm
+straightedge is the deflector's lowest section, about 12 mm across when scaled from that drawing (unverified, a drawing
+scale). The real trial therefore sets the guide from the torch itself rather than from a number: with the deflector's
+centre hole over the line and the deflector against the straightedge's working edge, the bar is laid along the line
+and the gap from the line to the edge is measured with calipers and recorded (about 6 mm). The nozzle is then on the
+line along the whole cut by construction. The simulation keeps its 20 mm copper shield and a 10 mm offset, which stand
+for the deflector and its offset.
+
 ## Why the task matters (category Other)
 
 The work is cutting up steel equipment where it stands, which is how contaminated plant is taken apart in nuclear
@@ -129,6 +174,11 @@ feeler gauge and an engineer's square; each segment photographed with the ruler 
 - **Cameras and arc light:** a shade 5 filter over every camera lens. Before each session a 100 mm test cut on scrap is
   recorded through the filtered robot cameras and the supervisor's view, and must show the torch, the straightedge and
   the cut line throughout (the earlier review's flag).
+- **Robot protection:** a Tillman 5218 leather welding sleeve on each forearm and wrist, cuff snapped on the gripper
+  housing 20 mm or more behind the finger slides; fire sleeve on the torch lead's first 0.9 m and any exposed wrist
+  cabling; finger pads bare (see Revision 1 for the clearances).
+- **Guide offset:** set from the torch: deflector centre hole over the line, deflector against the straightedge's
+  working edge, bar laid along the line; the line-to-edge gap is measured with calipers and recorded.
 - **Sparks, fume, fire:** a welding blanket over the table round the skid and pan; 10 mm of dry sand in the pan;
   welding screens close the cell, nobody inside while the arc can fire; cut outdoors or in an open bay with a fan drawing
   the plume away; only clean uncoated steel; an extinguisher and a 30 minute fire watch.
@@ -150,7 +200,9 @@ Prices seen 2026-11-21 in live US listings (rental or purchase).
 | Welding blanket | 6 x 8 ft fiberglass, Rig Welder Supply: https://rigweldersupply.com/24-oz-gold-acrylic-coated-fiberglass-welding-blanket-6x8/ | $47.12 |
 | Shade 5 filters | 2 x 4 in glass, three, Welders Helper: https://www.weldershelper.com/product/shade-5-glass-filter-plate-2x4-welding-lens/ | 3 x $1.96 |
 | Fan | Lasko 3720 20 in box fan, Do it Best: https://www.doitbest.com/product/513824/lasko-20-in-3-speed-white-weather-shield-performance-box-fan-513824/ | $44.99 |
-| **Priced total (rental route)** | | **$238.21** |
+| Robot sleeves | Tillman 5218 18 in leather welding sleeves (pair), Weld Shop Supply: https://www.weldshopsupply.com/products/tillman-18-leather-welding-sleeves-5218 | 2 x $23.00 |
+| Fire sleeve | Electriduct Thermo Armor silicone-coated fiberglass, 1 in ID x 3 ft, Walmart: https://www.walmart.com/ip/Thermo-Armor-Silicone-Coated-Fiberglass-Fire-Sleeve-1-3-Feet-Electriduct/658812375 | $16.70 |
+| **Priced total (rental route)** | | **$300.91** |
 
 Not priced (gaps): the deck plate (3 mm / 1/8 in A36, one 140 x 341 mm piece per trial; Warrenton Steel lists 12 x 12 x
 1/8 in A36 plate with no price shown), the 3 cm hardwood handle block and the straightedge's aluminium tab, the dross pan
@@ -214,7 +266,8 @@ latches, the straightedge having to stay where it was laid, holding still scorin
 Rigid bodies with real contact: the shield slides on the deck and bears on the loose straightedge, which moves if the
 hand does not press it. The arc, kerf, heat, sparks and dross are not simulated: cutting is arc time per segment from
 the torch's measured pose, and the strip hangs on one weld released when the last segment is cut through
-([DEVIATIONS.md](DEVIATIONS.md)).
+([DEVIATIONS.md](DEVIATIONS.md)). The robot's protective sleeves and the fire sleeve are not modelled: they touch
+none of the parts the hands or the shield contact, so they change no contact in the trial.
 
 ## Licence
 
