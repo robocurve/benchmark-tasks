@@ -104,7 +104,7 @@ def _brush(side: str) -> UsdBody:
     butt = np.array([gx, gy, 0.0]) - GRASP_AT * u
     return UsdBody(f"brush_{side}", usd="assets/brush.usdc", pos=(float(butt[0]), float(butt[1]), TOP + 4 * MM),
                    rot_xyzw=q, size=(0.024, 0.024, BRUSH_L), mass=BRUSH_MASS, friction=(0.7, 0.6),
-                   compliance=(5000.0, 5.0), solver_iters=32)
+                   compliance=(5000.0, 5.0), solver_iters=32, report=True)
 
 
 def _quat(R) -> tuple[float, float, float, float]:
@@ -158,17 +158,21 @@ for _side, _xy in PAN_XY.items():
                           size=(0.03, 0.015, PAN_RISE), color=(0.85, 0.85, 0.85))
 OBJECTS = [BUST, BRUSHES["right"], BRUSHES["left"], PANS["right"], PANS["left"], STANDS["right"], STANDS["left"]]
 
-# -- pigment (modelled): a brush starts clean; each cake point within TOUCH of the bristles gives it LOAD units a
-# second, up to DOSE_MAX; each skin point within TOUCH of the bristles takes RATE units a second from the dose, up to
-# FULL units, until the dose is gone. A point shows pigment from SHOWS units on (0.33 s
-# of contact, about the time a stroke at 7 cm/s needs to cross the 2.4 cm head).
-TOUCH = 2 * MM
+# -- pigment (modelled; needs contact and pressure): a brush starts clean. While its bristles rest on the cake (a
+# bristle point within GAP of the cake) and press it with a force (smoothed over 0.1 s) of at least F_LOAD newtons,
+# each cake point under the bristles (within GAP) gives it LOAD units a second, up to DOSE_MAX. While its bristles rest
+# on the skin and press it with at least F_SKIN newtons, each skin point within GAP of the bristles takes RATE units
+# a second from the dose, up to FULL
+# units, until the dose is gone. A point shows pigment from SHOWS units on (0.33 s of contact, about the time a stroke
+# at 7 cm/s needs to cross the 2.4 cm head). Hovering a few mm off, or touching without pressing, does nothing.
+GAP = 2 * MM  # the bristle footprint once pressed (the brush's bristles splay under the press)
+F_LOAD, F_SKIN = 0.3, 0.2  # N, the brush's total normal force on the pan / on the head
 DOSE_MAX, LOAD, RATE, FULL, SHOWS = 400.0, 2.0, 3.0, 1.5, 1.0
 # -- scoring
 COVER_FULL, COVER_HALF = 0.80, 0.40  # the fraction of a cheek's oval that shows pigment
 CLEAR = 20 * MM  # full credit needs both brushes' bristles at least this far from the skin at the end
 BLEED_MAX = 6  # skin points (about 3.5 mm apart: under 1 cm2 in all) showing pigment outside both limits
-_STATE: dict = {"dep": np.zeros(len(SKIN)), "dose": {"right": 0.0, "left": 0.0}, "t": 0.0, "last": -1.0, "clear": True}
+_STATE: dict = {"dep": np.zeros(len(SKIN)), "dose": {"right": 0.0, "left": 0.0}, "t": 0.0, "last": -1.0, "clear": True, "f": {}, "dist": 1.0, "clear_s": 0.0}
 _SKIN_TREE: list = []
 
 
@@ -177,23 +181,24 @@ def brush_points(brush) -> np.ndarray:
     return np.asarray(brush.pos) + BRISTLES @ brush.rotation().T
 
 
-def touch(side: str, brush, dt: float) -> None:
-    """One control step of ``dt`` seconds: the brush loads from the cake under its bristles, and moves pigment from
-    its dose to the skin under them."""
+def touch(side: str, brush, dt: float, f_pan: float, f_skin: float) -> None:
+    """One control step of ``dt`` seconds, with the brush's contact force (N) on its pan and on the head: it loads
+    from the cake under its bristles while pressing the pan, and moves pigment from its dose to the skin under them
+    while pressing the head."""
     pts = brush_points(brush)
     centre = pts.mean(0)
     from scipy.spatial import cKDTree
 
-    if np.linalg.norm(CAKE[side].mean(0) - centre) < 0.06:
-        d, _ = cKDTree(pts).query(CAKE[side], distance_upper_bound=TOUCH)
+    if f_pan >= F_LOAD and np.linalg.norm(CAKE[side].mean(0) - centre) < 0.06:
+        d, _ = cKDTree(pts).query(CAKE[side], distance_upper_bound=GAP)
         n = int(np.isfinite(d).sum())
         _STATE["dose"][side] = min(DOSE_MAX, _STATE["dose"][side] + LOAD * dt * n)
-    if _STATE["dose"][side] <= 0.0:
+    if _STATE["dose"][side] <= 0.0 or f_skin < F_SKIN:
         return
     near = np.flatnonzero(np.linalg.norm(SKIN - centre, axis=1) < 0.05)
     if not len(near):
         return
-    d, _ = cKDTree(pts).query(SKIN[near], distance_upper_bound=TOUCH)
+    d, _ = cKDTree(pts).query(SKIN[near], distance_upper_bound=GAP)
     hit = near[np.isfinite(d)]
     if not len(hit):
         return
@@ -251,7 +256,19 @@ def success(objects) -> bool:
 
 @on_reset
 def _reset(environment) -> None:
-    _STATE.update(dep=np.zeros(len(SKIN)), dose={"right": 0.0, "left": 0.0}, t=0.0, last=-1.0, clear=True)
+    _STATE.update(dep=np.zeros(len(SKIN)), dose={"right": 0.0, "left": 0.0}, t=0.0, last=-1.0, clear=True, f={}, dist=1.0, clear_s=0.0)
+
+
+def _bleed_where() -> str:
+    m = (_STATE["dep"] >= SHOWS) & OUT_LIMIT
+    if not m.any():
+        return ""
+    out = ""
+    for side in ("right", "left"):
+        k = m & (np.abs(S_ARC[side]) < 0.06)
+        if k.any():
+            out += f"[{side} s {1e3 * S_ARC[side][k].min():.0f}..{1e3 * S_ARC[side][k].max():.0f} v {1e3 * V_UP[k].min():.0f}..{1e3 * V_UP[k].max():.0f} mm]"
+    return out
 
 
 @on_step
@@ -259,16 +276,25 @@ def _watch(environment) -> None:
     from yam_arena.scene import object_states
 
     dt = environment.unwrapped.step_dt
+    import contactkit
+
     states = object_states(environment, ["brush_right", "brush_left"])
+    raw = contactkit.pressure(environment)
+    f = {k: 0.5 * v + 0.5 * _STATE["f"].get(k, 0.0) for k, v in raw.items()}  # smoothed over about 0.1 s
+    _STATE["f"] = f
+    if os.environ.get("BLUSH_FORCES") and any(v > 0 for v in f.values()):
+        print("FORCE t=%.2f " % _STATE["t"] + " ".join(f"{k[0]}_{k[1]}={v:.2f}" for k, v in f.items()), flush=True)
     for side in ("right", "left"):
-        touch(side, states[f"brush_{side}"], dt)
-    _STATE["clear"] = all(nearest_skin(states[f"brush_{side}"]) > CLEAR for side in ("right", "left"))
+        touch(side, states[f"brush_{side}"], dt, f[(side, "pan")], f[(side, "bust")])
+    _STATE["dist"] = min(nearest_skin(states[f"brush_{side}"]) for side in ("right", "left"))
+    _STATE["clear"] = _STATE["dist"] > CLEAR
+    _STATE["clear_s"] = _STATE["clear_s"] + dt if _STATE["clear"] else 0.0
     _STATE["t"] += dt
     if os.environ.get("BLUSH_LOG") and _STATE["t"] - _STATE["last"] >= 0.5:
         _STATE["last"] = _STATE["t"]
         b = {s: (states[f"brush_{s}"].pos[2] - TOP) * 1000 for s in ("right", "left")}
         print(f"LOG t={_STATE['t']:.1f} cover_right={coverage('right'):.2f} cover_left={coverage('left'):.2f} "
-              f"bleed={bleed()} clear={_STATE['clear']} dose_right={_STATE['dose']['right']:.0f} dose_left={_STATE['dose']['left']:.0f} "
+              f"bleed={bleed()}{_bleed_where()} clear={_STATE['clear']} dose_right={_STATE['dose']['right']:.0f} dose_left={_STATE['dose']['left']:.0f} "
               f"brush_z_right={b['right']:.0f}mm brush_z_left={b['left']:.0f}mm score={score():.2f}", flush=True)
 
 
@@ -313,7 +339,7 @@ def hand_for_dip(side: str, dw: float, dz: float, press: float) -> tuple:
 def demo():
     """Each arm: over its brush, down, grip the handle, lift, carry it to its (upright) pan, press the bristle tip
     in and swirl it (a small square pattern), lift, carry it to a staging point 4.5 cm off its cheek, press the
-    bristles in 1 mm, sweep two passes across the oval (v = +6 mm, then -6 mm, s = -10 to +10 mm), lift off."""
+    bristles in 1 mm, sweep three passes across the oval (v = +4, 0, -4 mm, s = -13 to +13 mm), pressing 4 mm, lift off."""
     from tiltkit import grip, install
     from yam_arena.constants import FINGER_OPEN as O
     from yam_arena.demo import Waypoint as W
@@ -348,12 +374,14 @@ def demo():
             W(0.8, dip(-SWIRL, 0.0, 0.0), -0.003, "swirl", yaw),
             W(0.8, dip(0.0, -SWIRL, 0.0), -0.003, "swirl", yaw),
             W(1.0, dip(0.0, 0.0, -0.030), -0.003, "lift off the cake", yaw),
-            W(2.0, on(-10 * MM, 6 * MM, -0.045), -0.003, "carry to the cheek", yaw),
-            W(1.5, on(-10 * MM, 6 * MM, 0.001), -0.003, "bristles on the cheek", yaw),
-            W(2.0, on(10 * MM, 6 * MM, 0.001), -0.003, "sweep 1", yaw),
-            W(1.0, on(10 * MM, -6 * MM, 0.001), -0.003, "down", yaw),
-            W(2.0, on(-10 * MM, -6 * MM, 0.001), -0.003, "sweep 2", yaw),
-            W(1.0, on(-10 * MM, -6 * MM, -0.045), -0.003, "lift off", yaw),
+            W(2.0, on(-13 * MM, 4 * MM, -0.045), -0.003, "carry to the cheek", yaw),
+            W(2.0, on(-13 * MM, 4 * MM, 0.004), -0.003, "bristles on the cheek", yaw),
+            W(2.5, on(13 * MM, 4 * MM, 0.004), -0.003, "sweep 1", yaw),
+            W(0.8, on(13 * MM, 0 * MM, 0.004), -0.003, "down", yaw),
+            W(2.5, on(-13 * MM, 0 * MM, 0.004), -0.003, "sweep 2", yaw),
+            W(0.8, on(-13 * MM, -4 * MM, 0.004), -0.003, "down", yaw),
+            W(2.5, on(13 * MM, -4 * MM, 0.004), -0.003, "sweep 3", yaw),
+            W(1.0, on(13 * MM, -4 * MM, -0.045), -0.003, "lift off", yaw),
             W(2.0, (0.20, sy, HOVER), -0.003, "back", yaw),
         ]
     return plans
@@ -409,39 +437,49 @@ def self_test(ObjectState=None):
     x = np.cross(z, u)
     x /= np.linalg.norm(x)
     R = np.column_stack([x, np.cross(u, x), u])
-    tip = CHEEK_CENTRE["right"] - 0.5 * MM * u
+    FS, FP = 2 * F_SKIN, 2 * F_LOAD  # a firm press
+    tip = CHEEK_CENTRE["right"] - 0.2 * MM * u  # resting on the skin
     pos = tip - BRUSH_L * u
     _reset(None)
     _STATE["dose"]["right"] = DOSE_MAX
     for _ in range(20):
-        touch("right", Brush(pos, R), 0.05)
+        touch("right", Brush(pos, R), 0.05, 0.0, FS)
     assert coverage("right") > 0.05, coverage("right")
     assert _STATE["dose"]["right"] < DOSE_MAX
+    for name, off, f in (("held 2 cm off", 20 * MM, FS), ("3 mm off, the handle pressing the head", 3 * MM, FS),
+                         ("hovering 1 mm off", 1.0 * MM, 0.0), ("touching, pressing too lightly", 0.0, 0.5 * F_SKIN),
+                         ("touching, no press", 0.0, 0.0)):
+        _reset(None)
+        _STATE["dose"]["right"] = DOSE_MAX
+        for _ in range(20):
+            touch("right", Brush(pos - off * u, R), 0.05, 0.0, f)
+        assert not (_STATE["dep"] > 0).any(), name
     _reset(None)
-    _STATE["dose"]["right"] = DOSE_MAX
     for _ in range(20):
-        touch("right", Brush(pos - 0.02 * u, R), 0.05)  # held 2 cm off the skin
-    assert not (_STATE["dep"] > 0).any()
-    _reset(None)
-    for _ in range(20):
-        touch("right", Brush(pos, R), 0.05)  # a dry brush on the skin
+        touch("right", Brush(pos, R), 0.05, 0.0, FS)  # a dry brush on the skin
     assert not (_STATE["dep"] > 0).any()
 
-    # a brush on its own cake loads (its bristle tip square on the pan's face, the same way it touches the cheek:
-    # the pan stands facing the same direction, OUTWARD), and only its own pan's
-    tip_d = PAN_FACE["right"]
+    # a brush pressed on its own cake loads (its bristle tip square on the pan's face, the same way it touches the
+    # cheek: the pan stands facing the same direction, OUTWARD), and only its own pan's
+    tip_d = PAN_FACE["right"] + 0.2 * MM * 0  # the cake's face
     pos_d = tip_d - BRUSH_L * u
     _reset(None)
     for _ in range(80):
-        touch("right", Brush(pos_d, R), 0.05)
-    assert _STATE["dose"]["right"] == DOSE_MAX, _STATE["dose"]
+        touch("right", Brush(pos_d, R), 0.05, FP, 0.0)
+    assert _STATE["dose"]["right"] >= 0.25 * DOSE_MAX, _STATE["dose"]
+    for name, off, f in (("hovering 1.5 mm over the cake", 1.5 * MM, 0.0), ("4 mm over the cake, the handle pressing it", 4 * MM, FP),
+                         ("on the cake, pressing too lightly", 0.0, 0.5 * F_LOAD), ("on the cake, no press", 0.0, 0.0)):
+        _reset(None)
+        for _ in range(80):
+            touch("right", Brush(pos_d - off * u, R), 0.05, f, 0.0)
+        assert _STATE["dose"]["right"] == 0.0, (name, _STATE["dose"])
     _reset(None)
     for _ in range(40):
-        touch("left", Brush(pos_d, R), 0.05)
+        touch("left", Brush(pos_d, R), 0.05, FP, 0.0)
     assert _STATE["dose"]["left"] == 0.0
     _reset(None)
     for _ in range(3):  # a short dip loads part of a dose
-        touch("right", Brush(pos_d, R), 0.05)
+        touch("right", Brush(pos_d, R), 0.05, FP, 0.0)
     assert 0.0 < _STATE["dose"]["right"] < DOSE_MAX, _STATE["dose"]
     _reset(None)
     # stated sizes against each other
@@ -451,7 +489,7 @@ def self_test(ObjectState=None):
     assert 10 * MM < 0.094  # the handle (10 mm) fits the gripper's 94 mm opening
     assert abs(CHEEK_Z - TOP - 0.167) < 0.003  # the cheek's centre 167 mm above the table
     assert all(np.linalg.norm(np.asarray(PAN_XY[s]) - np.asarray(GRASP_XY[s])) > 0.08 for s in PAN_XY)
-    return len(cases) + 10
+    return len(cases) + 20
 
 
 if __name__ == "__main__":

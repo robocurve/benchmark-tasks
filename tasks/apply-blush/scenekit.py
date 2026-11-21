@@ -52,6 +52,7 @@ class UsdBody(Box):
     compliance: tuple[float, float] | None = None  # compliant contact (stiffness, damping) on the override
     solver_iters: int = 16
     torsional_patch: float | None = None  # m, for bodies held in a pinch (lets the pads resist twisting)
+    report: bool = False  # the simulator reports this body's contacts (read with contactkit.py)
 
     def _check(self) -> None:
         if not (HERE / self.usd).is_file():
@@ -120,6 +121,9 @@ def _usd_object(spec: UsdBody):
                 torsional_patch_radius=spec.torsional_patch, min_torsional_patch_radius=0.8 * spec.torsional_patch)
         if spec.mass is not None:
             addon["mass_props"] = sim_utils.MassPropertiesCfg(mass=spec.mass)
+
+    if spec.report:
+        addon["activate_contact_sensors"] = True
 
     class UsdObject(Object):
         def _generate_articulation_cfg(self):
