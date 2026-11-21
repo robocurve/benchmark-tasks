@@ -1,0 +1,49 @@
+{
+  "schema": "runtime-evidence-v1",
+  "status": "native_verified",
+  "scope": "Complete native demo and Dream baseline, with frozen trace and contact audits.",
+  "current_task_runtime_verified": true,
+  "python": "3.12.16",
+  "packages": {
+    "numpy": "2.5.4",
+    "yam-arena": "0.1.0",
+    "inspect-robots": "1.0.0",
+    "inspect-robots-yam": "0.38.0",
+    "inspect-robots-dream": "0.1.0",
+    "dreamlabs-client": "1.0.14",
+    "isaaclab": "17.0.2",
+    "isaacsim": "6.1.0.0"
+  },
+  "repositories": {
+    "adapter": {
+      "url": "https://github.com/kairosiann/yam-isaac-lab-arena",
+      "revision": "0059d02a1a91bc6834c1d0846022891df0c78730"
+    },
+    "inspect": {
+      "url": "https://github.com/robocurve/inspect-robots",
+      "revision": "fc5ace923ce85117f9c86f35274122212fbcfe2c"
+    },
+    "arena": {
+      "url": "https://github.com/isaac-sim/IsaacLab-Arena",
+      "revision": "c7edf3a9d5d8276565208f72422f8f8a0806d6cf"
+    },
+    "isaaclab": {
+      "url": "https://github.com/isaac-sim/IsaacLab",
+      "revision": "91a0906f93802eb859192dcb0bca879f891e92d6",
+      "installation": "IsaacLab-Arena/submodules/IsaacLab; actual activated interpreter source, not the separate unused checkout."
+    }
+  },
+  "arena_asset_path_patch": {
+    "file": "isaaclab_arena/assets/nucleus.py",
+    "assignment": "ARENA_NUCLEUS_DIR: str = ISAACLAB_NUCLEUS_DIR",
+    "reason": "Use the public production asset root instead of unavailable staging assets.",
+    "sha256": "991c3d0dcfc331bc4177379b538646407f78b7dbb6e21b7f6e310518c13aa33d"
+  },
+  "platform": {
+    "gpu": "NVIDIA L40S",
+    "physics": "Native PhysX contacts, passive joints and the material approximations disclosed in task.json."
+  },
+  "reference_checked_utc_date": "2026-11-18",
+  "verified_utc_date": "2026-11-20",
+  "submission_ready": true
+}
