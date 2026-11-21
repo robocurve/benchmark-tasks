@@ -1,0 +1,8 @@
+# Suitcase visual asset
+
+- Original: Innerscene “Rolling suitcase”, https://www.innerscene.com/tools/library/3d-parts/rolling-suitcase-ee9d7578
+- License on source page: CC0 1.0, permits modification and redistribution.
+- Original file: `rolling-suitcase.glb`, SHA-256 `547ffc392c6583bc4a01c8459e8fbaa0cdc8aa4fb4dfff10bb4b63c40a228735`.
+- `rolling-suitcase-side-up.usda` is a geometry/material-colour conversion provided as a self-contained USD asset. The original recessed rigid carry bar and its mounts are excluded. The original asset is 468 × 278 × 807 mm; this tabletop cabin-case adaptation stands on a narrow 178 × approximately 450 mm footprint and rises about 334 mm after nonuniform scaling and rotation. It is not a replica of the 26-inch product.
+- The soft-style side handle is task-authored from simple dark webbing and padded-grip visuals, plus a rigid sliding collision proxy. At rest its central grip rises about 30 mm above the shell and can lift a further 40 mm. Fabric flex and stitching are not simulated. The original GLB is not redistributed in the submission; the converted USD assets are included and are not the collision geometry. A contact demo must validate manipulation separately.
+- Handle visual reference: Travelpro [VersaPack+ compact carry-on](https://travelpro.com/collections/versapack/products/versapack%C2%AE-compact-carry-on-expandable-softside-spinner), whose product photographs show a padded side carry handle fixed at two ends. The task handle copies that general construction, not the product's exact dimensions or branding. `rolling-suitcase-soft-side-handle.usda` is authored from a thin curved webbing mesh.

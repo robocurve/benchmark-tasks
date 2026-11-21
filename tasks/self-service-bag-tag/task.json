@@ -1,0 +1,21 @@
+{
+  "title": "Loop a printed baggage tag through a suitcase handle and press its ends together",
+  "category": "Societal relatability",
+  "keywords": [
+    "bimanual",
+    "baggage tag",
+    "flexible strip",
+    "threading",
+    "cold seal",
+    "self-service bag drop"
+  ],
+  "instruction": "Attach the printed baggage tag securely to the suitcase's long-side handle, with the barcode facing out. Press the designated ends together, release the tag and withdraw both arms.",
+  "context": "At self-service bag drop, a passenger pulls the printed tag from the outlet and seals it around the bag handle before handing the suitcase over. The physical challenge is feeding a flexible strip through the closed handle, receiving the partly hidden end, and bringing the correct faces together without losing the loop. Printing is already complete; barcode reading is outside the task; no flight booking or baggage transport is simulated.",
+  "setup": "Official bimanual YAM station, one overhead and two wrist cameras, fixed layout. A small hard-shell suitcase (approximately 450 x 178 x 334 mm in its side-standing orientation) is supported on a scale, its existing long-side strap handle upwards with approximately 30 mm central clearance. A 350 x 145 mm terminal/presenter stands to its right; a 21 mm-high hollow channel and single outlet retain one already printed 430 x 50 mm cold-seal strip, with approximately 90 mm protruding. Blue 39 x 46 mm marks identify the compatible end faces. The entire strip exists at reset. No auxiliary grip tabs or pre-threading. README and task.py provide all positions, dimensions and materials; PRESENTER.md gives a low-cost passive reconstruction so an operational airport kiosk is not needed.",
+  "scoring": "Current outcome tiers, not cumulative or peak score. All nonzero scores require the complete, intact label to be out of the outlet, its designated end patches physically pressed together and bonded with at least 600 mm² overlap into a closed loop around the actual handle, and a barcode face exposed outwards above the shell. An inward-facing or hidden barcode fails this prerequisite; barcode decoding is not evaluated. 0 otherwise, including extraction alone, loose threading, a loop beside the handle, or broken paper/connection. 0.75 for that intact linked seal; 0.85 once both grippers are open and clear and the loop remains within 5 mm of its hold-start position for 0.25 seconds; 1.0 after all prerequisites and that released stable state persist for at least 2 seconds. Real trials use video/photos and a ruler: at least 75 mm hand clearance and no corner drifting more than 5 mm from its position at the start of the hold. Exact hand assignment, handle lifting and arm home pose are not scored. Simulator geometry and adhesion tolerances are specified separately in README and tag_closure.py.",
+  "run_limit": "4,800 control steps at 20 Hz (240 simulated seconds).",
+  "reset_notes": "Replace the used printed label, load its trailing end into the presenter with 90 mm protruding, and reset both arms. Use self-bonding cold-seal luggage stock; no liner-removal step is omitted. Fixed seed 42, object_jitter=0.",
+  "fidelity": "Ten hinged colliding panels approximate a flexible tag (1 mm, 20 g). Correct overlapping faces must physically press at >=1 N for 0.4 s, sampled from native PhysX contact impulses, before a breakable joint forms at their current pose. No snapping or gripper attachment. Pressure, break limits, friction and 2 N outlet retention are tuning, not certified material values. Chemistry and peeling are omitted. Handle is a rigid spring proxy; case/presenter fixed.",
+  "scores": "Revised continuous scripted demo: 1.0, 2756 control steps / 137.8 simulated seconds, 13.8 seconds released stability. Dream-1-beta: 0.0 over the full 4800-step limit (one valid session); it did not extract the tag.",
+  "media": "M-YUVJ9U"
+}
