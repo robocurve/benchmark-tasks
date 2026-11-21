@@ -1,0 +1,20 @@
+{
+  "title": "Fit a pitcher water-filter cartridge and close the lid",
+  "category": "Societal relatability",
+  "keywords": [
+    "bimanual",
+    "kitchen",
+    "water filter",
+    "cartridge seat",
+    "lid close"
+  ],
+  "instruction": "Put the filter cartridge into the pitcher and close the lid.",
+  "context": "Pitcher water filters are ordinary kitchen appliances. The cartridge must seat in the reservoir well before the hinged lid can close; a mis-seated cartridge leaves the pitcher unusable and can spill.",
+  "setup": "A fixed 1100 x 1300 mm countertop at 500 mm. A clear pitcher body (140 mm OD, 140 mm tall, 280 g) stands on a 120 mm stand at (360,-50) mm with its hinged lid open about 1.2 rad. A cylindrical filter cartridge (50 mm OD, 70 mm tall, 100 g) lies on a matching stand at (360,-260) mm. Two YAM arms stand at (0,+/-305,750) mm with 75 mm grippers open. scene.py gives the remaining geometry.",
+  "scoring": "0.25 when the cartridge centre is within 45 mm XY of the pitcher axis and within 25 mm of the well seat height, upright within 30 degrees. 0.5 when, in addition, the lid is within 0.12 rad of closed. 1.0 when both hands stay at least 5 mm clear and motion stays under 10 mm/s and 2 deg/s for ten 20 Hz frames. Workspace escape, moved fixed scenery or damage permanently scores zero. Judge from overhead and side video.",
+  "run_limit": "1,600 control steps (80 seconds at 20 Hz)",
+  "reset_notes": "Cartridge beside pitcher, lid open, cameras and counters restored.",
+  "fidelity": "Procedural pitcher, cartridge and hinged lid at household scale. No branded CAD, no water fluid. Friction is a specified approximation.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-TMWYJZ"
+}
