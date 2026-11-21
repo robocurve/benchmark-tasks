@@ -1,0 +1,22 @@
+{
+  "title": "Unfold a kick scooter's folding stem until its latch pin locks upright, then close the joint quick-release clamp",
+  "category": "Societal relatability",
+  "keywords": [
+    "bimanual",
+    "kick scooter",
+    "folding mechanism",
+    "quick-release",
+    "spring latch",
+    "stem unfold",
+    "stability test"
+  ],
+  "instruction": "Unfold the kick scooter's stem until it locks upright and close the quick-release clamp, then let go.",
+  "context": "Commuters, students, and parents unfold kick scooters daily. When unfolding, the steering column (stem) must be swung upright until its spring-loaded joint latch pin snaps into the locking hole, and the joint's quick-release collar clamp must be firmly closed to eliminate steering play. If the latch pin fails to engage or the quick-release clamp is left loose, the steering stem will rattle, wobble, or collapse under riding loads, presenting a severe fall hazard. The robot must lift the stem to upright until the spring pin clicks into the locking notch, close the quick-release lever flat, and release both hands so the assembly can withstand an automated 12 N forward/backward push test using a standard Chatillon force gauge or 1.2 kg test rig.",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left; heights above the table). Full-size kick scooter (Razor A type) on bench (TOP = 0.748 m). Extruded aluminium deck (44 x 9.5 x 2.8 cm, 1.35 kg) centered at y = 0.0, x = 24.5 to 68.5 cm, with 95 mm rear urethane wheel and brake fender. Folding hinge pivot at x = 22.0, y = 0.0, z = 5.5 cm above bench (0.10 N*m friction, stops at 0 deg upright and 90 deg folded). Aluminium steering stem (28 mm OD, 40 cm long, 0.40 kg) with 24 cm wide handlebar crossbar and rubber grips; starts folded flat along the deck (+x). Steel spring latch pin (8 mm dia, 8 mm stroke, 150 N/m spring) on stem collar engages matching socket on front bracket when upright. Quick-release cam clamp lever (50 mm paddle) at x = 22.0, y = -2.4, z = 9.0 cm above bench; starts open (80 deg), closes flat against bracket (0 deg). Padded test pusher (2.4 x 5 x 5 cm rubber pad, 12 N Chatillon gauge fixture) at x = 66.0, y = 0.0, z = 21.5 cm above bench pushes horizontally with 12 N.",
+  "scoring": "Evaluated at trial end. 0 if stem folds > 3 deg under test load. 0.25 if stem lifted past 45 deg. 0.50 if stem upright (within 2 deg) and latch pin seated (>= 5 mm). 0.75 if stem upright, latch pin seated, and quick-release lever closed (within 12 deg). 1.00 strictly requires upright stem, seated latch pin, closed quick-release lever, hands clear (>= 5 cm), and passing the 12 N push test (< 1.0 deg deflection). 1.0 held 1 s.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Open the quick-release lever to 80 deg, retract the latch pin, fold the stem flat along the deck onto its rubber bumper rests, and retract the push test rod to its rear stop.",
+  "fidelity": "Aluminium colliders match commercial Razor A / Micro Sprite folding kick scooter. Extruded deck is rigidly clamped in bench vice jaws. Stem is 0.10 N*m friction hinge with stops at 0 deg upright and 90 deg folded. Spring latch pin has 8 mm travel and 150 N/m spring. Quick-release clamp rotates 80 deg. Automated 12 N horizontal push test tests joint retention.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0 (two runs, 564 steps each).",
+  "media": "M-44ETY9"
+}
