@@ -1,0 +1,20 @@
+{
+  "title": "Clip a dog leash bolt-snap onto a collar D-ring",
+  "category": "Societal relatability",
+  "keywords": [
+    "bimanual",
+    "leash",
+    "bolt-snap",
+    "D-ring",
+    "pet"
+  ],
+  "instruction": "Clip the leash onto the collar ring.",
+  "context": "Walking a dog starts by clipping a bolt-snap leash onto the collar D-ring. The spring gate must open, pass through the ring, and close again; a half-latched snap can come undone.",
+  "setup": "A fixed 1100 x 1300 mm countertop at 500 mm. A collar segment with an 18 mm inner D-ring stands at (400,0) mm on an 80 mm stand. A leash bolt-snap / handle body 80 x 50 x 45 mm (60 g) rests on a 120 x 100 x 220 mm pedestal at (400,-220) mm (body centre near 744 mm) with a spring gate on top. Two YAM arms stand at (0,+/-305,750) mm with 75 mm grippers open. scene.py gives the remaining geometry.",
+  "scoring": "0.25 when the snap eye centre is within 25 mm XY and 20 mm Z of the D-ring centre (hooked through). 0.5 when, in addition, the spring gate is within 4 mm of closed. 1.0 when both hands stay at least 5 mm clear and motion stays under 10 mm/s and 2 deg/s for ten 20 Hz frames. Workspace escape, moved fixed scenery or damage permanently scores zero.",
+  "run_limit": "1,600 control steps (80 seconds at 20 Hz)",
+  "reset_notes": "Snap beside the collar, gate closed, cameras restored.",
+  "fidelity": "Procedural bolt-snap with prismatic spring gate and fixed D-ring. No soft leash webbing dynamics beyond a rigid strap stub. Friction is a specified approximation.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-JKRPLB"
+}
