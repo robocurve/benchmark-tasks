@@ -1,0 +1,22 @@
+{
+  "title": "Fit a VerseGrip stylus to a MinVerse haptic controller: turn its free-spinning gimbal cutout-up and snap the ball in",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "haptic controller",
+    "teleoperation",
+    "robot data collection",
+    "Haply MinVerse",
+    "ball and socket",
+    "passive mechanism",
+    "bimanual hold and act"
+  ],
+  "instruction": "Fit the VerseGrip stylus onto the MinVerse's gimbal, then let go and move both hands clear.",
+  "context": "Haptic controllers such as Haply's MinVerse teleoperate robots and record the demonstrations robot policies are trained on. The wireless stylus comes off for charging and packing; the maker's guide refits it: \"With one hand, firmly hold the arm of the Minverse,\" turn the gimbal's cutout up, set the ball on it and turn the stylus down until it snaps in. The arm is unpowered and gives under a push, and the gimbal turns freely.",
+  "setup": "Desk; metres, x away from the two bench arms, y to their left, z up from the desk. Haply MinVerse (published folding size 240 x 120 x 40 mm; 1.2 kg) rebuilt from maker photographs, fixed in place: base bar 240 x 30 x 20 mm centred (0.523, 0.030), feet 120 x 20 x 6 mm, head 200 x 95 x 32 mm lying flat at height 0.096, inkwell at its right end. Unpowered passive arm: shoulder (0.465, 0.030, 0.088), elbow (0.418, 0.030, 0.112), gimbal bearing (0.370, 0.030, 0.070). Gimbal: black tube 14 mm across, x 0.370 to 0.307, level, pointing at the bench arms, turning freely; forked tip with a 9.6 mm pocket, 4.8 mm neck slot between two posts and a sprung tine with a lip, mouth chamfered 45 degrees; ball seat at (0.300, 0.030, 0.070). VerseGrip Stylus: black, 180 mm long, 21 mm body, 9 mm steel ball on a 4 mm neck, 80 g (estimates), lying on the desk buttons up. Lot A: gimbal cutout turned 40 degrees from straight up toward the bench arms' left; stylus ball at (0.290, -0.150), body along -x. Lot B: cutout straight up; stylus ball at (0.200, -0.095), body along -y. Bench arms at ready, grippers open. Jitter 0. Trials run on lots A and B and averaged; the screenshot shows lot A.",
+  "scoring": "Score 0 if the stylus ever falls off the desk or the gimbal is ever pushed down to within 5 mm of the desk (braced on it; side video, mm scale), 0 for the rest of the trial; also 0 if the trial record is incomplete. Otherwise the end state: 1.0: the ball is snapped in (centre within 1.5 mm of the seat, sprung tine shut within 0.5 mm: close side photo against a mm scale) and for the last 1 s both grippers stay 30 mm or more from the stylus, the gimbal and the controller's arm, and neither stylus nor gimbal moves more than 1 mm or 2 degrees (top and side video, steel rule). 0.75: snapped in and still for 1 s with no gripper within 5 mm, but one within 30 mm. 0.5: snapped in but still held, touched or moving. 0.25: not snapped in, but the ball is in the cutout's mouth, within 3.5 mm of its centre line and at most 10 mm above the seat (side photo, mm scale). 0: anything else. Simulation reads ball centre in the gimbal's frame, tine slide and points 3 mm apart on every gripper, finger and wrist face each control step; unknown or stale state scores 0. Trials are run on each of lots A and B and averaged.",
+  "run_limit": "1,200 control steps per lot (60 s at 20 Hz); two lots",
+  "reset_notes": "1. Lever the stylus out of the gimbal until the ball snaps out; lay it on the desk at the lot's position, buttons up. 2. Return the arm to the start pose and turn the gimbal to the lot's start against a printed protractor on the tube's end (A: 40 degrees toward the bench arms' left; B: cutout straight up). 3. Bench arms to ready. Nothing is consumed.",
+  "fidelity": "MinVerse rebuilt from photographs at its published 240 mm width; other sizes estimated, no CAD; fixed on the desk, unpowered, no electronics or haptics. Arm joints stick until pushed past 0.05-0.20 N m, gimbal 0.004 N m, then stay where left (estimates). The patent's magnet-biased socket half is a sliding tine pulled shut with 0.60-0.78 N (estimate); a 1-2.5 N press seats the ball. Stylus 80 g, 9 mm ball (estimates).",
+  "scores": "Dream-1 run: 0.0 (lots A and B: 0.0, 0.0; 1,200-step limit; in lot A the right arm moved round the stylus on the desk without lifting it, the gimbal untouched). Scripted demo: 1.0 (lots A and B: 1.0, 1.0; about 400 steps each).",
+  "media": "M-B7DQTC"
+}
