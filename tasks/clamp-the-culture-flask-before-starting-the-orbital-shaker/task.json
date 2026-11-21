@@ -19,6 +19,6 @@
   "run_limit": "700 steps (35 s at 20 Hz)",
   "reset_notes": "Stand the loose flask back on its mark beside the empty clamp; the start button springs back by itself.",
   "fidelity": "The shaker, its button and the four clamp fingers are a mechkit mechanism (task-local mechkit.py): the button slides 8 mm against a spring, each finger is a sprung hinge (0.10 N m/rad) leaning in so its top stands 1.5 mm inside the flask's radius, so the flask has to be pushed down between them. The flasks are rigid bodies at real size and mass; the broth is not simulated, and the platform does not orbit. Nothing is spilt.",
-  "scores": "Scripted policy, 700-step limit, 320x176 cameras, Isaac Lab dev cluster (21 Nov 2026): demo 1.0 (success at step 480); TASK_DEMO=naive (start pressed with the flask loose) 0.0; TASK_DEMO=early (start first, flask clamped after) 0.0; TASK_DEMO=clamp (clamped, never started) 0.5. Brev render check and Dream-1 flash: TBD.",
+  "scores": "Scripted policy, 700-step limit, 320x176 cameras, Isaac Lab (21 Nov 2026; same on the dev cluster and on an L40S render node): demo 1.0 (success at step 480); TASK_DEMO=naive (start pressed with the flask loose) 0.0; TASK_DEMO=early (start first, flask clamped after) 0.0; TASK_DEMO=clamp (clamped, never started) 0.5. Dream-1 flash (seed 1, 320x176, 700 steps): 0.0, ran to the step limit without refusing (status success, abort none, err None); it moved its arms but left the loose flask out of the clamp.",
   "media": "TBD"
 }

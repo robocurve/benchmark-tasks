@@ -51,4 +51,4 @@ Stand the loose flask back on its mark at x 35, y 18 beside the empty clamp. The
 The shaker, its button and the four clamp fingers are a mechkit mechanism (task-local mechkit.py): the button slides 8 mm against a spring and each finger is a sprung hinge (0.10 N m/rad). The flasks are rigid bodies at real size and mass.
 
 ## Scores
-Scripted policy, 700-step limit, 320x176 cameras, Isaac Lab dev cluster (21 Nov 2026): demo 1.0 (success at step 480); TASK_DEMO=naive (start pressed with the flask loose) 0.0; TASK_DEMO=early (start first, flask clamped after) 0.0; TASK_DEMO=clamp (clamped, never started) 0.5. Brev render check and Dream-1 flash: TBD.
+Scripted policy, 700-step limit, 320x176 cameras, Isaac Lab (21 Nov 2026; same on the dev cluster and on an L40S render node): demo 1.0 (success at step 480); TASK_DEMO=naive (start pressed with the flask loose) 0.0; TASK_DEMO=early (start first, flask clamped after) 0.0; TASK_DEMO=clamp (clamped, never started) 0.5. Dream-1 flash (seed 1, 320x176, 700 steps): 0.0, ran to the step limit without refusing (status success, abort none, err None); it moved its arms but left the loose flask out of the clamp.
