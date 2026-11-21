@@ -71,17 +71,48 @@ All from poses. The red jar's azimuth is measured about the tray's axis, 0 at th
 
 | Criterion | Simulation | Real trial |
 |---|---|---|
-| No other jar tipped | Every other jar within 15 degrees of upright, all through the run (latched) | No jar lying or leaning on another at any time in the video |
+| No other jar tipped | Every other jar within 15 degrees of upright, all through the run (latched) | Every other jar within 15 degrees of upright in every frame, read in the two counter cameras (below) |
 | No jar off the tray | Every other jar's centre within the 23.5 cm usable floor, at floor height (latched) | No jar off the tray at any time |
+| Red jar not tipped on the tray | The red jar within 15 degrees of upright while it is on the tray (latched) | The same 15 degrees, read the same way |
 | Tray on its bearing | The tray never more than 1.5 cm above its seat (latched) | The tray never lifted off its base |
-| Red jar fronted | The red jar, upright on the tray, within 30 degrees of the front | Red jar between two tape marks on the shelf's front edge, 30 degrees each side of the front |
-| Red jar on the mark | Its centre within 2 cm of the mark, base on the counter, within 5 degrees of upright | Jar base inside the 2 cm circle, standing |
+| Red jar fronted | The red jar, within 15 degrees of upright on the tray, within 30 degrees of the front | Red jar between two tape marks on the shelf's front edge, 30 degrees each side of the front |
+| Red jar on the mark | Its centre within 2 cm of the mark centre, base on the counter, within 5 degrees of upright | Its centre within 2 cm of the mark centre, read in the overhead camera; base on the counter and within 5 degrees of upright, read in the two counter cameras (below) |
 | Finished | No jar held; every jar moved under 2 mm and turned under 2 degrees over the last second | Both grippers open and away from the jars; no jar moving in the last second of the video |
 
 Score: **0** if any latch above trips (another jar tipped or off the tray, the red jar tipped on the tray, the tray lifted),
 or if the red jar never came round to the front on the tray. **0.5** once the red jar has come round to the front with
 nothing tipped. **1.0** with, as well, the red jar standing on the counter mark, no jar held and every jar still for one second. Doing
 nothing scores 0; taking the red jar out without turning the tray scores 0.
+
+### Real-trial cameras and readings
+
+Three Logitech C920s webcams (78 degree diagonal field of view, 1080p at 30 fps) record every trial from start to
+end, all started before the arms move. Every threshold is the simulator's, in the same degrees and centimetres.
+
+- **Counter cameras L and R** (tray-height views through the shelf's front opening): each stands on its own folded
+  clip on the counter, lens about 3 cm above the counter, levelled with a bubble level. L stands at (8, 40) and R at
+  (8, -36), each aimed at the tray's bearing (46, 2), so their sight lines cross at 90 degrees there; both lines pass
+  through the shelf's front opening (L's at y 16, R's at y -12, inside the opening from y -19 to 23), and both cameras
+  see the counter mark. The tray's 1 cm lip hides the bottom of each jar; the upper 9 cm or more of every jar is in view.
+- **Overhead camera O**: on a SmallRig 4862 Super Clamp with Magic Arm, its clamp on the upper shelf's front edge (1.8 cm
+  thick; the clamp takes up to 3 cm), the camera 45 cm above the counter directly over the counter mark, pointing
+  straight down, held by the clip's 1/4 in tripod thread.
+- **Tilt** (all jars, all frames): in each counter camera k the signed angle a_k of a jar's vertical edge from the image
+  vertical is measured on the frame with an on-screen protractor. With f_k the camera's level forward direction, r_k its
+  right, and d_k the jar's position (from the ring and the tray angle, or the counter mark) minus the camera's, each view
+  gives one linear equation in the jar's horizontal lean t (per unit height):
+  tan a_k = [(t . r_k)(d_k . f_k) - (d_k . r_k)(t . f_k)] / (d_k . f_k), for k = L, R.
+  The two equations are solved for t, and the tilt is atan(|t|). Checked numerically against exact pinhole projection
+  for every tilt direction, at all six ring positions and the mark: within 0.22 degrees at 15 degrees of tilt and 0.02
+  degrees at 5. Thresholds: 15 degrees for every other jar and for the red jar while on the tray, 5 degrees for the red
+  jar on the mark.
+- **Red jar's centre on the mark**: the counter sheet under the mark carries a printed 2 cm radius ring and crosshair
+  centred on the mark, and a second ring of 2.7 cm radius (2 cm x 45 / (45 - 11.2), the 2 cm ring scaled to the cap's
+  height of 11.2 cm as the overhead camera sees it). The jar's centre is within 2 cm of the mark centre when the red
+  cap's centre lies inside the 2.7 cm ring in the overhead frame. With the jar within 5 degrees of upright, its cap
+  centre and its body centre differ by at most 0.5 cm horizontally (5.6 cm x sin 5 degrees).
+- **All jars in view**: every jar is seen by at least one counter camera in every frame of the trial; a trial in which
+  an arm hides a jar from both counter cameras for more than one second is void and is run again.
 
 ## Real trial hardware
 
@@ -93,10 +124,13 @@ Prices seen 2026-11-21 in live US listings.
 | Spice jars | McCormick Ground Cinnamon 2.37 oz, Shoppers (sale; regular $4.59): https://shop.shoppersfood.com/store/shoppersfood/products/87608-mccormick-ground-cinnamon-2-37-oz | 6 x $2.99 |
 | Shelves | IKEA IVAR shelf, pine, 17 x 12 in, 103.181.59: https://www.ikea.com/us/en/p/ivar-shelf-pine-10318159/ | 2 x $10.00 |
 | Side units | IKEA IVAR side unit 11 3/4 x 49 in, 904.846.49: https://www.ikea.com/us/en/p/ivar-side-unit-90484649/ | 2 x $15.00 |
-| **Priced total** | | **$84.93** |
+| Cameras (3) | Logitech C920s PRO HD Webcam 960-001257 (78 degree dFoV, 1080p, tripod-ready clip with 1/4 in thread), Logitech: https://www.logitech.com/en-us/products/webcams/c920s-pro-hd-webcam.960-001257.html | 3 x $54.99 |
+| Overhead camera arm | SmallRig Super Clamp with Magic Arm Kit 4862 (524 mm arm, 1/4"-20 screw, clamps flat stock up to 30 mm), smallrigreseller.com: https://www.smallrigreseller.com/smallrig-super-clamp-with-magic-arm-kit-4862.html | $99.99 |
+| **Priced total** | | **$349.89** |
 
 Not priced (gaps): red tape for the target's cap, masking tape for the counter mark and the 30 degree marks, a saw to
-cut the side units down.
+cut the side units down, a bubble level for the counter cameras, the printed counter sheet (2 cm ring, crosshair
+and 2.7 cm cap ring), and a computer to record the three cameras.
 
 ## Run a trial
 
@@ -158,6 +192,17 @@ positive control from the same run, the right hand over the lip as it reaches in
 Rigid bodies with real contact: the tray turns on a hinge with Coulomb friction, the jars stand loose on it and ride
 round by friction, and the gripper turns it by pinching its lip. The bearing's friction is not published and is checked
 over a range ([DEVIATIONS.md](DEVIATIONS.md)).
+
+## Revision 1
+
+Reply to review TK-CW2F8K. The task file, tests and demo are unchanged (the task .py is byte-identical to the
+submitted version, so the demo and Dream-1 scores above still hold); README.md and task.json change.
+
+| Official text | This version |
+|---|---|
+| Flag: "Specify the red jar's numeric tipping threshold and make the real-video tilt check match the simulator." | The red jar is spoiled if it tilts more than 15 degrees while on the tray and must be within 5 degrees of upright on the mark; every other jar must stay within 15 degrees. The real trial uses the same degrees, measured from two levelled counter cameras whose sight lines cross at 90 degrees, solved for each jar's position (Scoring table; Real-trial cameras and readings). |
+| Scoring (not met): "The real-trial rule requires a 4.5 cm square jar base inside a 4 cm diameter circle and does not provide a view of all jars throughout the trial." | The real rule now checks the jar's centre, as the simulator does, and three cameras record the whole trial: two at tray height through the shelf's front, one overhead of the mark; a trial that loses sight of a jar in both counter cameras for over one second is void. |
+| What to change: "Please correct the real-trial target check to require the jar's center, rather than its entire base, to lie within 2 cm of the mark center." | The real-trial target check is the jar's centre within 2 cm of the mark centre, read as the red cap's centre inside a printed 2.7 cm ring (the 2 cm ring scaled to the cap's height) in the overhead camera. |
 
 ## Licence
 
