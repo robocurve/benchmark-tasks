@@ -102,8 +102,17 @@ def test_layout_in_middle_and_on_platform():
         assert M.PL_X0 + M.F_R + 0.01 <= lx <= M.SH_D / 2 - M.F_R - 0.005 and abs(ly) <= M.PL_W / 2 - M.F_R - 0.005
 
 
-def test_fingers_not_sprung_is_not_seated():
-    assert run(scene(False, M.EMPTY_XY, spread=1.0))[0] == 0.0
+def test_seating_does_not_depend_on_a_finger_angle():
+    # observable check only: flat on the platform at the ring's centre and upright
+    assert run(scene(False, M.EMPTY_XY, spread=0.0))[0] == M.CLAMP_ONLY
+
+
+def test_biohazard_sign_is_on_the_shaker_and_clear_of_the_clamp_work():
+    assert M.SIGN_W >= 0.15 and M.SIGN_H >= 0.12
+    wx, wy = M.SH_XY[0] + M.SIGN_X, M.SH_XY[1] + M.SIGN_Y
+    assert 0.35 <= wx <= 0.60 and abs(wy) < 0.35
+    # well behind the loose flask, the empty clamp and the held flask
+    assert all(wx - x > 0.08 for x, _ in (M.EMPTY_XY, M.LOOSE_XY, M.FULL_XY))
 
 
 def test_clamp_is_a_push_fit():
