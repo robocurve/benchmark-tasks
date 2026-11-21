@@ -1,0 +1,2084 @@
+#usda 1.0
+(
+ defaultPrim = "Fixture"
+ metersPerUnit = 1
+ upAxis = "Z"
+)
+def Xform "Fixture"
+{
+ def Scope "Actors"
+ {
+        def Xform "toaster" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 1.6
+            point3f physics:centerOfMass = (0, -0.02, 0.095)
+            float3 physics:diagonalInertia = (0.01681333333, 0.008666666667, 0.01585333333)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.73, 0.17, 0.7475)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "rubber_foot_0_0" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (-0.065, -0.145, 0.004)
+                double3 xformOp:scale = (0.02, 0.025, 0.008)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/rubber>
+                rel material:binding:physics = </Fixture/Materials/rubber>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "rubber_foot_0_1" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (-0.065, 0.105, 0.004)
+                double3 xformOp:scale = (0.02, 0.025, 0.008)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/rubber>
+                rel material:binding:physics = </Fixture/Materials/rubber>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "rubber_foot_1_0" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0.065, -0.145, 0.004)
+                double3 xformOp:scale = (0.02, 0.025, 0.008)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/rubber>
+                rel material:binding:physics = </Fixture/Materials/rubber>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "rubber_foot_1_1" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0.065, 0.105, 0.004)
+                double3 xformOp:scale = (0.02, 0.025, 0.008)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/rubber>
+                rel material:binding:physics = </Fixture/Materials/rubber>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "base_pan" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, -0.02, 0.011)
+                double3 xformOp:scale = (0.166, 0.296, 0.006)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "outer_side_0" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (-0.082, -0.02, 0.102)
+                double3 xformOp:scale = (0.006, 0.3, 0.176)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/cream>
+                rel material:binding:physics = </Fixture/Materials/cream>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "tray_rail_0" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (-0.067, -0.0045, 0.017)
+                double3 xformOp:scale = (0.01, 0.269, 0.006)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "tray_side_guide_0" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (-0.0725, -0.0045, 0.027)
+                double3 xformOp:scale = (0.003, 0.269, 0.014)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "outer_side_1" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0.082, -0.02, 0.102)
+                double3 xformOp:scale = (0.006, 0.3, 0.176)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/cream>
+                rel material:binding:physics = </Fixture/Materials/cream>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "tray_rail_1" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0.067, -0.0045, 0.017)
+                double3 xformOp:scale = (0.01, 0.269, 0.006)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "tray_side_guide_1" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0.0725, -0.0045, 0.027)
+                double3 xformOp:scale = (0.003, 0.269, 0.014)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "rear_panel" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, -0.167, 0.102)
+                double3 xformOp:scale = (0.164, 0.006, 0.176)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/cream>
+                rel material:binding:physics = </Fixture/Materials/cream>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "front_panel" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0.127, 0.112)
+                double3 xformOp:scale = (0.164, 0.006, 0.156)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/cream>
+                rel material:binding:physics = </Fixture/Materials/cream>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "tray_rear_stop" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, -0.1324, 0.0235)
+                double3 xformOp:scale = (0.14, 0.004, 0.007)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "top_bridge_0" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (-0.076, -0.02, 0.187)
+                double3 xformOp:scale = (0.016, 0.3, 0.006)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "top_bridge_1" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, -0.02, 0.187)
+                double3 xformOp:scale = (0.042, 0.3, 0.006)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "top_bridge_2" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0.076, -0.02, 0.187)
+                double3 xformOp:scale = (0.016, 0.3, 0.006)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "top_end_0" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, -0.145, 0.187)
+                double3 xformOp:scale = (0.14, 0.05, 0.006)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "top_end_1" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0.105, 0.187)
+                double3 xformOp:scale = (0.14, 0.05, 0.006)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "dark_slot_floor_0" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (-0.042, -0.02, 0.154)
+                double3 xformOp:scale = (0.035, 0.18, 0.003)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/dark>
+                rel material:binding:physics = </Fixture/Materials/dark>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "carriage_wire_0_0" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (-0.042, -0.1, 0.158)
+                double3 xformOp:scale = (0.026, 0.0015, 0.002)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "carriage_wire_0_1" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (-0.042, -0.06, 0.158)
+                double3 xformOp:scale = (0.026, 0.0015, 0.002)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "carriage_wire_0_2" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (-0.042, -0.02, 0.158)
+                double3 xformOp:scale = (0.026, 0.0015, 0.002)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "carriage_wire_0_3" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (-0.042, 0.02, 0.158)
+                double3 xformOp:scale = (0.026, 0.0015, 0.002)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "carriage_wire_0_4" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (-0.042, 0.06, 0.158)
+                double3 xformOp:scale = (0.026, 0.0015, 0.002)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "dark_slot_floor_1" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0.042, -0.02, 0.154)
+                double3 xformOp:scale = (0.035, 0.18, 0.003)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/dark>
+                rel material:binding:physics = </Fixture/Materials/dark>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "carriage_wire_1_0" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0.042, -0.1, 0.158)
+                double3 xformOp:scale = (0.026, 0.0015, 0.002)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "carriage_wire_1_1" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0.042, -0.06, 0.158)
+                double3 xformOp:scale = (0.026, 0.0015, 0.002)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "carriage_wire_1_2" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0.042, -0.02, 0.158)
+                double3 xformOp:scale = (0.026, 0.0015, 0.002)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "carriage_wire_1_3" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0.042, 0.02, 0.158)
+                double3 xformOp:scale = (0.026, 0.0015, 0.002)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "carriage_wire_1_4" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0.042, 0.06, 0.158)
+                double3 xformOp:scale = (0.026, 0.0015, 0.002)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "lift_lever_slot" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0.086, 0.04, 0.105)
+                double3 xformOp:scale = (0.002, 0.055, 0.009)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/dark>
+                rel material:binding:physics = </Fixture/Materials/dark>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "lift_lever" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0.093, 0.04, 0.105)
+                double3 xformOp:scale = (0.017, 0.02, 0.008)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/plastic>
+                rel material:binding:physics = </Fixture/Materials/plastic>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cylinder "browning_dial" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double radius = 0.014
+                double height = 0.011
+                uniform token axis = "Z"
+                double3 xformOp:translate = (0.0925, -0.07, 0.075)
+                quatf xformOp:orient = (0.7071067812, 0, 0.7071067812, 0)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                rel material:binding = </Fixture/Materials/plastic>
+                rel material:binding:physics = </Fixture/Materials/plastic>
+            }
+        }
+        def Xform "tray" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 0.1432944
+            point3f physics:centerOfMass = (0, 0.01544394198, 0.001141962282)
+            float3 physics:diagonalInertia = (0.001082487649, 0.0002445221219, 0.001325278118)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.73, 0.17, 0.7675)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "tray_part_0" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0.0002)
+                double3 xformOp:scale = (0.14, 0.26, 0.0004)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "tray_part_1" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (-0.0698, 0, 0.003)
+                double3 xformOp:scale = (0.0004, 0.26, 0.006)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "tray_part_2" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0.0698, 0, 0.003)
+                double3 xformOp:scale = (0.0004, 0.26, 0.006)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "tray_part_3" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, -0.1298, 0.003)
+                double3 xformOp:scale = (0.14, 0.0004, 0.006)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "tray_part_4" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0.1298, 0.003)
+                double3 xformOp:scale = (0.14, 0.0004, 0.006)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/steel>
+                rel material:binding:physics = </Fixture/Materials/steel>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "tray_part_5" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0.136, 0.003)
+                double3 xformOp:scale = (0.024, 0.012, 0.006)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/plastic>
+                rel material:binding:physics = </Fixture/Materials/plastic>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+            def Cube "tray_part_6" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0.152, 0.007)
+                double3 xformOp:scale = (0.044, 0.02, 0.014)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/plastic>
+                rel material:binding:physics = </Fixture/Materials/plastic>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb000" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 4.32e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (4.68e-12, 7.2e-12, 9e-12)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.83, 0.123, 0.7695)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.004, 0.003, 0.002)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb0>
+                rel material:binding:physics = </Fixture/Materials/crumb0>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb001" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 9.75618e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (2.117904075e-11, 2.293718569e-11, 3.044131414e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.83, 0.1465, 0.76995)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.00445, 0.0042, 0.0029)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb1>
+                rel material:binding:physics = </Fixture/Materials/crumb1>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb002" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 7.79688e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (1.19032368e-11, 1.99924998e-11, 2.31112518e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.83, 0.17, 0.7698)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.0049, 0.0034, 0.0026)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb2>
+                rel material:binding:physics = </Fixture/Materials/crumb2>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb003" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 1.018854e-05
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (2.245724025e-11, 2.879323856e-11, 4.226758271e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.83, 0.1935, 0.76965)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.00535, 0.0046, 0.0023)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb3>
+                rel material:binding:physics = </Fixture/Materials/crumb3>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb004" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 7.9344e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (1.2192528e-11, 2.4887568e-11, 3.1790496e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.83, 0.217, 0.7695)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.0058, 0.0038, 0.002)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb0>
+                rel material:binding:physics = </Fixture/Materials/crumb0>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb005" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 6.264e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (9.08802e-12, 1.274202e-11, 1.305e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.8014285714, 0.123, 0.76995)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.004, 0.003, 0.0029)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb1>
+                rel material:binding:physics = </Fixture/Materials/crumb1>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb006" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 8.74692e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (1.7785404e-11, 1.936167188e-11, 2.729221268e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.8014285714, 0.1465, 0.7698)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.00445, 0.0042, 0.0026)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb2>
+                rel material:binding:physics = </Fixture/Materials/crumb2>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb007" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 6.89724e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (9.6848745e-12, 1.6840761e-11, 2.04445689e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.8014285714, 0.17, 0.76965)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.0049, 0.0034, 0.0023)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb3>
+                rel material:binding:physics = </Fixture/Materials/crumb3>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb008" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 8.8596e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (1.8575628e-11, 2.408519175e-11, 3.675441975e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.8014285714, 0.1935, 0.7695)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.00535, 0.0046, 0.002)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb0>
+                rel material:binding:physics = </Fixture/Materials/crumb0>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb009" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 1.150488e-05
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (2.1907209e-11, 4.0315017e-11, 4.60962192e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.8014285714, 0.217, 0.76995)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.0058, 0.0038, 0.0029)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb1>
+                rel material:binding:physics = </Fixture/Materials/crumb1>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb010" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 5.616e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (7.37568e-12, 1.065168e-11, 1.17e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.7728571429, 0.123, 0.7698)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.004, 0.003, 0.0026)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb2>
+                rel material:binding:physics = </Fixture/Materials/crumb2>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb011" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 7.73766e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (1.478537865e-11, 1.617976946e-11, 2.414311121e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.7728571429, 0.1465, 0.76965)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.00445, 0.0042, 0.0023)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb3>
+                rel material:binding:physics = </Fixture/Materials/crumb3>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb012" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 5.9976e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (7.776888e-12, 1.3999398e-11, 1.7777886e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.7728571429, 0.17, 0.7695)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.0049, 0.0034, 0.002)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb0>
+                rel material:binding:physics = </Fixture/Materials/crumb0>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb013" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 1.284642e-05
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (3.165571995e-11, 3.964458739e-11, 5.329390864e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.7728571429, 0.1935, 0.76995)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.00535, 0.0046, 0.0029)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb1>
+                rel material:binding:physics = </Fixture/Materials/crumb1>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb014" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 1.031472e-05
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (1.8222672e-11, 3.4726224e-11, 4.13276448e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.7728571429, 0.217, 0.7698)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.0058, 0.0038, 0.0026)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb2>
+                rel material:binding:physics = </Fixture/Materials/crumb2>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb015" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 4.968e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (5.91606e-12, 8.81406e-12, 1.035e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.7442857143, 0.123, 0.76965)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.004, 0.003, 0.0023)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb3>
+                rel material:binding:physics = </Fixture/Materials/crumb3>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb016" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 6.7284e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (1.2133548e-11, 1.334606175e-11, 2.099400975e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.7442857143, 0.1465, 0.7695)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.00445, 0.0042, 0.002)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb0>
+                rel material:binding:physics = </Fixture/Materials/crumb0>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb017" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 8.69652e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (1.44724587e-11, 2.34950982e-11, 2.57779347e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.7442857143, 0.17, 0.76995)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.0049, 0.0034, 0.0029)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb1>
+                rel material:binding:physics = </Fixture/Materials/crumb1>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb018" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 1.151748e-05
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (2.67973368e-11, 3.395976968e-11, 4.778074568e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.7442857143, 0.1935, 0.7698)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.00535, 0.0046, 0.0026)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb2>
+                rel material:binding:physics = </Fixture/Materials/crumb2>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb019" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 9.12456e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (1.50022974e-11, 2.96015934e-11, 3.65590704e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.7442857143, 0.217, 0.76965)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.0058, 0.0038, 0.0023)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb3>
+                rel material:binding:physics = </Fixture/Materials/crumb3>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb020" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 4.32e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (4.68e-12, 7.2e-12, 9e-12)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.7157142857, 0.123, 0.7695)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.004, 0.003, 0.002)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb0>
+                rel material:binding:physics = </Fixture/Materials/crumb0>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb021" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 9.75618e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (2.117904075e-11, 2.293718569e-11, 3.044131414e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.7157142857, 0.1465, 0.76995)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.00445, 0.0042, 0.0029)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb1>
+                rel material:binding:physics = </Fixture/Materials/crumb1>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb022" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 7.79688e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (1.19032368e-11, 1.99924998e-11, 2.31112518e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.7157142857, 0.17, 0.7698)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.0049, 0.0034, 0.0026)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb2>
+                rel material:binding:physics = </Fixture/Materials/crumb2>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb023" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 1.018854e-05
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (2.245724025e-11, 2.879323856e-11, 4.226758271e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.7157142857, 0.1935, 0.76965)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.00535, 0.0046, 0.0023)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb3>
+                rel material:binding:physics = </Fixture/Materials/crumb3>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb024" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 7.9344e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (1.2192528e-11, 2.4887568e-11, 3.1790496e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.7157142857, 0.217, 0.7695)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.0058, 0.0038, 0.002)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb0>
+                rel material:binding:physics = </Fixture/Materials/crumb0>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb025" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 6.264e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (9.08802e-12, 1.274202e-11, 1.305e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.6871428571, 0.123, 0.76995)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.004, 0.003, 0.0029)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb1>
+                rel material:binding:physics = </Fixture/Materials/crumb1>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb026" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 8.74692e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (1.7785404e-11, 1.936167188e-11, 2.729221268e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.6871428571, 0.1465, 0.7698)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.00445, 0.0042, 0.0026)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb2>
+                rel material:binding:physics = </Fixture/Materials/crumb2>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb027" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 6.89724e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (9.6848745e-12, 1.6840761e-11, 2.04445689e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.6871428571, 0.17, 0.76965)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.0049, 0.0034, 0.0023)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb3>
+                rel material:binding:physics = </Fixture/Materials/crumb3>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb028" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 8.8596e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (1.8575628e-11, 2.408519175e-11, 3.675441975e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.6871428571, 0.1935, 0.7695)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.00535, 0.0046, 0.002)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb0>
+                rel material:binding:physics = </Fixture/Materials/crumb0>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb029" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 1.150488e-05
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (2.1907209e-11, 4.0315017e-11, 4.60962192e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.6871428571, 0.217, 0.76995)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.0058, 0.0038, 0.0029)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb1>
+                rel material:binding:physics = </Fixture/Materials/crumb1>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb030" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 5.616e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (7.37568e-12, 1.065168e-11, 1.17e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.6585714286, 0.123, 0.7698)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.004, 0.003, 0.0026)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb2>
+                rel material:binding:physics = </Fixture/Materials/crumb2>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb031" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 7.73766e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (1.478537865e-11, 1.617976946e-11, 2.414311121e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.6585714286, 0.1465, 0.76965)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.00445, 0.0042, 0.0023)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb3>
+                rel material:binding:physics = </Fixture/Materials/crumb3>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb032" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 5.9976e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (7.776888e-12, 1.3999398e-11, 1.7777886e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.6585714286, 0.17, 0.7695)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.0049, 0.0034, 0.002)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb0>
+                rel material:binding:physics = </Fixture/Materials/crumb0>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb033" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 1.284642e-05
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (3.165571995e-11, 3.964458739e-11, 5.329390864e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.6585714286, 0.1935, 0.76995)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.00535, 0.0046, 0.0029)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb1>
+                rel material:binding:physics = </Fixture/Materials/crumb1>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb034" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 1.031472e-05
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (1.8222672e-11, 3.4726224e-11, 4.13276448e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.6585714286, 0.217, 0.7698)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.0058, 0.0038, 0.0026)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb2>
+                rel material:binding:physics = </Fixture/Materials/crumb2>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb035" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 4.968e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (5.91606e-12, 8.81406e-12, 1.035e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.63, 0.123, 0.76965)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.004, 0.003, 0.0023)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb3>
+                rel material:binding:physics = </Fixture/Materials/crumb3>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb036" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 6.7284e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (1.2133548e-11, 1.334606175e-11, 2.099400975e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.63, 0.1465, 0.7695)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.00445, 0.0042, 0.002)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb0>
+                rel material:binding:physics = </Fixture/Materials/crumb0>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb037" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 8.69652e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (1.44724587e-11, 2.34950982e-11, 2.57779347e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.63, 0.17, 0.76995)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.0049, 0.0034, 0.0029)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb1>
+                rel material:binding:physics = </Fixture/Materials/crumb1>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb038" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 1.151748e-05
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (2.67973368e-11, 3.395976968e-11, 4.778074568e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.63, 0.1935, 0.7698)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.00535, 0.0046, 0.0026)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb2>
+                rel material:binding:physics = </Fixture/Materials/crumb2>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+        def Xform "crumb039" (prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled = 1
+            bool physics:kinematicEnabled = 0
+            bool physxRigidBody:enableCCD = 1
+            bool physxRigidBody:enableSpeculativeCCD = 1
+            float physics:mass = 9.12456e-06
+            point3f physics:centerOfMass = (0, 0, 0)
+            float3 physics:diagonalInertia = (1.50022974e-11, 2.96015934e-11, 3.65590704e-11)
+            quatf physics:principalAxes = (1, 0, 0, 0)
+            float physxRigidBody:linearDamping = 0.01
+            float physxRigidBody:angularDamping = 0.01
+            float physxRigidBody:maxDepenetrationVelocity = 0.5
+            int physxRigidBody:solverPositionIterationCount = 64
+            int physxRigidBody:solverVelocityIterationCount = 4
+            float physxRigidBody:sleepThreshold = 0
+            float physxContactReport:threshold = 0
+            double3 xformOp:translate = (0.63, 0.217, 0.76965)
+            quatf xformOp:orient = (0.7071067812, 0, 0, 0.7071067812)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            def Cube "dry_bread_chunk" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+            {
+                double size = 1
+                double3 xformOp:translate = (0, 0, 0)
+                double3 xformOp:scale = (0.0058, 0.0038, 0.0023)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                rel material:binding = </Fixture/Materials/crumb3>
+                rel material:binding:physics = </Fixture/Materials/crumb3>
+                float physxCollision:contactOffset = 0.0001
+                float physxCollision:restOffset = 0
+            }
+        }
+ }
+ def Scope "Hardware"
+ {
+        def Cube "waste_bin_floor" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+        {
+            double size = 1
+            double3 xformOp:translate = (0.4, 0.36, 0.7495)
+            double3 xformOp:scale = (0.27, 0.22, 0.004)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            rel material:binding = </Fixture/Materials/bin>
+            rel material:binding:physics = </Fixture/Materials/bin>
+            float physxCollision:contactOffset = 0.0001
+            float physxCollision:restOffset = 0
+        }
+        def Cube "waste_bin_wall_0" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+        {
+            double size = 1
+            double3 xformOp:translate = (0.2625, 0.36, 0.8075)
+            double3 xformOp:scale = (0.005, 0.23, 0.12)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            rel material:binding = </Fixture/Materials/bin>
+            rel material:binding:physics = </Fixture/Materials/bin>
+            float physxCollision:contactOffset = 0.0001
+            float physxCollision:restOffset = 0
+        }
+        def Cube "waste_bin_wall_1" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+        {
+            double size = 1
+            double3 xformOp:translate = (0.5375, 0.36, 0.8075)
+            double3 xformOp:scale = (0.005, 0.23, 0.12)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            rel material:binding = </Fixture/Materials/bin>
+            rel material:binding:physics = </Fixture/Materials/bin>
+            float physxCollision:contactOffset = 0.0001
+            float physxCollision:restOffset = 0
+        }
+        def Cube "waste_bin_wall_2" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+        {
+            double size = 1
+            double3 xformOp:translate = (0.4, 0.2475, 0.8075)
+            double3 xformOp:scale = (0.27, 0.005, 0.12)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            rel material:binding = </Fixture/Materials/bin>
+            rel material:binding:physics = </Fixture/Materials/bin>
+            float physxCollision:contactOffset = 0.0001
+            float physxCollision:restOffset = 0
+        }
+        def Cube "waste_bin_wall_3" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+        {
+            double size = 1
+            double3 xformOp:translate = (0.4, 0.4725, 0.8075)
+            double3 xformOp:scale = (0.27, 0.005, 0.12)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            rel material:binding = </Fixture/Materials/bin>
+            rel material:binding:physics = </Fixture/Materials/bin>
+            float physxCollision:contactOffset = 0.0001
+            float physxCollision:restOffset = 0
+        }
+        def Cube "unplugged_plug" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+        {
+            double size = 1
+            double3 xformOp:translate = (0.585, 0.31, 0.7575)
+            double3 xformOp:scale = (0.024, 0.035, 0.02)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            rel material:binding = </Fixture/Materials/plastic>
+            rel material:binding:physics = </Fixture/Materials/plastic>
+            float physxCollision:contactOffset = 0.0001
+            float physxCollision:restOffset = 0
+        }
+        def Cube "plug_pin_0" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+        {
+            double size = 1
+            double3 xformOp:translate = (0.579, 0.333, 0.7575)
+            double3 xformOp:scale = (0.003, 0.012, 0.004)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            rel material:binding = </Fixture/Materials/steel>
+            rel material:binding:physics = </Fixture/Materials/steel>
+            float physxCollision:contactOffset = 0.0001
+            float physxCollision:restOffset = 0
+        }
+        def Cube "plug_pin_2" (prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"])
+        {
+            double size = 1
+            double3 xformOp:translate = (0.591, 0.333, 0.7575)
+            double3 xformOp:scale = (0.003, 0.012, 0.004)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            rel material:binding = </Fixture/Materials/steel>
+            rel material:binding:physics = </Fixture/Materials/steel>
+            float physxCollision:contactOffset = 0.0001
+            float physxCollision:restOffset = 0
+        }
+        def Cylinder "cord_visual_0" (prepend apiSchemas = ["MaterialBindingAPI"])
+        {
+            double radius = 0.0023
+            double height = 0.0174642492
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.9015, 0.13, 0.7635)
+            quatf xformOp:orient = (0.2047469964, -0, 0.9788149301, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            rel material:binding = </Fixture/Materials/plastic>
+            rel material:binding:physics = </Fixture/Materials/plastic>
+        }
+        def Cylinder "cord_visual_1" (prepend apiSchemas = ["MaterialBindingAPI"])
+        {
+            double radius = 0.0023
+            double height = 0.1601280737
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.9025, 0.21, 0.7535)
+            quatf xformOp:orient = (0.6982191617, -0.7155347734, -0.02236046167, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            rel material:binding = </Fixture/Materials/plastic>
+            rel material:binding:physics = </Fixture/Materials/plastic>
+        }
+        def Cylinder "cord_visual_2" (prepend apiSchemas = ["MaterialBindingAPI"])
+        {
+            double radius = 0.0023
+            double height = 0.1603121954
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.82, 0.295, 0.7515)
+            quatf xformOp:orient = (0.7071067812, -0.04410810914, -0.7057297462, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            rel material:binding = </Fixture/Materials/plastic>
+            rel material:binding:physics = </Fixture/Materials/plastic>
+        }
+        def Cylinder "cord_visual_3" (prepend apiSchemas = ["MaterialBindingAPI"])
+        {
+            double radius = 0.0023
+            double height = 0.1204159458
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.68, 0.295, 0.7515)
+            quatf xformOp:orient = (0.7071067812, 0.05872202195, -0.7046642634, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            rel material:binding = </Fixture/Materials/plastic>
+            rel material:binding:physics = </Fixture/Materials/plastic>
+        }
+        def Cylinder "cord_visual_4" (prepend apiSchemas = ["MaterialBindingAPI"])
+        {
+            double radius = 0.0023
+            double height = 0.03573513677
+            uniform token axis = "Z"
+            double3 xformOp:translate = (0.6025, 0.292, 0.7545)
+            quatf xformOp:orient = (0.764166858, -0.07323966491, -0.640847068, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            rel material:binding = </Fixture/Materials/plastic>
+            rel material:binding:physics = </Fixture/Materials/plastic>
+        }
+ }
+ def Scope "Materials"
+ {
+        def Material "steel" (prepend apiSchemas = ["PhysicsMaterialAPI", "PhysxMaterialAPI"])
+        {
+            float physics:staticFriction = 0.35
+            float physics:dynamicFriction = 0.35
+            float physics:restitution = 0.0
+            token outputs:surface.connect = </Fixture/Materials/steel/Surface.outputs:surface>
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.52, 0.55, 0.57)
+                float inputs:metallic = 1.0
+                float inputs:roughness = 0.3
+                token outputs:surface
+            }
+        }
+        def Material "cream" (prepend apiSchemas = ["PhysicsMaterialAPI", "PhysxMaterialAPI"])
+        {
+            float physics:staticFriction = 0.35
+            float physics:dynamicFriction = 0.35
+            float physics:restitution = 0.0
+            token outputs:surface.connect = </Fixture/Materials/cream/Surface.outputs:surface>
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.72, 0.68, 0.57)
+                float inputs:metallic = 0.15
+                float inputs:roughness = 0.43
+                token outputs:surface
+            }
+        }
+        def Material "dark" (prepend apiSchemas = ["PhysicsMaterialAPI", "PhysxMaterialAPI"])
+        {
+            float physics:staticFriction = 0.4
+            float physics:dynamicFriction = 0.4
+            float physics:restitution = 0.0
+            token outputs:surface.connect = </Fixture/Materials/dark/Surface.outputs:surface>
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.025, 0.025, 0.023)
+                float inputs:metallic = 0.0
+                float inputs:roughness = 0.75
+                token outputs:surface
+            }
+        }
+        def Material "plastic" (prepend apiSchemas = ["PhysicsMaterialAPI", "PhysxMaterialAPI"])
+        {
+            float physics:staticFriction = 0.6
+            float physics:dynamicFriction = 0.6
+            float physics:restitution = 0.0
+            token outputs:surface.connect = </Fixture/Materials/plastic/Surface.outputs:surface>
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.055, 0.055, 0.048)
+                float inputs:metallic = 0.0
+                float inputs:roughness = 0.6
+                token outputs:surface
+            }
+        }
+        def Material "rubber" (prepend apiSchemas = ["PhysicsMaterialAPI", "PhysxMaterialAPI"])
+        {
+            float physics:staticFriction = 0.9
+            float physics:dynamicFriction = 0.9
+            float physics:restitution = 0.0
+            token outputs:surface.connect = </Fixture/Materials/rubber/Surface.outputs:surface>
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.04, 0.04, 0.035)
+                float inputs:metallic = 0.0
+                float inputs:roughness = 0.9
+                token outputs:surface
+            }
+        }
+        def Material "bin" (prepend apiSchemas = ["PhysicsMaterialAPI", "PhysxMaterialAPI"])
+        {
+            float physics:staticFriction = 0.5
+            float physics:dynamicFriction = 0.5
+            float physics:restitution = 0.0
+            token outputs:surface.connect = </Fixture/Materials/bin/Surface.outputs:surface>
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.09, 0.21, 0.17)
+                float inputs:metallic = 0.0
+                float inputs:roughness = 0.75
+                token outputs:surface
+            }
+        }
+        def Material "crumb0" (prepend apiSchemas = ["PhysicsMaterialAPI", "PhysxMaterialAPI"])
+        {
+            float physics:staticFriction = 0.55
+            float physics:dynamicFriction = 0.55
+            float physics:restitution = 0.0
+            token outputs:surface.connect = </Fixture/Materials/crumb0/Surface.outputs:surface>
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.42, 0.23, 0.09)
+                float inputs:metallic = 0.0
+                float inputs:roughness = 0.95
+                token outputs:surface
+            }
+        }
+        def Material "crumb1" (prepend apiSchemas = ["PhysicsMaterialAPI", "PhysxMaterialAPI"])
+        {
+            float physics:staticFriction = 0.55
+            float physics:dynamicFriction = 0.55
+            float physics:restitution = 0.0
+            token outputs:surface.connect = </Fixture/Materials/crumb1/Surface.outputs:surface>
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.55, 0.32, 0.13)
+                float inputs:metallic = 0.0
+                float inputs:roughness = 0.95
+                token outputs:surface
+            }
+        }
+        def Material "crumb2" (prepend apiSchemas = ["PhysicsMaterialAPI", "PhysxMaterialAPI"])
+        {
+            float physics:staticFriction = 0.55
+            float physics:dynamicFriction = 0.55
+            float physics:restitution = 0.0
+            token outputs:surface.connect = </Fixture/Materials/crumb2/Surface.outputs:surface>
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.62, 0.42, 0.2)
+                float inputs:metallic = 0.0
+                float inputs:roughness = 0.95
+                token outputs:surface
+            }
+        }
+        def Material "crumb3" (prepend apiSchemas = ["PhysicsMaterialAPI", "PhysxMaterialAPI"])
+        {
+            float physics:staticFriction = 0.55
+            float physics:dynamicFriction = 0.55
+            float physics:restitution = 0.0
+            token outputs:surface.connect = </Fixture/Materials/crumb3/Surface.outputs:surface>
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.36, 0.19, 0.07)
+                float inputs:metallic = 0.0
+                float inputs:roughness = 0.95
+                token outputs:surface
+            }
+        }
+ }
+}
