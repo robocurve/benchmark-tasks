@@ -1,0 +1,22 @@
+{
+  "title": "Slide a commercial condiment dispenser pump into a stainless fountain jar and press collar down",
+  "category": "Impact on jobs",
+  "keywords": [
+    "commercial food service",
+    "condiment pump",
+    "fountain jar",
+    "restaurant equipment",
+    "bimanual",
+    "sanitation setup",
+    "collar detent"
+  ],
+  "instruction": "Steady the stainless fountain jar with your right hand, pick up the condiment pump assembly from the wash rack with your left hand, guide the pick-up tube down into the jar bore, seat the lid collar flush on the jar rim, press the locking collar tab into the detent lock, and apply an upward proof pull to verify retention before clearing both hands.",
+  "context": "Fast food and counter workers (BLS SOC 35-3023: 3,460,000 workers) and food preparation workers (BLS SOC 35-2021: 891,000 workers), representing over 4.35 million US food service personnel, routinely assemble and restock condiment dispensing stations. Under commercial food code sanitation schedules, portion-control condiment dispenser pumps (Server Products / Vollrath commercial standard) are fully disassembled, washed, and reinstalled into stainless steel fountain jars daily. The worker steadies the fountain jar, retrieves the clean pump assembly from the sanitary rack, inserts the vertical pick-up cylinder coaxially into the jar bore without jamming, seats the rectangular lid collar flush over the flared jar mouth, and engages the spring collar retention tab into the rim detent slot. Proper seating and mechanical lock engagement prevent air ingress and accidental pump ejection during heavy customer service.",
+  "setup": "Commercial stainless prep counter (Z=0.7475 m). Center: heavy-gauge stainless fountain jar (110x130x75 mm, 1.2 kg) at (0.260, 0.080) m with a flared rim (Z=0.8225 m), side welded loop handle at (0.260, -0.015, 0.7865) m, and retention detent slot. Right counter: sanitary wire wash rack holding a 380 g commercial stainless portion-control pump assembly (24 mm dia x 65 mm vertical pick-up tube, 118x138 mm rectangular contoured lid collar, spring retention tab, and portion knob plunger) standing upright at (0.240, 0.250) m. Bimanual coordination: right gripper grasps jar loop handle to steady against insertion torque; left gripper grasps pump collar grip stem.",
+  "scoring": "Real-world inspection: coaxial alignment (r_xy < 35 mm) of pick-up cylinder within jar bore during entry, flush seating of collar onto jar rim (gap_z < 15 mm, r_xy < 25 mm), engagement of spring locking tab into rim detent (c_x - j_x < -2 mm), and upward verification proof pull (>5 N) sustained for >=10 steps without collar dislodging from jar. Stage progression: 0.20: pump grasped and lifted clear of wash rack (>30 mm); 0.40: pick-up tube entered jar bore (tube_z < rim_z - 10 mm); 0.65: lid collar seated flush on jar rim (vertical gap < 15 mm); 0.85: collar locking tab pushed into detent lock; 1.00: 5 N upward proof pull sustained without collar displacement, both hands clear (TCPs >= 35 mm, collision hulls clear), assembly stable. Defect latches (0.0): dropped pump, excessive jar slide (>35 mm) or tipping (>10 deg), or hands not clear.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Disengage collar lock tab, lift condiment pump assembly from fountain jar, and return upright into wire wash rack at (0.240, 0.250) m. Re-center stainless fountain jar at (0.260, 0.080) m.",
+  "fidelity": "Rigid bodies and composite collision boxes for rectangular fountain jar cavity, flared rim flange, welded side loop handle, and stainless pump collar. Coaxial cylinder hull models the pick-up tube. Spring-loaded collar retention tab is simulated with a mechanical detent catch. Upward proof pull tests physical reaction force before release clearance.",
+  "scores": "Dream-1: 0.0; scripted demo: 1.0 (two complete runs, 350 steps each).",
+  "media": "M-YTZMUB"
+}
