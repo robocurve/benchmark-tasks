@@ -1,0 +1,44 @@
+{
+  "robot_adapter": {
+    "url": "https://github.com/kairosiann/yam-isaac-lab-arena",
+    "revision": "0059d02a1a91bc6834c1d0846022891df0c78730",
+    "usage": "External YAM USD, kinematics and calibrated camera definitions; not redistributed",
+    "robot_asset_license": "MIT; retain upstream LICENSE.i2rt"
+  },
+  "local_runtime": {
+    "isaacsim": "6.2.0.0",
+    "isaaclab": "47.1.0",
+    "python": "3.12.13",
+    "backend": "Native PhysX CPU and RTX RGB rendering",
+    "arena_integration": "IsaacLab-Arena source checkout with task-local compatibility preparation",
+    "isaaclab_revision": "892354c283df78fabf2ff4661902a3a1504b3c82",
+    "numpy": "2.5.1",
+    "pillow": "12.3.0",
+    "websockets": "14.2",
+    "torch": "2.11.0+cu130"
+  },
+  "arena": {
+    "url": "https://github.com/isaac-sim/IsaacLab-Arena",
+    "revision": "c7edf3a9d5d8276565208f72422f8f8a0806d6cf",
+    "compatibility": "prepare_arena_compat.py; source-hashed local compatibility edits for IsaacLab 47.1",
+    "declared_source_version": "0.3.0",
+    "version_note": "The exact Git revision is authoritative; the YAM adapter documentation targets Arena 0.3.1."
+  },
+  "inspect": {
+    "inspect-robots": "0.60.0",
+    "inspect-robots-yam": "0.37.0",
+    "dreamlabs-client": "1.0.14",
+    "inspect-robots-dream_revision": "b5e936a201cec66c54c297e522c920d98445e339",
+    "isaaclab-teleop": "0.11.3",
+    "dream_adapter_url": "https://github.com/kairosiann/inspect-robots-dream"
+  },
+  "reference_geometry": {
+    "sensor": "https://www.sick.com/media/docs/4/34/634/operating_instructions_wl12g_3_en_de_fr_pt_it_es_ja_zh_im0035634.pdf",
+    "bracket": "https://cdn.sick.com/media/pdf/2/32/432/dataSheet_BEF-WG-W12_2013942_en.pdf",
+    "note": "Procedural approximation, not manufacturer CAD. SICK sensor and bracket envelopes, Omron E39-L261 clamp and published 3.0\u20133.5 N m tightening requirement, explicit custom adapter. Contact coefficients, thread compression, mass distribution and passive cable load are estimated. Numerical tool load-path calibration is included; physical hardware calibration has not been performed. Seated hex engagement is approximated by a native sliding key with axial withdrawal; no hand attachment.",
+    "sensor_variant": "https://www.sick.com/media/pdf/9/89/389/dataSheet_WL12G-3B2531T01_1041458_en.pdf",
+    "clamp": "https://www.omron-ap.com/data_pdf/mnu/e39-l261_inst-5630532-1a.pdf?id=3779",
+    "clamp_dimensions": "https://files.omron.eu/downloads/latest/datasheet/en/e3as_series_datasheet_en.pdf?v=1",
+    "tool": "Dimensioned 120 mm lever with native 10 N m/rad spring, 8.1 mm AF socket and calibrated magnifying dial; generic construction, no commercial tool CAD"
+  }
+}
