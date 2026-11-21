@@ -43,9 +43,11 @@ the coupler still hovers, the tines run into the ball's lower half, the jaw stop
 
 ## Judging a real trial
 
-Whether the ball is seated is partly hidden inside the socket from above. The overhead camera shows the coupler level
-(no longer tipped up) and the handle position; the side camera shows the red underjaw under the ball's equator. The
-decisive check is CURT's own: jack (here, lift) the tongue after latching. If it comes off the ball, it was not
+Whether the ball is seated is partly hidden inside the socket from above. In the 320×176 top camera the coupler going
+level (no longer tipped up) and the handle angle (up, jammed at about 15°, or flat) are visible; seated versus sitting
+on top, in the last few millimetres, is not reliably visible from above. The left policy camera gives a close side view
+while the arm is at the coupler, but it moves with the arm and does not hold a calibrated end view after the arm leaves.
+The decisive check is CURT's own: jack (here, lift) the tongue after latching. If it comes off the ball, it was not
 seated before it was latched.
 
 ## Fidelity, honestly
@@ -100,8 +102,7 @@ moved to (0.36, 0.22). Scores were the same in both places.
 
 ## Scores
 
-- Scripted demo (yam_arena, 320x176, seed 1): 1.0, success at step 377 of 700.
+- Scripted demo (yam_arena, 320x176, seed 1, Brev L40S, commit a8a35dc, fixture at (36, 22)): 1.0, success at step 377 of 700.
 - TASK_DEMO=naive: 0.5 (handle jams at about 15°; the coupler is then seated but cannot be latched).
 - TASK_DEMO=plate: 0.5.
-- Dream-1 flash (seed 1, 320x176, Brev L40S, at the first-build position (0.40, 0.16), commit 22f8e7e): 0.0 after 700 steps, not refused (28 requests).
-- The scripted runs above were repeated at the final position (0.36, 0.22): demo 1.0 at step 377, naive 0.5, plate 0.5 (Brev at 22f8e7e: 1.0 at step 375 / 0.5 / 0.5).
+- Dream-1 flash (dreamlabs/dream-1-beta-flash, seed 1, 320x176, 22 Nov 2026 on a Brev L40S, same commit): 0.25 after 700 steps (lowered onto the ball, not seated), 28 requests, not refused.
