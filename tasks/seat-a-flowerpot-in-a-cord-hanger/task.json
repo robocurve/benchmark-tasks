@@ -1,0 +1,19 @@
+{
+  "title": "Seat a flowerpot in a four-cord hanger",
+  "category": "Societal relatability",
+  "instruction": "Place the free pot inside the hanging cradle and let go. The pot must remain upright when the hanger swings.",
+  "context": "A hanging planter has a narrow opening when it is empty. A cord caught on the near side can leave the pot tilted or allow it to fall when the hanger swings.",
+  "reset_notes": "Remove the pot, untwist all four branches and let the empty hanger come to rest. Place the pot and the hook at the marked positions in the setup image. For simulation, start a fresh station at seed 0 with both arms in the ready pose.",
+  "scoring": "Score 0.5 when the knot sits under the base and four cords surround the pot. At 50 mm above the base the four strands must each cross at a radius of 45–80 mm, with no angular gap of 180° or more. The knot must be within 44 mm of the base center and between 25 mm below and 8 mm above it. For 1.0 the base must hang over 50 mm above the tabletop, within 10° of upright, with the hands clear of pot and cords. After 0.3 s of clearance, apply 0.28 N horizontally for 0.15 s. Keep all conditions true for the rest of the 106-step window at 20 Hz. Otherwise score 0.5 only if the pot remains seated at the end, or 0.",
+  "keywords": [
+    "hanging planter",
+    "cord hanger",
+    "flowerpot",
+    "seating"
+  ],
+  "setup": "Use a rigid, ballasted 330 g tapered flowerpot, 96 mm tall, with a hollow 123 mm outer lip and an 88 mm base. The lower portion holds the ballast. Suspend four 4.8 mm cords from a fixed hook 490 mm above the tabletop. Tie a 3.6 mm diagonal cord from each strand to the next, with 120 mm free between ties. The upper and lower ties sit 287 and 366 mm below the hook before loading. Gather the four main cords in a lower knot about 21 mm wide and 19 mm tall, 405 mm below the hook when empty, with all four strands emerging at the top. Measured from the tabletop midpoint between the arm bases, the hook is at x = 390 mm, y = 40 mm. Start the upright pot at x = 300 mm, y = −145 mm, both grippers open. Positive x points forward and positive y toward the left arm.",
+  "run_limit": "1200 control steps at 20 Hz (60 seconds).",
+  "fidelity": "The pot is a free rigid body with a hollow lip. Each cord is a chain of colliding segments joined by ball joints. The wrapped lower knot is modeled as one rigid body. The simulator applies a calibrated 0.28 N horizontal pulse for 0.15 s. The setup and disturbance have been tested in simulation.",
+  "scores": "Scripted reference scored 1 in 1,088 steps. Dream-1 scored 0 in 1,200 steps.",
+  "media": "M-7QLZGA"
+}
