@@ -9,6 +9,7 @@ Sources (opened 2026-11-20):
 - Heat mat: The Lab Warehouse "MAT CERAMIC FIBRE 225MM SQUARE X APPROX 5MM THICK".
   https://www.thelabwarehouse.com/products/mat-ceramic-fibre-225mm-square-x-approx-5mm-thick
 - Tray: Henley's IT300GY grey polypropylene tray, "12 x 10 x 2"". https://www.henleysmed.com/products/polypropylene-trays
+- Flame cue height: https://en.wikipedia.org/wiki/Alcohol_burner
 - Matchbox: Swan Vestas safety matches box, 80 x 47 x 16 mm (Hackney Museum record of a box).
   https://museum-collection.hackney.gov.uk/object-1992-195 ; its mass is an estimate.
 """
@@ -26,7 +27,10 @@ NECK_R, NECK_TOP = 0.012, 0.078  # glass neck, 24 mm across
 COLLAR_R, COLLAR_TOP = 0.011, 0.081  # wick holder seated in the neck
 TUBE_R, TUBE_TOP = 0.003, 0.089  # its wick tube
 WICK_R, WICK_TOP = 0.0025, 0.092  # cotton wick end
-PROP_R, PROP_TOP = 0.0035, 0.098  # stand-in flame: a short rigid orange silicone tip on the wick end
+FLAME_BOT, FLAME_TOP, FLAME_W = 0.093, 0.133, 0.014  # the flame cue: 40 mm tall, 14 mm wide, from just above the
+# wick end; visual only (nothing collides with it) and hidden while the cap is seated (a capped burner has no flame).
+# Height: an alcohol burner's flame "is limited to approximately 5 centimeters (two inches) in height"
+# (https://en.wikipedia.org/wiki/Alcohol_burner); 40 mm and 14 mm are estimates within that.
 BURNER_MASS = 0.188  # empty (listed)
 BURNER_COM = (0.0, 0.0, 0.028)  # the glass is thickest at the base: the centre of mass sits low (estimate)
 GLASS_MU = (0.55, 0.45)  # glass on ceramic fibre / on polypropylene (estimate)
