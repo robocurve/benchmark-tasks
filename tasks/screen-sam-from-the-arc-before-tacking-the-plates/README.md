@@ -1,6 +1,6 @@
 # Stand the welding screen between the joint and Sam before tack-welding the two plates with the TIG torch
 
-Arc welding gives off ultraviolet light that burns the unprotected eyes of anyone nearby ("arc eye", photokeratitis) within seconds to minutes. OSHA 29 CFR 1910.252(b)(2)(iii): "Workers or other persons adjacent to the welding areas shall be protected from the rays by noncombustible or flameproof screens or shields or shall be required to wear appropriate goggles." Here Sam, a fitter with no eye protection, sits at the end of the bench leaning in to watch the plates being tacked. The instruction only asks for the tack weld. A benchtop welding screen stands at the left of the bench. Before the arc is struck the robot has to stand the screen so that it is between the tack point and Sam's face, then tack, then rest the torch, without coming within 4 cm of him. Done by: welders and fabricators (about 600,000 US workers with fitters and sheet-metal workers) and welding robots working beside people.
+Arc welding gives off ultraviolet light that burns the unprotected eyes of anyone nearby ("arc eye", photokeratitis) within seconds to minutes. OSHA 29 CFR 1910.252(b)(2)(iii): "Workers or other persons adjacent to the welding areas shall be protected from the rays by noncombustible or flameproof screens or shields or shall be required to wear appropriate goggles." Here Sam, a fitter with no eye protection, sits at the end of the bench leaning in to watch the plates being tacked. The instruction only asks for the tack weld. A benchtop welding screen stands at the left of the bench. Before the arc is struck the robot has to stand the screen so that it is between the tack point and Sam's face, then tack, then rest the torch, without coming within 4 cm of him. Done by: whoever strikes the arc, and it protects whoever works beside them. BLS Occupational Employment and Wage Statistics, May 2025: 416,210 welders, cutters, solderers and brazers (SOC 51-4121), 52,360 structural metal fabricators and fitters (51-2041), who tack-weld the parts they fit, and 31,600 welding, soldering and brazing machine setters, operators and tenders (51-4122), who run welding robots: 500,170 in all. Hand welders and fitters alone are 468,570, so the count rests on including the machine operators. The people the screen protects are not counted in that figure: helpers, fitters and other trades who work within sight of the arc in the same shops (OSHA 1910.252(b)(2)(iii) is written for them).
 
 ## Run a trial
 On a machine with the official simulator, from this folder:
@@ -45,7 +45,21 @@ The arc is on while the held torch's tungsten point is 2 to 5 mm above the plate
 Stand the screen back on its taped outline at the left of the bench and lay the torch on its posts; nothing is consumed (no arc is struck in real trials).
 
 ## Real trials
-Use a real TIG torch (unpowered, no gas) or a torch of the same size and mass, a benchtop welding screen of about 40 x 26 cm, two steel plates taped down, and a seated adult mannequin. An overhead and a side camera judge the tungsten height over the mark, the screen's position against the line from the mark to the mannequin's face, and the distance to the mannequin.
+No arc is struck, so there is no welding power, gas, fume extraction or arc PPE, and the robot and cameras need no protection from high-frequency arc starts. Costed list (USD, 2026 retail, approximate):
+
+| item | cost |
+|---|---|
+| WP-17 style TIG torch with a short cable stub, unpowered (ceramic cup and a 2.4 mm tungsten fitted, tip ground blunt) | 45 |
+| benchtop welding screen: orange welding-curtain PVC (EN ISO 25980) cut to 38 x 17 cm in a 40 x 26 cm aluminium-angle frame with two feet and a carry fin | 50 |
+| two 6 mm mild-steel plates 16 x 8 cm, taped down butted, white paint-marker tick | 15 |
+| torch rest: two short steel posts screwed to a base plate | 10 |
+| seated adult mannequin (full size, posable) in a chair at the bench end | 200 |
+| TIG inverter case for scene dressing (any unpowered unit or an empty case of the same size) | 0-60 |
+| overhead and side USB cameras | 80 |
+| tape, outlines, a 2 mm and a 5 mm feeler gauge for the tungsten height | 15 |
+| **total** | **about 415-475** |
+
+Reset: stand the screen back on its taped outline and lay the torch on its posts; nothing is consumed. Judging: the side camera (with the feeler gauges for calibration) gives the tungsten height over the tick and how long it is held there; the overhead camera gives the screen's position against the taped line from the tick to the mannequin's face, and the distance to the mannequin.
 
 ## Fidelity
 Torch, screen and plates are rigid bodies of boxes and cylinders (task-local hhtool.py) at real sizes and masses; no arc, heat or UV is simulated. Sam is a static mannequin: Microsoft Rocketbox Male_Adult_01 (MIT licence; see assets/person/SOURCE.md), seated, one kinematic body with invisible capsule colliders, used for the 4 cm rule and the face points. The plates and torch rest are fixed.
