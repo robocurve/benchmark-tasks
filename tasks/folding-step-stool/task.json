@@ -1,0 +1,22 @@
+{
+  "title": "Unfold a steel folding step stool the way its maker shows: upside down, swing each leg out until its own lock clicks",
+  "category": "Societal relatability",
+  "keywords": [
+    "household",
+    "step stool",
+    "folding",
+    "steel",
+    "spring lock",
+    "Vive LVA2068BLK",
+    "hidden latch"
+  ],
+  "instruction": "The step stool lies upside down with its legs folded. Open each of its two legs fully, swinging it up and out until its lock clicks, then let go of the stool.",
+  "context": "Folding step stools are set up every day at home and at work (Vive Health's LVA2068BLK, sold as a step stool for adults and children). Each leg has its own spring lock, and Vive's own setup photos show it opened upside down, each leg swung out until it locks. OSHA 1926.1053(a)(8): a stepladder needs a locking device \"to hold the front and back sections in an open position when the ladder is being used\". A leg that looks open but isn't locked folds when someone steps on the stool.",
+  "setup": "Positions in cm on the table, from the midpoint between the arm bases: x forward, y to the robot's left. A Vive Folding Step Stool, product number LVA2068BLK (steel, 1.8 kg; platform 38.1 cm long along y, 26.7 cm deep, 2.5 cm thick, black with a grey textured mat), lies upside down, its mat face down, centred at (30, 0). Its two legs, one at each end of the platform, are folded flat against the platform's underside (now facing up). Each leg is a steel U-frame: two square posts (1.9 cm) 23.7 cm apart, 12.5 cm from the hinge to a round grey crossbar (1.8 cm across) at the foot; the hinge axis is 2 cm in from the platform's end and 0.8 cm under it; each post carries a red latch button on its inside. A leg opens to 100 degrees from folded (10 degrees past square, splayed) and locks at 98. Open and standing the right way up, the platform's top is 16.5 cm off the floor. Both grippers start open at the ready pose.",
+  "scoring": "A leg locks once it is opened 98 degrees from folded and then stays locked; short of that, from 80 degrees on, its lock's spring pushes it back (0.10 to 0.165 N m), so a leg let go short of its lock falls back. Once both grippers are more than 2 cm from the stool and it lies still and level upside down on the table, each leg is pushed back towards folded (0.6 N m, about 5 N on the crossbar): a locked leg holds, an unlocked one folds. 1.0: both legs locked and holding under that push, held 1 s (0.9 if time runs out first). 0.5: both legs locked, the hands still on the stool. 0.25: one leg locked. 0 otherwise: a leg that only looks open earns nothing. Real trials: with the hands off, push each crossbar towards folded with 5 N; a locked leg holds.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Fold both legs flat (press each leg's latch button on its inside), lay the stool upside down, mat face down, centred at (30, 0) with its long side along y.",
+  "fidelity": "The stool is the Vive LVA2068BLK at its listed size and mass; tube, hinge and latch sizes, the latch's push-back and the mass split are estimates. The latch is a model on each leg's hinge, not simulated contacts: it catches at 98 degrees and holds; short of it, its spring pushes back. The 5 N check folding an unlocked leg is a rule. Vive's last step, turning the stool over onto its feet, is left out.",
+  "scores": "Dream-1 run: 0.0 (1,200 steps); demo: 1.0 (scripted); legs stopped short of their locks (wrong way): 0",
+  "media": "M-PENDAW"
+}
