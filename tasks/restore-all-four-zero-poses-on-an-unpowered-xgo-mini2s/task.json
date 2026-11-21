@@ -1,0 +1,21 @@
+{
+  "title": "Pose an unpowered XGO-mini2S for joint calibration: every leg in the maker's posture, all four toes on the table",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "robot maintenance",
+    "joint calibration",
+    "passive joints",
+    "quadruped",
+    "XGO-mini2S",
+    "whole-body posing"
+  ],
+  "instruction": "Set every leg of this unpowered XGO-mini2S to its calibration posture (shoulders square to the body, thighs vertical, lower legs level), with all four toes on the table, then move both hands clear.",
+  "context": "Robot upkeep: when an XGO-mini2S stands wrongly, its manual has the servos \"stop producing torque\" and a person sets every leg by hand (shoulders square to the body, thighs vertical, lower legs square to the thighs) before its joint zeros are stored. Hard part: twelve unpowered joints slip under the robot's own 915 g, so moving the body moves every leg, and it must end standing by itself with all four toes on the table (a heel may touch too; a heel alone does not count).",
+  "setup": "Station table: level 1.10 x 1.30 m laminate. Coordinates in metres from the midpoint between the arm bases, x forward, y left, z up from the tabletop. One complete Luwu Dynamics XGO-mini2S (915 g; 12 leg joints; its own arm at model zero, head parked), servos without torque; geometry, axes, limits and link masses from the maker's open model, unscaled (266.85 x 144.13 x 176.30 mm). Lot A: head toward +x, set down with the midpoint of its four shoulder axles over (0.274, 0); shoulders and thighs at the illustrated posture, every lower leg turned 21 degrees toe-down past it (maker-model joint angle 36 degrees). It settles nose-up about 7 degrees, midpoint over (0.243, 0), with no leg in the posture. Lot B: the same start turned 180 degrees, set down over (0.246, 0). No jig, stand, added grip or stop. YAM finger force capped at 40 N. Trials alternate A and B and are averaged; the screenshot shows A.",
+  "scoring": "Score 0 if any part of the robot ever goes past a table edge or more than 10 mm below the tabletop (kept for the trial). Otherwise read the last 1 s; every row above 0 needs, for that whole second: both hands (housings and fingers) 30 mm or more from the robot and no arm link touching it (video, steel rule); all four silicone toes down, a 0.1 mm feeler leaf passing under none (a heel may touch too; heel contact alone does not count); the body's lowest surface 15 mm or more above the table and within 10 degrees of level; the robot's own arm 10 mm or more above the table; no point on the robot moving more than 2 mm (video against a steel rule). A leg is complete when its shoulder, thigh and lower-leg angles are each within 10 degrees of the illustrated posture and its thigh within 10 degrees of vertical (protractor on square-on photos against the supplied reference drawing; a hidden point earns nothing). 1.0: four complete legs; 0.75: three; 0.5: two; 0.25: one; 0: none. Lots A and B are averaged.",
+  "run_limit": "3,600 steps per lot (180 s at 20 Hz); two lots",
+  "reset_notes": "Keep the servos without torque; do not confirm the calibration or overwrite zeros. Park the arm and head. Set shoulders and thighs to the illustrated posture and each lower leg 21 degrees toe-down from it (reference drawing, protractor). Place the robot at the lot's position and heading, let it settle, and check no leg is in the posture.",
+  "fidelity": "Maker's open model, unscaled; 166 g missing from the 915 g total added to the body. Unpowered gearboxes: each joint holds 0.12 N m (4 N m/rad spring, 0.08 N m s/rad), then slips and keeps the new angle; never pulls toward the posture (estimate, 27% of the 0.44 N m powered torque; real unmeasured). Friction estimates: ABS 0.6/0.5, silicone toe 1.2/0.9. Lower leg collides as heel, shaft and toe pieces. Self-collision off.",
+  "scores": "Scripted demo: 1.0 (lots A and B: 1.0, 1.0; 421 and 428 steps). Dream-1 run: 0.0 (lots A and B: 0.0, 0.0; 3,600-step limit; both arms folded down near their bases and never touched the robot).",
+  "media": "M-NSVEM8"
+}
