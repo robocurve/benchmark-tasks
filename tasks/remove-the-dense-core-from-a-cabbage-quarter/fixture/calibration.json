@@ -1,0 +1,158 @@
+{
+ "about": "Fixed corrections used by demo() for each lot, keyed by the quarter's visible starting yaw in degrees. quarter_rotation and quarter_shift (m, quarter frame) are the quarter's settled pose under the steadying hand; each cut's rotation_bias and tcp_shift (m) are the arm's measured tilt and position offset while holding the knife during that sweep. demo() reads this file once when it builds its waypoints; it never reads a live pose.",
+ "measured_from": "Lot A (key 0): calibration-input.jsonl, the task's own 0.25 s log (knife and leaf poses) from one scripted run of both lots with the same waypoints and an earlier calibration; quarter pose 13-18 s, knife 14-16 s and 28-30 s. Lot B (key 15): calibration-input-B.jsonl, the same log from a later scripted run of both lots with these waypoints and the lot A values above; quarter pose 13-17 s, knife 14-17 s and 28-31 s.",
+ "observation_sha256": {
+  "calibration-input.jsonl": "5b438b01e149bb9d6d634354cc76b7bf3ed1026357f71db702c36350a6903dab",
+  "calibration-input-B.jsonl": "ef15396805ef4e5b5418036351aabb942ba93fe1486c9815b4fe9fa94c404f46"
+ },
+ "by_visible_yaw": {
+  "0": {
+   "quarter_rotation": [
+    [
+     0.9989063332632321,
+     -0.04675300128713684,
+     -0.0005424364013531321
+    ],
+    [
+     0.04674625029832084,
+     0.9988663660416557,
+     -0.008987261751151623
+    ],
+    [
+     0.0009620029372477426,
+     0.008952075814131193,
+     0.9999594666230059
+    ]
+   ],
+   "quarter_shift": [
+    0.002040210068225856,
+    0.0009677625447511579,
+    -0.00014724910259256152
+   ],
+   "cut": [
+    {
+     "rotation_bias": [
+      [
+       0.9985901973486342,
+       -0.01428874622487237,
+       -0.05112190812691719
+      ],
+      [
+       0.014110528508696249,
+       0.9998930473450586,
+       -0.003845368151103283
+      ],
+      [
+       0.05117138599276964,
+       0.003118589798844521,
+       0.9986850172367887
+      ]
+     ],
+     "tcp_shift": [
+      -0.0005870942846292783,
+      -0.003752906656775846,
+      -0.0044257652735322645
+     ]
+    },
+    {
+     "rotation_bias": [
+      [
+       0.9990403535311673,
+       -0.012688661244440779,
+       -0.04192099583913433
+      ],
+      [
+       0.01619757847723089,
+       0.996295761109131,
+       0.08445350701689364
+      ],
+      [
+       0.04069410851456056,
+       -0.08505148012705283,
+       0.9955451949863467
+      ]
+     ],
+     "tcp_shift": [
+      -0.001123232051723733,
+      -0.006443256122727833,
+      -0.01391996646552432
+     ]
+    }
+   ]
+  },
+  "15": {
+   "quarter_rotation": [
+    [
+     0.9987328892019963,
+     -0.0503249576876886,
+     0.00012107834711618464
+    ],
+    [
+     0.05032509418958939,
+     0.9987312679244233,
+     -0.0017998235700009153
+    ],
+    [
+     -3.0348686127866276e-05,
+     0.0018036362733439425,
+     0.9999983729862519
+    ]
+   ],
+   "quarter_shift": [
+    -0.0006100739107842617,
+    -0.0011325441792968823,
+    -0.00043143138289458705
+   ],
+   "cut": [
+    {
+     "rotation_bias": [
+      [
+       0.9985099526259176,
+       -0.018491653868099013,
+       -0.05134134049876815
+      ],
+      [
+       0.017487118174641235,
+       0.9996481049984287,
+       -0.019946600487215874
+      ],
+      [
+       0.05169211936972752,
+       0.019019067018991663,
+       0.9984819477010054
+      ]
+     ],
+     "tcp_shift": [
+      -5.5600950063204076e-05,
+      -0.0025988523904786464,
+      -0.002737681856525472
+     ]
+    },
+    {
+     "rotation_bias": [
+      [
+       0.9996825141146962,
+       -0.007089857972096046,
+       -0.02417860391451556
+      ],
+      [
+       0.008995796568906755,
+       0.9967820635752579,
+       0.07965295586945316
+      ],
+      [
+       0.02353607056010715,
+       -0.07984517298237728,
+       0.9965293782593686
+      ]
+     ],
+     "tcp_shift": [
+      -0.0031296207561984364,
+      -0.006661115141185813,
+      -0.014214094234042787
+     ]
+    }
+   ]
+  }
+ }
+}
