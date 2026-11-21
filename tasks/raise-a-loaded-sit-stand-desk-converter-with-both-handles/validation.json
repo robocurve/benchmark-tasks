@@ -1,0 +1,192 @@
+{
+  "source_run": "e021-desk4",
+  "sessions": "Two independently reset Inspect Robots runs. Real hardware calibration of spring/force estimates is pending.",
+  "input_archive_sha256": "0717c639db007ebafb662f23a01733c014b35af6e5b15c146bfc834bf5d25210",
+  "runtime": {
+    "platform": "Linux-5.14.0-570.58.1.el9_6.x86_64-x86_64-with-glibc2.34",
+    "libc": [
+      "glibc",
+      "2.34"
+    ],
+    "gpu": "NVIDIA L40S, 580.178.04, 46068 MiB",
+    "evaluation_mode": "scripted_then_dream"
+  },
+  "isaac_sim_6_1_sif_sha256": "cc8aa04e7d5ceaeb89870d4bbc182d17b8d861f655d9f32f0f7ae7b913d4924c",
+  "post_run_changes": [
+    "README.md",
+    "task.json",
+    "tests/test_package.py"
+  ],
+  "native_export_sha256": {
+    "scripted": {
+      "result": "0c702dac4eeced933a06ea865111d4bbefad9299381d910ac4887c2fbfe24d3f",
+      "raw_recordings": {
+        "setup.png": "92492c1741e62e814f5de46b16fc888e19d151fd93e1c230571958837b3d63e2",
+        "side_cam.mp4": "cd22ef37dfb7f2d59020f676b2f0a78a8f40a108764662aba3c6f08385d2831e",
+        "top_cam.mp4": "92549f60d811bcffd59be67d67687fa1505e63f2e0d300bce322be3f1f751cef",
+        "grader-trace.jsonl": "7d0b62111a1ac777bd5406f0b48099885dc1248c699473b8523433bcd2dd57e6"
+      }
+    },
+    "dream": {
+      "result": "bdc742b568aee7adcd27d14fb50887128a3f9790a9b82de323f06131ed4baf00",
+      "raw_recordings": {
+        "setup.png": "c384d3f97e79b8109d210c16ebe6ccf139427c5e300fc15c7801fd295220a9f3",
+        "side_cam.mp4": "4d0ff61d69be0b8e89887f18b0d725eb8af79018bde884135493237f9ff625dc",
+        "top_cam.mp4": "8c555ae50055a8d03e0897fe232b9bac9b6ecc97997133767fda8c702fa77a33",
+        "grader-trace.jsonl": "a19573f6fb837d46308b1223ba495daada3418dd8232c85addb39798888e4b80"
+      }
+    },
+    "dream_audit": {
+      "dream-action-trace.jsonl": "c5d4717d1eaf99e9330d5ceb9bd4ee04d10f87fb7bdedb9bc5f8bdd2ff5eba96",
+      "dream-input-rgb.zip": "c9d77a15445a1bbae71683bb24d07daed6d7703d1bb25c449fdfb2dc6d80d7e9",
+      "DREAM_USAGE.json": "57e53b174992492ac431680a8efdac937b0ea9060c0bacf7d2b5daa53704c44d"
+    }
+  },
+  "runs": {
+    "scripted": {
+      "policy": "scripted",
+      "model": null,
+      "variant": null,
+      "score": 1.0,
+      "scorer": "desk_converter_score",
+      "completed": true,
+      "error": null,
+      "control_hz": 20,
+      "step_limit": 2400,
+      "executed_steps": 575,
+      "elapsed_s": 142.32,
+      "scene_sha256": "229a208ece6dd47aa1527b936f5a169474974a820004b4b7da388a482d2ce936",
+      "asset_sha256": "3b8f0f307c5231142e49cb88edf86581748403bc5ea93f2404f04428e3883a84",
+      "layout_sha256": "1fa7f054de010b2b34f9a3beff948d4048d746e06440fde981f3e23786d94ec6",
+      "grader_sha256": "9e5c7b8b3c0038ba063b3adf9f02966f6364dd0bb1c5498f6b86d6f54f81e72d",
+      "inspect_robots": "1.0.0",
+      "yam_arena": "0.1.0",
+      "seed": 0,
+      "observation_state_keys": [
+        "joint_pos"
+      ],
+      "observation_cameras": [
+        "top_cam",
+        "left_cam",
+        "right_cam"
+      ],
+      "policy_inputs_camera_size": [
+        320,
+        176
+      ],
+      "wall_time_limit_is_external": true,
+      "scripted_demo_reads_simulator_state": true,
+      "dream_chunk_anchor": null,
+      "dream_action_requests": 0,
+      "dream_request_cap": null,
+      "peak_interarm_contact_n": 0.0,
+      "final_grade": {
+        "score": 1.0,
+        "tier": 1.0,
+        "setting": 8.911,
+        "peak_setting": 9.181,
+        "nearest_notch": 9,
+        "at_notch": true,
+        "seated": {
+          "left": true,
+          "right": true
+        },
+        "locked_at": 9,
+        "latch_mm": {
+          "left": -0.0,
+          "right": -0.0
+        },
+        "level": true,
+        "side_dz_mm": 0.0,
+        "raised_once": true,
+        "monitor_moved_mm": 0.0,
+        "monitor_tilt_deg": 0.0,
+        "keyboard_moved_mm": 0.1,
+        "keyboard_tilt_deg": 0.0,
+        "loads_ok": true,
+        "fallen": null,
+        "touching": false,
+        "hand_from_handle_mm": {
+          "left": 94.0,
+          "right": 94.0
+        },
+        "clear": true,
+        "held_s": 1.0
+      },
+      "termination_reason": "success"
+    },
+    "dream": {
+      "policy": "dream",
+      "model": "dreamlabs/dream-1-beta",
+      "variant": null,
+      "score": 0.0,
+      "scorer": "desk_converter_score",
+      "completed": true,
+      "error": null,
+      "control_hz": 20,
+      "step_limit": 2400,
+      "executed_steps": 2400,
+      "elapsed_s": 469.36,
+      "scene_sha256": "229a208ece6dd47aa1527b936f5a169474974a820004b4b7da388a482d2ce936",
+      "asset_sha256": "3b8f0f307c5231142e49cb88edf86581748403bc5ea93f2404f04428e3883a84",
+      "layout_sha256": "1fa7f054de010b2b34f9a3beff948d4048d746e06440fde981f3e23786d94ec6",
+      "grader_sha256": "9e5c7b8b3c0038ba063b3adf9f02966f6364dd0bb1c5498f6b86d6f54f81e72d",
+      "inspect_robots": "1.0.0",
+      "yam_arena": "0.1.0",
+      "seed": 0,
+      "observation_state_keys": [
+        "joint_pos"
+      ],
+      "observation_cameras": [
+        "top_cam",
+        "left_cam",
+        "right_cam"
+      ],
+      "policy_inputs_camera_size": [
+        320,
+        176
+      ],
+      "wall_time_limit_is_external": true,
+      "scripted_demo_reads_simulator_state": false,
+      "dream_chunk_anchor": "executed_target_blend_v2",
+      "dream_action_requests": 54,
+      "dream_request_cap": 200,
+      "peak_interarm_contact_n": 0.0,
+      "final_grade": {
+        "score": 0.0,
+        "tier": 0.0,
+        "setting": 3.911,
+        "peak_setting": 3.911,
+        "nearest_notch": 4,
+        "at_notch": true,
+        "seated": {
+          "left": true,
+          "right": true
+        },
+        "locked_at": 4,
+        "latch_mm": {
+          "left": -0.0,
+          "right": -0.0
+        },
+        "level": true,
+        "side_dz_mm": 0.0,
+        "raised_once": false,
+        "monitor_moved_mm": 0.0,
+        "monitor_tilt_deg": 0.0,
+        "keyboard_moved_mm": 0.0,
+        "keyboard_tilt_deg": 0.0,
+        "loads_ok": true,
+        "fallen": null,
+        "touching": false,
+        "hand_from_handle_mm": {
+          "left": 344.3,
+          "right": 464.1
+        },
+        "clear": true,
+        "held_s": 0.0
+      },
+      "termination_reason": "max_steps"
+    }
+  },
+  "recordings": "Overhead on left and side on right, synchronized at original 10 fps from a 20 Hz control loop, including the initial and terminal samples."
+}
