@@ -7,6 +7,9 @@ import numpy as np
 from geometry import BODIES,STRANDS,SEGMENTS,HEAD
 
 LENGTHS={b['name']:b['shapes'][0]['length'] for b in BODIES if b['name'].startswith('hair_')}
+# Distinct whole-fibre colours identify loose bundles; no ties join free hair.
+COLOUR_NAMES=['black','white','red','orange','yellow','lime','forest green','cyan','blue','violet','magenta','pink']
+COLOURS=[(.025,.025,.025),(.92,.92,.86),(.65,.015,.025),(.95,.23,.025),(.95,.76,.03),(.40,.85,.04),(.015,.22,.06),(.02,.65,.72),(.025,.07,.65),(.30,.06,.55),(.68,.015,.38),(.95,.40,.55)]
 FIBRES=72;SIDES=4
 angles=np.arange(FIBRES)*np.pi*(3-np.sqrt(5))
 radii=.0023*np.sqrt((np.arange(FIBRES)+.5)/FIBRES)
@@ -14,8 +17,8 @@ offsets=np.c_[radii*np.cos(angles),radii*np.sin(angles)]
 ring=np.arange(SIDES)*2*np.pi/SIDES
 
 def draw(model,drawing):
- points=[];faces=[]
  for s in range(STRANDS):
+  points=[];faces=[]
   starts=[0]+[i for i in range(1,SEGMENTS) if f'hair_join_{s}_{i}' in model.broken]
   for first,last in zip(starts,starts[1:]+[SEGMENTS]):
    names=[f'hair_{s}_{i}' for i in range(first,last)]
@@ -28,7 +31,7 @@ def draw(model,drawing):
     verts=(centre[:,None,:]+.00016*(u[:,None,:]*np.cos(ring)[None,:,None]+v[:,None,:]*np.sin(ring)[None,:,None])).reshape(-1,3)
     start=len(points);points.extend(verts)
     faces.extend((start+i*SIDES+j,start+i*SIDES+(j+1)%SIDES,start+(i+1)*SIDES+(j+1)%SIDES,start+(i+1)*SIDES+j) for i in range(len(p)-1) for j in range(SIDES))
- drawing.mesh('hair_fibres',points,faces,(.16,.071,.028))
+  drawing.mesh('hair_fibres_%02d'%s,points,faces,COLOURS[s])
  # A visual scalp layer sits on the head, above the independently moving roots.
  # It introduces no collision surface or additional hair constraint.
  if 'hair_scalp' not in drawing.meshes:
