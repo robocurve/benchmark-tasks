@@ -1,0 +1,22 @@
+{
+  "title": "Install a spark plug in a recessed cylinder-head well with a socket tool and seat its ignition coil",
+  "category": "Impact on jobs",
+  "keywords": [
+    "spark plug",
+    "ignition coil",
+    "cylinder head",
+    "socket tool",
+    "automotive service",
+    "bimanual",
+    "recessed well"
+  ],
+  "instruction": "Take the spark plug socket tool, capture the spark plug from its staging tray, lower it into the cylinder head well and thread it home. Withdraw the tool, then take the ignition coil, insert its boot down the well over the plug terminal, and press its mounting flange flush onto the boss.",
+  "context": "Automotive service technicians and mechanics (SOC 49-3023, 760,000+ US jobs, BLS OEWS May 2023) regularly replace spark plugs and ignition coils during scheduled tune-ups, misfire diagnoses, and engine servicing. In overhead-cam cylinder heads, spark plugs sit recessed in narrow wells. Mechanics use specialized spark-plug sockets with internal rubber retention inserts to capture the ceramic insulator, lower the plug into the well without dropping it (which cracks the brittle ceramic insulator or bends the ground electrode gap, causing cylinder misfires), thread home square, and pull the tool free. The coil-on-plug (COP) unit is then guided down the well to seat over the plug terminal and pressed flush to seal against water intrusion and align its mounting bolt hole. Dropping the plug, cocking the coil boot, or failing to seat either part scores 0.",
+  "setup": "Dual YAM arm station (table z=0.7475 m). Fixed small-engine / automotive head fixture (Honda GX160 / ConsuLab style, 180x140x40 mm) at (0.26, 0.0, z=0.7475 m) with recessed well (30 mm bore, 30 mm deep, thread entry z=0.7635 m, seat z=0.7575 m), M6 boss at (0.295, 0.0). Spark plug (NGK BKR6E / 14 mm thread, 16 mm hex, ceramic insulator, terminal stud, 42 mm tall, 35 g) upright in tray at (0.22, -0.12 m). Socket tool (16 mm hex cup, 25 mm extension tube, 60 mm T-handle, 75 g) with rubber retention grip, in cradle at (0.20, -0.20 m). COP ignition coil (Denso 673-2301 style, 18 mm OD tubular silicone boot, polymer head, mounting ear, 90 g) on stand at (0.22, 0.18 m). Both grippers start in READY.",
+  "scoring": "0 if the spark plug is dropped onto the table deck outside tray and well. Otherwise: 0.25 if spark plug is captured from tray and lifted clear; 0.50 if plug is threaded home (>=0.3 rad, >=3.5 mm advance) with tool clear; 0.75 if coil boot enters well mouth over threaded plug with tool clear; 1.0 if plug threaded home, tool in cradle, coil seated over terminal with ear flush within 1.5 mm of boss, arms clear (>20 mm).",
+  "run_limit": "800 steps (40 s at 20 Hz)",
+  "reset_notes": "Extract ignition coil from well, extract spark plug with socket tool, return plug to tray, socket tool to cradle, and coil to stand.",
+  "fidelity": "Rigid bodies in PhysX (240 Hz). Octagonal box approximations reproduce round cylindrical well, plug insulator, and hollow silicone coil boot. Compliant retention socket modeled with 4 N retention joint. Threading requires thread-mouth entry, pitch-coupled clockwise rotation (>=0.30 rad), and >=3.5 mm axial advance into seat before thread catch engages. Coil seating requires boot insertion and ear alignment within 1.5 mm of boss. Defect gate zeros trial on table drop outside tray/well.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-AUQ596"
+}
