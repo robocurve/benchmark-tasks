@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "yam-sling-edge-guards"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = ["inspect-robots==1.0.0", "inspect-robots-yam==0.38.0", "yam-arena==0.1.0", "numpy>=1.26", "scipy>=1.11", "pillow>=10", "imageio[ffmpeg]"]
+
+[project.entry-points."inspect_robots.embodiments"]
+yam_sling_guards = "rdb_sling_guards.adapter:make_embodiment"
+
+[project.entry-points."inspect_robots.policies"]
+sling_guards_scripted = "rdb_sling_guards.adapter:make_scripted"
+
+[project.entry-points."inspect_robots.scorers"]
+sling_guards_score = "rdb_sling_guards.grading:make_scorer"
+
+[tool.setuptools.packages.find]
+include = ["rdb_sling_guards*"]
+
+[tool.setuptools.package-data]
+rdb_sling_guards = ["rigging.usda"]

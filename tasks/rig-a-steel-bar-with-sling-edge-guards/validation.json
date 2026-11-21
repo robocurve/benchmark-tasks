@@ -1,0 +1,988 @@
+{
+ "status": "Scripted demonstration 1.0 on two machines with byte-identical scorer traces; the five controls score as they must; Dream-1 0.0 in 6,000 steps.",
+ "seed": 0,
+ "object_jitter": 0,
+ "control_hz": 20,
+ "physics_hz": 240,
+ "max_steps": 6000,
+ "runs": {
+  "scripted": {
+   "score": 1.0,
+   "executed_steps": 2443,
+   "step_limit": 6000,
+   "elapsed_s": 4989.83,
+   "termination_reason": "success",
+   "variant": "full",
+   "result": "out/scripted-1/RESULT.json",
+   "grader_trace": "out/scripted-1/media/grader-trace.jsonl",
+   "videos": {
+    "overhead": "out/scripted-1/media/top_cam.mp4",
+    "side": "out/scripted-1/media/side_cam.mp4",
+    "low": "out/scripted-1/media/low_cam.mp4",
+    "combined": "out/scripted-1/demo.mp4"
+   },
+   "stills": [
+    "out/scripted-1/media/setup.png",
+    "out/scripted-1/media/end_top_cam.png",
+    "out/scripted-1/media/end_side_cam.png",
+    "out/scripted-1/media/end_low_cam.png"
+   ],
+   "inspect_robots": "1.0.0",
+   "yam_arena": "0.1.0",
+   "final_grade": {
+    "score": 1.0,
+    "why": "hooked, guarded, let go, and the test load bore only on the guards",
+    "seated": {
+     "TL": "guard_1",
+     "BL": "guard_2",
+     "TR": "guard_3",
+     "BR": "guard_4"
+    },
+    "horns": {
+     "L": true,
+     "R": true
+    },
+    "guards": {
+     "guard_1": {
+      "edge": "TL",
+      "corner_mm": 0.0,
+      "angle_deg": 0.0,
+      "along_mm": 0.88
+     },
+     "guard_2": {
+      "edge": "BL",
+      "corner_mm": 0.0,
+      "angle_deg": 0.0,
+      "along_mm": 0.98
+     },
+     "guard_3": {
+      "edge": "TR",
+      "corner_mm": 0.0,
+      "angle_deg": 0.0,
+      "along_mm": 1.16
+     },
+     "guard_4": {
+      "edge": "BR",
+      "corner_mm": 0.0,
+      "angle_deg": 0.0,
+      "along_mm": 1.13
+     }
+    },
+    "test": "done",
+    "result": "passed",
+    "pull_n": 50.47,
+    "bare_peak_n": {
+     "TL": 0.0,
+     "BL": 0.0,
+     "TR": 0.0,
+     "BR": 0.0
+    },
+    "guard_low_n": {
+     "TL": 0.777,
+     "BL": 19.459,
+     "TR": 0.655,
+     "BR": 18.281
+    },
+    "hands_clear": true,
+    "under_bar": true,
+    "locked": null,
+    "success_ticks": 20
+   },
+   "timing_s": {
+    "magnets": 196.2,
+    "policy": 107.7,
+    "hoist_and_magnet_check": 13.1,
+    "simulate_and_render": 4788.6,
+    "measure": 40.1
+   },
+   "peaks": {
+    "left_arm_on_task_bodies_n": 61.57,
+    "right_arm_on_task_bodies_n": 61.91
+   },
+   "machine": "machine A: one NVIDIA A10 (24 GB), Ubuntu 22.04, headless; elapsed_s includes Isaac Sim start-up and scene creation",
+   "combined_video_sha256": "78e1430dda6a21d6b6d8ded10706bb41de885ad1dac5e81cce6e8e02127b6c2f",
+   "trace_sha256": [
+    "02062ade2d7260b74af679a7fc10c0291070a38e2f8a8401ec24791fca309585",
+    "02062ade2d7260b74af679a7fc10c0291070a38e2f8a8401ec24791fca309585"
+   ],
+   "repeat": "out/scripted-2/RESULT.json",
+   "repeat_score": 1.0,
+   "repeat_executed_steps": 2443,
+   "repeat_trace_identical": true
+  },
+  "dream": {
+   "model": "dreamlabs/dream-1-beta",
+   "score": 0.0,
+   "executed_steps": 6000,
+   "step_limit": 6000,
+   "termination_reason": "max_steps",
+   "elapsed_s": 9515.03,
+   "action_requests": 249,
+   "request_cap": 300,
+   "capacity_waits": 0,
+   "capacity_wait_s": 0.0,
+   "what_it_did": "It placed no guard and hooked no fitting: at the end all four guards were where they started, and neither arm had touched the hook, a fitting, the sling or a guard (the scorer's arm-contact peaks are 0.0 N). In the video the arms move near the hook and the sling's ends early on, and later stay raised near the hook or back near their start. Most of its 125 action chunks took a second request after the Dream session had expired (90 expiries), hence 249 requests.",
+   "result": "out/dream/RESULT.json",
+   "machine": "machine A: one NVIDIA A10 (24 GB), Ubuntu 22.04, headless; its GPU shared with the final round's no_guards and top_only runs for the trial's first 1.5 h",
+   "combined_video": {
+    "path": "out/dream/model_run.mp4",
+    "width": 3840,
+    "height": 704,
+    "duration_s": 300.1,
+    "bytes": 11578112,
+    "sha256": "220ba072398fc1e6ee0e376dd9e18c89d65b36ca73bf87b1394832dec22f0d72"
+   },
+   "result_sha256": "d1e5d07f6a60b3201a0879ec507dd967b9fd64395a27039dd23375d08cc3c692",
+   "usage": "out/dream/DREAM_USAGE.json",
+   "usage_sha256": "4469b6845cccc1a38de9bd3d2598e5e95c73f39b2925a62ec6f5d4988825d5c1",
+   "list_price_estimate_usd": 0.332,
+   "action_chunks": 125,
+   "session_expiries": 90,
+   "dream_chunk_anchor": "executed_target_blend_v2",
+   "final_grade_why": "0 guard(s) seated, 0 fitting(s) hooked",
+   "arm_contact_peaks_n": {
+    "left": 0.0,
+    "right": 0.0
+   },
+   "trace": "out/dream/media/grader-trace.jsonl",
+   "action_trace": "out/dream/dream-action-trace.jsonl",
+   "input_frames": "out/dream/dream-input-rgb.zip",
+   "harness_sha256": {
+    "dream_audit.py": "0c2f5632db14093e3267fb723357aed8ec953adf1802633c573b52dd383efabe",
+    "run.py": "58e64ac89b637223f88f12cf3830371c810f7217a3e78c5021eb339f58ca6c67"
+   },
+   "earlier_trial": "An earlier trial on the same code stopped at step 2,336 of 6,000 when Dream-1 refused a request at capacity (DA-2000 pool_full): score 0.0 at that step, 104 of 300 requests used. The runner now waits for a free seat with physics paused.",
+   "recorded_hashes_match_final": true
+  }
+ },
+ "controls": {
+  "no_guards": {
+   "score": 0.0,
+   "executed_steps": 1462,
+   "step_limit": 6000,
+   "elapsed_s": 2757.82,
+   "termination_reason": "test_done",
+   "variant": "no_guards",
+   "result": "out/control-no-guards/RESULT.json",
+   "grader_trace": "out/control-no-guards/media/grader-trace.jsonl",
+   "videos": {
+    "overhead": "out/control-no-guards/media/top_cam.mp4",
+    "side": "out/control-no-guards/media/side_cam.mp4",
+    "low": "out/control-no-guards/media/low_cam.mp4"
+   },
+   "stills": [
+    "out/control-no-guards/media/setup.png",
+    "out/control-no-guards/media/end_top_cam.png",
+    "out/control-no-guards/media/end_side_cam.png",
+    "out/control-no-guards/media/end_low_cam.png"
+   ],
+   "inspect_robots": "1.0.0",
+   "yam_arena": "0.1.0",
+   "final_grade": {
+    "score": 0.0,
+    "why": "the load was taken with an edge unguarded",
+    "seated": {
+     "TL": null,
+     "BL": null,
+     "TR": null,
+     "BR": null
+    },
+    "horns": {
+     "L": true,
+     "R": true
+    },
+    "guards": {
+     "guard_1": {
+      "edge": "BL",
+      "corner_mm": 133.27,
+      "angle_deg": 135.0,
+      "along_mm": 120.04
+     },
+     "guard_2": {
+      "edge": "BL",
+      "corner_mm": 211.7,
+      "angle_deg": 0.0,
+      "along_mm": 120.0
+     },
+     "guard_3": {
+      "edge": "BR",
+      "corner_mm": 133.24,
+      "angle_deg": 135.0,
+      "along_mm": 120.02
+     },
+     "guard_4": {
+      "edge": "BR",
+      "corner_mm": 211.7,
+      "angle_deg": 0.0,
+      "along_mm": 120.0
+     }
+    },
+    "test": "done",
+    "result": "the load was taken with an edge unguarded",
+    "pull_n": 49.62,
+    "bare_peak_n": {
+     "TL": 0.814,
+     "BL": 35.469,
+     "TR": 0.835,
+     "BR": 30.3
+    },
+    "guard_low_n": {
+     "TL": 0.0,
+     "BL": 0.0,
+     "TR": 0.0,
+     "BR": 0.0
+    },
+    "hands_clear": true,
+    "under_bar": true,
+    "locked": "the load was taken with an edge unguarded",
+    "success_ticks": 0
+   },
+   "timing_s": {
+    "magnets": 0.6,
+    "policy": 105.4,
+    "hoist_and_magnet_check": 9.7,
+    "simulate_and_render": 2574.5,
+    "measure": 18.2
+   },
+   "peaks": {
+    "left_arm_on_task_bodies_n": 61.3,
+    "right_arm_on_task_bodies_n": 61.84
+   },
+   "machine": "machine A: one NVIDIA A10 (24 GB), Ubuntu 22.04, headless; elapsed_s includes Isaac Sim start-up and scene creation",
+   "trace_sha256": "cc160b7cc4190d5fc4ce7256650844ab3c3193071e51bad4645b907c5122bea1"
+  },
+  "top_only": {
+   "score": 0.0,
+   "executed_steps": 1758,
+   "step_limit": 6000,
+   "elapsed_s": 3961.42,
+   "termination_reason": "test_done",
+   "variant": "top_only",
+   "result": "out/control-top-only/RESULT.json",
+   "grader_trace": "out/control-top-only/media/grader-trace.jsonl",
+   "videos": {
+    "overhead": "out/control-top-only/media/top_cam.mp4",
+    "side": "out/control-top-only/media/side_cam.mp4",
+    "low": "out/control-top-only/media/low_cam.mp4"
+   },
+   "stills": [
+    "out/control-top-only/media/setup.png",
+    "out/control-top-only/media/end_top_cam.png",
+    "out/control-top-only/media/end_side_cam.png",
+    "out/control-top-only/media/end_low_cam.png"
+   ],
+   "inspect_robots": "1.0.0",
+   "yam_arena": "0.1.0",
+   "final_grade": {
+    "score": 0.0,
+    "why": "the load was taken with an edge unguarded",
+    "seated": {
+     "TL": "guard_1",
+     "BL": null,
+     "TR": "guard_3",
+     "BR": null
+    },
+    "horns": {
+     "L": true,
+     "R": true
+    },
+    "guards": {
+     "guard_1": {
+      "edge": "TL",
+      "corner_mm": 0.0,
+      "angle_deg": 0.0,
+      "along_mm": 0.66
+     },
+     "guard_2": {
+      "edge": "BL",
+      "corner_mm": 212.21,
+      "angle_deg": 0.03,
+      "along_mm": 120.0
+     },
+     "guard_3": {
+      "edge": "TR",
+      "corner_mm": 0.0,
+      "angle_deg": 0.0,
+      "along_mm": 1.23
+     },
+     "guard_4": {
+      "edge": "BR",
+      "corner_mm": 212.2,
+      "angle_deg": 0.01,
+      "along_mm": 120.0
+     }
+    },
+    "test": "done",
+    "result": "the load was taken with an edge unguarded",
+    "pull_n": 50.1,
+    "bare_peak_n": {
+     "TL": 0.0,
+     "BL": 271.619,
+     "TR": 0.0,
+     "BR": 290.549
+    },
+    "guard_low_n": {
+     "TL": 1.436,
+     "BL": 0.0,
+     "TR": 2.424,
+     "BR": 0.0
+    },
+    "hands_clear": true,
+    "under_bar": true,
+    "locked": "the load was taken with an edge unguarded",
+    "success_ticks": 0
+   },
+   "timing_s": {
+    "magnets": 164.5,
+    "policy": 106.9,
+    "hoist_and_magnet_check": 12.9,
+    "simulate_and_render": 3760.5,
+    "measure": 33.0
+   },
+   "peaks": {
+    "left_arm_on_task_bodies_n": 61.52,
+    "right_arm_on_task_bodies_n": 61.67
+   },
+   "machine": "machine A: one NVIDIA A10 (24 GB), Ubuntu 22.04, headless; elapsed_s includes Isaac Sim start-up and scene creation",
+   "trace_sha256": "1dddae04e51879b8cc60b2d21f6a851d9d93aec1c3b44fcc9a9a041ef56543aa"
+  },
+  "guards_only": {
+   "score": 0.4,
+   "executed_steps": 1400,
+   "step_limit": 1400,
+   "elapsed_s": 1545.23,
+   "termination_reason": "max_steps",
+   "variant": "guards_only",
+   "result": "out/control-guards-only/RESULT.json",
+   "grader_trace": "out/control-guards-only/media/grader-trace.jsonl",
+   "videos": {
+    "overhead": "out/control-guards-only/media/top_cam.mp4",
+    "side": "out/control-guards-only/media/side_cam.mp4",
+    "low": "out/control-guards-only/media/low_cam.mp4"
+   },
+   "stills": [
+    "out/control-guards-only/media/setup.png",
+    "out/control-guards-only/media/end_top_cam.png",
+    "out/control-guards-only/media/end_side_cam.png",
+    "out/control-guards-only/media/end_low_cam.png"
+   ],
+   "inspect_robots": "1.0.0",
+   "yam_arena": "0.1.0",
+   "final_grade": {
+    "score": 0.4,
+    "why": "4 guard(s) seated, 0 fitting(s) hooked",
+    "seated": {
+     "TL": "guard_1",
+     "BL": "guard_2",
+     "TR": "guard_3",
+     "BR": "guard_4"
+    },
+    "horns": {
+     "L": false,
+     "R": false
+    },
+    "guards": {
+     "guard_1": {
+      "edge": "TL",
+      "corner_mm": 0.0,
+      "angle_deg": 0.0,
+      "along_mm": 0.88
+     },
+     "guard_2": {
+      "edge": "BL",
+      "corner_mm": 0.0,
+      "angle_deg": 0.0,
+      "along_mm": 0.98
+     },
+     "guard_3": {
+      "edge": "TR",
+      "corner_mm": 0.0,
+      "angle_deg": 0.0,
+      "along_mm": 1.16
+     },
+     "guard_4": {
+      "edge": "BR",
+      "corner_mm": 0.0,
+      "angle_deg": 0.0,
+      "along_mm": 1.13
+     }
+    },
+    "test": "waiting",
+    "result": null,
+    "pull_n": 0.0,
+    "bare_peak_n": {
+     "TL": 0.0,
+     "BL": 0.0,
+     "TR": 0.0,
+     "BR": 0.0
+    },
+    "guard_low_n": {
+     "TL": null,
+     "BL": null,
+     "TR": null,
+     "BR": null
+    },
+    "hands_clear": true,
+    "under_bar": true,
+    "locked": null,
+    "success_ticks": 0
+   },
+   "timing_s": {
+    "magnets": 14.3,
+    "policy": 3.0,
+    "hoist_and_magnet_check": 0.6,
+    "simulate_and_render": 1503.6,
+    "measure": 3.4
+   },
+   "peaks": {
+    "left_arm_on_task_bodies_n": 49.27,
+    "right_arm_on_task_bodies_n": 50.49
+   },
+   "machine": "machine B: one NVIDIA A10 (24 GB), Ubuntu 22.04, headless; elapsed_s includes Isaac Sim start-up and scene creation",
+   "trace_sha256": "9458c9173a2a40ff73ce47fa494fc82be17ea34e005b308149f079a7753093ad"
+  },
+  "not_past_latch": {
+   "score": 0.4,
+   "executed_steps": 1800,
+   "step_limit": 1800,
+   "elapsed_s": 2109.34,
+   "termination_reason": "max_steps",
+   "variant": "not_past_latch",
+   "result": "out/control-not-past-latch/RESULT.json",
+   "grader_trace": "out/control-not-past-latch/media/grader-trace.jsonl",
+   "videos": {
+    "overhead": "out/control-not-past-latch/media/top_cam.mp4",
+    "side": "out/control-not-past-latch/media/side_cam.mp4",
+    "low": "out/control-not-past-latch/media/low_cam.mp4"
+   },
+   "stills": [
+    "out/control-not-past-latch/media/setup.png",
+    "out/control-not-past-latch/media/end_top_cam.png",
+    "out/control-not-past-latch/media/end_side_cam.png",
+    "out/control-not-past-latch/media/end_low_cam.png"
+   ],
+   "inspect_robots": "1.0.0",
+   "yam_arena": "0.1.0",
+   "final_grade": {
+    "score": 0.4,
+    "why": "4 guard(s) seated, 0 fitting(s) hooked",
+    "seated": {
+     "TL": "guard_1",
+     "BL": "guard_2",
+     "TR": "guard_3",
+     "BR": "guard_4"
+    },
+    "horns": {
+     "L": false,
+     "R": false
+    },
+    "guards": {
+     "guard_1": {
+      "edge": "TL",
+      "corner_mm": 0.0,
+      "angle_deg": 0.0,
+      "along_mm": 0.88
+     },
+     "guard_2": {
+      "edge": "BL",
+      "corner_mm": 0.0,
+      "angle_deg": 0.0,
+      "along_mm": 0.98
+     },
+     "guard_3": {
+      "edge": "TR",
+      "corner_mm": 0.0,
+      "angle_deg": 0.0,
+      "along_mm": 1.16
+     },
+     "guard_4": {
+      "edge": "BR",
+      "corner_mm": 0.0,
+      "angle_deg": 0.0,
+      "along_mm": 1.13
+     }
+    },
+    "test": "waiting",
+    "result": null,
+    "pull_n": 1.01,
+    "bare_peak_n": {
+     "TL": 0.0,
+     "BL": 0.0,
+     "TR": 0.0,
+     "BR": 0.0
+    },
+    "guard_low_n": {
+     "TL": null,
+     "BL": null,
+     "TR": null,
+     "BR": null
+    },
+    "hands_clear": false,
+    "under_bar": true,
+    "locked": null,
+    "success_ticks": 0
+   },
+   "timing_s": {
+    "magnets": 32.4,
+    "policy": 53.7,
+    "hoist_and_magnet_check": 1.9,
+    "simulate_and_render": 2012.5,
+    "measure": 5.4
+   },
+   "peaks": {
+    "left_arm_on_task_bodies_n": 51.01,
+    "right_arm_on_task_bodies_n": 61.91
+   },
+   "machine": "machine B: one NVIDIA A10 (24 GB), Ubuntu 22.04, headless; elapsed_s includes Isaac Sim start-up and scene creation",
+   "trace_sha256": "e4fa94cb7b84dc587a5fe95230dab24593bdc2be3a4263645a63709f96d03b1e"
+  },
+  "one_fitting": {
+   "score": 0.6,
+   "executed_steps": 2000,
+   "step_limit": 2000,
+   "elapsed_s": 2210.23,
+   "termination_reason": "max_steps",
+   "variant": "one_fitting",
+   "result": "out/control-one-fitting/RESULT.json",
+   "grader_trace": "out/control-one-fitting/media/grader-trace.jsonl",
+   "videos": {
+    "overhead": "out/control-one-fitting/media/top_cam.mp4",
+    "side": "out/control-one-fitting/media/side_cam.mp4",
+    "low": "out/control-one-fitting/media/low_cam.mp4"
+   },
+   "stills": [
+    "out/control-one-fitting/media/setup.png",
+    "out/control-one-fitting/media/end_top_cam.png",
+    "out/control-one-fitting/media/end_side_cam.png",
+    "out/control-one-fitting/media/end_low_cam.png"
+   ],
+   "inspect_robots": "1.0.0",
+   "yam_arena": "0.1.0",
+   "final_grade": {
+    "score": 0.6,
+    "why": "4 guard(s) seated, 1 fitting(s) hooked",
+    "seated": {
+     "TL": "guard_1",
+     "BL": "guard_2",
+     "TR": "guard_3",
+     "BR": "guard_4"
+    },
+    "horns": {
+     "L": false,
+     "R": true
+    },
+    "guards": {
+     "guard_1": {
+      "edge": "TL",
+      "corner_mm": 0.0,
+      "angle_deg": 0.0,
+      "along_mm": 0.88
+     },
+     "guard_2": {
+      "edge": "BL",
+      "corner_mm": 0.0,
+      "angle_deg": 0.0,
+      "along_mm": 0.98
+     },
+     "guard_3": {
+      "edge": "TR",
+      "corner_mm": 0.0,
+      "angle_deg": 0.0,
+      "along_mm": 1.16
+     },
+     "guard_4": {
+      "edge": "BR",
+      "corner_mm": 0.0,
+      "angle_deg": 0.0,
+      "along_mm": 1.13
+     }
+    },
+    "test": "waiting",
+    "result": null,
+    "pull_n": 4.09,
+    "bare_peak_n": {
+     "TL": 0.0,
+     "BL": 0.0,
+     "TR": 0.0,
+     "BR": 0.0
+    },
+    "guard_low_n": {
+     "TL": null,
+     "BL": null,
+     "TR": null,
+     "BR": null
+    },
+    "hands_clear": true,
+    "under_bar": true,
+    "locked": null,
+    "success_ticks": 0
+   },
+   "timing_s": {
+    "magnets": 22.3,
+    "policy": 57.0,
+    "hoist_and_magnet_check": 0.9,
+    "simulate_and_render": 2108.4,
+    "measure": 5.0
+   },
+   "peaks": {
+    "left_arm_on_task_bodies_n": 50.86,
+    "right_arm_on_task_bodies_n": 61.91
+   },
+   "machine": "machine B: one NVIDIA A10 (24 GB), Ubuntu 22.04, headless; elapsed_s includes Isaac Sim start-up and scene creation",
+   "trace_sha256": "889d704b69097c0efa48be69db27a21b5578e26b854efab9bba34aba4477764a"
+  }
+ },
+ "recorded_hashes": {
+  "scene_sha256": "ddbd519655790c60196a8cc3a9dba4db4cca99e264fa78bef6a2adccc2c659ce",
+  "layout_sha256": "10d0fad51fefbf048a9e7dfd77785adc5b74854e384dcafa87c1ea1ca3b46cdc",
+  "hook_sha256": "7ac0f67eacc27ad8d374ec46d3812030892ca3545b3d99b7717318f59b7558ec",
+  "magnet_sha256": "56a860edfc8f81d52543ca556ee08a6bbf2618d12a5a8655094a2457a9afed70",
+  "grader_sha256": "6981047ab7f906d4f113eb0693ad0ae07c369e28fdffa74fcde0ff9058845e5a",
+  "adapter_sha256": "d100d1f7f5576b6073a4cd7c681091691d43226d92e6dd5eacfeb314a2f4f32b",
+  "scripted_sha256": "29e0555cc7ea9b747ea0a25ff13072cdf2717db3d210549b1a42a76a87aa6361",
+  "asset_sha256": "8057a87a911c5bbcc6edddf42568a76338f73dc9934b2f7ab258ce66b859f1c1"
+ },
+ "earlier_rounds": [
+  {
+   "note": "Round 1, superseded: the code before the hold rule (grading.py, layout.py) and before the review fixes; out/superseded-before-hold-rule/. The same scores as the final round; its no_guards control began its hold on a one-step 55 N reading, which led to the hold rule. The one_fitting control ran on both machines with byte-identical traces.",
+   "runs": [
+    {
+     "result": "out/superseded-before-hold-rule/scripted-1/RESULT.json",
+     "variant": "full",
+     "machine": "machine A",
+     "score": 1.0,
+     "executed_steps": 2443,
+     "termination_reason": "success",
+     "why": "hooked, guarded, let go, and the test load bore only on the guards",
+     "test": "done",
+     "test_result": "passed",
+     "trace_sha256": "02062ade2d7260b74af679a7fc10c0291070a38e2f8a8401ec24791fca309585",
+     "hashes": {
+      "scene_sha256": "ddbd519655790c60196a8cc3a9dba4db4cca99e264fa78bef6a2adccc2c659ce",
+      "layout_sha256": "6733ea6946c63e4ce811dfcdfc10cfc1784537fd54d705d093ac019fe7bae3f5",
+      "hook_sha256": "7a9148a886417a461d819d8ce29326196c8f3142a321c0ed0e5c050d0d27ed1f",
+      "magnet_sha256": "56a860edfc8f81d52543ca556ee08a6bbf2618d12a5a8655094a2457a9afed70",
+      "grader_sha256": "0bd6996baeff3a2232a69f3d991a0603c92ca7ad2c112b9d8c0bb7f42afae183",
+      "adapter_sha256": "e3c2fe9e5fa640e63c5609e6c817dd9b7333eedf2a12e76aec63f59071edfea8",
+      "scripted_sha256": "29e0555cc7ea9b747ea0a25ff13072cdf2717db3d210549b1a42a76a87aa6361",
+      "asset_sha256": "8057a87a911c5bbcc6edddf42568a76338f73dc9934b2f7ab258ce66b859f1c1"
+     }
+    },
+    {
+     "result": "out/superseded-before-hold-rule/scripted-2/RESULT.json",
+     "variant": "full",
+     "machine": "machine B",
+     "score": 1.0,
+     "executed_steps": 2443,
+     "termination_reason": "success",
+     "why": "hooked, guarded, let go, and the test load bore only on the guards",
+     "test": "done",
+     "test_result": "passed",
+     "trace_sha256": "02062ade2d7260b74af679a7fc10c0291070a38e2f8a8401ec24791fca309585",
+     "hashes": {
+      "scene_sha256": "ddbd519655790c60196a8cc3a9dba4db4cca99e264fa78bef6a2adccc2c659ce",
+      "layout_sha256": "6733ea6946c63e4ce811dfcdfc10cfc1784537fd54d705d093ac019fe7bae3f5",
+      "hook_sha256": "7a9148a886417a461d819d8ce29326196c8f3142a321c0ed0e5c050d0d27ed1f",
+      "magnet_sha256": "56a860edfc8f81d52543ca556ee08a6bbf2618d12a5a8655094a2457a9afed70",
+      "grader_sha256": "0bd6996baeff3a2232a69f3d991a0603c92ca7ad2c112b9d8c0bb7f42afae183",
+      "adapter_sha256": "e3c2fe9e5fa640e63c5609e6c817dd9b7333eedf2a12e76aec63f59071edfea8",
+      "scripted_sha256": "29e0555cc7ea9b747ea0a25ff13072cdf2717db3d210549b1a42a76a87aa6361",
+      "asset_sha256": "8057a87a911c5bbcc6edddf42568a76338f73dc9934b2f7ab258ce66b859f1c1"
+     }
+    },
+    {
+     "result": "out/superseded-before-hold-rule/control-no-guards/RESULT.json",
+     "variant": "no_guards",
+     "machine": "machine A",
+     "score": 0.0,
+     "executed_steps": 1276,
+     "termination_reason": "test_done",
+     "why": "the load was taken with an edge unguarded",
+     "test": "done",
+     "test_result": "the load was taken with an edge unguarded",
+     "trace_sha256": "75fb5c431d85d582a63025094f02bafb23e499f050933a067fa07c2e9c5d1c6a",
+     "hashes": {
+      "scene_sha256": "ddbd519655790c60196a8cc3a9dba4db4cca99e264fa78bef6a2adccc2c659ce",
+      "layout_sha256": "6733ea6946c63e4ce811dfcdfc10cfc1784537fd54d705d093ac019fe7bae3f5",
+      "hook_sha256": "7a9148a886417a461d819d8ce29326196c8f3142a321c0ed0e5c050d0d27ed1f",
+      "magnet_sha256": "56a860edfc8f81d52543ca556ee08a6bbf2618d12a5a8655094a2457a9afed70",
+      "grader_sha256": "0bd6996baeff3a2232a69f3d991a0603c92ca7ad2c112b9d8c0bb7f42afae183",
+      "adapter_sha256": "e3c2fe9e5fa640e63c5609e6c817dd9b7333eedf2a12e76aec63f59071edfea8",
+      "scripted_sha256": "29e0555cc7ea9b747ea0a25ff13072cdf2717db3d210549b1a42a76a87aa6361",
+      "asset_sha256": "8057a87a911c5bbcc6edddf42568a76338f73dc9934b2f7ab258ce66b859f1c1"
+     }
+    },
+    {
+     "result": "out/superseded-before-hold-rule/control-top-only/RESULT.json",
+     "variant": "top_only",
+     "machine": "machine A",
+     "score": 0.0,
+     "executed_steps": 1758,
+     "termination_reason": "test_done",
+     "why": "the load was taken with an edge unguarded",
+     "test": "done",
+     "test_result": "the load was taken with an edge unguarded",
+     "trace_sha256": "1dddae04e51879b8cc60b2d21f6a851d9d93aec1c3b44fcc9a9a041ef56543aa",
+     "hashes": {
+      "scene_sha256": "ddbd519655790c60196a8cc3a9dba4db4cca99e264fa78bef6a2adccc2c659ce",
+      "layout_sha256": "6733ea6946c63e4ce811dfcdfc10cfc1784537fd54d705d093ac019fe7bae3f5",
+      "hook_sha256": "7a9148a886417a461d819d8ce29326196c8f3142a321c0ed0e5c050d0d27ed1f",
+      "magnet_sha256": "56a860edfc8f81d52543ca556ee08a6bbf2618d12a5a8655094a2457a9afed70",
+      "grader_sha256": "0bd6996baeff3a2232a69f3d991a0603c92ca7ad2c112b9d8c0bb7f42afae183",
+      "adapter_sha256": "e3c2fe9e5fa640e63c5609e6c817dd9b7333eedf2a12e76aec63f59071edfea8",
+      "scripted_sha256": "29e0555cc7ea9b747ea0a25ff13072cdf2717db3d210549b1a42a76a87aa6361",
+      "asset_sha256": "8057a87a911c5bbcc6edddf42568a76338f73dc9934b2f7ab258ce66b859f1c1"
+     }
+    },
+    {
+     "result": "out/superseded-before-hold-rule/control-guards-only/RESULT.json",
+     "variant": "guards_only",
+     "machine": "machine B",
+     "score": 0.4,
+     "executed_steps": 1400,
+     "termination_reason": "max_steps",
+     "why": "4 guard(s) seated, 0 fitting(s) hooked",
+     "test": "waiting",
+     "test_result": null,
+     "trace_sha256": "9458c9173a2a40ff73ce47fa494fc82be17ea34e005b308149f079a7753093ad",
+     "hashes": {
+      "scene_sha256": "ddbd519655790c60196a8cc3a9dba4db4cca99e264fa78bef6a2adccc2c659ce",
+      "layout_sha256": "6733ea6946c63e4ce811dfcdfc10cfc1784537fd54d705d093ac019fe7bae3f5",
+      "hook_sha256": "7a9148a886417a461d819d8ce29326196c8f3142a321c0ed0e5c050d0d27ed1f",
+      "magnet_sha256": "56a860edfc8f81d52543ca556ee08a6bbf2618d12a5a8655094a2457a9afed70",
+      "grader_sha256": "0bd6996baeff3a2232a69f3d991a0603c92ca7ad2c112b9d8c0bb7f42afae183",
+      "adapter_sha256": "e3c2fe9e5fa640e63c5609e6c817dd9b7333eedf2a12e76aec63f59071edfea8",
+      "scripted_sha256": "29e0555cc7ea9b747ea0a25ff13072cdf2717db3d210549b1a42a76a87aa6361",
+      "asset_sha256": "8057a87a911c5bbcc6edddf42568a76338f73dc9934b2f7ab258ce66b859f1c1"
+     }
+    },
+    {
+     "result": "out/superseded-before-hold-rule/control-not-past-latch/RESULT.json",
+     "variant": "not_past_latch",
+     "machine": "machine B",
+     "score": 0.4,
+     "executed_steps": 1800,
+     "termination_reason": "max_steps",
+     "why": "4 guard(s) seated, 0 fitting(s) hooked",
+     "test": "waiting",
+     "test_result": null,
+     "trace_sha256": "e4fa94cb7b84dc587a5fe95230dab24593bdc2be3a4263645a63709f96d03b1e",
+     "hashes": {
+      "scene_sha256": "ddbd519655790c60196a8cc3a9dba4db4cca99e264fa78bef6a2adccc2c659ce",
+      "layout_sha256": "6733ea6946c63e4ce811dfcdfc10cfc1784537fd54d705d093ac019fe7bae3f5",
+      "hook_sha256": "7a9148a886417a461d819d8ce29326196c8f3142a321c0ed0e5c050d0d27ed1f",
+      "magnet_sha256": "56a860edfc8f81d52543ca556ee08a6bbf2618d12a5a8655094a2457a9afed70",
+      "grader_sha256": "0bd6996baeff3a2232a69f3d991a0603c92ca7ad2c112b9d8c0bb7f42afae183",
+      "adapter_sha256": "e3c2fe9e5fa640e63c5609e6c817dd9b7333eedf2a12e76aec63f59071edfea8",
+      "scripted_sha256": "29e0555cc7ea9b747ea0a25ff13072cdf2717db3d210549b1a42a76a87aa6361",
+      "asset_sha256": "8057a87a911c5bbcc6edddf42568a76338f73dc9934b2f7ab258ce66b859f1c1"
+     }
+    },
+    {
+     "result": "out/superseded-before-hold-rule/control-one-fitting/RESULT.json",
+     "variant": "one_fitting",
+     "machine": "machine A",
+     "score": 0.6,
+     "executed_steps": 2000,
+     "termination_reason": "max_steps",
+     "why": "4 guard(s) seated, 1 fitting(s) hooked",
+     "test": "waiting",
+     "test_result": null,
+     "trace_sha256": "889d704b69097c0efa48be69db27a21b5578e26b854efab9bba34aba4477764a",
+     "hashes": {
+      "scene_sha256": "ddbd519655790c60196a8cc3a9dba4db4cca99e264fa78bef6a2adccc2c659ce",
+      "layout_sha256": "6733ea6946c63e4ce811dfcdfc10cfc1784537fd54d705d093ac019fe7bae3f5",
+      "hook_sha256": "7a9148a886417a461d819d8ce29326196c8f3142a321c0ed0e5c050d0d27ed1f",
+      "magnet_sha256": "56a860edfc8f81d52543ca556ee08a6bbf2618d12a5a8655094a2457a9afed70",
+      "grader_sha256": "0bd6996baeff3a2232a69f3d991a0603c92ca7ad2c112b9d8c0bb7f42afae183",
+      "adapter_sha256": "e3c2fe9e5fa640e63c5609e6c817dd9b7333eedf2a12e76aec63f59071edfea8",
+      "scripted_sha256": "29e0555cc7ea9b747ea0a25ff13072cdf2717db3d210549b1a42a76a87aa6361",
+      "asset_sha256": "8057a87a911c5bbcc6edddf42568a76338f73dc9934b2f7ab258ce66b859f1c1"
+     }
+    },
+    {
+     "result": "out/superseded-before-hold-rule/control-one-fitting-machine-b/RESULT.json",
+     "variant": "one_fitting",
+     "machine": "machine B",
+     "score": 0.6,
+     "executed_steps": 2000,
+     "termination_reason": "max_steps",
+     "why": "4 guard(s) seated, 1 fitting(s) hooked",
+     "test": "waiting",
+     "test_result": null,
+     "trace_sha256": "889d704b69097c0efa48be69db27a21b5578e26b854efab9bba34aba4477764a",
+     "hashes": {
+      "scene_sha256": "ddbd519655790c60196a8cc3a9dba4db4cca99e264fa78bef6a2adccc2c659ce",
+      "layout_sha256": "6733ea6946c63e4ce811dfcdfc10cfc1784537fd54d705d093ac019fe7bae3f5",
+      "hook_sha256": "7a9148a886417a461d819d8ce29326196c8f3142a321c0ed0e5c050d0d27ed1f",
+      "magnet_sha256": "56a860edfc8f81d52543ca556ee08a6bbf2618d12a5a8655094a2457a9afed70",
+      "grader_sha256": "0bd6996baeff3a2232a69f3d991a0603c92ca7ad2c112b9d8c0bb7f42afae183",
+      "adapter_sha256": "e3c2fe9e5fa640e63c5609e6c817dd9b7333eedf2a12e76aec63f59071edfea8",
+      "scripted_sha256": "29e0555cc7ea9b747ea0a25ff13072cdf2717db3d210549b1a42a76a87aa6361",
+      "asset_sha256": "8057a87a911c5bbcc6edddf42568a76338f73dc9934b2f7ab258ce66b859f1c1"
+     }
+    }
+   ]
+  },
+  {
+   "note": "Round 2, superseded: the hold rule in place, before the review fixes (a hooked fitting's apex bar within 14 mm of the hook's plane, the web in the hands-clear check, a hand back in the rigging during the test locks 0, a restarted hold reads its own last second, a nonfinite force reading locks 0, the Dream-1 request cap ends the trial instead of failing it, the low review camera); out/superseded-before-review-fixes/. Every scorer trace is byte-identical to the final round's.",
+   "runs": [
+    {
+     "result": "out/superseded-before-review-fixes/scripted-1/RESULT.json",
+     "variant": "full",
+     "machine": "machine A",
+     "score": 1.0,
+     "executed_steps": 2443,
+     "termination_reason": "success",
+     "why": "hooked, guarded, let go, and the test load bore only on the guards",
+     "test": "done",
+     "test_result": "passed",
+     "trace_sha256": "02062ade2d7260b74af679a7fc10c0291070a38e2f8a8401ec24791fca309585",
+     "hashes": {
+      "scene_sha256": "ddbd519655790c60196a8cc3a9dba4db4cca99e264fa78bef6a2adccc2c659ce",
+      "layout_sha256": "0140335274bf723b0958568a56c8c5375576b41c44ba03358a32685ed5aafbff",
+      "hook_sha256": "7a9148a886417a461d819d8ce29326196c8f3142a321c0ed0e5c050d0d27ed1f",
+      "magnet_sha256": "56a860edfc8f81d52543ca556ee08a6bbf2618d12a5a8655094a2457a9afed70",
+      "grader_sha256": "fdfd3b59f9921fd17344db3c8fe1f8537472c87344a907762e4e2eccd4555461",
+      "adapter_sha256": "e3c2fe9e5fa640e63c5609e6c817dd9b7333eedf2a12e76aec63f59071edfea8",
+      "scripted_sha256": "29e0555cc7ea9b747ea0a25ff13072cdf2717db3d210549b1a42a76a87aa6361",
+      "asset_sha256": "8057a87a911c5bbcc6edddf42568a76338f73dc9934b2f7ab258ce66b859f1c1"
+     }
+    },
+    {
+     "result": "out/superseded-before-review-fixes/scripted-2/RESULT.json",
+     "variant": "full",
+     "machine": "machine B",
+     "score": 1.0,
+     "executed_steps": 2443,
+     "termination_reason": "success",
+     "why": "hooked, guarded, let go, and the test load bore only on the guards",
+     "test": "done",
+     "test_result": "passed",
+     "trace_sha256": "02062ade2d7260b74af679a7fc10c0291070a38e2f8a8401ec24791fca309585",
+     "hashes": {
+      "scene_sha256": "ddbd519655790c60196a8cc3a9dba4db4cca99e264fa78bef6a2adccc2c659ce",
+      "layout_sha256": "0140335274bf723b0958568a56c8c5375576b41c44ba03358a32685ed5aafbff",
+      "hook_sha256": "7a9148a886417a461d819d8ce29326196c8f3142a321c0ed0e5c050d0d27ed1f",
+      "magnet_sha256": "56a860edfc8f81d52543ca556ee08a6bbf2618d12a5a8655094a2457a9afed70",
+      "grader_sha256": "fdfd3b59f9921fd17344db3c8fe1f8537472c87344a907762e4e2eccd4555461",
+      "adapter_sha256": "e3c2fe9e5fa640e63c5609e6c817dd9b7333eedf2a12e76aec63f59071edfea8",
+      "scripted_sha256": "29e0555cc7ea9b747ea0a25ff13072cdf2717db3d210549b1a42a76a87aa6361",
+      "asset_sha256": "8057a87a911c5bbcc6edddf42568a76338f73dc9934b2f7ab258ce66b859f1c1"
+     }
+    },
+    {
+     "result": "out/superseded-before-review-fixes/control-no-guards/RESULT.json",
+     "variant": "no_guards",
+     "machine": "machine A",
+     "score": 0.0,
+     "executed_steps": 1462,
+     "termination_reason": "test_done",
+     "why": "the load was taken with an edge unguarded",
+     "test": "done",
+     "test_result": "the load was taken with an edge unguarded",
+     "trace_sha256": "cc160b7cc4190d5fc4ce7256650844ab3c3193071e51bad4645b907c5122bea1",
+     "hashes": {
+      "scene_sha256": "ddbd519655790c60196a8cc3a9dba4db4cca99e264fa78bef6a2adccc2c659ce",
+      "layout_sha256": "0140335274bf723b0958568a56c8c5375576b41c44ba03358a32685ed5aafbff",
+      "hook_sha256": "7a9148a886417a461d819d8ce29326196c8f3142a321c0ed0e5c050d0d27ed1f",
+      "magnet_sha256": "56a860edfc8f81d52543ca556ee08a6bbf2618d12a5a8655094a2457a9afed70",
+      "grader_sha256": "fdfd3b59f9921fd17344db3c8fe1f8537472c87344a907762e4e2eccd4555461",
+      "adapter_sha256": "e3c2fe9e5fa640e63c5609e6c817dd9b7333eedf2a12e76aec63f59071edfea8",
+      "scripted_sha256": "29e0555cc7ea9b747ea0a25ff13072cdf2717db3d210549b1a42a76a87aa6361",
+      "asset_sha256": "8057a87a911c5bbcc6edddf42568a76338f73dc9934b2f7ab258ce66b859f1c1"
+     }
+    },
+    {
+     "result": "out/superseded-before-review-fixes/control-top-only/RESULT.json",
+     "variant": "top_only",
+     "machine": "machine A",
+     "score": 0.0,
+     "executed_steps": 1758,
+     "termination_reason": "test_done",
+     "why": "the load was taken with an edge unguarded",
+     "test": "done",
+     "test_result": "the load was taken with an edge unguarded",
+     "trace_sha256": "1dddae04e51879b8cc60b2d21f6a851d9d93aec1c3b44fcc9a9a041ef56543aa",
+     "hashes": {
+      "scene_sha256": "ddbd519655790c60196a8cc3a9dba4db4cca99e264fa78bef6a2adccc2c659ce",
+      "layout_sha256": "0140335274bf723b0958568a56c8c5375576b41c44ba03358a32685ed5aafbff",
+      "hook_sha256": "7a9148a886417a461d819d8ce29326196c8f3142a321c0ed0e5c050d0d27ed1f",
+      "magnet_sha256": "56a860edfc8f81d52543ca556ee08a6bbf2618d12a5a8655094a2457a9afed70",
+      "grader_sha256": "fdfd3b59f9921fd17344db3c8fe1f8537472c87344a907762e4e2eccd4555461",
+      "adapter_sha256": "e3c2fe9e5fa640e63c5609e6c817dd9b7333eedf2a12e76aec63f59071edfea8",
+      "scripted_sha256": "29e0555cc7ea9b747ea0a25ff13072cdf2717db3d210549b1a42a76a87aa6361",
+      "asset_sha256": "8057a87a911c5bbcc6edddf42568a76338f73dc9934b2f7ab258ce66b859f1c1"
+     }
+    },
+    {
+     "result": "out/superseded-before-review-fixes/control-guards-only/RESULT.json",
+     "variant": "guards_only",
+     "machine": "machine B",
+     "score": 0.4,
+     "executed_steps": 1400,
+     "termination_reason": "max_steps",
+     "why": "4 guard(s) seated, 0 fitting(s) hooked",
+     "test": "waiting",
+     "test_result": null,
+     "trace_sha256": "9458c9173a2a40ff73ce47fa494fc82be17ea34e005b308149f079a7753093ad",
+     "hashes": {
+      "scene_sha256": "ddbd519655790c60196a8cc3a9dba4db4cca99e264fa78bef6a2adccc2c659ce",
+      "layout_sha256": "0140335274bf723b0958568a56c8c5375576b41c44ba03358a32685ed5aafbff",
+      "hook_sha256": "7a9148a886417a461d819d8ce29326196c8f3142a321c0ed0e5c050d0d27ed1f",
+      "magnet_sha256": "56a860edfc8f81d52543ca556ee08a6bbf2618d12a5a8655094a2457a9afed70",
+      "grader_sha256": "fdfd3b59f9921fd17344db3c8fe1f8537472c87344a907762e4e2eccd4555461",
+      "adapter_sha256": "e3c2fe9e5fa640e63c5609e6c817dd9b7333eedf2a12e76aec63f59071edfea8",
+      "scripted_sha256": "29e0555cc7ea9b747ea0a25ff13072cdf2717db3d210549b1a42a76a87aa6361",
+      "asset_sha256": "8057a87a911c5bbcc6edddf42568a76338f73dc9934b2f7ab258ce66b859f1c1"
+     }
+    },
+    {
+     "result": "out/superseded-before-review-fixes/control-not-past-latch/RESULT.json",
+     "variant": "not_past_latch",
+     "machine": "machine B",
+     "score": 0.4,
+     "executed_steps": 1800,
+     "termination_reason": "max_steps",
+     "why": "4 guard(s) seated, 0 fitting(s) hooked",
+     "test": "waiting",
+     "test_result": null,
+     "trace_sha256": "e4fa94cb7b84dc587a5fe95230dab24593bdc2be3a4263645a63709f96d03b1e",
+     "hashes": {
+      "scene_sha256": "ddbd519655790c60196a8cc3a9dba4db4cca99e264fa78bef6a2adccc2c659ce",
+      "layout_sha256": "0140335274bf723b0958568a56c8c5375576b41c44ba03358a32685ed5aafbff",
+      "hook_sha256": "7a9148a886417a461d819d8ce29326196c8f3142a321c0ed0e5c050d0d27ed1f",
+      "magnet_sha256": "56a860edfc8f81d52543ca556ee08a6bbf2618d12a5a8655094a2457a9afed70",
+      "grader_sha256": "fdfd3b59f9921fd17344db3c8fe1f8537472c87344a907762e4e2eccd4555461",
+      "adapter_sha256": "e3c2fe9e5fa640e63c5609e6c817dd9b7333eedf2a12e76aec63f59071edfea8",
+      "scripted_sha256": "29e0555cc7ea9b747ea0a25ff13072cdf2717db3d210549b1a42a76a87aa6361",
+      "asset_sha256": "8057a87a911c5bbcc6edddf42568a76338f73dc9934b2f7ab258ce66b859f1c1"
+     }
+    },
+    {
+     "result": "out/superseded-before-review-fixes/control-one-fitting/RESULT.json",
+     "variant": "one_fitting",
+     "machine": "machine B",
+     "score": 0.6,
+     "executed_steps": 2000,
+     "termination_reason": "max_steps",
+     "why": "4 guard(s) seated, 1 fitting(s) hooked",
+     "test": "waiting",
+     "test_result": null,
+     "trace_sha256": "889d704b69097c0efa48be69db27a21b5578e26b854efab9bba34aba4477764a",
+     "hashes": {
+      "scene_sha256": "ddbd519655790c60196a8cc3a9dba4db4cca99e264fa78bef6a2adccc2c659ce",
+      "layout_sha256": "0140335274bf723b0958568a56c8c5375576b41c44ba03358a32685ed5aafbff",
+      "hook_sha256": "7a9148a886417a461d819d8ce29326196c8f3142a321c0ed0e5c050d0d27ed1f",
+      "magnet_sha256": "56a860edfc8f81d52543ca556ee08a6bbf2618d12a5a8655094a2457a9afed70",
+      "grader_sha256": "fdfd3b59f9921fd17344db3c8fe1f8537472c87344a907762e4e2eccd4555461",
+      "adapter_sha256": "e3c2fe9e5fa640e63c5609e6c817dd9b7333eedf2a12e76aec63f59071edfea8",
+      "scripted_sha256": "29e0555cc7ea9b747ea0a25ff13072cdf2717db3d210549b1a42a76a87aa6361",
+      "asset_sha256": "8057a87a911c5bbcc6edddf42568a76338f73dc9934b2f7ab258ce66b859f1c1"
+     }
+    }
+   ]
+  }
+ ],
+ "gpu_note": "The final round's runs shared each machine's GPU with another simulation (a Dream-1 trial on machine A, another task's probe on machine B), so their elapsed_s is longer than on a GPU to itself: round 2's scripted runs, each GPU to itself and without the low camera, took 2,506 s and 2,519 s."
+}
