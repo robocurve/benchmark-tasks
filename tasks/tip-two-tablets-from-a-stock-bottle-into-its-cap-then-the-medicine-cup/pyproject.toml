@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "yam-tablets-cap"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = ["inspect-robots==1.0.0", "inspect-robots-yam==0.38.0", "yam-arena==0.1.0", "numpy>=1.26", "scipy>=1.11", "pillow>=10", "imageio[ffmpeg]"]
+
+[project.entry-points."inspect_robots.embodiments"]
+yam_tablets_cap = "rdb_tablets_cap.adapter:make_embodiment"
+
+[project.entry-points."inspect_robots.policies"]
+tablets_cap_scripted = "rdb_tablets_cap.adapter:make_scripted"
+
+[project.entry-points."inspect_robots.scorers"]
+tablets_cap_score = "rdb_tablets_cap.grading:make_scorer"
+
+[tool.setuptools.packages.find]
+include = ["rdb_tablets_cap*"]
+
+[tool.setuptools.package-data]
+rdb_tablets_cap = ["tablets.usda"]
