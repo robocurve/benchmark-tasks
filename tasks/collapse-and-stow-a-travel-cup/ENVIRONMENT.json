@@ -1,0 +1,19 @@
+{
+  "engine": {"name": "MuJoCo", "version": "3.11.0", "control_hz": 20, "physics_hz": 500},
+  "python": "3.12.12",
+  "libraries": {"numpy": "2.3.1", "scipy": "1.17.0", "opencv-python-headless-noffmpeg": "4.14.0.94rc1"},
+  "station_calibration": {"project": "https://github.com/kairosiann/yam-isaac-lab-arena", "commit": "bd62771e60320433893bd1d2df0fc79b5ddcd6d1"},
+  "robot_scene": {"project": "https://github.com/amazon-far/abc", "commit": "d0832d12651d1b260a652861a14648dc5f3660c7"},
+  "policy": {
+    "inspect-robots": "0.60.0",
+    "inspect-robots-yam": "0.37.0",
+    "inspect-robots-dream": "0.1.0",
+    "dreamlabs-client": "1.0.14",
+    "request_rows": 8,
+    "preroll_steps": 100,
+    "policy_camera_resolution": [320, 176]
+  },
+  "rendering": "EGL surfaceless via Mesa, FFmpeg H.264 yuv420p",
+  "seed": null,
+  "reset": "Fixed joint positions, object positions and orientations, body masses, and material force parameters. No random sampling."
+}
