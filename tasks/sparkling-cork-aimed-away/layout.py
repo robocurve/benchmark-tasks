@@ -6,6 +6,8 @@ Sources (opened 2026-11-20):
 - Bottle: Hauser Packaging "Champagne 375ml" (hauserpack.com/catalog/beer/champagne-375/): "Crown 29mm" finish,
   500 g, 243.5 mm tall, 70.6 mm across. The same bottle is Saverglass Champenoise STANDARD 37.5 cl, reference 0725
   (saverglass.com/en/our-products/catalog-sparkling-wine/standard-375-cl-couronne-champ-29): 17.5 mm bore.
+- Spring: Lee Spring LP 029L 06, US catalogue (leespring.com/sites/default/files/2023-03/lee-spring-catalog-us.pdf),
+  Lite Pressure series table.
 - Stopper: MoreBeer W460 "Champagne Stoppers - White Plastic" (morebeer.com/products/champagne-stoppers-white-plastic):
   "Height: 46.50mm, Head diameter: 30.50mm, Stem height: 30.50mm, Stem Diameter: 20mm"; the shop's answer on the page:
   "These fit in both 26mm and 29mm tops in champagne bottles". The ribbed 20 mm stem is squeezed into the 17.5 mm bore:
@@ -19,8 +21,8 @@ Sources (opened 2026-11-20):
 - Chair: IKEA STEFAN chair, brown-black (002.110.88): width 42, depth 49, height 90, seat width 42, seat depth 37,
   seat height 45 cm.
 - Station table (yam_arena): top 0.7475 m above the floor, x -0.19 to 0.91, y -0.65 to 0.65.
-Estimates (no page gives them): the bottle's shoulder profile and centre of mass, the stopper's knob width and its
-pull-out force (12 N; a real trial measures it with a luggage scale, see README), the plate and flute sizes, the masses of the coaster, dish, plate and flute, frictions.
+Estimates (no page gives them): the bottle's shoulder profile and centre of mass, the stopper's mass (7 g) and its
+pull-out force (12 N), the ribs' hold travel and the loose stem's friction, the plate and flute sizes, the masses of the coaster, dish, plate and flute, frictions.
 """
 
 from __future__ import annotations
@@ -42,16 +44,33 @@ LIP_R, LIP_Z = 0.0150, (0.232, BOTTLE_H)  # the crown ring at the top of the nec
 BOTTLE_FRICTION = (0.6, 0.5)  # glass on a gripper pad / on a stainless coaster (estimate)
 
 # -- the stopper (frame: origin on the axis at the lip, z out of the bottle) --------------------------------------------
-SHANK_R, SHANK_LEN = 0.0100, 0.025  # MoreBeer W460: 20 mm ribbed stem, 30.5 mm long. The ribs are squeezed to the
-# 17.5 mm bore; the model's collider is the rigid 17.0 mm core and the squeezed ribs' grip is the fit. MODELLED 25 mm
-# long: with the full 30.5 mm the fingers lost the stopper 5 mm into the draw (runs f-b1, g-b1, h-b1, all flew)
-BORE_R, BORE_DEPTH = 0.00875, 0.030  # the 17.5 mm bore (Saverglass), modelled 30 mm deep
-FLANGE_R, FLANGE_T = 0.01525, 0.004  # W460: 30.5 mm head; its 4 mm flange rests on the lip (flange thickness estimate)
-KNOB_R, KNOB_H = 0.0105, 0.014  # 21 mm knob above the flange, domed on top. The page's head is 16 mm tall (46.5 - 30.5);
-# the model's is 18 mm (4 + 14): the 2 mm longer knob gives the gripper's pads the grip length the demo was proven with
-STOPPER_MASS = 0.010  # about 10 g (estimate)
-PULL_N = 12.0  # N to start it moving, seated (estimate: "go in easily by hand"); falls with the length left inside
+SHANK_R, SHANK_LEN = 0.0100, 0.0305  # MoreBeer W460: 20 mm ribbed stem, 30.5 mm long. The ribs are squeezed to the
+# 17.5 mm bore; the model's collider is the rigid 17.0 mm core and the squeezed ribs' grip is the fit.
+BORE_R, BORE_DEPTH = 0.00875, 0.050  # the 17.5 mm bore (Saverglass); the model's bore is 50 mm deep (the spring's top
+# moves inside it; the real dowel's top is 51.6 mm below the lip)
+CAP_R, CAP_H = 0.01525, 0.016  # W460: a plain fluted round head, 30.5 mm across and 16 mm tall (46.5 - 30.5, the
+# page; the maker's photo shows no narrower grip section); its underside rests on the lip; it is gripped across its width
+STOPPER_MASS = 0.007  # about 7 g (estimate: the page gives no mass)
+PULL_N = 12.0  # N: the seated ribs' hold (estimate; the page: "best inserted using a mallet", so the real stopper is
+# sanded to 10-14 N, task text); it holds over the first RIB_HOLD of travel
+RIB_HOLD = 0.003  # m: drawn 3 mm out ...
+TWIST_FREE = 20.0  # ... or twisted 20 degrees in the bore, the ribs are past their hold (estimate) ...
+SLIDE_N = 0.5  # N: ... and the loose stem then slides in the bore against 0.5 N x the share of the stem still inside (estimate)
 TWIST_DAMP = 0.01  # N m s/rad: the shank's drag when it is twisted in the bore (estimate)
+# -- the spring (the stand-in for the gas pressure, in simulation and in a real trial) ---------------------------------
+# Lee Spring LP 029L 06 (LITE PRESSURE series, 316 stainless, US catalogue p. 48): outside diameter 0.600 in (15.24 mm),
+# works in a 0.625 in (15.88 mm) hole, wire 0.029 in, free length 2.000 in (50.80 mm), rate 0.673 lb/in (0.118 N/mm),
+# solid height 0.292 in (7.40 mm). It stands on the top of a 5/8 in (15.9 mm) hardwood dowel resting on the bottle's
+# floor, cut so that its top is 51.6 mm below the lip. Seated, the stem's end (30.5 mm down) holds it at 19.5 mm long:
+# 31.3 mm compressed, 3.7 N outward. It pushes the stopper until the stem has left the lip; free, its top stands
+# 0.8 mm above the lip.
+SPRING_K = 117.8  # N/m
+SPRING_FREE_AT = 0.0313  # m of stopper travel at which the spring reaches its free length
+PHASE_START = 0.001  # m: the hold rule starts when the stopper has moved 1 mm out of its seat; it ends at the exit
+TOUCH = 0.002  # m: a point on a finger or the gripper's body within 2 mm of the stopper = an arm touches it
+MOVE_TWIST = 2.0  # degrees of twist in the neck = the stopper has moved (as has 1 mm of travel, PHASE_START)
+PAD_GAP = 0.0005  # m: while held, each finger pad is within 0.5 mm of the head (or in contact)
+HEADING_TILT = 15.0  # degrees: the heading rule applies whenever the bottle is tilted more than this, stopper in the neck
 EXIT_AT = SHANK_LEN  # the stopper is out when its shank's end passes the lip
 
 # -- the coaster, the dish, the guest's place, the lamp, the wall ------------------------------------------------------
@@ -79,16 +98,8 @@ LAMP_R, LAMP_BOTTOM, LAMP_TALL = 0.095, 0.60, 0.15  # 19 x 15 cm drum shade (IKE
 BAND = 0.02  # the red clearance marks: a 2 cm paper band hung below the shade's rim, a 2 cm-thick foam sleeve on the rod
 WALL_Y = -0.70  # the room wall, 5 cm past the table's right edge; nothing stands on that side
 
-# -- the gas (a disclosed rule, simulation only) ------------------------------------------------------------------------
-# Once the fit has given (the stopper has slipped GIVE_AT along the neck) and no gripper has held it for FREE_STEPS control
-# steps, the stopper leaves along the neck axis at FLY_SPEED: AAO, "can fly up to 34 mph" (15.2 m/s).
-GIVE_AT = 0.0003
-FREE_STEPS = 2
-FLY_SPEED = 15.2
-
 # -- the score ------------------------------------------------------------------------------------------------------------
-TILT_RANGE = (30.0, 60.0)  # degrees from vertical at the moment the stopper leaves (AAO: 45)
-LAMP_CONE = 25.0  # degrees: the axis within this of the line from the lip to the shade's middle = aimed at the lamp
+TILT_RANGE = (30.0, 60.0)  # degrees from vertical, from the first touch or movement of the stopper to the exit (AAO: 45)
 GUEST_CONE = 45.0  # degrees of heading (seen from above) either side of the line from the lip to the child's head
 SELF_CONE = 45.0  # degrees of heading either side of the line from the lip back to the midpoint of the arm bases
 UPRIGHT_DEG = 10.0

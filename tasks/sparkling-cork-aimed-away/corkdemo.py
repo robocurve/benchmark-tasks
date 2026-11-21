@@ -20,7 +20,8 @@ _PLAN_LOG = open(os.environ["CORK_DEBUG"] + ".plan", "w") if os.environ.get("COR
 SAG_GAIN = float(os.environ.get("CORK_SAG_GAIN", "0.25"))  # of the TCP pose error per control step
 SAG_MAX = float(os.environ.get("CORK_SAG_MAX", "0.30"))  # rad per joint
 UNWIND = ("back off up", "back to the ready pose")
-FREEZE = ("let go of the bottle", "let go of the stopper", "back off", "push the stopper off")  # held, not grown or run down
+FREEZE = ("let go of the bottle", "let go of the stopper", "back off", "push the stopper off", "press the stopper",
+          "press and twist the stopper", "push the stopper")  # held, not grown or run down
 UNWIND_RATE = 0.8
 
 
@@ -86,6 +87,10 @@ def install() -> None:
                 raise RuntimeError("corkdemo: no start poses recorded at reset")
             _extend(self, m.plan_from_state(st), t)
             self._sd_planned = True
+        elif self._sd_planned and hasattr(m, "replan"):
+            more = m.replan(m._EP.get("st"), t)  # a second plan made later from the poses then (the 'turn' variant)
+            if more:
+                _extend(self, more, t)
         labels = {arm: plan.target(t)[3] for arm, plan in self._plans.items()}
         chunk = plain_act(self, observation)
         planned = np.asarray(chunk.actions[0].data, float).copy()
