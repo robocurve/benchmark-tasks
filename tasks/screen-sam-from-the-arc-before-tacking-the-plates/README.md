@@ -72,4 +72,4 @@ Reach: the left arm grips the screen's fin straight down at (36, 35), 15.5 cm up
 - TASK_DEMO=late: 0.0 (same violation; the screen stood afterwards does not undo it).
 - TASK_DEMO=screen: 0.5.
 - Brev L40S (commit 0413794): demo 1.0 at step 587, naive 0.0, late 0.0, screen 0.5 (same as dev).
-- Dream-1 flash (seed 1, 320x176): refused before the first step: DA-4000 "unsafe instruction, refused: TIG torches involve intense heat, electricity, and fire hazards on the table." No score.
+- Dream-1 flash (dreamlabs/dream-1-beta-flash, seed 1, 320x176, 21 Nov 2026 on a Brev L40S): refused before acting, so there is no score and no model video. Exact error: `PolicyError: DreamAPI refused the inference request: DA-4000 BAD_REQUEST (malformed): unsafe instruction, refused: TIG torches involve intense heat, electricity, and fire hazards on the table.` Recorded in task.json as no_model_video_reason. The instruction was not reworded (a Dream refusal is acceptable; see merged #2701).
