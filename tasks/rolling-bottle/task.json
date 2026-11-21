@@ -1,0 +1,20 @@
+{
+  "title": "Stop a glass bottle rolling along the worktop before it goes over the open edge",
+  "category": "Societal relatability",
+  "keywords": [
+    "moving object",
+    "interception",
+    "timing",
+    "kitchen",
+    "glass"
+  ],
+  "instruction": "Stop the bottle before it rolls off the edge.",
+  "context": "A bottle knocked over on a sloping drainboard rolls off it and along the worktop towards the open end; most people have lunged for one. If it goes over the edge it smashes. The robot has to read where the bottle is going and how fast, and get a hand into its path in time, then stop it without knocking it off: a moving target, not a placement.",
+  "setup": "Positions in cm on the table, from the midpoint between the two arm bases: x forward (away from the arms), y to the robot's left. A worktop section (fixed): laminate, 30 cm deep (x 15 to 45) and 55 cm long (y -22.5 to 32.5), its top 6 cm above the table, with an open end at y -22.5 on the robot's right. On its left end a stainless steel drainboard (loose but 15 kg), 30 x 14 cm and 3 mm thick, from y 18 to 32, sloping 2.2 degrees down towards the right. A 330 ml brown glass beer bottle, full (530 g, 6.1 cm across, 23 cm long), lies on its side on the drainboard at (29, 31), 13 cm up from its foot (a 5 mm drop), its axis along x and its neck pointing away from the arms; it is let go at rest and rolls at once, crossing the drainboard's foot at about 0.24 m/s as the trial starts, slowing by about 0.04 m/s each second along the worktop, and reaching the open end 1.7 s into the trial. Every loose object has friction 1.2 static, 1.0 dynamic. Both grippers start open at the ready pose.",
+  "scoring": "1.0: the bottle still (under 1 cm/s) on the worktop or on the drainboard, lying or stood up, resting on it (not held up off it), having never gone over an edge, held for 1 s, which ends the trial (if time runs out before that has held, it scores 0.9); a hand may stay in front of it. 0: anything else: still rolling, held up, on the table, or over an edge at any point in the trial (recorded as it happens; putting it back doesn't undo it).",
+  "run_limit": "1,000 steps (50 s at 20 Hz)",
+  "reset_notes": "Turn the bottle back and lay it on its side across the drainboard (sloping 2.2 degrees: a 5.4 mm shim under the high end of a 14 cm board), its middle 13 cm up from the drainboard's foot, held by a straightedge laid across the drainboard just below it; lift the straightedge straight up to let it go. Check a real setup with a 60 fps phone video against a ruler along the worktop: the bottle should cross the drainboard's foot at about 0.24-0.27 m/s and slow by about 0.02-0.05 m/s each second along the worktop (the simulator: 0.23-0.25 m/s, 0.038 m/s each second, the open end 1.6 s after the foot).",
+  "fidelity": "The worktop is a 6 cm block on the table, so going over the edge is a 6 cm drop, not a real counter's; any fall scores 0. The bottle is a capsule at full size and weight; it rolls straight, where a real bottle curves a little. PhysX has no rolling resistance, so the bottle is pushed against its motion by its mass times 0.05 m/s^2: it slows by 0.038 m/s each second, as a real one does (0.02-0.05). The trial starts as it reaches the worktop, about 1 s after it is let go.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-NBB3B9"
+}
