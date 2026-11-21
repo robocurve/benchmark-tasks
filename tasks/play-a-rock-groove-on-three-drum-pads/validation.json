@@ -1,0 +1,960 @@
+{
+ "status": "Scripted demonstration and controls run natively in Isaac Sim (headless). Dream-1 (dreamlabs/dream-1-beta) run natively once on the final code (hashes as recorded_hashes), with the same scene, instruction, scorer and control settings: score 0.0 at the 1,200-step limit; no hit was counted.",
+ "seed": 0,
+ "object_jitter": 0,
+ "control_hz": 20,
+ "physics_hz": 240,
+ "max_steps": 1200,
+ "runs": {
+  "scripted": {
+   "score": 1.0,
+   "score_from_files": 1.0,
+   "variant": "full",
+   "executed_steps": 305,
+   "step_limit": 1200,
+   "elapsed_s": 271.54,
+   "termination_reason": "success",
+   "result": "out/scripted-1/RESULT.json",
+   "grader_trace": "out/scripted-1/media/grader-trace.jsonl",
+   "hits_mid": "out/scripted-1/media/hits.mid",
+   "hits_mid_sha256": "e5cb62e7496271736d10aaedf0b944584638cf9e044a345a9a53308fc8536c0a",
+   "events": "out/scripted-1/media/events.json",
+   "score_vs_hits": {
+    "path": "out/scripted-1/media/score-vs-hits.png",
+    "sha256": "686bc2ff5767e3a447d69b8c95c6c220d98c4ca154d4a2323b926a1ef5a43cfd",
+    "table": "out/scripted-1/media/scored-hits.csv"
+   },
+   "judged": {
+    "score": 1.0,
+    "bpm": 74.996,
+    "rms_ms": 3.17,
+    "max_error_ms": 5.2,
+    "H": 41,
+    "G": 8,
+    "E": 0,
+    "wrong": 0,
+    "extra": 0,
+    "arm_contacts": 0,
+    "rests": 0,
+    "accent": true,
+    "accent_detail": {
+     "numbers_mean": 90.5,
+     "ands_mean": 51.7,
+     "snare_mean": 89.5,
+     "each_number_louder": true
+    },
+    "clean_end": true,
+    "pair_spread_max_ms": 8.3,
+    "title": "scripted-1 | score 1.00 | tempo 75.0 bpm fitted (written 75) | RMS 3 ms | pair spread max 8 ms, 8/8 together | extra or wrong hits 0 | notes 41/41"
+   },
+   "videos": {
+    "overhead": "out/scripted-1/media/top_cam.mp4",
+    "side": "out/scripted-1/media/side_cam.mp4",
+    "combined_with_sound": "out/scripted-1/demo.mp4",
+    "combined_sha256": "cbcb1788a6fd07cc845f60c168b26f99b134a9cf799b2e79792f97c8b481af35"
+   },
+   "sound_sync": {
+    "video_start_s": 0.0,
+    "audio_start_s": 0.0,
+    "video_duration_s": 15.3,
+    "audio_duration_s": 15.3,
+    "frames": 306,
+    "fps": "20/1",
+    "sample_rate": "48000",
+    "xcorr_offset_ms": 0.0,
+    "hits": 41,
+    "onset_offsets_ms": {
+     "median": -0.42,
+     "min": -4.29,
+     "max": 8.23
+    },
+    "caption": "Sound added offline from the logged hits; not simulated; the robot heard nothing",
+    "in_sync": true
+   },
+   "machine": "one NVIDIA A10 (24 GB), Ubuntu 22.04, headless, the GPU shared with up to two other Isaac Sim runs; elapsed_s includes Isaac Sim start-up and scene creation",
+   "inspect_robots": "1.0.0",
+   "yam_arena": "0.1.0",
+   "repeat": "out/scripted-2/RESULT.json",
+   "repeat_score": 1.0,
+   "repeat_trace_identical": true,
+   "trace_sha256": [
+    "5f38b467d6d6329814d3e09e2970964fd6d1c370eba7065c5d1d8fde0917741f",
+    "5f38b467d6d6329814d3e09e2970964fd6d1c370eba7065c5d1d8fde0917741f"
+   ],
+   "repeat_hits_mid_identical": true,
+   "stills": [
+    "out/scripted-1/media/setup.png",
+    "out/scripted-1/media/end_top_cam.png",
+    "out/scripted-1/media/end_side_cam.png"
+   ],
+   "screenshot": "out/scripted-1/setup.png",
+   "screenshot_note": "the first frame of demo.mp4: overhead and side together"
+  },
+  "dream": {
+   "model": "dreamlabs/dream-1-beta",
+   "score": 0.0,
+   "score_from_files": 0.0,
+   "executed_steps": 1200,
+   "step_limit": 1200,
+   "elapsed_s": 713.85,
+   "termination_reason": "max_steps",
+   "status": "run",
+   "result": "out/dream/RESULT.json",
+   "grader_trace": "out/dream/media/grader-trace.jsonl",
+   "hits_mid": "out/dream/media/hits.mid",
+   "hits_mid_sha256": "7256c0edb413fe04ddc0f5bbd1ad7b62b2d044cc688bc0bf93c48a925c11e764",
+   "events": "out/dream/media/events.json",
+   "score_vs_hits": {
+    "path": "out/dream/media/score-vs-hits.png",
+    "sha256": "9a4bd0e2a8ef16fd9232b64d38742ab5ce5c6bf0f81adcdec8bea35c866d267a",
+    "table": "out/dream/media/scored-hits.csv"
+   },
+   "judged": {
+    "score": 0.0,
+    "why": "no tempo from 60 to 90 bpm puts any hit on a written note",
+    "bpm": null,
+    "H": 0,
+    "G": 0,
+    "E": 0,
+    "wrong": 0,
+    "extra": 0,
+    "arm_contacts": 0,
+    "rests": 4,
+    "accent": false,
+    "clean_end": false,
+    "end_detail": "no notes played",
+    "title": "dream | score 0.00 | no tempo | RMS - | pair spread max -, 0/8 together | extra or wrong hits 0 | notes 0/41"
+   },
+   "videos": {
+    "overhead": "out/dream/media/top_cam.mp4",
+    "side": "out/dream/media/side_cam.mp4",
+    "combined_with_sound": "out/dream/model_run.mp4",
+    "combined_sha256": "0159e8314a47204724ffdfd7919c2798154c42522d3a64a946acbd3b3c92c4bd"
+   },
+   "sound_sync": {
+    "video_start_s": 0.0,
+    "audio_start_s": 0.0,
+    "video_duration_s": 60.05,
+    "audio_duration_s": 60.05,
+    "frames": 1201,
+    "fps": "20/1",
+    "sample_rate": "48000",
+    "xcorr_offset_ms": 0.0,
+    "hits": 0,
+    "onset_offsets_ms": {
+     "median": null,
+     "min": null,
+     "max": null
+    },
+    "caption": "Sound added offline from the logged hits; not simulated; the robot heard nothing",
+    "in_sync": true
+   },
+   "stills": [
+    "out/dream/media/setup.png",
+    "out/dream/media/end_top_cam.png",
+    "out/dream/media/end_side_cam.png"
+   ],
+   "what_it_did": "Until its first reply arrived (step 33, 1.65 s) the runtime held every joint, the grippers included, at its measured position, so the sticks sat in the fingers at under 1 N (not held by the hit rule); nothing touched a pad. Its first reply closed both grippers (27 to 33 N, both sticks held from step 34); from about step 49 it opened both grippers wide, and both sticks fell onto their pads (left on the hi-hat, right on the snare) at 2.7 s. The right gripper took the right stick again twice (steps 134 to 214 and 582 to 744), the left gripper the left stick only for a moment (near 13.8 s), and touched the snare with it 21 times, none faster than 0.19 m/s, so none was a hit (a hit needs 0.5 m/s). The four contacts at 0.5 m/s or more were all by sticks that were not held (2.7 s on the snare and the hi-hat, 53.7 and 53.8 s on the snare's rim). The left stick ended on the table beside the left arm's base, the right one loose on the snare. No gripper or arm touched a pad; 0 of 41 notes, no tempo fitted, so the score was 0 throughout.",
+   "action_requests": 49,
+   "request_cap": 120,
+   "list_price_estimate_usd": 0.065333,
+   "dream_chunk_anchor": "executed_target_blend_v2",
+   "client": {
+    "dreamlabs-client": "1.0.14",
+    "inspect-robots-dream": "git+https://github.com/kairosiann/inspect-robots-dream@b5e936a201cec66c54c297e522c920d98445e339"
+   },
+   "audit": {
+    "action_trace": "out/dream/dream-action-trace.jsonl",
+    "input_frames": "out/dream/dream-input-rgb.zip",
+    "input_frames_sha256": "64527778d4ee6a99d83fbe9022e3ea075850a07714b8819c2f2ad1582f886cc8",
+    "usage": "out/dream/DREAM_USAGE.json"
+   },
+   "code_hashes_match_recorded": true,
+   "machine": "one NVIDIA A10 (24 GB), Ubuntu 22.04, headless, the GPU shared with one other Isaac Sim run; elapsed_s includes Isaac Sim start-up and scene creation",
+   "inspect_robots": "1.0.0",
+   "yam_arena": "0.1.0"
+  }
+ },
+ "controls": {
+  "control-air": {
+   "score": 0.0,
+   "score_from_files": 0.0,
+   "variant": "air",
+   "executed_steps": 400,
+   "step_limit": 400,
+   "elapsed_s": 312.13,
+   "termination_reason": "max_steps",
+   "result": "out/control-air/RESULT.json",
+   "grader_trace": "out/control-air/media/grader-trace.jsonl",
+   "hits_mid": "out/control-air/media/hits.mid",
+   "hits_mid_sha256": "7256c0edb413fe04ddc0f5bbd1ad7b62b2d044cc688bc0bf93c48a925c11e764",
+   "events": "out/control-air/media/events.json",
+   "score_vs_hits": {
+    "path": "out/control-air/media/score-vs-hits.png",
+    "sha256": "79b5c11262bf8e1bdd14fe9fdfa6db8c0435b8a7ccf6a7fda8d65354f066c599",
+    "table": "out/control-air/media/scored-hits.csv"
+   },
+   "judged": {
+    "score": 0.0,
+    "bpm": null,
+    "rms_ms": null,
+    "max_error_ms": null,
+    "H": 0,
+    "G": 0,
+    "E": 0,
+    "wrong": 0,
+    "extra": 0,
+    "arm_contacts": 0,
+    "rests": 0,
+    "accent": false,
+    "accent_detail": {},
+    "clean_end": false,
+    "pair_spread_max_ms": null,
+    "title": "control-air | score 0.00 | no tempo | RMS - | pair spread max -, 0/8 together | extra or wrong hits 0 | notes 0/41"
+   },
+   "videos": {
+    "overhead": "out/control-air/media/top_cam.mp4",
+    "side": "out/control-air/media/side_cam.mp4",
+    "combined_with_sound": "out/control-air/combined.mp4",
+    "combined_sha256": "8c6d9fbdd068a097caadfcdb1df817e159d0be2346499d96b2e11ea3c808c3d0"
+   },
+   "sound_sync": {
+    "video_start_s": 0.0,
+    "audio_start_s": 0.0,
+    "video_duration_s": 20.05,
+    "audio_duration_s": 20.05,
+    "frames": 401,
+    "fps": "20/1",
+    "sample_rate": "48000",
+    "xcorr_offset_ms": 0.0,
+    "hits": 0,
+    "onset_offsets_ms": {
+     "median": null,
+     "min": null,
+     "max": null
+    },
+    "caption": "Sound added offline from the logged hits; not simulated; the robot heard nothing",
+    "in_sync": true
+   },
+   "expected": 0.0,
+   "native": true,
+   "must_run": true
+  },
+  "control-flail": {
+   "score": 0.0,
+   "score_from_files": 0.0,
+   "variant": "flail",
+   "executed_steps": 400,
+   "step_limit": 400,
+   "elapsed_s": 339.75,
+   "termination_reason": "max_steps",
+   "result": "out/control-flail/RESULT.json",
+   "grader_trace": "out/control-flail/media/grader-trace.jsonl",
+   "hits_mid": "out/control-flail/media/hits.mid",
+   "hits_mid_sha256": "b3a4928ab8a397f00cb040e4184d6053324a60e6d30a2d137d761c7fbe554393",
+   "events": "out/control-flail/media/events.json",
+   "score_vs_hits": {
+    "path": "out/control-flail/media/score-vs-hits.png",
+    "sha256": "abaef24b6fe069bfd953c2ed535e8f02072d242cc4f35b2bb22a4ba210439289",
+    "table": "out/control-flail/media/scored-hits.csv"
+   },
+   "judged": {
+    "score": 0.0,
+    "bpm": 83.5,
+    "rms_ms": 28.03,
+    "max_error_ms": 49.8,
+    "H": 29,
+    "G": 1,
+    "E": 90,
+    "wrong": 26,
+    "extra": 64,
+    "arm_contacts": 0,
+    "rests": 0,
+    "accent": false,
+    "accent_detail": {
+     "numbers_mean": 73.0,
+     "ands_mean": 81.6,
+     "snare_mean": 53.8,
+     "each_number_louder": false
+    },
+    "clean_end": false,
+    "pair_spread_max_ms": 62.5,
+    "title": "control-flail | score 0.00 | tempo 83.5 bpm fitted (written 75) | RMS 28 ms | pair spread max 62 ms, 1/8 together | extra or wrong hits 90 | notes 29/41"
+   },
+   "videos": {
+    "overhead": "out/control-flail/media/top_cam.mp4",
+    "side": "out/control-flail/media/side_cam.mp4",
+    "combined_with_sound": "out/control-flail/combined.mp4",
+    "combined_sha256": "7bcc8e1486470b2e9eef6e6ab41aea5fde6c56498b4c82a40f1f010d1e6e1dcb"
+   },
+   "sound_sync": {
+    "video_start_s": 0.0,
+    "audio_start_s": 0.0,
+    "video_duration_s": 20.05,
+    "audio_duration_s": 20.05,
+    "frames": 401,
+    "fps": "20/1",
+    "sample_rate": "48000",
+    "xcorr_offset_ms": 0.0,
+    "hits": 123,
+    "onset_offsets_ms": {
+     "median": -0.33,
+     "min": -15.0,
+     "max": 5.85
+    },
+    "caption": "Sound added offline from the logged hits; not simulated; the robot heard nothing",
+    "in_sync": true
+   },
+   "expected": 0.0,
+   "native": true,
+   "must_run": true
+  },
+  "control-flam_bar3": {
+   "score": 0.5,
+   "score_from_files": 0.5,
+   "variant": "flam_bar3",
+   "executed_steps": 400,
+   "step_limit": 400,
+   "elapsed_s": 334.82,
+   "termination_reason": "max_steps",
+   "result": "out/control-flam_bar3/RESULT.json",
+   "grader_trace": "out/control-flam_bar3/media/grader-trace.jsonl",
+   "hits_mid": "out/control-flam_bar3/media/hits.mid",
+   "hits_mid_sha256": "f54d815426fb77f23c4b431e13affe3403ebe89bece20e5991d137616ad819d5",
+   "events": "out/control-flam_bar3/media/events.json",
+   "score_vs_hits": {
+    "path": "out/control-flam_bar3/media/score-vs-hits.png",
+    "sha256": "9032b9e58e9072cd120d8ae101f5dc869957b222ceda4baae31645215ca53a18",
+    "table": "out/control-flam_bar3/media/scored-hits.csv"
+   },
+   "judged": {
+    "score": 0.5,
+    "bpm": 74.76,
+    "rms_ms": 16.43,
+    "max_error_ms": 49.9,
+    "H": 41,
+    "G": 6,
+    "E": 0,
+    "wrong": 0,
+    "extra": 0,
+    "arm_contacts": 0,
+    "rests": 0,
+    "accent": true,
+    "accent_detail": {
+     "numbers_mean": 90.5,
+     "ands_mean": 51.7,
+     "snare_mean": 89.6,
+     "each_number_louder": true
+    },
+    "clean_end": true,
+    "pair_spread_max_ms": 58.3,
+    "title": "control-flam_bar3 | score 0.50 | tempo 74.8 bpm fitted (written 75) | RMS 16 ms | pair spread max 58 ms, 6/8 together | extra or wrong hits 0 | notes 41/41"
+   },
+   "videos": {
+    "overhead": "out/control-flam_bar3/media/top_cam.mp4",
+    "side": "out/control-flam_bar3/media/side_cam.mp4",
+    "combined_with_sound": "out/control-flam_bar3/combined.mp4",
+    "combined_sha256": "689507e99d97f76acd37aeab48e6b2fa1a8406d27dec6b477cf958615f98cd79"
+   },
+   "sound_sync": {
+    "video_start_s": 0.0,
+    "audio_start_s": 0.0,
+    "video_duration_s": 20.05,
+    "audio_duration_s": 20.05,
+    "frames": 401,
+    "fps": "20/1",
+    "sample_rate": "48000",
+    "xcorr_offset_ms": 0.0,
+    "hits": 41,
+    "onset_offsets_ms": {
+     "median": -0.44,
+     "min": -4.29,
+     "max": 8.23
+    },
+    "caption": "Sound added offline from the logged hits; not simulated; the robot heard nothing",
+    "in_sync": true
+   },
+   "expected": 0.5,
+   "native": true,
+   "must_run": false
+  },
+  "control-flat": {
+   "score": 0.9,
+   "score_from_files": 0.9,
+   "variant": "flat",
+   "executed_steps": 400,
+   "step_limit": 400,
+   "elapsed_s": 315.3,
+   "termination_reason": "max_steps",
+   "result": "out/control-flat/RESULT.json",
+   "grader_trace": "out/control-flat/media/grader-trace.jsonl",
+   "hits_mid": "out/control-flat/media/hits.mid",
+   "hits_mid_sha256": "8ad808f4c86f515b0a5cbe5ee166bb8c24e263231a11f44d3b4a7c973d1b67e6",
+   "events": "out/control-flat/media/events.json",
+   "score_vs_hits": {
+    "path": "out/control-flat/media/score-vs-hits.png",
+    "sha256": "44270254490a8681cb24e06aacce4d2f235466c375e2c2ea35d204a07c54f7ea",
+    "table": "out/control-flat/media/scored-hits.csv"
+   },
+   "judged": {
+    "score": 0.9,
+    "bpm": 75.0,
+    "rms_ms": 2.06,
+    "max_error_ms": 8.4,
+    "H": 41,
+    "G": 8,
+    "E": 0,
+    "wrong": 0,
+    "extra": 0,
+    "arm_contacts": 0,
+    "rests": 0,
+    "accent": false,
+    "accent_detail": {
+     "numbers_mean": 73.0,
+     "ands_mean": 72.9,
+     "snare_mean": 89.5,
+     "each_number_louder": false
+    },
+    "clean_end": true,
+    "pair_spread_max_ms": 16.7,
+    "title": "control-flat | score 0.90 | tempo 75.0 bpm fitted (written 75) | RMS 2 ms | pair spread max 17 ms, 8/8 together | extra or wrong hits 0 | notes 41/41"
+   },
+   "videos": {
+    "overhead": "out/control-flat/media/top_cam.mp4",
+    "side": "out/control-flat/media/side_cam.mp4",
+    "combined_with_sound": "out/control-flat/combined.mp4",
+    "combined_sha256": "f2667769f1eaac17a455776cd96bae0eec2f3cbf7240e165686b7bbdb90899b0"
+   },
+   "sound_sync": {
+    "video_start_s": 0.0,
+    "audio_start_s": 0.0,
+    "video_duration_s": 20.05,
+    "audio_duration_s": 20.05,
+    "frames": 401,
+    "fps": "20/1",
+    "sample_rate": "48000",
+    "xcorr_offset_ms": 0.0,
+    "hits": 41,
+    "onset_offsets_ms": {
+     "median": -0.46,
+     "min": -15.0,
+     "max": 0.27
+    },
+    "caption": "Sound added offline from the logged hits; not simulated; the robot heard nothing",
+    "in_sync": true
+   },
+   "expected": 0.9,
+   "native": true,
+   "must_run": true
+  },
+  "control-gripper": {
+   "score": 0.5,
+   "score_from_files": 0.5,
+   "variant": "gripper",
+   "executed_steps": 420,
+   "step_limit": 420,
+   "elapsed_s": 357.93,
+   "termination_reason": "max_steps",
+   "result": "out/control-gripper/RESULT.json",
+   "grader_trace": "out/control-gripper/media/grader-trace.jsonl",
+   "hits_mid": "out/control-gripper/media/hits.mid",
+   "hits_mid_sha256": "e5cb62e7496271736d10aaedf0b944584638cf9e044a345a9a53308fc8536c0a",
+   "events": "out/control-gripper/media/events.json",
+   "score_vs_hits": {
+    "path": "out/control-gripper/media/score-vs-hits.png",
+    "sha256": "15a0a121c390c8468c570231f701493c484f3bb5e7fffaec461c79d2b416cc2b",
+    "table": "out/control-gripper/media/scored-hits.csv"
+   },
+   "judged": {
+    "score": 0.5,
+    "bpm": 74.996,
+    "rms_ms": 3.17,
+    "max_error_ms": 5.2,
+    "H": 41,
+    "G": 8,
+    "E": 1,
+    "wrong": 0,
+    "extra": 0,
+    "arm_contacts": 1,
+    "rests": 0,
+    "accent": true,
+    "accent_detail": {
+     "numbers_mean": 90.5,
+     "ands_mean": 51.7,
+     "snare_mean": 89.5,
+     "each_number_louder": true
+    },
+    "clean_end": true,
+    "pair_spread_max_ms": 8.3,
+    "title": "control-gripper | score 0.50 | tempo 75.0 bpm fitted (written 75) | RMS 3 ms | pair spread max 8 ms, 8/8 together | extra or wrong hits 1 | notes 41/41"
+   },
+   "videos": {
+    "overhead": "out/control-gripper/media/top_cam.mp4",
+    "side": "out/control-gripper/media/side_cam.mp4",
+    "combined_with_sound": "out/control-gripper/combined.mp4",
+    "combined_sha256": "837da1d41c04d5c68f3a0528352a20a0c4bef3f2d0bd3feae1276cef577b9dee"
+   },
+   "sound_sync": {
+    "video_start_s": 0.0,
+    "audio_start_s": 0.0,
+    "video_duration_s": 21.05,
+    "audio_duration_s": 21.05,
+    "frames": 421,
+    "fps": "20/1",
+    "sample_rate": "48000",
+    "xcorr_offset_ms": 0.0,
+    "hits": 41,
+    "onset_offsets_ms": {
+     "median": -0.42,
+     "min": -4.29,
+     "max": 8.23
+    },
+    "caption": "Sound added offline from the logged hits; not simulated; the robot heard nothing",
+    "in_sync": true
+   },
+   "expected": 0.5,
+   "native": true,
+   "must_run": false
+  },
+  "control-no_fill": {
+   "score": 0.75,
+   "score_from_files": 0.75,
+   "variant": "no_fill",
+   "executed_steps": 400,
+   "step_limit": 400,
+   "elapsed_s": 336.16,
+   "termination_reason": "max_steps",
+   "result": "out/control-no_fill/RESULT.json",
+   "grader_trace": "out/control-no_fill/media/grader-trace.jsonl",
+   "hits_mid": "out/control-no_fill/media/hits.mid",
+   "hits_mid_sha256": "a96ce2489eebc0de50c30a8ac9ba2f5a0d3be1a7b75351dc7f5f426b4ae7ead3",
+   "events": "out/control-no_fill/media/events.json",
+   "score_vs_hits": {
+    "path": "out/control-no_fill/media/score-vs-hits.png",
+    "sha256": "4d5c4940f7265e81f6bdcec82e74010d9ac8791bc1920058ab94f2005ed38302",
+    "table": "out/control-no_fill/media/scored-hits.csv"
+   },
+   "judged": {
+    "score": 0.75,
+    "bpm": 74.997,
+    "rms_ms": 3.19,
+    "max_error_ms": 5.1,
+    "H": 37,
+    "G": 7,
+    "E": 0,
+    "wrong": 0,
+    "extra": 0,
+    "arm_contacts": 0,
+    "rests": 0,
+    "accent": true,
+    "accent_detail": {
+     "numbers_mean": 90.5,
+     "ands_mean": 51.7,
+     "snare_mean": 89.4,
+     "each_number_louder": true
+    },
+    "clean_end": false,
+    "pair_spread_max_ms": 8.3,
+    "title": "control-no_fill | score 0.75 | tempo 75.0 bpm fitted (written 75) | RMS 3 ms | pair spread max 8 ms, 7/8 together | extra or wrong hits 0 | notes 37/41"
+   },
+   "videos": {
+    "overhead": "out/control-no_fill/media/top_cam.mp4",
+    "side": "out/control-no_fill/media/side_cam.mp4",
+    "combined_with_sound": "out/control-no_fill/combined.mp4",
+    "combined_sha256": "ac7a43a2bf84d8c33e0949933ac53a8cf4c798f6d05996bbc14bad2f1e27d00b"
+   },
+   "sound_sync": {
+    "video_start_s": 0.0,
+    "audio_start_s": 0.0,
+    "video_duration_s": 20.05,
+    "audio_duration_s": 20.05,
+    "frames": 401,
+    "fps": "20/1",
+    "sample_rate": "48000",
+    "xcorr_offset_ms": 0.0,
+    "hits": 37,
+    "onset_offsets_ms": {
+     "median": -0.44,
+     "min": -0.52,
+     "max": 8.23
+    },
+    "caption": "Sound added offline from the logged hits; not simulated; the robot heard nothing",
+    "in_sync": true
+   },
+   "expected": 0.75,
+   "native": true,
+   "must_run": false
+  },
+  "control-no_stop": {
+   "score": 0.0,
+   "score_from_files": 0.0,
+   "variant": "no_stop",
+   "executed_steps": 480,
+   "step_limit": 480,
+   "elapsed_s": 381.48,
+   "termination_reason": "max_steps",
+   "result": "out/control-no_stop/RESULT.json",
+   "grader_trace": "out/control-no_stop/media/grader-trace.jsonl",
+   "hits_mid": "out/control-no_stop/media/hits.mid",
+   "hits_mid_sha256": "c2c1101aa538e87e04a022554771547994cf8de87ab49f090977921edd176be2",
+   "events": "out/control-no_stop/media/events.json",
+   "score_vs_hits": {
+    "path": "out/control-no_stop/media/score-vs-hits.png",
+    "sha256": "05a2c00ad6f445cf6dcfa013b161936b25cb7b214942293f2aa1b6e76b9c2305",
+    "table": "out/control-no_stop/media/scored-hits.csv"
+   },
+   "judged": {
+    "score": 0.0,
+    "bpm": 74.996,
+    "rms_ms": 3.17,
+    "max_error_ms": 5.2,
+    "H": 41,
+    "G": 8,
+    "E": 10,
+    "wrong": 0,
+    "extra": 10,
+    "arm_contacts": 0,
+    "rests": 0,
+    "accent": true,
+    "accent_detail": {
+     "numbers_mean": 90.5,
+     "ands_mean": 51.7,
+     "snare_mean": 89.5,
+     "each_number_louder": true
+    },
+    "clean_end": false,
+    "pair_spread_max_ms": 8.3,
+    "title": "control-no_stop | score 0.00 | tempo 75.0 bpm fitted (written 75) | RMS 3 ms | pair spread max 8 ms, 8/8 together | extra or wrong hits 10 | notes 41/41"
+   },
+   "videos": {
+    "overhead": "out/control-no_stop/media/top_cam.mp4",
+    "side": "out/control-no_stop/media/side_cam.mp4",
+    "combined_with_sound": "out/control-no_stop/combined.mp4",
+    "combined_sha256": "6f87a8bf9b93477132f8ccd69cae6624d5574dc3a7d0d13d9e062f1fd139d3a3"
+   },
+   "sound_sync": {
+    "video_start_s": 0.0,
+    "audio_start_s": 0.0,
+    "video_duration_s": 24.05,
+    "audio_duration_s": 24.05,
+    "frames": 481,
+    "fps": "20/1",
+    "sample_rate": "48000",
+    "xcorr_offset_ms": 0.0,
+    "hits": 51,
+    "onset_offsets_ms": {
+     "median": -0.42,
+     "min": -4.29,
+     "max": 8.23
+    },
+    "caption": "Sound added offline from the logged hits; not simulated; the robot heard nothing",
+    "in_sync": true
+   },
+   "expected": 0.0,
+   "native": true,
+   "must_run": false
+  },
+  "control-one_arm": {
+   "score": 0.25,
+   "score_from_files": 0.25,
+   "variant": "one_arm",
+   "executed_steps": 400,
+   "step_limit": 400,
+   "elapsed_s": 339.96,
+   "termination_reason": "max_steps",
+   "result": "out/control-one_arm/RESULT.json",
+   "grader_trace": "out/control-one_arm/media/grader-trace.jsonl",
+   "hits_mid": "out/control-one_arm/media/hits.mid",
+   "hits_mid_sha256": "79fd37d37182af7fac080d5a31f239a99911da18f376ad2235ab7c7cf3ae2bab",
+   "events": "out/control-one_arm/media/events.json",
+   "score_vs_hits": {
+    "path": "out/control-one_arm/media/score-vs-hits.png",
+    "sha256": "5a500fc5318621f4f90eb525ab724679de37d9d787c960c463d09e05d84ad5a2",
+    "table": "out/control-one_arm/media/scored-hits.csv"
+   },
+   "judged": {
+    "score": 0.25,
+    "bpm": 74.993,
+    "rms_ms": 2.31,
+    "max_error_ms": 5.8,
+    "H": 31,
+    "G": 0,
+    "E": 0,
+    "wrong": 0,
+    "extra": 0,
+    "arm_contacts": 0,
+    "rests": 0,
+    "accent": false,
+    "accent_detail": {
+     "why": "not enough played hi-hat numbers, ands or snare notes"
+    },
+    "clean_end": false,
+    "pair_spread_max_ms": null,
+    "title": "control-one_arm | score 0.25 | tempo 75.0 bpm fitted (written 75) | RMS 2 ms | pair spread max -, 0/8 together | extra or wrong hits 0 | notes 31/41"
+   },
+   "videos": {
+    "overhead": "out/control-one_arm/media/top_cam.mp4",
+    "side": "out/control-one_arm/media/side_cam.mp4",
+    "combined_with_sound": "out/control-one_arm/combined.mp4",
+    "combined_sha256": "162edd06067f5f3c0a4526a26570d54a14ff217cd77acb4d880a2de5b4de5a3d"
+   },
+   "sound_sync": {
+    "video_start_s": 0.0,
+    "audio_start_s": 0.0,
+    "video_duration_s": 20.05,
+    "audio_duration_s": 20.05,
+    "frames": 401,
+    "fps": "20/1",
+    "sample_rate": "48000",
+    "xcorr_offset_ms": 0.0,
+    "hits": 31,
+    "onset_offsets_ms": {
+     "median": -0.46,
+     "min": -0.46,
+     "max": -0.35
+    },
+    "caption": "Sound added offline from the logged hits; not simulated; the robot heard nothing",
+    "in_sync": true
+   },
+   "expected": 0.25,
+   "native": true,
+   "must_run": true
+  },
+  "control-press": {
+   "score": 0.0,
+   "score_from_files": 0.0,
+   "variant": "press",
+   "executed_steps": 400,
+   "step_limit": 400,
+   "elapsed_s": 338.18,
+   "termination_reason": "max_steps",
+   "result": "out/control-press/RESULT.json",
+   "grader_trace": "out/control-press/media/grader-trace.jsonl",
+   "hits_mid": "out/control-press/media/hits.mid",
+   "hits_mid_sha256": "7256c0edb413fe04ddc0f5bbd1ad7b62b2d044cc688bc0bf93c48a925c11e764",
+   "events": "out/control-press/media/events.json",
+   "score_vs_hits": {
+    "path": "out/control-press/media/score-vs-hits.png",
+    "sha256": "b5aa0339bdede9149e6a0cb0bd10e99740e020b1d1e41d468e7577dd645638a3",
+    "table": "out/control-press/media/scored-hits.csv"
+   },
+   "judged": {
+    "score": 0.0,
+    "bpm": null,
+    "rms_ms": null,
+    "max_error_ms": null,
+    "H": 0,
+    "G": 0,
+    "E": 0,
+    "wrong": 0,
+    "extra": 0,
+    "arm_contacts": 0,
+    "rests": 2,
+    "accent": false,
+    "accent_detail": {},
+    "clean_end": false,
+    "pair_spread_max_ms": null,
+    "title": "control-press | score 0.00 | no tempo | RMS - | pair spread max -, 0/8 together | extra or wrong hits 0 | notes 0/41"
+   },
+   "videos": {
+    "overhead": "out/control-press/media/top_cam.mp4",
+    "side": "out/control-press/media/side_cam.mp4",
+    "combined_with_sound": "out/control-press/combined.mp4",
+    "combined_sha256": "2793ccf1a9729d0634ca336e54e8f52d7f36a4ea081f0f31b19ea3af07e1df51"
+   },
+   "sound_sync": {
+    "video_start_s": 0.0,
+    "audio_start_s": 0.0,
+    "video_duration_s": 20.05,
+    "audio_duration_s": 20.05,
+    "frames": 401,
+    "fps": "20/1",
+    "sample_rate": "48000",
+    "xcorr_offset_ms": 0.0,
+    "hits": 0,
+    "onset_offsets_ms": {
+     "median": null,
+     "min": null,
+     "max": null
+    },
+    "caption": "Sound added offline from the logged hits; not simulated; the robot heard nothing",
+    "in_sync": true
+   },
+   "expected": 0.0,
+   "native": true,
+   "must_run": true
+  },
+  "control-rest": {
+   "score": 0.75,
+   "score_from_files": 0.75,
+   "variant": "rest",
+   "executed_steps": 400,
+   "step_limit": 400,
+   "elapsed_s": 279.72,
+   "termination_reason": "max_steps",
+   "result": "out/control-rest/RESULT.json",
+   "grader_trace": "out/control-rest/media/grader-trace.jsonl",
+   "hits_mid": "out/control-rest/media/hits.mid",
+   "hits_mid_sha256": "b6ddd666936592d2120f427d1eb7dbad4a33536b20c0ded381e03916e6268bad",
+   "events": "out/control-rest/media/events.json",
+   "score_vs_hits": {
+    "path": "out/control-rest/media/score-vs-hits.png",
+    "sha256": "fba2f0e42aff5795466a93b99bee30830219999c80c1412caa1aa17fb5e45c90",
+    "table": "out/control-rest/media/scored-hits.csv"
+   },
+   "judged": {
+    "score": 0.75,
+    "bpm": 74.996,
+    "rms_ms": 3.17,
+    "max_error_ms": 5.2,
+    "H": 41,
+    "G": 8,
+    "E": 0,
+    "wrong": 0,
+    "extra": 0,
+    "arm_contacts": 0,
+    "rests": 8,
+    "accent": true,
+    "accent_detail": {
+     "numbers_mean": 90.5,
+     "ands_mean": 51.7,
+     "snare_mean": 89.4,
+     "each_number_louder": true
+    },
+    "clean_end": true,
+    "pair_spread_max_ms": 8.3,
+    "title": "control-rest | score 0.75 | tempo 75.0 bpm fitted (written 75) | RMS 3 ms | pair spread max 8 ms, 8/8 together | extra or wrong hits 0 | notes 41/41"
+   },
+   "videos": {
+    "overhead": "out/control-rest/media/top_cam.mp4",
+    "side": "out/control-rest/media/side_cam.mp4",
+    "combined_with_sound": "out/control-rest/combined.mp4",
+    "combined_sha256": "45ca33ae6365db5ed9d324be1c1af7252a9f3bbb79a60672ef606418345b18f6"
+   },
+   "sound_sync": {
+    "video_start_s": 0.0,
+    "audio_start_s": 0.0,
+    "video_duration_s": 20.05,
+    "audio_duration_s": 20.05,
+    "frames": 401,
+    "fps": "20/1",
+    "sample_rate": "48000",
+    "xcorr_offset_ms": 0.0,
+    "hits": 41,
+    "onset_offsets_ms": {
+     "median": -0.42,
+     "min": -4.29,
+     "max": 8.23
+    },
+    "caption": "Sound added offline from the logged hits; not simulated; the robot heard nothing",
+    "in_sync": true
+   },
+   "expected": 0.75,
+   "native": true,
+   "must_run": false
+  },
+  "control-tempo82": {
+   "score": 0.75,
+   "score_from_files": 0.75,
+   "variant": "tempo82",
+   "executed_steps": 400,
+   "step_limit": 400,
+   "elapsed_s": 333.82,
+   "termination_reason": "max_steps",
+   "result": "out/control-tempo82/RESULT.json",
+   "grader_trace": "out/control-tempo82/media/grader-trace.jsonl",
+   "hits_mid": "out/control-tempo82/media/hits.mid",
+   "hits_mid_sha256": "1d1025de79b2984f4fce78cce1cb407865d512319011f561a2be5e04796bb7fd",
+   "events": "out/control-tempo82/media/events.json",
+   "score_vs_hits": {
+    "path": "out/control-tempo82/media/score-vs-hits.png",
+    "sha256": "a5b262658dca1ba8dcba244674979e93933dabf014b76481cb92e80b04b4b591",
+    "table": "out/control-tempo82/media/scored-hits.csv"
+   },
+   "judged": {
+    "score": 0.75,
+    "bpm": 81.995,
+    "rms_ms": 15.48,
+    "max_error_ms": 30.8,
+    "H": 41,
+    "G": 8,
+    "E": 0,
+    "wrong": 0,
+    "extra": 0,
+    "arm_contacts": 0,
+    "rests": 0,
+    "accent": true,
+    "accent_detail": {
+     "numbers_mean": 92.1,
+     "ands_mean": 52.3,
+     "snare_mean": 89.9,
+     "each_number_louder": true
+    },
+    "clean_end": true,
+    "pair_spread_max_ms": 12.5,
+    "title": "control-tempo82 | score 0.75 | tempo 82.0 bpm fitted (written 75) | RMS 15 ms | pair spread max 12 ms, 8/8 together | extra or wrong hits 0 | notes 41/41"
+   },
+   "videos": {
+    "overhead": "out/control-tempo82/media/top_cam.mp4",
+    "side": "out/control-tempo82/media/side_cam.mp4",
+    "combined_with_sound": "out/control-tempo82/combined.mp4",
+    "combined_sha256": "9cc092abf971a909c98e8e73b772643fb7ef7575595a88444a426d8b5b7cb5a8"
+   },
+   "sound_sync": {
+    "video_start_s": 0.0,
+    "audio_start_s": 0.0,
+    "video_duration_s": 20.05,
+    "audio_duration_s": 20.05,
+    "frames": 401,
+    "fps": "20/1",
+    "sample_rate": "48000",
+    "xcorr_offset_ms": 0.0,
+    "hits": 41,
+    "onset_offsets_ms": {
+     "median": -0.42,
+     "min": -1.56,
+     "max": 12.4
+    },
+    "caption": "Sound added offline from the logged hits; not simulated; the robot heard nothing",
+    "in_sync": true
+   },
+   "expected": 0.75,
+   "native": true,
+   "must_run": false
+  }
+ },
+ "recorded_hashes": {
+  "scene_sha256": "457b0f8d185ff7806d11253238a428875c4f5ef3dd17bfb6ed268a99a5da6efa",
+  "layout_sha256": "6def71aaeb9cfa74f510e518150fc144495bba3381b32fb993e80c8ca22e61a4",
+  "hits_sha256": "dc02aa410c871102c943c2ac5dec49c55abfaf03def06c3cfba5b67969b354ef",
+  "judge_sha256": "5cac2d6b051dc755d94b8a92ad5dc28b716563d2c53ecd753b9a440d88c762c4",
+  "midi_sha256": "4dea2a091b300a11d3cd5f1d48217af0e654da3c59e8e78b1cf6ce7caf21d755",
+  "grader_sha256": "540b0ecd540d4a5bfe2e11e6f41eca9d72dbdd6416db28e43e5c3006a16dff1f",
+  "adapter_sha256": "8b8e2c8a02ae968d125769fd9f4cbcb026cc4bf92941f1b65a40155862b9c8b7",
+  "poses_sha256": "d3d4142e6e2b3998fe10d847fdd60c9f8bf19198cbeb9c2f708f7f25ca47cc33",
+  "scripted_sha256": "190e441dadaff5103556f5f31325e7db60c5a0d3094d77bffae5bb3e34d563d5",
+  "asset_sha256": "78f7612aea32fb3a21eddce4a30e9bba93717c9db07c17660bd39e16bb87dbec"
+ },
+ "scripted_final_grade": {
+  "score": 1.0,
+  "bpm": 74.996,
+  "rms_ms": 3.17,
+  "max_error_ms": 5.2,
+  "H": 41,
+  "G": 8,
+  "E": 0,
+  "wrong": 0,
+  "extra": 0,
+  "arm_contacts": 0,
+  "rests": 0,
+  "accent": true,
+  "accent_detail": {
+   "numbers_mean": 90.5,
+   "ands_mean": 51.7,
+   "snare_mean": 89.5,
+   "each_number_louder": true
+  },
+  "clean_end": true,
+  "pair_spread_max_ms": 8.3
+ }
+}
