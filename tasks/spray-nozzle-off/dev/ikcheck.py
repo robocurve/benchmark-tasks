@@ -13,7 +13,7 @@ from yam_arena import ik, station  # noqa: E402
 from yam_arena.demo import ArmPlan  # noqa: E402
 
 st = {n: state_from_pose(t.SPEC[n], p, q) for n, (p, q) in t.poses().items()}
-print("nozzle", t.nozzle_angle(st), "setting", t.setting(st), "compartment", t.compartment(st))
+print("nozzle", t.nozzle_angle(st), "setting", t.setting(st), "in cabinet", t.in_cabinet(st), "door", t.door_open_deg(st))
 plan = t.plan_from_state(st)
 for arm, wps in plan.items():
     ap = ArmPlan([t.park(arm, 0.5, label="look")] + list(wps), station.BASES[arm])

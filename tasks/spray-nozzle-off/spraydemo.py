@@ -2,8 +2,8 @@
 
 On its first control step the ``yam_scripted`` policy asks the task file for a plan made from the bottle's start pose,
 which it reads from the simulator (the scripted demo reads object poses; it moves the parts only through the grippers,
-by contact). Over the caddy it shifts the rest of the carrying hand's moves once, by how far the bottle's base is from
-the compartment's middle (read from the simulator). The simulated arm's joints are soft, so under load each settles
+by contact). Over its place it shifts the rest of the carrying hand's moves once, by how far the bottle's base is from
+that place (read from the simulator). The simulated arm's joints are soft, so under load each settles
 short of its target; the demo closes that gap from the joint angles it observes (a bounded integral correction of the
 TCP pose).
 """
@@ -21,7 +21,7 @@ _PLAN_LOG = open(os.environ["SPRAY_DEBUG"] + ".plan", "w") if os.environ.get("SP
 SAG_GAIN = float(os.environ.get("SPRAY_SAG_GAIN", "0.25"))  # of the TCP pose error per control step
 SAG_MAX = float(os.environ.get("SPRAY_SAG_MAX", "0.30"))  # rad per joint
 UNWIND = ("back off up", "back to the ready pose")
-FREEZE = ("let go of the bottle", "let go of the nozzle", "back off")  # held, not grown or run down
+FREEZE = ("let go of the bottle", "let go of the nozzle", "back off", "touch the door", "push the door shut")  # held, not grown or run down
 UNWIND_RATE = 0.8
 AIM_LABEL = "steady"
 
@@ -80,8 +80,8 @@ def install() -> None:
         self._end = max((p.duration for p in self._plans.values()), default=0.0)
 
     def _reaim(self, m, t) -> None:
-        """Once the carrying hand has held "steady" over the caddy for 0.5 s, shift its remaining moves (not the
-        park) by how far the bottle's base is from the compartment's middle, at most 30 mm."""
+        """Once the carrying hand has held "steady" over its place for 0.5 s, shift its remaining moves (not the
+        park) by how far the bottle's base is from that place, at most 30 mm."""
         if self._sd_aim_t is None:
             self._sd_aim_t = t
         if t - self._sd_aim_t < 0.5:

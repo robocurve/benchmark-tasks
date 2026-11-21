@@ -23,7 +23,7 @@ if [ "$policy" = "dream" ]; then extra+=(-P server_url=http://127.0.0.1:8211); f
 echo "=== $(date -u +%H:%M:%S) spray-nozzle-off-$name ($policy, seed $seed, $steps steps) $*" | tee "$dir/started.txt"
 printf 'n\n\n' | env "$@" SPRAY_DEBUG="$dir/debug.log" inspect-robots run --embodiment yam_arena \
   -E task=spray_nozzle_off.py -E object_jitter=0 -E control_hz=20 -E cam_width=${CAM_W:-640} -E cam_height=${CAM_H:-360} \
-  --instruction "Put the bathroom cleaner back in the caddy." \
+  --instruction "Put the bathroom cleaner away." \
   --scorer task_score --max-steps "$steps" --policy "$policy" "${extra[@]}" --seed "$seed" \
   --log-dir "$dir" > "$dir/run.out" 2>&1
 echo "exit $? score $(grep -h 'task_score:' "$dir/run.out" | tail -1 | awk '{print $2}')" | tee "$dir/finished.txt"
