@@ -1,0 +1,22 @@
+{
+  "title": "Pick up a tennis ball with a rolling wire-cage ball picker and lift it off the court",
+  "category": "Societal relatability",
+  "keywords": [
+    "tool use",
+    "rolling ball picker",
+    "tennis ball",
+    "long-handled tool",
+    "bimanual",
+    "regrasp",
+    "compliant wires"
+  ],
+  "instruction": "Pick up the tennis ball with the ball picker: roll its cage over the ball so the ball pops inside, then lift the picker off the court with the ball in it.",
+  "context": "Players, coaches and gardeners pick balls and nuts off the ground with rolling wire-cage pickers, standing up, without bending down. The skill is physical: the cage is rolled over the ball under a steady downward press, so two of its springy wires spread round the ball and close behind it. And the tool is a 1.5 m pole worked from standing height at the floor: both hands have to work it together to lift the picker with the ball still in it.",
+  "setup": "Positions in cm from the midpoint between the two arm bases (x forward, y to the robot's left); heights above the court. The arms stand on a bench 130 cm wide, its front edge at x 12, its top 76 cm above the floor. A green hard-court mat, 160 x 160 cm, 4 mm thick, lies on the floor from x 15 to 175, centred on y 0. Ball picker: a Garden Weasel Large Nut Gatherer cage (model 95404: 30 spring-steel wires 1 mm thick between two hubs, 20 cm across, takes objects 3.8-7.6 cm) turning in a red steel U-bail, on a 152 cm (60 in) aluminium pole with a 20 cm black rubber grip at its end, 0.81 kg in all; the cage stands on the mat with its axle at (101.6, 0), across y, and the pole leans back towards the robot at 55 degrees, its end at x 20, 127 cm up. Tennis ball: ITF type 2, 6.7 cm, 58 g, yellow felt, at rest on the mat at (119.6, 0).",
+  "scoring": "Tools: a tape measure and a phone camera from the side. Inside: the ball sits within the wire cage (between the hubs, behind the wires). Lifted: the cage's lowest point is at least 10 cm above the court. At the end: 0 if the ball is not inside the cage; 0.5 if it is inside but the cage is not lifted; 1.0 if it is inside and the cage is lifted, held for 1 s. A trial in which the robot touches the ball (checked on the video) scores 0.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Open the cage with its spreader to take the ball out, then stand the picker and the ball back on their marks, the pole leaning back at 55 degrees as in the setup.",
+  "fidelity": "Rigid-body PhysX. Each cage wire is a rigid bow on two springs (sideways and inwards) set from a beam model of a 1 mm spring-steel wire; the wires collide with each other and spread round the ball. The bail turns freely on the cage's axle. The ball is a rigid sphere of the ITF size and mass, with rolling friction added as a torque. The court is a flat mat and the arms' bench is the station's table cut short.",
+  "scores": "Dream-1 run: 0.0 (2,400 steps; the arms moved about near the pole's end without working the picker; the cage never rolled over the ball, which stayed on the court); demo: 1.0",
+  "media": "M-E36ZXS"
+}

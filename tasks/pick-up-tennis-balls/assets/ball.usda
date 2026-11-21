@@ -1,0 +1,40 @@
+#usda 1.0
+(
+    defaultPrim = "Ball"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Ball" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+)
+{
+    rel material:binding:physics = </Ball/Material> (
+        bindMaterialAs = "weakerThanDescendants"
+    )
+    float3 physics:diagonalInertia = (0.000043169217, 0.000043169217, 0.000043169217)
+    float physics:mass = 0.0577
+    custom float physxRigidBody:sleepThreshold = 0
+
+    def Sphere "geom" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.6993936, 0.7931102, 0.0153957475)]
+        double radius = 0.0335
+    }
+
+    def Material "Material" (
+        prepend apiSchemas = ["PhysicsMaterialAPI", "PhysxMaterialAPI"]
+    )
+    {
+        float physics:dynamicFriction = 1
+        float physics:restitution = 0
+        float physics:staticFriction = 1
+        custom token physxMaterial:frictionCombineMode = "multiply"
+    }
+}
+

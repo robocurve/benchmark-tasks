@@ -1,0 +1,35 @@
+#usda 1.0
+(
+    defaultPrim = "Court"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Court" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+)
+{
+    float physics:mass = 1
+    custom float physxRigidBody:sleepThreshold = 0
+
+    def Cube "visual"
+    {
+        color3f[] primvars:displayColor = [(0.028991187, 0.1483025, 0.070740275)]
+        double size = 1
+        float3 xformOp:scale = (1.6, 1.6, 0.004)
+        uniform token[] xformOpOrder = ["xformOp:scale"]
+    }
+
+    def Cube "collision" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        double size = 1
+        token visibility = "invisible"
+        float3 xformOp:scale = (1.6, 1.6, 0.05)
+        double3 xformOp:translate = (0, 0, -0.023)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+}
+
