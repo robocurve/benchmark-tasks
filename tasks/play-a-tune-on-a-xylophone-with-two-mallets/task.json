@@ -1,0 +1,20 @@
+{
+  "title": "Play a tune on a xylophone with two mallets",
+  "category": "Societal relatability",
+  "keywords": [
+    "xylophone",
+    "music",
+    "mallets",
+    "bimanual",
+    "reading a card"
+  ],
+  "instruction": "Play the tune on the card, one mallet in each hand.",
+  "context": "Playing a children's xylophone from a song card (here the opening of Twinkle, Twinkle, Little Star) is something nearly everyone has done or watched: the right bars, in order, each struck cleanly so the mallet bounces off, with a mallet in each hand.",
+  "setup": "Two arm bases stand 61 cm apart at the near edge of a table; positions are measured forward from the line through the bases (x) and sideways from the midline (y, positive to the robot's left). A student xylophone stands centred 36 cm out on the midline: a pine board 24 x 40 x 1 cm carrying two red felt rails (1.5 x 36 x 1 cm, 5 cm either side of the bars' centre line) and, on them, eight tuned painted steel bars C D E F G A B C, each 3.5 cm wide, 0.9 cm thick, side by side with 0.5 cm gaps, 4 cm apart, lengths 17, 16, 15, 14.2, 13.4, 12.6, 11.8 and 11 cm (the 17 cm low C at y = +14 cm, on the robot's left, the 11 cm high C at y = -14 cm), colours red, orange, yellow, green, cyan, blue, violet, pink (the note letter is printed on each bar in a real instrument). Two mallets lie on small pine stands on the table, heads forward, each stand two 3 x 4 x 4 cm blocks (centred 3 cm and 19 cm behind the ball's centre) carrying the handle 4 cm above the table: each a 22 x 1.2 x 2 cm wooden handle (40 g) with a 2.5 cm wooden ball head (25 g), the left mallet's head at 33 cm out, 31 cm left, the right mallet's head at 33 cm out, 31 cm right. A song card (cream card 36 x 20 cm, 0.6 cm thick, on a pine stand) stands at 62 cm out on the midline facing the robot, showing seven coloured squares (4 x 4 cm) left to right in the bars' colours: red, red, cyan, cyan, blue, blue, cyan, i.e. C C G G A A G (the note letters are printed under the squares on a real card). The arms start in their folded ready pose.",
+  "scoring": "A strike is a mallet head arriving on a bar: the ball's lowest point within 6 mm of the bar's top face, its centre over that bar's outline, moving down at 0.15 m/s or more just before contact, and then lifting back up (read from the trial video and its sound). A strike counts once; the head must rise 1 cm above the bars before another counts. A slow touch, a drag across bars or a hit with the handle or elsewhere is not a strike. The tune is bars C C G G A A G. k is how many of the first strikes match the tune, in order, before the first strike on any other bar or any strike after the seventh note (those end the count). Score = 0.6 x k / 7, plus 0.4 when all seven notes were played with no wrong or extra strike, each mallet played at least 2 of them, and at the end both mallets lie back on their stands (each handle within 3 cm of where it started and 1 cm of its height), both grippers are at least 7 cm from both handles, and nothing has moved more than 3 mm for 1 s. Doing nothing scores 0; a mallet knocked or dropped off the table scores 0; playing the whole tune with one mallet only, or leaving a mallet held or on the xylophone, scores at most 0.6.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "Lay the mallets back on their stands, heads forward. Nothing is consumed.",
+  "fidelity": "Real trials use a tuned 8-note C-major student xylophone (each bar its own pitch). In the sim the bars are rigid, fixed and silent: a strike is detected from the head's contact and speed rather than sound. Bars differ in length and colour as on the real instrument; letters on bars and card are replaced by matching colours. Mallets and bars are rigid shapes at real size and mass.",
+  "scores": "Dream-1 run: 0; demo: 1.0",
+  "media": "M-5HJP6P"
+}
