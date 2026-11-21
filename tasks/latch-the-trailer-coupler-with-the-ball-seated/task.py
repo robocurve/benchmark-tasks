@@ -38,7 +38,7 @@ LOOKS = {
     "jaw": m.Look(m.rgb(0.85, 0.25, 0.10), roughness=0.5),
     "tongue": m.Look(m.rgb(0.20, 0.35, 0.60), roughness=0.5),
 }
-BX, BY = 0.40, 0.16
+BX, BY = 0.36, 0.22  # (0.40, 0.16) in the first build: moved toward the left arm for the straight-down reach to the open handle
 BALL_DY = 0.0  # the ball sits under the socket (a probe moved it 45 mm aside to test the latched-not-seated rule)
 BZ = 0.070
 R = 0.0254
@@ -227,16 +227,6 @@ def push_handle(dz=0.0):
     return wps
 
 
-def push_plate_short():
-    """Push the coupler only 10 mm of its 25 mm down (still sitting high on the ball), then stop."""
-    x = -0.020
-    top0 = TOPPL + HOVER
-    return [Waypoint(1.5, W(x, 0, top0 + PAD + 0.06), FINGER_CLOSED, "above the coupler head", yaw=0.0),
-            Waypoint(1.0, W(x, 0, top0 + PAD + 0.004), FINGER_CLOSED, "down to the top plate", yaw=0.0),
-            Waypoint(1.5, W(x, 0, top0 + PAD - 0.010), FINGER_CLOSED, "push it 10 mm down", yaw=0.0),
-            Waypoint(1.0, W(x, 0, top0 + PAD + 0.05), FINGER_CLOSED, "straight up", yaw=0.0)]
-
-
 def demo():
     v = hhkit.demo_variant()
     rest = [Waypoint(1.0, REST_R, FINGER_OPEN, "stay", yaw=0.0)]
@@ -246,6 +236,4 @@ def demo():
         return {"left": start + push_handle(HOVER) + push_plate() + back, "right": rest}
     if v == "plate":  # only seat it
         return {"left": start + push_plate() + back, "right": rest}
-    if v == "short":  # coupler pushed only part-way, then the handle
-        return {"left": start + push_plate_short() + push_handle(HOVER * 0.6) + back, "right": rest}
     return {"left": start + push_plate() + push_handle(0.0) + back, "right": rest}

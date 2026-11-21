@@ -29,7 +29,7 @@ The score is recomputed from the current state, so undoing the latch drops it ag
 The underjaw is a real slider with two tines and a crossbar under the socket. When the handle is pushed down while
 the coupler still hovers, the tines run into the ball's lower half, the jaw stops, and the handle jams part-way
 (about 13–15° in sim). The coupler can then still be pushed down and seated, but the handle cannot be finished:
-0.5. Pushing the coupler down only part-way and then latching jams the same way (the sim `short` control).
+0.5.
 
 ## Parts and real-world counterparts
 
@@ -40,6 +40,13 @@ the coupler still hovers, the tines run into the ball's lower half, the jaw stop
 | Red underjaw slider, 65 mm stroke | Coupler underjaw / latch tongue |
 | Blue 2 in channel, 20 cm, pivoting on a stand | Front of the trailer A-frame tongue (the jack holds the rest) |
 | 2 in chrome ball, 3/4 in shank, on a 14 × 12 cm base | 2 in hitch ball on a ball mount |
+
+## Judging a real trial
+
+Whether the ball is seated is partly hidden inside the socket from above. The overhead camera shows the coupler level
+(no longer tipped up) and the handle position; the side camera shows the red underjaw under the ball's equator. The
+decisive check is CURT's own: jack (here, lift) the tongue after latching. If it comes off the ball, it was not
+seated before it was latched.
 
 ## Fidelity, honestly
 
@@ -59,7 +66,6 @@ the coupler still hovers, the tines run into the ball's lower half, the jaw stop
 | demo | coupler down, then handle down, arm to rest | 1.0 |
 | naive | handle first (jams), then coupler down | 0.5 |
 | plate | coupler down only | 0.5 |
-| short | coupler 10 mm of 25 mm down (it stays there, 3.9° up), then handle | 0.5: the handle push forces the coupler down and seats it, but the jaw has already met the ball and jams at 15° |
 
 `test_task.py` (offline, no simulator) checks the untouched start state (0), the scoring table, the 1 s hold, the 3 cm release check, undoing, the
 latched-not-seated zero (a development run also checked it in sim with the ball moved 45 mm aside: 0.0), the socket
@@ -67,10 +73,10 @@ geometry and the task.json limits.
 
 ## Reach
 
-All pushes are straight down with the left arm at x 0.38–0.40 m, y 0.16 m, TCP 0.10–0.22 m above the bench. An offline
-straight-down IK check of the arm puts the first touch of the open (60°) handle's end pad near the edge of the arm's straight-down envelope;
-the arm in the sim reaches it, and the scripted demo scores 1.0. A real trial should check that pose first; the
-fallback is to move the whole fixture to about (0.36, 0.22) with no other change.
+All pushes are straight down with the left arm at x 0.34–0.36 m, y 0.22 m (the fixture sits on the left arm's side),
+TCP 0.10–0.22 m above the bench. An earlier build put the ball at (0.40, 0.16); an offline straight-down IK check
+of the arm put the first touch of the open (60°) handle's end pad just outside the envelope there, so the fixture was
+moved to (0.36, 0.22). Scores were the same in both places.
 
 ## Not a duplicate of
 
@@ -94,8 +100,8 @@ fallback is to move the whole fixture to about (0.36, 0.22) with no other change
 
 ## Scores
 
-- Scripted demo (yam_arena, 320x176, seed 1): 1.0, success at step 375 of 700.
+- Scripted demo (yam_arena, 320x176, seed 1): 1.0, success at step 377 of 700.
 - TASK_DEMO=naive: 0.5 (handle jams at about 15°; the coupler is then seated but cannot be latched).
 - TASK_DEMO=plate: 0.5.
-- TASK_DEMO=short: 0.5.
-- Dream-1: not run yet.
+- Dream-1 flash (seed 1, 320x176, Brev L40S, at the first-build position (0.40, 0.16), commit 22f8e7e): 0.0 after 700 steps, not refused (28 requests).
+- The scripted runs above were repeated at the final position (0.36, 0.22): demo 1.0 at step 377, naive 0.5, plate 0.5 (Brev at 22f8e7e: 1.0 at step 375 / 0.5 / 0.5).
