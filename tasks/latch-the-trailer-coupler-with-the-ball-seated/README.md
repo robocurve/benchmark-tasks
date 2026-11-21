@@ -38,8 +38,11 @@ the coupler still hovers, the tines run into the ball's lower half, the jaw stop
 | Zinc socket head, 52.4 mm pocket, flared skirt, top plate | CURT 25153 coupler body (10-3/4 × 2 × 4-1/4 in) |
 | Yellow handle, 5.5 cm, hinged on top of the socket | Posi-Lock latch handle |
 | Red underjaw slider, 65 mm stroke | Coupler underjaw / latch tongue |
-| Blue 2 in channel, 20 cm, pivoting on a stand | Front of the trailer A-frame tongue (the jack holds the rest) |
-| 2 in chrome ball, 3/4 in shank, on a 14 × 12 cm base | 2 in hitch ball on a ball mount |
+| Blue 2 in tongue beam, pivoting at the tongue jack 22 cm behind the ball | Straight trailer tongue resting on its jack |
+| 2 in chrome ball, 3/4 in shank, on a ball mount (2 in square shank, hitch pin) in a 2 in receiver | 2 in hitch ball on a ball mount in the car's receiver hitch |
+| Car back at the bench's left end: bumper, tailgate, lamps, number plate (drawn only, 84 cm of a 1.8 m width) | The tow vehicle |
+| Tongue jack, A-frame braces, front rail and wooden front board at the bench's right end (drawn only) | Front of a small utility trailer |
+| Two safety chains hanging from the coupler, unhooked (drawn only) | Safety chains, crossed and hooked to the car after latching |
 
 ## Judging a real trial
 
@@ -59,7 +62,8 @@ seated before it was latched.
   angle and saturates fully in at 2° from closed. The jaw itself is a physical slider, so it is blocked by the ball when
   the coupler is not seated; it is never teleported.
 - Joint start states are written in `@m.on_reset` (mechkit's `start=` is not applied by the sim).
-- No safety pin or chains; the task ends at the latch.
+- The safety chains hang unhooked and there is no safety pin: the task ends at the latch (chains and pin go on after it).
+- **Realism pass (v6, after review).** The hitch is turned a quarter turn so the car can stand at the bench's left end and the trailer at its right end, at real size: the ball mount runs from the car's receiver to the ball, the tongue runs from the coupler through a tongue jack (where it pivots) to an A-frame and the trailer's front rail and board. The car's back and the trailer's front are cut off at the bench's edges (a car is 1.8 m wide and a utility trailer's tongue about 1.2 m long, so only partials fit); the ball is 7 cm above the bench, so the bench stands in for the ground about 40 cm below the ball. Everything added is drawn only (no colliders), so the scored mechanism, its colliders and the scoring are unchanged; the old 14 x 12 cm base is now an undrawn collider under the ball mount. The pushes are the same moves turned with the hitch (gripper yaw -90 degrees).
 
 ## Policy controls (scripted, `TASK_DEMO=<variant>`)
 
@@ -75,7 +79,7 @@ geometry and the task.json limits.
 
 ## Reach
 
-All pushes are straight down with the left arm at x 0.34–0.36 m, y 0.22 m (the fixture sits on the left arm's side),
+All pushes are straight down with the left arm at x 0.36 m, y 0.20–0.24 m (the fixture sits on the left arm's side; gripper yaw -90 degrees since v6),
 TCP 0.10–0.22 m above the bench. An earlier build put the ball at (0.40, 0.16); an offline straight-down IK check
 of the arm put the first touch of the open (60°) handle's end pad just outside the envelope there, so the fixture was
 moved to (0.36, 0.22). Scores were the same in both places.

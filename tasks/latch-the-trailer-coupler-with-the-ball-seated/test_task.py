@@ -66,7 +66,7 @@ def test_latched_not_seated_zero():
 
 
 def test_full_needs_hand_clear():
-    pad = ORIGIN + np.array([M.HP[0] - M.HANDLE_L, 0.0, M.HP[2] + 0.02])
+    pad = M.to_world(M.HP[0] - M.HANDLE_L, 0.0, M.HP[2] + 0.02)
     M.TRIAL.grippers_override = [{"tcp": pad, "tips": [pad, pad]}, FAR[1]]
     assert run(coupler(0.0, 1.0, -M.JAW_TRAVEL))[0] < 1.0
 
@@ -91,3 +91,11 @@ def test_task_json_limits():
     d = json.loads((HERE / "task.json").read_text())
     assert len(d["title"]) <= 120 and len(d["fidelity"]) <= 500 and len(d["scores"]) <= 300 and len(d.get("context", "")) <= 1000
     assert d["instruction"] == M.INSTRUCTION
+
+
+def test_hitch_turned_car_left_trailer_right():
+    assert np.allclose(M.to_world(0, 0, 0), ORIGIN)
+    car, trailer = M.to_world(M.CAR_X, 0), M.to_world(M.TRAILER_X, 0)
+    assert car[1] > 0.55 and trailer[1] < -0.55  # bumper at the bench's left end, trailer front at its right end
+    pad = M.to_world(M.HP[0] - M.HANDLE_L, 0, 0)
+    assert 0.35 <= pad[0] <= 0.60 and abs(pad[1]) < 0.35  # the handle pad stays in the table middle

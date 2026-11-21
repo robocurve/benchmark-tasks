@@ -1,7 +1,8 @@
-"""At the station table: a utility trailer's coupler, CURT 25153 (2 in straight-tongue coupler with Posi-Lock latch,
-3,500 lb, zinc, 27 cm long, 5 cm wide), on the end of its tongue, which pivots on a stand at its far end. The coupler
-hovers 25 mm above a 2 in hitch ball on a fixed ball mount, its yellow latch handle up (unlatched), as CURT's hook-up
-sheet says to start. The instruction asks only to hitch the trailer. Hitched means: the coupler pushed down until the
+"""At the station table: a car's back at the bench's left end, a 2 in hitch ball on a ball mount in its receiver, and a
+small utility trailer's tongue running from the ball through its jack to the trailer's front at the bench's right end.
+On the tongue's end is the coupler, CURT 25153 (2 in straight-tongue coupler with Posi-Lock latch, 3,500 lb, zinc,
+27 cm long, 5 cm wide); the tongue pivots at the jack. The coupler hovers 25 mm above the ball, its yellow latch handle
+up (unlatched), as CURT's hook-up sheet says to start. Car, ball mount, jack, trailer front and chains are drawn only. The instruction asks only to hitch the trailer. Hitched means: the coupler pushed down until the
 ball is fully seated in its socket, THEN the handle pushed down until it latches, which drives the underjaw in under the
 ball. Latching first (the handle down while the coupler still hovers) jams the underjaw against the ball; the handle
 stops part-way and cannot be finished from there. A latch closed with the ball not in the socket scores 0.
@@ -37,8 +38,21 @@ LOOKS = {
     "handle": m.Look(m.rgb(0.95, 0.80, 0.05), roughness=0.5),
     "jaw": m.Look(m.rgb(0.85, 0.25, 0.10), roughness=0.5),
     "tongue": m.Look(m.rgb(0.20, 0.35, 0.60), roughness=0.5),
+    "black": m.Look(m.rgb(0.06, 0.06, 0.07), roughness=0.55),
+    "powder": m.Look(m.rgb(0.10, 0.10, 0.11), metallic=0.3, roughness=0.45),
+    "paint": m.Look(m.rgb(0.55, 0.05, 0.06), metallic=0.5, roughness=0.25),
+    "lamp": m.Look(m.rgb(0.85, 0.08, 0.06), roughness=0.2),
+    "amber": m.Look(m.rgb(0.95, 0.55, 0.10), roughness=0.2),
+    "plate_w": m.Look(m.rgb(0.93, 0.93, 0.90), roughness=0.4),
+    "glass": m.Look(m.rgb(0.05, 0.06, 0.08), metallic=0.4, roughness=0.1),
+    "wood": m.Look(m.rgb(0.52, 0.40, 0.27), roughness=0.8),
+    "chain": m.Look(m.rgb(0.70, 0.72, 0.74), metallic=0.8, roughness=0.35),
 }
-BX, BY = 0.36, 0.22  # (0.40, 0.16) in the first build: moved toward the left arm for the straight-down reach to the open handle
+BX, BY = 0.36, 0.22  # the ball; (0.40, 0.16) in the first build: moved toward the left arm for the straight-down reach to the open handle
+# v6 (realism): the whole hitch is turned a quarter turn (yaw -90 deg) so the car can be at the bench's left end and the
+# trailer at its right end. The mechanism's own +x (from the ball toward the trailer) now points along world -y; its
+# own -x (from the ball toward the car) along world +y.
+YAW_DEG = -90.0
 BALL_DY = 0.0  # the ball sits under the socket (a probe moved it 45 mm aside to test the latched-not-seated rule)
 BZ = 0.070
 R = 0.0254
@@ -70,6 +84,15 @@ def _head():
         parts.append((f"fun{k}", fun, "zinc")); cols.append(m.col_hull(f"c_fun{k}", fun))
     bar = m.box((0.20, 0.034, 0.008), (0.1375, 0, BZ + 0.0284))
     parts.append(("bar", bar, "tongue")); cols.append(m.col_hull("c_bar", bar))
+    # drawn only (no colliders): the coupler's channel body over the tongue's end, the 2 x 2 in tongue beam to the
+    # jack, and the two safety chains hanging off the coupler, not yet hooked to the car (they go on after latching)
+    parts.append(("sleeve", m.box((0.085, 0.058, 0.052), (0.1025, 0, BZ + 0.0284)), "zinc"))
+    parts.append(("beam", m.box((0.0925, 0.050, 0.050), (0.1913, 0, BZ + 0.0284)), "tongue"))
+    for k, sy in (("l", 1.0), ("r", -1.0)):
+        pts = [(0.125, sy * 0.032, BZ + 0.012), (0.118, sy * 0.040, BZ - 0.020), (0.105, sy * 0.050, 0.030),
+               (0.085, sy * 0.058, 0.014), (0.055, sy * 0.066, 0.010), (0.020, sy * 0.072, 0.010), (-0.010, sy * 0.076, 0.012)]
+        parts.append((f"chain_{k}", m.tube(pts, 0.0035, sides=8), "chain"))
+        parts.append((f"hook_{k}", m.box((0.018, 0.005, 0.016), (-0.020, sy * 0.077, 0.016)), "chain"))
     return parts, cols
 
 
@@ -89,18 +112,58 @@ JAW = m.slider("jaw", "X", -JAW_TRAVEL, 0.0, (("t1", _t1, "jaw"), ("t2", _t2, "j
                (m.col_hull("c_t1", _t1), m.col_hull("c_t2", _t2), m.col_hull("c_tb", _tb)), mass=0.03, spring=4000.0, damping=40.0, friction=0.0, parent="tongue", effort=100.0)
 
 
+CAR_X = -0.40  # the car's rear bumper face, in the hitch's own x (world y 0.62, the bench's left end)
+TRAILER_X = 0.86  # the trailer's front rail, in the hitch's own x (world y -0.64, the bench's right end)
+
+
 def _frame():
-    base = m.box((0.14, 0.12, 0.012), (0, BALL_DY, 0.006))
     shank = m.cylinder(SHANK_R, BZ - 0.012, (0, BALL_DY, 0.012 + (BZ - 0.012) / 2))
     ball = m.sphere(R, (0, BALL_DY, BZ))
-    post = m.box((0.03, 0.05, PIV[2]), (PIV[0], 0, PIV[2] / 2))
-    parts = [("base", base, "base"), ("shank", shank, "ball"), ("ball", ball, "ball"), ("post", post, "base")]
+    parts = [("shank", shank, "ball"), ("ball", ball, "ball")]
+    # drawn only (no colliders). The car: a ball mount (2 in square shank, platform under the ball, hitch pin) in a
+    # 2 in receiver under the rear bumper of a car whose back stands at the bench's left end. Real size, cut off at the
+    # sides (a car is 1.8 m wide; 0.84 m of its back is drawn) and above the tailgate's lower half.
+    parts += [("bm_platform", m.box((0.080, 0.064, 0.012), (-0.008, 0, 0.024)), "zinc"),
+              ("bm_shank", m.box((0.250, 0.050, 0.050), (-0.180, 0, 0.025)), "powder"),
+              ("bm_nut", m.cylinder(0.017, 0.010, (0, 0, 0.013)), "zinc"),
+              ("receiver", m.box((0.120, 0.064, 0.064), (CAR_X + 0.060, 0, 0.032)), "black"),
+              ("hitch_pin", m.cylinder(0.008, 0.090, (CAR_X + 0.040, 0, 0.032), axis="y"), "zinc"),
+              ("crossmember", m.box((0.050, 0.70, 0.045), (CAR_X - 0.010, 0, 0.040)), "black"),
+              ("bumper", m.box((0.130, 0.84, 0.130), (CAR_X - 0.065, 0, 0.125)), "black"),
+              ("fascia", m.box((0.120, 0.84, 0.060), (CAR_X - 0.075, 0, 0.220)), "paint"),
+              ("tailgate", m.box((0.090, 0.84, 0.220), (CAR_X - 0.105, 0, 0.360)), "paint"),
+              ("rear_glass", m.box((0.010, 0.70, 0.050), (CAR_X - 0.062, 0, 0.445)), "glass"),
+              ("plate", m.box((0.006, 0.300, 0.150), (CAR_X - 0.058, 0, 0.330)), "plate_w"),
+              ("plate_text", m.box((0.004, 0.240, 0.050), (CAR_X - 0.055, 0, 0.330)), "glass"),
+              ("lamp_l", m.box((0.010, 0.120, 0.110), (CAR_X - 0.058, 0.350, 0.330)), "lamp"),
+              ("lamp_r", m.box((0.010, 0.120, 0.110), (CAR_X - 0.058, -0.350, 0.330)), "lamp"),
+              ("reflector_l", m.box((0.010, 0.060, 0.020), (CAR_X - 0.002, 0.360, 0.150)), "amber"),
+              ("reflector_r", m.box((0.010, 0.060, 0.020), (CAR_X - 0.002, -0.360, 0.150)), "amber")]
+    # the trailer: the tongue beam runs on from the jack to an A-frame and the front of a small utility trailer
+    # (front rail and a wooden front board) at the bench's right end, at real size, cut off at the bench's edge
+    zt = BZ + 0.0284
+    parts += [("beam_fixed", m.box((TRAILER_X - 0.2375, 0.050, 0.050), ((TRAILER_X + 0.2375) / 2, 0, zt)), "tongue"),
+              ("jack_tube", m.cylinder(0.022, 0.210, (PIV[0], 0.050, 0.105)), "powder"),
+              ("jack_foot", m.cylinder(0.045, 0.008, (PIV[0], 0.050, 0.004)), "powder"),
+              ("jack_cap", m.cylinder(0.026, 0.030, (PIV[0], 0.050, 0.225)), "black"),
+              ("jack_crank", m.box((0.090, 0.010, 0.010), (PIV[0] + 0.045, 0.050, 0.245)), "zinc"),
+              ("jack_knob", m.cylinder(0.008, 0.030, (PIV[0] + 0.090, 0.050, 0.262)), "black"),
+              ("jack_bracket", m.box((0.050, 0.030, 0.050), (PIV[0], 0.032, zt)), "powder"),
+              ("front_rail", m.box((0.050, 0.66, 0.050), (TRAILER_X, 0, zt)), "tongue"),
+              ("front_board", m.box((0.020, 0.66, 0.240), (TRAILER_X + 0.035, 0, zt + 0.145)), "wood")]
+    for k, sy in (("l", 1.0), ("r", -1.0)):  # A-frame braces from the beam to the front rail's corners
+        a, b = np.array([0.56, 0.0]), np.array([TRAILER_X - 0.02, sy * 0.30])
+        L = float(np.linalg.norm(b - a))
+        ang = math.degrees(math.atan2(b[1] - a[1], b[0] - a[0]))
+        brace = m.box((L, 0.040, 0.040), (0, 0, 0)).turned(ang, "z").moved(((a[0] + b[0]) / 2, (a[1] + b[1]) / 2, zt))
+        parts.append((f"aframe_{k}", brace, "tongue"))
+    # the old 14 x 12 cm base stays as an (undrawn) collider under the ball mount
     cols = [m.col_box("c_base", (0.14, 0.12, 0.012), (0, BALL_DY, 0.006)), m.col_cylinder("c_shank", SHANK_R, BZ - 0.012, (0, BALL_DY, 0.012 + (BZ - 0.012) / 2)), m.col_hull("c_ball", ball)]
     return parts, cols
 
 
 _FP, _FC = _frame()
-COUPLER = m.mechanism("coupler", (BX, BY, TOP), [TONGUE, HANDLE, JAW], LOOKS, frame_parts=_FP, frame_colliders=_FC,
+COUPLER = m.mechanism("coupler", (BX, BY, TOP), [TONGUE, HANDLE, JAW], LOOKS, frame_parts=_FP, frame_colliders=_FC, yaw_deg=YAW_DEG,
                       start=(("tongue", math.radians(START_DEG)), ("handle", math.radians(HANDLE_OPEN)), ("jaw", 0.0)))
 OBJECTS = [COUPLER]
 
@@ -139,7 +202,14 @@ def pocket_offset(th_rad):
     return x, z  # pocket centre (local x, z)
 
 
-COUPLER_BOX = ((0.10, 0.0, BZ + 0.03), (0.30, 0.07, 0.10))  # centre and size of a box round coupler, handle and tongue (local)
+def to_world(x, y, z=0.0):
+    """A point in the hitch's own frame (x from the ball toward the trailer) -> the env frame (yaw YAW_DEG about the ball)."""
+    c, s = math.cos(math.radians(YAW_DEG)), math.sin(math.radians(YAW_DEG))
+    return np.array([BX + c * x - s * y, BY + s * x + c * y, TOP + z])
+
+
+# a box round coupler, handle and tongue: centre (local (0.10, 0, BZ + 0.03)) and size in the env frame (turned)
+COUPLER_BOX = (tuple(to_world(0.10, 0.0, BZ + 0.03) - np.array([BX, BY, TOP])), (0.07, 0.30, 0.10))
 
 
 def _clear_of_coupler(st) -> bool:
@@ -195,20 +265,23 @@ REST_R = (0.20, -0.30, TOP + 0.18)
 PAD = 0.013  # TCP above fingertip
 
 
+GRIP_YAW = math.radians(YAW_DEG)  # the gripper turned with the hitch, so it meets the plate and pad as before
+
+
 def W(x, y, z):
-    return (BX + x, BY + y, TOP + z)
+    return tuple(float(v) for v in to_world(x, y, z))
 
 
 def push_plate(lift=0.0):
     x = -0.020
     top0 = TOPPL + HOVER
-    return [Waypoint(1.5, W(x, 0, top0 + PAD + 0.06), FINGER_CLOSED, "above the coupler head", yaw=0.0),
-            Waypoint(1.0, W(x, 0, top0 + PAD + 0.004), FINGER_CLOSED, "down to the top plate", yaw=0.0),
-            Waypoint(0.5, W(x, 0, top0 + PAD + 0.001), FINGER_CLOSED, "touch", yaw=0.0),
-            Waypoint(2.0, W(x, 0, TOPPL + PAD - 0.002), FINGER_CLOSED, "push the coupler down onto the ball", yaw=0.0),
-            Waypoint(1.0, W(x, 0, TOPPL + PAD - 0.006), FINGER_CLOSED, "press home", yaw=0.0),
-            Waypoint(0.6, W(x, 0, TOPPL + PAD - 0.006), FINGER_CLOSED, "hold", yaw=0.0),
-            Waypoint(1.0, W(x, 0, TOPPL + PAD + 0.06), FINGER_CLOSED, "straight up", yaw=0.0)]
+    return [Waypoint(1.5, W(x, 0, top0 + PAD + 0.06), FINGER_CLOSED, "above the coupler head", yaw=GRIP_YAW),
+            Waypoint(1.0, W(x, 0, top0 + PAD + 0.004), FINGER_CLOSED, "down to the top plate", yaw=GRIP_YAW),
+            Waypoint(0.5, W(x, 0, top0 + PAD + 0.001), FINGER_CLOSED, "touch", yaw=GRIP_YAW),
+            Waypoint(2.0, W(x, 0, TOPPL + PAD - 0.002), FINGER_CLOSED, "push the coupler down onto the ball", yaw=GRIP_YAW),
+            Waypoint(1.0, W(x, 0, TOPPL + PAD - 0.006), FINGER_CLOSED, "press home", yaw=GRIP_YAW),
+            Waypoint(0.6, W(x, 0, TOPPL + PAD - 0.006), FINGER_CLOSED, "hold", yaw=GRIP_YAW),
+            Waypoint(1.0, W(x, 0, TOPPL + PAD + 0.06), FINGER_CLOSED, "straight up", yaw=GRIP_YAW)]
 
 
 def push_handle(dz=0.0):
@@ -218,12 +291,12 @@ def push_handle(dz=0.0):
         return (HP[0] - HANDLE_L * math.cos(t) - 0.002, HP[2] + HANDLE_L * math.sin(t) + 0.004 + 0.001 + 0.003 + dz)
     wps = []
     ex, ez = end(60)
-    wps.append(Waypoint(1.5, W(ex, 0, ez + PAD + 0.05), FINGER_CLOSED, "above the open handle's end", yaw=0.0))
-    wps.append(Waypoint(1.0, W(ex, 0, ez + PAD + 0.002), FINGER_CLOSED, "onto the end pad", yaw=0.0))
+    wps.append(Waypoint(1.5, W(ex, 0, ez + PAD + 0.05), FINGER_CLOSED, "above the open handle's end", yaw=GRIP_YAW))
+    wps.append(Waypoint(1.0, W(ex, 0, ez + PAD + 0.002), FINGER_CLOSED, "onto the end pad", yaw=GRIP_YAW))
     for th in (45, 30, 15, 0):
         ex, ez = end(th)
-        wps.append(Waypoint(0.9, W(ex, 0, ez + PAD - (0.004 if th == 0 else 0.0)), FINGER_CLOSED, f"push handle to {th} deg", yaw=0.0))
-    wps += [Waypoint(0.6, W(ex, 0, ez + PAD - 0.006), FINGER_CLOSED, "hold", yaw=0.0), Waypoint(1.0, W(ex, 0, ez + PAD + 0.05), FINGER_CLOSED, "up", yaw=0.0)]
+        wps.append(Waypoint(0.9, W(ex, 0, ez + PAD - (0.004 if th == 0 else 0.0)), FINGER_CLOSED, f"push handle to {th} deg", yaw=GRIP_YAW))
+    wps += [Waypoint(0.6, W(ex, 0, ez + PAD - 0.006), FINGER_CLOSED, "hold", yaw=GRIP_YAW), Waypoint(1.0, W(ex, 0, ez + PAD + 0.05), FINGER_CLOSED, "up", yaw=GRIP_YAW)]
     return wps
 
 
