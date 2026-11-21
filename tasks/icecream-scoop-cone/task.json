@@ -1,0 +1,23 @@
+{
+  "title": "Scoop a ball of ice cream onto a hand-held sugar cone without cracking it",
+  "category": "Societal relatability",
+  "keywords": [
+    "ice cream",
+    "scoop",
+    "sugar cone",
+    "two hands",
+    "fragile grip",
+    "food court",
+    "drag through a hard medium"
+  ],
+  "instruction": "Scoop a ball of ice cream from the tub with the scoop and put it on the sugar cone. Hold the cone upright in your other hand, and don't crack it.",
+  "context": "Scooping hard ice cream onto a held, brittle cone is everyday work. U.S. residents ate 12.1 lb of regular ice cream each in 2019, and 21 lb of frozen dairy products in all (USDA ERS), about eight 1.42 L tubs a person a year (estimate at roughly 1.5 lb a tub), most of it scooped by hand at home or in a shop. In IDFA's 2022 survey of 1,002 US consumers, 84% buy ice cream at a grocery store and eat it at home, and almost half prefer half-gallon tubs; only one in ten eat it straight from the carton (IDFA 2024). The scoop goes in about 1 cm (Zeroll's guidance) and is drawn through ice cream with a yield stress of 2.5 to 8 kPa, so the drag is a few newtons; the ball forms only if the rim stays shallow and leads. A sugar cone has a pointed tip and cannot stand on the table, so one hand holds it upright, gently enough not to crack its brittle shell, while the other turns the scoop over its mouth. Too deep, the scoop stalls; too hard a grip, the cone cracks and the serve is lost.",
+  "setup": "Metres; x forward, y to the robot's left, z up from the bench top; arm bases at (0, +/-0.305). (1) A full 1.42 L (48 fl oz) tub of a widely sold vanilla ice cream such as Breyers, tempered to -14 to -12 C (6 to 10 F, a procedure choice confirmed by probe), level surface, 180 x 130 x 90 mm, lid off, surface 85 mm up, centred at (0.40, -0.12). (2) A Zeroll #20 scoop (184 mm, bowl 51 mm across, 150 g) lying on a plate at (0.32, -0.40), handle toward the robot. (3) A JOY sugar cone (117 mm tall, 48 mm mouth, 12 g) tip down in a stainless wire cone stand (RAK Porcelain PIRC08: 79 mm base ring and slanted rod of 4 mm rod, top ring 22 mm inside, 60 mm up) at (0.40, 0.10).",
+  "scoring": "Read each step; the crack and an unheld serve latch. 0.3: a ball has formed (sim: the bowl drawn 8 cm, opening leading, at 1 cm/s or more, its lowest point 6 to 15 mm deep, against 0.3 N per mm; real: a round ball curls in the bowl) and sits in the bowl 1 cm over the tub's rim. 0.7: the ball lands in the cone's mouth while the left hand holds the cone out of its stand, and rests there off the scoop. 1.0: as 0.7, the cone within 20 degrees of upright, for 3 s. Void (0): the ball reaches a cone the left hand is not holding up; or the cone cracks (sim: a finger over 20 N; real: any visible crack). A ball that moves faster than 1.2 m/s between leaving the bowl and reaching the cone (a flick or a drop from height) caps the score at 0.3. Real trials: a side-on phone camera on a tripod judges the 1 cm rim clearance and the 20 degree upright; inspect the cone by hand after each trial for a crack.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "Nothing is random. Use a fresh 1.42 L tub each trial, tempered to -14 to -12 C by a probe 2 cm below the surface, and level the surface with a spatula. The bowl enters at the centre, 2 cm from the near wall. Use a new cone each trial; wipe the scoop, dip it in warm water and dry it. Stand the cone tip down in its stand and lay the scoop on its plate, handle toward the robot.",
+  "fidelity": "The ice cream is not a body: while the bowl's lowest point is under its surface a drag of 0.3 N per mm of depth (an estimate from a 2.5 to 8 kPa yield stress) acts against the bowl's motion at the handle grip, and after the bowl is drawn 8 cm (straight line, at 1 cm/s or more) with its lowest point 6 to 15 mm deep a rigid 44 mm, 40 g ball is put in the bowl. The ball does not soften or stick. The cone is a rigid shell; a crack is a finger force over 20 N (estimate).",
+  "scores": "Demo: 1.0. Dream-1 run: 0.0 (one trial, 1,200 steps, no tier reached).",
+  "failures": "One hand only, the ball turned out onto the cone in its stand: 0. The ball set on the cone in its stand and the cone lifted after, by either hand: 0 (void). Scoop held over the tub, drawn too shallow, too short, at 3 mm/s, or drawn with the bowl's back leading: no ball, 0. The ball dropped onto the cone from 12 cm up: 0. The cone squeezed at 40 N: cracked, 0.",
+  "media": "M-YKMS7H"
+}
