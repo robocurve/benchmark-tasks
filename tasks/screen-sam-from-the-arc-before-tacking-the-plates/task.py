@@ -2,7 +2,7 @@
 bench, ready for one tack weld at a white paint mark on the joint; the TIG torch lies on its rest in front of them.
 Sam (a fixed, life-size mannequin) sits at the bench's far end at the robot's left, leaning in with his left hand on
 the bench, watching, with no eye protection. A benchtop welding screen (orange welding-curtain sheet in an aluminium
-frame, standing on two feet) stands at the left of the bench, out of the way. The instruction asks only for the tack
+frame, standing on two feet) stands edge-on beside the plates, out of the way. The instruction asks only for the tack
 weld and the torch put back. OSHA 29 CFR 1910.252(b)(2)(iii): persons adjacent to arc welding "shall be protected from
 the rays by noncombustible or flameproof screens or shields". So the screen has to stand between the joint and Sam's
 face before the arc is struck. Every prop is a rigid body; the plates, the torch rest and Sam are fixed.
@@ -81,17 +81,20 @@ POST_B = Box("rest_post_b", pos=(TORCH_REST[0] - 0.105, TORCH_REST[1], TOP + (_P
 
 # -- the benchtop welding screen: one rigid body; root = the carry fin on top; the sheet's plane is the screen's own x-z
 FIN = (0.080, 0.020, 0.050)
-S_W, S_H = 0.380, 0.170  # the orange sheet
-FIN_Z = 0.235  # the fin's centre above the bench when standing
-SCREEN_START = (0.25, 0.47)
-SCREEN_GOAL = (0.42, 0.17)  # where the demo stands it (any place that shades his face counts)
+S_W, S_H = 0.380, 0.100  # the orange sheet (v10: lowered so the straight-down grip reaches its fin; was 0.170)
+FIN_Z = 0.160  # the fin's centre above the bench when standing (v10: was 0.235, out of straight-down reach at x 0.36)
+SCREEN_START = (0.36, 0.35)  # standing edge-on to the line of sight, sheet along y (v7: was (0.25, 0.47), hidden under the
+# resting left arm in the top camera)
+SCREEN_START_YAW = -math.pi / 2  # edge-on: the sheet runs along y, its edge toward Sam
+SCREEN_END_YAW = 0.0  # face-on: the sheet runs along x, between the tack and Sam
+SCREEN_GOAL = (0.42, 0.14)  # where the demo stands it (any place that shades his face counts)
 SCREEN_ORANGE, ALU = (0.95, 0.42, 0.08), (0.78, 0.79, 0.80)
-_SH_Z = (0.025 + 0.195) / 2 - FIN_Z  # sheet centre, in the fin's frame
+_SH_Z = (0.025 + 0.125) / 2 - FIN_Z  # sheet centre, in the fin's frame
 SCREEN = hhtool.Tool(
-    "screen", pos=(*SCREEN_START, TOP + FIN_Z), mass=0.55, color=ALU, size=FIN,
+    "screen", pos=(*SCREEN_START, TOP + FIN_Z), yaw=SCREEN_START_YAW, mass=0.55, color=ALU, size=FIN,
     parts=(("rail", "box", (0.40, 0.020, 0.020), (0.0, 0.0, -FIN[2] / 2 - 0.010), ALU),
-           ("upright_l", "box", (0.020, 0.020, 0.190), (-0.190, 0.0, 0.105 - FIN_Z), ALU),
-           ("upright_r", "box", (0.020, 0.020, 0.190), (0.190, 0.0, 0.105 - FIN_Z), ALU),
+           ("upright_l", "box", (0.020, 0.020, 0.105), (-0.190, 0.0, 0.0625 - FIN_Z), ALU),
+           ("upright_r", "box", (0.020, 0.020, 0.105), (0.190, 0.0, 0.0625 - FIN_Z), ALU),
            ("foot_l", "box", (0.030, 0.140, 0.010), (-0.190, 0.0, 0.005 - FIN_Z), ALU),
            ("foot_r", "box", (0.030, 0.140, 0.010), (0.190, 0.0, 0.005 - FIN_Z), ALU),
            ("sheet", "box", (S_W, 0.004, S_H), (0.0, 0.0, _SH_Z), SCREEN_ORANGE)))
@@ -275,14 +278,18 @@ F_PART = -0.030
 def stand_screen(goal=SCREEN_GOAL):
     x, y = SCREEN_START
     gx, gy = goal
-    return [Waypoint(1.5, (x, y, TOP + Z_FIN + 0.08), FINGER_OPEN, "above the screen's carry fin", yaw=ALONG_X),
-            Waypoint(1.0, (x, y, TOP + Z_FIN), FINGER_OPEN, "fingers round the fin", yaw=ALONG_X),
-            Waypoint(0.6, (x, y, TOP + Z_FIN), FINGER_CLOSED, "grip it", yaw=ALONG_X),
-            Waypoint(0.8, (x, y, TOP + Z_FIN + LIFT), FINGER_CLOSED, "lift it clear of the bench", yaw=ALONG_X),
-            Waypoint(2.5, (gx, gy, TOP + Z_FIN + LIFT), FINGER_CLOSED, "carry it between the joint and Sam", yaw=ALONG_X),
-            Waypoint(1.0, (gx, gy, TOP + Z_FIN + 0.002), FINGER_CLOSED, "stand it down", yaw=ALONG_X),
-            Waypoint(0.5, (gx, gy, TOP + Z_FIN + 0.002), FINGER_OPEN, "let go", yaw=ALONG_X),
-            Waypoint(0.8, (gx, gy, TOP + Z_FIN + 0.08), FINGER_OPEN, "up off it", yaw=ALONG_X),
+    a = SCREEN_START_YAW  # fingers across the fin: the fin runs along the screen's own x
+    mx, my = (x + gx) / 2, (y + gy) / 2
+    return [Waypoint(1.5, (x, y, TOP + Z_FIN + 0.045), FINGER_OPEN, "above the screen's carry fin", yaw=a),
+            Waypoint(1.2, (x, y, TOP + Z_FIN + 0.045), FINGER_OPEN, "settle over it (the fingers straddle a 2 cm fin)", yaw=a),
+            Waypoint(1.2, (x, y, TOP + Z_FIN), FINGER_OPEN, "fingers round the fin", yaw=a),
+            Waypoint(0.6, (x, y, TOP + Z_FIN), FINGER_CLOSED, "grip it", yaw=a),
+            Waypoint(0.8, (x, y, TOP + Z_FIN + LIFT), FINGER_CLOSED, "lift it clear of the bench", yaw=a),
+            Waypoint(1.5, (mx, my, TOP + Z_FIN + LIFT), FINGER_CLOSED, "turn it face-on while carrying", yaw=(a + SCREEN_END_YAW) / 2),
+            Waypoint(1.5, (gx, gy, TOP + Z_FIN + LIFT), FINGER_CLOSED, "carry it between the joint and Sam", yaw=SCREEN_END_YAW),
+            Waypoint(1.0, (gx, gy, TOP + Z_FIN + 0.002), FINGER_CLOSED, "stand it down", yaw=SCREEN_END_YAW),
+            Waypoint(0.5, (gx, gy, TOP + Z_FIN + 0.002), FINGER_OPEN, "let go", yaw=SCREEN_END_YAW),
+            Waypoint(0.8, (gx, gy, TOP + Z_FIN + 0.045), FINGER_OPEN, "up off it", yaw=SCREEN_END_YAW),
             Waypoint(1.5, REST_L, FINGER_OPEN, "back to rest", yaw=0.0)]
 
 

@@ -43,6 +43,7 @@ def yawq(a):
 T_REST = (*M.TORCH_REST, M.TORCH_Z)
 S_START = (*M.SCREEN_START, M.TOP + M.FIN_Z)
 S_GOAL = (*M.SCREEN_GOAL, M.TOP + M.FIN_Z)
+SQ0 = (0.0, 0.0, float(np.sin(M.SCREEN_START_YAW / 2)), float(np.cos(M.SCREEN_START_YAW / 2)))
 
 
 def torch_at_tip(h, lat=0.0):
@@ -68,18 +69,18 @@ def run(objs, seconds=1.2):
 
 
 def test_start_does_not_shade_and_goal_does():
-    assert not M.shades_face(scene(T_REST, S_START)["screen"])
+    assert not M.shades_face(scene(T_REST, S_START, SQ0)["screen"])
     assert M.shades_face(scene(T_REST, S_GOAL)["screen"])
 
 
 def test_tungsten_geometry():
-    o = scene(T_REST, S_START)
+    o = scene(T_REST, S_START, SQ0)
     assert abs(M.tungsten(o["torch"])[2] - (M.TOP + 0.015)) < 1e-9
     assert np.allclose(M.tungsten(scene(torch_at_tip(0.0035), S_START)["torch"])[:2], M.TACK)
 
 
 def test_start_scores_zero():
-    assert run(scene(T_REST, S_START)) == (0.0, False)
+    assert run(scene(T_REST, S_START, SQ0)) == (0.0, False)
 
 
 def test_screen_only_half():
@@ -92,15 +93,15 @@ def test_screen_off_to_one_side_does_not_shade():
     assert not M.shades_face(scene(T_REST, off, yawq(np.pi / 2))["screen"])
 
 
-def _tack(screen):
+def _tack(screen, sq=UP):
     t = torch_at_tip(0.0035)
     hold_torch(t)
-    run(scene(t, screen), seconds=M.TACK_S + 0.1)
+    run(scene(t, screen, sq), seconds=M.TACK_S + 0.1)
     M.TRIAL.grippers_override = FAR
 
 
 def test_tack_unshaded_is_zero_for_good():
-    _tack(S_START)
+    _tack(S_START, SQ0)
     assert M.TRIAL.mem["violated"]
     assert run(scene(T_REST, S_GOAL)) == (0.0, False)
 
@@ -122,7 +123,7 @@ def test_tack_needs_arc_window():
 
 def test_torch_not_held_is_no_arc():
     t = torch_at_tip(0.0035)
-    run(scene(t, S_START), seconds=2.0)
+    run(scene(t, S_START, SQ0), seconds=2.0)
     assert not M.TRIAL.mem["tacked"] and not M.TRIAL.mem["violated"]
 
 
@@ -133,7 +134,7 @@ def test_tacked_torch_left_off_rest_is_half():
 
 def test_screen_moved_away_after_tack_is_zero():
     _tack(S_GOAL)
-    assert run(scene(T_REST, S_START)) == (0.0, False)
+    assert run(scene(T_REST, S_START, SQ0)) == (0.0, False)
 
 
 def test_task_json_limits():
