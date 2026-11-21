@@ -1,0 +1,21 @@
+{
+  "title": "Hoist a kettlebell hand over hand on a rope over a ratchet block, past a line 40 cm up, without letting it run back",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "rope",
+    "pulley",
+    "hand-over-hand",
+    "hoisting",
+    "force sharing"
+  ],
+  "instruction": "Raise the kettlebell with the rope over the pulley until its base is above the red line on the board, and hold it there. Don't touch the kettlebell or let it run back down.",
+  "context": "Construction laborers (O*NET 47-2061, about 1.1M US workers) raise materials and tools to scaffolds and upper floors by hauling a hand line over a gin wheel or block, as do riggers (49-9096), tree trimmers (37-3013) and deckhands (53-5011): both hands haul, then one holds while the other takes a new grip higher up, and the load must never run back. Unlike TK-CV5DX8 (one arm hauling a light pail over a gin wheel), here neither arm can raise the load alone and every hand change must leave it held.",
+  "setup": "Positions are from the midpoint between the two YAM arm bases (61 cm apart): x forward, y left, heights above the table top. (1) Frame of 40 x 40 mm aluminium T-slot extrusion, clamped to the table with four C-clamps: two base rails along x from 0.62 to 0.89 m at y = +-0.22 m; two uprights 0.90 m tall at x 0.80 m, y +-0.22 m; a crossbar joining their tops; a jib running forward from the crossbar's middle to x 0.57 m, its underside 0.86 m up. (2) A 75 mm (3 in) single sailing ratchet block for 10-12 mm line, ratchet ON, hung from the jib on a shackle and swivel; its sheave axle runs along y at x 0.60 m, 0.76 m up. (3) 1.75 m of 12 mm double-braid polyester rope, tied to the kettlebell's handle with a bowline, running up over the sheave from its far side, straight down its near side to the table, and along the table toward the arms on the midline, its free end 0.20 m in front of the arm bases. (4) A 4 kg cast-iron kettlebell (bell about 15 cm across, 21 cm tall), base centred at x 0.66 m, y 0, on (5) a 10 mm rubber mat 20 x 20 cm centred at x 0.68 m, y 0. (6) A white 12 mm melamine board 40 cm wide and 78 cm tall standing between the uprights, flush with their front faces, with 12 mm tape lines across it whose lower edges are 10, 20, 30 and 40 cm above the mat (the 40 cm line red, the others black) and a 1 cm tick ladder. Matches the screenshot; no randomisation.",
+  "scoring": "Height = the kettlebell base's height above the mat, read against the board's lines from a side video. 1.0: the base above the red 40 cm line continuously for 2.0 s. Otherwise the highest line the base has reached: 0.75 for the 30 cm line, 0.5 for 20 cm, 0.25 for 10 cm, else 0. The score is 0 for the whole run if at any time a gripper touches the kettlebell, a gripper takes hold of the rope between the kettlebell and the block, or the base drops more than 10 cm below the highest it has reached (the load ran back). In simulation the base height is the lowest point of the kettlebell's base and underside; touching is the gripper centre within 2 cm of the kettlebell's surface; taking the rope is the gripper centre within 3 cm of a rope link between the kettlebell and the block.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Switch the ratchet off (or lift the rope off the sheave) to lower the kettlebell onto its mark, lay the rope back along the table to its start, and switch the ratchet on. Nothing is consumed.",
+  "fidelity": "Isaac Sim 6.1 PhysX, 20 Hz, stock YAM gains. Rope: 80 rigid capsule links (22 mm long, 12 mm thick) jointed to the kettlebell, so it can't stretch; 20 g each (heavier than real braid) for solver stability. Ratchet pawl: a stiff spring engaged when the sheave turns back. Rope-sheave friction 1.5, so the locked sheave carries most of the load. Fingers closed on the rope hold it with a 2000 N/m spring, released when they open; same for every policy.",
+  "scores": "Dream-1 run: 0.0 (2,400 steps; the kettlebell never left the mat); demo: 1.0 (scripted, success at step 992: base 45.8 cm above the mat, held above the red line for 2 s)",
+  "media": "M-XM7ANR"
+}
