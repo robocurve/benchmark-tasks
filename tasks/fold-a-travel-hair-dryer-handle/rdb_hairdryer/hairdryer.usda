@@ -1,0 +1,1232 @@
+#usda 1.0
+( defaultPrim="Fixture"
+ metersPerUnit=1
+ upAxis="Z"
+)
+def Xform "Fixture"
+{
+    def Material "white" (prepend apiSchemas=["PhysicsMaterialAPI", "MaterialBindingAPI"])
+    {
+        float physics:staticFriction=0.4
+        float physics:dynamicFriction=0.4
+        float physics:restitution=0
+        token outputs:surface.connect=</Fixture/white/Surface.outputs:surface>
+        def Shader "Surface" { uniform token info:id="UsdPreviewSurface"
+            color3f inputs:diffuseColor=(0.86, 0.88, 0.9)
+            float inputs:roughness=.45
+            token outputs:surface
+        }
+    }
+    def Material "silver" (prepend apiSchemas=["PhysicsMaterialAPI", "MaterialBindingAPI"])
+    {
+        float physics:staticFriction=0.4
+        float physics:dynamicFriction=0.4
+        float physics:restitution=0
+        token outputs:surface.connect=</Fixture/silver/Surface.outputs:surface>
+        def Shader "Surface" { uniform token info:id="UsdPreviewSurface"
+            color3f inputs:diffuseColor=(0.48, 0.52, 0.56)
+            float inputs:roughness=.45
+            token outputs:surface
+        }
+    }
+    def Material "dark" (prepend apiSchemas=["PhysicsMaterialAPI", "MaterialBindingAPI"])
+    {
+        float physics:staticFriction=0.4
+        float physics:dynamicFriction=0.4
+        float physics:restitution=0
+        token outputs:surface.connect=</Fixture/dark/Surface.outputs:surface>
+        def Shader "Surface" { uniform token info:id="UsdPreviewSurface"
+            color3f inputs:diffuseColor=(0.08, 0.09, 0.1)
+            float inputs:roughness=.45
+            token outputs:surface
+        }
+    }
+    def Material "cord" (prepend apiSchemas=["PhysicsMaterialAPI", "MaterialBindingAPI"])
+    {
+        float physics:staticFriction=0.5
+        float physics:dynamicFriction=0.5
+        float physics:restitution=0
+        token outputs:surface.connect=</Fixture/cord/Surface.outputs:surface>
+        def Shader "Surface" { uniform token info:id="UsdPreviewSurface"
+            color3f inputs:diffuseColor=(0.06, 0.06, 0.065)
+            float inputs:roughness=.45
+            token outputs:surface
+        }
+    }
+    def Material "blue" (prepend apiSchemas=["PhysicsMaterialAPI", "MaterialBindingAPI"])
+    {
+        float physics:staticFriction=0.4
+        float physics:dynamicFriction=0.4
+        float physics:restitution=0
+        token outputs:surface.connect=</Fixture/blue/Surface.outputs:surface>
+        def Shader "Surface" { uniform token info:id="UsdPreviewSurface"
+            color3f inputs:diffuseColor=(0.12, 0.3, 0.55)
+            float inputs:roughness=.45
+            token outputs:surface
+        }
+    }
+    def Scope "Actors"
+    {
+        def Xform "head" (prepend apiSchemas=["PhysicsRigidBodyAPI","PhysicsMassAPI","PhysxRigidBodyAPI","PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled=1
+            bool physics:kinematicEnabled=0
+            float physics:mass=0.285
+            point3f physics:centerOfMass=(0.008, 0, -0.003)
+            float3 physics:diagonalInertia=(0.00023, 0.00063, 0.00063)
+            quatf physics:principalAxes=(1,0,0,0)
+            float physxRigidBody:linearDamping=.02
+            float physxRigidBody:angularDamping=.10
+            float physxRigidBody:sleepThreshold=0
+            bool physxRigidBody:enableCCD=1
+            float physxRigidBody:maxDepenetrationVelocity=.5
+            int physxRigidBody:solverPositionIterationCount=32
+            int physxRigidBody:solverVelocityIterationCount=8
+            float physxContactReport:threshold=0
+            double3 xformOp:translate=(0.28, -0.1, 0.7925)
+            quatf xformOp:orient=(0.707106781187, 0.707106781187, 0, 0)
+            uniform token[] xformOpOrder=["xformOp:translate","xformOp:orient"]
+            def Mesh "outlet" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-77, 25, 0), (-77, 24.1481456572, 6.47047612756), (-77, 21.6506350946, 12.5), (-77, 17.6776695297, 17.6776695297), (-77, 12.5, 21.6506350946), (-77, 6.47047612756, 24.1481456572), (-77, 1.53080849893e-15, 25), (-77, -6.47047612756, 24.1481456572), (-77, -12.5, 21.6506350946), (-77, -17.6776695297, 17.6776695297), (-77, -21.6506350946, 12.5), (-77, -24.1481456572, 6.47047612756), (-77, -25, 3.06161699787e-15), (-77, -24.1481456572, -6.47047612756), (-77, -21.6506350946, -12.5), (-77, -17.6776695297, -17.6776695297), (-77, -12.5, -21.6506350946), (-77, -6.47047612756, -24.1481456572), (-77, -4.5924254968e-15, -25), (-77, 6.47047612756, -24.1481456572), (-77, 12.5, -21.6506350946), (-77, 17.6776695297, -17.6776695297), (-77, 21.6506350946, -12.5), (-77, 24.1481456572, -6.47047612756), (-60, 35, 0), (-60, 33.8074039201, 9.05866657859), (-60, 30.3108891325, 17.5), (-60, 24.7487373415, 24.7487373415), (-60, 17.5, 30.3108891325), (-60, 9.05866657859, 33.8074039201), (-60, 2.14313189851e-15, 35), (-60, -9.05866657859, 33.8074039201), (-60, -17.5, 30.3108891325), (-60, -24.7487373415, 24.7487373415), (-60, -30.3108891325, 17.5), (-60, -33.8074039201, 9.05866657859), (-60, -35, 4.28626379702e-15), (-60, -33.8074039201, -9.05866657859), (-60, -30.3108891325, -17.5), (-60, -24.7487373415, -24.7487373415), (-60, -17.5, -30.3108891325), (-60, -9.05866657859, -33.8074039201), (-60, -6.42939569552e-15, -35), (-60, 9.05866657859, -33.8074039201), (-60, 17.5, -30.3108891325), (-60, 24.7487373415, -24.7487373415), (-60, 30.3108891325, -17.5), (-60, 33.8074039201, -9.05866657859)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[24, 47, 23, 0, 24, 23, 47, 46, 23, 23, 46, 22, 21, 46, 45, 22, 46, 21, 18, 43, 42, 19, 43, 18, 42, 41, 18, 18, 41, 17, 16, 40, 39, 16, 39, 15, 16, 41, 40, 17, 41, 16, 13, 37, 36, 36, 12, 13, 10, 34, 33, 10, 33, 9, 28, 3, 4, 27, 3, 28, 1, 25, 24, 1, 24, 0, 20, 44, 43, 20, 43, 19, 20, 21, 45, 45, 44, 20, 33, 32, 8, 9, 33, 8, 8, 32, 31, 31, 7, 8, 6, 31, 30, 6, 7, 31, 39, 38, 14, 15, 39, 14, 38, 37, 14, 37, 13, 14, 35, 47, 24, 35, 44, 45, 30, 31, 35, 36, 37, 35, 27, 28, 35, 24, 25, 35, 42, 43, 35, 35, 26, 27, 39, 40, 35, 35, 38, 39, 45, 46, 35, 35, 29, 30, 35, 25, 26, 35, 46, 47, 35, 41, 42, 35, 37, 38, 33, 34, 35, 35, 32, 33, 43, 44, 35, 40, 41, 35, 31, 32, 35, 35, 28, 29, 27, 26, 2, 2, 3, 27, 26, 25, 2, 25, 1, 2, 5, 28, 4, 29, 28, 5, 30, 29, 5, 5, 6, 30, 11, 20, 19, 19, 18, 11, 11, 1, 0, 0, 23, 11, 3, 2, 11, 11, 16, 15, 11, 23, 22, 22, 21, 11, 11, 10, 9, 4, 3, 11, 11, 18, 17, 17, 16, 11, 9, 8, 11, 11, 13, 12, 11, 5, 4, 15, 14, 11, 21, 20, 11, 11, 8, 7, 7, 6, 11, 11, 14, 13, 11, 2, 1, 6, 5, 11, 11, 12, 36, 36, 35, 11, 34, 10, 11, 11, 35, 34]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "main_barrel" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-60, 35, 0), (-60, 33.8074039201, 9.05866657859), (-60, 30.3108891325, 17.5), (-60, 24.7487373415, 24.7487373415), (-60, 17.5, 30.3108891325), (-60, 9.05866657859, 33.8074039201), (-60, 2.14313189851e-15, 35), (-60, -9.05866657859, 33.8074039201), (-60, -17.5, 30.3108891325), (-60, -24.7487373415, 24.7487373415), (-60, -30.3108891325, 17.5), (-60, -33.8074039201, 9.05866657859), (-60, -35, 4.28626379702e-15), (-60, -33.8074039201, -9.05866657859), (-60, -30.3108891325, -17.5), (-60, -24.7487373415, -24.7487373415), (-60, -17.5, -30.3108891325), (-60, -9.05866657859, -33.8074039201), (-60, -6.42939569552e-15, -35), (-60, 9.05866657859, -33.8074039201), (-60, 17.5, -30.3108891325), (-60, 24.7487373415, -24.7487373415), (-60, 30.3108891325, -17.5), (-60, 33.8074039201, -9.05866657859), (50, 35, 0), (50, 33.8074039201, 9.05866657859), (50, 30.3108891325, 17.5), (50, 24.7487373415, 24.7487373415), (50, 17.5, 30.3108891325), (50, 9.05866657859, 33.8074039201), (50, 2.14313189851e-15, 35), (50, -9.05866657859, 33.8074039201), (50, -17.5, 30.3108891325), (50, -24.7487373415, 24.7487373415), (50, -30.3108891325, 17.5), (50, -33.8074039201, 9.05866657859), (50, -35, 4.28626379702e-15), (50, -33.8074039201, -9.05866657859), (50, -30.3108891325, -17.5), (50, -24.7487373415, -24.7487373415), (50, -17.5, -30.3108891325), (50, -9.05866657859, -33.8074039201), (50, -6.42939569552e-15, -35), (50, 9.05866657859, -33.8074039201), (50, 17.5, -30.3108891325), (50, 24.7487373415, -24.7487373415), (50, 30.3108891325, -17.5), (50, 33.8074039201, -9.05866657859)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[15, 16, 40, 39, 15, 40, 40, 16, 17, 17, 41, 40, 18, 19, 42, 42, 19, 43, 42, 17, 18, 42, 41, 17, 29, 4, 5, 28, 4, 29, 0, 1, 25, 25, 24, 0, 1, 2, 25, 25, 2, 26, 3, 4, 27, 27, 4, 28, 27, 2, 3, 26, 2, 27, 36, 11, 12, 35, 11, 36, 12, 13, 36, 13, 37, 36, 38, 14, 15, 38, 15, 39, 13, 14, 38, 38, 37, 13, 10, 13, 12, 18, 17, 10, 10, 1, 0, 10, 22, 21, 0, 23, 10, 15, 14, 10, 10, 7, 6, 12, 11, 10, 10, 16, 15, 10, 4, 3, 6, 5, 10, 23, 22, 10, 21, 20, 10, 17, 16, 10, 10, 14, 13, 10, 19, 18, 3, 2, 10, 9, 8, 10, 20, 19, 10, 5, 4, 10, 10, 2, 1, 10, 8, 7, 47, 23, 0, 0, 24, 47, 47, 22, 23, 47, 46, 22, 43, 19, 44, 44, 19, 20, 6, 7, 30, 30, 7, 31, 30, 5, 6, 30, 29, 5, 7, 8, 32, 31, 7, 32, 32, 8, 9, 9, 33, 32, 34, 11, 35, 34, 10, 11, 9, 10, 34, 34, 33, 9, 45, 38, 39, 45, 30, 31, 43, 44, 45, 45, 42, 43, 35, 36, 45, 39, 40, 45, 24, 25, 45, 45, 27, 28, 31, 32, 45, 45, 47, 24, 45, 40, 41, 41, 42, 45, 28, 29, 45, 45, 25, 26, 26, 27, 45, 45, 36, 37, 37, 38, 45, 46, 47, 45, 45, 34, 35, 29, 30, 45, 45, 32, 33, 33, 34, 45, 21, 22, 45, 22, 46, 45, 45, 20, 21, 45, 44, 20]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "rear_motor" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(50, 39.5, 0), (50, 38.1540701384, 10.2233522815), (50, 34.2080034495, 19.75), (50, 27.9307178569, 27.9307178569), (50, 19.75, 34.2080034495), (50, 10.2233522815, 38.1540701384), (50, 2.41867742832e-15, 39.5), (50, -10.2233522815, 38.1540701384), (50, -19.75, 34.2080034495), (50, -27.9307178569, 27.9307178569), (50, -34.2080034495, 19.75), (50, -38.1540701384, 10.2233522815), (50, -39.5, 4.83735485663e-15), (50, -38.1540701384, -10.2233522815), (50, -34.2080034495, -19.75), (50, -27.9307178569, -27.9307178569), (50, -19.75, -34.2080034495), (50, -10.2233522815, -38.1540701384), (50, -7.25603228495e-15, -39.5), (50, 10.2233522815, -38.1540701384), (50, 19.75, -34.2080034495), (50, 27.9307178569, -27.9307178569), (50, 34.2080034495, -19.75), (50, 38.1540701384, -10.2233522815), (77, 39.5, 0), (77, 38.1540701384, 10.2233522815), (77, 34.2080034495, 19.75), (77, 27.9307178569, 27.9307178569), (77, 19.75, 34.2080034495), (77, 10.2233522815, 38.1540701384), (77, 2.41867742832e-15, 39.5), (77, -10.2233522815, 38.1540701384), (77, -19.75, 34.2080034495), (77, -27.9307178569, 27.9307178569), (77, -34.2080034495, 19.75), (77, -38.1540701384, 10.2233522815), (77, -39.5, 4.83735485663e-15), (77, -38.1540701384, -10.2233522815), (77, -34.2080034495, -19.75), (77, -27.9307178569, -27.9307178569), (77, -19.75, -34.2080034495), (77, -10.2233522815, -38.1540701384), (77, -7.25603228495e-15, -39.5), (77, 10.2233522815, -38.1540701384), (77, 19.75, -34.2080034495), (77, 27.9307178569, -27.9307178569), (77, 34.2080034495, -19.75), (77, 38.1540701384, -10.2233522815)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[3, 4, 27, 27, 4, 28, 15, 16, 40, 39, 15, 40, 16, 17, 40, 40, 17, 41, 47, 23, 0, 0, 24, 47, 47, 22, 23, 46, 22, 47, 45, 20, 21, 44, 20, 45, 21, 22, 45, 45, 22, 46, 12, 13, 37, 37, 36, 12, 35, 11, 12, 12, 36, 35, 32, 8, 9, 32, 9, 33, 32, 7, 8, 31, 7, 32, 26, 2, 3, 3, 27, 26, 41, 17, 42, 42, 17, 18, 38, 14, 15, 38, 15, 39, 13, 14, 38, 38, 37, 13, 0, 23, 10, 10, 19, 18, 10, 13, 12, 6, 5, 10, 12, 11, 10, 18, 17, 10, 10, 22, 21, 3, 2, 10, 10, 16, 15, 10, 1, 0, 15, 14, 10, 21, 20, 10, 2, 1, 10, 10, 14, 13, 9, 8, 10, 10, 7, 6, 10, 4, 3, 20, 19, 10, 10, 17, 16, 23, 22, 10, 10, 5, 4, 8, 7, 10, 30, 7, 31, 6, 7, 30, 0, 1, 25, 25, 24, 0, 25, 1, 2, 2, 26, 25, 43, 19, 20, 43, 20, 44, 18, 19, 43, 43, 42, 18, 33, 9, 34, 9, 10, 34, 11, 35, 34, 34, 10, 11, 44, 45, 29, 29, 27, 28, 29, 43, 44, 24, 25, 29, 39, 40, 29, 33, 34, 29, 29, 47, 24, 29, 38, 39, 29, 32, 33, 29, 40, 41, 46, 47, 29, 29, 45, 46, 36, 37, 29, 29, 35, 36, 31, 32, 29, 29, 26, 27, 41, 42, 29, 37, 38, 29, 29, 30, 31, 29, 25, 26, 42, 43, 29, 29, 34, 35, 28, 4, 29, 4, 5, 29, 29, 5, 6, 6, 30, 29]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/silver>
+            rel material:binding:physics=</Fixture/silver>
+            }
+            def Cube "hinge_clevis_0" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI"])
+            {
+                double size=1
+                double3 xformOp:scale=(0.026, 0.01, 0.024)
+                double3 xformOp:translate=(0.035, -0.021, -0.0425)
+                uniform token[] xformOpOrder=["xformOp:translate","xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Cube "hinge_clevis_2" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI"])
+            {
+                double size=1
+                double3 xformOp:scale=(0.026, 0.01, 0.024)
+                double3 xformOp:translate=(0.035, 0.021, -0.0425)
+                uniform token[] xformOpOrder=["xformOp:translate","xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "hinge_pin" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(42.5, -26, -50), (42.2444436972, -26, -48.0588571617), (41.4951905284, -26, -46.25), (40.3033008589, -26, -44.6966991411), (38.75, -26, -43.5048094716), (36.9411428383, -26, -42.7555563028), (35, -26, -42.5), (33.0588571617, -26, -42.7555563028), (31.25, -26, -43.5048094716), (29.6966991411, -26, -44.6966991411), (28.5048094716, -26, -46.25), (27.7555563028, -26, -48.0588571617), (27.5, -26, -50), (27.7555563028, -26, -51.9411428383), (28.5048094716, -26, -53.75), (29.6966991411, -26, -55.3033008589), (31.25, -26, -56.4951905284), (33.0588571617, -26, -57.2444436972), (35, -26, -57.5), (36.9411428383, -26, -57.2444436972), (38.75, -26, -56.4951905284), (40.3033008589, -26, -55.3033008589), (41.4951905284, -26, -53.75), (42.2444436972, -26, -51.9411428383), (42.5, 26, -50), (42.2444436972, 26, -48.0588571617), (41.4951905284, 26, -46.25), (40.3033008589, 26, -44.6966991411), (38.75, 26, -43.5048094716), (36.9411428383, 26, -42.7555563028), (35, 26, -42.5), (33.0588571617, 26, -42.7555563028), (31.25, 26, -43.5048094716), (29.6966991411, 26, -44.6966991411), (28.5048094716, 26, -46.25), (27.7555563028, 26, -48.0588571617), (27.5, 26, -50), (27.7555563028, 26, -51.9411428383), (28.5048094716, 26, -53.75), (29.6966991411, 26, -55.3033008589), (31.25, 26, -56.4951905284), (33.0588571617, 26, -57.2444436972), (35, 26, -57.5), (36.9411428383, 26, -57.2444436972), (38.75, 26, -56.4951905284), (40.3033008589, 26, -55.3033008589), (41.4951905284, 26, -53.75), (42.2444436972, 26, -51.9411428383)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[42, 19, 18, 43, 19, 42, 18, 17, 42, 42, 17, 41, 40, 16, 15, 40, 15, 39, 40, 17, 16, 41, 17, 40, 37, 13, 12, 12, 36, 37, 25, 1, 0, 0, 24, 25, 25, 2, 1, 26, 2, 25, 34, 10, 9, 34, 9, 33, 28, 5, 4, 29, 5, 28, 46, 22, 21, 21, 45, 46, 15, 14, 38, 39, 15, 38, 38, 14, 13, 13, 37, 38, 6, 5, 30, 30, 5, 29, 30, 7, 6, 31, 7, 30, 9, 8, 32, 33, 9, 32, 8, 7, 32, 32, 7, 31, 0, 1, 11, 12, 13, 11, 11, 2, 3, 21, 22, 11, 11, 23, 0, 6, 7, 11, 11, 20, 21, 15, 16, 11, 18, 19, 11, 11, 17, 18, 11, 14, 15, 11, 22, 23, 11, 5, 6, 13, 14, 11, 11, 8, 9, 9, 10, 11, 3, 4, 11, 16, 17, 11, 1, 2, 11, 4, 5, 11, 19, 20, 11, 11, 7, 8, 27, 2, 26, 3, 2, 27, 27, 4, 3, 27, 28, 4, 44, 19, 43, 44, 20, 19, 21, 20, 44, 44, 45, 21, 0, 23, 47, 47, 24, 0, 23, 22, 47, 22, 46, 47, 35, 40, 39, 35, 44, 43, 43, 42, 35, 35, 30, 29, 35, 25, 24, 29, 28, 35, 35, 34, 33, 35, 27, 26, 35, 42, 41, 41, 40, 35, 35, 37, 36, 26, 25, 35, 39, 38, 35, 24, 47, 35, 33, 32, 35, 35, 46, 45, 35, 38, 37, 31, 30, 35, 35, 32, 31, 28, 27, 35, 45, 44, 35, 35, 47, 46, 35, 36, 12, 12, 11, 35, 10, 34, 35, 35, 11, 10]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/silver>
+            rel material:binding:physics=</Fixture/silver>
+            }
+            def Cube "rear_grille" (prepend apiSchemas=["MaterialBindingAPI"])
+            {
+                double size=1
+                double3 xformOp:scale=(0.001, 0.048, 0.048)
+                double3 xformOp:translate=(0.0775, 0, 0)
+                uniform token[] xformOpOrder=["xformOp:translate","xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/dark>
+            rel material:binding:physics=</Fixture/dark>
+            }
+        }
+        def Xform "handle" (prepend apiSchemas=["PhysicsRigidBodyAPI","PhysicsMassAPI","PhysxRigidBodyAPI","PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled=1
+            bool physics:kinematicEnabled=0
+            float physics:mass=0.083
+            point3f physics:centerOfMass=(0, 0, -0.027)
+            float3 physics:diagonalInertia=(2.5e-05, 2.3e-05, 1.3e-05)
+            quatf physics:principalAxes=(1,0,0,0)
+            float physxRigidBody:linearDamping=.02
+            float physxRigidBody:angularDamping=.10
+            float physxRigidBody:sleepThreshold=0
+            bool physxRigidBody:enableCCD=1
+            float physxRigidBody:maxDepenetrationVelocity=.5
+            int physxRigidBody:solverPositionIterationCount=32
+            int physxRigidBody:solverVelocityIterationCount=8
+            float physxContactReport:threshold=0
+            double3 xformOp:translate=(0.315, -0.05, 0.7925)
+            quatf xformOp:orient=(0.707106781187, 0.707106781187, 0, 0)
+            uniform token[] xformOpOrder=["xformOp:translate","xformOp:orient"]
+            def Mesh "hinge_eye_0" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(8, -14, 0), (7.72740661031, -14, 2.07055236082), (10, -14, 0), (9.65925826289, -14, 2.58819045103), (8, 14, 0), (7.72740661031, 14, 2.07055236082), (10, 14, 0), (9.65925826289, 14, 2.58819045103)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[2, 3, 0, 0, 3, 1, 0, 5, 4, 1, 5, 0, 6, 0, 4, 2, 0, 6, 7, 5, 1, 1, 3, 7, 7, 3, 2, 2, 6, 7, 4, 5, 7, 7, 6, 4]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "hinge_eye_1" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(7.72740661031, -14, 2.07055236082), (6.92820323028, -14, 4), (9.65925826289, -14, 2.58819045103), (8.66025403784, -14, 5), (7.72740661031, 14, 2.07055236082), (6.92820323028, 14, 4), (9.65925826289, 14, 2.58819045103), (8.66025403784, 14, 5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[2, 3, 0, 0, 3, 1, 0, 5, 4, 1, 5, 0, 6, 0, 4, 2, 0, 6, 7, 5, 1, 1, 3, 7, 7, 3, 2, 2, 6, 7, 4, 5, 7, 7, 6, 4]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "hinge_eye_2" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(6.92820323028, -14, 4), (5.65685424949, -14, 5.65685424949), (8.66025403784, -14, 5), (7.07106781187, -14, 7.07106781187), (6.92820323028, 14, 4), (5.65685424949, 14, 5.65685424949), (8.66025403784, 14, 5), (7.07106781187, 14, 7.07106781187)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[2, 3, 0, 0, 3, 1, 5, 0, 1, 4, 0, 5, 1, 3, 5, 3, 7, 5, 2, 0, 6, 6, 0, 4, 6, 3, 2, 6, 7, 3, 4, 5, 6, 6, 5, 7]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "hinge_eye_3" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(5.65685424949, -14, 5.65685424949), (4, -14, 6.92820323028), (7.07106781187, -14, 7.07106781187), (5, -14, 8.66025403784), (5.65685424949, 14, 5.65685424949), (4, 14, 6.92820323028), (7.07106781187, 14, 7.07106781187), (5, 14, 8.66025403784)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[2, 3, 0, 0, 3, 1, 0, 5, 4, 1, 5, 0, 7, 5, 1, 1, 3, 7, 6, 0, 4, 2, 0, 6, 6, 3, 2, 6, 7, 3, 4, 5, 6, 5, 7, 6]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "hinge_eye_4" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(4, -14, 6.92820323028), (2.07055236082, -14, 7.72740661031), (5, -14, 8.66025403784), (2.58819045103, -14, 9.65925826289), (4, 14, 6.92820323028), (2.07055236082, 14, 7.72740661031), (5, 14, 8.66025403784), (2.58819045103, 14, 9.65925826289)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[2, 3, 0, 0, 3, 1, 5, 0, 1, 4, 0, 5, 1, 3, 5, 3, 7, 5, 2, 0, 6, 6, 0, 4, 6, 3, 2, 6, 7, 3, 4, 5, 6, 6, 5, 7]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "hinge_eye_5" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(2.07055236082, -14, 7.72740661031), (4.89858719659e-16, -14, 8), (2.58819045103, -14, 9.65925826289), (6.12323399574e-16, -14, 10), (2.07055236082, 14, 7.72740661031), (4.89858719659e-16, 14, 8), (2.58819045103, 14, 9.65925826289), (6.12323399574e-16, 14, 10)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[2, 3, 0, 0, 3, 1, 0, 5, 4, 1, 5, 0, 6, 0, 4, 2, 0, 6, 7, 5, 1, 1, 3, 7, 7, 3, 2, 2, 6, 7, 4, 5, 7, 7, 6, 4]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "hinge_eye_6" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(4.89858719659e-16, -14, 8), (-2.07055236082, -14, 7.72740661031), (6.12323399574e-16, -14, 10), (-2.58819045103, -14, 9.65925826289), (4.89858719659e-16, 14, 8), (-2.07055236082, 14, 7.72740661031), (6.12323399574e-16, 14, 10), (-2.58819045103, 14, 9.65925826289)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[6, 0, 4, 2, 0, 6, 6, 7, 3, 3, 2, 6, 1, 2, 3, 1, 0, 2, 7, 6, 5, 5, 6, 4, 4, 0, 5, 0, 1, 5, 3, 7, 5, 5, 1, 3]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "hinge_eye_7" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-2.07055236082, -14, 7.72740661031), (-4, -14, 6.92820323028), (-2.58819045103, -14, 9.65925826289), (-5, -14, 8.66025403784), (-2.07055236082, 14, 7.72740661031), (-4, 14, 6.92820323028), (-2.58819045103, 14, 9.65925826289), (-5, 14, 8.66025403784)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[6, 2, 0, 0, 4, 6, 0, 2, 1, 1, 2, 3, 2, 6, 7, 3, 2, 7, 5, 4, 0, 0, 1, 5, 5, 6, 4, 5, 7, 6, 5, 1, 3, 3, 7, 5]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "hinge_eye_8" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-4, -14, 6.92820323028), (-5.65685424949, -14, 5.65685424949), (-5, -14, 8.66025403784), (-7.07106781187, -14, 7.07106781187), (-4, 14, 6.92820323028), (-5.65685424949, 14, 5.65685424949), (-5, 14, 8.66025403784), (-7.07106781187, 14, 7.07106781187)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[6, 2, 0, 0, 4, 6, 0, 2, 1, 1, 2, 3, 2, 6, 7, 3, 2, 7, 5, 4, 0, 0, 1, 5, 5, 6, 4, 5, 7, 6, 5, 1, 3, 3, 7, 5]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "hinge_eye_9" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-5.65685424949, -14, 5.65685424949), (-6.92820323028, -14, 4), (-7.07106781187, -14, 7.07106781187), (-8.66025403784, -14, 5), (-5.65685424949, 14, 5.65685424949), (-6.92820323028, 14, 4), (-7.07106781187, 14, 7.07106781187), (-8.66025403784, 14, 5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[6, 2, 0, 0, 4, 6, 0, 2, 1, 1, 2, 3, 2, 6, 7, 3, 2, 7, 5, 4, 0, 0, 1, 5, 5, 6, 4, 5, 7, 6, 5, 1, 3, 3, 7, 5]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "hinge_eye_10" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-6.92820323028, -14, 4), (-7.72740661031, -14, 2.07055236082), (-8.66025403784, -14, 5), (-9.65925826289, -14, 2.58819045103), (-6.92820323028, 14, 4), (-7.72740661031, 14, 2.07055236082), (-8.66025403784, 14, 5), (-9.65925826289, 14, 2.58819045103)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[0, 4, 6, 6, 2, 0, 6, 7, 3, 3, 2, 6, 1, 2, 3, 0, 2, 1, 7, 6, 5, 5, 6, 4, 5, 4, 0, 0, 1, 5, 3, 7, 5, 5, 1, 3]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "hinge_eye_11" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-7.72740661031, -14, 2.07055236082), (-8, -14, 9.79717439318e-16), (-9.65925826289, -14, 2.58819045103), (-10, -14, 1.22464679915e-15), (-7.72740661031, 14, 2.07055236082), (-8, 14, 9.79717439318e-16), (-9.65925826289, 14, 2.58819045103), (-10, 14, 1.22464679915e-15)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[0, 4, 6, 6, 2, 0, 6, 7, 3, 3, 2, 6, 1, 2, 3, 0, 2, 1, 7, 6, 5, 5, 6, 4, 5, 4, 0, 0, 1, 5, 3, 7, 5, 5, 1, 3]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "hinge_eye_12" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-8, -14, 9.79717439318e-16), (-7.72740661031, -14, -2.07055236082), (-10, -14, 1.22464679915e-15), (-9.65925826289, -14, -2.58819045103), (-8, 14, 9.79717439318e-16), (-7.72740661031, 14, -2.07055236082), (-10, 14, 1.22464679915e-15), (-9.65925826289, 14, -2.58819045103)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[2, 3, 0, 0, 3, 1, 0, 5, 4, 1, 5, 0, 6, 0, 4, 2, 0, 6, 7, 5, 1, 1, 3, 7, 7, 3, 2, 2, 6, 7, 4, 5, 7, 7, 6, 4]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "hinge_eye_13" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-7.72740661031, -14, -2.07055236082), (-6.92820323028, -14, -4), (-9.65925826289, -14, -2.58819045103), (-8.66025403784, -14, -5), (-7.72740661031, 14, -2.07055236082), (-6.92820323028, 14, -4), (-9.65925826289, 14, -2.58819045103), (-8.66025403784, 14, -5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[2, 3, 0, 0, 3, 1, 0, 5, 4, 1, 5, 0, 6, 0, 4, 2, 0, 6, 7, 5, 1, 1, 3, 7, 7, 3, 2, 2, 6, 7, 4, 5, 7, 7, 6, 4]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "hinge_eye_14" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-6.92820323028, -14, -4), (-5.65685424949, -14, -5.65685424949), (-8.66025403784, -14, -5), (-7.07106781187, -14, -7.07106781187), (-6.92820323028, 14, -4), (-5.65685424949, 14, -5.65685424949), (-8.66025403784, 14, -5), (-7.07106781187, 14, -7.07106781187)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[2, 3, 0, 0, 3, 1, 0, 5, 4, 1, 5, 0, 6, 0, 4, 2, 0, 6, 7, 5, 1, 1, 3, 7, 7, 3, 2, 2, 6, 7, 4, 5, 7, 7, 6, 4]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "hinge_eye_15" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-5.65685424949, -14, -5.65685424949), (-4, -14, -6.92820323028), (-7.07106781187, -14, -7.07106781187), (-5, -14, -8.66025403784), (-5.65685424949, 14, -5.65685424949), (-4, 14, -6.92820323028), (-7.07106781187, 14, -7.07106781187), (-5, 14, -8.66025403784)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[2, 3, 0, 0, 3, 1, 0, 5, 4, 1, 5, 0, 6, 0, 4, 2, 0, 6, 7, 5, 1, 1, 3, 7, 7, 3, 2, 2, 6, 7, 4, 5, 7, 7, 6, 4]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "hinge_eye_16" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-4, -14, -6.92820323028), (-2.07055236082, -14, -7.72740661031), (-5, -14, -8.66025403784), (-2.58819045103, -14, -9.65925826289), (-4, 14, -6.92820323028), (-2.07055236082, 14, -7.72740661031), (-5, 14, -8.66025403784), (-2.58819045103, 14, -9.65925826289)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[2, 3, 0, 0, 3, 1, 0, 5, 4, 1, 5, 0, 7, 5, 1, 1, 3, 7, 6, 0, 4, 2, 0, 6, 6, 3, 2, 6, 7, 3, 4, 5, 6, 5, 7, 6]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "hinge_eye_17" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-2.07055236082, -14, -7.72740661031), (-1.46957615898e-15, -14, -8), (-2.58819045103, -14, -9.65925826289), (-1.83697019872e-15, -14, -10), (-2.07055236082, 14, -7.72740661031), (-1.46957615898e-15, 14, -8), (-2.58819045103, 14, -9.65925826289), (-1.83697019872e-15, 14, -10)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[2, 3, 0, 0, 3, 1, 0, 5, 4, 1, 5, 0, 6, 0, 4, 2, 0, 6, 7, 5, 1, 1, 3, 7, 7, 3, 2, 2, 6, 7, 4, 5, 7, 7, 6, 4]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "hinge_eye_18" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-1.46957615898e-15, -14, -8), (2.07055236082, -14, -7.72740661031), (-1.83697019872e-15, -14, -10), (2.58819045103, -14, -9.65925826289), (-1.46957615898e-15, 14, -8), (2.07055236082, 14, -7.72740661031), (-1.83697019872e-15, 14, -10), (2.58819045103, 14, -9.65925826289)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[6, 0, 4, 2, 0, 6, 6, 7, 3, 6, 3, 2, 2, 3, 1, 1, 0, 2, 7, 6, 5, 5, 6, 4, 4, 0, 5, 0, 1, 5, 3, 7, 5, 5, 1, 3]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "hinge_eye_19" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(2.07055236082, -14, -7.72740661031), (4, -14, -6.92820323028), (2.58819045103, -14, -9.65925826289), (5, -14, -8.66025403784), (2.07055236082, 14, -7.72740661031), (4, 14, -6.92820323028), (2.58819045103, 14, -9.65925826289), (5, 14, -8.66025403784)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[6, 2, 0, 0, 4, 6, 0, 2, 1, 1, 2, 3, 2, 6, 7, 3, 2, 7, 5, 4, 0, 0, 1, 5, 5, 6, 4, 5, 7, 6, 5, 1, 3, 3, 7, 5]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "hinge_eye_20" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(4, -14, -6.92820323028), (5.65685424949, -14, -5.65685424949), (5, -14, -8.66025403784), (7.07106781187, -14, -7.07106781187), (4, 14, -6.92820323028), (5.65685424949, 14, -5.65685424949), (5, 14, -8.66025403784), (7.07106781187, 14, -7.07106781187)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[6, 2, 0, 0, 4, 6, 0, 2, 1, 1, 2, 3, 2, 6, 7, 3, 2, 7, 5, 4, 0, 0, 1, 5, 5, 6, 4, 5, 7, 6, 5, 1, 3, 3, 7, 5]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "hinge_eye_21" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(5.65685424949, -14, -5.65685424949), (6.92820323028, -14, -4), (7.07106781187, -14, -7.07106781187), (8.66025403784, -14, -5), (5.65685424949, 14, -5.65685424949), (6.92820323028, 14, -4), (7.07106781187, 14, -7.07106781187), (8.66025403784, 14, -5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[6, 2, 0, 0, 4, 6, 0, 2, 1, 1, 2, 3, 2, 6, 7, 3, 2, 7, 5, 4, 0, 0, 1, 5, 5, 6, 4, 5, 7, 6, 5, 1, 3, 3, 7, 5]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "hinge_eye_22" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(6.92820323028, -14, -4), (7.72740661031, -14, -2.07055236082), (8.66025403784, -14, -5), (9.65925826289, -14, -2.58819045103), (6.92820323028, 14, -4), (7.72740661031, 14, -2.07055236082), (8.66025403784, 14, -5), (9.65925826289, 14, -2.58819045103)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[6, 2, 0, 0, 4, 6, 0, 2, 1, 1, 2, 3, 2, 6, 7, 3, 2, 7, 5, 4, 0, 0, 1, 5, 5, 6, 4, 5, 7, 6, 5, 1, 3, 3, 7, 5]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Mesh "hinge_eye_23" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(7.72740661031, -14, -2.07055236082), (8, -14, -1.95943487864e-15), (9.65925826289, -14, -2.58819045103), (10, -14, -2.44929359829e-15), (7.72740661031, 14, -2.07055236082), (8, 14, -1.95943487864e-15), (9.65925826289, 14, -2.58819045103), (10, 14, -2.44929359829e-15)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[0, 4, 6, 6, 2, 0, 6, 7, 3, 3, 2, 6, 1, 2, 3, 0, 2, 1, 7, 6, 5, 5, 6, 4, 5, 4, 0, 0, 1, 5, 3, 7, 5, 5, 1, 3]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Cube "grip" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI"])
+            {
+                double size=1
+                double3 xformOp:scale=(0.028, 0.03, 0.0385)
+                double3 xformOp:translate=(0, 0, -0.03125)
+                uniform token[] xformOpOrder=["xformOp:translate","xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/white>
+            rel material:binding:physics=</Fixture/white>
+            }
+            def Cube "power_switch" (prepend apiSchemas=["MaterialBindingAPI"])
+            {
+                double size=1
+                double3 xformOp:scale=(0.007, 0.031, 0.014)
+                double3 xformOp:translate=(0.0145, 0, -0.027)
+                uniform token[] xformOpOrder=["xformOp:translate","xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/blue>
+            rel material:binding:physics=</Fixture/blue>
+            }
+            def Cube "cord_strain_relief" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI"])
+            {
+                double size=1
+                double3 xformOp:scale=(0.012, 0.014, 0.009)
+                double3 xformOp:translate=(0, 0, -0.046)
+                uniform token[] xformOpOrder=["xformOp:translate","xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+        }
+        def Xform "cord_0" (prepend apiSchemas=["PhysicsRigidBodyAPI","PhysicsMassAPI","PhysxRigidBodyAPI","PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled=1
+            bool physics:kinematicEnabled=0
+            float physics:mass=0.00125
+            point3f physics:centerOfMass=(0, 0, 0)
+            float3 physics:diagonalInertia=(2.64e-07, 2.64e-07, 3.91e-09)
+            quatf physics:principalAxes=(1,0,0,0)
+            float physxRigidBody:linearDamping=.02
+            float physxRigidBody:angularDamping=.10
+            float physxRigidBody:sleepThreshold=0
+            bool physxRigidBody:enableCCD=1
+            float physxRigidBody:maxDepenetrationVelocity=.5
+            int physxRigidBody:solverPositionIterationCount=32
+            int physxRigidBody:solverVelocityIterationCount=8
+            float physxContactReport:threshold=0
+            double3 xformOp:translate=(0.315, 0.0253528656407, 0.789791666667)
+            quatf xformOp:orient=(0.6677075208, -0.744423714471, 0, 0)
+            uniform token[] xformOpOrder=["xformOp:translate","xformOp:orient"]
+            def Capsule "rubber_cable" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI"])
+            {
+                double radius=0.0025
+                double height=0.045000000000000005
+                uniform token axis="Z"
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+        }
+        def Xform "cord_1" (prepend apiSchemas=["PhysicsRigidBodyAPI","PhysicsMassAPI","PhysxRigidBodyAPI","PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled=1
+            bool physics:kinematicEnabled=0
+            float physics:mass=0.00125
+            point3f physics:centerOfMass=(0, 0, 0)
+            float3 physics:diagonalInertia=(2.64e-07, 2.64e-07, 3.91e-09)
+            quatf physics:principalAxes=(1,0,0,0)
+            float physxRigidBody:linearDamping=.02
+            float physxRigidBody:angularDamping=.10
+            float physxRigidBody:sleepThreshold=0
+            bool physxRigidBody:enableCCD=1
+            float physxRigidBody:maxDepenetrationVelocity=.5
+            int physxRigidBody:solverPositionIterationCount=32
+            int physxRigidBody:solverVelocityIterationCount=8
+            float physxContactReport:threshold=0
+            double3 xformOp:translate=(0.332573629826, 0.0677793611079, 0.784375)
+            quatf xformOp:orient=(0.6677075208, -0.526387056578, 0.526387056578, 0)
+            uniform token[] xformOpOrder=["xformOp:translate","xformOp:orient"]
+            def Capsule "rubber_cable" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI"])
+            {
+                double radius=0.0025
+                double height=0.045000000000000005
+                uniform token axis="Z"
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+        }
+        def Xform "cord_2" (prepend apiSchemas=["PhysicsRigidBodyAPI","PhysicsMassAPI","PhysxRigidBodyAPI","PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled=1
+            bool physics:kinematicEnabled=0
+            float physics:mass=0.00125
+            point3f physics:centerOfMass=(0, 0, 0)
+            float3 physics:diagonalInertia=(2.64e-07, 2.64e-07, 3.91e-09)
+            quatf physics:principalAxes=(1,0,0,0)
+            float physxRigidBody:linearDamping=.02
+            float physxRigidBody:angularDamping=.10
+            float physxRigidBody:sleepThreshold=0
+            bool physxRigidBody:enableCCD=1
+            float physxRigidBody:maxDepenetrationVelocity=.5
+            int physxRigidBody:solverPositionIterationCount=32
+            int physxRigidBody:solverVelocityIterationCount=8
+            float physxContactReport:threshold=0
+            double3 xformOp:translate=(0.367720889479, 0.0677793611079, 0.778958333333)
+            quatf xformOp:orient=(0.6677075208, 0.526387056578, 0.526387056578, -0)
+            uniform token[] xformOpOrder=["xformOp:translate","xformOp:orient"]
+            def Capsule "rubber_cable" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI"])
+            {
+                double radius=0.0025
+                double height=0.045000000000000005
+                uniform token axis="Z"
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+        }
+        def Xform "cord_3" (prepend apiSchemas=["PhysicsRigidBodyAPI","PhysicsMassAPI","PhysxRigidBodyAPI","PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled=1
+            bool physics:kinematicEnabled=0
+            float physics:mass=0.00125
+            point3f physics:centerOfMass=(0, 0, 0)
+            float3 physics:diagonalInertia=(2.64e-07, 2.64e-07, 3.91e-09)
+            quatf physics:principalAxes=(1,0,0,0)
+            float physxRigidBody:linearDamping=.02
+            float physxRigidBody:angularDamping=.10
+            float physxRigidBody:sleepThreshold=0
+            bool physxRigidBody:enableCCD=1
+            float physxRigidBody:maxDepenetrationVelocity=.5
+            int physxRigidBody:solverPositionIterationCount=32
+            int physxRigidBody:solverVelocityIterationCount=8
+            float physxContactReport:threshold=0
+            double3 xformOp:translate=(0.385294519306, 0.0253528656407, 0.773541666667)
+            quatf xformOp:orient=(0.6677075208, 0.744423714471, 0, -0)
+            uniform token[] xformOpOrder=["xformOp:translate","xformOp:orient"]
+            def Capsule "rubber_cable" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI"])
+            {
+                double radius=0.0025
+                double height=0.045000000000000005
+                uniform token axis="Z"
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+        }
+        def Xform "cord_4" (prepend apiSchemas=["PhysicsRigidBodyAPI","PhysicsMassAPI","PhysxRigidBodyAPI","PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled=1
+            bool physics:kinematicEnabled=0
+            float physics:mass=0.00125
+            point3f physics:centerOfMass=(0, 0, 0)
+            float3 physics:diagonalInertia=(2.64e-07, 2.64e-07, 3.91e-09)
+            quatf physics:principalAxes=(1,0,0,0)
+            float physxRigidBody:linearDamping=.02
+            float physxRigidBody:angularDamping=.10
+            float physxRigidBody:sleepThreshold=0
+            bool physxRigidBody:enableCCD=1
+            float physxRigidBody:maxDepenetrationVelocity=.5
+            int physxRigidBody:solverPositionIterationCount=32
+            int physxRigidBody:solverVelocityIterationCount=8
+            float physxContactReport:threshold=0
+            double3 xformOp:translate=(0.410147384947, 0.0005, 0.768125)
+            quatf xformOp:orient=(0.6677075208, -0, 0.744423714471, 0)
+            uniform token[] xformOpOrder=["xformOp:translate","xformOp:orient"]
+            def Capsule "rubber_cable" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI"])
+            {
+                double radius=0.0025
+                double height=0.045000000000000005
+                uniform token axis="Z"
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+        }
+        def Xform "cord_5" (prepend apiSchemas=["PhysicsRigidBodyAPI","PhysicsMassAPI","PhysxRigidBodyAPI","PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled=1
+            bool physics:kinematicEnabled=0
+            float physics:mass=0.00125
+            point3f physics:centerOfMass=(0, 0, 0)
+            float3 physics:diagonalInertia=(2.64e-07, 2.64e-07, 3.91e-09)
+            quatf physics:principalAxes=(1,0,0,0)
+            float physxRigidBody:linearDamping=.02
+            float physxRigidBody:angularDamping=.10
+            float physxRigidBody:sleepThreshold=0
+            bool physxRigidBody:enableCCD=1
+            float physxRigidBody:maxDepenetrationVelocity=.5
+            int physxRigidBody:solverPositionIterationCount=32
+            int physxRigidBody:solverVelocityIterationCount=8
+            float physxContactReport:threshold=0
+            double3 xformOp:translate=(0.459853116228, 0.0005, 0.762708333333)
+            quatf xformOp:orient=(0.6677075208, -0, 0.744423714471, 0)
+            uniform token[] xformOpOrder=["xformOp:translate","xformOp:orient"]
+            def Capsule "rubber_cable" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI"])
+            {
+                double radius=0.0025
+                double height=0.045000000000000005
+                uniform token axis="Z"
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+        }
+        def Xform "cord_bundle" (prepend apiSchemas=["PhysicsRigidBodyAPI","PhysicsMassAPI","PhysxRigidBodyAPI","PhysxContactReportAPI"])
+        {
+            bool physics:rigidBodyEnabled=1
+            bool physics:kinematicEnabled=0
+            float physics:mass=0.068
+            point3f physics:centerOfMass=(0.006, 0, 0)
+            float3 physics:diagonalInertia=(4.8e-05, 6.5e-05, 9e-05)
+            quatf physics:principalAxes=(1,0,0,0)
+            float physxRigidBody:linearDamping=.02
+            float physxRigidBody:angularDamping=.10
+            float physxRigidBody:sleepThreshold=0
+            bool physxRigidBody:enableCCD=1
+            float physxRigidBody:maxDepenetrationVelocity=.5
+            int physxRigidBody:solverPositionIterationCount=32
+            int physxRigidBody:solverVelocityIterationCount=8
+            float physxContactReport:threshold=0
+            double3 xformOp:translate=(0.524705981869, 0.0005, 0.76)
+            quatf xformOp:orient=(1, 0, 0, 0)
+            uniform token[] xformOpOrder=["xformOp:translate","xformOp:orient"]
+            def Mesh "bound_coil_0" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(30, 0, -12.5), (28.9777747887, 7.76457135308, -12.5), (40, 0, -12.5), (38.6370330516, 10.3527618041, -12.5), (30, 0, 12.5), (28.9777747887, 7.76457135308, 12.5), (40, 0, 12.5), (38.6370330516, 10.3527618041, 12.5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[0, 3, 2, 1, 3, 0, 2, 6, 0, 0, 6, 4, 1, 0, 5, 5, 0, 4, 2, 3, 7, 7, 6, 2, 7, 3, 1, 1, 5, 7, 4, 6, 7, 7, 5, 4]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+            def Mesh "bound_coil_1" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(28.9777747887, 7.76457135308, -12.5), (25.9807621135, 15, -12.5), (38.6370330516, 10.3527618041, -12.5), (34.6410161514, 20, -12.5), (28.9777747887, 7.76457135308, 12.5), (25.9807621135, 15, 12.5), (38.6370330516, 10.3527618041, 12.5), (34.6410161514, 20, 12.5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[0, 3, 2, 1, 3, 0, 2, 6, 0, 0, 6, 4, 1, 0, 5, 5, 0, 4, 2, 3, 7, 7, 6, 2, 7, 3, 1, 1, 5, 7, 4, 6, 7, 7, 5, 4]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+            def Mesh "bound_coil_2" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(25.9807621135, 15, -12.5), (21.2132034356, 21.2132034356, -12.5), (34.6410161514, 20, -12.5), (28.2842712475, 28.2842712475, -12.5), (25.9807621135, 15, 12.5), (21.2132034356, 21.2132034356, 12.5), (34.6410161514, 20, 12.5), (28.2842712475, 28.2842712475, 12.5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[0, 3, 2, 1, 3, 0, 2, 6, 0, 0, 6, 4, 1, 0, 5, 5, 0, 4, 2, 3, 7, 7, 6, 2, 7, 3, 1, 1, 5, 7, 4, 6, 7, 7, 5, 4]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+            def Mesh "bound_coil_3" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(21.2132034356, 21.2132034356, -12.5), (15, 25.9807621135, -12.5), (28.2842712475, 28.2842712475, -12.5), (20, 34.6410161514, -12.5), (21.2132034356, 21.2132034356, 12.5), (15, 25.9807621135, 12.5), (28.2842712475, 28.2842712475, 12.5), (20, 34.6410161514, 12.5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[0, 3, 2, 1, 3, 0, 2, 6, 0, 0, 6, 4, 1, 0, 5, 5, 0, 4, 2, 3, 7, 7, 6, 2, 7, 3, 1, 1, 5, 7, 4, 6, 7, 7, 5, 4]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+            def Mesh "bound_coil_4" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(15, 25.9807621135, -12.5), (7.76457135308, 28.9777747887, -12.5), (20, 34.6410161514, -12.5), (10.3527618041, 38.6370330516, -12.5), (15, 25.9807621135, 12.5), (7.76457135308, 28.9777747887, 12.5), (20, 34.6410161514, 12.5), (10.3527618041, 38.6370330516, 12.5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[0, 3, 2, 1, 3, 0, 2, 6, 0, 0, 6, 4, 1, 0, 5, 5, 0, 4, 2, 3, 7, 7, 6, 2, 7, 3, 1, 1, 5, 7, 4, 6, 7, 7, 5, 4]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+            def Mesh "bound_coil_5" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(7.76457135308, 28.9777747887, -12.5), (1.83697019872e-15, 30, -12.5), (10.3527618041, 38.6370330516, -12.5), (2.44929359829e-15, 40, -12.5), (7.76457135308, 28.9777747887, 12.5), (1.83697019872e-15, 30, 12.5), (10.3527618041, 38.6370330516, 12.5), (2.44929359829e-15, 40, 12.5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[0, 3, 2, 1, 3, 0, 2, 6, 0, 0, 6, 4, 2, 3, 7, 7, 6, 2, 1, 0, 5, 5, 0, 4, 5, 3, 1, 5, 7, 3, 4, 6, 5, 6, 7, 5]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+            def Mesh "bound_coil_6" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(1.83697019872e-15, 30, -12.5), (-7.76457135308, 28.9777747887, -12.5), (2.44929359829e-15, 40, -12.5), (-10.3527618041, 38.6370330516, -12.5), (1.83697019872e-15, 30, 12.5), (-7.76457135308, 28.9777747887, 12.5), (2.44929359829e-15, 40, 12.5), (-10.3527618041, 38.6370330516, 12.5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[0, 1, 3, 3, 2, 0, 2, 6, 0, 0, 6, 4, 0, 5, 1, 4, 5, 0, 7, 2, 3, 7, 6, 2, 3, 1, 7, 1, 5, 7, 4, 6, 7, 7, 5, 4]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+            def Mesh "bound_coil_7" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-7.76457135308, 28.9777747887, -12.5), (-15, 25.9807621135, -12.5), (-10.3527618041, 38.6370330516, -12.5), (-20, 34.6410161514, -12.5), (-7.76457135308, 28.9777747887, 12.5), (-15, 25.9807621135, 12.5), (-10.3527618041, 38.6370330516, 12.5), (-20, 34.6410161514, 12.5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[6, 4, 0, 0, 2, 6, 1, 2, 0, 3, 2, 1, 7, 6, 2, 7, 2, 3, 0, 4, 5, 5, 1, 0, 4, 6, 5, 6, 7, 5, 3, 1, 5, 5, 7, 3]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+            def Mesh "bound_coil_8" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-15, 25.9807621135, -12.5), (-21.2132034356, 21.2132034356, -12.5), (-20, 34.6410161514, -12.5), (-28.2842712475, 28.2842712475, -12.5), (-15, 25.9807621135, 12.5), (-21.2132034356, 21.2132034356, 12.5), (-20, 34.6410161514, 12.5), (-28.2842712475, 28.2842712475, 12.5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[6, 4, 0, 0, 2, 6, 1, 2, 0, 3, 2, 1, 7, 6, 2, 7, 2, 3, 0, 4, 5, 5, 1, 0, 4, 6, 5, 6, 7, 5, 3, 1, 5, 5, 7, 3]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+            def Mesh "bound_coil_9" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-21.2132034356, 21.2132034356, -12.5), (-25.9807621135, 15, -12.5), (-28.2842712475, 28.2842712475, -12.5), (-34.6410161514, 20, -12.5), (-21.2132034356, 21.2132034356, 12.5), (-25.9807621135, 15, 12.5), (-28.2842712475, 28.2842712475, 12.5), (-34.6410161514, 20, 12.5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[6, 4, 0, 0, 2, 6, 1, 2, 0, 3, 2, 1, 7, 6, 2, 7, 2, 3, 0, 4, 5, 5, 1, 0, 4, 6, 5, 6, 7, 5, 3, 1, 5, 5, 7, 3]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+            def Mesh "bound_coil_10" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-25.9807621135, 15, -12.5), (-28.9777747887, 7.76457135308, -12.5), (-34.6410161514, 20, -12.5), (-38.6370330516, 10.3527618041, -12.5), (-25.9807621135, 15, 12.5), (-28.9777747887, 7.76457135308, 12.5), (-34.6410161514, 20, 12.5), (-38.6370330516, 10.3527618041, 12.5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[6, 4, 0, 0, 2, 6, 3, 7, 6, 6, 2, 3, 3, 2, 1, 1, 2, 0, 5, 6, 7, 4, 6, 5, 0, 4, 5, 5, 1, 0, 5, 7, 3, 3, 1, 5]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+            def Mesh "bound_coil_11" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-28.9777747887, 7.76457135308, -12.5), (-30, 3.67394039744e-15, -12.5), (-38.6370330516, 10.3527618041, -12.5), (-40, 4.89858719659e-15, -12.5), (-28.9777747887, 7.76457135308, 12.5), (-30, 3.67394039744e-15, 12.5), (-38.6370330516, 10.3527618041, 12.5), (-40, 4.89858719659e-15, 12.5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[6, 4, 0, 0, 2, 6, 1, 2, 0, 3, 2, 1, 7, 6, 2, 7, 2, 3, 0, 4, 5, 5, 1, 0, 4, 6, 5, 6, 7, 5, 3, 1, 5, 5, 7, 3]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+            def Mesh "bound_coil_12" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-30, 3.67394039744e-15, -12.5), (-28.9777747887, -7.76457135308, -12.5), (-40, 4.89858719659e-15, -12.5), (-38.6370330516, -10.3527618041, -12.5), (-30, 3.67394039744e-15, 12.5), (-28.9777747887, -7.76457135308, 12.5), (-40, 4.89858719659e-15, 12.5), (-38.6370330516, -10.3527618041, 12.5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[1, 3, 0, 0, 3, 2, 2, 6, 0, 0, 6, 4, 1, 0, 5, 5, 0, 4, 2, 3, 7, 7, 6, 2, 7, 3, 1, 1, 5, 7, 4, 6, 7, 7, 5, 4]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+            def Mesh "bound_coil_13" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-28.9777747887, -7.76457135308, -12.5), (-25.9807621135, -15, -12.5), (-38.6370330516, -10.3527618041, -12.5), (-34.6410161514, -20, -12.5), (-28.9777747887, -7.76457135308, 12.5), (-25.9807621135, -15, 12.5), (-38.6370330516, -10.3527618041, 12.5), (-34.6410161514, -20, 12.5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[1, 3, 0, 0, 3, 2, 6, 0, 2, 4, 0, 6, 2, 3, 6, 3, 7, 6, 1, 0, 5, 5, 0, 4, 5, 3, 1, 5, 7, 3, 4, 6, 5, 5, 6, 7]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+            def Mesh "bound_coil_14" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-25.9807621135, -15, -12.5), (-21.2132034356, -21.2132034356, -12.5), (-34.6410161514, -20, -12.5), (-28.2842712475, -28.2842712475, -12.5), (-25.9807621135, -15, 12.5), (-21.2132034356, -21.2132034356, 12.5), (-34.6410161514, -20, 12.5), (-28.2842712475, -28.2842712475, 12.5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[1, 3, 0, 0, 3, 2, 2, 6, 0, 0, 6, 4, 1, 0, 5, 5, 0, 4, 2, 3, 7, 7, 6, 2, 7, 3, 1, 1, 5, 7, 4, 6, 7, 7, 5, 4]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+            def Mesh "bound_coil_15" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-21.2132034356, -21.2132034356, -12.5), (-15, -25.9807621135, -12.5), (-28.2842712475, -28.2842712475, -12.5), (-20, -34.6410161514, -12.5), (-21.2132034356, -21.2132034356, 12.5), (-15, -25.9807621135, 12.5), (-28.2842712475, -28.2842712475, 12.5), (-20, -34.6410161514, 12.5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[1, 3, 0, 0, 3, 2, 2, 6, 0, 0, 6, 4, 1, 0, 5, 5, 0, 4, 2, 3, 7, 7, 6, 2, 7, 3, 1, 1, 5, 7, 4, 6, 7, 7, 5, 4]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+            def Mesh "bound_coil_16" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-15, -25.9807621135, -12.5), (-7.76457135308, -28.9777747887, -12.5), (-20, -34.6410161514, -12.5), (-10.3527618041, -38.6370330516, -12.5), (-15, -25.9807621135, 12.5), (-7.76457135308, -28.9777747887, 12.5), (-20, -34.6410161514, 12.5), (-10.3527618041, -38.6370330516, 12.5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[1, 3, 0, 0, 3, 2, 2, 6, 0, 0, 6, 4, 1, 0, 5, 5, 0, 4, 2, 3, 7, 7, 6, 2, 7, 3, 1, 1, 5, 7, 4, 6, 7, 7, 5, 4]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+            def Mesh "bound_coil_17" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-7.76457135308, -28.9777747887, -12.5), (-5.51091059616e-15, -30, -12.5), (-10.3527618041, -38.6370330516, -12.5), (-7.34788079488e-15, -40, -12.5), (-7.76457135308, -28.9777747887, 12.5), (-5.51091059616e-15, -30, 12.5), (-10.3527618041, -38.6370330516, 12.5), (-7.34788079488e-15, -40, 12.5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[1, 3, 0, 0, 3, 2, 2, 6, 0, 0, 6, 4, 1, 0, 5, 5, 0, 4, 2, 3, 7, 7, 6, 2, 7, 3, 1, 1, 5, 7, 4, 6, 7, 7, 5, 4]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+            def Mesh "bound_coil_18" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(-5.51091059616e-15, -30, -12.5), (7.76457135308, -28.9777747887, -12.5), (-7.34788079488e-15, -40, -12.5), (10.3527618041, -38.6370330516, -12.5), (-5.51091059616e-15, -30, 12.5), (7.76457135308, -28.9777747887, 12.5), (-7.34788079488e-15, -40, 12.5), (10.3527618041, -38.6370330516, 12.5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[6, 4, 0, 6, 0, 2, 2, 0, 1, 1, 3, 2, 7, 6, 2, 2, 3, 7, 0, 4, 5, 5, 1, 0, 4, 6, 5, 6, 7, 5, 3, 1, 5, 5, 7, 3]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+            def Mesh "bound_coil_19" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(7.76457135308, -28.9777747887, -12.5), (15, -25.9807621135, -12.5), (10.3527618041, -38.6370330516, -12.5), (20, -34.6410161514, -12.5), (7.76457135308, -28.9777747887, 12.5), (15, -25.9807621135, 12.5), (10.3527618041, -38.6370330516, 12.5), (20, -34.6410161514, 12.5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[6, 4, 0, 0, 2, 6, 1, 2, 0, 3, 2, 1, 7, 6, 2, 7, 2, 3, 0, 4, 5, 5, 1, 0, 4, 6, 5, 6, 7, 5, 3, 1, 5, 5, 7, 3]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+            def Mesh "bound_coil_20" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(15, -25.9807621135, -12.5), (21.2132034356, -21.2132034356, -12.5), (20, -34.6410161514, -12.5), (28.2842712475, -28.2842712475, -12.5), (15, -25.9807621135, 12.5), (21.2132034356, -21.2132034356, 12.5), (20, -34.6410161514, 12.5), (28.2842712475, -28.2842712475, 12.5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[6, 4, 0, 0, 2, 6, 1, 2, 0, 3, 2, 1, 7, 6, 2, 7, 2, 3, 0, 4, 5, 5, 1, 0, 4, 6, 5, 6, 7, 5, 3, 1, 5, 5, 7, 3]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+            def Mesh "bound_coil_21" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(21.2132034356, -21.2132034356, -12.5), (25.9807621135, -15, -12.5), (28.2842712475, -28.2842712475, -12.5), (34.6410161514, -20, -12.5), (21.2132034356, -21.2132034356, 12.5), (25.9807621135, -15, 12.5), (28.2842712475, -28.2842712475, 12.5), (34.6410161514, -20, 12.5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[6, 4, 0, 0, 2, 6, 3, 7, 6, 6, 2, 3, 3, 2, 1, 1, 2, 0, 5, 6, 7, 4, 6, 5, 0, 4, 5, 5, 1, 0, 5, 7, 3, 3, 1, 5]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+            def Mesh "bound_coil_22" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(25.9807621135, -15, -12.5), (28.9777747887, -7.76457135308, -12.5), (34.6410161514, -20, -12.5), (38.6370330516, -10.3527618041, -12.5), (25.9807621135, -15, 12.5), (28.9777747887, -7.76457135308, 12.5), (34.6410161514, -20, 12.5), (38.6370330516, -10.3527618041, 12.5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[6, 4, 0, 0, 2, 6, 3, 7, 6, 6, 2, 3, 3, 2, 1, 1, 2, 0, 5, 6, 7, 4, 6, 5, 0, 4, 5, 5, 1, 0, 5, 7, 3, 3, 1, 5]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+            def Mesh "bound_coil_23" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI","PhysicsMeshCollisionAPI"])
+            {
+                point3f[] points=[(28.9777747887, -7.76457135308, -12.5), (30, -7.34788079488e-15, -12.5), (38.6370330516, -10.3527618041, -12.5), (40, -9.79717439318e-15, -12.5), (28.9777747887, -7.76457135308, 12.5), (30, -7.34788079488e-15, 12.5), (38.6370330516, -10.3527618041, 12.5), (40, -9.79717439318e-15, 12.5)]
+                int[] faceVertexCounts=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                int[] faceVertexIndices=[6, 4, 0, 0, 2, 6, 1, 2, 0, 3, 2, 1, 7, 6, 2, 7, 2, 3, 0, 4, 5, 5, 1, 0, 4, 6, 5, 6, 7, 5, 3, 1, 5, 5, 7, 3]
+                uniform token subdivisionScheme="none"
+                token physics:approximation="convexHull"
+                double3 xformOp:scale=(.001,.001,.001)
+                uniform token[] xformOpOrder=["xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/cord>
+            rel material:binding:physics=</Fixture/cord>
+            }
+            def Cube "tied_plug" (prepend apiSchemas=["MaterialBindingAPI","PhysicsCollisionAPI","PhysxCollisionAPI"])
+            {
+                double size=1
+                double3 xformOp:scale=(0.04, 0.025, 0.018)
+                double3 xformOp:translate=(0.052, 0, 0)
+                uniform token[] xformOpOrder=["xformOp:translate","xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/dark>
+            rel material:binding:physics=</Fixture/dark>
+            }
+            def Cube "strap_top" (prepend apiSchemas=["MaterialBindingAPI"])
+            {
+                double size=1
+                double3 xformOp:scale=(0.014, 0.081, 0.001)
+                double3 xformOp:translate=(0, 0, 0.013)
+                uniform token[] xformOpOrder=["xformOp:translate","xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/blue>
+            rel material:binding:physics=</Fixture/blue>
+            }
+            def Cube "strap_bottom" (prepend apiSchemas=["MaterialBindingAPI"])
+            {
+                double size=1
+                double3 xformOp:scale=(0.014, 0.081, 0.001)
+                double3 xformOp:translate=(0, 0, -0.013)
+                uniform token[] xformOpOrder=["xformOp:translate","xformOp:scale"]
+                float physxCollision:contactOffset=.00015
+                float physxCollision:restOffset=0
+            rel material:binding=</Fixture/blue>
+            rel material:binding:physics=</Fixture/blue>
+            }
+        }
+    }
+    def PhysicsRevoluteJoint "folding_hinge" (prepend apiSchemas=["PhysicsDriveAPI:angular"])
+    {
+        rel physics:body0=</Fixture/Actors/head>
+        rel physics:body1=</Fixture/Actors/handle>
+        point3f physics:localPos0=(0.035, 0, -0.05)
+        point3f physics:localPos1=(0,0,0)
+        uniform token physics:axis="Y"
+        float physics:lowerLimit=0
+        float physics:upperLimit=90.0
+        uniform bool physics:excludeFromArticulation=1
+        bool physics:collisionEnabled=1
+        token drive:angular:physics:type="force"
+        float drive:angular:physics:stiffness=0
+        float drive:angular:physics:damping=50.0
+        float drive:angular:physics:targetVelocity=0
+        float drive:angular:physics:maxForce=0.025
+    }
+    def PhysicsSphericalJoint "loose_tail_0"
+    {
+        rel physics:body0=</Fixture/Actors/handle>
+        rel physics:body1=</Fixture/Actors/cord_0>
+        point3f physics:localPos0=(0, 0, -0.0505)
+        point3f physics:localPos1=(0, 0, -0.025)
+        float physics:coneAngle0Limit=179.9
+        float physics:coneAngle1Limit=179.9
+        uniform bool physics:excludeFromArticulation=1
+        bool physics:collisionEnabled=0
+    }
+    def PhysicsSphericalJoint "loose_tail_1"
+    {
+        rel physics:body0=</Fixture/Actors/cord_0>
+        rel physics:body1=</Fixture/Actors/cord_1>
+        point3f physics:localPos0=(0, 0, 0.025)
+        point3f physics:localPos1=(0, 0, -0.025)
+        float physics:coneAngle0Limit=179.9
+        float physics:coneAngle1Limit=179.9
+        uniform bool physics:excludeFromArticulation=1
+        bool physics:collisionEnabled=0
+    }
+    def PhysicsSphericalJoint "loose_tail_2"
+    {
+        rel physics:body0=</Fixture/Actors/cord_1>
+        rel physics:body1=</Fixture/Actors/cord_2>
+        point3f physics:localPos0=(0, 0, 0.025)
+        point3f physics:localPos1=(0, 0, -0.025)
+        float physics:coneAngle0Limit=179.9
+        float physics:coneAngle1Limit=179.9
+        uniform bool physics:excludeFromArticulation=1
+        bool physics:collisionEnabled=0
+    }
+    def PhysicsSphericalJoint "loose_tail_3"
+    {
+        rel physics:body0=</Fixture/Actors/cord_2>
+        rel physics:body1=</Fixture/Actors/cord_3>
+        point3f physics:localPos0=(0, 0, 0.025)
+        point3f physics:localPos1=(0, 0, -0.025)
+        float physics:coneAngle0Limit=179.9
+        float physics:coneAngle1Limit=179.9
+        uniform bool physics:excludeFromArticulation=1
+        bool physics:collisionEnabled=0
+    }
+    def PhysicsSphericalJoint "loose_tail_4"
+    {
+        rel physics:body0=</Fixture/Actors/cord_3>
+        rel physics:body1=</Fixture/Actors/cord_4>
+        point3f physics:localPos0=(0, 0, 0.025)
+        point3f physics:localPos1=(0, 0, -0.025)
+        float physics:coneAngle0Limit=179.9
+        float physics:coneAngle1Limit=179.9
+        uniform bool physics:excludeFromArticulation=1
+        bool physics:collisionEnabled=0
+    }
+    def PhysicsSphericalJoint "loose_tail_5"
+    {
+        rel physics:body0=</Fixture/Actors/cord_4>
+        rel physics:body1=</Fixture/Actors/cord_5>
+        point3f physics:localPos0=(0, 0, 0.025)
+        point3f physics:localPos1=(0, 0, -0.025)
+        float physics:coneAngle0Limit=179.9
+        float physics:coneAngle1Limit=179.9
+        uniform bool physics:excludeFromArticulation=1
+        bool physics:collisionEnabled=0
+    }
+    def PhysicsSphericalJoint "bound_tail"
+    {
+        rel physics:body0=</Fixture/Actors/cord_5>
+        rel physics:body1=</Fixture/Actors/cord_bundle>
+        point3f physics:localPos0=(0, 0, 0.025)
+        point3f physics:localPos1=(-0.04, 0, 0)
+        float physics:coneAngle0Limit=179.9
+        float physics:coneAngle1Limit=179.9
+        uniform bool physics:excludeFromArticulation=1
+        bool physics:collisionEnabled=0
+    }
+}
