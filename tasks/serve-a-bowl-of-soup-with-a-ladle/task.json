@@ -1,0 +1,24 @@
+{
+  "title": "Serve a bowl of soup with a ladle: two ladlefuls from the pot, none on the rim or the counter",
+  "category": "Societal relatability",
+  "keywords": [
+    "ladle",
+    "soup",
+    "serving",
+    "pot",
+    "bowl",
+    "kitchen",
+    "restaurant",
+    "tool use",
+    "liquid transfer"
+  ],
+  "instruction": "Serve a bowl of soup: two ladlefuls.",
+  "context": "Ladling soup into a bowl is done every day at family dinners, in school and hospital canteens and on every restaurant line. A full ladle is a deep cup on a long handle: tilted a few degrees it spills, and moved off quickly it sloshes over. So it is dipped deep enough to fill, lifted out level, tipped back a little over the pot to shed the brim, held a moment there while the drips fall back, carried level, and tipped low over the middle of the bowl, so nothing runs onto the rim. Pour from high and it splashes; carry it straight across and it drips on the counter. The robot's own handling of the ladle decides every drop.",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y to the robot's left); heights above the table top. A grey absorbent pad (disposable underpad, 70 x 50 cm), centred at (38, -5). On it: a 3 qt stainless steel pot without its lid (inside 21 cm across and 8.5 cm deep, two side loop handles pointing along y), centred at (40, -15), holding 2.40 kg of soup: room-temperature tap water with orange food colouring; an 8 oz stainless steel ladle with a black soft-grip handle (bowl 10 cm across and 4.6 cm deep, about 220 mL to its brim; handle rising at 65 deg from the bowl's rim, 24 x 16 mm grip, about 31 cm overall) standing in the pot, its bowl on the pot's floor near the middle, leaning 10 deg with its handle on the rim, pointing back and to the right (150 deg from straight ahead), as in the screenshot; a white ceramic soup bowl (16.6 cm across the rim, 7.2 cm tall, about 700 mL to the brim), empty and dry, centred at (34, 7). Real trials only: a nitrile cover over each gripper's finger pads. Both arms start at the ready pose. One fixed layout.",
+  "scoring": "0, latched: pot or bowl moved >3 cm or tipped >10 deg, or ladle dropped. After: bowl gain W; S = soup anywhere outside the bowl (pad gain + towel wipes). 1.0: W 340-480 g in 2 pours, S <=3 g, ladle back in pot, released. 0.5: W >=150 g, S <=15 g. 0.25: W >=40 g. Else 0.",
+  "run_limit": "3,600 steps (3 minutes at 20 Hz)",
+  "reset_notes": "Pour the bowl back into the pot and top the pot up to 2.40 kg of soup by weight; dry the bowl, its rim and the ladle; swap the pad for a fresh one and weigh it; lean the ladle back as in the screenshot. About 2 minutes.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. Soup is a model (soup.py): level in the ladle, leaning with its acceleration (one slosh mode); runs over the rim's lowest point at a rate set by the head over it, falling where the lip is; the ladle fills when dipped; its underside carries 3 mL out that drips off its lowest point over ~2 s; falls over 15 cm splash. The soup's weight acts on the ladle. Pot, ladle and bowl collide as real shapes; soup is drawn as shapes.",
+  "scores": "Dream-1 run: 0 (lifts the ladle out after 2 min and tips it on the way to the bowl: 10 g in the bowl, 78 g on the pad). Demo: 1.0 (430 g in 2 pours, 0.9 g outside, 1,267 steps). Controls: carried across quickly, no pause for drips 0.5 (13 g on the pad); one ladleful 0.5; idle 0.",
+  "media": "M-C7C5FY"
+}
