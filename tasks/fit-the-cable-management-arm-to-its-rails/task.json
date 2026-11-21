@@ -1,0 +1,21 @@
+{
+  "title": "Fit a server's cable management arm to its rails and support bar",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "data centre",
+    "rack server",
+    "cable management arm",
+    "bimanual",
+    "articulated part",
+    "latch"
+  ],
+  "instruction": "Install the cable management arm on the server's rails and secure it on its support bar, then let go.",
+  "context": "Racking servers for AI compute is hands-on data-centre build-out work, and each slide-out server gets a cable management arm (CMA) that carries its cables as it slides in and out. A CMA with a clip unlatched or its free end off the support bar lets the cables sag and catch on the server below. Scene: Lenovo ThinkSystem Toolless Slide Rail Kit with 1U CMA (7M27A05701), installed as its CMA Installation Guide (SP47A24965, Part II) describes.",
+  "setup": "Millimetres; x away from the arm bases, y to the robot's left, z above the bench top. Fixed rack rear: two rear posts of a 19-inch rack (20 x 20 x 240 mm, black steel) at x 455-475, y +/-231 to 251; a 1U server (434.4 mm wide, 43 mm high, rear face at x 480, underside 58 mm above the bench) fully in on Lenovo tool-less slide rails (inner members at y +/-217 to 222, outer at +/-222 to 228). On the left rail: the inner bracket's tab (30 x 20 x 2 mm steel) at x 407-437, y 178-198, and the outer bracket's tab at x 357-387, y 208-228, both top faces 90 mm above the bench, each with a yellow latch tooth (16 mm wide, 2.5 mm proud) 10 mm in front of its stop face. Steel support bar 30 x 5 mm at x 375-405 across the rack, top 57 mm above the bench (3 mm below the CMA's baskets when level). Blue stop bracket: a 43 x 6 x 36 mm plate on a vertical hinge at x 336, y -220, starting shut (pointing along +y, standing where the CMA's hinge end goes). Loose cable management arm (Lenovo ThinkSystem 1U CMA, black): an inner basket 45 x 372 x 40 mm with its inner clip at the robot's left end and an outer basket 45 x 399 x 40 mm with its outer clip, joined at their right ends by a vertical hinge; 0.85 kg (estimate). Start: the CMA on the bench, hinge axis at x 239.5, y -205, inner basket along +y, outer arm swung 15 degrees open toward the robot, as in the screenshot. fixture/geometry.json lists every part.",
+  "scoring": "0 for the whole trial if at any moment the CMA falls off the bench (video). Otherwise read the end state once both hands are 30 mm or more from the CMA and the stop bracket and nothing has moved for 1 s. 1.0: both clips latched, the CMA's hinge end resting on the support bar (gap 1.5 mm or less, ruler) and the stop bracket shut (within 0.15 rad, about 9 degrees, photo). 2/3: both clips latched and resting on the bar, stop bracket not shut. 1/3: one clip latched, or both latched with the hinge end not resting on the bar. 0: no clip latched. A clip is latched when it has snapped home on its own tab: its front 3.5 mm or less from the bracket's stop face (ruler), its catch engaged (video: the click; the simulated rail shows a yellow tooth standing in the clip's window), within 2.5 mm sideways and 2 mm in height of the tab's line and within 3 degrees in yaw and tilt. A clip on the wrong tab is not latched.",
+  "run_limit": "1,200 control steps (60 seconds at 20 Hz)",
+  "reset_notes": "1. Pull the CMA's release rings (simulation: lift the yellow teeth), slide both clips off and lay the CMA on the bench at its start position (fixture/geometry.json), its outer arm 15 degrees open. 2. Press and turn the stop bracket shut. 3. Check the server is fully in. 4. Hands clear. Use object_jitter=0.",
+  "fidelity": "True-size rack rear, server, rails, support bar and CMA; the CMA's mass, internal shapes, hinge drag and clip fit are estimates. Each clip's sprung latch tooth sits on the rail tab (on the real kit the catch is in the clip). The stop bracket's press-to-release lock is a two-position detent. No cables yet, as in the maker's sequence; units above empty, as while a rack is filled bottom-up. One published layout.",
+  "scores": "Scripted demo: 1.0 (one layout, seed 0). Dream-1 run: 0.0 (ran to the 1,200-step limit; no refusal).",
+  "media": "M-9CL3CG"
+}
