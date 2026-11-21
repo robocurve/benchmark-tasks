@@ -1,0 +1,22 @@
+{
+  "title": "Fit a servo horn onto its splined output shaft with the horn arm on the zero mark",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "servo horn",
+    "25T spline",
+    "press fit",
+    "indexed alignment",
+    "robot assembly",
+    "zero mark",
+    "single arm"
+  ],
+  "instruction": "Fit the white servo horn onto the servo's splined output shaft with its arm lined up on the engraved zero mark, then let go.",
+  "context": "Building a robot arm means fitting a servo horn on each joint's 25-tooth output shaft. The horn seats at only 25 angles, 14.4 deg apart, so the technician lines its arm up on the engraved zero mark before pressing; pressed where it lands, the joint is off by whole teeth and every later calibration inherits it. This is the assembly step behind the arms that collect robot-learning data, and a robot able to do it can build and repair its own hardware.",
+  "setup": "Station table; positions in metres, x forward from the arm bases, y to the robot's left, z up; table top at z 0.7475. (1) Hobby servo: black ABS/aluminium case 40.7 x 19.7 x 36 mm, 55 g, long axis along x, bolted to the bench (fixed); silver 11.5 mm boss 3 mm tall on the case top and a silver 25-tooth output shaft 5.9 mm across, 5 mm proud of the boss, on the case top 10 mm from its -x end, at (0.250, -0.050). A white 1.2 x 24 mm zero mark is engraved on the case top from the boss out along +x. (2) Servo horn: white nylon single-arm horn, 4 g, a 14 mm x 7 mm hub with a 6.8 mm bore and a 28 mm arm 2 mm thick, lying flat at (0.220, -0.220), arm pointing 68 deg from +x (4 deg from a spline position). Measured on the MG996R with its stock horn: crest on crest the horn stands 3.5 mm proud of the boss (earlier set value 1.5 mm) and seating it takes 32 N (earlier 3.6 N); the simulation uses these. It seats (hub flush) only when its bore is within 0.8 mm of the shaft, tilt 4 deg or less, and the arm within 2.0 deg of one of the 25 positions (every 14.4 deg from the zero mark). Real parts: TowerPro MG996R (25T spline) with the single-arm horn from its own horn set.",
+  "scoring": "Final state only: the pose at the last control step, plus the last second. Arm azimuth a is the horn arm's angle from the zero mark (top view). 0 if the horn is seated (ring 3.0 mm of 3.5) with its arm more than 2.0 deg from the mark (wrong tooth) or is anywhere else; an earlier wrong seating that was refitted costs nothing, and a horn aligned once and left misaligned scores 0. 0.25: at the end the horn rests on the crests (bore within 1.0 mm, tilt 4 deg or less) with the arm within 3.0 deg of the mark. 0.5: seated at index 0 (arm within 2.0 deg, bore within 0.8 mm, tilt 4 deg or less). 0.75: flush (gap 0.5 mm or less), tilt 2 deg or less. 1.0: also the horn still (under 2 mm/s and 2 deg/s) and both grippers at least 30 mm away and under 5 mm/s for the last 1 s. Real trial: top photo with a ruler for the arm against the mark; 0.5 mm feeler under the hub; video for the release.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Pull the horn off the shaft (by hand, a servo-horn puller or a 4 mm bolt through the hub), lay it flat at (0.220, -0.220) with its arm 68 deg from +x (taped outline), and check with the 3.5 mm feeler gauge that a crest-on-crest horn stands proud again. The servo stays bolted.",
+  "fidelity": "True-size MG996R and stock horn, 25 teeth at 14.4 deg. Measured by the team: crest-on-crest stand-off 3.5 mm, seating force 32 N; the simulation uses both (before: 1.5 mm, 3.6 N). Teeth are modelled as a ring sliding under 32 N joint friction, only when bore, tilt and arm angle align; it stays down once pressed. No pull-off force. Rigid.",
+  "scores": "Dream-1 run: not run on this revision; demo: 1.0",
+  "media": "M-2SFFNS"
+}
