@@ -1,0 +1,14 @@
+{
+  "name": "seat-switch-line-card-with-dual-ejector-levers",
+  "title": "Seat a switch line card by swinging dual ejector levers closed into chassis catches",
+  "category": "Impact on AI timelines",
+  "instruction": "Seat the switch line card: swing both ejector levers closed into their catches and release.",
+  "context": "Enterprise network administrators and data center technicians install modular switch blades into 19-inch racks. Inserting a 4.0 kg card into backplane sockets requires swinging dual mechanical cam ejector handles shut symmetrically to overcome 80 N insertion force without bending pins, then engaging locking detents.",
+  "setup": "19-inch 4-post rack bay (482.6 mm width, EIA-310-D standard) with neighboring 1U chassis modules above (z +44 mm) and below (z 0 mm). 1U subrack chassis slot fixed to table (face at x 33 cm, centered y 0 cm, floor 1 cm above table, 403 mm between guide tracks, 520 mm deep). Two 8 mm steel ejector pins on floor tabs at x 30.17 cm, y +-20.5 cm. Two backplane connector blocks at y +-15 cm mate over final 8 mm against 5000 N/m springs (40 N each, 80 N total at home). 4.0 kg rigid line card blade (40 x 46 x 3.5 cm) starts pulled out 6 cm in guide tracks. Dual IEEE 1101.10 cam ejector levers pivot at y +-19.2 cm, starting 85 deg open with claws inside chassis pins. Spring catches engage when levers reach <= 2.5 deg of closed.",
+  "scoring": "Each end gap: distance faceplate is short of home (18 cm either side of middle). Permanent 0.0 if differential skew > 1.5 mm while mating (gaps <= 8 mm). Stage 0.25: card pushed to pins (gaps <= 25 mm). Stage 0.50: levers rotated >= 45 deg into mating zone (gaps <= 8 mm, skew <= 1.5 mm). Stage 0.75: levers locked into catches (both angles <= 2.5 deg, both gaps <= 1.0 mm). Stage 1.00: both grippers clear > 30 mm, card seated with both levers <= 2.5 deg, and card withstands 20 N retention proof pull held for 1.0 s (20 control steps).",
+  "reset_notes": "Press handle release catches, swing both ejector levers open to 85 deg, and slide card blade forward to 6 cm short of home.",
+  "fidelity": "1U switch chassis with IEEE 1101.10 guide tracks and flange pins; 4.0 kg card blade with dual pivoting cam ejector levers and detent catches; dual connector blocks with 80 N mating resistance over final 8 mm; 1.5 mm skew threshold; 20 N retention proof pull.",
+  "scores": "Dream-1 (1200 steps): 0.0; Negative control (uneven skew): 0.0; Negative control (unlatched): 0.50; Scripted demo 1: 1.0; Scripted demo 2: 1.0.",
+  "run_limit": "1200 steps (60 s at 20 Hz). Scripted demo completes in ~450 steps.",
+  "media": "M-7XJJ9Y"
+}
