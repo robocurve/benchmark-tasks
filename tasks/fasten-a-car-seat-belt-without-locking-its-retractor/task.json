@@ -1,0 +1,20 @@
+{
+  "title": "Fasten a car seat belt: draw it across smoothly so the retractor does not lock, and latch the tongue in the buckle",
+  "category": "Societal relatability",
+  "keywords": [
+    "seat belt",
+    "inertia reel retractor",
+    "latch plate and buckle",
+    "smooth pull against a spring",
+    "blind latch insertion"
+  ],
+  "instruction": "Fasten the seat belt.",
+  "context": "Nearly everyone fastens a car seat belt on every trip. The webbing comes off an emergency-locking retractor (inertia reel) in the door pillar; the latch plate (tongue) is drawn across the seat and pushed straight into the buckle until it clicks. A reel that senses webbing withdrawal locks when the belt is pulled out sharply (FMVSS 209, S4.3(j)(2)(iii): it 'shall not lock' at a webbing acceleration 'no greater than 0.3 g'; above that it may): a snatched belt stops dead and must be let back and drawn again, smoothly. The hand skill: a smooth 48 cm draw against the retractor's 2-3.5 N pull, the tongue carried blade down, then its 3 mm blade pushed into a 4.5 mm slot on a buckle stalk that gives, past the latch spring, until it catches. One arm is enough here (the left arm stays at its ready pose); the difficulty is in the speed of the draw and the aim of the insertion, not in a second hand.",
+  "setup": "Positions in cm from the midpoint between the arm bases: x forward, y to the robot's left, heights above the table. A car front seat (true size, fixed): cushion 45 cm wide (y -43 to +2), top 4.5 cm above the table, from x 6 to 40 (its front 15 cm cut off to clear the arm bases), 2 cm side bolsters; backrest 9 cm thick, front at x 40, 62 cm tall; head restraint. Door pillar trim (fixed) on the robot's left, y +9 to +15, x 33 to 47, 68 cm tall, the retractor at its foot. 3-point belt, 48 mm webbing: shoulder guide on a bracket at (24.5, 3, 60), lap anchor bolt on the sill at (24.5, 3, 4.5). The tongue (40 g: plastic head 50 x 13 x 28 mm, steel blade 22 x 3 x 24 mm with a latch window) hangs blade down on the webbing at x 24.5, y 3, its slot about 14 cm up, its faces toward +-y. Buckle (head 53 x 32 x 50 mm, slot 26 x 4.5 mm with a funnel, red release button) on a short stalk that gives, at x 23, y -44.8, its mouth 9.5 cm up. Both arms start at the ready pose. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "End of run. Latched: the tongue in the buckle with the latch caught in its window (in the sim: the pawl back within 0.8 mm, the tongue's head within 3.5 mm of the mouth). 1.0: latched, gripper let go (every finger point 2 cm or more from the tongue), tongue still for 1 s, and the retractor never locked. 0.6: the same, but the retractor locked at some time (a lock: webbing accelerated out faster than 0.7 g over a 50 ms step). 0.4: latched but still held at the end. 0.25: the blade has been 10 mm or more into the slot at some time. 0 otherwise. Real trial: a tug on the latched tongue by hand after the run; the lock is heard (the reel clicks) and seen on video (the belt stops dead while the hand pulls).",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Press the buckle's release button, let the belt wind back in slowly by hand (do not let it whip back), and leave the tongue hanging at rest beside the pillar, blade down, faces toward the pillar. A locked retractor frees itself once the belt has gone back in a little. Simulation: each trial starts the simulator afresh.",
+  "fidelity": "Rigid bodies. The webbing is two straight runs kept taut by the reel (slides with a 4 N/m preloaded spring, 2-3.5 N); it does not sag, twist or touch the seat, and is drawn only. The reel's lock is a rule read every 50 ms: payout acceleration over 0.7 g (estimate; FMVSS 209 sets only the 0.3 g no-lock floor) stops payout until 5 mm goes back in. The latch is a sprung pawl (about 6 N to pass). The cushion's front 15 cm is cut off.",
+  "scores": "Dream-1 run: 0.0 (the left gripper went again and again to the pillar where the tongue hangs but never took it, the right hovered over the cushion near the buckle; the belt was never drawn); demo: 1.0",
+  "media": "M-T2CG7F"
+}
