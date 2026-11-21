@@ -1,0 +1,762 @@
+{
+  "status": "Current original-asset simulation revision validated; matching reviewed media uploaded",
+  "tested_runtime_revision": "ee5269d7fc4721b5eaae64e4656608f4d8d1ce1748182df31957f008cc03f902",
+  "runtime_input_sha256": {
+    "assets/area-blue.png": "7beb98c7bc6162f4d7641f38058608e6d1d7d5c534c0277a9da9bf6e366385ec",
+    "assets/area-blue.usdc": "2a937bdee41bf4e63ddebe28362a50d7667755a442a48ca37b35d1fe3bbd80e5",
+    "assets/area-red.png": "8fb8b2c49593674e8a861c8c2caa7e9ad21cfca4f6e578a8059e00b0eb9e6a68",
+    "assets/area-red.usdc": "7dccbde58d53f31b43f81fd1b27704c80c9b9f922114ca4e69839b064ec2ab3a",
+    "assets/cap-blue.usdc": "bd27d211a33548734b73ed0027ff3c75774bb45371a27aa5c8d9bc5e2debdddc",
+    "assets/cap-red.usdc": "f4b2c4dcbac1d6314d0bbf4158520495cd9f984e740ef169016519d88d9bb07c",
+    "assets/pen-blue.usdc": "cb5b0d5999ff4ad85b61fd5b1b86a49d0e9c44bc95bce558dae1d4b97bb42aef",
+    "assets/pen-red.usdc": "cc93d3ad939bcc84abb07fcdd06ddcba6038b8e115986efa58facb73b30496d7",
+    "audit_retention_runtime.py": "ec1e3c6e23792a6b463f1db262f538a9185993d32578896c71d2ceb3eb79d39c",
+    "build_assets.py": "c585da5f92429fd3733ffc3e9cc7cffcc49c766d44edaa9bc9d71a25ba338aba",
+    "pen_capping/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pen_capping/alignment.py": "6bf8845a7ce665b602fd66792b6ad98fe93eacd5c60135b43d91dac4c0e35445",
+    "pen_capping/contact_tracker.py": "1d9364bd931bbb3b46b43631a0349738791cda4ff59c3b4d664656a03b4a77fd",
+    "pen_capping/embodiment.py": "78c8ec07bbc76dae34c65b661e4379fda276dc6de2d36a49903a8de022d7cf8d",
+    "pen_capping/policy.py": "0786fe12226fb36efcffcc97cf55e04dbc9e54b71812c88a984b555828409d99",
+    "pen_capping/recovery.py": "622431ad4ff6c73f83be83d1d93826bbcd90688789e021c33b7bf834a74f49bf",
+    "pen_capping/retention.py": "c94b3705044b0a3639a6302988290e8540acd4670a19ee68abff67b585128780",
+    "pen_capping/scoring.py": "c4cd5b6345c1b69376002f7787732572ce96af18bb35e11dd30e67f76cb61e21",
+    "pen_capping/solver_audit.py": "f5b885f728a9f1d972cf0d0ed32ca60d8162fa95bd9cebc7bb7a37b623681e2c",
+    "pyproject.toml": "ea6e5b81fcd834a3888f6fc80de83f7570b92eb1438771a8e171c9f7e6252814",
+    "task.py": "541376f53b5c79fb7aaaf71e92183d52e46982914e730ca25be8a58701bbf4d7",
+    "test_alignment.py": "b11bfbd6ea31825a455e3a8a071dd70c6e53f2781b644415943118051b1f6125",
+    "test_assets.py": "f90dced6a6a54cc626beb65ddbc7152efb471627dc160939eaac4e3ae6f7d984",
+    "test_insertion_advance.py": "934aed4fa5f9d261787bf20909f3ef4e4b0c8fc8e1b4b9edb373ab46154e3691",
+    "test_lateral_damping.py": "d1945737b3c16a48d2ee30ed9f389e9b16b7f1934722a7101fe46ba4efc0d2f1",
+    "test_recovery.py": "1807aeebefed8d2d4a792d1bd6a69c930540124cb44b95d842b75434b098d90e",
+    "test_rest_motion.py": "f9f4de621e14bad1f0fe6c36fde3f86547751fa0fbfcba16ec98dc5fa1bb4b3e",
+    "test_retention.py": "c41f7ab38ba4cfaa5b514f114dd491ebd136e0686a69b3e618c71553cf14729a",
+    "test_scoring.py": "43ba5391638c6c4bc71c327d20cb6dc8c33f51f25de85f81a7f2a0f731d8d2df",
+    "test_solver_audit.py": "3c45beae42bfcadccbae56c8e4118a0f70b2ac3397d5b3c7dd9ca2815353d154"
+  },
+  "fixed_config": {
+    "seed": 0,
+    "jitter": 0,
+    "control_hz": 20,
+    "physics_hz": 240,
+    "device": "cpu",
+    "camera_size": [
+      640,
+      360
+    ],
+    "max_steps": 6000
+  },
+  "camera_calibration": {
+    "pos": [
+      -0.16649487853050232,
+      -0.008999999612569809,
+      1.5418205499649047
+    ],
+    "rot_xyzw": [
+      0.2126292878609637,
+      -0.2126292878609637,
+      -0.6743802977131967,
+      0.6743802977131964
+    ],
+    "convention": "opengl",
+    "lens": {
+      "fx": 392.195617675781,
+      "fy": 391.722351074219,
+      "cx": 318.389434814453,
+      "cy": 177.876312255859,
+      "width": 640,
+      "height": 360
+    }
+  },
+  "runtime": {
+    "python": "3.12.12",
+    "isaac_sim": "6.1.0.0",
+    "isaaclab": "17.0.2",
+    "arena": "0.3.0",
+    "yam_arena": "0.1.0",
+    "inspect_robots": "0.60.0",
+    "gpu": "NVIDIA L40S",
+    "driver": "580.159.04"
+  },
+  "source_commits": {
+    "arena": "c7edf3a9d5d8276565208f72422f8f8a0806d6cf",
+    "yam_arena": "0059d02a1a91bc6834c1d0846022891df0c78730",
+    "isaaclab": "91a0906f93802eb859192dcb0bca879f891e92d6"
+  },
+  "scripted_demo": {
+    "trial": "original-assets-demo-001",
+    "result": "adhoc_c6eaea7c.json",
+    "score": 1.0,
+    "steps": 4910,
+    "simulated_s": 245.5,
+    "wall_s": 600.3275145618245,
+    "run_limit": 6000,
+    "errored_trials": 0,
+    "environment_revision": "ee5269d7fc4721b5eaae64e4656608f4d8d1ce1748182df31957f008cc03f902",
+    "policy": "yam_scripted",
+    "policy_checkpoint": null,
+    "native_video_frames": 4911,
+    "native_result_sha256": "214b9638087deb1be062d305b38c5bf50c64fd424bbe845cfd9c20387bb0d4ea",
+    "media": {
+      "scene-0-e0_left_cam.mp4": {
+        "sha256": "4f78e079309727d36a614dc68b82c6fccaa2fe928b7433b06c578daecdce8f03",
+        "metadata": {
+          "ffmpeg_version": "n9.0.2-17-g2a571b6068-20260930 built with gcc 16.2.0 (crosstool-NG 1.29.0.7_b1a94f6)",
+          "codec": "h264",
+          "pix_fmt": "yuv420p(progressive)",
+          "fps": 20.0,
+          "source_size": [
+            640,
+            360
+          ],
+          "size": [
+            640,
+            360
+          ],
+          "rotate": 0,
+          "duration": 245.55
+        },
+        "frames": 4911,
+        "size_bytes": 5001516
+      },
+      "scene-0-e0_right_cam.mp4": {
+        "sha256": "be25776cbcce772c082567d9f1429997e1d5be3aed743dd68f78644dcccfd415",
+        "metadata": {
+          "ffmpeg_version": "n9.0.2-17-g2a571b6068-20260930 built with gcc 16.2.0 (crosstool-NG 1.29.0.7_b1a94f6)",
+          "codec": "h264",
+          "pix_fmt": "yuv420p(progressive)",
+          "fps": 20.0,
+          "source_size": [
+            640,
+            360
+          ],
+          "size": [
+            640,
+            360
+          ],
+          "rotate": 0,
+          "duration": 245.55
+        },
+        "frames": 4911,
+        "size_bytes": 4149603
+      },
+      "scene-0-e0_top_cam.mp4": {
+        "sha256": "eb5493ae621a42876f6b499816c6c21a142cb47f6b8dbde49e7fdee6de915ed4",
+        "metadata": {
+          "ffmpeg_version": "n9.0.2-17-g2a571b6068-20260930 built with gcc 16.2.0 (crosstool-NG 1.29.0.7_b1a94f6)",
+          "codec": "h264",
+          "pix_fmt": "yuv420p(progressive)",
+          "fps": 20.0,
+          "source_size": [
+            640,
+            360
+          ],
+          "size": [
+            640,
+            360
+          ],
+          "rotate": 0,
+          "duration": 245.55
+        },
+        "frames": 4911,
+        "size_bytes": 4359388
+      },
+      "setup.png": {
+        "sha256": "e67e95d221d1b417e59c9cf02beb8329c9c9bdd04c04eb5bcd0949ce51e1cf40",
+        "size_bytes": 154457
+      },
+      "final.png": {
+        "sha256": "320cfbd6b353cc7b3472af47bebafd8a0be45070543b48ceeac8c14b1f218c93",
+        "size_bytes": 154089
+      }
+    },
+    "visual_review": {
+      "reviewed_at_utc": "2026-11-16T04:17:53.656077+00:00",
+      "reviewed": true,
+      "scope": "Top camera every2simulatedseconds through245.5s; both wrist cameras at1s intervals within2s of all four engagement times.",
+      "findings": "All four matching caps engaged and remained attached through handover; two red and two blue assemblies were released in their respective marked areas and stable at the final hold. Wrist insertion interfaces are partly occluded; numerical overlap/retention records corroborate engagement. No identifying names, institution labels or file paths were visible in sampled views.",
+      "physical_force_validation": false
+    },
+    "engagements": [
+      {
+        "pen": 0,
+        "cap": 0,
+        "time_s": 39.35,
+        "relative_m": [
+          -0.08281639963388443,
+          -0.00021292945893947035,
+          2.3143245925894007e-05
+        ],
+        "metrics": {
+          "eligible": true,
+          "overlap_m": 0.0031776509628580474,
+          "eccentricity_m": 0.00020532692417230954,
+          "compression_m": 0.00040532865866778345,
+          "tip_clearance_m": 0.004914758189463081,
+          "axis_alignment": 0.9999998211860657,
+          "axis_angle_deg": 0.03426402009603798,
+          "overlap_interval_m": [
+            0.012822349037141953,
+            0.016
+          ],
+          "failed_conditions": []
+        }
+      },
+      {
+        "pen": 1,
+        "cap": 1,
+        "time_s": 100.05,
+        "relative_m": [
+          -0.0828310027718544,
+          -4.336340225563617e-06,
+          -0.00012310539023019373
+        ],
+        "metrics": {
+          "eligible": true,
+          "overlap_m": 0.0031689517114622534,
+          "eccentricity_m": 0.00011878607285537105,
+          "compression_m": 0.00031878376019570456,
+          "tip_clearance_m": 0.0049310429479615826,
+          "axis_alignment": 1.000000238418579,
+          "axis_angle_deg": 0.0,
+          "overlap_interval_m": [
+            0.012831048288537747,
+            0.016
+          ],
+          "failed_conditions": []
+        }
+      },
+      {
+        "pen": 2,
+        "cap": 2,
+        "time_s": 158.7,
+        "relative_m": [
+          -0.08116792142391205,
+          1.7331230992567725e-05,
+          -9.05904162209481e-05
+        ],
+        "metrics": {
+          "eligible": true,
+          "overlap_m": 0.004795424059843087,
+          "eccentricity_m": 7.682465521686245e-05,
+          "compression_m": 0.00027689345734633816,
+          "tip_clearance_m": 0.0032569013969911496,
+          "axis_alignment": 0.9999929070472717,
+          "axis_angle_deg": 0.21579998972694253,
+          "overlap_interval_m": [
+            0.011204575940156914,
+            0.016
+          ],
+          "failed_conditions": []
+        }
+      },
+      {
+        "pen": 3,
+        "cap": 3,
+        "time_s": 220.05,
+        "relative_m": [
+          -0.0829404890537262,
+          3.210585782653652e-05,
+          0.00010493920126464218
+        ],
+        "metrics": {
+          "eligible": true,
+          "overlap_m": 0.00305197829110662,
+          "eccentricity_m": 0.00010445653978766708,
+          "compression_m": 0.0003044594306137998,
+          "tip_clearance_m": 0.005038223471700539,
+          "axis_alignment": 0.9999997019767761,
+          "axis_angle_deg": 0.044234660174789026,
+          "overlap_interval_m": [
+            0.01294802170889338,
+            0.016
+          ],
+          "failed_conditions": []
+        }
+      }
+    ],
+    "retention_losses": 0,
+    "maximum_measured_joint_position_residual_m": 2.767834743158872e-05,
+    "final_sampled_scores": {
+      "237.0": 1.0,
+      "238.0": 1.0,
+      "239.0": 1.0,
+      "240.0": 1.0,
+      "241.0": 1.0,
+      "242.0": 1.0,
+      "243.0": 1.0,
+      "244.0": 1.0,
+      "245.0": 1.0
+    }
+  },
+  "dream": {
+    "trial": "original-assets-dream-001",
+    "result": "adhoc_292dd371.json",
+    "score": 0.0,
+    "steps": 6000,
+    "simulated_s": 300.0,
+    "wall_s": 737.583291888237,
+    "run_limit": 6000,
+    "errored_trials": 0,
+    "environment_revision": "ee5269d7fc4721b5eaae64e4656608f4d8d1ce1748182df31957f008cc03f902",
+    "policy": "dream",
+    "policy_checkpoint": "dreamlabs/dream-1-beta",
+    "native_video_frames": 6001,
+    "native_result_sha256": "f7f5dc699ca6ca5421622a69722f06b766494fc3175c190fddba8076db74fa94",
+    "media": {
+      "scene-0-e0_left_cam.mp4": {
+        "sha256": "3095edad053f609f8dfaa91c73cc6e84c426a6b498b79264f487dc7b0e9e4dc7",
+        "metadata": {
+          "ffmpeg_version": "n9.0.2-17-g2a571b6068-20260930 built with gcc 16.2.0 (crosstool-NG 1.29.0.7_b1a94f6)",
+          "codec": "h264",
+          "pix_fmt": "yuv420p(progressive)",
+          "fps": 20.0,
+          "source_size": [
+            640,
+            360
+          ],
+          "size": [
+            640,
+            360
+          ],
+          "rotate": 0,
+          "duration": 300.05
+        },
+        "frames": 6001,
+        "size_bytes": 8462172
+      },
+      "scene-0-e0_right_cam.mp4": {
+        "sha256": "a100ebc24e2eebf679f3f75fb296cce3e4669f473d34c444e03d9b00ad89de2e",
+        "metadata": {
+          "ffmpeg_version": "n9.0.2-17-g2a571b6068-20260930 built with gcc 16.2.0 (crosstool-NG 1.29.0.7_b1a94f6)",
+          "codec": "h264",
+          "pix_fmt": "yuv420p(progressive)",
+          "fps": 20.0,
+          "source_size": [
+            640,
+            360
+          ],
+          "size": [
+            640,
+            360
+          ],
+          "rotate": 0,
+          "duration": 300.05
+        },
+        "frames": 6001,
+        "size_bytes": 7166494
+      },
+      "scene-0-e0_top_cam.mp4": {
+        "sha256": "5a93d2c6c8ee5844816ebd9272996b0403b3296f82f681aa5bff62eee824471c",
+        "metadata": {
+          "ffmpeg_version": "n9.0.2-17-g2a571b6068-20260930 built with gcc 16.2.0 (crosstool-NG 1.29.0.7_b1a94f6)",
+          "codec": "h264",
+          "pix_fmt": "yuv420p(progressive)",
+          "fps": 20.0,
+          "source_size": [
+            640,
+            360
+          ],
+          "size": [
+            640,
+            360
+          ],
+          "rotate": 0,
+          "duration": 300.05
+        },
+        "frames": 6001,
+        "size_bytes": 5779107
+      },
+      "setup.png": {
+        "sha256": "e67e95d221d1b417e59c9cf02beb8329c9c9bdd04c04eb5bcd0949ce51e1cf40",
+        "size_bytes": 154457
+      },
+      "final.png": {
+        "sha256": "9b671feafdc9f361426113606fdfee94c9e7ee5db4e2eec012f014e6d4bafd0e",
+        "size_bytes": 141118
+      }
+    },
+    "visual_review": {
+      "reviewed": true,
+      "reviewed_at_utc": "2026-11-16T04:33:33.828476+00:00",
+      "scope": "Top camera every5simulatedseconds through300s; both wrists at1s intervals within2s of0,60,120,180,240,298s.",
+      "findings": "Dream manipulates a loose blue cap and holds an uncapped red pen, displaces other objects, and never establishes cap engagement. It ends without a retained capped placement; terminal score0.0 is consistent with the sampled views and zero seating events. No identifying names, institution labels or file paths were visible.",
+      "physical_force_validation": false
+    },
+    "mean_inference_latency_s": 0.6412960224896669
+  },
+  "runtime_audit": {
+    "environment_revision": "ee5269d7fc4721b5eaae64e4656608f4d8d1ce1748182df31957f008cc03f902",
+    "assets": {
+      "pen_0": {
+        "mass_kg": 0.03500000014901161,
+        "colliders": [
+          "/World/envs/env_0/pen_0/Barrel",
+          "/World/envs/env_0/pen_0/Shoulder",
+          "/World/envs/env_0/pen_0/Nib",
+          "/World/envs/env_0/pen_0/End"
+        ]
+      },
+      "cap_0": {
+        "mass_kg": 0.00800000037997961,
+        "colliders": [
+          "/World/envs/env_0/cap_0/Wall00",
+          "/World/envs/env_0/cap_0/Wall00Seat",
+          "/World/envs/env_0/cap_0/Wall01",
+          "/World/envs/env_0/cap_0/Wall01Seat",
+          "/World/envs/env_0/cap_0/Wall02",
+          "/World/envs/env_0/cap_0/Wall02Seat",
+          "/World/envs/env_0/cap_0/Wall03",
+          "/World/envs/env_0/cap_0/Wall03Seat",
+          "/World/envs/env_0/cap_0/Wall04",
+          "/World/envs/env_0/cap_0/Wall04Seat",
+          "/World/envs/env_0/cap_0/Wall05",
+          "/World/envs/env_0/cap_0/Wall05Seat",
+          "/World/envs/env_0/cap_0/Wall06",
+          "/World/envs/env_0/cap_0/Wall06Seat",
+          "/World/envs/env_0/cap_0/Wall07",
+          "/World/envs/env_0/cap_0/Wall07Seat",
+          "/World/envs/env_0/cap_0/Wall08",
+          "/World/envs/env_0/cap_0/Wall08Seat",
+          "/World/envs/env_0/cap_0/Wall09",
+          "/World/envs/env_0/cap_0/Wall09Seat",
+          "/World/envs/env_0/cap_0/Wall10",
+          "/World/envs/env_0/cap_0/Wall10Seat",
+          "/World/envs/env_0/cap_0/Wall11",
+          "/World/envs/env_0/cap_0/Wall11Seat",
+          "/World/envs/env_0/cap_0/Wall12",
+          "/World/envs/env_0/cap_0/Wall12Seat",
+          "/World/envs/env_0/cap_0/Wall13",
+          "/World/envs/env_0/cap_0/Wall13Seat",
+          "/World/envs/env_0/cap_0/Wall14",
+          "/World/envs/env_0/cap_0/Wall14Seat",
+          "/World/envs/env_0/cap_0/Wall15",
+          "/World/envs/env_0/cap_0/Wall15Seat",
+          "/World/envs/env_0/cap_0/ClosedEnd",
+          "/World/envs/env_0/cap_0/LinerBacking00",
+          "/World/envs/env_0/cap_0/LinerBacking01",
+          "/World/envs/env_0/cap_0/LinerBacking02",
+          "/World/envs/env_0/cap_0/LinerBacking03",
+          "/World/envs/env_0/cap_0/LinerBacking04",
+          "/World/envs/env_0/cap_0/LinerBacking05",
+          "/World/envs/env_0/cap_0/LinerBacking06",
+          "/World/envs/env_0/cap_0/LinerBacking07",
+          "/World/envs/env_0/cap_0/LinerBacking08",
+          "/World/envs/env_0/cap_0/LinerBacking09",
+          "/World/envs/env_0/cap_0/LinerBacking10",
+          "/World/envs/env_0/cap_0/LinerBacking11",
+          "/World/envs/env_0/cap_0/LinerBacking12",
+          "/World/envs/env_0/cap_0/LinerBacking13",
+          "/World/envs/env_0/cap_0/LinerBacking14",
+          "/World/envs/env_0/cap_0/LinerBacking15"
+        ]
+      },
+      "pen_1": {
+        "mass_kg": 0.03500000014901161,
+        "colliders": [
+          "/World/envs/env_0/pen_1/Barrel",
+          "/World/envs/env_0/pen_1/Shoulder",
+          "/World/envs/env_0/pen_1/Nib",
+          "/World/envs/env_0/pen_1/End"
+        ]
+      },
+      "cap_1": {
+        "mass_kg": 0.00800000037997961,
+        "colliders": [
+          "/World/envs/env_0/cap_1/Wall00",
+          "/World/envs/env_0/cap_1/Wall00Seat",
+          "/World/envs/env_0/cap_1/Wall01",
+          "/World/envs/env_0/cap_1/Wall01Seat",
+          "/World/envs/env_0/cap_1/Wall02",
+          "/World/envs/env_0/cap_1/Wall02Seat",
+          "/World/envs/env_0/cap_1/Wall03",
+          "/World/envs/env_0/cap_1/Wall03Seat",
+          "/World/envs/env_0/cap_1/Wall04",
+          "/World/envs/env_0/cap_1/Wall04Seat",
+          "/World/envs/env_0/cap_1/Wall05",
+          "/World/envs/env_0/cap_1/Wall05Seat",
+          "/World/envs/env_0/cap_1/Wall06",
+          "/World/envs/env_0/cap_1/Wall06Seat",
+          "/World/envs/env_0/cap_1/Wall07",
+          "/World/envs/env_0/cap_1/Wall07Seat",
+          "/World/envs/env_0/cap_1/Wall08",
+          "/World/envs/env_0/cap_1/Wall08Seat",
+          "/World/envs/env_0/cap_1/Wall09",
+          "/World/envs/env_0/cap_1/Wall09Seat",
+          "/World/envs/env_0/cap_1/Wall10",
+          "/World/envs/env_0/cap_1/Wall10Seat",
+          "/World/envs/env_0/cap_1/Wall11",
+          "/World/envs/env_0/cap_1/Wall11Seat",
+          "/World/envs/env_0/cap_1/Wall12",
+          "/World/envs/env_0/cap_1/Wall12Seat",
+          "/World/envs/env_0/cap_1/Wall13",
+          "/World/envs/env_0/cap_1/Wall13Seat",
+          "/World/envs/env_0/cap_1/Wall14",
+          "/World/envs/env_0/cap_1/Wall14Seat",
+          "/World/envs/env_0/cap_1/Wall15",
+          "/World/envs/env_0/cap_1/Wall15Seat",
+          "/World/envs/env_0/cap_1/ClosedEnd",
+          "/World/envs/env_0/cap_1/LinerBacking00",
+          "/World/envs/env_0/cap_1/LinerBacking01",
+          "/World/envs/env_0/cap_1/LinerBacking02",
+          "/World/envs/env_0/cap_1/LinerBacking03",
+          "/World/envs/env_0/cap_1/LinerBacking04",
+          "/World/envs/env_0/cap_1/LinerBacking05",
+          "/World/envs/env_0/cap_1/LinerBacking06",
+          "/World/envs/env_0/cap_1/LinerBacking07",
+          "/World/envs/env_0/cap_1/LinerBacking08",
+          "/World/envs/env_0/cap_1/LinerBacking09",
+          "/World/envs/env_0/cap_1/LinerBacking10",
+          "/World/envs/env_0/cap_1/LinerBacking11",
+          "/World/envs/env_0/cap_1/LinerBacking12",
+          "/World/envs/env_0/cap_1/LinerBacking13",
+          "/World/envs/env_0/cap_1/LinerBacking14",
+          "/World/envs/env_0/cap_1/LinerBacking15"
+        ]
+      },
+      "pen_2": {
+        "mass_kg": 0.03500000014901161,
+        "colliders": [
+          "/World/envs/env_0/pen_2/Barrel",
+          "/World/envs/env_0/pen_2/Shoulder",
+          "/World/envs/env_0/pen_2/Nib",
+          "/World/envs/env_0/pen_2/End"
+        ]
+      },
+      "cap_2": {
+        "mass_kg": 0.00800000037997961,
+        "colliders": [
+          "/World/envs/env_0/cap_2/Wall00",
+          "/World/envs/env_0/cap_2/Wall00Seat",
+          "/World/envs/env_0/cap_2/Wall01",
+          "/World/envs/env_0/cap_2/Wall01Seat",
+          "/World/envs/env_0/cap_2/Wall02",
+          "/World/envs/env_0/cap_2/Wall02Seat",
+          "/World/envs/env_0/cap_2/Wall03",
+          "/World/envs/env_0/cap_2/Wall03Seat",
+          "/World/envs/env_0/cap_2/Wall04",
+          "/World/envs/env_0/cap_2/Wall04Seat",
+          "/World/envs/env_0/cap_2/Wall05",
+          "/World/envs/env_0/cap_2/Wall05Seat",
+          "/World/envs/env_0/cap_2/Wall06",
+          "/World/envs/env_0/cap_2/Wall06Seat",
+          "/World/envs/env_0/cap_2/Wall07",
+          "/World/envs/env_0/cap_2/Wall07Seat",
+          "/World/envs/env_0/cap_2/Wall08",
+          "/World/envs/env_0/cap_2/Wall08Seat",
+          "/World/envs/env_0/cap_2/Wall09",
+          "/World/envs/env_0/cap_2/Wall09Seat",
+          "/World/envs/env_0/cap_2/Wall10",
+          "/World/envs/env_0/cap_2/Wall10Seat",
+          "/World/envs/env_0/cap_2/Wall11",
+          "/World/envs/env_0/cap_2/Wall11Seat",
+          "/World/envs/env_0/cap_2/Wall12",
+          "/World/envs/env_0/cap_2/Wall12Seat",
+          "/World/envs/env_0/cap_2/Wall13",
+          "/World/envs/env_0/cap_2/Wall13Seat",
+          "/World/envs/env_0/cap_2/Wall14",
+          "/World/envs/env_0/cap_2/Wall14Seat",
+          "/World/envs/env_0/cap_2/Wall15",
+          "/World/envs/env_0/cap_2/Wall15Seat",
+          "/World/envs/env_0/cap_2/ClosedEnd",
+          "/World/envs/env_0/cap_2/LinerBacking00",
+          "/World/envs/env_0/cap_2/LinerBacking01",
+          "/World/envs/env_0/cap_2/LinerBacking02",
+          "/World/envs/env_0/cap_2/LinerBacking03",
+          "/World/envs/env_0/cap_2/LinerBacking04",
+          "/World/envs/env_0/cap_2/LinerBacking05",
+          "/World/envs/env_0/cap_2/LinerBacking06",
+          "/World/envs/env_0/cap_2/LinerBacking07",
+          "/World/envs/env_0/cap_2/LinerBacking08",
+          "/World/envs/env_0/cap_2/LinerBacking09",
+          "/World/envs/env_0/cap_2/LinerBacking10",
+          "/World/envs/env_0/cap_2/LinerBacking11",
+          "/World/envs/env_0/cap_2/LinerBacking12",
+          "/World/envs/env_0/cap_2/LinerBacking13",
+          "/World/envs/env_0/cap_2/LinerBacking14",
+          "/World/envs/env_0/cap_2/LinerBacking15"
+        ]
+      },
+      "pen_3": {
+        "mass_kg": 0.03500000014901161,
+        "colliders": [
+          "/World/envs/env_0/pen_3/Barrel",
+          "/World/envs/env_0/pen_3/Shoulder",
+          "/World/envs/env_0/pen_3/Nib",
+          "/World/envs/env_0/pen_3/End"
+        ]
+      },
+      "cap_3": {
+        "mass_kg": 0.00800000037997961,
+        "colliders": [
+          "/World/envs/env_0/cap_3/Wall00",
+          "/World/envs/env_0/cap_3/Wall00Seat",
+          "/World/envs/env_0/cap_3/Wall01",
+          "/World/envs/env_0/cap_3/Wall01Seat",
+          "/World/envs/env_0/cap_3/Wall02",
+          "/World/envs/env_0/cap_3/Wall02Seat",
+          "/World/envs/env_0/cap_3/Wall03",
+          "/World/envs/env_0/cap_3/Wall03Seat",
+          "/World/envs/env_0/cap_3/Wall04",
+          "/World/envs/env_0/cap_3/Wall04Seat",
+          "/World/envs/env_0/cap_3/Wall05",
+          "/World/envs/env_0/cap_3/Wall05Seat",
+          "/World/envs/env_0/cap_3/Wall06",
+          "/World/envs/env_0/cap_3/Wall06Seat",
+          "/World/envs/env_0/cap_3/Wall07",
+          "/World/envs/env_0/cap_3/Wall07Seat",
+          "/World/envs/env_0/cap_3/Wall08",
+          "/World/envs/env_0/cap_3/Wall08Seat",
+          "/World/envs/env_0/cap_3/Wall09",
+          "/World/envs/env_0/cap_3/Wall09Seat",
+          "/World/envs/env_0/cap_3/Wall10",
+          "/World/envs/env_0/cap_3/Wall10Seat",
+          "/World/envs/env_0/cap_3/Wall11",
+          "/World/envs/env_0/cap_3/Wall11Seat",
+          "/World/envs/env_0/cap_3/Wall12",
+          "/World/envs/env_0/cap_3/Wall12Seat",
+          "/World/envs/env_0/cap_3/Wall13",
+          "/World/envs/env_0/cap_3/Wall13Seat",
+          "/World/envs/env_0/cap_3/Wall14",
+          "/World/envs/env_0/cap_3/Wall14Seat",
+          "/World/envs/env_0/cap_3/Wall15",
+          "/World/envs/env_0/cap_3/Wall15Seat",
+          "/World/envs/env_0/cap_3/ClosedEnd",
+          "/World/envs/env_0/cap_3/LinerBacking00",
+          "/World/envs/env_0/cap_3/LinerBacking01",
+          "/World/envs/env_0/cap_3/LinerBacking02",
+          "/World/envs/env_0/cap_3/LinerBacking03",
+          "/World/envs/env_0/cap_3/LinerBacking04",
+          "/World/envs/env_0/cap_3/LinerBacking05",
+          "/World/envs/env_0/cap_3/LinerBacking06",
+          "/World/envs/env_0/cap_3/LinerBacking07",
+          "/World/envs/env_0/cap_3/LinerBacking08",
+          "/World/envs/env_0/cap_3/LinerBacking09",
+          "/World/envs/env_0/cap_3/LinerBacking10",
+          "/World/envs/env_0/cap_3/LinerBacking11",
+          "/World/envs/env_0/cap_3/LinerBacking12",
+          "/World/envs/env_0/cap_3/LinerBacking13",
+          "/World/envs/env_0/cap_3/LinerBacking14",
+          "/World/envs/env_0/cap_3/LinerBacking15"
+        ]
+      }
+    },
+    "reset_passed": true,
+    "solver_audit": {
+      "requested": {
+        "position": 128,
+        "velocity": 16
+      },
+      "bodies": {
+        "pen_0": {
+          "position": 128,
+          "velocity": 16
+        },
+        "cap_0": {
+          "position": 128,
+          "velocity": 16
+        },
+        "pen_1": {
+          "position": 128,
+          "velocity": 16
+        },
+        "cap_1": {
+          "position": 128,
+          "velocity": 16
+        },
+        "pen_2": {
+          "position": 128,
+          "velocity": 16
+        },
+        "cap_2": {
+          "position": 128,
+          "velocity": 16
+        },
+        "pen_3": {
+          "position": 128,
+          "velocity": 16
+        },
+        "cap_3": {
+          "position": 128,
+          "velocity": 16
+        }
+      },
+      "scene_solver_settings": [
+        {
+          "path": "/physicsScene",
+          "attributes": {
+            "physxScene:enableExternalForcesEveryIteration": true,
+            "physxScene:maxPositionIterationCount": 255,
+            "physxScene:maxVelocityIterationCount": 255,
+            "physxScene:minPositionIterationCount": 1,
+            "physxScene:minVelocityIterationCount": 0,
+            "physxScene:solverType": "TGS"
+          }
+        }
+      ],
+      "simulation_config": {
+        "min_position_iteration_count": null,
+        "max_position_iteration_count": null,
+        "min_velocity_iteration_count": null,
+        "max_velocity_iteration_count": null,
+        "solver_type": null
+      },
+      "issues": [],
+      "scope": "Authored runtime body/scene settings and configured global bounds; no solver-force measurement."
+    },
+    "scope": "Runtime geometry inspection and synthetic reset only; no insertion, proof load or demo result.",
+    "physical_force_calibration": false,
+    "contact_only_retention": false,
+    "resolved_motion_history_reset_passed": true
+  },
+  "local_tests": {
+    "task_tests_passed": 81,
+    "skipped": 0
+  },
+  "matching_frozen_source_manifests": true,
+  "working_runtime_inputs_match_tested_source": true,
+  "authored_physics_comparison": "Collision geometry, masses, transforms and physical attributes match the previous lined-cap assets. The scan was removed and the analytic barrel made visible.",
+  "headless_rendering": "Synchronous process-local renderer scheduling; physics, camera definitions and timing unchanged.",
+  "physical_specification": {
+    "body_shell": "polypropylene",
+    "nib": "polyester felt",
+    "liner": "Smooth-On SORTA-Clear 40, manufacturer nominal Shore A40",
+    "capture": "Four molded-through headed silicone keys; no adhesive bond assumed",
+    "document": "PHYSICAL_REPRODUCTION.md",
+    "physical_force_calibration": false,
+    "physical_construction_tested": false,
+    "contact_only_retention": false
+  },
+  "asset_provenance": "Original analytic assets generated without an external source mesh; see assets/provenance.json.",
+  "previous_lined_validation": "previous-lined-validation.json",
+  "historical_unlined_validation": "historical-validation.json",
+  "media_uploaded": true,
+  "media_reference": "M-CYJ5YA identifies the current original-asset demo, Dream run and recorded setup image.",
+  "owner_publication_authorized": true,
+  "uploaded_media": {
+    "media_id": "M-CYJ5YA",
+    "uploaded_at_utc": "2026-11-16T04:50:52.232579+00:00",
+    "files": {
+      "demo": {
+        "filename": "demo-top.mp4",
+        "sha256": "eb5493ae621a42876f6b499816c6c21a142cb47f6b8dbde49e7fdee6de915ed4",
+        "size_bytes": 4359388
+      },
+      "video": {
+        "filename": "dream-top.mp4",
+        "sha256": "5a93d2c6c8ee5844816ebd9272996b0403b3296f82f681aa5bff62eee824471c",
+        "size_bytes": 5779107
+      },
+      "screenshot": {
+        "filename": "setup.png",
+        "sha256": "e67e95d221d1b417e59c9cf02beb8329c9c9bdd04c04eb5bcd0949ce51e1cf40",
+        "size_bytes": 154457
+      }
+    },
+    "cameras": {
+      "demo": "top_cam",
+      "video": "top_cam",
+      "screenshot": "top_cam initial recorded frame"
+    }
+  },
+  "additional_camera_views": "Synchronized demo and Dream left/right wrist videos remain in the retained evidence package."
+}
