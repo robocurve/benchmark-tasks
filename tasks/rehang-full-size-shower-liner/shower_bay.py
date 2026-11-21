@@ -37,11 +37,18 @@ def room():
     steel = (.30,.31,.33)
     objects = [_box("floor", (20.,20.,.04), (0.,0.,-.02), (.55,.56,.55)),
                DomeLight(spawner_cfg=sim.DomeLightCfg(intensity=1900., color=(.87,.91,1.)))]
-    for side, (x,y,z) in BASES.items():
-        objects.extend((
-            _box(f"{side}_foot", (.24,.24,.015), (x,y,.0075), steel),
-            _box(f"{side}_column", (.10,.10,z-.015), (x,y,(z+.015)/2), steel),
-        ))
+    deck_height = BASES["left"][2] - .7475
+    tabletop = BASES["left"][2]
+    # Existing upper deck, with the liner hanging into the lower bay in front.
+    objects += [
+        _box("upper_deck", (2.7,2.4,.16), (-1.27,0.,deck_height-.08), (.42,.44,.46)),
+        _box("bench_top", (.80,1.2,.05), (-.30,0.,tabletop-.025), (.63,.51,.37)),
+    ]
+    leg_height = tabletop - .05 - deck_height
+    for i, x in enumerate((-.65,.045)):
+        for j, y in enumerate((-.54,.54)):
+            objects.append(_box(f"bench_leg_{i}_{j}", (.06,.06,leg_height),
+                                (x,y,deck_height + leg_height/2), steel))
     x,y,z = CAMERA
     objects += [_box("mast_foot", (.24,.24,.015), (x-.10,y,.0075), steel),
                 _box("mast", (.045,.045,z-.015), (x-.10,y,(z+.015)/2), steel),

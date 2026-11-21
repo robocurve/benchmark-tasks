@@ -1,4 +1,4 @@
-"""Full-size shower liner on the pedestal shower bay."""
+"""Full-size shower liner in the two-level shower bay."""
 import sys
 from pathlib import Path
 
