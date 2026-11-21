@@ -1,0 +1,45 @@
+--- a/task.py
++++ b/task.py
+@@ -827,3 +827,42 @@
+                     Waypoint(0.5, rest, FINGER_OPEN, "settle at the rest pose", ryaw)]
+         plans[arm] = work
+     return plans
++
++# Read-only native diagnostic and an aligned negative-controller grip. Not submitted.
++_candidate_contact_observation = contact_observation
++_candidate_lid_grip = _lid_grip
++
++def contact_observation(objects, clouds):
++    result = _candidate_contact_observation(objects, clouds)
++    if result is None:
++        return None
++    st = objects["laptop"]
++    o, r = lid_pose(st)
++    witnesses = []
++    for (arm, link), points in clouds.items():
++        if link not in ("tip_left", "tip_right"):
++            continue
++        faces = [[], []]
++        for shape in LID_COLLIDE:
++            c = o + r @ (np.asarray(shape.at) - np.asarray(PIVOT))
++            local = (points - c) @ (r @ shape.R)
++            h = np.asarray(shape.size) / 2
++            inside = (np.abs(local[:,0]) <= h[0]+TOUCH+EPS) & (np.abs(local[:,1]) <= h[1]+TOUCH+EPS)
++            for i, sign in enumerate((-1,1)):
++                hit = inside & (np.abs(local[:,2]-sign*h[2]) <= TOUCH+EPS)
++                faces[i].extend(local[hit,:2])
++        witnesses.append((arm+":"+link,[np.asarray(f).reshape((-1,2)) for f in faces]))
++    ds=[]
++    for i,(_,a) in enumerate(witnesses):
++        for _,b in witnesses[i+1:]:
++            for side in (0,1):
++                if len(a[side]) and len(b[1-side]):
++                    ds.append(float(np.linalg.norm(a[side][:,None,:]-b[1-side][None,:,:],axis=2).min()))
++    result["audit_face_counts"]={name:[len(f[0]),len(f[1])] for name,f in witnesses}
++    result["audit_min_projected_pair"] = min(ds) if ds else None
++    return result
++
++def _lid_grip(heading):
++    # Approach direction unchanged; closing direction rotated onto the actual lid normal.
++    axis=(math.cos(heading),math.sin(heading),0.0)
++    return parts._rot(axis,D(20.0)) @ _candidate_lid_grip(heading)
