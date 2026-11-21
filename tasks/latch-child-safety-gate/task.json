@@ -1,0 +1,20 @@
+{
+  "title": "Close and lock a pressure-mounted child safety gate across a hallway",
+  "category": "Societal relatability",
+  "keywords": [
+    "bimanual",
+    "child safety",
+    "gate latch",
+    "dual-action lock",
+    "household"
+  ],
+  "instruction": "Close the child safety gate across the hallway opening and lock it. Swing the walk-through door shut, push the top lock lever down so the spring latch engages the catch, and turn the bottom base lock down. Leave both hands clear of the gate.",
+  "context": "Pressure-mounted walk-through child gates are everyday household hardware that parents close and lock many times a day to keep toddlers away from stairs and kitchens; a household robot that uses a gated doorway has to leave it secured the same way. Swinging the door shut is not enough: the top lever must re-engage the spring latch and the base lock must be turned down, or a child can push the gate open.",
+  "setup": "A fixed hallway opening 762 mm wide is centred on y=0 at x=500 mm. An already-installed white steel pressure-mounted walk-through gate (generic Regalo Easy Step class reconstruction; 762 mm tall; 406 mm walk-through door plus fixed half-panel; 19 mm tube frame; ~51 mm bar spacing) spans the opening. The hinged door starts open 35 degrees toward the arms (negative yaw). The top lock lever starts raised about 55 degrees; the spring latch is free. The bottom base lock starts horizontal. A fixed blue receiving catch sits on the centre stile where the door meets the fixed panel. A 22 x 90 x 25 mm rectangular handle sits on the free stile near the top. Two YAM arms stand on 750 mm pedestals at (0, +/-305, 750) mm with 75 mm grippers open. Floor, walls and frame are fixed. All parts start still. scene.py and the README give the remaining dimensions.",
+  "scoring": "From overhead and side video plus a millimetre scale at the latch: 0.25 when the door is within 7 degrees of closed; 0.5 when, in addition, the top lever is within 8 degrees of down and the spring latch overlaps the catch by at least 4 mm; 1.0 when the base lock is also within 12 degrees of down, both hands stay at least 5 mm clear, and translation stays under 10 mm/s and rotation under 2 deg/s for ten consecutive 20 Hz frames. Escaping the published workspace, moving fixed scenery, or damaging the gate permanently scores zero. Once the door has been within 7 degrees of closed with both hands clear, if it later opens to more than 12 degrees from fully closed (5 degrees beyond the closed band), the trial permanently scores zero, even if the door is closed again.",
+  "run_limit": "1,600 control steps (80 seconds at 20 Hz)",
+  "reset_notes": "Door yaw 35 degrees open, lever raised, base lock horizontal, latch free, all velocities zero, cameras and counters restored.",
+  "fidelity": "Actual-size walk-through pressure gate with native hinge, lever, prismatic spring latch and base-lock joints. Rectangular handle. Friction and spring rates are specified approximations without hardware calibration. Soft pad compliance and branded CAD are omitted; the dual close-then-lock sequence matches the maker latch procedure.",
+  "scores": "Dream-1 run: 0.0 (stopped at step 224 when Dream-1 sent a gripper command outside 0-1, which the Inspect Robots adapter rejects); demo: 1.0",
+  "media": "M-JJ8CZJ"
+}
