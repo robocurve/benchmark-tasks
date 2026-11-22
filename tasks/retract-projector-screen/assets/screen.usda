@@ -1,0 +1,783 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Asset" (
+    kind = "component"
+)
+{
+    def Scope "Links"
+    {
+        def Xform "case" (
+            prepend apiSchemas = ["PhysxArticulationAPI", "PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsArticulationRootAPI"]
+            customData = {
+                dictionary usdcraft = {
+                    string bodyModel = "rigid"
+                    string bodyRealization = "native"
+                    string partName = "case"
+                }
+            }
+        )
+        {
+            bool physics:kinematicEnabled = 0
+            float physics:mass = 3.6785665
+
+            def Scope "Visuals"
+            {
+                def Xform "housing_back"
+                {
+                    float3 xformOp:scale = (1.3, 1, 1)
+                    double3 xformOp:translate = (0, 0.0385, 0.09299999999999997)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+
+                    def Mesh "Geom" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        float3[] extent = [(-0.744, -0.0015, -0.04), (0.744, 0.0015, 0.04)]
+                        int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                        int[] faceVertexIndices = [1, 3, 0, 4, 1, 0, 0, 3, 2, 2, 4, 0, 1, 7, 3, 5, 1, 4, 5, 7, 1, 3, 7, 2, 6, 4, 2, 2, 7, 6, 6, 5, 4, 7, 5, 6]
+                        rel material:binding = </Asset/Looks/anodised_aluminium>
+                        normal3f[] normals = [(-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+                            interpolation = "faceVarying"
+                        )
+                        point3f[] points = [(-0.744, -0.0015, -0.04), (-0.744, -0.0015, 0.04), (-0.744, 0.0015, -0.04), (-0.744, 0.0015, 0.04), (0.744, -0.0015, -0.04), (0.744, -0.0015, 0.04), (0.744, 0.0015, -0.04), (0.744, 0.0015, 0.04)]
+                        uniform token subdivisionScheme = "none"
+                    }
+                }
+
+                def Xform "housing_front"
+                {
+                    float3 xformOp:scale = (1.3, 1, 1)
+                    double3 xformOp:translate = (0, -0.0385, 0.09299999999999997)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+
+                    def Mesh "Geom" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        float3[] extent = [(-0.744, -0.0015, -0.04), (0.744, 0.0015, 0.04)]
+                        int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                        int[] faceVertexIndices = [1, 3, 0, 4, 1, 0, 0, 3, 2, 2, 4, 0, 1, 7, 3, 5, 1, 4, 5, 7, 1, 3, 7, 2, 6, 4, 2, 2, 7, 6, 6, 5, 4, 7, 5, 6]
+                        rel material:binding = </Asset/Looks/anodised_aluminium>
+                        normal3f[] normals = [(-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+                            interpolation = "faceVarying"
+                        )
+                        point3f[] points = [(-0.744, -0.0015, -0.04), (-0.744, -0.0015, 0.04), (-0.744, 0.0015, -0.04), (-0.744, 0.0015, 0.04), (0.744, -0.0015, -0.04), (0.744, -0.0015, 0.04), (0.744, 0.0015, -0.04), (0.744, 0.0015, 0.04)]
+                        uniform token subdivisionScheme = "none"
+                    }
+                }
+
+                def Xform "housing_roof"
+                {
+                    float3 xformOp:scale = (1.3, 1, 1)
+                    double3 xformOp:translate = (0, 0, 0.13149999999999995)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+
+                    def Mesh "Geom" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        float3[] extent = [(-0.744, -0.037, -0.0015), (0.744, 0.037, 0.0015)]
+                        int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                        int[] faceVertexIndices = [1, 3, 0, 4, 1, 0, 0, 3, 2, 2, 4, 0, 1, 7, 3, 5, 1, 4, 5, 7, 1, 3, 7, 2, 6, 4, 2, 2, 7, 6, 6, 5, 4, 7, 5, 6]
+                        rel material:binding = </Asset/Looks/anodised_aluminium>
+                        normal3f[] normals = [(-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+                            interpolation = "faceVarying"
+                        )
+                        point3f[] points = [(-0.744, -0.037, -0.0015), (-0.744, -0.037, 0.0015), (-0.744, 0.037, -0.0015), (-0.744, 0.037, 0.0015), (0.744, -0.037, -0.0015), (0.744, -0.037, 0.0015), (0.744, 0.037, -0.0015), (0.744, 0.037, 0.0015)]
+                        uniform token subdivisionScheme = "none"
+                    }
+                }
+
+                def Xform "slot_lip_front"
+                {
+                    float3 xformOp:scale = (1.3, 1, 1)
+                    double3 xformOp:translate = (0, -0.0235, 0.05449999999999999)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+
+                    def Mesh "Geom" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        float3[] extent = [(-0.744, -0.0135, -0.0015), (0.744, 0.0135, 0.0015)]
+                        int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                        int[] faceVertexIndices = [1, 3, 0, 4, 1, 0, 0, 3, 2, 2, 4, 0, 1, 7, 3, 5, 1, 4, 5, 7, 1, 3, 7, 2, 6, 4, 2, 2, 7, 6, 6, 5, 4, 7, 5, 6]
+                        rel material:binding = </Asset/Looks/anodised_aluminium>
+                        normal3f[] normals = [(-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+                            interpolation = "faceVarying"
+                        )
+                        point3f[] points = [(-0.744, -0.0135, -0.0015), (-0.744, -0.0135, 0.0015), (-0.744, 0.0135, -0.0015), (-0.744, 0.0135, 0.0015), (0.744, -0.0135, -0.0015), (0.744, -0.0135, 0.0015), (0.744, 0.0135, -0.0015), (0.744, 0.0135, 0.0015)]
+                        uniform token subdivisionScheme = "none"
+                    }
+                }
+
+                def Xform "slot_lip_back"
+                {
+                    float3 xformOp:scale = (1.3, 1, 1)
+                    double3 xformOp:translate = (0, 0.0235, 0.05449999999999999)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+
+                    def Mesh "Geom" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        float3[] extent = [(-0.744, -0.0135, -0.0015), (0.744, 0.0135, 0.0015)]
+                        int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                        int[] faceVertexIndices = [1, 3, 0, 4, 1, 0, 0, 3, 2, 2, 4, 0, 1, 7, 3, 5, 1, 4, 5, 7, 1, 3, 7, 2, 6, 4, 2, 2, 7, 6, 6, 5, 4, 7, 5, 6]
+                        rel material:binding = </Asset/Looks/anodised_aluminium>
+                        normal3f[] normals = [(-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+                            interpolation = "faceVarying"
+                        )
+                        point3f[] points = [(-0.744, -0.0135, -0.0015), (-0.744, -0.0135, 0.0015), (-0.744, 0.0135, -0.0015), (-0.744, 0.0135, 0.0015), (0.744, -0.0135, -0.0015), (0.744, -0.0135, 0.0015), (0.744, 0.0135, -0.0015), (0.744, 0.0135, 0.0015)]
+                        uniform token subdivisionScheme = "none"
+                    }
+                }
+
+                def Xform "end_cap_left"
+                {
+                    double3 xformOp:translate = (-0.9711000000000001, 0, 0.09299999999999997)
+                    uniform token[] xformOpOrder = ["xformOp:translate"]
+
+                    def Mesh "Geom" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        float3[] extent = [(-0.003, -0.04, -0.04), (0.003, 0.04, 0.04)]
+                        int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                        int[] faceVertexIndices = [1, 3, 0, 4, 1, 0, 0, 3, 2, 2, 4, 0, 1, 7, 3, 5, 1, 4, 5, 7, 1, 3, 7, 2, 6, 4, 2, 2, 7, 6, 6, 5, 4, 7, 5, 6]
+                        rel material:binding = </Asset/Looks/machined_aluminium_cap>
+                        normal3f[] normals = [(-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+                            interpolation = "faceVarying"
+                        )
+                        point3f[] points = [(-0.003, -0.04, -0.04), (-0.003, -0.04, 0.04), (-0.003, 0.04, -0.04), (-0.003, 0.04, 0.04), (0.003, -0.04, -0.04), (0.003, -0.04, 0.04), (0.003, 0.04, -0.04), (0.003, 0.04, 0.04)]
+                        uniform token subdivisionScheme = "none"
+                    }
+                }
+
+                def Xform "end_cap_right"
+                {
+                    double3 xformOp:translate = (0.9711000000000001, 0, 0.09299999999999997)
+                    uniform token[] xformOpOrder = ["xformOp:translate"]
+
+                    def Mesh "Geom" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        float3[] extent = [(-0.003, -0.04, -0.04), (0.003, 0.04, 0.04)]
+                        int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                        int[] faceVertexIndices = [1, 3, 0, 4, 1, 0, 0, 3, 2, 2, 4, 0, 1, 7, 3, 5, 1, 4, 5, 7, 1, 3, 7, 2, 6, 4, 2, 2, 7, 6, 6, 5, 4, 7, 5, 6]
+                        rel material:binding = </Asset/Looks/machined_aluminium_cap>
+                        normal3f[] normals = [(-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+                            interpolation = "faceVarying"
+                        )
+                        point3f[] points = [(-0.003, -0.04, -0.04), (-0.003, -0.04, 0.04), (-0.003, 0.04, -0.04), (-0.003, 0.04, 0.04), (0.003, -0.04, -0.04), (0.003, -0.04, 0.04), (0.003, 0.04, -0.04), (0.003, 0.04, 0.04)]
+                        uniform token subdivisionScheme = "none"
+                    }
+                }
+            }
+
+            def Scope "Collisions"
+            {
+                def Xform "housing_back"
+                {
+                    token visibility = "invisible"
+                    float3 xformOp:scale = (1.3, 1, 1)
+                    double3 xformOp:translate = (0, 0.0385, 0.09299999999999997)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+
+                    def Cube "Geom" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding:physics = </Asset/PhysicsMaterials/aluminium_contact> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        uniform token purpose = "guide"
+                        double size = 1
+                        token visibility = "invisible"
+                        float3 xformOp:scale = (1.488, 0.003, 0.08)
+                        uniform token[] xformOpOrder = ["xformOp:scale"]
+                    }
+                }
+
+                def Xform "housing_front"
+                {
+                    token visibility = "invisible"
+                    float3 xformOp:scale = (1.3, 1, 1)
+                    double3 xformOp:translate = (0, -0.0385, 0.09299999999999997)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+
+                    def Cube "Geom" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding:physics = </Asset/PhysicsMaterials/aluminium_contact> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        uniform token purpose = "guide"
+                        double size = 1
+                        token visibility = "invisible"
+                        float3 xformOp:scale = (1.488, 0.003, 0.08)
+                        uniform token[] xformOpOrder = ["xformOp:scale"]
+                    }
+                }
+
+                def Xform "housing_roof"
+                {
+                    token visibility = "invisible"
+                    float3 xformOp:scale = (1.3, 1, 1)
+                    double3 xformOp:translate = (0, 0, 0.13149999999999995)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+
+                    def Cube "Geom" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding:physics = </Asset/PhysicsMaterials/aluminium_contact> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        uniform token purpose = "guide"
+                        double size = 1
+                        token visibility = "invisible"
+                        float3 xformOp:scale = (1.488, 0.074, 0.003)
+                        uniform token[] xformOpOrder = ["xformOp:scale"]
+                    }
+                }
+
+                def Xform "slot_lip_front"
+                {
+                    token visibility = "invisible"
+                    float3 xformOp:scale = (1.3, 1, 1)
+                    double3 xformOp:translate = (0, -0.0235, 0.05449999999999999)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+
+                    def Cube "Geom" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding:physics = </Asset/PhysicsMaterials/aluminium_contact> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        uniform token purpose = "guide"
+                        double size = 1
+                        token visibility = "invisible"
+                        float3 xformOp:scale = (1.488, 0.027, 0.003)
+                        uniform token[] xformOpOrder = ["xformOp:scale"]
+                    }
+                }
+
+                def Xform "slot_lip_back"
+                {
+                    token visibility = "invisible"
+                    float3 xformOp:scale = (1.3, 1, 1)
+                    double3 xformOp:translate = (0, 0.0235, 0.05449999999999999)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+
+                    def Cube "Geom" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding:physics = </Asset/PhysicsMaterials/aluminium_contact> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        uniform token purpose = "guide"
+                        double size = 1
+                        token visibility = "invisible"
+                        float3 xformOp:scale = (1.488, 0.027, 0.003)
+                        uniform token[] xformOpOrder = ["xformOp:scale"]
+                    }
+                }
+
+                def Xform "end_cap_left"
+                {
+                    token visibility = "invisible"
+                    double3 xformOp:translate = (-0.9711000000000001, 0, 0.09299999999999997)
+                    uniform token[] xformOpOrder = ["xformOp:translate"]
+
+                    def Cube "Geom" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding:physics = </Asset/PhysicsMaterials/aluminium_contact> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        uniform token purpose = "guide"
+                        double size = 1
+                        token visibility = "invisible"
+                        float3 xformOp:scale = (0.006, 0.08, 0.08)
+                        uniform token[] xformOpOrder = ["xformOp:scale"]
+                    }
+                }
+
+                def Xform "end_cap_right"
+                {
+                    token visibility = "invisible"
+                    double3 xformOp:translate = (0.9711000000000001, 0, 0.09299999999999997)
+                    uniform token[] xformOpOrder = ["xformOp:translate"]
+
+                    def Cube "Geom" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding:physics = </Asset/PhysicsMaterials/aluminium_contact> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        uniform token purpose = "guide"
+                        double size = 1
+                        token visibility = "invisible"
+                        float3 xformOp:scale = (0.006, 0.08, 0.08)
+                        uniform token[] xformOpOrder = ["xformOp:scale"]
+                    }
+                }
+            }
+        }
+
+        def Xform "panel" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxRigidBodyAPI"]
+            customData = {
+                dictionary usdcraft = {
+                    string bodyModel = "rigid"
+                    string bodyRealization = "native"
+                    string partName = "panel"
+                }
+            }
+        )
+        {
+            bool physics:kinematicEnabled = 0
+            float physics:mass = 0.5
+            custom bool physxRigidBody:disableGravity = 1
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+
+            def Scope "Visuals"
+            {
+                def Xform "projection_panel"
+                {
+                    float3 xformOp:scale = (1.3, 1, 0.21352313)
+                    double3 xformOp:translate = (0, 0, 0.164)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+
+                    def Mesh "Geom" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        float3[] extent = [(-0.744, -0.0025, -0.843), (0.744, 0.0025, 0.843)]
+                        int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                        int[] faceVertexIndices = [1, 3, 0, 4, 1, 0, 0, 3, 2, 2, 4, 0, 1, 7, 3, 5, 1, 4, 5, 7, 1, 3, 7, 2, 6, 4, 2, 2, 7, 6, 6, 5, 4, 7, 5, 6]
+                        rel material:binding = </Asset/Looks/white_composite>
+                        normal3f[] normals = [(-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+                            interpolation = "faceVarying"
+                        )
+                        point3f[] points = [(-0.744, -0.0025, -0.843), (-0.744, -0.0025, 0.843), (-0.744, 0.0025, -0.843), (-0.744, 0.0025, 0.843), (0.744, -0.0025, -0.843), (0.744, -0.0025, 0.843), (0.744, 0.0025, -0.843), (0.744, 0.0025, 0.843)]
+                        uniform token subdivisionScheme = "none"
+                    }
+                }
+
+                def Xform "bar_front"
+                {
+                    float3 xformOp:scale = (1.3, 1, 1)
+                    double3 xformOp:translate = (0, -0.006500000000000001, 0.002000000000000224)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+
+                    def Mesh "Geom" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        float3[] extent = [(-0.726, -0.004, -0.016), (0.726, 0.004, 0.016)]
+                        int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                        int[] faceVertexIndices = [1, 3, 0, 4, 1, 0, 0, 3, 2, 2, 4, 0, 1, 7, 3, 5, 1, 4, 5, 7, 1, 3, 7, 2, 6, 4, 2, 2, 7, 6, 6, 5, 4, 7, 5, 6]
+                        rel material:binding = </Asset/Looks/anodised_aluminium>
+                        normal3f[] normals = [(-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+                            interpolation = "faceVarying"
+                        )
+                        point3f[] points = [(-0.726, -0.004, -0.016), (-0.726, -0.004, 0.016), (-0.726, 0.004, -0.016), (-0.726, 0.004, 0.016), (0.726, -0.004, -0.016), (0.726, -0.004, 0.016), (0.726, 0.004, -0.016), (0.726, 0.004, 0.016)]
+                        uniform token subdivisionScheme = "none"
+                    }
+                }
+
+                def Xform "bar_back"
+                {
+                    float3 xformOp:scale = (1.3, 1, 1)
+                    double3 xformOp:translate = (0, 0.006500000000000001, 0.002000000000000224)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+
+                    def Mesh "Geom" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        float3[] extent = [(-0.726, -0.004, -0.016), (0.726, 0.004, 0.016)]
+                        int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                        int[] faceVertexIndices = [1, 3, 0, 4, 1, 0, 0, 3, 2, 2, 4, 0, 1, 7, 3, 5, 1, 4, 5, 7, 1, 3, 7, 2, 6, 4, 2, 2, 7, 6, 6, 5, 4, 7, 5, 6]
+                        rel material:binding = </Asset/Looks/anodised_aluminium>
+                        normal3f[] normals = [(-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+                            interpolation = "faceVarying"
+                        )
+                        point3f[] points = [(-0.726, -0.004, -0.016), (-0.726, -0.004, 0.016), (-0.726, 0.004, -0.016), (-0.726, 0.004, 0.016), (0.726, -0.004, -0.016), (0.726, -0.004, 0.016), (0.726, 0.004, -0.016), (0.726, 0.004, 0.016)]
+                        uniform token subdivisionScheme = "none"
+                    }
+                }
+
+                def Xform "bar_bottom_rail"
+                {
+                    float3 xformOp:scale = (1.3, 1, 1)
+                    double3 xformOp:translate = (0, 0, -0.016999999999999904)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+
+                    def Mesh "Geom" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        float3[] extent = [(-0.726, -0.0105, -0.003), (0.726, 0.0105, 0.003)]
+                        int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                        int[] faceVertexIndices = [1, 3, 0, 4, 1, 0, 0, 3, 2, 2, 4, 0, 1, 7, 3, 5, 1, 4, 5, 7, 1, 3, 7, 2, 6, 4, 2, 2, 7, 6, 6, 5, 4, 7, 5, 6]
+                        rel material:binding = </Asset/Looks/anodised_aluminium>
+                        normal3f[] normals = [(-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+                            interpolation = "faceVarying"
+                        )
+                        point3f[] points = [(-0.726, -0.0105, -0.003), (-0.726, -0.0105, 0.003), (-0.726, 0.0105, -0.003), (-0.726, 0.0105, 0.003), (0.726, -0.0105, -0.003), (0.726, -0.0105, 0.003), (0.726, 0.0105, -0.003), (0.726, 0.0105, 0.003)]
+                        uniform token subdivisionScheme = "none"
+                    }
+                }
+
+                def Xform "bar_end_cap_left"
+                {
+                    double3 xformOp:translate = (-0.9529, 0, 2.220446049250313e-16)
+                    uniform token[] xformOpOrder = ["xformOp:translate"]
+
+                    def Mesh "Geom" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        float3[] extent = [(-0.007, -0.012, -0.02), (0.007, 0.012, 0.02)]
+                        int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                        int[] faceVertexIndices = [1, 3, 0, 4, 1, 0, 0, 3, 2, 2, 4, 0, 1, 7, 3, 5, 1, 4, 5, 7, 1, 3, 7, 2, 6, 4, 2, 2, 7, 6, 6, 5, 4, 7, 5, 6]
+                        rel material:binding = </Asset/Looks/black_abs>
+                        normal3f[] normals = [(-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+                            interpolation = "faceVarying"
+                        )
+                        point3f[] points = [(-0.007, -0.012, -0.02), (-0.007, -0.012, 0.02), (-0.007, 0.012, -0.02), (-0.007, 0.012, 0.02), (0.007, -0.012, -0.02), (0.007, -0.012, 0.02), (0.007, 0.012, -0.02), (0.007, 0.012, 0.02)]
+                        uniform token subdivisionScheme = "none"
+                    }
+                }
+
+                def Xform "bar_end_cap_right"
+                {
+                    double3 xformOp:translate = (0.9529, 0, 2.220446049250313e-16)
+                    uniform token[] xformOpOrder = ["xformOp:translate"]
+
+                    def Mesh "Geom" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        float3[] extent = [(-0.007, -0.012, -0.02), (0.007, 0.012, 0.02)]
+                        int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                        int[] faceVertexIndices = [1, 3, 0, 4, 1, 0, 0, 3, 2, 2, 4, 0, 1, 7, 3, 5, 1, 4, 5, 7, 1, 3, 7, 2, 6, 4, 2, 2, 7, 6, 6, 5, 4, 7, 5, 6]
+                        rel material:binding = </Asset/Looks/black_abs>
+                        normal3f[] normals = [(-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+                            interpolation = "faceVarying"
+                        )
+                        point3f[] points = [(-0.007, -0.012, -0.02), (-0.007, -0.012, 0.02), (-0.007, 0.012, -0.02), (-0.007, 0.012, 0.02), (0.007, -0.012, -0.02), (0.007, -0.012, 0.02), (0.007, 0.012, -0.02), (0.007, 0.012, 0.02)]
+                        uniform token subdivisionScheme = "none"
+                    }
+                }
+
+                def Xform "tab_body"
+                {
+                    double3 xformOp:translate = (0, -0.016, -0.028)
+                    uniform token[] xformOpOrder = ["xformOp:translate"]
+
+                    def Mesh "Geom" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        float3[] extent = [(-0.028, -0.0025, -0.018), (0.028, 0.0025, 0.018)]
+                        int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                        int[] faceVertexIndices = [1, 3, 0, 4, 1, 0, 0, 3, 2, 2, 4, 0, 1, 7, 3, 5, 1, 4, 5, 7, 1, 3, 7, 2, 6, 4, 2, 2, 7, 6, 6, 5, 4, 7, 5, 6]
+                        rel material:binding = </Asset/Looks/black_abs>
+                        normal3f[] normals = [(-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 1, 0), (0, 1, 0), (0, 1, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0)] (
+                            interpolation = "faceVarying"
+                        )
+                        point3f[] points = [(-0.028, -0.0025, -0.018), (-0.028, -0.0025, 0.018), (-0.028, 0.0025, -0.018), (-0.028, 0.0025, 0.018), (0.028, -0.0025, -0.018), (0.028, -0.0025, 0.018), (0.028, 0.0025, -0.018), (0.028, 0.0025, 0.018)]
+                        uniform token subdivisionScheme = "none"
+                    }
+                }
+            }
+
+            def Scope "Collisions"
+            {
+                def Xform "projection_panel" (
+                    active = false
+                )
+                {
+                    token visibility = "invisible"
+                    double3 xformOp:translate = (0, 0, 0.164)
+                    uniform token[] xformOpOrder = ["xformOp:translate"]
+
+                    def Cube "Geom" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding:physics = </Asset/PhysicsMaterials/panel_contact> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        uniform token purpose = "guide"
+                        double size = 1
+                        token visibility = "invisible"
+                        float3 xformOp:scale = (1.488, 0.005, 1.686)
+                        uniform token[] xformOpOrder = ["xformOp:scale"]
+                    }
+                }
+
+                def Xform "bar_front"
+                {
+                    token visibility = "invisible"
+                    float3 xformOp:scale = (1.3, 1, 1)
+                    double3 xformOp:translate = (0, -0.006500000000000001, 0.002000000000000224)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+
+                    def Cube "Geom" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding:physics = </Asset/PhysicsMaterials/panel_contact> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        uniform token purpose = "guide"
+                        double size = 1
+                        token visibility = "invisible"
+                        float3 xformOp:scale = (1.452, 0.008, 0.032)
+                        uniform token[] xformOpOrder = ["xformOp:scale"]
+                    }
+                }
+
+                def Xform "bar_back"
+                {
+                    token visibility = "invisible"
+                    float3 xformOp:scale = (1.3, 1, 1)
+                    double3 xformOp:translate = (0, 0.006500000000000001, 0.002000000000000224)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+
+                    def Cube "Geom" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding:physics = </Asset/PhysicsMaterials/panel_contact> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        uniform token purpose = "guide"
+                        double size = 1
+                        token visibility = "invisible"
+                        float3 xformOp:scale = (1.452, 0.008, 0.032)
+                        uniform token[] xformOpOrder = ["xformOp:scale"]
+                    }
+                }
+
+                def Xform "bar_bottom_rail"
+                {
+                    token visibility = "invisible"
+                    float3 xformOp:scale = (1.3, 1, 1)
+                    double3 xformOp:translate = (0, 0, -0.016999999999999904)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+
+                    def Cube "Geom" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding:physics = </Asset/PhysicsMaterials/panel_contact> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        uniform token purpose = "guide"
+                        double size = 1
+                        token visibility = "invisible"
+                        float3 xformOp:scale = (1.452, 0.021, 0.006)
+                        uniform token[] xformOpOrder = ["xformOp:scale"]
+                    }
+                }
+
+                def Xform "bar_end_cap_left"
+                {
+                    token visibility = "invisible"
+                    double3 xformOp:translate = (-0.9529, 0, 2.220446049250313e-16)
+                    uniform token[] xformOpOrder = ["xformOp:translate"]
+
+                    def Cube "Geom" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding:physics = </Asset/PhysicsMaterials/panel_contact> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        uniform token purpose = "guide"
+                        double size = 1
+                        token visibility = "invisible"
+                        float3 xformOp:scale = (0.014, 0.024, 0.04)
+                        uniform token[] xformOpOrder = ["xformOp:scale"]
+                    }
+                }
+
+                def Xform "bar_end_cap_right"
+                {
+                    token visibility = "invisible"
+                    double3 xformOp:translate = (0.9529, 0, 2.220446049250313e-16)
+                    uniform token[] xformOpOrder = ["xformOp:translate"]
+
+                    def Cube "Geom" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding:physics = </Asset/PhysicsMaterials/panel_contact> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        uniform token purpose = "guide"
+                        double size = 1
+                        token visibility = "invisible"
+                        float3 xformOp:scale = (0.014, 0.024, 0.04)
+                        uniform token[] xformOpOrder = ["xformOp:scale"]
+                    }
+                }
+
+                def Xform "tab_body"
+                {
+                    token visibility = "invisible"
+                    double3 xformOp:translate = (0, -0.016, -0.028)
+                    uniform token[] xformOpOrder = ["xformOp:translate"]
+
+                    def Cube "Geom" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        rel material:binding:physics = </Asset/PhysicsMaterials/panel_contact> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        uniform token purpose = "guide"
+                        double size = 1
+                        token visibility = "invisible"
+                        float3 xformOp:scale = (0.056, 0.005, 0.036)
+                        uniform token[] xformOpOrder = ["xformOp:scale"]
+                    }
+                }
+            }
+        }
+    }
+
+    def Scope "Joints"
+    {
+        def PhysicsPrismaticJoint "panel_slide" (
+            prepend apiSchemas = ["PhysxJointAxisAPI:linear", "PhysicsDriveAPI:linear"]
+            customData = {
+            }
+        )
+        {
+            float drive:linear:physics:damping = 8
+            float drive:linear:physics:maxForce = 200
+            float drive:linear:physics:stiffness = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "Z"
+            rel physics:body0 = </Asset/Links/case>
+            rel physics:body1 = </Asset/Links/panel>
+            bool physics:collisionEnabled = 0
+            point3f physics:localPos0 = (0, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -0.354
+            float physics:upperLimit = 0
+            float physxJointAxis:linear:dynamicFrictionEffort
+            float physxJointAxis:linear:maxJointVelocity
+            float physxJointAxis:linear:staticFrictionEffort
+            float physxJointAxis:linear:viscousFrictionCoefficient
+        }
+    }
+
+    def Scope "Looks"
+    {
+        def Material "anodised_aluminium"
+        {
+            token outputs:surface.connect = </Asset/Looks/anodised_aluminium/PreviewSurface.outputs:surface>
+
+            def Shader "PreviewSurface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.4769998, 0.5070785, 0.55422175)
+                float inputs:metallic = 0.9
+                float inputs:opacity = 1
+                float inputs:roughness = 0.3
+                token outputs:surface
+            }
+        }
+
+        def Material "machined_aluminium_cap"
+        {
+            token outputs:surface.connect = </Asset/Looks/machined_aluminium_cap/PreviewSurface.outputs:surface>
+
+            def Shader "PreviewSurface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.34239164, 0.38005632, 0.42003328)
+                float inputs:metallic = 0.88
+                float inputs:opacity = 1
+                float inputs:roughness = 0.44
+                token outputs:surface
+            }
+        }
+
+        def Material "white_composite"
+        {
+            token outputs:surface.connect = </Asset/Looks/white_composite/PreviewSurface.outputs:surface>
+
+            def Shader "PreviewSurface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.8900054, 0.8900054, 0.8688994)
+                float inputs:metallic = 0
+                float inputs:opacity = 1
+                float inputs:roughness = 0.62
+                token outputs:surface
+            }
+        }
+
+        def Material "black_abs"
+        {
+            token outputs:surface.connect = </Asset/Looks/black_abs/PreviewSurface.outputs:surface>
+
+            def Shader "PreviewSurface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.0059810597, 0.0059810597, 0.007194409)
+                float inputs:metallic = 0
+                float inputs:opacity = 1
+                float inputs:roughness = 0.42
+                token outputs:surface
+            }
+        }
+    }
+
+    def Scope "PhysicsMaterials"
+    {
+        def Material "aluminium_contact" (
+            prepend apiSchemas = ["PhysicsMaterialAPI"]
+        )
+        {
+            float physics:density = 2700
+            float physics:dynamicFriction = 0.18
+            float physics:restitution = 0.05
+            float physics:staticFriction = 0.25
+        }
+
+        def Material "panel_contact" (
+            prepend apiSchemas = ["PhysicsMaterialAPI"]
+        )
+        {
+            float physics:density = 500
+            float physics:dynamicFriction = 0.35
+            float physics:restitution = 0.05
+            float physics:staticFriction = 0.5
+        }
+    }
+}
+
