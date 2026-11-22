@@ -196,7 +196,8 @@ _SOCK_E = np.array([INV_FRONT - 0.015, INV_C[1] - 0.040, TOP + 0.055])
 def _hose_ends(env, origin):
     p, R = hhdeco.body_pose(env, "torch", origin)
     a = p + R @ STUB_END
-    return a, a + R @ np.array([-0.06, 0.0, 0.0]) + np.array([0.0, 0.0, -0.05]), _SOCK_T + np.array([-0.12, 0.10, -0.05]), _SOCK_T
+    # out of the handle's back end, down to the bench behind the torch, round and forward into the socket
+    return a, a + R @ np.array([-0.08, 0.0, 0.0]) + np.array([0.0, -0.05, -0.07]), _SOCK_T + np.array([-0.20, 0.0, -0.05]), _SOCK_T
 
 
 def _lead_ends(env, origin):
