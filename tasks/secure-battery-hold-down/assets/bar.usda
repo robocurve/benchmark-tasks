@@ -1,0 +1,185 @@
+#usda 1.0
+(
+    defaultPrim = "Bar"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Bar" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+)
+{
+    rel material:binding:physics = </Bar/Material> (
+        bindMaterialAs = "weakerThanDescendants"
+    )
+    point3f physics:centerOfMass = (0, 0, 0)
+    float physics:mass = 0.17
+
+    def Cube "middle_visual"
+    {
+        color3f[] primvars:displayColor = [(0.017744508, 0.017744508, 0.02027625)]
+        double size = 1
+        float3 xformOp:scale = (0.172, 0.0254, 0.004)
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def "collision"
+    {
+        def Cube "middle" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0002
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:scale = (0.172, 0.0254, 0.004)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "end_p" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0002
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:scale = (0.008, 0.0254, 0.004)
+            double3 xformOp:translate = (0.11, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "cheek_p_l" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0002
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:scale = (0.02, 0.0077, 0.004)
+            double3 xformOp:translate = (0.096, 0.00885, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "cheek_p_r" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0002
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:scale = (0.02, 0.0077, 0.004)
+            double3 xformOp:translate = (0.096, -0.00885, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "end_n" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0002
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:scale = (0.008, 0.0254, 0.004)
+            double3 xformOp:translate = (-0.11, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "cheek_n_l" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0002
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:scale = (0.02, 0.0077, 0.004)
+            double3 xformOp:translate = (-0.096, 0.00885, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "cheek_n_r" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0002
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:scale = (0.02, 0.0077, 0.004)
+            double3 xformOp:translate = (-0.096, -0.00885, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def Cube "end_p_visual"
+    {
+        color3f[] primvars:displayColor = [(0.017744508, 0.017744508, 0.02027625)]
+        double size = 1
+        float3 xformOp:scale = (0.008, 0.0254, 0.004)
+        double3 xformOp:translate = (0.11, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "cheek_p_l_visual"
+    {
+        color3f[] primvars:displayColor = [(0.017744508, 0.017744508, 0.02027625)]
+        double size = 1
+        float3 xformOp:scale = (0.02, 0.0077, 0.004)
+        double3 xformOp:translate = (0.096, 0.00885, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "cheek_p_r_visual"
+    {
+        color3f[] primvars:displayColor = [(0.017744508, 0.017744508, 0.02027625)]
+        double size = 1
+        float3 xformOp:scale = (0.02, 0.0077, 0.004)
+        double3 xformOp:translate = (0.096, -0.00885, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "end_n_visual"
+    {
+        color3f[] primvars:displayColor = [(0.017744508, 0.017744508, 0.02027625)]
+        double size = 1
+        float3 xformOp:scale = (0.008, 0.0254, 0.004)
+        double3 xformOp:translate = (-0.11, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "cheek_n_l_visual"
+    {
+        color3f[] primvars:displayColor = [(0.017744508, 0.017744508, 0.02027625)]
+        double size = 1
+        float3 xformOp:scale = (0.02, 0.0077, 0.004)
+        double3 xformOp:translate = (-0.096, 0.00885, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "cheek_n_r_visual"
+    {
+        color3f[] primvars:displayColor = [(0.017744508, 0.017744508, 0.02027625)]
+        double size = 1
+        float3 xformOp:scale = (0.02, 0.0077, 0.004)
+        double3 xformOp:translate = (-0.096, -0.00885, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Material "Material" (
+        prepend apiSchemas = ["PhysicsMaterialAPI"]
+    )
+    {
+        float physics:dynamicFriction = 0.4
+        float physics:restitution = 0
+        float physics:staticFriction = 0.5
+    }
+}
+

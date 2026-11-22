@@ -1,0 +1,116 @@
+#usda 1.0
+(
+    defaultPrim = "JBolt"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "JBolt" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+)
+{
+    rel material:binding:physics = </JBolt/Material> (
+        bindMaterialAs = "weakerThanDescendants"
+    )
+    point3f physics:centerOfMass = (0.00089029747, 0, 0.13929838)
+    float physics:mass = 0.08
+
+    def Cylinder "shank_visual"
+    {
+        uniform token axis = "Z"
+        double height = 0.301825
+        color3f[] primvars:displayColor = [(0.6120656, 0.6120656, 0.5155963)]
+        double radius = 0.003175
+        double3 xformOp:translate = (0, 0, 0.1540875)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "bottom_visual"
+    {
+        uniform token axis = "X"
+        double height = 0.01235
+        color3f[] primvars:displayColor = [(0.6120656, 0.6120656, 0.5155963)]
+        double radius = 0.003175
+        double3 xformOp:translate = (0.006175, 0, 0.003175)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "tip_visual"
+    {
+        uniform token axis = "Z"
+        double height = 0.014825000000000001
+        color3f[] primvars:displayColor = [(0.6120656, 0.6120656, 0.5155963)]
+        double radius = 0.003175
+        double3 xformOp:translate = (0.01235, 0, 0.010587500000000001)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Sphere "bend_in_visual"
+    {
+        color3f[] primvars:displayColor = [(0.6120656, 0.6120656, 0.5155963)]
+        double radius = 0.003175
+        double3 xformOp:translate = (0, 0, 0.003175)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Sphere "bend_out_visual"
+    {
+        color3f[] primvars:displayColor = [(0.6120656, 0.6120656, 0.5155963)]
+        double radius = 0.003175
+        double3 xformOp:translate = (0.01235, 0, 0.003175)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def "collision"
+    {
+        def Cube "shank" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0002
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:scale = (0.00635, 0.00635, 0.305)
+            double3 xformOp:translate = (0, 0, 0.1525)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "bottom" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0002
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:scale = (0.006, 0.00635, 0.00635)
+            double3 xformOp:translate = (0.006175, 0, 0.003175)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "tip" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0002
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:scale = (0.00635, 0.00635, 0.018)
+            double3 xformOp:translate = (0.01235, 0, 0.009000000000000001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def Material "Material" (
+        prepend apiSchemas = ["PhysicsMaterialAPI"]
+    )
+    {
+        float physics:dynamicFriction = 0.3
+        float physics:restitution = 0
+        float physics:staticFriction = 0.4
+    }
+}
+
