@@ -42,7 +42,7 @@ def install(geometry,out,plan=None):
     contact_capacity=getattr(geometry,'CONTACT_CAPACITY',65536)
     paths=[];sensors=[];filters=[];sample_count=0;
     applied_repair_actions=[];executed_indices=[]
-    adaptive=plan is not None
+    adaptive=plan is not None and any(r.get("label")!="Reset and hold" for r in plan)
     def flush():
         if not pending:return
         import torch
@@ -56,7 +56,7 @@ def install(geometry,out,plan=None):
             if c.sum()>=contact_capacity or e.sum()>=contact_capacity:raise RuntimeError('Contact buffer full')
             poses.append(a);vels.append(b);counts.append(c);forces.append(d);ocounts.append(e);oforces.append(f);onets.append(g)
         if hasattr(geometry,'after_contact_batch') and len(batch):
-            geometry.after_contact_batch(poses[-1],oforces[-len(batch):],paths,filters,len(poses),PHYSICS_HZ)
+            geometry.after_contact_batch(poses[-len(batch):],oforces[-len(batch):],paths,filters,len(poses),PHYSICS_HZ)
     def ensure(self,goal):
         nonlocal installed,view,contact,object_contact,sim,paths,sensors,filters
         assert self.rig==official.station.rig('calibrated') and (self.cam_width,self.cam_height)==(320,176)
@@ -149,6 +149,25 @@ def install(geometry,out,plan=None):
         self._joint_hold=None;self._tcp_retreat=None
     def act(self,obs):
         index=min(self._probe_i,len(plan)-1)
+        from tool_return import PREFIX_ACTIONS
+        if adaptive and self._probe_i>=PREFIX_ACTIONS:
+            from inspect_robots_yam.packing import STATE_KEY
+            from tool_return import ReturnDriver
+            if not hasattr(self,'driver_return'):
+                self.driver_return=ReturnDriver(applied_repair_actions[-1])
+            phase=self.driver_return.phase
+            bodies={p.rsplit('/',1)[-1]:v for p,v in zip(paths,poses[-1])}
+            if phase in ('Align lifting handle above rack','Seat lifting handle behind posts','Release lifting handle','Clear lifting handle'):
+                from repair_plan import correct_tool
+                base=plan[self.repair_schedule.index]
+                left=correct_tool(self,base,obs,np.array(base['action']),poses[-1],paths)
+                self.driver_return.action[:7]=left[:7]
+            row=self.driver_return.step(np.asarray(obs.state[STATE_KEY]),bodies,geometry.debug_metrics())
+            plan.append(dict(label=phase,action=row.tolist()))
+            executed_indices.append(len(plan)-1)
+            applied_repair_actions.append(row.copy())
+            self._probe_i+=1
+            return ActionChunk(actions=[Action(data=pack(row[:7],row[7:]))],control_hz=20)
         if adaptive:
             from repair_plan import RepairSchedule
             if not hasattr(self,'repair_schedule'):self.repair_schedule=RepairSchedule(plan)
@@ -167,6 +186,9 @@ def install(geometry,out,plan=None):
             from repair_plan import track_stock
             row=track_stock(self,entry,obs,row,poses[-1],paths)
         if entry.get('hold_wood') and hasattr(self,'wood_q'):row[7:13]=self.wood_q
+        if 'clear_stock' in entry:
+            from repair_plan import clear_stock
+            row=clear_stock(self,entry,obs,row)
         if 'repair_pose' in entry:
             from repair_plan import align_patch
             row=align_patch(self,entry,obs,row,poses[-1],paths)

@@ -9,16 +9,21 @@ import sys
 from zipfile import ZipFile, ZIP_DEFLATED
 
 ROOT = Path(__file__).resolve().parent
-BUDGET = 2400
+from tool_return import PREFIX_ACTIONS, RETURN_ACTIONS
+
+BUDGET = PREFIX_ACTIONS + RETURN_ACTIONS
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--mode', choices=('demo','dream','setup'), required=True)
+    parser.add_argument('--mode', choices=('setup','demo','dream'), required=True)
     parser.add_argument('--log-dir', type=Path, required=True)
     parser.add_argument('--gpu', choices=('auto','0','1'), default='auto')
     parser.add_argument('--config-only', action='store_true')
+    parser.add_argument('--test-steps',type=int,help='Shorter free commissioning run')
     args = parser.parse_args()
+    if args.test_steps is not None and (args.mode != 'demo' or not 0 < args.test_steps <= BUDGET):
+        parser.error('--test-steps is for a free demo and must fit within the published action budget.')
     out = args.log_dir.resolve()
     if out.is_relative_to(ROOT):
         parser.error('Select a new output directory outside the task folder.')
@@ -28,7 +33,7 @@ def main():
     (out/'runtime-contract.json').write_text(json.dumps(check(),indent=2))
     from yam_arena.constants import READY
     instruction=json.loads((ROOT/'task.json').read_text())['instruction']
-    steps=40 if args.mode=='setup' else BUDGET
+    steps=40 if args.mode=='setup' else (args.test_steps or BUDGET)
     plan=None
     if args.mode=='demo':
         from repair_plan import make

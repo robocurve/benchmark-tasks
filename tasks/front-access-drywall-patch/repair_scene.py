@@ -6,6 +6,8 @@ import numpy as np
 from scipy.spatial.transform import Rotation as R
 from surface_process_probe import WORLD, body, box
 import rotary_driver as driver
+from tool_profile import TIP as NOSE, TRIGGER
+from wall_driver import build as build_driver, PITCH as CARRIER_PITCH, POCKETS
 from grading import bite, backing_rows
 
 FRONT, BOARD, DEPTH = .350, .0127, .089
@@ -16,18 +18,16 @@ STOCK = np.array([.248,-.066,TABLE_TOP+.126])
 SECOND = np.array([.296,.158,TABLE_TOP+.070])
 RACK_LIFT = .042
 PATCH_START = np.array([.350,-.323,TABLE_TOP+.100+RACK_LIFT])
-HANDLE = np.array([.263,.320,.895])
+HANDLE = np.array([.180,.390,TABLE_TOP+.026])
 HANDLE_Z = .010
 GRIP_Y = -.065
 ENTRY_BOTTOM,ENTRY_TOP,ENTRY_HALF_WIDTH=-.0145,-.0055,.0045
 CARRIER_HOME = PATCH_START + [-.044,0,HANDLE_Z]
 PICK = CARRIER_HOME + [0,GRIP_Y,0]
-EXTENSION = .048
-TIP = .110 + EXTENSION
-SCREW = .03175
+SCREW = .030
 PITCH = .003175
 BACKERS = ('strip','spare_strip')
-BODIES = [*BACKERS,'patch','carrier','driver','spindle','shoe']
+BODIES = [*BACKERS,'patch','carrier','driver','spindle','shoe','trigger','screw_carrier']
 FIXED = []
 WOOD=(.70,.47,.26)
 PAPER=(.80,.84,.82)
@@ -141,61 +141,10 @@ def build(g,stage):
     detent=UsdPhysics.DriveAPI.Apply(key.GetPrim(),'linear')
     detent.CreateTypeAttr('force');detent.CreateStiffnessAttr(170.);detent.CreateDampingAttr(1.2)
     detent.CreateMaxForceAttr(2.6);detent.CreateTargetPositionAttr(.0006)
-    motor=driver.build_driver(stage,HANDLE)
-    # An extended collated bit keeps the operator's wrist clear of the board.
-    # The spindle and its PH2 flutes rotate; the concentric stationary guide
-    # and sliding nose maintain the original 31.75 mm screw feed stroke.
-    driver.cyl(stage,WORLD+'/spindle/extension_shank',.078+EXTENSION/2,EXTENSION,.0031,driver.STEEL)
-    for i,(dy,dz) in enumerate(((.0048,.00066),(.00066,.0048))):
-        driver.small_box(stage,WORLD+'/spindle/extended_flute'+str(i),(.077+EXTENSION,0,0),(.002,dy,dz),driver.STEEL)
-    for i in range(8):
-        angle=2*np.pi*i/8
-        guide=driver.small_box(stage,WORLD+'/driver/bit_guide'+str(i),
-                (.070+EXTENSION/2,.008*np.cos(angle),.008*np.sin(angle)),(EXTENSION+.017,.0024,.0068),driver.SHELL)
-        driver.orient(guide,R.from_euler('x',angle))
-    # Clip-on parallel-jaw adapter. Physical flats transmit roll and the two
-    # shoulders stop a loaded screwdriver sliding lengthwise through the jaws.
-    for i,sign in enumerate((-1,1)):
-        cheek=box(stage,WORLD+'/driver/grip_cheek'+str(i),(0,sign*.019,0),(.047,.006,.030),driver.RUBBER)
-        rubber=UsdPhysics.MaterialAPI.Get(stage,cheek.GetPath().AppendChild('friction'))
-        rubber.GetStaticFrictionAttr().Set(1.2);rubber.GetDynamicFrictionAttr().Set(1.)
-        for j,side in enumerate((-1,1)):
-            box(stage,WORLD+f'/driver/shoulder{i}{j}',(side*.023,sign*.022,0),(.005,.007,.030),driver.SHELL)
-    # The jaws enter from above. A lower ledge under each pad reacts roll
-    # of the motor casing; the upper opening stays free for release.
-    for sign in (-1,1):
-        ledge=box(stage,WORLD+f'/driver/pad_ledge_{sign+1}',(-.002,sign*.028,-.0135),
-                  (.042,.015,.003),driver.RUBBER)
-        driver.orient(ledge,R.from_euler('y',-17,degrees=True))
-    motor.GetDampingAttr().Set(.015)
-    motor.GetMaxForceAttr().Set(.65)
-    shoe=part('shoe',HANDLE,.035)
-    # The annulus alone bears on the surface. The remaining hollow centre
-    # represents the feed channel of a collated magazine.
-    for i in range(12):
-        theta=2*np.pi*i/12
-        shape=shoe('rim'+str(i),(TIP-.002,.007*np.cos(theta),.007*np.sin(theta)),(.004,.0023,.0039),driver.RUBBER)
-        driver.orient(shape,R.from_euler('x',theta))
-    shoe('slide',(.084+EXTENSION,0,.010),(.044,.010,.005),driver.STEEL)
-    shoe('magazine',(.083+EXTENSION,.018,.011),(.037,.035,.012),driver.SHELL)
-    # Show the unfed strip and narrow steel fasteners beside the feed channel.
-    for i in range(6):
-        box(stage,WORLD+'/shoe/strip_screw'+str(i),(.080+EXTENSION,.031+i*.006,.010),(.030,.002,.002),driver.STEEL,collision=False)
-    box(stage,WORLD+'/shoe/collation',(.079+EXTENSION,.045,.010),(.005,.038,.0025),(.64,.60,.45),collision=False)
-    j=driver.joint(stage,UsdPhysics.PrismaticJoint,'nose_spring','driver','shoe',(0,0,0),(0,0,0))
-    j.CreateLowerLimitAttr(-.034);j.CreateUpperLimitAttr(0.)
-    spring=UsdPhysics.DriveAPI.Apply(j.GetPrim(),'linear')
-    spring.CreateTypeAttr('force');spring.CreateStiffnessAttr(180.);spring.CreateDampingAttr(1.45)
-    spring.CreateMaxForceAttr(12.);spring.CreateTargetPositionAttr(0.)
-    # The spindle passes through the housing and shoe without striking them.
-    UsdPhysics.FilteredPairsAPI.Apply(stage.GetPrimAtPath(WORLD+'/spindle')).CreateFilteredPairsRel().AddTarget(WORLD+'/shoe')
-    for i,dx in enumerate((-.061,.029)):
-        h=HANDLE[2]-.0176-TABLE_TOP
-        fixed('driverrest'+str(i),(HANDLE[0]+dx,HANDLE[1],TABLE_TOP+h/2),(.012,.039,h),STAND)
-        for k,s in enumerate((-1,1)):
-            fixed(f'lip{i}{k}',(HANDLE[0]+dx,HANDLE[1]+s*.023,HANDLE[2]-.010),(.012,.004,.016),STAND)
+    motor,feed_rail=build_driver(stage,HANDLE)
     global CURRENT
     CURRENT=Repair(stage,motor)
+    CURRENT.rail=feed_rail
     CURRENT.braked=g=='repair-brake'
     CURRENT.key=key
     CURRENT.key_release=None
@@ -227,13 +176,21 @@ class Repair:
         self.log=[]
         self.last_rotation=None
         self.stroke=None
-        self.armed=True
-        self.rounds=12
+        self.rounds=POCKETS
+        self.pocket=0
+        self.spent=False
+        self.indexing=False
+        self.magazine_events=[]
         self.powered=False
         self.score=0.
         self.hold=0.
         self.hold_samples=0
         self.panel_samples=0
+        from putaway import Touchdown
+        self.touchdown=Touchdown()
+        self.park_samples=0
+        self.park_reference=None
+        self.park_indices=None
         self.loaded_steps=[]
         self.delivered_proof=[]
         self.cutting_torque=0.
@@ -275,7 +232,7 @@ class Repair:
             if s is not None and self.powered and s['depth']>=.0009:
                 sh=shoe.get_transforms().cpu().numpy()[0]
                 v=shoe.get_velocities().cpu().numpy()[0]
-                shoe_arm=R.from_quat(sh[3:]).apply([TIP,0,0])
+                shoe_arm=R.from_quat(sh[3:]).apply(NOSE)
                 at=sh[:3]+shoe_arm
                 speed=v[:3]+np.cross(v[3:],shoe_arm)
                 if s['front']=='patch':
@@ -311,6 +268,15 @@ class Repair:
                     fasteners_N=internal[2,:3].tolist(),submitted_N=submitted.cpu().numpy().tolist()))
         self.connections.bind(sim,external_wrench,record_delivery)
 
+    def consume(self,event,sample):
+        from pxr import UsdGeom, UsdPhysics
+        self.spent=True
+        self.rounds-=1
+        screw_shape = self.stage.GetPrimAtPath(WORLD+f'/screw_carrier/screw_{self.pocket}')
+        UsdPhysics.CollisionAPI(screw_shape).GetCollisionEnabledAttr().Set(False)
+        UsdGeom.Imageable(screw_shape).MakeInvisible()
+        self.magazine_events.append(dict(event=event,pocket=self.pocket+1,sample=sample,remaining=self.rounds))
+
     def fasten(self,point,axis,wood,front,poses):
         from pxr import Gf, UsdGeom, UsdPhysics, UsdShade
         i=len(self.fasteners)
@@ -337,7 +303,7 @@ class Repair:
             self.key_release=dict(sample=sample,slide_mm=1000*slide)
         p,sh,sp=(poses[n] for n in ('driver','shoe','spindle'))
         rot=R.from_quat(p[3:]);axis=rot.apply([1,0,0])
-        face=sh[:3]+R.from_quat(sh[3:]).apply([TIP,0,0])
+        face=sh[:3]+R.from_quat(sh[3:]).apply(NOSE)
         stroke=-float((sh[:3]-p[:3])@axis)
         relative=rot.inv()*R.from_quat(sp[3:])
         angle=0. if self.last_rotation is None else (self.last_rotation.inv()*relative).as_rotvec()[0]
@@ -347,12 +313,27 @@ class Repair:
         loads={n:max(0.,float(-np.mean([f[shoe,ids[n]]@axis for f in forces]))) for n in ('patch','jamb_minus','jamb_plus','header','sill')}
         front=max(loads,key=loads.get)
         load=loads[front]
-        if stroke<.001 and load<.03:
-            self.armed=True
+        unloaded=stroke<.0008 and max(float(np.linalg.norm(f[shoe,ids[k]])) for f in forces
+             for k in ('patch','jamb_minus','jamb_plus','header','sill'))<.03
+        rail=-local(sh,poses['screw_carrier'][:3])[1]
+        switch=TRIGGER[0]-local(p,poses['trigger'][:3])[0]
+        if unloaded:
+            if self.stroke is not None and self.stroke['depth']>=.0009 and not self.spent:
+                self.consume('partial withdrawal',sample)
             self.stroke=None
+            if self.spent and self.rounds and not self.indexing:
+                self.pocket+=1
+                self.rail.GetTargetPositionAttr().Set(-CARRIER_PITCH*self.pocket)
+                self.indexing=True
+                self.magazine_events.append(dict(event='index requested',pocket=self.pocket+1,sample=sample))
+        aligned=abs(rail-CARRIER_PITCH*self.pocket)<.00045
+        if self.indexing and aligned and unloaded:
+            self.spent=False
+            self.indexing=False
+            self.magazine_events.append(dict(event='arrived',pocket=self.pocket+1,sample=sample,rail_mm=1000*rail))
         face_error=abs(local(poses['patch'],face)[0]+BOARD/2) if front=='patch' else abs(face[0]-FRONT)
         loaded=load>.35 and axis[0]>.98 and stroke>.001 and face_error<.0012
-        running=loaded and self.armed and self.rounds>0 and not self.braked
+        running=loaded and switch>=.002 and aligned and not self.spent and not self.indexing and self.rounds>0 and not self.braked
         self.cutting_torque=0.
         self.cutting_wood=None
         if running and self.stroke is not None:
@@ -362,7 +343,7 @@ class Repair:
             fraction=np.clip((depth-BOARD)/THICK,0.,1.) if self.cutting_wood else 0.
             self.cutting_torque=.025+.30*fraction
         if running!=self.powered:
-            self.motor.GetTargetVelocityAttr().Set(2580. if running else 0.)
+            self.motor.GetTargetVelocityAttr().Set(1980. if running else 0.)
             self.powered=running
         if running:
             if self.stroke is None:
@@ -375,8 +356,10 @@ class Repair:
                 s['turns']+=angle/(2*np.pi)
                 s['depth']=float(np.clip(s['depth']+angle/(2*np.pi)*PITCH,0,max(0.,stroke+.0004)))
                 if s['depth']>=SCREW-.0006:
-                    self.armed=False
-                    self.rounds-=1
+                    self.consume('driven',sample)
+                    self.motor.GetTargetVelocityAttr().Set(0.)
+                    self.powered=False
+                    self.cutting_torque=0.
                     point=face.copy()
                     wood=None
                     for name in BACKERS:
@@ -385,7 +368,7 @@ class Repair:
                     if wood and s.get('wood_work_J',{}).get(wood,0.)>=1.0 and all(np.linalg.norm(point-f['head'])>.011 for f,m in zip(self.fasteners,self.connections.mounts) if not m['broken']):
                         self.fasten(point,axis,wood,front,poses)
                     self.log.append(dict(sample=sample,front=front,wood=wood,point=point.tolist(),depth=s['depth'],turns=s['turns']))
-        self.diagnostics=dict(stroke_mm=round(stroke*1000,2),load=round(load,2),face=face.round(4).tolist(),axis=axis.round(3).tolist(),cut_mm=round(1000*self.stroke['depth'],2) if self.stroke else 0.,remaining=self.rounds,key_slide_mm=round(1000*slide,2),carrier_offset_x_mm=round(1000*carrier_offset[0],2),key_released=self.key_release is not None)
+        self.diagnostics=dict(pocket=self.pocket+1,rail_mm=1000*rail,switch_mm=1000*switch,aligned=bool(aligned),stroke_mm=round(stroke*1000,2),load=round(load,2),face=face.round(4).tolist(),axis=axis.round(3).tolist(),cut_mm=round(1000*self.stroke['depth'],2) if self.stroke else 0.,remaining=self.rounds,key_slide_mm=round(1000*slide,2),carrier_offset_x_mm=round(1000*carrier_offset[0],2),key_released=self.key_release is not None)
         # Evaluate all four exterior corners of the released patch.
         patch=poses['patch'];q=R.from_quat(patch[3:])
         corners=patch[:3]+q.apply([[-BOARD/2,y,z] for y in (-PATCH/2,PATCH/2) for z in (-PATCH/2,PATCH/2)])
@@ -393,7 +376,7 @@ class Repair:
         seam=float(max(np.max(np.abs(np.abs(corners[:,1])-.10)),np.max(np.abs(np.abs(corners[:,2]-MID)-.10))))
         inside=(np.max(np.abs(corners[:,1]))<=.1005 and np.max(np.abs(corners[:,2]-MID))<=.1005)
         rows, panel_rows, secure = backing_rows(self.fasteners, self.connections.mounts, MID)
-        toolfree=not any(np.any(f[k,ids[n]]) for f in forces for k in [paths.index(WORLD+'/'+name) for name in (*BACKERS,'patch')] for n in ('driver','shoe','carrier','spindle'))
+        toolfree=not any(np.any(f[k,ids[n]]) for f in forces for k in [paths.index(WORLD+'/'+name) for name in (*BACKERS,'patch')] for n in ('driver','shoe','carrier','spindle','trigger','screw_carrier'))
         fingers=[i for i,n in enumerate(filters) if '/LeftArm/' in n or '/RightArm/' in n]
         unheld=all(not np.any(f[k,fingers]) for f in forces for k in [paths.index(WORLD+'/'+n) for n in (*BACKERS,'patch')])
         released = self.key_release is not None and toolfree and unheld
@@ -424,5 +407,46 @@ class Repair:
             self.score = 1.
         self.last_metrics=dict(fasteners=len(self.fasteners),flush_mm=1000*flush,max_joint_gap_mm=1000*seam,backing_rows=rows,panel_rows=panel_rows,released=bool(released),hold_s=self.hold,proof_complete=self.proof_complete,drift_mm=1000*drift,score=self.score)
 
+    def measure_park(self,pose_batch,force_batch,paths,filters,hz):
+        if self.park_indices is None:
+            bodies=[paths.index(WORLD+'/'+name) for name in ('driver','shoe','spindle','trigger','screw_carrier')]
+            table=filters.index(WORLD+'/table/geometry/mesh')
+            robot=[i for i,n in enumerate(filters) if '/LeftArm/' in n or '/RightArm/' in n]
+            right=[i for i in robot if '/RightArm/' in filters[i] and '/tip_' in filters[i]]
+            self.park_indices=(bodies,table,robot,right,paths.index(WORLD+'/carrier'))
+        bodies,table,robot,right,handle=self.park_indices
+        f=np.asarray(force_batch)
+        load=f[:,bodies,table,2].sum(axis=1)
+        pads=np.linalg.norm(f[:,bodies[0],right],axis=-1)
+        self.diagnostics['right_on_handle']=bool(np.any(f[:,handle,right]))
+        self.diagnostics['right_lift_N']=float(f[:,bodies[0],right,2].sum(axis=1).mean())
+        self.diagnostics.update(table=bool(np.max(load)>.15),table_load=float(load.mean()),
+             right_pads=bool(np.all(pads>.1)),carrier_table=float(f[:,handle,table,2].mean()))
+        if not self.fasteners or len(self.fasteners)<8:
+            return
+        pose=np.asarray(pose_batch)
+        shells=pose[:,bodies[0]]
+        rotation=R.from_quat(shells[:,3:])
+        switch=TRIGGER[0]-rotation.inv().apply(pose[:,bodies[3],:3]-shells[:,:3])[:,0]
+        fingers=[i for i in robot if '/tip_' in filters[i]]
+        grip=np.any(np.linalg.norm(f[:,bodies[0],fingers],axis=-1)>.1,axis=1)
+        self.touchdown.update(load,grip,switch<.002,hz,self.sample-len(f))
+        good=self.score==1.
+        if good and self.touchdown.seen and np.all(load>1.) and not np.any(f[:,bodies][:,:,robot]):
+            if self.park_reference is None:self.park_reference=(shells[0,:3].copy(),rotation[0])
+            anchor,att=self.park_reference
+            steady=np.max(np.linalg.norm(shells[:,:3]-anchor,axis=1))<=.002
+            steady=steady and np.max((att.inv()*rotation).magnitude())<=np.deg2rad(2.)
+            if steady and np.all(switch<.002):
+                self.park_samples+=len(f)
+            else:
+                self.park_samples=0
+                self.park_reference=None
+        else:
+            self.park_samples=0
+            self.park_reference=None
+        if good and self.park_samples<hz:self.score=.75
+        self.last_metrics.update(score=self.score,parked_s=self.park_samples/hz,controlled_touchdown=self.touchdown.seen,landing=self.touchdown.event)
+
     def save(self,out):
-        (out/'repair-result.json').write_text(json.dumps(dict(metrics=self.last_metrics,shots=self.log,fasteners=self.fasteners,key_release=self.key_release,connections=[{k:v for k,v in m.items() if k in ('broken','gap','max_gap','peak_force','peak_moment')} for m in self.connections.mounts],peak_cutting_torque_Nm=self.peak_torque,embedded_screw_bearing=dict(samples=self.bearing_samples,peak_N=self.peak_bearing),proof_force_world_N=[2.,0.,0.],proof_substeps=self.loaded_steps,delivered_proof=self.delivered_proof),indent=2)+'\n')
+        (out/'repair-result.json').write_text(json.dumps(dict(metrics=self.last_metrics,magazine_events=self.magazine_events,remaining=self.rounds,shots=self.log,fasteners=self.fasteners,key_release=self.key_release,connections=[{k:v for k,v in m.items() if k in ('broken','gap','max_gap','peak_force','peak_moment')} for m in self.connections.mounts],peak_cutting_torque_Nm=self.peak_torque,embedded_screw_bearing=dict(samples=self.bearing_samples,peak_N=self.peak_bearing),proof_force_world_N=[2.,0.,0.],proof_substeps=self.loaded_steps,delivered_proof=self.delivered_proof),indent=2)+'\n')

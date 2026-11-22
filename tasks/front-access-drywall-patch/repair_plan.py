@@ -187,98 +187,130 @@ def park_joints(policy,entry,obs,row,poses,paths):
 
 
 def make(mode):
-    p=Plan()
-    p.move('Settle loose parts',10)
-    if mode=='repair-lower':
-        p.stock(g.SECOND,g.MID-.044,'lower backer')
-        p.move('Inspect held lower strip',25)
-        return p
-    if mode in ('repair-test','repair-panel'):
-        place(p)
-        p.move('Observe carrier',35)
-        for row in p.rows[-35:]:row['repair_pose']=g.FRONT+g.BOARD/2
-        return p
-    if mode not in ('repair-tool','repair-brake','repair-finish','repair-sites','repair-far','repair-lower-pair'):p.stock(g.STOCK,g.MID+.066,'upper backer')
-    h=g.HANDLE
-    p.tool('Approach driver stand',46,h+[0,0,.086],.72)
-    p.tool('Lower to grip',33,h+[0,0,.004],.72)
-    p.tool('Grip driver',16,opening=0.)
-    p.tool('Lift out of stand',34,h+[0,0,.070])
-    if mode=='repair-lower-pair':
-        p.stock(g.SECOND,g.MID-.044,'lower backer')
-        start=len(p.rows)
-        p.drive('lower positive jamb','wall','spare_strip',.114,g.MID-.044)
-        for row in p.rows[start:]:row['stock_target']=[.371,0,g.MID-.044,0]
-        p.release(g.MID-.044)
-        p.drive('lower negative jamb','wall','spare_strip',-.108,g.MID-.044)
-        p.move('Inspect fastened lower backer',30)
-        return p
-    if mode=='repair-far':
-        p.drive('upper positive jamb','wall','strip',.114,g.MID+.066)
-        p.drive('lower positive jamb','wall','spare_strip',.114,g.MID-.044)
-        p.drive('lower negative jamb','wall','spare_strip',-.108,g.MID-.044)
-        p.drive('patch spare_strip -0.052','patch','spare_strip',-.078,g.MID-.044)
-        p.move('Inspect remote fastening',18)
-        return p
-    if mode=='repair-sites':
-        for w,z in [('spare_strip',g.MID-.044),('strip',g.MID+.066)]:
-            for y in (.078,-.078):p.drive('patch '+w+' '+str(y),'patch',w,y,z)
-        p.move('Inspect four fixture sites',18)
-        return p
-    if mode!='repair-finish':
-        start=len(p.rows)
-        p.drive('upper positive jamb','wall','strip',.114,g.MID+.066)
-        if mode not in ('repair-tool','repair-brake'):
-            for row in p.rows[start:]:
-                row['stock_target']=[.3709,0,g.MID+.066,0];row['wood_name']='strip'
-        if mode=='repair-brake':
-            p.move('Inspect braked stroke',28)
-            return p
-        if mode=='repair-tool':
-            p.drive('upper negative jamb','wall','strip',-.114,g.MID+.066)
-            p.move('Inspect trial',25)
-            return p
-        if mode=='repair-first':
-            p.move('Inspect first fastening',30)
-            return p
-        p.release(g.MID+.066)
-        p.drive('upper negative jamb','wall','strip',-.114,g.MID+.066)
-        park(p,'Park beyond opening',70)
-        start_stock=len(p.rows)
-        p.stock(g.SECOND,g.MID-.044,'lower backer')
-        for row in p.rows[start_stock:]:row['hold_tool']=True
-        starts=len(p.rows)
-        p.drive('lower positive jamb','wall','spare_strip',.114,g.MID-.044)
-        for row in p.rows[starts:]:row['stock_target']=[.371,0,g.MID-.044,0]
-        p.release(g.MID-.044)
-        p.drive('lower negative jamb','wall','spare_strip',-.108,g.MID-.044)
-        park(p,'Clear lifting path',70)
-        if mode=='repair-stock':return p
-    start_panel=len(p.rows)
-    target=place(p)
-    first_patch_step=len(p.rows)
-    if mode!='repair-finish':
-        for row in p.rows[start_panel:]:row['hold_tool']=True
-    # Start two vertically separated screws, one into each piece of backing.
-    # The fasteners can now carry the patch while the right hand removes the
-    # lifter; the screwdriver never has to traverse through the lifter.
-    for n,z in [('strip',g.MID+.066),('spare_strip',g.MID-.044)]:
-        p.drive('patch '+n+' 0.078','patch',n,.078,z)
-    for row in p.rows[first_patch_step:]:row['repair_pose']=g.FRONT+g.BOARD/2
-    start_remove=len(p.rows)
-    for name,n,offset in [('Unhook carrying pins',26,0.),('Pull handle from face',30,-.075)]:
-        p.move(name,n,target+[offset,0,-.0135])
-        for row in p.rows[-n:]:row['unhook']=offset
-    p.move('Withdraw handle',39,[.245,-.284,.961])
-    for row in p.rows[start_remove:]:row['hold_tool']=True
-    for n,z in [('spare_strip',g.MID-.044),('strip',g.MID+.066)]:
-        p.drive('patch '+n+' -0.052','patch',n,-.052,z)
-    park(p,'Park driver beside completed wall',67)
-    p.move('Inspect released repair',65)
-    for row in p.rows[-65:]:row['hold_tool']=True
-    if mode!='repair-finish':pack_schedule(p)
-    return p
-
+    """Commission both loose backing strips in the complete wall."""
+    from types import SimpleNamespace
+    from reach import solve,SEEDS
+    from yam_arena.demo import grip_rotation
+    rows=json.loads(Path(__file__).with_name('upper-plan.json').read_text())
+    left=np.r_[READY,1.]
+    # From the original laydown point the nose is under the spare-stock rack.
+    # Draw it towards the operator side before lifting through the rack height.
+    pc=[]
+    attitude=R.from_matrix(grip_rotation(-np.pi/2))
+    stages=[
+        (50,[0.,0.,.090],.85),(38,[0.,0.,-.002],.85),
+        (20,[0.,0.,-.002],.39),(18,[0.,0.,-.002],.39),
+        (38,[0.,0.,.074],.39),(30,[0.,0.,.074],.39),
+    ]
+    for n,offset,opening in stages:
+        goal,delta,angle=solve(g.HANDLE+offset,attitude,[left[:6],*SEEDS],'left')
+        if delta>.0018 or angle>.015:raise ValueError(('wall pickup',offset,delta,angle))
+        next_=np.r_[goal,opening]
+        pc.extend(left+ik.smoothstep((i+1)/n)*(next_-left) for i in range(n))
+        left=next_
+    start=next(i for i,row in enumerate(rows) if 'Approach driver stand' in row['label'])
+    start-=36  # Left hand can approach the driver while the right presents the first timber.
+    end=next(i for i,row in enumerate(rows) if 'repair_drive' in row)
+    import copy
+    extra=[copy.deepcopy(rows[end-1]) for _ in range(len(pc)-(end-start))]
+    for step in extra:step['label']='Clear spare-stock rack with held driver'
+    rows[end:end]=extra
+    for i,row in enumerate(rows[start:]):
+        row['action'][:7]=pc[min(i,len(pc)-1)].tolist()
+    base=next(row for row in rows if 'repair_drive' in row)
+    head=rows[:rows.index(base)]
+    base=dict(base,stock_target=list(base['stock_target']),repair_drive=dict(base['repair_drive']))
+    base['stock_target'][2]-=.028; base['repair_drive']['z']-=.028
+    stages=[('Lift above base',98),('Skirt stock rack',68),('Retract clear of jamb',55),('Traverse to upper wood',100),
+            ('Register upper entry',47),('Press first fixing',220),('Withdraw first fixing',90)]
+    for label,num in stages:
+        head.extend(dict(base,label=label) for _ in range(num))
+    # One installed screw carries the light backer while the right hand clears the magazine.
+    for label,n in [('Open stock jaws',36),('Draw clear of stock',90),('Clear opposite jamb',105)]:
+        for k in range(n):
+            step=dict(base, label=label, action=base['action'].copy(), clear_stock=[label,(k+1)/n])
+            step.pop('stock_target',None)
+            step['action'][13]=.85*(ik.smoothstep((k+1)/n) if label=='Open stock jaws' else 1.)
+            head.append(step)
+    opposite=dict(base,repair_drive=dict(base['repair_drive'],y=-.108),action=base['action'].copy(),clear_stock=['Stay clear',1.])
+    opposite.pop('stock_target',None)
+    opposite['action'][13]=.85
+    for label,num in [('Pass ahead of stock hand',145),('Register second entry',48),('Press second fixing',230),('Withdraw second fixing',135)]:
+        head.extend(dict(opposite,label=label) for _ in range(num))
+    park=dict(opposite,repair_drive=dict(opposite['repair_drive'],y=.232))
+    for i in range(215):
+        head.append(dict(park,label='Park for lower stock'))
+    loader=Plan()
+    stowed,dx,da=ik.solve([.180,-.235,.994],(R.from_euler('y',28,degrees=True)*NEUTRAL).as_quat(),q_init=[1.16,.63,.86,-1.16,.94,-.75],base_pos=station.BASES['right'],iters=100,tol=.0001)
+    assert dx<.002 and da<.025
+    loader.command[7:13]=stowed;loader.command[13]=.85
+    loader.stock(g.SECOND,g.MID-.044,'lower backer')
+    overlap=32
+    for parent,child in zip(head[-overlap:],loader.rows[:overlap],strict=True):
+        parent.pop('clear_stock',None)
+        parent['action']=parent['action'][:7]+child['action'][7:]
+    for step in loader.rows[overlap:]:
+        r=dict(step,action=step['action'].copy(),repair_drive=park['repair_drive'],park_lower=True)
+        head.append(r)
+    work=dict(base,action=head[-1]['action'].copy(),wood_name='spare_strip',
+              repair_drive=dict(wood='spare_strip',front='wall',y=.114,z=g.MID-.044,depth=-.002),
+              stock_target=[.371,0.,g.MID-.044,0.])
+    for label,n in [('Approach lower strip',110),('Register lower entry',54),('Press third fixing',260),('Withdraw third fixing',130)]:
+        head.extend(dict(work,label=label) for _ in range(n))
+    for label,n in [('Open stock jaws',36),('Draw clear of stock',85),('Clear opposite jamb',85)]:
+        for k in range(n):
+            step=dict(work,label=label,action=work['action'].copy(),clear_stock=[label,(k+1)/n])
+            step.pop('stock_target',None)
+            step['action'][13]=.85*(ik.smoothstep((k+1)/n) if label=='Open stock jaws' else 1.)
+            head.append(step)
+    fourth=dict(opposite,repair_drive=dict(work['repair_drive'],y=-.108))
+    for label,n in [('Pass ahead of stock hand',155),('Register second entry',52),('Press fourth fixing',250),('Withdraw fourth fixing',155)]:
+        head.extend(dict(fourth,label=label) for _ in range(n))
+    # When both rows are in place the other hand brings the loose panel to the opening.
+    park_panel=dict(fourth,repair_drive=dict(fourth['repair_drive'],y=.232))
+    for i in range(205):
+        head.append(dict(park_panel,label='Park for lower stock'))
+    panel=Plan()
+    panel.command[7:13]=stowed
+    panel.command[13]=.85
+    target=place(panel)
+    for step in panel.rows:
+        head.append(dict(step,park_lower=True,repair_drive=park_panel['repair_drive']))
+    def panel_site(name,wood,y,pocket,hold):
+        drive=dict(front='patch',wood=wood,y=y,z=0.,depth=0.)
+        for phase,depth,n in [('Travel',-.037,125),('Register',-.002,52),('Seat',.033,205),('Unload',-.042,125)]:
+            for _ in range(n):
+                step=dict(label=phase+' '+name,action=panel.command.tolist(),repair_drive=drive,panel_phase=phase,depth=depth,pocket=pocket)
+                if hold:
+                    step['repair_pose']=g.FRONT+g.BOARD/2
+                head.append(step)
+    panel_site('upper panel positive','strip',.075,5,True)
+    panel_site('lower panel positive','spare_strip',.075,6,True)
+    # Draw the two real studs through their enlarged openings before leaving with the handle.
+    panel.rows=[]
+    for label,n,offset in [('Unhook carrying pins',35,0.),('Pull handle from face',40,-.075)]:
+        panel.move(label,n,target+[offset,0,-.0135])
+        for step in panel.rows[-n:]:
+            step['unhook']=offset
+    panel.move('Withdraw handle',70,[.212,-.235,.970])
+    # Keep the freed lifting handle outside the driver's far-side upward path.
+    # Rotate the carrying arm about its base only after the studs leave the panel.
+    q_near=panel.command.copy()
+    q_away=q_near.copy()
+    q_away[7]-=.85
+    for i in range(56):
+        fraction=ik.smoothstep((i+1)/56)
+        panel.rows.append(dict(label='Park free lifting handle',action=(q_near+fraction*(q_away-q_near)).tolist()))
+    panel.command=q_away
+    for step in panel.rows:
+        head.append(dict(step,repair_drive=dict(front='patch',wood='spare_strip',y=.075,z=0.,depth=-.042),
+                         panel_phase='Travel',depth=-.042))
+    panel_site('lower panel negative','spare_strip',-.068,7,False)
+    panel_site('upper panel negative','strip',-.068,8,False)
+    for _ in range(80):
+        head.append(dict(head[-1],label='Observe released panel'))
+    rows=head
+    return SimpleNamespace(rows=rows)
 
 def place(p):
     p.carry=True
@@ -464,6 +496,12 @@ class RepairSchedule:
                 self.site=site;self.start_rounds=rounds;self.extra=0;self.finished=0
         label=row['label']
         j=min(i+1,len(self.rows)-1)
+        if row.get('panel_phase')=='Seat' and rounds<=8-row['pocket']:
+            while j<len(self.rows)-1 and self.rows[j]['label']==label:j+=1
+        if label in ('Press first fixing','Press second fixing') and metrics.get('remaining',8)<=(7 if label=='Press first fixing' else 6):
+            while j<len(self.rows)-1 and self.rows[j]['label']==label:j+=1
+        if label in ('Press third fixing','Press fourth fixing') and metrics.get('remaining',8)<=(5 if label=='Press third fixing' else 4):
+            while j<len(self.rows)-1 and self.rows[j]['label']==label:j+=1
         if 'upper ' in label and 'jamb' in label:
             # Keep the experimentally checked hand-off to the second stock rack.
             self.index=j
@@ -481,6 +519,9 @@ class RepairSchedule:
             target=np.array([g.FRONT+drive['depth'],drive['y'],drive['z']])
             if np.max(abs(face-target))<.0045 and metrics.get('axis',[0])[0]>.994:
                 while j<len(self.rows)-1 and self.rows[j]['label']==label:j+=1
+        about_to_unhook = 'unhook' not in row and 'unhook' in self.rows[j]
+        if about_to_unhook and metrics.get('panel_rows', 0) < 2:
+            j = i  # Keep the carrying hand on the panel until both backing strips carry it.
         if 'unhook' in row and self.rows[j].get('unhook')!=row['unhook']:
             if row['unhook']==0 and not metrics.get('key_released'):
                 self.key_wait+=1
@@ -494,146 +535,102 @@ class RepairSchedule:
 
 def correct_tool(policy,entry,obs,row,poses,paths):
     from inspect_robots_yam.packing import STATE_KEY
-    f=entry['repair_drive']
     parts={n.rsplit('/',1)[-1]:v for n,v in zip(paths,poses)}
-    measured=np.asarray(obs.state[STATE_KEY])[:6]
-    key=f.get('site_id',(f['wood'],f['y'],f['front']))
-    cutting=f['depth']>0 and not f.get('transit')
-    housing=parts['driver']
-    shell=R.from_quat(housing[3:])
-    tcp,mat=ik.tcp_pose(measured,base_pos=station.BASES['left'])
-    hand=R.from_matrix(mat)
-    axis=shell.apply([1.,0,0])
-    tip=housing[:3]+shell.apply([g.TIP,0,0])
-    if getattr(policy,'repair_key',None)!=key:
-        policy.repair_key=key
-        policy.hand_to_shell=hand.inv()*shell
-        policy.grip_offset=hand.inv().apply(housing[:3]-tcp)
-        policy.site_roll=shell.as_euler('xyz')[0]
-        policy.start_y=tip[1]
-        policy.travel_y=tip[1]
-        policy.travel_z=tip[2]
-        policy.drive_command=measured.copy()
-        policy.travel_x=tip[0]
-        policy.cut_site=None
-        policy.free_roll=0.
-        policy.feed_bias=np.zeros(3)
-        policy.tilt_bias=np.zeros(3)
-    # Track slip of the carried tool. Measurements never write an object pose.
-    rel=hand.inv()*shell
-    policy.hand_to_shell=policy.hand_to_shell*R.from_rotvec(.15*(policy.hand_to_shell.inv()*rel).as_rotvec())
-    policy.grip_offset=.85*policy.grip_offset+.15*hand.inv().apply(housing[:3]-tcp)
-    wood=parts[f['wood']]
-    along=R.from_quat(wood[3:]).apply([0.,1.,0.])
-    z=float(np.clip(wood[2]+(f['y']-wood[1])*along[2]/max(.7,along[1]),f['z']-.013,f['z']+.013))
-    if f.get('transit'):
-        z=f['z']
-    shoe=parts['shoe'];nose=shoe[:3]+R.from_quat(shoe[3:]).apply([g.TIP,0,0])
-    compression=float((housing[:3]-shoe[:3])@axis)
-    plane_x=g.FRONT
-    if f['front']=='patch':
-        patch=parts['patch']
-        normal=R.from_quat(patch[3:]).apply([1.,0.,0.])
-        centre=patch[:3]-g.BOARD/2*normal
-        if normal[0]>.9:
-            plane_x=centre[0]-np.dot(normal[1:],[f['y']-centre[1],z-centre[2]])/normal[0]
-    registered=abs(nose[1]-f['y'])<.0045 and abs(nose[2]-z)<.0045 and axis[0]>.992
-    if cutting and registered and compression>.001 and abs(nose[0]-plane_x)<.0015 and policy.cut_site is None:
-        policy.cut_site=nose[1:].copy()
-    if cutting and f['front']=='patch' and policy.cut_site is None and axis[0]>.985:
-        # The unmarked facing accepts any sound fixing in this part of the row.
-        # Project the real bit forward and acquire a reachable, fully backed
-        # point; no scorer thresholds or simulator objects are changed.
-        entry=nose+(plane_x-nose[0])*axis/axis[0]
-        if (abs(entry[1]-f['y'])<.012 and abs(entry[2]-z)<.008 and
-                plane_x-.030<nose[0]<plane_x+.002 and g.bite(wood,entry,axis)):
-            policy.cut_site=entry[1:].copy()
-    s=g.CURRENT.stroke
-    if cutting and s and s['depth']>.0009 and ((s['front']=='patch')==(f['front']=='patch')):
-        actual=parts['patch'][:3]+R.from_quat(parts['patch'][3:]).apply(s['local']) if s['front']=='patch' else s['point']
-        if np.max(abs(actual[1:]-[f['y'],z]))<.008:
-            policy.cut_site=actual[1:].copy()
-    sy,sz=policy.cut_site if cutting and policy.cut_site is not None else (f['y'],z)
-    goal_x=plane_x+f['depth']+(.0009 if cutting else 0.)
-    speed=.009 if f.get('transit') else .004
-    if not f.get('transit') and policy.cut_site is None and not registered:
-        # Register the bit at the intended board point before applying pressure.
-        goal_x=min(goal_x,plane_x-.013)
-    if f.get('transit') and tip[0]>plane_x-.012 and abs(tip[1]-sy)>.035:
-        sy=tip[1]
-    policy.travel_y+=np.clip(sy-policy.travel_y,-speed,speed)
-    # Clear the empty work rests while moving the tool across the opening.
-    if f.get('transit') and min(policy.start_y,f['y'])<.015 and max(policy.start_y,f['y'])>.04 and sz<.92:
-        fraction=np.clip((policy.travel_y-policy.start_y)/(f['y']-policy.start_y),0.,1.)
-        sz+=.079*np.sin(np.pi*fraction)
-    policy.travel_z+=np.clip(sz-policy.travel_z,-speed,speed)
-    wanted_roll=np.deg2rad(-75. if f['z']<g.MID-.025 else -64. if f['front']=='patch' and f['y']>0 else np.clip(290*(policy.travel_y-.02),-44.,0.))
-    policy.site_roll+=np.clip((wanted_roll-policy.site_roll+np.pi)%(2*np.pi)-np.pi,-.044,.044)
-    if cutting:
-        # Approach then apply feed at a rate a 430-rpm, 8-TPI screw can accept.
-        can_advance=(abs(nose[1]-sy)<.005 and abs(nose[2]-sz)<.005 and axis[0]>.985)
-        if f['front']=='patch' and policy.cut_site is not None:
-            can_advance=(abs(nose[1]-sy)<.007 and abs(nose[2]-sz)<.007 and axis[0]>.981)
-        advance=.00103 if can_advance else 0.
-    else:advance=.0055
-    policy.travel_x+=np.clip(goal_x-policy.travel_x,-.0065,advance)
-    free_error=np.array([policy.travel_x,policy.travel_y,policy.travel_z])-tip
-    # Lift compensation differs by wrist posture. The lower opposite corner can
-    # sag more than 35 mm under the tool even with millimetric IK residual.
-    bias_limits=np.array([.035,.035,.075 if f['z']<g.MID-.025 and f['y']<0 else .035])
-    # Freeze forward windup at the travel stop while retaining the effort
-    # already required to hold the tool against the wall.
-    if cutting and compression>=.033:
-        free_error[0]=min(free_error[0],0.)
-    policy.feed_bias=np.clip(policy.feed_bias+np.clip(.12*free_error,-.0014,.0014),-bias_limits,bias_limits)
-    policy.tilt_bias=np.clip(policy.tilt_bias+.09*np.cross(axis,[1.,0,0]),-.14,.14)
-    desired_shell=R.from_rotvec(policy.tilt_bias)*R.from_euler('x',policy.site_roll+policy.free_roll)
-    desired_hand=desired_shell*policy.hand_to_shell.inv()
-    goal=policy.feed_bias+np.array([policy.travel_x,policy.travel_y,policy.travel_z])-desired_shell.apply([g.TIP,0,0])-desired_hand.apply(policy.grip_offset)
-    # Solve the full no-load pose. Use the measured compliance correction only
-    # after grasping; gradual joint commands keep the attachment seated.
+    h=parts['driver'];rot=R.from_quat(h[3:])
+    nose=h[:3]+rot.apply(g.NOSE)
+    if not hasattr(policy,'acquired_xyz'):
+        ac,_=ik.tcp_pose(np.asarray(obs.state[STATE_KEY])[:6],station.BASES['left'])
+        policy.rel=rot.inv().apply(ac-h[:3]);policy.drive_command=row[:6].copy()
+        policy.acquired_xyz=nose.copy()
     q=policy.drive_command
-    candidate,d,a=ik.solve(goal,desired_hand.as_quat(),q_init=q,base_pos=station.BASES['left'],iters=32,tol=.00009)
-    if d>.0015 or a>.025:
-        # The PH2 bit can approach axially at any casing roll. Search the
-        # remaining degree of freedom if the nominal wrist hits a joint limit.
-        reference=policy.free_roll
-        for delta in (.16,-.16,.34,-.34,.57,-.57,.84,-.84):
-            trial=float(np.clip(reference+delta,-1.45,1.45))
-            shell_q=R.from_rotvec(policy.tilt_bias)*R.from_euler('x',policy.site_roll+trial)
-            hand_q=shell_q*policy.hand_to_shell.inv()
-            new_goal=policy.feed_bias+np.array([policy.travel_x,policy.travel_y,policy.travel_z])-shell_q.apply([g.TIP,0,0])-hand_q.apply(policy.grip_offset)
-            sol,dist,ang=ik.solve(new_goal,hand_q.as_quat(),q_init=q,base_pos=station.BASES['left'],iters=16,tol=.00015)
-            if dist+.15*ang<d+.15*a:
-                candidate,d,a,goal=sol,dist,ang,new_goal
-                policy.free_roll=trial
-            if d<.0015 and a<.025:break
-    if (d>=.0028 or a>=.038) and (f['front']=='patch' or f['y']<0 and f['z']<g.MID):
-        # At the far lower corner the bit must reach the screw and stay axial.
-        # A round PH2 shank has no preferred handle roll. Use the local tool
-        # Jacobian to relax that redundant constraint without moving the tool
-        # or changing the wrist, joint, contact or scoring limits.
-        offset=hand.inv().apply(tip-tcp)
-        local_axis=hand.inv().apply(axis)
-        def tool_state(joints):
-            centre,matrix=ik.tcp_pose(joints,base_pos=station.BASES['left'])
-            return np.r_[centre+matrix@offset,.17*(matrix@local_axis)]
-        origin=tool_state(q)
-        jac=np.column_stack([(tool_state(q+direction*1.e-5)-origin)/1.e-5 for direction in np.eye(6)])
-        travel=np.array([policy.travel_x,policy.travel_y,policy.travel_z])
-        inward=(np.array([.9976,-.0698,0.]) if f['y']<0 and f['z']<g.MID else np.array([1.,0.,0.]))
-        correction=np.r_[np.clip(.25*(travel-tip),-.0035,.0035),
-                         .17*np.clip(.20*(inward-axis),-.026,.026)]
-        dq=jac.T@np.linalg.solve(jac@jac.T+.024**2*np.eye(6),correction)
-        step=np.clip(dq,-.035,.035)
-        policy.drive_command=np.clip(q+step,np.maximum(ik.LOWER,measured-.24),np.minimum(ik.UPPER,measured+.24))
-    elif d<.0028 and a<.038:
-        change=candidate-q
-        policy.drive_command=q+change*min(1.,.056/max(1.e-9,np.max(abs(change))))
-    policy.tool_diagnostics=dict(target_x=policy.travel_x,target_z=z,goal=goal.tolist(),ik_mm=d*1000,ik_deg=np.rad2deg(a),servo_error=(policy.drive_command-measured).round(3).tolist(),axis=axis.tolist(),tip=tip.tolist())
+    tcp,hand=ik.tcp_pose(q,station.BASES['left'])
+    w=parts[entry['repair_drive']['wood']]; direction=R.from_quat(w[3:]).apply([0,1,0])
+    y=entry['repair_drive']['y']; height=w[2]+(y-w[1])*direction[2]/max(.7,direction[1])
+    goal=np.array([g.FRONT-.064,y,height])
+    phase=entry['label']
+    if y<0 and phase in ('Press fourth fixing','Register second entry','Press second fixing','Withdraw second fixing','Release fastened upper wood','Withdraw third fixing','Withdraw fourth fixing'):
+        goal[2]-=.0035
+    if phase=='Lift above base':
+        goal[:2]=policy.acquired_xyz[:2]
+        goal[2]=.926
+    if phase=='Skirt stock rack':
+        goal[:2]=[policy.acquired_xyz[0],.260]
+        goal[2]=.926
+    if phase=='Retract clear of jamb':
+        goal[:2]=[g.FRONT-.025,.244]
+        goal[2]=.926
+    if phase=='Traverse to upper wood':goal[0]=g.FRONT-.025
+    if phase=='Park for lower stock' or entry.get('park_lower'):goal[:]=[.310,.232,.953]
+    if phase=='Approach lower strip':goal[0]=g.FRONT-.029
+    if phase=='Pass ahead of stock hand':goal[0]=g.FRONT-.036
+    if phase in ('Open stock jaws','Draw clear of stock','Clear opposite jamb'):goal[0]=g.FRONT-.032
+    if phase in ('Register upper entry','Register second entry','Register lower entry'):goal[0]=g.FRONT-.002
+    if phase in ('Press first fixing','Press second fixing','Press third fixing','Press fourth fixing'):goal[0]=g.FRONT+.033
+    if phase in ('Withdraw first fixing','Withdraw second fixing','Release fastened upper wood','Withdraw third fixing','Withdraw fourth fixing'):goal[0]=g.FRONT-.040
+    panel_phase=entry.get('panel_phase')
+    if panel_phase:
+        goal[0]=g.FRONT+entry['depth']
+        if y<0:
+            # The upper strip slopes under the first fixing. Keep the final
+            # screw inside the timber and above the upper-row height gauge.
+            goal[2] += .003 if entry['repair_drive']['wood']=='strip' else -.002
+    travel=np.clip(.16*(goal-nose),-.0018,.0018)
+    axis=rot.apply([1.,0,0]);shoe=parts['shoe'];rim=shoe[:3]+R.from_quat(shoe[3:]).apply(g.NOSE)
+    stroke=(h[:3]-shoe[:3])@axis
+    unloading=phase in ('Withdraw first fixing','Withdraw second fixing','Release fastened upper wood','Withdraw third fixing','Withdraw fourth fixing') and stroke>.001
+    unloading=unloading or (panel_phase=='Unload' and stroke>.001)
+    if unloading:travel=-.00135*axis
+    if (phase in ('Press first fixing','Press second fixing','Press third fixing','Press fourth fixing') or panel_phase=='Seat') and g.CURRENT.stroke is not None:
+        dyz=g.CURRENT.stroke['point'][1:]-rim[1:]
+        travel[1:]=np.clip(.25*dyz,-.0015,.0015)
+        travel[0]=min(travel[0],.00055 if np.linalg.norm(dyz)<.0025 else 0.)
+    from scipy.optimize import lsq_linear
+    actual_base,actual_mat=ik.tcp_pose(np.asarray(obs.state[STATE_KEY])[:6],station.BASES['left'])
+    offset=actual_mat.T@(nose-actual_base)
+    direction=actual_mat.T@axis
+    lateral=actual_mat.T@rot.apply([0.,1,0])
+    def point_and_axis(q):
+        pt,mat=ik.tcp_pose(q,station.BASES['left'])
+        return np.r_[pt+mat@offset,.10*mat@direction,.045*(mat@lateral)[2]]
+    state=point_and_axis(q)
+    jac=np.column_stack([(point_and_axis(q+col*1e-5)-state)*1e5 for col in np.eye(6)])
+    change_axis=np.clip(.18*(np.array([1.,0,0])-axis),-.018,.018)
+    desired=np.r_[travel,.10*change_axis,.045*np.clip(-.16*rot.apply([0.,1,0])[2],-.021,.021)]
+    if unloading:
+        desired[3:]=0.  # Axial extraction while the bit is constrained by the installed fastener.
+    # At the far lower jamb keep withdrawing along the bit after the shoe spring
+    # unloads. Do not introduce an abrupt sideways / roll correction at index.
+    if phase=='Withdraw fourth fixing':
+        clear=nose[0] < g.FRONT-.031
+        desired[:3]=np.zeros(3) if clear else -.00080*axis
+        desired[3:]=0.
+    reg=.012
+    lower=np.maximum(ik.LOWER-q,-.021); upper=np.minimum(ik.UPPER-q,.021)
+    dq=lsq_linear(np.vstack([jac,reg*np.eye(6)]),np.r_[desired,np.zeros(6)],
+                  bounds=(np.minimum(lower,-1e-9),np.maximum(upper,1e-9)),method='bvls').x
+    policy.drive_command=np.clip(q+dq,ik.LOWER,ik.UPPER)
     row[:6]=policy.drive_command
+    row[6]=.21
+    policy.tool_diagnostics=dict(phase=phase,goal=goal.tolist(),nose=nose.tolist(),entry=rim.tolist(),q=policy.drive_command.tolist())
     return row
 
-
-if __name__=='__main__':
-    res=make(sys.argv[1]);Path(sys.argv[2]).write_text(json.dumps(dict(steps=res.rows,ik=res.checks)))
+def clear_stock(policy,entry,obs,row):
+    from inspect_robots_yam.packing import STATE_KEY
+    label,fraction=entry['clear_stock']
+    if getattr(policy,'clear_label',None)!=label:
+        policy.clear_initial=np.asarray(obs.state[STATE_KEY])[7:13].copy()
+        policy.clear_label=label
+        policy.clear_target=policy.clear_initial.copy()
+        if label=='Draw clear of stock':
+            tcp,mat=ik.tcp_pose(policy.clear_initial,station.BASES['right'])
+            policy.clear_target,d,a=ik.solve(tcp+[-.120,0.,0.],R.from_matrix(mat).as_quat(),
+                    q_init=policy.clear_initial,base_pos=station.BASES['right'],iters=240,tol=.00008)
+            if d>.002 or a>.03:raise ValueError(('stock withdrawal IK',d,a))
+        elif label in ('Clear opposite jamb','Stay clear'):
+            # The standard READY pose sweeps an open pad through the staged patch.
+            att=R.from_euler('y',28,degrees=True)*NEUTRAL
+            q,dx,da=ik.solve([.180,-.235,.994],att.as_quat(),q_init=[1.16,.63,.86,-1.16,.94,-.75],base_pos=station.BASES['right'],iters=100,tol=.0001)
+            if dx>.002 or da>.025:raise ValueError(('safe rack stand-off',dx,da))
+            policy.clear_target=q
+    row[7:13]=policy.clear_initial+ik.smoothstep(fraction)*(policy.clear_target-policy.clear_initial)
+    return row

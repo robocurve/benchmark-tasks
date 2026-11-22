@@ -74,7 +74,7 @@ def build_driver(stage,grip,depth_sleeve=False,cross_phase=0.):
     """Free straight electric driver with a separate rotating spindle and cross bit."""
     from pxr import UsdPhysics
     shell=WORLD+"/driver"
-    body(stage,shell,grip,.294)
+    body(stage,shell,grip,1.0737391304)
     cyl(stage,shell+"/rear_bumper",-.108,.012,.017,RUBBER)
     cyl(stage,shell+"/battery",-.074,.061,.0175,SHELL)
     cyl(stage,shell+"/grip",-.013,.065,.018,RUBBER)
@@ -96,7 +96,7 @@ def build_driver(stage,grip,depth_sleeve=False,cross_phase=0.):
                 (front-.054,.0024,.00258),RUBBER)
             orient(outer,Rotation.from_euler("x",theta))
     rotor=WORLD+"/spindle"
-    body(stage,rotor,grip,.016)
+    body(stage,rotor,grip,0.0584347826)
     cyl(stage,rotor+"/chuck",.057,.012,.0076,STEEL)
     cyl(stage,rotor+"/bit_shank",.065,.012,.0031,STEEL)
     cyl(stage,rotor+"/bit_neck",.073,.0065,.0017,STEEL)

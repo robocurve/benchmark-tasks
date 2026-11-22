@@ -7,13 +7,13 @@
     "rotary fastening",
     "building maintenance"
   ],
-  "instruction": "Repair the square opening from the front. Secure a backing strip across the upper and lower halves, one in each. Fasten the patch flush to both strips on both sides, then remove the carrying handle and leave it ready for mesh and joint compound.",
+  "instruction": "Repair the opening from the front. Pick up the loose timber strips and the collated screwdriver. Fasten one strip behind the upper half and one behind the lower half, at both jambs. Fit the patch flush and screw both wings to each strip, using eight screws in total. Remove the carrying handle. Support the screwdriver while releasing its trigger, set it down on the table, and leave both grippers clear. Leave the patch ready for mesh and joint compound.",
   "context": "Building maintenance workers patch damaged gypsum wallboard between studs. Timber longer than the opening must be turned inside the closed cavity and secured before the new facing can support itself.",
-  "setup": "A vertical 405 x 350 mm wall has 12.7 mm gypsum facing, a 200 mm square cutout and an 89 mm closed cavity. Two loose 251 x 25 x 16 mm pine strips rest on separate supports. A 197 mm square patch of matching board starts on edge with a removable two-stud handle fitted. A collated PH2 depth-stop driver with twelve 32 mm screws rests alongside. See WORKCELL.md for the fixed layout.",
-  "scoring": "0.25 per opposite upper/lower backing row attached at both jambs, up to 0.5. Earn 0.75 with both rows and the released, flush patch fastened to each for one second. Earn 1.0 with two-sided panel fastenings on both rows and the released panel passing the 2 N check. Otherwise zero when no row is secured. Detailed gauges and thresholds in WORKCELL.md.",
-  "reset_notes": "Replace the pierced front board, patch and timber, seat the handle on the new patch, reload twelve screws and return loose stock and tools to their rests.",
-  "run_limit": "2,400 actions at 20 Hz (120 seconds).",
-  "fidelity": "Full-size wall segment, closed cavity and free stock. A finite collated feed uses contact, spindle turns, penetration and compliant joints to approximate screwing. The paper, threads and tear-out are not individually resolved. The compact driver and two-stud lifting handle are workcell adapters. Mesh and finishing compound are applied after this operation.",
-  "scores": "Dream-1: 0 in 2,400 actions (120 s). Scripted demonstration: 1.0 in 2,400 actions (120 s).",
-  "media": "M-BYG2BD"
+  "setup": "A vertical 405 x 350 mm wall has 12.7 mm gypsum facing, a 200 mm square cutout and an 89 mm closed cavity. Two loose 251 x 25 x 16 mm pine strips rest on separate supports. A 197 mm square patch of matching board starts on edge with a removable two-stud handle fitted. A driver modeled on the Bosch Professional GTB 12V-11 with the Bosch MA 55 collated magazine with eight 30 mm PH2 screws rests alongside.",
+  "scoring": "0.25 per backing row secured at both jambs, up to 0.5. Earn 0.75 for a flush, released patch secured to both rows for one second. Earn 1.0 with both patch wings fastened to both rows, the released patch passing the 2 N proof, and a controlled, trigger-off set-down. The screwdriver must rest on the table clear of both arms for one second.",
+  "reset_notes": "Replace the pierced front board, patch and timber, seat the handle on the new patch, reload eight screws and return loose stock and tools to their rests.",
+  "run_limit": "7,200 control actions at 20 Hz (360 seconds).",
+  "fidelity": "The tool approximates the Bosch Professional GTB 12V-11 and MA 55, with finite collated feed, a spring-return trigger and contact-driven fastening. Individual paper fibres and threads are unresolved. We could not obtain the same hardware for a physical YAM trial within the revision window. A creator tests the actual pairing at https://www.youtube.com/watch?v=ar1G789SydA&t=132s.",
+  "scores": "Dream-1: 0.0 after 7,200 actions (360 s), no screws driven. Known-layout demo: 1.0 over 7,200 actions, with eight screws driven, a released 2 N wall test and a controlled trigger-off tool return. Both scores were verified by independent replay.",
+  "media": "M-9PNRRF"
 }

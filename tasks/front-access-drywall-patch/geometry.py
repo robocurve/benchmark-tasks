@@ -10,7 +10,8 @@ def build(stage):
 
 
 def after_contact_batch(poses, forces, paths, filters, sample, hz):
-    repair_scene.CURRENT.update(poses, forces, paths, filters, sample, hz)
+    repair_scene.CURRENT.update(poses[-1], forces, paths, filters, sample, hz)
+    repair_scene.CURRENT.measure_park(poses, forces, paths, filters, hz)
 
 
 def debug_metrics():

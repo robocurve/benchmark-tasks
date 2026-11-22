@@ -7,6 +7,31 @@ from scipy.spatial.transform import Rotation as R
 
 from media import export_video, image_at
 from grading import backing_rows
+from run import BUDGET
+from tool_profile import TRIGGER
+from wall_driver import PITCH as FEED_PITCH, POCKETS
+from repair_scene import SCREW, PITCH as THREAD_PITCH
+
+
+def tool_at_rest(poses,forces,schema,hz):
+    names=[p.rsplit('/',1)[-1] for p in schema['paths']]
+    housing=names.index('driver')
+    trigger=names.index('trigger')
+    bodies=[names.index(n) for n in ('driver','shoe','trigger','screw_carrier','spindle')]
+    table=next(i for i,n in enumerate(schema['filters']) if n.endswith('/table/geometry/mesh'))
+    arm=[schema['filters'].index(n) for n in schema['sensors']]
+    shell=poses[:,housing]
+    rot=R.from_quat(shell[:,3:])
+    pressed=TRIGGER[0]-rot.inv().apply(poses[:,trigger,:3]-shell[:,:3])[:,0]
+    minimum_force=float(forces[:,bodies,table,2].sum(axis=1).min())
+    arm_clear=not np.any(forces[:,bodies][:,:,arm])
+    translation=float(np.linalg.norm(shell[:,:3]-shell[0,:3],axis=1).max())
+    angle=float(np.rad2deg((rot[0].inv()*rot).magnitude().max()))
+    return dict(passes=bool(len(shell)==hz and arm_clear and minimum_force>1. and
+                            pressed.max()<.002 and translation<=.002 and angle<=2.),
+                seconds=len(shell)/hz,minimum_table_load_N=minimum_force,
+                both_arms_clear=bool(arm_clear),maximum_switch_travel_mm=float(1000*pressed.max()),
+                maximum_translation_mm=1000*translation,maximum_rotation_deg=angle)
 
 
 def audit(run,media=None):
@@ -39,6 +64,9 @@ def audit(run,media=None):
     loose_start=('test_only_clamp_' not in workspace and
                  all(np.linalg.norm(parts[n][0,:3]-[.371,0,.9195])>.075 for n in ('strip','spare_strip','patch')))
     fasteners=archive['fasteners'];checkshots=[];mount_residual=[];retained_offsets=[]
+    driven = {event['sample']: event['pocket'] for event in archive['magazine_events'] if event['event'] == 'driven'}
+    if len(set(driven.values())) != len(driven) or any(not 1 <= pocket <= POCKETS for pocket in driven.values()):
+        raise ValueError('Duplicate or out-of-range collated screw')
     for shot in fasteners:
         end=shot['sample']
         i=end-1;head=np.array(shot['head']);axis=np.array(shot['axis'])
@@ -73,8 +101,17 @@ def audit(run,media=None):
         retained_offsets.append(offsets)
         mount_residual.append(float(np.max(offsets)))
         work=float(shot['wood_work_J'])
-        ok=work>=1. and stroke>=.0305 and bite>=8 and load>.35 and turns>=9.7 and -.0015<=substrate_gap<=.0025
-        checkshots.append(dict(wood=shot['wood'],front=shot['front'],action=int(np.searchsorted(obs,i)),stroke_mm=1000*stroke,wood_depth_samples_mm=bite,backing_gap_mm=1000*substrate_gap,pressure_N=load,native_spindle_turns=turns,recorded_wood_work_J=work,valid=bool(ok)))
+        pocket = driven.get(end)
+        rail = -R.from_quat(sh[3:]).inv().apply(parts['screw_carrier'][i,:3]-sh[:3])[1]
+        pressed = TRIGGER[0]-R.from_quat(shell[3:]).inv().apply(parts['trigger'][i,:3]-shell[:3])[0]
+        aligned = pocket is not None and abs(rail-(pocket-1)*FEED_PITCH)<.00045
+        # The cutting model tolerates 0.6 mm short of nominal depth and at most
+        # 0.4 mm compliance between measured shoe stroke and fed thread.
+        minimum_depth = SCREW-.0006
+        ok=(aligned and pressed>=.002 and work>=1. and stroke>=minimum_depth-.0004
+            and bite>=8 and load>.35 and turns>=minimum_depth/THREAD_PITCH
+            and -.0015<=substrate_gap<=.0025)
+        checkshots.append(dict(wood=shot['wood'],front=shot['front'],action=int(np.searchsorted(obs,i)),pocket=pocket,feed_rail_mm=1000*rail,trigger_mm=1000*pressed,stroke_mm=1000*stroke,wood_depth_samples_mm=bite,backing_gap_mm=1000*substrate_gap,pressure_N=load,native_spindle_turns=turns,recorded_wood_work_J=work,valid=bool(ok)))
     tail=parts['patch'][-hz:];rot=R.from_quat(tail[:,3:]).as_matrix()
     corners=np.array([[-.0127/2,y,z] for y in (-.0985,.0985) for z in (-.0985,.0985)])
     edges=tail[:,:3,None]+rot@corners.T
@@ -85,7 +122,7 @@ def audit(run,media=None):
     clear=not np.any(robot[-hz:,:,targets])
     release=archive.get('key_release')
     tool_clear=release is not None and release['sample']<=samples-hz
-    for n in ('driver','carrier','shoe','spindle'):
+    for n in ('driver','carrier','shoe','spindle','trigger','screw_carrier'):
         if np.any(f[-hz:, [ids['strip'],ids['spare_strip'],ids['patch']],filters.index(schema['paths'][ids[n]])]):tool_clear=False
     proof=archive.get('proof_substeps',[])
     proof_windows=[[step for _,step in group] for _,group in groupby(enumerate(proof),key=lambda item:item[1]-item[0])]
@@ -107,7 +144,7 @@ def audit(run,media=None):
         if np.any(robot[start:stop,:,targets]):
             continue
         outside=release is not None and release['sample']<=start
-        metal_contact=any(np.any(f[start:stop,[ids[n] for n in ('strip','spare_strip','patch')],filters.index(schema['paths'][ids[t]])]) for t in ('driver','carrier','shoe','spindle'))
+        metal_contact=any(np.any(f[start:stop,[ids[n] for n in ('strip','spare_strip','patch')],filters.index(schema['paths'][ids[t]])]) for t in ('driver','carrier','shoe','spindle','trigger','screw_carrier'))
         if not all(step in delivery for step in window):
             continue
         applied=np.array([np.subtract(delivery[i]['submitted_N'],delivery[i]['fasteners_N']) for i in window])
@@ -136,19 +173,41 @@ def audit(run,media=None):
         return backing_rows(sites,mounts_at_sample,.9195)
     rows,panel_rows,complete=coverage(hz-2)
     panel_retained=all(coverage(i)[:2]==(2,2) for i in range(0,hz,12))
+    tool_ids=[ids[n] for n in ('driver','shoe','spindle','trigger','screw_carrier')]
+    desk=next(i for i,path in enumerate(filters) if path.endswith('/table/geometry/mesh'))
+    tips=[filters.index(n) for n in sensors if '/tip_' in n]
+    landing=None
+    if len(fasteners)>=8:
+        start=fasteners[7]['sample']-1
+        shell=parts['driver'][start:]
+        switch=TRIGGER[0]-R.from_quat(shell[:,3:]).inv().apply(parts['trigger'][start:,:3]-shell[:,:3])[:,0]
+        support=np.sum([f[start:,i,desk,2] for i in tool_ids],axis=0)
+        held=np.any(np.linalg.norm(f[start:,ids['driver']][:,tips],axis=-1)>.1,axis=1)
+        # Locate every uninterrupted airborne interval, then inspect its first landing.
+        free=support<=.15
+        edges=np.diff(np.r_[False,free,False].astype(int))
+        for lo,hi in zip(np.flatnonzero(edges==1),np.flatnonzero(edges==-1),strict=True):
+            if hi-lo>=hz//10:
+                landing=None if hi==len(free) else dict(sample=int(start+hi),
+                    under_gripper_control=bool(held[hi]),
+                    trigger_released_before_contact=bool(max(switch[hi-1:hi+1])<.002))
     grade=float(result['results']['metrics']['task_score'])
+    parked=tool_at_rest(pose[-hz:], f[-hz:], schema, hz)
+    parked['landing']=landing
+    parked['passes']=bool(parked['passes'] and landing and landing['under_gripper_control']
+                          and landing['trigger_released_before_contact'])
     taped_fit=flush<.002 and seam_lo>=-.0005 and seam_hi<=.0035
     independent=.25*rows
     if rows==2 and panel_rows==2 and panel_retained and clear and tool_clear and taped_fit:
         independent=.75
-        if complete and proof_verified:
+        if complete and proof_verified and parked['passes']:
             independent=1.
-    verified=bool(loose_start and 0<step_count<=2400 and all(c['valid'] for c in checkshots)
+    verified=bool(loose_start and 0<step_count<=BUDGET and all(c['valid'] for c in checkshots)
                   and independent==grade and grade==archive['metrics']['score'] and len(obs)==step_count+1
                   and hz==240 and np.all(np.diff(obs)==12))
     if not verified:
         raise ValueError(f"Independent grade {independent} disagrees with reported grade {grade}, or evidence invalid")
-    report=dict(actions=step_count,seconds=step_count/20,physics_hz=hz,native_score=grade,independently_verified=verified,replay_score=independent,backing_rows=rows,loose_stock_reset=loose_start,final_mount_residuals_mm=[1000*x[-2] for x in retained_offsets],peak_last_second_mount_residuals_mm=[1000*x for x in mount_residual],transfers=transfer,fastenings=checkshots,maximum_face_step_mm=1000*flush,edge_gap_range_mm=[1000*seam_lo,1000*seam_hi],last_1s_drift_mm=1000*drift,released=clear and tool_clear,proof_load_s=len(proof)/hz,complete_released_proof_window=proof_verified,peak_drift_across_proof_mm=loaded_drift,verified_net_added_x_force_range_N=delivered_range,mean_centre_x_response_mm=response_mm)
+    report=dict(tool_return=parked,actions=step_count,seconds=step_count/20,physics_hz=hz,native_score=grade,independently_verified=verified,replay_score=independent,backing_rows=rows,loose_stock_reset=loose_start,final_mount_residuals_mm=[1000*x[-2] for x in retained_offsets],peak_last_second_mount_residuals_mm=[1000*x for x in mount_residual],transfers=transfer,fastenings=checkshots,maximum_face_step_mm=1000*flush,edge_gap_range_mm=[1000*seam_lo,1000*seam_hi],last_1s_drift_mm=1000*drift,released=clear and tool_clear,proof_load_s=len(proof)/hz,complete_released_proof_window=proof_verified,peak_drift_across_proof_mm=loaded_drift,verified_net_added_x_force_range_N=delivered_range,mean_centre_x_response_mm=response_mm)
     if media:
         media.mkdir(parents=True,exist_ok=True)
         if cfg.get('mode')=='demo' and grade!=1.:raise ValueError('Full-score demonstration did not achieve 1.0')
