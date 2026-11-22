@@ -523,7 +523,7 @@ def Xform "stand" (
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
     }
 
-    def Cube "holder_floor" (
+    def Cube "nut_post_floor" (
         prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
     )
     {
@@ -531,12 +531,12 @@ def Xform "stand" (
         custom float physxCollision:contactOffset = 0.001
         custom float physxCollision:restOffset = 0
         double size = 1
-        float3 xformOp:scale = (0.06, 0.06, 0.005)
-        double3 xformOp:translate = (0.215, -0.17, 0.0025000000000000022)
+        float3 xformOp:scale = (0.03, 0.022, 0.024)
+        double3 xformOp:translate = (0.25, -0.05, 0.012)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
     }
 
-    def Cube "holder_n" (
+    def Cube "nut_post_n" (
         prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
     )
     {
@@ -544,12 +544,12 @@ def Xform "stand" (
         custom float physxCollision:contactOffset = 0.001
         custom float physxCollision:restOffset = 0
         double size = 1
-        float3 xformOp:scale = (0.018, 0.06, 0.061)
-        double3 xformOp:translate = (0.194, -0.17, 0.035500000000000004)
+        float3 xformOp:scale = (0.0065, 0.022, 0.038)
+        double3 xformOp:translate = (0.23825, -0.05, 0.043)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
     }
 
-    def Cube "holder_f" (
+    def Cube "nut_post_f" (
         prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
     )
     {
@@ -557,12 +557,12 @@ def Xform "stand" (
         custom float physxCollision:contactOffset = 0.001
         custom float physxCollision:restOffset = 0
         double size = 1
-        float3 xformOp:scale = (0.018, 0.06, 0.061)
-        double3 xformOp:translate = (0.236, -0.17, 0.035500000000000004)
+        float3 xformOp:scale = (0.0065, 0.022, 0.038)
+        double3 xformOp:translate = (0.26175000000000004, -0.05, 0.043)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
     }
 
-    def Cube "holder_r" (
+    def Cube "nut_post_r" (
         prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
     )
     {
@@ -570,12 +570,12 @@ def Xform "stand" (
         custom float physxCollision:contactOffset = 0.001
         custom float physxCollision:restOffset = 0
         double size = 1
-        float3 xformOp:scale = (0.024, 0.011, 0.061)
-        double3 xformOp:translate = (0.215, -0.1945, 0.035500000000000004)
+        float3 xformOp:scale = (0.017, 0.0025, 0.038)
+        double3 xformOp:translate = (0.25, -0.05975, 0.043)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
     }
 
-    def Cube "holder_l" (
+    def Cube "nut_post_l" (
         prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
     )
     {
@@ -583,8 +583,73 @@ def Xform "stand" (
         custom float physxCollision:contactOffset = 0.001
         custom float physxCollision:restOffset = 0
         double size = 1
-        float3 xformOp:scale = (0.024, 0.011, 0.061)
-        double3 xformOp:translate = (0.215, -0.14550000000000002, 0.035500000000000004)
+        float3 xformOp:scale = (0.017, 0.0025, 0.038)
+        double3 xformOp:translate = (0.25, -0.04025000000000001, 0.043)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "fit_block_floor" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </stand/Looks/wood>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.03, 0.03, 0.03)
+        double3 xformOp:translate = (0.19, -0.17, 0.015)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "fit_block_n" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </stand/Looks/wood>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.0075, 0.03, 0.03)
+        double3 xformOp:translate = (0.17875, -0.17, 0.045)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "fit_block_f" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </stand/Looks/wood>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.0075, 0.03, 0.03)
+        double3 xformOp:translate = (0.20125, -0.17, 0.045)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "fit_block_r" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </stand/Looks/wood>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.015, 0.0075, 0.03)
+        double3 xformOp:translate = (0.19, -0.18125000000000002, 0.045)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "fit_block_l" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        rel material:binding = </stand/Looks/wood>
+        custom float physxCollision:contactOffset = 0.001
+        custom float physxCollision:restOffset = 0
+        double size = 1
+        float3 xformOp:scale = (0.015, 0.0075, 0.03)
+        double3 xformOp:translate = (0.19, -0.15875, 0.045)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
     }
 

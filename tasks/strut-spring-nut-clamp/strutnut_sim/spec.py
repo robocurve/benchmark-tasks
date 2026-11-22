@@ -97,9 +97,13 @@ BOLT_L = 15 / 16 * IN
 HEAD_AF = 0.75 * IN
 HEAD_H = 5 / 16 * IN
 BOLT_MASS = 0.040
-START_TURNS = 2.0
-"""The bolt is started this many turns into the nut when the kit is handed over (installer's pre-assembly)."""
+TIP_CHAMFER = 0.0012
+"""The bolt's end is chamfered from the shank to TIP_D over this length (a pilot point; ASME B18.2.1 allows it)."""
+TIP_D = 0.0105
+"""Diameter at the bolt's very end (about the thread's minor diameter, 10.8 mm)."""
 SLIDE_MASS = 0.004
+LINK_MASS = 0.002
+"""Mass of each of the four light links of the bolt's free chain (x, y slides and two tilt axes), see props.py."""
 
 # -- fitting (P1064 square washer) ---------------------------------------------------------------------------------
 FIT_W = 1.625 * IN
@@ -121,12 +125,48 @@ bolt while it is below the lips, far less than the nut's square corners resist o
 NUT_K = 0.2
 """Nut factor in T = K F d (the bolt formula)."""
 
-# -- holder (where the kit stands at the start) -----------------------------------------------------------------------
-HOLDER_XY = (0.215, -0.170)
-HOLDER_SIZE = (0.060, 0.060, 0.066)
-POCKET = (0.024, 0.038)
-"""Pocket the nut and its spring hang in (x across, y along the nut)."""
-POCKET_DEPTH = 0.061
+# -- thread start (the robot starts the bolt itself) ----------------------------------------------------------------
+NUT_HOLE = 0.0134
+"""The nut's tapped hole, as a square collider hole (a 1/2-13 thread's major diameter is 12.7 mm; the shank collider is
+a 16-sided prism 12.5 mm across flats, 12.6 mm across corners)."""
+NUT_CSK = 0.0008
+"""The hole's mouth is countersunk 45 degrees, this deep (nuts are countersunk)."""
+ENTRY_DEPTH = 0.0006
+"""How far the bolt's pilot end sits in the nut's hole before the first thread catches (the thread's chamfered start):
+until it catches the bolt cannot go deeper (a thread rule, see task.py)."""
+MOUTH_SLACK = 0.0025
+"""Once its end sits in the hole's mouth, the bolt stays there while its end is within OVER_HOLE + this of the axis (the
+countersink holds the end; nothing else in the rule models the cone)."""
+OVER_HOLE = 0.00145
+"""Tip within this distance of the nut's axis: its pilot end (10.5 mm) is over the hole."""
+CATCH_DEG = 45.0
+"""Clockwise turn of the bolt relative to the nut, seated at the entry, after which the first thread has caught."""
+ALIGN_DEG = 5.0
+"""The bolt's axis must be within this of the nut's when the thread catches; more and it cross-threads (a hazard)."""
+STARTED_TURNS = 2.0
+"""Milestone: the bolt started at least this many turns into the nut."""
+STOP_K, STOP_D, STOP_MAX_N = 1.5e4, 10.0, 40.0
+"""Not yet started, the bolt's end held at the entry (a drive on the z slide, on only within 0.3 mm of it), N/m."""
+LOCK_K, LOCK_D, LOCK_MAX_N = 1.0e5, 50.0, 400.0
+"""Started thread: the bolt's axis held on the nut's (lateral drives), N/m."""
+TILT_K, TILT_D, TILT_MAX_NM = 60.0, 0.05, 6.0
+"""Started thread: the bolt held square to the nut (tilt drives), N m/rad."""
+JAM_NM = 2.0
+"""A cross-threaded bolt binds: it takes this torque to turn it any further (it is then left jammed)."""
+
+# -- parts blocks (where the parts lie at the start) --------------------------------------------------------------------
+NUT_POST_XY = (0.250, -0.050)
+NUT_POST_SIZE = (0.030, 0.022, 0.062)
+"""Wooden post the spring nut stands on (x, y, height); its spring hangs in a square pocket in the post's top."""
+NUT_POCKET = 0.017
+NUT_POCKET_DEPTH = 0.038
+FIT_BLOCK_XY = (0.190, -0.170)
+FIT_BLOCK_SIZE = (0.030, 0.030, 0.060)
+BOLT_HOLE = 0.0150
+BOLT_HOLE_DEPTH = 0.030
+"""Wooden block the fitting lies on with the bolt dropped through its hole (head on the fitting, shank down in a
+15 mm hole in the block, not in any nut); 30 mm square, narrower than the fitting, so fingers can take the fitting
+by two edges."""
 
 # -- scoring --------------------------------------------------------------------------------------------------------
 NUT_ACROSS_DEG = 10.0
@@ -145,8 +185,9 @@ TEST_RAMP_S = 0.5
 TEST_PULL_N = 20.0
 TEST_MAX_MOVE = 0.001
 DROP_Z = 0.030
-"""A kit part below this height outside the holder's pocket and outside the channel has fallen to the table."""
+"""A part below this height outside the channel has fallen to the table (both parts blocks are taller)."""
 NUT_OFF_TURNS = 0.5
+"""A nut inside the channel with less than this engaged (or not started) is loose in the channel (lost)."""
 
 
 def head_rest_above_nut(engaged_m: float) -> float:
@@ -155,13 +196,14 @@ def head_rest_above_nut(engaged_m: float) -> float:
 
 
 def kit_start() -> dict:
-    """Start poses: the kit stands in the holder, the fitting flat on the holder's top, the bolt's head on it, the nut
-    hanging on the bolt in the pocket with its spring free, its long axis along y (as the slot will need)."""
-    hx, hy = HOLDER_XY
-    top = HOLDER_SIZE[2]
-    e0 = START_TURNS * PITCH
-    nut_top = top + FIT_T - head_rest_above_nut(e0)
-    return {"fit": (hx, hy, top), "nut": (hx, hy, nut_top), "e0": e0}
+    """Start poses (desk frame, origins as in props.py): the nut standing on its post (top face centre), long axis along
+    y, spring hanging in the pocket; the fitting flat on its block (underside centre); the bolt dropped through the
+    fitting's hole (head underside centre on the fitting), two head flats facing left and right. The bolt is not in the
+    nut."""
+    nx, ny = NUT_POST_XY
+    fx, fy = FIT_BLOCK_XY
+    return {"nut": (nx, ny, NUT_POST_SIZE[2] + NUT_T), "fit": (fx, fy, FIT_BLOCK_SIZE[2]),
+            "bolt": (fx, fy, FIT_BLOCK_SIZE[2] + FIT_T)}
 
 
 def nut_outline(n_arc: int = 6):

@@ -1,6 +1,6 @@
 """Check the scorer's zero gate without the simulator: ``python -m strutnut_sim.check_scorer``.
 
-For each hazard, raised before any milestone and after each of 25, 50 and 75 (and once after 100), the later
+For each hazard, raised before any milestone and after each of 20, 40, 60 and 80 (and once after 100), the later
 milestones are still reached in the sequence; the reported score must be 0 from the hazard on. Without a hazard the
 sequence must end at 1.0. A milestone needs the ones before it at the same step.
 """
@@ -11,15 +11,16 @@ import torch
 
 from strutnut_sim.scorer import Scorer, Step
 
-SEQ = [(), ("seated",), ("seated", "at_mark"), ("seated", "at_mark", "engaged"),
-       ("seated", "at_mark", "engaged", "test_passed")]
+F = ("started", "seated", "at_mark", "engaged", "test_passed")
+SEQ = [F[:i] for i in range(len(F) + 1)]
+H = ("dropped", "nut_off", "cross_threaded")
 
 
 def run(hazard: str | None, after: int) -> tuple[float, int]:
     s = Scorer(1)
     for k, flags in enumerate(SEQ + [SEQ[-1]] * 3):
-        f = {n: torch.tensor([n in flags]) for n in ("seated", "at_mark", "engaged", "test_passed")}
-        h = {n: torch.tensor([hazard == n and k == after + 1]) for n in ("dropped", "nut_off")}
+        f = {n: torch.tensor([n in flags]) for n in F}
+        h = {n: torch.tensor([hazard == n and k == after + 1]) for n in H}
         s.update(Step(**f, **h))
     r = s.report(0)
     return r["score"], r["progress_milestone"]
@@ -30,10 +31,10 @@ def main() -> None:
     score, prog = run(None, -1)
     print(f"no hazard: score {score}, progress {prog}")
     ok &= score == 1.0
-    for hazard in ("dropped", "nut_off"):
-        for after in (-1, 0, 1, 2, 3, 4):
+    for hazard in H:
+        for after in (-1, 0, 1, 2, 3, 4, 5):
             score, prog = run(hazard, after)
-            label = "before any milestone" if after < 0 else f"after {[0, 25, 50, 75, 100][after]}"
+            label = "before any milestone" if after < 0 else f"after {[0, 20, 40, 60, 80, 100][after]}"
             print(f"{hazard} {label}: score {score}, progress {prog}")
             ok &= score == 0.0 and prog == 100
     print("PASS" if ok else "FAIL")

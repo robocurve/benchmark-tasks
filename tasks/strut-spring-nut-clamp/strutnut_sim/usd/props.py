@@ -1,15 +1,17 @@
 """Generate the props of the strut spring-nut task as USD (dimensions and sources: strutnut_sim/spec.py).
 
 Files (desk frame, see spec.py):
-- ``stand.usda`` (fixed colliders): a 2 ft length of Unistrut P1000 channel, open side up, bolted across two P1000
-  posts on square post bases; its lips modelled as the catalog section shows them (top flange, return turned down
-  7.1 mm, the bend at the slot edge as a chamfer); a 12 mm red tape mark across the near wall and lip; the wooden
-  parts block whose pocket the kit stands in.
+- ``stand.usda`` (fixed colliders): a 2 ft length of Unistrut P1000 channel bolted flat to the bench, open side up;
+  its lips modelled as the catalog section shows them (top flange, return turned down 7.1 mm, the bend at the slot
+  edge as a chamfer); a 12 mm red tape mark across the near wall and lip; three wooden parts blocks: the nut's post
+  (with a pocket its spring hangs in) and the fitting's block (a hole the bolt's shank hangs in).
 - ``kit.usda``: one floating articulation, rooted at the spring nut (origin: the middle of the nut's top face). The
   nut is a convex outline with its two leading corners rounded (a quarter turn clockwise inside the channel, square
-  corners stop it) and two grooves across its top under the lip returns; its spring is a sprung prismatic foot.
-  The bolt is screwed into the nut: a prismatic ``thread`` joint (head underside height above the nut's top) and a
-  revolute ``turn`` joint, coupled per control step by strutnut_sim.task (the screw rule). Self-collisions are off.
+  corners stop it), two grooves across its top under the lip returns and a hole through it; its spring is a sprung
+  prismatic foot. The bolt is not assembled: a free chain of six joints joins it to the nut (x, y and z slides, two
+  tilts, ``turn`` about its own axis) through light links without colliders, all drives off, so it moves as a free
+  body until strutnut_sim.task's thread rule finds the thread started and switches them on (z slide ``thread``: head
+  underside height above the nut's top). Self-collisions are on (the bolt meets the nut, its hole and the foot).
 - ``fitting.usda``: the P1064 flat plate fitting (square washer), a free rigid body (origin: the middle of its
   underside) with a 9/16 in hole round the bolt's shank; it is held on the bolt only by geometry (the head above,
   the nut below).
@@ -21,6 +23,8 @@ from __future__ import annotations
 
 import math
 import sys
+
+import numpy as np
 from pathlib import Path
 
 from pxr import Gf, Sdf, UsdGeom, UsdPhysics, UsdShade
@@ -195,17 +199,22 @@ def make_stand(out_path: Path) -> None:
     span(stage, f"{root}/mark_face", (cx - w - 0.0004, cx - w), (my0, my1), (top - 0.030, top), m["red"], collide=False)
     span(stage, f"{root}/mark_lip", (cx - w, cx - S.SLOT / 2 - 0.0015), (my0, my1), (top, top + 0.0004), m["red"],
          collide=False)
-    # Parts block (wood) with the pocket the kit's nut and spring hang in.
-    hx, hy = S.HOLDER_XY
-    bx, by, bz = S.HOLDER_SIZE
-    px, py = S.POCKET
-    pz = bz - S.POCKET_DEPTH
+    # Parts blocks (wood): the nut's post with its spring pocket, the fitting's riser, the bolt's block.
     wood = m["wood"]
-    span(stage, f"{root}/holder_floor", (hx - bx / 2, hx + bx / 2), (hy - by / 2, hy + by / 2), (0.0, pz), wood)
-    span(stage, f"{root}/holder_n", (hx - bx / 2, hx - px / 2), (hy - by / 2, hy + by / 2), (pz, bz), wood)
-    span(stage, f"{root}/holder_f", (hx + px / 2, hx + bx / 2), (hy - by / 2, hy + by / 2), (pz, bz), wood)
-    span(stage, f"{root}/holder_r", (hx - px / 2, hx + px / 2), (hy - by / 2, hy - py / 2), (pz, bz), wood)
-    span(stage, f"{root}/holder_l", (hx - px / 2, hx + px / 2), (hy + py / 2, hy + by / 2), (pz, bz), wood)
+
+    def block_with_hole(name, xy, size, hole, depth):
+        hx, hy = xy
+        bx, by, bz = size
+        hw = hole / 2
+        pz = bz - depth
+        span(stage, f"{root}/{name}_floor", (hx - bx / 2, hx + bx / 2), (hy - by / 2, hy + by / 2), (0.0, pz), wood)
+        span(stage, f"{root}/{name}_n", (hx - bx / 2, hx - hw), (hy - by / 2, hy + by / 2), (pz, bz), wood)
+        span(stage, f"{root}/{name}_f", (hx + hw, hx + bx / 2), (hy - by / 2, hy + by / 2), (pz, bz), wood)
+        span(stage, f"{root}/{name}_r", (hx - hw, hx + hw), (hy - by / 2, hy - hw), (pz, bz), wood)
+        span(stage, f"{root}/{name}_l", (hx - hw, hx + hw), (hy + hw, hy + by / 2), (pz, bz), wood)
+
+    block_with_hole("nut_post", S.NUT_POST_XY, S.NUT_POST_SIZE, S.NUT_POCKET, S.NUT_POCKET_DEPTH)
+    block_with_hole("fit_block", S.FIT_BLOCK_XY, S.FIT_BLOCK_SIZE, S.BOLT_HOLE, S.BOLT_HOLE_DEPTH)
     steel = physics_material(stage, root, "painted_steel", 0.30)
     UsdShade.MaterialBindingAPI.Apply(stage.GetPrimAtPath(root)).Bind(steel, UsdShade.Tokens.weakerThanDescendants,
                                                                        "physics")
@@ -240,47 +249,105 @@ def _prismatic(stage, path, b0, b1, pos0, lo, hi):
     return j
 
 
+def hull_points(stage, path, pts, material, collide=True):
+    """A convex solid (visual mesh and convex-hull collider) from a point set."""
+    from scipy.spatial import ConvexHull
+
+    pts = np.asarray(pts, dtype=float)
+    hull = ConvexHull(pts)
+    mesh = UsdGeom.Mesh.Define(stage, path)
+    mesh.CreatePointsAttr([Gf.Vec3f(*map(float, p)) for p in pts])
+    mesh.CreateFaceVertexIndicesAttr([int(i) for tri in hull.simplices for i in tri])
+    mesh.CreateFaceVertexCountsAttr([3] * len(hull.simplices))
+    mesh.CreateSubdivisionSchemeAttr("none")
+    mesh.CreateDoubleSidedAttr(True)
+    UsdShade.MaterialBindingAPI.Apply(mesh.GetPrim()).Bind(material)
+    if collide:
+        UsdPhysics.CollisionAPI.Apply(mesh.GetPrim())
+        UsdPhysics.MeshCollisionAPI.Apply(mesh.GetPrim()).CreateApproximationAttr("convexHull")
+    return mesh
+
+
+def clip_half(poly, a, b, c):
+    """Keep the part of a convex polygon with a x + b y >= c."""
+    out = []
+    n = len(poly)
+    for k in range(n):
+        p, q = poly[k], poly[(k + 1) % n]
+        fp, fq = a * p[0] + b * p[1] - c, a * q[0] + b * q[1] - c
+        if fp >= 0:
+            out.append(p)
+        if (fp >= 0) != (fq >= 0):
+            t = fp / (fp - fq)
+            out.append((p[0] + t * (q[0] - p[0]), p[1] + t * (q[1] - p[1])))
+    return out
+
+
+def around_hole(poly, h):
+    """Split a convex polygon round a centred square hole of half-width h into four convex pieces."""
+    return [clip_half(poly, 0, 1, h), clip_half(poly, 0, -1, h),
+            clip_half(clip_half(clip_half(poly, 1, 0, h), 0, 1, -h), 0, -1, -h),
+            clip_half(clip_half(clip_half(poly, -1, 0, h), 0, 1, -h), 0, -1, -h)]
+
+
 def make_kit(out_path: Path) -> None:
+    """One floating articulation rooted at the spring nut. The bolt is NOT assembled to the nut: it is joined to it by
+    a free six-axis chain (x, y, z slides, x and y tilts, the turn about its own axis) through four light links with no
+    colliders, all drives off, so it moves as a free body (task.py's thread rule switches the drives on only once the
+    robot has started the thread). Self-collisions are on: the bolt collides with the nut (it has a real hole) and its
+    spring foot; joined bodies (nut and foot) do not collide with each other."""
     root = "/kit"
     stage, root_prim = kit.new_stage(out_path, root)
-    kit.articulation_root(stage, root_prim, self_collisions=False)
-    root_prim.CreateAttribute("physxArticulation:solverPositionIterationCount", Sdf.ValueTypeNames.Int).Set(32)
-    root_prim.CreateAttribute("physxArticulation:solverVelocityIterationCount", Sdf.ValueTypeNames.Int).Set(4)
     m = mats(stage, root)
-    e0 = S.START_TURNS * S.PITCH
-    q_thread0 = S.BOLT_L - e0
+    z_auth = 0.030
 
-    # Nut: origin at the middle of its top face; x across its width, y along its length.
+    # Nut: origin at the middle of its top face; x across its width, y along its length; a square hole through it.
+    # The articulation root is on the nut's body prim (on the Xform above it PhysX may pick a link mid-chain as root).
     nut = _body(stage, f"{root}/nut", (0.0, 0.0, 0.0), S.NUT_MASS)
+    kit.articulation_root(stage, nut.GetPrim(), self_collisions=True)
+    nut.GetPrim().CreateAttribute("physxArticulation:solverPositionIterationCount", Sdf.ValueTypeNames.Int).Set(32)
+    nut.GetPrim().CreateAttribute("physxArticulation:solverVelocityIterationCount", Sdf.ValueTypeNames.Int).Set(4)
     outline = S.nut_outline()
     lower_top = -S.GROOVE_D
+    h = S.NUT_HOLE / 2
     # Lower body: the outline at the groove floor, bevelled along its long lower edges.
     inset = [(x - math.copysign(S.NUT_CHAMFER, x) if abs(abs(x) - S.NUT_W / 2) < 1e-6 else x, y) for x, y in outline]
-    hull_mesh(stage, f"{root}/nut/body", [(-S.NUT_T, inset), (-S.NUT_T + S.NUT_CHAMFER, outline), (lower_top, outline)],
-              m["nut"])
-    # Top: the middle land between the grooves and the two end lands outside them.
+    rings = [(-S.NUT_T, inset), (-S.NUT_T + S.NUT_CHAMFER, outline), (lower_top, outline)]
+    for i in range(4):
+        pts = []
+        for z, poly in rings:
+            pts += [(x, y, z) for x, y in around_hole(poly, h)[i]]
+        hull_points(stage, f"{root}/nut/body{i}", pts, m["nut"])
+    # Top: the middle land between the grooves (round the hole) and the two end lands outside them.
     g0, g1 = S.GROOVE_C - S.GROOVE_W / 2, S.GROOVE_C + S.GROOVE_W / 2
     hw = S.NUT_W / 2
-    prism(stage, f"{root}/nut/land_mid", [(hw, -g0), (hw, g0), (-hw, g0), (-hw, -g0)], lower_top, 0.0, m["nut"])
+    mid = [(hw, -g0), (hw, g0), (-hw, g0), (-hw, -g0)]
+    csk = S.NUT_CSK
+    for i, poly in enumerate(around_hole(mid, h)):
+        # The hole's countersunk mouth: the piece's edge on the hole bevelled 45 degrees, CSK deep.
+        def opened(x, y):
+            if i == 0 and abs(y - h) < 1e-6:
+                return x, y + csk
+            if i == 1 and abs(y + h) < 1e-6:
+                return x, y - csk
+            if i == 2 and abs(x - h) < 1e-6:
+                return x + csk, y
+            if i == 3 and abs(x + h) < 1e-6:
+                return x - csk, y
+            return x, y
+        pts = [(x, y, z) for z in (lower_top, -csk) for x, y in poly] + [(*opened(x, y), 0.0) for x, y in poly]
+        hull_points(stage, f"{root}/nut/land_mid{i}", pts, m["nut"])
 
     def clip(poly, ymin):
-        out = []
-        n = len(poly)
-        for k in range(n):
-            a, b = poly[k], poly[(k + 1) % n]
-            ina, inb = a[1] >= ymin, b[1] >= ymin
-            if ina:
-                out.append(a)
-            if ina != inb:
-                t = (ymin - a[1]) / (b[1] - a[1])
-                out.append((a[0] + t * (b[0] - a[0]), ymin))
-        return out
+        return clip_half(poly, 0, 1, ymin)
 
     end_pos = clip(outline, g1)
     end_neg = [(-x, -y) for x, y in end_pos]
     for name, poly in (("land_end_p", end_pos), ("land_end_n", end_neg)):
         hull_mesh(stage, f"{root}/nut/{name}", [(lower_top, poly), (0.0, poly)], m["nut"])
-    kit.cylinder(stage, f"{root}/nut/hole_vis", (0.0, 0.0, 0.0002), S.BOLT_D / 2 * 0.8, 0.0006, m["dark"])
+    # The tapped hole, seen from above (visual only: a dark bore inside the square collider hole).
+    kit.cylinder(stage, f"{root}/nut/bore_vis", (0.0, 0.0, -S.NUT_T / 2 - 0.0003), h - 0.0003, S.NUT_T - 0.0006,
+                 m["dark"])
 
     # Spring foot: origin at its underside, spring free (joint 0) below the nut.
     foot_z = -S.NUT_T - S.SPRING_FREE
@@ -292,15 +359,41 @@ def make_kit(out_path: Path) -> None:
     _prismatic(stage, f"{root}/joints/spring", nut.GetPath(), foot.GetPath(), (0.0, 0.0, foot_z), -0.001,
                S.SPRING_MAX)
 
-    # Bolt: thread slide (prismatic) then turn (revolute); origin at the head's underside on the axis.
-    slide = _body(stage, f"{root}/slide", (0.0, 0.0, q_thread0), S.SLIDE_MASS, inertia=(4e-7, 4e-7, 4e-7))
-    bolt = _body(stage, f"{root}/bolt", (0.0, 0.0, q_thread0), S.BOLT_MASS)
+    # The bolt's free chain: x slide, y slide, z slide (``thread``: head underside height above the nut's top), x tilt,
+    # y tilt, turn about the bolt's axis. Light links, no colliders.
+    li = (2e-8, 2e-8, 2e-8)
+    lx = _body(stage, f"{root}/link_x", (0.0, 0.0, 0.0), S.LINK_MASS, inertia=li)
+    ly = _body(stage, f"{root}/link_y", (0.0, 0.0, 0.0), S.LINK_MASS, inertia=li)
+    slide = _body(stage, f"{root}/slide", (0.0, 0.0, z_auth), S.SLIDE_MASS, inertia=(4e-7, 4e-7, 4e-7))
+    tx = _body(stage, f"{root}/link_tx", (0.0, 0.0, z_auth), S.LINK_MASS, inertia=li)
+    ty = _body(stage, f"{root}/link_ty", (0.0, 0.0, z_auth), S.LINK_MASS, inertia=li)
+    bolt = _body(stage, f"{root}/bolt", (0.0, 0.0, z_auth), S.BOLT_MASS)
     prism(stage, f"{root}/bolt/head", ngon(S.HEAD_AF / 2, 6, phase_deg=90.0 - 30.0), 0.0, S.HEAD_H, m["bolt"])
-    prism(stage, f"{root}/bolt/shank", ngon(S.BOLT_D / 2 * 0.985, 8), -S.BOLT_L, 0.0, m["bolt"])
-    _prismatic(stage, f"{root}/joints/thread", nut.GetPath(), slide.GetPath(), (0.0, 0.0, 0.0),
-               S.BOLT_L - S.NUT_T - 0.004, S.BOLT_L)
+    shank = ngon(S.BOLT_D / 2 * 0.985, 16)
+    tip = ngon(S.TIP_D / 2, 16)
+    hull_mesh(stage, f"{root}/bolt/shank", [(-S.BOLT_L, tip), (-S.BOLT_L + S.TIP_CHAMFER, shank), (0.0, shank)],
+              m["bolt"])
+
+    def slide_joint(name, b0, b1, axis):
+        j = _prismatic(stage, f"{root}/joints/{name}", b0, b1, (0.0, 0.0, 0.0), -0.6, 0.6)
+        j.CreateAxisAttr(axis)
+        return j
+
+    slide_joint("bx", nut.GetPath(), lx.GetPath(), "X")
+    slide_joint("by", lx.GetPath(), ly.GetPath(), "Y")
+    slide_joint("thread", ly.GetPath(), slide.GetPath(), "Z")
+    for name, b0, b1, axis in (("tilt_x", slide, tx, "X"), ("tilt_y", tx, ty, "Y")):
+        j = UsdPhysics.RevoluteJoint.Define(stage, f"{root}/joints/{name}")
+        j.CreateBody0Rel().SetTargets([b0.GetPath()])
+        j.CreateBody1Rel().SetTargets([b1.GetPath()])
+        j.CreateAxisAttr(axis)
+        j.CreateLocalPos0Attr(Gf.Vec3f(0, 0, 0))
+        j.CreateLocalPos1Attr(Gf.Vec3f(0, 0, 0))
+        j.CreateLowerLimitAttr(-80.0)
+        j.CreateUpperLimitAttr(80.0)
+        UsdPhysics.DriveAPI.Apply(j.GetPrim(), "angular")
     turn = UsdPhysics.RevoluteJoint.Define(stage, f"{root}/joints/turn")
-    turn.CreateBody0Rel().SetTargets([slide.GetPath()])
+    turn.CreateBody0Rel().SetTargets([ty.GetPath()])
     turn.CreateBody1Rel().SetTargets([bolt.GetPath()])
     turn.CreateAxisAttr("Z")
     turn.CreateLocalPos0Attr(Gf.Vec3f(0, 0, 0))

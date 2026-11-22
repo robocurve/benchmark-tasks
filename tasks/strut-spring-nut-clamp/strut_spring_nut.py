@@ -1,12 +1,13 @@
-"""A 2 ft length of green Unistrut P1000 strut channel is bolted open side up across two short strut posts on the
-bench in front of the arms, left to right, its top 14 cm above the table; a strip of red tape across its near wall
-and lip, just right of the middle, marks where a fitting goes. On a wooden parts block in front of the channel, to the
-right, stands the installer's kit: a zinc Unistrut P1064 square plate fitting (1-5/8 in, 1/4 in thick) lying flat on
-the block, a 1/2-13 x 15/16 in hex head bolt through its hole, started two turns into a Unistrut P1010 channel spring
-nut that hangs below it in the block's pocket, its spring free. Goal: the fitting fastened to the strut at the red
-mark with the spring nut and bolt, the bolt left hand-snug (not torqued). Constraints: do not drop any part, and let
-go of them when done. The usual way (not given to the robot): push the nut edge-on through the slot, turn it a
-quarter turn clockwise so its grooves catch the lips, slide it to the mark, run the bolt down hand-snug.
+"""A 2 ft length of green Unistrut P1000 strut channel is bolted open side up to the bench in front of the arms,
+left to right; a strip of red tape across its near wall and lip, just right of the middle, marks where a fitting
+goes. In front of it stand the installer's parts, not assembled, on two wooden parts blocks: a Unistrut P1010 1/2-13
+channel spring nut standing on a post (its spring in the post's pocket), and a zinc Unistrut P1064 square plate
+fitting (1-5/8 in, 1/4 in thick) lying on a block with a 1/2-13 x 15/16 in hex head bolt dropped through its hole (not
+in any nut). Goal: the fitting fastened to the strut at the red mark with the spring nut and bolt, the bolt left
+hand-snug (not torqued). Constraints: do not drop any part, and let go of them when done. The usual way (not given to
+the robot): hold the nut, lay the fitting on it, start the bolt through the fitting into the nut by hand square to it
+(two or more turns; crooked, it cross-threads), push the nut edge-on through the slot, turn it a quarter turn
+clockwise so its grooves catch the lips, slide it to the mark, run the bolt down hand-snug.
 
 Task file for yam-isaac-lab-arena (commit 0059d02); see README.md. ``SNC_CONTROL=<seconds>`` forces the after-release
 check that many seconds into the run whatever the robot has done (control runs).
@@ -59,9 +60,10 @@ success = STATION.success
 
 
 def score(objects):
-    """The reported score (strutnut_sim.scorer.Scorer): milestone / 100 (0.25 the spring nut seated under the lips,
-    0.5 also the bolt within 3 mm of the red mark, 0.75 also the bolt engaged 5 turns or more, 1.0 the after-release
-    pull check passed: 20 N along the channel moves the fitting less than 1 mm); 0 for the whole trial once the kit
-    has been dropped or the nut run off the bolt, whatever was reached before or after."""
+    """The reported score (strutnut_sim.scorer.Scorer): milestone / 100 (0.2 the bolt started 2 turns or more into the
+    nut by the robot, square; 0.4 also the spring nut seated under the lips; 0.6 also the bolt within 3 mm of the red
+    mark; 0.8 also the bolt engaged 5 turns or more; 1.0 the after-release pull check passed: 20 N along the channel
+    moves the fitting less than 1 mm); 0 for the whole trial once a part has been dropped, the nut is loose in the
+    channel (not on the bolt) or the bolt has cross-threaded, whatever was reached before or after."""
     report = STATION.report or {}
     return float(report.get("score", 0.0))
