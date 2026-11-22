@@ -1,0 +1,19 @@
+{
+  "title": "Support the uncoupled PTO shaft on its cradle",
+  "category": "Safety and alignment",
+  "keywords": [
+    "PTO",
+    "driveline",
+    "cradle",
+    "implement",
+    "farm safety"
+  ],
+  "instruction": "The PTO shaft is uncoupled and on the ground. Set it in the yellow cradle so it sits off the ground, then let go.",
+  "context": "HSE Agriculture Information Sheet 40 says that when a machine is not in use, the operator should support the shaft and guard on the cradle provided, and should not rest PTO shafts on drawbars or drop them on the ground. The guard's restraining chain should not be used to support the uncoupled shaft. Weasler, the ADMA driveline safety manual, and ANSI/ASABE AD5673-1 say the same. A shaft left on the ground or hanging from the chain damages the guard that prevents PTO entanglement deaths. Here a short PTO shaft starts on a mark in front of a fixed U-cradle on an implement-tongue stub. The robot has to set the shaft in the cradle so it sits off the table, then let go. Leaving it on the table, or dropping it short of the cradle, is not enough.",
+  "setup": "Positions in cm from the midpoint between the arm bases: x forward, y to the robot's left; heights above the station table (110 x 130 cm). A yellow U-cradle is fixed mid-table on the left arm's side at (32, 22), on a short green implement-tongue stub with a gray PIC-style end. The U floor is 3 cm above the table, inner width 7 cm, walls 4 cm high, 5 cm along y. A short yellow PTO guard-tube section (4 x 14 x 4 cm, axis along y, dark yokes, top grab bar 3 x 4 x 1.6 cm) starts on an 8 mm pedestal at (41, 22) and seats in the U so its origin is 5 cm above the table (the tube sits off the table). The robot pinches the grab bar straight down, lifts, and sets the tube into the U. All props are rigid and start on marks.",
+  "scoring": "From the overhead video, the shaft is seated when it sits in the U-cradle (error under 18 mm in x, 25 mm in y and 10 mm in height, tilt under 15 degrees). At the end, after 1 s at rest with the left gripper clear of the shaft (at least 16 cm from the shaft origin and at least 15.5 cm above the table): 1.0 if seated and clear; 0.5 if it is seated but the arm is still holding it; 0.25 if it is close but not seated (error under 35 mm in x and y and 20 mm in height, tilt under 25 degrees); 0 if it is left on the start mark or dropped short of the cradle. Possible scores: 0, 0.25, 0.5, 1.0.",
+  "run_limit": "600 steps (30 s at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Put the shaft back on its pedestal at (41, 22) cm.",
+  "fidelity": "The shaft and the cradle are rigid and start on marks. The shaft is a short bench-scale guard-tube section with dark yokes, not a full-length PTO shaft (a real shaft will not fit the envelope). The tongue is a stub, not a full implement. This is a place into an open U-cradle, not a sleeve over a U-joint and not a retry of the failed PTO driveline-shield probe. Full credit is the shaft at rest in the cradle, off the table, left arm clear.",
+  "scores": "Scripted (yam_arena, 320x176, seed 0; Brev L40S, probe v1): demo 1.0; naive 0.0; short 0.0 (tipped 90 degrees on a 50 mm-short drop, did not luck into the U); idle 0.0. Dream-1 flash (seed 1, 22 Nov 2026): 0.0 at 600 steps (24 requests / 32 attempts, not a refusal)."
+}
