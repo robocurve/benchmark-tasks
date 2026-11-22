@@ -1,0 +1,19 @@
+{
+  "title": "Level a platform with a gauge that may read wrong",
+  "category": "Other",
+  "keywords": [
+    "instrument calibration",
+    "zero error",
+    "levelling",
+    "buttons"
+  ],
+  "instruction": "The digital angle gauge may not read true; its reading appears on the red display, in degrees. The grey granite block marked REF is exactly level. Make the platform truly level, to within 0.15 degrees, using the UP and DOWN buttons of its levelling foot.",
+  "context": "Levelling a machine bed or optical table with a gauge whose zero is off is a classic metrology trap: zeroing the gauge leaves the bed tilted by the gauge's error. The robot has to find the error against a known reference (or by turning the gauge round) before trusting it.",
+  "setup": "A grey aluminium platform (20 x 14 x 1.2 cm) is hinged along its far edge 6 cm above the table, centred between the arms 30-50 cm in front of the bases; its near edge rests on an orange motorised levelling foot. Two push buttons (dark grey caps 3.6 x 3.6 cm, 3 cm tall) stand 22 cm in front of the bases, 9.5 cm (UP) and 19.5 cm (DOWN) right of centre; each press tilts the platform by 0.25 deg. A yellow digital angle gauge (5 cm cube, 120 g) with a black arrow on top marking its sensing direction stands 19 cm in front of the left arm, arrow pointing away from the arms; a 3-digit red LED display 24 cm in front, 6.5 cm left of centre, shows its reading in tenths of a degree. A grey granite block (10 x 9 x 5 cm) marked REF stands 31 cm in front, 22.5 cm left of centre. The platform starts tilted 1-2 deg, far edge high.",
+  "scoring": "0: no button pressed and nothing touched. 0.25: a button is pressed or the gauge touched. 0.5: the gauge has rested on the platform, untouched and still, for at least 1 s (a platform reading). 0.75: the 0.5 condition holds and the gauge's zero error is pinned: it has also rested still for 1 s on the REF block, or on the platform twice at the same foot setting with its arrow turned 180 deg between the two. 1.0: the 0.75 condition holds and the platform's true tilt is within 0.15 deg of level at the end. The score is the highest level reached.",
+  "run_limit": "4,000 steps (3 min 20 s at 20 Hz)",
+  "reset_notes": "Hidden per trial (redrawn every trial from its seed): Initial tilt as easy; gauge zero error e = 0.6-1.0 deg, random sign. Pressing until the gauge reads 0 leaves the platform 0.6-1.0 deg off. The gauge on REF reads e; the platform's true tilt is its reading minus e (or half the difference of two readings with the gauge turned 180 deg).",
+  "fidelity": "The platform's tilt is set by a stiff hinge spring whose rest angle steps 0.25 deg per press (a motorised foot in code); the gauge reading is computed from the cube's pitch plus a fixed zero error and shown on a separate display.",
+  "scores": "Dream-1 run: 0.25; demo: 1",
+  "media": "M-XSQFN3"
+}
