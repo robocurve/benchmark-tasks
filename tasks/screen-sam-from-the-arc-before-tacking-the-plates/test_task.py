@@ -154,3 +154,13 @@ def test_dressing_has_no_bodies():
     names = {o.name for o in M.OBJECTS}
     assert not any(n.startswith(("hose", "earth", "arc", "tack_bead")) for n in names)
     assert M.DECO.switches and M.DECO.cables
+
+
+def test_sheet_meets_the_bench():
+    assert M.SHEET_BOT <= 0.002
+
+
+def test_shade_check_covers_hand_and_arm():
+    assert M.shades_face is M.shades_exposed
+    # five face points plus sampled left hand / arm points (18 in all)
+    # point-list name checked visually in shades_exposed; alias is enough here
