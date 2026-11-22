@@ -1,0 +1,22 @@
+{
+  "title": "Throw a mini orange basketball into a miniature basket goal with the right arm",
+  "category": "Societal relatability",
+  "keywords": [
+    "single-arm",
+    "right arm",
+    "throwing",
+    "dynamic manipulation",
+    "basketball",
+    "sports",
+    "target shooting",
+    "ballistic"
+  ],
+  "instruction": "Use the right arm to pick up the orange basketball and throw it into the red basket.",
+  "context": "Shooting a basketball into a hoop is a familiar everyday recreational task that requires dynamic manipulation—grasping a spherical object, accelerating it along a controlled arc, and releasing it at the right moment to land inside an elevated target. Unlike static pick-and-place, throwing tests a robot's ability to coordinate arm velocity and gripper timing to reach a target beyond simple drop placement.",
+  "setup": "World frame for this text: 'in front' is away from the arm bases, 'left' and 'right' are from the robot's view, heights are above the station table top, and the midline is halfway between the two arm bases. Basketball (loose, solid rigid sphere): an orange mini basketball, 54 mm in diameter (27 mm radius) and 60 g, resting on the robot's right side, 18.0 cm in front of the arm bases and 18.0 cm to the right of the midline. Basket goal (fixed, solid rigid blocks): a miniature basketball goal centred further back on the right side, 48.0 cm in front of the arm bases and 18.0 cm to the right of the midline. It consists of a dark gray 80 x 80 mm pedestal (50 mm tall), a red 150 x 150 mm basket floor (10 mm thick, top surface at 60 mm height), four red walls (10 mm thick, 80 mm tall) enclosing a 130 x 130 mm square inner opening with its rim at 140 mm height (outer footprint spanning 40.5 to 55.5 cm in front and 10.5 to 25.5 cm to the right), and a white backboard (12 mm thick, 180 mm wide, 160 mm tall) mounted flush behind the back wall from 60 mm to 220 mm height. Nothing else is on the table.",
+  "scoring": "Judged from simulator state (task_score). Limits are inclusive.\nBall in basket: basketball centre within 51.5 mm of the basket centre along both horizontal axes, and ball bottom between 52 mm and 113 mm above the table top (i.e., from 8 mm below the 60 mm basket floor up to the ball centre at the 140 mm rim height). The ball does not need to be completely at rest (rolling inside the basket still counts).\n1.0: the basketball is inside the basket goal.\n0.0: the basketball is not inside the basket goal.",
+  "run_limit": "2400 steps (120 seconds at 20 Hz)",
+  "fidelity": "Approximate. The basketball is modelled as a smooth, rigid, uniform-density sphere without rubberized grip texture, seams, or realistic air-filled bounce dynamics. The basket goal is modelled as a rigid box-shaped catch bin with solid walls and a closed floor rather than a circular rim with a flexible net.",
+  "scores": "demo: 1.0; Dream-1: 0",
+  "media": "M-VWBMJM"
+}
