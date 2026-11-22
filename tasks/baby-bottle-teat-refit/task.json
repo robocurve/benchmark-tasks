@@ -1,0 +1,18 @@
+{
+  "title": "Refit a silicone teat and fasten the collar of a baby bottle",
+  "category": "Societal relatability",
+  "keywords": [
+    "baby bottle",
+    "flexible seal",
+    "threaded assembly"
+  ],
+  "instruction": "Fit the teat and screw the collar onto the bottle, then release the assembly.",
+  "context": "After washing, a feeding bottle must be reassembled. A collar can catch the bottle thread while part of the flexible teat flange remains folded away from the rim.",
+  "setup": "Three loose parts on the calibrated dual-YAM table: a rigid plastic bottle (71 mm tall, 60 mm body diameter), a screw collar (62 mm outside diameter, 44 mm aperture) and a silicone teat (about 56 mm across its flange). From the base midpoint, in mm forward and left, place the upright bottle at (304,18), collar skirt down at (318,112) and teat flange down at (301,-131). A fixed 20 g internal load represents a 20 mL prefill.",
+  "scoring": "Binary. In simulation both lugs and the full rim must stay seated for 1 s after release and for 1 s under a collar-only lift with bottle rise and table clearance each >=20 mm. In a physical trial prefill with 20 mL, lift by the collar alone and invert for 10 s. Score 1 if the bottle follows, all parts stay attached and neither the collar/bottle seam nor the teat base leaks. Other readable outcomes score 0. Ignore normal teat-outlet flow. Reset and repeat unreadable trials.",
+  "run_limit": "2,400 actions at 20 Hz (120 seconds). The post-release grading lift is outside the policy budget.",
+  "reset_notes": "Use the fixed three-part start shown in the screenshot, with the screw collar and silicone teat separated from the bottle. For a physical trial, dry the exterior of each part and prefill the upright bottle with 20 mL of clear water.",
+  "fidelity": "Free rigid bottle and collar with modeled load-bearing thread flanks, a deformable silicone teat and a fixed internal mass. Dimensions and material response approximate a Philips Avent Natural Response assembly. Grading uses rim contact and collar retention as mechanical proxies. Liquid flow, valve behavior and watertightness have not been validated.",
+  "scores": "Dream-1: 0.0 after 2,400 actions (120 s). Known-layout scripted demo: 1.0 in 1,769 actions (88.45 s).",
+  "media": "M-H2GJPS"
+}
