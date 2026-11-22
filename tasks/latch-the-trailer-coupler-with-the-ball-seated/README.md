@@ -109,4 +109,4 @@ moved to (0.36, 0.22). Scores were the same in both places.
 - Scripted demo (yam_arena, 320x176, seed 1, Brev L40S, commit a8a35dc, fixture at (36, 22)): 1.0, success at step 377 of 700.
 - TASK_DEMO=naive: 0.5 (handle jams at about 15°; the coupler is then seated but cannot be latched).
 - TASK_DEMO=plate: 0.5.
-- Dream-1 flash (dreamlabs/dream-1-beta-flash, seed 1, 320x176, 22 Nov 2026 on a Brev L40S, same commit): 0.25 after 700 steps (lowered onto the ball, not seated), 28 requests, not refused.
+- Dream-1 flash (dreamlabs/dream-1-beta-flash, seed 1, 320x176, 22 Nov 2026 on a Brev L40S, 3906c0a): no score; the trial errored at step 680 of 700 with `PolicyError: q_r_chunk gripper leaves 0..1: [0.961, 1.058]` (27 requests, not a content refusal). A previous render at a8a35dc (same scoring, no car/trailer dressing) scored 0.25 in 700 steps, not refused.
