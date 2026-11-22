@@ -1,0 +1,20 @@
+{
+  "title": "Seat the punched offset plate on the press register pins",
+  "category": "Societal relatability",
+  "keywords": [
+    "printing",
+    "offset",
+    "register pins",
+    "plate",
+    "proof press"
+  ],
+  "instruction": "Put the plate on the pins.",
+  "context": "In offset lithography, press operators hang a punched plate on the register pins of the plate-cylinder clamps before the lead and tail clamps are tightened. PrintWiki (Plate Clamp): many clamps \"comprise a series of register pins that correspond to holes punched in the plates, allowing for proper positioning with a minimum of, if any, further adjustment.\" Printing Industries of America guidance on PrintPlanet describes the same step: operators \"mount the plates on the pins on the plate clamps of the press.\" A plate that is not on the pins will be out of register or can be damaged as the clamps close. This task is the last seating push: an A5-scale punched plate, already over both pins, is lowered 25 mm until it sits flat on a proof-press bed. A spare unpinned plate on a board beside the bed is not on the pins. The trial is cold and unpowered: no ink and no moving cylinder.",
+  "setup": "A short proof-press bed with two register pins, bearer rings and a lead-edge clamp bar sits in the middle of the table, unpowered. A punched A5-scale plate (about 150 x 110 mm) with a printed image and four red register marks already hovers 25 mm above the bed, holes over both pins, so the plate is a large, clearly visible rectangle in the table middle. A second, yellow, unpinned plate lies on a wooden board beside the bed. All props are rigid and start on fixed marks. The bed is bench-scale, not a full 40 in press.",
+  "scoring": "As seen in the overhead video, the plate stays on both register pins. At the end, after 1 s at rest and with the gripper clear of the plate: 1.0 once the plate is flat on the bed (within 3 mm) and has been let go; 0.5 if the plate has been pushed at least 8 mm from the start but is still short of the bed, or if it is on the bed but has not been let go or is not yet still; 0 for the start pose itself (25 mm up, already on the pins) and for any path that never pushes. Possible scores: 0, 0.5, 1.0.",
+  "run_limit": "500 steps (25 s at 20 Hz)",
+  "reset_notes": "Raise the punched plate 25 mm above the bed, still on both register pins. The spare yellow plate stays on the board.",
+  "fidelity": "The bed, pins and plates are rigid bodies of boxes and cylinders at real sizes and masses. The plate is a Z-slider already on both pins (PhysX contactOffset is 4 mm, so a free plate on real pin diameters is not used). The bed is an A5-scale proof-press segment, not a full press. No ink is applied and the cylinder does not turn.",
+  "scores": "Scripted (yam_arena, 320x176, seed 0; Brev L40S, v1): demo 1.0 (step 178); short 0.5; idle 0.0; naive 0.0. Dream-1 flash (seed 1, 22 Nov 2026): 0.5 in 500 steps, not refused (plate pushed to 15.2 mm short of the bed).",
+  "media": "M-B9D8RG"
+}
