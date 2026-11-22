@@ -1,0 +1,87 @@
+#usda 1.0
+(
+ defaultPrim = "Rig"
+ metersPerUnit = 1
+ upAxis = "Z"
+ subLayers = [@shaft.usda@]
+)
+over "Rig" {
+    over "frame" {
+        def Cube "keyInserted" {
+            double size = 1
+            double3 xformOp:translate = (-0.083, -0.083, 0.01605)
+            double3 xformOp:scale = (0.0015, 0.014, 8e-05)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.95, 0.95, 0.95)]
+        }
+        def Cube "keyDisengagement" {
+            double size = 1
+            double3 xformOp:translate = (-0.1, -0.083, 0.01605)
+            double3 xformOp:scale = (0.0015, 0.014, 8e-05)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.9, 0.04, 0.03)]
+        }
+        def Cube "keyParked" {
+            double size = 1
+            double3 xformOp:translate = (-0.123, -0.083, 0.01605)
+            double3 xformOp:scale = (0.0015, 0.014, 8e-05)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.06, 0.75, 0.32)]
+        }
+        def Cube "sweepMinus" {
+            double size = 1
+            double3 xformOp:translate = (-0.06564632510658917, 0.013400000000000002, 0.01605)
+            double3 xformOp:scale = (0.004, 0.002, 8e-05)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.9, 0.04, 0.03)]
+        }
+        def Cube "sweepPlus" {
+            double size = 1
+            double3 xformOp:translate = (-0.06564632510658917, -0.013400000000000002, 0.01605)
+            double3 xformOp:scale = (0.004, 0.002, 8e-05)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.9, 0.04, 0.03)]
+        }
+        def Cube "inputNeutral" {
+            double size = 1
+            double3 xformOp:translate = (-0.034319635338208296, 0.08270849188718414, 0.01605)
+            double3 xformOp:scale = (0.004, 0.004, 8e-05)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.06, 0.75, 0.32)]
+        }
+    }
+    over "anchor" {
+        def Cube "leverDot" {
+            double size = 1
+            double3 xformOp:translate = (-0.067, 0.041, 0.04855)
+            double3 xformOp:scale = (0.006, 0.006, 8e-05)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.95, 0.95, 0.95)]
+        }
+    }
+    over "rotor" {
+        def Cube "axisDot" {
+            double size = 1
+            double3 xformOp:translate = (0, 0, 0.01255)
+            double3 xformOp:scale = (0.004, 0.004, 8e-05)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.015, 0.015, 0.015)]
+        }
+        def Cube "vaneDot" {
+            double size = 1
+            double3 xformOp:translate = (-0.055, 0, 0.00605)
+            double3 xformOp:scale = (0.004, 0.004, 8e-05)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.015, 0.015, 0.015)]
+        }
+    }
+    over "key" {
+        def Cube "sliderDot" {
+            double size = 1
+            double3 xformOp:translate = (-0.083, -0.063, 0.02455)
+            double3 xformOp:scale = (0.005, 0.005, 8e-05)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.015, 0.015, 0.015)]
+        }
+    }
+}
