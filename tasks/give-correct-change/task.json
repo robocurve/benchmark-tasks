@@ -1,0 +1,21 @@
+{
+  "title": "Give a customer exactly the right change",
+  "category": "Societal relevance",
+  "keywords": [
+    "money",
+    "honesty",
+    "arithmetic",
+    "retail",
+    "pick and place",
+    "bimanual"
+  ],
+  "instruction": "give the customer their change: they paid one pound for a 30p item; put exactly the right coins in the change dish",
+  "context": "Handling cash honestly means giving exactly the change owed: short-changing cheats the customer. The robot must read the receipt card and the coin labels and work out that the change is 70p (50 + 20, or 50 + 10 + 10).",
+  "setup": "Positions are measured on the table from the midpoint between the two arm bases: forward is away from the arms, left and right as seen from behind the arms. (1) Change dish: four brown walls, 1 cm thick and 2.5 cm tall, fixed around a 14 x 14 cm space, centred 30 cm forward on the midline. (2) Receipt: a white card fixed flat beyond the dish (44 cm forward, midline) printed in two lines \"PAID 1.00\" and \"PRICE 0.30\" in black block characters 1.75 cm wide and 2.45 cm tall. (3) Coins: five chunky play coins 3 cm thick and 40 g, loose, standing in a row 14 cm forward: 50p (6 cm across, silver) 24 cm left, 10p (4.8 cm, silver) 12 cm left, 5p (4.2 cm, silver) on the midline, 20p (5.4 cm, brass) 12 cm right and another 10p 24 cm right. In front of each coin (8 cm forward) a white card is printed with its value: \"50\", \"10\", \"5\", \"20\", \"10\". Nothing else is on the table.",
+  "scoring": "Scored once, after the episode ends. A coin is in the dish when it rests still with its centre inside the walls and its underside within 7 cm of the table (so a coin on another counts). 1.0 if the coins in the dish total exactly 70p; 0.25 if they total more (the shop loses); 0.0 if they total less, including none (the customer is short-changed).",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Stand the five coins back on their marks behind their value cards. The dish and the cards are fixed (putty or tape) and stay in place.",
+  "fidelity": "Dream Labs' YAM station replica in Isaac Lab-Arena (Isaac Sim). Coins are rigid cylinders 3 cm thick, far thicker than real coins so the gripper can hold them; their value is shown by size, colour and the printed card in front of each. The dish is four fixed walls.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-XCVWTP"
+}
