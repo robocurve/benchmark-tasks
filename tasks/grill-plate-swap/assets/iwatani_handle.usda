@@ -1,0 +1,206 @@
+#usda 1.0
+(
+    defaultPrim = "AuxiliaryHandle"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "AuxiliaryHandle" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+)
+{
+    point3f physics:centerOfMass = (0.005, 0, 0.053)
+    bool physics:kinematicEnabled = 0
+    float physics:mass = 0.08
+
+    def "visual"
+    {
+        def Mesh "Grip" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            float3[] extent = [(0.0035, -0.0185, 0.048), (0.0065, 0.0185, 0.108)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [0, 3, 2, 1, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </AuxiliaryHandle/Looks/M_112_122_125_6>
+            rel material:binding:physics = </AuxiliaryHandle/Looks/SteelContact> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.0005
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(0.0035, -0.0185, 0.048), (0.0065, -0.0185, 0.048), (0.0065, 0.0185, 0.048), (0.0035, 0.0185, 0.048), (0.0035, -0.0185, 0.108), (0.0065, -0.0185, 0.108), (0.0065, 0.0185, 0.108), (0.0035, 0.0185, 0.108)]
+            color3f[] primvars:displayColor = [(0.16428423, 0.19894394, 0.20817634)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "UprightL" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            float3[] extent = [(0.0035, -0.0185, 0.013), (0.0065, -0.0115, 0.049)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [0, 3, 2, 1, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </AuxiliaryHandle/Looks/M_173_184_186_6>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.0005
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(0.0035, -0.0185, 0.013), (0.0065, -0.0185, 0.013), (0.0065, -0.0115, 0.013), (0.0035, -0.0115, 0.013), (0.0035, -0.0185, 0.049), (0.0065, -0.0185, 0.049), (0.0065, -0.0115, 0.049), (0.0035, -0.0115, 0.049)]
+            color3f[] primvars:displayColor = [(0.42807475, 0.48543546, 0.5003919)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "TabL" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            float3[] extent = [(-0.004, -0.013, -0.004), (0.004, -0.007, 0.008)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [0, 3, 2, 1, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </AuxiliaryHandle/Looks/M_173_184_186_6>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.0005
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(-0.004, -0.013, -0.004), (0.004, -0.013, -0.004), (0.004, -0.007, -0.004), (-0.004, -0.007, -0.004), (-0.004, -0.013, 0.008), (0.004, -0.013, 0.008), (0.004, -0.007, 0.008), (-0.004, -0.007, 0.008)]
+            color3f[] primvars:displayColor = [(0.42807475, 0.48543546, 0.5003919)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "ToeL" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            float3[] extent = [(-0.021, -0.012, -0.0045), (-0.003, -0.008, -0.0015)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [0, 3, 2, 1, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </AuxiliaryHandle/Looks/M_173_184_186_6>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00025
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(-0.021, -0.012, -0.0045), (-0.003, -0.012, -0.0045), (-0.003, -0.008, -0.0045), (-0.021, -0.008, -0.0045), (-0.021, -0.012, -0.0015), (-0.003, -0.012, -0.0015), (-0.003, -0.008, -0.0015), (-0.021, -0.008, -0.0015)]
+            color3f[] primvars:displayColor = [(0.42807475, 0.48543546, 0.5003919)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "UprightR" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            float3[] extent = [(0.0035, 0.0115, 0.013), (0.0065, 0.0185, 0.049)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [0, 3, 2, 1, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </AuxiliaryHandle/Looks/M_173_184_186_6>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.0005
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(0.0035, 0.0115, 0.013), (0.0065, 0.0115, 0.013), (0.0065, 0.0185, 0.013), (0.0035, 0.0185, 0.013), (0.0035, 0.0115, 0.049), (0.0065, 0.0115, 0.049), (0.0065, 0.0185, 0.049), (0.0035, 0.0185, 0.049)]
+            color3f[] primvars:displayColor = [(0.42807475, 0.48543546, 0.5003919)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "TabR" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            float3[] extent = [(-0.004, 0.007, -0.004), (0.004, 0.013, 0.008)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [0, 3, 2, 1, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </AuxiliaryHandle/Looks/M_173_184_186_6>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.0005
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(-0.004, 0.007, -0.004), (0.004, 0.007, -0.004), (0.004, 0.013, -0.004), (-0.004, 0.013, -0.004), (-0.004, 0.007, 0.008), (0.004, 0.007, 0.008), (0.004, 0.013, 0.008), (-0.004, 0.013, 0.008)]
+            color3f[] primvars:displayColor = [(0.42807475, 0.48543546, 0.5003919)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "ToeR" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            float3[] extent = [(-0.021, 0.008, -0.0045), (-0.003, 0.012, -0.0015)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [0, 3, 2, 1, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </AuxiliaryHandle/Looks/M_173_184_186_6>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.00025
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(-0.021, 0.008, -0.0045), (-0.003, 0.008, -0.0045), (-0.003, 0.012, -0.0045), (-0.021, 0.012, -0.0045), (-0.021, 0.008, -0.0015), (-0.003, 0.008, -0.0015), (-0.003, 0.012, -0.0015), (-0.021, 0.012, -0.0015)]
+            color3f[] primvars:displayColor = [(0.42807475, 0.48543546, 0.5003919)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "LowerBridge" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            float3[] extent = [(-0.005, -0.0185, 0.011), (0.013, 0.0185, 0.021)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [0, 3, 2, 1, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </AuxiliaryHandle/Looks/M_173_184_186_6>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.0005
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(-0.005, -0.0185, 0.011), (0.013, -0.0185, 0.011), (0.013, 0.0185, 0.011), (-0.005, 0.0185, 0.011), (-0.005, -0.0185, 0.021), (0.013, -0.0185, 0.021), (0.013, 0.0185, 0.021), (-0.005, 0.0185, 0.021)]
+            color3f[] primvars:displayColor = [(0.42807475, 0.48543546, 0.5003919)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "RestShoulder" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            float3[] extent = [(0.002, -0.022, 0.011), (0.024, 0.022, 0.015)]
+            int[] faceVertexCounts = [4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [0, 3, 2, 1, 4, 5, 6, 7, 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6, 3, 0, 4, 7]
+            rel material:binding = </AuxiliaryHandle/Looks/M_173_184_186_6>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.0005
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(0.002, -0.022, 0.011), (0.024, -0.022, 0.011), (0.024, 0.022, 0.011), (0.002, 0.022, 0.011), (0.002, -0.022, 0.015), (0.024, -0.022, 0.015), (0.024, 0.022, 0.015), (0.002, 0.022, 0.015)]
+            color3f[] primvars:displayColor = [(0.42807475, 0.48543546, 0.5003919)]
+            uniform token subdivisionScheme = "none"
+        }
+    }
+
+    def "Looks"
+    {
+        def Material "M_112_122_125_6"
+        {
+            token outputs:surface.connect = </AuxiliaryHandle/Looks/M_112_122_125_6/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.16428423, 0.19894394, 0.20817634)
+                float inputs:metallic = 0.6
+                float inputs:roughness = 0.36
+                token outputs:surface
+            }
+        }
+
+        def Material "M_173_184_186_6"
+        {
+            token outputs:surface.connect = </AuxiliaryHandle/Looks/M_173_184_186_6/Surface.outputs:surface>
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.42807475, 0.48543546, 0.5003919)
+                float inputs:metallic = 0.6
+                float inputs:roughness = 0.36
+                token outputs:surface
+            }
+        }
+
+        def Material "SteelContact" (
+            prepend apiSchemas = ["PhysicsMaterialAPI"]
+        )
+        {
+            float physics:dynamicFriction = 0.9
+            float physics:staticFriction = 1.1
+        }
+    }
+}
+
