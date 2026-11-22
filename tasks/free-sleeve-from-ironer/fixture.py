@@ -11,6 +11,8 @@ PITCH=.017
 COUNT=7
 K_LOAD=500.
 TRIP_N=5.
+FOREARM_LIMIT_N=15.
+GLOVE_LIMIT_N=4.
 BODIES=[]
 SHAPES=[]
 PROPS={}
@@ -90,8 +92,8 @@ def collision_allowed(a,b):
     return True
 
 MODES=("idle","release_only","closed_pull","partial_release","reference","slow_reference",
-       "abandon_release","held_arm","hand_press","recover_after_tug","open_hover","park_closed","surface_touch")
+       "abandon_release","held_arm","hand_press","recover_after_tug","open_hover","park_closed","surface_touch","hard_pinch")
 # The short-stroke intervention has two independently testable outcomes, selected by measured load.
 EXPECTED={"idle":0.,"release_only":0.,"closed_pull":0.,"reference":1.,"slow_reference":1.,
           "abandon_release":0.,"held_arm":.5,"hand_press":0.,"recover_after_tug":0.,
-          "open_hover":.5,"park_closed":.5,"surface_touch":0.}
+          "open_hover":.5,"park_closed":1.,"surface_touch":1.,"hard_pinch":0.}

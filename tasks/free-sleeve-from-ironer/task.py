@@ -3,7 +3,7 @@ from pathlib import Path
 import sys,json,os
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 import numpy as np
-from fixture import WORLD,BODIES,COUNT,INSTRUCTION
+from fixture import WORLD,BODIES,COUNT,INSTRUCTION,TRIP_N
 from measure import observe,glove_geometry
 from withdrawal import native_arm_state
 from scoring import Evaluator
@@ -50,7 +50,7 @@ def step(env):
     arms=[left,right]
     f=observe(q,v,poses,reader.read(),arms,bool(reader.surface_contacts),limits)
     meter.observe(f)
-    if meter.fault=="wrist_overload":
+    if f.peak_n>=TRIP_N:
         idx=rig.joint_names.index("flag_travel")
         import torch
         target=torch.full((1,1),.036,device=str(env.unwrapped.device),dtype=torch.float32)
@@ -58,7 +58,7 @@ def step(env):
             rig.set_joint_position_target_index(target=target,joint_ids=[idx])
         else:
             rig.set_joint_position_target(target,joint_ids=[idx])
-    last_row=dict(**meter.record(f),**reader.approach.record(),**glove_geometry(poses),q=q,sleeve_pinch_substeps=reader.sleeve_steps,sleeve_pad_peak_n=reader.sleeve_pad_peak,opposed_forearm_contact=reader.opposed,robot_glove_contact=reader.glove_touch,
+    last_row=dict(**meter.record(f),**reader.approach.record(),**glove_geometry(poses),q=q,contact_force_samples=reader.contact_force_samples,sleeve_pinch_substeps=reader.sleeve_steps,sleeve_pad_peak_n=reader.sleeve_pad_peak,opposed_forearm_contact=reader.opposed,robot_glove_contact=reader.glove_touch,
                   opposed_knob=reader.opposed_knob,surface_pairs=reader.surface_contacts,
                   left_outboard_m=arms[0][2],right_outboard_m=arms[1][2])
     if trace:trace.write(json.dumps(last_row)+"\n")

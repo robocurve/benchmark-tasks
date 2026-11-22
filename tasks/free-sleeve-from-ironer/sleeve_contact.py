@@ -2,6 +2,7 @@
 from math import hypot
 
 SLEEVE_COLLIDERS = frozenset(("sleeve_upper", "sleeve_lower", "sleeve_fold", "wrist_cuff"))
+FOREARM_SKIN = SLEEVE_COLLIDERS | {"elbow_cuff","upper_arm_sleeve"}
 PADS = ("tip_left", "tip_right")
 MIN_NORMAL_N = 0.01
 

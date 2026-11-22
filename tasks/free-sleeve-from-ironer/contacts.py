@@ -1,7 +1,7 @@
 """Sample fabric clamp load, feed-table support and transient wrist extension at each PhysX advance."""
 import numpy as np
 from handle_approach import Acquisition,camera_clearance
-from sleeve_contact import PADS, SLEEVE_COLLIDERS, sleeve_pinch
+from sleeve_contact import PADS, SLEEVE_COLLIDERS, FOREARM_SKIN, sleeve_pinch
 from fixture import K_LOAD,WORLD,SIDES,SHAPES
 SHOE_SHAPES={name for name,owner,*_ in SHAPES if owner=="shoe"}
 def knob_pinch(samples,angle):
@@ -81,6 +81,7 @@ class Reader:
         return found
 
     def contacts(self,headers,points):
+        forearm=table_load=0.
         nip=rest=hand=0.;touch=lever=arm=glove=False;sleeve_samples=[];knob=[];surfaces=set()
         handle_pairs=set()
         for h in headers:
@@ -98,7 +99,6 @@ class Reader:
                 if "release_grip" in shapes[1-li].split("/") and actors[li].rsplit("/",1)[-1] in ("tip_left","tip_right"):
                     pad=actors[li].rsplit("/",1)[-1]
 
-            touch|=bool(pair & {"left_robot","right_robot"}) and bool(pair-{"left_robot","right_robot","other"})
             lever|=pair=={"left_robot","shoe"};arm|=pair=={"right_robot","arm"}
             sleeve_pad=None
             if pair=={"right_robot","arm"}:
@@ -106,11 +106,16 @@ class Reader:
                 link=actors[ri].rsplit("/",1)[-1]
                 if link in PADS and SLEEVE_COLLIDERS.intersection(shapes[1-ri].split("/")):
                     sleeve_pad=link
+            robot_index=next((j for j,who in enumerate(actors) if any(who.startswith(self.paths[k]) for k in ("left_robot","right_robot"))),None)
+            external=shapes[1-robot_index].split("/") if robot_index is not None else ()
+            skin=bool(FOREARM_SKIN.intersection(external)) and bool(pair & {"arm","elbow","frame"})
+            feed="feed_table" in external and "frame" in pair
+            touch|=bool(pair & {"left_robot","right_robot"}) and bool(pair-{"left_robot","right_robot","other"}) and not feed
             fabric="shoe" in pair and any(n.startswith("fabric") for n in pair)
             table=pair=={"frame","hand"}
             glove|="hand" in pair and bool(pair & {"left_robot","right_robot"})
             hit="hand" in pair and bool(pair & {"shoe","left_robot","right_robot"})
-            if not (fabric or table or hit or left_shape or pad or sleeve_pad or surface_pair):continue
+            if not (skin or feed or fabric or table or hit or left_shape or pad or sleeve_pad or surface_pair):continue
             for i in range(h.contact_data_offset,h.contact_data_offset+h.num_contact_data):
                 p=points[i];imp=p.impulse
                 normal=abs(float(imp)) if np.isscalar(imp) else abs(float(np.dot(tuple(imp),tuple(p.normal))))
@@ -123,13 +128,15 @@ class Reader:
                 if sleeve_pad and normal/self.dt>.01:
                     direction=np.array(tuple(p.normal))*(1 if ri==0 else -1)
                     sleeve_samples.append((sleeve_pad,tuple(p.position),direction,normal/self.dt))
+                if skin:forearm+=normal/self.dt
+                if feed:table_load+=normal/self.dt
                 if hit:hand+=normal/self.dt
                 if fabric:nip+=normal/self.dt
                 if (table and -.418<=float(p.position[0])-WORLD[0]<=-.020
                     and -.255<=float(p.position[1])-WORLD[1]<=.169 and abs(float(p.position[2])-WORLD[2]-.070)<.004):
                     rest+=normal*abs(float(p.normal[2]))/self.dt
         self.handle_pairs=handle_pairs
-        return nip,rest,touch,lever,arm,hand,sleeve_pinch(sleeve_samples),glove,knob,surfaces
+        return nip,rest,touch,lever,arm,hand,forearm,table_load,sleeve_pinch(sleeve_samples),glove,knob,surfaces
     def callback(self,h,p):
         try:self.packet=self.contacts(h,p)
         except Exception as exc:self.error=exc
@@ -153,12 +160,13 @@ class Reader:
     def read(self):
         rows,self.rows=self.rows,[]
         if len(rows)!=self.n:raise RuntimeError(f"Missing simulation advances: {len(rows)}/{self.n}")
-        peak,nip,rest,touch,lever,arm,hand,opposed,glove,pinch,surfaces=zip(*rows)
+        peak,nip,rest,touch,lever,arm,hand,forearm,table_load,opposed,glove,pinch,surfaces=zip(*rows)
+        self.contact_force_samples={"forearm_n":list(forearm),"hand_n":list(hand),"table_n":list(table_load)}
         self.opposed_knob=any(pinch);self.surface_contacts=sorted(set().union(*surfaces))
         self.glove_touch=any(glove)
         self.sleeve_steps=sum(int(paired) for paired,_ in opposed)
         self.sleeve_pad_peak={pad:max(loads[pad] for _,loads in opposed) for pad in PADS}
         self.opposed=self.sleeve_steps>0
-        return max(peak),float(np.mean(nip)),float(np.mean(rest)),any(touch),any(lever),any(arm),max(hand)
+        return max(peak),float(np.mean(nip)),float(np.mean(rest)),any(touch),any(lever),any(arm),max(hand),max(forearm),max(table_load)
     def close(self):
         self.sim.step=self.saved;self.sub=None;self.settings.set_bool(self.key,bool(self.old))

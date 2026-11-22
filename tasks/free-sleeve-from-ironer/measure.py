@@ -32,13 +32,13 @@ def glove_geometry(poses):
     return {"glove_table_margin_m":float(margin),"wrist_y":float(wrist[1])}
 
 def observe(q,v,poses,interval,arms,right_surface,limits):
-    peak,nip,rest,touch,lever,arm,hand=interval
+    peak,nip,rest,touch,lever,arm,hand,forearm,table=interval
     xmax=max(float(p[0]+max(CORNERS@R[0])) for p,R in (poses["fabric"+str(i)] for i in range(COUNT)))
     p,R=poses["arm"]
     wrist=float((p+R@np.array([0,.204,0]))[0])
     load=K_LOAD*max(float(q["extension"]),0.)
     return Frame(xmax,wrist,shoe_gap(q["lift"]),max(peak,load),load,nip,rest,touch,
-                 max(abs(v["elbow_yaw"]),abs(v["elbow_pitch"]),abs(v["wrist_flex"])),max(abs(v["seam"+str(i)]) for i in range(COUNT)),lever,arm,hand,arms[0][0],arms[1][0],arms[0][1],arms[1][1],right_surface,**limits)
+                 max(abs(v["elbow_yaw"]),abs(v["elbow_pitch"]),abs(v["wrist_flex"])),max(abs(v["seam"+str(i)]) for i in range(COUNT)),lever,arm,hand,arms[0][0],arms[1][0],arms[0][1],arms[1][1],right_surface,forearm_n=forearm,table_n=table,**limits)
 
 
 def link_poses(q):
