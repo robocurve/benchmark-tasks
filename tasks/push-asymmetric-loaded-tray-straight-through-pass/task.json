@@ -1,0 +1,23 @@
+{
+  "title": "Push an asymmetrically loaded cafeteria tray straight through the counter pass-through",
+  "category": "Societal relatability",
+  "keywords": [
+    "asymmetric load",
+    "centre of friction",
+    "yaw control",
+    "pass-through window",
+    "cafeteria tray",
+    "planar sliding",
+    "counter work"
+  ],
+  "instruction": "Push the loaded tray cleanly through the counter pass-through window onto the far side without wedging or spilling either item.",
+  "context": "Every lunch rush, fast-food and counter workers slide loaded cafeteria trays through the pass-through window between the prep counter and the service counter -- US BLS OEWS 35-3023 counts about 3.85 million people in the job. A tray carrying a heavy dish on one side and a light cup on the other does not slide straight when pushed on its midline: the unbalanced load shifts the centre of friction, so a centre push applies a yaw torque that spins the tray crooked and wedges it in the opening. The skill is finding and pushing along the offset line instead.",
+  "setup": "Station table, both YAM arms parked at the back edge. A 0.82 x 0.90 m low-friction polypropylene service mat (5 mm thick) covers the counter from x = 0.00 to x = 0.82 m. On it sits a rigid polypropylene fast-food tray, 302 x 410 x 20 mm and 0.359 kg, four corner pads flush on the mat, centred at (0.195, 0.075) m with its long side along +Y: rear rim face at x = 0.044 m, front rim face at x = 0.346 m. The tray carries an asymmetric load: a heavy 8-inch square clear glass baking dish (203 x 203 x 64 mm, 1.45 kg) centred 95 mm toward +Y of the tray midline, and a light clear plastic tumbler (76 mm diameter x 130 mm tall, 0.073 kg) centred 105 mm toward -Y; together they shift the loaded tray's centre of friction about 69 mm off the midline. A fixed partition crosses the whole counter at x = 0.355 m: 12 mm walls from y = -0.600 to +0.600 m with a single 18-inch (457.2 mm) clear aperture centred at y = 0.075 m and a transom beam over the opening (clear above 0.44 m), so nothing bypasses the window.",
+  "scoring": "Judged at the end of the trial. 0.5 if the tray is still straight (yaw <= 8 deg) with both items seated upright inside it and its front edge is engaged in the pass-through window, while its rear edge has not yet cleared the far face of the 12 mm frame wall. 1.0 if the tray slid fully through the window so its rear edge is at least 6 mm past that far face while its front edge stays within 800 mm of the table origin, the yaw stays within 8 deg, both items are upright and seated inside the tray walls, everything is at rest, and both grippers are at least 40 mm clear of tray, dish and tumbler. 0.0 if the tray dumps past 10 deg, or an item spills (tilts past 15 deg or leaves the tray), or the tray skews past the 12 deg wedge limit, or it drifts more than 120 mm sideways, or its front edge passes the delivery limit. Possible scores: 0.0, 0.5, 1.0.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "real_trial_cost_usd": 12.99,
+  "reset_notes": "Set the empty tray flat on the slide mat at its start mark, centre the glass dish on its +Y mark and the tumbler on its -Y mark, and send both arms to ready pose.",
+  "fidelity": "Rigid-body simulation (PhysX, 20 Hz). The tray, baking dish and tumbler are rigid compound bodies built from box/cylinder shells; the pass-through partition is fixed. PhysX friction pairs use the measured polypropylene-on-polypropylene coefficient; the scripted push force comes only from the finger pads on the tray's rear rim face. Item-on-tray micro-slip is modelled; food, liquid and dish contents are not.",
+  "scores": "Dream-1 run: 0; demo: 1",
+  "media": "M-55VVCU"
+}
