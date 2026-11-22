@@ -9,8 +9,9 @@ published drawing (Bussmann Technical Data 720147 p.3, side view with the carrie
   front steps back to 42.6 mm (lower) and 43.2 mm (upper) from the back. (D) carrier hinge 29.5 mm above the
   bottom and 4 mm behind the front face; fully open about 72 deg (the 4 mm lockout hole in the grip tab sits on
   a circle about the hinge boss in both drawn positions). (I) the fuse's axis 18 mm behind the carrier face, its
-  centre 40 mm above the bottom (chosen within the body so the YAM's fingers clear the open carrier); the carrier's internals (a U clip round the inner ferrule, open toward the body, a saddle under the outer
-  ferrule, a bottom stop) are ours: Bussmann does not publish them.
+  centre 40 mm above the bottom (chosen within the body so the YAM's fingers clear the open carrier); the carrier's internals (a U clip round the inner ferrule, open toward the body, with
+  sprung lips that retain it (LIP_*), a saddle under the outer ferrule, a bottom stop and an end wall) are ours:
+  Bussmann does not publish them.
   Each carrier is a rigid body on a revolute joint about y at the hinge (0 = closed, opening is negative about
   +y: its top swings toward the robot). The latch is a task rule (a spring pulling the carrier shut inside
   LATCH_DEG); the open stop is the joint limit; gravity swings an unlatched carrier open, as on the real part.
@@ -97,6 +98,24 @@ the cheek's edge (with the cheeks 1 mm past the axis and 0.8 mm clearance a 1 mm
 the fuse in the carrier against gravity at any opening, and the body's upper contact block closes it in when shut.
 The fuse is laid in and lifted out across its axis. A closed sleeve that it slid into along its axis jammed the
 new fuse short of its seat."""
+LIP_R = 1.5 * MM
+LIP_IN = 0.7 * MM
+LIP_X0 = 2.7 * MM
+"""Ferrule retention clip (I, see the README "Retention"): at the inner ferrule a pair of spring fingers, one either side,
+each ending in a rounded lip (a 3 mm rod along the fuse) whose centre stands LIP_X0 out from the ferrule's axis toward
+the clip's open side, overlapping the ferrule's radius by up to LIP_IN where it passes. A ferrule pushed in spreads
+the lips over its widest part and they close behind it (the detent); pulled out, it spreads them again. Each lip is a
+fixed collider with a compliant-contact material: PhysX's contact force is then a spring on the penetration, i.e. the
+finger's spring deflection (the method the station's clip-held fuse blocks use). Seated, the lips still press on the
+ferrule (0.12 mm deflection); a ferrule is free once its centre is 5.7 mm out."""
+LIP_K = 10000.0
+"""Compliant-contact spring rate of a lip (N/m). Measured without the robot (README, "Retention"): a seated fuse levers
+out at 1.4 N lifted by its outer end and comes out at 4.2 N pulled straight at the inner ferrule. At 15 kN/m the
+station arm's fingertip press at mid-tube could not push the spare past the lips."""
+LIP_DAMPING = 30.0
+LIP_MU = 0.15
+"""Friction of the lips on the ferrule (min-combined): lubricated contact-grade metal."""
+INNER_LIP_Z = (FUSE_Z0 + 1.0 * MM, FUSE_Z0 + CAP_L - 1.0 * MM)
 STOP_Z = (FUSE_Z0 - 2.3 * MM, FUSE_Z0 - GAP)
 SADDLE_HALF_Y = 2.5 * MM
 SADDLE_Z = (FUSE_Z1 - 9.5 * MM, FUSE_Z1 - 3.0 * MM)
@@ -287,6 +306,24 @@ def _phys_mat(stage, root, prim_path, friction, name):
                                                                      "physics")
 
 
+def _compliant_mat(stage, root, name, mu, k, c):
+    mat = UsdShade.Material.Define(stage, f"{root}/PhysicsMaterials/{name}")
+    api = UsdPhysics.MaterialAPI.Apply(mat.GetPrim())
+    api.CreateStaticFrictionAttr(mu)
+    api.CreateDynamicFrictionAttr(mu)
+    prim = mat.GetPrim()
+    prim.AddAppliedSchema("PhysxMaterialAPI")
+    prim.CreateAttribute("physxMaterial:frictionCombineMode", Sdf.ValueTypeNames.Token).Set("min")
+    prim.CreateAttribute("physxMaterial:compliantContactStiffness", Sdf.ValueTypeNames.Float).Set(k)
+    prim.CreateAttribute("physxMaterial:compliantContactDamping", Sdf.ValueTypeNames.Float).Set(c)
+    return mat
+
+
+def _bind_compliant(stage, path, mat):
+    UsdShade.MaterialBindingAPI.Apply(stage.GetPrimAtPath(path)).Bind(mat, UsdShade.Tokens.strongerThanDescendants,
+                                                                       "physics")
+
+
 def ngon(r, n=16):
     return [(r * math.cos(2 * math.pi * (k + 0.5) / n), r * math.sin(2 * math.pi * (k + 0.5) / n)) for k in range(n)]
 
@@ -334,6 +371,7 @@ def make_holders(out_path: Path) -> None:
     rp.CreateAttribute("physxArticulation:solverVelocityIterationCount", Sdf.ValueTypeNames.Int).Set(4)
     m = _mats(stage, root, ("body", "carrier", "red", "rail", "pan", "stand", "copper", "steel", "fuse_tube",
                             "fuse_cap", "dark"))
+    lip_mat = _compliant_mat(stage, root, "clip_lip", LIP_MU, LIP_K, LIP_DAMPING)
     base = kit.rigid_body(stage, f"{root}/base", (0, 0, 0), 2.0)
     kit.fix_to_world(stage, root, base.GetPath())
     b = f"{root}/base"
@@ -376,7 +414,7 @@ def make_holders(out_path: Path) -> None:
         p = f"{root}/{name}"
 
         def cb(nm, ds, ys, zs, mat, collide=True):
-            _span(stage, f"{p}/{nm}", (ds[0] - HINGE_D, ds[1] - HINGE_D), ys, (zs[0] - HINGE_Z, zs[1] - HINGE_Z), mat,
+            return _span(stage, f"{p}/{nm}", (ds[0] - HINGE_D, ds[1] - HINGE_D), ys, (zs[0] - HINGE_Z, zs[1] - HINGE_Z), mat,
                   collide)
 
         cb("plate", PLATE, (-PLATE_HALF_Y, PLATE_HALF_Y), PLATE_Z, m["carrier"])
@@ -391,6 +429,23 @@ def make_holders(out_path: Path) -> None:
             cb(f"clip_side{k}", (AXIS_D - r_in, AXIS_D + CLIP_LIP), tuple(sorted((sv * r_in, sv * (r_in + CLIP_T)))),
                CLIP_Z, m["carrier"])
         cb("saddle", (PLATE[1], AXIS_D - FUSE_R - GAP), (-SADDLE_HALF_Y, SADDLE_HALF_Y), SADDLE_Z, m["carrier"])
+        # End wall of the fuse pocket beyond the outer ferrule's end (3 mm clear of it, room to lay the fuse in
+        # tilted), low and narrow so that the fingertips gripping the outer ferrule pass either side of it: without it
+        # the fuse crept along its axis out of the inner clip as the carrier fell open; it still lifts out across its
+        # axis.
+        cb("end_stop", (AXIS_D - FUSE_R, AXIS_D - 2.5 * MM), (-1.5 * MM, 1.5 * MM),
+           (FUSE_Z1 + 3.0 * MM, FUSE_Z1 + 5.0 * MM), m["carrier"])
+        # Ferrule retention: spring fingers with lips either side of each ferrule (compliant contact).
+        lip_x = AXIS_D + LIP_X0 - HINGE_D
+        for e, lz in (("in", INNER_LIP_Z),):
+            for k, sv in enumerate((-1, 1)):
+                cy = sv * (FUSE_R + LIP_R - LIP_IN)
+                lip = prism(stage, f"{p}/lip_{e}{k}", [(lip_x + u, cy + v) for u, v in ngon(LIP_R)],
+                            lz[0] - HINGE_Z, lz[1] - HINGE_Z, m["steel"])
+                _bind_compliant(stage, lip.GetPath(), lip_mat)
+                y_out = sv * (FUSE_R + CLIP_CLR + CLIP_T)
+                cb(f"finger_{e}{k}", (AXIS_D - FUSE_R, AXIS_D + LIP_X0), tuple(sorted((cy + sv * 0.5 * LIP_R, y_out))),
+                   lz, m["steel"], collide=False)
         # Window recess in the face (visual) and the hinge boss.
         cb("window", (-0.4 * MM, 0.0), (-5.5 * MM, 5.5 * MM), (30.0 * MM, 44.0 * MM), m["dark"], collide=False)
         kit.cylinder(stage, f"{p}/boss", (0.0, 0.0, 0.0), 2.5 * MM, 2 * TAB_HALF_Y + 0.4 * MM, m["carrier"], axis="Y")
@@ -504,9 +559,9 @@ def make_fuse(out_path: Path, amps: int, blown: bool = False) -> None:
     root_prim.CreateAttribute("physxRigidBody:solverPositionIterationCount", Sdf.ValueTypeNames.Int).Set(32)
     root_prim.CreateAttribute("physxRigidBody:maxDepenetrationVelocity", Sdf.ValueTypeNames.Float).Set(0.3)
     h = FUSE_L / 2
-    prism(stage, f"{root}/cap_lo", ngon(FUSE_R), -h, -h + CAP_L, m["fuse_cap"])
+    prism(stage, f"{root}/cap_lo", ngon(FUSE_R, 32), -h, -h + CAP_L, m["fuse_cap"])
     prism(stage, f"{root}/tube", ngon(TUBE_R), -h + CAP_L, h - CAP_L, m["fuse_tube"])
-    prism(stage, f"{root}/cap_hi", ngon(FUSE_R), h - CAP_L, h, m["fuse_cap"])
+    prism(stage, f"{root}/cap_hi", ngon(FUSE_R, 32), h - CAP_L, h, m["fuse_cap"])
     # Printed rating on four faces of the tube (reads along the axis).
     tm = _tex(stage, root, "print", f"./textures/fuse_{tex}.png")
     r = TUBE_R + 0.15 * MM

@@ -333,6 +333,28 @@ def Xform "holders" (
         }
     }
 
+    def "PhysicsMaterials"
+    {
+        def Material "clip_lip" (
+            prepend apiSchemas = ["PhysicsMaterialAPI", "PhysxMaterialAPI"]
+        )
+        {
+            float physics:dynamicFriction = 0.15
+            float physics:staticFriction = 0.15
+            custom float physxMaterial:compliantContactDamping = 30
+            custom float physxMaterial:compliantContactStiffness = 10000
+            custom token physxMaterial:frictionCombineMode = "min"
+        }
+
+        def Material "pbt" (
+            prepend apiSchemas = ["PhysicsMaterialAPI"]
+        )
+        {
+            float physics:dynamicFriction = 0.5
+            float physics:staticFriction = 0.5
+        }
+    }
+
     def Xform "base" (
         prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
     )
@@ -12929,6 +12951,75 @@ def Xform "holders" (
             uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         }
 
+        def Cube "end_stop" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </holders/Looks/carrier>
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.00265, 0.003, 0.002)
+            double3 xformOp:translate = (0.010175000000000002, 0, 0.03355000000000001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Mesh "lip_in0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [16, 16, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 0, 1, 17, 16, 1, 2, 18, 17, 2, 3, 19, 18, 3, 4, 20, 19, 4, 5, 21, 20, 5, 6, 22, 21, 6, 7, 23, 22, 7, 8, 24, 23, 8, 9, 25, 24, 9, 10, 26, 25, 10, 11, 27, 26, 11, 12, 28, 27, 12, 13, 29, 28, 13, 14, 30, 29, 14, 15, 31, 30, 15, 0, 16, 31]
+            rel material:binding = </holders/Looks/steel>
+            rel material:binding:physics = </holders/PhysicsMaterials/clip_lip> (
+                bindMaterialAs = "strongerThanDescendants"
+            )
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(0.018171178, -0.0056573646, -0.00755), (0.017947204, -0.005116645, -0.00755), (0.017533354, -0.0047027958, -0.00755), (0.016992636, -0.004478822, -0.00755), (0.016407365, -0.004478822, -0.00755), (0.015866645, -0.0047027958, -0.00755), (0.015452796, -0.005116645, -0.00755), (0.015228822, -0.0056573646, -0.00755), (0.015228822, -0.0062426357, -0.00755), (0.015452796, -0.0067833555, -0.00755), (0.015866645, -0.0071972045, -0.00755), (0.016407365, -0.007421178, -0.00755), (0.016992636, -0.007421178, -0.00755), (0.017533354, -0.0071972045, -0.00755), (0.017947204, -0.0067833555, -0.00755), (0.018171178, -0.0062426357, -0.00755), (0.018171178, -0.0056573646, 0.00045), (0.017947204, -0.005116645, 0.00045), (0.017533354, -0.0047027958, 0.00045), (0.016992636, -0.004478822, 0.00045), (0.016407365, -0.004478822, 0.00045), (0.015866645, -0.0047027958, 0.00045), (0.015452796, -0.005116645, 0.00045), (0.015228822, -0.0056573646, 0.00045), (0.015228822, -0.0062426357, 0.00045), (0.015452796, -0.0067833555, 0.00045), (0.015866645, -0.0071972045, 0.00045), (0.016407365, -0.007421178, 0.00045), (0.016992636, -0.007421178, 0.00045), (0.017533354, -0.0071972045, 0.00045), (0.017947204, -0.0067833555, 0.00045), (0.018171178, -0.0062426357, 0.00045)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Cube "finger_in0" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </holders/Looks/steel>
+            double size = 1
+            float3 xformOp:scale = (0.00785, 0.00095, 0.008)
+            double3 xformOp:translate = (0.012775000000000002, -0.007175, -0.003550000000000003)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Mesh "lip_in1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [16, 16, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 0, 1, 17, 16, 1, 2, 18, 17, 2, 3, 19, 18, 3, 4, 20, 19, 4, 5, 21, 20, 5, 6, 22, 21, 6, 7, 23, 22, 7, 8, 24, 23, 8, 9, 25, 24, 9, 10, 26, 25, 10, 11, 27, 26, 11, 12, 28, 27, 12, 13, 29, 28, 13, 14, 30, 29, 14, 15, 31, 30, 15, 0, 16, 31]
+            rel material:binding = </holders/Looks/steel>
+            rel material:binding:physics = </holders/PhysicsMaterials/clip_lip> (
+                bindMaterialAs = "strongerThanDescendants"
+            )
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(0.018171178, 0.0062426357, -0.00755), (0.017947204, 0.0067833555, -0.00755), (0.017533354, 0.0071972045, -0.00755), (0.016992636, 0.007421178, -0.00755), (0.016407365, 0.007421178, -0.00755), (0.015866645, 0.0071972045, -0.00755), (0.015452796, 0.0067833555, -0.00755), (0.015228822, 0.0062426357, -0.00755), (0.015228822, 0.0056573646, -0.00755), (0.015452796, 0.005116645, -0.00755), (0.015866645, 0.0047027958, -0.00755), (0.016407365, 0.004478822, -0.00755), (0.016992636, 0.004478822, -0.00755), (0.017533354, 0.0047027958, -0.00755), (0.017947204, 0.005116645, -0.00755), (0.018171178, 0.0056573646, -0.00755), (0.018171178, 0.0062426357, 0.00045), (0.017947204, 0.0067833555, 0.00045), (0.017533354, 0.0071972045, 0.00045), (0.016992636, 0.007421178, 0.00045), (0.016407365, 0.007421178, 0.00045), (0.015866645, 0.0071972045, 0.00045), (0.015452796, 0.0067833555, 0.00045), (0.015228822, 0.0062426357, 0.00045), (0.015228822, 0.0056573646, 0.00045), (0.015452796, 0.005116645, 0.00045), (0.015866645, 0.0047027958, 0.00045), (0.016407365, 0.004478822, 0.00045), (0.016992636, 0.004478822, 0.00045), (0.017533354, 0.0047027958, 0.00045), (0.017947204, 0.005116645, 0.00045), (0.018171178, 0.0056573646, 0.00045)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Cube "finger_in1" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </holders/Looks/steel>
+            double size = 1
+            float3 xformOp:scale = (0.00785, 0.00095, 0.008)
+            double3 xformOp:translate = (0.012775000000000002, 0.007175, -0.003550000000000003)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
         def Cube "window" (
             prepend apiSchemas = ["MaterialBindingAPI"]
         )
@@ -13118,6 +13209,75 @@ def Xform "holders" (
             uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         }
 
+        def Cube "end_stop" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </holders/Looks/carrier>
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.00265, 0.003, 0.002)
+            double3 xformOp:translate = (0.010175000000000002, 0, 0.03355000000000001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Mesh "lip_in0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [16, 16, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 0, 1, 17, 16, 1, 2, 18, 17, 2, 3, 19, 18, 3, 4, 20, 19, 4, 5, 21, 20, 5, 6, 22, 21, 6, 7, 23, 22, 7, 8, 24, 23, 8, 9, 25, 24, 9, 10, 26, 25, 10, 11, 27, 26, 11, 12, 28, 27, 12, 13, 29, 28, 13, 14, 30, 29, 14, 15, 31, 30, 15, 0, 16, 31]
+            rel material:binding = </holders/Looks/steel>
+            rel material:binding:physics = </holders/PhysicsMaterials/clip_lip> (
+                bindMaterialAs = "strongerThanDescendants"
+            )
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(0.018171178, -0.0056573646, -0.00755), (0.017947204, -0.005116645, -0.00755), (0.017533354, -0.0047027958, -0.00755), (0.016992636, -0.004478822, -0.00755), (0.016407365, -0.004478822, -0.00755), (0.015866645, -0.0047027958, -0.00755), (0.015452796, -0.005116645, -0.00755), (0.015228822, -0.0056573646, -0.00755), (0.015228822, -0.0062426357, -0.00755), (0.015452796, -0.0067833555, -0.00755), (0.015866645, -0.0071972045, -0.00755), (0.016407365, -0.007421178, -0.00755), (0.016992636, -0.007421178, -0.00755), (0.017533354, -0.0071972045, -0.00755), (0.017947204, -0.0067833555, -0.00755), (0.018171178, -0.0062426357, -0.00755), (0.018171178, -0.0056573646, 0.00045), (0.017947204, -0.005116645, 0.00045), (0.017533354, -0.0047027958, 0.00045), (0.016992636, -0.004478822, 0.00045), (0.016407365, -0.004478822, 0.00045), (0.015866645, -0.0047027958, 0.00045), (0.015452796, -0.005116645, 0.00045), (0.015228822, -0.0056573646, 0.00045), (0.015228822, -0.0062426357, 0.00045), (0.015452796, -0.0067833555, 0.00045), (0.015866645, -0.0071972045, 0.00045), (0.016407365, -0.007421178, 0.00045), (0.016992636, -0.007421178, 0.00045), (0.017533354, -0.0071972045, 0.00045), (0.017947204, -0.0067833555, 0.00045), (0.018171178, -0.0062426357, 0.00045)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Cube "finger_in0" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </holders/Looks/steel>
+            double size = 1
+            float3 xformOp:scale = (0.00785, 0.00095, 0.008)
+            double3 xformOp:translate = (0.012775000000000002, -0.007175, -0.003550000000000003)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Mesh "lip_in1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [16, 16, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 0, 1, 17, 16, 1, 2, 18, 17, 2, 3, 19, 18, 3, 4, 20, 19, 4, 5, 21, 20, 5, 6, 22, 21, 6, 7, 23, 22, 7, 8, 24, 23, 8, 9, 25, 24, 9, 10, 26, 25, 10, 11, 27, 26, 11, 12, 28, 27, 12, 13, 29, 28, 13, 14, 30, 29, 14, 15, 31, 30, 15, 0, 16, 31]
+            rel material:binding = </holders/Looks/steel>
+            rel material:binding:physics = </holders/PhysicsMaterials/clip_lip> (
+                bindMaterialAs = "strongerThanDescendants"
+            )
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(0.018171178, 0.0062426357, -0.00755), (0.017947204, 0.0067833555, -0.00755), (0.017533354, 0.0071972045, -0.00755), (0.016992636, 0.007421178, -0.00755), (0.016407365, 0.007421178, -0.00755), (0.015866645, 0.0071972045, -0.00755), (0.015452796, 0.0067833555, -0.00755), (0.015228822, 0.0062426357, -0.00755), (0.015228822, 0.0056573646, -0.00755), (0.015452796, 0.005116645, -0.00755), (0.015866645, 0.0047027958, -0.00755), (0.016407365, 0.004478822, -0.00755), (0.016992636, 0.004478822, -0.00755), (0.017533354, 0.0047027958, -0.00755), (0.017947204, 0.005116645, -0.00755), (0.018171178, 0.0056573646, -0.00755), (0.018171178, 0.0062426357, 0.00045), (0.017947204, 0.0067833555, 0.00045), (0.017533354, 0.0071972045, 0.00045), (0.016992636, 0.007421178, 0.00045), (0.016407365, 0.007421178, 0.00045), (0.015866645, 0.0071972045, 0.00045), (0.015452796, 0.0067833555, 0.00045), (0.015228822, 0.0062426357, 0.00045), (0.015228822, 0.0056573646, 0.00045), (0.015452796, 0.005116645, 0.00045), (0.015866645, 0.0047027958, 0.00045), (0.016407365, 0.004478822, 0.00045), (0.016992636, 0.004478822, 0.00045), (0.017533354, 0.0047027958, 0.00045), (0.017947204, 0.005116645, 0.00045), (0.018171178, 0.0056573646, 0.00045)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Cube "finger_in1" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </holders/Looks/steel>
+            double size = 1
+            float3 xformOp:scale = (0.00785, 0.00095, 0.008)
+            double3 xformOp:translate = (0.012775000000000002, 0.007175, -0.003550000000000003)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
         def Cube "window" (
             prepend apiSchemas = ["MaterialBindingAPI"]
         )
@@ -13271,6 +13431,75 @@ def Xform "holders" (
             uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         }
 
+        def Cube "end_stop" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </holders/Looks/carrier>
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.00265, 0.003, 0.002)
+            double3 xformOp:translate = (0.010175000000000002, 0, 0.03355000000000001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Mesh "lip_in0" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [16, 16, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 0, 1, 17, 16, 1, 2, 18, 17, 2, 3, 19, 18, 3, 4, 20, 19, 4, 5, 21, 20, 5, 6, 22, 21, 6, 7, 23, 22, 7, 8, 24, 23, 8, 9, 25, 24, 9, 10, 26, 25, 10, 11, 27, 26, 11, 12, 28, 27, 12, 13, 29, 28, 13, 14, 30, 29, 14, 15, 31, 30, 15, 0, 16, 31]
+            rel material:binding = </holders/Looks/steel>
+            rel material:binding:physics = </holders/PhysicsMaterials/clip_lip> (
+                bindMaterialAs = "strongerThanDescendants"
+            )
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(0.018171178, -0.0056573646, -0.00755), (0.017947204, -0.005116645, -0.00755), (0.017533354, -0.0047027958, -0.00755), (0.016992636, -0.004478822, -0.00755), (0.016407365, -0.004478822, -0.00755), (0.015866645, -0.0047027958, -0.00755), (0.015452796, -0.005116645, -0.00755), (0.015228822, -0.0056573646, -0.00755), (0.015228822, -0.0062426357, -0.00755), (0.015452796, -0.0067833555, -0.00755), (0.015866645, -0.0071972045, -0.00755), (0.016407365, -0.007421178, -0.00755), (0.016992636, -0.007421178, -0.00755), (0.017533354, -0.0071972045, -0.00755), (0.017947204, -0.0067833555, -0.00755), (0.018171178, -0.0062426357, -0.00755), (0.018171178, -0.0056573646, 0.00045), (0.017947204, -0.005116645, 0.00045), (0.017533354, -0.0047027958, 0.00045), (0.016992636, -0.004478822, 0.00045), (0.016407365, -0.004478822, 0.00045), (0.015866645, -0.0047027958, 0.00045), (0.015452796, -0.005116645, 0.00045), (0.015228822, -0.0056573646, 0.00045), (0.015228822, -0.0062426357, 0.00045), (0.015452796, -0.0067833555, 0.00045), (0.015866645, -0.0071972045, 0.00045), (0.016407365, -0.007421178, 0.00045), (0.016992636, -0.007421178, 0.00045), (0.017533354, -0.0071972045, 0.00045), (0.017947204, -0.0067833555, 0.00045), (0.018171178, -0.0062426357, 0.00045)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Cube "finger_in0" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </holders/Looks/steel>
+            double size = 1
+            float3 xformOp:scale = (0.00785, 0.00095, 0.008)
+            double3 xformOp:translate = (0.012775000000000002, -0.007175, -0.003550000000000003)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Mesh "lip_in1" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [16, 16, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 0, 1, 17, 16, 1, 2, 18, 17, 2, 3, 19, 18, 3, 4, 20, 19, 4, 5, 21, 20, 5, 6, 22, 21, 6, 7, 23, 22, 7, 8, 24, 23, 8, 9, 25, 24, 9, 10, 26, 25, 10, 11, 27, 26, 11, 12, 28, 27, 12, 13, 29, 28, 13, 14, 30, 29, 14, 15, 31, 30, 15, 0, 16, 31]
+            rel material:binding = </holders/Looks/steel>
+            rel material:binding:physics = </holders/PhysicsMaterials/clip_lip> (
+                bindMaterialAs = "strongerThanDescendants"
+            )
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(0.018171178, 0.0062426357, -0.00755), (0.017947204, 0.0067833555, -0.00755), (0.017533354, 0.0071972045, -0.00755), (0.016992636, 0.007421178, -0.00755), (0.016407365, 0.007421178, -0.00755), (0.015866645, 0.0071972045, -0.00755), (0.015452796, 0.0067833555, -0.00755), (0.015228822, 0.0062426357, -0.00755), (0.015228822, 0.0056573646, -0.00755), (0.015452796, 0.005116645, -0.00755), (0.015866645, 0.0047027958, -0.00755), (0.016407365, 0.004478822, -0.00755), (0.016992636, 0.004478822, -0.00755), (0.017533354, 0.0047027958, -0.00755), (0.017947204, 0.005116645, -0.00755), (0.018171178, 0.0056573646, -0.00755), (0.018171178, 0.0062426357, 0.00045), (0.017947204, 0.0067833555, 0.00045), (0.017533354, 0.0071972045, 0.00045), (0.016992636, 0.007421178, 0.00045), (0.016407365, 0.007421178, 0.00045), (0.015866645, 0.0071972045, 0.00045), (0.015452796, 0.0067833555, 0.00045), (0.015228822, 0.0062426357, 0.00045), (0.015228822, 0.0056573646, 0.00045), (0.015452796, 0.005116645, 0.00045), (0.015866645, 0.0047027958, 0.00045), (0.016407365, 0.004478822, 0.00045), (0.016992636, 0.004478822, 0.00045), (0.017533354, 0.0047027958, 0.00045), (0.017947204, 0.005116645, 0.00045), (0.018171178, 0.0056573646, 0.00045)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Cube "finger_in1" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </holders/Looks/steel>
+            double size = 1
+            float3 xformOp:scale = (0.00785, 0.00095, 0.008)
+            double3 xformOp:translate = (0.012775000000000002, 0.007175, -0.003550000000000003)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
         def Cube "window" (
             prepend apiSchemas = ["MaterialBindingAPI"]
         )
@@ -13356,17 +13585,6 @@ def Xform "holders" (
             double radius = 0.00515
             double3 xformOp:translate = (0.014000000000000002, 0, 0.02455)
             uniform token[] xformOpOrder = ["xformOp:translate"]
-        }
-    }
-
-    def "PhysicsMaterials"
-    {
-        def Material "pbt" (
-            prepend apiSchemas = ["PhysicsMaterialAPI"]
-        )
-        {
-            float physics:dynamicFriction = 0.5
-            float physics:staticFriction = 0.5
         }
     }
 }

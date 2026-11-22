@@ -10,8 +10,11 @@ Mechanism (see fuse_sim/usd/fuse_props.py):
   carrier shut). In between the drive's stiffness is zero, so it adds no torque.
 - The fuse is a free rigid body. In the carrier its inner ferrule sits in a U clip open toward the body on a bottom
   stop and its outer ferrule on a saddle; with the carrier shut the body's upper contact block stands behind the
-  outer ferrule. Opening tilts it out with the carrier; it is lifted out of the clip's open side (and laid back in)
-  across its axis. Nothing holds it but that geometry and gravity.
+  outer ferrule. The inner ferrule is held by a pair of spring fingers whose rounded lips close over it past its widest
+  part (fuse_props LIP_*: fixed colliders with a compliant-contact material, so the contact force is the fingers'
+  spring). The fuse has to be pulled out of the clip's open side across its axis, spreading the lips (the detent), and
+  pushed in past them to seat; laid on them it rests about 5 mm proud, not seated. Shut, the body's contact block
+  holds the outer ferrule.
 
 Function test (the success check): once the named carrier is shut (< CLOSED_DEG) with the matching spare seated and both
 grasp points have been more than RELEASE_CLEAR_M from its grip tab for TEST_WAIT_S (and only after milestone 75), the scorer applies
@@ -75,7 +78,9 @@ opening torque on a decoy carrier for HAZARD_OPEN_S: ``decoy_open_start`` F1 at 
 ``decoy_open_75`` F3 as soon as the matching spare is seated (milestone 75). ``wrong_spare`` is in fuse_sim.demo."""
 HAZARD_OPEN_NM = 0.40
 HAZARD_OPEN_S = 1.0
-CARRIER_DAMPING = 0.001
+CARRIER_DAMPING = 0.005
+"""N*m*s/rad: hinge friction (I). An unlatched carrier falls open in about 2 s instead of slamming onto its stop (with
+0.001 the impact sometimes threw the fuse's free outer end out of the carrier)."""
 
 OPENED_DEG = 30.0
 DECOY_OPENED_DEG = 5.0
@@ -83,6 +88,10 @@ DECOY_TOUCH_DEG = 1.0
 CLOSED_DEG = 1.0
 SEAT_M = 0.002
 SEAT_AXIS_COS = math.cos(math.radians(6.0))
+DETENT_M = props.LIP_X0 - 0.001
+"""Seated means past the clip detent: each ferrule's centre less than 1.7 mm out of its seat toward the clip's open
+side (the inner ferrule's lips, centred 2.7 mm out, then bear behind its widest part and push it home)."""
+CAP_OFF = props.FUSE_L / 2 - props.CAP_L / 2
 OUT_M = 0.025
 TOUCH_MARGIN_M = 0.002
 TRAY_Z_M = 0.03
@@ -309,7 +318,13 @@ class FuseHolderTask(TaskBase):
         in_c = math_utils.quat_apply_inverse(q_rep, (f_pos - nc_pos[:, None]).reshape(-1, 3)).reshape(n, 3, 3)
         ax_c = math_utils.quat_apply_inverse(q_rep, f_axis.reshape(-1, 3)).reshape(n, 3, 3)
         off = (in_c - st.seat).norm(dim=-1)  # (N, 3)
-        seated = (off < SEAT_M) & (ax_c[..., 2].abs() > SEAT_AXIS_COS)
+        # Each ferrule's offset out of its seat toward the clips' open side (carrier +x); the axis may point either way.
+        ax_s = torch.where(ax_c[..., 2:3] < 0, -ax_c, ax_c)
+        past = torch.ones_like(off, dtype=torch.bool)
+        for e in (-1.0, 1.0):
+            s_out = in_c[..., 0] + e * CAP_OFF * ax_s[..., 0] - st.seat[0]
+            past &= s_out < DETENT_M
+        seated = (off < SEAT_M) & (ax_c[..., 2].abs() > SEAT_AXIS_COS) & past
         st.seated_role = torch.where(seated.any(dim=1), seated.float().argmax(dim=1), torch.full_like(st.seated_role, -1))
         right_seated = seated[ar, st.match]
         wrong_role = 3 - st.match  # the other spare
