@@ -4,7 +4,7 @@ from collections import deque
 import numpy as np
 
 from scoring import SEATING_GAP_MM, flange_gaps
-from scoring import inspect_pair, metrics, pad_clearance
+from scoring import inspect_pair, pad_clearance, teat_fit
 
 
 class AssemblyScore:
@@ -28,13 +28,16 @@ class AssemblyScore:
         collar = poses[self.collar]
         bottle = poses[self.bottle]
         soft = nodes[None]
-        retained = metrics(soft, collar[None], self.grid)[1].all()
+        sectors, outlet_exposed = teat_fit(soft, collar[None], self.grid)
+        retained = sectors.all() and outlet_exposed[0]
         seated = retained and (np.abs(flange_gaps(bottle[None], soft, self.grid,
                                                    self.tets)) <= SEATING_GAP_MM).all()
         threaded = seated and all(round(lug["under_fraction"] * 15) >= 12
                                  for lug in inspect_pair(collar, bottle)["lugs"])
-        valid = threaded and pad_clearance(soft, arm_poses[None], self.arm_paths,
-                                           np.array([0]), self.tets) > 0
-        self.frames.append(bool(valid))
-        return float(len(self.frames) == 21 and len(self.released_intervals) == 20
-                     and all(self.frames) and all(self.released_intervals))
+        released_fit = retained and pad_clearance(soft, arm_poses[None], self.arm_paths,
+                                                  np.array([0]), self.tets) > 0
+        level = 1.0 if threaded else 0.5
+        self.frames.append(level if released_fit else 0.0)
+        if len(self.frames) < 21 or len(self.released_intervals) < 20 or not all(self.released_intervals):
+            return 0.0
+        return min(self.frames)

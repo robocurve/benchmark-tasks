@@ -28,6 +28,13 @@ def metrics(nodes,poses,grid):
     return raw,raw&inside&(winding[:,None]==1),mm
 
 
+def teat_fit(nodes, collar, grid):
+    """Check the retaining bead and the exposed outlet on the front side of the collar."""
+    _, captured, local_mm = metrics(nodes, collar, grid)
+    outlet_height = local_mm[:, grid[:, -1, :], 2].mean(axis=-1)
+    return captured, outlet_height.min(axis=1) > LIP_HALF
+
+
 def pad_clearance(nodes, poses, paths, indices, tetrahedra):
     """Lower bound between each complete soft-body and each supplied robot collision mesh at observed poses."""
     soft = nodes[indices]
@@ -117,7 +124,8 @@ def evaluate(window):
     bottle = poses[:, window['names'].index('bottle')]
     gaps = flange_gaps(bottle, nodes, window['grid'], window['tets'])
     rim_counts = (np.abs(gaps) <= SEATING_GAP_MM).sum(axis=1)
-    captured = metrics(nodes, collar, window['grid'])[1].sum(axis=1)
+    sectors, outlet_exposed = teat_fit(nodes, collar, window['grid'])
+    captured = sectors.sum(axis=1)
     bearings = [[round(lug['under_fraction'] * 15) for lug in inspect_pair(c, b)['lugs']]
                 for c, b in zip(collar, bottle, strict=True)]
     flanks = np.min(bearings, axis=0)
@@ -125,9 +133,11 @@ def evaluate(window):
                 np.arange(len(poses)), window['tets']) > 0)
     secured = bool((flanks >= 12).all())
     seated = bool((rim_counts == 48).all() and (captured == 48).all())
-    return dict(score=int(free and secured and seated), released=free,
+    candidate = 1.0 if secured and seated else 0.5
+    score = candidate if free and outlet_exposed.all() and (captured == 48).all() else 0.0
+    return dict(score=score, released=free,
                 sealing_points_min=int(rim_counts.min()), collar_sectors_min=int(captured.min()),
-                thread_samples_min=flanks.tolist())
+                thread_samples_min=flanks.tolist(), outlet_exposed=bool(outlet_exposed.all()))
 
 
 def read_window(run, end_frame=None):

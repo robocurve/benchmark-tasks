@@ -1,39 +1,30 @@
-"""Grade the physical bottle trial from human observations.
-
-Start with dry exteriors, a dry tray and 20 mL of clear water in the bottle.
-After the robot releases the assembly, lift it by the collar alone and invert it
-for 10 seconds. The bottle must follow the collar. Watch the wetted collar/bottle
-seam and teat base. Give 1 if both stay dry externally and the assembly holds.
-Give 0 for a visibly incomplete assembly, separation or water escaping at either
-interface. Identifiable teat-outlet discharge is allowed. If the reset is invalid
-or the result is unreadable, return no score and repeat from a fresh reset.
-"""
+"""Record a collar-only lift and, for a complete bottle, the 10 s leak inspection."""
 import argparse
 import json
 
 
-def grade(retention, seams, inspection, setup="valid"):
-    """Apply the physical protocol in README.md. A null score calls for a fresh trial."""
+def grade(retention, seams, inspection, setup="valid", teat_fit="unclear"):
+    """A clearly failed full assembly can earn half credit for a proven retained pair."""
     if setup == "invalid":
-        return {"score": None, "reason": "Reset the dry parts, tray and 20 mL prefill and repeat."}
-    if retention == "failed":
-        return {"score": 0, "reason": "The robot did not leave a released assembly that held together."}
-    if seams in ("bottle-collar", "teat-base"):
-        return {"score": 0, "reason": "Water visibly escaped at the " + seams + " interface."}
-    if retention == "held" and inspection == "complete" and seams in ("dry", "outlet-only"):
-        return {"score": 1, "reason": "The assembly held together and both seams passed inspection."}
-    return {"score": None, "reason": "Incomplete or ambiguous inspection. Reset and repeat."}
+        return {"score": None, "reason": "Restore dry equipment, parts and the 20 mL prefill; repeat."}
+    if teat_fit == "failed":
+        return {"score": 0, "reason": "Parts remained held, or the teat was loose, folded or separated."}
+    if teat_fit == "retained" and retention == "held" and inspection == "complete" and seams in ("dry", "outlet-only"):
+        return {"score": 1, "reason": "Released bottle and teat remained attached and both interfaces passed."}
+    full_failed = retention in ("failed", "cross-threaded") or seams in ("bottle-collar", "teat-base", "both")
+    if full_failed and teat_fit == "retained":
+        return {"score": 0.5, "reason": "The teat stayed correctly captured in the lifted collar; full assembly failed."}
+    return {"score": None, "reason": "The observation does not distinguish the possible scores; repeat from reset."}
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--retention", required=True, choices=("held", "failed", "unclear"),
-                        help="Released bottle follows a collar-only lift and stays assembled through inversion.")
-    parser.add_argument("--seams", required=True,
-                        choices=("dry", "outlet-only", "bottle-collar", "teat-base", "unclear"),
-                        help="Source of any visible water. Use unclear if the source cannot be traced.")
-    parser.add_argument("--inspection", required=True, choices=("complete", "incomplete"),
-                        help="Complete means 10 s inverted with both wetted interfaces visible and checked.")
-    parser.add_argument("--setup", default="valid", choices=("valid", "invalid"),
-                        help="Valid requires the specified reset with dry exterior, dry tray and 20 mL prefill.")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--teat-fit', choices=('retained', 'failed', 'unclear'), default='unclear',
+                        help='After release, observe the whole rim and lift only the collar. See README for the retained-pair test.')
+    parser.add_argument('--retention', required=True, choices=('held', 'failed', 'cross-threaded', 'unclear'),
+                        help='Does the bottle follow and remain attached? Record visible thread misalignment as cross-threaded. A bottle that fails to follow or separates during the lift fails.')
+    parser.add_argument('--seams', required=True, choices=('dry', 'outlet-only', 'bottle-collar', 'teat-base', 'both', 'unclear'))
+    parser.add_argument('--inspection', required=True, choices=('complete', 'incomplete'),
+                        help='Complete means both wetted interfaces observed during the 10 s inversion.')
+    parser.add_argument('--setup', default='valid', choices=('valid', 'invalid'))
     print(json.dumps(grade(**vars(parser.parse_args()))))

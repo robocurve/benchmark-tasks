@@ -18,12 +18,15 @@ def main():
     parser.add_argument('--gpu', choices=('0','1'), required=True)
     parser.add_argument('--mode', choices=('demo', 'setup', 'dream'), default='demo')
     parser.add_argument('--config-only', action='store_true')
+    parser.add_argument('--collar-only-demo', action='store_true', help='End the scripted example after the fitted pair is released, before mounting it on the bottle.')
     args = parser.parse_args()
+    if args.collar_only_demo and args.mode != 'demo':
+        parser.error('--collar-only-demo requires --mode demo')
     args.out.mkdir(parents=True,exist_ok=False)
     source_hashes = {}
     with ZipFile(args.out/'source.zip','w',ZIP_DEFLATED) as zip_file:
         for path in sorted(ROOT.iterdir()):
-            if path.is_file() and path.suffix in ('.py','.md','.npz'):
+            if path.is_file() and path.suffix in ('.py','.md','.npz','.json'):
                 zip_file.write(path,path.name)
                 source_hashes[path.name] = hashlib.sha256(path.read_bytes()).hexdigest()
     (args.out/'source-manifest.json').write_text(json.dumps(source_hashes,indent=2)+'\n')
@@ -38,12 +41,14 @@ def main():
     policy_name = 'dream' if args.mode == 'dream' else 'yam_scripted'
     steps = 2400 if args.mode == 'dream' else 40
     actions = np.load(ROOT/'demo-actions.npz')['actions'] if args.mode == 'demo' else None
+    if args.collar_only_demo:
+        actions = actions[:962]  # Last rest action before the collar is picked up for threading.
     if actions is not None:
         steps = len(actions)
     argv = ['inspect-robots','run','--embodiment','yam_arena','--policy',policy_name,
             '-E',f'task={ROOT/"task.py"}','-E','scene=station','-E','object_jitter=0',
             '-E','cam_width=320','-E','cam_height=176','-E','headless=true','-E','control_hz=20',
-            '--instruction',INSTRUCTION,'--grader','collar_load_exam','--scorer','operator',
+            '--instruction',INSTRUCTION,'--grader','collar_load_exam','--scorer','collar_retention',
             '--max-steps',str(steps),'--epochs','1','--fail-on-error','1','--store-frames',
             '--no-prompt','--log-dir',str(args.out)]
     if args.mode=='dream':
@@ -94,8 +99,8 @@ def main():
     if replay['score']:
         with np.load(args.out/'collar-exam.npz') as raw:
             proof = grade(raw)
-    score = proof['score'] if proof else 0
-    if score != record['results']['metrics']['operator']:
+    score = min(replay['score'], proof['score']) if proof else 0.0
+    if score != record['results']['metrics']['collar_retention']:
         raise RuntimeError("Stored judgement and mechanical replay disagree")
     (args.out/'endpoint.json').write_text(json.dumps(dict(score=score, released_assembly=replay,
         collar_load_exam=proof),indent=2)+'\n')
