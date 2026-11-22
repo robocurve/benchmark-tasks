@@ -1,0 +1,19 @@
+{
+  "title": "Chock the trailer wheel before the dock is boarded: wedge on the ground, slope facing the tread",
+  "category": "Safety and alignment",
+  "keywords": [
+    "wheel chock",
+    "trailer",
+    "dock",
+    "1910.178",
+    "yard safety"
+  ],
+  "instruction": "The wheel chock is out. Set the chock against the tire so it sits on the ground and the slope faces the tread.",
+  "context": "OSHA 29 CFR 1910.178(k)(1): when a highway truck is boarded with a powered industrial truck, \"the brakes of highway trucks shall be set and wheel chocks placed under the rear wheels to prevent the trucks from rolling.\" 1910.178(m)(7) restates the chock rule for trucks and trailers at the dock. A known failure is to skip the chock, or to set it backwards or short of the tread, so the trailer can roll when a pallet truck is driven on. Here a yellow wedge starts on a mark beside a trailer-size tire at the back of a short trailer body, with a dock lip in view. The robot has to set the chock on the ground with its slope facing the tread and the tip against the contact patch, then let go. Leaving it on the start mark, or setting it short of the tire, is not enough.",
+  "setup": "Positions in cm from the midpoint between the arm bases: x forward, y to the robot's left; heights above the station table (110 x 130 cm). A light-trailer tire (20 cm outside diameter, 8 cm section width, rubber tread, rim and hub, axis along y) is fixed mid-table on the left arm's side, centre at (18, 22), sitting on the table. A short red-and-white trailer bed, side panel and black fender sit with the tire; a dock lip with a yellow bumper is at the near edge. A yellow wedge (10 cm long, 7 cm wide, 10 cm tall, with a small top handle) starts on an 8 mm pedestal at (41, 22), tip toward the tire, and seats on the table at (33, 22) so the tip meets the tire's +x contact patch and the slope faces the tread. All props are rigid and start on marks.",
+  "scoring": "From the overhead video, the chock is seated when it sits on the table, the tip is against the tire's contact patch, and the slope faces the tread (the fat end faces away): lateral error under 20 mm, height error under 10 mm, tip-to-tire gap between -10 mm and 18 mm, tilt under 12 degrees, tip pointing at the tire. At the end, after 1 s at rest with the left gripper clear of the chock (at least 16 cm from the chock origin and at least 15.5 cm above the table): 1.0 if seated and clear; 0.5 if it is seated but the arm is still holding it; 0.25 if it is upright and on the table but 18-50 mm short of the tire (lateral error under 30 mm, height error under 15 mm, tilt under 18 degrees, tip still pointing at the tire); 0 if it is left on the start mark or set down well short of the tread. Possible scores: 0, 0.25, 0.5, 1.0.",
+  "run_limit": "600 steps (30 s at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Put the chock back on its pedestal at (41, 22) cm, tip toward the tire.",
+  "fidelity": "The chock and tire are rigid and start on marks. The tire is a light-trailer size (~200 mm OD), not a 1 m drive tire, so it fits the reach envelope. A short trailer bed, side, fender and a dock lip with a yellow bumper are in the scene; they are cut off at bench scale, and the dock lip is easy to miss in the top camera. The chock is 70 mm wide for a yaw-0 pinch, with a small top bar. Full credit is the wedge at rest, tip against the tread, slope facing it, left arm clear.",
+  "scores": "Scripted (yam_arena, 320x176, seed 0; Brev L40S, probe v3d): demo 1.0; naive 0.0; short 0.25 (released 50 mm short of the tire); idle 0.0. Dream-1 flash (seed 1, 22 Nov 2026): 0.0 at 600 steps (24/33 attempts, not a refusal; chock never moved)."
+}
