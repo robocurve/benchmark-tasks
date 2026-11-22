@@ -1,0 +1,3 @@
+# Asset provenance
+
+The ironer section, arm, glove, flexible cuff and gauge were authored in fixture.py and build_asset.py. The public task includes their generated USD. It references the installed YAM station at runtime. The station observation bridge in scenekit.py is adapted from the benchmark repository's lock-before-loading task. The independent reproduction archive separately carries the YAM diagnostic meshes and their accompanying license under diagnostics/yam_meshes. The bounds in assets/yam-collider-bounds.json are derived from the YAM station CAD. Their source asset digest is recorded in the file. The mount and links share the YAM material license in YAM_LICENSE.txt.
