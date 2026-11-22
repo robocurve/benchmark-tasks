@@ -1,0 +1,22 @@
+{
+  "title": "Roll a dark blue bowling ball down the table to knock down miniature bowling pins with the right arm",
+  "category": "Societal relatability",
+  "keywords": [
+    "single-arm",
+    "right arm",
+    "rolling",
+    "dynamic manipulation",
+    "bowling",
+    "sports",
+    "target knocking",
+    "non-prehensile"
+  ],
+  "instruction": "Using the right arm, roll the blue bowling ball forward down the table to knock down as many white pins as possible.",
+  "context": "Bowling is a familiar recreational sport that requires coordinated dynamic manipulation—grasping a heavy spherical object, accelerating it smoothly along a straight horizontal trajectory, and releasing it cleanly onto a flat surface so its momentum carries it into distant targets beyond the robot's direct kinematic reach. Unlike quasi-static pick-and-place, rolling tests the robot's ability to transfer linear impulse without dropping or imparting unintended spin.",
+  "setup": "World frame for this text: 'in front' is away from the arm bases, 'left' and 'right' are from the robot's view, heights are above the station table top, and the midline is halfway between the two arm bases. Bowling ball (loose, solid rigid sphere): a dark blue bowling ball, 58 mm in diameter (29 mm radius) and 140 g, resting on the robot's right side, 24.0 cm in front of the arm bases and 10.0 cm to the right of the midline (centre at 29 mm height). Bowling pins (loose, solid rigid rectangular prisms): three white pins, each 20 x 20 mm in square footprint, 140 mm tall, and 10 g (centre at 70 mm height), arranged in a two-row triangular rack (1-2 formation) beyond the arm's reach. The head pin (pin_1) stands at 74.0 cm in front of the arm bases and 10.4 cm to the right of the midline, and the back row stands 45 mm further back (78.5 cm in front) with two pins (pin_2 and pin_3) spaced 44 mm apart laterally at 12.6 cm and 8.2 cm to the right of the midline. Nothing else is on the table.",
+  "scoring": "Judged from simulator state (task_score). Limits are inclusive.\nMinimum forward roll: the bowling ball centre must advance to at least 39.0 cm in front of the arm bases (15.0 cm forward of its starting position) for any knocked pins to count.\nKnocked pin: a pin's centre height is at or below 49 mm above the table top (i.e., toppled onto its side at ~10 mm centre height or knocked off the table edge).\n1.0: at least 2 of the 3 pins (a majority) are knocked down after rolling the ball.\n0.5: 1 of the 3 pins is knocked down after rolling the ball.\n0.0: no pins are knocked down or the bowling ball was not rolled at least 15.0 cm forward.",
+  "run_limit": "2400 steps (120 seconds at 20 Hz)",
+  "fidelity": "Approximate. The bowling ball is modelled as a smooth, rigid, uniform-density sphere without finger holes or asymmetric core weight block, and the bowling pins are modelled as uniform rectangular boxes rather than contoured hourglass-shaped pins.",
+  "scores": "demo: 1.0; Dream-1: 0",
+  "media": "M-XN9SDS"
+}
