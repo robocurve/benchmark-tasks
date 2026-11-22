@@ -48,8 +48,8 @@ BAND_LO, BAND_HI = 33.0, 43.0
 
 # -- the bath (centre on the table) ----------------------------------------------------------------
 BX, BY = 0.310, 0.150
-BW, BLEN, BH, WT, FL = 0.190, 0.400, 0.055, 0.008, 0.006
-LEVELS = [(0.15, 0.008), (0.40, 0.018), (0.70, 0.030), (0.98, 0.040)]
+BW, BLEN, BH, WT, FL = 0.300, 0.560, 0.070, 0.010, 0.008
+LEVELS = [(0.15, 0.012), (0.40, 0.026), (0.70, 0.042), (0.98, 0.056)]
 
 LOOKS = {
     "chrome": m.Look(m.rgb(0.70, 0.72, 0.76), metallic=0.9, roughness=0.22),
@@ -110,12 +110,12 @@ tub_parts = [
     ("wall_f", m.box((WT, BLEN, BH), (-BW / 2 + WT / 2, 0.0, BH / 2)), "tub"),
     ("end_p", m.box((BW, WT, BH), (0.0, BLEN / 2 - WT / 2, BH / 2)), "tub"),
     ("end_n", m.box((BW, WT, BH), (0.0, -BLEN / 2 + WT / 2, BH / 2)), "tub"),
-    ("head", m.sphere(0.030, (0.035, -0.125, FL + 0.030)), "skin"),
-    ("torso", m.box((0.066, 0.100, 0.040), (0.035, -0.040, FL + 0.020)), "suit"),
-    ("leg_a", m.cylinder(0.013, 0.140, (0.017, 0.080, FL + 0.014), axis="y"), "skin"),
-    ("leg_b", m.cylinder(0.013, 0.140, (0.053, 0.080, FL + 0.014), axis="y"), "skin"),
-    ("arm_a", m.cylinder(0.009, 0.070, (-0.005, -0.060, FL + 0.024), axis="y"), "skin"),
-    ("arm_b", m.cylinder(0.009, 0.070, (0.075, -0.060, FL + 0.024), axis="y"), "skin"),
+    ("head", m.sphere(0.045, (0.050, -0.190, FL + 0.045)), "skin"),
+    ("torso", m.box((0.100, 0.150, 0.060), (0.050, -0.060, FL + 0.030)), "suit"),
+    ("leg_a", m.cylinder(0.0195, 0.210, (0.026, 0.120, FL + 0.021), axis="y"), "skin"),
+    ("leg_b", m.cylinder(0.0195, 0.210, (0.080, 0.120, FL + 0.021), axis="y"), "skin"),
+    ("arm_a", m.cylinder(0.0135, 0.105, (-0.008, -0.090, FL + 0.036), axis="y"), "skin"),
+    ("arm_b", m.cylinder(0.0135, 0.105, (0.112, -0.090, FL + 0.036), axis="y"), "skin"),
 ]
 for k, (_, h) in enumerate(LEVELS):
     tub_parts.append((f"water{k}", m.box((IW, IL, h), (0.0, 0.0, FL + h / 2)), "water", True))
