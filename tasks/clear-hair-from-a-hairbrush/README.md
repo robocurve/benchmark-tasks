@@ -42,11 +42,9 @@ centre (430, 150) mm. The comb tail points along +Y. Match the setup photo.
 Ordinary silicone covers are 2 x 18 x 24 mm on each finger, with 40 N
 actuator limits. Neither the brush nor comb is fixed to the table.
 
-Prepare ten equal 0.2 g synthetic-hair locks, each 75 mm long. Loosely
-catch each around one pin and spread them across the head as photographed;
-do not tie or glue them. Before a trial all ten locks must be caught among
-the pins. Restore this layout with intact pins after each trial. The hair,
-brush and comb are reusable; replace any damaged item before resetting.
+The reset is specified in [the physical-check protocol](loading-guide/PHYSICAL_CHECK.md), with a [numbered-pin diagram](loading-guide/numbered-loading.svg), [close route and height views](loading-guide/close-route.svg), and [free-end coordinates](loading-guide/routes.json). Ten loose 75 mm, 0.2 g locks each weave across one row, alternately around columns A–D; row 11 stays empty. Do not tie, glue or wind them around a pin. Use loose synthetic wig fibres from one documented donor/product batch. Preparation and placement checks are specified in the protocol.
+
+**Manual check:** an operator followed the diagram with synthetic hair from an old wig on a similar household brush. Loading took an estimated few minutes. The hair stayed caught during a gentle move and came out with the comb without damaging pins. Visibility and releasing the fibres were awkward initially but improved with practice. [The report](loading-guide/PHYSICAL_CHECK_REPORT.md) records the observations and limits: no photos, exact dimensional/mass checks or stopwatch timing are claimed. The close diagrams are construction references. Use contrasting loading cards to make fine fibres visible; remove them before trials. Replace damaged pins or hair before resetting.
 
 ## Judging
 
@@ -76,9 +74,17 @@ native pinch forms. It releases on opening, 8 mm slip, or loads above
 18 N / 0.24 Nm. Grip reaction loads on the robot are omitted. These
 approximations apply equally to the demo and Dream.
 
-All task geometry is original procedural work under the included MIT
-license. The robot, table, runtime and cameras come from the pinned YAM /
-Isaac environment; no third-party task meshes, scans or textures are used.
+Brush, comb, hair, dish, rests and pad covers are original procedural geometry
+under the included MIT licence. The external pinned YAM runtime supplies
+I2RT robot meshes under its [MIT asset licence](https://github.com/kairosiann/yam-isaac-lab-arena/blob/0059d02a1a91bc6834c1d0846022891df0c78730/yam_arena/assets/yam/LICENSE.i2rt):
+`assets/base.stl`, `gripper.stl`, `link1.stl` through `link5.stl`, `tip_left.stl`,
+`tip_right.stl`, and their `collision/<link>/` convex decompositions. Dream-style
+`dream/link2_black.stl`, `link2_white.stl`, `link3_black.stl` and `link3_white.stl`
+carry the same MIT terms, as identified in the pinned runtime's
+[station module](https://github.com/kairosiann/yam-isaac-lab-arena/blob/0059d02a1a91bc6834c1d0846022891df0c78730/yam_arena/station.py).
+The robot USD is converted from those assets; table, floor and camera supports
+use runtime primitives. Robot meshes and runtime source are external dependencies,
+not redistributed here. Package versions and revisions are in `ENVIRONMENT.json`.
 
 ## Recorded trials
 
