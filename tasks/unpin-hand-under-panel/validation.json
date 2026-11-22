@@ -1,0 +1,336 @@
+{
+  "native": {
+    "idle": {
+      "mode": "idle",
+      "seed": 0,
+      "steps": 1200,
+      "score": 0.0,
+      "success": false,
+      "fault": "",
+      "branch_tick": null,
+      "termination": "budget"
+    },
+    "one_key": {
+      "mode": "one_key",
+      "seed": 0,
+      "steps": 600,
+      "score": 0.0,
+      "success": false,
+      "fault": "",
+      "branch_tick": null,
+      "termination": "budget"
+    },
+    "holding": {
+      "mode": "holding",
+      "seed": 0,
+      "steps": 600,
+      "score": 0.5,
+      "success": false,
+      "fault": "",
+      "branch_tick": null,
+      "termination": "budget"
+    },
+    "touch_cuff": {
+      "mode": "touch_cuff",
+      "seed": 0,
+      "steps": 600,
+      "score": 0.0,
+      "success": false,
+      "fault": "hand_struck",
+      "branch_tick": null,
+      "termination": "budget"
+    },
+    "reference": {
+      "mode": "reference",
+      "seed": 0,
+      "steps": 385,
+      "score": 1.0,
+      "success": true,
+      "fault": "",
+      "branch_tick": null,
+      "termination": "success"
+    },
+    "unload_left": {
+      "mode": "unload_left",
+      "seed": 0,
+      "steps": 600,
+      "score": 0.0,
+      "success": false,
+      "fault": "repinned_left",
+      "branch_tick": 197,
+      "termination": "budget"
+    },
+    "unload_right": {
+      "mode": "unload_right",
+      "seed": 0,
+      "steps": 600,
+      "score": 0.0,
+      "success": false,
+      "fault": "repinned_right",
+      "branch_tick": 197,
+      "termination": "budget"
+    },
+    "unload_both": {
+      "mode": "unload_both",
+      "seed": 0,
+      "steps": 600,
+      "score": 0.0,
+      "success": false,
+      "fault": "repinned_left",
+      "branch_tick": 197,
+      "termination": "budget"
+    },
+    "keep_support": {
+      "mode": "keep_support",
+      "seed": 0,
+      "steps": 373,
+      "score": 1.0,
+      "success": true,
+      "fault": "",
+      "branch_tick": 197,
+      "termination": "success"
+    },
+    "hands_off_early": {
+      "mode": "hands_off_early",
+      "seed": 0,
+      "steps": 600,
+      "score": 0.0,
+      "success": false,
+      "fault": "repinned_left",
+      "branch_tick": 197,
+      "termination": "budget"
+    }
+  },
+  "native_matched_controls": {
+    "unload_left": {
+      "mode": "unload_left",
+      "branch_tick": 197,
+      "start_digit_n": [
+        0.0,
+        0.0
+      ],
+      "start_bearing_n": [
+        2.462926082138449,
+        2.2191851811473473
+      ],
+      "pointer_sweep_mm": {
+        "left": 35.5,
+        "right": 22.49
+      },
+      "start_withdraw_mm": 1.0266208555549383,
+      "reload": {
+        "left": {
+          "tick": 202,
+          "force_n": 2.743915836675279,
+          "withdraw_mm": 5.948879756033421,
+          "recompression_mm": 1.3895895972382277
+        },
+        "right": {
+          "tick": 354,
+          "force_n": 1.1751260634391507,
+          "withdraw_mm": 9.53970942646265,
+          "recompression_mm": 1.9445980142336339
+        }
+      },
+      "end_score": 0.0,
+      "end_withdraw_mm": 9.843133389949799,
+      "fault": "repinned_left"
+    },
+    "unload_right": {
+      "mode": "unload_right",
+      "branch_tick": 197,
+      "start_digit_n": [
+        0.0,
+        0.0
+      ],
+      "start_bearing_n": [
+        2.462926082138449,
+        2.2191851811473473
+      ],
+      "pointer_sweep_mm": {
+        "left": 24.06,
+        "right": 34.16
+      },
+      "start_withdraw_mm": 1.0266208555549383,
+      "reload": {
+        "left": {
+          "tick": 353,
+          "force_n": 1.0382893296999314,
+          "withdraw_mm": 9.550739079713821,
+          "recompression_mm": 1.7258798179682344
+        },
+        "right": {
+          "tick": 202,
+          "force_n": 2.74581128086863,
+          "withdraw_mm": 6.023556925356388,
+          "recompression_mm": 1.3258873659651726
+        }
+      },
+      "end_score": 0.0,
+      "end_withdraw_mm": 9.905585087835789,
+      "fault": "repinned_right"
+    },
+    "unload_both": {
+      "mode": "unload_both",
+      "branch_tick": 197,
+      "start_digit_n": [
+        0.0,
+        0.0
+      ],
+      "start_bearing_n": [
+        2.462926082138449,
+        2.2191851811473473
+      ],
+      "pointer_sweep_mm": {
+        "left": 32.21,
+        "right": 31.12
+      },
+      "start_withdraw_mm": 1.0266208555549383,
+      "reload": {
+        "left": {
+          "tick": 201,
+          "force_n": 3.5361193319038158,
+          "withdraw_mm": 4.595370031893253,
+          "recompression_mm": 1.4957046078052372
+        },
+        "right": {
+          "tick": 201,
+          "force_n": 1.1599068195424267,
+          "withdraw_mm": 4.595370031893253,
+          "recompression_mm": 1.5059214492794126
+        }
+      },
+      "end_score": 0.0,
+      "end_withdraw_mm": 4.608344286680222,
+      "fault": "repinned_left"
+    },
+    "keep_support": {
+      "mode": "keep_support",
+      "branch_tick": 197,
+      "start_digit_n": [
+        0.0,
+        0.0
+      ],
+      "start_bearing_n": [
+        2.462926082138449,
+        2.2191851811473473
+      ],
+      "pointer_sweep_mm": {
+        "left": 0.0,
+        "right": 0.0
+      },
+      "start_withdraw_mm": 1.0266208555549383,
+      "reload": {},
+      "end_score": 1.0,
+      "end_withdraw_mm": 79.99999821186066,
+      "fault": ""
+    },
+    "hands_off_early": {
+      "mode": "hands_off_early",
+      "branch_tick": 197,
+      "start_digit_n": [
+        0.0,
+        0.0
+      ],
+      "start_bearing_n": [
+        2.462926082138449,
+        2.2191851811473473
+      ],
+      "pointer_sweep_mm": {
+        "left": 24.0,
+        "right": 22.92
+      },
+      "start_withdraw_mm": 1.0266208555549383,
+      "reload": {
+        "left": {
+          "tick": 199,
+          "force_n": 2.2496017258912264,
+          "withdraw_mm": 3.1578654889017344,
+          "recompression_mm": 1.0977455822285265
+        },
+        "right": {
+          "tick": 200,
+          "force_n": 1.224755357787048,
+          "withdraw_mm": 3.1579069327563047,
+          "recompression_mm": 1.8854913942050189
+        }
+      },
+      "end_score": 0.0,
+      "end_withdraw_mm": 3.1581795774400234,
+      "fault": "repinned_left"
+    }
+  },
+  "native_reference_return": {
+    "hand_out_tick": 270,
+    "first_spring_action": 352,
+    "pegs_home_tick": 355,
+    "pegs_settled_tick": 356,
+    "first_full_tick": 385,
+    "peg_robot_contacts_during_return": 0,
+    "peg_height_before_spring_mm": [
+      33.93950313329697,
+      33.93657132983208
+    ],
+    "peg_home_mm": [
+      -3.9730934986437205e-05,
+      -2.618149608224485e-05
+    ],
+    "hand_travel_mm": 79.99999821186066,
+    "terminal_landing_n": [
+      2.147971171762343,
+      2.56072375883956
+    ]
+  },
+  "dream": {
+    "score": 0.0,
+    "steps": 1200,
+    "fault": ""
+  },
+  "source_revision": "971197a45e453571e5dbff444fee39236ecb387021488baed67db9c0a8298f6c",
+  "native_wrist_visibility": {
+    "ticks": [
+      192,
+      346
+    ],
+    "frames_checked": 155,
+    "max_single_color_fraction": [
+      0.2041903409090909,
+      0.2369318181818182
+    ]
+  },
+  "fps": 20,
+  "simulation_sha256": {
+    "assets/trainer.usda": "e54742d949e35fe1ef3eda280265eb7db60b07941448386536d7a9190773575e",
+    "build_asset.py": "69d8f312a4b5344f86a66b07214f3e79d398b2d06083060dea7ba20830f80e51",
+    "build_gauge.py": "ff4ab1a167d35127e759be631afb6b353e5e9e82c7bbee29186471b645f9821c",
+    "contacts.py": "3ab1b6da1a696eadad06c12a51805d73fa5d8464bdb177360c63dc32cdef5579",
+    "fixture.py": "4428bf5e4dd1c79cddf1b83dc4d8c920aefc41ab40125ab95fa221c174f68b94",
+    "peg_return.py": "224deed5da58bd6da74281404bcad03a3467bfe9341a95001e1cda4a13111220",
+    "reference.py": "e8cf07f8bdfecf510fbce70b3ecb1a98c1c98d33f0926e01ca3e7843360800d7",
+    "scenekit.py": "960a981d05415035afa2a97c1e476f9873edeafdbdc5bc0d26fb4fc7c1409f77",
+    "scoring.py": "228564b8dbd8ee6f77f1335c05b8bdaf8a6876ef9d8477ab6c86f8f9e6239f1a",
+    "task.py": "f3394181aea94e7f92fb99bec121004af5e9bb7d3f516392ca645861bb97eb65"
+  },
+  "publication_edits": {
+    "evaluated_revision": "971197a45e453571e5dbff444fee39236ecb387021488baed67db9c0a8298f6c",
+    "files": {
+      "PHYSICAL_CALIBRATION.md": {
+        "evaluated_sha256": "2ab2b5c76f6370511d43fd6b258817a971cce886e39224b60554d2592543acb8",
+        "prepared_sha256": "478383c3e4eda46c055794cd86c918d543a85c73359dea865673767400cb9283"
+      },
+      "README.md": {
+        "evaluated_sha256": "26071318db859f337d9d06b58e0c08ebf1f61aaf3fda296bfb4eb7058e60514c",
+        "prepared_sha256": "a75db75f08cce4af222bb93610006bc60d35b009cf8f9456862061f7ef7c23ab"
+      },
+      "task.json": {
+        "evaluated_sha256": "2da0a138a014755c8006a86ad36a4b87bccd25e19d472b4533ac06c6129486be",
+        "prepared_sha256": "e4c52616b10a8669b22aab1d0f4d17d5fbc3d984aeb2c88bf765c44c827c04bb"
+      }
+    },
+    "task_json_fields": [
+      "scoring",
+      "scores"
+    ],
+    "description": "Glove color, lift-saddle terminology, scoring summary and measured video scores. Prepared hashes precede the task board’s media-ID assignment."
+  }
+}
