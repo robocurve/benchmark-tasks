@@ -1,4 +1,4 @@
-# Lift a steeped infuser out of a glass teapot by its thin handle bar, shake off the drips, set it on a saucer and put the lid back
+# Lift a steeped infuser out of a glass teapot by its thin handle bar, shake off drips, set it on a saucer, lid back on
 
 A glass teapot stands on the table with its lid on and a stainless steel infuser basket of damp, steeped tea leaves
 standing in it. The robot takes the lid off, pinches the thin handle bar across the top of the basket and lifts the
