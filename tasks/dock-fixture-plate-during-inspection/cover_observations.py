@@ -122,6 +122,31 @@ def registration(cover):
     return depths, margins
 
 
+def plate_marks(cover):
+    """Four underside corners in fixture coordinates, in perimeter order."""
+    return [
+        tuple(a - b for a, b in zip(pt(cover, (x, y, 0)), ORIGIN))
+        for x, y in (
+            (-LENGTH / 2, -WIDTH / 2), (LENGTH / 2, -WIDTH / 2),
+            (LENGTH / 2, WIDTH / 2), (-LENGTH / 2, WIDTH / 2),
+        )
+    ]
+
+
+def over_receiver(corners):
+    """Top-view overlap with the taped hull of the two 98 x 26 mm faces."""
+    target = [(x + LAND_X, y) for x in (-0.049, 0.049) for y in (-0.132, 0.132)]
+    axes = [(1, 0), (0, 1)]
+    for a, b in zip(corners, corners[1:] + corners[:1]):
+        axes.append((a[1] - b[1], b[0] - a[0]))
+    for x, y in axes:
+        plate = [x * p[0] + y * p[1] for p in corners]
+        face = [x * u + y * v for u, v in target]
+        if max(plate) < min(face) or max(face) < min(plate):
+            return False
+    return True
+
+
 def measure(raw):
     poses = raw["poses"]
     for p in (*poses.values(), *raw["distal"].values()):
@@ -232,7 +257,10 @@ def measure(raw):
         - edge
     )
     depths, margins = registration(cover)
+    corners = plate_marks(cover)
     return dict(
+        corners=corners,
+        over_receiver=over_receiver(corners),
         drive_travel=poses["stageDrive"][0] - start_x,
         pin_depth=depths,
         pin_margin=margins,
