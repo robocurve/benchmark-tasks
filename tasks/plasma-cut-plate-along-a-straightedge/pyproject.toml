@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robocurve-plasma-cut"
+version = "0.0.1"
+
+[project.entry-points."inspect_robots.embodiments"]
+yam_plasma = "plasma_cut.embodiment:make_embodiment"
+
+[tool.setuptools.packages.find]
+include = ["plasma_cut*"]
