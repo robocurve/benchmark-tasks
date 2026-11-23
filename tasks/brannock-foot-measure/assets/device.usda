@@ -1,0 +1,593 @@
+#usda 1.0
+(
+    defaultPrim = "device"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "device" (
+    prepend apiSchemas = ["PhysicsArticulationRootAPI", "PhysxArticulationAPI"]
+)
+{
+    custom bool physxArticulation:enabledSelfCollisions = 0
+    custom int physxArticulation:solverPositionIterationCount = 32
+    custom int physxArticulation:solverVelocityIterationCount = 8
+
+    def Material "pm" (
+        prepend apiSchemas = ["PhysicsMaterialAPI"]
+    )
+    {
+        float physics:dynamicFriction = 0.4
+        float physics:restitution = 0
+        float physics:staticFriction = 0.45
+    }
+
+    def Xform "base" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxRigidBodyAPI"]
+    )
+    {
+        float physics:mass = 0.8
+        custom float physxRigidBody:maxDepenetrationVelocity = 0.5
+        custom int physxRigidBody:solverPositionIterationCount = 16
+        custom int physxRigidBody:solverVelocityIterationCount = 4
+
+        def Cube "plate" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </device/pm> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            custom float physxCollision:contactOffset = 0.002
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.08, 0.09, 0.1)]
+            double size = 1
+            float3 xformOp:scale = (0.34, 0.222, 0.01)
+            double3 xformOp:translate = (0.156, -0.039, -0.005)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Mesh "cup0" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+            int[] faceVertexIndices = [4, 2, 0, 6, 2, 4, 0, 2, 3, 3, 1, 0, 5, 4, 0, 0, 1, 5, 7, 2, 6, 7, 3, 2, 6, 4, 7, 4, 5, 7, 1, 3, 7, 7, 5, 1]
+            rel material:binding:physics = </device/pm> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.002
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(0.037, 0.037, 0), (0.037, 0.037, 0.028), (0.037, 0.042, 0), (0.037, 0.042, 0.028), (0.024345255, 0.034768626, 0), (0.024345255, 0.034768626, 0.028), (0.022635154, 0.03946709, 0), (0.022635154, 0.03946709, 0.028)]
+            color3f[] primvars:displayColor = [(0.08, 0.09, 0.1)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "cup1" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+            int[] faceVertexIndices = [4, 2, 0, 6, 2, 4, 0, 2, 3, 3, 1, 0, 5, 4, 0, 0, 1, 5, 7, 2, 6, 7, 3, 2, 6, 4, 7, 4, 5, 7, 1, 3, 7, 7, 5, 1]
+            rel material:binding:physics = </device/pm> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.002
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(0.024345255, 0.034768626, 0), (0.024345255, 0.034768626, 0.028), (0.022635154, 0.03946709, 0), (0.022635154, 0.03946709, 0.028), (0.013216859, 0.028343644, 0), (0.013216859, 0.028343644, 0.028), (0.01000292, 0.03217387, 0), (0.01000292, 0.03217387, 0.028)]
+            color3f[] primvars:displayColor = [(0.08, 0.09, 0.1)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "cup2" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+            int[] faceVertexIndices = [3, 1, 0, 0, 2, 3, 6, 7, 3, 3, 2, 6, 6, 2, 4, 4, 2, 0, 5, 3, 7, 1, 3, 5, 0, 1, 5, 5, 4, 0, 5, 7, 6, 6, 4, 5]
+            rel material:binding:physics = </device/pm> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.002
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(0.013216859, 0.028343644, 0), (0.013216859, 0.028343644, 0.028), (0.01000292, 0.03217387, 0), (0.01000292, 0.03217387, 0.028), (0.00495706, 0.0185, 0), (0.00495706, 0.0185, 0.028), (0.00062693306, 0.021, 0), (0.00062693306, 0.021, 0.028)]
+            color3f[] primvars:displayColor = [(0.08, 0.09, 0.1)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "cup3" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+            int[] faceVertexIndices = [3, 1, 0, 0, 2, 3, 4, 2, 0, 6, 2, 4, 7, 3, 2, 7, 2, 6, 0, 1, 5, 5, 4, 0, 1, 3, 5, 3, 7, 5, 6, 4, 5, 5, 7, 6]
+            rel material:binding:physics = </device/pm> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.002
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(0.00495706, 0.0185, 0), (0.00495706, 0.0185, 0.028), (0.00062693306, 0.021, 0), (0.00062693306, 0.021, 0.028), (0.0005621131, 0.0064249826, 0), (0.0005621131, 0.0064249826, 0.028), (-0.0043619256, 0.0072932234, 0), (-0.0043619256, 0.0072932234, 0.028)]
+            color3f[] primvars:displayColor = [(0.08, 0.09, 0.1)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "cup4" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+            int[] faceVertexIndices = [3, 1, 0, 0, 2, 3, 4, 2, 0, 6, 2, 4, 7, 3, 2, 7, 2, 6, 0, 1, 5, 5, 4, 0, 1, 3, 5, 3, 7, 5, 6, 4, 5, 5, 7, 6]
+            rel material:binding:physics = </device/pm> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.002
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(0.0005621131, 0.0064249826, 0), (0.0005621131, 0.0064249826, 0.028), (-0.0043619256, 0.0072932234, 0), (-0.0043619256, 0.0072932234, 0.028), (0.0005621131, -0.0064249826, 0), (0.0005621131, -0.0064249826, 0.028), (-0.0043619256, -0.0072932234, 0), (-0.0043619256, -0.0072932234, 0.028)]
+            color3f[] primvars:displayColor = [(0.08, 0.09, 0.1)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "cup5" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+            int[] faceVertexIndices = [0, 6, 2, 4, 6, 0, 1, 5, 0, 0, 5, 4, 1, 0, 3, 3, 0, 2, 4, 5, 7, 7, 6, 4, 2, 6, 7, 7, 3, 2, 7, 5, 1, 1, 3, 7]
+            rel material:binding:physics = </device/pm> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.002
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(0.0005621131, -0.0064249826, 0), (0.0005621131, -0.0064249826, 0.028), (-0.0043619256, -0.0072932234, 0), (-0.0043619256, -0.0072932234, 0.028), (0.00495706, -0.0185, 0), (0.00495706, -0.0185, 0.028), (0.00062693306, -0.021, 0), (0.00062693306, -0.021, 0.028)]
+            color3f[] primvars:displayColor = [(0.08, 0.09, 0.1)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "cup6" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+            int[] faceVertexIndices = [0, 6, 2, 4, 6, 0, 1, 5, 0, 0, 5, 4, 1, 0, 3, 3, 0, 2, 4, 5, 7, 7, 6, 4, 2, 6, 7, 7, 3, 2, 7, 5, 1, 1, 3, 7]
+            rel material:binding:physics = </device/pm> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.002
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(0.00495706, -0.0185, 0), (0.00495706, -0.0185, 0.028), (0.00062693306, -0.021, 0), (0.00062693306, -0.021, 0.028), (0.013216859, -0.028343644, 0), (0.013216859, -0.028343644, 0.028), (0.01000292, -0.03217387, 0), (0.01000292, -0.03217387, 0.028)]
+            color3f[] primvars:displayColor = [(0.08, 0.09, 0.1)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "cup7" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+            int[] faceVertexIndices = [0, 6, 2, 4, 6, 0, 1, 5, 0, 0, 5, 4, 1, 0, 3, 3, 0, 2, 4, 5, 7, 7, 6, 4, 2, 6, 7, 7, 3, 2, 7, 5, 1, 1, 3, 7]
+            rel material:binding:physics = </device/pm> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.002
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(0.013216859, -0.028343644, 0), (0.013216859, -0.028343644, 0.028), (0.01000292, -0.03217387, 0), (0.01000292, -0.03217387, 0.028), (0.024345255, -0.034768626, 0), (0.024345255, -0.034768626, 0.028), (0.022635154, -0.03946709, 0), (0.022635154, -0.03946709, 0.028)]
+            color3f[] primvars:displayColor = [(0.08, 0.09, 0.1)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "cup8" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+            int[] faceVertexIndices = [0, 6, 2, 4, 6, 0, 1, 5, 0, 0, 5, 4, 1, 0, 3, 3, 0, 2, 4, 5, 7, 7, 6, 4, 2, 6, 7, 7, 3, 2, 7, 5, 1, 1, 3, 7]
+            rel material:binding:physics = </device/pm> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.002
+            custom float physxCollision:restOffset = 0
+            point3f[] points = [(0.024345255, -0.034768626, 0), (0.024345255, -0.034768626, 0.028), (0.022635154, -0.03946709, 0), (0.022635154, -0.03946709, 0.028), (0.037, -0.037, 0), (0.037, -0.037, 0.028), (0.037, -0.042, 0), (0.037, -0.042, 0.028)]
+            color3f[] primvars:displayColor = [(0.08, 0.09, 0.1)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Cube "cupL" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </device/pm> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            custom float physxCollision:contactOffset = 0.002
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.08, 0.09, 0.1)]
+            double size = 1
+            float3 xformOp:scale = (0.021, 0.005, 0.028)
+            double3 xformOp:translate = (0.0475, 0.0395, 0.014)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "cupR" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </device/pm> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            custom float physxCollision:contactOffset = 0.002
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.08, 0.09, 0.1)]
+            double size = 1
+            float3 xformOp:scale = (0.021, 0.005, 0.028)
+            double3 xformOp:translate = (0.0475, -0.0395, 0.014)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "guide" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </device/pm> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            custom float physxCollision:contactOffset = 0.002
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.08, 0.09, 0.1)]
+            double size = 1
+            float3 xformOp:scale = (0.22, 0.012, 0.026)
+            double3 xformOp:translate = (0.19, 0.059000000000000004, 0.013000000000000001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Mesh "len_scale" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            rel material:binding = </device/base/len_scale_mat>
+            point3f[] points = [(0.15, -0.022, 0.00015), (0.322, -0.022, 0.00015), (0.322, 0.022, 0.00015), (0.15, 0.022, 0.00015)]
+            texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1)] (
+                interpolation = "varying"
+            )
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Material "len_scale_mat"
+        {
+            token outputs:surface.connect = </device/base/len_scale_mat/pbr.outputs:surface>
+
+            def Shader "pbr"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor.connect = </device/base/len_scale_mat/tex.outputs:rgb>
+                float inputs:roughness = 0.8
+                token outputs:surface
+            }
+
+            def Shader "tex"
+            {
+                uniform token info:id = "UsdUVTexture"
+                asset inputs:file = @scale_length.png@
+                float2 inputs:st.connect = </device/base/len_scale_mat/st.outputs:result>
+                color3f outputs:rgb
+            }
+
+            def Shader "st"
+            {
+                uniform token info:id = "UsdPrimvarReader_float2"
+                token inputs:varname = "st"
+                float2 outputs:result
+            }
+        }
+
+        def Mesh "arch_scale" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            rel material:binding = </device/base/arch_scale_mat>
+            point3f[] points = [(0.128, 0.053, 0.02615), (0.25, 0.053, 0.02615), (0.25, 0.065, 0.02615), (0.128, 0.065, 0.02615)]
+            texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1)] (
+                interpolation = "varying"
+            )
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Material "arch_scale_mat"
+        {
+            token outputs:surface.connect = </device/base/arch_scale_mat/pbr.outputs:surface>
+
+            def Shader "pbr"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor.connect = </device/base/arch_scale_mat/tex.outputs:rgb>
+                float inputs:roughness = 0.8
+                token outputs:surface
+            }
+
+            def Shader "tex"
+            {
+                uniform token info:id = "UsdUVTexture"
+                asset inputs:file = @scale_arch.png@
+                float2 inputs:st.connect = </device/base/arch_scale_mat/st.outputs:result>
+                color3f outputs:rgb
+            }
+
+            def Shader "st"
+            {
+                uniform token info:id = "UsdPrimvarReader_float2"
+                token inputs:varname = "st"
+                float2 outputs:result
+            }
+        }
+
+        def Mesh "width_chart" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            rel material:binding = </device/base/width_chart_mat>
+            point3f[] points = [(0.262, -0.074, 0.00015), (0.324, -0.074, 0.00015), (0.324, -0.022, 0.00015), (0.262, -0.022, 0.00015)]
+            texCoord2f[] primvars:st = [(0, 0), (1, 0), (1, 1), (0, 1)] (
+                interpolation = "varying"
+            )
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Material "width_chart_mat"
+        {
+            token outputs:surface.connect = </device/base/width_chart_mat/pbr.outputs:surface>
+
+            def Shader "pbr"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor.connect = </device/base/width_chart_mat/tex.outputs:rgb>
+                float inputs:roughness = 0.8
+                token outputs:surface
+            }
+
+            def Shader "tex"
+            {
+                uniform token info:id = "UsdUVTexture"
+                asset inputs:file = @scale_width.png@
+                float2 inputs:st.connect = </device/base/width_chart_mat/st.outputs:result>
+                color3f outputs:rgb
+            }
+
+            def Shader "st"
+            {
+                uniform token info:id = "UsdPrimvarReader_float2"
+                token inputs:varname = "st"
+                float2 outputs:result
+            }
+        }
+    }
+
+    def PhysicsFixedJoint "anchor"
+    {
+        rel physics:body1 = </device/base>
+    }
+
+    def Xform "pointer" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxRigidBodyAPI"]
+    )
+    {
+        float physics:mass = 0.03
+        custom float physxRigidBody:maxDepenetrationVelocity = 0.5
+        custom int physxRigidBody:solverPositionIterationCount = 16
+        custom int physxRigidBody:solverVelocityIterationCount = 4
+        double3 xformOp:translate = (0.146, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cube "carriage" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </device/pm> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            custom float physxCollision:contactOffset = 0.002
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.72, 0.73, 0.75)]
+            double size = 1
+            float3 xformOp:scale = (0.028, 0.016, 0.006)
+            double3 xformOp:translate = (0, 0.059000000000000004, 0.029)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "arm" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </device/pm> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            custom float physxCollision:contactOffset = 0.002
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.72, 0.73, 0.75)]
+            double size = 1
+            float3 xformOp:scale = (0.008, 0.006, 0.025)
+            double3 xformOp:translate = (0, 0.058, 0.0195)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cylinder "nose" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.014
+            rel material:binding:physics = </device/pm> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            custom float physxCollision:contactOffset = 0.002
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.72, 0.73, 0.75)]
+            double radius = 0.005
+            double3 xformOp:translate = (-0, 0.058, 0.014)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cube "index"
+        {
+            color3f[] primvars:displayColor = [(0.9, 0.1, 0.1)]
+            double size = 1
+            float3 xformOp:scale = (0.0012, 0.014, 0.0003)
+            double3 xformOp:translate = (0, 0.059000000000000004, 0.03215)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "flange" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </device/pm> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            custom float physxCollision:contactOffset = 0.002
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.15, 0.45, 0.85)]
+            double size = 1
+            float3 xformOp:scale = (0.03, 0.012, 0.002)
+            double3 xformOp:translate = (0, 0.059000000000000004, 0.033)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "fin" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </device/pm> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            custom float physxCollision:contactOffset = 0.002
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.15, 0.45, 0.85)]
+            double size = 1
+            float3 xformOp:scale = (0.024, 0.005, 0.024)
+            double3 xformOp:translate = (0, 0.059000000000000004, 0.046)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def PhysicsPrismaticJoint "pointer_slide"
+    {
+        uniform token physics:axis = "X"
+        rel physics:body0 = </device/base>
+        rel physics:body1 = </device/pointer>
+        point3f physics:localPos0 = (0.146, 0, 0)
+        point3f physics:localPos1 = (0, 0, 0)
+        float physics:lowerLimit = -0.006
+        float physics:upperLimit = 0.09
+    }
+
+    def Xform "bar" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxRigidBodyAPI"]
+    )
+    {
+        float physics:mass = 0.08
+        custom float physxRigidBody:maxDepenetrationVelocity = 0.5
+        custom int physxRigidBody:solverPositionIterationCount = 16
+        custom int physxRigidBody:solverVelocityIterationCount = 4
+        double3 xformOp:translate = (0, -0.128, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Cube "beam" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </device/pm> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            custom float physxCollision:contactOffset = 0.002
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.72, 0.73, 0.75)]
+            double size = 1
+            float3 xformOp:scale = (0.11, 0.012, 0.022)
+            double3 xformOp:translate = (0.167, 0.047, 0.014)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "index"
+        {
+            color3f[] primvars:displayColor = [(0.9, 0.1, 0.1)]
+            double size = 1
+            float3 xformOp:scale = (0.102, 0.001, 0.0003)
+            double3 xformOp:translate = (0.273, 0.0525, 0.00045)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "bridge" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </device/pm> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            custom float physxCollision:contactOffset = 0.002
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.72, 0.73, 0.75)]
+            double size = 1
+            float3 xformOp:scale = (0.03, 0.048, 0.008)
+            double3 xformOp:translate = (0.167, 0.017, 0.021)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "flange" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </device/pm> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            custom float physxCollision:contactOffset = 0.002
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.15, 0.45, 0.85)]
+            double size = 1
+            float3 xformOp:scale = (0.03, 0.012, 0.002)
+            double3 xformOp:translate = (0.167, 0.001, 0.026000000000000002)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "fin" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            rel material:binding:physics = </device/pm> (
+                bindMaterialAs = "weakerThanDescendants"
+            )
+            custom float physxCollision:contactOffset = 0.002
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.15, 0.45, 0.85)]
+            double size = 1
+            float3 xformOp:scale = (0.024, 0.005, 0.024)
+            double3 xformOp:translate = (0.167, 0.001, 0.039)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def PhysicsPrismaticJoint "bar_slide"
+    {
+        uniform token physics:axis = "Y"
+        rel physics:body0 = </device/base>
+        rel physics:body1 = </device/bar>
+        point3f physics:localPos0 = (0, -0.128, 0)
+        point3f physics:localPos1 = (0, 0, 0)
+        float physics:lowerLimit = -0.004
+        float physics:upperLimit = 0.068
+    }
+}
+
