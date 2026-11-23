@@ -1,0 +1,3451 @@
+#usda 1.0
+(
+    defaultPrim = "cassette"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "cassette" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxRigidBodyAPI"]
+)
+{
+    bool physics:kinematicEnabled = 1
+    float physics:mass = 0.082
+    custom int physxRigidBody:solverPositionIterationCount = 16
+    custom int physxRigidBody:solverVelocityIterationCount = 4
+
+    def Material "pp" (
+        prepend apiSchemas = ["PhysicsMaterialAPI"]
+    )
+    {
+        float physics:dynamicFriction = 0.35
+        float physics:restitution = 0
+        float physics:staticFriction = 0.35
+    }
+
+    def Cube "end_a" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0674, 0.004, 0.0615)
+        double3 xformOp:translate = (0, -0.06899999999999999, 0.03075)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "end_b" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0674, 0.004, 0.0615)
+        double3 xformOp:translate = (0, 0.06899999999999999, 0.03075)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "side_p" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.134, 0.0515)
+        double3 xformOp:translate = (0.0299, 0, 0.03575)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_00r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, -0.059379999999999995, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_00t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, -0.059379999999999995, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_01r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, -0.054619999999999995, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_01t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, -0.054619999999999995, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_02r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, -0.049859999999999995, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_02t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, -0.049859999999999995, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_03r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, -0.045099999999999994, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_03t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, -0.045099999999999994, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_04r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, -0.040339999999999994, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_04t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, -0.040339999999999994, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_05r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, -0.035579999999999994, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_05t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, -0.035579999999999994, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_06r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, -0.030819999999999993, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_06t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, -0.030819999999999993, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_07r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, -0.026059999999999993, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_07t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, -0.026059999999999993, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_08r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, -0.021299999999999993, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_08t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, -0.021299999999999993, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_09r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, -0.016539999999999992, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_09t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, -0.016539999999999992, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_10r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, -0.011779999999999992, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_10t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, -0.011779999999999992, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_11r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, -0.0070199999999999915, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_11t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, -0.0070199999999999915, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_12r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, -0.002259999999999991, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_12t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, -0.002259999999999991, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_13r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, 0.002500000000000009, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_13t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, 0.002500000000000009, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_14r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, 0.0072600000000000095, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_14t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, 0.0072600000000000095, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_15r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, 0.01202000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_15t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, 0.01202000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_16r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, 0.01678000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_16t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, 0.01678000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_17r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, 0.02154000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_17t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, 0.02154000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_18r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, 0.02630000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_18t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, 0.02630000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_19r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, 0.03106000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_19t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, 0.03106000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_20r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, 0.03582000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_20t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, 0.03582000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_21r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, 0.04058000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_21t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, 0.04058000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_22r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, 0.04534000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_22t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, 0.04534000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_23r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, 0.05010000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_23t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, 0.05010000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_24r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, 0.05486000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_24t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, 0.05486000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_25r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (0.02605, 0.05962000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_p_25t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (0.02435, 0.05962000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rail_p" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.134, 0.011813397)
+        double3 xformOp:translate = (0.015, 0, 0.005906698431651187)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_00r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, -0.059379999999999995, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_00t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, -0.059379999999999995, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_01r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, -0.054619999999999995, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_01t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, -0.054619999999999995, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_02r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, -0.049859999999999995, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_02t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, -0.049859999999999995, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_03r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, -0.045099999999999994, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_03t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, -0.045099999999999994, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_04r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, -0.040339999999999994, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_04t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, -0.040339999999999994, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_05r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, -0.035579999999999994, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_05t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, -0.035579999999999994, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_06r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, -0.030819999999999993, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_06t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, -0.030819999999999993, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_07r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, -0.026059999999999993, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_07t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, -0.026059999999999993, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_08r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, -0.021299999999999993, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_08t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, -0.021299999999999993, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_09r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, -0.016539999999999992, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_09t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, -0.016539999999999992, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_10r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, -0.011779999999999992, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_10t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, -0.011779999999999992, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_11r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, -0.0070199999999999915, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_11t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, -0.0070199999999999915, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_12r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, -0.002259999999999991, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_12t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, -0.002259999999999991, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_13r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, 0.002500000000000009, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_13t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, 0.002500000000000009, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_14r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, 0.0072600000000000095, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_14t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, 0.0072600000000000095, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_15r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, 0.01202000000000001, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_15t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, 0.01202000000000001, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_16r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, 0.01678000000000001, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_16t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, 0.01678000000000001, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_17r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, 0.02154000000000001, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_17t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, 0.02154000000000001, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_18r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, 0.02630000000000001, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_18t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, 0.02630000000000001, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_19r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, 0.03106000000000001, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_19t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, 0.03106000000000001, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_20r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, 0.03582000000000001, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_20t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, 0.03582000000000001, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_21r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, 0.04058000000000001, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_21t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, 0.04058000000000001, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_22r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, 0.04534000000000001, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_22t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, 0.04534000000000001, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_23r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, 0.05010000000000001, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_23t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, 0.05010000000000001, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_24r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, 0.05486000000000001, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_24t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, 0.05486000000000001, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_25r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (0.015, 0.05962000000000001, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_p_25t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (0.015, 0.05962000000000001, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "side_n" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.134, 0.0515)
+        double3 xformOp:translate = (-0.0299, 0, 0.03575)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_00r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, -0.059379999999999995, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_00t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, -0.059379999999999995, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_01r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, -0.054619999999999995, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_01t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, -0.054619999999999995, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_02r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, -0.049859999999999995, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_02t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, -0.049859999999999995, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_03r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, -0.045099999999999994, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_03t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, -0.045099999999999994, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_04r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, -0.040339999999999994, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_04t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, -0.040339999999999994, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_05r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, -0.035579999999999994, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_05t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, -0.035579999999999994, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_06r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, -0.030819999999999993, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_06t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, -0.030819999999999993, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_07r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, -0.026059999999999993, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_07t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, -0.026059999999999993, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_08r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, -0.021299999999999993, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_08t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, -0.021299999999999993, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_09r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, -0.016539999999999992, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_09t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, -0.016539999999999992, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_10r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, -0.011779999999999992, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_10t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, -0.011779999999999992, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_11r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, -0.0070199999999999915, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_11t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, -0.0070199999999999915, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_12r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, -0.002259999999999991, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_12t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, -0.002259999999999991, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_13r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, 0.002500000000000009, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_13t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, 0.002500000000000009, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_14r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, 0.0072600000000000095, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_14t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, 0.0072600000000000095, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_15r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, 0.01202000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_15t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, 0.01202000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_16r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, 0.01678000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_16t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, 0.01678000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_17r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, 0.02154000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_17t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, 0.02154000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_18r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, 0.02630000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_18t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, 0.02630000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_19r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, 0.03106000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_19t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, 0.03106000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_20r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, 0.03582000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_20t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, 0.03582000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_21r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, 0.04058000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_21t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, 0.04058000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_22r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, 0.04534000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_22t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, 0.04534000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_23r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, 0.05010000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_23t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, 0.05010000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_24r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, 0.05486000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_24t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, 0.05486000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_25r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.00374, 0.042)
+        double3 xformOp:translate = (-0.02605, 0.05962000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "comb_n_25t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.0017, 0.0018, 0.042)
+        double3 xformOp:translate = (-0.02435, 0.05962000000000001, 0.037000000000000005)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rail_n" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.134, 0.011813397)
+        double3 xformOp:translate = (-0.015, 0, 0.005906698431651187)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_00r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, -0.059379999999999995, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_00t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, -0.059379999999999995, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_01r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, -0.054619999999999995, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_01t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, -0.054619999999999995, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_02r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, -0.049859999999999995, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_02t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, -0.049859999999999995, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_03r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, -0.045099999999999994, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_03t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, -0.045099999999999994, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_04r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, -0.040339999999999994, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_04t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, -0.040339999999999994, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_05r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, -0.035579999999999994, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_05t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, -0.035579999999999994, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_06r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, -0.030819999999999993, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_06t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, -0.030819999999999993, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_07r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, -0.026059999999999993, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_07t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, -0.026059999999999993, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_08r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, -0.021299999999999993, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_08t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, -0.021299999999999993, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_09r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, -0.016539999999999992, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_09t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, -0.016539999999999992, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_10r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, -0.011779999999999992, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_10t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, -0.011779999999999992, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_11r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, -0.0070199999999999915, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_11t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, -0.0070199999999999915, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_12r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, -0.002259999999999991, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_12t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, -0.002259999999999991, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_13r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, 0.002500000000000009, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_13t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, 0.002500000000000009, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_14r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, 0.0072600000000000095, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_14t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, 0.0072600000000000095, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_15r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, 0.01202000000000001, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_15t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, 0.01202000000000001, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_16r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, 0.01678000000000001, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_16t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, 0.01678000000000001, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_17r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, 0.02154000000000001, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_17t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, 0.02154000000000001, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_18r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, 0.02630000000000001, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_18t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, 0.02630000000000001, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_19r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, 0.03106000000000001, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_19t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, 0.03106000000000001, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_20r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, 0.03582000000000001, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_20t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, 0.03582000000000001, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_21r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, 0.04058000000000001, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_21t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, 0.04058000000000001, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_22r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, 0.04534000000000001, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_22t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, 0.04534000000000001, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_23r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, 0.05010000000000001, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_23t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, 0.05010000000000001, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_24r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, 0.05486000000000001, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_24t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, 0.05486000000000001, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_25r" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.00374, 0.002)
+        double3 xformOp:translate = (-0.015, 0.05962000000000001, 0.012813396863302375)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cube "rt_n_25t" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </cassette/pp> (
+            bindMaterialAs = "weakerThanDescendants"
+        )
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        color3f[] primvars:displayColor = [(0.82, 0.82, 0.78)]
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.0018, 0.002)
+        double3 xformOp:translate = (-0.015, 0.05962000000000001, 0.014813396863302374)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+}
+
