@@ -1,0 +1,132 @@
+{
+  "status": "rearward_tab_aim_cpu_verified_native_pending",
+  "date": "2026-11-16",
+  "local_model_tests_passed": 121,
+  "native_runtime": true,
+  "demo_score": null,
+  "video": null,
+  "remaining": [
+    "Select real connector CAD/dimensions",
+    "Native flexible latch and retained jack engagement",
+    "Flexible crowded cables and bimanual access",
+    "Robot controller and actual scored video"
+  ],
+  "native_probes": [
+    {
+      "run": "ethernet-native-002",
+      "retains_engaged_0_2N": true,
+      "clip_depresses": true,
+      "withdraws_pressed": false
+    },
+    {
+      "run": "ethernet-native-003",
+      "withdraws_pressed_1N_m": 0.227345,
+      "seating_lash_m": 0.003026,
+      "legacy_result_check_failed": true,
+      "travel_coordinate_bug": "world-z superseded by plug-local readback"
+    }
+  ],
+  "robot_attempts": [
+    {
+      "run": "ethernet-release-001",
+      "score": 0.0,
+      "clip_release_observed": true,
+      "plug_disconnected": false
+    }
+  ],
+  "current_model_note": "16.26 mm horizontal pitch, provisional 13.72 mm vertical pitch. Earlier 28 mm pitch attempts do not validate this revision.",
+  "role_revision": {
+    "boot_hand": "left",
+    "clip_hand": "right",
+    "mechanics_changed": false,
+    "basis": "Astra convex-box SAT and hand-hand separating-plane certificates with0.2mm margin, scoped to tested gripper/plug geometries; arm links, live cables and actual retention unvalidated"
+  },
+  "socket_fit_candidate": {
+    "native_validated": false,
+    "guide_x_m": [
+      0.3995,
+      0.4255
+    ],
+    "guide_y_offsets_m": [
+      -0.00475,
+      0.00475
+    ],
+    "guide_width_m": 0.0025,
+    "guide_z_m": [
+      0.0043,
+      0.0068
+    ],
+    "nominal_shoulder_clearance_m": 0.0003,
+    "clip_channel_width_m": 0.007,
+    "baseline_limits": {
+      "all_connected_plugs": 7,
+      "max_abs_pitch_deg": 3.5,
+      "max_abs_clip_travel_m": 0.0002
+    },
+    "fidelity": "Original procedural internal shoulder guides; not vendor-validated CAD. Native baseline, retention and full robot runs remain unvalidated."
+  },
+  "grasp_candidate": {
+    "boot_tcp_plug_local_m": [
+      -0.038,
+      -0.0035,
+      0.00024
+    ],
+    "wrist_rotation": "world-fixed R_GRIP",
+    "native_sustained_hold_validated": false,
+    "basis": "Astra exact-capsule/full-gripper swept entry and closure certificates on three actual guided snapshots; >=0.5 mm clearance. Rear fingertip contact remains subject to native independent-jaw/slip gates.",
+    "hold_opening_m": 0.00304001,
+    "predicted_opposed_normal_force_N": [
+      2.506,
+      2.494
+    ]
+  },
+  "work_state": "active_serial_priority",
+  "full_completion_verified": false,
+  "native_fit_bench": {
+    "run": "ethernet-guided003",
+    "task_angle_limit_deg": 5.0,
+    "max_axis_angle_deg": 4.436,
+    "max_clip_travel_m": 2.33e-05,
+    "engaged_pull_N": 1.0,
+    "retains_engaged": true,
+    "pressed_withdrawal_m": 0.2196918,
+    "task_score": null,
+    "engineering_axis_margin_deg": 3.5,
+    "engineering_margin_pass": false
+  },
+  "fast_mode_check": {
+    "runs": [
+      "ethernet-fastfit005",
+      "ethernet-videofit005"
+    ],
+    "simulated_s": 6.0,
+    "fast_wall_s": 23.591034894,
+    "video_wall_s": 37.56497373,
+    "speedup": 1.592341069,
+    "physics_manifests_equal": true,
+    "colliders": 830,
+    "bodies": 116,
+    "joints": 109,
+    "media_eligible": false
+  },
+  "latest_contact_probe": {
+    "run": "ethernet-clip031",
+    "score": null,
+    "steps": 744,
+    "time_s": 37.2,
+    "entered_contact_s": 26.8,
+    "failure": "measured stationary hold lost rigid/interhand clearance during press approach",
+    "closest_pair": [
+      "tip_left:58",
+      "switch/side_0_m"
+    ],
+    "certified_gap_m": 0.00018722851824237718,
+    "clip_release_observed": false
+  },
+  "pending_candidate": {
+    "only_production_change": "tab contact plug-local X -0.010 to -0.0105 m",
+    "recorded_translated_actual_gap_m": 0.0006788146772715442,
+    "nominal_dense_sweep_gap_m_minimum": 0.00095,
+    "native_release_verified": false
+  }
+}
