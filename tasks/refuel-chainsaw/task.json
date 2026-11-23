@@ -1,0 +1,21 @@
+{
+  "title": "Top up a chainsaw's fuel tank from a premix bottle without spilling",
+  "category": "Societal relatability",
+  "keywords": [
+    "chainsaw",
+    "refuelling",
+    "pouring",
+    "premix bottle",
+    "small engine",
+    "spill"
+  ],
+  "instruction": "Top up the chainsaw's fuel tank from the premix bottle: pour the fuel into the tank without spilling.",
+  "context": "Topping up a chainsaw from a premix bottle is a routine job for anyone who cuts firewood or clears trees: the filler opening is small, the bottle must be turned past horizontal while it stays aimed, and fuel spilled on the housing or the ground is a fire and pollution hazard. The difficulty is physical: the 4 cm opening is only a little wider than the 3 cm spout, and the bottle has to be rolled past 120 degrees with its spout over it.",
+  "setup": "Positions in cm from the midpoint between the two arm bases (x forward, y to the robot's left); heights above the table top. (1) Chainsaw, fixed (clamped to the table): a vintage-style 1970s chainsaw with a red painted cast-aluminium housing, a 50 cm steel bar and a top carry handle, 90 x 28 x 34 cm, lying on its flat base with the bar pointing to the robot's right (-y) along x = 45.0; its housing spans x 30.8 to 59.2, y -49.4 to 41.0. Its fuel tank is open: a round filler opening 4.0 cm across, with a dull-metal collar, centred at (40.0, 20.0) in the housing's top, 20.0 cm above the table, over a tank of about 0.9 L; the fuel cap is not part of the task. (2) Premix bottle: a 1 L molded-plastic fuel-mixing bottle, orange, 8.5 cm along x by 7.0 cm along y and 20.0 cm tall, about 120 g empty, standing upright with the centre of its base at (35.0, 55.0); its pour spout, 3.0 cm across, 2.4 cm bore and 6.0 cm tall, is on the top at (37.0, 56.9), 1.6 cm in from its +y wall. It holds about 0.1 L of fuel (1,170 rigid beads, 70 g, in simulation; see fidelity), a layer 4.5 cm deep. Both arms start at the ready pose; the right arm has nothing to do.",
+  "scoring": "Read at the end of the run (real trial: the video plus a graduated cylinder and a scale). Fuel in the tank means below the filler opening, inside the tank. Fuel outside means neither in the bottle nor in the tank (on the saw, the table or the floor). 0 if more than 10% of the fuel (by mass) is outside, at the end of the run. Otherwise 0.25 with at least 25% of the fuel in the tank, 0.5 with at least 50%, 0.75 with at least 75%, and 1.0 with at least 80%; less than 25% in the tank scores 0.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "Use water (dyed) for real trials. Empty the saw's tank and refill the bottle to its starting dose before each trial; wipe the housing and the table. Keep the chain's bar guard on and the saw unpowered, with no fuel in it.",
+  "fidelity": "Rigid-body PhysX at 240 Hz. The chainsaw is a fixed prop: USDCraft-10K ds_R951_08 meshes (Apache-2.0) with our own box colliders and a hollow 0.9 L tank under a 4 cm opening in the housing's top; its original neck, cap and moving parts are omitted. The bottle is our own hollow shell with a 2.4 cm bore spout. The fuel is 1,170 rigid beads, 4.0-5.6 mm across (70 g), with damping, in place of liquid.",
+  "scores": "Dream-1 run: 0.0 (1,200 steps); demo: 1.0",
+  "media": "M-E2EBRN"
+}

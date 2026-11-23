@@ -1,0 +1,406 @@
+#usda 1.0
+(
+    defaultPrim = "Can"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Can" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxRigidBodyAPI", "MaterialBindingAPI"]
+)
+{
+    rel material:binding:physics = </Can/Material> (
+        bindMaterialAs = "weakerThanDescendants"
+    )
+    float physics:mass = 0.12
+    custom int physxRigidBody:solverPositionIterationCount = 32
+
+    def Scope "visual"
+    {
+        def Cube "shell"
+        {
+            color3f[] primvars:displayColor = [(0.8524374, 0.1483025, 0.003861873)]
+            double size = 1
+            float3 xformOp:scale = (0.085, 0.07, 0.2)
+            double3 xformOp:translate = (0, 0, 0.1)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cylinder "spout"
+        {
+            uniform token axis = "Z"
+            double height = 0.06
+            color3f[] primvars:displayColor = [(0.8524374, 0.1483025, 0.003861873)]
+            double radius = 0.015
+            double3 xformOp:translate = (0.02, 0.019, 0.23)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Scope "collision"
+    {
+        def Cube "floor" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0002
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:rotateXYZ = (0, 0, 0)
+            float3 xformOp:scale = (0.085, 0.07, 0.004)
+            double3 xformOp:translate = (0, 0, 0.002)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+        }
+
+        def Cube "wall_xn" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0002
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:rotateXYZ = (0, 0, 0)
+            float3 xformOp:scale = (0.004, 0.07, 0.2)
+            double3 xformOp:translate = (-0.0405, 0, 0.1)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+        }
+
+        def Cube "wall_xp" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0002
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:rotateXYZ = (0, 0, 0)
+            float3 xformOp:scale = (0.004, 0.07, 0.2)
+            double3 xformOp:translate = (0.0405, 0, 0.1)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+        }
+
+        def Cube "wall_yn" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0002
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:rotateXYZ = (0, 0, 0)
+            float3 xformOp:scale = (0.085, 0.004, 0.2)
+            double3 xformOp:translate = (0, -0.033, 0.1)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+        }
+
+        def Cube "wall_yp" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0002
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:rotateXYZ = (0, 0, 0)
+            float3 xformOp:scale = (0.085, 0.004, 0.2)
+            double3 xformOp:translate = (0, 0.033, 0.1)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+        }
+
+        def Cube "top_a" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0002
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:rotateXYZ = (0, 0, 0)
+            float3 xformOp:scale = (0.0505, 0.07, 0.004)
+            double3 xformOp:translate = (-0.01725, 0, 0.198)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+        }
+
+        def Cube "top_b" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0002
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:rotateXYZ = (0, 0, 0)
+            float3 xformOp:scale = (0.0105, 0.07, 0.004)
+            double3 xformOp:translate = (0.037250000000000005, 0, 0.198)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+        }
+
+        def Cube "top_c" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0002
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:rotateXYZ = (0, 0, 0)
+            float3 xformOp:scale = (0.024, 0.042, 0.004)
+            double3 xformOp:translate = (0.02, -0.014000000000000002, 0.198)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+        }
+
+        def Cube "top_d" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0002
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:rotateXYZ = (0, 0, 0)
+            float3 xformOp:scale = (0.024, 0.004, 0.004)
+            double3 xformOp:translate = (0.02, 0.033, 0.198)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+        }
+
+        def "spout"
+        {
+            def Cube "s0" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                custom float physxCollision:contactOffset = 0.0002
+                custom float physxCollision:restOffset = 0
+                double size = 1
+                token visibility = "invisible"
+                float3 xformOp:rotateXYZ = (0, 0, 0)
+                float3 xformOp:scale = (0.003, 0.006206066, 0.064)
+                double3 xformOp:translate = (0.0335, 0.019, 0.228)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            }
+
+            def Cube "s1" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                custom float physxCollision:contactOffset = 0.0002
+                custom float physxCollision:restOffset = 0
+                double size = 1
+                token visibility = "invisible"
+                float3 xformOp:rotateXYZ = (0, 0, 22.5)
+                float3 xformOp:scale = (0.003, 0.006206066, 0.064)
+                double3 xformOp:translate = (0.03247237368890237, 0.024166226336928713, 0.228)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            }
+
+            def Cube "s2" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                custom float physxCollision:contactOffset = 0.0002
+                custom float physxCollision:restOffset = 0
+                double size = 1
+                token visibility = "invisible"
+                float3 xformOp:rotateXYZ = (0, 0, 45)
+                float3 xformOp:scale = (0.003, 0.006206066, 0.064)
+                double3 xformOp:translate = (0.029545941546018393, 0.02854594154601839, 0.228)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            }
+
+            def Cube "s3" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                custom float physxCollision:contactOffset = 0.0002
+                custom float physxCollision:restOffset = 0
+                double size = 1
+                token visibility = "invisible"
+                float3 xformOp:rotateXYZ = (0, 0, 67.5)
+                float3 xformOp:scale = (0.003, 0.006206066, 0.064)
+                double3 xformOp:translate = (0.025166226336928714, 0.03147237368890237, 0.228)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            }
+
+            def Cube "s4" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                custom float physxCollision:contactOffset = 0.0002
+                custom float physxCollision:restOffset = 0
+                double size = 1
+                token visibility = "invisible"
+                float3 xformOp:rotateXYZ = (0, 0, 90)
+                float3 xformOp:scale = (0.003, 0.006206066, 0.064)
+                double3 xformOp:translate = (0.02, 0.0325, 0.228)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            }
+
+            def Cube "s5" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                custom float physxCollision:contactOffset = 0.0002
+                custom float physxCollision:restOffset = 0
+                double size = 1
+                token visibility = "invisible"
+                float3 xformOp:rotateXYZ = (0, 0, 112.5)
+                float3 xformOp:scale = (0.003, 0.006206066, 0.064)
+                double3 xformOp:translate = (0.01483377366307129, 0.03147237368890237, 0.228)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            }
+
+            def Cube "s6" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                custom float physxCollision:contactOffset = 0.0002
+                custom float physxCollision:restOffset = 0
+                double size = 1
+                token visibility = "invisible"
+                float3 xformOp:rotateXYZ = (0, 0, 135)
+                float3 xformOp:scale = (0.003, 0.006206066, 0.064)
+                double3 xformOp:translate = (0.01045405845398161, 0.028545941546018392, 0.228)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            }
+
+            def Cube "s7" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                custom float physxCollision:contactOffset = 0.0002
+                custom float physxCollision:restOffset = 0
+                double size = 1
+                token visibility = "invisible"
+                float3 xformOp:rotateXYZ = (0, 0, 157.5)
+                float3 xformOp:scale = (0.003, 0.006206066, 0.064)
+                double3 xformOp:translate = (0.007527626311097629, 0.024166226336928713, 0.228)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            }
+
+            def Cube "s8" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                custom float physxCollision:contactOffset = 0.0002
+                custom float physxCollision:restOffset = 0
+                double size = 1
+                token visibility = "invisible"
+                float3 xformOp:rotateXYZ = (0, 0, 180)
+                float3 xformOp:scale = (0.003, 0.006206066, 0.064)
+                double3 xformOp:translate = (0.006500000000000001, 0.019, 0.228)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            }
+
+            def Cube "s9" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                custom float physxCollision:contactOffset = 0.0002
+                custom float physxCollision:restOffset = 0
+                double size = 1
+                token visibility = "invisible"
+                float3 xformOp:rotateXYZ = (0, 0, 202.5)
+                float3 xformOp:scale = (0.003, 0.006206066, 0.064)
+                double3 xformOp:translate = (0.007527626311097628, 0.01383377366307129, 0.228)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            }
+
+            def Cube "s10" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                custom float physxCollision:contactOffset = 0.0002
+                custom float physxCollision:restOffset = 0
+                double size = 1
+                token visibility = "invisible"
+                float3 xformOp:rotateXYZ = (0, 0, 225)
+                float3 xformOp:scale = (0.003, 0.006206066, 0.064)
+                double3 xformOp:translate = (0.010454058453981606, 0.009454058453981609, 0.228)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            }
+
+            def Cube "s11" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                custom float physxCollision:contactOffset = 0.0002
+                custom float physxCollision:restOffset = 0
+                double size = 1
+                token visibility = "invisible"
+                float3 xformOp:rotateXYZ = (0, 0, 247.5)
+                float3 xformOp:scale = (0.003, 0.006206066, 0.064)
+                double3 xformOp:translate = (0.01483377366307128, 0.006527626311097632, 0.228)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            }
+
+            def Cube "s12" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                custom float physxCollision:contactOffset = 0.0002
+                custom float physxCollision:restOffset = 0
+                double size = 1
+                token visibility = "invisible"
+                float3 xformOp:rotateXYZ = (0, 0, 270)
+                float3 xformOp:scale = (0.003, 0.006206066, 0.064)
+                double3 xformOp:translate = (0.019999999999999997, 0.0055, 0.228)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            }
+
+            def Cube "s13" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                custom float physxCollision:contactOffset = 0.0002
+                custom float physxCollision:restOffset = 0
+                double size = 1
+                token visibility = "invisible"
+                float3 xformOp:rotateXYZ = (0, 0, 292.5)
+                float3 xformOp:scale = (0.003, 0.006206066, 0.064)
+                double3 xformOp:translate = (0.025166226336928714, 0.00652762631109763, 0.228)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            }
+
+            def Cube "s14" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                custom float physxCollision:contactOffset = 0.0002
+                custom float physxCollision:restOffset = 0
+                double size = 1
+                token visibility = "invisible"
+                float3 xformOp:rotateXYZ = (0, 0, 315)
+                float3 xformOp:scale = (0.003, 0.006206066, 0.064)
+                double3 xformOp:translate = (0.02954594154601839, 0.009454058453981605, 0.228)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            }
+
+            def Cube "s15" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                custom float physxCollision:contactOffset = 0.0002
+                custom float physxCollision:restOffset = 0
+                double size = 1
+                token visibility = "invisible"
+                float3 xformOp:rotateXYZ = (0, 0, 337.5)
+                float3 xformOp:scale = (0.003, 0.006206066, 0.064)
+                double3 xformOp:translate = (0.032472373688902365, 0.013833773663071279, 0.228)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            }
+        }
+    }
+
+    def Material "Material" (
+        prepend apiSchemas = ["PhysicsMaterialAPI"]
+    )
+    {
+        float physics:dynamicFriction = 1
+        float physics:restitution = 0
+        float physics:staticFriction = 1.2
+    }
+}
+
