@@ -1,0 +1,27 @@
+{
+  "title": "Seat a robot controller's add-on board on its two rows of header pins without bending any pin",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "bimanual",
+    "robot assembly",
+    "electronics assembler",
+    "add-on board",
+    "stacking header",
+    "pin header",
+    "bent pin",
+    "square press",
+    "tilt alignment",
+    "insertion force",
+    "controller board",
+    "shield"
+  ],
+  "instruction": "Press the blue add-on board fully onto the controller's header pins without bending any pin, then let go with both grippers.",
+  "context": "Electronics assemblers and robotics technicians stack add-on boards (shields) onto a robot controller's header pins when they build and repair robots. The board's two rows of 20 pins must enter the sockets square; pressed in cocked or off-centre, the leading pins bend and the board must be scrapped. The board is first set down level on the pin tips, so it must be pressed home evenly, through its centre.",
+  "setup": "Station table; positions in metres, x forward from the arm bases, y to the robot's left, z up; table top z 0.7475. (1) Controller board: green PCB 85 x 56 x 1.6 mm, FR-4, on a 100 x 70 x 6 mm aluminium carrier plate (silver, 0.4 kg with the board), the plate bolted to the table, centred (0.30, 0.0), long edge along y. (2) Female header: black 2 x 20 plastic socket, 7.62 x 50.8 x 8.5 mm (the two pin rows 5.08 mm apart plus 1.27 mm of plastic each side, so both rows fit), rows along y, 2.54 mm pitch, centred on the board; its top face is 16.1 mm above the table top. (3) Add-on board: blue PCB 65 x 56 x 1.6 mm (long edge along y), 30 g with a 25 x 25 x 12 mm aluminium heat sink (silver) glued at its centre; on its underside two rows of 20 gold pins, 0.64 mm square, 2.54 mm pitch, rows 5.08 mm apart, 6 mm long, matching the header. It starts level, set down by hand on the header with the pin tips resting on its top face (and the first pins just in the lead-ins of the sockets): the underside is 6.0 mm above the header top, which is exactly the pin length, so nothing else supports it. (4) Mating: the pins enter the sockets only when the board is within 1.5 deg lengthwise and 4 deg across as the tips pass 1.5 mm into the sockets; pressed in more cocked than that, the leading pins bend. Insertion force about 3.3 N (0.08 N per pin), then the contacts hold the board where it is pushed. Pressed off-centre the pins on the loaded side enter first and the board rocks; the pins in the sockets resist about 0.16 N m before it passes 1.5 deg. Fully seated = underside within 0.3 mm of the header top. Gripper friction pads: the heat sink gives 25 mm of aluminium to pinch between the pads.",
+  "scoring": "Measured from link poses every control step from reset: the board's height above the seat (mm), its tilt lengthwise (roll about x) and across (pitch about y), its speed, and each gripper's pad clearance. Bent: the board below 4.5 mm above the seat (pins 1.5 mm into the sockets) with tilt over 1.5 deg lengthwise or 4 deg across, at any time (a bent pin is permanent damage). Seated: height at most 0.3 mm. Whole-run record (a linkkit History updated every control step and cleared only by the simulator reset, so pulling the board out again never clears an earlier bend). Ladder: 0 = bent at any time (gate), or never pressed into the sockets; 0.5 = pressed within 2 mm of the seat, unbent, at some time; 0.75 = seated at the end; 1.0 = seated and still (under 3 mm/s and 3 deg/s) for the last 1 s and the release gate: every pad of both grippers at least 30 mm from every part of the board and heat sink, both grippers moving under 5 mm/s for the last 1 s. Success (1.0) must hold 1 s. Lifting the board off the header and letting go scores 0: it falls back onto the pin tips and is never pressed in. Real trial: a digital protractor (0.1 deg) on the board's long edge and a side camera at 60 fps with a 1 mm grid behind the header for the tilt as the pin tips pass 1.5 mm into the sockets; a feeler gauge (0.3 mm) at the four corners for seating; a 10x loupe and a straight edge on the pins afterwards for any bent pin; a tape for gripper clearance; the video for stillness.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Pull the board off with a puller (about 3 N), check each pin with a 10x loupe against a straight edge and replace the shield if any pin is bent, then set it level on the header by hand so that the pin tips rest on the header's top face (underside 6 mm above the header, verify with the protractor and a 6 mm gauge block laid beside it, then remove the block). Nothing else supports or props it. The carrier plate and controller need no reset. Verify mating force with a push-pull gauge on a spare pair: 2.5 to 4 N.",
+  "fidelity": "Pins and sockets have no collision. The board rides a vertical slide and two tilt hinges, all free above the header, so gravity drops it onto the pin tips and its weight levels it there. In the sockets a spring latch holds the slide where the board was pushed (3.3 N per further 1 mm), and with the pins 1.5 mm in a stiff spring resists rocking (6 N m/rad); a tilt rule at that depth stands for pin bending. Lateral play is not modelled, so in-plane alignment is assumed. Either arm can press.",
+  "scores": "Dream-1 run: not run on this revision; demo: 1.0",
+  "media": "M-GW9K87"
+}
