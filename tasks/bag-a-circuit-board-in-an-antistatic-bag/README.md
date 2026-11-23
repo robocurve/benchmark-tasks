@@ -4,8 +4,9 @@ An empty static-shielding bag (SCS 10035, 3 x 5 in, open top) lies flat and shut
 towards the robot. A Raspberry Pi Zero 2 W board lies beside it, and a conductive tote stands on the robot's left.
 The robot must get the board into the bag and put the filled bag in the tote.
 
-Under ESD control programs (ANSI/ESD S20.20), every static-sensitive board that leaves the protected bench is packed in
-a static-shielding bag. Electronics assemblers, repair technicians and returns packers bag boards many times a shift.
+Opening a new, flat bag and putting something in it is an everyday two-handed job: a freezer or sandwich bag, a padded
+mailer, a gift bag or, here, the static-shielding bag a computer part ships and is returned in, which anyone who sends
+back a graphics card or a motherboard handles.
 
 A new bag lies flat with its films touching, so the mouth is shut: the board's leading edge only rides up onto it. One
 hand must open the bag and keep it open: squeezing the bag's two side seams together stands its edges up and arches
