@@ -19,22 +19,23 @@ import task as T  # noqa: E402
 
 
 def meas(slot=None, cassette=None, dz=0.0, tilt_deg=0.0, grip=0.0, tips=0.08, in_stand=True, robot=0.1, nb=0.0,
-         vz=0.0, speed=0.0, low=None, edge_slots=None):
+         vz=0.0, speed=0.0, low=None, edge_slots=None, touch=0.0, pos=None):
     """Measurements for a wafer standing in `slot` of `cassette` (default: the target), dz above its seat."""
     cassette = T.FAR_XY if cassette is None else cassette
     slot = T.DST if slot is None else slot
     x, y = T.slot_xy(cassette, slot)
-    pos = np.array([x, y, T.SEAT_Z + dz])
+    pos = np.array([x, y, T.SEAT_Z + dz]) if pos is None else np.asarray(pos, float)
     ys = [y, y] if edge_slots is None else [cassette[1] + P.slot_y(k) for k in edge_slots]
     return dict(wafer_pos=pos, wafer_vz=vz, wafer_speed=speed,
                 wafer_low=pos[2] - P.WAFER_R if low is None else low, edge_y=tuple(ys),
                 edge_x=(x + P.WAFER_R, x - P.WAFER_R), upright_deg=tilt_deg, nb_moved=nb, grip_N=grip,
-                tips_to_wafer=tips, tw_in_stand=in_stand, robot_to_tweezers=robot)
+                tips_to_wafer=tips, tw_in_stand=in_stand, robot_to_tweezers=robot, robot_touch_N=touch)
 
 
 def fresh():
     s: dict = {}
-    s.update(lifted=False, dropped=False, displaced=False, table=False, entered=False, free_steps=0, events=[])
+    s.update(was_held=False, parted_pos=None, checked=False, dropped=False, displaced=False, table=False,
+             robot=False, entered=False, free_steps=0, events=[])
     return s
 
 
@@ -92,17 +93,36 @@ def test_neighbour_displaced_latches_zero():  # negative control
     assert out["score"] == 0.0 and s["displaced"]
 
 
-def test_dropped_wafer_latches_zero():  # negative control: lifted, then falls free of the tweezers
-    lifted = meas(grip=0.5, low=T.TOP + P.CAS_H + 0.01, dz=0.05)
-    falling = meas(grip=0.0, dz=0.02, vz=-0.5, speed=0.5)
-    out, s = run([lifted, falling] + settled())
+def test_dropped_wafer_latches_zero():  # negative control: let go 20 mm above its slot, then it falls in
+    out, s = run([meas(grip=0.5, dz=0.02)] + [meas(dz=0.02)] * 3 + settled())
     assert out["score"] == 0.0 and s["dropped"]
 
 
-def test_slow_settle_is_not_a_drop():
-    lifted = meas(grip=0.5, low=T.TOP + P.CAS_H + 0.01, dz=0.05)
-    out, s = run([lifted, meas(grip=0.0, vz=-0.05, speed=0.05)] + settled())
+def test_let_go_outside_a_cassette_latches_zero():
+    out, s = run([meas(grip=0.5, pos=(0.26, 0.30, T.TOP + 0.10))] + [meas(pos=(0.26, 0.30, T.TOP + 0.10))] * 3)
+    assert out["score"] == 0.0 and s["dropped"]
+
+
+def test_released_resting_in_its_slot_is_not_a_drop():
+    out, s = run([meas(grip=0.5)] * 5 + settled())
     assert out["score"] == 1.0 and not s["dropped"]
+
+
+def test_release_within_3_mm_is_not_a_drop():
+    out, s = run([meas(grip=0.5, dz=0.0025)] + [meas(dz=0.0025)] * 3 + settled())
+    assert out["score"] == 1.0 and not s["dropped"]
+
+
+def test_contact_flicker_while_carried_is_not_a_drop():  # free for 2 steps mid-carry, then held again
+    high = dict(dz=0.05)
+    seq = [meas(grip=0.5, **high), meas(**high), meas(**high), meas(grip=0.5, **high), meas(grip=0.5)] + settled()
+    out, s = run(seq)
+    assert out["score"] == 1.0 and not s["dropped"]
+
+
+def test_robot_touching_a_wafer_latches_zero():  # negative control: fingers or arm on any wafer
+    out, s = run([meas(touch=0.01)] + settled())
+    assert out["score"] == 0.0 and s["robot"]
 
 
 def test_table_touch_latches_zero():

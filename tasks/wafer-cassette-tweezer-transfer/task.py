@@ -40,7 +40,9 @@ SEAT_Z = TOP + P.seated_center_z()
 SEATED_TOL = 0.002  # top edge within 2 mm of its neighbours' top edges
 DISPLACED = 0.002  # another wafer moved or lifted 2 mm or more
 CLEAR = 0.050  # tweezer tips at least 50 mm from the wafer before any credit
-DROP_SPEED = 0.2  # m/s down while free of the tweezers: a fall of 2 mm or more (v^2 = 2 g h)
+RELEASE_HIGH = 0.003  # parted from the tips with its top edge over 3 mm (half a tip's width) above its neighbours'
+PARTED_STEPS = 3  # free of the tips this many control steps in a row = parted (ignores one-step contact flicker)
+ROBOT_TOUCH = 1e-4  # N: any reported contact between a robot link and a wafer
 UPRIGHT_DEG = 5.0
 RUN_LIMIT_STEPS = 2400
 SCORE_OVER = "end"
@@ -74,6 +76,11 @@ OBJECTS = [
 ]
 
 ak.sensor("grip", "wafer", ["tweezers/half_a", "tweezers/half_b"])
+_LINKS = "Geometry/base/link1/link2/link3/link4"
+_ROBOT = [f"{arm}/{_LINKS}{tail}" for arm in ("LeftArm", "RightArm")
+          for tail in ("", "/link5", "/link5/gripper", "/link5/gripper/tip_left", "/link5/gripper/tip_right")]
+ak.sensor("robot_wafer", "wafer", _ROBOT)  # the robot itself (not the tweezers) touching the moved wafer
+ak.sensor("robot_nb", "nb_.*", _ROBOT)  # ... or any other wafer
 
 # -- measurement (simulator) -> pure scoring ---------------------------------------------------------------------------
 
@@ -83,7 +90,8 @@ S: dict = {}
 @ak.on_reset
 def _reset():
     S.clear()
-    S.update(lifted=False, dropped=False, displaced=False, table=False, entered=False, free_steps=0, events=[])
+    S.update(was_held=False, parted_pos=None, checked=False, dropped=False, displaced=False, table=False,
+             robot=False, entered=False, free_steps=0, events=[])
 
 
 _reset()
@@ -143,6 +151,7 @@ def measure(objects) -> dict:
                         for k, (c, j) in NEIGHBOURS.items())
     env = ak.env() is not None
     m["grip_N"] = ak.force("grip") if env else 0.0
+    m["robot_touch_N"] = max(ak.force("robot_wafer"), ak.force("robot_nb")) if env else 0.0
     if env:
         tips = tip_points()
         m["tips_to_wafer"] = min(disk_dist(t, w.pos, n) for t in tips)
@@ -176,20 +185,30 @@ def _robot_to_tweezers(mid, axis):
 def ladder(m: dict, s: dict) -> dict:
     """Pure scoring from one step's measurements m; s carries the latched events between steps."""
     held = m["grip_N"] > 0.02
-    s["free_steps"] = 0 if held else s["free_steps"] + 1
-    near_top = TOP + P.CAS_H
-    if held and m["wafer_low"] > near_top + 0.001:
-        s["lifted"] = True
-    if s["lifted"] and not held and m["wafer_vz"] < -DROP_SPEED and not s["dropped"]:
-        s["dropped"] = True
-        s["events"].append("dropped: fell free of the tweezers")
+    p = m["wafer_pos"]
+    if held:
+        s["was_held"], s["checked"], s["free_steps"] = True, False, 0
+    else:
+        s["free_steps"] += 1
+    # the wafer must already rest in a slot when it parts from the tweezer tips (tips opened, or it slipped out)
+    if s["was_held"] and s["free_steps"] == 1:
+        s["parted_pos"] = p.copy()
+    if s["was_held"] and s["free_steps"] == PARTED_STEPS and not s["checked"] and not s["dropped"]:
+        s["checked"] = True
+        q = s["parted_pos"]
+        in_cassette = (in_footprint(NEAR_XY, q) or in_footprint(FAR_XY, q)) and q[2] < TOP + P.CAS_H
+        if not in_cassette or q[2] - SEAT_Z > RELEASE_HIGH:
+            s["dropped"] = True
+            s["events"].append("dropped: left the tips before resting in a slot")
+    if m["robot_touch_N"] > ROBOT_TOUCH and not s["robot"]:
+        s["robot"] = True
+        s["events"].append("the robot touched a wafer (not with the tweezers)")
     if m["nb_moved"] >= DISPLACED and not s["displaced"]:
         s["displaced"] = True
         s["events"].append("another wafer moved or lifted 2 mm or more")
     if m["wafer_low"] < TOP + 0.001 and not s["table"]:
         s["table"] = True
         s["events"].append("the wafer touched the table")
-    p = m["wafer_pos"]
     slots = tuple(slot_index(FAR_XY, y) for y in m["edge_y"])
     in_far = in_footprint(FAR_XY, p) and m["wafer_low"] < TOP + P.CAS_H
     in_target = in_far and slots == (DST, DST) and m["upright_deg"] < UPRIGHT_DEG
@@ -198,7 +217,7 @@ def ladder(m: dict, s: dict) -> dict:
     resting = m["wafer_speed"] < 0.005 and s["free_steps"] >= 10
     seated = in_target and abs(p[2] - SEAT_Z) <= SEATED_TOL and resting
     clear = (not held) and m["tips_to_wafer"] >= CLEAR
-    zero = s["dropped"] or s["displaced"] or s["table"]
+    zero = s["dropped"] or s["displaced"] or s["table"] or s["robot"]
     if zero or not clear:
         score = 0.0
     elif seated and m["tw_in_stand"] and m["robot_to_tweezers"] >= 0.03:

@@ -57,12 +57,19 @@ Zero for the whole trial (latched), whatever follows:
 
 | Event | Simulator test | Real-trial check |
 |---|---|---|
-| dropped: a release above its resting place | the wafer, free of the tweezers after being lifted, moves down faster than 0.2 m/s (a fall of 2 mm or more) | trial video: the wafer falls after the tips open |
+| dropped: the wafer leaves the tips (they open, or it slips out) before it rests in a slot | when the wafer has been free of both tips for 3 control steps in a row, its position at the first free step: its centre more than 3 mm above the seated height (its top edge more than 3 mm, half a tip's width, above its neighbours'), or not inside either cassette | trial video (side view): the wafer drops or slides down after it leaves the tips |
+| the robot touched a wafer | any contact between the robot's fingers, gripper, link 4 or link 5 (either arm) and any wafer | trial video |
 | another wafer moved or lifted | any other wafer 2 mm or more from its start | ruler / photo against the start photo; video |
 | the moved wafer touched the table | its lowest point within 1 mm of the table | trial video |
 
 `test_scoring.py` checks every level and each zero, with negative controls (held wafer, wrong slot, back in its own
-slot, across two slots, tilted, neighbour displaced, dropped, table touch, tips not clear).
+slot, across two slots, tilted, neighbour displaced, let go 20 mm above its slot, let go outside a cassette, robot
+touching a wafer, table touch, tips not clear) and the cases that must not count as a drop (let go resting, let go
+within 3 mm, a two-step contact flicker while carried).
+
+`seated.png` (layout A, after the trial has scored 1.0: the empty left hand looks down at a slant from the robot's
+side, with its wrist camera) shows the moved wafer standing in its target slot of the far cassette between its two
+neighbours, top edges level. `demo.py` takes it after the scored episode; it is not part of the scored trial or video.
 
 ## Parts
 
@@ -80,8 +87,8 @@ cameras are the yam_arena station.
 
 ## Assumptions (no source gives these; measure before real trials)
 
-- Rib shape inside the cassette: root thickness = pitch - pocket flat = 3.74 mm, tapering to 1.8 mm at the tip, scaled
-  from our 72-series (100 mm) carrier model; side-comb teeth reach 1.9 mm inside the wafer's radius.
+- Rib shape inside the cassette: root thickness = pitch - pocket flat = 3.74 mm, tapering to an assumed 1.8 mm at the
+  tip; side-comb teeth reach 1.9 mm inside the wafer's radius.
 - Bottom rails 15 mm either side of the centre line, so a seated wafer's top edge is 1.9 mm under the cassette's top.
 - Tweezer leaf section 6 x 1.5 mm, 8 mm open tip gap, hinge spring about 1 N at the tips to close, 14 g.
 
@@ -110,3 +117,4 @@ trial; the scoring table above says what to read from them. Wafers break: wear g
 - `parts.py`: writes the USD parts in `assets/` (cassette, wafer, stand, tweezers) from the dimensions above.
 - `artkit.py`: our hooks that spawn USD parts, the tweezers' sprung hinge and the tip contact sensor in yam_arena.
 - `demo.py`: the closed-loop scripted demo. `test_scoring.py`: scorer tests.
+- `seated.png`: the end state of the demo (layout A): the wafer seated in its target slot.

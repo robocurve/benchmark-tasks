@@ -8,7 +8,7 @@ Sources (also in README.md, "Parts"):
   wafer     2 inch (50.8 mm), 279 +/- 25 um, CZ-Si (100), MicroChemicals WSM20279250B1324SNN1; silicon 2.329 g/cm3.
   tweezers  PELCO 5048-SV (Ted Pella), for 2" wafers: 136.5 mm long, points 6 mm x 0.7 mm.
 ASSUMPTIONS (no source gives them; README "Assumptions" and the fidelity note): the rib shape (root = pitch - pocket flat,
-tapering to 1.8 mm at the tip, scaled from our 72-series carrier model), the side-comb depth, the bottom-rail position and
+tapering to an assumed 1.8 mm at the tip), the side-comb depth, the bottom-rail position and
 height (so the seated wafer's top edge sits 1.9 mm under the carrier's top), the tweezers' leaf section, open gap,
 spring and mass, and the stand (our own printable part, drawn here).
 Frames: carrier slots stack along +y (wafer faces normal to y); the carrier origin is its footprint centre on the table.

@@ -263,6 +263,25 @@ def strategy(ctx, L, log):
     log["script_done"] = True
 
 
+def photo(ctx, L):
+    """After the scored episode: the empty left hand looks down at the far cassette at a slant (45 deg down, turned
+    25 deg off the slot rows) from the robot's side, so the moved wafer's top edge shows next to its neighbours'."""
+    import parts as P
+
+    T = ctx.T
+    tgt = np.array([*T.slot_xy(T.FAR_XY, T.DST), T.SEAT_Z + P.WAFER_R])
+    tilt, yaw = math.radians(45), math.radians(25)
+    d = np.array([math.cos(tilt) * math.cos(yaw), math.cos(tilt) * math.sin(yaw), -math.sin(tilt)])
+    side = np.array([-math.sin(yaw), math.cos(yaw), 0.0])
+    side = side - d * (side @ d)
+    side /= np.linalg.norm(side)
+    R = np.column_stack([side, np.cross(d, side), d]) @ np.diag([-1.0, -1.0, 1.0])
+    p, _ = L.pose()
+    yield from L.move(p + np.array([0.0, 0.0, 0.03]), finger=-0.01, dur=1.0)
+    yield from L.move(tgt - d * 0.12, R, dur=3.0)
+    yield from wait(1.5)
+
+
 def write_mp4(frames, path):
     h, w = frames[0].shape[:2]
     proc = subprocess.Popen(["ffmpeg", "-loglevel", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{w}x{h}",
@@ -284,7 +303,7 @@ def run(out_dir, max_steps=2400, record=True):
 
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
-    w, h = (320, 176) if record else (64, 36)
+    w, h = (tuple(int(v) for v in os.environ.get("DEMO_CAM", "320x176").split("x")) if record else (64, 36))
     t0 = time.time()
     emb = yam_arena_embodiment(task=str(HERE / "task.py"), object_jitter=0, control_hz=HZ, cam_width=w, cam_height=h)
     obs = emb.reset(Scene(id="demo", instruction="demo"))
@@ -348,6 +367,19 @@ def run(out_dir, max_steps=2400, record=True):
     result = {"layout": ctx.T.LAYOUT, "source_slot": ctx.T.SRC, "target_slot": ctx.T.DST, "task_score": score,
               "success": success, "steps": steps, "script_end_step": ended, "events": list(ctx.T.S["events"]),
               "best_score": max(scores) if scores else 0.0, "log": log, "wall_s": round(time.time() - t0, 1)}
+    if record and success and os.environ.get("DEMO_PHOTO", "1") == "1":  # outside the scored episode and the video
+        import imageio
+
+        gen2, res2 = photo(ctx, L), None
+        for _ in range(8 * HZ):
+            try:
+                next(gen2)
+            except StopIteration:
+                break
+            res2 = emb.step(Action(data=pack(L.cmd, right)))
+        if res2 is not None:
+            imageio.imwrite(out / "seated.png", np.asarray(res2.observation.images["left_cam"])[..., :3])
+            log["photo"] = "seated.png"
     if record:
         import imageio
 
