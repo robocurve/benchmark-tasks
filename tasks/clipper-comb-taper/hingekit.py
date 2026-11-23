@@ -93,12 +93,13 @@ def _frame_with_x(axis) -> np.ndarray:
 
 @dataclass(frozen=True)
 class Shape:
-    kind: str  # "box" | "cyl"
+    kind: str  # "box" | "cyl" | "curves" (display only: strands, e.g. hair)
     size: tuple  # box: (x, y, z); cylinder: (radius, height)
     at: tuple  # centre in the part frame
     color: tuple | None = None
     axis: str = "Z"  # a cylinder's axis in the part frame: "X", "Y" or "Z"
     friction: float | None = None  # None: the arena's grippy material; else this friction, combined by the minimum
+    data: object = field(default=None, compare=False, repr=False)  # curves: (points, counts, widths, colours)
 
 
 def box(size, at=(0.0, 0.0, 0.0), color=None, friction=None) -> Shape:
@@ -107,6 +108,16 @@ def box(size, at=(0.0, 0.0, 0.0), color=None, friction=None) -> Shape:
 
 def cyl(radius, height, at=(0.0, 0.0, 0.0), color=None, axis="Z", friction=None) -> Shape:
     return Shape("cyl", (float(radius), float(height)), tuple(float(a) for a in at), color, axis.upper(), friction)
+
+
+def curves(points, counts, widths, colors) -> Shape:
+    """Strands (display only; a non-colliding part): polylines through ``points`` (N x 3, part frame), ``counts``
+    points each, ``widths`` (N, m) at each point and one RGB colour per strand. Spawned as a USD BasisCurves prim, which
+    the RTX renderer draws as fine tubes (as hair is drawn in film)."""
+    pts = np.asarray(points, float)
+    lo, hi = pts.min(axis=0), pts.max(axis=0)
+    return Shape("curves", tuple(float(v) for v in hi - lo), tuple(float(v) for v in (lo + hi) / 2), None, "Z", None,
+                 (pts, np.asarray(counts, int), np.asarray(widths, float), np.asarray(colors, float)))
 
 
 @dataclass(frozen=True)
@@ -159,24 +170,27 @@ class Kit:
         self.steps: list = []
         self.resets: list = []
         self.kinematics: list = []
+        self.curves: list = []
         _KITS.append(self)
 
     def part(self, name: str, origin, shapes, mass: float | None = None, color=(0.6, 0.6, 0.6),
-             collide: bool = True) -> str:
-        """A rigid body made of ``shapes``; its frame at world ``origin`` (axes aligned with the world) with every
-        hinge at 0. ``mass`` None: a static collider."""
+             collide: bool = True, rot=None) -> str:
+        """A rigid body made of ``shapes``; its frame at world ``origin`` (axes aligned with the world, or turned by the
+        3x3 ``rot``) with every hinge at 0. ``mass`` None: a static collider."""
         shapes = tuple(shapes)
         corners = []
         for s in shapes:
             c = np.asarray(s.at)
-            if s.kind == "box":
+            if s.kind in ("box", "curves"):
                 h = np.asarray(s.size) / 2
             else:
                 h = np.full(3, s.size[0])
                 h["XYZ".index(s.axis)] = s.size[1] / 2
             corners += [c - h, c + h]
         corners = np.array(corners)
-        p = _Part(name, T(None, np.asarray(origin, float)), shapes, mass, tuple(color))
+        p = _Part(name, T(rot, np.asarray(origin, float)), shapes, mass, tuple(color))
+        if any(s.kind == "curves" for s in shapes) and (collide or mass is not None):
+            raise ValueError(f"part {name!r}: curves are display only (a static, non-colliding part)")
         if not collide:
             if mass is not None:
                 raise ValueError(f"part {name!r}: only a static part (no mass) can be non-colliding")
@@ -206,6 +220,11 @@ class Kit:
         """``fn()`` -> {part name: 4x4 world pose} after every control step in sim: those static, non-colliding
         parts are moved there (display only; e.g. a part whose length the task changes)."""
         self.kinematics.append(fn)
+
+    def on_curves(self, fn) -> None:
+        """``fn()`` -> {part name: N x 3 points (part frame)} after every control step in sim: the curves shape of those
+        display-only parts is redrawn through them (same point count; e.g. hair cut shorter)."""
+        self.curves.append(fn)
 
     def on_reset(self, fn) -> None:
         """``fn()`` at every episode reset in sim."""
@@ -335,6 +354,9 @@ def _patch_scene(mod) -> None:
                                                   friction_combine_mode="min")
 
         for i, s in enumerate(spec.shapes):
+            if s.kind == "curves":
+                _spawn_curves(stage, f"{prim_path}/s{i}", s, mod)
+                continue
             look = sim_utils.PreviewSurfaceCfg(diffuse_color=mod.linear_rgb(s.color or spec.color), roughness=0.4)
             if s.kind == "box":
                 c = sim_utils.CuboidCfg(size=tuple(s.size), collision_props=coll,
@@ -379,6 +401,26 @@ def _patch_scene(mod) -> None:
 
         cls.__init__ = __init__
         cls._hingekit = True
+
+
+def _spawn_curves(stage, path: str, s: Shape, mod) -> None:
+    """A curves shape as a UsdGeom.BasisCurves prim: linear, tapering widths, one colour per strand."""
+    from pxr import Gf, UsdGeom, Vt
+
+    pts, counts, widths, cols = s.data
+    c = UsdGeom.BasisCurves.Define(stage, path)
+    c.CreateTypeAttr(UsdGeom.Tokens.linear)
+    c.CreateWrapAttr(UsdGeom.Tokens.nonperiodic)
+    c.CreatePointsAttr(Vt.Vec3fArray([Gf.Vec3f(*map(float, p)) for p in pts]))
+    c.CreateCurveVertexCountsAttr(Vt.IntArray([int(n) for n in counts]))
+    c.CreateWidthsAttr(Vt.FloatArray([float(w) for w in widths]))
+    c.SetWidthsInterpolation(UsdGeom.Tokens.vertex)
+    lin = [mod.linear_rgb(tuple(float(v) for v in col)) for col in cols]
+    pv = UsdGeom.PrimvarsAPI(c).CreatePrimvar("displayColor", __import__("pxr").Sdf.ValueTypeNames.Color3fArray,
+                                              UsdGeom.Tokens.uniform)
+    pv.Set(Vt.Vec3fArray([Gf.Vec3f(*map(float, v)) for v in lin]))
+    lo, hi = pts.min(axis=0), pts.max(axis=0)
+    c.CreateExtentAttr(Vt.Vec3fArray([Gf.Vec3f(*map(float, lo)), Gf.Vec3f(*map(float, hi))]))
 
 
 def _author_hinges(stage, env_path: str) -> None:
@@ -445,6 +487,8 @@ def _patch_embodiment(ie) -> None:
         for kit in _KITS:
             for fn in kit.resets:
                 fn()
+        _KIN_LAST.clear()  # the scene is back at its start: move every kinematic part again
+        _CURVE_LAST.clear()
         return obs
 
     def _task_step(self, *a, **k):
@@ -453,18 +497,56 @@ def _patch_embodiment(ie) -> None:
         if any(kit.steps for kit in _KITS):
             from yam_arena.scene import object_states
 
-            states = object_states(self._env, list(self.task.names))
+            # display-only parts (static, no collision) are never read back: skip them
+            states = object_states(self._env, [n for n in self.task.names if not _display_only(n)])
             for kit in _KITS:
                 for fn in kit.steps:
                     fn(states)
         if any(kit.kinematics for kit in _KITS):
             _move_kinematic(self._env.unwrapped)
+        if any(kit.curves for kit in _KITS):
+            _redraw_curves(self._env.unwrapped)
         return step0(self, *a, **k)
 
     cls._ensure_sim, cls.reset, cls._task_step = _ensure_sim, reset, _task_step
 
 
 _KIN_LOG: dict = {"said": False, "how": None}
+_KIN_LAST: dict = {}  # the pose each kinematic part was last moved to
+_CURVE_LAST: dict = {}  # the points each curves part was last drawn through
+
+
+def _redraw_curves(base) -> None:
+    """Re-author the points of the curves shapes the curves functions name, where they changed (USD; the renderer
+    picks the change up like any other edit to a non-physics prim)."""
+    from pxr import Gf, UsdGeom, Vt
+    from isaaclab.sim.utils import get_current_stage
+
+    stage = get_current_stage()
+    env = base.scene.env_prim_paths[0]
+    n = 0
+    for kit in _KITS:
+        for fn in kit.curves:
+            for name, pts in fn().items():
+                pts = np.asarray(pts, float)
+                last = _CURVE_LAST.get(name)
+                if last is not None and last.shape == pts.shape and float(np.max(np.abs(last - pts))) < 1e-5:
+                    continue
+                _CURVE_LAST[name] = pts
+                i = next(j for j, sh in enumerate(kit.parts[name].shapes) if sh.kind == "curves")
+                prim = stage.GetPrimAtPath(f"{env}/{name}/s{i}")
+                if not prim.IsValid():
+                    continue
+                UsdGeom.BasisCurves(prim).GetPointsAttr().Set(Vt.Vec3fArray.FromNumpy(pts.astype(np.float32)))
+                n += 1
+    if n and not _KIN_LOG.get("curves_said"):
+        _KIN_LOG["curves_said"] = True
+        print(f"[hingekit] curves redrawn via USD points ({n} parts this step)", flush=True)
+
+
+def _display_only(name: str) -> bool:
+    parts = _all_parts()
+    return name in parts and parts[name][1].mass is None and not parts[name][1].collide
 
 
 def _kinematic_poses() -> list:
@@ -478,9 +560,12 @@ def _kinematic_poses() -> list:
 def _move_kinematic(base) -> None:
     """Move the static, non-colliding parts the kinematic functions name (display only). Through Arena's FrameView
     when it has one (it writes where the renderer reads, Fabric included), else by authoring the USD xform ops."""
-    poses = _kinematic_poses()
+    poses = [(n, t) for n, t in _kinematic_poses()
+             if n not in _KIN_LAST or float(np.max(np.abs(_KIN_LAST[n] - t))) > 1e-6]  # only what moved
     if not poses:
         return
+    for n, t in poses:
+        _KIN_LAST[n] = np.array(t, float)
     scene = base.scene
     how = _KIN_LOG["how"]
     if how in (None, "frameview"):
