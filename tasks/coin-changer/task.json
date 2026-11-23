@@ -1,0 +1,21 @@
+{
+  "title": "Give exactly $1.35 change from a four-barrel belt coin changer into a coin tray held under its chute",
+  "category": "Impact on jobs",
+  "keywords": [
+    "cashier",
+    "coin changer",
+    "change making",
+    "bimanual",
+    "lever dispenser",
+    "retail"
+  ],
+  "instruction": "Give the customer $1.35 change from the coin changer into the tray.",
+  "context": "Handing back exact change is core cashier work: BLS counts 3,298,660 cashiers (SOC 41-2011, May 2023). A belt coin changer vends one coin per lever press from a barrel of quarters, dimes, nickels or pennies, so exact change means pressing the right lever the right number of times with the other hand catching the coins; a coin that misses the tray rolls away. The instruction does not name the coins or the coin changer's levers.",
+  "setup": "Positions in cm from the midpoint between the two arm bases: x forward, y to the robot's left, table top z 0. (1) Four-barrel steel coin changer, fixed, on four 1.4 cm square legs so its 15 x 19 x 0.6 cm base plate underside is 10 cm above the table; base plate x 20 to 35, y -9.5 to 9.5; chute edge (front lip) at x 35. (2) Four vertical barrels on the base at y -6 (quarters), -2 (dimes), +2 (nickels), +6 (pennies), centred at x 32, 4 cm apart: each a 5 cm tall steel tube, 3 mm walls, inside 1.6 mm wider than its coin, with a floor slot 0.3 mm taller than one coin at its front. (3) 8 coins in each barrel, US size and mass: quarter 24.26 mm x 1.75 mm 5.67 g, dime 17.91 x 1.35 mm 2.27 g, nickel 21.21 x 1.95 mm 5.00 g, penny 19.05 x 1.52 mm 2.50 g. (4) Under each barrel's floor a spring-return pusher plate (1 mm thick, 14 mm wide) with a tail and a 1.0 x 1.4 x 1.6 cm thumb tab 9.8 cm behind the barrel (x about 22): pushing the tab 36 mm forward slides the bottom coin out of the slot and off the lip, one coin per full push; a 60 N/m spring returns it. (5) Coin tray, loose, blue plastic, 70 g: inside 10 x 17 cm, floor 3 mm, 2.2 cm walls 3 mm thick, centre x 19, y 20 on the table.",
+  "scoring": "Coins are counted from the final state, held 1 s. A coin counts as in the tray when its centre is inside the tray's inner footprint and below its rim top; a coin that is neither in the tray nor still in the changer is loose. 1.0: the tray holds exactly 5 quarters and 1 dime ($1.35), no nickel or penny, no loose coin, and the tray is tilted 20 degrees or less. 0.5: the tray holds at least 5 quarters and 1 dime but also an extra coin, or a coin is loose. 0.25: at least one coin in the tray. 0: no coin in the tray, or tray tilted over 20 degrees. Where the arms end up does not count. Possible scores: 0, 0.25, 0.5, 1.0. Real trials: use a real changer and US coins; count the coins in the tray and on the counter.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Reload 8 coins in each barrel, return the four tabs to their rests, put the tray back on its start mark. Real trials: count the coins back in.",
+  "fidelity": "Rigid-body model of a belt-style four-barrel changer: a spring-return 1 mm plate slides each barrel's bottom coin through a slot 0.3 mm taller than the coin, one per full press. The real changer's lever and ring mechanism, barrel pitch and sizes are approximated, not measured. Coins are US size and mass, rigid, 8 per barrel (real barrels hold 37-56). The changer stands fixed at 10 cm; no sound or coin wear.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-QJ3B8T"
+}
