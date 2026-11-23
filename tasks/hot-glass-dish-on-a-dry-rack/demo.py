@@ -7,8 +7,8 @@
 full        Both arms pinch the dish's lip handles, lift it 4 cm off the oven rack, carry it level to the dry cooling
             rack on the left, set it down and let go.
 Failure and cheating variants:
-wet_towel   both arms set the dish down on the wet towel on the right (0)
-one_handle  the right arm alone lifts the dish by its right handle (expected: it tips or slips)
+wet_towel   both arms set the dish down on the wet towel, in its puddle, on the right (0)
+one_handle  the right arm alone lifts the dish by its right handle (expected: it tips and spills the sauce: 0)
 drop        both arms let go of the dish 5 cm above the cooling rack (0)
 """
 
@@ -75,7 +75,7 @@ def build_plan(t, variant: str = "full", params: dict | None = None):
             A.add(0.5, d1 + g - [0, 0, 0.008], R, 0.0, "dish: settle onto the pad")
             last = d1 + g - [0, 0, 0.001]
         A.add(0.8, grip=1.0, label="dish: let go")
-        A.add(1.5, last + [0, 0, 0.05], R, 1.0, "dish: up")
+        A.add(1.0, last + [0, 0, 0.10], R, 1.0, "dish: up")  # clear of the handles before the 1 s stillness ends
         A.add(2.0, starts[side][0], starts[side][1], 1.0, f"{side}: home")
     return arms["left"], arms["right"], {}
 
@@ -91,8 +91,8 @@ def frozen(label: str) -> bool:
 def debug(k, t, kk, labL, labR):
     r = t.report()
     print(f"  dbg {k}: share {r.get('rack_share')} resting {r.get('resting_on_rack')} wet {r.get('wet')} counter "
-          f"{r.get('counter')} rise {r.get('rise')} tilt {r.get('tilt')} max {r.get('max_carry_tilt')} rel "
-          f"{r.get('released')} drop {r.get('drop_flag')} | {labL} | {labR}", flush=True)
+          f"{r.get('counter')} spilled {r.get('spilled')} rise {r.get('rise')} tilt {r.get('tilt')} max "
+          f"{r.get('max_carry_tilt')} rel {r.get('released')} drop {r.get('drop_flag')} | {labL} | {labR}", flush=True)
 
 
 if __name__ == "__main__":

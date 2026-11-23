@@ -42,6 +42,7 @@ class Geom:
     torsion: float | None = None  # contact patch radius (m) for torsional friction (PhysX); None: none
     friction: tuple[float, float] | None = None  # (static, dynamic) for this geom; None: the Part's material
     collide: bool = True  # False: visual only (no collision shape), e.g. flames or markings
+    roughness: float | None = None  # visual finish, 0 (glossy, e.g. water) to 1 (matte); None: 0.45
 
 
 @dataclass(frozen=True)
@@ -463,11 +464,12 @@ def _spawn_part(prim_path, cfg, translation=None, orientation=None, **kwargs):
         if g.collide:
             schemas.define_collision_properties(path, props, stage=stage)
         color = tuple(g.color or spec.color)
-        if color not in looks:
-            looks[color] = f"{prim_path}/geometry/look{len(looks)}"
-            look = sim_utils.PreviewSurfaceCfg(diffuse_color=linear_rgb(color), roughness=0.45)
-            look.func(looks[color], look)
-        bind_visual_material(path, looks[color], stage=stage)
+        rough = 0.45 if g.roughness is None else float(g.roughness)
+        if (color, rough) not in looks:
+            looks[(color, rough)] = f"{prim_path}/geometry/look{len(looks)}"
+            look = sim_utils.PreviewSurfaceCfg(diffuse_color=linear_rgb(color), roughness=rough)
+            look.func(looks[(color, rough)], look)
+        bind_visual_material(path, looks[(color, rough)], stage=stage)
         if g.friction is not None:
             own = f"{prim_path}/geometry/physics_material_g{i:02d}"
             spawn_physics_material(own, sim_utils.RigidBodyMaterialCfg(static_friction=g.friction[0],
