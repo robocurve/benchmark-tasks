@@ -64,10 +64,10 @@ LOOKS = {
     "beak": m.Look(m.rgb(0.92, 0.40, 0.08), roughness=0.45),
     "eye": m.Look(m.rgb(0.08, 0.08, 0.08), roughness=0.5),
     "thermo": m.Look(m.rgb(0.93, 0.93, 0.95), roughness=0.35),
-    "water_cold": m.Look(m.rgb(0.15, 0.42, 0.95), roughness=0.08, opacity=0.62),
-    "water_warm": m.Look(m.rgb(0.12, 0.72, 0.58), roughness=0.08, opacity=0.62),
-    "water_hot": m.Look(m.rgb(0.95, 0.45, 0.10), roughness=0.08, opacity=0.68),
-    "water_scald": m.Look(m.rgb(0.95, 0.10, 0.06), roughness=0.08, opacity=0.72),
+    "water_cold": m.Look(m.rgb(0.10, 0.38, 0.98), roughness=0.08, opacity=0.48),
+    "water_warm": m.Look(m.rgb(0.08, 0.78, 0.62), roughness=0.08, opacity=0.48),
+    "water_hot": m.Look(m.rgb(0.98, 0.42, 0.08), roughness=0.08, opacity=0.50),
+    "water_scald": m.Look(m.rgb(0.98, 0.08, 0.05), roughness=0.08, opacity=0.52),
     "stream_cold": m.Look(m.rgb(0.40, 0.70, 1.00), roughness=0.08, opacity=0.85),
     "stream_warm": m.Look(m.rgb(0.25, 0.85, 0.65), roughness=0.08, opacity=0.85),
     "stream_hot": m.Look(m.rgb(1.00, 0.55, 0.18), roughness=0.08, opacity=0.88),
@@ -78,8 +78,10 @@ LOOKS = {
     "merc_scald": m.Look(m.rgb(0.95, 0.08, 0.05), roughness=0.3, emissive=m.rgb(0.40, 0.02, 0.01)),
 }
 TINTS = ("cold", "warm", "hot", "scald")
-# bath thermometer, in the tub frame: in the table-middle window, clear of the spout and the left arm
-TX, TY = 0.040, -0.160
+# rubber duck (tub frame): in the 320x176 window (world x 0.35-0.6, |y|<0.35), at the far end
+DX, DY = -0.080, 0.040
+# bath thermometer, standing against the near rim, cap above the wall, in the same window
+TX, TY = 0.050, -0.248
 THERMO_COLS = [  # (up to this temperature, column height above the floor, tint)
     (22.0, 0.018, "cold"),
     (28.0, 0.028, "cold"),
@@ -140,22 +142,37 @@ tub_parts = [
     ("wall_f", m.box((WT, BLEN, BH), (-BW / 2 + WT / 2, 0.0, BH / 2)), "tub"),
     ("end_p", m.box((BW, WT, BH), (0.0, BLEN / 2 - WT / 2, BH / 2)), "tub"),
     ("end_n", m.box((BW, WT, BH), (0.0, -BLEN / 2 + WT / 2, BH / 2)), "tub"),
-    # rubber duck: a baby-bath cue, fixed at the far end, no collider
-    ("duck_body", m.sphere(0.028, (0.020, 0.185, FL + 0.024)), "duck"),
-    ("duck_head", m.sphere(0.016, (0.042, 0.185, FL + 0.044)), "duck"),
-    ("duck_beak", m.box((0.014, 0.010, 0.008), (0.056, 0.185, FL + 0.042)), "beak"),
-    ("duck_eye_a", m.sphere(0.0035, (0.050, 0.196, FL + 0.050)), "eye"),
-    ("duck_eye_b", m.sphere(0.0035, (0.050, 0.174, FL + 0.050)), "eye"),
-    # bath thermometer: tall stem, fixed colour bands, a column and bulb that follow the bath temperature
-    ("th_stem", m.box((0.020, 0.016, 0.100), (TX, TY, FL + 0.054)), "thermo"),
-    ("th_band_c", m.box((0.022, 0.006, 0.022), (TX, TY - 0.009, FL + 0.024)), "cold"),
-    ("th_band_w", m.box((0.022, 0.006, 0.016), (TX, TY - 0.009, FL + 0.043)), "warm"),
-    ("th_band_h", m.box((0.022, 0.006, 0.028), (TX, TY - 0.009, FL + 0.065)), "hot"),
 ]
+# rubber duck: baby-bath cue. One copy sits on the floor when the bath is empty;
+# further copies sit on the waterline at each fill level (visual only; a real duck would float).
+def _duck_parts(tag, body_z, hidden):
+    hid = (True,) if hidden else ()
+    return [
+        (f"duck{tag}_body", m.sphere(0.032, (DX, DY, body_z)), "duck", *hid),
+        (f"duck{tag}_head", m.sphere(0.018, (DX + 0.026, DY, body_z + 0.022)), "duck", *hid),
+        (f"duck{tag}_beak", m.box((0.016, 0.012, 0.009), (DX + 0.044, DY, body_z + 0.020)), "beak", *hid),
+        (f"duck{tag}_eye_a", m.sphere(0.0045, (DX + 0.034, DY + 0.013, body_z + 0.028)), "eye", *hid),
+        (f"duck{tag}_eye_b", m.sphere(0.0045, (DX + 0.034, DY - 0.013, body_z + 0.028)), "eye", *hid),
+    ]
+
+DUCK_POSES = [("e", FL + 0.032)] + [(str(k), FL + h + 0.020) for k, (_, h) in enumerate(LEVELS)]
+for tag, z in DUCK_POSES:
+    tub_parts.extend(_duck_parts(tag, z, hidden=(tag != "e")))
+# rim-standing bath thermometer: 130 mm stem against the near wall, scale bands facing into the bath,
+# a wide column, and a large colour-changing cap above the rim (readable at 320x176)
+tub_parts.extend([
+    ("th_stem", m.box((0.036, 0.018, 0.130), (TX, TY, FL + 0.065)), "thermo"),
+    ("th_band_c", m.box((0.038, 0.006, 0.028), (TX, TY + 0.010, FL + 0.028)), "cold"),
+    ("th_band_w", m.box((0.038, 0.006, 0.020), (TX, TY + 0.010, FL + 0.052)), "warm"),
+    ("th_band_h", m.box((0.038, 0.006, 0.036), (TX, TY + 0.010, FL + 0.080)), "hot"),
+])
 for tint in TINTS:
-    tub_parts.append((f"th_bulb_{tint}", m.sphere(0.016, (TX, TY, FL + 0.014)), f"merc_{tint}", True))
+    # large cap above the rim (wall is 70 mm; cap centre is at 156 mm)
+    tub_parts.append((f"th_cap_{tint}", m.sphere(0.024, (TX, TY, FL + 0.148)), f"merc_{tint}", True))
+    # sensing bulb at the foot, in the water, also tinted
+    tub_parts.append((f"th_bulb_{tint}", m.sphere(0.016, (TX, TY, FL + 0.016)), f"merc_{tint}", True))
 for i, (_, h, tint) in enumerate(THERMO_COLS):
-    tub_parts.append((f"th_col_{i}", m.cylinder(0.0055, h, (TX, TY, FL + 0.012 + h / 2)), f"merc_{tint}", True))
+    tub_parts.append((f"th_col_{i}", m.cylinder(0.008, h, (TX, TY, FL + 0.016 + h / 2)), f"merc_{tint}", True))
 for k, (_, h) in enumerate(LEVELS):
     for tint in TINTS:
         tub_parts.append((f"water{k}_{tint}", m.box((IW, IL, h), (0.0, 0.0, FL + h / 2)), f"water_{tint}", True))
@@ -223,15 +240,45 @@ def _hide_water_and_stream():
             m.set_visible(f"{m.ENV_PATH}/tub/visual/stream{i}_{tint}", False)
             m.set_visible(f"{m.ENV_PATH}/tub/visual/streamw{i}_{tint}", False)
     for tint in TINTS:
+        m.set_visible(f"{m.ENV_PATH}/tub/visual/th_cap_{tint}", False)
         m.set_visible(f"{m.ENV_PATH}/tub/visual/th_bulb_{tint}", False)
     for i, _ in enumerate(THERMO_COLS):
         m.set_visible(f"{m.ENV_PATH}/tub/visual/th_col_{i}", False)
+    for tag, _ in DUCK_POSES:
+        for part in ("body", "head", "beak", "eye_a", "eye_b"):
+            m.set_visible(f"{m.ENV_PATH}/tub/visual/duck{tag}_{part}", False)
+
+
+def _show_thermo(tint: str, mean: float):
+    m.set_visible(f"{m.ENV_PATH}/tub/visual/th_cap_{tint}", True)
+    m.set_visible(f"{m.ENV_PATH}/tub/visual/th_bulb_{tint}", True)
+    shown = 0 if mean <= 0.0 else len(THERMO_COLS) - 1
+    if mean > 0.0:
+        for i, (t_lim, _, _) in enumerate(THERMO_COLS):
+            if mean <= t_lim:
+                shown = i
+                break
+    m.set_visible(f"{m.ENV_PATH}/tub/visual/th_col_{shown}", True)
+
+
+def _show_duck(water_h: float):
+    tag = "e"
+    if water_h > 0.0:
+        tag = str(len(LEVELS) - 1)
+        for k, (_, h) in enumerate(LEVELS):
+            if water_h <= h + 1e-9:
+                tag = str(k)
+                break
+    for part in ("body", "head", "beak", "eye_a", "eye_b"):
+        m.set_visible(f"{m.ENV_PATH}/tub/visual/duck{tag}_{part}", True)
 
 
 @m.on_reset
 def _reset(env):
     _put_swing(env, SW_START)  # the lever was left swung to full hot, shut
     _hide_water_and_stream()
+    _show_duck(0.0)
+    _show_thermo("cold", 0.0)
 
 
 @m.on_step
@@ -261,22 +308,17 @@ def _log(env):
     mean = mem["heat"] / vol if vol > 1e-9 else 0.0
     if mean >= SCALD_T:
         mem["scalded"] = True  # the bath itself is at a scalding temperature
-    # visuals: tinted rising water and a spout stream that shortens as the level rises
+    # visuals: tinted rising water, a duck on the waterline, a colour-changing thermometer, and a spout stream
     _hide_water_and_stream()
     water_h = 0.0
+    tint = _tint(mean) if vol > 1e-9 else "cold"
     if vol > 1e-9:
-        tint = _tint(mean)
         for k, (thr, h) in enumerate(LEVELS):
             if vol >= thr:
                 m.set_visible(f"{m.ENV_PATH}/tub/visual/water{k}_{tint}", True)
                 water_h = h
-        m.set_visible(f"{m.ENV_PATH}/tub/visual/th_bulb_{tint}", True)
-        shown = len(THERMO_COLS) - 1
-        for i, (t_lim, _, _) in enumerate(THERMO_COLS):
-            if mean <= t_lim:
-                shown = i
-                break
-        m.set_visible(f"{m.ENV_PATH}/tub/visual/th_col_{shown}", True)
+    _show_thermo(tint, mean)
+    _show_duck(water_h)
     water_top = FL + water_h
     if flow > 0.0:
         stint = _tint(T)
