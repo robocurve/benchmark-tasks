@@ -1,5 +1,6 @@
 """Offline checks of task.py (no simulator): python -m pytest -q test_task.py"""
 
+import math
 import pathlib
 import sys
 
@@ -43,7 +44,14 @@ def run(states, grips=None, n=1):
 
 
 def in_box():
-    return (M.BOX_XY[0] + 0.02, M.BOX_XY[1], M.PT + 2 * M.T)
+    """Resting on the chamber floor, well past the baffle plate."""
+    return (M.BOX_XY[0] + 0.02, M.BOX_XY[1] + M.CHAMBER_Y - 0.03, M.PT + 2 * M.T)
+
+
+def on_ramp():
+    """Lying on the deflector ramp under the slot (a hand through the slot reaches it)."""
+    y = M.SLOT_XY[1]
+    return (M.SLOT_XY[0], y, M.PT + (y - M.BOX_XY[1]) + 0.004)
 
 
 def in_bin():
@@ -90,6 +98,29 @@ def test_slot_and_label_fit():
         if o.name.startswith("label_"):  # every letter stroke lies on the white label
             assert abs(o.pos[0] - M.LABEL_XY[0]) + o.size[0] / 2 <= M.LABEL[0] / 2 + 1e-9
             assert abs(o.pos[1] - M.LABEL_XY[1]) + o.size[1] / 2 <= M.LABEL[1] / 2 + 1e-9
+
+
+def test_baffle_geometry():
+    # the baffle: ramp under the slot, a plate hanging from the lid beyond the slot's far edge, a narrow throat between
+    names = [o.name for o in M.OBJECTS]
+    assert "dropbox_baffle" in names
+    slot_lo, slot_hi = M.SLOT_XY[1] - M.BOX_XY[1] - M.SLOT[1] / 2, M.SLOT_XY[1] - M.BOX_XY[1] + M.SLOT[1] / 2
+    assert M.CHAMBER_Y <= slot_lo  # the chamber lies beyond the slot, under the solid lid
+    assert M.BF_YW > slot_hi  # the ramp starts under the whole slot
+    assert M.BF_PLATE_Z0 < M.BOX_H - M.LID_T  # the plate hangs from the lid
+    throat = M.BF_PLATE_Z0 - (M.BF_PLATE_Y1)  # the ramp surface under the plate's slot-side face: z = y
+    assert 0.008 <= throat <= 0.015  # a hand (or a toddler's finger) cannot pass; a folded patch does
+    assert throat * math.cos(math.pi / 4) > 4 * M.T  # the folded film (two layers) passes with room to spare
+    assert M.SLOT[1] < 0.035 and M.SLOT[1] > M.W / 2 + 0.005  # a folded patch passes the slot, a hand does not
+    assert M.BF_PLATE_Z0 > M.BF_PLATE_Y1  # the plate clears the top of the ramp where it meets it
+
+
+def test_on_the_ramp_or_in_the_throat_is_not_contained():
+    assert run([patch(180.0), patch(180.0, on_ramp())], n=25) == (False, 0.0)
+    assert not M.in_drop_box(patch(180.0, on_ramp())["patch"])
+    in_throat = (M.BOX_XY[0], M.BOX_XY[1] + M.BF_Y0 - 0.003, M.PT + M.BF_Y0 - 0.003 + 0.006)
+    assert not M.in_drop_box(patch(180.0, in_throat)["patch"])
+    assert M.in_drop_box(patch(180.0, in_box())["patch"])
 
 
 def test_folded_in_the_drop_box_scores_1():
@@ -158,8 +189,8 @@ def test_robot_near_patient_is_0():
 
 def test_demo_plans():
     import os
-    for v in ("demo", "naive", "unsafe"):
+    for v in ("demo", "naive", "unsafe", "short", "idle"):
         os.environ["TASK_DEMO"] = v
         plan = M.demo()
-        assert set(plan) == {"right"} and len(plan["right"]) > 5
+        assert set(plan) == {"right"} and len(plan["right"]) > (0 if v == "idle" else 5)
     os.environ.pop("TASK_DEMO")
