@@ -131,7 +131,8 @@ The scripted demo:
 
 The B215 demo reached 1.0 in 1,998 steps (99.9 s of robot time), with zero blank frames. The recorded run took
 449 s (about 7.5 minutes) of wall time on one NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition at the
-default 640 x 360 camera resolution. The demo's other modes are `idle` (the setup image) and `right` (the first nail only).
+default 640 x 360 camera resolution. The B215 Dream-1 trial took 925 s (about 15.4 minutes) including startup,
+at 320 x 176 per camera, for the full 4,800 steps. The demo's other modes are `idle` (the setup image) and `right` (the first nail only).
 
 Offline tests (32; no simulator; `yam-isaac-lab-arena` on `PYTHONPATH` for `yam_arena.task_file`):
 
@@ -172,11 +173,13 @@ the bar, clear of the board; in a real trial it would then put the bar down.
 | Run | Score | Steps |
 |---|---|---|
 | Vaughan B215 demo, GPU, recorded | 1.0: both nails out, board flat and released on the table; zero blank frames | 1,998 |
+| Vaughan B215 Dream-1 (`--policy dream`, seed 0, full limit), recorded | 0.0: picked up and repositioned the bar at the board's front edge but earned no partial credit; evaluation completed without error | 4,800 |
 | Original generic-bar demo, GPU, recorded | 1.0 (right nail out at step 694, left at 1693; all 12.7 mm of each credited to the bar) | 2,031 |
 | Original generic-bar Dream-1 (`--policy dream`, seed 0, full limit) | 0.0: it picked the bar up with its right arm several times and brought the blade to the board's front edge near the right joist, but never seated it in the joint or levered; neither nail moved, and the bar was dropped on the table and across the joists | 4,800 |
 
-The existing `task.json` media ID refers to the original generic-bar submission. Revised setup/demo media must
-be uploaded before resubmitting; the Dream-1 result above is historical and has not been rerun on the B215.
+The B215 Dream-1 recording has 4,801 consecutive frames per camera (reset plus 4,800 steps), with no empty or
+uniform frames, and is exported as H.264 MP4. The existing `task.json` media ID still refers to the original
+generic-bar submission. Revised model, demo and setup media are prepared locally and must be uploaded before resubmitting.
 
 ## Third-party code and assets
 
