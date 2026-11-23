@@ -8,9 +8,10 @@ Isaac-side code runs later, when yam_arena loads its scene and embodiment module
 - ``ring`` / ``vessel``: round containers made of a floor disk and a ring of wall boxes.
 - ``STATE``: robot readings captured before each task step (finger pad points per arm, and each Part's root
   pose), so a task's ``score()`` can tell which loose pieces a gripper touched.
-- ``watch_contact(a, b)``: also record the contact force between Parts ``a`` and ``b`` each step
-  (``STATE.contacts[(a, b)]``, newtons: the mean over the step's physics substeps), read from PhysX's contact
-  reports.
+- ``watch_contact(a, b)``: also record the contact force between Part ``a`` and body ``b`` (a Part, or a robot link
+  path under the env) each step (``STATE.contacts[(a, b)]``, newtons: the mean over the step's physics substeps;
+  ``STATE.peaks[(a, b)]``: the largest substep value), read from PhysX's contact reports. A pair whose contact view
+  cannot be read is skipped and listed by ``contact_errors()``; the other pairs keep working.
 
 Nothing in yam_arena is edited: kitchenkit wraps two functions when their modules are imported.
 """
@@ -277,12 +278,13 @@ class _State:
     poses: dict = field(default_factory=dict)  # part name -> (pos (3,), quat_xyzw (4,)) of the Part's root frame
     piles: dict = field(default_factory=dict)  # pile name -> (n, 3) sphere centres
     contacts: dict = field(default_factory=dict)  # (part a, part b) -> contact force between them (N)
+    peaks: dict = field(default_factory=dict)  # (part a, part b) -> largest substep contact force in the step (N)
     links: dict = field(default_factory=dict)  # arm -> (n, 3) origins of the arm's links, world frame (m), if tracked
     error: str | None = None
 
     def clear(self) -> None:
         self.step, self.fingers, self.poses, self.piles, self.contacts, self.error = -1, {}, {}, {}, {}, None
-        self.links = {}
+        self.links, self.peaks = {}, {}
 
 
 STATE = _State()
@@ -325,7 +327,8 @@ _CONTACT_PAIRS: list[tuple[str, str]] = []
 
 
 def watch_contact(a: str, b: str) -> None:
-    """Record the contact force between Parts ``a`` and ``b`` (both with a mass) in ``STATE.contacts`` each step."""
+    """Record the contact force between Part ``a`` (with a mass) and body ``b`` in ``STATE.contacts`` each step. ``b``
+    is a Part name or a path under the env (e.g. a robot link: ``RightArm/Geometry/.../gripper/tip_left``)."""
     if (a, b) not in _CONTACT_PAIRS:
         _CONTACT_PAIRS.append((a, b))
 
@@ -360,9 +363,10 @@ def _hook_substeps(env) -> None:
         out = step(*a, **k)
         try:
             for pair, f in read_contacts(env).items():
-                acc = _ACC.setdefault(pair, [0.0, 0])
+                acc = _ACC.setdefault(pair, [0.0, 0, 0.0])
                 acc[0] += f
                 acc[1] += 1
+                acc[2] = max(acc[2], f)
         except Exception as exc:  # noqa: BLE001 - keep stepping; capture() falls back to one sample
             if STATE.error is None:
                 STATE.error = repr(exc)
@@ -373,29 +377,48 @@ def _hook_substeps(env) -> None:
 
 
 def mean_contacts(env) -> dict:
-    """Mean contact force per watched pair over the substeps since the last call (one sample if there were none)."""
+    """Mean contact force per watched pair over the substeps since the last call (one sample if there were none);
+    also sets ``STATE.peaks``, the largest substep value per pair. Unreadable pairs read 0 (see ``contact_errors()``)."""
     _hook_substeps(env)
-    out, last = {}, None
+    out, peaks, last = {}, {}, None
     for pair in _CONTACT_PAIRS:
         acc = _ACC.get(pair)
         if acc and acc[1] > 0:
-            out[pair] = acc[0] / acc[1]
+            out[pair], peaks[pair] = acc[0] / acc[1], acc[2]
             STATE.contact_substeps = acc[1]
         else:
-            last = last or read_contacts(env)
-            out[pair] = last[pair]
+            last = last if last is not None else read_contacts(env)
+            out[pair] = peaks[pair] = last.get(pair, 0.0)
     _ACC.clear()
+    STATE.peaks = peaks
     return out
 
 
+_BAD: dict = {}  # pair -> error text, for watched pairs whose contact view could not be read (skipped from then on)
+
+
+def contact_errors() -> dict:
+    """Watched pairs that could not be read, as {"a | b": error text} (empty when every pair works)."""
+    return {f"{a} | {b}": e for (a, b), e in _BAD.items()}
+
+
 def read_contacts(env) -> dict:
-    """Contact force (N) between each watched pair at the last physics substep."""
+    """Contact force (N) between each watched pair at the last physics substep (unreadable pairs are left out)."""
     base = env.unwrapped
     dt = float(getattr(base, "physics_dt", 1.0 / 240.0))
     out = {}
     for a, b in _CONTACT_PAIRS:
-        f = _contact_view(env, a, b).get_contact_force_matrix(dt=dt)
-        f = f.numpy() if hasattr(f, "numpy") else _np(f)
+        if (a, b) in _BAD:
+            continue
+        try:
+            f = _contact_view(env, a, b).get_contact_force_matrix(dt=dt)
+            f = f.numpy() if hasattr(f, "numpy") else _np(f)
+            if np.asarray(f).size < 3:  # a path that matched no body gives an empty matrix: it would read 0 for ever
+                raise RuntimeError(f"empty contact matrix, shape {np.asarray(f).shape}")
+        except Exception as exc:  # noqa: BLE001 - one bad pair (e.g. a wrong link path) must not stop the others
+            _BAD[(a, b)] = repr(exc)
+            print(f"kitchenkit: contact {a} | {b} cannot be read, skipped: {exc!r}", flush=True)
+            continue
         out[(a, b)] = float(np.linalg.norm(np.asarray(f, dtype=np.float64).reshape(-1, 3).sum(axis=0)))
     return out
 
