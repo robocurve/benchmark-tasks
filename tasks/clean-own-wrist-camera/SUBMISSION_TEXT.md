@@ -1,6 +1,6 @@
 # Clean your wrist camera
 
-**Domain:** Other
+**Domain:** Impact on AI timelines
 
 **Instruction:** Use the brush to clean the protective window of your left wrist camera.
 
@@ -8,7 +8,7 @@ Dry workshop dust on a robot's wrist-camera protective window obscures its close
 
 **Setup:** A bimanual YAM station with parallel grippers and the original top, left-wrist and right-wrist RGB cameras. The left arm presents its mounted camera within reach and the right hand starts empty. The camera has a 40x36x28 mm rigid housing and a replaceable 14x12x0.3 mm transparent protective window. Its retaining bezel is 0.6 mm below the glass front. A wooden-handled brush with a metal ferrule and soft bristles stands upright in an open rigid holder: 117 mm total length, maximum handle section 14x22 mm, 20.5-24 mm bristles and 18 g total mass. The holder has a 42x44x4 mm base and 32 mm height. A 260x180 mm printed test card lies on the 1100x1300x60 mm wooden table, whose top is 0.7475 m above the world origin. Exact poses, camera mount and dimensions are in layout.json and initial_state.json. The initial contamination pattern is supplied in dirty.png and represents dry particulate dust on the outer protective window.
 
-**Scoring:** Score 0 before confirmed brush pickup; 0.25 after pickup; 0.50 after pickup and at least 25% final image-error recovery; 0.75 at 50%; 1.00 at 90%. Pickup requires at least 40 mm lift from the brush rest and stable gripper-relative carriage for 0.5 s. Stable carriage uses at most 15 mm position error and 10 mm relative spread. Image-error recovery is 1-E_after/E_dirty, where E is RGB mean squared error to a clean reference over the same fixed test-card ROI. Five frames are averaged per condition. The evaluator standardizes camera pose, chart, lighting, exposure and focus after the trial; this measurement is outside the robot action budget. A valid initial measurement requires E_dirty greater than max(10 times repeated-clean error, 1e-8), on RGB values scaled to [0,1]. The final measurement determines the recovery tier.
+**Scoring:** 0 before confirmed brush pickup; 0.25 after pickup. Recovery tiers require verified brush-head wiping of the glass after pickup: 0.50 at 25%, 0.75 at 50%, and 1.00 at 90% final image-error recovery. In simulation, only sliding brush-face contact with the measured glass body can remove dust. For a physical trial, video must show bristles sweeping the exposed glass; if the gripper or its cover directly wipes any part of the glass, cap the score at 0.25. Pickup requires >=40 mm lift and stable carriage for 0.5 s (<=15 mm pose error and <=10 mm spread in position relative to the gripper). Recovery is 1-E_after/E_dirty, where E is RGB mean squared error to a clean reference in the fixed test-card ROI. Average five frames per condition. The evaluator fixes camera pose, lighting, chart, exposure and focus after the trial. Require E_dirty > max(10 times repeated-clean error, 1e-8) for RGB scaled to [0,1].
 
 **Run limit:** 1800 control steps at 20 Hz (90 seconds).
 

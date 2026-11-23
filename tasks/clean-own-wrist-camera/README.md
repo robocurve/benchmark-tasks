@@ -38,11 +38,15 @@ Start each trial in a fresh process and output directory. Physics runs at 240 Hz
 |---|---:|
 | Before confirmed brush pickup | 0.00 |
 | Confirmed brush pickup | 0.25 |
-| Pickup and final image-error recovery ≥25% | 0.50 |
-| Pickup and final image-error recovery ≥50% | 0.75 |
-| Pickup and final image-error recovery ≥90% | 1.00 |
+| Pickup, verified brush-head wiping and final image-error recovery ≥25% | 0.50 |
+| Pickup, verified brush-head wiping and final image-error recovery ≥50% | 0.75 |
+| Pickup, verified brush-head wiping and final image-error recovery ≥90% | 1.00 |
 
 Pickup is latched after the brush rises at least 40 mm above its rest and remains stably carried for 0.5 seconds. The simulator checks a closed gripper command, at most 15 mm gripper-relative position error and 10 mm relative spread over that interval.
+
+Recovery credit requires visible brush-head wiping after pickup. For a physical trial, record the window and the tool from the side so that the assessor can see the bristles make contact and translate across the exposed glass. If the gripper or its protective cover directly wipes the glass at any time, cap the score at pickup credit even if the brush was also used. Incidental contact with the bezel is allowed. In simulation, only tangential brush-face contacts with the glass body can change the contamination layer, and the scoring script requires evidence of that contact and removal.
+
+For a physical trial, record the assessor's findings as JSON with boolean fields `grasp_achieved`, `verified_brush_wipe` and `direct_gripper_wipe`. Set `verified_brush_wipe` to false when a brush stroke cannot be verified. Score those annotations and the same image assay with `python scorer.py --physical --trial physical_trial.json --images image_quality_score.json --out score.json`.
 
 After the trial, the evaluator standardizes camera pose, target position, lighting, exposure and focus. Five frames are averaged for each of the clean reference, dirty initial state and final state, using the same full test-card interior ROI. The robot's action budget covers the manipulation; the evaluator performs the measurement setup. The final photographs determine the recovery tier.
 
