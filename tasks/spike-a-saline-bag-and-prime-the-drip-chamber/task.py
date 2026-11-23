@@ -22,9 +22,9 @@ import numpy as np
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 
 from bodykit import (Body, BoxShape, CylShape, allow_matrix_grips, as_numpy, hinge, on_reset, on_step,  # noqa: E402
-                     rotation, set_slide_target, set_thread_on, thread)
+                     rotation, set_slide_target, set_thread_on, slider, thread)
 from asepsis import AsepsisMonitor, obstacles_from_body  # noqa: E402
-from priming_meter import PrimingMeter  # noqa: E402
+from priming_meter import PrimingMeter, squeeze_of as _squeeze_of  # noqa: E402
 from yam_arena.constants import FINGER_CLOSED, FINGER_OPEN, TCP_OFFSET  # noqa: E402
 from yam_arena.demo import Waypoint, grip_rotation  # noqa: E402
 from yam_arena.task_file import TABLE_TOP  # noqa: E402
@@ -58,6 +58,18 @@ SET_AT = np.array([0.36, -0.30, TT + 0.080])  # upright chamber in a reachable p
 SET_R0_XYZW = RX90
 SET_R0 = BAG_R0  # local +y/spike axis -> world +z
 CH_R, CH_L = 0.010, 0.045  # the drip chamber
+CORE_R = 0.0035  # the chamber's rigid core collider: the squeezable wall lies outside it
+# The chamber's flexible wall, between the two printed collars: two clear panels that a squeeze pushes in, each on a
+# spring that pushes it back out.
+COLLAR_Y, COLLAR_T = 0.018, 0.004  # the printed collars' middles, above and below the chamber's middle, and thickness
+COLLAR_X, COLLAR_Z = 0.010, 0.035  # their width across the grip (inside the squeezed wall, so fingers meet the wall) and depth
+GAP_Y = COLLAR_Y - COLLAR_T / 2  # the bare wall between the collars runs from -GAP_Y to +GAP_Y
+WALL_T, WALL_H, WALL_W = 0.002, 0.030, 0.014  # m: panel thickness (across), height (along the axis), width
+WALL_X = CH_R - WALL_T / 2  # the panels' middles, either side of the axis, across the grip
+WALL_TRAVEL = 0.004  # m: a full squeeze pushes each panel in this far, to its stop
+WALL_K, WALL_D = 1000.0, 3.0  # N/m, N s/m: about 4 N per side for a full squeeze (a fingertip squeeze)
+WALL_MASS = 0.002
+BOTH_SIDES = 0.001  # m: each panel must be pushed in at least this far for a squeeze to count
 SPIKE_TIP = 0.0655  # the spike's tip, ahead of the chamber's middle (set frame, +y)
 SEAT = 0.025  # the spike in this deep: its collar on the port's mouth, locked
 K_SPIKE, SLIP_S, D_SPIKE = 1500.0, 0.001, 3.0  # the port's grip on the spike: about 1.5 N to push it further
@@ -72,7 +84,6 @@ RACK_CLIP_BREAK = 8.0  # N: the rack's spring clip lets the set go above this pu
 # -- priming: measured finger compression produces a continuous liquid-column height ---------------------------------
 SEGMENTS = 6
 CH_USABLE_H = CH_L - 0.006
-SQUEEZE_AT = 0.04  # the TCP this close to the chamber's middle
 
 # -- scoring ------------------------------------------------------------------------------------------------------------
 CAP_OFF = 0.005
@@ -144,22 +155,20 @@ def _sterile_cradle() -> Body:
     return Body.build("sterile_cradle", pos=(SET_AT[0], SET_AT[1], TOP), mass=0.15, kinematic=True,
                       friction=(0.8, 0.7), color=WHITE,
                       shapes=[BoxShape((0.0, 0.0, 0.004), (0.080, 0.080, 0.008), WHITE),
-                              BoxShape((0.0, 0.025, 0.032), (0.025, 0.012, 0.056), WHITE),
-                              BoxShape((0.0, 0.014, 0.060), (0.025, 0.026, 0.006), WHITE)])
+                              BoxShape((0.0, 0.025, 0.032), (0.025, 0.012, 0.056), WHITE)])
 
 
 def _giving_set() -> Body:
     """The giving set: spike, drip chamber, a short length of tubing with its roller clamp. Origin in the drip
     chamber's middle; the spike points +y. The chamber is clear (its wall is not drawn): the saline shows in it."""
-    shapes = [CylShape((0.0, 0.0, 0.0), CH_R, CH_L, None, axis="Y"),  # the chamber (clear)
-              # Molded wings give the parallel pads a symmetric purchase while staying
-              # inside the cap-removal approach envelope.  Their depth and height resist
-              # pitch during the required horizontal-to-vertical transfer.
-              BoxShape((0.0, 0.0, 0.0), (0.040, 0.020, 0.024), CLEAR),
-              # Upper/lower handling flanges form a shallow waist around the pads.  They
-              # provide geometric pitch and slip resistance during the vertical carry.
-              BoxShape((0.0, -0.014, 0.0), (0.050, 0.004, 0.035), CLEAR),
-              BoxShape((0.0, 0.014, 0.0), (0.050, 0.004, 0.035), CLEAR),
+    shapes = [CylShape((0.0, 0.0, 0.0), CORE_R, CH_L, None, axis="Y"),  # the chamber's rigid core (not drawn)
+              # Its ends, from the collars outward, are rigid at full size.
+              CylShape((0.0, (CH_L / 2 + GAP_Y) / 2, 0.0), CH_R, CH_L / 2 - GAP_Y, None, axis="Y"),
+              CylShape((0.0, -(CH_L / 2 + GAP_Y) / 2, 0.0), CH_R, CH_L / 2 - GAP_Y, None, axis="Y"),
+              # Two printed collars clipped round the chamber, above and below the bare squeezable wall: the fingers
+              # take the chamber between them, on the wall itself. They resist pitch and slip during the carry.
+              BoxShape((0.0, -COLLAR_Y, 0.0), (COLLAR_X, COLLAR_T, COLLAR_Z), CLEAR),
+              BoxShape((0.0, COLLAR_Y, 0.0), (COLLAR_X, COLLAR_T, COLLAR_Z), CLEAR),
               CylShape((0.0, CH_L / 2 - 0.0015, 0.0), CH_R + 0.0003, 0.003, CLEAR, axis="Y", collide=False),
               CylShape((0.0, -CH_L / 2 + 0.0015, 0.0), CH_R + 0.0003, 0.003, CLEAR, axis="Y", collide=False),
               CylShape((0.0, 0.030, 0.0), 0.007, 0.015, WHITE, axis="Y"),  # the spike's base
@@ -177,9 +186,17 @@ def _giving_set() -> Body:
     for k in range(1, 4):  # 25%, 50% and 75% liquid-height marks
         shapes.append(CylShape((0.0, -CH_L / 2 + 0.003 + k * CH_USABLE_H / 4, 0.0), CH_R + 0.0003, 0.0006,
                                DARK, axis="Y", collide=False))
-    # The carried rigid proxy is the 20 g chamber/spike assembly; flexible tubing is visual only.
-    return Body.build("giving_set", pos=tuple(SET_AT.tolist()), mass=0.020, shapes=shapes, friction=(8.0, 6.0),
+    # The carried proxy is the 20 g chamber/spike assembly, wall panels included; flexible tubing is visual only.
+    return Body.build("giving_set", pos=tuple(SET_AT.tolist()), mass=0.020 - 2 * WALL_MASS, shapes=shapes, friction=(8.0, 6.0),
                       color=WHITE, com=(0.0, 0.0, 0.0), start_xyzw=SET_R0_XYZW, ignore=("bag",))
+
+
+def _wall(side: int) -> Body:
+    """One panel of the chamber's squeezable wall (side +1 or -1, across the grip). Its origin is the set's (so the
+    slider's anchor, at both origins, is right for the turned bodies); the panel sits WALL_X out along the set's x."""
+    return Body.build(f"wall_{'p' if side > 0 else 'n'}", pos=tuple(SET_AT.tolist()), mass=WALL_MASS, friction=(8.0, 6.0),
+                      color=CLEAR, start_xyzw=SET_R0_XYZW, ignore=("bag",),
+                      shapes=[BoxShape((side * WALL_X, 0.0, 0.0), (WALL_T, WALL_H, WALL_W), CLEAR)])
 
 
 def _fluid(k: int) -> Body:
@@ -189,8 +206,13 @@ def _fluid(k: int) -> Body:
                                                     axis="Y", collide=False)])
 
 
-OBJECTS = [_tray(), _iv_support(), _sterile_cradle(), _bag(), _cap(), _giving_set(), _spike_cap(),
+OBJECTS = [_tray(), _iv_support(), _sterile_cradle(), _bag(), _cap(), _giving_set(), _wall(+1), _wall(-1), _spike_cap(),
            *[_fluid(k) for k in range(1, SEGMENTS + 1)]]
+# Each wall panel slides in along the set's x (across the grip), from its rest place (0) to its stop, on a spring.
+slider("wall_p_slide", "giving_set", "wall_p", anchor=tuple(SET_AT.tolist()), axis="X", limits=(-WALL_TRAVEL, 0.0),
+       stiffness=WALL_K, damping=WALL_D, target=0.0)
+slider("wall_n_slide", "giving_set", "wall_n", anchor=tuple(SET_AT.tolist()), axis="X", limits=(0.0, WALL_TRAVEL),
+       stiffness=WALL_K, damping=WALL_D, target=0.0)
 _SPEC = {o.name: o for o in OBJECTS}
 # The rack's spring clip: holds the set in place against its weight and the spike cap's pull, and lets go for good
 # once the set is pulled out of it with more than RACK_CLIP_BREAK (re-armed at every reset).
@@ -220,7 +242,8 @@ thread("spike_in", "bag", "giving_set", anchor0=tuple(MOUTH.tolist()), axis0=(0.
 
 def _fresh() -> dict:
     return {"on": False, "hold": 0.0, "locked": False, "cap_off": False, "spike_cap_off": False,
-            "meter": PrimingMeter(usable_height=CH_USABLE_H, closed_finger=-0.020),
+            "meter": PrimingMeter(usable_height=CH_USABLE_H, full_squeeze=WALL_TRAVEL, both_sides=BOTH_SIDES),
+            "compression": 0.0,
             "asepsis": AsepsisMonitor(), "tcps": None, "s": {}}
 
 
@@ -281,6 +304,36 @@ def _place(base, origin, name, pos, rot) -> None:
                                               dtype=torch.float32, device=asset.device))
 
 
+def wall_travel(g_pos, g_rot, wall_pos, side: int) -> float:
+    """How far one wall panel is pushed in from its rest place (m), from the panel's and the set's measured poses."""
+    local_x = float((np.asarray(g_rot, float).T @ (np.asarray(wall_pos, float) - np.asarray(g_pos, float)))[0])
+    return max(0.0, -side * local_x)
+
+
+def squeeze_of(travels) -> float:
+    """The squeeze on the chamber from both panels' inward travels (m): their mean, but only once both sides have been
+    pushed in at least BOTH_SIDES; pressing one side, or a light brush, is no squeeze."""
+    return _squeeze_of(travels, BOTH_SIDES)
+
+
+def _wall_travels(base, origin, g_pos, g_rot) -> tuple[float, float]:
+    """Each wall panel's measured inward travel (m)."""
+    travel = []
+    for name, side in (("wall_p", +1), ("wall_n", -1)):
+        w = as_numpy(base.scene[name].data.root_link_pose_w)[0]
+        travel.append(wall_travel(g_pos, g_rot, w[:3] - origin, side))
+    return travel[0], travel[1]
+
+
+def _walls_local(base, origin, g_pos, g_rot) -> list:
+    """Debug: each wall panel's origin in the set's frame, mm."""
+    out = []
+    for name in ("wall_p", "wall_n"):
+        w = as_numpy(base.scene[name].data.root_link_pose_w)[0]
+        out.append(np.round(g_rot.T @ (w[:3] - origin - g_pos) * 1000, 1).tolist())
+    return out
+
+
 @on_step
 def _follow(env) -> None:
     base = env.unwrapped
@@ -318,14 +371,16 @@ def _follow(env) -> None:
             set_slide_target("spike_in", depth)
     tcps, fingers, gripper_surfaces = _hands(base, origin)
     _EP["tcps"] = tcps
-    near = float(np.linalg.norm(tcps[1] - g_pos)) <= SQUEEZE_AT
+    travels = _wall_travels(base, origin, g_pos, g_rot)
+    compression = squeeze_of(travels)
+    _EP["compression"] = compression
     mouth_w = b_pos + b_rot @ MOUTH
     chamber_low = float((g_pos + g_rot @ np.array([0.0, -CH_L / 2 + 0.003, 0.0]))[2])
     vertical_deg = math.degrees(math.acos(float(np.clip(g_rot[2, 1], -1.0, 1.0))))
     orientation_ok = vertical_deg <= CHAMBER_VERTICAL_DEG
     head_ok = mouth_w[2] - chamber_low >= 0.010  # measured liquid region is >=10 mm below the wetted port
     meter = _EP["meter"]
-    meter.observe(fingers[1], near=near and head_ok and orientation_ok, locked=_EP["locked"])
+    meter.observe(travels, valid=_EP["locked"] and head_ok and orientation_ok)
     spike_base = g_pos + g_rot @ np.array([0.0, 0.039, 0.0])
     spike_tip = g_pos + g_rot @ np.array([0.0, SPIKE_TIP, 0.0])
     from gripper_geometry import link_contact
@@ -372,7 +427,8 @@ def _follow(env) -> None:
                   f"q={np.round(q * 1000, 1).tolist()} "
                   f"off={off * 1000:4.1f}mm angle={angle:4.1f} on={_EP['on']} locked={_EP['locked']} "
                   f"fill_height={meter.fill_height * 1000:.1f}mm spill={meter.spilled} fingerR={fingers[1]:.4f} "
-                  f"near={near} head_ok={head_ok} vertical={vertical_deg:.1f}deg clear={clear} "
+                  f"squeeze={compression * 1000:.2f}mm walls={_walls_local(base, origin, g_pos, g_rot)} "
+                  f"head_ok={head_ok} vertical={vertical_deg:.1f}deg clear={clear} "
                   f"spike_cap_off={_EP['spike_cap_off']} contaminated={_EP['asepsis'].contaminated} "
                   f"cause={_EP['asepsis'].cause} "
                   f"bag={np.round(b_pos * 1000).astype(int).tolist()} set={np.round(g_pos * 1000).astype(int).tolist()} "
@@ -442,18 +498,23 @@ def success(objects) -> bool:
 X_GRIP = grip_rotation(math.pi / 2)  # straight down, fingers closing along x (right arm)
 _tilt = math.radians(35)
 SIDE_GRIP = np.array([[1,0,0],[0,math.cos(_tilt),-math.sin(_tilt)],[0,math.sin(_tilt),math.cos(_tilt)]]) @ X_GRIP
-CHAMBER_UP = 0.006  # the right TCP this far above the drip chamber's axis
+CHAMBER_UP = -0.025  # the right TCP this far along the chamber from its middle: low, so the long fingers stay below the spike
 PUSH_PAST = 0.025  # aim past the seat (the hand lags)
 VIA_RISE, VIA_OVER = 0.12, np.array([0.0, 0.04, 0.035])  # m: the high crossing from the dropped cap to the spike cap
 DROP_AT = np.array([0.24, 0.18, TT + 0.05])
 SPIKE_CAP_DROP = np.array([0.47, 0.05, TT + 0.05])  # forward: never crosses the exposed spike or chamber
 LEAD_S, LEAD_STEPS = 3.0, 15
 SET_OFF = np.array([-0.009, 0.0, -0.003])  # where the spike's tip ends up off the port's mouth if aimed straight at it
-GRASP_DELTA = np.array([-0.022, 0.002, 0.004])  # measured TCP minus chamber centre during the tilted pickup
-# (measured: the bag turns a little about the held tab as the cap is pulled, and the set hangs low in the grip)
-_carry_trim = math.radians(4)
+GRASP_DELTA = np.array([0.0, 0.001, -0.026])  # measured TCP minus chamber centre: the fingers close on the wall, centred
+_carry_trim = math.radians(0)  # the set no longer hangs off-centre in the grip: no trim needed
 VERT_GRIP = np.array([[1,0,0],[0,math.cos(_carry_trim),-math.sin(_carry_trim)],
                      [0,math.sin(_carry_trim),math.cos(_carry_trim)]]) @ SIDE_GRIP
+APPROACH_Y = 0.085  # m: slide in beneath the port along +y, from the robot's side
+BACK_Y = 0.06  # m: draw the open hand back from the seated set, on the robot's side
+# m: shift the open hand this far across the grip before squeezing. Measured: at 0 or -1.5 mm the carry grasp, which
+# sits off-centre on the set, pushes one panel in under 1 mm on some squeezes; at -3 mm both move on every squeeze.
+SQUEEZE_DX = -0.003
+SQUEEZES = 3  # measured rises of 9.1, 4.0 and 5.2 mm: 18.3 mm, inside the 15-27 mm band
 
 
 def _good_ik(arm: str, pos, rot) -> np.ndarray:
@@ -551,8 +612,8 @@ def _right(start: float) -> tuple[list[Waypoint], float]:
                "release the spike cap above its presentation rack", SIDE_GRIP)]
     grip = SET_AT + [0.0, 0.0, CHAMBER_UP]
     mouth = BAG_AT + BAG_R0 @ MOUTH
-    align_set = np.array([mouth[0], mouth[1] - 0.006, mouth[2] - SPIKE_TIP + 0.004])
-    seated_set = np.array([mouth[0], mouth[1] - 0.006, mouth[2] - SPIKE_TIP + SEAT + 0.008])
+    align_set = np.array([mouth[0], mouth[1], mouth[2] - SPIKE_TIP + 0.004])
+    seated_set = np.array([mouth[0], mouth[1], mouth[2] - SPIKE_TIP + SEAT + 0.008])
     below_tcp = align_set + GRASP_DELTA + [0.0, 0.0, -0.008]
     align_tcp, seated_tcp = align_set + GRASP_DELTA, seated_set + GRASP_DELTA
     low = np.array([0.40, -0.25, below_tcp[2]])
@@ -569,27 +630,32 @@ def _right(start: float) -> tuple[list[Waypoint], float]:
                "move the capped end outward before descending", VERT_GRIP),
             _w(3.0, low, FINGER_CLOSED, "lower the upright set below the hanging bag", VERT_GRIP)]
     q_low = _good_ik("right", low, VERT_GRIP)
-    side_tcp = np.array([0.42, below_tcp[1], below_tcp[2]])
+    side_tcp = np.array([below_tcp[0], below_tcp[1] - APPROACH_Y, below_tcp[2]])
     q_side = _good_ik("right", side_tcp, VERT_GRIP)
     q_below = _good_ik("right", below_tcp, VERT_GRIP)
     q_align = _good_ik("right", align_tcp, VERT_GRIP)
     q_seated = _good_ik("right", seated_tcp, VERT_GRIP)
-    out += _joint_path("right", q_low, q_side, "match the port line outside the bag footprint", FINGER_CLOSED)
-    out += _joint_path("right", q_side, q_below, "translate inward beneath the port", FINGER_CLOSED)
+    out += _joint_path("right", q_low, q_side, "line the set up with the port, on the robot's side of the bag", FINGER_CLOSED)
+    out += _joint_path("right", q_side, q_below, "slide in beneath the port, the fingers either side of its path", FINGER_CLOSED)
     out += _joint_path("right", q_below, q_align, "align the upward spike with the port mouth", FINGER_CLOSED)
     out += _joint_path("right", q_align, q_seated, "push the spike upward to its collar: it locks", FINGER_CLOSED)
     out += [_w(3.0, seated_tcp, FINGER_CLOSED, "hold the seated spike while the port grip settles", VERT_GRIP),
             _w(0.5, seated_tcp, FINGER_OPEN, "release the insertion grasp", VERT_GRIP)]
     chamber = np.array([mouth[0], mouth[1], mouth[2] - SPIKE_TIP + SEAT])
-    out.append(_w(0.6, chamber, FINGER_OPEN, "round the upright drip chamber", VERT_GRIP))
-    for k in (1, 2):
-        out += [_w(0.6, chamber, FINGER_CLOSED, f"squeeze the vertical drip chamber ({k})", VERT_GRIP),
-                _w(0.3, chamber, FINGER_CLOSED, "hold the squeeze", VERT_GRIP),
-                _w(0.7, chamber, FINGER_OPEN, "release: saline rises from the outlet end", VERT_GRIP)]
-    up = chamber + [0.0, -0.080, 0.025]
-    out.append(_w(0.8, up, FINGER_OPEN, "rise clear", VERT_GRIP))
+    # Squeeze in place with the same upright grasp that carried and seated the set: its fingers already lie across the
+    # chamber's bare wall. Open, shift across the grip so both fingers meet their panels together, then squeeze and
+    # release a few times.
+    sq = chamber + GRASP_DELTA + [SQUEEZE_DX, 0.0, 0.0]
+    out.append(_w(0.6, sq, FINGER_OPEN, "centre the open fingers on the drip chamber's wall", VERT_GRIP))
+    for k in range(1, SQUEEZES + 1):
+        out += [_w(1.5, sq, FINGER_CLOSED, f"squeeze the drip chamber's wall ({k})", VERT_GRIP),
+                _w(0.5, sq, FINGER_CLOSED, "hold the squeeze", VERT_GRIP),
+                _w(1.0, sq, FINGER_OPEN, "release: the wall springs back and saline rises from the outlet end", VERT_GRIP)]
+    back = sq + [0.0, -BACK_Y, 0.0]
+    q_sq, q_back = _good_ik("right", sq, VERT_GRIP), _good_ik("right", back, VERT_GRIP)
+    out += _joint_path("right", q_sq, q_back, "draw the open hand back from the set", FINGER_OPEN)
     done = sum(w.duration for w in out)
-    out += _go_home("right", up, VERT_GRIP, FINGER_OPEN)
+    out += _go_home("right", back, VERT_GRIP, FINGER_OPEN)
     return out, done
 
 
