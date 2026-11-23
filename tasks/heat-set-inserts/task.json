@@ -1,0 +1,21 @@
+{
+  "title": "Install two brass heat-set threaded inserts in a 3D-printed robot part: melt each in with a soldering iron, then press it flush",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "robot building",
+    "heat-set insert",
+    "soldering iron",
+    "3D printing",
+    "bimanual",
+    "force control"
+  ],
+  "instruction": "This 3D-printed robot part needs metal threads for the M3 screws that will hold it. Install the two brass heat-set inserts sitting loose in its holes: melt each one most of the way in with the hot soldering iron, keeping the iron straight, then press it flush with the steel block while the plastic is still soft. Lay the iron back on its stand when you are done.",
+  "context": "A heat-set insert is a small knurled brass sleeve with an M3 thread inside. Pressed into a hole in a 3D-printed part with a hot soldering iron, it melts the plastic round it, which sets again in its knurls: the part gets a metal thread that survives repeated screwing, where a thread cut in plastic strips. Open-source robot arms are built this way (Instructables' Giant 3D Printed Robot Arm, USC SPRITE, RBX1, PAROL6). CNC Kitchen's method: melt it to about 90 % of its depth, then press it flush with a flat tool. The skill is physical: a vertical iron with light pressure on a 4.4 mm insert, stopping short of flush, then a flat press while it is soft.",
+  "setup": "Positions in cm from the midpoint between the two arm bases (x forward, y to the robot's left), same layout every trial. Plate: 3D-printed PLA, 30 x 60 x 10 mm (plate.stl in the task folder), centred at (33.0, -3.0), 60 mm side along y, taped down; two blind pilot holes 4.0 mm across and 8 mm deep at (33.0, -4.5) and (33.0, -1.5). Inserts: brass M3 heat-set inserts, 5.7 mm long, 4.4 mm across (McMaster-Carr 94459A140 type), one set upright 0.8 mm into each hole's mouth. Soldering iron: pen-style, about 175 mm long, 15 mm grip, 45 g, with an M3 heat-set insert tip (5 mm shoulder over a pilot pin), at 225 C, lying on its stand along x with its tip towards the robot at (20.0, -17.0), its axis 4.0 cm above the table; the stand is two supports (a bar with a post either side), under the shaft 3.5 cm and under the grip 16 cm from the tip. Flat tool: hardened steel 1-2-3 block, 25.4 x 50.8 x 76.2 mm, 0.77 kg, standing on its 25.4 x 50.8 mm end at (25.0, 10.0), its 50.8 mm side along x.",
+  "scoring": "After the trial, per insert, with a straightedge and a 0.2 mm feeler gauge, a 30 mm M3 screw with a small square, and a photo. 0.5: flush (the feeler gauge doesn't pass under a straightedge across it, and it is not more than 0.2 mm below the surface), square (the screw threaded in stands within 3 degrees of perpendicular: 1.6 mm at its head) and no melt mark from the iron's shoulder on the PLA round it. 0.25: at least half way in (2.45 mm or more below where it was set) but not flush, not square or marked. 0: less than half way in, or sunk more than 0.2 mm below the surface. The two inserts' scores are added; full credit (1.0) also needs the iron lying back on its stand, let go, for 1 s; until then at most 0.75.",
+  "run_limit": "3,600 steps (3 minutes at 20 Hz)",
+  "reset_notes": "A fresh printed plate with two fresh inserts set in its holes for every trial (each plate is single-use); let the block cool and wipe it; lay the iron back on its stand. The iron stays on at 225 C throughout; keep hands clear of the tip.",
+  "fidelity": "Rigid-body PhysX at 240 Hz. The melting PLA is a rule: each insert slides on a stiff joint whose depth changes only while it is soft (touched by the iron in the last 8 s) and pressed: by the iron with at least 1 N, by the block's face from 0.3 N, at most 2 mm/s. It takes the iron's tilt as the iron sinks it; the block's face, resting within 5 degrees of flat on the plate, leaves it flush and square to the face. Heat and melt marks are rules too.",
+  "scores": "Dream-1 run: 0.0 (3,600 steps; the right arm moved over the plate and near the iron but never grasped it; the left arm barely moved; nothing was touched); demo: 1.0",
+  "media": "M-52NTNF"
+}
