@@ -109,7 +109,10 @@ def test_baffle_geometry():
     assert M.BF_YW > slot_hi  # the ramp starts under the whole slot
     assert M.BF_PLATE_Z0 < M.BOX_H - M.LID_T  # the plate hangs from the lid
     throat = M.BF_PLATE_Z0 - (M.BF_PLATE_Y1)  # the ramp surface under the plate's slot-side face: z = y
-    assert 0.008 <= throat <= 0.015  # a hand (or a toddler's finger) cannot pass; a folded patch does
+    square_on = throat * math.cos(math.pi / 4)
+    assert square_on < 0.0056  # IEC 61032 probe 19 (a child under 3's finger, 5.6 mm) does not pass
+    assert square_on > 0.004  # a folded patch (two layers) slides through
+    assert abs(square_on - M.BF_GAP) < 1e-9
     assert throat * math.cos(math.pi / 4) > 4 * M.T  # the folded film (two layers) passes with room to spare
     assert M.SLOT[1] < 0.035 and M.SLOT[1] > M.W / 2 + 0.005  # a folded patch passes the slot, a hand does not
     assert M.BF_PLATE_Z0 > M.BF_PLATE_Y1  # the plate clears the top of the ramp where it meets it

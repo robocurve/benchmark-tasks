@@ -46,6 +46,8 @@ class Patch(Box):
     gap: float = 0.0003  # between neighbouring slats
     face_color: tuple = (0.92, 0.88, 0.80)  # the adhesive face (translucent beige)
     back_color: tuple = (0.80, 0.55, 0.30)  # the printed backing
+    print_color: tuple = None  # visual only: a printed border, diagonal stripes and a name block (as on a Duragesic)
+    border_m: float = 0.003  # width of the printed border
 
     @property
     def free(self) -> bool:  # not jittered by yam_arena's reset (it writes rigid poses only)
@@ -121,6 +123,37 @@ def fold_angle(quat) -> float:
     return float(math.degrees(math.acos(max(-1.0, min(1.0, float(za @ zb))))))
 
 
+def _print_marks(spec: Patch, k: int) -> list:
+    """The printed marks on slat k, as (centre along the slat's x, centre along its y, size x, size y) in its frame: a
+    border round the whole patch, diagonal stripes, and a name and strength block in the middle of each half. Visual
+    only (no collision, no mass); drawn on both faces, as the print shows through the translucent film."""
+    sw, L, _ = spec.slat
+    b, n = spec.border_m, spec.n
+    out = [(0.0, -L / 2 + b / 2, sw, b), (0.0, L / 2 - b / 2, sw, b)]  # the two ends of the border
+    if k in (0, n - 1):  # the two long sides of the border
+        out.append(((-1 if k == 0 else 1) * (sw - b) / 2, 0.0, b, L - 2 * b))
+    else:  # a diagonal stripe: one square per slat, stepping along the patch
+        for y in (-L / 2 + b + (k * 0.006) % (L - 2 * b - 0.004) + 0.002,):
+            out.append((0.0, y, 0.6 * sw, 0.004))
+    if k in (n // 4, n - 1 - n // 4):  # the name and strength block, one in the middle of each half
+        out.append((0.0, 0.0, 0.8 * sw, 0.35 * L))
+    return out
+
+
+def _print_slat(stage, path, spec: Patch, k: int, look: str) -> None:
+    from isaaclab.sim.utils import bind_visual_material
+    from pxr import Gf, UsdGeom
+
+    t, ink = spec.size[2], 4e-5
+    for i, (x, y, sx, sy) in enumerate(_print_marks(spec, k)):
+        for side, z in (("up", t / 2 + ink), ("dn", -t / 2 - ink)):
+            g = UsdGeom.Cube.Define(stage, f"{path}/print_{side}{i}")
+            g.CreateSizeAttr(1.0)
+            g.AddTranslateOp().Set(Gf.Vec3d(x, y, z))
+            g.AddScaleOp().Set(Gf.Vec3f(sx, sy, ink))
+            bind_visual_material(str(g.GetPrim().GetPath()), look, stage=stage)
+
+
 def _spawn_patch(prim_path: str, cfg, translation=None, orientation=None, **kwargs):
     import isaaclab.sim as sim_utils
     from isaaclab.sim.utils import bind_physics_material, bind_visual_material
@@ -139,7 +172,7 @@ def _spawn_patch(prim_path: str, cfg, translation=None, orientation=None, **kwar
     pm = sim_utils.RigidBodyMaterialCfg(static_friction=spec.friction, dynamic_friction=spec.friction * 0.9)
     pm.func(phys, pm)
     looks = {}
-    for k, c in (("face", spec.face_color), ("back", spec.back_color)):
+    for k, c in (("face", spec.face_color), ("back", spec.back_color), ("print", spec.print_color or spec.back_color)):
         looks[k] = f"{prim_path}/Looks/{k}"
         lk = sim_utils.PreviewSurfaceCfg(diffuse_color=linear_rgb(c), roughness=0.6)
         lk.func(looks[k], lk)
@@ -170,6 +203,8 @@ def _spawn_patch(prim_path: str, cfg, translation=None, orientation=None, **kwar
             cp.CreateRestOffsetAttr(0.0)
             bind_physics_material(str(g.GetPrim().GetPath()), phys, stage=stage)
             bind_visual_material(str(g.GetPrim().GetPath()), looks[look], stage=stage)
+        if spec.print_color is not None:
+            _print_slat(stage, path, spec, k, looks["print"])
         paths.append(path)
     for k in range(spec.n - 1):
         j = UsdPhysics.RevoluteJoint.Define(stage, f"{paths[k + 1]}/bend{k}")
