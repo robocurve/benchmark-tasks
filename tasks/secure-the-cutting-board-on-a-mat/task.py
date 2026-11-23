@@ -8,6 +8,7 @@ pushes the mat away, so the natural way is to lift it by both handles and set it
 it, tilted). The instruction does not state the rule.
 
 Scored each step from poses: how much of the board's underside is over the mat, how it rests, whether it was dropped.
+How it is held on the way (level, tilted or on edge) is not scored.
 """
 
 from __future__ import annotations
@@ -58,7 +59,6 @@ OBJECTS = [BOARD_PART, MAT_PART]
 # -- scoring -----------------------------------------------------------------------------------------------------------
 FULL_ON, PART_ON = 0.70, 0.40  # share of the board's underside over the mat
 REST_TOL, FLAT, TILTED = 0.006, 3.0, 10.0  # resting on the mat: underside on its top, level / tilted on its edge
-CARRY_TILT = 20.0  # deg: lifted more crooked than this and the board is out of control (counts as a drop)
 BOARD_NEAR, RELEASE_DIST = 0.020, 0.008
 DROP_FALL, DROP_STEPS = 0.03, 10
 STILL_MOVE, STILL_STEPS = 0.002, 20
@@ -87,7 +87,7 @@ def _update(objects):
     loc = (under - mat[0]) @ mat[1]
     share = float(((np.abs(loc[:, 0]) <= MAT[0] / 2) & (np.abs(loc[:, 1]) <= MAT[1] / 2)).mean())
     tilt = kk.tilt_deg(board[1])
-    if board[0][2] - BOARD_POS[2] > 0.010:
+    if board[0][2] - BOARD_POS[2] > 0.010:  # reported only: how the board is held on the way is not scored
         _S["max_tilt"] = max(_S["max_tilt"], tilt)
     handled = kk.touched_by_any(_BOARD_C, _BOARD_S, board, BOARD_NEAR)
     if _S["fall"].update(board[0][2], handled):
@@ -100,7 +100,7 @@ def _update(objects):
                   round(float(board[0][2] - (mat[0][2] + MAT[2])), 4), "max_lift_tilt": round(_S["max_tilt"], 2),
                   "mat_moved": round(float(np.linalg.norm(mat[0][:2] - np.asarray(MAT_XY))), 4),
                   "released": released, "still": still}
-    if _S["dropped"] or _S["max_tilt"] > CARRY_TILT:
+    if _S["dropped"]:  # the only lasting zero: a drop (tilting it while it is held, even on edge, is not one)
         res = (0.0, False)
     elif released and still and on_mat and share >= FULL_ON and tilt <= FLAT:
         res = (1.0, True)
@@ -113,15 +113,15 @@ def _update(objects):
 
 
 def success(objects) -> bool:
-    """The board rests flat (within 3 deg) on the mat with at least 70% of its underside over it, released and still;
-    it was never lifted more than 20 deg crooked and never dropped."""
+    """The board rests flat (top face up, within 3 deg of level) on the mat with at least 70% of its underside over
+    it, released and still, and it was never dropped. How it was held on the way (level, tilted, on edge) is free."""
     return _update(objects)[1]
 
 
 def score(objects) -> float:
     """1.0 flat on the mat; 0.5 resting at mat height at least 40% over the mat but tilted (up to 10 deg) or under 70%
-    over it; 0 if the board is not on the mat, was dropped, or was lifted more than 20 deg crooked. The share over the
-    mat is measured on a 1 cm grid over the board's underside."""
+    over it; 0 if the board is not on the mat or was ever dropped. Its tilt while it is held is not scored. The share
+    over the mat is measured on a 1 cm grid over the board's underside."""
     return _update(objects)[0]
 
 
