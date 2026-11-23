@@ -104,14 +104,14 @@ class Layout(unittest.TestCase):
 
     def test_blade_underside_runs_flush_from_the_shaft(self):
         # a flat bar is ground on its top face: every blade segment's underside is the shaft's, 3 mm off the centre line
-        x = z = 0.0
-        for (c, s, a, _col), (length, _t, _ang, _c) in zip(L.bar_shapes()[:4], L.BAR_SEGMENTS[:4]):
+        for c, s, a, _col in L.bar_shapes():
+            if not math.isclose(a, math.radians(L.BLADE_BEND)):
+                continue
             n = (math.sin(a), math.cos(a))
             under = (c[0] - n[0] * s[2] / 2, c[2] - n[1] * s[2] / 2)
-            mid = (x + math.cos(a) * length / 2, z - math.sin(a) * length / 2)
-            self.assertAlmostEqual((under[0] - mid[0]) * n[0] + (under[1] - mid[1]) * n[1], -L.SHAFT_T / 2, delta=1e-9)
-            x, z = x + math.cos(a) * length, z - math.sin(a) * length
+            self.assertAlmostEqual(under[0] * n[0] + under[1] * n[1], -L.SHAFT_T / 2, delta=1e-9)
         # and the heel (the bend's underside) is the bar's lowest point with the blade laid flat
+        z = -sum(length * math.sin(math.radians(angle)) for length, _t, angle, _c in L.BAR_SEGMENTS[:3])
         self.assertAlmostEqual(L.bar_point("heel")[2], z - L.SHAFT_T / 2, delta=1e-9)
 
     def test_eased_edge_takes_the_blade(self):
@@ -120,8 +120,37 @@ class Layout(unittest.TestCase):
         self.assertAlmostEqual(L.EASE, 3.0 * MM)
 
     def test_bar_dimensions(self):
-        self.assertAlmostEqual(sum(seg[0] for seg in L.BAR_SEGMENTS), 0.410, delta=0.01)
-        self.assertTrue(0.4 < L.BAR_MASS < 0.7)
+        # Published B215 dimensions apply to the complete folded tool, not the sum of segment lengths.
+        corners = L.bar_corners_local()
+        span = max(p[0] for p in corners) - min(p[0] for p in corners)
+        self.assertAlmostEqual(span, 381 * MM, delta=1e-9)
+        self.assertAlmostEqual(T.BAR.mass, 24 * 0.028349523125, delta=1e-9)
+
+    def test_bar_has_three_real_nail_openings(self):
+        def metal(point):
+            point = np.asarray(L.bar_frame_rotation()) @ point
+            return any(np.all(np.abs(shape.rotation().T @ (point - shape.center)) < np.asarray(shape.size) / 2 - 1e-8)
+                       for shape in T.BAR.shapes)
+
+        def profile_point(index, along, y=0.0):
+            x = z = 0.0
+            for length, _t, angle, _col in L.BAR_SEGMENTS[:index]:
+                a = math.radians(angle)
+                x += math.cos(a) * length
+                z -= math.sin(a) * length
+            _length, thick, angle, _col = L.BAR_SEGMENTS[index]
+            a = math.radians(angle)
+            up = -(L.SHAFT_T - thick) / 2 if index < 3 else 0.0
+            return np.array([x + math.cos(a) * along + math.sin(a) * up, y,
+                             z - math.sin(a) * along + math.cos(a) * up])
+
+        for index, along in ((0, 2 * MM), (3, 24 * MM), (7, 12 * MM)):
+            self.assertFalse(metal(profile_point(index, along)), "a nail opening is filled by a collider")
+            for side in (-1, 1):
+                self.assertTrue(metal(profile_point(index, along, side * 12 * MM)), "missing metal beside slot")
+        # The closed keyhole has metal before and after it; the shaft grip is solid and remains 32 mm wide.
+        for along in (15 * MM, 39 * MM, L.BAR_GRIP_X - L.bar_point("heel")[0]):
+            self.assertTrue(metal(profile_point(3, along)))
 
     def test_frame_is_joists_with_a_rim_clamped_at_the_back(self):
         # the rim joist closes the joists' back ends, flush with their outer faces, inside the table's back edge

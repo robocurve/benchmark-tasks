@@ -8,9 +8,9 @@ The board: a 600 mm length of 1x4 common pine (19 x 89 mm actual, 0.46 kg) lying
 centred between them (its ends overhang each joist by 78 mm), held by one 3d box nail (1-1/4 in, bright steel) into
 each joist, driven square through its centre line, head flush.
 
-The pry bar: a 380 mm flat pry bar (0.57 kg; 32 x 6 mm blue spring steel, a flat chisel blade at one end, a curved
-nail claw at the other) lies on the table in front of the frame, parallel to the board, its claw to the robot's right,
-curled down.
+The pry bar: a Vaughan B215 Original SuperBar (part VN45001), 381 mm and 24 oz (0.680 kg), blue spring steel
+with a flared blade, a curved rocker head and three nail openings. Fine dimensions are approximated (README).
+It lies on the table in front of the frame, parallel to the board, its claw to the robot's right, curled down.
 
 Goal: the board pried off the joists with the bar and laid flat on the table; then both grippers clear of it. See
 scoring.py. The usual way: slip the blade under the board beside a joist, rest the bar across that joist's top and

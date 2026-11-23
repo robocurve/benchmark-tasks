@@ -9,7 +9,7 @@ stand at y = +-0.305. The station table's top is the work surface: ``TOP``. On i
 - the board (loose, but nailed): a 600 mm length of 1x4 pine (19 x 89 mm actual) lying flat across the joists' tops,
   centred between them (its ends overhang each joist by 78 mm), held by one 3d box nail (1-1/4 in) into each joist,
   driven through its centre line;
-- the pry bar (loose): a 380 mm flat pry bar lying on the table in front of the frame.
+- the pry bar (loose): a Vaughan B215 Original SuperBar, 381 mm long, lying on the table in front of the frame.
 
 The board's own frame (used by the scorer): origin at its centre, x across its width (away from the robot), y along
 its length (to the robot's left), z up out of its top face. At rest on its nails it is the world's axes.
@@ -99,16 +99,23 @@ CARRIER_MASS = 0.05  # each of the carrier's two links
 CARRIER_Z = 25.0 * MM  # the carrier's hidden 6 mm boxes, inside each joist, this far above the table
 
 # -- the pry bar (loose) ---------------------------------------------------------------------------------------------
-# A 15 in (380 mm) flat pry bar: flat spring steel, 32 mm wide and 6 mm thick, ground to a flat chisel blade at one
-# end and bent into a curved nail claw at the other, powder-coated blue with the blade and claw bare. The blade is
+# Vaughan B215 Original SuperBar (current part VN45001). The manufacturer's VGSS001 sell sheet specifies
+# 15 in / 381 mm and 24 oz. Stock size, flare, slots and bend dimensions below are explicit photo-based
+# approximations, not manufacturer drawings; see README. The blade is
 # bent 15 deg off the shaft, away from the claw's curl: laid flat on the work with the shaft rising behind it, the bend
 # is the heel the bar rocks on.
 # Drawn in its own frame: x along the bar from the blade's tip (x = 0) to the claw, y across its width, z through its
 # thickness; the claw curls toward -z. Each segment: (length, thickness, angle from +x toward -z in degrees, colour).
-BAR_W = 32.0 * MM
+BAR_MAKE = "Vaughan"
+BAR_MODEL = "B215 Original SuperBar"
+BAR_PART_NUMBER = "VN45001"
+BAR_LENGTH = 15.0 * INCH
+BAR_MASS = 24.0 * 0.028349523125  # kg: published tool weight, not the website's shipping weight
+BAR_W = 32.0 * MM  # approximate flat shaft stock, retained from the original simulation
+BAR_END_W = 45.0 * MM  # approximate flared blade and rocker-head width from manufacturer photos
 BLADE_BEND = 15.0  # deg: from the tip, the blade falls toward -z (the claw's side) to meet the shaft
 BLADE_LEN = 48.0 * MM
-BAR_SEGMENTS = (
+_BAR_PROFILE = (
     (16.0 * MM, 1.6 * MM, BLADE_BEND, BAR_BRIGHT),  # the blade's edge
     (16.0 * MM, 2.8 * MM, BLADE_BEND, BAR_BRIGHT),
     (16.0 * MM, 4.2 * MM, BLADE_BEND, BAR_BRIGHT),
@@ -118,8 +125,27 @@ BAR_SEGMENTS = (
     (18.0 * MM, 5.0 * MM, 150.0, BAR_BRIGHT),
     (14.0 * MM, 3.5 * MM, 172.0, BAR_BRIGHT),  # the claw's tip
 )
+
+
+def _profile_span(segments) -> float:
+    """End-to-end extent along the tool, including the bevel and the folded rocker head."""
+    xs = []
+    x = 0.0
+    for i, (length, thick, angle, _color) in enumerate(segments):
+        a = math.radians(angle)
+        up = -(segments[3][1] - thick) / 2 if i < 3 else 0.0
+        xs.extend(x + math.cos(a) * u + math.sin(a) * (up + v)
+                  for u in (0.0, length) for v in (-thick / 2, thick / 2))
+        x += math.cos(a) * length
+    return max(xs) - min(xs)
+
+
+# Size the straight shaft so the complete folded tool spans the published 381 mm. Summing segment lengths
+# would measure the curved path, rather than the overall length. Blade and heel geometry are independent of this.
+_SHAFT_EXTENSION = BAR_LENGTH - _profile_span(_BAR_PROFILE)
+BAR_SEGMENTS = tuple((length + (_SHAFT_EXTENSION if i == 3 else 0.0), thick, angle, color)
+                     for i, (length, thick, angle, color) in enumerate(_BAR_PROFILE))
 STEEL_DENSITY = 7850.0
-BAR_MASS = round(sum(l * t * BAR_W for l, t, _a, _c in BAR_SEGMENTS) * STEEL_DENSITY, 3)  # 0.57 kg
 BAR_FRICTION = (0.9, 0.8)  # powder-coated steel on the grippers' rubber pads
 # Where it lies: on the table in front of the frame, parallel to the board, its blade to the robot's left and its
 # claw to the right, curled down: it rests on the claw and the blade's heel, the shaft sloping up toward the claw.
@@ -151,7 +177,7 @@ def bar_point(name: str) -> tuple:
     raise KeyError(name)
 
 
-BAR_GRIP_X = 0.200  # where the demo holds the shaft, from the tip: at its centre of mass (the shaft runs 46 to 336 mm)
+BAR_GRIP_X = 0.200  # where the demo holds the plain shaft, measured from the blade tip
 
 # -- scoring ----------------------------------------------------------------------------------------------------------
 BAR_AT_NAIL_Y = 0.060  # the bar levers at a nail when its blade is within 6 cm of that joist's centre line, side to side
@@ -213,8 +239,11 @@ def bar_frame_rotation():
 
 
 def bar_shapes() -> list:
-    """The bar's segments as (centre, size, pitch) in its own frame: centre line from the blade's tip along +x,
-    each segment turned by its angle toward -z (pitch about +y is positive toward -z for a +x vector)."""
+    """Solid boxes forming the B215, including two open nail notches and a closed keyhole.
+
+    Slots are actual gaps between collision pieces. Their stepped outlines and the flared shoulders approximate
+    the photographed forging; no black decals or collision boxes fill the holes.
+    """
     out = []
     x = z = 0.0
     for k, (length, thick, ang, colour) in enumerate(BAR_SEGMENTS):
@@ -223,8 +252,28 @@ def bar_shapes() -> list:
         # the blade is ground on its top face: its underside runs on from the shaft's (its centre lowered along the
         # segment's +z normal, (sin a, cos a) in x, z)
         up = -(BAR_SEGMENTS[3][1] - thick) / 2 if k < 3 else 0.0
-        out.append(((x + dx * length / 2 + math.sin(a) * up, 0.0, z + dz * length / 2 + math.cos(a) * up),
-                    (length, BAR_W, thick), a, colour))
+        # Each interval is (start, end, outside width, central opening width).
+        width = BAR_W if k == 3 else BAR_END_W
+        bands = [(0.0, length, width, 0.0)]
+        if k == 0:  # V-shaped nail notch at the flat blade's end
+            bands = [(0.0, 4 * MM, width, 8 * MM), (4 * MM, 8 * MM, width, 4 * MM),
+                     (8 * MM, length, width, 0.0)]
+        elif k == 3:  # flared shoulder, closed keyhole nail slot, then the unbroken gripping shaft
+            bands = [(0.0, 20 * MM, BAR_END_W, 0.0), (20 * MM, 28 * MM, BAR_END_W, 10 * MM),
+                     (28 * MM, 38 * MM, BAR_END_W, 4 * MM), (38 * MM, 40 * MM, BAR_END_W, 0.0),
+                     (40 * MM, 55 * MM, (BAR_END_W + BAR_W) / 2, 0.0),
+                     (55 * MM, length, BAR_W, 0.0)]
+        elif k == len(BAR_SEGMENTS) - 1:  # open notch in the curved nail claw
+            bands = [(0.0, length - 8 * MM, width, 0.0),
+                     (length - 8 * MM, length - 4 * MM, width, 4 * MM),
+                     (length - 4 * MM, length, width, 8 * MM)]
+        for start, end, outside, gap in bands:
+            mid = (start + end) / 2
+            strips = [(0.0, outside)] if not gap else [(-(outside + gap) / 4, (outside - gap) / 2),
+                                                                    ((outside + gap) / 4, (outside - gap) / 2)]
+            for y, strip_width in strips:
+                out.append(((x + dx * mid + math.sin(a) * up, y, z + dz * mid + math.cos(a) * up),
+                            (end - start, strip_width, thick), a, colour))
         x, z = x + dx * length, z + dz * length
     return out
 

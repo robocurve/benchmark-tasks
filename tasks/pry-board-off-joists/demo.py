@@ -152,9 +152,12 @@ def pry(ctx, arm, side: str, strokes: int = 4, withdraw: bool = True):
     for k in range(strokes):
         report(ctx, arm, f"stroke {k + 1}")
         yield from lever(ctx, arm, side, want)
+        # A freed board can settle back onto the joist during the pause. Keep
+        # the visible evidence that this nail cleared before relaxing the bar.
+        cleared = gap(ctx, side) >= GAP_DONE
         yield from arm.wait(0.4)
         yield from relax(arm)
-        if gap(ctx, side) >= GAP_DONE:
+        if cleared or gap(ctx, side) >= GAP_DONE:
             break
         # re-set the blade: up off the work, back out, level, and in under the raised board, deeper
         want = GAP_DONE
