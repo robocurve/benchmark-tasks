@@ -1,0 +1,797 @@
+{
+  "title": "Low-cost microtome fixture for real trials",
+  "summary": "A bench fixture that replaces the costly rotary microtome in a real trial. It is built from the task's own modelled parts, at full size and in the same positions: a plywood housing; a printed handwheel whose handle pin locks only at 12 o'clock; a printed specimen head on two 8 mm rods, driven through its 59 mm stroke by a crank pin in a yoke slot; a sprung cassette clamp with its lever (longer and lower than the instrument's, as in the simulation, so a gripper fits behind it); and a knife holder with a dull mock blade and a hinged guard with stops. The robot meets the same shapes, positions, strokes and operating forces as in the simulation. Only the housing's outside differs from a real instrument, and the robot never handles it. A real Leica RM2125 RTS can be used instead where one is available: the scene follows it.",
+  "printer_bed_mm": [
+    220,
+    220,
+    250
+  ],
+  "sheet": {
+    "material": "12 mm (1/2 in) birch plywood, 2 x 4 ft project panel",
+    "part_number": "FALKENDESIGN-PW-Birch-D4-1/2-2448",
+    "thickness_mm": 12,
+    "sheet_mm": [
+      610,
+      1220
+    ],
+    "price": 35.04,
+    "seller": "Home Depot",
+    "url": "https://homedepot.com/p/Falken-Design-1-2-in-x-2-ft-x-4-ft-Birch-Plywood-Project-Panel-FALKENDESIGN-PW-Birch-D4-1-2-2448/319137344"
+  },
+  "filament": {
+    "material": "PLA",
+    "part_number": "Bambu Lab PLA Basic 1.75 mm 1 kg",
+    "price_per_kg": 29.99,
+    "fill": 0.35,
+    "density_g_cm3": 1.24,
+    "seller": "MatterHackers",
+    "url": "https://www.matterhackers.com/store/l/bambu-lab-pla-filament-175mm-1kg"
+  },
+  "bought": {
+    "cassette__body:0": "standard plastic histology cassette (BOM 12), as used on the real instrument",
+    "cassette__body:1": "paraffin block cast in the cassette's face (BOM 13)",
+    "microtome__body:18": "mock blade: 80 x 8 mm cut from 0.3 mm stainless sheet, edge dulled with a file (BOM 11)",
+    "handwheel__wheel:1": "5/8 in (15.9 mm) aluminium round bar, cut to 160 mm (BOM 5)",
+    "handwheel__wheel:3": "10 x 30 mm steel dowel pin, pressed into the crank disc (BOM 7)",
+    "handwheel__handle:1": "8 x 40 mm steel dowel pin, glued into the knob (BOM 8)",
+    "head__body:0": "8 mm x 200 mm stainless shaft (BOM 6)",
+    "head__body:1": "8 mm x 200 mm stainless shaft (BOM 6)"
+  },
+  "panels": [
+    {
+      "name": "front_wall",
+      "shells": [
+        "microtome__body:4",
+        "microtome__body:5",
+        "microtome__body:6",
+        "microtome__body:7"
+      ],
+      "note": "Faces the specimen head; the 43 mm slot is where the yoke passes through to the crank."
+    },
+    {
+      "name": "side_wall",
+      "shells": [
+        "microtome__body:8",
+        "microtome__body:9",
+        "microtome__body:10",
+        "microtome__body:11",
+        "microtome__body:12",
+        "microtome__body:13",
+        "microtome__body:14"
+      ],
+      "note": "Handwheel side. Cut-out 1: the 32 mm square shaft opening behind the bearing boss. Cut-out 2: the 13 mm lock hole at 12 o'clock; drill it 13 mm round."
+    }
+  ],
+  "bores": {
+    "handwheel__body:0": [
+      {
+        "axis": "x",
+        "at": [
+          -160,
+          140
+        ],
+        "d": 16.1
+      }
+    ],
+    "handwheel__wheel:0": [
+      {
+        "axis": "x",
+        "at": [
+          -160,
+          140
+        ],
+        "d": 15.9
+      },
+      {
+        "axis": "x",
+        "at": [
+          -86.4,
+          182.5
+        ],
+        "d": 8.4
+      }
+    ],
+    "handwheel__wheel:2": [
+      {
+        "axis": "x",
+        "at": [
+          -160,
+          140
+        ],
+        "d": 15.9
+      },
+      {
+        "axis": "x",
+        "at": [
+          -134.5,
+          154.8
+        ],
+        "d": 9.9
+      }
+    ]
+  },
+  "extra": [
+    {
+      "name": "inner_bearing",
+      "joint": "fixed to the base plate",
+      "note": "second bearing for the shaft, beside the crank disc (the simulation's hinge needs none)",
+      "boxes": [
+        {
+          "centre": [
+            495,
+            -160,
+            98.5
+          ],
+          "size": [
+            20,
+            44,
+            127
+          ],
+          "bores": [
+            {
+              "axis": "x",
+              "at": [
+                -160,
+                140
+              ],
+              "d": 16.1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "knife_bar_web",
+      "joint": "printed with the knife holder",
+      "join": "microtome__body",
+      "note": "joins the knife clamp bar to the holder (in the simulation they are one fixed body)",
+      "boxes": [
+        {
+          "centre": [
+            530,
+            62,
+            122
+          ],
+          "size": [
+            90,
+            6,
+            8
+          ]
+        }
+      ]
+    },
+    {
+      "name": "rod_ears",
+      "joint": "on the carriage",
+      "join": "head__carriage",
+      "note": "guides the carriage on the two 8 mm rods (in the simulation the rails guide it by contact)",
+      "boxes": [
+        {
+          "centre": [
+            489,
+            -30.75,
+            175.3
+          ],
+          "size": [
+            16,
+            17.5,
+            40
+          ],
+          "bores": [
+            {
+              "axis": "z",
+              "at": [
+                489,
+                -34
+              ],
+              "d": 8.3
+            }
+          ]
+        },
+        {
+          "centre": [
+            571,
+            -30.75,
+            175.3
+          ],
+          "size": [
+            16,
+            17.5,
+            40
+          ],
+          "bores": [
+            {
+              "axis": "z",
+              "at": [
+                571,
+                -34
+              ],
+              "d": 8.3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "rod_bridge",
+      "joint": "screwed to the top of the front wall",
+      "note": "holds the rods' upper ends at z 253; 5 mm above the carriage's highest point",
+      "boxes": [
+        {
+          "centre": [
+            530,
+            -34.5,
+            246.5
+          ],
+          "size": [
+            100,
+            11,
+            13
+          ],
+          "bores": [
+            {
+              "axis": "z",
+              "at": [
+                489,
+                -34
+              ],
+              "d": 8.0
+            },
+            {
+              "axis": "z",
+              "at": [
+                571,
+                -34
+              ],
+              "d": 8.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "rod_feet",
+      "joint": "screwed to the front wall's face",
+      "note": "hold the rods' lower part; two blocks, clear of the yoke at its lowest",
+      "boxes": [
+        {
+          "centre": [
+            489,
+            -34.5,
+            101
+          ],
+          "size": [
+            18,
+            11,
+            13
+          ],
+          "bores": [
+            {
+              "axis": "z",
+              "at": [
+                489,
+                -34
+              ],
+              "d": 8.0
+            }
+          ]
+        },
+        {
+          "centre": [
+            571,
+            -34.5,
+            101
+          ],
+          "size": [
+            18,
+            11,
+            13
+          ],
+          "bores": [
+            {
+              "axis": "z",
+              "at": [
+                571,
+                -34
+              ],
+              "d": 8.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "guard_posts",
+      "joint": "glued to the knife holder base",
+      "note": "carry the guard's two M4 shoulder screws (the simulation's hinge needs none)",
+      "boxes": [
+        {
+          "centre": [
+            474,
+            98,
+            103
+          ],
+          "size": [
+            10,
+            10,
+            86
+          ],
+          "bores": [
+            {
+              "axis": "x",
+              "at": [
+                97,
+                142
+              ],
+              "d": 5.2
+            }
+          ]
+        },
+        {
+          "centre": [
+            586,
+            98,
+            103
+          ],
+          "size": [
+            10,
+            10,
+            86
+          ],
+          "bores": [
+            {
+              "axis": "x",
+              "at": [
+                97,
+                142
+              ],
+              "d": 5.2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "guard_knuckle",
+      "joint": "printed with the guard",
+      "join": "microtome__guard",
+      "note": "the guard's hinge knuckle along its back edge; tap both ends M4",
+      "boxes": [
+        {
+          "centre": [
+            530,
+            97,
+            142
+          ],
+          "size": [
+            100,
+            8,
+            8
+          ],
+          "bores": [
+            {
+              "axis": "x",
+              "at": [
+                97,
+                142
+              ],
+              "d": 3.3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "clamp_spring_bridge",
+      "joint": "on the carriage",
+      "join": "head__carriage",
+      "note": "holds the clamp spring above the lever's forward arm, 40 mm in front of the pivot; glued to the carriage plate's top",
+      "boxes": [
+        {
+          "centre": [
+            477.5,
+            19,
+            220
+          ],
+          "size": [
+            45,
+            78,
+            10
+          ],
+          "bores": [
+            {
+              "axis": "z",
+              "at": [
+                466,
+                50
+              ],
+              "d": 8.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "features": [
+    {
+      "name": "Wheel axis",
+      "value": "5/8 in (15.9 mm) shaft along x at y -160, z 140; bearing bores 16.1, wheel and crank disc bores 15.9 (pressed and glued)",
+      "tolerance": "+-0.5 mm",
+      "check": "rule from the bench top and the housing's front edge"
+    },
+    {
+      "name": "Lock hole at 12 o'clock",
+      "value": "13 mm hole in the side wall at y -160, z 225 (85 mm above the axis)",
+      "tolerance": "+-0.5 mm",
+      "check": "with the knob at 12 o'clock the pin enters without touching; 2 degrees either side it hits the wall"
+    },
+    {
+      "name": "Handle pin and travel",
+      "value": "8 mm pin on an 85 mm radius; slides 10 mm in its 8.4 mm bore; tip 4 mm off the wall when out, 2 mm into the hole when pushed 6 mm",
+      "tolerance": "+-0.5 mm",
+      "check": "rule on the knob's travel; the wheel is locked once the knob is 6 mm in"
+    },
+    {
+      "name": "Crank",
+      "value": "10 mm pin at 29.5 mm radius (59 mm stroke); the yoke slot is 11 mm high (0.5 mm play a side)",
+      "tolerance": "+-0.3 mm",
+      "check": "one turn of the wheel moves the head 59 mm (rule on the carriage)"
+    },
+    {
+      "name": "Specimen head guide",
+      "value": "two 8 x 200 mm rods at x 489 and 571, y -34, from z 53 to 253, held by the rod feet (z 94.5-107.5) and the rod bridge (z 240-253); ear bores 8.3 mm",
+      "tolerance": "+-0.3 mm",
+      "check": "the head slides its full stroke without binding when the yoke is lifted off the pin"
+    },
+    {
+      "name": "Head start position",
+      "value": "the handle at 10 o'clock puts the head 14.75 mm below its top",
+      "tolerance": "+-1 mm",
+      "check": "rule from the bench top to the cassette's centre: 160.3 mm at the start, 175 mm at the top"
+    },
+    {
+      "name": "Cassette clamp",
+      "value": "standard cassette 40.4 x 28.4 x 6.5 mm (bought, or printed from stl/cassette_printed.stl within +-0.3 mm, 6.5 +-0.2 mm thick) against the clamp face; the rocker's lip holds its top edge. Cut a 31 x 36 x 8.5 mm slot (x 514.5-545.5, y 4-40, z 189.5-198) through the clamp block for the rocker, trim the rocker's side arm to 11 mm (x 504-515), and pivot it on an M4 shoulder screw (5 mm shoulder, 12 mm long) along x at y 10, z 201.5, threaded into the block",
+      "tolerance": "+-0.3 mm",
+      "check": "with the lever released the cassette does not fall out as the wheel runs the head through its stroke"
+    },
+    {
+      "name": "Clamp lever",
+      "value": "lever on the clamp's side nearer the robot: an arm 40 mm forward from the rocker and a 24 mm wide push bar (x 446-470, y 47-55) down to 100 mm above the bench, pushed +y; rocker turns -1 to 26 degrees",
+      "tolerance": "",
+      "check": "pushing the bar's foot 20 mm forward (about 12 degrees) lifts the lip about 8 mm off the cassette; 25 mm (15 degrees, the fixture's open stop) lifts it 10 mm"
+    },
+    {
+      "name": "Knife edge",
+      "value": "mock blade edge up at y 53.3, z 130, 80 mm long, 0.5 mm in front of the block face",
+      "tolerance": "+-0.5 mm",
+      "check": "feeler gauge between block face and edge"
+    },
+    {
+      "name": "Knife guard",
+      "value": "46 mm guard whose knuckle turns on two M4 shoulder screws, one through each post (5.2 mm bores) into the knuckle's tapped ends, on the axis y 97, z 142; it rests forward at 0 degrees on a 3 mm ledge filed on each post and stops over the edge at 190 degrees against the posts' rear faces",
+      "tolerance": "+-3 degrees",
+      "check": "protractor on the hinge line at each stop"
+    },
+    {
+      "name": "Tray",
+      "value": "grey tray 148 x 108 x 22 mm outside, 0.15 kg, loose, centre at x 290, y 85",
+      "tolerance": "",
+      "check": "taped outline on the bench"
+    }
+  ],
+  "forces": [
+    {
+      "name": "Handwheel turning",
+      "model": "0.6 N m Coulomb friction on the wheel (7.1 N at the 85 mm knob)",
+      "target": "6 to 9 N at the knob",
+      "set": "neoprene washer (BOM 2) between the inner bearing and the 5/8 in clamp collar (BOM 4), with a disc spring (BOM 3) behind the collar; slide the collar along to set the squeeze and tighten its screw",
+      "check": "spring scale (BOM 14) hooked on the knob, pulled square to the arm: 6 to 9 N while it turns"
+    },
+    {
+      "name": "Handle push-in",
+      "model": "4 N Coulomb friction on the handle's 10 mm slide",
+      "target": "3 to 6 N",
+      "set": "an 8 mm nitrile O-ring (BOM 10) on the pin, seated in a 10.5 mm, 2 mm deep counterbore on the wheel's inner face, so the pin drags through it",
+      "check": "spring scale (BOM 14) on the knob end, pushed along the axle: 3 to 6 N while it slides; the lock pin drops in only with the wheel at 12 o'clock"
+    },
+    {
+      "name": "Clamp lever",
+      "model": "rocker spring 1.2 N m/rad with 0.07 N m at rest; the lever's foot 101 mm below the pivot",
+      "target": "3.5 to 5.5 N at the lever's foot, held 15 degrees open (the lip 10 mm up; the fixture's spring is solid there, its open stop); the model gives 4.4 N",
+      "set": "compression spring (BOM 1: Lee Spring LC 022D 03 S, 0.74 N/mm) in the bridge's 8 mm pocket, pressing down on the lever's forward arm 40 mm in front of the pivot; compressed 2.4 mm at rest it gives the model's 0.07 N m, and its rate at 40 mm is the model's 1.2 N m/rad; it reaches solid at about 15 degrees, which is the fixture's open stop. A washer under it raises the force",
+      "check": "spring scale (BOM 14) on the lever's foot, pushed forward: 3.5 to 5.5 N with the lip 10 mm up"
+    },
+    {
+      "name": "Head held by the wheel",
+      "model": "carriage driven only through the crank; the wheel's friction holds it",
+      "target": "the head stays where the wheel leaves it",
+      "set": "follows from the wheel's friction",
+      "check": "with the handle out and let go at 3 o'clock, the head does not drift down"
+    },
+    {
+      "name": "Knife guard",
+      "model": "free hinge (damping only) with stops at 0 and 190 degrees",
+      "target": "rests on either stop by its own weight",
+      "set": "free on its two shoulder screws",
+      "check": "folded over, it stays over the edge; folded down, it stays forward"
+    }
+  ],
+  "bom": [
+    {
+      "item": "Compression spring, stainless",
+      "part_number": "Lee Spring LC 022D 03 S",
+      "spec": "7.62 mm OD, 15.88 mm free, 0.736 N/mm, 12.8 mm to solid",
+      "qty": 2,
+      "unit_price": 8.04,
+      "seller": "Lee Spring",
+      "url": "https://www.leespring.com/product/compression-spring-lc022d03s-stainless-steel",
+      "use": "clamp lever spring (one spare)"
+    },
+    {
+      "item": "Neoprene sealing washer for 5/8 in, pack of 25",
+      "part_number": "BSC Preferred 90133A430 (Zoro G911467524)",
+      "spec": "15.6 mm ID x 33.3 mm OD",
+      "qty": 1,
+      "unit_price": 19.49,
+      "seller": "Zoro",
+      "url": "https://zoro.com/bsc-preferred-oil-resistant-neoprene-rubber-sealing-washer-for-58-615-id-1312-od-11-14-thick-25pk-90133a430/i/G911467524",
+      "use": "handwheel friction"
+    },
+    {
+      "item": "Disc spring DIN 2093, pack of 25",
+      "part_number": "Zoro Select M363033310008 (Zoro G2646920)",
+      "spec": "31.5 x 16.3 x 0.8 mm",
+      "qty": 1,
+      "unit_price": 11.15,
+      "seller": "Zoro",
+      "url": "https://www.zoro.com/zoro-select-disc-sprngs-clght-315x163x08mm-pk25-m363033310008/i/G2646920/",
+      "use": "handwheel friction"
+    },
+    {
+      "item": "Clamp shaft collar, 5/8 in bore",
+      "part_number": "Climax 1C-062-A (Zoro G2668675)",
+      "spec": "5/8 in bore, 1-5/16 in OD",
+      "qty": 1,
+      "unit_price": 5.45,
+      "seller": "Zoro",
+      "url": "https://zoro.com/climax-metal-products-1c-062-a-one-piece-clamping-collar-1c-062-a/i/G2668675",
+      "use": "handwheel friction"
+    },
+    {
+      "item": "Round bar 5/8 in, 6061 aluminium, 12 in",
+      "part_number": "Speedy Metals 61r.625",
+      "spec": "15.875 mm, 305 mm",
+      "qty": 1,
+      "unit_price": 5.4,
+      "seller": "Speedy Metals",
+      "url": "https://speedymetals.com/p-2439-58-rd-6061-t6511-aluminum-extruded.aspx",
+      "use": "wheel shaft (cut to 160 mm)"
+    },
+    {
+      "item": "Stainless precision shaft 8 x 200 mm",
+      "part_number": "ServoCity 2100-0008-0200",
+      "spec": "8 mm OD, 200 mm",
+      "qty": 2,
+      "unit_price": 4.99,
+      "seller": "ServoCity",
+      "url": "https://www.servocity.com/8mm-x-200mm-stainless-steel-precision-shafting/",
+      "use": "specimen head rods"
+    },
+    {
+      "item": "Steel dowel pin 10 x 30 mm, pack of 5",
+      "part_number": "Zoro Select M39070.100.0030 (Zoro G3423850)",
+      "spec": "DIN 7",
+      "qty": 1,
+      "unit_price": 1.85,
+      "seller": "Zoro",
+      "url": "https://www.zoro.com/zoro-select-standard-dowel-pin-10-mm-nominal-dia-30-mm-l-steel-5-pk-m390701000030/i/G3423850/",
+      "use": "crank pin"
+    },
+    {
+      "item": "Steel dowel pin 8 x 40 mm, pack of 5",
+      "part_number": "Zoro Select M39070.080.0040 (Zoro G3423975)",
+      "spec": "DIN 7",
+      "qty": 1,
+      "unit_price": 3.35,
+      "seller": "Zoro",
+      "url": "https://www.zoro.com/zoro-select-standard-dowel-pin-8-mm-nominal-dia-40-mm-l-steel-5-pk-m390700800040/i/G3423975",
+      "use": "handle lock pin"
+    },
+    {
+      "item": "Shoulder screw M4, 5 x 12 mm shoulder, pack of 5",
+      "part_number": "Zoro Select MSB2-11 (Zoro G1343684)",
+      "spec": "18-8 stainless",
+      "qty": 1,
+      "unit_price": 9.79,
+      "seller": "Zoro",
+      "url": "https://www.zoro.com/zoro-select-precision-shoulder-screw-m4-070-thr-sz-5-mm-thr-lg-12-mm-shoulder-lg-18-8-stainless-steel-msb2-11/i/G1343684",
+      "use": "clamp pivot, guard hinge (3 used)"
+    },
+    {
+      "item": "O-ring 8 x 1.5 mm Buna-N",
+      "part_number": "AG-M15X8 (Zoro G909222500)",
+      "spec": "sold in fours",
+      "qty": 4,
+      "unit_price": 1.89,
+      "seller": "Zoro",
+      "url": "https://zoro.com/o-rings-buna-n70-metric-o-ring-15mm-x-8mm-ag-m15x8/i/G909222500",
+      "use": "handle push-in friction"
+    },
+    {
+      "item": "Stainless sheet 0.012 in (0.3 mm), 6 x 12 in",
+      "part_number": "K&S 87181 (Zoro G007984676)",
+      "spec": "sold in twos",
+      "qty": 2,
+      "unit_price": 5.59,
+      "seller": "Zoro",
+      "url": "https://zoro.com/k-s-precision-metals-012x6x12-ss-sheet-87181/i/G007984676",
+      "use": "dull mock blade"
+    },
+    {
+      "item": "Tissue cassettes, box of 500",
+      "part_number": "Ted Pella 27400-1A",
+      "spec": "28.5 x 41 x 6.7 mm (standard)",
+      "qty": 1,
+      "unit_price": 75.65,
+      "seller": "Ted Pella",
+      "url": "https://www.tedpella.com/embedding_html/tissue_processing_cassettes.aspx",
+      "use": "specimen cassettes (consumable; a few per session)"
+    },
+    {
+      "item": "Paraffin wax, 1 lb",
+      "part_number": "Gulf Wax UPC 062338009728",
+      "spec": "household paraffin",
+      "qty": 1,
+      "unit_price": 5.99,
+      "seller": "Hardwick & Sons",
+      "url": "https://hardwickandsons.com/products/1-lb-gulf-wax",
+      "use": "blocks cast in the cassettes"
+    },
+    {
+      "item": "Push-pull spring scale 0-10 N",
+      "part_number": "Eisco, Ward's 470344-688",
+      "spec": "20 g graduations",
+      "qty": 1,
+      "unit_price": 17.3,
+      "seller": "Ward's Science",
+      "url": "https://www.wardsci.com/us/en/product/NA5209712/eisco-push-pull-spring-scales",
+      "use": "force checks"
+    },
+    {
+      "item": "Wood screws #8 x 1-1/4 in, 100",
+      "part_number": "Everbilt 822802",
+      "spec": "flat head",
+      "qty": 1,
+      "unit_price": 8.98,
+      "seller": "Home Depot",
+      "url": "https://homedepot.com/p/Everbilt-8-x-1-1-4-in-Phillips-Flat-Head-Zinc-Plated-Wood-Screw-100-Pack-822802/317479393",
+      "use": "housing, mounts, spring stop"
+    },
+    {
+      "item": "Wood glue 8 oz",
+      "part_number": "Titebond II 5003",
+      "spec": "",
+      "qty": 1,
+      "unit_price": 4.38,
+      "seller": "Home Depot",
+      "url": "https://homedepot.com/p/Titebond-8-oz-Premium-Wood-Glue-5003/202180087",
+      "use": "housing, laminated base"
+    }
+  ],
+  "notes": [
+    "Safety: the fixture has no cutting edge. The mock blade is dull shim stock, so a gripper that reaches between clamp and knife is still scored 0 for good, as in the simulation, but is not hurt.",
+    "Housing outside: the plywood walls stand where the instrument's covers are, so the robot's clearances are the same; the robot never handles the housing.",
+    "Prices were read from the sellers' pages or search listings on 2026-11-18, before shipping and tax; they move, so treat the total as an estimate. For comparison, a used Leica RM2125 lists at about 2,100 USD and a refurbished one at about 3,400 USD (search listings, 2026-11-18).",
+    "Tools assumed: an FDM printer with a 220 x 220 mm bed (PLA, 3 perimeters, 15 to 20 % infill), a saw for the plywood, a drill with 4.2, 5.2, 8, 13 and 16 mm bits, an M4 tap and a file.",
+    "Positions are the task's assembly coordinates: millimetres from the midpoint between the arm bases, x forward, y left, z up from the bench top; the instrument stands 80 mm further out than the instrument's own layout numbers in task.py (task.XS)."
+  ],
+  "cheapest": {
+    "intro": "The list above names parts by their best specification. Every line marked here can be bought cheaper with the same function; prices were read on 2026-11-18 (sellers' pages or search listings) and move.",
+    "replace": {
+      "1": {
+        "item": "one spring instead of two",
+        "part_number": "Lee Spring LC 022D 03 S",
+        "qty": 1,
+        "unit_price": 8.04,
+        "url": "https://www.leespring.com/product/compression-spring-lc022d03s-stainless-steel",
+        "note": "no hardware-store spring states its rate"
+      },
+      "2": {
+        "item": "Everbilt neoprene washer 5/8 x 2 in, single (trim to 35 mm)",
+        "part_number": "Everbilt 815888",
+        "qty": 1,
+        "unit_price": 2.75,
+        "url": "https://www.homedepot.com/p/Everbilt-5-8-in-x-2-in-Black-Neoprene-Washer-815888/204276369",
+        "note": ""
+      },
+      "3": {
+        "item": "a second neoprene washer instead of the disc springs",
+        "part_number": "Everbilt 815888",
+        "qty": 1,
+        "unit_price": 2.75,
+        "url": "https://www.homedepot.com/p/Everbilt-5-8-in-x-2-in-Black-Neoprene-Washer-815888/204276369",
+        "note": "rubber relaxes: re-check the wheel force before each session"
+      },
+      "6": {
+        "item": "plain steel rod 5/16 in (7.94 mm) x 3 ft, cut to 2 x 200 mm",
+        "part_number": "Everbilt 0004",
+        "qty": 1,
+        "unit_price": 6.47,
+        "url": "https://homedepot.com/p/Everbilt-5-16-in-x-3-ft-Plain-Steel-Solid-Round-Rod-0004/332733889",
+        "note": "for this rod set the ear bores to 8.1 mm and the rod bridge and feet bores to 7.9 mm in fabrication.json and re-run the exporter"
+      },
+      "9": {
+        "item": "M4 x 20 socket screws (bag of 3) and 4 M4 nylon lock nuts",
+        "part_number": "Everbilt 803248 + 803668",
+        "qty": 1,
+        "unit_price": 7.25,
+        "url": "https://homedepot.com/p/Everbilt-M4-0-7-x-20-mm-Zinc-Plated-Steel-Socket-Cap-Recessed-Hex-Screw-3-per-Bag-803248/204281931",
+        "note": "printed knuckles turn on the screw shank"
+      },
+      "11": {
+        "item": "stainless strip 0.018 x 1/2 x 12 in",
+        "part_number": "K&S 87157",
+        "qty": 1,
+        "unit_price": 0.79,
+        "url": "https://www.hammondhardware.com/p/k-and-s-stainless-steel-strip-stock-614121071575",
+        "note": "0.46 mm; fine for a dull mock blade"
+      },
+      "14": {
+        "item": "spring scale 0-10 N, pull only",
+        "part_number": "Home Science Tools BS-SCALE3",
+        "qty": 1,
+        "unit_price": 5.95,
+        "url": "https://www.homesciencetools.com/product/spring-scale-1000-g-10-newton/",
+        "note": "push checks are made by pulling with a cord loop"
+      },
+      "17": {
+        "item": "SUNLU PLA 1.75 mm, 1 kg",
+        "part_number": "ASIN B07XG3RM58",
+        "qty": 1,
+        "unit_price": 13.99,
+        "url": "https://camelcamelcamel.com/product/B07XG3RM58",
+        "note": "price from a tracker listing"
+      },
+      "18": {
+        "item": "1/2 in MDF, one 4 x 8 ft sheet (covers all panels)",
+        "part_number": "Woodworker's Source 1010.SG.5010",
+        "qty": 1,
+        "unit_price": 39.0,
+        "url": "https://www.woodworkerssource.com/plywood-sheet-goods/mdf-12.html",
+        "note": "pickup listing; any local 1/2 in MDF sheet does"
+      },
+      "12": {
+        "item": "print the cassette with its block (stl/cassette_printed.stl)",
+        "part_number": "",
+        "qty": 1,
+        "unit_price": 0.0,
+        "url": "",
+        "note": "the clamp holds only the cassette's outside edges: print within +-0.3 mm; the box of 500 stays the option for labs that want the real consumable"
+      },
+      "13": {
+        "item": "no wax needed (the block is printed with the cassette)",
+        "part_number": "",
+        "qty": 0,
+        "unit_price": 0.0,
+        "url": "",
+        "note": ""
+      }
+    },
+    "owned": [
+      14,
+      15,
+      16,
+      17
+    ],
+    "owned_text": "a 3D printer, filament, wood screws, glue and a spring scale",
+    "outro": "With the printed cassette there is no consumable to buy: the floor is the hardware, about 124 USD, and about 91 USD for a lab that already owns a printer, filament, screws, glue and a spring scale. A lab that wants the real moulded cassettes adds BOM 12-13 (about 82 USD for a box of 500 and wax)."
+  },
+  "also_print": {
+    "cassette__body": {
+      "name": "cassette_printed",
+      "fill": 0.7,
+      "note": "no-purchase route instead of BOM 12-13: the cassette with its block on its face, one piece; print within +-0.3 mm (the clamp takes 39.8-40.9 x 28-28.8 mm), 6.5 mm thick +-0.2, about 70 % infill for the modelled 10 g; paint the block face white if the camera should see wax"
+    }
+  }
+}
