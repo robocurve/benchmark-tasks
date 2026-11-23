@@ -27,6 +27,58 @@ The microwave and bowl meshes derive from NVIDIA USDCraft-10K (Apache-2.0), usin
 `ds_R001_06` and mixing bowls `ds_R078_01` and `ds_R078_02`. The steel mesh is scaled to a shallow
 shape and has a rolled rim and flat foot. [USDCraft-10K dataset and license](https://huggingface.co/datasets/nvidia/USDCraft-10K#license)
 
+## Physical trial preparation
+
+Use an unplugged microwave. Set the bowls on their marked positions, close the
+door, and return the timer to zero. Keep a timer, a digital food thermometer,
+a kitchen scale with 1 g resolution, and a fine-mesh strainer at the prep station.
+Choose one fill option for the session and record it with each trial.
+
+### Reference fill — canned green peas
+
+1. Use plain canned green peas packed in water. Record the brand, product and
+   lot code, and use that product and lot for repeated trials. Bring the unopened
+   can to room temperature before preparation.
+2. Empty the can into a clean, dry fine-mesh strainer set over a catch container.
+   Start a timer when the peas are in the strainer. Drain for **60 seconds** with
+   the strainer level. Leave the peas undisturbed during draining.
+3. Spread the peas in a single layer on a fresh paper towel. Lay a second paper
+   towel over them for **5 seconds** with only the weight of the towel. Remove the
+   towel and use a fresh one if visible droplets remain.
+4. Gather the prepared peas in a clean, dry container. Insert the thermometer
+   probe into the middle of the batch, clear of the container, and wait for the
+   reading to stabilize. Load the peas only when the reading is **20–22 °C**.
+   Tare the dry steel bowl, load **164 g**, record the measured mass and
+   temperature, and start the trial within **2 minutes** of the temperature check.
+5. Weigh the peas recovered from the glass bowl at the end. Divide that mass by
+   the measured starting mass. Discard the used portion and prepare a fresh
+   portion for the next trial.
+
+### Dry alternative — non-food pea surrogates
+
+Use **450 clean, dry, solid spherical polypropylene beads** at **20–22 °C**,
+nominally **9.2 mm** in diameter and within **8–9.4 mm**. Record the bead
+specification and total mass. Use the same bead lot for repeated trials.
+Before scoring this option, run the bowl-to-bowl transfer on the fixed layout
+and confirm that at least **405 beads** enter the glass bowl with the specified
+bowls and grip surfaces. Record that check. For each scored trial, reload
+450 beads and count how many finish in the glass bowl.
+
+### Protect the shared rig
+
+Prepare and weigh the fill away from the robot. Before loading the bowls onto
+the rig, secure a thin waterproof catch mat across the exposed tabletop under
+the complete transfer path. Keep the mat flat, with its edges clear of the
+bowl support points, oven feet, robot bases and moving parts. Check that the
+tabletop, both bowl exteriors, rims and gripper pads are clean and dry. Keep
+the gripper pads on the dry exterior rim surfaces during the transfer.
+
+If food or liquid touches a pad or any part of the rig, stop the trial. Have
+the rig operator remove the residue using the lab's approved cleaning method
+and verify the affected surfaces are dry before resetting. Between trials,
+clear the mat and tabletop, wash and dry both bowls after using canned peas,
+and check the pads and rig again before loading the next portion.
+
 ## Run and score
 
 In the YAM Arena environment, from this directory, run the scripted demonstration with seed 0.
@@ -45,8 +97,9 @@ inspect-robots run --embodiment yam_arena --policy yam_scripted \
 angles, pea share and score during the run. Run `python task.py` for the offline scoring and kinematics checks.
 
 The scorer uses the door and timer angles and the poses of the two bowls and peas. In an unplugged
-physical trial, use a scale to measure the amount of peas in the glass bowl and a video to verify
-the bowl positions, door and timer.
+physical trial, use video to verify the bowl positions, door and timer. For canned
+peas, weigh the peas in the glass bowl and divide by the starting fill mass.
+For beads, count the beads in the glass bowl and divide by 450.
 
 | Outcome | Score |
 | --- | ---: |
