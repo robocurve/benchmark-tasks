@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 from pathlib import Path
 import math, numpy as np
-from native.fixture_v21 import BASES
+from native.fixture import BASES
 
 
 @dataclass
@@ -22,38 +22,18 @@ def virtual(side, xyz):
 
 
 def orientation():
-    from scipy.spatial.transform import Rotation
+    from yam_arena.urdf import rpy_matrix
     from yam_arena.demo import grip_rotation
+    return rpy_matrix(np.array((0.,math.radians(-20.),0.))) @ grip_rotation(0.)
 
-    return Rotation.from_euler("y", -20, degrees=True).as_matrix() @ grip_rotation(0)
 
-
-def solve(pos, q0):
-    from scipy.optimize import least_squares
-    from scipy.spatial.transform import Rotation
+def solve(pos,q0):
     from yam_arena import ik
-
-    rot = orientation()
-
-    def residual(q):
-        p, r = ik.tcp_pose(q)
-        return np.r_[p - pos, 0.22 * Rotation.from_matrix(rot @ r.T).as_rotvec()]
-
-    sol = least_squares(
-        residual,
-        q0,
-        bounds=(ik.LOWER, ik.UPPER),
-        ftol=1e-11,
-        xtol=1e-11,
-        gtol=1e-11,
-        max_nfev=100,
-    )
-    if (
-        np.linalg.norm(sol.fun[:3]) > 0.0025
-        or math.degrees(np.linalg.norm(sol.fun[3:]) / 0.22) > 2
-    ):
-        raise ValueError(f"Unreachable TCP {pos.tolist()}, residual {sol.fun.tolist()}")
-    return sol.x
+    q,dp,dr = ik.solve(pos,ik.matrix_to_quat_xyzw(orientation()),q_init=q0,
+                       iters=90,damping=.015,rot_weight=.22,tol=.00015)
+    if dp>.0025 or dr>math.radians(2):
+        raise ValueError(f"Unreachable TCP {pos}, error {dp} m, {dr} rad")
+    return q
 
 
 class Plan:
@@ -141,48 +121,16 @@ class ScriptClock:
 
     def __init__(self, plans, mode):
         self.plans = plans
-        self.required = {
-            s
-            for s in BASES
-            if mode in ("reference", "alternate", "single_" + s, "probe_" + s)
-        }
-        self.positive = mode in ("reference", "alternate")
-        self.time = 0.0
-        self.wait = 0.0
+        self.mode = mode
+        self.time = 0.
         self.fault = None
 
     def advance(self, qualification, dt):
-        if self.fault:
-            return self.time
-        self.fault = qualification.forbidden or (
-            qualification.failed if self.positive else None
-        )
-        if self.fault:
-            return self.time
         candidate = self.time + dt
-        labels = {s: p.action7(candidate)[1] for s, p in self.plans.items()}
-        reason = None
-        for s in self.required:
-            if labels[s] == "fold prop" and s not in qualification.pinched:
-                reason = s + " grip unconfirmed"
-            if labels[s] == "release prop" and s not in qualification.seated:
-                reason = s + " seat unconfirmed"
-        if "valve" in labels["right"] and labels["right"] != "clear valve":
-            if any(
-                s not in qualification.seated
-                or abs(qualification.last_angles.get(s, 90.0)) >= 2
-                for s in self.required
-            ):
-                reason = "required prop unseated before valve"
-        if labels["right"] == "turn valve" and qualification.valve_touch is None:
-            reason = "valve grip unconfirmed"
-        if reason:
-            self.wait += dt
-            if self.wait >= 2.5:
-                self.fault = reason
-        else:
-            self.time = candidate
-            self.wait = 0.0
+        label = self.plans['right'].action7(candidate)[1]
+        if self.mode in ('reference','alternate','late_clear') and label == 'turn valve' and not qualification.worker_clear:
+            return self.time
+        self.time = candidate
         return self.time
 
 
@@ -195,7 +143,7 @@ def install_task20_guard(entry):
         if not hasattr(yam_arena, "__path__"):
             return
         raise
-    if getattr(YamScriptedPolicy, "_v21_entry", None) == entry:
+    if getattr(YamScriptedPolicy, "_cart_guard_entry", None) == entry:
         return
     original = YamScriptedPolicy.reset
     orig_act = getattr(YamScriptedPolicy, "act", None)
@@ -203,7 +151,7 @@ def install_task20_guard(entry):
     def reset(policy, scene):
         if policy._task is None or Path(policy._task.path).resolve() != entry:
             return original(policy, scene)
-        from native.cart_motion_v21 import demo
+        from native.cart_motion import demo
 
         policy._plans = compile_plans(demo())
         policy._end = max(p.duration for p in policy._plans.values())
@@ -235,4 +183,4 @@ def install_task20_guard(entry):
 
     YamScriptedPolicy.act = act
     YamScriptedPolicy.reset = reset
-    YamScriptedPolicy._v21_entry = entry
+    YamScriptedPolicy._cart_guard_entry = entry

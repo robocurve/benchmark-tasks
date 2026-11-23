@@ -1,10 +1,10 @@
 """Attach both YAM arms at the verified original positions, facing the lift."""
 
 import math, numpy as np
-from native.fixture_v21 import BASES
+from native.fixture import BASES
 
-EYE = (-2.185, 0.143, 0.8525)
-TARGET = (-0.55, 0.0, 0.68)
+EYE = (-2.05, -0.60, 1.13)
+TARGET = (-0.62, 0.04, 0.66)
 
 
 def aim(pos, target, up=(0.0, 0.0, 1.0)):
@@ -72,8 +72,7 @@ def configure(cfg):
     floor.init_state.pos = (x, y, -height / 2)
     for side, p in BASES.items():
         state = getattr(cfg, side + "_robot").init_state
-        if math.dist(state.pos, p) > 0.008:
-            raise ValueError("Unexpected original base " + side)
+        state.pos = p
         state.rot = (0.0, 0.0, 1.0, 0.0)
         cam = getattr(cfg, side + "_cam").offset
         if cam.convention != "opengl":

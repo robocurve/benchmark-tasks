@@ -1,12 +1,12 @@
-"""Secure a loaded service lift with a gloved hand beneath the raised deck."""
+"""Prepare a raised cart for attended work after the technician withdraws."""
 import sys
 from pathlib import Path
 HERE=Path(__file__).resolve().parent
 sys.path.insert(0,str(HERE))
 sys.path.insert(0,str(HERE.parent))
 from yam_arena.task_file import Box
-from native.bridge_v21 import install
-from entry_layout import CART_ROOT
+from native.bridge import install
+from native.entry_layout import CART_ROOT
 
 SCENE="station"
 OBJECTS=[Box("cart_fixture",pos=CART_ROOT,size=(0.001,0.001,0.001))]
@@ -20,5 +20,5 @@ def score(objects):
 
 def success(objects):return score(objects)==1.0
 
-from native.cart_motion_v21 import demo
+from native.cart_motion import demo
 install(HERE/'entry.py')
