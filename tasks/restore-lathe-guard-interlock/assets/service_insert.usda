@@ -1,0 +1,35 @@
+#usda 1.0
+(
+    defaultPrim = "insert"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "insert" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxContactReportAPI"]
+)
+{
+    float physics:mass = 0.07
+    float physxContactReport:threshold = 0
+
+    def Cube "yellow_insert" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </insert/contact_material>
+        color3f[] primvars:displayColor = [(0.97, 0.76, 0.06)]
+        double size = 1
+        float3 xformOp:scale = (0.023, 0.026, 0.03)
+        uniform token[] xformOpOrder = ["xformOp:scale"]
+    }
+
+    def Material "contact_material" (
+        prepend apiSchemas = ["PhysicsMaterialAPI"]
+    )
+    {
+        float physics:dynamicFriction = 0.85
+        float physics:restitution = 0
+        float physics:staticFriction = 0.85
+    }
+}
+
