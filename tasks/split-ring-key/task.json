@@ -1,0 +1,20 @@
+{
+  "title": "Thread a household key onto a split ring",
+  "category": "Societal relatability",
+  "keywords": [
+    "bimanual",
+    "split ring",
+    "spring opening",
+    "threading",
+    "household key"
+  ],
+  "instruction": "Thread the brass house key fully onto the steel split ring. Use the orange spring-return splitter and unpowered crank as needed. Release the key and splitter, with both overlapping turns retained and both grippers clear of the key and ring. You may keep holding the crank.",
+  "context": "Adding or sharing a house key requires opening the steel spring end and feeding the closed key hole around the overlapping spiral without dropping or deforming the hardware. The fixture can be rebuilt from the README parts list around a stocked 38 mm steel split ring (RS PRO 866-579), and every ring-damage check has a video, feeler-gauge or caliper equivalent.",
+  "setup": "A vertical 38.3 mm OD steel split ring (1.3 mm wire, 1.6 mm pitch, 705-degree spiral; real build: RS PRO 866-579, 38 mm OD, 1.98 mm wire) is held by a lower-coil vise on a blue bench fixture. It has an unpowered 85 mm-radius four-spoke handwheel on two 6001-2RS bearings with four freely spinning orange knobs, and a passive orange splitter with a 140 mm radial return slide and 8 mm axial opening slide. A 47.5 x 18 x 2 mm brass key with a 7 mm empty hole starts flat and unthreaded on a separate support. Standard two-arm YAM station; fixed layout, seed 0.",
+  "scoring": "0 for no captured strand or a damaged ring: any turn spread over 12 mm from the turn beneath, or ring outline over 4 mm off radius, at any time (both visible on video). 0.25 for one strand within 10 mm of an end; 0.5 for one strand farther along; 0.75 for two distinct turns at least 12 mm from both ends. Full score needs the released key retained, no turn left over 1.8 mm apart (feeler gauge), ring span <=4.7 mm (calipers), grippers 20 mm clear, key speed <=15 mm/s, key spin <=0.35 rad/s, ring spin <=0.03 rad/s for 2 s.",
+  "run_limit": "2,400 robot actions (120 seconds at 20 Hz).",
+  "reset_notes": "Restore the complete native articulation and key root state. The key starts separate; splitter slides return to their spring rest positions and crank angle returns to zero. Nothing is consumed in simulation. A real ring is replaced if it fails the post-trial feeler-gauge or caliper check against its as-received values.",
+  "fidelity": "Steel spiral: 20 curved links with permanent radial bending springs; torsion and yield not modelled, so the peak-spread limit stands in for permanent set. Real collision hole and passive fixture contacts; no key attachment or callback forces. Resting turns have 0.3 mm clearance and 1.3 mm wire; the real ring's turns touch and its wire is 1.98 mm, so it is stiffer. Spring gains approximate; uniform 30/80 um contact offsets and numerical damping.",
+  "scores": "Dream-1: 0.0 (seed 0, ended at the 2,400-action limit); scripted demo: 1.0, success after 2,246 of 2,400 actions. Both on this task file (task.py SHA-256 prefix 1e04cf3ac2d6).",
+  "media": "M-CXXHKF"
+}
