@@ -1,0 +1,23 @@
+{
+  "title": "Return a shopping trolley: push the chain key of the trolley in front home in your coin lock, then take the quarter back",
+  "category": "Societal relatability",
+  "keywords": [
+    "shopping trolley",
+    "coin lock",
+    "chain key",
+    "US quarter",
+    "key insertion",
+    "linked by a chain",
+    "coin retrieval",
+    "supermarket"
+  ],
+  "instruction": "Return the trolley: push the chain key of the trolley in front into this trolley's coin lock until it locks, then take out the quarter the lock gives back and lay it on the rubber mat.",
+  "context": "Supermarkets that lend trolleys for a coin (in the US, a quarter) chain them together: each trolley's lock holds the key of the trolley in front. To get the coin back you nest your trolley behind the last one, pick up that trolley's key, which lies at the end of its 26 cm steel chain, turn it the right way round and push it fully into your lock. Only then does the lock latch the key and push your coin out, half of it standing clear, to be pinched by its faces and drawn out. The key is a thin flat steel plate linked to the other trolley by a chain that drags and swings while you line it up with a 17 x 3.5 mm slot, and it must go about 25 mm deep against the lock's springs before anything happens. A key pushed part way earns nothing; the coin cannot be reached until the lock lets it go.",
+  "setup": "Millimetres from the midpoint between the arm bases: x forward, y to the robot's left, heights above the table top. Two Malltek MT-STL04 shopping-cart coin locks (black and red plastic body 90 long x 70 wide x 68 high, 260 mm stainless chain and flat stainless key, takes coins 23-28 mm across) are each clamped on a 300 mm length of 25 mm steel handle tube. Each tube runs along y, its axis 100 mm above the table, on two steel posts 280 mm apart; the locks sit in the middle of their tubes. The returning trolley's handle (near) is at x 150, y -110; the trolley in front's handle is 178 mm further on, at x 328, y -110 (the nesting distance of a tight-nesting cart). On each lock the key slot (17 x 3.5 mm behind a 6 mm funnel, floor 116 above the table) is in the end facing -y and the coin pusher is on the side facing the arms. The near lock holds a US quarter (24.26 mm, 1.75 mm, 5.67 g) captive, on edge in its pusher; its key slot is empty. The front lock's chain leaves its -y end 20 mm toward the near lock and 121 mm up, hangs to the table and lies 140 mm along -y; the key lies flat at its end, tip pointing -y, tip at x 308, y -354. A black rubber mat 110 x 110 x 2 mm lies at x 60, y -40.",
+  "scoring": "Judged at the end (the video and one pull on the key). 1.0: the key is locked in the near lock (fully home; a firm pull does not bring it out) and the quarter rests on the mat. 0.75: key locked, quarter out of the lock but not resting on the mat (dropped elsewhere, still held above it). 0.5: key locked, quarter still in the pusher. 0.25: key not locked, but in the near lock's slot, in line with it, with at most 53 mm of the 58 mm key still sticking out (ruler). 0: otherwise. At the start the key lies on the table and the quarter is locked in, so doing nothing scores 0.",
+  "run_limit": "2,400 steps (120 seconds at 20 steps per second)",
+  "reset_notes": "Push the pusher (with the quarter in its pocket, on edge) back into the near lock: the lock lets the key go; pull it out. Lay the chain and key on their marks (chain hanging from the front lock, along -y on the table, key flat, tip away) and the mat on its marks. About 30 seconds; nothing is consumed.",
+  "fidelity": "Lock body, chain length, coin range from the listing; quarter at US Mint size. Key 58 x 15 x 3 mm, 18 g, springs and the ~2.5 N push to latch are estimates. The lock is three sprung slides after the Wanzl patent: the key lifts a 7 mm ball (3 g in sim) and pushes a plunger; at full depth the ball drops into the key's hole and the pusher springs out, locking the key. Chain: 13 jointed 20 mm links. Stands are lower than a real handle, so the key rests on the table.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-6ASLC8"
+}
