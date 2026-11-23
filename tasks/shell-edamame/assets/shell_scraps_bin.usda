@@ -1,0 +1,69 @@
+#usda 1.0
+(
+    defaultPrim = "Asset"
+    metersPerUnit = 1
+    kilogramsPerUnit = 1
+    upAxis = "Z"
+)
+def Xform "Asset"
+{
+    def Xform "bin" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+        float physics:mass = 0.5
+        bool physics:kinematicEnabled = true
+        def Cube "Base" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (0, 0, 0)
+            float3 xformOp:scale = (0.165, 0.165, 0.008)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.23, 0.37, 0.29)]
+        }
+        def Cube "NegativeX" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (-0.08, 0, 0.0625)
+            float3 xformOp:scale = (0.005, 0.165, 0.125)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.23, 0.37, 0.29)]
+        }
+        def Cube "NegativeY" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (0, -0.08, 0.0625)
+            float3 xformOp:scale = (0.165, 0.005, 0.125)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.23, 0.37, 0.29)]
+        }
+        def Cube "PositiveX" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (0.08, 0, 0.0625)
+            float3 xformOp:scale = (0.005, 0.165, 0.125)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.23, 0.37, 0.29)]
+        }
+        def Cube "PositiveY" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            double size = 1
+            double3 xformOp:translate = (0, 0.08, 0.0625)
+            float3 xformOp:scale = (0.165, 0.005, 0.125)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            color3f[] primvars:displayColor = [(0.23, 0.37, 0.29)]
+        }
+    }
+}

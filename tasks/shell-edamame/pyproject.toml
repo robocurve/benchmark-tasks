@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "failsafe-edamame-shelling"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+
+[project.entry-points."inspect_robots.policies"]
+edamame_scripted = "edamame_policy:edamame_scripted"
+
+[tool.setuptools]
+py-modules = ["edamame_policy"]
