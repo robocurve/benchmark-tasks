@@ -6,7 +6,7 @@ Cover the prepared plate with the loose film, press around the wells using the r
 
 Use a 96-well polypropylene plate with a 127.76 × 85.48 mm footprint, 9 mm well pitch and 34 mm height; 130 × 80 × 0.1 mm adhesive PET storage film; a clean release liner and raised tray; and a padded hand roller with a 50 mm-wide wheel lying freely on the bench. The plate is secured in a fixed 140 × 100 × 30 mm polymer bench holder with four low clips. The holder provides finger clearance and prevents plate movement; removing the plate is outside the task. Operator preparation fills the wells and removes the backing before placing the film adhesive-side down on its non-stick liner. Peeling backing is not part of the task. Alternating coloured and clear water supports later leakage inspection.
 
-The fixed polymer tray is 116 × 62 × 120 mm; its 130 × 62 × 0.1 mm liner leaves both long film edges accessible. The film weighs 1.44 g. The secured plate and prepared contents are represented by a fixed 104 g body. The 40 g roller has a 10 × 16 × 65 mm polymer handle and a 24 mm-diameter rubber wheel. Coordinates are metres: table Z=0.7475, plate centre (0.350, 0, 0.7945), film centre (0.200, 0, 0.8675), roller handle initially (0.180, −0.170, 0.7595), lying along Y. Gravity settles the loose objects before recording. Both arms use 40 × 6 × 1 mm rigid stainless-steel finger extensions and a 4 N jaw limit.
+The fixed polymer tray is 116 × 44 × 120 mm; its 130 × 44 × 0.1 mm liner leaves an 18 mm overhang along each long film edge. The film weighs 1.44 g. The secured plate and prepared contents are represented by a fixed 104 g body. The 40 g roller has a 10 × 16 × 65 mm polymer handle and a 24 mm-diameter rubber wheel. Coordinates are metres: table Z=0.7475, plate centre (0.350, 0, 0.7945), film centre (0.200, 0, 0.8675), roller handle initially (0.180, −0.170, 0.7595), lying along Y. Gravity settles the loose objects before recording. Both arms use the standard YAM fingers and original TCP, with a 4 N jaw effort limit. There are no attached tongs, finger extensions or added grip tabs. The robot pinches the exposed film edges, carries the sheet above the plate, releases it onto the rims, and uses the loose hand roller.
 
 The film uses 216 passive connected sectors, with bending and native collision. The roller wheel rotates freely and its native padding compression supplies the pressing load. Adhesion requires actual rim proximity, roller load and dwell. Each sector has one force-limited point bond anchored at an actually pressed rim sample. The point can rotate, so adhesion does not freeze the film’s bending; it can detach under excess force. Detailed peel-front mechanics are omitted. The model does not simulate liquid flow or adhesive chemistry. A connectivity calculation estimates whether each well has a path to another well or the outside; it does not certify molecular sealing or long-term storage.
 
@@ -22,7 +22,7 @@ Use new film each trial. The plate contains approximately 0.4 mL of alternating 
 
 ## Run and score
 
-Use the pinned Isaac/YAM environment in `ENVIRONMENT.json`. A CUDA GPU is required for native physics and camera rendering; the offline scorer runs on CPU.
+Use the pinned Isaac/YAM environment in `ENVIRONMENT.json`. On a fresh Linux NVIDIA container, `bash tasks/seal-a-laboratory-sample-plate/bootstrap.sh` installs it. A CUDA GPU is required for native physics and camera rendering; the offline scorer runs on CPU.
 
 ```bash
 python tasks/seal-a-laboratory-sample-plate/run.py --mode demo --out /tmp/seal-a-laboratory-sample-plate-demo
@@ -36,8 +36,8 @@ No task object follows a scripted animation. Geometry is reset once. During exec
 
 ## Validation
 
-Native demo: **1.0**, 1,860 controls (93 simulated seconds). Dream-1: **0.0**, 2,400 controls (120 simulated seconds). The demo leaves all 96 wells sealed, with 5.9 seconds of clear-hand retention and no film damage.
+The revised native demo scores **1.0** in 1,860 controls (93 seconds), with all 96 wells sealed, 6.1 seconds with hands clear, and no film damage. Dream-1 scores **0.00** in 2,400 controls. Both runs use the standard YAM fingers, the same physics, instruction, cameras and scorer.
 
-Frozen-source rescoring and native finger-contact checks pass for both episodes. The uploaded videos are complete, uncut 20 Hz recordings from the fixed front camera; the setup image is the demo's initial frame. Visual review sampled 12 evenly spaced frames in all three recorded views. `VALIDATION.json` and `evidence/` record scores, source hashes, contact checks, trace/video hashes and the media receipt. The full traces are retained in the team's private evidence archive.
+Frozen-source rescoring and independent checks against the recorded stock finger meshes pass for both runs. Videos are full, uncut 20 Hz front-camera recordings; the setup image is the demo's initial frame. Twelve evenly spaced frames were inspected in each of the three views. `VALIDATION.json` and `evidence/` record the source hashes, scores, contact checks and media receipt. Full traces are retained in the private evidence archive.
 
-Measured wall time on a shared L40S was 45.1 minutes for the demo and 59.4 minutes for Dream-1, including concurrent validation workloads and model calls. These are measured run times, not real-time performance claims. The layout is fixed and no random seed is used. Environment and policy sources match between the two runs; any unused demo-authoring differences are listed in `evidence/source-equivalence.json`.
+On an RTX 6000 Ada, the demo took 19.4 minutes and Dream-1 41.8 minutes, including rendering and model calls. Dream required 49 server-session expiry recoveries: physical state continued, but model memory restarted. The low model score therefore does not isolate task difficulty. Layout is fixed; there is no random seed.

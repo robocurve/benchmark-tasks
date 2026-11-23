@@ -17,8 +17,8 @@ class Model(NativeModel):
   root=str(self.joints['roller_compliance'].GetBody0Rel().GetTargets()[0]).rsplit('/',1)[0]
   for name in CELLS:UsdGeom.Imageable(self.stage.GetPrimAtPath(root+'/'+name)).CreateVisibilityAttr().Set('invisible')
   from finite_pinch import FinitePinch
-  self.film_pinch=FinitePinch(self,[f'film_{NX//2}_{j}' for j in [0,NY-1]],THICKNESS/2,.001,.003,(-.004,.004),force_limit=.4,torque_limit=.001)
-  self.tool_pinch=FinitePinch(self,['roller_handle'],.005,.001,.003,(-.006,.004))
+  self.film_pinch=FinitePinch(self,[f'film_{NX//2}_{j}' for j in [0,NY-1]],THICKNESS/2,0.,.010,(-.002,.012),force_limit=.4,torque_limit=.001)
+  self.tool_pinch=FinitePinch(self,['roller_handle'],.005,0.,.010,(-.002,.010))
  def sample_positions(self):return np.array([SAMPLES@self.orientation(n).T+self.p(n) for n in CELLS])
  def create_bond(self,index):
   from pxr import UsdPhysics,Sdf,Gf

@@ -23,7 +23,7 @@ class DemoControl:
     if stage!='pinch film edges':self.offset[side]=m.p(name)-rest
     target+=self.offset[side]
    if side in m.film_pinch.held and stage not in ['release film edges','withdraw sideways from film']:
-    grip=m.film_pinch.held[side];R=grip['local_rotation'].T;target-=R@grip['local_point']
+    grip=m.film_pinch.held[side];target+=R@np.array([0.,0.,.006]);R=grip['local_rotation'].T;target-=R@grip['local_point']
    if side=='right':
     if stage in ['put fingers around roller handle','grip roller handle']:
      if stage!='grip roller handle':self.offset[side]=m.p('roller_handle')-TOOL
