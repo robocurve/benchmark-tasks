@@ -1,0 +1,24 @@
+{
+  "title": "Swing a mitre saw's turntable to its 45 degree detent with the squeeze release and leave it locked",
+  "category": "Impact on jobs",
+  "keywords": [
+    "mitre saw",
+    "miter saw",
+    "detent",
+    "turntable",
+    "squeeze release",
+    "carpentry",
+    "trim",
+    "framing",
+    "setting a tool"
+  ],
+  "instruction": "Set the mitre saw to a 45 degree mitre and leave it locked in the detent.",
+  "context": "Carpenters (O*NET 47-2031.00, about 940,000 US workers) set a mitre saw's angle many times a day for trim, framing and picture-frame cuts. The turntable only turns while the detent release is squeezed against the front handle, and it only locks if it is let go exactly at the detent; let go between detents it is left loose and the cut comes out wrong.",
+  "setup": "Millimetres; x forward from the line through the two arm bases, y to the robot's left, z above the table top; arm bases at y +305 and -305. The layout is the same in every trial, as in the screenshot. (1) A 10 inch compound mitre saw, 15 kg, on the bench with its front toward the arms, turntable centred at x 400, y 0: a 250 x 290 mm base, fixed extension wings 85 mm high at y 145 to 230 either side from x 350 to 550 (the front of the turntable is open), a fence 15 mm thick standing 100 to 155 mm high at x 438 to 453 with a gap for the blade, and a 280 mm aluminium turntable whose top is 85 mm above the bench. The raised head turns with the turntable: its column stands on a rear extension 200 mm behind the turntable's centre, passing under the fence, and carries the arm, motor and a 254 mm blade 300 mm up. (2) The turntable's front arm reaches out under a red front handle 25 x 60 x 25 mm at x 172.5 to 197.5 (radius 202.5 to 227.5 mm), 65 to 90 mm above the bench. (3) A black release paddle 6 mm thick in front of the handle, 4.5 mm from it when released, hinged on a vertical pin at its left end; squeezing it 2.7 mm toward the handle lifts the detent plunger. Detents at 0, 15, 22.5, 31.6 and 45 degrees either side; the turntable starts at 0.",
+  "scoring": "Measured at the end of the trial with the saw's own mitre scale. 0 for the rest of the trial if the saw is moved 10 mm on the bench at any time. Otherwise: 1.0 (success, must hold for 1 s) when the turntable is locked in a 45 degree detent (either side; locked means the paddle is let go and the plunger is in the detent, within 0.5 degrees of 45), both grippers are clear of the handle and paddle, and the table does not move more than 0.1 degree for 1 s; 0.75 when it is locked at 45 degrees but a gripper is still at the handle or the table still moves; 0.5 when it is locked in another mitre detent (15, 22.5 or 31.6 degrees); 0.25 when the table was swung 10 degrees at some point; else 0.",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Squeeze the release paddle, swing the turntable back to 0 degrees and let go so the plunger drops into the 0 detent. Check the saw's base is against its two bench stops.",
+  "fidelity": "Rigid bodies at true size. The detent plunger is modelled in the task code: while the paddle is squeezed 2.7 mm the turntable turns freely; let go within 1.5 degrees of a detent it is pulled into the detent and held stiffly (1,000 N m/rad), elsewhere it is left free. The turntable turns against 3 N m s/rad of damping. The head is fixed in its raised position; the motor, blade guard and lock knob are simplified to boxes and a disc.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-H7UMYD"
+}
