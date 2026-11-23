@@ -1,0 +1,19 @@
+{
+  "title": "Seat a Mini-ITX motherboard in a computer assembly fixture",
+  "category": "Impact on jobs",
+  "keywords": [
+    "motherboard",
+    "computer assembly",
+    "standoff alignment",
+    "bimanual"
+  ],
+  "instruction": "Seat the Mini-ITX motherboard on all four standoffs with its rear ports in the opening, then release it.",
+  "context": "In small-form-factor computer production, team assemblers rotate through regular board-installation stations. At this station they seat a motherboard on four standoffs and align its rear I/O before fastening; misalignment can damage parts and require rework.",
+  "setup": "Unpowered computer assembly station; tabletop z=0.7475 m. A 210 x 210 x 4 mm black ESD rubber mat is centred at (0.100,0,0.7495) m. A 240 x 240 x 12 mm fixed aluminium assembly plate is centred at (0.350,0,0.7535) m. Four brass standoff bases of radius 7 mm and height 24 mm carry coaxial 2.4 mm diameter, 6 mm high cylindrical locating pins. Pin and standoff centres follow the Mini-ITX C/F/H/J pattern at board-local x,y positions in mm: C=(74.84,-78.65), F=(51.98,78.83), H=(-80.10,-78.65), J=(-80.10,78.83), relative to target board origin (0.350,0) m; standoff centres are at z=0.7715 m and pin centres at z=0.7865 m. A fixed open-topped steel rear I/O channel is centred at x=0.455 m and is 100 mm wide between its sides. A 170 x 170 x 1.6 mm green FR-4 Mini-ITX board, mass 0.44 kg, has four 3.96 mm diameter circular through-holes at those positions, a plastic CPU cover and slots, and a 38 x 60 x 18 mm rear I/O housing. It starts flat on the mat with body origin (0.100,0,0.7523) m and zero yaw. Its seated body origin is (0.350,0,0.7843) m. Two 16 x 26 x 18 mm black polymer protective edge clamps are attached at board-local (-0.060,+0.079,+0.010) and (+0.050,-0.079,+0.010) m, clear of the holes, and provide gripping surfaces. All parts start stationary.",
+  "scoring": "0 if the board centre is more than 20 mm from target, tilt exceeds 8 degrees, or absolute yaw exceeds 12 degrees. 0.25 inside that coarse zone. 0.5 when both faces of every circular mounting hole are within 2 mm horizontally of the matching pin axis and each hole underside is within 6 mm vertically of its standoff top. 0.75 when every hole face is within 0.77 mm radially of its pin axis at both PCB faces (inside the 0.78 mm nominal radial clearance of a 3.96 mm hole around a 2.4 mm pin), every hole underside is within 2 mm of its support, tilt and absolute yaw are at most 3 degrees, and the rear I/O housing tip reaches x=0.453 m or farther with its centre within 30 mm of the opening centre. 1.0 only after that pose is still for 1 second and both grippers are open with TCPs at least 60 mm from the board bounding box. The task measures placement ready for fastening; screws and electrical operation are outside the trial.",
+  "run_limit": "2,500 control steps (125 seconds at 20 Hz)",
+  "reset_notes": "Put the motherboard back flat on the ESD mat at the stated starting pose. Inspect that every hole and locating pin is unobstructed. The fixed bench and rear wall do not move.",
+  "fidelity": "The board is full-size with the standard Mini-ITX C/F/H/J hole locations and 3.96 mm circular mounting holes. The simulator approximates each round aperture with narrow collision strips and represents the PCB, ports, and attached protective clamps as one rigid body. The fixture uses 2.4 mm round locating pins with 0.78 mm nominal radial clearance; pin detents, screw fastening, and electrical contact are not modelled.",
+  "scores": "Corrected hole-to-I/O orientation: Dream-1 run 0.0; scripted Isaac Lab demo 1.0.",
+  "media": "M-JF4RRK"
+}
