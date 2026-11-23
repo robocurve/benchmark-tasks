@@ -1,0 +1,21 @@
+{
+  "title": "Open a beverage can with a 3D-printed tab lifter",
+  "category": "Societal relatability",
+  "keywords": [
+    "beverage can",
+    "pull tab",
+    "tab lifter",
+    "assistive tool",
+    "bimanual",
+    "tool use"
+  ],
+  "instruction": "Open the can: hold it down with one hand and use the tab lifter from the rack to pull the ring-pull tab up.",
+  "context": "Ring-pull cans can be hard to open with weak or stiff hands: the can has to be held down while the ring is pulled up. Tab lifters, small hooks that go through the ring, are sold as an aid for exactly that. The task is to use one, with two arms.",
+  "setup": "Positions in cm from the midpoint between the two arm bases (x forward, y to the robot's left); heights above the table top. Can: aluminium beverage can, 6.6 cm across and 12.0 cm tall, 0.35 kg (full and sealed), standing on its base at (30.0, -5.0), its stay-on ring-pull tab shut flat on the end with the ring pointing to the robot's left (+y); the tab is a ring 18.8 mm wide and 22.8 mm long, riveted at the end's centre, with a 11.8 x 13 mm hole, its underside 0.8 mm above the end panel; the panel has a finger well under the ring. Tab lifter: 3D-printed in PLA, 30 g: a 16 x 16 x 90 mm handle, a 3 x 8 mm plate 30 mm long hanging from its bottom, and at the plate's foot a 5 x 8 x 1.8 mm tongue pointing +x; it stands in a grey 3.8 x 3.4 x 2.8 cm rack at (22.0, -17.0), tongue towards +x, the plate in a 1.4 x 1.0 cm slot, the handle standing from 3.3 to 12.3 cm above the table. Table: flat, as in the screenshot.",
+  "scoring": "Tools: a protractor or a phone photo from the side (the angle between the tab and the end face), a ruler. Scored on the final state, with the tab lifter allowed to stay hooked: 0 with the tab lifted less than 20 degrees; 0.25 with it lifted at least 20 degrees; 0.5 at least 35 degrees; 0.75 at least 45 degrees but with the can tipped more than 10 degrees from upright, off the table, or a gripper still touching the can or the tab; 1.0 at least 45 degrees, the can standing upright on the table (axis within 10 degrees of vertical) and no gripper touching the can or the tab.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "A new sealed can for every trial (the tab can be opened only once; a retail can costs about $1) set on its base on a marked spot with the ring pointing left; put the tab lifter back in its rack. Stand the can in a shallow tray to catch any spray and wipe the pads. The tab lifter is 3D-printed (assets/opener_print.stl); check that its plate goes through the ring's hole of the cans used.",
+  "fidelity": "Can and tab: NVIDIA USDCraft-10K ds_R043_01 meshes (rigid, aluminium); colliders rebuilt (cylinder body, rim, a 3 mm finger well under the ring in the collider only). The score line is not modelled: the tab's hinge is a spring that gives way at 0.10 N m (5 N at the ring's tip) and then holds at 0.03 N m; the can is a rigid 0.35 kg body, no liquid.",
+  "scores": "Dream-1 run: 0.0 (2,400 steps, hit the step limit: both arms moved towards the can and the lifter's rack within the first 30 s, the lifter stayed in its rack and the tab was never lifted); demo: 1.0 (scores 1.0 at 43.5 s, 870 steps)",
+  "media": "M-A2AKQC"
+}

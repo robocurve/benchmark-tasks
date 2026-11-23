@@ -1,0 +1,102 @@
+#usda 1.0
+(
+    defaultPrim = "Opener"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Opener" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+)
+{
+    rel material:binding:physics = </Opener/Material> (
+        bindMaterialAs = "weakerThanDescendants"
+    )
+    point3f physics:centerOfMass = (0.00375, 0, 0.07)
+    float physics:mass = 0.03
+
+    def Material "Material" (
+        prepend apiSchemas = ["PhysicsMaterialAPI"]
+    )
+    {
+        float physics:dynamicFriction = 0.5
+        float physics:restitution = 0
+        float physics:staticFriction = 0.6
+    }
+
+    def Scope "visual"
+    {
+        def Cube "handle"
+        {
+            color3f[] primvars:displayColor = [(0.15, 0.45, 0.8)]
+            double size = 1
+            float3 xformOp:scale = (0.016, 0.016, 0.09)
+            double3 xformOp:translate = (0.00375, 0, 0.075)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "plate"
+        {
+            color3f[] primvars:displayColor = [(0.15, 0.45, 0.8)]
+            double size = 1
+            float3 xformOp:scale = (0.003, 0.008, 0.03)
+            double3 xformOp:translate = (0, 0, 0.015)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "tongue"
+        {
+            color3f[] primvars:displayColor = [(0.15, 0.45, 0.8)]
+            double size = 1
+            float3 xformOp:scale = (0.005, 0.008, 0.0018)
+            double3 xformOp:translate = (0.004, 0, 0.0009000000000000001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def Scope "collision"
+    {
+        def Cube "handle" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0004
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.15, 0.45, 0.8)]
+            uniform token purpose = "guide"
+            double size = 1
+            float3 xformOp:scale = (0.016, 0.016, 0.09)
+            double3 xformOp:translate = (0.00375, 0, 0.075)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "plate" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0004
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.15, 0.45, 0.8)]
+            uniform token purpose = "guide"
+            double size = 1
+            float3 xformOp:scale = (0.003, 0.008, 0.03)
+            double3 xformOp:translate = (0, 0, 0.015)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "tongue" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0004
+            custom float physxCollision:restOffset = 0
+            color3f[] primvars:displayColor = [(0.15, 0.45, 0.8)]
+            uniform token purpose = "guide"
+            double size = 1
+            float3 xformOp:scale = (0.005, 0.008, 0.0018)
+            double3 xformOp:translate = (0.004, 0, 0.0009000000000000001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+}
+
