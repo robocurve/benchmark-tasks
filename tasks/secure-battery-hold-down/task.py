@@ -1,4 +1,5 @@
-"""Secure a new car battery with its hold-down: hook both J-bolts into the tray's slots, then fit the bar over them.
+"""Secure a new car battery with its hold-down: hook both J-bolts into the tray's slots, fit the bar over them and push
+the nuts down onto it.
 
 The table has an engine bay cut into it: a well 21 cm deep with a BCI Group 35 battery (230 x 175 x 225 mm) standing in
 a steel tray at its bottom, its top 4 cm above the table, its length along x. The tray's floor sits on a bracket 19.5 mm
@@ -6,16 +7,16 @@ above the well's floor; halfway along each long side of the battery the floor ha
 across), 2.5 mm outside the battery, with the tray's 40 mm side wall 6 mm beyond it. Two new 12 in (305 mm) steel
 J-bolts (1/4 in rod) stand hook down in holders at the bay's front corners, one each side, hook tips towards +x; the
 hold-down bar (228 x 25.4 x 4 mm steel, a 10 x 20 mm slot 96 mm either side of its middle) lies on the table to the
-right of the bay, along x.
+right of the bay, along x, and two 1/4-20 steel flange nuts lie flange down on the table beside the bay, one each side.
 
-Mechanics fitting a new battery hook each J-bolt into its slot in the tray, then lay the bar across the battery's top
-over both bolts (Dorman's hold-down kit instructions).
+Mechanics fitting a new battery hook each J-bolt into its slot in the tray, lay the bar across the battery's top over
+both bolts, then run a nut down each bolt onto the bar (Dorman's hold-down kit instructions).
 
 What makes it hard: each J-bolt is held by its top, a hand's length above the battery, and its hook has to go down
 the gap beside the battery into a slot 21 cm below, out of sight, then slide along under the tray's floor to the
 slot's far end; the bolt sways and turns in the hand, and its hook has room of a few mm either way. Let go, a bolt
 is held only by its hook and leans a few degrees. The bar then has to go down over both leaning bolt tops at once
-without knocking either loose.
+without knocking either loose, and each nut has to follow its leaning bolt down onto the bar.
 
 Run it:  inspect-robots run --embodiment yam_arena -E task=task.py -E object_jitter=0 --scorer task_score ...
 """
@@ -40,8 +41,8 @@ SCENE = "station"
 SCORE_OVER = "end"
 SUCCESS_HOLD_S = 1.0
 
-INSTRUCTION = ("Secure the battery with its hold-down: hook each J-bolt into its slot in the battery tray, then lay "
-               "the bar across the battery's top with both bolts through its slots.")
+INSTRUCTION = ("Secure the battery with its hold-down: hook each J-bolt into its slot in the battery tray, lay the bar "
+               "across the battery's top with both bolts through its slots, then push a nut down each bolt onto the bar.")
 
 TOP = TABLE_TOP[SCENE]
 SIDES = {"l": 1.0, "r": -1.0}  # the left bolt's slot is at +y, the right one's at -y
@@ -72,7 +73,7 @@ def _cut_table(room, scene):
 
 
 def box(name, lo, hi, color):
-    """A fixed box spanning lo..hi (x, y, height above the table)."""
+    """A static part, a box spanning lo..hi (x, y, height above the table)."""
     lo, hi = np.asarray(lo, float), np.asarray(hi, float)
     c = (lo + hi) / 2
     return Shape(name, pos=(c[0], c[1], Z(c[2])), size=tuple(hi - lo), color=color)
@@ -158,11 +159,19 @@ BAR_START = (d.BAT_X, -0.250, Z(d.BAR_T / 2) + 0.0003)
 BAR = UsdBody("bar", usd="assets/bar.usda", pos=BAR_START, size=(d.BAR_LEN, d.BAR_W, d.BAR_T), mass=d.BAR_MASS,
               material=False, torsional_patch=0.008)
 
-OBJECTS = [*WELL, *TRAY_PARTS, *BATTERY, *HOLDERS, *BOLTS.values(), BAR]
+# the two 1/4-20 flange nuts lie flange down on the table beside the bay, one each side
+NUTS = {k: UsdBody(f"nut_{k}", usd="assets/nut.usda", pos=(d.NUT_X, s * d.NUT_Y, Z(0.0) + 0.0003),
+                   size=(d.NUT_FLANGE_D, d.NUT_FLANGE_D, d.NUT_H), mass=d.NUT_MASS, material=False,
+                   torsional_patch=0.006)
+        for k, s in SIDES.items()}
+
+OBJECTS = [*WELL, *TRAY_PARTS, *BATTERY, *HOLDERS, *BOLTS.values(), BAR, *NUTS.values()]
 
 # -- scoring -----------------------------------------------------------------------------------------------------
 SEAT_TOL = 3.0 * d.MM  # the bar's underside within this of the battery's top...
 LEVEL = math.radians(5.0)  # ... and within this of level
+NUT_DOWN = 2.0 * d.MM  # a nut is down when its flange is within this of the bar's top...
+NUT_LEVEL = math.radians(10.0)  # ... square to its bolt within this
 _STATE: dict = {"free": True, "t": 0.0, "last": -1.0}
 
 
@@ -199,10 +208,10 @@ def hooked(b, side: float) -> bool:
     return math.hypot(dx, dy) > d.ROD_R
 
 
-def through_holes(bar, bolts) -> bool:
-    """Each bolt's shank passes through a different one of the bar's two holes."""
+def through_slots(bar, bolts) -> bool:
+    """Each bolt's shank passes through a different one of the bar's two slots."""
     r = bar.rotation()
-    holes = set()
+    slots = set()
     for b in bolts:
         p = on_axis(b, float(bar.pos[2]))
         if p is None:
@@ -210,11 +219,11 @@ def through_holes(bar, bolts) -> bool:
         local = r.T @ (p - np.asarray(bar.pos, float))
         for n, s in enumerate((1.0, -1.0)):
             if abs(local[0] - s * d.BAR_HOLE_Y) < d.BAR_SLOT / 2 and abs(local[1]) < d.BAR_HOLE / 2:
-                holes.add(n)
+                slots.add(n)
                 break
         else:
             return False
-    return len(holes) == len(bolts)
+    return len(slots) == len(bolts)
 
 
 def seated(bar) -> bool:
@@ -224,22 +233,42 @@ def seated(bar) -> bool:
     return up[2] > math.cos(LEVEL) and abs(bottom - Z(d.BAT_TOP)) < SEAT_TOL
 
 
+def nut_down(nut, bolt, bar) -> bool:
+    """The nut is on the bolt (the bolt's axis through its bore) and pushed down onto the bar: its flange within
+    NUT_DOWN of the bar's top, square to the bolt."""
+    up = nut.rotation()[:, 2]
+    if up[2] < math.cos(NUT_LEVEL):
+        return False
+    o = np.asarray(nut.pos, float)
+    p = on_axis(bolt, float(o[2]))
+    if p is None or math.hypot(p[0] - o[0], p[1] - o[1]) > d.NUT_BORE / 2:
+        return False
+    return abs(float(o[2]) - (float(bar.pos[2]) + d.BAR_T / 2)) < NUT_DOWN
+
+
 def score(objects) -> float:
     """0: neither J-bolt hooked into its slot.
-    0.25: one J-bolt hooked.
-    0.5: both hooked; the bar not on the battery's top with both bolts through its holes.
-    0.75: both hooked and the bar on the battery's top, level, both bolts through its holes, but the robot still
-    touching a bolt or the bar.
+    0.2: one J-bolt hooked.
+    0.4: both hooked; the bar not on the battery's top with both bolts through its slots.
+    0.6: both hooked and the bar on the battery's top, level, both bolts through its slots; not both nuts down.
+    0.8: so, and a nut pushed down each bolt onto the bar, but the robot still touching a bolt, the bar or a nut.
     1.0: so, and the robot off them."""
     n = sum(hooked(objects[f"jbolt_{k}"], s) for k, s in SIDES.items())
     if n == 0:
         return 0.0
     if n == 1:
-        return 0.25
+        return 0.2
     bar = objects["bar"]
-    if not (seated(bar) and through_holes(bar, [objects["jbolt_l"], objects["jbolt_r"]])):
-        return 0.5
-    return 1.0 if _STATE["free"] else 0.75
+    bolts = [objects["jbolt_l"], objects["jbolt_r"]]
+    if not (seated(bar) and through_slots(bar, bolts)):
+        return 0.4
+    nuts = [objects.get("nut_l"), objects.get("nut_r")]
+    # each bolt needs a nut down on it (either nut on either bolt)
+    if any(n is None for n in nuts) or not (
+            (nut_down(nuts[0], bolts[0], bar) and nut_down(nuts[1], bolts[1], bar))
+            or (nut_down(nuts[0], bolts[1], bar) and nut_down(nuts[1], bolts[0], bar))):
+        return 0.6
+    return 1.0 if _STATE["free"] else 0.8
 
 
 def success(objects) -> bool:
@@ -254,14 +283,14 @@ def _reset(environment) -> None:
 
 @on_step
 def _watch(environment) -> None:
-    """Released: no robot link touches either bolt or the bar (PhysX contacts, touch.py)."""
-    _STATE["free"] = not any(touch.touching(environment, ["jbolt_l", "jbolt_r", "bar"]).values())
+    """Released: no robot link touches a bolt, the bar or a nut (PhysX contacts, touch.py)."""
+    _STATE["free"] = not any(touch.touching(environment, ["jbolt_l", "jbolt_r", "bar", "nut_l", "nut_r"]).values())
     _STATE["t"] += environment.unwrapped.step_dt
     if os.environ.get("BATTERY_LOG") and _STATE["t"] - _STATE["last"] >= 0.5:
         _STATE["last"] = _STATE["t"]
         from yam_arena.scene import object_states
 
-        s = object_states(environment, ["jbolt_l", "jbolt_r", "bar"])
+        s = object_states(environment, ["jbolt_l", "jbolt_r", "bar", "nut_l", "nut_r"])
         parts = []
         for k, side in SIDES.items():
             b = s[f"jbolt_{k}"]
@@ -272,8 +301,13 @@ def _watch(environment) -> None:
                          f"hooked={hooked(b, side)}")
         bar = s["bar"]
         bo = (np.asarray(bar.pos) - np.array([d.BAT_X, 0.0, TOP])) * 1000
+        nuts = []
+        for k in SIDES:
+            nn = (np.asarray(s[f"nut_{k}"].pos) - np.array([d.BAT_X, 0.0, TOP])) * 1000
+            down = nut_down(s[f"nut_{k}"], s[f"jbolt_{k}"], bar)
+            nuts.append(f"nut_{k} {nn[0]:+.1f} {nn[1]:+.1f} {nn[2]:+.1f}{' down' if down else ''}")
         print(f"LOG t={_STATE['t']:.1f} {'  '.join(parts)}  bar {bo[0]:+.1f} {bo[1]:+.1f} {bo[2]:+.1f} mm "
-              f"seated={seated(bar)}  free={_STATE['free']}  score={score(s)}", flush=True)
+              f"seated={seated(bar)}  {'  '.join(nuts)}  free={_STATE['free']}  score={score(s)}", flush=True)
 
 
 # -- two places in a slot the checks below use: a hook straight down through it, and slid on under the floor ----
@@ -313,39 +347,64 @@ def self_test(ObjectState=None):
         pos = np.array([x, y, Z(h)])
         return BodyState(pos=pos, quat_xyzw=qz(yaw), lin_vel=np.zeros(3), ang_vel=np.zeros(3), low=pos, high=pos)
 
+    def nut(x, y, h, tilt=0.0):
+        q = np.array([math.sin(tilt / 2), 0.0, 0.0, math.cos(tilt / 2)])
+        pos = np.array([x, y, Z(h)])
+        return BodyState(pos=pos, quat_xyzw=q, lin_vel=np.zeros(3), ang_vel=np.zeros(3), low=pos, high=pos)
+
     hook_x, drop_x = SX0 + HOOK_U, SX0 + DROP_U
     off = bar(*BAR_START[:2], h=d.BAR_T / 2, yaw=0.0)
     start = {k: bolt(s, BOLT_START_X, y=s * d.HOLDER_Y) for k, s in SIDES.items()}
     hk = {k: bolt(s, hook_x) for k, s in SIDES.items()}
+    nut_table = {f"nut_{k}": nut(d.NUT_X, s * d.NUT_Y, 0.0) for k, s in SIDES.items()}
+    on_bar = d.BAT_TOP + d.BAR_T
+    nut_on = {f"nut_{k}": nut(hook_x, s * d.SLOT_YC, on_bar) for k, s in SIDES.items()}
+    full = {"jbolt_l": hk["l"], "jbolt_r": hk["r"], "bar": bar()}
     cases = {
         "as set up": ({"jbolt_l": start["l"], "jbolt_r": start["r"], "bar": off}, True, 0.0),
         "left hook down through its slot, not slid": ({"jbolt_l": bolt(1, drop_x), "jbolt_r": start["r"], "bar": off},
                                                       True, 0.0),
-        "left hooked": ({"jbolt_l": hk["l"], "jbolt_r": start["r"], "bar": off}, True, 0.25),
-        "both hooked": ({"jbolt_l": hk["l"], "jbolt_r": hk["r"], "bar": off}, True, 0.5),
+        "left hooked": ({"jbolt_l": hk["l"], "jbolt_r": start["r"], "bar": off}, True, 0.2),
+        "both hooked": ({"jbolt_l": hk["l"], "jbolt_r": hk["r"], "bar": off}, True, 0.4),
         "both hooked, lifted 1 mm (tip still under the floor)": (
-            {"jbolt_l": bolt(1, hook_x, d.FLOOR + 0.001), "jbolt_r": hk["r"], "bar": off}, True, 0.5),
+            {"jbolt_l": bolt(1, hook_x, d.FLOOR + 0.001), "jbolt_r": hk["r"], "bar": off}, True, 0.4),
         "both hooked, one leaning out 3 degrees": (
-            {"jbolt_l": bolt(1, hook_x, lean_y=math.radians(3)), "jbolt_r": hk["r"], "bar": off}, True, 0.5),
-        "bar on, both through, still held": ({"jbolt_l": hk["l"], "jbolt_r": hk["r"], "bar": bar()}, False, 0.75),
-        "bar on, both through, released": ({"jbolt_l": hk["l"], "jbolt_r": hk["r"], "bar": bar()}, True, 1.0),
-        "bar on, holes swapped end for end": ({"jbolt_l": hk["l"], "jbolt_r": hk["r"], "bar": bar(yaw=-math.pi / 2)},
+            {"jbolt_l": bolt(1, hook_x, lean_y=math.radians(3)), "jbolt_r": hk["r"], "bar": off}, True, 0.4),
+        "bar on, both through, still held": ({"jbolt_l": hk["l"], "jbolt_r": hk["r"], "bar": bar()}, False, 0.6),
+        "bar on, both through, released": ({"jbolt_l": hk["l"], "jbolt_r": hk["r"], "bar": bar()}, True, 0.6),
+        "bar on, slots swapped end for end": ({"jbolt_l": hk["l"], "jbolt_r": hk["r"], "bar": bar(yaw=-math.pi / 2), **nut_on},
                                               True, 1.0),
-        "bar on, 6 mm off along x (bolts beside its holes)": (
-            {"jbolt_l": hk["l"], "jbolt_r": hk["r"], "bar": bar(x=hook_x + 0.006)}, True, 0.5),
+        "bar on, 6 mm off along x (bolts beside its slots)": (
+            {"jbolt_l": hk["l"], "jbolt_r": hk["r"], "bar": bar(x=hook_x + 0.006)}, True, 0.4),
         "bar resting on the bolt tops": ({"jbolt_l": hk["l"], "jbolt_r": hk["r"],
-                                          "bar": bar(h=d.BOLT_TOP + d.BAR_T / 2)}, True, 0.5),
+                                          "bar": bar(h=d.BOLT_TOP + d.BAR_T / 2)}, True, 0.4),
         "bar on, one bolt slipped back (hook under the slot)": (
-            {"jbolt_l": bolt(1, drop_x), "jbolt_r": hk["r"], "bar": bar(x=hook_x)}, True, 0.25),
+            {"jbolt_l": bolt(1, drop_x), "jbolt_r": hk["r"], "bar": bar(x=hook_x)}, True, 0.2),
         "a bolt hooked but turned half round (tip to -x)": (
-            {"jbolt_l": bolt(1, SX1 - (hook_x - SX0), yaw=math.pi), "jbolt_r": hk["r"], "bar": off}, True, 0.5),
+            {"jbolt_l": bolt(1, SX1 - (hook_x - SX0), yaw=math.pi), "jbolt_r": hk["r"], "bar": off}, True, 0.4),
         "a bolt lying flat": ({"jbolt_l": BodyState(pos=np.array([0.3, 0.2, Z(0.003)]), quat_xyzw=np.array(
             [0.0, math.sin(math.pi / 4), 0.0, math.cos(math.pi / 4)]), lin_vel=np.zeros(3), ang_vel=np.zeros(3),
-            low=np.zeros(3), high=np.zeros(3)), "jbolt_r": hk["r"], "bar": off}, True, 0.25),
+            low=np.zeros(3), high=np.zeros(3)), "jbolt_r": hk["r"], "bar": off}, True, 0.2),
+        "bar on, both nuts down, still held": ({**full, **nut_on}, False, 0.8),
+        "bar on, both nuts down, released": ({**full, **nut_on}, True, 1.0),
+        "bar on, nuts swapped side for side, down": ({**full, "nut_l": nut_on["nut_r"], "nut_r": nut_on["nut_l"]},
+                                                     True, 1.0),
+        "bar on, one nut down, the other on the table": ({**full, "nut_l": nut_on["nut_l"],
+                                                          "nut_r": nut_table["nut_r"]}, True, 0.6),
+        "bar on, both nuts on their bolts 10 mm above the bar": (
+            {**full, **{k: nut(hook_x, (1 if k == "nut_l" else -1) * d.SLOT_YC, on_bar + 0.010) for k in nut_on}},
+            True, 0.6),
+        "bar on, a nut beside its bolt on the bar": ({**full, "nut_l": nut(hook_x + 0.015, d.SLOT_YC, on_bar),
+                                                      "nut_r": nut_on["nut_r"]}, True, 0.6),
+        "bar on, a nut tipped 30 degrees": ({**full, "nut_l": nut(hook_x, d.SLOT_YC, on_bar, math.radians(30)),
+                                             "nut_r": nut_on["nut_r"]}, True, 0.6),
+        "nuts down but one bolt unhooked": ({"jbolt_l": bolt(1, drop_x), "jbolt_r": hk["r"], "bar": bar(),
+                                             **nut_on}, True, 0.2),
         "a bolt pulled out up through its slot": (
-            {"jbolt_l": bolt(1, hook_x, d.PLATE_TOP + 0.005), "jbolt_r": hk["r"], "bar": off}, True, 0.25),
+            {"jbolt_l": bolt(1, hook_x, d.PLATE_TOP + 0.005), "jbolt_r": hk["r"], "bar": off}, True, 0.2),
     }
     for name, (objs, free, want) in cases.items():
+        objs = {**nut_table, **objs}
         _STATE["free"] = free
         got = score(objs)
         assert abs(got - want) < 1e-9, (name, got, want)
@@ -359,7 +418,9 @@ def self_test(ObjectState=None):
     assert d.SLOT_IN > d.BAT_W / 2 and d.BRACKET_Y < d.SLOT_IN - d.ROD_D  # the slot outside the battery and the bracket
     assert DROP_U >= d.ROD_R and DROP_U + hook_w - d.ROD_R <= d.SLOT_LEN  # down through the slot
     assert HOOK_U + d.ROD_R <= d.SLOT_LEN and HOOK_U + d.J_TIP_X - d.ROD_R > d.SLOT_LEN  # hooked
-    return len(cases) + 7
+    assert d.ROD_D < d.NUT_BORE and d.NUT_FLANGE_D > d.BAR_HOLE  # the nut goes on the bolt; it cannot pass the slot
+    assert d.BOLT_TOP > d.BAT_TOP + d.BAR_T + d.NUT_H + 0.010  # the bolt reaches above a nut down on the bar
+    return len(cases) + 9
 
 
 if __name__ == "__main__":

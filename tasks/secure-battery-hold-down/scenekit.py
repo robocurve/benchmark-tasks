@@ -1,7 +1,7 @@
 """scenekit: USD bodies, articulations and posed fixed shapes for a yam_arena task file.
 
 yam_arena's task files spawn single primitives (yaw only) and library assets. This module adds two object kinds,
-used here for the J-bolts, the bar and the engine bay's parts:
+used here for the J-bolts, the bar, the nuts and the engine bay's parts:
 
 - :class:`UsdBody`: a body loaded from a USD file next to the task file (with ``articulation=True``, an articulation
   whose joints start at ``joint_pos``).

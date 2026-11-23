@@ -58,6 +58,14 @@ BAR_SLOT = 0.020  # ... and 20 mm long, along the bar, so it takes the bolts a l
 BAR_HOLE_Y = 0.096  # the slots' centres from the bar's middle, along it (a let-go bolt's top leans out a few mm)
 BAR_MASS = 0.170  # kg: 228 x 25.4 x 4 mm steel less the slots
 
+# -- the nuts: 1/4-20 steel flange nuts (9/16 in tall, 1 in flange, as McMaster's 1/4-20 flange nuts) --------------
+NUT_H = 0.0143  # overall height
+NUT_FLANGE_D, NUT_FLANGE_T = 0.0254, 0.002  # the flange it bears on the bar with
+NUT_BODY_D = 0.017  # the body above the flange
+NUT_BORE = 0.008  # the bore round the 1/4 in bolt
+NUT_MASS = 0.025  # kg
+NUT_X, NUT_Y = 0.170, 0.200  # each lies flange down on the table beside the bay, one each side (+-y)
+
 # -- the holders the new bolts stand in, at the front corners of the bay -----------------------------------------
 HOLDER = (0.030, 0.030, 0.060)  # x, y, z: a block on the well's floor with a slot the hook stands in
 HOLDER_SLOT = (0.020, 0.007)  # along x, y
