@@ -178,8 +178,8 @@ the bar, clear of the board; in a real trial it would then put the bar down.
 | Original generic-bar Dream-1 (`--policy dream`, seed 0, full limit) | 0.0: it picked the bar up with its right arm several times and brought the blade to the board's front edge near the right joist, but never seated it in the joint or levered; neither nail moved, and the bar was dropped on the table and across the joists | 4,800 |
 
 The B215 Dream-1 recording has 4,801 consecutive frames per camera (reset plus 4,800 steps), with no empty or
-uniform frames, and is exported as H.264 MP4. The existing `task.json` media ID still refers to the original
-generic-bar submission. Revised model, demo and setup media are prepared locally and must be uploaded before resubmitting.
+uniform frames, and is exported as H.264 MP4. Media **M-UDT7R8** in `task.json` contains the revised B215
+Dream-1 run, full-score scripted demo and setup screenshot. The generic-bar results above are historical.
 
 ## Third-party code and assets
 
