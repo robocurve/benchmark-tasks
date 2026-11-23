@@ -6,8 +6,8 @@ It reads the simulator's state to plan (tweezer, wafer and gripper poses) and ac
 fingers squeeze the tweezers' sprung leaves, and the tips hold the wafer by friction. Nothing is written to the
 simulation. Phases:
   1 grasp the tweezers in their stand (fingers lowered along the tweezers' axis), set the tip gap, lift them out
-  2 over the source wafer, tips open about 2 mm; down between its neighbours to 3 mm below its top edge, on the
-    measured wafer position; squeeze until the tips grip
+  2 over the source wafer, tips open about 2 mm, blades turned parallel to its faces; down between its neighbours to
+    4 mm below its top edge, on the measured wafer pose; squeeze until the tips grip
   3 lift straight up until the wafer clears the cassette top; carry it over the empty slot, on the measured wafer pose
   4 lower it into the slot, correcting sideways on the way, until it rests on the cassette's rails
   5 open the tips, rise 60 mm, put the tweezers back in the stand, let go, move clear
@@ -32,7 +32,7 @@ sys.path.insert(0, str(HERE))
 HZ = 20
 S_GRIP = 0.05  # fingers on the tweezers 50 mm from the tips
 GAMMA = math.radians(32)  # tweezers held 32 deg off the gripper's approach axis (reach check)
-GRIP_IN = float(os.environ.get("GRIP_IN", 0.005))  # tips 5 mm below the wafer's top edge (edge zone 2-5 mm)
+GRIP_IN = float(os.environ.get("GRIP_IN", 0.004))  # tips 4 mm below the wafer's top edge (handling zone 2-5 mm)
 GAP_GRASP = 0.0045  # tip gap while lifting the tweezers out of the stand
 GAP_OPEN = 0.0020  # tip gap while going down between neighbours / releasing
 
@@ -49,6 +49,17 @@ def frame(u, s, gamma, sg):
 
 # tweezers vertical, leaves parted along y (the wafers' normal); the hand turned 180 deg about its approach
 R_HOLD = frame(np.array([0, 0, 1.0]), np.array([0, 1.0, 0]), GAMMA, 1) @ np.diag([-1.0, -1.0, 1.0])
+
+
+def rot_between(a, b):
+    """Smallest rotation taking unit vector a to b."""
+    a, b = a / np.linalg.norm(a), b / np.linalg.norm(b)
+    v = np.cross(a, b)
+    c = float(a @ b)
+    if np.linalg.norm(v) < 1e-9:
+        return np.eye(3)
+    vx = np.array([[0, -v[2], v[1]], [v[2], 0, -v[0]], [-v[1], v[0], 0]])
+    return np.eye(3) + vx + vx @ vx * (1 / (1 + c))
 
 
 class PoseArm:
@@ -122,7 +133,7 @@ class Ctx:
         pts = []
         for h in ("half_a", "half_b"):
             p, q = self.ak.body_pose("tweezers", h)
-            pts.append(p + self.T._rot(q) @ np.array(P.half_point(h, P.TW_HINGE_GAP / 2 + P.TW_BODY_T / 2, -(P.TW_LEN - S_GRIP))))
+            pts.append(p + self.T.quat_xyzw_to_matrix(q) @ np.array(P.half_point(h, P.TW_HINGE_GAP / 2 + P.TW_BODY_T / 2, -(P.TW_LEN - S_GRIP))))
         return (pts[0] + pts[1]) / 2
 
     def tip_gap(self):
@@ -142,10 +153,12 @@ def strategy(ctx, L, log):
     Z = np.array([0, 0, 1.0])
     R = R_HOLD
 
-    def tcp_for_tips(tips):
-        """TCP target putting the tips' midpoint at `tips`, from the measured tips offset in the TCP frame."""
+    def tcp_for_tips(tips, Rt=None):
+        """TCP target putting the tips' midpoint at `tips` with the hand at rotation Rt (default R), from the measured
+        tips offset in the TCP frame."""
+        Rt = R if Rt is None else Rt
         _, Rc = L.pose()
-        return np.asarray(tips) - R @ (Rc.T @ (ctx.tips_mid() - ctx.tcp()))
+        return np.asarray(tips) - Rt @ (Rc.T @ (ctx.tips_mid() - ctx.tcp()))
 
     def set_gap(target, tol=0.0003, max_iter=40):
         for _ in range(max_iter):
@@ -170,28 +183,37 @@ def strategy(ctx, L, log):
     if os.environ.get("DEMO_STOP") == "1":
         return
 
-    # 2 over the source wafer, down between its neighbours, squeeze
-    c, _ = ctx.wafer()
-    top = c + Z * P.WAFER_R
+    # 2 over the source wafer, down between its neighbours, squeeze. Wafers lean a little in their pockets, so every tip
+    # target is a point on the wafer's own top edge, from its measured position and orientation (not straight above its
+    # centre)
+    def edge(d):
+        """The point d below the wafer's top edge, along the wafer's own in-plane 'up' (negative d: above the edge)."""
+        c, w = ctx.wafer()
+        up = T.quat_xyzw_to_matrix(w.quat_xyzw)[:, 2]
+        up = up if up[2] > 0 else -up
+        return c + up * (P.WAFER_R - d)
+
+    _, w0 = ctx.wafer()
+    log["source_wafer_lean_deg"] = round(T.upright_deg(T.wafer_normal(w0.quat_xyzw)), 2)
+    # turn the hand so the tweezer blades lie parallel to the (leaning) wafer's faces: the squeeze axis onto its normal
+    n0 = T.wafer_normal(w0.quat_xyzw)
+    sq = R[:, 0]
+    Rg = rot_between(sq, n0 if n0 @ sq > 0 else -n0) @ R
     yield from set_gap(GAP_OPEN)
-    yield from L.move(tcp_for_tips(top + Z * 0.030), R, dur=3.0)
+    yield from L.move(tcp_for_tips(edge(-0.030), Rg), Rg, dur=3.0)
     for _ in range(2):
-        c, _ = ctx.wafer()
-        yield from L.move(tcp_for_tips(c + Z * (P.WAFER_R + 0.015)), R, dur=0.8)
-    for z_off in (0.006, 0.0, -GRIP_IN):
-        c, _ = ctx.wafer()
-        yield from L.move(tcp_for_tips(c + Z * (P.WAFER_R + z_off)), R, dur=1.0 if z_off > 0 else 1.5)
+        yield from L.move(tcp_for_tips(edge(-0.015), Rg), Rg, dur=0.8)
+    for d in (-0.006, 0.0, GRIP_IN):
+        yield from L.move(tcp_for_tips(edge(d), Rg), Rg, dur=1.0 if d < 0 else 1.5)
     yield from wait(0.3)
-    for _ in range(6):  # centre the tips on the wafer (x along the edge, y across its faces) before squeezing
-        c, _ = ctx.wafer()
-        err = (c + Z * (P.WAFER_R - GRIP_IN)) - ctx.tips_mid()
-        if abs(err[1]) < 0.00015 and abs(err[0]) < 0.0005:
+    for _ in range(6):  # centre the tips on the wafer (x along the edge, y across its faces, z depth) before squeezing
+        err = edge(GRIP_IN) - ctx.tips_mid()
+        if abs(err[1]) < 0.00015 and abs(err[0]) < 0.0005 and abs(err[2]) < 0.0003:
             break
         p, _ = L.pose()
-        yield from L.move(p + np.array([err[0], err[1], 0.0]), R, dur=0.5)
+        yield from L.move(p + err, Rg, dur=0.5)
         yield from wait(0.3)
-    c, _ = ctx.wafer()
-    log["tips_vs_top_edge_mm"] = [round(v * 1000, 2) for v in (ctx.tips_mid() - (c + Z * (P.WAFER_R - GRIP_IN)))]
+    log["tips_vs_top_edge_mm"] = [round(v * 1000, 2) for v in (ctx.tips_mid() - edge(GRIP_IN))]
     # squeeze until the tips close on the wafer's faces, then a small preload: tip gap 60 % of the wafer's thickness
     yield from set_gap(P.WAFER_T * float(os.environ.get("PRELOAD_GAP", 0.6)), tol=0.00003, max_iter=60)
     yield from wait(0.3)
@@ -207,7 +229,7 @@ def strategy(ctx, L, log):
             break
         corr = np.array([src[0] - c[0], src[1] - c[1], 0.0]) * 0.5
         p, _ = L.pose()
-        yield from L.move(p + corr + Z * 0.001, R, dur=1 / HZ)
+        yield from L.move(p + corr + Z * 0.001, Rg, dur=1 / HZ)
     yield from wait(0.3)
     c1, _ = ctx.wafer()
     log["wafer_lift_mm"] = round(float(c1[2] - c0[2]) * 1000, 2)
@@ -226,17 +248,37 @@ def strategy(ctx, L, log):
         yield from wait(0.2)
     c, _ = ctx.wafer()
     log["over_slot_error_mm"] = [round(v * 1000, 2) for v in (c - tgt)]
+    # line the wafer's faces up with the slot: turn the hand about the wafer's centre until its face normal is along the
+    # slot axis (y), on the measured wafer pose, and keep it there over the slot
+    Y = np.array([0.0, 1.0, 0.0])
+    for _ in range(3):
+        c, w = ctx.wafer()
+        n = T.wafer_normal(w.quat_xyzw)
+        Rc = rot_between(n, Y if n @ Y > 0 else -Y)
+        p_now, R_now = L.pose()
+        yield from L.move(c + Rc @ (p_now - c) + (tgt - c), Rc @ R_now, dur=1.0)
+        yield from wait(0.3)
+    c, w = ctx.wafer()
+    log["face_tilt_before_lowering_deg"] = round(math.degrees(math.acos(min(1.0, abs(T.wafer_normal(w.quat_xyzw) @ Y)))), 2)
+    _, R_ins = L.pose()
 
-    # 4 lower into the slot until it rests on the rails
+    # 4 lower into the slot until it rests on the rails: stop at the seated height, or as soon as the tips start to
+    # slide down the wafer's faces (it has bottomed out on the rails and is no longer following the hand)
+    c, _ = ctx.wafer()
+    rel0 = ctx.tips_mid()[2] - c[2]
     for _ in range(400):
         c, w = ctx.wafer()
         dz = c[2] - T.SEAT_Z
-        if dz < 0.0003:
+        if dz < 0.0003 or rel0 - (ctx.tips_mid()[2] - c[2]) > 0.0005:
             break
-        step = 0.001 if dz > 0.012 else 0.0004
+        step = 0.001 if dz > 0.012 else (0.0004 if dz > 0.003 else 0.0002)
         corr = np.array([tgt[0] - c[0], tgt[1] - c[1], 0.0]) * 0.5
         p, _ = L.pose()
-        yield from L.move(p + corr - Z * min(step, dz + 0.0002), R, dur=1 / HZ)
+        yield from L.move(p + corr - Z * min(step, dz + 0.0002), R_ins, dur=1 / HZ)
+    # the arm lags its commands: hold the hand where it actually is now, so it does not keep pressing down after the
+    # wafer has bottomed out (which would slide the tips down its faces)
+    p_cmd, _ = L.pose()
+    yield from L.move(p_cmd + (ctx.tcp() - p_cmd) + Z * 0.0002, R_ins, dur=0.3)
     yield from wait(0.5)
     c, _ = ctx.wafer()
     log["seat_error_mm"] = round(float(c[2] - T.SEAT_Z) * 1000, 3)
@@ -245,7 +287,7 @@ def strategy(ctx, L, log):
     yield from set_gap(GAP_OPEN + 0.0005)
     yield from wait(0.5)
     p, _ = L.pose()
-    yield from L.move(p + Z * 0.06, R, dur=1.5)
+    yield from L.move(p + Z * 0.06, R_ins, dur=1.5)
     c, _ = ctx.wafer()
     log["wafer_after_release_mm"] = round(float(c[2] - T.SEAT_Z) * 1000, 3)
     stand = np.array([*T.STAND_XY, T.TOP])
@@ -336,7 +378,7 @@ def run(out_dir, max_steps=2400, record=True):
         snap(res.observation)
         if os.environ.get("DEMO_DEBUG") and ("grip_force_N" in log or ctx.ak.force("grip") > 0):
             wc, ws = ctx.wafer()
-            n = ctx.T._rot(ws.quat_xyzw)[:, 1]
+            n = ctx.T.wafer_normal(ws.quat_xyzw)
             tm = ctx.tips_mid()
             print(f"dbg {steps} grip {ctx.ak.force('grip'):.3f} gap {ctx.tip_gap()*1000:.3f} wafer_z {(wc[2]-ctx.T.SEAT_Z)*1000:.2f} "
                   f"tips_z_rel {(tm[2]-wc[2])*1000:.2f} tips_y_rel {(tm[1]-wc[1])*1000:.3f} tilt {math.degrees(math.acos(min(1, abs(n[1])))):.2f} "
@@ -352,12 +394,13 @@ def run(out_dir, max_steps=2400, record=True):
         if ended is not None and steps - ended >= 3 * HZ:
             break
     score = 1.0 if success else float(info.get("score", 0.0) or 0.0)
+    log["max_tip_depth_mm"] = round(float(ctx.T.S.get("max_tip_depth", 0.0)) * 1000, 2)
     try:
         m = ctx.T.measure(ctx.states())
         tips = ctx.T.tip_points()
         mid = (tips[0] + tips[1]) / 2
         _, qa = ctx.ak.body_pose("tweezers", "half_a")
-        ax = ctx.T._rot(qa) @ np.array([0.0, 0.0, -1.0])
+        ax = ctx.T.tweezer_axis(qa)
         log["final"] = {"tw_in_stand": bool(m["tw_in_stand"]), "robot_to_tweezers_mm": round(m["robot_to_tweezers"] * 1000, 1),
                         "tips_vs_stand_mm": [round(float(v) * 1000, 1) for v in (mid - np.array([*ctx.T.STAND_XY, ctx.T.TOP]))],
                         "tweezer_tilt_deg": round(math.degrees(math.acos(min(1.0, -ax[2]))), 2),

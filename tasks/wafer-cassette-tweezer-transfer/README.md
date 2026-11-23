@@ -59,13 +59,21 @@ Zero for the whole trial (latched), whatever follows:
 |---|---|---|
 | dropped: the wafer leaves the tips (they open, or it slips out) before it rests in a slot | when the wafer has been free of both tips for 3 control steps in a row, its position at the first free step: its centre more than 3 mm above the seated height (its top edge more than 3 mm, half a tip's width, above its neighbours'), or not inside either cassette | trial video (side view): the wafer drops or slides down after it leaves the tips |
 | the robot touched a wafer | any contact between the robot's fingers, gripper, link 4 or link 5 (either arm) and any wafer | trial video |
+| a tweezer tip on the wafer's face outside the edge zone | while the tips grip the wafer, any point of either tip paddle (its tip end and rows 4, 8 and 12 mm up, at its centre and both edges) lying on the wafer's face (within 1 mm of it) more than 6 mm inside the rim | trial video (side view: the tips pushed down more than their own width below the wafer's top edge), and the faces inspected for tip marks under a low-angle lamp after the trial |
 | another wafer moved or lifted | any other wafer 2 mm or more from its start | ruler / photo against the start photo; video |
 | the moved wafer touched the table | its lowest point within 1 mm of the table | trial video |
 
 `test_scoring.py` checks every level and each zero, with negative controls (held wafer, wrong slot, back in its own
 slot, across two slots, tilted, neighbour displaced, let go 20 mm above its slot, let go outside a cassette, robot
-touching a wafer, table touch, tips not clear) and the cases that must not count as a drop (let go resting, let go
-within 3 mm, a two-step contact flicker while carried).
+touching a wafer, a tip pressed 8 mm into the face, table touch, tips not clear) and the cases that must not count as a drop (let go resting, let go
+within 3 mm, a two-step contact flicker while carried, a grip 5 mm below the top edge).
+
+Edge zone and the grip: the tips are 6 mm wide and their paddles 12 mm long. Wafers lean in their pockets (about 2.2 to
+2.4 deg in the simulator), so the demo aims at the wafer's own top edge and turns the blades parallel to its faces; it
+sets the tip ends 4 mm below that edge (closed loop on the measured wafer, within 0.3 mm) before it squeezes, and while lowering it stops as
+soon as the tips start to slide down the faces, so a correct grip stays inside the 6 mm zone (the demo logs the deepest
+point, `max_tip_depth_mm`). The tips can physically reach deeper: between neighbours 4.76 mm apart the 0.7 mm tips can
+be pushed tens of millimetres down a face, hence the latched zero.
 
 `seated.png` (layout A, after the trial has scored 1.0: the empty left hand looks down at a slant from the robot's
 side, with its wrist camera) shows the moved wafer standing in its target slot of the far cassette between its two
@@ -87,8 +95,10 @@ cameras are the yam_arena station.
 
 ## Assumptions (no source gives these; measure before real trials)
 
-- Rib shape inside the cassette: root thickness = pitch - pocket flat = 3.74 mm, tapering to an assumed 1.8 mm at the
-  tip; side-comb teeth reach 1.9 mm inside the wafer's radius.
+- Rib shape inside the cassette: the 1.02 mm pocket flat is the floor of the bottom rails' grooves, where the wafer
+  rests (rib root 3.74 mm = pitch - pocket flat, then an assumed 1.8 mm above). The side combs guide the wafer: their
+  teeth reach 1.9 mm inside the wafer's radius and are 1.8 mm thick (2.96 mm gaps) as far out as 0.5 mm beyond the
+  wafer's edge, thickening to 3.74 mm only outside that.
 - Bottom rails 15 mm either side of the centre line, so a seated wafer's top edge is 1.9 mm under the cassette's top.
 - Tweezer leaf section 6 x 1.5 mm, 8 mm open tip gap, hinge spring about 1 N at the tips to close, 14 g.
 
@@ -102,6 +112,26 @@ cameras are the yam_arena station.
 - The tweezers are two rigid leaves on a hinge with an angular spring (a passive drive toward the sprung-open rest);
   the gripper's fingers squeeze the leaves 50 mm from the tips, and only contact friction holds the wafer.
 - The cassettes and the stand are fixed bodies (taped down in the real trial); wafers and tweezers are free.
+
+## Quaternion order (measured)
+
+Every rotation the scorer reads goes through one function, `quat_xyzw_to_matrix` in `task.py`, which takes (x, y, z, w).
+That is the order this stack hands over, measured in the simulator rather than assumed (Isaac Lab 3.0, which yam_arena
+uses, gives poses as x, y, z, w; earlier Isaac Lab versions used w, x, y, z):
+
+- A fixed part spawned at 90 deg about x, then 30 deg about z, read back through yam_arena's object states as
+  (0.683, 0.183, 0.183, 0.683), its spawn rotation written x, y, z, w. Read as x, y, z, w, all three body axes match
+  the intended rotation (0.0 deg error); read as w, x, y, z they are off by 60, 60 and 76 deg.
+- A tweezer leaf (artkit.body_pose, Isaac Lab's body_link_pose_w), spawned at 90 deg about z and standing in its
+  stand, read back as (-0.0045, 0.0045, 0.707, 0.7071): within 0.7 deg of its spawn as x, y, z, w, 90 deg off as
+  w, x, y, z. Physically, the tweezers stand tips down in the stand and the gripper squeezes their leaves along y; read
+  as w, x, y, z, that spawn would be a half turn about (0, 1, 1) and lay them on their side, tips along -y.
+- `quat_probe_task.py` and `quat_check.py` in this folder reproduce the measurement: run
+  `python quat_check.py OUT.json` and it prints both readbacks and the axis errors for each order.
+
+`test_scoring.py` checks the order and the poses that depend on it with these measured quaternions: the wafer's
+orientation (upright, lying flat, turned 30 deg), the tweezer tip positions (tips at the table in the stand, the 8 mm
+sprung-open gap) and the upright-stand test (upright, leaning 20 deg, lying, moving, off the slot, lifted).
 
 ## Real trials
 

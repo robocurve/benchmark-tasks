@@ -38,8 +38,12 @@ WAFER_MASS = SI_DENSITY * math.pi * WAFER_R**2 * WAFER_T_REAL  # real mass whate
 # -- assumptions ------------------------------------------------------------------------------------------------------
 RIB_ROOT = PITCH - POCKET_FLAT  # 3.74 mm
 RIB_TIP = 0.0018
-SIDE_ROOT_X = WAFER_R + 0.0015  # comb groove root, 1.5 mm outside the wafer edge
-TOOTH_DEPTH = 0.0034  # comb teeth reach 1.9 mm inside the wafer radius
+COMB_TIP_X = WAFER_R - 0.0019  # side-comb tooth tips reach 1.9 mm inside the wafer's radius
+COMB_STEP_X = WAFER_R + 0.0005  # the teeth thicken (narrow pocket) only beyond the wafer's edge: the wafer meets the
+#   side combs only where the gap between teeth is pitch - RIB_TIP; the 1.02 mm pocket flat is the floor of the bottom
+#   rails' grooves, where the wafer rests
+SIDE_ROOT_X = 2 * COMB_STEP_X - COMB_TIP_X  # comb groove root
+TOOTH_DEPTH = SIDE_ROOT_X - COMB_TIP_X
 COMB_Z = (0.016, 0.058)  # comb teeth height range above the table
 RAIL_X = 0.015  # bottom rails either side of the centre line; the wafer bears on their inner corners (|x| = 12 mm)
 RAIL_CONTACT_X = RAIL_X - 0.003
@@ -187,8 +191,8 @@ def write_cassette(path: Path) -> Path:
     zc, zh = (COMB_Z[0] + COMB_Z[1]) / 2, COMB_Z[1] - COMB_Z[0]
     rt = rail_top()
     for side, s in (("p", 1), ("n", -1)):
-        wall_x = s * (SIDE_ROOT_X + 0.003)
-        _box(stage, f"/cassette/side_{side}", (wall_x, 0, (CAS_H + 0.010) / 2), (0.006, inner, CAS_H - 0.010), PP_COLOR, pp)
+        wall_x = s * (SIDE_ROOT_X + 0.002)
+        _box(stage, f"/cassette/side_{side}", (wall_x, 0, (CAS_H + 0.010) / 2), (0.004, inner, CAS_H - 0.010), PP_COLOR, pp)
         for i, y in enumerate(ribs):
             for part, t, x0 in (("r", RIB_ROOT, SIDE_ROOT_X - TOOTH_DEPTH / 4), ("t", RIB_TIP, SIDE_ROOT_X - 3 * TOOTH_DEPTH / 4)):
                 _box(stage, f"/cassette/comb_{side}_{i:02d}{part}", (s * x0, y, zc), (TOOTH_DEPTH / 2, t, zh), PP_COLOR, pp)

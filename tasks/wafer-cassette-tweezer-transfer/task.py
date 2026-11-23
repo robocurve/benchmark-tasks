@@ -43,6 +43,8 @@ CLEAR = 0.050  # tweezer tips at least 50 mm from the wafer before any credit
 RELEASE_HIGH = 0.003  # parted from the tips with its top edge over 3 mm (half a tip's width) above its neighbours'
 PARTED_STEPS = 3  # free of the tips this many control steps in a row = parted (ignores one-step contact flicker)
 ROBOT_TOUCH = 1e-4  # N: any reported contact between a robot link and a wafer
+EDGE_ZONE = 0.006  # m: tweezer tips may touch a wafer face only within one tip width (6 mm) of its rim
+FACE_BAND = 0.001  # m: a tip point this close to the wafer's face plane (beyond its half thickness) is on the face
 UPRIGHT_DEG = 5.0
 RUN_LIMIT_STEPS = 2400
 SCORE_OVER = "end"
@@ -91,17 +93,51 @@ S: dict = {}
 def _reset():
     S.clear()
     S.update(was_held=False, parted_pos=None, checked=False, dropped=False, displaced=False, table=False,
-             robot=False, entered=False, free_steps=0, events=[])
+             robot=False, face=False, max_tip_depth=0.0, entered=False, free_steps=0, events=[])
 
 
 _reset()
 
 
-def _rot(q):
+def quat_xyzw_to_matrix(q):
+    """THE quaternion convention of this task, in one place: (x, y, z, w) -> 3x3 rotation matrix.
+
+    Measured in the installed stack (README, "Quaternion order"): yam_arena's object states (from the scene's
+    get_pose_w) and artkit.body_pose (Isaac Lab's body_link_pose_w) both hand the scorer the rotation as x, y, z, w; a
+    part spawned at 90 deg about x then 30 deg about z read back as (0.683, 0.183, 0.183, 0.683), its spawn rotation
+    written x, y, z, w, and every body axis matched within 0.0 deg, against 60-76 deg if read as w, x, y, z."""
     x, y, z, w = q
     return np.array([[1 - 2 * (y * y + z * z), 2 * (x * y - z * w), 2 * (x * z + y * w)],
                      [2 * (x * y + z * w), 1 - 2 * (x * x + z * z), 2 * (y * z - x * w)],
                      [2 * (x * z - y * w), 2 * (y * z + x * w), 1 - 2 * (x * x + y * y)]])
+
+
+def wafer_normal(quat_xyzw):
+    """The wafer's face normal (its body y axis, the disc's axis) in the world."""
+    return quat_xyzw_to_matrix(quat_xyzw)[:, 1]
+
+
+def upright_deg(n):
+    """Angle between the wafer's face normal and the slot axis (world y): 0 for a wafer standing in a slot."""
+    return math.degrees(math.acos(min(1.0, abs(float(n[1])))))
+
+
+def tip_point(pos, quat_xyzw, half):
+    """World position of a tweezer leaf's tip end (middle of the tip's width and thickness), from the leaf's body pose."""
+    return np.asarray(pos, float) + quat_xyzw_to_matrix(quat_xyzw) @ np.array(
+        P.half_point(half, P.TW_HINGE_GAP / 2 + P.TIP_T / 2, -P.TW_LEN))
+
+
+def tweezer_axis(quat_xyzw):
+    """Unit vector from the tweezers' back end toward the tips (leaf A's body -z) in the world."""
+    return quat_xyzw_to_matrix(quat_xyzw) @ np.array([0.0, 0.0, -1.0])
+
+
+def in_stand(tips_mid, axis, resting):
+    """Tweezers standing in their stand: tips inside the stand's slot and below its top, within 15 deg of tips-down,
+    at rest."""
+    return bool(abs(tips_mid[0] - STAND_XY[0]) < 0.008 and abs(tips_mid[1] - STAND_XY[1]) < 0.009
+                and tips_mid[2] < TOP + P.STAND[2] and axis[2] < -math.cos(math.radians(15)) and resting)
 
 
 def disk_points(c, n):
@@ -131,36 +167,61 @@ def in_footprint(c, p):
     return abs(p[0] - c[0]) < P.CAS_W / 2 and abs(p[1] - c[1]) < P.CAS_L / 2
 
 
+def tip_paddle_points():
+    """Points over both tip paddles' wafer-facing sides: the tip end and 3 rows up the 12 mm paddle, at the centre and
+    both 6 mm edges (env frame)."""
+    out = []
+    for half in ("half_a", "half_b"):
+        p, q = ak.body_pose("tweezers", half)
+        Rq = quat_xyzw_to_matrix(q)
+        for dz in (0.0, 0.004, 0.008, 0.012):
+            c = np.array(P.half_point(half, P.TW_HINGE_GAP / 2, -P.TW_LEN + dz))
+            for dy in (-P.TIP_W / 2, 0.0, P.TIP_W / 2):
+                out.append(p + Rq @ (c + np.array([0.0, dy, 0.0])))
+    return out
+
+
+def tip_depth(w_pos, n):
+    """Deepest point of a tip paddle lying on the wafer's face, measured inward from the rim (0 if none)."""
+    best = 0.0
+    for t in tip_paddle_points():
+        v = t - w_pos
+        a = float(v @ n)
+        r = float(np.linalg.norm(v - n * a))
+        if r < P.WAFER_R and abs(a) < P.WAFER_T / 2 + FACE_BAND:
+            best = max(best, P.WAFER_R - r)
+    return best
+
+
 def tip_points():
     out = []
     for half in ("half_a", "half_b"):
         p, q = ak.body_pose("tweezers", half)
-        out.append(p + _rot(q) @ np.array(P.half_point(half, P.TW_HINGE_GAP / 2 + P.TIP_T / 2, -P.TW_LEN)))
+        out.append(tip_point(p, q, half))
     return out
 
 
 def measure(objects) -> dict:
     """Everything the scorer needs, from the simulator state (and the contact sensor)."""
     w = objects["wafer"]
-    n = _rot(w.quat_xyzw)[:, 1]  # disc axis (faces' normal) is the body's y
+    n = wafer_normal(w.quat_xyzw)
     low, e1, e2 = disk_points(w.pos, n)
     m = dict(wafer_pos=np.asarray(w.pos, float), wafer_vz=float(w.lin_vel[2]), wafer_speed=float(np.linalg.norm(w.lin_vel)),
              wafer_low=low, edge_y=(float(e1[1]), float(e2[1])), edge_x=(float(e1[0]), float(e2[0])),
-             upright_deg=math.degrees(math.acos(min(1.0, abs(n[1])))))
+             upright_deg=upright_deg(n))
     m["nb_moved"] = max(float(np.linalg.norm(np.asarray(objects[k].pos) - np.array(seat_pos(c, j))))
                         for k, (c, j) in NEIGHBOURS.items())
     env = ak.env() is not None
     m["grip_N"] = ak.force("grip") if env else 0.0
     m["robot_touch_N"] = max(ak.force("robot_wafer"), ak.force("robot_nb")) if env else 0.0
+    m["tip_depth"] = tip_depth(np.asarray(w.pos, float), n) if (env and m["grip_N"] > 0.02) else 0.0
     if env:
         tips = tip_points()
         m["tips_to_wafer"] = min(disk_dist(t, w.pos, n) for t in tips)
         mid = (tips[0] + tips[1]) / 2
         _, qa = ak.body_pose("tweezers", "half_a")
-        axis = _rot(qa) @ np.array([0.0, 0.0, -1.0])
-        m["tw_in_stand"] = bool(abs(mid[0] - STAND_XY[0]) < 0.008 and abs(mid[1] - STAND_XY[1]) < 0.009
-                                and mid[2] < TOP + P.STAND[2] and axis[2] < -math.cos(math.radians(15))
-                                and objects["tweezers"].resting(0.01, 0.2))
+        axis = tweezer_axis(qa)
+        m["tw_in_stand"] = in_stand(mid, axis, objects["tweezers"].resting(0.01, 0.2))
         m["robot_to_tweezers"] = _robot_to_tweezers(mid, axis)
     else:
         m.update(tips_to_wafer=1.0, tw_in_stand=False, robot_to_tweezers=1.0)
@@ -200,6 +261,10 @@ def ladder(m: dict, s: dict) -> dict:
         if not in_cassette or q[2] - SEAT_Z > RELEASE_HIGH:
             s["dropped"] = True
             s["events"].append("dropped: left the tips before resting in a slot")
+    s["max_tip_depth"] = max(s["max_tip_depth"], m["tip_depth"])
+    if m["tip_depth"] > EDGE_ZONE and not s["face"]:
+        s["face"] = True
+        s["events"].append("a tweezer tip touched the wafer's face more than 6 mm inside its rim")
     if m["robot_touch_N"] > ROBOT_TOUCH and not s["robot"]:
         s["robot"] = True
         s["events"].append("the robot touched a wafer (not with the tweezers)")
@@ -217,7 +282,7 @@ def ladder(m: dict, s: dict) -> dict:
     resting = m["wafer_speed"] < 0.005 and s["free_steps"] >= 10
     seated = in_target and abs(p[2] - SEAT_Z) <= SEATED_TOL and resting
     clear = (not held) and m["tips_to_wafer"] >= CLEAR
-    zero = s["dropped"] or s["displaced"] or s["table"] or s["robot"]
+    zero = s["dropped"] or s["displaced"] or s["table"] or s["robot"] or s["face"]
     if zero or not clear:
         score = 0.0
     elif seated and m["tw_in_stand"] and m["robot_to_tweezers"] >= 0.03:
