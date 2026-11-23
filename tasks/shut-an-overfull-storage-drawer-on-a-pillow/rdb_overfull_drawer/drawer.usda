@@ -1,0 +1,1349 @@
+#usda 1.0
+(
+    defaultPrim = "Fixture"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Fixture"
+{
+    def Scope "Actors"
+    {
+        def Xform "drawer" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysxContactReportAPI", "PhysicsMassAPI"]
+        )
+        {
+            float physics:mass = 0.5
+            bool physics:rigidBodyEnabled = 1
+            float physxContactReport:threshold = 0
+            float physxRigidBody:maxDepenetrationVelocity = 1
+            float physxRigidBody:sleepThreshold = 0
+            int physxRigidBody:solverPositionIterationCount = 32
+            int physxRigidBody:solverVelocityIterationCount = 8
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:translate = (0.17, 0, 0.7475)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+            def Cube "front" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                rel material:binding = </Fixture/Materials/drawer>
+                rel material:binding:physics = </Fixture/Materials/drawer>
+                float physxCollision:contactOffset = 0.001
+                float physxCollision:restOffset = 0
+                double size = 2
+                float3 xformOp:scale = (0.004, 0.1715, 0.068)
+                double3 xformOp:translate = (0.004, 0, 0.08)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+            def Cube "pull" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                rel material:binding = </Fixture/Materials/drawer>
+                rel material:binding:physics = </Fixture/Materials/drawer>
+                float physxCollision:contactOffset = 0.001
+                float physxCollision:restOffset = 0
+                double size = 2
+                float3 xformOp:scale = (0.006, 0.06, 0.004)
+                double3 xformOp:translate = (-0.006, 0, 0.132)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+            def Cube "floor" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                rel material:binding = </Fixture/Materials/drawer>
+                rel material:binding:physics = </Fixture/Materials/drawer>
+                float physxCollision:contactOffset = 0.001
+                float physxCollision:restOffset = 0
+                double size = 2
+                float3 xformOp:scale = (0.2095, 0.159, 0.004)
+                double3 xformOp:translate = (0.2175, 0, 0.018)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+            def Cube "wall_left" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                rel material:binding = </Fixture/Materials/drawer>
+                rel material:binding:physics = </Fixture/Materials/drawer>
+                float physxCollision:contactOffset = 0.001
+                float physxCollision:restOffset = 0
+                double size = 2
+                float3 xformOp:scale = (0.2095, 0.004, 0.062)
+                double3 xformOp:translate = (0.2175, 0.155, 0.084)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+            def Cube "wall_right" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                rel material:binding = </Fixture/Materials/drawer>
+                rel material:binding:physics = </Fixture/Materials/drawer>
+                float physxCollision:contactOffset = 0.001
+                float physxCollision:restOffset = 0
+                double size = 2
+                float3 xformOp:scale = (0.2095, 0.004, 0.062)
+                double3 xformOp:translate = (0.2175, -0.155, 0.084)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+            def Cube "wall_back" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                rel material:binding = </Fixture/Materials/drawer>
+                rel material:binding:physics = </Fixture/Materials/drawer>
+                float physxCollision:contactOffset = 0.001
+                float physxCollision:restOffset = 0
+                double size = 2
+                float3 xformOp:scale = (0.0015, 0.151, 0.062)
+                double3 xformOp:translate = (0.4255, 0, 0.084)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+        }
+
+        def Xform "pillow_base" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysxContactReportAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+        )
+        {
+            rel physics:filteredPairs = [
+                </Fixture/Actors/pad_0_l>,
+                </Fixture/Actors/pad_0_r>,
+                </Fixture/Actors/pad_1_l>,
+                </Fixture/Actors/pad_1_r>,
+                </Fixture/Actors/pad_2_l>,
+                </Fixture/Actors/pad_2_r>,
+                </Fixture/Actors/pad_3_l>,
+                </Fixture/Actors/pad_3_r>,
+                </Fixture/Actors/pad_4_l>,
+                </Fixture/Actors/pad_4_r>,
+                </Fixture/Actors/pad_5_l>,
+                </Fixture/Actors/pad_5_r>,
+                </Fixture/Actors/pad_6_l>,
+                </Fixture/Actors/pad_6_r>,
+                </Fixture/Actors/pad_7_l>,
+                </Fixture/Actors/pad_7_r>,
+            ]
+            float physics:mass = 0.085
+            bool physics:rigidBodyEnabled = 1
+            float physxContactReport:threshold = 0
+            float physxRigidBody:maxDepenetrationVelocity = 1
+            float physxRigidBody:sleepThreshold = 0
+            int physxRigidBody:solverPositionIterationCount = 32
+            int physxRigidBody:solverVelocityIterationCount = 8
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:translate = (0.386, 0, 0.77)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+            def Cube "slab" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                rel material:binding = </Fixture/Materials/fabric_a>
+                rel material:binding:physics = </Fixture/Materials/fabric_a>
+                float physxCollision:contactOffset = 0.001
+                float physxCollision:restOffset = 0
+                double size = 2
+                float3 xformOp:scale = (0.205, 0.148, 0.01)
+                double3 xformOp:translate = (0, 0, 0.01)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+        }
+
+        def Xform "pad_0_l" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysxContactReportAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+        )
+        {
+            rel physics:filteredPairs = [
+                </Fixture/Actors/pad_0_r>,
+                </Fixture/Actors/pad_1_l>,
+                </Fixture/Actors/pad_1_r>,
+                </Fixture/Actors/pad_2_l>,
+                </Fixture/Actors/pad_2_r>,
+                </Fixture/Actors/pad_3_l>,
+                </Fixture/Actors/pad_3_r>,
+                </Fixture/Actors/pad_4_l>,
+                </Fixture/Actors/pad_4_r>,
+                </Fixture/Actors/pad_5_l>,
+                </Fixture/Actors/pad_5_r>,
+                </Fixture/Actors/pad_6_l>,
+                </Fixture/Actors/pad_6_r>,
+                </Fixture/Actors/pad_7_l>,
+                </Fixture/Actors/pad_7_r>,
+            ]
+            float physics:mass = 0.015
+            bool physics:rigidBodyEnabled = 1
+            float physxContactReport:threshold = 0
+            float physxRigidBody:maxDepenetrationVelocity = 1
+            float physxRigidBody:sleepThreshold = 0
+            int physxRigidBody:solverPositionIterationCount = 32
+            int physxRigidBody:solverVelocityIterationCount = 8
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:translate = (0.206625, 0.0745, 0.888)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+            def Cube "pad" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                rel material:binding = </Fixture/Materials/fabric_b>
+                rel material:binding:physics = </Fixture/Materials/fabric_b>
+                float physxCollision:contactOffset = 0.001
+                float physxCollision:restOffset = 0
+                double size = 2
+                float3 xformOp:scale = (0.024, 0.0715, 0.0125)
+                double3 xformOp:translate = (0, 0, -0.0125)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+        }
+
+        def Xform "pad_0_r" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysxContactReportAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+        )
+        {
+            rel physics:filteredPairs = [
+                </Fixture/Actors/pad_1_l>,
+                </Fixture/Actors/pad_1_r>,
+                </Fixture/Actors/pad_2_l>,
+                </Fixture/Actors/pad_2_r>,
+                </Fixture/Actors/pad_3_l>,
+                </Fixture/Actors/pad_3_r>,
+                </Fixture/Actors/pad_4_l>,
+                </Fixture/Actors/pad_4_r>,
+                </Fixture/Actors/pad_5_l>,
+                </Fixture/Actors/pad_5_r>,
+                </Fixture/Actors/pad_6_l>,
+                </Fixture/Actors/pad_6_r>,
+                </Fixture/Actors/pad_7_l>,
+                </Fixture/Actors/pad_7_r>,
+            ]
+            float physics:mass = 0.015
+            bool physics:rigidBodyEnabled = 1
+            float physxContactReport:threshold = 0
+            float physxRigidBody:maxDepenetrationVelocity = 1
+            float physxRigidBody:sleepThreshold = 0
+            int physxRigidBody:solverPositionIterationCount = 32
+            int physxRigidBody:solverVelocityIterationCount = 8
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:translate = (0.206625, -0.0745, 0.888)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+            def Cube "pad" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                rel material:binding = </Fixture/Materials/fabric_a>
+                rel material:binding:physics = </Fixture/Materials/fabric_a>
+                float physxCollision:contactOffset = 0.001
+                float physxCollision:restOffset = 0
+                double size = 2
+                float3 xformOp:scale = (0.024, 0.0715, 0.0125)
+                double3 xformOp:translate = (0, 0, -0.0125)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+        }
+
+        def Xform "pad_1_l" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysxContactReportAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+        )
+        {
+            rel physics:filteredPairs = [
+                </Fixture/Actors/pad_1_r>,
+                </Fixture/Actors/pad_2_l>,
+                </Fixture/Actors/pad_2_r>,
+                </Fixture/Actors/pad_3_l>,
+                </Fixture/Actors/pad_3_r>,
+                </Fixture/Actors/pad_4_l>,
+                </Fixture/Actors/pad_4_r>,
+                </Fixture/Actors/pad_5_l>,
+                </Fixture/Actors/pad_5_r>,
+                </Fixture/Actors/pad_6_l>,
+                </Fixture/Actors/pad_6_r>,
+                </Fixture/Actors/pad_7_l>,
+                </Fixture/Actors/pad_7_r>,
+            ]
+            float physics:mass = 0.015
+            bool physics:rigidBodyEnabled = 1
+            float physxContactReport:threshold = 0
+            float physxRigidBody:maxDepenetrationVelocity = 1
+            float physxRigidBody:sleepThreshold = 0
+            int physxRigidBody:solverPositionIterationCount = 32
+            int physxRigidBody:solverVelocityIterationCount = 8
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:translate = (0.257875, 0.0745, 0.91)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+            def Cube "pad" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                rel material:binding = </Fixture/Materials/fabric_a>
+                rel material:binding:physics = </Fixture/Materials/fabric_a>
+                float physxCollision:contactOffset = 0.001
+                float physxCollision:restOffset = 0
+                double size = 2
+                float3 xformOp:scale = (0.024, 0.0715, 0.0125)
+                double3 xformOp:translate = (0, 0, -0.0125)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+        }
+
+        def Xform "pad_1_r" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysxContactReportAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+        )
+        {
+            rel physics:filteredPairs = [
+                </Fixture/Actors/pad_2_l>,
+                </Fixture/Actors/pad_2_r>,
+                </Fixture/Actors/pad_3_l>,
+                </Fixture/Actors/pad_3_r>,
+                </Fixture/Actors/pad_4_l>,
+                </Fixture/Actors/pad_4_r>,
+                </Fixture/Actors/pad_5_l>,
+                </Fixture/Actors/pad_5_r>,
+                </Fixture/Actors/pad_6_l>,
+                </Fixture/Actors/pad_6_r>,
+                </Fixture/Actors/pad_7_l>,
+                </Fixture/Actors/pad_7_r>,
+            ]
+            float physics:mass = 0.015
+            bool physics:rigidBodyEnabled = 1
+            float physxContactReport:threshold = 0
+            float physxRigidBody:maxDepenetrationVelocity = 1
+            float physxRigidBody:sleepThreshold = 0
+            int physxRigidBody:solverPositionIterationCount = 32
+            int physxRigidBody:solverVelocityIterationCount = 8
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:translate = (0.257875, -0.0745, 0.91)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+            def Cube "pad" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                rel material:binding = </Fixture/Materials/fabric_b>
+                rel material:binding:physics = </Fixture/Materials/fabric_b>
+                float physxCollision:contactOffset = 0.001
+                float physxCollision:restOffset = 0
+                double size = 2
+                float3 xformOp:scale = (0.024, 0.0715, 0.0125)
+                double3 xformOp:translate = (0, 0, -0.0125)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+        }
+
+        def Xform "pad_2_l" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysxContactReportAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+        )
+        {
+            rel physics:filteredPairs = [
+                </Fixture/Actors/pad_2_r>,
+                </Fixture/Actors/pad_3_l>,
+                </Fixture/Actors/pad_3_r>,
+                </Fixture/Actors/pad_4_l>,
+                </Fixture/Actors/pad_4_r>,
+                </Fixture/Actors/pad_5_l>,
+                </Fixture/Actors/pad_5_r>,
+                </Fixture/Actors/pad_6_l>,
+                </Fixture/Actors/pad_6_r>,
+                </Fixture/Actors/pad_7_l>,
+                </Fixture/Actors/pad_7_r>,
+            ]
+            float physics:mass = 0.015
+            bool physics:rigidBodyEnabled = 1
+            float physxContactReport:threshold = 0
+            float physxRigidBody:maxDepenetrationVelocity = 1
+            float physxRigidBody:sleepThreshold = 0
+            int physxRigidBody:solverPositionIterationCount = 32
+            int physxRigidBody:solverVelocityIterationCount = 8
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:translate = (0.309125, 0.0745, 0.92)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+            def Cube "pad" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                rel material:binding = </Fixture/Materials/fabric_b>
+                rel material:binding:physics = </Fixture/Materials/fabric_b>
+                float physxCollision:contactOffset = 0.001
+                float physxCollision:restOffset = 0
+                double size = 2
+                float3 xformOp:scale = (0.024, 0.0715, 0.0125)
+                double3 xformOp:translate = (0, 0, -0.0125)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+        }
+
+        def Xform "pad_2_r" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysxContactReportAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+        )
+        {
+            rel physics:filteredPairs = [
+                </Fixture/Actors/pad_3_l>,
+                </Fixture/Actors/pad_3_r>,
+                </Fixture/Actors/pad_4_l>,
+                </Fixture/Actors/pad_4_r>,
+                </Fixture/Actors/pad_5_l>,
+                </Fixture/Actors/pad_5_r>,
+                </Fixture/Actors/pad_6_l>,
+                </Fixture/Actors/pad_6_r>,
+                </Fixture/Actors/pad_7_l>,
+                </Fixture/Actors/pad_7_r>,
+            ]
+            float physics:mass = 0.015
+            bool physics:rigidBodyEnabled = 1
+            float physxContactReport:threshold = 0
+            float physxRigidBody:maxDepenetrationVelocity = 1
+            float physxRigidBody:sleepThreshold = 0
+            int physxRigidBody:solverPositionIterationCount = 32
+            int physxRigidBody:solverVelocityIterationCount = 8
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:translate = (0.309125, -0.0745, 0.92)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+            def Cube "pad" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                rel material:binding = </Fixture/Materials/fabric_a>
+                rel material:binding:physics = </Fixture/Materials/fabric_a>
+                float physxCollision:contactOffset = 0.001
+                float physxCollision:restOffset = 0
+                double size = 2
+                float3 xformOp:scale = (0.024, 0.0715, 0.0125)
+                double3 xformOp:translate = (0, 0, -0.0125)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+        }
+
+        def Xform "pad_3_l" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysxContactReportAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+        )
+        {
+            rel physics:filteredPairs = [
+                </Fixture/Actors/pad_3_r>,
+                </Fixture/Actors/pad_4_l>,
+                </Fixture/Actors/pad_4_r>,
+                </Fixture/Actors/pad_5_l>,
+                </Fixture/Actors/pad_5_r>,
+                </Fixture/Actors/pad_6_l>,
+                </Fixture/Actors/pad_6_r>,
+                </Fixture/Actors/pad_7_l>,
+                </Fixture/Actors/pad_7_r>,
+            ]
+            float physics:mass = 0.015
+            bool physics:rigidBodyEnabled = 1
+            float physxContactReport:threshold = 0
+            float physxRigidBody:maxDepenetrationVelocity = 1
+            float physxRigidBody:sleepThreshold = 0
+            int physxRigidBody:solverPositionIterationCount = 32
+            int physxRigidBody:solverVelocityIterationCount = 8
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:translate = (0.360375, 0.0745, 0.92)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+            def Cube "pad" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                rel material:binding = </Fixture/Materials/fabric_a>
+                rel material:binding:physics = </Fixture/Materials/fabric_a>
+                float physxCollision:contactOffset = 0.001
+                float physxCollision:restOffset = 0
+                double size = 2
+                float3 xformOp:scale = (0.024, 0.0715, 0.0125)
+                double3 xformOp:translate = (0, 0, -0.0125)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+        }
+
+        def Xform "pad_3_r" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysxContactReportAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+        )
+        {
+            rel physics:filteredPairs = [
+                </Fixture/Actors/pad_4_l>,
+                </Fixture/Actors/pad_4_r>,
+                </Fixture/Actors/pad_5_l>,
+                </Fixture/Actors/pad_5_r>,
+                </Fixture/Actors/pad_6_l>,
+                </Fixture/Actors/pad_6_r>,
+                </Fixture/Actors/pad_7_l>,
+                </Fixture/Actors/pad_7_r>,
+            ]
+            float physics:mass = 0.015
+            bool physics:rigidBodyEnabled = 1
+            float physxContactReport:threshold = 0
+            float physxRigidBody:maxDepenetrationVelocity = 1
+            float physxRigidBody:sleepThreshold = 0
+            int physxRigidBody:solverPositionIterationCount = 32
+            int physxRigidBody:solverVelocityIterationCount = 8
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:translate = (0.360375, -0.0745, 0.92)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+            def Cube "pad" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                rel material:binding = </Fixture/Materials/fabric_b>
+                rel material:binding:physics = </Fixture/Materials/fabric_b>
+                float physxCollision:contactOffset = 0.001
+                float physxCollision:restOffset = 0
+                double size = 2
+                float3 xformOp:scale = (0.024, 0.0715, 0.0125)
+                double3 xformOp:translate = (0, 0, -0.0125)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+        }
+
+        def Xform "pad_4_l" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysxContactReportAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+        )
+        {
+            rel physics:filteredPairs = [
+                </Fixture/Actors/pad_4_r>,
+                </Fixture/Actors/pad_5_l>,
+                </Fixture/Actors/pad_5_r>,
+                </Fixture/Actors/pad_6_l>,
+                </Fixture/Actors/pad_6_r>,
+                </Fixture/Actors/pad_7_l>,
+                </Fixture/Actors/pad_7_r>,
+            ]
+            float physics:mass = 0.015
+            bool physics:rigidBodyEnabled = 1
+            float physxContactReport:threshold = 0
+            float physxRigidBody:maxDepenetrationVelocity = 1
+            float physxRigidBody:sleepThreshold = 0
+            int physxRigidBody:solverPositionIterationCount = 32
+            int physxRigidBody:solverVelocityIterationCount = 8
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:translate = (0.411625, 0.0745, 0.8987)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+            def Cube "pad" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                rel material:binding = </Fixture/Materials/fabric_b>
+                rel material:binding:physics = </Fixture/Materials/fabric_b>
+                float physxCollision:contactOffset = 0.001
+                float physxCollision:restOffset = 0
+                double size = 2
+                float3 xformOp:scale = (0.024, 0.0715, 0.0125)
+                double3 xformOp:translate = (0, 0, -0.0125)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+        }
+
+        def Xform "pad_4_r" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysxContactReportAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+        )
+        {
+            rel physics:filteredPairs = [
+                </Fixture/Actors/pad_5_l>,
+                </Fixture/Actors/pad_5_r>,
+                </Fixture/Actors/pad_6_l>,
+                </Fixture/Actors/pad_6_r>,
+                </Fixture/Actors/pad_7_l>,
+                </Fixture/Actors/pad_7_r>,
+            ]
+            float physics:mass = 0.015
+            bool physics:rigidBodyEnabled = 1
+            float physxContactReport:threshold = 0
+            float physxRigidBody:maxDepenetrationVelocity = 1
+            float physxRigidBody:sleepThreshold = 0
+            int physxRigidBody:solverPositionIterationCount = 32
+            int physxRigidBody:solverVelocityIterationCount = 8
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:translate = (0.411625, -0.0745, 0.8987)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+            def Cube "pad" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                rel material:binding = </Fixture/Materials/fabric_a>
+                rel material:binding:physics = </Fixture/Materials/fabric_a>
+                float physxCollision:contactOffset = 0.001
+                float physxCollision:restOffset = 0
+                double size = 2
+                float3 xformOp:scale = (0.024, 0.0715, 0.0125)
+                double3 xformOp:translate = (0, 0, -0.0125)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+        }
+
+        def Xform "pad_5_l" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysxContactReportAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+        )
+        {
+            rel physics:filteredPairs = [
+                </Fixture/Actors/pad_5_r>,
+                </Fixture/Actors/pad_6_l>,
+                </Fixture/Actors/pad_6_r>,
+                </Fixture/Actors/pad_7_l>,
+                </Fixture/Actors/pad_7_r>,
+            ]
+            float physics:mass = 0.015
+            bool physics:rigidBodyEnabled = 1
+            float physxContactReport:threshold = 0
+            float physxRigidBody:maxDepenetrationVelocity = 1
+            float physxRigidBody:sleepThreshold = 0
+            int physxRigidBody:solverPositionIterationCount = 32
+            int physxRigidBody:solverVelocityIterationCount = 8
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:translate = (0.462875, 0.0745, 0.8987)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+            def Cube "pad" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                rel material:binding = </Fixture/Materials/fabric_a>
+                rel material:binding:physics = </Fixture/Materials/fabric_a>
+                float physxCollision:contactOffset = 0.001
+                float physxCollision:restOffset = 0
+                double size = 2
+                float3 xformOp:scale = (0.024, 0.0715, 0.0125)
+                double3 xformOp:translate = (0, 0, -0.0125)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+        }
+
+        def Xform "pad_5_r" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysxContactReportAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+        )
+        {
+            rel physics:filteredPairs = [
+                </Fixture/Actors/pad_6_l>,
+                </Fixture/Actors/pad_6_r>,
+                </Fixture/Actors/pad_7_l>,
+                </Fixture/Actors/pad_7_r>,
+            ]
+            float physics:mass = 0.015
+            bool physics:rigidBodyEnabled = 1
+            float physxContactReport:threshold = 0
+            float physxRigidBody:maxDepenetrationVelocity = 1
+            float physxRigidBody:sleepThreshold = 0
+            int physxRigidBody:solverPositionIterationCount = 32
+            int physxRigidBody:solverVelocityIterationCount = 8
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:translate = (0.462875, -0.0745, 0.8987)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+            def Cube "pad" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                rel material:binding = </Fixture/Materials/fabric_b>
+                rel material:binding:physics = </Fixture/Materials/fabric_b>
+                float physxCollision:contactOffset = 0.001
+                float physxCollision:restOffset = 0
+                double size = 2
+                float3 xformOp:scale = (0.024, 0.0715, 0.0125)
+                double3 xformOp:translate = (0, 0, -0.0125)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+        }
+
+        def Xform "pad_6_l" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysxContactReportAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+        )
+        {
+            rel physics:filteredPairs = [
+                </Fixture/Actors/pad_6_r>,
+                </Fixture/Actors/pad_7_l>,
+                </Fixture/Actors/pad_7_r>,
+            ]
+            float physics:mass = 0.015
+            bool physics:rigidBodyEnabled = 1
+            float physxContactReport:threshold = 0
+            float physxRigidBody:maxDepenetrationVelocity = 1
+            float physxRigidBody:sleepThreshold = 0
+            int physxRigidBody:solverPositionIterationCount = 32
+            int physxRigidBody:solverVelocityIterationCount = 8
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:translate = (0.514125, 0.0745, 0.8987)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+            def Cube "pad" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                rel material:binding = </Fixture/Materials/fabric_b>
+                rel material:binding:physics = </Fixture/Materials/fabric_b>
+                float physxCollision:contactOffset = 0.001
+                float physxCollision:restOffset = 0
+                double size = 2
+                float3 xformOp:scale = (0.024, 0.0715, 0.0125)
+                double3 xformOp:translate = (0, 0, -0.0125)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+        }
+
+        def Xform "pad_6_r" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysxContactReportAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+        )
+        {
+            rel physics:filteredPairs = [
+                </Fixture/Actors/pad_7_l>,
+                </Fixture/Actors/pad_7_r>,
+            ]
+            float physics:mass = 0.015
+            bool physics:rigidBodyEnabled = 1
+            float physxContactReport:threshold = 0
+            float physxRigidBody:maxDepenetrationVelocity = 1
+            float physxRigidBody:sleepThreshold = 0
+            int physxRigidBody:solverPositionIterationCount = 32
+            int physxRigidBody:solverVelocityIterationCount = 8
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:translate = (0.514125, -0.0745, 0.8987)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+            def Cube "pad" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                rel material:binding = </Fixture/Materials/fabric_a>
+                rel material:binding:physics = </Fixture/Materials/fabric_a>
+                float physxCollision:contactOffset = 0.001
+                float physxCollision:restOffset = 0
+                double size = 2
+                float3 xformOp:scale = (0.024, 0.0715, 0.0125)
+                double3 xformOp:translate = (0, 0, -0.0125)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+        }
+
+        def Xform "pad_7_l" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysxContactReportAPI", "PhysicsMassAPI", "PhysicsFilteredPairsAPI"]
+        )
+        {
+            rel physics:filteredPairs = [
+                </Fixture/Actors/pad_7_r>,
+            ]
+            float physics:mass = 0.015
+            bool physics:rigidBodyEnabled = 1
+            float physxContactReport:threshold = 0
+            float physxRigidBody:maxDepenetrationVelocity = 1
+            float physxRigidBody:sleepThreshold = 0
+            int physxRigidBody:solverPositionIterationCount = 32
+            int physxRigidBody:solverVelocityIterationCount = 8
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:translate = (0.565375, 0.0745, 0.888)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+            def Cube "pad" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                rel material:binding = </Fixture/Materials/fabric_a>
+                rel material:binding:physics = </Fixture/Materials/fabric_a>
+                float physxCollision:contactOffset = 0.001
+                float physxCollision:restOffset = 0
+                double size = 2
+                float3 xformOp:scale = (0.024, 0.0715, 0.0125)
+                double3 xformOp:translate = (0, 0, -0.0125)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+        }
+
+        def Xform "pad_7_r" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysxRigidBodyAPI", "PhysxContactReportAPI", "PhysicsMassAPI"]
+        )
+        {
+            float physics:mass = 0.015
+            bool physics:rigidBodyEnabled = 1
+            float physxContactReport:threshold = 0
+            float physxRigidBody:maxDepenetrationVelocity = 1
+            float physxRigidBody:sleepThreshold = 0
+            int physxRigidBody:solverPositionIterationCount = 32
+            int physxRigidBody:solverVelocityIterationCount = 8
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:translate = (0.565375, -0.0745, 0.888)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+            def Cube "pad" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                rel material:binding = </Fixture/Materials/fabric_b>
+                rel material:binding:physics = </Fixture/Materials/fabric_b>
+                float physxCollision:contactOffset = 0.001
+                float physxCollision:restOffset = 0
+                double size = 2
+                float3 xformOp:scale = (0.024, 0.0715, 0.0125)
+                double3 xformOp:translate = (0, 0, -0.0125)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+        }
+
+    }
+
+    def Scope "Static"
+    {
+        def Cube "top" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </Fixture/Materials/frame>
+            rel material:binding:physics = </Fixture/Materials/frame>
+            float physxCollision:contactOffset = 0.001
+            float physxCollision:restOffset = 0
+            double size = 2
+            float3 xformOp:scale = (0.216, 0.1825, 0.0115)
+            double3 xformOp:translate = (0.606, 0, 0.911)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "side_left" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </Fixture/Materials/frame>
+            rel material:binding:physics = </Fixture/Materials/frame>
+            float physxCollision:contactOffset = 0.001
+            float physxCollision:restOffset = 0
+            double size = 2
+            float3 xformOp:scale = (0.216, 0.004, 0.076)
+            double3 xformOp:translate = (0.606, 0.1785, 0.8235)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "side_right" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </Fixture/Materials/frame>
+            rel material:binding:physics = </Fixture/Materials/frame>
+            float physxCollision:contactOffset = 0.001
+            float physxCollision:restOffset = 0
+            double size = 2
+            float3 xformOp:scale = (0.216, 0.004, 0.076)
+            double3 xformOp:translate = (0.606, -0.1785, 0.8235)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "back" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </Fixture/Materials/frame>
+            rel material:binding:physics = </Fixture/Materials/frame>
+            float physxCollision:contactOffset = 0.001
+            float physxCollision:restOffset = 0
+            double size = 2
+            float3 xformOp:scale = (0.001, 0.1745, 0.076)
+            double3 xformOp:translate = (0.821, 0, 0.8235)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "base" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </Fixture/Materials/frame>
+            rel material:binding:physics = </Fixture/Materials/frame>
+            float physxCollision:contactOffset = 0.001
+            float physxCollision:restOffset = 0
+            double size = 2
+            float3 xformOp:scale = (0.216, 0.1745, 0.005)
+            double3 xformOp:translate = (0.606, 0, 0.7525)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+    }
+
+    def Scope "Joints"
+    {
+        def PhysicsPrismaticJoint "drawer_slide" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 30000
+            float drive:linear:physics:maxForce = 3
+            float drive:linear:physics:stiffness = 0
+            float drive:linear:physics:targetPosition = 0
+            float drive:linear:physics:targetVelocity = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "X"
+            rel physics:body1 = </Fixture/Actors/drawer>
+            bool physics:collisionEnabled = 0
+            uniform bool physics:excludeFromArticulation = 1
+            point3f physics:localPos0 = (0.39, 0, 0.7475)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0, 0, 0.70710677, 0.70710677)
+            quatf physics:localRot1 = (0, 0, 0.70710677, 0.70710677)
+            float physics:lowerLimit = 0
+            float physics:upperLimit = 0.3
+        }
+
+        def PhysicsPrismaticJoint "spring_0_l" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 6
+            float drive:linear:physics:stiffness = 60
+            float drive:linear:physics:targetPosition = 0.004
+            float drive:linear:physics:targetVelocity = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "X"
+            rel physics:body0 = </Fixture/Actors/pillow_base>
+            rel physics:body1 = </Fixture/Actors/pad_0_l>
+            bool physics:collisionEnabled = 0
+            uniform bool physics:excludeFromArticulation = 1
+            point3f physics:localPos0 = (-0.179375, 0.0745, 0.118)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0, 0.70710677, 0, 0.70710677)
+            quatf physics:localRot1 = (0, 0.70710677, 0, 0.70710677)
+            float physics:lowerLimit = -0.06
+            float physics:upperLimit = 0
+        }
+
+        def PhysicsPrismaticJoint "spring_0_r" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 6
+            float drive:linear:physics:stiffness = 60
+            float drive:linear:physics:targetPosition = 0.004
+            float drive:linear:physics:targetVelocity = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "X"
+            rel physics:body0 = </Fixture/Actors/pillow_base>
+            rel physics:body1 = </Fixture/Actors/pad_0_r>
+            bool physics:collisionEnabled = 0
+            uniform bool physics:excludeFromArticulation = 1
+            point3f physics:localPos0 = (-0.179375, -0.0745, 0.118)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0, 0.70710677, 0, 0.70710677)
+            quatf physics:localRot1 = (0, 0.70710677, 0, 0.70710677)
+            float physics:lowerLimit = -0.06
+            float physics:upperLimit = 0
+        }
+
+        def PhysicsPrismaticJoint "spring_1_l" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 6
+            float drive:linear:physics:stiffness = 60
+            float drive:linear:physics:targetPosition = 0.004
+            float drive:linear:physics:targetVelocity = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "X"
+            rel physics:body0 = </Fixture/Actors/pillow_base>
+            rel physics:body1 = </Fixture/Actors/pad_1_l>
+            bool physics:collisionEnabled = 0
+            uniform bool physics:excludeFromArticulation = 1
+            point3f physics:localPos0 = (-0.128125, 0.0745, 0.14)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0, 0.70710677, 0, 0.70710677)
+            quatf physics:localRot1 = (0, 0.70710677, 0, 0.70710677)
+            float physics:lowerLimit = -0.06
+            float physics:upperLimit = 0
+        }
+
+        def PhysicsPrismaticJoint "spring_1_r" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 6
+            float drive:linear:physics:stiffness = 60
+            float drive:linear:physics:targetPosition = 0.004
+            float drive:linear:physics:targetVelocity = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "X"
+            rel physics:body0 = </Fixture/Actors/pillow_base>
+            rel physics:body1 = </Fixture/Actors/pad_1_r>
+            bool physics:collisionEnabled = 0
+            uniform bool physics:excludeFromArticulation = 1
+            point3f physics:localPos0 = (-0.128125, -0.0745, 0.14)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0, 0.70710677, 0, 0.70710677)
+            quatf physics:localRot1 = (0, 0.70710677, 0, 0.70710677)
+            float physics:lowerLimit = -0.06
+            float physics:upperLimit = 0
+        }
+
+        def PhysicsPrismaticJoint "spring_2_l" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 6
+            float drive:linear:physics:stiffness = 60
+            float drive:linear:physics:targetPosition = 0.004
+            float drive:linear:physics:targetVelocity = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "X"
+            rel physics:body0 = </Fixture/Actors/pillow_base>
+            rel physics:body1 = </Fixture/Actors/pad_2_l>
+            bool physics:collisionEnabled = 0
+            uniform bool physics:excludeFromArticulation = 1
+            point3f physics:localPos0 = (-0.076875, 0.0745, 0.15)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0, 0.70710677, 0, 0.70710677)
+            quatf physics:localRot1 = (0, 0.70710677, 0, 0.70710677)
+            float physics:lowerLimit = -0.06
+            float physics:upperLimit = 0
+        }
+
+        def PhysicsPrismaticJoint "spring_2_r" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 6
+            float drive:linear:physics:stiffness = 60
+            float drive:linear:physics:targetPosition = 0.004
+            float drive:linear:physics:targetVelocity = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "X"
+            rel physics:body0 = </Fixture/Actors/pillow_base>
+            rel physics:body1 = </Fixture/Actors/pad_2_r>
+            bool physics:collisionEnabled = 0
+            uniform bool physics:excludeFromArticulation = 1
+            point3f physics:localPos0 = (-0.076875, -0.0745, 0.15)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0, 0.70710677, 0, 0.70710677)
+            quatf physics:localRot1 = (0, 0.70710677, 0, 0.70710677)
+            float physics:lowerLimit = -0.06
+            float physics:upperLimit = 0
+        }
+
+        def PhysicsPrismaticJoint "spring_3_l" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 6
+            float drive:linear:physics:stiffness = 60
+            float drive:linear:physics:targetPosition = 0.004
+            float drive:linear:physics:targetVelocity = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "X"
+            rel physics:body0 = </Fixture/Actors/pillow_base>
+            rel physics:body1 = </Fixture/Actors/pad_3_l>
+            bool physics:collisionEnabled = 0
+            uniform bool physics:excludeFromArticulation = 1
+            point3f physics:localPos0 = (-0.025625, 0.0745, 0.15)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0, 0.70710677, 0, 0.70710677)
+            quatf physics:localRot1 = (0, 0.70710677, 0, 0.70710677)
+            float physics:lowerLimit = -0.06
+            float physics:upperLimit = 0
+        }
+
+        def PhysicsPrismaticJoint "spring_3_r" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 6
+            float drive:linear:physics:stiffness = 60
+            float drive:linear:physics:targetPosition = 0.004
+            float drive:linear:physics:targetVelocity = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "X"
+            rel physics:body0 = </Fixture/Actors/pillow_base>
+            rel physics:body1 = </Fixture/Actors/pad_3_r>
+            bool physics:collisionEnabled = 0
+            uniform bool physics:excludeFromArticulation = 1
+            point3f physics:localPos0 = (-0.025625, -0.0745, 0.15)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0, 0.70710677, 0, 0.70710677)
+            quatf physics:localRot1 = (0, 0.70710677, 0, 0.70710677)
+            float physics:lowerLimit = -0.06
+            float physics:upperLimit = 0
+        }
+
+        def PhysicsPrismaticJoint "spring_4_l" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 6
+            float drive:linear:physics:stiffness = 60
+            float drive:linear:physics:targetPosition = 0.004
+            float drive:linear:physics:targetVelocity = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "X"
+            rel physics:body0 = </Fixture/Actors/pillow_base>
+            rel physics:body1 = </Fixture/Actors/pad_4_l>
+            bool physics:collisionEnabled = 0
+            uniform bool physics:excludeFromArticulation = 1
+            point3f physics:localPos0 = (0.025625, 0.0745, 0.15)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0, 0.70710677, 0, 0.70710677)
+            quatf physics:localRot1 = (0, 0.70710677, 0, 0.70710677)
+            float physics:lowerLimit = -0.06
+            float physics:upperLimit = 0
+        }
+
+        def PhysicsPrismaticJoint "spring_4_r" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 6
+            float drive:linear:physics:stiffness = 60
+            float drive:linear:physics:targetPosition = 0.004
+            float drive:linear:physics:targetVelocity = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "X"
+            rel physics:body0 = </Fixture/Actors/pillow_base>
+            rel physics:body1 = </Fixture/Actors/pad_4_r>
+            bool physics:collisionEnabled = 0
+            uniform bool physics:excludeFromArticulation = 1
+            point3f physics:localPos0 = (0.025625, -0.0745, 0.15)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0, 0.70710677, 0, 0.70710677)
+            quatf physics:localRot1 = (0, 0.70710677, 0, 0.70710677)
+            float physics:lowerLimit = -0.06
+            float physics:upperLimit = 0
+        }
+
+        def PhysicsPrismaticJoint "spring_5_l" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 6
+            float drive:linear:physics:stiffness = 60
+            float drive:linear:physics:targetPosition = 0.004
+            float drive:linear:physics:targetVelocity = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "X"
+            rel physics:body0 = </Fixture/Actors/pillow_base>
+            rel physics:body1 = </Fixture/Actors/pad_5_l>
+            bool physics:collisionEnabled = 0
+            uniform bool physics:excludeFromArticulation = 1
+            point3f physics:localPos0 = (0.076875, 0.0745, 0.15)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0, 0.70710677, 0, 0.70710677)
+            quatf physics:localRot1 = (0, 0.70710677, 0, 0.70710677)
+            float physics:lowerLimit = -0.06
+            float physics:upperLimit = 0
+        }
+
+        def PhysicsPrismaticJoint "spring_5_r" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 6
+            float drive:linear:physics:stiffness = 60
+            float drive:linear:physics:targetPosition = 0.004
+            float drive:linear:physics:targetVelocity = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "X"
+            rel physics:body0 = </Fixture/Actors/pillow_base>
+            rel physics:body1 = </Fixture/Actors/pad_5_r>
+            bool physics:collisionEnabled = 0
+            uniform bool physics:excludeFromArticulation = 1
+            point3f physics:localPos0 = (0.076875, -0.0745, 0.15)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0, 0.70710677, 0, 0.70710677)
+            quatf physics:localRot1 = (0, 0.70710677, 0, 0.70710677)
+            float physics:lowerLimit = -0.06
+            float physics:upperLimit = 0
+        }
+
+        def PhysicsPrismaticJoint "spring_6_l" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 6
+            float drive:linear:physics:stiffness = 60
+            float drive:linear:physics:targetPosition = 0.004
+            float drive:linear:physics:targetVelocity = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "X"
+            rel physics:body0 = </Fixture/Actors/pillow_base>
+            rel physics:body1 = </Fixture/Actors/pad_6_l>
+            bool physics:collisionEnabled = 0
+            uniform bool physics:excludeFromArticulation = 1
+            point3f physics:localPos0 = (0.128125, 0.0745, 0.14)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0, 0.70710677, 0, 0.70710677)
+            quatf physics:localRot1 = (0, 0.70710677, 0, 0.70710677)
+            float physics:lowerLimit = -0.06
+            float physics:upperLimit = 0
+        }
+
+        def PhysicsPrismaticJoint "spring_6_r" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 6
+            float drive:linear:physics:stiffness = 60
+            float drive:linear:physics:targetPosition = 0.004
+            float drive:linear:physics:targetVelocity = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "X"
+            rel physics:body0 = </Fixture/Actors/pillow_base>
+            rel physics:body1 = </Fixture/Actors/pad_6_r>
+            bool physics:collisionEnabled = 0
+            uniform bool physics:excludeFromArticulation = 1
+            point3f physics:localPos0 = (0.128125, -0.0745, 0.14)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0, 0.70710677, 0, 0.70710677)
+            quatf physics:localRot1 = (0, 0.70710677, 0, 0.70710677)
+            float physics:lowerLimit = -0.06
+            float physics:upperLimit = 0
+        }
+
+        def PhysicsPrismaticJoint "spring_7_l" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 6
+            float drive:linear:physics:stiffness = 60
+            float drive:linear:physics:targetPosition = 0.004
+            float drive:linear:physics:targetVelocity = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "X"
+            rel physics:body0 = </Fixture/Actors/pillow_base>
+            rel physics:body1 = </Fixture/Actors/pad_7_l>
+            bool physics:collisionEnabled = 0
+            uniform bool physics:excludeFromArticulation = 1
+            point3f physics:localPos0 = (0.179375, 0.0745, 0.118)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0, 0.70710677, 0, 0.70710677)
+            quatf physics:localRot1 = (0, 0.70710677, 0, 0.70710677)
+            float physics:lowerLimit = -0.06
+            float physics:upperLimit = 0
+        }
+
+        def PhysicsPrismaticJoint "spring_7_r" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 6
+            float drive:linear:physics:stiffness = 60
+            float drive:linear:physics:targetPosition = 0.004
+            float drive:linear:physics:targetVelocity = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "X"
+            rel physics:body0 = </Fixture/Actors/pillow_base>
+            rel physics:body1 = </Fixture/Actors/pad_7_r>
+            bool physics:collisionEnabled = 0
+            uniform bool physics:excludeFromArticulation = 1
+            point3f physics:localPos0 = (0.179375, -0.0745, 0.118)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0, 0.70710677, 0, 0.70710677)
+            quatf physics:localRot1 = (0, 0.70710677, 0, 0.70710677)
+            float physics:lowerLimit = -0.06
+            float physics:upperLimit = 0
+        }
+
+    }
+
+    def Scope "Materials"
+    {
+        def Material "frame" (
+            prepend apiSchemas = ["PhysicsMaterialAPI", "PhysxMaterialAPI"]
+        )
+        {
+            token outputs:surface.connect = </Fixture/Materials/frame/Surface.outputs:surface>
+            float physics:dynamicFriction = 0.2
+            float physics:restitution = 0
+            float physics:staticFriction = 0.2
+            uniform token physxMaterial:frictionCombineMode = "average"
+            uniform token physxMaterial:restitutionCombineMode = "min"
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.93, 0.93, 0.91)
+                float inputs:opacity = 1.0
+                float inputs:roughness = 0.35
+                token outputs:surface
+            }
+        }
+
+        def Material "drawer" (
+            prepend apiSchemas = ["PhysicsMaterialAPI", "PhysxMaterialAPI"]
+        )
+        {
+            token outputs:surface.connect = </Fixture/Materials/drawer/Surface.outputs:surface>
+            float physics:dynamicFriction = 0.2
+            float physics:restitution = 0
+            float physics:staticFriction = 0.2
+            uniform token physxMaterial:frictionCombineMode = "average"
+            uniform token physxMaterial:restitutionCombineMode = "min"
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.9, 0.93, 0.95)
+                float inputs:opacity = 0.22
+                float inputs:roughness = 0.08
+                token outputs:surface
+            }
+        }
+
+        def Material "fabric_a" (
+            prepend apiSchemas = ["PhysicsMaterialAPI", "PhysxMaterialAPI"]
+        )
+        {
+            token outputs:surface.connect = </Fixture/Materials/fabric_a/Surface.outputs:surface>
+            float physics:dynamicFriction = 0.4
+            float physics:restitution = 0
+            float physics:staticFriction = 0.4
+            uniform token physxMaterial:frictionCombineMode = "average"
+            uniform token physxMaterial:restitutionCombineMode = "min"
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.05, 0.16, 0.42)
+                float inputs:opacity = 1.0
+                float inputs:roughness = 0.9
+                token outputs:surface
+            }
+        }
+
+        def Material "fabric_b" (
+            prepend apiSchemas = ["PhysicsMaterialAPI", "PhysxMaterialAPI"]
+        )
+        {
+            token outputs:surface.connect = </Fixture/Materials/fabric_b/Surface.outputs:surface>
+            float physics:dynamicFriction = 0.4
+            float physics:restitution = 0
+            float physics:staticFriction = 0.4
+            uniform token physxMaterial:frictionCombineMode = "average"
+            uniform token physxMaterial:restitutionCombineMode = "min"
+
+            def Shader "Surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.07, 0.21, 0.5)
+                float inputs:opacity = 1.0
+                float inputs:roughness = 0.9
+                token outputs:surface
+            }
+        }
+
+    }
+}

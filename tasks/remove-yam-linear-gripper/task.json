@@ -1,0 +1,18 @@
+{
+  "title": "Remove and stow a YAM linear gripper",
+  "instruction": "Loosen both captive screws on the de-energized YAM wrist with the blue driver. Slide the old gripper off the wrist, lay it in the empty cradle, and release it.",
+  "setup": "A donor wrist with its installed Linear 4310 gripper, a blue driver in a clutch-shoulder dock, and an empty gripper cradle.",
+  "scoring": "0.50 when both heads have at least two complete engaged turns and their modeled captive fastening constraints have released. 1.00 for supported separation and released, stable cradle stowage for one second. Invalid forced or unsupported extraction scores zero.",
+  "run_limit": "1,500 steps at 20 Hz (75 s)",
+  "fidelity": "Pinned I2RT v1.3.6 visual geometry, fabricated M3 \u00d7 0.5 training adapter and 2.5 mm bit. The reduced hex-drive coupling models 0.50 N m breakaway and 0.10 N m running resistance with 1.30 N m capacity. Values are engineering assumptions for the training fixture.",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "bimanual",
+    "captive screws",
+    "gripper",
+    "maintenance"
+  ],
+  "context": "Remove a worn gripper from a de-energized wrist fixture for service.",
+  "reset_notes": "Restore the mounted module, both captive screws, the docked driver and the empty cradle.",
+  "scores": "Revised Lambda simulation: scripted demo 1.00, one fastener engaged 0.00, spindle spinning without bit engagement 0.00."
+}

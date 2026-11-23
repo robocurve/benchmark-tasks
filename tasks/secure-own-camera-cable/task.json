@@ -1,0 +1,18 @@
+{
+  "title": "Secure your loose wrist-camera cable",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "self-maintenance",
+    "cable-management",
+    "bimanual"
+  ],
+  "instruction": "The left wrist camera cable is hanging loose. Use the right hand to place the loose cable over the round retaining peg on the side of the left arm, then fold the upright hook-and-loop strap down over the cable and attach it to the round pad. Release the strap and move the right hand away.",
+  "context": "A loose sensing cable on a robot needs to be routed and secured on the robot itself. This maintenance step restores cable management without a person handling the arm.",
+  "setup": "A dual-arm YAM station with parallel grippers and its three original RGB cameras. Left arm starts at READY [0,1,1,-0.6,0,0] rad; right initial joints and fixed base poses are in layout.json. A 740 mm long, 6 mm diameter, 120 g standard camera USB data cable joins a gray connector on the left upper arm to the mounted left wrist camera. Its free span hangs loose. A short polymer side-mounted retaining peg has a 40 mm long, 20 mm diameter shaft and a 36 mm diameter round end cap. A 168 mm long, 20 mm wide black polymer-backed textile hook-and-loop strap (24 mm wide over the terminal grasp region; 1.5 mm thick) stands in a curved open position above it. Its inner face attaches to the round cap. The wooden tabletop is1100×1300×60 mm, centre(0.36,0,0.7175) m and top z=0.7475 m. The gray proximal connector is24×14×24 mm and the mounted camera housing40×36×28 mm. The camera stand, floor and lighting are the pinned station primitives. No additional loose objects or layout randomization. Executable dimensions, mount pose and settled cable state are bundled.",
+  "scoring": "Final-state score with continuous dwell. Award 0.5 for 1 s with the connected cable resting on the upper shaft behind the cap. Award 0.75 for 1 s with the strap attached to the pad and enclosing that same cable crossing. Award 1.0 after 2 s of enclosure with the right hand released, finger gap over 80 mm and TCP more than 120 mm from the peg centre. Otherwise award 0. In simulation, the cable centreline must pass inside the cross-section bounded by the mounted strap and the peg, with the cable within the strap width and no opening between consecutive links equal to or greater than the 6 mm cable diameter. For a physical trial, check the finished closure from the side and from above to confirm that the strap crosses over the cable on the shaft, then check the hands-off hold on timed video.",
+  "run_limit": "1800 control steps at20 Hz (90 seconds).",
+  "reset_notes": "Start a fresh simulator process for each trial. Cable and open strap are initialized from the supplied settled state before the first action. No object state is restored during the trial. Camera calibration remains fixed. For physical reset, peel the strap from the pad and restore its outward open bow; release the cable span to hang between its existing connectors as shown in the setup screenshot.",
+  "fidelity": "Cable and open strap use articulated rigid segments with elastic joints and collision geometry. Hook-and-loop fastening uses an ideal local contact bond: an inward strap face must meet the receiving pad and sustain compression for0.10 s; any segment can attach after independently sustaining compression on the pad, while the rest of the strap remains flexible.",
+  "scores": "Scripted demo: 1.0 (1,325 steps; 66.25 s). Dream-1 run: 0.00 (1,800 steps, 90 seconds, one session).",
+  "media": "M-8GYQWD"
+}

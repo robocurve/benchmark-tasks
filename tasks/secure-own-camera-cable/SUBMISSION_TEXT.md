@@ -1,0 +1,1 @@
+The robot reroutes its own USB wrist-camera cable over an arm-mounted retaining peg and fastens a hook-and-loop strap over the same cable. The revised scorer verifies enclosure before assigning fastening credit and requires a released hold for full credit. The scripted demo reaches 1.0 and retains the cable for 4.0 seconds hands-free.
