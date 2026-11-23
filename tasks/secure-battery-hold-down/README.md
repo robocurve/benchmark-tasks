@@ -1,4 +1,4 @@
-# Secure a new car battery's hold-down: hook both J-bolts blind into the tray's slots, fit the bar over them and push the nuts down onto it
+# Secure a new car battery's hold-down: hook both J-bolts blind into the tray, fit the bar and press the nuts on
 
 A new car battery stands in its tray at the bottom of an engine bay (a well cut into the table). Two J-bolts stand in
 holders at the bay's front corners, the hold-down bar lies on the table beside it, and two flange nuts lie by the bay.
