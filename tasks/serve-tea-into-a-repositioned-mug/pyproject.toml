@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "yam-household-tea"
+version = "1.2.0"
+requires-python = ">=3.11"
+dependencies = ["mujoco==3.3.7", "numpy>=1.26,<3", "scipy>=1.14,<2", "Pillow>=10"]
+
+[project.optional-dependencies]
+inspect = ["inspect-robots==1.0.0"]
+
+[project.entry-points."inspect_robots.embodiments"]
+yam_tea_service = "tea.inspect_adapter:Embodiment"
+
+[project.entry-points."inspect_robots.policies"]
+tea_replay = "tea.inspect_adapter:Replay"
+
+[project.entry-points."inspect_robots.scorers"]
+tea_outcome = "tea.inspect_adapter:TerminalScore"
+
+[tool.setuptools]
+packages=["tea"]
+
+[tool.setuptools.package-data]
+tea=["assets/*"]
