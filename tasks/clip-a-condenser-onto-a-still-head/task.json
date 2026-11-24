@@ -1,0 +1,21 @@
+{
+  "title": "Fit a condenser to a still head and clip the joint, holding the condenser in line while the other hand snaps the clip on",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "bimanual",
+    "lab automation",
+    "glassware",
+    "ground-glass joint",
+    "joint clip",
+    "holding while fastening"
+  ],
+  "instruction": "Fit the glass condenser to the still head: with one hand lift the condenser off its cradles and push its ground-glass socket all the way onto the cone at the end of the still head's side arm, keeping it level and in line, and hold it there; with the other hand take the yellow joint clip and push it down over the joint until it snaps on. Then let go of both, leaving the condenser held by the clipped joint, and take both arms back to where they started. Do not drop the glass.",
+  "context": "Distillation and reflux set-ups are built from glassware joined by ground-glass joints, secured with plastic joint clips; assembling them is routine lab work that self-driving labs still leave to people. A horizontal joint cannot carry the condenser by itself, so one hand holds the condenser in line while the other snaps the clip on.",
+  "setup": "A table in front of two arms (bases 61 cm apart), seen by one overhead camera and a camera on each wrist. Distances are measured forward from the line between the arm bases and sideways from the midpoint between them. (1) A distillation set-up, fixed: a black cast-iron stand base 20 by 12 cm with a short chromed rod at 40.5 cm forward, 14 cm left of the centre line, whose clamp holds a glass still head standing on a 100 mL round-bottom flask in a cork ring at 28 cm forward, 14 cm left. The still head's side arm (a glass tube 2 cm across) runs horizontally toward the right along the line 28 cm forward, 8.5 cm above the table, to its shoulder 4 cm left of the centre line, ending in a frosted ground-glass cone 2.2 cm across and 3 cm long with a short narrower nose. (2) A glass Liebig condenser (150 g, a water jacket 3.4 cm across, 28 cm long overall) lying on two cork cradles along the line 19 cm forward, its frosted socket (2.9 cm across inside, 4 cm deep, with a slightly flared mouth) at its left end, 3 cm right of the centre line, pointing left. (3) A yellow acetal joint clip (8 g, 5.1 cm wide, with a tab 1.2 by 1.0 cm on top and two arms 1.8 cm long) standing on its arms at 19 cm forward, 12 cm left of the centre line. The socket fits loosely on the cone: an unclipped condenser sags off line. The clip snaps on when pushed down over the socket just behind its mouth (within 1 cm across and 1.4 cm along, its top within 6 mm of the socket's top, upright within 20 degrees) while the condenser is seated; it then holds the condenser square on the cone. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "0.0 if the condenser was ever dropped (falling faster than 0.7 m/s, or tipped more than 35 degrees off level) before the clip was on. Seated: the condenser's socket pushed onto the side arm's cone (its rim within 6 mm short of, or 10 mm past, the cone's shoulder; its axis within 5 mm and 6 degrees of the cone's). Clipped: the clip snapped on over the joint while the condenser was seated. Otherwise 1.0: clipped, and both arms back where they started (each gripper's fingertip centre (TCP) within 5 cm of its start) at the end; 0.5: clipped; 0.25: the condenser seated at some point; else 0.0. The trial ends at the run limit, or once the full score has held for 1 s with the condenser and the clip still.",
+  "run_limit": "900 steps (45 s at 20 Hz)",
+  "reset_notes": "Pull the clip off, take the condenser off the cone and lay it back on its cradles; stand the clip back on its arms.",
+  "fidelity": "Rigid-body simulation (Isaac Sim 6.1, PhysX, 20 Hz control). Simplified: the ground-glass joint is a plain cylinder in a loose socket (3.5 mm clear all round), with low glass friction; the clip's snap is a rule: once it is pushed over the seated joint, fixed joints hold the clip and the condenser at their seats. The set-up is one fixed body. Cameras 1280 x 704 (Dream-1 sees 320 x 176).",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-9NF8XH"
+}
