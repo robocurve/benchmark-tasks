@@ -26,6 +26,14 @@ PREVIOUS_QUALIFIER = "a513082609c7eab6a5f50250f5bf8ca7c799d1316dda921806fd212e80
 FIRST_RESUME_QUALIFIER = (
     "cb94db407c3c40f46a7f53574d34f3cd2583388ea51f9b3a89e8247fda52a434"
 )
+SUBMITTED_TEMPLATE = "3956dead8480ec92aa91edf29d882774ef51b2939e63427d61393244a5279c08"
+JOBS_TEMPLATE = "56d9e3c82668d0531713323bcd00d4d3867688cac13b21abfdea23d4d09010db"
+SUBMITTED_QUALIFIER = "188a593d14a0d99a00d7c9088d37da7061bf7b00e70c8f9a5d3102f072cd92e2"
+FOLLOWUP_QUALIFIER = "5677530c1f52d00328869f725cd18f43c55f4ec81869a1c7c6ab1cb2f78492b1"
+JOBS_QUALIFIER = "bb579020002631dcce88ebb7a471ca41eb8a087019994aea93a3f7c960c66ea5"
+SUBMITTED_WITNESS = "41e79b9cb50103379bbf5198413262f8402cae84595b636f0fcbf1b04ab5f260"
+NORMAL_WITNESS = "ac1794fa39c35699fc9a66e2f5c13b0db7575b1028faff3548161d3ba4d38528"
+FOLLOWUP_FIXTURE_SHA = "6ab93fea4f68906a9a9fdd3f972bf16b574506fb8c96fb2b0484089ac49ab9ed"
 COMPARE = ("fixed_partial", "fixed_late_lift", "fixed_later_lift", "fixed_heel_on_foam")
 
 
@@ -65,17 +73,37 @@ def sources():
 
 
 def compatible(recorded, current):
-    """Only the reporting code and a new, independent fixture may differ on v2 tags."""
-    legacy = dict(current)
-    legacy.pop(FOLLOWUP_FIXTURE)
-    legacy["isaac/qualify.py"] = PREVIOUS_QUALIFIER
-    previous = dict(current)
-    previous["isaac/qualify.py"] = FIRST_RESUME_QUALIFIER
-    last = dict(current)
-    last["isaac/qualify.py"] = (
-        "5677530c1f52d00328869f725cd18f43c55f4ec81869a1c7c6ab1cb2f78492b1"
-    )
-    return recorded in (current, previous, legacy, last)
+    """Identify the known acquisition versions eligible for a full raw-frame replay."""
+    if recorded == current:
+        return True
+    if (
+        current.get("task/task.template.json") != JOBS_TEMPLATE
+        or current.get("task/witness.py") != NORMAL_WITNESS
+        or current.get(FOLLOWUP_FIXTURE) != FOLLOWUP_FIXTURE_SHA
+    ):
+        return False
+    expected = dict(current)
+    expected["task/witness.py"] = SUBMITTED_WITNESS
+    version = recorded.get("isaac/qualify.py")
+    if version != JOBS_QUALIFIER:
+        expected["task/task.template.json"] = SUBMITTED_TEMPLATE
+        if version == PREVIOUS_QUALIFIER:
+            # This launcher predates the separate +50 mm follow-up fixture.
+            expected.pop(FOLLOWUP_FIXTURE)
+        elif version not in (
+            FIRST_RESUME_QUALIFIER, FOLLOWUP_QUALIFIER, SUBMITTED_QUALIFIER
+        ):
+            return False
+    expected["isaac/qualify.py"] = version
+    return recorded == expected
+
+
+def fixture_path(name, options):
+    if name == FOLLOWUP:
+        return ROOT / FOLLOWUP_FIXTURE
+    geometry = {k: v for k, v in options.items() if k != "delay"}
+    digest = hashlib.sha256(json.dumps(geometry, sort_keys=True).encode()).hexdigest()
+    return ROOT / "isaac/assets" / ("fixture-" + digest[:12] + ".usda")
 
 
 def comparisons(results):
@@ -188,7 +216,59 @@ def read_commands(folder):
     return cmd
 
 
+def replay_trace(trace, options, fixture_sha):
+    """Rebuild all witnesses from raw native poses and heel data before regrading."""
+    read = Readout(options)
+    rows = []
+    with gzip.open(trace, "rt") as f:
+        header = json.loads(next(f))
+        check(
+            header["kind"] == "reset"
+            and header["settings"] == options
+            and header["fixture_sha256"] == fixture_sha
+            and abs(header["dt"] - 1 / 240) < 1e-7,
+            "Trace header mismatch: " + str(trace),
+        )
+
+        def sample(raw):
+            readings = [raw[k] for k in ("heel_n", "assist_nm", "knee_rate")]
+            check(
+                all(type(v) in (int, float) and np.isfinite(v) for v in readings)
+                and raw["heel_n"] >= 0,
+                "Invalid native measurement: " + str(trace),
+            )
+            return read.sample(raw)[0]
+
+        sample(json.loads(next(f))["initial"])
+        for i, line in enumerate(f):
+            row = json.loads(line)
+            check(
+                type(row["tick"]) is int and row["tick"] == i < 280,
+                "Invalid native tick",
+            )
+            command = np.asarray(row["action"])
+            check(
+                command.shape == (14,)
+                and command.dtype.kind in "fiu"
+                and np.isfinite(command).all(),
+                "Invalid executed command",
+            )
+            measured = sample(row["raw"])
+            # JSON comparison preserves the distinction between bool and 0/1 in the record.
+            check(
+                json.dumps(measured, sort_keys=True, allow_nan=False)
+                == json.dumps(row["witness"], sort_keys=True, allow_nan=False),
+                f"Raw poses and recorded witnesses differ at {trace}, tick {i}. "
+                "Use a fresh run tag for a changed result.",
+            )
+            row["witness"] = measured
+            rows.append(row)
+    check(len(rows) == 280, "Incomplete native episode: " + str(trace))
+    return rows
+
+
 def read_certified_controls(dest, record, original, current):
+    check(compatible(original, current), "Frozen control source differs")
     results = record["trials"]
     check(set(results) == set(CASES), "Incomplete saved control checkpoint")
     for name, result in results.items():
@@ -211,10 +291,32 @@ def read_certified_controls(dest, record, original, current):
                 and sha(f / "media" / filename) == digest,
                 "Saved media differs for " + name,
             )
+        commands = read_commands(f)
         check(
-            hashlib.sha256(read_commands(f).tobytes()).hexdigest()
-            == result["actions_sha256"],
+            hashlib.sha256(commands.tobytes()).hexdigest() == result["actions_sha256"],
             "Saved action sequence differs for " + name,
+        )
+        fixture = fixture_path(name, result["settings"])
+        fixture_sha = current[fixture.relative_to(ROOT).as_posix()]
+        check(
+            result["fixture_sha256"] == fixture_sha == sha(fixture),
+            "Saved fixture differs for " + name,
+        )
+        rows = replay_trace(f / "trace.jsonl.gz", result["settings"], fixture_sha)
+        outcome = score(rows)
+        doc = json.loads(inspect_record(f).read_text())
+        check(
+            inspect_failure(doc) is None
+            and outcome == (result["score"], result["reason"])
+            and outcome[0]
+            == doc["samples"][0]["reduced"]["task_score"]
+            == doc["results"]["metrics"]["task_score"]
+            and result["heel_n"] == rows[-1]["witness"]["heel_channel_n"]
+            and result["gap_mm"] == rows[-1]["witness"]["heel_clear_mm"]
+            and np.allclose(
+                commands, [row["action"] for row in rows], atol=1e-6, rtol=0
+            ),
+            "Raw replay disagrees with the saved outcome, measurements or commands for " + name,
         )
     check(
         record["missed"] == misses(results)
@@ -266,26 +368,8 @@ def certify(folder, name, opt, fixture, sig):
         and sample["instruction"] == draft["instruction"],
         "Incorrect Inspect run",
     )
-    read = Readout(opt)
-    rows = []
     trace = folder / "trace.jsonl.gz"
-    with gzip.open(trace, "rt") as f:
-        hdr = json.loads(next(f))
-        check(
-            hdr["settings"] == opt
-            and hdr["fixture_sha256"] == sha(fixture)
-            and abs(hdr["dt"] - 1 / 240) < 1e-7,
-            "Trace header mismatch",
-        )
-        read.sample(json.loads(next(f))["initial"])
-        for i, line in enumerate(f):
-            row = json.loads(line)
-            w, _ = read.sample(row["raw"])
-            check(
-                w == row["witness"] and i == row["tick"],
-                f"Native reading mismatch at {i}",
-            )
-            rows.append(row)
+    rows = replay_trace(trace, opt, sha(fixture))
     val, why = score(rows)
     check(
         val
@@ -428,6 +512,47 @@ def review_archive(dest, results):
     print(f"Station qualification and review media: {bundle}")
 
 
+def measured_manifest(results):
+    """Build the public fields from this run before the board assigns a media ID."""
+    meta = json.loads((ROOT / "task/task.template.json").read_text())
+    extra = (
+        f", 50 mm follow-up {results[FOLLOWUP]['score']:g}"
+        if FOLLOWUP in results
+        else ""
+    )
+    dream = results["dream"]
+    refused = dream.get("status") == "refused_before_model_action"
+    if refused:
+        dream_score = "Dream-1 refused before any model action; unscored."
+        if dream["recording"]["kind"] == "no_recording_available":
+            meta["no_model_video_reason"] = dream["exact_provider_error"]
+            recording_note = "No model recording was available."
+        else:
+            dream_score += " Model clip shows camera warm-up only."
+            recording_note = "The model clip shows camera warm-up only."
+        meta["no_video_reason"] = (
+            f"Dream-1 refused its first inference after {dream['warmup_steps']} warm-up steps. "
+            f"It returned {dream['model_actions']} model actions and received no numeric score. "
+            f"{recording_note} {dream['exact_provider_error']}"
+        )
+    else:
+        dream_score = f"Hosted Dream-1 {dream['score']:g}."
+    meta["scores"] = (
+        f"Seed 0, 280 actions at 20 Hz. Reference {results['reference']['score']:g}, "
+        f"heel on foam {results['fixed_heel_on_foam']['score']:g}, 80 mm offset {results['fixed_partial']['score']:g}"
+        f"{extra}, linger {results['still_at_cushion']['score']:g}, parked closed {results['park_closed']['score']:g}, "
+        f"{dream_score}"
+    )
+    check(
+        all(
+            len(meta[k]) <= v
+            for k, v in (("scores", 300), ("scoring", 300), ("fidelity", 500))
+        ),
+        "Metadata length",
+    )
+    return meta
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -465,16 +590,7 @@ def main():
         if offline:
             check(folder.is_dir(), "Missing saved recording for " + name)
         folder.mkdir(exist_ok=True)
-        geometry = {k: v for k, v in opt.items() if k != "delay"}
-        slug = (
-            "fixture-"
-            + hashlib.sha256(json.dumps(geometry, sort_keys=True).encode()).hexdigest()[
-                :12
-            ]
-        )
-        fixture = ROOT / "isaac/assets" / (slug + ".usda")
-        if name == FOLLOWUP:
-            fixture = ROOT / FOLLOWUP_FIXTURE
+        fixture = fixture_path(name, opt)
         check(
             fixture.is_file()
             and sha(fixture) == sig[fixture.relative_to(ROOT).as_posix()],
@@ -671,40 +787,17 @@ def main():
     )
     if a.phase in ("all", "qualify", "finalize"):
         results["dream"] = run("dream")
-        meta = json.loads((ROOT / "task/task.template.json").read_text())
-        extra = (
-            f", 50 mm follow-up {results[FOLLOWUP]['score']:g}"
-            if FOLLOWUP in results
-            else ""
-        )
+        meta = measured_manifest(results)
         dream = results["dream"]
         refused = dream.get("status") == "refused_before_model_action"
-        if refused:
-            dream_score = "Dream-1 refused before any model action; unscored."
-            if dream["recording"]["kind"] == "no_recording_available":
-                meta["no_model_video_reason"] = dream["exact_provider_error"]
-            else:
-                dream_score += " Model clip shows camera warm-up only."
-        else:
-            dream_score = f"Hosted Dream-1 {dream['score']:g}."
-        meta["scores"] = (
-            f"Seed 0, 280 actions at 20 Hz. Reference {results['reference']['score']:g}, "
-            f"heel on foam {results['fixed_heel_on_foam']['score']:g}, 80 mm offset {results['fixed_partial']['score']:g}"
-            f"{extra}, linger {results['still_at_cushion']['score']:g}, parked closed {results['park_closed']['score']:g}, "
-            f"{dream_score}"
-        )
-        check(
-            all(
-                len(meta[k]) <= v
-                for k, v in (("scores", 300), ("scoring", 300), ("fidelity", 500))
-            ),
-            "Metadata length",
-        )
         save(dest / "task.json", meta)
         save(
             dest / "qualification.json",
             dict(
                 station_replay_passed=True,
+                replay_sources=sig,
+                replay_method="Recomputed witnesses from raw station poses and heel measurements; "
+                "required equality at every control tick and regraded all native outcomes.",
                 hosted_outcome=dream.get("status", "scored"),
                 hosted_rollout_completed=not refused,
                 board_media=dict(

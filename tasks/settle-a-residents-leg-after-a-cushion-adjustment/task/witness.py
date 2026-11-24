@@ -26,6 +26,16 @@ class Witness:
     def __init__(self, m):
         self.ids = {m.geom(i).name: i for i in range(m.ngeom)}
         self.tare = None
+        # On both YAM slides, increasing joint position closes the jaws.
+        # Cache each closing direction in the compiled mesh frame used by both readers.
+        self.jaw_close = {}
+        for name, geom in self.ids.items():
+            if name.endswith(("tip_left", "tip_right")):
+                body = m.geom_bodyid[geom]
+                joint = m.body_jntadr[body]
+                rotation = np.empty(9)
+                mj.mju_quat2Mat(rotation, m.geom_quat[geom])
+                self.jaw_close[geom] = rotation.reshape(3, 3).T @ m.jnt_axis[joint]
 
     def sample(self, m, d, heel_load, assist, arms=("arm_",)):
         def gap(a, b):
@@ -73,7 +83,7 @@ class Witness:
         for arm in arms:
             for region in PEOPLE:
                 i = self.ids[region]
-                ends = []
+                normals = []
                 for jaw in ("tip_left", "tip_right"):
                     j = self.ids[arm + jaw]
                     # The closest points give the two sides of a visible clamp around the same body.
@@ -85,8 +95,17 @@ class Witness:
                     seg = np.zeros(6)
                     if mj.mj_geomDistance(m, d, i, j, 0.05, seg) > 0.001:
                         break
-                    ends.append(seg[:3] - d.geom_xpos[i])
-                if len(ends) == 2 and ends[0] @ ends[1] < 0:
+                    # All marked person regions are ellipsoids. The local surface normal
+                    # is the gradient of sum((x / radius)**2). A center ray instead of
+                    # a normal misclassifies opposed pads near an elongated region's end.
+                    axes = d.geom_xmat[i].reshape(3, 3)
+                    local_point = axes.T @ (seg[:3] - d.geom_xpos[i])
+                    outward = axes @ (local_point / m.geom_size[i]**2)
+                    closing = d.geom_xmat[j].reshape(3, 3) @ self.jaw_close[j]
+                    if outward @ closing >= 0:
+                        break
+                    normals.append(outward)
+                if len(normals) == 2 and normals[0] @ normals[1] < 0:
                     jaw_pair = True
         heel = d.geom_xpos[self.ids["heel"]]
         knee = d.geom_xpos[self.ids["knee_shell"]]
