@@ -1,11 +1,14 @@
 """MuJoCo YAM plant and a reduced-order gravity pour. No policy or trial labels enter the scorer."""
 
+from collections import deque
 from functools import lru_cache
 from pathlib import Path
 import math
 import mujoco as mj
 import numpy as np
 from scipy.spatial.transform import Rotation
+from scipy.spatial.distance import pdist
+from .primary import DWELL_S, POSITION_MM, ROTATION_DEG, SCORE_ID, UPRIGHT_DEG, WATER_G_PER_ML, grade
 from .scene import ASSETS, HOME, LIP, MUG, READY, TABLE, build
 
 DT = 1 / 240
@@ -13,9 +16,12 @@ SUBSTEPS = 12
 VOLUME = 200.0
 TARGET = 120.0
 WET_LIMIT = 2.0
-TRIP_N = 10.0
+TRIP_M = 0.003
+DROP_M = 0.030
+# Surface tension holds a small meniscus until at least one optically visible drop detaches.
+# 0.020 mL makes a 3.37 mm diameter dyed water sphere. Every detached drop is rendered.
+DETACH_ML = 0.020
 CLEARANCE = 0.035
-MAX_SPEED = 0.005
 MUG_RADIUS = 0.0328
 PROFILES = {
     "steady": (None, 0),
@@ -63,8 +69,10 @@ class Kitchen:
         self.d = mj.MjData(self.m)
         self.actor_ids = {
             n: self.m.body(n).mocapid[0]
-            for n in ("receiving_hand", "forearm", "upperarm")
+            for n in ("stage_driver", "forearm", "upperarm")
         }
+        self.witness_q = [self.m.joint("witness_" + a).qposadr[0] for a in "xy"]
+        self.flag_geom = self.m.geom("witness_flag").id
         self.pot = self.m.body("pitcher").id
         self.jp = [
             self.m.joint(s + "_j" + str(i)).qposadr[0]
@@ -95,9 +103,22 @@ class Kitchen:
         self.renderer = None
         self.robot_clear_time = 0.0
         self.partial_support_time = 0.0
+        self.dwell_ticks = round(DWELL_S / (SUBSTEPS * DT))
+        self.frames = deque(maxlen=self.dwell_ticks + 1)
+        self.frames.append((self.d.xpos[self.pot].copy(), self.d.xquat[self.pot].copy(), None))
+        self.motion_completed = False
+        self.stage_body = self.m.body("stage_driver").id
+        self.stage_due_at = self.stage_start_s = self.stage_duration_s = self.stage_onset_g = None
+        self.stage_error = None
+        self.stage_travel_mm = 0.0
+        self.robot_interference_observed = False
+        self.last_receiver_contact = -math.inf
+        self.displacement_peak = 0.0
+        self.last_accepted = None
         self.base_height = float(self.d.xpos[self.pot, 2])
 
     def reset_counts(self):
+        self.meniscus_ml = 0.0
         self.remaining = VOLUME
         self.cup = self.skin = self.other = self.counter_ml = 0.0
         self.packets = []
@@ -111,13 +132,11 @@ class Kitchen:
         self.flag_time = None
         self.free_speed = 0.0
         self.clear = False
-        self.peak_load = 0.0
         self.rate = 0.0
         self.lifted = False
         self.max_tilt = 0.0
         self.onset = None
         self.airborne_z = None
-        self.prev_vertical = 0.0
 
     def move_person(self, t):
         threshold, dx = PROFILES[self.profile]
@@ -128,8 +147,8 @@ class Kitchen:
         if self.profile == "return" and start is not None:
             fraction -= smooth((t - start - 2.1) / 1.0)
         pos = MUG + [dx * fraction, 0, 0]
-        self.d.mocap_pos[self.actor_ids["receiving_hand"]] = pos
-        wrist = pos + [0.101, 0.005, 0.051]
+        self.d.mocap_pos[self.actor_ids["stage_driver"]] = pos
+        wrist = pos + np.r_[self.d.qpos[self.witness_q], 0] + [0.101, 0.005, 0.051]
         shoulder = np.array([0.825, 0.266, 1.084])
         line = wrist - shoulder
         length = np.linalg.norm(line)
@@ -167,6 +186,13 @@ class Kitchen:
                 -0.04695 * grip,
                 -0.04695 * grip,
             ]
+        ctrl = self.d.ctrl.reshape(2, 8)
+        self.last_accepted = np.column_stack((ctrl[:, :6], -ctrl[:, 6] / 0.04695)).ravel().copy()
+        # A 20 Hz video frame represents the preceding interval. Brief visible events
+        # and support loss between poses persist to the next frame.
+        self.frame_discharge = False
+        self.frame_supported = self.frame_counter = self.frame_released = self.frame_clear = True
+        self.frame_tilt = 0.0
         for _ in range(SUBSTEPS):
             self.move_person(self.d.time + DT)
             self.weight()
@@ -174,6 +200,54 @@ class Kitchen:
             # Position, collision and camera quantities use the same physics epoch as the contacts.
             self.flow()
             self.contacts()
+            self.observe_stage(self.d.time, self.d.xpos[self.stage_body])
+            self.frame_discharge |= self.emitted or bool(self.packets)
+            self.frame_supported &= self.supported or self.robot_support
+            self.frame_counter &= self.supported
+            self.frame_released &= not self.robot_touches
+            self.frame_clear &= self.clear
+            self.frame_tilt = max(self.frame_tilt, self.tilt_deg)
+        self.frames.append((self.d.xpos[self.pot].copy(), self.d.xquat[self.pot].copy(),
+                            (self.frame_discharge, self.frame_supported, self.frame_counter,
+                             self.frame_released, self.frame_clear, self.frame_tilt)))
+        if self.onset is not None:
+            # Read receiver position at its shifted endpoint. A blocked hand cannot
+            # satisfy the motion contract simply because a stage command was issued.
+            goal = MUG + [PROFILES[self.profile][1], 0, 0]
+            self.motion_completed |= bool(np.linalg.norm(self.d.body("receiving_hand").xpos - goal) <= 0.002
+                                          and self.d.time + 1e-9 >= self.onset + 1)
+
+    def observe_stage(self, now, marker):
+        """Read the examiner carriage's registration mark independently of its command."""
+        nominal_g, dx = PROFILES[self.profile]
+        if nominal_g is None or self.stage_error is not None:
+            return
+        if self.cup >= nominal_g and self.stage_due_at is None:
+            self.stage_due_at = now
+        signed_travel = (marker[0] - MUG[0]) * np.sign(dx)
+        nominal_travel = abs(dx)
+        self.stage_travel_mm = max(self.stage_travel_mm, float(1000 * signed_travel))
+        # The timed segment is between the 1 mm departure band at A and arrival band at B.
+        if signed_travel >= 0.001 and self.stage_start_s is None:
+            self.stage_start_s = now
+            self.stage_onset_g = float(self.cup * WATER_G_PER_ML)
+            if not nominal_g - 3 <= self.stage_onset_g <= nominal_g + 7:
+                self.stage_error = "onset outside calibrated fill band"
+        if self.stage_start_s is not None and self.stage_duration_s is None:
+            if signed_travel >= nominal_travel - .001:
+                self.stage_duration_s = float(now - self.stage_start_s)
+                if not .85 <= self.stage_duration_s <= 1.15:
+                    self.stage_error = "stage movement duration outside tolerance"
+            elif now - self.stage_start_s > 1.15:
+                self.stage_error = "stage did not reach B on time"
+        if np.linalg.norm(marker[1:] - MUG[1:]) > .002 or not -.002 <= signed_travel <= nominal_travel + .002:
+            self.stage_error = "carriage marker outside its calibrated path"
+        if (self.stage_due_at is not None and self.stage_start_s is None
+                and now - self.stage_due_at > 1.15):
+            self.stage_error = "triggered carriage did not move"
+        if self.stage_duration_s is not None and self.profile != "return":
+            if signed_travel < nominal_travel - .002:
+                self.stage_error = "carriage left the B stop"
 
     def state(self):
         q = self.d.qpos[self.jp].reshape(2, 8)
@@ -206,10 +280,16 @@ class Kitchen:
         else:
             retained = 0.0
         self.rate = min(42.0, max(0.0, (self.remaining - retained) / 0.52))
-        amount = min(self.remaining, self.rate * DT)
+        available = max(0.0, self.remaining - self.meniscus_ml)
+        self.meniscus_ml += min(available, self.rate * DT)
+        if self.rate == 0.0:
+            self.meniscus_ml = 0.0  # Attached liquid returns to the vessel as it rights.
+        amount = self.meniscus_ml
+        self.emitted = amount >= DETACH_ML
         lip = origin + rot @ opening
-        if amount > 1e-9:
+        if self.emitted:
             self.remaining -= amount
+            self.meniscus_ml = 0.0
             # Include rigid-body lip velocity and a small outward jet component.
             twist = np.zeros(6)
             mj.mj_objectVelocity(self.m, d, mj.mjtObj.mjOBJ_BODY, self.pot, twist, 0)
@@ -264,80 +344,61 @@ class Kitchen:
                 survivors.append((end, v + [0, 0, -9.81 * DT], w))
         self.packets = survivors
 
-    def update_flag(self, wrist, pads):
-        channels = {"wrist": float(np.linalg.norm(wrist)), **pads}
-        channel = max(channels, key=channels.get)
-        load = channels[channel]
-        self.peak_load = max(self.peak_load, load)
-        if load >= TRIP_N and self.flag_source is None:
-            self.flag_source = channel
+    def update_flag(self):
+        offset = self.d.qpos[self.witness_q]
+        axis = int(np.argmax(np.abs(offset)))
+        travel = float(offset[axis])
+        self.displacement_peak = max(abs(travel), self.displacement_peak)
+        if abs(travel) >= TRIP_M and self.flag_source is None:
+            self.flag_source = "xy"[axis] + ("+" if travel > 0 else "-")
+            self.m.geom_rgba[self.flag_geom] = (1.0, 0.025, 0.015, 1)
             self.flag_time = round(self.d.time, 4)
-            self.fault("resident_or_held_mug_overload")
+            if self.d.time - self.last_receiver_contact <= 0.05:
+                self.robot_interference_observed = True
+            self.fault("receiver_displacement")
 
     def contacts(self):
         m, d = self.m, self.d
-        supported = False
-        held = False
-        wrist = np.zeros(3)
-        pads = {}
+        supported = held = third_support = False
         for c in d.contact:
+            if c.efc_address < 0:
+                continue
             g1, g2 = c.geom
-            a, b = self.groups[[g1, g2]]
-            if a == b or c.efc_address < 0:
-                continue
-            pair = {int(a), int(b)}
-            if pair == {0, 4} and "counter" in (self.gname[g1], self.gname[g2]):
-                supported = True
-            if pair == {0, 1}:
-                held = True
-        for i, c in enumerate(d.contact):
-            pair = {int(x) for x in self.groups[c.geom]}
-            if c.efc_address < 0 or pair not in ({1, 3}, {0, 3}, {1, 2}, {0, 2}):
-                continue
-            f = np.zeros(6)
-            mj.mj_contactForce(m, d, i, f)
-            # Contact-frame force on geom 2; account for the order of each pair.
-            target = 1 if self.groups[c.geom[1]] in (2, 3) else 0
-            geom = c.geom[target]
-            force = c.frame.reshape(3, 3).T @ f[:3] * (1 if target else -1)
-            body = m.geom_bodyid[geom]
-            if body == m.body("receiving_hand").id:
-                wrist += force
-            # A split shell prevents opposing jaws from unloading a single net-force sensor.
-            # Assign each pad to the anatomical segment and loaded face in its local frame.
-            normal = c.frame[:3] * (1 if target else -1)
-            local = d.xmat[body].reshape(3, 3).T @ normal
-            axis = int(np.argmax(np.abs(local)))
-            segment = self.gname[geom] if m.body(body).name == "adult" else m.body(body).name
-            if self.groups[geom] == 2:
-                segment = "mug"
-            key = f"{segment}/{'xyz'[axis]}{'+' if local[axis] > 0 else '-'}"
-            pads[key] = pads.get(key, 0.0) + max(0.0, f[0])
-        self.update_flag(wrist, pads)
+            pair = {int(self.groups[g1]), int(self.groups[g2])}
+            names = (self.gname[g1], self.gname[g2])
+            if 0 in pair:
+                if "counter" in names:
+                    supported = True
+                elif 1 in pair:
+                    held = True
+                elif len(pair) > 1:
+                    third_support = True
+            if ((0 in pair or 1 in pair) and (2 in pair or 3 in pair)
+                    and self.m.body("receiving_hand").id in m.geom_bodyid[c.geom]):
+                self.last_receiver_contact = d.time
+            if (0 in pair or 1 in pair) and any(n.startswith("examiner_") for n in names):
+                self.robot_interference_observed = True
+                self.fault("examiner_fixture_interference")
+        self.update_flag()
+        self.robot_support = held and not third_support
         origin = d.xpos[self.pot]
         rot = d.xmat[self.pot].reshape(3, 3)
         tilt = np.arccos(np.clip(rot[2, 2], -1.0, 1.0))
         self.max_tilt = max(self.max_tilt, float(tilt))
         self.lifted |= origin[2] > TABLE + 0.035
-        vz = d.qvel[m.joint("pitcher_free").dofadr[0] + 2]
-        if not held and not supported:
-            self.airborne_z = (
-                origin[2]
-                if self.airborne_z is None
-                else max(self.airborne_z, origin[2])
-            )
-        elif supported and self.airborne_z is not None:
-            if self.airborne_z - origin[2] > 0.03 and self.prev_vertical < -0.25:
-                self.fault("pitcher_drop_impact")
+        self.tilt_deg = float(np.degrees(tilt))
+        if self.airborne_z is not None:
+            if self.airborne_z - origin[2] > DROP_M:
+                self.fault("dropped_pitcher")
+        if supported or held:
             self.airborne_z = None
-        elif held:
-            self.airborne_z = None
-        self.prev_vertical = vz
+        else:
+            self.airborne_z = max(float(origin[2]), self.airborne_z or float(origin[2]))
         self.supported = supported
         self.robot_touches = held
         speed = np.linalg.norm(d.qvel[m.joint("pitcher_free").dofadr[0] :][:3])
         clear = False
-        if supported and not held and self.lifted and self.cup >= 30 and tilt < 0.11:
+        if supported and not held and self.cup >= 30:
             pa, ra = self.pitcher_geoms, self.robot_geoms
             dist = np.linalg.norm(
                 d.geom_xpos[pa, None, :] - d.geom_xpos[ra][None, :, :], axis=2
@@ -349,27 +410,39 @@ class Kitchen:
                 mj.mj_geomDistance(m, d, int(pa[a]), int(ra[b]), CLEARANCE, None) >= CLEARANCE
                 for a, b in close_pairs
             )
-        dof = m.joint("pitcher_free").dofadr[0]
         self.free_speed = speed
         self.clear = clear
-        still = speed < MAX_SPEED and np.linalg.norm(d.qvel[dof + 3 : dof + 6]) < 0.12
-        # A terminal partial serving must remain under control. A single last-tick
-        # release can leave the pitcher airborne before a drop impact is observable.
-        supported_still = (supported or held) and still
-        self.partial_support_time = self.partial_support_time + DT if supported_still else 0.0
-        stable = (
-            supported
-            and not held
-            and clear
-            and tilt < 0.11
-            and still
-            and self.rate < 0.05
-            and not self.packets
-        )
-        self.robot_clear_time = self.robot_clear_time + DT if stable else 0.0
-        self.returned = self.robot_clear_time >= 1.0
+        self.partial_support_time = self.partial_support_time + DT if (supported or self.robot_support) else 0.0
+        placed = supported and not held and clear and self.tilt_deg <= UPRIGHT_DEG
+        self.robot_clear_time = self.robot_clear_time + DT if placed else 0.0
         if origin[2] < TABLE - 0.07:
             self.fault("dropped_pitcher")
+
+    def observations(self):
+        frames = list(self.frames)
+        intervals = [r[2] for r in frames[1:]]
+        if intervals:
+            emitted, support, counter, released, clear, tilts = zip(*intervals)
+            positions = np.array([r[0] for r in frames])
+            quats = np.array([r[1] for r in frames])
+            # abs(dot) gives the shorter SO(3) rotation, independent of quaternion sign.
+            least = np.clip(np.min(np.abs(quats @ quats.T)), 0.0, 1.0)
+            span_mm = float(1000 * np.max(pdist(positions)))
+            span_deg = float(np.degrees(2 * np.arccos(least)))
+        else:
+            emitted, support, counter, released, clear, tilts = [], [False], [False], [False], [False], [0.0]
+            span_mm = span_deg = 0.0
+        return dict(
+            measurements_valid=(self.stage_error is None or self.robot_interference_observed),
+            fault_latched=self.first_fault is not None,
+            mug_water_g=float(self.cup * WATER_G_PER_ML), resident_water_g=float(self.skin * WATER_G_PER_ML),
+            other_spill_g=float((self.other + self.counter_ml) * WATER_G_PER_ML),
+            window_s=len(intervals) * SUBSTEPS * DT, visible_discharge=bool(any(emitted)),
+            position_span_mm=span_mm, orientation_span_deg=span_deg, max_tilt_deg=max(tilts),
+            supported_throughout=bool(all(support)), counter_supported_throughout=bool(all(counter)),
+            released_throughout=bool(all(released)), clear_35mm_throughout=bool(all(clear)),
+            receiver_motion_completed=bool(self.motion_completed),
+        )
 
     def report(self):
         inflight = sum(x[2] for x in self.packets)
@@ -383,27 +456,22 @@ class Kitchen:
         )
         if not np.isfinite(total) or abs(total - VOLUME) > 1e-6:
             raise RuntimeError("Volume ledger did not balance")
-        quiet = self.rate < 0.1 and inflight < 0.05
-        safe_progress = (
-            self.lifted
-            and 30 <= self.cup <= 130
-            and quiet
-            and self.partial_support_time >= 0.25
-            and self.counter_ml + self.other <= 10
-        )
-        full = (
-            100 <= self.cup <= 130
-            and self.returned
-            and self.counter_ml + self.other <= 10
-        )
+        evidence = self.observations()
+        decision = grade(evidence, "static_control" if self.profile == "steady" else "moving")
+        self.returned = bool(evidence["window_s"] >= DWELL_S and evidence["counter_supported_throughout"]
+                             and evidence["released_throughout"] and evidence["clear_35mm_throughout"]
+                             and evidence["max_tilt_deg"] <= UPRIGHT_DEG
+                             and evidence["position_span_mm"] <= POSITION_MM
+                             and evidence["orientation_span_deg"] <= ROTATION_DEG
+                             and not evidence["visible_discharge"])
         return dict(
-            score=0.0
-            if self.first_fault
-            else 1.0
-            if full
-            else 0.5
-            if safe_progress
-            else 0.0,
+            **decision, primary_observations=evidence, scoring_id=SCORE_ID,
+            mug_water_g=evidence["mug_water_g"], resident_water_g=evidence["resident_water_g"],
+            other_spill_g=evidence["other_spill_g"], receiver_motion_completed=self.motion_completed,
+            displacement_flag=self.flag_source, displacement_peak_mm=round(1000*self.displacement_peak, 3),
+            stage_onset_g=self.stage_onset_g, stage_travel_mm=self.stage_travel_mm,
+            stage_duration_s=self.stage_duration_s, stage_error=self.stage_error,
+            robot_interference_observed=self.robot_interference_observed,
             first_fault=self.first_fault,
             received_ml=round(self.cup, 3),
             on_person_ml=round(self.skin, 3),
@@ -420,7 +488,6 @@ class Kitchen:
             pitcher_speed_mm_s=round(float(self.free_speed * 1000), 5),
             clearance_35mm=bool(self.clear),
             terminal_dwell_s=round(float(self.robot_clear_time), 4),
-            peak_contact_n=round(self.peak_load, 3),
             released_on_counter=bool(self.returned),
             pitcher_lifted=bool(self.lifted),
             max_tilt_deg=round(np.degrees(self.max_tilt), 2),

@@ -8,19 +8,19 @@ from .model import smooth
 
 
 class IK:
-    def __init__(self, env):
+    def __init__(self, env, side="left"):
         self.m = env.m
         self.d = mj.MjData(env.m)
         self.d.qpos[:] = env.d.qpos
-        self.site = self.m.site("left_tcp").id
+        self.site = self.m.site(side + "_tcp").id
         self.qadr = np.array(
-            [self.m.joint("left_j" + str(i)).qposadr[0] for i in range(1, 7)]
+            [self.m.joint(side + "_j" + str(i)).qposadr[0] for i in range(1, 7)]
         )
         self.dof = np.array(
-            [self.m.joint("left_j" + str(i)).dofadr[0] for i in range(1, 7)]
+            [self.m.joint(side + "_j" + str(i)).dofadr[0] for i in range(1, 7)]
         )
         self.limits = self.m.jnt_range[
-            [self.m.joint("left_j" + str(i)).id for i in range(1, 7)]
+            [self.m.joint(side + "_j" + str(i)).id for i in range(1, 7)]
         ]
         self.worst = 0.0
 
@@ -66,7 +66,7 @@ class Server:
         self.last_rot = None
         self.shift_start = None
         self.previous = None
-        self.recovered = False
+        self.obstruction_pose = None
 
     def command(self):
         e = self.env
@@ -75,12 +75,12 @@ class Server:
             return self.start.copy()
         cup = e.d.body("receiving_hand").xpos.copy()
         if self.mode == "contact_probe":
-            goal = cup + [0.077, 0, 0.048]
-            high = goal + [0, 0, 0.12]
+            approach = MUG + [0, -0.095, 0.052]
+            goal = MUG + [0, -0.006, 0.052]
             pos = (
-                self.p0 + (high - self.p0) * smooth(t / 2)
-                if t <= 2
-                else high + (goal - high) * smooth((t - 2) / 2)
+                self.p0 + (approach - self.p0) * smooth(t / 2.5)
+                if t <= 2.5
+                else approach + (goal - approach) * smooth((t - 2.5) / 3.0)
             )
             f = smooth(t / 2)
             rot = (
@@ -108,10 +108,9 @@ class Server:
         if self.mode == "track":
             pause = False
         # Aim over the actual mug. Keep the angled spout above the rim through wrist roll.
-        if (
-            self.finish_at is None
-            and e.cup + sum(p[2] for p in e.packets) + 0.24 * e.rate >= 120
-        ):
+        if self.finish_at is None and e.cup + sum(
+            p[2] for p in e.packets
+        ) + 0.24 * e.rate >= {"insufficient": 16, "overfill": 151}.get(self.mode, 120):
             self.finish_at = t
             self.last_pose = e.d.site("left_tcp").xpos.copy()
             self.last_rot = e.d.site("left_tcp").xmat.reshape(3, 3).copy()
@@ -137,7 +136,8 @@ class Server:
             gap = 0.0
         elif self.finish_at is None:
             goal_angle = 0.0 if t < 5.5 or pause else np.radians(81)
-            self.pitch += np.clip(goal_angle - self.pitch, -0.115, 0.020)
+            tilt_step = 0.014 if self.mode == "slow_reference" else 0.020
+            self.pitch += np.clip(goal_angle - self.pitch, -0.115, tilt_step)
             r = Rotation.from_rotvec([-self.pitch, 0, 0]).as_matrix()
             # Calibrated geometric offset for downward flight at the outlet.
             mouth = cup + [0, -0.008, 0.212]
@@ -165,9 +165,11 @@ class Server:
                 )
                 gap = 0.0
             elif self.mode == "early_release":
-                pos = vertical
+                raise_fraction = smooth((z - 0.52) / 0.80)
+                exit_fraction = smooth((z - 1.32) / 0.48)
+                pos = vertical + [-0.085 * exit_fraction, 0, 0.080 * raise_fraction]
                 rot = DOWN
-                gap = 1.0
+                gap = 0.0 if z < 1.32 else 0.36 if exit_fraction < 0.99 else 1.0
             elif self.mode == "hold":
                 pos = vertical
                 rot = DOWN
@@ -176,6 +178,11 @@ class Server:
                 pos = vertical + (up - vertical) * smooth((z - 0.52) / 1.78)
                 rot = DOWN
                 gap = 0.0
+            elif self.mode == "drop":
+                exit_fraction = smooth((z - 2.3) / 0.48)
+                pos = up + [-0.085 * exit_fraction, 0, 0]
+                rot = DOWN
+                gap = 0.36 if exit_fraction < 0.99 else 1.0
             elif z < 3.6:
                 pos = up + (rest - up) * smooth((z - 2.3) / 1.3)
                 rot = DOWN
@@ -187,13 +194,33 @@ class Server:
                 exit_handle = 0.060 * smooth((elapsed - 0.60) / 0.55)
                 lift = 0.060 * smooth((elapsed - 1.90) / 0.95)
                 retreat = smooth((elapsed - 2.85) / 0.9)
-                pos = rest + [-exit_handle - 0.031 * retreat, -0.035 * retreat,
-                              lift + 0.033 * retreat]
+                pos = rest + [
+                    -exit_handle - 0.031 * retreat,
+                    -0.035 * retreat,
+                    lift + 0.033 * retreat,
+                ]
                 rot = DOWN
                 gap = 0.36 if elapsed < 1.15 else 1.0
                 if self.mode == "park_closed" and elapsed > 3.4:
                     gap = 0.0
         a = self.start.copy()
+        if self.mode == "receiver_obstruction" and e.onset is not None:
+            # Guide the held pitcher into the path of the already-moving receiver.
+            # Before onset this is the responsive controller, including the genuine pour.
+            if self.obstruction_pose is None:
+                self.obstruction_pose = e.d.site("left_tcp").xpos.copy()
+                self.obstruction_rot = e.d.site("left_tcp").xmat.reshape(3, 3).copy()
+            goal = MUG + [-0.080, -0.060, 0.102]
+            frac = smooth((t - e.onset) / 0.46)
+            pos = self.obstruction_pose + frac * (goal - self.obstruction_pose)
+            rot = (
+                Rotation.from_rotvec(
+                    frac
+                    * Rotation.from_matrix(DOWN @ self.obstruction_rot.T).as_rotvec()
+                ).as_matrix()
+                @ self.obstruction_rot
+            )
+            gap = 0.0
         a[:6] = self.ik.solve(pos, rot)
         a[6] = gap
         return a

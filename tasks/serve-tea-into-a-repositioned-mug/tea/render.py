@@ -54,24 +54,11 @@ class Camera:
                 e.d.xpos[e.pot] + [0, 0, 0.005 + h / 2],
                 TEA,
             )
-        for p, v, w in e.packets:
-            if w > 0.0008:
-                overlay_geom(
-                    sc,
-                    mj.mjtGeom.mjGEOM_SPHERE,
-                    [min(0.0028, 0.0009 + 0.0019 * (w / 0.17) ** (1 / 3)), 0, 0],
-                    p,
-                    TEA,
-                )
-        # A spring pin on the cuff exposes its red head after any witness trips.
-        base = mug + [0.104, 0.005, 0.066]
-        overlay_geom(sc, mj.mjtGeom.mjGEOM_CYLINDER, [0.010, 0.008, 0], base,
-                     (0.15, 0.19, 0.20, 1))
-        if e.flag_source is not None:
-            overlay_geom(sc, mj.mjtGeom.mjGEOM_CYLINDER, [0.004, 0.024, 0],
-                         base + [0, 0, 0.030], (0.84, 0.08, 0.04, 1))
-            overlay_geom(sc, mj.mjtGeom.mjGEOM_BOX, [0.018, 0.005, 0.013],
-                         base + [0, 0, 0.060], (1, 0.035, 0.025, 1))
+        # Every emitted drop is visible in the evaluator's camera model. Its
+        # radius represents its water volume, independently of any outcome label.
+        for p, _, w in e.packets:
+            radius = (3 * w * 1e-6 / (4 * np.pi)) ** (1 / 3)
+            overlay_geom(sc, mj.mjtGeom.mjGEOM_SPHERE, [radius, 0, 0], p, TEA)
         if e.last_skin_point is not None:
             # Attached blot follows the hand after wetting. Its presence conveys wetness, not dose.
             overlay_geom(

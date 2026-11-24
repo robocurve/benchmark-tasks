@@ -159,5 +159,5 @@ class TerminalScore:
         score = float(record.steps[-1].result.info["score"]) if record.steps else 0.0
         return Score(
             value=score,
-            explanation="Terminal pitcher support, delivered volume and latched safety observations.",
+            explanation="Terminal collected masses, two-second visible dwell, pitcher placement and fixture witnesses.",
         )

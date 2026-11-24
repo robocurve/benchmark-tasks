@@ -156,6 +156,152 @@ def rig(parent, asset, acts, side, base_y):
     )
 
 
+def mug_stage(world):
+    """Passive -X main carriage with independent X/Y contact travel at the wrist."""
+    metal = ".37 .43 .46 1"
+    tray = ".27 .32 .34 1"
+    marker = ".96 .72 .16 1"
+    hardware = dict(contype="8", conaffinity="1")
+    visual = dict(contype="0", conaffinity="0")
+
+    # All station drawing coordinates use the tabletop z=0 datum.
+    def point(x, y, z):
+        return np.array([x / 1000, y / 1000, TABLE + z / 1000])
+
+    def box(body, name, center, dims, color, **kw):
+        geom(
+            body,
+            name,
+            "box",
+            4,
+            pos=vec(center),
+            size=vec(np.asarray(dims) / 2000),
+            rgba=color,
+            **kw,
+        )
+
+    box(world, "stage_base", point(605, 343, 6), [240, 112, 12], tray, **hardware)
+    for i, y in enumerate((315, 371)):
+        tube(
+            world,
+            f"stage_rod{i}",
+            point(494, y, 24),
+            point(716, y, 24),
+            0.004,
+            4,
+            metal,
+            **hardware,
+        )
+        for end, x in enumerate((496, 714)):
+            box(
+                world,
+                f"stage_pillow{i}_{end}",
+                point(x, y, 19),
+                [10, 16, 14],
+                metal,
+                **hardware,
+            )
+    for i, x in enumerate((644, 561)):
+        box(
+            world,
+            f"stage_endpoint{i}",
+            point(x, 394, 12.5),
+            [2, 8, 1],
+            marker,
+            **visual,
+        )
+    for i, x in enumerate((526, 679)):
+        box(world, f"stage_stop{i}", point(x, 343, 27), [4, 15, 26], tray, **hardware)
+    # The cord runs to the outside of the worktop. Only the fairlead and tab
+    # are scored examiner-only fixtures; harmless touches on the base are allowed.
+    box(world, "examiner_fairlead", point(501, 386, 22), [8, 12, 16], metal, **hardware)
+    box(world, "examiner_pull_tab", point(501, 548, 8), [16, 24, 8], marker, **hardware)
+    tube(
+        world,
+        "stage_cord_route",
+        point(501, 386, 24),
+        point(501, 548, 10),
+        0.001,
+        5,
+        ".30 .27 .18 1",
+        **visual,
+    )
+    driver = node(world, "body", name="stage_driver", mocap="true", pos=vec(MUG))
+    offset = point(644, 343, 0) - MUG
+
+    # Locations of the guides/witnesses are relative to the commanded moving frame.
+    def at(z):
+        return offset + [0, 0, z / 1000]
+
+    box(driver, "stage_main_carriage", at(35), [66, 90, 6], metal, **hardware)
+    box(driver, "stage_cross_guide_x", at(42), [60, 12, 8], tray, **hardware)
+    first = node(driver, "body", name="stage_x_slide")
+    node(
+        first,
+        "inertial",
+        pos=vec(at(48)),
+        mass=".090",
+        diaginertia=".00004 .00004 .00008",
+    )
+
+    def slider(parent, axis):
+        node(
+            parent,
+            "joint",
+            type="slide",
+            name="witness_" + axis,
+            axis="1 0 0" if axis == "x" else "0 1 0",
+            range="-.006 .006",
+            stiffness="500",
+            damping="2",
+            solreflimit=".004 1",
+        )
+
+    slider(first, "x")
+    box(first, "stage_cross_plate_x", at(48), [60, 60, 4], metal, **hardware)
+    box(first, "stage_cross_guide_y", at(54), [12, 60, 8], tray, **hardware)
+    hand = node(first, "body", name="receiving_hand")
+    node(
+        hand,
+        "inertial",
+        pos=vec((0.10, 0.02, 0.045)),
+        mass=".300",
+        diaginertia=".0007 .001 .001",
+    )
+    slider(hand, "y")
+    box(hand, "stage_cross_plate_y", at(60), [60, 60, 4], metal, **hardware)
+    # A folded angle projects from the top plate to the dorsal wrist support.
+    tube(
+        hand,
+        "stage_bracket_long",
+        at(62),
+        (0.101, 0.103, 0.060),
+        0.004,
+        4,
+        metal,
+        **hardware,
+    )
+    tube(
+        hand,
+        "stage_bracket_wrist",
+        (0.101, 0.103, 0.060),
+        (0.101, 0.005, 0.051),
+        0.004,
+        4,
+        metal,
+        **hardware,
+    )
+    box(
+        driver,
+        "witness_flag",
+        offset + [0, 0.036, 0.049],
+        [22, 8, 18],
+        ".27 .43 .35 1",
+        **visual,
+    )
+    return hand
+
+
 def build():
     root = Element("mujoco", model="Tea service at a kitchen counter")
     node(
@@ -359,22 +505,28 @@ def build():
     tube(pot, "lip_left", (0.012, 0.033, 0.085), LIP, 0.0028, 0, ".22 .49 .53 1")
     tube(pot, "lip_right", (-0.012, 0.033, 0.085), LIP, 0.0028, 0, ".22 .49 .53 1")
     # Facing the arm, the resident holds the mug from its far side (world +x).
-    mug = node(world, "body", name="receiving_hand", mocap="true", pos=vec(MUG))
+    mug = mug_stage(world)
     wall(mug, "mug_wall", 0.035, 0.089, 2, ".54 .77 .87 .26")
-    for i in range(16):
-        a = 2 * np.pi * i / 16
-        b = 2 * np.pi * (i + 1) / 16
-        tube(
-            mug,
-            "serving_mark" + str(i),
-            (0.037 * np.cos(a), 0.037 * np.sin(a), 0.042),
-            (0.037 * np.cos(b), 0.037 * np.sin(b), 0.042),
-            0.0012,
-            5,
-            ".04 .36 .43 1",
-            contype="0",
-            conaffinity="0",
-        )
+    # The same visible levels drive the physical examiner and communicate the target.
+    # Internal liquid area is nominally 260 mL over 78 mm above a 6 mm base.
+    for name, grams, color in [
+        ("trigger_mark", 48, ".83 .41 .08 1"),
+        ("serving_mark", 120, ".04 .36 .43 1"),
+    ]:
+        height = 0.006 + 0.078 * grams / 260
+        for i in range(24):
+            a, b = 2 * np.pi * i / 24, 2 * np.pi * (i + 1) / 24
+            tube(
+                mug,
+                name + str(i),
+                (0.037 * np.cos(a), 0.037 * np.sin(a), height),
+                (0.037 * np.cos(b), 0.037 * np.sin(b), height),
+                0.0009,
+                5,
+                color,
+                contype="0",
+                conaffinity="0",
+            )
     geom(
         mug,
         "mug_base",

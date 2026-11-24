@@ -98,18 +98,18 @@ def main():
                     draw.text((x + 12, 29), subtitle, font=font(14), fill="#bfdad6")
                     draw.text(
                         (x + 12, 324),
-                        f"Mug  {env.cup:5.1f} mL      On person  {env.skin:4.1f} mL",
+                        f"Mug  {report['mug_water_g']:5.1f} g      On surrogate  {report['resident_water_g']:4.1f} g",
                         font=font(16),
                         fill="white",
                     )
                     status = (
-                        "Exposure latched"
+                        "Spill limit exceeded"
                         if env.first_fault
                         else "Pitcher returned"
                         if env.returned and env.lifted
-                        else "Pour in progress"
-                        if env.rate > 0.1
-                        else "Flow stopped"
+                        else "Water falling"
+                        if env.frame_discharge
+                        else "No visible discharge"
                     )
                     draw.text(
                         (x + 12, 352),
@@ -126,7 +126,15 @@ def main():
                 raise RuntimeError("Video encoding failed")
         for env, c, arr, r, title, subtitle in plants:
             replay = env.report()
-            for key in ("score", "received_ml", "on_person_ml", "released_on_counter"):
+            for key in (
+                "score",
+                "mug_water_g",
+                "resident_water_g",
+                "released_on_counter",
+                "receiver_motion_completed",
+                "displacement_flag",
+                "primary_observations",
+            ):
                 if replay[key] != r[key]:
                     raise RuntimeError(f"Replay mismatch: {key}")
 
