@@ -2,8 +2,8 @@
 
 Isaac Lab turns PhysX contact processing off unless a ContactSensor exists; importing this module switches it back
 on when the physics is configured (as touch.py does). The loop is spawned with contact reports on
-(``UsdBody(report=True)``). ``loop_on_agar(environment)`` returns, after the last physics step, the total normal
-force (N) the loop presses on the agar.
+(``UsdBody(report=True)``). ``loops_on_agar(environment, names)`` returns, after the last physics step, the total
+normal force (N) each named loop's tip (neck and ring) presses on the agar.
 """
 
 from __future__ import annotations
@@ -90,29 +90,37 @@ def _body_path(environment, name: str) -> str:
     return path
 
 
-def _make_view(environment) -> None:
+def _tip_path(environment, name: str) -> str:
+    """The rigid body named 'tip' (neck and ring) inside the loop asset ``name``."""
+    from isaaclab.sim.utils.stage import get_current_stage
+
+    root = environment.unwrapped.scene[name].root_view.prim_paths[0]
+    base = root if root.rstrip("/").endswith("/" + name) else root.rsplit("/", 1)[0]
+    for p in get_current_stage().Traverse():
+        q = p.GetPath().pathString
+        if q.startswith(base + "/") and p.GetName() == "tip" and "PhysicsRigidBodyAPI" in p.GetAppliedSchemas():
+            return q
+    raise RuntimeError(f"no tip body under {base}")
+
+
+def _make_view(environment, names) -> None:
     from isaaclab_physx.physics import PhysxManager
 
     _enable_contact_processing()
-    from isaaclab.sim.utils.stage import get_current_stage
-
     agar = _body_path(environment, "agar")
-    stage = get_current_stage()
-    root = environment.unwrapped.scene["loop"].root_view.prim_paths[0]
-    loop = next(p.GetPath().pathString for p in stage.Traverse()
-                if p.GetPath().pathString.startswith(root.rsplit("/", 1)[0] + "/") and p.GetName() == "tip"
-                and "PhysicsRigidBodyAPI" in p.GetAppliedSchemas())
+    tips = [_tip_path(environment, n) for n in names]
+    assert len(set(tips)) == len(tips), tips
     view = PhysxManager.get_physics_sim_view().create_rigid_contact_view(
-        [loop], filter_patterns=[[agar]], max_contact_data_count=512)
-    _VIEW.update(view=view)
-    print(f"[contactkit] {loop} x {agar}", flush=True)
+        tips, filter_patterns=[[agar]] * len(tips), max_contact_data_count=1024)
+    _VIEW.update(view=view, names=list(names))
+    print(f"[contactkit] {tips} x {agar}", flush=True)
 
 
-def loop_on_agar(environment) -> float:
-    """The total normal force (N) the loop pressed on the agar in the last physics step."""
-    if _VIEW["view"] is None:
-        _make_view(environment)
+def loops_on_agar(environment, names) -> list:
+    """The total normal force (N) each loop in ``names`` pressed on the agar in the last physics step."""
+    if _VIEW["view"] is None or _VIEW.get("names") != list(names):
+        _make_view(environment, names)
     force, _, _, _, counts, starts = _VIEW["view"].get_contact_data(dt=environment.unwrapped.physics_dt)
     force = np.abs(_np(force).reshape(-1))
-    n, s = int(_np(counts).reshape(-1)[0]), int(_np(starts).reshape(-1)[0])
-    return float(force[s:s + n].sum())
+    counts, starts = _np(counts).reshape(-1), _np(starts).reshape(-1)
+    return [float(force[int(starts[i]):int(starts[i] + counts[i])].sum()) for i in range(len(names))]
