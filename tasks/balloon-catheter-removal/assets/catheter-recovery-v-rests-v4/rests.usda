@@ -1,0 +1,66 @@
+#usda 1.0
+(defaultPrim="RecoveryRests"
+ metersPerUnit=1
+ upAxis="Z")
+def Xform "RecoveryRests" {
+ def Xform "Rest0" {
+ double3 xformOp:translate=(0,0,0)
+ uniform token[] xformOpOrder=["xformOp:translate"]
+  def Cube "Pedestal" (prepend apiSchemas=["PhysicsCollisionAPI"]) {
+   double size=1
+   double3 xformOp:translate=(0,0,0.0175)
+   double3 xformOp:scale=(.020,.028,0.035)
+   uniform token[] xformOpOrder=["xformOp:translate","xformOp:scale"]
+   bool physics:collisionEnabled=true
+   color3f[] primvars:displayColor=[(0.16,0.55,0.58)]
+  }
+  def Mesh "LeftWing" (prepend apiSchemas=["PhysicsCollisionAPI","PhysicsMeshCollisionAPI"]) {
+   point3f[] points=[(-0.01,-0.014,0.035), (0,-0.014,0.035), (0,-0.014,0.0523), (-0.01,-0.014,0.0623), (-0.01,0.014,0.035), (0,0.014,0.035), (0,0.014,0.0523), (-0.01,0.014,0.0623)]
+   int[] faceVertexCounts=[4, 4, 4, 4, 4, 4]
+   int[] faceVertexIndices=[0, 1, 2, 3, 7, 6, 5, 4, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0]
+   uniform token subdivisionScheme="none"
+   token physics:approximation="convexHull"
+   bool physics:collisionEnabled=true
+   color3f[] primvars:displayColor=[(0.16,0.55,0.58)]
+  }
+  def Mesh "RightWing" (prepend apiSchemas=["PhysicsCollisionAPI","PhysicsMeshCollisionAPI"]) {
+   point3f[] points=[(0,-0.014,0.035), (0.01,-0.014,0.035), (0.01,-0.014,0.0623), (0,-0.014,0.0523), (0,0.014,0.035), (0.01,0.014,0.035), (0.01,0.014,0.0623), (0,0.014,0.0523)]
+   int[] faceVertexCounts=[4, 4, 4, 4, 4, 4]
+   int[] faceVertexIndices=[0, 1, 2, 3, 7, 6, 5, 4, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0]
+   uniform token subdivisionScheme="none"
+   token physics:approximation="convexHull"
+   bool physics:collisionEnabled=true
+   color3f[] primvars:displayColor=[(0.16,0.55,0.58)]
+  }
+ }
+ def Xform "Rest1" {
+ double3 xformOp:translate=(0,-0.15,0)
+ uniform token[] xformOpOrder=["xformOp:translate"]
+  def Cube "Pedestal" (prepend apiSchemas=["PhysicsCollisionAPI"]) {
+   double size=1
+   double3 xformOp:translate=(0,0,0.0175)
+   double3 xformOp:scale=(.020,.028,0.035)
+   uniform token[] xformOpOrder=["xformOp:translate","xformOp:scale"]
+   bool physics:collisionEnabled=true
+   color3f[] primvars:displayColor=[(0.16,0.55,0.58)]
+  }
+  def Mesh "LeftWing" (prepend apiSchemas=["PhysicsCollisionAPI","PhysicsMeshCollisionAPI"]) {
+   point3f[] points=[(-0.01,-0.014,0.035), (0,-0.014,0.035), (0,-0.014,0.0523), (-0.01,-0.014,0.0623), (-0.01,0.014,0.035), (0,0.014,0.035), (0,0.014,0.0523), (-0.01,0.014,0.0623)]
+   int[] faceVertexCounts=[4, 4, 4, 4, 4, 4]
+   int[] faceVertexIndices=[0, 1, 2, 3, 7, 6, 5, 4, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0]
+   uniform token subdivisionScheme="none"
+   token physics:approximation="convexHull"
+   bool physics:collisionEnabled=true
+   color3f[] primvars:displayColor=[(0.16,0.55,0.58)]
+  }
+  def Mesh "RightWing" (prepend apiSchemas=["PhysicsCollisionAPI","PhysicsMeshCollisionAPI"]) {
+   point3f[] points=[(0,-0.014,0.035), (0.01,-0.014,0.035), (0.01,-0.014,0.0623), (0,-0.014,0.0523), (0,0.014,0.035), (0.01,0.014,0.035), (0.01,0.014,0.0623), (0,0.014,0.0523)]
+   int[] faceVertexCounts=[4, 4, 4, 4, 4, 4]
+   int[] faceVertexIndices=[0, 1, 2, 3, 7, 6, 5, 4, 0, 4, 5, 1, 1, 5, 6, 2, 2, 6, 7, 3, 3, 7, 4, 0]
+   uniform token subdivisionScheme="none"
+   token physics:approximation="convexHull"
+   bool physics:collisionEnabled=true
+   color3f[] primvars:displayColor=[(0.16,0.55,0.58)]
+  }
+ }
+}

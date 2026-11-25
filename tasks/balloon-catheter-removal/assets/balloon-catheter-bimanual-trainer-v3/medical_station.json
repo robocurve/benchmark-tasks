@@ -1,0 +1,46 @@
+{
+  "units": "m",
+  "chamber_radii_m": [
+    0.075,
+    0.065,
+    0.045
+  ],
+  "catheter_radius_m": 0.003,
+  "inflated_balloon_radius_m": 0.015,
+  "deflated_balloon_radius_m": 0.004,
+  "neck_bore_radius_m": 0.006,
+  "root_translation_m": [
+    0,
+    0.1,
+    0
+  ],
+  "syringe_plunger_travel_m": [
+    -0.055,
+    0
+  ],
+  "rigid_bodies": [
+    "Catheter",
+    "Valve",
+    "Syringe/Barrel",
+    "Syringe/Plunger"
+  ],
+  "physical": [
+    "annular neck and hollow syringe wall",
+    "free catheter retained by contacts",
+    "spherical valve branch",
+    "free syringe and prismatic plunger"
+  ],
+  "visual_only": [
+    "cutaway chamber window"
+  ],
+  "chamber_visualization": "cutaway display shell; invisible full hollow wall retains collisions",
+  "approximations": [
+    "rigid main catheter",
+    "one spherical joint for flexible valve branch",
+    "runtime pressure-volume surrogate; no fluid solver"
+  ],
+  "not_implemented": [
+    "clinical anatomy and forces",
+    "continuous catheter deformation"
+  ]
+}
