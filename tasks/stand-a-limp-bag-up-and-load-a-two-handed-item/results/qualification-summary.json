@@ -1,0 +1,9432 @@
+{
+ "note": "Copied from the RESULT.json files of the recorded Isaac runs (per-step samples left out); see README. The scripted and Dream-1 runs were re-recorded on 2026-11-23 with the files in this folder; the control variants are from the earlier build and grader and were not re-run.",
+ "scripted": {
+  "policy": "scripted",
+  "model": null,
+  "demo_variant": "full",
+  "score": 1.0,
+  "scorer": "bag_load_score",
+  "control_hz": 20,
+  "step_limit": 2400,
+  "executed_steps": 1620,
+  "elapsed_s": 540.26,
+  "scene_sha256": "98feb3b63507e5670f52eb77247d8729a6b6990923a446879e1e13df40d71095",
+  "asset_sha256": "fa6a091f5e07929b24735d63fe51018080b17cf0c45336f2dd3388ac39b28928",
+  "model_sha256": "5a2e4b1caf40a3578b94bbd87bbe8de950571b9ce2da90d15225e8e58dfd51a7",
+  "grader_sha256": "8d636d4a2773be8574ff44d2c5e91e4de1fbc2a95efe68a6d447761e0e02b7c9",
+  "inspect_robots": "1.0.0",
+  "yam_arena": "0.1.0",
+  "seed": 0,
+  "observation_state_keys": [
+   "joint_pos"
+  ],
+  "observation_cameras": [
+   "top_cam",
+   "left_cam",
+   "right_cam"
+  ],
+  "policy_inputs_camera_size": [
+   320,
+   176
+  ],
+  "wall_time_limit_is_external": true,
+  "scripted_demo_reads_simulator_state": true,
+  "dream_chunk_anchor": null,
+  "dream_action_requests": 0,
+  "peak_interarm_contact_n": 0.0,
+  "final_grade": {
+   "score": 1.0,
+   "hold_ticks": 40,
+   "lift_ticks": 0,
+   "lifted": true,
+   "fell": false,
+   "spilled": false,
+   "torn": false,
+   "peak_seam_pull_n": 3.54,
+   "carton": {
+    "rests": true,
+    "inside": true,
+    "above_base_mm": -0.0,
+    "lean_deg": 0.0,
+    "outside_outline_mm": -6.2
+   },
+   "pack": {
+    "rests": true,
+    "inside": true,
+    "above_base_mm": -0.0,
+    "lean_deg": 0.0,
+    "outside_outline_mm": -2.1
+   },
+   "upright": true,
+   "hanging": false,
+   "hands_clear": true,
+   "rims_mm": {
+    "left": 179.7,
+    "right": 177.1,
+    "near": 177.8,
+    "far": 178.4
+   },
+   "base_low_mm": -0.0,
+   "base_tilt_deg": 0.0,
+   "base_shift_mm": 24.8,
+   "grips_above_rim_mm": {
+    "left": -75.3,
+    "right": -80.9
+   },
+   "gripper_clearance_mm": 135.4,
+   "seam_pull_n": 0.32
+  },
+  "termination_reason": "success",
+  "reset_state": {
+   "base_mm": [
+    360.0,
+    70.0,
+    -0.0
+   ],
+   "base_tilt_deg": 0.0,
+   "rims_mm": {
+    "left": 26.7,
+    "right": 26.2,
+    "near": 27.0,
+    "far": 27.0
+   },
+   "grips_mm": {
+    "left": [
+     360.0,
+     226.5,
+     7.0
+    ],
+    "right": [
+     360.0,
+     -85.1,
+     7.0
+    ]
+   },
+   "carton_mm": [
+    220.0,
+    245.0,
+    107.5
+   ],
+   "pack_mm": [
+    405.0,
+    -170.0,
+    100.0
+   ],
+   "carton_tilt_deg": 0.0,
+   "pack_tilt_deg": 0.0,
+   "angles_deg": {
+    "left_lean": 85.3,
+    "right_lean": 89.4,
+    "near_lean": -82.0,
+    "far_lean": -82.0,
+    "left_fold": -165.2,
+    "right_fold": -165.4,
+    "near_fold": 165.0,
+    "far_fold": 165.0,
+    "left_swing": -24.2,
+    "right_swing": -27.8
+   }
+  },
+  "peaks": {
+   "left_on_bag": 68.287,
+   "left_on_carton": 5.841,
+   "left_on_pack": 7.976,
+   "left_tips_on_carton": 0.0,
+   "left_tips_on_pack": 7.98,
+   "left_tips_on_handle_left": 36.32,
+   "left_tips_on_handle_right": 0.0,
+   "right_on_bag": 60.149,
+   "right_on_carton": 78.568,
+   "right_on_pack": 6.107,
+   "right_tips_on_carton": 39.61,
+   "right_tips_on_pack": 6.11,
+   "right_tips_on_handle_left": 0.0,
+   "right_tips_on_handle_right": 32.41
+  },
+  "phases": [
+   [
+    0,
+    "carton: reach across"
+   ],
+   [
+    84,
+    "carton: pinch and lift"
+   ],
+   [
+    130,
+    "carton: over the bag"
+   ],
+   [
+    188,
+    "open: pinch the handle on the table"
+   ],
+   [
+    268,
+    "open: raise the wall"
+   ],
+   [
+    336,
+    "carton: lower onto the base"
+   ],
+   [
+    460,
+    "carton: let go"
+   ],
+   [
+    484,
+    "stand: let go of the handle"
+   ],
+   [
+    518,
+    "pack: hands over it"
+   ],
+   [
+    638,
+    "pack: hands down beside it"
+   ],
+   [
+    670,
+    "pack: press from both sides"
+   ],
+   [
+    701,
+    "pack: try the lift"
+   ],
+   [
+    747,
+    "pack: lift"
+   ],
+   [
+    787,
+    "pack: up and over to the bag"
+   ],
+   [
+    919,
+    "pack: lower to the rim"
+   ],
+   [
+    979,
+    "let down: ease the hands apart"
+   ],
+   [
+    1008,
+    "let down: draw the hands away"
+   ],
+   [
+    1050,
+    "lift: fingers through the handles"
+   ],
+   [
+    1152,
+    "lift: swing the handles up"
+   ],
+   [
+    1346,
+    "lift: up"
+   ],
+   [
+    1407,
+    "lift: hold, and back over the marks"
+   ],
+   [
+    1455,
+    "lift: set down"
+   ],
+   [
+    1509,
+    "lift: let go"
+   ],
+   [
+    1589,
+    "away"
+   ]
+  ],
+  "demo_events": [
+   {
+    "tick": 98,
+    "event": "carton pinched",
+    "rims_mm": [
+     27,
+     26,
+     27,
+     27
+    ],
+    "base_mm": [
+     360.0,
+     70.0,
+     -0.0
+    ],
+    "carton_mm": [
+     219.7,
+     244.9,
+     107.6
+    ],
+    "pack_mm": [
+     405.0,
+     -170.0,
+     100.0
+    ],
+    "grips_mm": {
+     "left": [
+      360.0,
+      226.5,
+      7.0
+     ],
+     "right": [
+      360.0,
+      -85.1,
+      7.0
+     ]
+    },
+    "tips_command_mm": {
+     "right": [
+      220.0,
+      249.0,
+      195.0
+     ],
+     "left": [
+      400.0,
+      361.5,
+      197.0
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      400.1,
+      362.2,
+      196.3
+     ],
+     "right": [
+      219.3,
+      248.9,
+      193.5
+     ]
+    },
+    "pads_apart_mm": [
+     40.0,
+     59.9
+    ],
+    "held": true
+   },
+   {
+    "tick": 188,
+    "event": "carton over the bag",
+    "rims_mm": [
+     27,
+     26,
+     27,
+     27
+    ],
+    "base_mm": [
+     360.0,
+     70.0,
+     -0.0
+    ],
+    "carton_mm": [
+     244.9,
+     70.4,
+     307.8
+    ],
+    "pack_mm": [
+     405.0,
+     -170.0,
+     100.0
+    ],
+    "grips_mm": {
+     "left": [
+      360.0,
+      226.5,
+      7.0
+     ],
+     "right": [
+      360.0,
+      -85.1,
+      7.0
+     ]
+    },
+    "tips_command_mm": {
+     "right": [
+      241.7,
+      73.1,
+      417.2
+     ],
+     "left": [
+      400.0,
+      361.5,
+      197.0
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      400.5,
+      361.5,
+      196.7
+     ],
+     "right": [
+      244.7,
+      74.1,
+      394.3
+     ]
+    },
+    "pads_apart_mm": [
+     40.0,
+     59.9
+    ],
+    "under_mm": 200.2
+   },
+   {
+    "tick": 268,
+    "event": "handle pinched",
+    "rims_mm": [
+     26,
+     25,
+     26,
+     26
+    ],
+    "base_mm": [
+     360.2,
+     69.5,
+     -0.0
+    ],
+    "carton_mm": [
+     245.9,
+     70.6,
+     310.4
+    ],
+    "pack_mm": [
+     405.0,
+     -170.0,
+     100.0
+    ],
+    "grips_mm": {
+     "left": [
+      359.9,
+      226.0,
+      7.0
+     ],
+     "right": [
+      360.6,
+      -86.0,
+      6.9
+     ]
+    },
+    "tips_command_mm": {
+     "right": [
+      241.7,
+      73.1,
+      417.2
+     ],
+     "left": [
+      380.0,
+      226.5,
+      3.0
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      379.9,
+      226.1,
+      3.5
+     ],
+     "right": [
+      245.2,
+      73.9,
+      396.8
+     ]
+    },
+    "pads_apart_mm": [
+     19.7,
+     59.9
+    ],
+    "held": true
+   },
+   {
+    "tick": 336,
+    "event": "wall raised",
+    "rims_mm": [
+     177,
+     173,
+     178,
+     175
+    ],
+    "base_mm": [
+     360.6,
+     85.4,
+     1.4
+    ],
+    "carton_mm": [
+     245.9,
+     70.6,
+     310.5
+    ],
+    "pack_mm": [
+     405.0,
+     -170.0,
+     100.0
+    ],
+    "grips_mm": {
+     "left": [
+      360.2,
+      241.7,
+      161.3
+     ],
+     "right": [
+      362.4,
+      -5.2,
+      94.6
+     ]
+    },
+    "tips_command_mm": {
+     "right": [
+      241.7,
+      73.1,
+      417.2
+     ],
+     "left": [
+      380.0,
+      241.6,
+      158.8
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      380.2,
+      242.0,
+      157.6
+     ],
+     "right": [
+      245.2,
+      73.8,
+      397.0
+     ]
+    },
+    "pads_apart_mm": [
+     19.5,
+     59.9
+    ],
+    "held": true,
+    "rim_mm": [
+     361.2,
+     162.6,
+     178.7
+    ],
+    "base_up_mm": 1.4
+   },
+   {
+    "tick": 336,
+    "event": "creases",
+    "rims_mm": [
+     177,
+     173,
+     178,
+     175
+    ],
+    "base_mm": [
+     360.6,
+     85.4,
+     1.4
+    ],
+    "carton_mm": [
+     245.9,
+     70.6,
+     310.5
+    ],
+    "pack_mm": [
+     405.0,
+     -170.0,
+     100.0
+    ],
+    "grips_mm": {
+     "left": [
+      360.2,
+      241.7,
+      161.3
+     ],
+     "right": [
+      362.4,
+      -5.2,
+      94.6
+     ]
+    },
+    "tips_command_mm": {
+     "right": [
+      241.7,
+      73.1,
+      417.2
+     ],
+     "left": [
+      380.0,
+      241.6,
+      158.8
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      380.2,
+      242.0,
+      157.6
+     ],
+     "right": [
+      245.2,
+      73.8,
+      397.0
+     ]
+    },
+    "pads_apart_mm": [
+     19.5,
+     59.9
+    ],
+    "left_mm": [
+     360.6,
+     147.7,
+     91.9
+    ],
+    "right_mm": [
+     361.9,
+     31.6,
+     89.6
+    ],
+    "carton_y_mm": 89.7,
+    "room_mm": 114.1,
+    "carton_lean_deg": [
+     0.4,
+     -0.4
+    ]
+   },
+   {
+    "tick": 446,
+    "event": "carton down",
+    "rims_mm": [
+     180,
+     177,
+     178,
+     178
+    ],
+    "base_mm": [
+     360.9,
+     86.1,
+     -0.0
+    ],
+    "carton_mm": [
+     244.6,
+     89.4,
+     120.5
+    ],
+    "pack_mm": [
+     405.0,
+     -170.0,
+     100.0
+    ],
+    "grips_mm": {
+     "left": [
+      359.9,
+      241.4,
+      163.8
+     ],
+     "right": [
+      361.5,
+      -13.4,
+      98.9
+     ]
+    },
+    "tips_command_mm": {
+     "right": [
+      245.4,
+      95.5,
+      229.5
+     ],
+     "left": [
+      380.0,
+      241.6,
+      158.8
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      379.9,
+      241.6,
+      160.3
+     ],
+     "right": [
+      244.3,
+      93.2,
+      206.9
+     ]
+    },
+    "pads_apart_mm": [
+     19.3,
+     59.9
+    ],
+    "above_base_mm": 8.8
+   },
+   {
+    "tick": 518,
+    "event": "bag standing",
+    "rims_mm": [
+     180,
+     177,
+     178,
+     178
+    ],
+    "base_mm": [
+     360.9,
+     86.0,
+     0.0
+    ],
+    "carton_mm": [
+     243.0,
+     90.3,
+     111.5
+    ],
+    "pack_mm": [
+     405.0,
+     -170.0,
+     100.0
+    ],
+    "grips_mm": {
+     "left": [
+      360.2,
+      193.6,
+      104.4
+     ],
+     "right": [
+      361.5,
+      -12.7,
+      98.4
+     ]
+    },
+    "tips_command_mm": {
+     "right": [
+      244.4,
+      -27.4,
+      272.2
+     ],
+     "left": [
+      341.4,
+      271.6,
+      234.8
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      342.3,
+      272.0,
+      235.7
+     ],
+     "right": [
+      245.1,
+      -27.5,
+      272.7
+     ]
+    },
+    "pads_apart_mm": [
+     40.0,
+     86.0
+    ],
+    "upright": true
+   },
+   {
+    "tick": 701,
+    "event": "pack pressed",
+    "rims_mm": [
+     180,
+     177,
+     178,
+     178
+    ],
+    "base_mm": [
+     360.9,
+     86.0,
+     -0.0
+    ],
+    "carton_mm": [
+     243.0,
+     90.3,
+     111.5
+    ],
+    "pack_mm": [
+     405.0,
+     -170.0,
+     100.0
+    ],
+    "grips_mm": {
+     "left": [
+      360.2,
+      193.6,
+      104.4
+     ],
+     "right": [
+      361.5,
+      -12.7,
+      98.4
+     ]
+    },
+    "tips_command_mm": {
+     "left": [
+      405.0,
+      -139.2,
+      148.3
+     ],
+     "right": [
+      405.0,
+      -200.8,
+      148.3
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      418.4,
+      -113.8,
+      156.6
+     ],
+     "right": [
+      418.0,
+      -226.4,
+      157.5
+     ]
+    },
+    "pads_apart_mm": [
+     0.2,
+     0.0
+    ],
+    "press_n": [
+     7.3,
+     5.7
+    ],
+    "travel_mm": 46.0,
+    "held": true,
+    "attempt": 0
+   },
+   {
+    "tick": 747,
+    "event": "pack hanging",
+    "rims_mm": [
+     180,
+     177,
+     178,
+     178
+    ],
+    "base_mm": [
+     360.9,
+     86.0,
+     0.0
+    ],
+    "carton_mm": [
+     243.0,
+     90.3,
+     111.5
+    ],
+    "pack_mm": [
+     393.9,
+     -169.9,
+     131.0
+    ],
+    "grips_mm": {
+     "left": [
+      360.2,
+      193.6,
+      104.4
+     ],
+     "right": [
+      361.5,
+      -12.7,
+      98.4
+     ]
+    },
+    "tips_command_mm": {
+     "left": [
+      405.0,
+      -139.2,
+      208.3
+     ],
+     "right": [
+      405.0,
+      -200.8,
+      208.3
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      411.5,
+      -114.6,
+      188.2
+     ],
+     "right": [
+      407.0,
+      -227.2,
+      187.5
+     ]
+    },
+    "pads_apart_mm": [
+     0.3,
+     0.4
+    ],
+    "lean_deg": 2.2,
+    "attempt": 0,
+    "twist_deg": {
+     "left": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "right": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "off_middle_mm": [
+     14.6,
+     16.0
+    ]
+   },
+   {
+    "tick": 767,
+    "event": "carrying",
+    "rims_mm": [
+     180,
+     177,
+     178,
+     178
+    ],
+    "base_mm": [
+     360.9,
+     86.0,
+     0.0
+    ],
+    "carton_mm": [
+     243.0,
+     90.3,
+     111.5
+    ],
+    "pack_mm": [
+     398.8,
+     -171.1,
+     183.6
+    ],
+    "grips_mm": {
+     "left": [
+      360.2,
+      193.6,
+      104.4
+     ],
+     "right": [
+      361.5,
+      -12.7,
+      98.4
+     ]
+    },
+    "tips_command_mm": {
+     "left": [
+      404.3,
+      -140.4,
+      259.5
+     ],
+     "right": [
+      404.6,
+      -200.1,
+      259.6
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      414.7,
+      -115.2,
+      240.9
+     ],
+     "right": [
+      411.4,
+      -227.8,
+      241.1
+     ]
+    },
+    "pads_apart_mm": [
+     0.4,
+     0.4
+    ],
+    "lean_deg": 1.0,
+    "press_n": [
+     5.0,
+     5.1
+    ],
+    "twist_deg": {
+     "left": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "right": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "off_deg": {
+     "left": 6.0,
+     "right": 7.2
+    },
+    "level_mm": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "tilt_deg": 1.0,
+    "squeeze_mm": [
+     1.5,
+     0.9
+    ],
+    "trim_mm": [
+     0.0,
+     0.0,
+     1.3
+    ]
+   },
+   {
+    "tick": 787,
+    "event": "carrying",
+    "rims_mm": [
+     180,
+     177,
+     178,
+     178
+    ],
+    "base_mm": [
+     360.9,
+     86.0,
+     -0.0
+    ],
+    "carton_mm": [
+     243.0,
+     90.3,
+     111.5
+    ],
+    "pack_mm": [
+     394.5,
+     -169.7,
+     192.2
+    ],
+    "grips_mm": {
+     "left": [
+      360.2,
+      193.6,
+      104.4
+     ],
+     "right": [
+      361.5,
+      -12.7,
+      98.4
+     ]
+    },
+    "tips_command_mm": {
+     "left": [
+      403.4,
+      -141.9,
+      269.4
+     ],
+     "right": [
+      404.1,
+      -199.4,
+      269.9
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      412.2,
+      -114.6,
+      250.2
+     ],
+     "right": [
+      407.8,
+      -227.3,
+      248.7
+     ]
+    },
+    "pads_apart_mm": [
+     0.1,
+     0.3
+    ],
+    "lean_deg": 2.1,
+    "press_n": [
+     5.7,
+     5.7
+    ],
+    "twist_deg": {
+     "left": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "right": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "off_deg": {
+     "left": 6.6,
+     "right": 7.6
+    },
+    "level_mm": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "tilt_deg": 2.3,
+    "squeeze_mm": [
+     3.3,
+     1.8
+    ],
+    "trim_mm": [
+     0.0,
+     0.0,
+     -0.7
+    ]
+   },
+   {
+    "tick": 787,
+    "event": "pack lifted",
+    "rims_mm": [
+     180,
+     177,
+     178,
+     178
+    ],
+    "base_mm": [
+     360.9,
+     86.0,
+     -0.0
+    ],
+    "carton_mm": [
+     243.0,
+     90.3,
+     111.5
+    ],
+    "pack_mm": [
+     394.5,
+     -169.7,
+     192.2
+    ],
+    "grips_mm": {
+     "left": [
+      360.2,
+      193.6,
+      104.4
+     ],
+     "right": [
+      361.5,
+      -12.7,
+      98.4
+     ]
+    },
+    "tips_command_mm": {
+     "left": [
+      403.4,
+      -141.9,
+      269.4
+     ],
+     "right": [
+      404.1,
+      -199.4,
+      269.9
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      412.2,
+      -114.6,
+      250.2
+     ],
+     "right": [
+      407.8,
+      -227.3,
+      248.7
+     ]
+    },
+    "pads_apart_mm": [
+     0.1,
+     0.3
+    ],
+    "press_n": [
+     5.7,
+     5.7
+    ]
+   },
+   {
+    "tick": 807,
+    "event": "carrying",
+    "rims_mm": [
+     180,
+     177,
+     178,
+     178
+    ],
+    "base_mm": [
+     360.9,
+     86.0,
+     0.0
+    ],
+    "carton_mm": [
+     243.0,
+     90.3,
+     111.5
+    ],
+    "pack_mm": [
+     399.5,
+     -131.5,
+     245.1
+    ],
+    "grips_mm": {
+     "left": [
+      360.2,
+      193.6,
+      104.4
+     ],
+     "right": [
+      361.5,
+      -12.7,
+      98.4
+     ]
+    },
+    "tips_command_mm": {
+     "left": [
+      405.1,
+      -102.2,
+      321.9
+     ],
+     "right": [
+      405.8,
+      -159.7,
+      322.4
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      416.2,
+      -75.9,
+      303.7
+     ],
+     "right": [
+      413.5,
+      -188.7,
+      302.8
+     ]
+    },
+    "pads_apart_mm": [
+     0.2,
+     0.3
+    ],
+    "lean_deg": 1.6,
+    "press_n": [
+     5.5,
+     5.5
+    ],
+    "twist_deg": {
+     "left": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "right": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "off_deg": {
+     "left": 6.8,
+     "right": 6.7
+    },
+    "level_mm": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "tilt_deg": 1.7,
+    "squeeze_mm": [
+     3.3,
+     1.8
+    ],
+    "trim_mm": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "tick": 827,
+    "event": "carrying",
+    "rims_mm": [
+     180,
+     177,
+     178,
+     178
+    ],
+    "base_mm": [
+     360.9,
+     86.0,
+     0.0
+    ],
+    "carton_mm": [
+     243.0,
+     90.3,
+     111.5
+    ],
+    "pack_mm": [
+     394.8,
+     -77.1,
+     311.7
+    ],
+    "grips_mm": {
+     "left": [
+      360.2,
+      193.6,
+      104.4
+     ],
+     "right": [
+      361.5,
+      -12.7,
+      98.4
+     ]
+    },
+    "tips_command_mm": {
+     "left": [
+      401.1,
+      -50.6,
+      385.6
+     ],
+     "right": [
+      401.8,
+      -108.1,
+      386.0
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      410.8,
+      -21.3,
+      371.4
+     ],
+     "right": [
+      408.3,
+      -134.1,
+      369.9
+     ]
+    },
+    "pads_apart_mm": [
+     0.4,
+     0.1
+    ],
+    "lean_deg": 0.6,
+    "press_n": [
+     5.5,
+     5.5
+    ],
+    "twist_deg": {
+     "left": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "right": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "off_deg": {
+     "left": 7.1,
+     "right": 6.4
+    },
+    "level_mm": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "tilt_deg": 0.8,
+    "squeeze_mm": [
+     3.3,
+     1.8
+    ],
+    "trim_mm": [
+     -6.0,
+     1.6,
+     -2.5
+    ]
+   },
+   {
+    "tick": 863,
+    "event": "carrying",
+    "rims_mm": [
+     180,
+     177,
+     178,
+     178
+    ],
+    "base_mm": [
+     360.9,
+     86.0,
+     0.0
+    ],
+    "carton_mm": [
+     243.0,
+     90.3,
+     111.5
+    ],
+    "pack_mm": [
+     394.0,
+     -45.2,
+     311.1
+    ],
+    "grips_mm": {
+     "left": [
+      360.2,
+      193.6,
+      104.4
+     ],
+     "right": [
+      361.5,
+      -12.7,
+      98.4
+     ]
+    },
+    "tips_command_mm": {
+     "left": [
+      406.2,
+      -17.0,
+      388.8
+     ],
+     "right": [
+      406.8,
+      -74.3,
+      389.1
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      412.1,
+      10.9,
+      370.7
+     ],
+     "right": [
+      410.7,
+      -101.8,
+      370.1
+     ]
+    },
+    "pads_apart_mm": [
+     0.2,
+     0.1
+    ],
+    "lean_deg": 2.5,
+    "press_n": [
+     5.3,
+     5.3
+    ],
+    "twist_deg": {
+     "left": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "right": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "off_deg": {
+     "left": 7.5,
+     "right": 6.6
+    },
+    "level_mm": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "tilt_deg": 2.6,
+    "squeeze_mm": [
+     3.3,
+     2.1
+    ],
+    "trim_mm": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "tick": 883,
+    "event": "carrying",
+    "rims_mm": [
+     180,
+     177,
+     178,
+     178
+    ],
+    "base_mm": [
+     360.9,
+     86.0,
+     0.0
+    ],
+    "carton_mm": [
+     243.0,
+     90.3,
+     111.5
+    ],
+    "pack_mm": [
+     398.6,
+     27.2,
+     314.0
+    ],
+    "grips_mm": {
+     "left": [
+      360.2,
+      193.6,
+      104.4
+     ],
+     "right": [
+      361.5,
+      -12.7,
+      98.4
+     ]
+    },
+    "tips_command_mm": {
+     "left": [
+      410.8,
+      56.9,
+      391.3
+     ],
+     "right": [
+      411.4,
+      -0.3,
+      391.6
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      416.7,
+      84.2,
+      373.5
+     ],
+     "right": [
+      417.5,
+      -28.6,
+      374.4
+     ]
+    },
+    "pads_apart_mm": [
+     0.2,
+     0.1
+    ],
+    "lean_deg": 3.1,
+    "press_n": [
+     5.8,
+     5.6
+    ],
+    "twist_deg": {
+     "left": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "right": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "off_deg": {
+     "left": 7.9,
+     "right": 6.2
+    },
+    "level_mm": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "tilt_deg": 3.1,
+    "squeeze_mm": [
+     3.3,
+     2.1
+    ],
+    "trim_mm": [
+     4.0,
+     4.8,
+     2.2
+    ]
+   },
+   {
+    "tick": 903,
+    "event": "carrying",
+    "rims_mm": [
+     180,
+     177,
+     178,
+     178
+    ],
+    "base_mm": [
+     360.9,
+     86.0,
+     0.0
+    ],
+    "carton_mm": [
+     243.0,
+     90.3,
+     111.5
+    ],
+    "pack_mm": [
+     400.3,
+     82.6,
+     315.2
+    ],
+    "grips_mm": {
+     "left": [
+      360.2,
+      193.6,
+      104.4
+     ],
+     "right": [
+      361.5,
+      -12.7,
+      98.4
+     ]
+    },
+    "tips_command_mm": {
+     "left": [
+      411.9,
+      111.7,
+      392.0
+     ],
+     "right": [
+      412.5,
+      54.5,
+      392.3
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      418.3,
+      140.0,
+      374.7
+     ],
+     "right": [
+      419.3,
+      27.2,
+      376.1
+     ]
+    },
+    "pads_apart_mm": [
+     0.2,
+     0.1
+    ],
+    "lean_deg": 2.9,
+    "press_n": [
+     5.3,
+     5.2
+    ],
+    "twist_deg": {
+     "left": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "right": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "off_deg": {
+     "left": 7.8,
+     "right": 6.3
+    },
+    "level_mm": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "tilt_deg": 3.0,
+    "squeeze_mm": [
+     3.3,
+     2.1
+    ],
+    "trim_mm": [
+     4.7,
+     5.5,
+     2.6
+    ]
+   },
+   {
+    "tick": 919,
+    "event": "pack over the bag",
+    "rims_mm": [
+     180,
+     177,
+     178,
+     178
+    ],
+    "base_mm": [
+     360.9,
+     86.0,
+     0.0
+    ],
+    "carton_mm": [
+     243.0,
+     90.3,
+     111.5
+    ],
+    "pack_mm": [
+     399.4,
+     86.6,
+     314.6
+    ],
+    "grips_mm": {
+     "left": [
+      360.2,
+      193.6,
+      104.4
+     ],
+     "right": [
+      361.5,
+      -12.7,
+      98.4
+     ]
+    },
+    "tips_command_mm": {
+     "left": [
+      412.5,
+      115.7,
+      392.4
+     ],
+     "right": [
+      413.1,
+      58.4,
+      392.7
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      417.8,
+      144.2,
+      373.9
+     ],
+     "right": [
+      418.3,
+      31.4,
+      375.7
+     ]
+    },
+    "pads_apart_mm": [
+     0.1,
+     0.1
+    ],
+    "off_mm": [
+     1.0,
+     -0.4
+    ],
+    "press_n": [
+     5.3,
+     5.3
+    ],
+    "lean_deg": 3.1,
+    "squeeze_mm": [
+     3.3,
+     2.1
+    ],
+    "foot_mm": [
+     393.8,
+     86.6,
+     209.4
+    ]
+   },
+   {
+    "tick": 939,
+    "event": "carrying",
+    "rims_mm": [
+     180,
+     177,
+     178,
+     178
+    ],
+    "base_mm": [
+     360.9,
+     86.0,
+     -0.0
+    ],
+    "carton_mm": [
+     243.0,
+     90.3,
+     111.5
+    ],
+    "pack_mm": [
+     389.3,
+     84.7,
+     243.9
+    ],
+    "grips_mm": {
+     "left": [
+      360.2,
+      193.6,
+      104.4
+     ],
+     "right": [
+      361.5,
+      -12.7,
+      98.4
+     ]
+    },
+    "tips_command_mm": {
+     "left": [
+      412.9,
+      115.5,
+      326.6
+     ],
+     "right": [
+      413.5,
+      58.3,
+      327.0
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      412.5,
+      142.5,
+      302.6
+     ],
+     "right": [
+      413.7,
+      29.4,
+      305.7
+     ]
+    },
+    "pads_apart_mm": [
+     0.1,
+     0.1
+    ],
+    "lean_deg": 6.8,
+    "press_n": [
+     5.6,
+     5.6
+    ],
+    "twist_deg": {
+     "left": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "right": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "off_deg": {
+     "left": 8.4,
+     "right": 8.1
+    },
+    "level_mm": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "tilt_deg": 6.8,
+    "squeeze_mm": [
+     3.3,
+     2.1
+    ],
+    "trim_mm": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "tick": 959,
+    "event": "carrying",
+    "rims_mm": [
+     180,
+     177,
+     178,
+     178
+    ],
+    "base_mm": [
+     360.9,
+     86.0,
+     0.0
+    ],
+    "carton_mm": [
+     243.0,
+     90.3,
+     111.5
+    ],
+    "pack_mm": [
+     407.2,
+     86.2,
+     153.8
+    ],
+    "grips_mm": {
+     "left": [
+      360.2,
+      193.6,
+      104.4
+     ],
+     "right": [
+      361.5,
+      -12.7,
+      98.4
+     ]
+    },
+    "tips_command_mm": {
+     "left": [
+      432.2,
+      115.7,
+      240.7
+     ],
+     "right": [
+      432.8,
+      58.4,
+      241.1
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      431.6,
+      144.2,
+      212.7
+     ],
+     "right": [
+      433.9,
+      31.3,
+      216.1
+     ]
+    },
+    "pads_apart_mm": [
+     0.1,
+     0.1
+    ],
+    "lean_deg": 7.7,
+    "press_n": [
+     5.4,
+     5.4
+    ],
+    "twist_deg": {
+     "left": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "right": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "off_deg": {
+     "left": 8.5,
+     "right": 7.6
+    },
+    "level_mm": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "tilt_deg": 7.7,
+    "squeeze_mm": [
+     3.3,
+     2.1
+    ],
+    "trim_mm": [
+     18.7,
+     0.4,
+     10.2
+    ]
+   },
+   {
+    "tick": 979,
+    "event": "carrying",
+    "rims_mm": [
+     180,
+     177,
+     178,
+     178
+    ],
+    "base_mm": [
+     360.9,
+     86.0,
+     0.0
+    ],
+    "carton_mm": [
+     243.0,
+     90.3,
+     111.5
+    ],
+    "pack_mm": [
+     406.6,
+     86.0,
+     144.4
+    ],
+    "grips_mm": {
+     "left": [
+      360.2,
+      193.6,
+      104.5
+     ],
+     "right": [
+      361.5,
+      -12.7,
+      98.4
+     ]
+    },
+    "tips_command_mm": {
+     "left": [
+      424.2,
+      114.5,
+      228.4
+     ],
+     "right": [
+      424.9,
+      58.0,
+      228.9
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      428.3,
+      143.8,
+      204.7
+     ],
+     "right": [
+      430.3,
+      31.0,
+      207.5
+     ]
+    },
+    "pads_apart_mm": [
+     0.1,
+     0.2
+    ],
+    "lean_deg": 5.1,
+    "press_n": [
+     5.2,
+     5.2
+    ],
+    "twist_deg": {
+     "left": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "right": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    "off_deg": {
+     "left": 7.8,
+     "right": 6.7
+    },
+    "level_mm": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "tilt_deg": 5.2,
+    "squeeze_mm": [
+     3.9,
+     2.4
+    ],
+    "trim_mm": [
+     10.9,
+     -0.3,
+     11.0
+    ]
+   },
+   {
+    "tick": 979,
+    "event": "pack at the rim",
+    "rims_mm": [
+     180,
+     177,
+     178,
+     178
+    ],
+    "base_mm": [
+     360.9,
+     86.0,
+     0.0
+    ],
+    "carton_mm": [
+     243.0,
+     90.3,
+     111.5
+    ],
+    "pack_mm": [
+     406.6,
+     86.0,
+     144.4
+    ],
+    "grips_mm": {
+     "left": [
+      360.2,
+      193.6,
+      104.5
+     ],
+     "right": [
+      361.5,
+      -12.7,
+      98.4
+     ]
+    },
+    "tips_command_mm": {
+     "left": [
+      424.2,
+      114.5,
+      228.4
+     ],
+     "right": [
+      424.9,
+      58.0,
+      228.9
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      428.3,
+      143.8,
+      204.7
+     ],
+     "right": [
+      430.3,
+      31.0,
+      207.5
+     ]
+    },
+    "pads_apart_mm": [
+     0.1,
+     0.2
+    ],
+    "above_base_mm": 40.4
+   },
+   {
+    "tick": 1008,
+    "event": "pack let down",
+    "rims_mm": [
+     180,
+     177,
+     178,
+     178
+    ],
+    "base_mm": [
+     360.9,
+     86.0,
+     0.0
+    ],
+    "carton_mm": [
+     243.0,
+     90.3,
+     111.5
+    ],
+    "pack_mm": [
+     413.9,
+     89.5,
+     104.0
+    ],
+    "grips_mm": {
+     "left": [
+      360.2,
+      193.5,
+      104.5
+     ],
+     "right": [
+      361.5,
+      -12.6,
+      98.8
+     ]
+    },
+    "tips_command_mm": {
+     "left": [
+      424.2,
+      128.3,
+      228.4
+     ],
+     "right": [
+      424.9,
+      44.2,
+      228.9
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      423.6,
+      130.2,
+      225.5
+     ],
+     "right": [
+      423.7,
+      41.9,
+      224.5
+     ]
+    },
+    "pads_apart_mm": [
+     0.1,
+     0.1
+    ],
+    "eased_mm": 13.8,
+    "above_base_mm": -0.0
+   },
+   {
+    "tick": 1050,
+    "event": "pack in",
+    "rims_mm": [
+     180,
+     177,
+     178,
+     178
+    ],
+    "base_mm": [
+     360.9,
+     86.0,
+     -0.0
+    ],
+    "carton_mm": [
+     243.0,
+     90.3,
+     111.5
+    ],
+    "pack_mm": [
+     413.9,
+     89.5,
+     104.0
+    ],
+    "grips_mm": {
+     "left": [
+      360.2,
+      193.5,
+      104.5
+     ],
+     "right": [
+      361.5,
+      -12.6,
+      98.8
+     ]
+    },
+    "tips_command_mm": {
+     "left": [
+      394.2,
+      193.3,
+      338.4
+     ],
+     "right": [
+      394.9,
+      -20.8,
+      338.9
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      400.9,
+      193.9,
+      352.3
+     ],
+     "right": [
+      399.3,
+      -17.6,
+      355.6
+     ]
+    },
+    "pads_apart_mm": [
+     0.1,
+     0.1
+    ]
+   },
+   {
+    "tick": 1152,
+    "event": "fingers through the handles",
+    "rims_mm": [
+     180,
+     177,
+     178,
+     178
+    ],
+    "base_mm": [
+     360.9,
+     86.0,
+     -0.0
+    ],
+    "carton_mm": [
+     243.0,
+     90.3,
+     111.5
+    ],
+    "pack_mm": [
+     413.9,
+     89.5,
+     104.0
+    ],
+    "grips_mm": {
+     "left": [
+      360.2,
+      193.6,
+      104.5
+     ],
+     "right": [
+      361.5,
+      -12.6,
+      98.8
+     ]
+    },
+    "tips_command_mm": {
+     "left": [
+      356.0,
+      172.4,
+      98.7
+     ],
+     "right": [
+      357.0,
+      8.3,
+      93.0
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      353.1,
+      171.2,
+      96.8
+     ],
+     "right": [
+      355.7,
+      8.9,
+      93.5
+     ]
+    },
+    "pads_apart_mm": [
+     30.0,
+     30.0
+    ],
+    "handle_deg": [
+     22.0,
+     15.0
+    ]
+   },
+   {
+    "tick": 1320,
+    "event": "handles up",
+    "rims_mm": [
+     180,
+     177,
+     178,
+     178
+    ],
+    "base_mm": [
+     370.4,
+     86.3,
+     -0.0
+    ],
+    "carton_mm": [
+     252.4,
+     88.6,
+     111.5
+    ],
+    "pack_mm": [
+     423.2,
+     90.8,
+     104.0
+    ],
+    "grips_mm": {
+     "left": [
+      367.2,
+      192.9,
+      255.1
+     ],
+     "right": [
+      372.7,
+      10.4,
+      258.0
+     ]
+    },
+    "tips_command_mm": {
+     "left": [
+      356.4,
+      168.9,
+      255.8
+     ],
+     "right": [
+      357.4,
+      1.5,
+      253.2
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      355.9,
+      169.0,
+      255.6
+     ],
+     "right": [
+      356.8,
+      1.2,
+      251.9
+     ]
+    },
+    "pads_apart_mm": [
+     28.4,
+     26.0
+    ],
+    "handle_deg": [
+     159.0,
+     180.0
+    ]
+   },
+   {
+    "tick": 1346,
+    "event": "grips pinched",
+    "rims_mm": [
+     180,
+     178,
+     178,
+     178
+    ],
+    "base_mm": [
+     370.4,
+     86.3,
+     -0.0
+    ],
+    "carton_mm": [
+     252.4,
+     88.6,
+     111.5
+    ],
+    "pack_mm": [
+     423.2,
+     90.8,
+     104.0
+    ],
+    "grips_mm": {
+     "left": [
+      367.1,
+      197.7,
+      253.7
+     ],
+     "right": [
+      372.5,
+      14.2,
+      258.5
+     ]
+    },
+    "tips_command_mm": {
+     "left": [
+      363.3,
+      170.8,
+      255.0
+     ],
+     "right": [
+      368.7,
+      31.2,
+      258.0
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      363.4,
+      171.1,
+      253.8
+     ],
+     "right": [
+      367.9,
+      31.5,
+      258.6
+     ]
+    },
+    "pads_apart_mm": [
+     19.4,
+     17.9
+    ],
+    "held": [
+     true,
+     true
+    ],
+    "attempt": 1
+   },
+   {
+    "tick": 1407,
+    "event": "bag up",
+    "rims_mm": [
+     248,
+     239,
+     260,
+     238
+    ],
+    "base_mm": [
+     353.2,
+     98.0,
+     75.5
+    ],
+    "carton_mm": [
+     244.1,
+     92.7,
+     195.6
+    ],
+    "pack_mm": [
+     413.8,
+     96.6,
+     175.3
+    ],
+    "grips_mm": {
+     "left": [
+      368.8,
+      195.5,
+      334.7
+     ],
+     "right": [
+      375.1,
+      17.0,
+      330.4
+     ]
+    },
+    "tips_command_mm": {
+     "left": [
+      363.3,
+      170.8,
+      362.5
+     ],
+     "right": [
+      368.7,
+      31.2,
+      365.5
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      365.1,
+      169.1,
+      335.5
+     ],
+     "right": [
+      370.4,
+      34.3,
+      330.1
+     ]
+    },
+    "pads_apart_mm": [
+     19.4,
+     17.8
+    ],
+    "rise_mm": 107.5,
+    "base_low_mm": 59.1
+   },
+   {
+    "tick": 1455,
+    "event": "bag held",
+    "rims_mm": [
+     244,
+     237,
+     261,
+     236
+    ],
+    "base_mm": [
+     359.6,
+     70.6,
+     74.0
+    ],
+    "carton_mm": [
+     251.6,
+     67.7,
+     195.1
+    ],
+    "pack_mm": [
+     421.1,
+     71.5,
+     173.2
+    ],
+    "grips_mm": {
+     "left": [
+      377.5,
+      171.3,
+      331.7
+     ],
+     "right": [
+      384.1,
+      -7.6,
+      330.6
+     ]
+    },
+    "tips_command_mm": {
+     "left": [
+      373.1,
+      146.2,
+      362.5
+     ],
+     "right": [
+      378.5,
+      6.5,
+      365.5
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      373.7,
+      144.9,
+      332.3
+     ],
+     "right": [
+      379.4,
+      9.8,
+      330.3
+     ]
+    },
+    "pads_apart_mm": [
+     19.4,
+     17.8
+    ],
+    "base_tilt_deg": 5.3,
+    "base_low_mm": 57.9,
+    "moved_back_mm": [
+     9.8,
+     -24.6
+    ]
+   },
+   {
+    "tick": 1589,
+    "event": "bag set down",
+    "rims_mm": [
+     180,
+     177,
+     178,
+     178
+    ],
+    "base_mm": [
+     383.1,
+     79.1,
+     0.0
+    ],
+    "carton_mm": [
+     265.1,
+     75.6,
+     111.5
+    ],
+    "pack_mm": [
+     435.6,
+     86.1,
+     104.0
+    ],
+    "grips_mm": {
+     "left": [
+      374.6,
+      186.8,
+      104.7
+     ],
+     "right": [
+      390.8,
+      -18.8,
+      99.0
+     ]
+    },
+    "tips_command_mm": {
+     "left": [
+      311.1,
+      261.8,
+      157.0
+     ],
+     "right": [
+      316.4,
+      -131.8,
+      150.2
+     ]
+    },
+    "tips_measured_mm": {
+     "left": [
+      317.0,
+      265.1,
+      160.4
+     ],
+     "right": [
+      319.7,
+      -132.7,
+      153.9
+     ]
+    },
+    "pads_apart_mm": [
+     24.9,
+     28.0
+    ]
+   }
+  ],
+  "worst_ik_mm": 0.095
+ },
+ "dream": {
+  "policy": "dream",
+  "model": "dreamlabs/dream-1-beta",
+  "demo_variant": null,
+  "score": 0.0,
+  "scorer": "bag_load_score",
+  "control_hz": 20,
+  "step_limit": 2400,
+  "executed_steps": 2400,
+  "elapsed_s": 686.06,
+  "scene_sha256": "98feb3b63507e5670f52eb77247d8729a6b6990923a446879e1e13df40d71095",
+  "asset_sha256": "fa6a091f5e07929b24735d63fe51018080b17cf0c45336f2dd3388ac39b28928",
+  "model_sha256": "5a2e4b1caf40a3578b94bbd87bbe8de950571b9ce2da90d15225e8e58dfd51a7",
+  "grader_sha256": "8d636d4a2773be8574ff44d2c5e91e4de1fbc2a95efe68a6d447761e0e02b7c9",
+  "inspect_robots": "1.0.0",
+  "yam_arena": "0.1.0",
+  "seed": 0,
+  "observation_state_keys": [
+   "joint_pos"
+  ],
+  "observation_cameras": [
+   "top_cam",
+   "left_cam",
+   "right_cam"
+  ],
+  "policy_inputs_camera_size": [
+   320,
+   176
+  ],
+  "wall_time_limit_is_external": true,
+  "scripted_demo_reads_simulator_state": false,
+  "dream_chunk_anchor": "executed_target_blend_v2",
+  "dream_action_requests": 92,
+  "peak_interarm_contact_n": 0.0,
+  "final_grade": {
+   "score": 0.0,
+   "hold_ticks": 0,
+   "lift_ticks": 0,
+   "lifted": false,
+   "fell": false,
+   "spilled": false,
+   "torn": false,
+   "peak_seam_pull_n": 0.5,
+   "carton": {
+    "rests": false,
+    "inside": false,
+    "above_base_mm": -4.0,
+    "lean_deg": 0.0,
+    "outside_outline_mm": 140.6
+   },
+   "pack": {
+    "rests": false,
+    "inside": false,
+    "above_base_mm": -4.0,
+    "lean_deg": 0.0,
+    "outside_outline_mm": 193.2
+   },
+   "upright": false,
+   "hanging": false,
+   "hands_clear": true,
+   "rims_mm": {
+    "left": 94.0,
+    "right": 94.0,
+    "near": 94.1,
+    "far": 94.1
+   },
+   "base_low_mm": -0.0,
+   "base_tilt_deg": 0.0,
+   "base_shift_mm": 20.9,
+   "grips_above_rim_mm": {
+    "left": -166.5,
+    "right": -166.5
+   },
+   "gripper_clearance_mm": 175.3,
+   "seam_pull_n": 0.03
+  },
+  "termination_reason": "max_steps",
+  "reset_state": {
+   "base_mm": [
+    360.0,
+    70.0,
+    -0.0
+   ],
+   "base_tilt_deg": 0.0,
+   "rims_mm": {
+    "left": 26.7,
+    "right": 26.2,
+    "near": 27.0,
+    "far": 27.0
+   },
+   "grips_mm": {
+    "left": [
+     360.0,
+     226.5,
+     7.0
+    ],
+    "right": [
+     360.0,
+     -85.1,
+     7.0
+    ]
+   },
+   "carton_mm": [
+    220.0,
+    245.0,
+    107.5
+   ],
+   "pack_mm": [
+    405.0,
+    -170.0,
+    100.0
+   ],
+   "carton_tilt_deg": 0.0,
+   "pack_tilt_deg": 0.0,
+   "angles_deg": {
+    "left_lean": 85.3,
+    "right_lean": 89.4,
+    "near_lean": -82.0,
+    "far_lean": -82.0,
+    "left_fold": -165.2,
+    "right_fold": -165.4,
+    "near_fold": 165.0,
+    "far_fold": 165.0,
+    "left_swing": -24.2,
+    "right_swing": -27.8
+   }
+  },
+  "peaks": {
+   "left_on_bag": 54.976,
+   "left_on_carton": 0.0,
+   "left_on_pack": 0.0,
+   "left_tips_on_carton": 0.0,
+   "left_tips_on_pack": 0.0,
+   "left_tips_on_handle_left": 27.5,
+   "left_tips_on_handle_right": 0.0,
+   "right_on_bag": 0.214,
+   "right_on_carton": 0.0,
+   "right_on_pack": 8.801,
+   "right_tips_on_carton": 0.0,
+   "right_tips_on_pack": 8.8,
+   "right_tips_on_handle_left": 0.0,
+   "right_tips_on_handle_right": 0.0
+  },
+  "phases": null,
+  "demo_events": null,
+  "worst_ik_mm": null
+ },
+ "variants": {
+  "large_first": {
+   "policy": "scripted",
+   "model": null,
+   "demo_variant": "large_first",
+   "score": 0.0,
+   "scorer": "bag_load_score",
+   "control_hz": 20,
+   "step_limit": 2400,
+   "executed_steps": 2400,
+   "elapsed_s": 1534.33,
+   "scene_sha256": "9bc4690a944d5b216cf0472cc6b3573243ecb73ee2286c6a661ff9a9224cdc32",
+   "asset_sha256": "4dd936ad467c5b6da6df57b9d333e4b23ec6b80980493235a5be703f01eeef0c",
+   "model_sha256": "a8be6cb0f2289a9df4382a70a40a694a63b778e037fe46e70ab1f2f6402ec906",
+   "grader_sha256": "3270e6db7bc7320917e1524ac07d41e505899023608e042adac0667ab2a696a5",
+   "inspect_robots": "1.0.0",
+   "yam_arena": "0.1.0",
+   "seed": 0,
+   "observation_state_keys": [
+    "joint_pos"
+   ],
+   "observation_cameras": [
+    "top_cam",
+    "left_cam",
+    "right_cam"
+   ],
+   "policy_inputs_camera_size": [
+    320,
+    176
+   ],
+   "wall_time_limit_is_external": true,
+   "scripted_demo_reads_simulator_state": true,
+   "dream_chunk_anchor": null,
+   "dream_action_requests": 0,
+   "peak_interarm_contact_n": 0.0,
+   "final_grade": {
+    "score": 0.0,
+    "hold_ticks": 0,
+    "lift_ticks": 0,
+    "lifted": false,
+    "fell": false,
+    "spilled": false,
+    "torn": false,
+    "peak_seam_pull_n": 0.52,
+    "carton": {
+     "rests": false,
+     "inside": false,
+     "above_base_mm": -4.0,
+     "lean_deg": 0.0,
+     "outside_outline_mm": 160.9
+    },
+    "pack": {
+     "rests": false,
+     "inside": true,
+     "above_base_mm": 5.22,
+     "lean_deg": 0.8,
+     "outside_outline_mm": -2.4
+    },
+    "upright": false,
+    "hanging": false,
+    "hands_clear": true,
+    "rims_mm": {
+     "left": 10.1,
+     "right": 10.1,
+     "near": 10.8,
+     "far": 10.1
+    },
+    "base_low_mm": -0.0,
+    "base_tilt_deg": 0.0,
+    "base_shift_mm": 0.3,
+    "grips_above_rim_mm": {
+     "left": -174.5,
+     "right": -174.5
+    },
+    "gripper_clearance_mm": 173.8,
+    "seam_pull_n": 0.37
+   },
+   "termination_reason": "max_steps",
+   "reset_state": {
+    "base_mm": [
+     360.0,
+     70.0,
+     -0.0
+    ],
+    "base_tilt_deg": 0.0,
+    "rims_mm": {
+     "left": 26.7,
+     "right": 26.2,
+     "near": 27.0,
+     "far": 27.0
+    },
+    "grips_mm": {
+     "left": [
+      360.0,
+      226.5,
+      7.0
+     ],
+     "right": [
+      360.0,
+      -85.1,
+      7.0
+     ]
+    },
+    "carton_mm": [
+     220.0,
+     245.0,
+     107.5
+    ],
+    "pack_mm": [
+     405.0,
+     -170.0,
+     100.0
+    ],
+    "carton_tilt_deg": 0.0,
+    "pack_tilt_deg": 0.0,
+    "angles_deg": {
+     "left_lean": 85.3,
+     "right_lean": 89.4,
+     "near_lean": -82.0,
+     "far_lean": -82.0,
+     "left_fold": -165.2,
+     "right_fold": -165.4,
+     "near_fold": 165.0,
+     "far_fold": 165.0,
+     "left_swing": -24.2,
+     "right_swing": -27.8
+    }
+   },
+   "peaks": {
+    "left_on_bag": 0.0,
+    "left_on_carton": 0.0,
+    "left_on_pack": 7.703,
+    "left_tips_on_carton": 0.0,
+    "left_tips_on_pack": 7.7,
+    "left_tips_on_handle_left": 0.0,
+    "left_tips_on_handle_right": 0.0,
+    "right_on_bag": 0.0,
+    "right_on_carton": 0.0,
+    "right_on_pack": 6.204,
+    "right_tips_on_carton": 0.0,
+    "right_tips_on_pack": 6.2,
+    "right_tips_on_handle_left": 0.0,
+    "right_tips_on_handle_right": 0.0
+   },
+   "phases": [
+    [
+     0,
+     "pack: hands over it"
+    ],
+    [
+     120,
+     "pack: hands down beside it"
+    ],
+    [
+     152,
+     "pack: press from both sides"
+    ],
+    [
+     183,
+     "pack: try the lift"
+    ],
+    [
+     229,
+     "pack: lift"
+    ],
+    [
+     269,
+     "pack: up and over to the bag"
+    ],
+    [
+     401,
+     "pack: lower to the rim"
+    ],
+    [
+     461,
+     "let down: ease the hands apart"
+    ],
+    [
+     515,
+     "let down: draw the hands away"
+    ],
+    [
+     557,
+     "away"
+    ],
+    [
+     601,
+     "wait"
+    ]
+   ],
+   "demo_events": [
+    {
+     "tick": 183,
+     "event": "pack pressed",
+     "rims_mm": [
+      27,
+      26,
+      27,
+      27
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      220.0,
+      245.0,
+      107.5
+     ],
+     "pack_mm": [
+      405.0,
+      -170.0,
+      100.0
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       226.5,
+       7.0
+      ],
+      "right": [
+       360.0,
+       -85.1,
+       7.0
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       405.0,
+       -139.2,
+       148.3
+      ],
+      "right": [
+       405.0,
+       -200.8,
+       148.3
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       418.4,
+       -113.8,
+       156.6
+      ],
+      "right": [
+       418.0,
+       -226.4,
+       157.5
+      ]
+     },
+     "pads_apart_mm": [
+      0.2,
+      0.0
+     ],
+     "press_n": [
+      7.4,
+      5.6
+     ],
+     "travel_mm": 46.0,
+     "held": true,
+     "attempt": 0
+    },
+    {
+     "tick": 229,
+     "event": "pack hanging",
+     "rims_mm": [
+      27,
+      26,
+      27,
+      27
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      220.0,
+      245.0,
+      107.5
+     ],
+     "pack_mm": [
+      394.0,
+      -169.9,
+      131.0
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       226.5,
+       7.0
+      ],
+      "right": [
+       360.0,
+       -85.1,
+       7.0
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       405.0,
+       -139.2,
+       208.3
+      ],
+      "right": [
+       405.0,
+       -200.8,
+       208.3
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       411.5,
+       -114.6,
+       188.2
+      ],
+      "right": [
+       407.0,
+       -227.2,
+       187.5
+      ]
+     },
+     "pads_apart_mm": [
+      0.3,
+      0.4
+     ],
+     "lean_deg": 2.1,
+     "attempt": 0,
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_middle_mm": [
+      14.5,
+      15.9
+     ]
+    },
+    {
+     "tick": 249,
+     "event": "carrying",
+     "rims_mm": [
+      27,
+      26,
+      27,
+      27
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      220.0,
+      245.0,
+      107.5
+     ],
+     "pack_mm": [
+      399.0,
+      -171.0,
+      183.5
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       226.5,
+       7.0
+      ],
+      "right": [
+       360.0,
+       -85.1,
+       7.0
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       404.3,
+       -140.4,
+       259.4
+      ],
+      "right": [
+       404.4,
+       -199.9,
+       259.5
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       414.9,
+       -115.2,
+       241.1
+      ],
+      "right": [
+       411.3,
+       -227.8,
+       241.0
+      ]
+     },
+     "pads_apart_mm": [
+      0.4,
+      0.4
+     ],
+     "lean_deg": 0.9,
+     "press_n": [
+      5.0,
+      5.0
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 6.0,
+      "right": 7.3
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 0.9,
+     "squeeze_mm": [
+      1.5,
+      1.2
+     ],
+     "trim_mm": [
+      0.0,
+      0.0,
+      1.3
+     ]
+    },
+    {
+     "tick": 269,
+     "event": "carrying",
+     "rims_mm": [
+      27,
+      26,
+      27,
+      27
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      220.0,
+      245.0,
+      107.5
+     ],
+     "pack_mm": [
+      395.0,
+      -169.6,
+      192.2
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       226.5,
+       7.0
+      ],
+      "right": [
+       360.0,
+       -85.1,
+       7.0
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       403.7,
+       -141.4,
+       269.0
+      ],
+      "right": [
+       404.1,
+       -199.4,
+       269.3
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       412.3,
+       -114.4,
+       250.3
+      ],
+      "right": [
+       408.1,
+       -227.0,
+       248.9
+      ]
+     },
+     "pads_apart_mm": [
+      0.2,
+      0.3
+     ],
+     "lean_deg": 1.8,
+     "press_n": [
+      5.6,
+      5.7
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 6.6,
+      "right": 7.6
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 2.0,
+     "squeeze_mm": [
+      2.7,
+      1.8
+     ],
+     "trim_mm": [
+      0.0,
+      0.0,
+      -1.1
+     ]
+    },
+    {
+     "tick": 269,
+     "event": "pack lifted",
+     "rims_mm": [
+      27,
+      26,
+      27,
+      27
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      220.0,
+      245.0,
+      107.5
+     ],
+     "pack_mm": [
+      395.0,
+      -169.6,
+      192.2
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       226.5,
+       7.0
+      ],
+      "right": [
+       360.0,
+       -85.1,
+       7.0
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       403.7,
+       -141.4,
+       269.0
+      ],
+      "right": [
+       404.1,
+       -199.4,
+       269.3
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       412.3,
+       -114.4,
+       250.3
+      ],
+      "right": [
+       408.1,
+       -227.0,
+       248.9
+      ]
+     },
+     "pads_apart_mm": [
+      0.2,
+      0.3
+     ],
+     "press_n": [
+      5.6,
+      5.7
+     ]
+    },
+    {
+     "tick": 289,
+     "event": "carrying",
+     "rims_mm": [
+      27,
+      26,
+      27,
+      27
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      220.0,
+      245.0,
+      107.5
+     ],
+     "pack_mm": [
+      400.1,
+      -137.9,
+      244.3
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       226.5,
+       7.0
+      ],
+      "right": [
+       360.0,
+       -85.1,
+       7.0
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       405.1,
+       -108.7,
+       321.3
+      ],
+      "right": [
+       405.4,
+       -166.5,
+       321.5
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       416.6,
+       -82.4,
+       303.3
+      ],
+      "right": [
+       413.2,
+       -195.2,
+       301.9
+      ]
+     },
+     "pads_apart_mm": [
+      0.2,
+      0.3
+     ],
+     "lean_deg": 1.1,
+     "press_n": [
+      5.4,
+      5.3
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 6.7,
+      "right": 6.8
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 1.3,
+     "squeeze_mm": [
+      2.7,
+      2.1
+     ],
+     "trim_mm": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "tick": 309,
+     "event": "carrying",
+     "rims_mm": [
+      27,
+      26,
+      27,
+      27
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      220.0,
+      245.0,
+      107.5
+     ],
+     "pack_mm": [
+      394.2,
+      -93.3,
+      310.7
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       226.5,
+       7.0
+      ],
+      "right": [
+       360.0,
+       -85.1,
+       7.0
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       399.7,
+       -66.6,
+       384.5
+      ],
+      "right": [
+       399.9,
+       -124.3,
+       384.7
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       409.7,
+       -37.6,
+       370.5
+      ],
+      "right": [
+       406.7,
+       -150.3,
+       368.7
+      ]
+     },
+     "pads_apart_mm": [
+      0.4,
+      0.1
+     ],
+     "lean_deg": 0.0,
+     "press_n": [
+      5.4,
+      5.4
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 6.9,
+      "right": 6.5
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 0.6,
+     "squeeze_mm": [
+      2.7,
+      2.1
+     ],
+     "trim_mm": [
+      -7.2,
+      1.0,
+      -2.6
+     ]
+    },
+    {
+     "tick": 345,
+     "event": "carrying",
+     "rims_mm": [
+      27,
+      26,
+      27,
+      27
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      220.0,
+      245.0,
+      107.5
+     ],
+     "pack_mm": [
+      392.6,
+      -60.9,
+      309.6
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       226.5,
+       7.0
+      ],
+      "right": [
+       360.0,
+       -85.1,
+       7.0
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       404.6,
+       -33.0,
+       387.7
+      ],
+      "right": [
+       404.9,
+       -90.7,
+       387.9
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       410.5,
+       -5.1,
+       369.5
+      ],
+      "right": [
+       408.5,
+       -117.8,
+       368.2
+      ]
+     },
+     "pads_apart_mm": [
+      0.3,
+      0.2
+     ],
+     "lean_deg": 2.1,
+     "press_n": [
+      5.3,
+      5.5
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 7.5,
+      "right": 6.7
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 2.2,
+     "squeeze_mm": [
+      2.7,
+      2.1
+     ],
+     "trim_mm": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "tick": 365,
+     "event": "carrying",
+     "rims_mm": [
+      27,
+      26,
+      27,
+      27
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      220.0,
+      245.0,
+      107.5
+     ],
+     "pack_mm": [
+      397.2,
+      11.0,
+      313.0
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       226.5,
+       7.0
+      ],
+      "right": [
+       360.0,
+       -85.1,
+       7.0
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       409.2,
+       40.6,
+       390.8
+      ],
+      "right": [
+       409.5,
+       -17.1,
+       391.0
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       414.9,
+       67.8,
+       372.7
+      ],
+      "right": [
+       415.2,
+       -45.0,
+       373.2
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.1
+     ],
+     "lean_deg": 2.6,
+     "press_n": [
+      5.4,
+      5.3
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 7.8,
+      "right": 6.2
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 2.6,
+     "squeeze_mm": [
+      2.7,
+      2.1
+     ],
+     "trim_mm": [
+      4.4,
+      4.5,
+      2.7
+     ]
+    },
+    {
+     "tick": 385,
+     "event": "carrying",
+     "rims_mm": [
+      27,
+      26,
+      27,
+      27
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      220.0,
+      245.0,
+      107.5
+     ],
+     "pack_mm": [
+      398.7,
+      66.2,
+      314.5
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       226.5,
+       7.0
+      ],
+      "right": [
+       360.0,
+       -85.1,
+       7.0
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       410.6,
+       95.6,
+       392.2
+      ],
+      "right": [
+       410.9,
+       37.9,
+       392.4
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       416.6,
+       123.5,
+       374.3
+      ],
+      "right": [
+       417.1,
+       10.7,
+       375.3
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.1
+     ],
+     "lean_deg": 2.6,
+     "press_n": [
+      5.4,
+      5.3
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 7.8,
+      "right": 6.4
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 2.7,
+     "squeeze_mm": [
+      2.7,
+      2.1
+     ],
+     "trim_mm": [
+      5.7,
+      5.3,
+      3.8
+     ]
+    },
+    {
+     "tick": 401,
+     "event": "pack over the bag",
+     "rims_mm": [
+      27,
+      26,
+      27,
+      27
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      220.0,
+      245.0,
+      107.5
+     ],
+     "pack_mm": [
+      398.2,
+      70.2,
+      314.2
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       226.5,
+       7.0
+      ],
+      "right": [
+       360.0,
+       -85.1,
+       7.0
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       411.5,
+       99.7,
+       392.5
+      ],
+      "right": [
+       411.8,
+       42.0,
+       392.7
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       416.5,
+       127.6,
+       373.7
+      ],
+      "right": [
+       416.4,
+       14.8,
+       375.1
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.1
+     ],
+     "off_mm": [
+      0.6,
+      -0.2
+     ],
+     "press_n": [
+      5.0,
+      5.0
+     ],
+     "lean_deg": 2.7,
+     "squeeze_mm": [
+      2.7,
+      2.1
+     ],
+     "foot_mm": [
+      393.4,
+      70.2,
+      209.5
+     ]
+    },
+    {
+     "tick": 421,
+     "event": "carrying",
+     "rims_mm": [
+      27,
+      26,
+      27,
+      27
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      220.0,
+      245.0,
+      107.5
+     ],
+     "pack_mm": [
+      386.2,
+      69.2,
+      233.2
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       226.5,
+       7.0
+      ],
+      "right": [
+       360.0,
+       -85.1,
+       7.0
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       411.6,
+       99.4,
+       316.7
+      ],
+      "right": [
+       411.6,
+       42.6,
+       316.7
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       410.4,
+       126.9,
+       292.5
+      ],
+      "right": [
+       411.2,
+       13.7,
+       295.0
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.1
+     ],
+     "lean_deg": 7.1,
+     "press_n": [
+      5.4,
+      5.4
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 8.5,
+      "right": 8.2
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 7.1,
+     "squeeze_mm": [
+      3.0,
+      3.0
+     ],
+     "trim_mm": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "tick": 441,
+     "event": "carrying",
+     "rims_mm": [
+      16,
+      18,
+      17,
+      17
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      220.0,
+      245.0,
+      107.5
+     ],
+     "pack_mm": [
+      405.9,
+      70.7,
+      128.7
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       229.3,
+       6.1
+      ],
+      "right": [
+       360.0,
+       -88.2,
+       6.2
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       433.4,
+       98.3,
+       217.6
+      ],
+      "right": [
+       433.1,
+       42.6,
+       217.4
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       431.7,
+       128.0,
+       188.5
+      ],
+      "right": [
+       433.0,
+       14.9,
+       190.8
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.1
+     ],
+     "lean_deg": 8.2,
+     "press_n": [
+      5.6,
+      5.7
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 8.8,
+      "right": 7.8
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 8.2,
+     "squeeze_mm": [
+      3.3,
+      3.9
+     ],
+     "trim_mm": [
+      21.6,
+      -0.7,
+      11.8
+     ]
+    },
+    {
+     "tick": 461,
+     "event": "carrying",
+     "rims_mm": [
+      10,
+      10,
+      10,
+      10
+     ],
+     "base_mm": [
+      360.3,
+      70.2,
+      -0.0
+     ],
+     "carton_mm": [
+      220.0,
+      245.0,
+      107.5
+     ],
+     "pack_mm": [
+      408.7,
+      70.0,
+      121.2
+     ],
+     "grips_mm": {
+      "left": [
+       360.2,
+       230.1,
+       5.5
+      ],
+      "right": [
+       360.3,
+       -89.6,
+       5.5
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       427.1,
+       97.9,
+       197.8
+      ],
+      "right": [
+       426.8,
+       43.2,
+       197.6
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       433.1,
+       127.2,
+       182.0
+      ],
+      "right": [
+       434.0,
+       14.5,
+       184.4
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.1
+     ],
+     "lean_deg": 6.3,
+     "press_n": [
+      5.3,
+      6.2
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 7.1,
+      "right": 6.4
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 6.3,
+     "squeeze_mm": [
+      3.9,
+      4.5
+     ],
+     "trim_mm": [
+      15.6,
+      -0.6,
+      7.1
+     ]
+    },
+    {
+     "tick": 461,
+     "event": "pack at the rim",
+     "rims_mm": [
+      10,
+      10,
+      10,
+      10
+     ],
+     "base_mm": [
+      360.3,
+      70.2,
+      -0.0
+     ],
+     "carton_mm": [
+      220.0,
+      245.0,
+      107.5
+     ],
+     "pack_mm": [
+      408.7,
+      70.0,
+      121.2
+     ],
+     "grips_mm": {
+      "left": [
+       360.2,
+       230.1,
+       5.5
+      ],
+      "right": [
+       360.3,
+       -89.6,
+       5.5
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       427.1,
+       97.9,
+       197.8
+      ],
+      "right": [
+       426.8,
+       43.2,
+       197.6
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       433.1,
+       127.2,
+       182.0
+      ],
+      "right": [
+       434.0,
+       14.5,
+       184.4
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.1
+     ],
+     "above_base_mm": 17.2
+    },
+    {
+     "tick": 515,
+     "event": "pack let down",
+     "rims_mm": [
+      10,
+      10,
+      11,
+      10
+     ],
+     "base_mm": [
+      360.3,
+      70.2,
+      -0.0
+     ],
+     "carton_mm": [
+      220.0,
+      245.0,
+      107.5
+     ],
+     "pack_mm": [
+      411.7,
+      70.4,
+      110.0
+     ],
+     "grips_mm": {
+      "left": [
+       360.2,
+       230.1,
+       5.5
+      ],
+      "right": [
+       360.3,
+       -89.6,
+       5.5
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       427.1,
+       128.5,
+       197.8
+      ],
+      "right": [
+       426.8,
+       12.6,
+       197.6
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       428.2,
+       129.0,
+       198.8
+      ],
+      "right": [
+       427.4,
+       12.2,
+       198.0
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.1
+     ],
+     "eased_mm": 30.6,
+     "above_base_mm": 6.0
+    },
+    {
+     "tick": 557,
+     "event": "pack in",
+     "rims_mm": [
+      10,
+      10,
+      10,
+      10
+     ],
+     "base_mm": [
+      360.3,
+      70.2,
+      -0.0
+     ],
+     "carton_mm": [
+      220.0,
+      245.0,
+      107.5
+     ],
+     "pack_mm": [
+      411.7,
+      70.4,
+      110.0
+     ],
+     "grips_mm": {
+      "left": [
+       360.2,
+       230.1,
+       5.5
+      ],
+      "right": [
+       360.3,
+       -89.6,
+       5.5
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       397.1,
+       193.5,
+       307.8
+      ],
+      "right": [
+       396.8,
+       -52.4,
+       307.6
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       404.0,
+       194.1,
+       321.9
+      ],
+      "right": [
+       401.7,
+       -49.6,
+       324.0
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.1
+     ]
+    },
+    {
+     "tick": 601,
+     "event": "parked",
+     "rims_mm": [
+      10,
+      10,
+      10,
+      11
+     ],
+     "base_mm": [
+      360.3,
+      70.2,
+      -0.0
+     ],
+     "carton_mm": [
+      220.0,
+      245.0,
+      107.5
+     ],
+     "pack_mm": [
+      411.7,
+      70.4,
+      110.0
+     ],
+     "grips_mm": {
+      "left": [
+       360.2,
+       230.1,
+       5.5
+      ],
+      "right": [
+       360.3,
+       -89.6,
+       5.5
+      ]
+     },
+     "tips_command_mm": {},
+     "tips_measured_mm": {
+      "left": [
+       334.1,
+       302.9,
+       253.3
+      ],
+      "right": [
+       334.8,
+       -304.7,
+       254.2
+      ]
+     },
+     "pads_apart_mm": [
+      93.9,
+      93.9
+     ]
+    }
+   ],
+   "worst_ik_mm": 0.089
+  },
+  "no_opening": {
+   "policy": "scripted",
+   "model": null,
+   "demo_variant": "no_opening",
+   "score": 0.0,
+   "scorer": "bag_load_score",
+   "control_hz": 20,
+   "step_limit": 2400,
+   "executed_steps": 2400,
+   "elapsed_s": 1269.91,
+   "scene_sha256": "9bc4690a944d5b216cf0472cc6b3573243ecb73ee2286c6a661ff9a9224cdc32",
+   "asset_sha256": "4dd936ad467c5b6da6df57b9d333e4b23ec6b80980493235a5be703f01eeef0c",
+   "model_sha256": "a8be6cb0f2289a9df4382a70a40a694a63b778e037fe46e70ab1f2f6402ec906",
+   "grader_sha256": "3270e6db7bc7320917e1524ac07d41e505899023608e042adac0667ab2a696a5",
+   "inspect_robots": "1.0.0",
+   "yam_arena": "0.1.0",
+   "seed": 0,
+   "observation_state_keys": [
+    "joint_pos"
+   ],
+   "observation_cameras": [
+    "top_cam",
+    "left_cam",
+    "right_cam"
+   ],
+   "policy_inputs_camera_size": [
+    320,
+    176
+   ],
+   "wall_time_limit_is_external": true,
+   "scripted_demo_reads_simulator_state": true,
+   "dream_chunk_anchor": null,
+   "dream_action_requests": 0,
+   "peak_interarm_contact_n": 0.0,
+   "final_grade": {
+    "score": 0.0,
+    "hold_ticks": 0,
+    "lift_ticks": 0,
+    "lifted": false,
+    "fell": false,
+    "spilled": false,
+    "torn": false,
+    "peak_seam_pull_n": 0.49,
+    "carton": {
+     "rests": false,
+     "inside": true,
+     "above_base_mm": 6.43,
+     "lean_deg": 0.2,
+     "outside_outline_mm": -7.4
+    },
+    "pack": {
+     "rests": false,
+     "inside": true,
+     "above_base_mm": 5.66,
+     "lean_deg": 0.6,
+     "outside_outline_mm": 0.2
+    },
+    "upright": false,
+    "hanging": false,
+    "hands_clear": true,
+    "rims_mm": {
+     "left": 10.1,
+     "right": 10.1,
+     "near": 10.7,
+     "far": 10.1
+    },
+    "base_low_mm": -0.0,
+    "base_tilt_deg": 0.0,
+    "base_shift_mm": 0.0,
+    "grips_above_rim_mm": {
+     "left": -174.5,
+     "right": -174.5
+    },
+    "gripper_clearance_mm": 174.9,
+    "seam_pull_n": 0.37
+   },
+   "termination_reason": "max_steps",
+   "reset_state": {
+    "base_mm": [
+     360.0,
+     70.0,
+     -0.0
+    ],
+    "base_tilt_deg": 0.0,
+    "rims_mm": {
+     "left": 26.7,
+     "right": 26.2,
+     "near": 27.0,
+     "far": 27.0
+    },
+    "grips_mm": {
+     "left": [
+      360.0,
+      226.5,
+      7.0
+     ],
+     "right": [
+      360.0,
+      -85.1,
+      7.0
+     ]
+    },
+    "carton_mm": [
+     220.0,
+     245.0,
+     107.5
+    ],
+    "pack_mm": [
+     405.0,
+     -170.0,
+     100.0
+    ],
+    "carton_tilt_deg": 0.0,
+    "pack_tilt_deg": 0.0,
+    "angles_deg": {
+     "left_lean": 85.3,
+     "right_lean": 89.4,
+     "near_lean": -82.0,
+     "far_lean": -82.0,
+     "left_fold": -165.2,
+     "right_fold": -165.4,
+     "near_fold": 165.0,
+     "far_fold": 165.0,
+     "left_swing": -24.2,
+     "right_swing": -27.8
+    }
+   },
+   "peaks": {
+    "left_on_bag": 0.0,
+    "left_on_carton": 5.742,
+    "left_on_pack": 7.706,
+    "left_tips_on_carton": 0.0,
+    "left_tips_on_pack": 7.71,
+    "left_tips_on_handle_left": 0.0,
+    "left_tips_on_handle_right": 0.0,
+    "right_on_bag": 0.0,
+    "right_on_carton": 78.577,
+    "right_on_pack": 9.901,
+    "right_tips_on_carton": 39.61,
+    "right_tips_on_pack": 9.9,
+    "right_tips_on_handle_left": 0.0,
+    "right_tips_on_handle_right": 0.0
+   },
+   "phases": [
+    [
+     0,
+     "carton: reach across"
+    ],
+    [
+     84,
+     "carton: pinch and lift"
+    ],
+    [
+     130,
+     "carton: over the bag"
+    ],
+    [
+     188,
+     "carton: lower onto the base"
+    ],
+    [
+     312,
+     "carton: let go"
+    ],
+    [
+     336,
+     "pack: hands over it"
+    ],
+    [
+     456,
+     "pack: hands down beside it"
+    ],
+    [
+     488,
+     "pack: press from both sides"
+    ],
+    [
+     519,
+     "pack: try the lift"
+    ],
+    [
+     565,
+     "pack: lift"
+    ],
+    [
+     605,
+     "pack: up and over to the bag"
+    ],
+    [
+     737,
+     "pack: lower to the rim"
+    ],
+    [
+     797,
+     "let down: ease the hands apart"
+    ],
+    [
+     851,
+     "let down: draw the hands away"
+    ],
+    [
+     893,
+     "lift: fingers through the handles"
+    ],
+    [
+     995,
+     "lift: swing the handles up"
+    ],
+    [
+     1163,
+     "lift: let go, a handle was missed"
+    ],
+    [
+     1243,
+     "away"
+    ],
+    [
+     1287,
+     "wait"
+    ]
+   ],
+   "demo_events": [
+    {
+     "tick": 98,
+     "event": "carton pinched",
+     "rims_mm": [
+      27,
+      26,
+      27,
+      27
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      219.7,
+      244.9,
+      107.6
+     ],
+     "pack_mm": [
+      405.0,
+      -170.0,
+      100.0
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       226.5,
+       7.0
+      ],
+      "right": [
+       360.0,
+       -85.1,
+       7.0
+      ]
+     },
+     "tips_command_mm": {
+      "right": [
+       220.0,
+       249.0,
+       195.0
+      ],
+      "left": [
+       400.0,
+       361.5,
+       197.0
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       400.1,
+       362.2,
+       196.3
+      ],
+      "right": [
+       219.3,
+       248.9,
+       193.5
+      ]
+     },
+     "pads_apart_mm": [
+      40.0,
+      59.9
+     ],
+     "held": true
+    },
+    {
+     "tick": 188,
+     "event": "carton over the bag",
+     "rims_mm": [
+      27,
+      26,
+      27,
+      27
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      244.6,
+      70.7,
+      308.2
+     ],
+     "pack_mm": [
+      405.0,
+      -170.0,
+      100.0
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       226.5,
+       7.0
+      ],
+      "right": [
+       360.0,
+       -85.1,
+       7.0
+      ]
+     },
+     "tips_command_mm": {
+      "right": [
+       241.4,
+       73.0,
+       417.3
+      ],
+      "left": [
+       400.0,
+       361.5,
+       197.0
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       400.6,
+       360.5,
+       196.4
+      ],
+      "right": [
+       244.2,
+       74.4,
+       394.6
+      ]
+     },
+     "pads_apart_mm": [
+      40.0,
+      59.9
+     ],
+     "under_mm": 200.4
+    },
+    {
+     "tick": 188,
+     "event": "creases",
+     "rims_mm": [
+      27,
+      26,
+      27,
+      27
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      244.6,
+      70.7,
+      308.2
+     ],
+     "pack_mm": [
+      405.0,
+      -170.0,
+      100.0
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       226.5,
+       7.0
+      ],
+      "right": [
+       360.0,
+       -85.1,
+       7.0
+      ]
+     },
+     "tips_command_mm": {
+      "right": [
+       241.4,
+       73.0,
+       417.3
+      ],
+      "left": [
+       400.0,
+       361.5,
+       197.0
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       400.6,
+       360.5,
+       196.4
+      ],
+      "right": [
+       244.2,
+       74.4,
+       394.6
+      ]
+     },
+     "pads_apart_mm": [
+      40.0,
+      59.9
+     ],
+     "left_mm": [
+      360.0,
+      61.3,
+      11.2
+     ],
+     "right_mm": [
+      360.0,
+      79.0,
+      4.8
+     ],
+     "carton_y_mm": 70.1,
+     "room_mm": -19.7,
+     "carton_lean_deg": [
+      0.2,
+      -0.2
+     ]
+    },
+    {
+     "tick": 298,
+     "event": "carton down",
+     "rims_mm": [
+      11,
+      11,
+      11,
+      11
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      243.8,
+      69.2,
+      118.7
+     ],
+     "pack_mm": [
+      405.0,
+      -170.0,
+      100.0
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       229.9,
+       5.6
+      ],
+      "right": [
+       360.0,
+       -89.7,
+       5.6
+      ]
+     },
+     "tips_command_mm": {
+      "right": [
+       244.1,
+       75.5,
+       224.7
+      ],
+      "left": [
+       400.0,
+       361.5,
+       197.0
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       400.6,
+       360.5,
+       196.4
+      ],
+      "right": [
+       243.4,
+       73.0,
+       205.1
+      ]
+     },
+     "pads_apart_mm": [
+      40.0,
+      59.9
+     ],
+     "above_base_mm": 7.0
+    },
+    {
+     "tick": 519,
+     "event": "pack pressed",
+     "rims_mm": [
+      10,
+      10,
+      10,
+      11
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      243.0,
+      69.1,
+      118.1
+     ],
+     "pack_mm": [
+      405.0,
+      -170.0,
+      100.0
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       229.9,
+       5.5
+      ],
+      "right": [
+       360.0,
+       -89.7,
+       5.5
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       405.0,
+       -139.2,
+       148.3
+      ],
+      "right": [
+       405.0,
+       -200.8,
+       148.3
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       418.4,
+       -113.8,
+       156.5
+      ],
+      "right": [
+       418.0,
+       -226.4,
+       157.5
+      ]
+     },
+     "pads_apart_mm": [
+      0.2,
+      0.0
+     ],
+     "press_n": [
+      7.4,
+      5.6
+     ],
+     "travel_mm": 46.0,
+     "held": true,
+     "attempt": 0
+    },
+    {
+     "tick": 565,
+     "event": "pack hanging",
+     "rims_mm": [
+      10,
+      10,
+      11,
+      10
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      243.0,
+      69.1,
+      118.1
+     ],
+     "pack_mm": [
+      394.0,
+      -169.9,
+      131.0
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       229.9,
+       5.5
+      ],
+      "right": [
+       360.0,
+       -89.7,
+       5.5
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       405.0,
+       -139.2,
+       208.3
+      ],
+      "right": [
+       405.0,
+       -200.8,
+       208.3
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       411.4,
+       -114.6,
+       188.1
+      ],
+      "right": [
+       407.0,
+       -227.2,
+       187.5
+      ]
+     },
+     "pads_apart_mm": [
+      0.4,
+      0.4
+     ],
+     "lean_deg": 2.0,
+     "attempt": 0,
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_middle_mm": [
+      14.4,
+      15.9
+     ]
+    },
+    {
+     "tick": 585,
+     "event": "carrying",
+     "rims_mm": [
+      10,
+      10,
+      11,
+      10
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      243.0,
+      69.1,
+      118.1
+     ],
+     "pack_mm": [
+      398.9,
+      -171.0,
+      183.4
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       229.9,
+       5.5
+      ],
+      "right": [
+       360.0,
+       -89.7,
+       5.5
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       404.3,
+       -140.4,
+       259.4
+      ],
+      "right": [
+       404.3,
+       -199.6,
+       259.4
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       414.7,
+       -115.2,
+       240.8
+      ],
+      "right": [
+       411.3,
+       -227.8,
+       240.8
+      ]
+     },
+     "pads_apart_mm": [
+      0.4,
+      0.4
+     ],
+     "lean_deg": 0.9,
+     "press_n": [
+      5.1,
+      5.2
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 6.1,
+      "right": 7.4
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 1.0,
+     "squeeze_mm": [
+      1.5,
+      1.5
+     ],
+     "trim_mm": [
+      0.0,
+      0.0,
+      1.4
+     ]
+    },
+    {
+     "tick": 605,
+     "event": "carrying",
+     "rims_mm": [
+      10,
+      10,
+      11,
+      10
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      243.0,
+      69.1,
+      118.1
+     ],
+     "pack_mm": [
+      394.5,
+      -168.7,
+      191.9
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       229.9,
+       5.5
+      ],
+      "right": [
+       360.0,
+       -89.7,
+       5.5
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       403.8,
+       -141.1,
+       269.9
+      ],
+      "right": [
+       403.8,
+       -198.9,
+       269.9
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       412.3,
+       -113.8,
+       250.0
+      ],
+      "right": [
+       407.6,
+       -226.5,
+       248.2
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.1
+     ],
+     "lean_deg": 2.2,
+     "press_n": [
+      5.6,
+      5.7
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 6.7,
+      "right": 7.6
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 2.5,
+     "squeeze_mm": [
+      2.4,
+      2.4
+     ],
+     "trim_mm": [
+      0.0,
+      0.0,
+      -0.2
+     ]
+    },
+    {
+     "tick": 605,
+     "event": "pack lifted",
+     "rims_mm": [
+      10,
+      10,
+      11,
+      10
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      243.0,
+      69.1,
+      118.1
+     ],
+     "pack_mm": [
+      394.5,
+      -168.7,
+      191.9
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       229.9,
+       5.5
+      ],
+      "right": [
+       360.0,
+       -89.7,
+       5.5
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       403.8,
+       -141.1,
+       269.9
+      ],
+      "right": [
+       403.8,
+       -198.9,
+       269.9
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       412.3,
+       -113.8,
+       250.0
+      ],
+      "right": [
+       407.6,
+       -226.5,
+       248.2
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.1
+     ],
+     "press_n": [
+      5.6,
+      5.7
+     ]
+    },
+    {
+     "tick": 625,
+     "event": "carrying",
+     "rims_mm": [
+      10,
+      10,
+      11,
+      10
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      243.0,
+      69.1,
+      118.1
+     ],
+     "pack_mm": [
+      400.1,
+      -138.2,
+      245.6
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       229.9,
+       5.5
+      ],
+      "right": [
+       360.0,
+       -89.7,
+       5.5
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       405.5,
+       -108.9,
+       322.5
+      ],
+      "right": [
+       405.5,
+       -166.6,
+       322.5
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       416.9,
+       -82.7,
+       304.5
+      ],
+      "right": [
+       413.6,
+       -195.4,
+       303.2
+      ]
+     },
+     "pads_apart_mm": [
+      0.3,
+      0.3
+     ],
+     "lean_deg": 1.3,
+     "press_n": [
+      5.4,
+      5.4
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 6.7,
+      "right": 6.8
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 1.5,
+     "squeeze_mm": [
+      2.4,
+      2.4
+     ],
+     "trim_mm": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "tick": 645,
+     "event": "carrying",
+     "rims_mm": [
+      10,
+      10,
+      11,
+      10
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      243.0,
+      69.1,
+      118.1
+     ],
+     "pack_mm": [
+      394.3,
+      -93.3,
+      311.0
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       229.9,
+       5.5
+      ],
+      "right": [
+       360.0,
+       -89.7,
+       5.5
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       400.3,
+       -66.6,
+       385.0
+      ],
+      "right": [
+       400.3,
+       -124.3,
+       385.0
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       410.2,
+       -37.7,
+       370.8
+      ],
+      "right": [
+       407.2,
+       -150.4,
+       369.1
+      ]
+     },
+     "pads_apart_mm": [
+      0.4,
+      0.1
+     ],
+     "lean_deg": 0.3,
+     "press_n": [
+      5.4,
+      5.4
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 6.9,
+      "right": 6.6
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 0.7,
+     "squeeze_mm": [
+      2.4,
+      2.4
+     ],
+     "trim_mm": [
+      -7.4,
+      1.6,
+      -3.9
+     ]
+    },
+    {
+     "tick": 681,
+     "event": "carrying",
+     "rims_mm": [
+      10,
+      10,
+      10,
+      10
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      243.0,
+      69.1,
+      118.1
+     ],
+     "pack_mm": [
+      392.6,
+      -61.0,
+      310.2
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       229.9,
+       5.5
+      ],
+      "right": [
+       360.0,
+       -89.7,
+       5.5
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       405.2,
+       -33.4,
+       388.1
+      ],
+      "right": [
+       405.2,
+       -90.6,
+       388.1
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       411.0,
+       -5.2,
+       370.0
+      ],
+      "right": [
+       409.0,
+       -118.0,
+       368.9
+      ]
+     },
+     "pads_apart_mm": [
+      0.2,
+      0.1
+     ],
+     "lean_deg": 2.5,
+     "press_n": [
+      5.5,
+      5.5
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 7.5,
+      "right": 6.7
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 2.6,
+     "squeeze_mm": [
+      2.7,
+      2.7
+     ],
+     "trim_mm": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "tick": 701,
+     "event": "carrying",
+     "rims_mm": [
+      10,
+      10,
+      10,
+      10
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      243.0,
+      69.1,
+      118.1
+     ],
+     "pack_mm": [
+      397.8,
+      10.9,
+      313.9
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       229.9,
+       5.5
+      ],
+      "right": [
+       360.0,
+       -89.7,
+       5.5
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       410.7,
+       40.4,
+       391.4
+      ],
+      "right": [
+       410.7,
+       -16.8,
+       391.4
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       416.4,
+       67.7,
+       373.5
+      ],
+      "right": [
+       416.9,
+       -45.1,
+       374.3
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.1
+     ],
+     "lean_deg": 3.1,
+     "press_n": [
+      5.6,
+      5.5
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 7.8,
+      "right": 6.2
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 3.2,
+     "squeeze_mm": [
+      2.7,
+      2.7
+     ],
+     "trim_mm": [
+      5.2,
+      4.9,
+      3.0
+     ]
+    },
+    {
+     "tick": 721,
+     "event": "carrying",
+     "rims_mm": [
+      10,
+      10,
+      10,
+      10
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      243.0,
+      69.1,
+      118.1
+     ],
+     "pack_mm": [
+      399.9,
+      66.3,
+      315.7
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       229.9,
+       5.5
+      ],
+      "right": [
+       360.0,
+       -89.7,
+       5.5
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       412.8,
+       95.4,
+       393.1
+      ],
+      "right": [
+       412.8,
+       38.2,
+       393.1
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       418.7,
+       123.5,
+       375.2
+      ],
+      "right": [
+       419.4,
+       10.8,
+       376.6
+      ]
+     },
+     "pads_apart_mm": [
+      0.2,
+      0.1
+     ],
+     "lean_deg": 3.3,
+     "press_n": [
+      5.6,
+      5.5
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 7.8,
+      "right": 6.4
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 3.4,
+     "squeeze_mm": [
+      2.7,
+      2.7
+     ],
+     "trim_mm": [
+      7.1,
+      5.8,
+      4.5
+     ]
+    },
+    {
+     "tick": 737,
+     "event": "pack over the bag",
+     "rims_mm": [
+      10,
+      10,
+      10,
+      11
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      243.0,
+      69.1,
+      118.1
+     ],
+     "pack_mm": [
+      399.6,
+      70.3,
+      315.3
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       229.9,
+       5.5
+      ],
+      "right": [
+       360.0,
+       -89.7,
+       5.5
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       413.7,
+       99.3,
+       393.5
+      ],
+      "right": [
+       413.7,
+       42.1,
+       393.5
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       418.8,
+       127.6,
+       374.7
+      ],
+      "right": [
+       418.9,
+       14.8,
+       376.4
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.1
+     ],
+     "off_mm": [
+      0.5,
+      -0.3
+     ],
+     "press_n": [
+      5.0,
+      5.0
+     ],
+     "lean_deg": 3.4,
+     "squeeze_mm": [
+      2.7,
+      2.7
+     ],
+     "foot_mm": [
+      393.5,
+      70.3,
+      209.5
+     ]
+    },
+    {
+     "tick": 757,
+     "event": "carrying",
+     "rims_mm": [
+      10,
+      10,
+      10,
+      11
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      243.0,
+      69.1,
+      118.1
+     ],
+     "pack_mm": [
+      387.9,
+      68.7,
+      234.4
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       229.9,
+       5.5
+      ],
+      "right": [
+       360.0,
+       -89.7,
+       5.5
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       413.6,
+       98.8,
+       317.5
+      ],
+      "right": [
+       413.8,
+       42.3,
+       317.6
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       412.5,
+       126.2,
+       293.3
+      ],
+      "right": [
+       413.5,
+       13.0,
+       296.2
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.1
+     ],
+     "lean_deg": 7.5,
+     "press_n": [
+      5.4,
+      5.4
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 8.5,
+      "right": 8.2
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 7.5,
+     "squeeze_mm": [
+      3.3,
+      3.0
+     ],
+     "trim_mm": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "tick": 777,
+     "event": "carrying",
+     "rims_mm": [
+      10,
+      10,
+      10,
+      11
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      242.9,
+      69.1,
+      118.1
+     ],
+     "pack_mm": [
+      406.9,
+      70.4,
+      129.3
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       229.9,
+       5.5
+      ],
+      "right": [
+       360.0,
+       -89.7,
+       5.5
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       434.2,
+       97.7,
+       217.6
+      ],
+      "right": [
+       434.3,
+       42.2,
+       217.7
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       433.0,
+       127.5,
+       188.8
+      ],
+      "right": [
+       434.3,
+       14.4,
+       191.2
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.1
+     ],
+     "lean_deg": 8.4,
+     "press_n": [
+      5.2,
+      5.2
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 8.8,
+      "right": 7.8
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 8.4,
+     "squeeze_mm": [
+      3.9,
+      3.6
+     ],
+     "trim_mm": [
+      20.6,
+      -0.4,
+      11.0
+     ]
+    },
+    {
+     "tick": 797,
+     "event": "carrying",
+     "rims_mm": [
+      10,
+      10,
+      10,
+      11
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      243.0,
+      69.1,
+      118.1
+     ],
+     "pack_mm": [
+      409.9,
+      69.9,
+      122.0
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       229.9,
+       5.5
+      ],
+      "right": [
+       360.0,
+       -89.7,
+       5.5
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       428.7,
+       97.9,
+       198.1
+      ],
+      "right": [
+       428.8,
+       42.9,
+       198.2
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       434.8,
+       127.1,
+       182.4
+      ],
+      "right": [
+       436.4,
+       14.5,
+       185.4
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.1
+     ],
+     "lean_deg": 6.8,
+     "press_n": [
+      4.8,
+      5.8
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 7.1,
+      "right": 6.3
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 6.8,
+     "squeeze_mm": [
+      4.2,
+      3.9
+     ],
+     "trim_mm": [
+      15.2,
+      0.1,
+      6.6
+     ]
+    },
+    {
+     "tick": 797,
+     "event": "pack at the rim",
+     "rims_mm": [
+      10,
+      10,
+      10,
+      11
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      243.0,
+      69.1,
+      118.1
+     ],
+     "pack_mm": [
+      409.9,
+      69.9,
+      122.0
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       229.9,
+       5.5
+      ],
+      "right": [
+       360.0,
+       -89.7,
+       5.5
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       428.7,
+       97.9,
+       198.1
+      ],
+      "right": [
+       428.8,
+       42.9,
+       198.2
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       434.8,
+       127.1,
+       182.4
+      ],
+      "right": [
+       436.4,
+       14.5,
+       185.4
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.1
+     ],
+     "above_base_mm": 18.0
+    },
+    {
+     "tick": 851,
+     "event": "pack let down",
+     "rims_mm": [
+      10,
+      10,
+      10,
+      10
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      243.0,
+      69.1,
+      118.1
+     ],
+     "pack_mm": [
+      412.7,
+      69.2,
+      110.8
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       229.9,
+       5.5
+      ],
+      "right": [
+       360.0,
+       -89.7,
+       5.5
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       428.7,
+       128.5,
+       198.1
+      ],
+      "right": [
+       428.8,
+       12.3,
+       198.2
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       429.6,
+       129.0,
+       199.0
+      ],
+      "right": [
+       429.7,
+       12.2,
+       199.5
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.1
+     ],
+     "eased_mm": 30.6,
+     "above_base_mm": 6.8
+    },
+    {
+     "tick": 893,
+     "event": "pack in",
+     "rims_mm": [
+      10,
+      10,
+      11,
+      10
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      243.0,
+      69.1,
+      118.1
+     ],
+     "pack_mm": [
+      412.7,
+      69.2,
+      110.8
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       229.9,
+       5.5
+      ],
+      "right": [
+       360.0,
+       -89.7,
+       5.5
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       398.7,
+       193.5,
+       308.1
+      ],
+      "right": [
+       398.8,
+       -52.7,
+       308.2
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       405.6,
+       194.2,
+       322.3
+      ],
+      "right": [
+       403.6,
+       -49.7,
+       324.7
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.1
+     ]
+    },
+    {
+     "tick": 995,
+     "event": "fingers through the handles",
+     "rims_mm": [
+      10,
+      10,
+      11,
+      10
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      243.0,
+      69.1,
+      118.1
+     ],
+     "pack_mm": [
+      412.7,
+      69.2,
+      110.8
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       229.9,
+       5.5
+      ],
+      "right": [
+       360.0,
+       -89.7,
+       5.5
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       355.8,
+       208.8,
+       1.2
+      ],
+      "right": [
+       355.8,
+       -68.5,
+       1.2
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       358.3,
+       210.4,
+       43.6
+      ],
+      "right": [
+       360.4,
+       -64.5,
+       37.5
+      ]
+     },
+     "pads_apart_mm": [
+      30.0,
+      30.0
+     ],
+     "handle_deg": [
+      87.0,
+      87.0
+     ]
+    },
+    {
+     "tick": 1163,
+     "event": "handles up",
+     "rims_mm": [
+      10,
+      10,
+      11,
+      10
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      243.0,
+      69.1,
+      118.1
+     ],
+     "pack_mm": [
+      412.7,
+      69.2,
+      110.8
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       229.9,
+       5.5
+      ],
+      "right": [
+       360.0,
+       -89.7,
+       5.5
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       356.0,
+       155.3,
+       86.3
+      ],
+      "right": [
+       356.0,
+       -15.1,
+       86.3
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       351.1,
+       155.8,
+       56.3
+      ],
+      "right": [
+       355.2,
+       -15.3,
+       71.7
+      ]
+     },
+     "pads_apart_mm": [
+      19.0,
+      19.0
+     ],
+     "handle_deg": [
+      87.0,
+      87.0
+     ]
+    },
+    {
+     "tick": 1287,
+     "event": "parked",
+     "rims_mm": [
+      10,
+      10,
+      10,
+      10
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      243.0,
+      69.1,
+      118.1
+     ],
+     "pack_mm": [
+      412.7,
+      69.2,
+      110.8
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       229.9,
+       5.5
+      ],
+      "right": [
+       360.0,
+       -89.7,
+       5.5
+      ]
+     },
+     "tips_command_mm": {},
+     "tips_measured_mm": {
+      "left": [
+       339.2,
+       300.2,
+       262.2
+      ],
+      "right": [
+       340.7,
+       -302.0,
+       264.7
+      ]
+     },
+     "pads_apart_mm": [
+      93.9,
+      93.9
+     ]
+    }
+   ],
+   "worst_ik_mm": 48.453
+  },
+  "drop_from_rim": {
+   "policy": "scripted",
+   "model": null,
+   "demo_variant": "drop_from_rim",
+   "score": 1.0,
+   "scorer": "bag_load_score",
+   "control_hz": 20,
+   "step_limit": 2400,
+   "executed_steps": 1575,
+   "elapsed_s": 707.19,
+   "scene_sha256": "9bc4690a944d5b216cf0472cc6b3573243ecb73ee2286c6a661ff9a9224cdc32",
+   "asset_sha256": "4dd936ad467c5b6da6df57b9d333e4b23ec6b80980493235a5be703f01eeef0c",
+   "model_sha256": "a8be6cb0f2289a9df4382a70a40a694a63b778e037fe46e70ab1f2f6402ec906",
+   "grader_sha256": "3270e6db7bc7320917e1524ac07d41e505899023608e042adac0667ab2a696a5",
+   "inspect_robots": "1.0.0",
+   "yam_arena": "0.1.0",
+   "seed": 0,
+   "observation_state_keys": [
+    "joint_pos"
+   ],
+   "observation_cameras": [
+    "top_cam",
+    "left_cam",
+    "right_cam"
+   ],
+   "policy_inputs_camera_size": [
+    320,
+    176
+   ],
+   "wall_time_limit_is_external": true,
+   "scripted_demo_reads_simulator_state": true,
+   "dream_chunk_anchor": null,
+   "dream_action_requests": 0,
+   "peak_interarm_contact_n": 0.0,
+   "final_grade": {
+    "score": 1.0,
+    "hold_ticks": 40,
+    "lift_ticks": 0,
+    "lifted": true,
+    "fell": false,
+    "spilled": false,
+    "torn": false,
+    "peak_seam_pull_n": 3.02,
+    "carton": {
+     "rests": true,
+     "inside": true,
+     "above_base_mm": -0.0,
+     "lean_deg": 0.0,
+     "outside_outline_mm": -8.5
+    },
+    "pack": {
+     "rests": true,
+     "inside": true,
+     "above_base_mm": -0.0,
+     "lean_deg": 0.0,
+     "outside_outline_mm": -18.8
+    },
+    "upright": true,
+    "hanging": false,
+    "hands_clear": true,
+    "rims_mm": {
+     "left": 179.4,
+     "right": 177.1,
+     "near": 177.5,
+     "far": 177.5
+    },
+    "base_low_mm": -0.0,
+    "base_tilt_deg": 0.0,
+    "base_shift_mm": 21.1,
+    "grips_above_rim_mm": {
+     "left": -76.3,
+     "right": -81.3
+    },
+    "gripper_clearance_mm": 144.9,
+    "seam_pull_n": 0.15
+   },
+   "termination_reason": "success",
+   "reset_state": {
+    "base_mm": [
+     360.0,
+     70.0,
+     -0.0
+    ],
+    "base_tilt_deg": 0.0,
+    "rims_mm": {
+     "left": 26.7,
+     "right": 26.2,
+     "near": 27.0,
+     "far": 27.0
+    },
+    "grips_mm": {
+     "left": [
+      360.0,
+      226.5,
+      7.0
+     ],
+     "right": [
+      360.0,
+      -85.1,
+      7.0
+     ]
+    },
+    "carton_mm": [
+     220.0,
+     245.0,
+     107.5
+    ],
+    "pack_mm": [
+     405.0,
+     -170.0,
+     100.0
+    ],
+    "carton_tilt_deg": 0.0,
+    "pack_tilt_deg": 0.0,
+    "angles_deg": {
+     "left_lean": 85.3,
+     "right_lean": 89.4,
+     "near_lean": -82.0,
+     "far_lean": -82.0,
+     "left_fold": -165.2,
+     "right_fold": -165.4,
+     "near_fold": 165.0,
+     "far_fold": 165.0,
+     "left_swing": -24.2,
+     "right_swing": -27.8
+    }
+   },
+   "peaks": {
+    "left_on_bag": 69.884,
+    "left_on_carton": 5.742,
+    "left_on_pack": 7.644,
+    "left_tips_on_carton": 0.0,
+    "left_tips_on_pack": 7.64,
+    "left_tips_on_handle_left": 37.34,
+    "left_tips_on_handle_right": 0.0,
+    "right_on_bag": 74.977,
+    "right_on_carton": 78.577,
+    "right_on_pack": 6.111,
+    "right_tips_on_carton": 39.61,
+    "right_tips_on_pack": 6.11,
+    "right_tips_on_handle_left": 0.0,
+    "right_tips_on_handle_right": 41.31
+   },
+   "phases": [
+    [
+     0,
+     "carton: reach across"
+    ],
+    [
+     84,
+     "carton: pinch and lift"
+    ],
+    [
+     130,
+     "carton: over the bag"
+    ],
+    [
+     188,
+     "open: pinch the handle on the table"
+    ],
+    [
+     268,
+     "open: raise the wall"
+    ],
+    [
+     342,
+     "carton: lower onto the base"
+    ],
+    [
+     466,
+     "carton: let go"
+    ],
+    [
+     490,
+     "stand: let go of the handle"
+    ],
+    [
+     524,
+     "pack: hands over it"
+    ],
+    [
+     644,
+     "pack: hands down beside it"
+    ],
+    [
+     676,
+     "pack: press from both sides"
+    ],
+    [
+     707,
+     "pack: try the lift"
+    ],
+    [
+     753,
+     "pack: lift"
+    ],
+    [
+     793,
+     "pack: up and over to the bag"
+    ],
+    [
+     925,
+     "pack: lower to the rim"
+    ],
+    [
+     985,
+     "let down: ease the hands apart"
+    ],
+    [
+     985,
+     "let down: draw the hands away"
+    ],
+    [
+     1014,
+     "lift: fingers through the handles"
+    ],
+    [
+     1116,
+     "lift: swing the handles up"
+    ],
+    [
+     1298,
+     "lift: up"
+    ],
+    [
+     1362,
+     "lift: hold, and back over the marks"
+    ],
+    [
+     1410,
+     "lift: set down"
+    ],
+    [
+     1466,
+     "lift: let go"
+    ],
+    [
+     1546,
+     "away"
+    ]
+   ],
+   "demo_events": [
+    {
+     "tick": 98,
+     "event": "carton pinched",
+     "rims_mm": [
+      27,
+      26,
+      27,
+      27
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      219.7,
+      244.9,
+      107.6
+     ],
+     "pack_mm": [
+      405.0,
+      -170.0,
+      100.0
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       226.5,
+       7.0
+      ],
+      "right": [
+       360.0,
+       -85.1,
+       7.0
+      ]
+     },
+     "tips_command_mm": {
+      "right": [
+       220.0,
+       249.0,
+       195.0
+      ],
+      "left": [
+       400.0,
+       361.5,
+       197.0
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       400.1,
+       362.2,
+       196.3
+      ],
+      "right": [
+       219.3,
+       248.9,
+       193.5
+      ]
+     },
+     "pads_apart_mm": [
+      40.0,
+      59.9
+     ],
+     "held": true
+    },
+    {
+     "tick": 188,
+     "event": "carton over the bag",
+     "rims_mm": [
+      27,
+      26,
+      27,
+      27
+     ],
+     "base_mm": [
+      360.0,
+      70.0,
+      -0.0
+     ],
+     "carton_mm": [
+      244.6,
+      70.7,
+      308.2
+     ],
+     "pack_mm": [
+      405.0,
+      -170.0,
+      100.0
+     ],
+     "grips_mm": {
+      "left": [
+       360.0,
+       226.5,
+       7.0
+      ],
+      "right": [
+       360.0,
+       -85.1,
+       7.0
+      ]
+     },
+     "tips_command_mm": {
+      "right": [
+       241.4,
+       73.0,
+       417.3
+      ],
+      "left": [
+       400.0,
+       361.5,
+       197.0
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       400.6,
+       360.5,
+       196.4
+      ],
+      "right": [
+       244.2,
+       74.4,
+       394.6
+      ]
+     },
+     "pads_apart_mm": [
+      40.0,
+      59.9
+     ],
+     "under_mm": 200.4
+    },
+    {
+     "tick": 268,
+     "event": "handle pinched",
+     "rims_mm": [
+      26,
+      25,
+      26,
+      26
+     ],
+     "base_mm": [
+      360.3,
+      69.5,
+      -0.0
+     ],
+     "carton_mm": [
+      244.9,
+      70.8,
+      309.3
+     ],
+     "pack_mm": [
+      405.0,
+      -170.0,
+      100.0
+     ],
+     "grips_mm": {
+      "left": [
+       359.9,
+       226.0,
+       7.0
+      ],
+      "right": [
+       360.6,
+       -86.0,
+       6.9
+      ]
+     },
+     "tips_command_mm": {
+      "right": [
+       241.4,
+       73.0,
+       417.3
+      ],
+      "left": [
+       380.0,
+       226.5,
+       3.0
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       380.0,
+       226.1,
+       3.5
+      ],
+      "right": [
+       244.2,
+       74.1,
+       395.7
+      ]
+     },
+     "pads_apart_mm": [
+      19.7,
+      59.9
+     ],
+     "held": true
+    },
+    {
+     "tick": 342,
+     "event": "wall raised",
+     "rims_mm": [
+      178,
+      174,
+      177,
+      176
+     ],
+     "base_mm": [
+      360.5,
+      87.5,
+      1.0
+     ],
+     "carton_mm": [
+      245.0,
+      70.8,
+      309.6
+     ],
+     "pack_mm": [
+      405.0,
+      -170.0,
+      100.0
+     ],
+     "grips_mm": {
+      "left": [
+       359.2,
+       243.5,
+       163.3
+      ],
+      "right": [
+       362.1,
+       -4.4,
+       94.5
+      ]
+     },
+     "tips_command_mm": {
+      "right": [
+       241.4,
+       73.0,
+       417.3
+      ],
+      "left": [
+       380.0,
+       243.7,
+       162.2
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       379.2,
+       243.9,
+       159.8
+      ],
+      "right": [
+       244.3,
+       74.2,
+       396.0
+      ]
+     },
+     "pads_apart_mm": [
+      19.4,
+      59.9
+     ],
+     "held": true,
+     "rim_mm": [
+      360.3,
+      164.0,
+      179.0
+     ],
+     "base_up_mm": 1.0
+    },
+    {
+     "tick": 342,
+     "event": "creases",
+     "rims_mm": [
+      178,
+      174,
+      177,
+      176
+     ],
+     "base_mm": [
+      360.5,
+      87.5,
+      1.0
+     ],
+     "carton_mm": [
+      245.0,
+      70.8,
+      309.6
+     ],
+     "pack_mm": [
+      405.0,
+      -170.0,
+      100.0
+     ],
+     "grips_mm": {
+      "left": [
+       359.2,
+       243.5,
+       163.3
+      ],
+      "right": [
+       362.1,
+       -4.4,
+       94.5
+      ]
+     },
+     "tips_command_mm": {
+      "right": [
+       241.4,
+       73.0,
+       417.3
+      ],
+      "left": [
+       380.0,
+       243.7,
+       162.2
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       379.2,
+       243.9,
+       159.8
+      ],
+      "right": [
+       244.3,
+       74.2,
+       396.0
+      ]
+     },
+     "pads_apart_mm": [
+      19.4,
+      59.9
+     ],
+     "left_mm": [
+      360.1,
+      150.8,
+      92.0
+     ],
+     "right_mm": [
+      361.6,
+      32.5,
+      89.3
+     ],
+     "carton_y_mm": 91.7,
+     "room_mm": 116.3,
+     "carton_lean_deg": [
+      0.4,
+      -0.4
+     ]
+    },
+    {
+     "tick": 452,
+     "event": "carton down",
+     "rims_mm": [
+      180,
+      177,
+      178,
+      178
+     ],
+     "base_mm": [
+      360.9,
+      88.1,
+      -0.0
+     ],
+     "carton_mm": [
+      244.5,
+      91.4,
+      120.0
+     ],
+     "pack_mm": [
+      405.0,
+      -170.0,
+      100.0
+     ],
+     "grips_mm": {
+      "left": [
+       359.2,
+       243.5,
+       166.0
+      ],
+      "right": [
+       361.9,
+       -11.0,
+       98.8
+      ]
+     },
+     "tips_command_mm": {
+      "right": [
+       245.0,
+       97.8,
+       228.7
+      ],
+      "left": [
+       380.0,
+       243.7,
+       162.2
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       379.3,
+       243.8,
+       162.6
+      ],
+      "right": [
+       244.2,
+       95.2,
+       206.4
+      ]
+     },
+     "pads_apart_mm": [
+      19.1,
+      59.9
+     ],
+     "above_base_mm": 8.2
+    },
+    {
+     "tick": 524,
+     "event": "bag standing",
+     "rims_mm": [
+      180,
+      177,
+      178,
+      178
+     ],
+     "base_mm": [
+      360.9,
+      88.1,
+      0.0
+     ],
+     "carton_mm": [
+      243.7,
+      91.5,
+      111.5
+     ],
+     "pack_mm": [
+      405.0,
+      -170.0,
+      100.0
+     ],
+     "grips_mm": {
+      "left": [
+       359.8,
+       195.0,
+       104.0
+      ],
+      "right": [
+       362.0,
+       -10.6,
+       98.4
+      ]
+     },
+     "tips_command_mm": {
+      "right": [
+       244.0,
+       -25.0,
+       271.8
+      ],
+      "left": [
+       341.4,
+       273.7,
+       238.2
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       342.3,
+       274.1,
+       239.0
+      ],
+      "right": [
+       244.7,
+       -25.1,
+       272.3
+      ]
+     },
+     "pads_apart_mm": [
+      40.0,
+      86.0
+     ],
+     "upright": true
+    },
+    {
+     "tick": 707,
+     "event": "pack pressed",
+     "rims_mm": [
+      180,
+      177,
+      178,
+      178
+     ],
+     "base_mm": [
+      360.9,
+      88.1,
+      0.0
+     ],
+     "carton_mm": [
+      243.7,
+      91.5,
+      111.5
+     ],
+     "pack_mm": [
+      405.0,
+      -170.0,
+      100.0
+     ],
+     "grips_mm": {
+      "left": [
+       359.8,
+       195.0,
+       104.0
+      ],
+      "right": [
+       362.0,
+       -10.6,
+       98.4
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       405.0,
+       -139.2,
+       148.3
+      ],
+      "right": [
+       405.0,
+       -200.8,
+       148.3
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       418.3,
+       -113.8,
+       156.6
+      ],
+      "right": [
+       418.0,
+       -226.4,
+       157.5
+      ]
+     },
+     "pads_apart_mm": [
+      0.2,
+      0.0
+     ],
+     "press_n": [
+      7.4,
+      5.6
+     ],
+     "travel_mm": 46.0,
+     "held": true,
+     "attempt": 0
+    },
+    {
+     "tick": 753,
+     "event": "pack hanging",
+     "rims_mm": [
+      180,
+      177,
+      178,
+      178
+     ],
+     "base_mm": [
+      360.9,
+      88.1,
+      0.0
+     ],
+     "carton_mm": [
+      243.7,
+      91.5,
+      111.5
+     ],
+     "pack_mm": [
+      394.0,
+      -169.9,
+      131.1
+     ],
+     "grips_mm": {
+      "left": [
+       359.8,
+       195.0,
+       104.0
+      ],
+      "right": [
+       362.0,
+       -10.6,
+       98.4
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       405.0,
+       -139.2,
+       208.3
+      ],
+      "right": [
+       405.0,
+       -200.8,
+       208.3
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       411.5,
+       -114.6,
+       188.2
+      ],
+      "right": [
+       407.0,
+       -227.2,
+       187.7
+      ]
+     },
+     "pads_apart_mm": [
+      0.3,
+      0.4
+     ],
+     "lean_deg": 2.1,
+     "attempt": 0,
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_middle_mm": [
+      14.6,
+      16.0
+     ]
+    },
+    {
+     "tick": 773,
+     "event": "carrying",
+     "rims_mm": [
+      180,
+      177,
+      178,
+      178
+     ],
+     "base_mm": [
+      360.9,
+      88.1,
+      0.0
+     ],
+     "carton_mm": [
+      243.7,
+      91.5,
+      111.5
+     ],
+     "pack_mm": [
+      398.9,
+      -170.9,
+      183.5
+     ],
+     "grips_mm": {
+      "left": [
+       359.8,
+       195.0,
+       104.0
+      ],
+      "right": [
+       362.0,
+       -10.6,
+       98.4
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       404.4,
+       -140.1,
+       259.6
+      ],
+      "right": [
+       404.4,
+       -199.9,
+       259.6
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       414.8,
+       -115.1,
+       241.0
+      ],
+      "right": [
+       411.4,
+       -227.7,
+       241.0
+      ]
+     },
+     "pads_apart_mm": [
+      0.4,
+      0.4
+     ],
+     "lean_deg": 1.0,
+     "press_n": [
+      4.9,
+      5.1
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 6.0,
+      "right": 7.3
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 1.0,
+     "squeeze_mm": [
+      1.2,
+      1.2
+     ],
+     "trim_mm": [
+      0.0,
+      0.0,
+      1.4
+     ]
+    },
+    {
+     "tick": 793,
+     "event": "carrying",
+     "rims_mm": [
+      180,
+      177,
+      178,
+      178
+     ],
+     "base_mm": [
+      360.9,
+      88.1,
+      0.0
+     ],
+     "carton_mm": [
+      243.7,
+      91.5,
+      111.5
+     ],
+     "pack_mm": [
+      394.0,
+      -169.0,
+      192.1
+     ],
+     "grips_mm": {
+      "left": [
+       359.8,
+       195.0,
+       104.0
+      ],
+      "right": [
+       362.0,
+       -10.6,
+       98.4
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       403.8,
+       -141.1,
+       270.5
+      ],
+      "right": [
+       404.0,
+       -199.1,
+       270.6
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       412.2,
+       -114.0,
+       250.3
+      ],
+      "right": [
+       407.5,
+       -226.7,
+       248.5
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.2
+     ],
+     "lean_deg": 2.4,
+     "press_n": [
+      5.6,
+      5.7
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 6.7,
+      "right": 7.6
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 2.6,
+     "squeeze_mm": [
+      2.4,
+      2.1
+     ],
+     "trim_mm": [
+      0.0,
+      0.0,
+      0.4
+     ]
+    },
+    {
+     "tick": 793,
+     "event": "pack lifted",
+     "rims_mm": [
+      180,
+      177,
+      178,
+      178
+     ],
+     "base_mm": [
+      360.9,
+      88.1,
+      0.0
+     ],
+     "carton_mm": [
+      243.7,
+      91.5,
+      111.5
+     ],
+     "pack_mm": [
+      394.0,
+      -169.0,
+      192.1
+     ],
+     "grips_mm": {
+      "left": [
+       359.8,
+       195.0,
+       104.0
+      ],
+      "right": [
+       362.0,
+       -10.6,
+       98.4
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       403.8,
+       -141.1,
+       270.5
+      ],
+      "right": [
+       404.0,
+       -199.1,
+       270.6
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       412.2,
+       -114.0,
+       250.3
+      ],
+      "right": [
+       407.5,
+       -226.7,
+       248.5
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.2
+     ],
+     "press_n": [
+      5.6,
+      5.7
+     ]
+    },
+    {
+     "tick": 813,
+     "event": "carrying",
+     "rims_mm": [
+      180,
+      177,
+      178,
+      178
+     ],
+     "base_mm": [
+      360.9,
+      88.1,
+      0.0
+     ],
+     "carton_mm": [
+      243.7,
+      91.5,
+      111.5
+     ],
+     "pack_mm": [
+      399.6,
+      -130.5,
+      245.8
+     ],
+     "grips_mm": {
+      "left": [
+       359.8,
+       195.0,
+       104.0
+      ],
+      "right": [
+       362.0,
+       -10.6,
+       98.4
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       405.7,
+       -100.9,
+       323.3
+      ],
+      "right": [
+       405.9,
+       -158.9,
+       323.3
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       416.7,
+       -74.9,
+       304.9
+      ],
+      "right": [
+       413.5,
+       -187.7,
+       303.5
+      ]
+     },
+     "pads_apart_mm": [
+      0.3,
+      0.4
+     ],
+     "lean_deg": 1.6,
+     "press_n": [
+      5.4,
+      5.4
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 6.8,
+      "right": 6.7
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 1.7,
+     "squeeze_mm": [
+      2.4,
+      2.1
+     ],
+     "trim_mm": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "tick": 833,
+     "event": "carrying",
+     "rims_mm": [
+      180,
+      177,
+      178,
+      178
+     ],
+     "base_mm": [
+      360.9,
+      88.1,
+      -0.0
+     ],
+     "carton_mm": [
+      243.7,
+      91.5,
+      111.5
+     ],
+     "pack_mm": [
+      394.5,
+      -75.1,
+      311.8
+     ],
+     "grips_mm": {
+      "left": [
+       359.8,
+       195.0,
+       104.0
+      ],
+      "right": [
+       362.0,
+       -10.6,
+       98.4
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       401.4,
+       -48.4,
+       386.3
+      ],
+      "right": [
+       401.6,
+       -106.3,
+       386.4
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       410.9,
+       -19.4,
+       371.9
+      ],
+      "right": [
+       408.1,
+       -132.1,
+       370.1
+      ]
+     },
+     "pads_apart_mm": [
+      0.4,
+      0.1
+     ],
+     "lean_deg": 0.7,
+     "press_n": [
+      5.3,
+      5.3
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 7.0,
+      "right": 6.4
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 0.9,
+     "squeeze_mm": [
+      2.4,
+      2.1
+     ],
+     "trim_mm": [
+      -6.6,
+      1.9,
+      -3.4
+     ]
+    },
+    {
+     "tick": 869,
+     "event": "carrying",
+     "rims_mm": [
+      180,
+      177,
+      178,
+      178
+     ],
+     "base_mm": [
+      360.9,
+      88.1,
+      -0.0
+     ],
+     "carton_mm": [
+      243.7,
+      91.5,
+      111.5
+     ],
+     "pack_mm": [
+      394.1,
+      -42.9,
+      311.4
+     ],
+     "grips_mm": {
+      "left": [
+       359.8,
+       195.0,
+       104.0
+      ],
+      "right": [
+       362.0,
+       -10.6,
+       98.4
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       406.8,
+       -14.4,
+       389.7
+      ],
+      "right": [
+       406.9,
+       -72.4,
+       389.8
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       412.7,
+       13.1,
+       371.4
+      ],
+      "right": [
+       410.7,
+       -99.6,
+       370.3
+      ]
+     },
+     "pads_apart_mm": [
+      0.2,
+      0.2
+     ],
+     "lean_deg": 2.6,
+     "press_n": [
+      5.4,
+      5.2
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 7.5,
+      "right": 6.6
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 2.6,
+     "squeeze_mm": [
+      2.4,
+      2.1
+     ],
+     "trim_mm": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "tick": 889,
+     "event": "carrying",
+     "rims_mm": [
+      180,
+      177,
+      178,
+      178
+     ],
+     "base_mm": [
+      360.9,
+      88.1,
+      -0.0
+     ],
+     "carton_mm": [
+      243.7,
+      91.5,
+      111.5
+     ],
+     "pack_mm": [
+      398.7,
+      29.3,
+      314.0
+     ],
+     "grips_mm": {
+      "left": [
+       359.8,
+       195.0,
+       104.0
+      ],
+      "right": [
+       362.0,
+       -10.6,
+       98.4
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       411.1,
+       59.4,
+       392.0
+      ],
+      "right": [
+       411.3,
+       1.4,
+       392.1
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       417.1,
+       86.3,
+       374.0
+      ],
+      "right": [
+       417.3,
+       -26.5,
+       374.5
+      ]
+     },
+     "pads_apart_mm": [
+      0.2,
+      0.1
+     ],
+     "lean_deg": 2.9,
+     "press_n": [
+      5.5,
+      5.4
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 7.9,
+      "right": 6.2
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 2.9,
+     "squeeze_mm": [
+      2.4,
+      2.1
+     ],
+     "trim_mm": [
+      3.4,
+      4.4,
+      1.9
+     ]
+    },
+    {
+     "tick": 909,
+     "event": "carrying",
+     "rims_mm": [
+      180,
+      177,
+      178,
+      178
+     ],
+     "base_mm": [
+      360.9,
+      88.1,
+      -0.0
+     ],
+     "carton_mm": [
+      243.7,
+      91.5,
+      111.5
+     ],
+     "pack_mm": [
+      400.0,
+      84.7,
+      314.8
+     ],
+     "grips_mm": {
+      "left": [
+       359.8,
+       195.0,
+       104.0
+      ],
+      "right": [
+       362.0,
+       -10.6,
+       98.4
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       411.5,
+       114.2,
+       392.4
+      ],
+      "right": [
+       411.7,
+       56.2,
+       392.4
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       418.2,
+       142.3,
+       375.3
+      ],
+      "right": [
+       418.3,
+       29.4,
+       375.8
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.1
+     ],
+     "lean_deg": 2.5,
+     "press_n": [
+      5.5,
+      5.3
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 7.8,
+      "right": 6.3
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 2.6,
+     "squeeze_mm": [
+      2.4,
+      2.1
+     ],
+     "trim_mm": [
+      3.0,
+      5.0,
+      2.0
+     ]
+    },
+    {
+     "tick": 925,
+     "event": "pack over the bag",
+     "rims_mm": [
+      180,
+      177,
+      178,
+      178
+     ],
+     "base_mm": [
+      360.9,
+      88.1,
+      0.0
+     ],
+     "carton_mm": [
+      243.7,
+      91.5,
+      111.5
+     ],
+     "pack_mm": [
+      398.7,
+      88.8,
+      314.0
+     ],
+     "grips_mm": {
+      "left": [
+       359.8,
+       195.0,
+       104.0
+      ],
+      "right": [
+       362.0,
+       -10.6,
+       98.4
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       411.9,
+       118.1,
+       392.8
+      ],
+      "right": [
+       412.1,
+       60.2,
+       392.9
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       417.3,
+       146.5,
+       374.3
+      ],
+      "right": [
+       417.0,
+       33.7,
+       375.1
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.1
+     ],
+     "off_mm": [
+      1.1,
+      -0.4
+     ],
+     "press_n": [
+      5.3,
+      5.2
+     ],
+     "lean_deg": 2.7,
+     "squeeze_mm": [
+      2.4,
+      2.1
+     ],
+     "foot_mm": [
+      393.9,
+      88.8,
+      209.4
+     ]
+    },
+    {
+     "tick": 945,
+     "event": "carrying",
+     "rims_mm": [
+      180,
+      177,
+      178,
+      178
+     ],
+     "base_mm": [
+      360.9,
+      88.1,
+      0.0
+     ],
+     "carton_mm": [
+      243.7,
+      91.5,
+      111.5
+     ],
+     "pack_mm": [
+      388.4,
+      86.7,
+      243.4
+     ],
+     "grips_mm": {
+      "left": [
+       359.8,
+       195.0,
+       104.0
+      ],
+      "right": [
+       362.0,
+       -10.6,
+       98.4
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       412.3,
+       118.0,
+       327.0
+      ],
+      "right": [
+       412.2,
+       60.5,
+       326.9
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       411.9,
+       144.8,
+       303.1
+      ],
+      "right": [
+       412.4,
+       31.7,
+       305.5
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.1
+     ],
+     "lean_deg": 6.4,
+     "press_n": [
+      5.6,
+      5.5
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 8.3,
+      "right": 8.1
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 6.5,
+     "squeeze_mm": [
+      2.4,
+      2.7
+     ],
+     "trim_mm": [
+      0.0,
+      0.0,
+      0.0
+     ]
+    },
+    {
+     "tick": 965,
+     "event": "carrying",
+     "rims_mm": [
+      180,
+      177,
+      178,
+      178
+     ],
+     "base_mm": [
+      360.9,
+      88.1,
+      -0.0
+     ],
+     "carton_mm": [
+      243.7,
+      91.5,
+      111.5
+     ],
+     "pack_mm": [
+      406.4,
+      88.5,
+      153.1
+     ],
+     "grips_mm": {
+      "left": [
+       359.8,
+       195.0,
+       104.0
+      ],
+      "right": [
+       362.0,
+       -10.6,
+       98.4
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       431.5,
+       117.4,
+       241.1
+      ],
+      "right": [
+       431.4,
+       60.9,
+       241.0
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       431.2,
+       146.3,
+       213.3
+      ],
+      "right": [
+       432.4,
+       33.2,
+       215.5
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.2
+     ],
+     "lean_deg": 7.3,
+     "press_n": [
+      5.2,
+      5.1
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 8.6,
+      "right": 7.7
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 7.3,
+     "squeeze_mm": [
+      3.0,
+      3.3
+     ],
+     "trim_mm": [
+      18.9,
+      0.1,
+      10.4
+     ]
+    },
+    {
+     "tick": 985,
+     "event": "carrying",
+     "rims_mm": [
+      180,
+      177,
+      178,
+      178
+     ],
+     "base_mm": [
+      360.9,
+      88.1,
+      0.0
+     ],
+     "carton_mm": [
+      243.7,
+      91.5,
+      111.5
+     ],
+     "pack_mm": [
+      407.0,
+      88.5,
+      144.9
+     ],
+     "grips_mm": {
+      "left": [
+       359.8,
+       195.0,
+       104.2
+      ],
+      "right": [
+       362.0,
+       -10.6,
+       98.4
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       426.5,
+       116.8,
+       229.9
+      ],
+      "right": [
+       426.3,
+       60.3,
+       229.8
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       430.1,
+       146.4,
+       205.7
+      ],
+      "right": [
+       431.4,
+       33.6,
+       207.9
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.2
+     ],
+     "lean_deg": 5.8,
+     "press_n": [
+      5.3,
+      5.4
+     ],
+     "twist_deg": {
+      "left": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "right": [
+       0.0,
+       0.0,
+       0.0
+      ]
+     },
+     "off_deg": {
+      "left": 7.9,
+      "right": 6.8
+     },
+     "level_mm": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "tilt_deg": 5.9,
+     "squeeze_mm": [
+      3.0,
+      3.3
+     ],
+     "trim_mm": [
+      13.8,
+      -0.5,
+      12.1
+     ]
+    },
+    {
+     "tick": 985,
+     "event": "pack at the rim",
+     "rims_mm": [
+      180,
+      177,
+      178,
+      178
+     ],
+     "base_mm": [
+      360.9,
+      88.1,
+      0.0
+     ],
+     "carton_mm": [
+      243.7,
+      91.5,
+      111.5
+     ],
+     "pack_mm": [
+      407.0,
+      88.5,
+      144.9
+     ],
+     "grips_mm": {
+      "left": [
+       359.8,
+       195.0,
+       104.2
+      ],
+      "right": [
+       362.0,
+       -10.6,
+       98.4
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       426.5,
+       116.8,
+       229.9
+      ],
+      "right": [
+       426.3,
+       60.3,
+       229.8
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       430.1,
+       146.4,
+       205.7
+      ],
+      "right": [
+       431.4,
+       33.6,
+       207.9
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.2
+     ],
+     "above_base_mm": 40.9
+    },
+    {
+     "tick": 985,
+     "event": "pack let down",
+     "rims_mm": [
+      180,
+      177,
+      178,
+      178
+     ],
+     "base_mm": [
+      360.9,
+      88.1,
+      0.0
+     ],
+     "carton_mm": [
+      243.7,
+      91.5,
+      111.5
+     ],
+     "pack_mm": [
+      407.0,
+      88.5,
+      144.9
+     ],
+     "grips_mm": {
+      "left": [
+       359.8,
+       195.0,
+       104.2
+      ],
+      "right": [
+       362.0,
+       -10.6,
+       98.4
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       426.5,
+       116.8,
+       229.9
+      ],
+      "right": [
+       426.3,
+       60.3,
+       229.8
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       430.1,
+       146.4,
+       205.7
+      ],
+      "right": [
+       431.4,
+       33.6,
+       207.9
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.2
+     ],
+     "eased_mm": 0.0,
+     "above_base_mm": 40.9
+    },
+    {
+     "tick": 1014,
+     "event": "pack in",
+     "rims_mm": [
+      180,
+      177,
+      178,
+      178
+     ],
+     "base_mm": [
+      360.0,
+      88.0,
+      0.0
+     ],
+     "carton_mm": [
+      242.9,
+      91.5,
+      111.5
+     ],
+     "pack_mm": [
+      396.0,
+      87.4,
+      104.0
+     ],
+     "grips_mm": {
+      "left": [
+       358.9,
+       194.9,
+       104.2
+      ],
+      "right": [
+       361.0,
+       -10.7,
+       98.4
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       396.5,
+       181.8,
+       339.9
+      ],
+      "right": [
+       396.3,
+       -4.7,
+       339.8
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       403.0,
+       182.2,
+       354.1
+      ],
+      "right": [
+       400.4,
+       -1.2,
+       356.8
+      ]
+     },
+     "pads_apart_mm": [
+      0.1,
+      0.1
+     ]
+    },
+    {
+     "tick": 1116,
+     "event": "fingers through the handles",
+     "rims_mm": [
+      180,
+      177,
+      178,
+      178
+     ],
+     "base_mm": [
+      360.0,
+      88.0,
+      -0.0
+     ],
+     "carton_mm": [
+      242.9,
+      91.5,
+      111.5
+     ],
+     "pack_mm": [
+      396.0,
+      87.4,
+      104.0
+     ],
+     "grips_mm": {
+      "left": [
+       358.9,
+       194.9,
+       104.1
+      ],
+      "right": [
+       361.0,
+       -10.7,
+       98.4
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       354.8,
+       173.7,
+       98.3
+      ],
+      "right": [
+       356.4,
+       10.1,
+       92.6
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       351.9,
+       172.5,
+       96.4
+      ],
+      "right": [
+       355.1,
+       10.7,
+       93.2
+      ]
+     },
+     "pads_apart_mm": [
+      30.0,
+      30.0
+     ],
+     "handle_deg": [
+      21.0,
+      14.0
+     ]
+    },
+    {
+     "tick": 1284,
+     "event": "handles up",
+     "rims_mm": [
+      180,
+      178,
+      178,
+      178
+     ],
+     "base_mm": [
+      369.6,
+      90.8,
+      -0.0
+     ],
+     "carton_mm": [
+      252.3,
+      91.1,
+      111.5
+     ],
+     "pack_mm": [
+      405.7,
+      90.4,
+      104.0
+     ],
+     "grips_mm": {
+      "left": [
+       365.9,
+       195.2,
+       255.7
+      ],
+      "right": [
+       373.3,
+       -15.4,
+       252.4
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       355.2,
+       170.7,
+       255.7
+      ],
+      "right": [
+       356.8,
+       2.3,
+       253.0
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       355.0,
+       171.0,
+       255.1
+      ],
+      "right": [
+       356.4,
+       2.3,
+       252.2
+      ]
+     },
+     "pads_apart_mm": [
+      28.3,
+      28.5
+     ],
+     "handle_deg": [
+      160.0,
+      158.0
+     ]
+    },
+    {
+     "tick": 1298,
+     "event": "grips pinched",
+     "rims_mm": [
+      180,
+      178,
+      178,
+      178
+     ],
+     "base_mm": [
+      369.6,
+      90.8,
+      -0.0
+     ],
+     "carton_mm": [
+      252.3,
+      91.1,
+      111.5
+     ],
+     "pack_mm": [
+      405.7,
+      90.4,
+      104.0
+     ],
+     "grips_mm": {
+      "left": [
+       366.0,
+       193.4,
+       255.9
+      ],
+      "right": [
+       373.2,
+       -13.6,
+       253.0
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       355.2,
+       170.7,
+       255.7
+      ],
+      "right": [
+       356.8,
+       2.3,
+       253.0
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       355.3,
+       170.9,
+       256.2
+      ],
+      "right": [
+       356.7,
+       2.0,
+       253.1
+      ]
+     },
+     "pads_apart_mm": [
+      19.8,
+      20.1
+     ],
+     "held": [
+      true,
+      true
+     ]
+    },
+    {
+     "tick": 1362,
+     "event": "bag up",
+     "rims_mm": [
+      254,
+      239,
+      261,
+      237
+     ],
+     "base_mm": [
+      349.8,
+      105.1,
+      79.1
+     ],
+     "carton_mm": [
+      242.4,
+      94.1,
+      199.1
+     ],
+     "pack_mm": [
+      394.1,
+      95.1,
+      179.4
+     ],
+     "grips_mm": {
+      "left": [
+       366.6,
+       190.6,
+       342.5
+      ],
+      "right": [
+       373.6,
+       -9.8,
+       327.8
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       355.2,
+       170.7,
+       368.8
+      ],
+      "right": [
+       356.8,
+       2.3,
+       366.1
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       355.8,
+       168.0,
+       344.0
+      ],
+      "right": [
+       357.0,
+       5.8,
+       328.3
+      ]
+     },
+     "pads_apart_mm": [
+      19.7,
+      20.2
+     ],
+     "rise_mm": 113.1,
+     "base_low_mm": 59.5
+    },
+    {
+     "tick": 1410,
+     "event": "bag held",
+     "rims_mm": [
+      248,
+      237,
+      262,
+      236
+     ],
+     "base_mm": [
+      359.6,
+      71.0,
+      76.7
+     ],
+     "carton_mm": [
+      253.7,
+      62.9,
+      198.0
+     ],
+     "pack_mm": [
+      404.9,
+      64.0,
+      176.8
+     ],
+     "grips_mm": {
+      "left": [
+       378.9,
+       160.1,
+       338.4
+      ],
+      "right": [
+       386.2,
+       -39.8,
+       327.4
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       368.1,
+       140.0,
+       368.8
+      ],
+      "right": [
+       369.7,
+       -28.5,
+       366.1
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       368.1,
+       137.5,
+       339.8
+      ],
+      "right": [
+       369.6,
+       -24.3,
+       328.3
+      ]
+     },
+     "pads_apart_mm": [
+      19.7,
+      20.1
+     ],
+     "base_tilt_deg": 6.4,
+     "base_low_mm": 57.7,
+     "moved_back_mm": [
+      12.9,
+      -30.8
+     ]
+    },
+    {
+     "tick": 1546,
+     "event": "bag set down",
+     "rims_mm": [
+      179,
+      177,
+      178,
+      178
+     ],
+     "base_mm": [
+      379.2,
+      61.4,
+      -0.0
+     ],
+     "carton_mm": [
+      262.9,
+      60.6,
+      111.5
+     ],
+     "pack_mm": [
+      415.3,
+      61.2,
+      104.0
+     ],
+     "grips_mm": {
+      "left": [
+       374.8,
+       167.6,
+       103.7
+      ],
+      "right": [
+       383.4,
+       -37.8,
+       98.7
+      ]
+     },
+     "tips_command_mm": {
+      "left": [
+       311.9,
+       258.2,
+       156.6
+      ],
+      "right": [
+       318.2,
+       -133.9,
+       150.2
+      ]
+     },
+     "tips_measured_mm": {
+      "left": [
+       317.6,
+       261.4,
+       160.0
+      ],
+      "right": [
+       321.5,
+       -134.9,
+       153.9
+      ]
+     },
+     "pads_apart_mm": [
+      25.1,
+      25.6
+     ]
+    }
+   ],
+   "worst_ik_mm": 0.099
+  }
+ }
+}

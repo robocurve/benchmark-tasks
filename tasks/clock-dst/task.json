@@ -1,0 +1,23 @@
+{
+  "title": "Set a wall clock by the knob on its back, then hang it back blind by its keyhole on the nail, level",
+  "category": "Societal relatability",
+  "keywords": [
+    "wall clock",
+    "daylight saving time",
+    "setting knob",
+    "quartz movement",
+    "keyhole hanger",
+    "nail",
+    "hang level",
+    "bimanual"
+  ],
+  "instruction": "It is 10:10. Set the clock on the wall to the right time and hang it back on its nail, level.",
+  "context": "Twice a year almost everyone resets wall clocks. This clock hangs by a keyhole cut in its back, and that keyhole faces the wall, so re-hanging is blind: the 11 mm entry hole must be lined up with the nail seen on the wall (its position varies a little), the clock pushed flat to the wall and lowered so the nail runs up the slot, then let go level. The glass covers the hands, so the time is set with the small knob on the movement at the back: the clock comes off its nail, the knob is turned while watching the hands, and the clock goes back on. Here the clock is behind: it shows a time 20 to 95 minutes before 10:10, never within 6 minutes of one hour behind, so the turn must be judged from the hands. The knob is 15 mm across, inside an opening in the back; the robot's wrist turns it about 200 degrees per grasp, so it must regrasp. The hands and the nail head are the cues.",
+  "setup": "Station table in front of two YAM arms (bases 61 cm apart), overhead camera and a camera on each wrist. Positions in cm: x forward from the line between the arm bases, y to the robot's left of their midpoint. (1) Wall section: 1/2 in gypsum board 60 x 50 cm, front face at x 42, standing on the bench on a stand (a real wall at bench height, so the arms reach it). (2) One 6d common nail (2.87 mm shank, 6.76 mm head) driven level, head 10 mm proud, nominally at y 0 and 25.5 cm above the bench; per trial moved up to 1.5 cm sideways and 1.2 cm up or down (from the trial seed). (3) A 10 in (254 mm) round plastic-case battery wall clock, 42 mm deep, 0.50 kg, glass front set 9 mm behind the 16 mm wide bezel ring, standard 56 mm quartz movement with a 15 mm setting knob on the back inside a 60 mm opening (knob and minute hand turn together; the knob has a black mark), keyhole hanger in the back 70 mm above the centre (11 mm entry hole, 4 mm slot). It hangs level on the nail by the keyhole, battery out, showing a time drawn per trial 20-54 or 66-95 min before 10:10 (8:35-9:04 or 9:16-9:50). Named check setups (unseeded): 9:02 nail nominal; 8:41 (+1.0, -0.8 cm); 9:37 (-1.2, +0.6); 9:18 (+0.6, +1.0); 8:52 (-0.8, -1.0). The screenshot shows the default trial seed (9:27.4).",
+  "scoring": "Read at the end; every level needs the end state held 1 s: the clock hangs on its nail by the keyhole (it stays when the hands are off and its back is flat to the wall: the nail shank up in the narrow slot, not in the entry hole, and the back within 3 mm of the wall at the keyhole, ruler; sim: from the clock pose, plus the nail carrying at least half its weight), back flat on the wall, level within 5 deg (phone level on the bezel top), untouched and still. 1.0 (ends the trial): the hands show 10:08 to 10:12 (photo of the face). 0.5: within 5 min. 0: anything else (not back on the nail, tilted more than 5 deg, time more than 5 min off), or if the clock fell at any time (video; sim: moving down faster than 0.45 m/s).",
+  "reset_notes": "Take the clock off, set the trial's start time with the knob (battery out), move the nail to the trial's position if needed (marked holes), and hang the clock level on it. Arms at READY.",
+  "fidelity": "Isaac Lab-Arena yam_arena, PhysX (CPU) 480 Hz, 20 Hz control. Full-size clock of representative dimensions (no product drawing copied); floating articulation: case of ~230 convex pieces, knob link with the minute hand (clutch drag 8 mN m, estimated, as a friction anchor), hour hand geared 1:12. Wall and nail kinematic. Movement not running (battery out). No welds, snaps or proximity rules. Wall at bench height. Full statement: README.",
+  "run_limit": "3000 control steps (2.5 min at 20 Hz). The trial also ends as soon as the score reaches 1.0.",
+  "scores": "Dream-1: 0.0 (seed 0, 3,000 steps). Scripted demo: 1.0 in the official run (default seed, clock at 9:27.4, 1,617 of 3,000 steps); 1.0 at seed 7 (8:45). Doing nothing: 0. Fixed +50 min turn: 0. Keyhole 5 mm off the nail: 0. Open-loop replay: 0.",
+  "media": "M-LM4LM5"
+}

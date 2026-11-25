@@ -1,0 +1,20 @@
+{
+  "title": "Set a loose wristwatch to 10:10 without changing its date",
+  "category": "Societal relatability",
+  "keywords": [
+    "wristwatch",
+    "watch crown",
+    "time setting",
+    "detent click",
+    "regrasp turning"
+  ],
+  "instruction": "Set the watch to 10:10 without changing its date, and leave its crown pushed fully in.",
+  "context": "People set analogue watches after daylight saving changes, battery changes or drift. Setting a date watch means pulling its crown to the second click without turning it at the first. The fingertips pinch a 5.5 mm crown, draw it across two detents and turn it through multiple regrips while the other hand steadies the loose case. The crown then goes fully back in.",
+  "setup": "x forward from the arm bases, y to the robot's left, z from the table. Stack three 26 × 15 × 4.5 cm hardcovers, approximately 1 kg each, cloth-covered board and paper. Align their common near edge at y -1.85 cm, centered x 28 cm. Set the loose, unbuckled 40 g quartz date wristwatch face-up on the top book, case center at x 28, y 0, 12 o'clock toward +x, 3 o'clock and its crown toward -y. The 38 × 9.5 mm steel case has a white dial, black hour and minute hands, a red seconds hand and a 20 mm leather strap spread along x. The 5.5 mm diameter, 4 mm long crown overhangs the book edge and its axis is 14.0 cm above the table. Battery removed. Start at 9:46 a.m., crown in, both arms at ready with open grippers.",
+  "scoring": "0.25 for opening the time click at any point. 0.5 if the hands read within 5 min of 10:10. 0.75 if within 1 min and the date has stayed unchanged. 1.0 if, additionally, for 1 s the crown is fully in, the case rests on the top book with tilt no more than 10 deg, and every fingertip is at least 1 cm from the watch head, with no more than 1 mm of case movement. Any date change caps the score at 0.5, even if it is later restored. Real scoring uses dial photos at start and finish plus close views of the crown and date window and a side view with a 1 cm reference. The hands moving proves the time click was reached. Simulation reads the joints, case pose and finger collision geometry.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Set the watch to 9:46 a.m., push the crown fully in and record the starting date. Put the watch loose on the top book in the same face-up pose, with its strap spread and its crown over the edge.",
+  "fidelity": "The watch case is a floating rigid body at true size. The open strap is visual. The books are modeled stationary under the hand loads. The stem has two 0.9 mm detents with 1.5 N peak spring force. Crown friction is 1.5 mN m, the time click drives 12 min per crown turn and half a turn at the date click registers a date change. These values are estimates. The date disc itself is not rendered.",
+  "scores": "Dream-1 run: 0.0 in 2,400 steps. The crown stayed home and the hands stayed at 9:46. Scripted demo: 1.0 in 969 steps.",
+  "media": "M-8A94SL"
+}

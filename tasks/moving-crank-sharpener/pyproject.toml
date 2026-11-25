@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "dynamic-task-moving-crank-sharpener"
+version = "0.1.0"
+requires-python = ">=3.12"
+[project.entry-points."inspect_robots.embodiments"]
+moving_crank_sharpener_yam = "dynamic_task_moving_crank_sharpener.yam_dynamic:make_embodiment"
+[project.entry-points."inspect_robots.policies"]
+moving_crank_sharpener_demo = "dynamic_task_moving_crank_sharpener.yam_dynamic:make_scripted_policy"
+moving_crank_sharpener_idle = "dynamic_task_moving_crank_sharpener.yam_dynamic:make_idle_policy"
+moving_crank_sharpener_dream_guard = "dynamic_task_moving_crank_sharpener.budget:make_guarded_dream_policy"
+[tool.setuptools.packages.find]
+include = ["dynamic_task_moving_crank_sharpener*"]

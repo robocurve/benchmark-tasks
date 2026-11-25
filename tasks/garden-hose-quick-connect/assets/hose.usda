@@ -1,0 +1,885 @@
+#usda 1.0
+(
+    defaultPrim = "hose"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "hose"
+{
+    def "Looks"
+    {
+        def Material "hose"
+        {
+            token outputs:surface.connect = </hose/Looks/hose/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.1, 0.45, 0.2)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.6
+                token outputs:surface
+            }
+        }
+
+        def Material "clamp"
+        {
+            token outputs:surface.connect = </hose/Looks/clamp/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.45, 0.46, 0.48)
+                float inputs:metallic = 0.6
+                float inputs:roughness = 0.4
+                token outputs:surface
+            }
+        }
+
+        def Material "brass"
+        {
+            token outputs:surface.connect = </hose/Looks/brass/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.78, 0.6, 0.26)
+                float inputs:metallic = 0.9
+                float inputs:roughness = 0.3
+                token outputs:surface
+            }
+        }
+
+        def Material "boot"
+        {
+            token outputs:surface.connect = </hose/Looks/boot/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.1, 0.1, 0.11)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.7
+                token outputs:surface
+            }
+        }
+    }
+
+    def Xform "clamp" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsArticulationRootAPI", "PhysxArticulationAPI"]
+    )
+    {
+        float physics:mass = 0.3
+        custom bool physxArticulation:enabledSelfCollisions = 0
+        custom float physxArticulation:sleepThreshold = 0
+        custom float physxArticulation:stabilizationThreshold = 0
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Xform "block"
+        {
+            double3 xformOp:translate = (-0.01, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+
+            def Cube "shape" (
+                prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+            )
+            {
+                rel material:binding = </hose/Looks/clamp>
+                custom float physxCollision:contactOffset = 0.0008
+                custom float physxCollision:restOffset = 0
+                double size = 1
+                float3 xformOp:scale = (0.03, 0.05, 0.031)
+                uniform token[] xformOpOrder = ["xformOp:scale"]
+            }
+        }
+    }
+
+    def Xform "h00" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.012
+        float xformOp:rotateZ = -20
+        double3 xformOp:translate = (0.005, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def Capsule "tube" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.026
+            rel material:binding = </hose/Looks/hose>
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.0115
+            double3 xformOp:translate = (0.0225, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def "joints"
+    {
+        def PhysicsRevoluteJoint "j0" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "Z"
+            rel physics:body0 = </hose/clamp>
+            rel physics:body1 = </hose/h00>
+            point3f physics:localPos0 = (0.005, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.9848077, 0, 0, -0.17364818)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -60
+            float physics:upperLimit = 60
+        }
+
+        def PhysicsRevoluteJoint "j1" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "Y"
+            rel physics:body0 = </hose/h00>
+            rel physics:body1 = </hose/h01>
+            point3f physics:localPos0 = (0.045, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -45
+            float physics:upperLimit = 45
+        }
+
+        def PhysicsRevoluteJoint "j2" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "Z"
+            rel physics:body0 = </hose/h01>
+            rel physics:body1 = </hose/h02>
+            point3f physics:localPos0 = (0.045, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.9848077, 0, 0, -0.17364818)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -60
+            float physics:upperLimit = 60
+        }
+
+        def PhysicsRevoluteJoint "j3" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "Y"
+            rel physics:body0 = </hose/h02>
+            rel physics:body1 = </hose/h03>
+            point3f physics:localPos0 = (0.045, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -45
+            float physics:upperLimit = 45
+        }
+
+        def PhysicsRevoluteJoint "j4" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "Z"
+            rel physics:body0 = </hose/h03>
+            rel physics:body1 = </hose/h04>
+            point3f physics:localPos0 = (0.045, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.9848077, 0, 0, -0.17364818)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -60
+            float physics:upperLimit = 60
+        }
+
+        def PhysicsRevoluteJoint "j5" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "Y"
+            rel physics:body0 = </hose/h04>
+            rel physics:body1 = </hose/h05>
+            point3f physics:localPos0 = (0.045, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -45
+            float physics:upperLimit = 45
+        }
+
+        def PhysicsRevoluteJoint "j6" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "Z"
+            rel physics:body0 = </hose/h05>
+            rel physics:body1 = </hose/h06>
+            point3f physics:localPos0 = (0.045, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.9848077, 0, 0, -0.17364818)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -60
+            float physics:upperLimit = 60
+        }
+
+        def PhysicsRevoluteJoint "j7" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "Y"
+            rel physics:body0 = </hose/h06>
+            rel physics:body1 = </hose/h07>
+            point3f physics:localPos0 = (0.045, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -45
+            float physics:upperLimit = 45
+        }
+
+        def PhysicsRevoluteJoint "j8" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "Z"
+            rel physics:body0 = </hose/h07>
+            rel physics:body1 = </hose/h08>
+            point3f physics:localPos0 = (0.045, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.9848077, 0, 0, -0.17364818)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -60
+            float physics:upperLimit = 60
+        }
+
+        def PhysicsRevoluteJoint "j9" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "Y"
+            rel physics:body0 = </hose/h08>
+            rel physics:body1 = </hose/h09>
+            point3f physics:localPos0 = (0.045, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -45
+            float physics:upperLimit = 45
+        }
+
+        def PhysicsRevoluteJoint "j10" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "Z"
+            rel physics:body0 = </hose/h09>
+            rel physics:body1 = </hose/h10>
+            point3f physics:localPos0 = (0.045, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.9848077, 0, 0, -0.17364818)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -60
+            float physics:upperLimit = 60
+        }
+
+        def PhysicsRevoluteJoint "j11" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "Y"
+            rel physics:body0 = </hose/h10>
+            rel physics:body1 = </hose/h11>
+            point3f physics:localPos0 = (0.045, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -45
+            float physics:upperLimit = 45
+        }
+
+        def PhysicsRevoluteJoint "j12" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "Z"
+            rel physics:body0 = </hose/h11>
+            rel physics:body1 = </hose/h12>
+            point3f physics:localPos0 = (0.045, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.9848077, 0, 0, -0.17364818)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -60
+            float physics:upperLimit = 60
+        }
+
+        def PhysicsRevoluteJoint "j13" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "Y"
+            rel physics:body0 = </hose/h12>
+            rel physics:body1 = </hose/h13>
+            point3f physics:localPos0 = (0.045, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -45
+            float physics:upperLimit = 45
+        }
+
+        def PhysicsRevoluteJoint "j14" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "Z"
+            rel physics:body0 = </hose/h13>
+            rel physics:body1 = </hose/h14>
+            point3f physics:localPos0 = (0.045, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.9848077, 0, 0, -0.17364818)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -60
+            float physics:upperLimit = 60
+        }
+
+        def PhysicsRevoluteJoint "j15" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "Y"
+            rel physics:body0 = </hose/h14>
+            rel physics:body1 = </hose/h15>
+            point3f physics:localPos0 = (0.045, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -45
+            float physics:upperLimit = 45
+        }
+
+        def PhysicsRevoluteJoint "j16" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "Z"
+            rel physics:body0 = </hose/h15>
+            rel physics:body1 = </hose/plug>
+            point3f physics:localPos0 = (0.045, 0, 0)
+            point3f physics:localPos1 = (-0.068, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -60
+            float physics:upperLimit = 60
+        }
+    }
+
+    def Xform "h01" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.012
+        float xformOp:rotateZ = -20
+        double3 xformOp:translate = (0.04728616793536587, -0.015390906449655092, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def Capsule "tube" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.026
+            rel material:binding = </hose/Looks/hose>
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.0115
+            double3 xformOp:translate = (0.0225, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "h02" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.012
+        float xformOp:rotateZ = -40
+        double3 xformOp:translate = (0.08957233587073174, -0.030781812899310184, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def Capsule "tube" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.026
+            rel material:binding = </hose/Looks/hose>
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.0115
+            double3 xformOp:translate = (0.0225, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "h03" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.012
+        float xformOp:rotateZ = -40
+        double3 xformOp:translate = (0.12404433581108575, -0.05970725533520445, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def Capsule "tube" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.026
+            rel material:binding = </hose/Looks/hose>
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.0115
+            double3 xformOp:translate = (0.0225, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "h04" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.012
+        float xformOp:rotateZ = -60
+        double3 xformOp:translate = (0.15851633575143975, -0.08863269777109871, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def Capsule "tube" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.026
+            rel material:binding = </hose/Looks/hose>
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.0115
+            double3 xformOp:translate = (0.0225, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "h05" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.012
+        float xformOp:rotateZ = -60
+        double3 xformOp:translate = (0.18101633575143974, -0.12760384094139843, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def Capsule "tube" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.026
+            rel material:binding = </hose/Looks/hose>
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.0115
+            double3 xformOp:translate = (0.0225, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "h06" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.012
+        float xformOp:rotateZ = -80
+        double3 xformOp:translate = (0.20351633575143974, -0.16657498411169816, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def Capsule "tube" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.026
+            rel material:binding = </hose/Looks/hose>
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.0115
+            double3 xformOp:translate = (0.0225, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "h07" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.012
+        float xformOp:rotateZ = -80
+        double3 xformOp:translate = (0.2113305037464516, -0.21089133299724752, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def Capsule "tube" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.026
+            rel material:binding = </hose/Looks/hose>
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.0115
+            double3 xformOp:translate = (0.0225, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "h08" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.012
+        float xformOp:rotateZ = -100
+        double3 xformOp:translate = (0.21914467174146346, -0.25520768188279686, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def Capsule "tube" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.026
+            rel material:binding = </hose/Looks/hose>
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.0115
+            double3 xformOp:translate = (0.0225, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "h09" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.012
+        float xformOp:rotateZ = -100
+        double3 xformOp:translate = (0.2113305037464516, -0.2995240307683462, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def Capsule "tube" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.026
+            rel material:binding = </hose/Looks/hose>
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.0115
+            double3 xformOp:translate = (0.0225, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "h10" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.012
+        float xformOp:rotateZ = -120
+        double3 xformOp:translate = (0.20351633575143974, -0.3438403796538956, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def Capsule "tube" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.026
+            rel material:binding = </hose/Looks/hose>
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.0115
+            double3 xformOp:translate = (0.0225, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "h11" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.012
+        float xformOp:rotateZ = -120
+        double3 xformOp:translate = (0.18101633575143974, -0.38281152282419534, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def Capsule "tube" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.026
+            rel material:binding = </hose/Looks/hose>
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.0115
+            double3 xformOp:translate = (0.0225, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "h12" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.012
+        float xformOp:rotateZ = -140
+        double3 xformOp:translate = (0.15851633575143975, -0.4217826659944951, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def Capsule "tube" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.026
+            rel material:binding = </hose/Looks/hose>
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.0115
+            double3 xformOp:translate = (0.0225, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "h13" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.012
+        float xformOp:rotateZ = -140
+        double3 xformOp:translate = (0.12404433581108575, -0.4507081084303894, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def Capsule "tube" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.026
+            rel material:binding = </hose/Looks/hose>
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.0115
+            double3 xformOp:translate = (0.0225, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "h14" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.012
+        float xformOp:rotateZ = -160
+        double3 xformOp:translate = (0.08957233587073174, -0.4796335508662837, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def Capsule "tube" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.026
+            rel material:binding = </hose/Looks/hose>
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.0115
+            double3 xformOp:translate = (0.0225, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "h15" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.012
+        float xformOp:rotateZ = -160
+        double3 xformOp:translate = (0.047286167935365865, -0.49502445731593875, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def Capsule "tube" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.026
+            rel material:binding = </hose/Looks/hose>
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.0115
+            double3 xformOp:translate = (0.0225, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "plug" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.1
+        float xformOp:rotateZ = -160
+        double3 xformOp:translate = (-0.058899098213441775, -0.5336727335117393, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ"]
+
+        def Cylinder "shaft_a" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.006
+            rel material:binding = </hose/Looks/brass>
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.00775
+            double3 xformOp:translate = (0.003, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cylinder "groove" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.006
+            rel material:binding = </hose/Looks/brass>
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.0055
+            double3 xformOp:translate = (0.009000000000000001, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cylinder "shaft_b" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.005999999999999998
+            rel material:binding = </hose/Looks/brass>
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.00775
+            double3 xformOp:translate = (0.015, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cone "nose" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.008
+            rel material:binding = </hose/Looks/brass>
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.00775
+            double3 xformOp:translate = (0.022, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cylinder "flange" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.006
+            rel material:binding = </hose/Looks/brass>
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.012
+            double3 xformOp:translate = (-0.003, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Mesh "body" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysicsMeshCollisionAPI"]
+        )
+        {
+            int[] faceVertexCounts = [6, 6, 4, 4, 4, 4, 4, 4]
+            int[] faceVertexIndices = [5, 4, 3, 2, 1, 0, 6, 7, 8, 9, 10, 11, 0, 1, 7, 6, 1, 2, 8, 7, 2, 3, 9, 8, 3, 4, 10, 9, 4, 5, 11, 10, 5, 0, 6, 11]
+            rel material:binding = </hose/Looks/brass>
+            uniform token physics:approximation = "convexHull"
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:minTorsionalPatchRadius = 0.006
+            custom float physxCollision:restOffset = 0
+            custom float physxCollision:torsionalPatchRadius = 0.008
+            point3f[] points = [(-0.046, 0.006350853, 0.011), (-0.046, 0.012701706, 7.777552e-19), (-0.046, 0.006350853, -0.011), (-0.046, -0.006350853, -0.011), (-0.046, -0.012701706, -2.3332656e-18), (-0.046, -0.006350853, 0.011), (-0.006, 0.006350853, 0.011), (-0.006, 0.012701706, 7.777552e-19), (-0.006, 0.006350853, -0.011), (-0.006, -0.006350853, -0.011), (-0.006, -0.012701706, -2.3332656e-18), (-0.006, -0.006350853, 0.011)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Cylinder "boot" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.022000000000000006
+            rel material:binding = </hose/Looks/boot>
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.0105
+            double3 xformOp:translate = (-0.057, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+}
+

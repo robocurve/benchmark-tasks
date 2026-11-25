@@ -1,0 +1,2284 @@
+#usda 1.0
+(
+    defaultPrim = "coupler"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "coupler"
+{
+    def "Looks"
+    {
+        def Material "brass"
+        {
+            token outputs:surface.connect = </coupler/Looks/brass/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.78, 0.6, 0.26)
+                float inputs:metallic = 0.9
+                float inputs:roughness = 0.3
+                token outputs:surface
+            }
+        }
+
+        def Material "steel"
+        {
+            token outputs:surface.connect = </coupler/Looks/steel/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.7, 0.72, 0.75)
+                float inputs:metallic = 0.9
+                float inputs:roughness = 0.3
+                token outputs:surface
+            }
+        }
+
+        def Material "black"
+        {
+            token outputs:surface.connect = </coupler/Looks/black/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.1, 0.1, 0.11)
+                float inputs:metallic = 0.3
+                float inputs:roughness = 0.5
+                token outputs:surface
+            }
+        }
+
+        def Material "red"
+        {
+            token outputs:surface.connect = </coupler/Looks/red/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.7, 0.08, 0.06)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.5
+                token outputs:surface
+            }
+        }
+
+        def Material "greased" (
+            prepend apiSchemas = ["PhysicsMaterialAPI", "PhysxMaterialAPI"]
+        )
+        {
+            float physics:dynamicFriction = 0.1
+            float physics:restitution = 0
+            float physics:staticFriction = 0.1
+            custom token physxMaterial:frictionCombineMode = "min"
+        }
+    }
+
+    def Xform "body" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysicsArticulationRootAPI", "PhysxArticulationAPI"]
+    )
+    {
+        float physics:mass = 0.3
+        custom bool physxArticulation:enabledSelfCollisions = 0
+        custom float physxArticulation:sleepThreshold = 0
+        custom float physxArticulation:stabilizationThreshold = 0
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def "lead_in0"
+        {
+            def Xform "seg00"
+            {
+                double3 xformOp:translate = (0.001, 0.013499999999999998, 0)
+                uniform token[] xformOpOrder = ["xformOp:translate"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.001, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg01"
+            {
+                float xformOp:rotateX = 22.5
+                double3 xformOp:translate = (0.001, 0.01247237368890237, 0.005166226336928711)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.001, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg02"
+            {
+                float xformOp:rotateX = 45
+                double3 xformOp:translate = (0.001, 0.00954594154601839, 0.009545941546018389)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.001, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg03"
+            {
+                float xformOp:rotateX = 67.5
+                double3 xformOp:translate = (0.001, 0.005166226336928712, 0.01247237368890237)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.001, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg04"
+            {
+                float xformOp:rotateX = 90
+                double3 xformOp:translate = (0.001, 8.266365894244633e-19, 0.013499999999999998)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.001, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg05"
+            {
+                float xformOp:rotateX = 112.5
+                double3 xformOp:translate = (0.001, -0.005166226336928711, 0.01247237368890237)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.001, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg06"
+            {
+                float xformOp:rotateX = 135
+                double3 xformOp:translate = (0.001, -0.009545941546018389, 0.00954594154601839)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.001, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg07"
+            {
+                float xformOp:rotateX = 157.5
+                double3 xformOp:translate = (0.001, -0.01247237368890237, 0.005166226336928713)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.001, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg08"
+            {
+                float xformOp:rotateX = 180
+                double3 xformOp:translate = (0.001, -0.013499999999999998, 1.6532731788489266e-18)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.001, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg09"
+            {
+                float xformOp:rotateX = 202.5
+                double3 xformOp:translate = (0.001, -0.012472373688902371, -0.00516622633692871)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.001, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg10"
+            {
+                float xformOp:rotateX = 225
+                double3 xformOp:translate = (0.001, -0.009545941546018392, -0.009545941546018389)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.001, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg11"
+            {
+                float xformOp:rotateX = 247.5
+                double3 xformOp:translate = (0.001, -0.0051662263369287075, -0.012472373688902371)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.001, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg12"
+            {
+                float xformOp:rotateX = 270
+                double3 xformOp:translate = (0.001, -2.4799097682733898e-18, -0.013499999999999998)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.001, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg13"
+            {
+                float xformOp:rotateX = 292.5
+                double3 xformOp:translate = (0.001, 0.005166226336928714, -0.012472373688902368)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.001, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg14"
+            {
+                float xformOp:rotateX = 315
+                double3 xformOp:translate = (0.001, 0.009545941546018387, -0.009545941546018392)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.001, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg15"
+            {
+                float xformOp:rotateX = 337.5
+                double3 xformOp:translate = (0.001, 0.012472373688902371, -0.005166226336928708)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.001, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+        }
+
+        def "lead_in1"
+        {
+            def Xform "seg00"
+            {
+                double3 xformOp:translate = (0.003, 0.01275, 0)
+                uniform token[] xformOpOrder = ["xformOp:translate"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.0025, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg01"
+            {
+                float xformOp:rotateX = 22.5
+                double3 xformOp:translate = (0.003, 0.011779464039518905, 0.004879213762654894)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.0025, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg02"
+            {
+                float xformOp:rotateX = 45
+                double3 xformOp:translate = (0.003, 0.00901561146012848, 0.00901561146012848)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.0025, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg03"
+            {
+                float xformOp:rotateX = 67.5
+                double3 xformOp:translate = (0.003, 0.004879213762654895, 0.011779464039518905)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.0025, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg04"
+            {
+                float xformOp:rotateX = 90
+                double3 xformOp:translate = (0.003, 7.807123344564376e-19, 0.01275)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.0025, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg05"
+            {
+                float xformOp:rotateX = 112.5
+                double3 xformOp:translate = (0.003, -0.0048792137626548935, 0.011779464039518905)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.0025, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg06"
+            {
+                float xformOp:rotateX = 135
+                double3 xformOp:translate = (0.003, -0.00901561146012848, 0.00901561146012848)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.0025, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg07"
+            {
+                float xformOp:rotateX = 157.5
+                double3 xformOp:translate = (0.003, -0.011779464039518905, 0.004879213762654896)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.0025, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg08"
+            {
+                float xformOp:rotateX = 180
+                double3 xformOp:translate = (0.003, -0.01275, 1.5614246689128752e-18)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.0025, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg09"
+            {
+                float xformOp:rotateX = 202.5
+                double3 xformOp:translate = (0.003, -0.011779464039518907, -0.004879213762654893)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.0025, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg10"
+            {
+                float xformOp:rotateX = 225
+                double3 xformOp:translate = (0.003, -0.009015611460128482, -0.00901561146012848)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.0025, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg11"
+            {
+                float xformOp:rotateX = 247.5
+                double3 xformOp:translate = (0.003, -0.004879213762654891, -0.011779464039518907)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.0025, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg12"
+            {
+                float xformOp:rotateX = 270
+                double3 xformOp:translate = (0.003, -2.342137003369313e-18, -0.01275)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.0025, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg13"
+            {
+                float xformOp:rotateX = 292.5
+                double3 xformOp:translate = (0.003, 0.004879213762654897, -0.011779464039518904)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.0025, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg14"
+            {
+                float xformOp:rotateX = 315
+                double3 xformOp:translate = (0.003, 0.009015611460128478, -0.009015611460128482)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.0025, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg15"
+            {
+                float xformOp:rotateX = 337.5
+                double3 xformOp:translate = (0.003, 0.011779464039518907, -0.004879213762654892)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.0025, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+        }
+
+        def "lead_in2"
+        {
+            def Xform "seg00"
+            {
+                double3 xformOp:translate = (0.005, 0.012, 0)
+                uniform token[] xformOpOrder = ["xformOp:translate"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.004, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg01"
+            {
+                float xformOp:rotateX = 22.5
+                double3 xformOp:translate = (0.005, 0.011086554390135442, 0.004592201188381078)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.004, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg02"
+            {
+                float xformOp:rotateX = 45
+                double3 xformOp:translate = (0.005, 0.008485281374238571, 0.00848528137423857)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.004, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg03"
+            {
+                float xformOp:rotateX = 67.5
+                double3 xformOp:translate = (0.005, 0.004592201188381078, 0.011086554390135442)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.004, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg04"
+            {
+                float xformOp:rotateX = 90
+                double3 xformOp:translate = (0.005, 7.347880794884119e-19, 0.012)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.004, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg05"
+            {
+                float xformOp:rotateX = 112.5
+                double3 xformOp:translate = (0.005, -0.004592201188381077, 0.011086554390135442)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.004, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg06"
+            {
+                float xformOp:rotateX = 135
+                double3 xformOp:translate = (0.005, -0.00848528137423857, 0.008485281374238571)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.004, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg07"
+            {
+                float xformOp:rotateX = 157.5
+                double3 xformOp:translate = (0.005, -0.011086554390135442, 0.004592201188381079)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.004, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg08"
+            {
+                float xformOp:rotateX = 180
+                double3 xformOp:translate = (0.005, -0.012, 1.4695761589768239e-18)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.004, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg09"
+            {
+                float xformOp:rotateX = 202.5
+                double3 xformOp:translate = (0.005, -0.011086554390135443, -0.004592201188381076)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.004, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg10"
+            {
+                float xformOp:rotateX = 225
+                double3 xformOp:translate = (0.005, -0.008485281374238573, -0.00848528137423857)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.004, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg11"
+            {
+                float xformOp:rotateX = 247.5
+                double3 xformOp:translate = (0.005, -0.004592201188381074, -0.011086554390135443)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.004, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg12"
+            {
+                float xformOp:rotateX = 270
+                double3 xformOp:translate = (0.005, -2.2043642384652355e-18, -0.012)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.004, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg13"
+            {
+                float xformOp:rotateX = 292.5
+                double3 xformOp:translate = (0.005, 0.0045922011883810804, -0.01108655439013544)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.004, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg14"
+            {
+                float xformOp:rotateX = 315
+                double3 xformOp:translate = (0.005, 0.008485281374238568, -0.008485281374238573)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.004, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg15"
+            {
+                float xformOp:rotateX = 337.5
+                double3 xformOp:translate = (0.005, 0.011086554390135443, -0.004592201188381075)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.002, 0.004, 0.00601511)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+        }
+
+        def "bore"
+        {
+            def Xform "seg00"
+            {
+                double3 xformOp:translate = (0.023, 0.010499999999999999, 0)
+                uniform token[] xformOpOrder = ["xformOp:translate"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0051558088)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg01"
+            {
+                float xformOp:rotateX = 22.5
+                double3 xformOp:translate = (0.023, 0.00970073509136851, 0.004018176039833442)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0051558088)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg02"
+            {
+                float xformOp:rotateX = 45
+                double3 xformOp:translate = (0.023, 0.007424621202458749, 0.007424621202458748)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0051558088)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg03"
+            {
+                float xformOp:rotateX = 67.5
+                double3 xformOp:translate = (0.023, 0.004018176039833443, 0.00970073509136851)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0051558088)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg04"
+            {
+                float xformOp:rotateX = 90
+                double3 xformOp:translate = (0.023, 6.429395695523604e-19, 0.010499999999999999)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0051558088)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg05"
+            {
+                float xformOp:rotateX = 112.5
+                double3 xformOp:translate = (0.023, -0.004018176039833442, 0.00970073509136851)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0051558088)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg06"
+            {
+                float xformOp:rotateX = 135
+                double3 xformOp:translate = (0.023, -0.007424621202458748, 0.007424621202458749)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0051558088)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg07"
+            {
+                float xformOp:rotateX = 157.5
+                double3 xformOp:translate = (0.023, -0.00970073509136851, 0.004018176039833444)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0051558088)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg08"
+            {
+                float xformOp:rotateX = 180
+                double3 xformOp:translate = (0.023, -0.010499999999999999, 1.2858791391047207e-18)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0051558088)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg09"
+            {
+                float xformOp:rotateX = 202.5
+                double3 xformOp:translate = (0.023, -0.00970073509136851, -0.004018176039833441)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0051558088)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg10"
+            {
+                float xformOp:rotateX = 225
+                double3 xformOp:translate = (0.023, -0.00742462120245875, -0.007424621202458748)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0051558088)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg11"
+            {
+                float xformOp:rotateX = 247.5
+                double3 xformOp:translate = (0.023, -0.0040181760398334395, -0.00970073509136851)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0051558088)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg12"
+            {
+                float xformOp:rotateX = 270
+                double3 xformOp:translate = (0.023, -1.928818708657081e-18, -0.010499999999999999)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0051558088)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg13"
+            {
+                float xformOp:rotateX = 292.5
+                double3 xformOp:translate = (0.023, 0.004018176039833445, -0.009700735091368509)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0051558088)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg14"
+            {
+                float xformOp:rotateX = 315
+                double3 xformOp:translate = (0.023, 0.007424621202458746, -0.00742462120245875)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0051558088)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg15"
+            {
+                float xformOp:rotateX = 337.5
+                double3 xformOp:translate = (0.023, 0.00970073509136851, -0.0040181760398334395)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    rel material:binding:physics = </coupler/Looks/greased>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0051558088)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+        }
+
+        def "shell"
+        {
+            def Xform "seg00"
+            {
+                double3 xformOp:translate = (0.023, 0.0135, 0)
+                uniform token[] xformOpOrder = ["xformOp:translate"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0064447606)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg01"
+            {
+                float xformOp:rotateX = 22.5
+                double3 xformOp:translate = (0.023, 0.012472373688902371, 0.005166226336928712)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0064447606)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg02"
+            {
+                float xformOp:rotateX = 45
+                double3 xformOp:translate = (0.023, 0.009545941546018392, 0.00954594154601839)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0064447606)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg03"
+            {
+                float xformOp:rotateX = 67.5
+                double3 xformOp:translate = (0.023, 0.005166226336928713, 0.012472373688902371)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0064447606)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg04"
+            {
+                float xformOp:rotateX = 90
+                double3 xformOp:translate = (0.023, 8.266365894244634e-19, 0.0135)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0064447606)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg05"
+            {
+                float xformOp:rotateX = 112.5
+                double3 xformOp:translate = (0.023, -0.005166226336928711, 0.012472373688902371)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0064447606)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg06"
+            {
+                float xformOp:rotateX = 135
+                double3 xformOp:translate = (0.023, -0.00954594154601839, 0.009545941546018392)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0064447606)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg07"
+            {
+                float xformOp:rotateX = 157.5
+                double3 xformOp:translate = (0.023, -0.012472373688902371, 0.0051662263369287136)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0064447606)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg08"
+            {
+                float xformOp:rotateX = 180
+                double3 xformOp:translate = (0.023, -0.0135, 1.6532731788489268e-18)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0064447606)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg09"
+            {
+                float xformOp:rotateX = 202.5
+                double3 xformOp:translate = (0.023, -0.012472373688902373, -0.00516622633692871)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0064447606)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg10"
+            {
+                float xformOp:rotateX = 225
+                double3 xformOp:translate = (0.023, -0.009545941546018394, -0.00954594154601839)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0064447606)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg11"
+            {
+                float xformOp:rotateX = 247.5
+                double3 xformOp:translate = (0.023, -0.005166226336928708, -0.012472373688902373)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0064447606)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg12"
+            {
+                float xformOp:rotateX = 270
+                double3 xformOp:translate = (0.023, -2.47990976827339e-18, -0.0135)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0064447606)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg13"
+            {
+                float xformOp:rotateX = 292.5
+                double3 xformOp:translate = (0.023, 0.005166226336928715, -0.01247237368890237)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0064447606)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg14"
+            {
+                float xformOp:rotateX = 315
+                double3 xformOp:translate = (0.023, 0.009545941546018389, -0.009545941546018394)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0064447606)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg15"
+            {
+                float xformOp:rotateX = 337.5
+                double3 xformOp:translate = (0.023, 0.012472373688902373, -0.005166226336928709)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/brass>
+                    double size = 1
+                    float3 xformOp:scale = (0.034, 0.003, 0.0064447606)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+        }
+
+        def Cylinder "back" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.003999999999999997
+            rel material:binding = </coupler/Looks/brass>
+            double radius = 0.015
+            double3 xformOp:translate = (0.038000000000000006, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cylinder "hex" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.012000000000000004
+            rel material:binding = </coupler/Looks/brass>
+            double radius = 0.017
+            double3 xformOp:translate = (0.046, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cylinder "spout" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "X"
+            double height = 0.012999999999999984
+            rel material:binding = </coupler/Looks/brass>
+            double radius = 0.01
+            double3 xformOp:translate = (0.058499999999999996, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Xform "tap"
+        {
+            double3 xformOp:translate = (0.07, 0, 0.004)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+
+            def Cube "shape" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </coupler/Looks/brass>
+                double size = 1
+                float3 xformOp:scale = (0.026, 0.03, 0.034)
+                uniform token[] xformOpOrder = ["xformOp:scale"]
+            }
+        }
+
+        def Xform "stem"
+        {
+            double3 xformOp:translate = (0.07, 0, 0.03)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+
+            def Cube "shape" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </coupler/Looks/steel>
+                double size = 1
+                float3 xformOp:scale = (0.008, 0.008, 0.022)
+                uniform token[] xformOpOrder = ["xformOp:scale"]
+            }
+        }
+
+        def Xform "handle_a"
+        {
+            double3 xformOp:translate = (0.07, 0, 0.043)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+
+            def Cube "shape" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </coupler/Looks/red>
+                double size = 1
+                float3 xformOp:scale = (0.008, 0.05, 0.006)
+                uniform token[] xformOpOrder = ["xformOp:scale"]
+            }
+        }
+
+        def Xform "handle_b"
+        {
+            double3 xformOp:translate = (0.07, 0, 0.043)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+
+            def Cube "shape" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </coupler/Looks/red>
+                double size = 1
+                float3 xformOp:scale = (0.05, 0.008, 0.006)
+                uniform token[] xformOpOrder = ["xformOp:scale"]
+            }
+        }
+    }
+
+    def Xform "collar" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.04
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def "sleeve"
+        {
+            def Xform "seg00"
+            {
+                double3 xformOp:translate = (0.012, 0.018250000000000002, 0)
+                uniform token[] xformOpOrder = ["xformOp:translate"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/black>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.03, 0.0035, 0.0068422076)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg01"
+            {
+                float xformOp:rotateX = 18
+                double3 xformOp:translate = (0.012, 0.017356781422386554, 0.005639560147342791)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/black>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.03, 0.0035, 0.0068422076)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg02"
+            {
+                float xformOp:rotateX = 36
+                double3 xformOp:translate = (0.012, 0.014764560147342794, 0.010727080854337635)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/black>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.03, 0.0035, 0.0068422076)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg03"
+            {
+                float xformOp:rotateX = 54
+                double3 xformOp:translate = (0.012, 0.010727080854337635, 0.014764560147342794)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/black>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.03, 0.0035, 0.0068422076)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg04"
+            {
+                float xformOp:rotateX = 72
+                double3 xformOp:translate = (0.012, 0.005639560147342792, 0.017356781422386554)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/black>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.03, 0.0035, 0.0068422076)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg05"
+            {
+                float xformOp:rotateX = 90
+                double3 xformOp:translate = (0.012, 1.11749020422196e-18, 0.018250000000000002)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/black>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.03, 0.0035, 0.0068422076)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg06"
+            {
+                float xformOp:rotateX = 108
+                double3 xformOp:translate = (0.012, -0.00563956014734279, 0.017356781422386554)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/black>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.03, 0.0035, 0.0068422076)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg07"
+            {
+                float xformOp:rotateX = 126
+                double3 xformOp:translate = (0.012, -0.010727080854337634, 0.014764560147342794)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/black>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.03, 0.0035, 0.0068422076)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg08"
+            {
+                float xformOp:rotateX = 144
+                double3 xformOp:translate = (0.012, -0.01476456014734279, 0.010727080854337639)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/black>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.03, 0.0035, 0.0068422076)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg09"
+            {
+                float xformOp:rotateX = 162
+                double3 xformOp:translate = (0.012, -0.017356781422386554, 0.0056395601473427925)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/black>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.03, 0.0035, 0.0068422076)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg10"
+            {
+                float xformOp:rotateX = 180
+                double3 xformOp:translate = (0.012, -0.018250000000000002, 2.23498040844392e-18)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/black>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.03, 0.0035, 0.0068422076)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg11"
+            {
+                float xformOp:rotateX = 198
+                double3 xformOp:translate = (0.012, -0.017356781422386554, -0.005639560147342789)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/black>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.03, 0.0035, 0.0068422076)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg12"
+            {
+                float xformOp:rotateX = 216
+                double3 xformOp:translate = (0.012, -0.014764560147342795, -0.010727080854337634)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/black>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.03, 0.0035, 0.0068422076)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg13"
+            {
+                float xformOp:rotateX = 234
+                double3 xformOp:translate = (0.012, -0.010727080854337639, -0.01476456014734279)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/black>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.03, 0.0035, 0.0068422076)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg14"
+            {
+                float xformOp:rotateX = 252
+                double3 xformOp:translate = (0.012, -0.005639560147342793, -0.017356781422386554)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/black>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.03, 0.0035, 0.0068422076)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg15"
+            {
+                float xformOp:rotateX = 270
+                double3 xformOp:translate = (0.012, -3.3524706126658797e-18, -0.018250000000000002)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/black>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.03, 0.0035, 0.0068422076)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg16"
+            {
+                float xformOp:rotateX = 288
+                double3 xformOp:translate = (0.012, 0.005639560147342787, -0.017356781422386554)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/black>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.03, 0.0035, 0.0068422076)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg17"
+            {
+                float xformOp:rotateX = 306
+                double3 xformOp:translate = (0.012, 0.010727080854337632, -0.014764560147342795)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/black>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.03, 0.0035, 0.0068422076)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg18"
+            {
+                float xformOp:rotateX = 324
+                double3 xformOp:translate = (0.012, 0.01476456014734279, -0.01072708085433764)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/black>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.03, 0.0035, 0.0068422076)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+
+            def Xform "seg19"
+            {
+                float xformOp:rotateX = 342
+                double3 xformOp:translate = (0.012, 0.017356781422386554, -0.005639560147342795)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+                def Cube "shape" (
+                    prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+                )
+                {
+                    rel material:binding = </coupler/Looks/black>
+                    custom float physxCollision:contactOffset = 0.0008
+                    custom float physxCollision:restOffset = 0
+                    double size = 1
+                    float3 xformOp:scale = (0.03, 0.0035, 0.0068422076)
+                    uniform token[] xformOpOrder = ["xformOp:scale"]
+                }
+            }
+        }
+    }
+
+    def "joints"
+    {
+        def PhysicsPrismaticJoint "collar" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:targetPosition = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "X"
+            rel physics:body0 = </coupler/body>
+            rel physics:body1 = </coupler/collar>
+            point3f physics:localPos0 = (0, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = 0
+            float physics:upperLimit = 0.009
+        }
+
+        def PhysicsPrismaticJoint "pin0" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:targetPosition = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "Y"
+            rel physics:body0 = </coupler/body>
+            rel physics:body1 = </coupler/pin0>
+            point3f physics:localPos0 = (0.008, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.70710677, 0.70710677, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = 0
+            float physics:upperLimit = 0.0035
+        }
+
+        def PhysicsPrismaticJoint "pin1" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:targetPosition = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "Y"
+            rel physics:body0 = </coupler/body>
+            rel physics:body1 = </coupler/pin1>
+            point3f physics:localPos0 = (0.008, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (-0.25881904, 0.9659258, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = 0
+            float physics:upperLimit = 0.0035
+        }
+
+        def PhysicsPrismaticJoint "pin2" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:targetPosition = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "Y"
+            rel physics:body0 = </coupler/body>
+            rel physics:body1 = </coupler/pin2>
+            point3f physics:localPos0 = (0.008, 0, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (-0.9659258, 0.25881904, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = 0
+            float physics:upperLimit = 0.0035
+        }
+    }
+
+    def Xform "pin0" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.002
+        float xformOp:rotateX = 90
+        double3 xformOp:translate = (0.008, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+        def Sphere "ball" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </coupler/Looks/steel>
+            rel material:binding:physics = </coupler/Looks/greased>
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.002
+            double3 xformOp:translate = (0, 0.008, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "pin1" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.002
+        float xformOp:rotateX = 210
+        double3 xformOp:translate = (0.008, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+        def Sphere "ball" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </coupler/Looks/steel>
+            rel material:binding:physics = </coupler/Looks/greased>
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.002
+            double3 xformOp:translate = (0, 0.008, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+
+    def Xform "pin2" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        float physics:mass = 0.002
+        float xformOp:rotateX = 330
+        double3 xformOp:translate = (0.008, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateX"]
+
+        def Sphere "ball" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </coupler/Looks/steel>
+            rel material:binding:physics = </coupler/Looks/greased>
+            custom float physxCollision:contactOffset = 0.0008
+            custom float physxCollision:restOffset = 0
+            double radius = 0.002
+            double3 xformOp:translate = (0, 0.008, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+    }
+}
+

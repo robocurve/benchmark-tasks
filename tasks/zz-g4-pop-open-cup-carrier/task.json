@@ -1,0 +1,21 @@
+{
+  "title": "Pop open a flat-folded 2-cup drink carrier and load two lidded hot cups onto the pickup mat",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "drink carrier",
+    "takeout counter",
+    "grocery cafe",
+    "loaded handle carry",
+    "articulated packaging"
+  ],
+  "instruction": "Open the flat 2-cup drink carrier and seat both lidded hot cups upright in its pockets before it crosses the white tape line, then leave the loaded carrier standing on the blue pickup mat.",
+  "context": "Fast food and counter workers (O*NET 35-3023.00; 3,676,580 US jobs, BLS OEWS May 2023) and cashiers (41-2011.00; 3,298,660; \"Bag, box, wrap, or gift-wrap merchandise\") pack takeout drinks into flat-folded 2-cup kraft carriers. Two hands pull the folded pockets open past crease return until the auto-bottom floors drop flat and lock; one hand steadies the empty 42 g carrier while the other seats the first 245 g lidded cup, then the loaded carrier is carried by its center handle to the pickup mat.",
+  "setup": "110x130 cm table at (36,0) (z=0; cm from arm-base midpoint, x fwd, y left; arms READY, jaws 9.4 cm). Fixed ABS U-slot rack (11.0x6.8x6.5 cm, 4.4 cm y-slot, 0.8 cm floor) at (19,0) holds a folded Southern Champion Tray 2795 2-cup kraft carrier upright along x (42 g; 9.5x4.2x22.5 cm; opens to 9.5x19.4x22.5 cm, 8.4 cm walls, 5.6x4.8 cm collar tabs). Two 245 g Solo 378W 8 oz cups + TL38R2 lids (8.0 cm rim, 5.1 cm base, 10.8 cm H) at (26,-24) and (37,-24); blue mat (16x24x0.4 cm) at (32,22); continuous white tape line at y=8, x 20-90 (between work area and mat).",
+  "scoring": "Score 0 if ever carrier/cup leaves 110x130 cm table (center z<0, x<-19 or x>91 cm, |y|>65 cm, or low <-3.0 cm) or a lidded cup tilts >25.0 deg, or any robot link presses a cup/lid >20.0 N or a carrier panel >30.0 N (crush/tear). Else at end (released, neither gripper holding, TCPs >=2.0 cm from carrier/cups; carrier >=2.0 cm from rack, pockets >=8.2 cm, floors <=12.0 deg, tilt <=8.0 deg, base <=1.0 cm; else 0): 0.25 open; 0.50 1 cup (<=8.0 deg, base <=1.5 cm, XY <=2.2 cm); 0.70 2 cups (L,R); 0.85 footprint on 16.0x24.0 cm mat (2.0 mm tol) and both cups were seated while carrier center y<8.0 cm before it first crossed y=8.0 cm (latched); 1.00 TCPs >=10.0 cm clear, <2.0 cm/s 1.0 s.",
+  "run_limit": "1,500 steps (75 seconds at 20 Hz)",
+  "reset_notes": "Stand both sealed 245 g Solo 378W 8 oz dummy cups upright at (26.0, -24.0) and (37.0, -24.0) cm. Use a fresh flat-folded Southern Champion Tray 2795 carrier (~$0.27/unit, or replace after 3 refolds if crease return weakens), with both 9.0x8.0 cm auto-bottom floor flaps folded upward against the divider and end walls at 4.2 cm folded width; stand it upright along x in the U-slot rack at (19.0, 0.0) cm, and return both arms to READY with jaws open 9.4 cm.",
+  "fidelity": "5-body 42 g SCT 2795 (Y-prismatic walls 0-8.3 cm, 1.20 N return; X-hinged floors locking on 9.5 mm tabs) & 245 g tapered Solo 378W+TL38R2 cups. Pad grip (no weld): compliant 6-axis joint only on two-pad contact (>=3.0 N/pad cups/collars, >=5.5 N/pad handle) + jaw close; squeeze bounded by damage limits (20 N cups/collars, 30 N rim), so caps 20 N pull (2 x mu 0.5 x 20 N), 0.20 N m twist, 0.60 N m tip; rim 30 N pull, 0.027 N m roll (mu 0.10, 4.5 mm). Damage = contact-force limits.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-GBTBHA"
+}

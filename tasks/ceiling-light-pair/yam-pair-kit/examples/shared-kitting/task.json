@@ -1,0 +1,21 @@
+{
+  "title": "Coordinate two robots to kit assembly components",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "multi-robot",
+    "coordination",
+    "assembly kitting"
+  ],
+  "instruction": "Robot A: Put both camera modules from the middle gray tray into the orange tray nearest you. Move one at a time and pull your hand back after each placement. Wait if the other robot is reaching into the same area. Robot B: Put both black servo motors from the middle gray tray into the blue tray nearest you. Give the other robot priority in the shared tray and wait while it reaches there. Move one at a time and pull your hand back after each placement.",
+  "context": "Two independently controlled robots prepare distinct kits for a downstream assembly station from one shared supply tray. They must share access while completing their own assigned deliveries.",
+  "setup": "Two face-to-face bimanual YAM stations, with four arms total. Each robot has its own top and two wrist cameras. The gray central tray holds two RealSense D405 camera modules and two DYNAMIXEL XL430-W250-T servo motors. The orange output tray is on the A side and the blue output tray is on the B side. The fixed layout and procedural case assets are defined in task.py; each robot's own instruction is in instructions.a / instructions.b.",
+  "scoring": "Task score: 0.25 for each of four objects whose centre is in the assigned destination tray at the end. Maximum 1.0. Collision-free score: 1 if no inter-robot normal contact exceeds 0.5 N during execution, else 0. Also report the peak normal contact force. The scores are separate.",
+  "run_limit": "1,800 control steps at 20 Hz (90 seconds).",
+  "reset_notes": "Start a fresh simulator process to restore the fixed object layout and robot states.",
+  "fidelity": "Camera modules and motors are rigid procedural cases with representative dimensions and masses. Electronics are visual geometry. Inter-robot simulation contact is measured separately from object delivery.",
+  "scores": "yam_pair_scripted (scripted demo): task 1.0, collision-free 1.0, inter-robot peak 0.0 N (success at step 497). dream_pair smoke test, 200 steps (not a scored trial): 0. Prototype's own 90 s two-session Dream-1 run: task 0.25, collision-free 0.0, peak 3.51 N.",
+  "instructions": {
+    "a": "Put both camera modules from the middle gray tray into the orange tray nearest you. Move one at a time and pull your hand back after each placement. Wait if the other robot is reaching into the same area.",
+    "b": "Put both black servo motors from the middle gray tray into the blue tray nearest you. Give the other robot priority in the shared tray and wait while it reaches there. Move one at a time and pull your hand back after each placement."
+  }
+}

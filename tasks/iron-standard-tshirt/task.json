@@ -1,0 +1,19 @@
+{
+  "title": "Iron the front strip of a T-shirt",
+  "category": "Societal relatability",
+  "keywords": [
+    "laundry",
+    "ironing",
+    "deformable fabric",
+    "bimanual"
+  ],
+  "instruction": "Iron the marked right half of the front of the T-shirt. Leave the shirt spread out and released, and return the iron to its rest.",
+  "setup": "Fixed bimanual YAM station: bases 610 mm apart; 1100 x 1300 mm tabletop at z=747.5 mm; x forward, y left. One blue cotton-like adult T-shirt, length 680 mm, torso width 500 mm, sleeve span 740 mm, approximately 133 g, has two sewn panels with open neck, hem and cuffs. It starts front up on a fixed 800 x 1000 x 8 mm padded mat, centred at (420,0) mm, top z=755.5 mm. The shallow torso crease crosses the garment near material distance 287.5 mm from the hem. The target is its robot-right portion, negative y: 30 to 230 mm inboard from the right torso seam. The exact initial cloth shape is settled_buckle.npz, with zero nodal velocity. One free 1 kg corded iron shown powered on, with a 257 x 124 mm tapered sole and a 28 mm-thick open handle centred 100 mm above the sole, starts pointing +x on a fixed 290 x 138 x 6 mm rest centred at (200,-570) mm. Both arms start at READY, grippers open. No other loose objects. Garment reference: UNIQLO SUPIMA Cotton Crew Neck T-shirt E455365, size M (100% cotton, 680 mm back length, 515 mm laid-flat body width). The stated 133 g is a simulation estimate. The visual cord runs from the heel to a fixed outlet at the right edge of the table.",
+  "scoring": "Award 0.2 for each of five stations covered by a level sole in contact with the front cloth for at least three consecutive controls. Require the shirt spread front up on the mat, the hands clear, and the sole flat and wholly on its rest for the final second. The five garment landmarks must move at most 3 mm in that second. The final crease profile is recorded for diagnosis.",
+  "reset_notes": "Seed 0; no jitter. Restore both arms to READY, the iron to its rest, and the garment to the supplied settled_buckle.npz shape only at reset; settle for 0.5 seconds before recording. The README gives a proposed removable jig and measurement stencil. The physical reset and room-temperature finish have yet to be validated.",
+  "fidelity": "Native PhysX simulates cloth and iron contact. The cord, outlet and power indicator represent a heated iron visually. The cord does not exert forces. Heat transfer, steam and permanent thermal crease removal are outside this model.",
+  "run_limit": "1,800 control steps (90 seconds at 20 Hz)",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-ADCDTA",
+  "context": "The robot practices supported ironing passes over the right front of a cotton T-shirt and returns the iron to its rest."
+}

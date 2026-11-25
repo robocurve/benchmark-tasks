@@ -1,0 +1,18 @@
+{
+  "title": "Pan a tripod camera to follow a moving subject",
+  "category": "Societal relatability",
+  "keywords": [
+    "camera operator",
+    "fluid head",
+    "continuous tracking",
+    "moving subject"
+  ],
+  "instruction": "Use the pan handle to film the moving orange target in one level shot. Keep the whole target centered through the marked crossing.",
+  "context": "A camera operator must pan a damped head as a subject moves independently, keeping the shot usable throughout the crossing.",
+  "setup": "Use a level tabletop tripod and a SmallRig CH10 3259B compact fluid head. Mount a Logitech MX Brio 4K webcam (US$199.99 list) directly to the stock 1/4-20 quick-release plate, or use a Sony ZV-1. For the webcam, record at 4K/30 over USB 3 and use a fixed centered 16:9 crop calibrated to a 34-degree horizontal field of view. The physical protocol gives the crop and lens placement checks. Lock tilt and use the stock pan handle on the right. Place the fixed pan axis at x=0.435 m, y=-0.190 m, z=0.8795 m in the YAM station. Place the lens centre 63 mm forward of the axis and 74 mm above it. Set the 58 by 104 mm orange plate at lens height on a driven tabletop slider at x=0.923 m. Its centre travels from y=-0.395 m to y=0.135 m in eight seconds after a 3.25-second preparation interval. It eases in and out at each end. Start with the lens aimed at the starting centre of the orange plate.",
+  "scoring": "Use the camera recording from the start to the end of the eight-second crossing. Score 0.50 if the whole orange rectangle is visible for at least 4 seconds. Score 1.00 if the whole plate stays in the central half of the image width for at least 90 percent of the crossing and the recorded horizon is within 2 degrees of level in those frames. Check the playback with a simple vertical centre band and a level line. Score zero if the tripod shifts over 4 mm or the robot alters the target path by over 18 mm.",
+  "run_limit": "480 actions (24 s at 20 Hz)",
+  "fidelity": "The camera and original-style pan bar share one native revolute body, with passive viscous pan resistance and a locked tilt. The camera is rendered from a native pinhole sensor rigidly mounted to the camera body. A guided slider moves the visible orange target. Pan resistance, the tripod envelope and the lens are nominal models. The three standard YAM observations are used by the policy. The recorded camera view is independent evidence for scoring.",
+  "scores": "Dream-1 beta run: 0.00; scripted native-contact demo: 1.00",
+  "media": "M-A2W92B"
+}

@@ -1,0 +1,135 @@
+#usda 1.0
+(
+    defaultPrim = "driver"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "driver" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+)
+{
+    point3f physics:centerOfMass = (0, 0, 0.075)
+    float3 physics:diagonalInertia = (0.00060636, 0.00060636, 0.00005022)
+    float physics:mass = 0.31
+
+    def "Looks"
+    {
+        def Material "blue"
+        {
+            token outputs:surface.connect = </driver/Looks/blue/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.02, 0.3, 0.52)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.45
+                token outputs:surface
+            }
+        }
+
+        def Material "rubber"
+        {
+            token outputs:surface.connect = </driver/Looks/rubber/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.1, 0.11, 0.12)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.9
+                token outputs:surface
+            }
+        }
+
+        def Material "steel"
+        {
+            token outputs:surface.connect = </driver/Looks/steel/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.55, 0.56, 0.58)
+                float inputs:metallic = 0.9
+                float inputs:roughness = 0.25
+                token outputs:surface
+            }
+        }
+    }
+
+    def Cylinder "grip" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.15
+        rel material:binding = </driver/Looks/rubber>
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        double radius = 0.018
+        double3 xformOp:translate = (0, 0, 0.075)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "shell_top" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.09
+        rel material:binding = </driver/Looks/blue>
+        double radius = 0.018799999999999997
+        double3 xformOp:translate = (0, 0, 0.105)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "end_cap" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.006
+        rel material:binding = </driver/Looks/blue>
+        double radius = 0.018799999999999997
+        double3 xformOp:translate = (0, 0, 0.003)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cube "switch" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </driver/Looks/rubber>
+        double size = 1
+        float3 xformOp:scale = (0.012, 0.0035, 0.03)
+        double3 xformOp:translate = (0, 0.019249999999999996, 0.11)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Cylinder "collar" (
+        prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double height = 0.01999999999999999
+        rel material:binding = </driver/Looks/steel>
+        custom float physxCollision:contactOffset = 0.0005
+        custom float physxCollision:restOffset = 0
+        double radius = 0.01
+        double3 xformOp:translate = (0, 0, 0.15999999999999998)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cube "bit" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </driver/Looks/steel>
+        double size = 1
+        float3 xformOp:scale = (0.006, 0.006, 0.025)
+        double3 xformOp:translate = (0, 0, 0.1825)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+}
+

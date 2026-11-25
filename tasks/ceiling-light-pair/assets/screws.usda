@@ -1,0 +1,580 @@
+#usda 1.0
+(
+    defaultPrim = "screws"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "screws" (
+    prepend apiSchemas = ["PhysicsArticulationRootAPI", "PhysxArticulationAPI"]
+)
+{
+    custom bool physxArticulation:enabledSelfCollisions = 0
+    custom float physxArticulation:sleepThreshold = 0
+    custom int physxArticulation:solverPositionIterationCount = 32
+    custom float physxArticulation:stabilizationThreshold = 0
+
+    def "Looks"
+    {
+        def Material "zinc"
+        {
+            token outputs:surface.connect = </screws/Looks/zinc/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.8, 0.8, 0.76)
+                float inputs:metallic = 0.9
+                float inputs:roughness = 0.3
+                token outputs:surface
+            }
+        }
+
+        def Material "dark"
+        {
+            token outputs:surface.connect = </screws/Looks/dark/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.15, 0.15, 0.15)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.5
+                token outputs:surface
+            }
+        }
+    }
+
+    def Xform "base" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, 0)
+        float3 physics:diagonalInertia = (0.00001, 0.00001, 0.00001)
+        float physics:mass = 0.05
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def PhysicsFixedJoint "fix"
+    {
+        rel physics:body1 = </screws/base>
+    }
+
+    def Xform "a_left_link_pz" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, 0)
+        float3 physics:diagonalInertia = (0.000001, 0.000001, 0.000001)
+        float physics:mass = 0.01
+        double3 xformOp:translate = (-0.40299999999999997, 0.095, 1.5075)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Capsule "shank_collider" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.014850000000000002
+            custom float physxCollision:contactOffset = 0.0005
+            custom float physxCollision:restOffset = 0
+            double radius = 0.0021
+            token visibility = "invisible"
+            double3 xformOp:translate = (0, 0, -0.009525)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cube "head_collider" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0005
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:scale = (0.0042, 0.008, 0.0028)
+            double3 xformOp:translate = (0, 0, -0.020450000000000003)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def PhysicsPrismaticJoint "a_left_pz" (
+        prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+    )
+    {
+        float drive:linear:physics:damping = 0
+        float drive:linear:physics:stiffness = 0
+        uniform token drive:linear:physics:type = "force"
+        uniform token physics:axis = "Z"
+        rel physics:body0 = </screws/base>
+        rel physics:body1 = </screws/a_left_link_pz>
+        point3f physics:localPos0 = (-0.403, 0.095, 1.5075)
+        point3f physics:localPos1 = (0, 0, 0)
+        quatf physics:localRot0 = (1, 0, 0, 0)
+        quatf physics:localRot1 = (1, 0, 0, 0)
+        float physics:lowerLimit = 0.00755
+        float physics:upperLimit = 0.02155
+    }
+
+    def Xform "a_left_screw" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, -0.009)
+        float3 physics:diagonalInertia = (2e-7, 2e-7, 5e-8)
+        float physics:mass = 0.003
+        double3 xformOp:translate = (-0.40299999999999997, 0.095, 1.5075)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Capsule "shank" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.015050000000000001
+            rel material:binding = </screws/Looks/zinc>
+            double radius = 0.002
+            double3 xformOp:translate = (0, 0, -0.009525)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cylinder "head" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.0028000000000000004
+            rel material:binding = </screws/Looks/zinc>
+            double radius = 0.0039000000000000003
+            double3 xformOp:translate = (0, 0, -0.020450000000000003)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cube "recess" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </screws/Looks/dark>
+            double size = 1
+            float3 xformOp:scale = (0.0066, 0.0066, 0.0004)
+            double3 xformOp:translate = (0, 0, -0.02185)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "mark" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </screws/Looks/dark>
+            double size = 1
+            float3 xformOp:scale = (0.0002, 0.001, 0.0004)
+            double3 xformOp:translate = (0.0034000000000000002, 0, -0.02185)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def PhysicsRevoluteJoint "a_left_spin" (
+        prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+    )
+    {
+        float drive:angular:physics:damping = 0
+        float drive:angular:physics:stiffness = 0
+        uniform token drive:angular:physics:type = "force"
+        uniform token physics:axis = "Z"
+        rel physics:body0 = </screws/a_left_link_pz>
+        rel physics:body1 = </screws/a_left_screw>
+        point3f physics:localPos0 = (0, 0, 0)
+        point3f physics:localPos1 = (0, 0, 0)
+        quatf physics:localRot0 = (1, 0, 0, 0)
+        quatf physics:localRot1 = (1, 0, 0, 0)
+    }
+
+    def Xform "a_right_link_pz" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, 0)
+        float3 physics:diagonalInertia = (0.000001, 0.000001, 0.000001)
+        float physics:mass = 0.01
+        double3 xformOp:translate = (-0.40299999999999997, -0.095, 1.5075)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Capsule "shank_collider" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.014850000000000002
+            custom float physxCollision:contactOffset = 0.0005
+            custom float physxCollision:restOffset = 0
+            double radius = 0.0021
+            token visibility = "invisible"
+            double3 xformOp:translate = (0, 0, -0.009525)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cube "head_collider" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0005
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:scale = (0.0042, 0.008, 0.0028)
+            double3 xformOp:translate = (0, 0, -0.020450000000000003)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def PhysicsPrismaticJoint "a_right_pz" (
+        prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+    )
+    {
+        float drive:linear:physics:damping = 0
+        float drive:linear:physics:stiffness = 0
+        uniform token drive:linear:physics:type = "force"
+        uniform token physics:axis = "Z"
+        rel physics:body0 = </screws/base>
+        rel physics:body1 = </screws/a_right_link_pz>
+        point3f physics:localPos0 = (-0.403, -0.095, 1.5075)
+        point3f physics:localPos1 = (0, 0, 0)
+        quatf physics:localRot0 = (1, 0, 0, 0)
+        quatf physics:localRot1 = (1, 0, 0, 0)
+        float physics:lowerLimit = 0.00755
+        float physics:upperLimit = 0.02155
+    }
+
+    def Xform "a_right_screw" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, -0.009)
+        float3 physics:diagonalInertia = (2e-7, 2e-7, 5e-8)
+        float physics:mass = 0.003
+        double3 xformOp:translate = (-0.40299999999999997, -0.095, 1.5075)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Capsule "shank" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.015050000000000001
+            rel material:binding = </screws/Looks/zinc>
+            double radius = 0.002
+            double3 xformOp:translate = (0, 0, -0.009525)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cylinder "head" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.0028000000000000004
+            rel material:binding = </screws/Looks/zinc>
+            double radius = 0.0039000000000000003
+            double3 xformOp:translate = (0, 0, -0.020450000000000003)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cube "recess" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </screws/Looks/dark>
+            double size = 1
+            float3 xformOp:scale = (0.0066, 0.0066, 0.0004)
+            double3 xformOp:translate = (0, 0, -0.02185)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "mark" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </screws/Looks/dark>
+            double size = 1
+            float3 xformOp:scale = (0.0002, 0.001, 0.0004)
+            double3 xformOp:translate = (0.0034000000000000002, 0, -0.02185)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def PhysicsRevoluteJoint "a_right_spin" (
+        prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+    )
+    {
+        float drive:angular:physics:damping = 0
+        float drive:angular:physics:stiffness = 0
+        uniform token drive:angular:physics:type = "force"
+        uniform token physics:axis = "Z"
+        rel physics:body0 = </screws/a_right_link_pz>
+        rel physics:body1 = </screws/a_right_screw>
+        point3f physics:localPos0 = (0, 0, 0)
+        point3f physics:localPos1 = (0, 0, 0)
+        quatf physics:localRot0 = (1, 0, 0, 0)
+        quatf physics:localRot1 = (1, 0, 0, 0)
+    }
+
+    def Xform "b_left_link_pz" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, 0)
+        float3 physics:diagonalInertia = (0.000001, 0.000001, 0.000001)
+        float physics:mass = 0.01
+        double3 xformOp:translate = (0.423, -0.095, 1.5075)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Capsule "shank_collider" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.014850000000000002
+            custom float physxCollision:contactOffset = 0.0005
+            custom float physxCollision:restOffset = 0
+            double radius = 0.0021
+            token visibility = "invisible"
+            double3 xformOp:translate = (0, 0, -0.009525)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cube "head_collider" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0005
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:scale = (0.0042, 0.008, 0.0028)
+            double3 xformOp:translate = (0, 0, -0.020450000000000003)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def PhysicsPrismaticJoint "b_left_pz" (
+        prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+    )
+    {
+        float drive:linear:physics:damping = 0
+        float drive:linear:physics:stiffness = 0
+        uniform token drive:linear:physics:type = "force"
+        uniform token physics:axis = "Z"
+        rel physics:body0 = </screws/base>
+        rel physics:body1 = </screws/b_left_link_pz>
+        point3f physics:localPos0 = (0.423, -0.095, 1.5075)
+        point3f physics:localPos1 = (0, 0, 0)
+        quatf physics:localRot0 = (1, 0, 0, 0)
+        quatf physics:localRot1 = (1, 0, 0, 0)
+        float physics:lowerLimit = 0.00755
+        float physics:upperLimit = 0.02155
+    }
+
+    def Xform "b_left_screw" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, -0.009)
+        float3 physics:diagonalInertia = (2e-7, 2e-7, 5e-8)
+        float physics:mass = 0.003
+        double3 xformOp:translate = (0.423, -0.095, 1.5075)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Capsule "shank" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.015050000000000001
+            rel material:binding = </screws/Looks/zinc>
+            double radius = 0.002
+            double3 xformOp:translate = (0, 0, -0.009525)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cylinder "head" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.0028000000000000004
+            rel material:binding = </screws/Looks/zinc>
+            double radius = 0.0039000000000000003
+            double3 xformOp:translate = (0, 0, -0.020450000000000003)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cube "recess" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </screws/Looks/dark>
+            double size = 1
+            float3 xformOp:scale = (0.0066, 0.0066, 0.0004)
+            double3 xformOp:translate = (0, 0, -0.02185)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "mark" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </screws/Looks/dark>
+            double size = 1
+            float3 xformOp:scale = (0.0002, 0.001, 0.0004)
+            double3 xformOp:translate = (0.0034000000000000002, 0, -0.02185)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def PhysicsRevoluteJoint "b_left_spin" (
+        prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+    )
+    {
+        float drive:angular:physics:damping = 0
+        float drive:angular:physics:stiffness = 0
+        uniform token drive:angular:physics:type = "force"
+        uniform token physics:axis = "Z"
+        rel physics:body0 = </screws/b_left_link_pz>
+        rel physics:body1 = </screws/b_left_screw>
+        point3f physics:localPos0 = (0, 0, 0)
+        point3f physics:localPos1 = (0, 0, 0)
+        quatf physics:localRot0 = (1, 0, 0, 0)
+        quatf physics:localRot1 = (1, 0, 0, 0)
+    }
+
+    def Xform "b_right_link_pz" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, 0)
+        float3 physics:diagonalInertia = (0.000001, 0.000001, 0.000001)
+        float physics:mass = 0.01
+        double3 xformOp:translate = (0.423, 0.095, 1.5075)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Capsule "shank_collider" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.014850000000000002
+            custom float physxCollision:contactOffset = 0.0005
+            custom float physxCollision:restOffset = 0
+            double radius = 0.0021
+            token visibility = "invisible"
+            double3 xformOp:translate = (0, 0, -0.009525)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cube "head_collider" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            custom float physxCollision:contactOffset = 0.0005
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            token visibility = "invisible"
+            float3 xformOp:scale = (0.0042, 0.008, 0.0028)
+            double3 xformOp:translate = (0, 0, -0.020450000000000003)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def PhysicsPrismaticJoint "b_right_pz" (
+        prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+    )
+    {
+        float drive:linear:physics:damping = 0
+        float drive:linear:physics:stiffness = 0
+        uniform token drive:linear:physics:type = "force"
+        uniform token physics:axis = "Z"
+        rel physics:body0 = </screws/base>
+        rel physics:body1 = </screws/b_right_link_pz>
+        point3f physics:localPos0 = (0.423, 0.095, 1.5075)
+        point3f physics:localPos1 = (0, 0, 0)
+        quatf physics:localRot0 = (1, 0, 0, 0)
+        quatf physics:localRot1 = (1, 0, 0, 0)
+        float physics:lowerLimit = 0.00755
+        float physics:upperLimit = 0.02155
+    }
+
+    def Xform "b_right_screw" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, -0.009)
+        float3 physics:diagonalInertia = (2e-7, 2e-7, 5e-8)
+        float physics:mass = 0.003
+        double3 xformOp:translate = (0.423, 0.095, 1.5075)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+
+        def Capsule "shank" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.015050000000000001
+            rel material:binding = </screws/Looks/zinc>
+            double radius = 0.002
+            double3 xformOp:translate = (0, 0, -0.009525)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cylinder "head" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token axis = "Z"
+            double height = 0.0028000000000000004
+            rel material:binding = </screws/Looks/zinc>
+            double radius = 0.0039000000000000003
+            double3 xformOp:translate = (0, 0, -0.020450000000000003)
+            uniform token[] xformOpOrder = ["xformOp:translate"]
+        }
+
+        def Cube "recess" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </screws/Looks/dark>
+            double size = 1
+            float3 xformOp:scale = (0.0066, 0.0066, 0.0004)
+            double3 xformOp:translate = (0, 0, -0.02185)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "mark" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </screws/Looks/dark>
+            double size = 1
+            float3 xformOp:scale = (0.0002, 0.001, 0.0004)
+            double3 xformOp:translate = (0.0034000000000000002, 0, -0.02185)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def PhysicsRevoluteJoint "b_right_spin" (
+        prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+    )
+    {
+        float drive:angular:physics:damping = 0
+        float drive:angular:physics:stiffness = 0
+        uniform token drive:angular:physics:type = "force"
+        uniform token physics:axis = "Z"
+        rel physics:body0 = </screws/b_right_link_pz>
+        rel physics:body1 = </screws/b_right_screw>
+        point3f physics:localPos0 = (0, 0, 0)
+        point3f physics:localPos1 = (0, 0, 0)
+        quatf physics:localRot0 = (1, 0, 0, 0)
+        quatf physics:localRot1 = (1, 0, 0, 0)
+    }
+}
+

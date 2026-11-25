@@ -1,0 +1,148 @@
+{
+  "policy": "scripted",
+  "model": null,
+  "score": 1.0,
+  "executed_steps": 1411,
+  "step_limit": 1800,
+  "declared_step_limit": 1800,
+  "control_hz": 20,
+  "seed": 0,
+  "elapsed_s": 225.31,
+  "smoke_only": false,
+  "observations": {
+    "cameras": [
+      "top_cam",
+      "left_cam",
+      "right_cam"
+    ],
+    "state": [
+      "joint_pos"
+    ],
+    "rgb_size": [
+      320,
+      176
+    ]
+  },
+  "scripted_reads_simulator_state": true,
+  "source_sha256": {
+    "adapter.py": "00f496e10169e62730cf01f7c0453e90b1624a441f53479ae15da8ec248c970c",
+    "fixed_scene.py": "ebed6adcfff6d968552bcab4e794666d6314f4b41153fadd144f8e750f63543c",
+    "grading.py": "33b91388265824e04803ffc13e9fe1a4a5f23a4c3cd8e3e97b54899859ddb854",
+    "keyboard_feet.usda": "19976db6934917989037415acbd417c13873170843aad3945fed551d2dabfff2",
+    "layout.py": "19af750a7ccbf52f969184c144baedf34445be567b6bd4ea13d4cbc05022c048",
+    "recording.py": "472a1bd3c619f4f9b05b4c89f129f708733f7a70fce96a468831b3cdf4d9d60b",
+    "run.py": "b50a5619cd2e9762fee341548ab593d2ab061c9a185ef1abeb892bc421b16465",
+    "scripted.py": "684af457076473fa5d71afd34df81c2812127b0177cfeb5c3cf88a3dc2e32619"
+  },
+  "source_unchanged": true,
+  "runtime": {
+    "isaacsim": "6.1.0.0",
+    "inspect-robots": "1.0.0",
+    "inspect-robots-yam": "0.38.0",
+    "yam-arena": "0.1.0"
+  },
+  "physics_hz": 240.0,
+  "physics_samples": 16932,
+  "dream_requests": 0,
+  "final_grade": {
+    "score": 1.0,
+    "finished": true,
+    "void": null,
+    "sample": 16932,
+    "sample_hz": 240.0,
+    "angles_deg": [
+      -120.59975573296771,
+      -120.5370130214423
+    ],
+    "inverted": true,
+    "feet_opened": [
+      true,
+      true
+    ],
+    "flat": true,
+    "grounded": true,
+    "feet_height_m": [
+      -8.118230739238147e-06,
+      -6.107006077751137e-06
+    ],
+    "front_pad_height_m": [
+      2.7898600989118005e-07,
+      9.730191687963574e-08
+    ],
+    "released": true,
+    "notebook_clear": true,
+    "contained": true,
+    "stable_seconds": 1.0,
+    "support_loads_n": [
+      1.5191035270690918,
+      1.2805615663528442,
+      1.3299583196640015,
+      1.2867698669433594
+    ],
+    "support_impulses_ns": [
+      1.5111095622181892,
+      1.2729492848118147,
+      1.3272027815381686,
+      1.2842734972635905
+    ],
+    "actual_front_to_rear_tilt_deg": 5.922805282880101
+  },
+  "diagnostic_checkpoints": 282,
+  "native_physics": {
+    "device": "cpu",
+    "gpu_dynamics": false,
+    "table_contact_filter": [
+      "/World/envs/env_0/table/geometry/mesh"
+    ]
+  },
+  "reference_phases": [
+    [
+      0,
+      "approach the first folded rear support"
+    ],
+    [
+      60,
+      "pinch and unfold rear support 2"
+    ],
+    [
+      366,
+      "pinch and unfold rear support 1"
+    ],
+    [
+      634,
+      "grasp the front edge and lift from the protective notebook"
+    ],
+    [
+      804,
+      "both real edge grasps closed"
+    ],
+    [
+      864,
+      "leave the mass centre supported by the original central grasp"
+    ],
+    [
+      963,
+      "roll the keyboard upright with the real central grasp"
+    ],
+    [
+      1099,
+      "lower the actual rear supports onto the desk"
+    ],
+    [
+      1344,
+      "release and leave the keyboard supported on the desk"
+    ]
+  ],
+  "summary_only": true,
+  "original_result": {
+    "sha256": "7349f45d1ac5820ac75bb17867b8c4dfe03d930ce929683b57a6df9b653ba294",
+    "bytes": 3251
+  },
+  "omitted_fields": [
+    "diagnostics",
+    "guard_changes",
+    "dream_transcript"
+  ],
+  "machine_paths_omitted": true,
+  "presentation_labels_anonymized": true
+}

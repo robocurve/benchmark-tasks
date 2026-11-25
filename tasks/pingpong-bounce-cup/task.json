@@ -1,0 +1,21 @@
+{
+  "title": "Bounce a table-tennis ball once into a practice cup",
+  "category": "Societal relatability",
+  "keywords": [
+    "table tennis ball",
+    "bounce",
+    "cup",
+    "rebound trajectory",
+    "release timing",
+    "tabletop game"
+  ],
+  "instruction": "Bounce the white table-tennis ball once on the board into the red cup, leaving the ball inside the cup and both hands clear.",
+  "context": "A familiar tabletop ball-and-cup challenge tests aiming a free ball through a surface rebound. Unlike paddle keep-ups or a tethered cup-and-ball toy, success requires a released ballistic trajectory into a separate narrow receiver.",
+  "setup": "Fixed layout: positions are metres from the midpoint between arm bases, x forward and y left, z above the table. A 360 x 260 x 6 mm laminated board is taped flat, centred (0.290,-0.150), top 6 mm above the table. One white 40 mm, 2.7 g hollow ABS table-tennis ball starts at (0.200,-0.150), centre 27 mm above the table. A red polypropylene cup is taped by its base at (0.378,-0.18034) on the board: height 115 mm, top diameter 95 mm, base diameter 60 mm, wall/floor 1 mm. Board and cup are fixed by removable tape, not by the robot. Native sphere contact models the ball. Board-pair restitution 0.90 and friction 0.20 are acceptance targets, verified by a drop test, not manufacturer claims.",
+  "scoring": "1.0: ball inside the cup after exactly one released bounce on the board, both grippers greater than 55 mm from its centre, and ball centre moving no more than 1 mm over the last 1 s (20 steps). Cup containment: ball centre 20.5-95 mm above board and sphere normal clearance from the exact tapered inner wall at least 20 mm. 0.75: that containment and hand clearance after one bounce, but the 1 s stability window is incomplete. 0.25: the ball has made one valid released board bounce, whether or not it reached the cup; this is retained milestone credit. 0: no released board bounce. Permanent zero if the ball falls below the table, makes a second board bounce, or robot/ball recontact occurs after confirmed release. Release is confirmed by the first complete 50 ms control interval without robot/ball contact after prior robot contact, with the ball bottom more than 1 mm above the board and the ball outside the cup. The initial separation phase starts at the beginning of that confirming interval: fingers may initially be within 55 mm but must reach greater than 55 mm clearance within 200 ms (four control intervals including confirmation). Failure to reach that clearance by the deadline, or loss of clearance after first achieving it, permanently gives zero. Board-supported handling before confirmation cannot earn bounce credit. This requires continuous unassisted flight into the cup. Board bounce requires an actual native ball/board contact sensor episode with an upward-facing board contact (absolute normal z at least 0.95), contact position within the 360 x 260 mm board footprint and within 2 mm of its top surface and outside the 30 mm-radius disk covered by the cup base. Contacts on the cup or underlying table cannot count. After initial separation, the hand clearance check applies continuously. In a real trial use synchronized slow-motion side and overhead video at 100 fps or faster to check contact-free release, the 200 ms separation deadline, no recontact, continuous subsequent clearance and bounce count, a ruler for cup dimensions, and the last second of video for stability.",
+  "run_limit": "1,600 steps (80 seconds at 20 Hz)",
+  "reset_notes": "Retrieve the ball, inspect for dents, verify the cup remains taped upright at its mark and replace tape if loose. Reset the ball on its mark. Use an intact 40 mm ABS ball and clean dry board; verify the rebound before each batch.",
+  "fidelity": "Native rigid sphere, gravity, contact and friction; no launch impulses or trajectory scripts. Real 40 mm/2.7 g hollow ball; isotropic thin-shell inertia 7.2e-7 kg m\u00b2 (2mr\u00b2/3). Tapered 95/60 x 115 mm cup with 1 mm wall is fixed with tape. Board-pair restitution 0.90 is a calibrated target, friction 0.20 an estimate. Air drag and ball-shell compliance are omitted. Validate the bought ball/board with the stated drop test. No rolling resistance; natural settling can be slow.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-YWBDBQ"
+}

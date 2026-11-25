@@ -1,0 +1,153 @@
+{
+  "kind": "native PhysX simulation, not trainer or physical robot measurement",
+  "raw_sha256": "2664329e6928be2abedb0a0084e1cd3f56545c3b5d20b447f27f1967ea1c6501",
+  "csv_sha256": "cd168f88d15b000ec9745be495079bf9cd94c31f791e4e6c9c19247ba4d387c6",
+  "native_source_files_sha256": {
+    "task.py": "b5229c63257640eaf216cf77d6988fa42dedb3dfeb81225e2a3b146848db0cd0",
+    "parts.py": "d7d33d8456c2fdbe213f8642f3615bdbc0d36c6dfb3c81c6efb8db9ea88138a7",
+    "tilt.py": "6b694076a64897421e76b4242d2c23ae030871ca5ba2e334b32fb32d099d8c2e",
+    "lots.py": "f2a660eddea564c7c9562864872c00cbaaa15874ec60e9345bd58eeb851bea77",
+    "near_misses.py": "22aab194a480965c48cefd151924071850da1db9744b9285ae8c174cf1948c4e",
+    "assets/dial.png": "673de31ce6be024e4309cd579ed7f646135bd9510352d1368d8fb9b34e89d885"
+  },
+  "native_drive_properties": {
+    "cat_windlass": {
+      "joint_names": [
+        "winding",
+        "rod_tilt"
+      ],
+      "body_names": [
+        "base",
+        "winding",
+        "rod_tilt"
+      ],
+      "stiffness": [
+        0.2975881099700928,
+        0.10000000149011612
+      ],
+      "damping": [
+        0.20000000298023224,
+        0.02500000037252903
+      ],
+      "max_drive_force": [
+        5.0,
+        2.0
+      ],
+      "body_masses": [
+        1.0,
+        0.009999999776482582,
+        0.029999997466802597
+      ]
+    },
+    "attached_clip_hip": {
+      "joint_names": [
+        "lip_a",
+        "lip_b"
+      ],
+      "body_names": [
+        "base",
+        "lip_a",
+        "lip_b"
+      ],
+      "stiffness": [
+        41760.64453125,
+        91531.9765625
+      ],
+      "damping": [
+        36.555992126464844,
+        54.120452880859375
+      ],
+      "max_drive_force": [
+        10.623908042907715,
+        23.285734176635742
+      ],
+      "body_masses": [
+        1.0,
+        0.00800000037997961,
+        0.00800000037997961
+      ]
+    },
+    "attached_clip_knee": {
+      "joint_names": [
+        "lip_a",
+        "lip_b"
+      ],
+      "body_names": [
+        "base",
+        "lip_a",
+        "lip_b"
+      ],
+      "stiffness": [
+        41760.64453125,
+        91531.9765625
+      ],
+      "damping": [
+        36.555992126464844,
+        54.120452880859375
+      ],
+      "max_drive_force": [
+        10.623908042907715,
+        23.285734176635742
+      ],
+      "body_masses": [
+        1.0,
+        0.00800000037997961,
+        0.00800000037997961
+      ]
+    }
+  },
+  "trials": [
+    {
+      "trial": 0,
+      "rows": 2206,
+      "final": {
+        "trial": 0,
+        "time_s": 110.29999999999588,
+        "winding_deg": 250.18179699510313,
+        "tilt_deg": 5.443347852029819,
+        "pressure_proxy_mmhg": 254.58584210730243,
+        "left_rod_contact_n": 87.14675471773415,
+        "right_rod_contact_n": 0.0,
+        "hip_lip_normal_n": 0.0,
+        "hip_base_normal_n": 0.0,
+        "hip_lip_friction_n": 0.0,
+        "hip_base_friction_n": 0.0,
+        "hip_complete_clip_reaction_n": 0.0,
+        "rod_geometrically_seated": 0,
+        "knee_lip_normal_n": 0.0,
+        "hip_end_normal_m": 0.021209226558198284,
+        "hip_entry_peak_n": 0.0,
+        "hip_entry_passed": 0,
+        "hip_robot_left_contact_n": 0.0,
+        "hip_robot_right_contact_n": 0.0,
+        "lip_a_position_m": 6.60768165986099e-14,
+        "lip_b_position_m": 4.3580529538855134e-14,
+        "hip_contact_work_j": 0.0,
+        "hip_advancing_contact_m": 0.0,
+        "hip_seen_lips": 0,
+        "snap_verified": 0,
+        "released_hold_s": 0.0,
+        "hip_mouth_mm": 10.000000000109658,
+        "sampled_clearance_m": 0.0
+      },
+      "max_lip_normal_n": 8.001192284258426,
+      "max_advancing_witness_n": 8.001192284258426,
+      "max_negative_normal_n": 9.051402590324564,
+      "max_hold_s": 9.949999999999434,
+      "max_winding_deg": 270.26919209881385,
+      "first_completed_entry_s": 67.89999999999829,
+      "entry_normal_peak_through_closed_seat_n": 8.001192284258426,
+      "friction_recorded": true,
+      "first_geometry_seating_s": 68.64999999999824,
+      "first_closed_seating_s": 68.64999999999824,
+      "entry_complete_peak_n": 8.35880699489371,
+      "pull_complete_peak_n": 8.79780218572626,
+      "pull_normal_peak_n": 9.051402590324564,
+      "pull_direct_robot_clip_peak_n": 0.0,
+      "entry_direct_robot_clip_peak_n": 0.0
+    }
+  ],
+  "run_id": "trace-20261124T070100",
+  "mechanism_base_sha256": "3d854739b95447bc767734363821684491d98490f1e47caad0564e2c4889aa9a",
+  "scope": "Positive 270-degree turn into hip clip, lot A; diagnostic continues after released hold and extracts rod. Not final policy qualification."
+}

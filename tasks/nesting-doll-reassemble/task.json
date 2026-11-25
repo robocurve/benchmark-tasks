@@ -1,0 +1,25 @@
+{
+  "title": "Put a five-piece wooden nesting doll set back together, each doll closed with its own top and its face lined up",
+  "category": "Societal relatability",
+  "instruction": "Put the nesting dolls back together, each closed with its own top and its face lined up, the smaller ones inside the largest.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "media": "M-2RSUCR",
+  "keywords": [
+    "nesting dolls",
+    "matryoshka",
+    "toy",
+    "lid fit",
+    "matching halves",
+    "nesting order",
+    "rotational alignment",
+    "household",
+    "friction fit",
+    "press fit"
+  ],
+  "context": "A nesting doll set is a familiar toy and ornament that comes apart in halves; putting it back together means matching each top to its own bottom by size, closing the inner doll before it goes into the next, turning each top so its painted face sits over the apron, and pressing each top home: on a real set the last few millimetres are a snug friction fit, so a top that is only set on stays up until it is pressed. Each top goes over its own bottom's spigot with 1.5 mm to spare, so it seats only when square and centred, and its last 4 mm take a firm axial press.",
+  "setup": "Positions in mm from the midpoint between the two arm bases (x forward, y left, z up from the table top). One fixed layout, as in the screenshot. A five-piece turned linden nesting doll set (sizes of an unfinished 15 cm set, painted here red with a cream face on each top and a cream apron on each bottom half) (the face and apron are on the same side when a doll is closed). Doll 1: 150 mm tall and 71 mm across, split 60 mm up; its bottom half (38 g) stands open end up at x 220, y 40, apron toward the arms; its top (16 g) stands on its rim at x 300, y 220, its face turned a quarter turn from the apron. Doll 2: 110 mm by 52 mm, split 44 mm up; bottom (20 g) at x 220, y -180; top (8 g) at x 400, y -200, a quarter turn off. Doll 3: 72 mm by 34 mm, closed (it holds dolls 4 and 5; 21 g) at x 180, y -330. Walls 2.5 mm, floors 4 mm; each bottom half has a spigot 2 mm thick and 8 mm tall that its own top goes over with 1.5 mm to spare, the last 4 mm a snug friction fit (a top set on stands 4 mm proud; an axial press over 4 N for doll 1, 3 N for doll 2, seats it); an inner doll passes the next one's spigot with 2 mm to spare.",
+  "scoring": "Read at the end from the video and a photo, and only while no gripper fingertip is within 20 mm of any piece. Inside: a doll or bottom half stands on the floor of the next bottom half, on its axis (within 3 mm) and upright (within 8 degrees). Closed: a top is pressed home on its own bottom half, its rim on the shoulder (within 1 mm; a top only set on stands 4 mm proud), centred (2.5 mm), square (5 degrees), its face within 15 degrees of the apron. 1.0: doll 3 inside doll 2, doll 2 closed and inside doll 1, doll 1 closed and upright (5 degrees), with no piece moving more than 1 mm and no fingertip near throughout the last 1 s. 0.75: doll 2, closed with doll 3 in it, stands inside doll 1 (or all of it but not yet still). 0.5: doll 2 is closed with doll 3 in it. 0.25: doll 3 is inside doll 2's bottom half. 0 otherwise; a top on the other doll's bottom does not count. 0 for good if any piece falls off the table.",
+  "reset_notes": "Take the set apart: doll 3 closed with dolls 4 and 5 inside; stand each half of dolls 1 and 2 on its outline (bottoms open end up, tops on their rims) with the faces turned as marked.",
+  "fidelity": "Rigid lathed halves (48 sides, signed-distance colliders) at a real 15 cm set's sizes; linden masses. The snug fit: a hidden ring in each top, on a prismatic joint along its axis, lands on the spigot; the top slides its last 4 mm over it only against a damping drive capped at 4 N (doll 1) or 3 N (doll 2), as Coulomb friction. Forces are estimates; the README says how to measure them. Pull-off grip not modelled. Doll 3 is solid. Paint visual only. Friction 0.5.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0"
+}

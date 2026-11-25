@@ -1,0 +1,56 @@
+{
+  "schema": "runtime-v1",
+  "scope": "Runtime the recorded battery-pills trials ran on (versions read from each trial's run.json), plus the reference stack revisions shared with the accepted peg-out-a-tshirt task.",
+  "python": "3.12",
+  "packages_recorded_in_run_json": {
+    "isaacsim": "6.1.0.0",
+    "isaaclab": "17.0.2",
+    "isaaclab_arena": "0.3.0",
+    "yam-arena": "0.1.0",
+    "inspect-robots": "1.0.0",
+    "inspect-robots-yam": "0.38.0",
+    "inspect-robots-dream": "0.1.0",
+    "dreamlabs-client": "1.1.7",
+    "numpy": "2.3.1"
+  },
+  "dream_model": "dreamlabs/dream-1-beta",
+  "reference_stack": {
+    "note": "Same stack as peg-out-a-tshirt; these revisions were not re-read by run.py.",
+    "repositories": {
+      "launchable": {
+        "url": "https://github.com/ttpierson/YAM-inspect-Isaac",
+        "revision": "25a2963d10451265dd2a6cbddea69d6a3b3b9b0d"
+      },
+      "adapter": {
+        "url": "https://github.com/kairosiann/yam-isaac-lab-arena",
+        "revision": "0059d02a1a91bc6834c1d0846022891df0c78730"
+      },
+      "inspect": {
+        "url": "https://github.com/robocurve/inspect-robots",
+        "revision": "fc5ace923ce85117f9c86f35274122212fbcfe2c"
+      },
+      "arena": {
+        "url": "https://github.com/isaac-sim/IsaacLab-Arena",
+        "revision": "c7edf3a9d5d8276565208f72422f8f8a0806d6cf"
+      },
+      "isaaclab": {
+        "url": "https://github.com/isaac-sim/IsaacLab",
+        "revision": "91a0906f93802eb859192dcb0bca879f891e92d6"
+      }
+    },
+    "arena_asset_path_patch": {
+      "file": "isaaclab_arena/assets/nucleus.py",
+      "assignment": "ARENA_NUCLEUS_DIR: str = ISAACLAB_NUCLEUS_DIR",
+      "reason": "Use the public production asset root instead of unavailable staging assets (as peg-out-a-tshirt)."
+    }
+  },
+  "physics": {
+    "control_hz": 20,
+    "physics_hz": 240,
+    "solver": "TGS, GPU",
+    "bodies": "9 dynamic rigid bodies of convex pieces (tray, dish, jar, cell, 5 tablets)"
+  },
+  "hardware": {
+    "gpu": "NVIDIA L40 48 GB (recorded trials); an RTX-class NVIDIA GPU with Vulkan rendering is required"
+  }
+}

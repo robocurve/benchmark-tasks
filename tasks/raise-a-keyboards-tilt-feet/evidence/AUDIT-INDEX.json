@@ -1,0 +1,505 @@
+{
+  "presentation_copies_only": true,
+  "machine_paths_omitted": true,
+  "presentation_labels_anonymized": true,
+  "scope": "Original report hashes plus portable report metadata. Full raw model/physical inputs are retained separately.",
+  "reports": {
+    "INPUT-REPLAY-AUDIT.json": {
+      "original_report": {
+        "sha256": "53b1da7e3da77e103727baff1cb8aabb8c0e8589c97e66fc56f1c6abac6c28df",
+        "bytes": 3698
+      },
+      "summary": {
+        "schema": "robocurve-dream-native-input-replay-v1",
+        "ok": true,
+        "trial": "<original-machine-path-omitted>",
+        "candidate_slug": "raise-a-keyboards-tilt-feet",
+        "module": "rdb_keyboard_feet",
+        "policy": "dream",
+        "model": "dreamlabs/dream-1-beta",
+        "score": 0.0,
+        "complete_verified_dream_evidence": true,
+        "scripted_reader_diagnostic": false,
+        "full_budget": true,
+        "step_limit": 1800,
+        "executed_steps": 1800,
+        "termination": "action_budget_exhausted",
+        "source_identical": true,
+        "source_sha256": {
+          "adapter.py": "00f496e10169e62730cf01f7c0453e90b1624a441f53479ae15da8ec248c970c",
+          "fixed_scene.py": "ebed6adcfff6d968552bcab4e794666d6314f4b41153fadd144f8e750f63543c",
+          "grading.py": "33b91388265824e04803ffc13e9fe1a4a5f23a4c3cd8e3e97b54899859ddb854",
+          "keyboard_feet.usda": "19976db6934917989037415acbd417c13873170843aad3945fed551d2dabfff2",
+          "layout.py": "19af750a7ccbf52f969184c144baedf34445be567b6bd4ea13d4cbc05022c048",
+          "recording.py": "472a1bd3c619f4f9b05b4c89f129f708733f7a70fce96a468831b3cdf4d9d60b",
+          "run.py": "b50a5619cd2e9762fee341548ab593d2ab061c9a185ef1abeb892bc421b16465",
+          "scripted.py": "684af457076473fa5d71afd34df81c2812127b0177cfeb5c3cf88a3dc2e32619"
+        },
+        "control_hz": 20,
+        "physics_hz": 240,
+        "physics_inputs_replayed": 21600,
+        "all_native_grades_exact": true,
+        "first_finished_native_sample": null,
+        "final_grade": {
+          "score": 0.0,
+          "finished": false,
+          "void": null,
+          "sample": 21600,
+          "sample_hz": 240.0,
+          "angles_deg": [
+            0.020101388160332544,
+            0.04350061487134434
+          ],
+          "inverted": true,
+          "feet_opened": [
+            false,
+            false
+          ],
+          "flat": false,
+          "grounded": false,
+          "feet_height_m": [
+            0.04429719166193218,
+            0.04429652827313966
+          ],
+          "front_pad_height_m": [
+            0.04959588365552638,
+            0.0495983167421425
+          ],
+          "released": true,
+          "notebook_clear": false,
+          "contained": true,
+          "stable_seconds": 0.0,
+          "support_loads_n": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "support_impulses_ns": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actual_front_to_rear_tilt_deg": 0.000653782168345824
+        },
+        "dream_requests": 37,
+        "dream_successful_replies": 37,
+        "actions_14d": 1800,
+        "post_guard_commands_within_stock_bounds": true,
+        "executed_delta_guard_verified": true,
+        "maximum_executed_target_delta": 0.07070158192744619,
+        "measured_observations_14d": 1801,
+        "observation_coverage": "initial_and_every_control_step",
+        "initial_observation_recorded": true,
+        "all_control_grades_match_native_endpoints": true,
+        "verified_evidence_files": {
+          "RESULT.json": {
+            "sha256": "8f37023e943b006d0fa35df5d5f7287fcd7d219c5a7acbf0478a7197f154c3c9",
+            "bytes": 2326546
+          },
+          "CONFIG.json": {
+            "sha256": "d233eccf7d0aba132c66b8e77c2d65447277930ec9009e95614b2d67e977330a",
+            "bytes": 4173
+          },
+          "DREAM_USAGE.json": {
+            "sha256": "987519f8a678c519b7f3e7244267cdb966e3bd815e2f1b3e30efef7281273fdf",
+            "bytes": 195
+          },
+          "media/physics-grade.jsonl": {
+            "sha256": "24b0de24dc2848eb9e5d90829d2f7695aab50474d734fd864f5422d1006b9431",
+            "bytes": 50365655
+          },
+          "actions.jsonl": {
+            "sha256": "8f2fb9ab752b0647b83e8a0a15f0490e78b83a3959cd0e6a92d119da65d6f895",
+            "bytes": 620650
+          },
+          "media/grader-trace.jsonl": {
+            "sha256": "f6f5c9d59da2f320ca7d700c74fe4985eb5a73045722c22c6ddac1aac65d258d",
+            "bytes": 3399533
+          },
+          "measured-observations.jsonl": {
+            "sha256": "5e3d12132331e9fd27984fa278d553bbebf8d68092b1ac1c3b87828734558190",
+            "bytes": 624767
+          }
+        }
+      }
+    },
+    "MODEL-PROVENANCE-AUDIT.json": {
+      "original_report": {
+        "sha256": "b7b08470afa7b2c933191ba4cc11a65a823a9c1da6618e92c850b35ad27d0936",
+        "bytes": 2598
+      },
+      "summary": {
+        "ok": true,
+        "audit_kind": "dream-model-input-and-action-provenance-v1",
+        "candidate_slug": "raise-a-keyboards-tilt-feet",
+        "model": "dreamlabs/dream-1-beta",
+        "score": 0.0,
+        "completed_model_trial": true,
+        "native_grade_replay_required_separately": true,
+        "control_steps": 1800,
+        "initial_and_post_step_measured_states": 1801,
+        "model_observations": 1800,
+        "archived_rgb_jpegs": 5400,
+        "exact_observation_joint_states": true,
+        "only_stock_rgb_and_joint_state": true,
+        "all_jpegs_decoded_and_hashed": true,
+        "exact_sdk_nine_frame_windows": true,
+        "successful_sdk_chunks": 37,
+        "exact_stock_sdk_filter_replays": 37,
+        "exact_preroll_and_chunk_queue_replay": true,
+        "exact_stock_guard_replay": true,
+        "guard_modified_steps": 0,
+        "action_request_attempts": 37,
+        "retry_errors": 0,
+        "retry_error_types": {},
+        "session_expiration_errors": 0,
+        "observed_successful_session_transitions": 0,
+        "successful_session_ids": [
+          "240fcc09-2006-449b-99f4-b2f61fefed7f"
+        ],
+        "selected_model_rows_played": 1768,
+        "unused_final_chunk_rows": 8,
+        "inputs": {
+          "RESULT.json": {
+            "sha256": "8f37023e943b006d0fa35df5d5f7287fcd7d219c5a7acbf0478a7197f154c3c9",
+            "bytes": 2326546
+          },
+          "CONFIG.json": {
+            "sha256": "d233eccf7d0aba132c66b8e77c2d65447277930ec9009e95614b2d67e977330a",
+            "bytes": 4173
+          },
+          "DREAM_USAGE.json": {
+            "sha256": "987519f8a678c519b7f3e7244267cdb966e3bd815e2f1b3e30efef7281273fdf",
+            "bytes": 195
+          },
+          "dream-action-trace.jsonl": {
+            "sha256": "4c8dde508114312dc80f816cef314d33c18cd4e0860e84ab13b97505f65200f3",
+            "bytes": 8481787
+          },
+          "dream-input-rgb.zip": {
+            "sha256": "dfa364268038dad1749f31ae1a4accd1b214b4bfa1d07fa2cf99405b0da7c1a4",
+            "bytes": 33783005
+          },
+          "policy-actions.jsonl": {
+            "sha256": "4b0bdcd59a446d13b8aa898604d84eff4bee861f72e01c05f2e8085149f859b0",
+            "bytes": 568269
+          },
+          "actions.jsonl": {
+            "sha256": "8f2fb9ab752b0647b83e8a0a15f0490e78b83a3959cd0e6a92d119da65d6f895",
+            "bytes": 620650
+          },
+          "measured-observations.jsonl": {
+            "sha256": "5e3d12132331e9fd27984fa278d553bbebf8d68092b1ac1c3b87828734558190",
+            "bytes": 624767
+          },
+          "policy-source/evaluate_dream.py": {
+            "sha256": "bd627381753b9dd1e4c8cb676df689af2d1c0b49ac9078d5fb8eb5d699248dc4",
+            "bytes": 14809
+          },
+          "policy-source/dream_model_audit.py": {
+            "sha256": "1b30923ce19526d1159eb88eef5d44c68cd0279dc73d183092ef032873cd1823",
+            "bytes": 9616
+          }
+        },
+        "auditor_sha256": "d9c302af880c2c12b2811b96b77f64867a8d0e180b4a7569fec9e2d4cf5cc1b3"
+      }
+    },
+    "MEDIA-AUDIT.json": {
+      "original_report": {
+        "sha256": "17049aeba1d795c853311cea04d0f3c2ec712e0ddb0914d291a1d99498de55f6",
+        "bytes": 7659
+      },
+      "summary": {
+        "schema": "robocurve-dream-native-media-review-v1",
+        "ok": true,
+        "trial": "<original-machine-path-omitted>",
+        "candidate_slug": "raise-a-keyboards-tilt-feet",
+        "model": "dreamlabs/dream-1-beta",
+        "score": 0.0,
+        "executed_actions": 1800,
+        "control_hz": 20,
+        "camera_hz": 10.0,
+        "expected_frames": 901,
+        "initial_frame_included": true,
+        "every_second_control_frame": true,
+        "terminal_odd_control_frame_included": false,
+        "complete_episode": true,
+        "no_temporal_cuts": true,
+        "no_frame_interpolation": true,
+        "no_generated_scene_content": true,
+        "original_inputs_unchanged": true,
+        "source_result_sha256": "8f37023e943b006d0fa35df5d5f7287fcd7d219c5a7acbf0478a7197f154c3c9",
+        "source_sha256": {
+          "adapter.py": "00f496e10169e62730cf01f7c0453e90b1624a441f53479ae15da8ec248c970c",
+          "fixed_scene.py": "ebed6adcfff6d968552bcab4e794666d6314f4b41153fadd144f8e750f63543c",
+          "grading.py": "33b91388265824e04803ffc13e9fe1a4a5f23a4c3cd8e3e97b54899859ddb854",
+          "keyboard_feet.usda": "19976db6934917989037415acbd417c13873170843aad3945fed551d2dabfff2",
+          "layout.py": "19af750a7ccbf52f969184c144baedf34445be567b6bd4ea13d4cbc05022c048",
+          "recording.py": "472a1bd3c619f4f9b05b4c89f129f708733f7a70fce96a468831b3cdf4d9d60b",
+          "run.py": "b50a5619cd2e9762fee341548ab593d2ab061c9a185ef1abeb892bc421b16465",
+          "scripted.py": "684af457076473fa5d71afd34df81c2812127b0177cfeb5c3cf88a3dc2e32619"
+        },
+        "all_four_native_cameras": {
+          "top_cam": {
+            "source": "<original-machine-path-omitted>",
+            "width": 640,
+            "height": 360,
+            "fps": 10.0,
+            "frames": 901,
+            "duration_s": 90.1,
+            "first_frame_pts_s": 0.0,
+            "last_frame_pts_s": 90.0,
+            "all_frame_timestamps_verified": true,
+            "full_decode": true,
+            "sha256": "99610c7dcb3e2e9b3750fce39205355a2184314c0a7a13739b77d6368c739c1f",
+            "bytes": 1345610
+          },
+          "left_cam": {
+            "source": "<original-machine-path-omitted>",
+            "width": 640,
+            "height": 360,
+            "fps": 10.0,
+            "frames": 901,
+            "duration_s": 90.1,
+            "first_frame_pts_s": 0.0,
+            "last_frame_pts_s": 90.0,
+            "all_frame_timestamps_verified": true,
+            "full_decode": true,
+            "sha256": "917aff954c892250425e672b09058191cfcbf75e34ddcb002666133ff6fd82e3",
+            "bytes": 1507026
+          },
+          "right_cam": {
+            "source": "<original-machine-path-omitted>",
+            "width": 640,
+            "height": 360,
+            "fps": 10.0,
+            "frames": 901,
+            "duration_s": 90.1,
+            "first_frame_pts_s": 0.0,
+            "last_frame_pts_s": 90.0,
+            "all_frame_timestamps_verified": true,
+            "full_decode": true,
+            "sha256": "9eb6e31c4eee26afd040cbe7de39e576701fd6f99be041e7f4e31acbc62ade43",
+            "bytes": 1227304
+          },
+          "side_cam": {
+            "source": "<original-machine-path-omitted>",
+            "width": 1280,
+            "height": 704,
+            "fps": 10.0,
+            "frames": 901,
+            "duration_s": 90.1,
+            "first_frame_pts_s": 0.0,
+            "last_frame_pts_s": 90.0,
+            "all_frame_timestamps_verified": true,
+            "full_decode": true,
+            "sha256": "9cd3e50bd8170f1d41b0abf02cfe82faaf7e1e2863c959d91e0ff7a04c0e7d0a",
+            "bytes": 3052654
+          }
+        },
+        "demo": {
+          "width": 1280,
+          "height": 704,
+          "fps": 10.0,
+          "frames": 901,
+          "duration_s": 90.1,
+          "first_frame_pts_s": 0.0,
+          "last_frame_pts_s": 90.0,
+          "all_frame_timestamps_verified": true,
+          "full_decode": true,
+          "sha256": "1b748e9b1d40bc320d75284458a23d3cd7c1c524ad3d0127a4bcc9f2f6a3249e",
+          "bytes": 5334620,
+          "source_primary_camera": "side_cam",
+          "source_inset_camera": "top_cam",
+          "inset_geometry_pixels": {
+            "position": "upper_right",
+            "x": 880,
+            "y": 12,
+            "width": 388,
+            "height": 220,
+            "image_width": 384,
+            "image_height": 216,
+            "border_px": 2,
+            "margin_px": 12
+          },
+          "composition": "Full native side-view episode with synchronized resized top-camera inset; no cuts, retiming, interpolation, or added scene content",
+          "codec": "H.264 libx264 CRF18 YUV420P; source frame chronology retained"
+        },
+        "contact_sheet": {
+          "source_demo_sha256": "1b748e9b1d40bc320d75284458a23d3cd7c1c524ad3d0127a4bcc9f2f6a3249e",
+          "sha256": "e064d48e203745d5b8e6de6435088457b07429a66f978decfa0f620562883231",
+          "bytes": 825500,
+          "width": 1280,
+          "height": 1282,
+          "chronological": true,
+          "selection": "six evenly spaced original frame indices including both endpoints",
+          "extraction": "ffmpeg select by decoded frame index; no timestamp seeking",
+          "thumbnail_resampling": "Pillow LANCZOS",
+          "panels": [
+            {
+              "panel": 1,
+              "source_frame_index_zero_based": 0,
+              "video_pts_s": 0.0,
+              "native_control_tick": 0,
+              "native_simulation_time_s": 0.0,
+              "extracted_full_frame_png_sha256": "f3ca5087ceaf4410ee16ecad7ccbbda469cbb553ce141857ea166b770ecc5831",
+              "repeated_source_frame": false
+            },
+            {
+              "panel": 2,
+              "source_frame_index_zero_based": 180,
+              "video_pts_s": 18.0,
+              "native_control_tick": 360,
+              "native_simulation_time_s": 18.0,
+              "extracted_full_frame_png_sha256": "fe220f3938c1f9fd56a3ba261e75ad00436464e6b9b2e32dfdadf65b514025e7",
+              "repeated_source_frame": false
+            },
+            {
+              "panel": 3,
+              "source_frame_index_zero_based": 360,
+              "video_pts_s": 36.0,
+              "native_control_tick": 720,
+              "native_simulation_time_s": 36.0,
+              "extracted_full_frame_png_sha256": "57be8516fe197560b052c3cf4318fd58246b0cadbb75f5ef47f8ce2801a24300",
+              "repeated_source_frame": false
+            },
+            {
+              "panel": 4,
+              "source_frame_index_zero_based": 540,
+              "video_pts_s": 54.0,
+              "native_control_tick": 1080,
+              "native_simulation_time_s": 54.0,
+              "extracted_full_frame_png_sha256": "14eaa1b178211005e51675222a17e3b895a25b9c4d023b0ba78df0ff38182fc4",
+              "repeated_source_frame": false
+            },
+            {
+              "panel": 5,
+              "source_frame_index_zero_based": 720,
+              "video_pts_s": 72.0,
+              "native_control_tick": 1440,
+              "native_simulation_time_s": 72.0,
+              "extracted_full_frame_png_sha256": "552f9aee2a8b6d4f165e6a7472af9991ac558b123a588c8fe20b5effbeaebd5c",
+              "repeated_source_frame": false
+            },
+            {
+              "panel": 6,
+              "source_frame_index_zero_based": 900,
+              "video_pts_s": 90.0,
+              "native_control_tick": 1800,
+              "native_simulation_time_s": 90.0,
+              "extracted_full_frame_png_sha256": "57bf69f120f480825e50bd3a167830985206a1b7f015d3ab2bdebb6941d827cc",
+              "repeated_source_frame": false
+            }
+          ]
+        },
+        "setup": {
+          "source": "<original-machine-path-omitted>",
+          "sha256": "82feb349daad70d956326d73348052b78aaf3e1bc65e927f21efb54ed7b3f160",
+          "byte_identical_copy": true,
+          "bytes": 137549
+        },
+        "tool_sha256": "b71c7d3a3a595e115d7edd3b50187d43fd509b0d6883e5754acf5a0b981f4746",
+        "media_tools": {
+          "ffmpeg": "ffmpeg version 7.0.2-static https://johnvansickle.com/ffmpeg/  Copyright (c) 2000-2024 the FFmpeg developers",
+          "ffprobe": "ffprobe version 9.0.1 Copyright (c) 2007-2026 the FFmpeg developers"
+        }
+      }
+    },
+    "VISUAL-REVIEW.json": {
+      "original_report": {
+        "sha256": "271e6b2d146a6c226d8e757f4082adbaa65094d8a12d4d16b58417b6768f421b",
+        "bytes": 3072
+      },
+      "summary": {
+        "candidate_slug": "raise-a-keyboards-tilt-feet",
+        "trial_path": "<original-machine-path-omitted>",
+        "model": "dreamlabs/dream-1-beta",
+        "score": 0.0,
+        "executed_steps": 1800,
+        "step_limit": 1800,
+        "verified_demo_sha256": "1b748e9b1d40bc320d75284458a23d3cd7c1c524ad3d0127a4bcc9f2f6a3249e",
+        "verified_native_video_sha256": {
+          "top_cam": "99610c7dcb3e2e9b3750fce39205355a2184314c0a7a13739b77d6368c739c1f",
+          "left_cam": "917aff954c892250425e672b09058191cfcbf75e34ddcb002666133ff6fd82e3",
+          "right_cam": "9eb6e31c4eee26afd040cbe7de39e576701fd6f99be041e7f4e31acbc62ade43",
+          "side_cam": "9cd3e50bd8170f1d41b0abf02cfe82faaf7e1e2863c959d91e0ff7a04c0e7d0a"
+        },
+        "media_audit_path": "<original-machine-path-omitted>",
+        "contact_sheet_path": "<original-machine-path-omitted>",
+        "observations": [
+          {
+            "kind": "direct_image",
+            "source_frames": [
+              0,
+              180,
+              360,
+              540,
+              720,
+              900
+            ],
+            "video_times_s": [
+              0.0,
+              18.0,
+              36.0,
+              54.0,
+              72.0,
+              90.0
+            ],
+            "description": "Both grippers approach the keyboard edges and change pose beside the chassis. The keyboard remains underside-up on its support; neither rear tilt foot is visibly unfolded and no keys-up placement is shown in the sampled frames."
+          }
+        ],
+        "grade_facts": {
+          "kind": "native_grader_over_every_physics_sample",
+          "samples": 21600,
+          "max_score": 0.0,
+          "robot_contact_samples": 636,
+          "robot_component_contact_samples": [
+            636,
+            0,
+            0,
+            0
+          ],
+          "first_robot_contact_sample": 5509,
+          "robot_contact_total_sample_duration_s": 2.65,
+          "any_foot_open_samples": 0,
+          "both_feet_open_samples": 0,
+          "inverted_samples": 21600,
+          "flat_samples": 0,
+          "grounded_samples": 0,
+          "notebook_clear_samples": 0,
+          "minimum_foot_angles_deg": [
+            -0.14283543128542053,
+            -0.04269727978399762
+          ],
+          "maximum_foot_angles_deg": [
+            0.09755967180521526,
+            0.08801912134107702
+          ],
+          "maximum_stable_seconds": 0.0,
+          "keyboard_chassis_coordinate_ranges_m": [
+            0.00033274292945861816,
+            0.0004814875137526542,
+            0.0005484819412231445
+          ],
+          "final_void": null,
+          "final_inverted": true,
+          "final_feet_opened": [
+            false,
+            false
+          ],
+          "final_support_loads_n": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "short_failure_label": "Chassis touched; feet stay closed and keyboard stays upside-down",
+        "interpretation": "Images show approach to keyboard edges without the required transformation. All 21,600 native samples keep the keyboard inverted and both feet closed; native contact occurred only with the chassis, never either foot, and no load-bearing keys-up pose was reached.",
+        "vision_reviewed": true
+      }
+    }
+  }
+}

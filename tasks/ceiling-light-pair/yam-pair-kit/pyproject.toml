@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "yam-pair-kit"
+version = "0.1.0"
+description = "Two bimanual YAM stations (four arms, two independent policies) for Inspect Robots on Isaac Lab-Arena."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+# Isaac Sim, Isaac Lab, Isaac Lab-Arena and yam-arena are not on PyPI: install this into Arena's venv, next to
+# yam-arena (https://github.com/kairosiann/yam-isaac-lab-arena) and inspect-robots-dream.
+dependencies = ["inspect-robots>=0.60", "inspect-robots-yam>=0.6", "numpy>=1.26"]
+
+[project.optional-dependencies]
+dream = ["inspect-robots-dream>=0.1"]
+dev = ["pytest>=8.0"]
+
+[project.entry-points."inspect_robots.embodiments"]
+yam_pair = "yam_pair.embodiment:yam_pair_embodiment"
+
+[project.entry-points."inspect_robots.policies"]
+dream_pair = "yam_pair.policies:dream_pair_policy"
+yam_pair_scripted = "yam_pair.policies:yam_pair_scripted_policy"
+
+[project.entry-points."inspect_robots.scorers"]
+pair_task_score = "yam_pair.scoring:pair_task_score"
+
+[project.scripts]
+yam-pair-video = "yam_pair.media:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["yam_pair*"]

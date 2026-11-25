@@ -1,0 +1,21 @@
+{
+  "title": "Connect a garden hose to its tap's quick-connect coupler: collar held back, plug pushed home, collar released to lock",
+  "category": "Societal relatability",
+  "keywords": [
+    "bimanual",
+    "garden hose",
+    "quick connect",
+    "ball lock",
+    "peg in hole",
+    "coordination"
+  ],
+  "instruction": "Connect the hose to the tap: pull back the coupler's collar, push the hose's brass plug fully in, let the collar spring forward to lock it, then let go of everything.",
+  "context": "Anyone who waters a garden or washes a car clicks a hose onto an outdoor tap. With a ball-lock quick-connect, one hand holds the coupler's sprung collar back while the other lines the plug up with the bore and pushes it home against the locking balls; the collar is then let go so it springs forward and locks. Pushing without holding the collar back, or letting it go early, leaves the plug out.",
+  "setup": "Positions in cm from the midpoint between the arm bases: x forward, y to the robot's left; heights above the table top. A grey 5 x 5 x 17 cm standpipe post stands at (40.2, -6.2) with a brass garden tap on it (red cross handle). Its spout carries a brass ball-lock quick-connect coupler: a 3 cm brass body, 4 cm long, whose mouth faces the robot at (32, -4), 11 cm up; the bore runs into the tap along heading -15 deg (turned 15 deg toward the robot's right). The mouth is chamfered from 26 mm down to the 18 mm bore over its first 6 mm. Three 4 mm steel balls sit in the bore wall 8 mm in, at 120 deg (one on top); at rest each stands 3 mm into the bore. Over the front of the body slides a black knurled collar, 40 mm across and 30 mm long, reaching 3 mm in front of the mouth at rest; it slides 9 mm back toward the tap against a spring (1.2 N at rest, 3.9 N at 9 mm), and only when it is at least 6 mm back can the balls rise. A 72 cm green PVC garden hose (23 mm across) is clamped to the table by a grey clamp block at (-4, -48) and lies in a curve round the right arm's base; its end is a brass male plug (100 g) lying on the table with its flange face at about (21, 0), nose pointing forward: a 15.5 mm shaft 26 mm long with a pointed nose, an 11 mm groove 6 to 12 mm ahead of the flange, a 24 mm flange 6 mm thick, a 22 mm hex body 40 mm long and a black strain-relief boot. Both arms start at the ready pose with open grippers. Nothing else is on the table.",
+  "scoring": "Measured along the bore: flange = how far the plug's flange face is from the mouth (0 at the mouth); locked = flange within 3 mm of the mouth with the plug's axis within 10 deg of the bore's, the collar back within 1.5 mm of rest and all three balls down in the groove (real trial: the plug then withstands a 10 N pull along the bore from a spring scale on the hose just behind the boot, moving less than 1 mm). 1.0 (success): locked, every finger pad of both grippers at least 3 cm from the coupler, collar and plug, and the plug moved less than 3 mm over the last second, all together for 1 s; this ends the trial. Otherwise, at the end of the run: 0.75 locked but still touched or held; 0.5 the plug's nose at least 15 mm into the bore (past the balls, so the collar was held back) on the bore's axis but not locked; 0.25 its nose got 15 mm in at some point but is out at the end; 0 otherwise, including pushing the plug in without holding the collar back (the balls stop the nose 12 mm in).",
+  "run_limit": "1,200 steps (1 minute at 20 Hz)",
+  "reset_notes": "Pull the collar back and draw the plug out; lay the hose back in its curve with the plug at its mark. The clamp and the coupler stay put.",
+  "fidelity": "Rigid bodies, 240 Hz physics, 20 Hz control. Fixed coupler; its bore and chamfered mouth are rings of convex segments (wet brass, friction 0.1). Three real ball colliders on sprung radial slides; the collar slides on its spring. The collar's inner land is a joint-limit rule: under 6 mm back the balls can't rise, a raised ball keeps the collar back, and with all balls down it springs home over them. Hose: 16 rigid links on soft hinges (real hose is continuous). Details in the README.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-RRCBYN"
+}
