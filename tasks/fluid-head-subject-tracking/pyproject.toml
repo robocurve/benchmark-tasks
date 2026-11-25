@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "dynamic-task-fluid-head-subject-tracking"
+version = "0.1.0"
+requires-python = ">=3.12"
+[project.entry-points."inspect_robots.embodiments"]
+fluid_head_subject_tracking_yam = "dynamic_task_fluid_head_subject_tracking.yam_dynamic:make_embodiment"
+[project.entry-points."inspect_robots.policies"]
+fluid_head_subject_tracking_demo = "dynamic_task_fluid_head_subject_tracking.yam_dynamic:make_scripted_policy"
+fluid_head_subject_tracking_idle = "dynamic_task_fluid_head_subject_tracking.yam_dynamic:make_idle_policy"
+fluid_head_subject_tracking_dream_guard = "dynamic_task_fluid_head_subject_tracking.budget:make_guarded_dream_policy"
+[tool.setuptools.packages.find]
+include = ["dynamic_task_fluid_head_subject_tracking*"]

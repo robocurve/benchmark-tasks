@@ -1,0 +1,249 @@
+#usda 1.0
+(
+    defaultPrim = "new_case"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "new_case" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxRigidBodyAPI"]
+)
+{
+    float physics:mass = 1.5000
+    int physxRigidBody:solverPositionIterationCount = 16
+    int physxRigidBody:solverVelocityIterationCount = 4
+    float physxRigidBody:maxDepenetrationVelocity = 1
+
+    def Material "PhysicsMaterial" (
+        prepend apiSchemas = ["PhysicsMaterialAPI"]
+    )
+    {
+        float physics:staticFriction = 0.5000
+        float physics:dynamicFriction = 0.5000
+        float physics:restitution = 0
+    }
+
+    def Cube "col00" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </new_case/PhysicsMaterial>
+        uniform token purpose = "guide"
+        double size = 1
+        float physxCollision:contactOffset = 0.004
+        float physxCollision:restOffset = 0
+        double3 xformOp:translate = (0.000000, 0.000000, -0.069450)
+        float3 xformOp:scale = (0.295300, 0.231800, 0.004000)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+    def Cube "col01" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </new_case/PhysicsMaterial>
+        uniform token purpose = "guide"
+        double size = 1
+        float physxCollision:contactOffset = 0.004
+        float physxCollision:restOffset = 0
+        double3 xformOp:translate = (0.000000, 0.000000, 0.069450)
+        float3 xformOp:scale = (0.295300, 0.231800, 0.004000)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+    def Cube "col02" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </new_case/PhysicsMaterial>
+        uniform token purpose = "guide"
+        double size = 1
+        float physxCollision:contactOffset = 0.004
+        float physxCollision:restOffset = 0
+        double3 xformOp:translate = (-0.145650, 0.000000, 0.000000)
+        float3 xformOp:scale = (0.004000, 0.223800, 0.134900)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+    def Cube "col03" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </new_case/PhysicsMaterial>
+        uniform token purpose = "guide"
+        double size = 1
+        float physxCollision:contactOffset = 0.004
+        float physxCollision:restOffset = 0
+        double3 xformOp:translate = (0.145650, 0.000000, 0.000000)
+        float3 xformOp:scale = (0.004000, 0.223800, 0.134900)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+    def Cube "col04" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </new_case/PhysicsMaterial>
+        uniform token purpose = "guide"
+        double size = 1
+        float physxCollision:contactOffset = 0.004
+        float physxCollision:restOffset = 0
+        double3 xformOp:translate = (0.000000, -0.113900, -0.039275)
+        float3 xformOp:scale = (0.287300, 0.004000, 0.056350)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+    def Cube "col05" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </new_case/PhysicsMaterial>
+        uniform token purpose = "guide"
+        double size = 1
+        float physxCollision:contactOffset = 0.004
+        float physxCollision:restOffset = 0
+        double3 xformOp:translate = (0.000000, -0.113900, 0.044050)
+        float3 xformOp:scale = (0.287300, 0.004000, 0.046800)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+    def Cube "col06" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </new_case/PhysicsMaterial>
+        uniform token purpose = "guide"
+        double size = 1
+        float physxCollision:contactOffset = 0.004
+        float physxCollision:restOffset = 0
+        double3 xformOp:translate = (-0.097225, -0.113900, 0.004775)
+        float3 xformOp:scale = (0.092850, 0.004000, 0.031750)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+    def Cube "col07" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </new_case/PhysicsMaterial>
+        uniform token purpose = "guide"
+        double size = 1
+        float physxCollision:contactOffset = 0.004
+        float physxCollision:restOffset = 0
+        double3 xformOp:translate = (0.097225, -0.113900, 0.004775)
+        float3 xformOp:scale = (0.092850, 0.004000, 0.031750)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+    def Cube "col08" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </new_case/PhysicsMaterial>
+        uniform token purpose = "guide"
+        double size = 1
+        float physxCollision:contactOffset = 0.004
+        float physxCollision:restOffset = 0
+        double3 xformOp:translate = (0.000000, 0.113900, -0.039275)
+        float3 xformOp:scale = (0.287300, 0.004000, 0.056350)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+    def Cube "col09" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </new_case/PhysicsMaterial>
+        uniform token purpose = "guide"
+        double size = 1
+        float physxCollision:contactOffset = 0.004
+        float physxCollision:restOffset = 0
+        double3 xformOp:translate = (0.000000, 0.113900, 0.044050)
+        float3 xformOp:scale = (0.287300, 0.004000, 0.046800)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+    def Cube "col10" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </new_case/PhysicsMaterial>
+        uniform token purpose = "guide"
+        double size = 1
+        float physxCollision:contactOffset = 0.004
+        float physxCollision:restOffset = 0
+        double3 xformOp:translate = (-0.097225, 0.113900, 0.004775)
+        float3 xformOp:scale = (0.092850, 0.004000, 0.031750)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+    def Cube "col11" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </new_case/PhysicsMaterial>
+        uniform token purpose = "guide"
+        double size = 1
+        float physxCollision:contactOffset = 0.004
+        float physxCollision:restOffset = 0
+        double3 xformOp:translate = (0.097225, 0.113900, 0.004775)
+        float3 xformOp:scale = (0.092850, 0.004000, 0.031750)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+    def Cube "col12" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysxCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </new_case/PhysicsMaterial>
+        uniform token purpose = "guide"
+        double size = 1
+        float physxCollision:contactOffset = 0.004
+        float physxCollision:restOffset = 0
+        double3 xformOp:translate = (0.000000, 0.000000, -0.041775)
+        float3 xformOp:scale = (0.287300, 0.223800, 0.051350)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+    }
+
+    def Scope "Looks"
+    {
+        def Material "new_case"
+        {
+            token outputs:surface.connect = </new_case/Looks/new_case/surface.outputs:surface>
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                float inputs:metallic = 0.0
+                color3f inputs:diffuseColor.connect = </new_case/Looks/new_case/color_tex.outputs:rgb>
+                float inputs:roughness = 0.85
+                token outputs:surface
+            }
+            def Shader "uv"
+            {
+                uniform token info:id = "UsdPrimvarReader_float2"
+                token inputs:varname = "st"
+                float2 outputs:result
+            }
+            def Shader "color_tex"
+            {
+                uniform token info:id = "UsdUVTexture"
+                asset inputs:file = @./textures/rice_case.png@
+                float2 inputs:st.connect = </new_case/Looks/new_case/uv.outputs:result>
+                token inputs:wrapS = "repeat"
+                token inputs:wrapT = "repeat"
+                token inputs:sourceColorSpace = "sRGB"
+                float4 inputs:scale = (0.5, 0.5, 0.5, 1)
+                float3 outputs:rgb
+            }
+        }
+    }
+
+    def Xform "visual"
+    {
+        def Mesh "box" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </new_case/Looks/new_case>
+            uniform bool doubleSided = 0
+            int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+            int[] faceVertexIndices = [0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15, 16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23]
+            point3f[] points = [(0.14765, -0.11590, -0.07145), (0.14765, 0.11590, -0.07145), (0.14765, 0.11590, 0.07145), (0.14765, -0.11590, 0.07145), (-0.14765, 0.11590, -0.07145), (-0.14765, -0.11590, -0.07145), (-0.14765, -0.11590, 0.07145), (-0.14765, 0.11590, 0.07145), (0.14765, 0.11590, -0.07145), (-0.14765, 0.11590, -0.07145), (-0.14765, 0.11590, 0.07145), (0.14765, 0.11590, 0.07145), (-0.14765, -0.11590, -0.07145), (0.14765, -0.11590, -0.07145), (0.14765, -0.11590, 0.07145), (-0.14765, -0.11590, 0.07145), (-0.14765, -0.11590, 0.07145), (0.14765, -0.11590, 0.07145), (0.14765, 0.11590, 0.07145), (-0.14765, 0.11590, 0.07145), (-0.14765, 0.11590, -0.07145), (0.14765, 0.11590, -0.07145), (0.14765, -0.11590, -0.07145), (-0.14765, -0.11590, -0.07145)]
+            normal3f[] normals = [(1.0000, 0.0000, 0.0000), (1.0000, 0.0000, 0.0000), (1.0000, 0.0000, 0.0000), (1.0000, 0.0000, 0.0000), (1.0000, 0.0000, 0.0000), (1.0000, 0.0000, 0.0000), (-1.0000, 0.0000, 0.0000), (-1.0000, 0.0000, 0.0000), (-1.0000, 0.0000, 0.0000), (-1.0000, 0.0000, 0.0000), (-1.0000, 0.0000, 0.0000), (-1.0000, 0.0000, 0.0000), (0.0000, 1.0000, 0.0000), (0.0000, 1.0000, 0.0000), (0.0000, 1.0000, 0.0000), (0.0000, 1.0000, 0.0000), (0.0000, 1.0000, 0.0000), (0.0000, 1.0000, 0.0000), (0.0000, -1.0000, 0.0000), (0.0000, -1.0000, 0.0000), (0.0000, -1.0000, 0.0000), (0.0000, -1.0000, 0.0000), (0.0000, -1.0000, 0.0000), (0.0000, -1.0000, 0.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, 1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, -1.0000), (0.0000, 0.0000, -1.0000)] (
+                interpolation = "faceVarying"
+            )
+            texCoord2f[] primvars:st = [(0.0000, 0.5000), (0.3333, 0.5000), (0.3333, 1.0000), (0.0000, 0.5000), (0.3333, 1.0000), (0.0000, 1.0000), (0.3333, 0.5000), (0.6667, 0.5000), (0.6667, 1.0000), (0.3333, 0.5000), (0.6667, 1.0000), (0.3333, 1.0000), (0.6667, 0.5000), (1.0000, 0.5000), (1.0000, 1.0000), (0.6667, 0.5000), (1.0000, 1.0000), (0.6667, 1.0000), (0.0000, 0.0000), (0.3333, 0.0000), (0.3333, 0.5000), (0.0000, 0.0000), (0.3333, 0.5000), (0.0000, 0.5000), (0.3333, 0.0000), (0.6667, 0.0000), (0.6667, 0.5000), (0.3333, 0.0000), (0.6667, 0.5000), (0.3333, 0.5000), (0.6667, 0.0000), (1.0000, 0.0000), (1.0000, 0.5000), (0.6667, 0.0000), (1.0000, 0.5000), (0.6667, 0.5000)] (
+                interpolation = "faceVarying"
+            )
+            uniform token subdivisionScheme = "none"
+        }
+    }
+}

@@ -1,0 +1,855 @@
+#usda 1.0
+(
+    defaultPrim = "printer"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "printer" (
+    prepend apiSchemas = ["PhysicsArticulationRootAPI", "PhysxArticulationAPI"]
+)
+{
+    custom bool physxArticulation:enabledSelfCollisions = 0
+    custom float physxArticulation:sleepThreshold = 0
+    custom float physxArticulation:stabilizationThreshold = 0
+
+    def "Looks"
+    {
+        def Material "white"
+        {
+            token outputs:surface.connect = </printer/Looks/white/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.7605245, 0.7605245, 0.73046076)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.45
+                token outputs:surface
+            }
+        }
+
+        def Material "shade"
+        {
+            token outputs:surface.connect = </printer/Looks/shade/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.67244315, 0.67244315, 0.6444797)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.5
+                token outputs:surface
+            }
+        }
+
+        def Material "grey"
+        {
+            token outputs:surface.connect = </printer/Looks/grey/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.3049873, 0.31398872, 0.3277781)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.5
+                token outputs:surface
+            }
+        }
+
+        def Material "dark"
+        {
+            token outputs:surface.connect = </printer/Looks/dark/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.019382361, 0.02121901, 0.02518686)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.5
+                token outputs:surface
+            }
+        }
+
+        def Material "glass"
+        {
+            token outputs:surface.connect = </printer/Looks/glass/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.015996294, 0.02121901, 0.027320892)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.08
+                token outputs:surface
+            }
+        }
+
+        def Material "pad"
+        {
+            token outputs:surface.connect = </printer/Looks/pad/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.9046612, 0.9046612, 0.8879231)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.8
+                color3f inputs:specularColor = (0, 0, 0)
+                int inputs:useSpecularWorkflow = 1
+                token outputs:surface
+            }
+        }
+
+        def Material "paper"
+        {
+            token outputs:surface.connect = </printer/Looks/paper/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.9734453, 0.9734453, 1)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.8
+                color3f inputs:specularColor = (0, 0, 0)
+                int inputs:useSpecularWorkflow = 1
+                token outputs:surface
+            }
+        }
+
+        def Material "mark"
+        {
+            token outputs:surface.connect = </printer/Looks/mark/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor = (0.00699541, 0.00699541, 0.008023193)
+                float inputs:metallic = 0
+                float inputs:roughness = 0.6
+                token outputs:surface
+            }
+        }
+
+        def Material "panel"
+        {
+            token outputs:surface.connect = </printer/Looks/panel/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor.connect = </printer/Looks/panel/texture.outputs:rgb>
+                float inputs:metallic = 0
+                float inputs:roughness = 0.5
+                token outputs:surface
+            }
+
+            def Shader "st"
+            {
+                uniform token info:id = "UsdPrimvarReader_float2"
+                token inputs:varname = "st"
+                float2 outputs:result
+            }
+
+            def Shader "texture"
+            {
+                uniform token info:id = "UsdUVTexture"
+                asset inputs:file = @./textures/pl_panel_1.png@
+                float2 inputs:st.connect = </printer/Looks/panel/st.outputs:result>
+                float3 outputs:rgb
+            }
+        }
+
+        def Material "key_black"
+        {
+            token outputs:surface.connect = </printer/Looks/key_black/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor.connect = </printer/Looks/key_black/texture.outputs:rgb>
+                float inputs:metallic = 0
+                float inputs:roughness = 0.5
+                token outputs:surface
+            }
+
+            def Shader "st"
+            {
+                uniform token info:id = "UsdPrimvarReader_float2"
+                token inputs:varname = "st"
+                float2 outputs:result
+            }
+
+            def Shader "texture"
+            {
+                uniform token info:id = "UsdUVTexture"
+                asset inputs:file = @./textures/pl_key_black_1.png@
+                float2 inputs:st.connect = </printer/Looks/key_black/st.outputs:result>
+                float3 outputs:rgb
+            }
+        }
+
+        def Material "key_color"
+        {
+            token outputs:surface.connect = </printer/Looks/key_color/surface.outputs:surface>
+
+            def Shader "surface"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                color3f inputs:diffuseColor.connect = </printer/Looks/key_color/texture.outputs:rgb>
+                float inputs:metallic = 0
+                float inputs:roughness = 0.5
+                token outputs:surface
+            }
+
+            def Shader "st"
+            {
+                uniform token info:id = "UsdPrimvarReader_float2"
+                token inputs:varname = "st"
+                float2 outputs:result
+            }
+
+            def Shader "texture"
+            {
+                uniform token info:id = "UsdUVTexture"
+                asset inputs:file = @./textures/pl_key_color_1.png@
+                float2 inputs:st.connect = </printer/Looks/key_color/st.outputs:result>
+                float3 outputs:rgb
+            }
+        }
+    }
+
+    def Xform "body" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxRigidBodyAPI"]
+    )
+    {
+        float physics:mass = 3.65
+        custom float physxRigidBody:maxDepenetrationVelocity = 0.3
+        custom float physxRigidBody:sleepThreshold = 0
+        quatd xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Cube "base" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/white>
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.327, 0.435, 0.081)
+            double3 xformOp:translate = (0.2635, -0.05, 0.044500000000000005)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "base_upper" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/white>
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.292, 0.435, 0.015)
+            double3 xformOp:translate = (0.28099999999999997, -0.05, 0.0925)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "feet" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/dark>
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.307, 0.415, 0.004)
+            double3 xformOp:translate = (0.2635, -0.05, 0.002)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "glass" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/glass>
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.22, 0.3, 0.015)
+            double3 xformOp:translate = (0.255, -0.07500000000000001, 0.10750000000000001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "frame_front" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/shade>
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.01, 0.3525, 0.0165)
+            double3 xformOp:translate = (0.13999999999999999, -0.09125, 0.10825000000000001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "frame_back" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/shade>
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.02, 0.3525, 0.0165)
+            double3 xformOp:translate = (0.375, -0.09125, 0.10825000000000001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "frame_right" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/shade>
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.22, 0.0425, 0.0165)
+            double3 xformOp:translate = (0.255, -0.24625000000000002, 0.10825000000000001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "frame_left" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/shade>
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.22, 0.01, 0.0165)
+            double3 xformOp:translate = (0.255, 0.08, 0.10825000000000001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "side" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/white>
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.285, 0.0825, 0.05)
+            double3 xformOp:translate = (0.2425, 0.12625, 0.11000000000000001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "rear_front" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/white>
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.003, 0.435, 0.045)
+            double3 xformOp:translate = (0.3865, -0.05, 0.1225)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "slot_floor" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/dark>
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.022, 0.295, 0.012)
+            double3 xformOp:translate = (0.399, -0.012499999999999997, 0.10600000000000001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "slot_right" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/white>
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.022, 0.1075, 0.045)
+            double3 xformOp:translate = (0.399, -0.21375, 0.1225)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "slot_left" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/white>
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.022, 0.0325, 0.045)
+            double3 xformOp:translate = (0.399, 0.15125, 0.1225)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "rear_back" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/white>
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.017, 0.435, 0.046)
+            double3 xformOp:translate = (0.4185, -0.05, 0.123)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "right_mark" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/mark>
+            double size = 1
+            float3 xformOp:scale = (0.022, 0.0008, 0.01)
+            double3 xformOp:translate = (0.399, -0.1602, 0.13799999999999998)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Mesh "panel" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform bool doubleSided = 1
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            rel material:binding = </printer/Looks/panel>
+            point3f[] points = [(0.33, 0.161, 0.1352), (0.33, 0.092, 0.1352), (0.106, 0.092, 0.1352), (0.106, 0.161, 0.1352)]
+            texCoord2f[] primvars:st = [(0, 1), (1, 1), (1, 0), (0, 0)] (
+                interpolation = "vertex"
+            )
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "mark" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform bool doubleSided = 1
+            int[] faceVertexCounts = [3]
+            int[] faceVertexIndices = [0, 1, 2]
+            rel material:binding = </printer/Looks/mark>
+            point3f[] points = [(0.3665, 0.0765, 0.1167), (0.3745, 0.0765, 0.1167), (0.3665, 0.0845, 0.1167)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Mesh "mark_stem" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform bool doubleSided = 1
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            rel material:binding = </printer/Looks/mark>
+            point3f[] points = [(0.3705, 0.0835, 0.1167), (0.3735, 0.0805, 0.1167), (0.3785, 0.0855, 0.1167), (0.3755, 0.0885, 0.1167)]
+            uniform token subdivisionScheme = "none"
+        }
+
+        def Cube "exit" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/dark>
+            double size = 1
+            float3 xformOp:scale = (0.0028, 0.16, 0.032)
+            double3 xformOp:translate = (0.10060000000000001, -0.05, 0.046)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "tray" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/shade>
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.11, 0.17, 0.003)
+            double3 xformOp:translate = (0.045, -0.05, 0.028499999999999998)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "tray_stop" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/shade>
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.004, 0.17, 0.012)
+            double3 xformOp:translate = (-0.008000000000000009, -0.05, 0.036)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def "joints"
+    {
+        def PhysicsFixedJoint "root_joint"
+        {
+            rel physics:body1 = </printer/body>
+        }
+
+        def PhysicsRevoluteJoint "cover" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0
+            float drive:angular:physics:stiffness = 0
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "Y"
+            rel physics:body0 = </printer/body>
+            rel physics:body1 = </printer/cover>
+            point3f physics:localPos0 = (0.385, 0, 0.135)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = 0
+            float physics:upperLimit = 100
+        }
+
+        def PhysicsRevoluteJoint "support" (
+            prepend apiSchemas = ["PhysicsDriveAPI:angular"]
+        )
+        {
+            float drive:angular:physics:damping = 0
+            float drive:angular:physics:stiffness = 0
+            float drive:angular:physics:targetPosition = 0
+            uniform token drive:angular:physics:type = "force"
+            uniform token physics:axis = "Y"
+            rel physics:body0 = </printer/body>
+            rel physics:body1 = </printer/support>
+            point3f physics:localPos0 = (0.412, 0, 0.15)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = 0
+            float physics:upperLimit = 110
+        }
+
+        def PhysicsPrismaticJoint "guide" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 0
+            float drive:linear:physics:stiffness = 0
+            float drive:linear:physics:targetPosition = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "Y"
+            rel physics:body0 = </printer/body>
+            rel physics:body1 = </printer/guide>
+            point3f physics:localPos0 = (0.399, 0.1, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -0.052
+            float physics:upperLimit = 0
+        }
+
+        def PhysicsPrismaticJoint "btn_black" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 0
+            float drive:linear:physics:stiffness = 0
+            float drive:linear:physics:targetPosition = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "Z"
+            rel physics:body0 = </printer/body>
+            rel physics:body1 = </printer/btn_black>
+            point3f physics:localPos0 = (0.13, 0.14, 0.137)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -0.0015
+            float physics:upperLimit = 0
+        }
+
+        def PhysicsPrismaticJoint "btn_color" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 0
+            float drive:linear:physics:stiffness = 0
+            float drive:linear:physics:targetPosition = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "Z"
+            rel physics:body0 = </printer/body>
+            rel physics:body1 = </printer/btn_color>
+            point3f physics:localPos0 = (0.13, 0.114, 0.137)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -0.0015
+            float physics:upperLimit = 0
+        }
+
+        def PhysicsPrismaticJoint "btn_ok" (
+            prepend apiSchemas = ["PhysicsDriveAPI:linear"]
+        )
+        {
+            float drive:linear:physics:damping = 0
+            float drive:linear:physics:stiffness = 0
+            float drive:linear:physics:targetPosition = 0
+            uniform token drive:linear:physics:type = "force"
+            uniform token physics:axis = "Z"
+            rel physics:body0 = </printer/body>
+            rel physics:body1 = </printer/btn_ok>
+            point3f physics:localPos0 = (0.192, 0.1145, 0.137)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -0.0015
+            float physics:upperLimit = 0
+        }
+    }
+
+    def Xform "cover" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxRigidBodyAPI"]
+    )
+    {
+        float physics:mass = 0.35
+        custom float physxRigidBody:maxDepenetrationVelocity = 0.3
+        custom float physxRigidBody:sleepThreshold = 0
+        quatd xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0.385, 0, 0.135)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Cube "plate" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/white>
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.27, 0.34, 0.0175)
+            double3 xformOp:translate = (-0.135, -0.08499999999999999, -0.00875)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "pad" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/pad>
+            double size = 1
+            float3 xformOp:scale = (0.254, 0.32, 0.0005)
+            double3 xformOp:translate = (-0.137, -0.07500000000000001, -0.017650000000000002)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "grip" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/shade>
+            double size = 1
+            float3 xformOp:scale = (0.0008, 0.14, 0.006)
+            double3 xformOp:translate = (-0.2701, -0.049999999999999996, -0.009000000000000001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def Xform "support" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxRigidBodyAPI"]
+    )
+    {
+        float physics:mass = 0.05
+        custom float physxRigidBody:maxDepenetrationVelocity = 0.3
+        custom float physxRigidBody:sleepThreshold = 0
+        quatd xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0.412, 0, 0.15)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Cube "plate" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/white>
+            custom float physxCollision:contactOffset = 0.001
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.11, 0.25, 0.003)
+            double3 xformOp:translate = (-0.055, -0.045000000000000005, 0.0015)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def Xform "guide" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxRigidBodyAPI"]
+    )
+    {
+        float physics:mass = 0.01
+        custom float physxRigidBody:maxDepenetrationVelocity = 0.3
+        custom float physxRigidBody:sleepThreshold = 0
+        quatd xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0.399, 0.1, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Cube "fence" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/grey>
+            custom float physxCollision:contactOffset = 0.0005
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.02, 0.008, 0.045)
+            double3 xformOp:translate = (0, 0.004, 0.1355)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Cube "grip" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/grey>
+            custom float physxCollision:contactOffset = 0.0005
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.02, 0.014, 0.012)
+            double3 xformOp:translate = (0, 0.007, 0.152)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+    }
+
+    def Xform "btn_black" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxRigidBodyAPI"]
+    )
+    {
+        float physics:mass = 0.002
+        custom float physxRigidBody:maxDepenetrationVelocity = 0.3
+        custom float physxRigidBody:sleepThreshold = 0
+        quatd xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0.13, 0.14, 0.137)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Cube "key" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/grey>
+            custom float physxCollision:contactOffset = 0.0005
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.013, 0.013, 0.0058)
+            double3 xformOp:translate = (0, 0, -0.0031)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Mesh "face" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform bool doubleSided = 1
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            rel material:binding = </printer/Looks/key_black>
+            point3f[] points = [(0.0065, 0.0065, 0), (0.0065, -0.0065, 0), (-0.0065, -0.0065, 0), (-0.0065, 0.0065, 0)]
+            texCoord2f[] primvars:st = [(0, 1), (1, 1), (1, 0), (0, 0)] (
+                interpolation = "vertex"
+            )
+            uniform token subdivisionScheme = "none"
+        }
+    }
+
+    def Xform "btn_color" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxRigidBodyAPI"]
+    )
+    {
+        float physics:mass = 0.002
+        custom float physxRigidBody:maxDepenetrationVelocity = 0.3
+        custom float physxRigidBody:sleepThreshold = 0
+        quatd xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0.13, 0.114, 0.137)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Cube "key" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/grey>
+            custom float physxCollision:contactOffset = 0.0005
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.013, 0.013, 0.0058)
+            double3 xformOp:translate = (0, 0, -0.0031)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Mesh "face" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform bool doubleSided = 1
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            rel material:binding = </printer/Looks/key_color>
+            point3f[] points = [(0.0065, 0.0065, 0), (0.0065, -0.0065, 0), (-0.0065, -0.0065, 0), (-0.0065, 0.0065, 0)]
+            texCoord2f[] primvars:st = [(0, 1), (1, 1), (1, 0), (0, 0)] (
+                interpolation = "vertex"
+            )
+            uniform token subdivisionScheme = "none"
+        }
+    }
+
+    def Xform "btn_ok" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "PhysxRigidBodyAPI"]
+    )
+    {
+        float physics:mass = 0.002
+        custom float physxRigidBody:maxDepenetrationVelocity = 0.3
+        custom float physxRigidBody:sleepThreshold = 0
+        quatd xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:translate = (0.192, 0.1145, 0.137)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+        def Cube "key" (
+            prepend apiSchemas = ["MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI"]
+        )
+        {
+            rel material:binding = </printer/Looks/grey>
+            custom float physxCollision:contactOffset = 0.0005
+            custom float physxCollision:restOffset = 0
+            double size = 1
+            float3 xformOp:scale = (0.013, 0.013, 0.0058)
+            double3 xformOp:translate = (0, 0, -0.0031)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+        }
+
+        def Mesh "face" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform bool doubleSided = 1
+            int[] faceVertexCounts = [4]
+            int[] faceVertexIndices = [0, 1, 2, 3]
+            rel material:binding = </printer/Looks/grey>
+            point3f[] points = [(0.0065, 0.0065, 0), (0.0065, -0.0065, 0), (-0.0065, -0.0065, 0), (-0.0065, 0.0065, 0)]
+            texCoord2f[] primvars:st = [(0, 1), (1, 1), (1, 0), (0, 0)] (
+                interpolation = "vertex"
+            )
+            uniform token subdivisionScheme = "none"
+        }
+    }
+}
+

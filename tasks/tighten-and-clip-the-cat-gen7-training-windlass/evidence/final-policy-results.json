@@ -1,0 +1,316 @@
+{
+  "kind": "Native PhysX simulation; no physical robot results",
+  "source_sha256": "3d854739b95447bc767734363821684491d98490f1e47caad0564e2c4889aa9a",
+  "runtime_files": {
+    "task.py": {
+      "sha256": "3d854739b95447bc767734363821684491d98490f1e47caad0564e2c4889aa9a",
+      "mtime_utc": "2026-11-24T07:00:57.822271+00:00"
+    },
+    "parts.py": {
+      "sha256": "d7d33d8456c2fdbe213f8642f3615bdbc0d36c6dfb3c81c6efb8db9ea88138a7",
+      "mtime_utc": "2026-11-24T03:12:45.650548+00:00"
+    },
+    "tilt.py": {
+      "sha256": "6b694076a64897421e76b4242d2c23ae030871ca5ba2e334b32fb32d099d8c2e",
+      "mtime_utc": "2026-11-22T12:44:04+00:00"
+    },
+    "lots.py": {
+      "sha256": "f2a660eddea564c7c9562864872c00cbaaa15874ec60e9345bd58eeb851bea77",
+      "mtime_utc": "2026-11-22T11:42:40+00:00"
+    },
+    "near_misses.py": {
+      "sha256": "22aab194a480965c48cefd151924071850da1db9744b9285ae8c174cf1948c4e",
+      "mtime_utc": "2026-11-24T03:56:55.700421+00:00"
+    },
+    "assets/dial.png": {
+      "sha256": "673de31ce6be024e4309cd579ed7f646135bd9510352d1368d8fb9b34e89d885",
+      "mtime_utc": "2026-11-22T12:19:25+00:00"
+    }
+  },
+  "max_steps": 2400,
+  "epochs": 2,
+  "control_hz": 20,
+  "object_jitter": 0,
+  "instruction": "Tighten the C-A-T trainer until its gauge is green, lock its rod in its attached clip, then move both hands clear.",
+  "runs": {
+    "demo": {
+      "run_id": "demo-20261124T072408",
+      "status": "success",
+      "results": {
+        "abstentions": {},
+        "errored_trials": 0,
+        "metrics": {
+          "task_score": 1.0
+        },
+        "total_scenes": 1,
+        "total_trials": 2
+      },
+      "eval_log_filename": "adhoc_cfae30f7.json",
+      "eval_log_sha256": "71ce6e151c5d8dfa7e57789bae49bba2fdf2fd6d8d772c9f2e30d6013a2c20bf",
+      "telemetry_raw_sha256": "4a819426855d5826a8eb396e05c5e0d29559cd9b1dc6f2a5e34632608affbc33",
+      "telemetry_csv_sha256": "5ef2c95127b0e8f950df124f7bff4c72e8a9fc5daad277705ea2eeb188d2c880",
+      "telemetry_csv": "final-demo-native-sim.csv",
+      "native_source_files_sha256": {
+        "task.py": "3d854739b95447bc767734363821684491d98490f1e47caad0564e2c4889aa9a",
+        "parts.py": "d7d33d8456c2fdbe213f8642f3615bdbc0d36c6dfb3c81c6efb8db9ea88138a7",
+        "tilt.py": "6b694076a64897421e76b4242d2c23ae030871ca5ba2e334b32fb32d099d8c2e",
+        "lots.py": "f2a660eddea564c7c9562864872c00cbaaa15874ec60e9345bd58eeb851bea77",
+        "near_misses.py": "22aab194a480965c48cefd151924071850da1db9744b9285ae8c174cf1948c4e",
+        "assets/dial.png": "673de31ce6be024e4309cd579ed7f646135bd9510352d1368d8fb9b34e89d885"
+      },
+      "source_verified_before_and_after": true,
+      "source_mtime_utc": "2026-11-24T07:00:57Z",
+      "behavior": {
+        "instruction": "Tighten the C-A-T trainer until its gauge is green, lock its rod in its attached clip, then move both hands clear.",
+        "termination_reasons": [
+          "success",
+          "success"
+        ],
+        "termination_details": [
+          null,
+          null
+        ],
+        "policy_transcripts": []
+      },
+      "trials": [
+        {
+          "trial": 0,
+          "rows": 1581,
+          "final": {
+            "trial": 0,
+            "time_s": 79.04999999999765,
+            "winding_deg": 269.38121286519885,
+            "tilt_deg": -20.99860221355365,
+            "pressure_proxy_mmhg": 269.5187211173769,
+            "left_rod_contact_n": 0.0,
+            "right_rod_contact_n": 0.0,
+            "hip_lip_normal_n": -3.6540709264535307,
+            "hip_base_normal_n": 3.707996516532577,
+            "hip_lip_friction_n": 0.3656075597507487,
+            "hip_base_friction_n": -0.20581797738455662,
+            "hip_complete_clip_reaction_n": 0.21371517244523816,
+            "rod_geometrically_seated": 1,
+            "knee_lip_normal_n": 0.0,
+            "hip_end_normal_m": 2.445901164581632e-07,
+            "hip_entry_peak_n": 8.001192284258426,
+            "hip_entry_passed": 1,
+            "hip_robot_left_contact_n": 0.0,
+            "hip_robot_right_contact_n": 0.0,
+            "lip_a_position_m": 0.0008642822504043579,
+            "lip_b_position_m": 4.358033302721137e-14,
+            "hip_contact_work_j": 0.014510938766676753,
+            "hip_advancing_contact_m": 0.00447485883879067,
+            "hip_seen_lips": 3,
+            "snap_verified": 1,
+            "released_hold_s": 0.9999999999999432,
+            "hip_mouth_mm": 10.864282250447937,
+            "sampled_clearance_m": 0.1350849688987572
+          },
+          "max_advancing_witness_n": 8.001192284258426,
+          "max_hold_s": 0.9999999999999432,
+          "max_winding_deg": 270.26919209881385,
+          "first_completed_entry_s": 67.89999999999829,
+          "first_closed_seating_s": 68.64999999999824,
+          "entry_normal_peak_through_closed_seat_n": 8.001192284258426,
+          "entry_complete_peak_n": 8.35880699489371,
+          "entry_direct_robot_clip_peak_n": 0.0,
+          "lot": "A",
+          "score": 1.0
+        },
+        {
+          "trial": 1,
+          "rows": 1581,
+          "final": {
+            "trial": 1,
+            "time_s": 79.04999999999765,
+            "winding_deg": 269.38083037460535,
+            "tilt_deg": -20.99860236017175,
+            "pressure_proxy_mmhg": 269.518423624693,
+            "left_rod_contact_n": 0.0,
+            "right_rod_contact_n": 0.0,
+            "hip_lip_normal_n": -4.610755109150863,
+            "hip_base_normal_n": 5.533579676519418,
+            "hip_lip_friction_n": -0.38683941928411913,
+            "hip_base_friction_n": -0.034770075714428916,
+            "hip_complete_clip_reaction_n": 0.5012150723700071,
+            "rod_geometrically_seated": 1,
+            "knee_lip_normal_n": 0.0,
+            "hip_end_normal_m": 2.4327563729262796e-07,
+            "hip_entry_peak_n": 8.560855591992956,
+            "hip_entry_passed": 1,
+            "hip_robot_left_contact_n": 0.0,
+            "hip_robot_right_contact_n": 0.0,
+            "lip_a_position_m": 0.000910795817617327,
+            "lip_b_position_m": 4.358054986764587e-14,
+            "hip_contact_work_j": 0.014275252537556803,
+            "hip_advancing_contact_m": 0.00407394006310969,
+            "hip_seen_lips": 3,
+            "snap_verified": 1,
+            "released_hold_s": 0.9999999999999432,
+            "hip_mouth_mm": 10.910795817660908,
+            "sampled_clearance_m": 0.13508500657197609
+          },
+          "max_advancing_witness_n": 8.560855591992956,
+          "max_hold_s": 0.9999999999999432,
+          "max_winding_deg": 270.675642995943,
+          "first_completed_entry_s": 67.99999999999828,
+          "first_closed_seating_s": 68.59999999999825,
+          "entry_normal_peak_through_closed_seat_n": 8.560855591992958,
+          "entry_complete_peak_n": 9.244892125477698,
+          "entry_direct_robot_clip_peak_n": 0.0,
+          "lot": "B",
+          "score": 1.0
+        }
+      ]
+    },
+    "dream": {
+      "run_id": "dream-20261124T073904",
+      "status": "success",
+      "results": {
+        "abstentions": {},
+        "errored_trials": 0,
+        "metrics": {
+          "task_score": 0.0
+        },
+        "total_scenes": 1,
+        "total_trials": 2
+      },
+      "eval_log_filename": "adhoc_12a04512.json",
+      "eval_log_sha256": "7471bdcd567b6d672f28dbf563c91eccca3665f6006196c08c459ca1e6d6c077",
+      "telemetry_raw_sha256": "189902fb018d289f27f349056fa1212f5e2e813699e7eac52644b57c92e51123",
+      "telemetry_csv_sha256": "19ccf3b7908c52b017eda5d6d01cb79d3c9db0921e15276e99fc05c8e5fcfc09",
+      "telemetry_csv": "final-dream-native-sim.csv",
+      "native_source_files_sha256": {
+        "task.py": "3d854739b95447bc767734363821684491d98490f1e47caad0564e2c4889aa9a",
+        "parts.py": "d7d33d8456c2fdbe213f8642f3615bdbc0d36c6dfb3c81c6efb8db9ea88138a7",
+        "tilt.py": "6b694076a64897421e76b4242d2c23ae030871ca5ba2e334b32fb32d099d8c2e",
+        "lots.py": "f2a660eddea564c7c9562864872c00cbaaa15874ec60e9345bd58eeb851bea77",
+        "near_misses.py": "22aab194a480965c48cefd151924071850da1db9744b9285ae8c174cf1948c4e",
+        "assets/dial.png": "673de31ce6be024e4309cd579ed7f646135bd9510352d1368d8fb9b34e89d885"
+      },
+      "source_verified_before_and_after": true,
+      "source_mtime_utc": "2026-11-24T07:00:57Z",
+      "behavior": {
+        "instruction": "Tighten the C-A-T trainer until its gauge is green, lock its rod in its attached clip, then move both hands clear.",
+        "termination_reasons": [
+          "max_steps",
+          "max_steps"
+        ],
+        "termination_details": [
+          null,
+          null
+        ],
+        "policy_transcripts": [
+          {
+            "model": "dreamlabs/dream-1-beta",
+            "control_hz": 20.0,
+            "dry_run": false,
+            "requests": 50,
+            "total_rows_beyond_limits": 966,
+            "request_attempts": [
+              1
+            ],
+            "tracking_error_rad": {
+              "max": 0.13228383755931708,
+              "mean": 0.01891584380087325
+            }
+          },
+          {
+            "model": "dreamlabs/dream-1-beta",
+            "control_hz": 20.0,
+            "dry_run": false,
+            "requests": 50,
+            "total_rows_beyond_limits": 788,
+            "request_attempts": [
+              1
+            ],
+            "tracking_error_rad": {
+              "max": 0.12136393577068816,
+              "mean": 0.01750529759716706
+            }
+          }
+        ]
+      },
+      "trials": [
+        {
+          "trial": 0,
+          "rows": 2400,
+          "final": {
+            "trial": 0,
+            "time_s": 119.99999999999532,
+            "winding_deg": -3.3375318116773603e-16,
+            "tilt_deg": 8.351166387142783e-07,
+            "pressure_proxy_mmhg": 60.0,
+            "left_rod_contact_n": 0.0,
+            "right_rod_contact_n": 0.0,
+            "hip_lip_normal_n": 0.0,
+            "hip_base_normal_n": 0.0,
+            "hip_lip_friction_n": 0.0,
+            "hip_base_friction_n": 0.0,
+            "hip_complete_clip_reaction_n": 0.0,
+            "rod_geometrically_seated": 0,
+            "knee_lip_normal_n": 0.0,
+            "hip_end_normal_m": 2.091683954400524e-09,
+            "hip_entry_peak_n": 0.0,
+            "hip_entry_passed": 0,
+            "hip_robot_left_contact_n": 0.0,
+            "hip_robot_right_contact_n": 0.0,
+            "lip_a_position_m": 6.607680304608274e-14,
+            "lip_b_position_m": 4.358017378501729e-14,
+            "hip_contact_work_j": 0.0,
+            "hip_advancing_contact_m": 0.0,
+            "hip_seen_lips": 0,
+            "snap_verified": 0,
+            "released_hold_s": 0.0,
+            "hip_mouth_mm": 10.000000000109658,
+            "sampled_clearance_m": 0.0
+          },
+          "max_advancing_witness_n": 0.0,
+          "max_hold_s": 0.0,
+          "max_winding_deg": 3.2105684122917517,
+          "lot": "A",
+          "score": 0.0
+        },
+        {
+          "trial": 1,
+          "rows": 2400,
+          "final": {
+            "trial": 1,
+            "time_s": 119.99999999999532,
+            "winding_deg": -1.061802437792142e-09,
+            "tilt_deg": 8.351166387142783e-07,
+            "pressure_proxy_mmhg": 60.00000000082585,
+            "left_rod_contact_n": 0.0,
+            "right_rod_contact_n": 0.0,
+            "hip_lip_normal_n": 0.0,
+            "hip_base_normal_n": 0.0,
+            "hip_lip_friction_n": 0.0,
+            "hip_base_friction_n": 0.0,
+            "hip_complete_clip_reaction_n": 0.0,
+            "rod_geometrically_seated": 0,
+            "knee_lip_normal_n": 0.0,
+            "hip_end_normal_m": 2.091683954400524e-09,
+            "hip_entry_peak_n": 0.0,
+            "hip_entry_passed": 0,
+            "hip_robot_left_contact_n": 0.0,
+            "hip_robot_right_contact_n": 0.0,
+            "lip_a_position_m": 6.607680982234632e-14,
+            "lip_b_position_m": 4.3580349967870316e-14,
+            "hip_contact_work_j": 0.0,
+            "hip_advancing_contact_m": 0.0,
+            "hip_seen_lips": 0,
+            "snap_verified": 0,
+            "released_hold_s": 0.0,
+            "hip_mouth_mm": 10.000000000109658,
+            "sampled_clearance_m": 0.0
+          },
+          "max_advancing_witness_n": 0.0,
+          "max_hold_s": 0.0,
+          "max_winding_deg": 1.629525614727309,
+          "lot": "B",
+          "score": 0.0
+        }
+      ]
+    }
+  }
+}

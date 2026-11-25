@@ -1,0 +1,107 @@
+# Set a probe positioner on a probe station: slide it to the die, hold it as its magnet locks, trim its tip by knob
+
+A loose MP40-class probe positioner stands on the steel platen of a TS150-class wafer probe station (MPI TS150: https://www.epfl.ch/research/facilities/cmi/wp-content/uploads/2021/05/MPI-TS150-Manual-Probe-System-Data-Sheet.pdf), its magnet lever OFF. The right gripper slides its base along the platen until its needle points at the marked die, lets go and presses the base down by its top while the left pushes the magnet lever to ON and then turns the X knob; the left then presses the top while the right turns the Y knob, until the tip is over the mark, 2 mm short of the other positioner's tip.
+
+## Run
+
+From this folder, on a GPU host (not the Mac):
+
+```
+python demokit.py task.py OUT                      # final film, 640 x 360, GPU to yourself
+python demokit.py task.py OUT --no-record --mode full,none,one_hand,unheld,no_trim,touch
+```
+
+The harness's instruction (Dream-1 run): `--instruction "Set the loose probe positioner up on the marked die. Its magnet is off. Slide it along the platen until its needle points at the die with the tip near the mark, never touching the other needle, the wafer or the microscope. Keep it from shifting while you push its magnet lever to ON. Then turn its X and Y knobs to bring the tip over the mark, short of the other probe's tip. Let go."`
+
+`PP_DX` (default 0.06 m) sets the whole station that far out in x, so both wrists stay inside their joint limits.
+`PP_LEVER_N` (default 3) sets the lever's resistance at its knob in newtons; `PP_LEVER_N=2.7 python demokit.py task.py OUT --no-record --mode full` and `PP_LEVER_N=4 ...` run the two ends of the accepted window (1.0 each). `PP_MU` (default 0.3) sets the base's friction on the platen, and `PP_MAGNET_N` (default 343) the magnet's pull at ON. Every run listed below sets only these three (and `PP_DX` stays at its default); the press tilt, press offset, knob-turn cap and pre-roll (`PP_LPT`, `PP_LPX`, `PP_KIT`, `PP_PRE`, `PP_YFLIP`) were at their defaults in every run, the demo included.
+
+## Scoring, and the routes that score less
+
+Read at the end from the station: the tip against the mark in plan, the lever, the tip's shift across the lever's throw, and every fingertip against the needles, wafer and lens. A person reads the 0.3 mm trim through the station's microscope reticle or a printed scale. Tiers are in `task.json`: 0.5 needs the tip within 4 mm of the mark when the lever latches; 0.75 needs the knobs turned at least 90 degrees in all after the latch and the base moved under 0.5 mm since it.
+
+| Mode | What it does | Score (GPU) |
+|---|---|---|
+| full | right slides the base by its tip's reading, then presses its top; left throws the lever, stopping at ON, and turns the X knob; left presses while right turns the Y knob; part turns, the tip read after each | 1.0 |
+| none | nothing | 0 |
+| one_hand | left alone throws the lever, base unslid and unheld | 0 |
+| unheld | base slid to the die, let go, lever pushed with nobody pressing the base: the push shoves the base about 70 mm and the lever never latches | 0 |
+| no_trim | slide, press and clamp, knobs untouched, then let go: the tip ends 4.9 mm off the mark, short of every tier | 0 |
+| touch | the whole act, then the right hand's fingers go in over the needle and meet the microscope lens (a fingertip within 4 mm of the lens, 6 mm of a needle, or low over the wafer) | 0 |
+
+## Scores
+
+Demo: 1.0, success at step 2,327 of 3,000, the same on an RTX 4070 Ti SUPER and an RTX 3090 Ti. Range ends, each 1.0 (RTX 3090 Ti or RTX 4070 Ti SUPER): lever 2.7 N at step 2,479, 3.3 N at 2,169 and 4 N at 1,258 (5 N and 6 N: 0); friction 0.25 at 2,470, 0.4 at 2,239 and 0.5 at 2,044; magnet 200 N at 2,171 and 686 N at 2,936. Corners of the lever and friction windows, each 1.0: friction 0.25 with the lever at 3.3 N (step 2,478) and friction 0.5 with the lever at 2.7 N (step 1,977); the 4 N lever was run at friction 0.3 only. The unheld route at 4 N scores 0 (the base is shoved about 70 mm, the lever never latches). At friction 0.178 the score is 0 (the press slides the base) and at 0.64 it is 0.5 (the base drifts 1.3 mm). Dream-1 run (one session, 3,000 steps, 16 rows per request, RTX 4070 Ti SUPER): 0.0.
+
+## Real items
+
+- Probe station: MPI Corporation TS150 manual probe system. The scene follows its steel platen (about 330 x 235 mm, R125 opening), its chuck holding a 150 mm wafer, 28 mm below the platen top, and its bridge microscope. Data sheet: https://www.epfl.ch/research/facilities/cmi/wp-content/uploads/2021/05/MPI-TS150-Manual-Probe-System-Data-Sheet.pdf
+- Probe positioner: MPI Corporation MP40 manual micropositioner, 65 x 40 mm magnetic base with a side ON/OFF lever, 13 mm travel on micrometer knobs. Product page: https://www.electrorent.com/products/lcr--impedance-analyzers/semiconductor-test-equipment/mpi/mp40/01t1O000004TcjHQAS
+
+## Real trial
+
+The bench stand-in for the probe station is built from stock parts. Prices are list prices in USD, seen 22 Nov 2026, before tax and shipping.
+
+| Item | Part and source | Price | What it stands for in the scene |
+|---|---|---|---|
+| Platen | 1/2 x 2 in A36 hot-rolled steel flat bar, 24 in, Speedy Metals item 4085, cut into two 235 mm pieces: https://www.speedymetals.com/p-4085-12-x-2-a-36-1020-hot-rolled-steel.aspx | 12.47 | The platen's steel near and far ends. Its 25 cm opening is wider than the 23.5 cm platen, so the steel the positioners stand on is two end pieces. Each bar's inner edge lies on the opening's edge at the centre line (x 29.5 cm near, 54.5 cm far), top 12 cm above the bench; 12.7 mm thick (scene 12 mm), each running 1 cm past the platen's outer edge. |
+| Chuck, risers, posts, needle arms | Printed in PLA from the file below, about 0.6 kg of filament | about 15 (estimate) | The 160 mm chuck, its top 28 mm below the platen top; four risers under the bar ends; the bridge posts; each needle's 10 x 10 mm arm. |
+| Die target | The wafer printed on paper at 100 % (150 mm circle, 10 mm die grid, 1 mm cross at its centre), glued on the chuck top | under 1 | The wafer and the die mark. |
+| Positioner 2 (the one the robot sets) | Used lever-type manual probe positioner: a switchable magnetic base with a 70-degree ON/OFF lever and X, Y, Z micrometers, for example a Signatone S-926 with magnetic base (https://www.ebay.com/itm/156616072025, 199.99); choose a listing whose photos show the lever. A unit with a turned-handle or detent magnet switch is outside the lever window below: reject it, or fit nothing to it. | 199.99 used | The MP40-class positioner: the base slid on the steel, the lever thrown while the base is held, the X and Y micrometers turned. Mount the base with its lever on the +y side, as the scene's lever. |
+| Positioner 1 (fixed) | A first4magnets 19206 switchable base (https://www.first4magnets.com/us/product/63-x-50-x-55mm-high-switchable-magnetic-base-with-m8-mounting-hole-70kg-pull-19206) with a printed needle post, switched ON on the far bar | 29.37 | The clamped far positioner, its tip 2 mm past the mark. |
+| Needles | Two single ultrafine tungsten manipulator probes, 0.52 mm (0.020 in) shaft, 25 mm long, Ted Pella catalog 13570 (reseller page: https://www.fishersci.com/shop/products/ultrafine-tngstn-manpltr-probe/NC3238580), 22.60 each at the maker's list (the 13570-10 replacement probe is listed at 16.50; check the live page) | 45.20 | The two 0.51 mm needles. Each is glued into the end of a printed arm (next row) with its tip 144 mm ahead of the arm's base end. |
+| Microscope stand-in | A 2 MP USB digital microscope, 40x to 1000x, with its own stand (a Jiusion 40-1000x listing: https://www.ebay.com/itm/155431593074); any 2 MP unit works | 27.50 | The microscope: its tube held under a 45 cm wooden beam on the two printed posts at y +/-20 cm, its lens about 4 cm above the target. Move it up or down until the frame is about 12 mm wide (the 1 mm cross, both tips and a printed 1 mm scale in one frame): 1,920 pixels over 12 mm is 0.006 mm a pixel, so 0.3 mm and 4 mm both read in one frame. |
+| Whole-trial camera | A phone on a tripod or a clamp stand (the phone is owned; stand about 10), 1.2 m above the bench, the whole platen, both positioners and both hands in frame, 30 frames per second or more, sound on, a 30 cm ruler lying on the bench in view | about 10 | The record of the whole trial: the slide, the 6.5 cm trim, every hand's clearance (the 3 cm ruler laid on the bar), any fingertip on a needle, the paper or the lens, and the continuity beep. The 12 mm microscope frame cannot show these. |
+| Measuring tools, not part of the rig | Two 0.01 mm dial indicators on magnetic bases (about 20 each), against positioner 2's -x and -y faces; a 0-50 N push-pull gauge (about 30); a phone level app on the base's top; a multimeter's continuity beep on each needle against a foil strip on the target (about 20) | about 90 (estimates) | The base's drift since the latch (under 0.5 mm), the lever's and knob's force, its tilt (under 2 degrees) and any needle touch. |
+
+Total: about USD 340 for the rig (199.99 + 29.37 + 12.47 + 15 + 1 + 45.20 + 27.50 + 10), plus about USD 90 of measuring tools (the last row; estimates).
+
+Differences from the scene, each one making the real act no easier: a used positioner's base is heavier than the scene's 0.6 kg, so the slide pushes more mass; its micrometer head may move 0.5 mm a turn (scene 0.3 mm), so the 0.3 mm trim needs finer part turns; its lever may be shorter than the scene's, and the hold-while-switching step is the same. The tip's shift across the throw is read on the microscope image before and after the throw. Look at each tip on the microscope before a trial and replace a bent tip. Fitting the needle: the printed arm is bolted to the positioner's Z block (or its own probe arm is removed and this one bolted in its place) and the glued needle's tip is set 144 mm ahead of the base's centre, measured with a ruler along the base's x axis; a unit whose arm cannot be set to that reach is moved so the tip still lands 6.5 cm off the cross.
+
+### Bench layout, reset, one trial, hand scoring
+
+Positions in cm from a datum on the bench, x along the platen, y across, as in the scene (mark at x 42, y 0).
+
+- **Layout.** The two bars lie on four printed risers so the bar tops stand 12 cm above the bench; the chuck stands between them on its own printed column, its top 28 mm below the bar tops, the paper die target on it, the cross at (42, 0). Positioner 1 (a 19206 base, ON) stands on the far bar with its needle pointing -x, its tip 2 mm past the cross and 1 mm above the paper. Positioner 2 stands on the near bar at (27.6, 6.5), lever OFF, stages at mid-travel, its needle pointing +x with the tip 1 mm above the paper, 6.5 cm to the side of the cross. The microscope on the bridge looks straight down at the cross; the phone camera stands over the bench. Two dial indicators sit on magnetic bases on the bar, one against positioner 2's -x face and one against its -y face, each at least 20 mm clear of the knob axes; they are placed and zeroed after the latch (not before, so the slide and the lever cannot knock them) and read at the end. The phone level lies on the base's top. Positioner 1 has no indicator: its tip is read on the microscope.
+- **Reset.** Switch the lever OFF; set both micrometers to mid-travel; put positioner 2 back at (27.6, 6.5) with its tip 6.5 cm off the line (a printed stop block clamped to the bar marks the start); inspect each needle on the microscope and swap a bent tip; wipe the bar of filings.
+- **One trial.** (1) Slide the base along the bar until the needle points at the cross (heading within 5 degrees) with the tip within 4 mm of it, never touching the other needle, the paper or the microscope; let go. (2) Press the base's top down with one hand and throw the lever to ON with the other, gently. (3) Turn the X and Y micrometers, reading the microscope after each part turn, until the tip is over the cross; the other tip is 2 mm away. (4) Take both hands clear and hold still for 1 s.
+- **Hand scoring.** 0.25: the phone level reads under 2 degrees and an overhead photo of the base, with a protractor laid over it, shows the needle's line within 5 degrees of the line to the cross; the tip is within 4 mm of the cross on the microscope's printed scale. 0.5: the lever's ON position reads on the handle's mark, the tip is within 4 mm of the cross at the latch, and the tip's position on the microscope frame before and after the throw differs by under 0.5 mm. 0.75: the tip is within 0.3 mm of the cross on the printed scale; the micrometers have turned at least 90 degrees in all since the latch (count the divisions); neither dial indicator moved more than 0.5 mm since the latch. 1.0: the phone view shows every hand 3 cm clear of positioner 2 and its needle (a 3 cm ruler laid on the bar at the end), all still for 1 s, and positioner 1's tip on the microscope within 1 mm of where it stood at the start. 0: a continuity beep between the needle and the other needle, between a needle and the foil strip under it, or between a needle and a foil ring round the microscope lens, or a fingertip on a needle, the paper or the lens. The scene tests contact with its own margins (a fingertip within 6 mm of a needle, 4 mm of the lens, a needle's centre line within 0.6 mm of the other's): they stand in for the beep and belong to the sim only. The phone records the whole trial at 30 frames per second or more with sound on (the beep is on the record) and the ruler in view, to settle any call; the microscope image is recorded too.
+- **Forces, and the window the real trial accepts.** Base friction on the bar, with the lever OFF, by tilt: rest the base on one bar with its 65 mm side facing down the slope, tilt the bar slowly about the x axis (lift one long edge) and read the angle at which the base starts to slide (phone level app); if the base rocks or tips instead of sliding, stop and read again with the base re-seated; friction = tan(angle). Accepted 14 to 26.5 degrees (friction 0.25 to 0.5), the band run to 1.0 for levers up to 3.3 N; a lever reading above 3.3 N (up to 4 N) is accepted only on a bar reading 16.7 degrees or more (friction 0.3 or more), because 4 N was run at friction 0.3 only; the scene uses 0.3. No source gives this pad on this bar: Engineering Toolbox gives 0.178 (greased) to 0.64 (clean, dry) for nickel on mild steel. Over 26.5 degrees, wipe the bar with a drop of light machine oil and dry it with a cloth; under 14 degrees, clean it with isopropyl alcohol; then read again. The lever's force at its knob: push it with a force gauge (a 0-50 N push-pull gauge, about USD 30) and read the peak across the throw; accepted 2.7 to 4 N (3.3 N at most on a bar under 16.7 degrees). No maker publishes this force: neither the 19206 base's listing nor the used positioners' listings give a lever force, so the real trial measures it and rejects a unit outside the window. MIL-STD-1472H, 5.1.4.2.1.1.6 and figure 14, gives 2.8 N (10 oz) to 11 N (40 oz) for a single-finger push button, taken here by analogy for a finger-thrown lever; the window sits at the low end of that band. The scene's lever takes 3 N (estimate) and the act was run to 1.0 at 2.7, 3, 3.3 and 4 N; at 5 N and at 6 N it scores 0 (the left hand's throw does not reach ON before the base slides), so a stiffer lever is outside the task. Set-up check before the first trial: read the lever at its knob with the gauge; a unit that reads outside 2.7 to 4 N is rejected, and so is a unit whose magnet switch is a detent or a turned handle rather than a lever; choose another used lever-type positioner. Knob drag (0.02 N m in the scene, an estimate that was not ranged): wind a string round one 16 mm thimble and pull it with the push-pull gauge; 0.02 N m is about 2.5 N at the 8 mm radius; a unit whose knobs need clearly more than that is also outside what was run. Then check that the clamp holds (the ON side-pull check below). The magnet's hold: the 19206's 70 kg (686 N) is the maker's pull-off rating straight off thick steel; the scene takes half, 343 N, for the 12.7 mm bar, so with the lever ON the base resists sliding with friction x (343 N + its weight), about 105 N at the scene's friction 0.3. On the bench, with the lever ON, pull the base sideways at its needle arm with the push-pull gauge: accepted if it does not slide at 50 N, the gauge's full scale. A stiffer lever or a slippery bar asks for a firmer hold on the base, which is the skill the act tests.
+
+Print file (OpenSCAD, millimetres; print the chuck hollow with 3 walls and 10 % infill):
+
+```
+cylinder(d = 160, h = 92, $fn = 180);                          // chuck: top 92 mm up, 28 mm below the platen top
+for (i = [0:3]) translate([i * 60 + 200, 0, 0]) cube([50, 40, 107.3]);   // risers: bar top at 120 mm
+for (i = [0:1]) translate([i * 30 + 200, 60, 0]) cube([20, 20, 180]);    // bridge posts, beam on top
+translate([0, 100, 0]) difference() {                          // needle arm: 10 x 10 mm, tip 144 mm ahead of the base centre
+    cube([120, 10, 10]);
+    translate([115, 5, -1]) cylinder(d = 0.7, h = 12, $fn = 24);
+}
+```
+
+## What is code, and what is an estimate
+
+- Held by the magnet: a 343 N downward pull on the base once the lever passes 62 degrees. The rig's first4magnets 19206 base is rated 70 kg (686 N) pull-off on thick steel (maker's page, https://www.first4magnets.com/us/product/63-x-50-x-55mm-high-switchable-magnetic-base-with-m8-mounting-hole-70kg-pull-19206), taken at half for the 12.7 mm bar; runs pass at 200 N (friction 0.3 only) and 686 N (`PP_MAGNET_N`); the side-pull check at 50 N on the bench bounds the low-friction case, and a unit that slides under it is rejected.
+- Base friction on the platen, 0.3 in the scene (estimate; `PP_MU`). Runs at 3 N score 1.0 at 0.25, 0.3, 0.4 and 0.5 (and 0.25 at 3.3 N, 0.5 at 2.7 N; 4 N was run at 0.3 only, so the real trial accepts 4 N only at friction 0.3 or more); at 0.178 the press slides the loose base 23.7 mm before the magnet is on (0), and at 0.64 the base drifts 1.3 mm during the trim (0.5). The real trial sets the bar to 0.25 to 0.5 by tilt (Real trial, Forces); Engineering Toolbox gives 0.178 (greased) to 0.64 (clean, dry) for nickel on mild steel. The scorer reads the tip's shift, the base's drift and the knob turns, never the friction.
+- The lever's 3 N at its knob is an estimate by analogy: MIL-STD-1472H (figure 14) gives 2.8 to 11 N for a single-finger push button; no maker publishes the lever force, so the real trial measures it on a force gauge and accepts 2.7 to 4 N (4 N only at friction 0.3 or more) (Real trial, Forces), the range run to 1.0; 5 N and 6 N score 0. The 0.5 mm throw-shift tier is set by the task, not a maker (no maker publishes a lock shift): a pressed base shifts the tip 0.05 mm at 3 N, while an unheld throw shoves the base about 70 mm and never latches; the shift is read on the microscope against the printed 1 mm scale. The lever swing (70 degrees), the knob drag (0.02 N m), the base and needle masses, the 100 mm base height, the 14.4 cm needle reach and friction 0.3 are estimates.
+- Each stage is a sprung slide that code drives from its knob's angle: 0.3 mm of tip travel a turn (MP40 screw resolution 300 um; estimate).
+- Needle collider 1.2 mm across (real 0.51 mm), which makes the act harder: the simulated needle is wider than the real one, so a graze that a real needle clears counts as contact in the scene. The scorer reads needle contact from the centre lines, under 0.6 mm apart (real needle 0.51 mm). The 3 cm fingertip clearance and the 0.6 mm needle-contact distance are sim-only margins; on the bench a touch is read by continuity and video.
+- The demo reads positioner 2's pose and joints, as the microscope view would. It slides on the needle tip's reading, and turns each knob in part turns of 150 degrees (the wrist's reach) until the tip is within 0.1 mm.
+
+## Sources
+
+- MPI TS150 manual (EPFL CMI, 2024): https://www.epfl.ch/research/facilities/cmi/wp-content/uploads/2024/11/MPI_TS150_manual_2024.pdf
+- MPI TS150 datasheet, about 330 x 235 mm platen, R125 opening, chuck top 28 mm below the platen top: https://www.epfl.ch/research/facilities/cmi/wp-content/uploads/2021/05/MPI-TS150-Manual-Probe-System-Data-Sheet.pdf
+- Friction coefficients, nickel on mild steel 0.178 to 0.64: https://www.engineeringtoolbox.com/friction-coefficients-d_778.html
+- MIL-STD-1472H, 5.1.4.2.1.1.6 and figure 14, push button resistance, single finger 2.8 N (10 oz) to 11 N (40 oz): https://everyspec.com/MIL-STD/MIL-STD-1400-1499/MIL-STD-1472H_57041/
+- MIT MTL IV-probe SOP (flip the magnetize lever, tips '2-3 mm apart'): https://mtlsites.mit.edu/fabrication/sops/IV-probe.pdf
+- MPI MP40 positioner, 65 x 40 mm, 13 mm travel, magnetic mount: https://www.electrorent.com/products/lcr--impedance-analyzers/semiconductor-test-equipment/mpi/mp40/01t1O000004TcjHQAS
+- Tungsten probe tips 0.020 in: https://etesters.com/product/656FD3EF-39FC-4CAC-8FCC-C7DEB4B80E36/solid-tungsten-probe-tips
+- All meshes are built in `task.py` from boxes, cylinders and tubes; no third-party meshes.
+
+MPI, TS150 and MP40 are trademarks of MPI Corporation. Signatone is a trademark of Signatone. They are named only to say what the modelled sizes follow; this task is not endorsed by or affiliated with the makers.
+
+## Licence
+
+MIT

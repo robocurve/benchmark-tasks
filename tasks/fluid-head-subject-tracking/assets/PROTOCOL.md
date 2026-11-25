@@ -1,0 +1,13 @@
+# Pan a tripod camera to follow a moving subject
+
+Mount a Logitech MX Brio 4K (960-001542) on a SmallRig CH10 3259B using the stock 1/4-20 quick-release plate. Remove the webcam's monitor clip to expose its tripod thread. Logitech lists the camera at US$199.99. Connect it to a computer over USB 3 and leave a slack loop of cable near the pan axis. Set the lens centre 63 mm forward of the pan axis and 74 mm above it by sliding the quick-release plate and adding a standard threaded camera riser if needed. A Sony ZV-1 on the same plate also works. Level the tripod, lock tilt and leave pan unlocked.
+
+Record one continuous 16:9 clip. On the MX Brio, select its 65-degree diagonal setting and capture 3840 × 2160 at 30 frames per second. Use a fixed, centered crop of about 2112 × 1188 pixels as the starting point. Check the cropped horizontal field with a ruler placed 500 mm in front of the lens and perpendicular to its axis. Adjust the crop to show 306 mm across the frame, equivalent to a 34-degree horizontal field of view. Keep the crop fixed throughout the recording. Set any automatic reframing off. Use the same field of view on the Sony.
+
+Use a motorized tabletop camera slider to move a 58 by 104 mm orange card between the specified positions in eight seconds. Set the card square to the bench and place its centre at lens height. Let the slider ease in and out at the ends, then stop. Start the camera at the first position with the target centred. Use a level horizontal wall line or spirit-level reference in the shot.
+
+Review the eight seconds from the start mark through the end mark. Award half credit when all of the orange card is visible for at least four seconds. Award full credit when its complete outline stays within the central half of the frame width and the horizon is within two degrees of level for at least 90 percent of that interval. A shifted tripod beyond 4 mm or an altered slider path beyond 18 mm makes the trial zero.
+
+In the four-view videos, the upper left shows the station, the upper right shows the native recording from the mounted camera, and the underside shows the two arm views. The lens is simulated as a pinhole. Pan drag is nominal.
+
+[SmallRig CH10 3259B manual](https://static.smallrig.com/mall/img/public/1729047357672_.pdf) · [Logitech MX Brio price and recording specs](https://www.logitech.com/en-us/shop/p/mx-brio-4k-webcam.960-001542) · [Tripod mount and field-of-view settings](https://www.bhphotovideo.com/c/product/1835811-REG/logitech_960_001558_mx_brio_4k_webcam.html) · [Sony ZV-1 specifications](https://www.sony.com/electronics/support/compact-cameras-zv-series/zv-1/specifications)

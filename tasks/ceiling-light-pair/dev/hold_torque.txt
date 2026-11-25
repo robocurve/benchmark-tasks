@@ -1,0 +1,70 @@
+# Static joint torques in the task's poses (N m), held indefinitely; ratio = |torque| / rated (9 N m J1-J3, 3 N m J4-J6)
+
+Load: vertical force on the hand, N (+ up). -9.1 N = a quarter of the light's 3.7 kg (each of the four hands); -18.1 N = half of it (one hand carrying its whole end, a bound). The arm's own weight is always included.
+
+| Pose (station frame) | Load N | J1 | J2 | J3 | J4 | J5 | J6 | max ratio |
+|---|---|---|---|---|---|---|---|---|
+| pinch, left arm: A on stands (x 0.140, back -30 mm) | -9.1 | 0.00 | 2.50 | 5.83 | 0.23 | 1.68 | 0.00 | 0.65 (J3) |
+| pinch, left arm: A on stands (x 0.140, back -30 mm) | -18.1 | 0.00 | 3.66 | 7.72 | 0.21 | 2.94 | 0.00 | 0.98 (J5) |
+| pinch, right arm: A on stands (x 0.140, back -30 mm) | -9.1 | 0.00 | 2.50 | 5.83 | 0.23 | 1.68 | 0.00 | 0.65 (J3) |
+| pinch, right arm: A on stands (x 0.140, back -30 mm) | -18.1 | 0.00 | 3.66 | 7.72 | 0.21 | 2.94 | 0.00 | 0.98 (J5) |
+| pinch, left arm: B on stands (x 0.110, back -30 mm) | -9.1 | 0.00 | 2.63 | 5.09 | 1.04 | 1.59 | 0.00 | 0.57 (J3) |
+| pinch, left arm: B on stands (x 0.110, back -30 mm) | -18.1 | 0.00 | 3.56 | 6.56 | 1.46 | 2.78 | 0.00 | 0.93 (J5) |
+| pinch, right arm: B on stands (x 0.110, back -30 mm) | -9.1 | 0.00 | 2.63 | 5.08 | 1.04 | 1.59 | 0.00 | 0.56 (J3) |
+| pinch, right arm: B on stands (x 0.110, back -30 mm) | -18.1 | 0.00 | 3.56 | 6.56 | 1.47 | 2.78 | 0.00 | 0.93 (J5) |
+| pinch, left arm: A lifted (x 0.140, back -18 mm) | -9.1 | 0.00 | 2.58 | 5.60 | 0.23 | 1.68 | 0.00 | 0.62 (J3) |
+| pinch, left arm: A lifted (x 0.140, back -18 mm) | -18.1 | 0.00 | 3.73 | 7.43 | 0.22 | 2.94 | 0.00 | 0.98 (J5) |
+| pinch, right arm: A lifted (x 0.140, back -18 mm) | -9.1 | 0.00 | 2.57 | 5.60 | 0.23 | 1.68 | 0.00 | 0.62 (J3) |
+| pinch, right arm: A lifted (x 0.140, back -18 mm) | -18.1 | 0.00 | 3.73 | 7.43 | 0.22 | 2.94 | 0.00 | 0.98 (J5) |
+| pinch, left arm: A raised (x 0.135, back -2 mm) | -9.1 | 0.00 | 2.69 | 5.14 | 0.37 | 1.68 | 0.00 | 0.57 (J3) |
+| pinch, left arm: A raised (x 0.135, back -2 mm) | -18.1 | 0.00 | 3.80 | 6.80 | 0.43 | 2.94 | 0.00 | 0.98 (J5) |
+| pinch, right arm: A raised (x 0.135, back -2 mm) | -9.1 | 0.00 | 2.69 | 5.14 | 0.38 | 1.68 | 0.00 | 0.57 (J3) |
+| pinch, right arm: A raised (x 0.135, back -2 mm) | -18.1 | 0.00 | 3.80 | 6.80 | 0.44 | 2.94 | 0.00 | 0.98 (J5) |
+| pinch, left arm: B raised (x 0.115, back -2 mm) | -9.1 | 0.00 | 2.78 | 4.63 | 0.91 | 1.62 | 0.00 | 0.54 (J5) |
+| pinch, left arm: B raised (x 0.115, back -2 mm) | -18.1 | 0.00 | 3.74 | 6.01 | 1.27 | 2.83 | 0.00 | 0.94 (J5) |
+| pinch, right arm: B raised (x 0.115, back -2 mm) | -9.1 | 0.00 | 2.78 | 4.63 | 0.92 | 1.62 | 0.00 | 0.54 (J5) |
+| pinch, right arm: B raised (x 0.115, back -2 mm) | -18.1 | 0.00 | 3.74 | 6.00 | 1.27 | 2.83 | 0.00 | 0.94 (J5) |
+| pinch, left arm: both after the slide (x 0.125, back -2 mm) | -9.1 | 0.00 | 2.72 | 4.89 | 0.65 | 1.66 | 0.00 | 0.55 (J5) |
+| pinch, left arm: both after the slide (x 0.125, back -2 mm) | -18.1 | 0.00 | 3.75 | 6.41 | 0.86 | 2.90 | 0.00 | 0.97 (J5) |
+| pinch, right arm: both after the slide (x 0.125, back -2 mm) | -9.1 | 0.00 | 2.72 | 4.89 | 0.65 | 1.66 | 0.00 | 0.55 (J5) |
+| pinch, right arm: both after the slide (x 0.125, back -2 mm) | -18.1 | 0.00 | 3.75 | 6.40 | 0.86 | 2.90 | 0.00 | 0.97 (J5) |
+| pinch, left arm: both lowered (x 0.125, back -11 mm) | -9.1 | 0.00 | 2.65 | 5.09 | 0.65 | 1.66 | 0.00 | 0.57 (J3) |
+| pinch, left arm: both lowered (x 0.125, back -11 mm) | -18.1 | 0.00 | 3.69 | 6.66 | 0.86 | 2.90 | 0.00 | 0.97 (J5) |
+| pinch, right arm: both lowered (x 0.125, back -11 mm) | -9.1 | 0.00 | 2.65 | 5.08 | 0.65 | 1.66 | 0.00 | 0.56 (J3) |
+| pinch, right arm: both lowered (x 0.125, back -11 mm) | -18.1 | 0.00 | 3.69 | 6.66 | 0.86 | 2.90 | 0.00 | 0.97 (J5) |
+| screwdriver: taking it off its holder | -3.0 | 0.00 | 2.54 | 6.08 | 1.75 | 0.00 | 0.00 | 0.68 (J3) |
+| screwdriver: under the head | -3.0 | 0.00 | 4.10 | 5.79 | 1.65 | 0.00 | 0.00 | 0.64 (J3) |
+| screwdriver: pushing the head, as set | -3.0 | 0.00 | 4.44 | 4.99 | 1.65 | 0.00 | 0.00 | 0.55 (J3) |
+| screwdriver: pushing the head, as set | +7.0 | 0.00 | 1.77 | 2.16 | 0.30 | 0.00 | 0.00 | 0.24 (J3) |
+| screwdriver: pushing the head, tight | -3.0 | 0.00 | 4.56 | 4.71 | 1.65 | 0.00 | 0.00 | 0.55 (J4) |
+| screwdriver: pushing the head, tight | +7.0 | 0.00 | 1.89 | 2.00 | 0.30 | 0.00 | 0.00 | 0.22 (J3) |
+| screwdriver: held beside the light at the end | -3.0 | 0.00 | 0.29 | 3.82 | 1.41 | 0.00 | 0.00 | 0.47 (J4) |
+
+Worst pinch pose at 9.1 N: pinch, left arm: A on stands (x 0.140, back -30 mm), 0.65 of rated.
+
+## One station alone
+
+- A's left shoulder (J2) to the nearer of B's two screws: 1262 mm (YAM reach 750 mm).
+- A's right shoulder (J2) to the nearer of B's two screws: 1250 mm (YAM reach 750 mm).
+- A's left hand pinches its wall at most 480 mm from A's arms (light on its stands); the light's centre of mass is 669 mm away. Carrying half the light there: |torque| J1 0.0, J2 17.2, J3 10.3, J4 4.5, J5 0.7, J6 0.0 N m (max 1.91 of rated).
+- A's right hand pinches its wall at most 480 mm from A's arms (light on its stands); the light's centre of mass is 669 mm away. Carrying half the light there: |torque| J1 0.0, J2 17.2, J3 10.2, J4 4.5, J5 0.7, J6 0.0 N m (max 1.91 of rated).
+- To lift the whole light flat from there, A's two pinches would also have to hold 36.3 N x 189 mm = 6.9 N m of pitch between their pads (each pad pair grips about 20 mm of wall height), on top of the arms' torques above.
+
+## What one hand can carry, against reach
+
+The demo's pinch on the left long wall (light lifted, back 18 mm under the ceiling), moved along x; the largest vertical load on the hand with every joint within 70 % of rated (the arm's own weight included).
+
+| x in front of the base, mm | load within 70 % of rated, N | limiting joint |
+|---|---|---|
+| 100 | 13.5 | J5 |
+| 150 | 11.0 | J3 |
+| 200 | 7.2 | J3 |
+| 250 | 5.8 | J3 |
+| 300 | 4.8 | J3 |
+| 350 | 4.2 | J3 |
+| 400 | 0.8 | J2 |
+| 450 | 0.0 | J2 |
+
+## The bare arm
+
+- With no load, the arm's own weight needs at most 15.3 N m at J2 (1.70 of rated), stretched out level in front of it (q = [0.0, 3.15, 2.89, 0.0, 0.0, 0.0], the tool point 772 mm in front of the base, 44 mm above it); a policy that holds an arm out like that loads J2 past its rating with no task load at all.

@@ -1,0 +1,19 @@
+{
+  "title": "Guide a captive wooden bead around a three-dimensional wire maze",
+  "category": "Societal relatability",
+  "keywords": [
+    "bead maze",
+    "toddler toy",
+    "captive bead",
+    "contact guidance"
+  ],
+  "instruction": "Move the red wooden bead to the green end of its wire maze, leaving it there with both hands clear.",
+  "context": "A familiar toddler-style wire bead maze: guiding a captive bored bead around bends requires contact-guided orientation changes, unlike a free ring kept away from a buzz-wire. Explicit DIY fixture dimensions make the real trial reproducible.",
+  "setup": "Fixed layout; all dimensions in mm, coordinates relative to the arm-base midpoint at tabletop height. Clamped plywood base 300 x 220 x 12, centre (335,-180). Wooden posts 25 x 25 at (220,-230), height 112, and (450,-130), height 212. Fixed 4 mm steel rod centreline starts at (220,-230,112), spans 230 x 100 horizontally and rises 100; three 50 mm radius bends in orthogonal planes. Red wooden bead: 30 mm diameter, straight 10 mm bore, 10 g, centre (252,-230,112), bore along x. Green post marks the finish; goal centre (416,-130,212). Complete rod geometry is in wire-drawing.svg and wire-centreline.csv.",
+  "scoring": "Permanent 0 if the bead centre falls below the tabletop or is over 35 mm from the wire centreline. Otherwise, the final bead centre nearest centreline sample index 146 or later earns 0.5; index 86 or later earns 0.25; otherwise 0. Both levels require every fingertip point over 45 mm from the bead centre. Goal: centre within 12 mm of (416,-130,212) mm, with fingertips over 45 mm clear, earns 0.75; 1.0 only after 20 consecutive 20 Hz centre positions there, all within 1 mm of the first. Highest matching level applies.",
+  "run_limit": "1,400 steps (70 seconds at 20 Hz)",
+  "fidelity": "Native rigid contact between a 256-voxel SDF bored wooden bead and exact static wire. Explicit DIY dimensions, not manufacturer measurements. 0.1 mm contact offsets; friction 0.3. No path joint or scripted bead motion. Wire flexibility and wood compliance omitted.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "reset_notes": "Return bead 32 mm along initial straight; base clamped, wire ends secure; inspect smooth bore and rod. Fixed layout, object_jitter=0; no seeds.",
+  "media": "M-P86D65"
+}

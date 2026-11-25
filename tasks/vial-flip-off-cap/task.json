@@ -1,0 +1,23 @@
+{
+  "title": "Flip the plastic cap off a new injection vial: hold it upright, push the 21 mm button up at its edge, stopper untouched",
+  "category": "Impact on jobs",
+  "keywords": [
+    "injection vial",
+    "flip-off seal",
+    "crimp cap",
+    "break-away",
+    "edge push",
+    "two hands, different jobs",
+    "clinic",
+    "medication preparation"
+  ],
+  "instruction": "Hold the vial upright in one gripper; push its flip-off cap up at the edge with the other until it snaps clear, without touching the stopper.",
+  "context": "Impact on jobs: flipping the plastic cap off a new injection vial starts every dose drawn from it. It is routine work for the 817,870 US medical assistants (BLS OEWS, May 2025, SOC 31-9092; O*NET Core task: \"Prepare and administer medications as directed by a physician.\") and for registered nurses who draw doses (3,379,720 employed, SOC 29-1141; O*NET Core task: \"Administer medications to patients and monitor patients for reactions or side effects.\"). The worker holds the vial and thumbs the button up at one edge until its snap breaks. The seal of a 20 mm vial releases only between 6 N and 35 N (West Pharmaceutical, after ISO 8362-6 and YBB 00372003-2015), on a lip about 0.5 mm proud of the crimp, while a 15 g vial tips at far less unless held. A finger or the cap touching the bared stopper spoils its asepsis.",
+  "setup": "Positions in mm from the midpoint between the arm bases: x forward, y to the robot's left; heights above the bench top. One Pfizer (Hospira) 0.9% Sodium Chloride Injection, USP, 10 mL single-dose plastic Fliptop vial, NDC 0409-4888-10 (light green button), stands upright on the bench at x 400, y 0: body 24 mm across and 40 mm tall, neck 14 mm, aluminium crimp 20 mm across (20 mm seal) with its top edge rolled in, button 21 mm across and 4.5 mm tall on the crimp, its top 58 mm up. Rubber stopper face inside an 8 mm opening in the crimp. Vial 15 g, button 2 g. Both arms start at their ready pose.",
+  "scoring": "0.25: one gripper holds the vial (a finger each side of its body). 0.5: seal broken while held (real trial: a close side camera): the button's near edge lifted off the crimp (a push down never breaks it). 0.75: button over 15 mm from the crimp's top. 1.0: over 30 mm, vial held and upright (under 10 deg), hands still 3 s. 0: after the button lifted, a fingertip within 7.5 mm of the vial axis and under 4 mm above the crimp top, or the button over the opening, touches the stopper; vial over 30 deg or base over 10 mm below the bench top; seal broken unheld. Lifted (ruler or side camera): no button point over the 8 mm opening, or the lowest over 2 mm up.",
+  "run_limit": "400 steps (20 s at 20 Hz); the scripted demo reaches 1.0 at step 294 (14.7 s) on an RTX 3090 Ti.",
+  "reset_notes": "A new vial each trial (about $1 a vial; the seal does not reseat): stand it at the marked spot, arms at their ready pose.",
+  "fidelity": "PhysX rigid bodies; vial and button at real size (crimp 20 mm). A hinge lets only the near edge lift (0-15 deg, 4 N m/rad), so a side-edge push scores 0.25; seal lets go at 12 N lifting the near edge (estimate in the published 6-35 N; real trial: force gauge on 5 vials). Estimates, run at their bounds: curl 0.5-1.5 mm, hinge 2.6-10.6 N m/rad, masses 12-20 g and 1-4 g. Stopper zone from fingertip points (7.5 mm) and 48 button points.",
+  "scores": "Demo: 1.0 (step 294, 14.7 s, RTX 3090 Ti); Dream-1: 0.0 (the model never held the vial)",
+  "media": "M-PQYE55"
+}

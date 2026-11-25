@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "yam-filter-clamp"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = ["inspect-robots==1.0.0", "inspect-robots-yam==0.38.0", "yam-arena==0.1.0", "numpy>=1.26", "scipy>=1.11", "pillow>=10", "imageio[ffmpeg]"]
+
+[project.entry-points."inspect_robots.embodiments"]
+yam_filter_clamp = "rdb_filter_clamp.adapter:make_embodiment"
+
+[project.entry-points."inspect_robots.policies"]
+filter_clamp_scripted = "rdb_filter_clamp.adapter:make_scripted"
+
+[project.entry-points."inspect_robots.scorers"]
+filter_clamp_score = "rdb_filter_clamp.grading:make_scorer"
+
+[tool.setuptools.packages.find]
+include = ["rdb_filter_clamp*"]
+
+[tool.setuptools.package-data]
+rdb_filter_clamp = ["filter_clamp.usda"]

@@ -1,0 +1,21 @@
+{
+  "title": "Build the first A-frame of a house of cards: lean two playing cards together on the felt so they stand on their own",
+  "category": "Societal relatability",
+  "keywords": [
+    "bimanual",
+    "house of cards",
+    "playing cards",
+    "thin objects",
+    "balance",
+    "simultaneous release"
+  ],
+  "instruction": "Build the first A-frame of a house of cards: take both cards out of their stands and lean them against each other on the felt so that they stand up on their own.",
+  "context": "Building a house of cards is a pastime almost everyone has tried, and 'house of cards' is a byword for anything fragile. Every house starts with this A-frame. Nothing joins the two cards, unlike a folded greeting card: the 0.3 mm top edges must meet at matching angles, both cards set down together, and both hands let go and slide off without nudging either card. A few millimetres of disturbance and the frame falls.",
+  "setup": "Wooden table, 500 x 700 mm top, 760 mm high, centred 450 mm in front of the line between the arm bases. On it a green felt card mat, 400 x 560 x 3 mm, centred 430 mm out. Two walnut place-card stands (blocks 20 x 60 x 15 mm, 40 g, a slot 1.6 mm wide and 10 mm deep along the top) stand loose on the felt 370 mm out, 150 mm either side of centre, slots across the arms' reach. In each stands one poker-size paper playing card (63.5 x 88.9 x 0.29 mm, 1.8 g), short edge down in the slot, red back away from the arms. Two YAM arms on 750 mm pedestals at y = +/-305 mm.",
+  "scoring": "A-frame: both cards on the felt (lowest point within 2 mm of it), each leaning 10 to 35 degrees from vertical towards the other, top edges within 5 mm of each other, bottom edges at least 20 mm apart, neither touching a stand. 0.25 if the robot holds both cards out of their stands at once (each lifted above its stand's top or over 40 mm from it); 0.5 if the cards form an A-frame, held or not; 1.0 if they stand as an A-frame for 5 s in a row with nothing but the felt and each other touching them. The highest level reached counts. The trial scores 0 if a card is creased, bent or torn, a card falls off the table (more than 50 mm below its top), the table or mat moves 3 mm, or anything leaves the area (x -0.4 to 1.4 m, y -1.4 to 1.0 m, up to 1.6 m high). Judged from video, with a protractor and a ruler; in simulation touches are PhysX contacts at every physics step.",
+  "run_limit": "600 steps (30 seconds at 20 Hz)",
+  "reset_notes": "Nothing is consumed. Put each card back in its stand's slot, red back away from the arms, and the stands back on tape marks at their corners. Replace a card that is creased, bent or frayed.",
+  "fidelity": "Rigid-body PhysX at 960 Hz, 20 Hz control. Cards are rigid and cannot bend; they collide as 1.09 mm slabs (0.4 mm rest offset), since a 0.29 mm box lets an edge pass through a face, so a card leans 3 degrees in its slot, not 7.5. Friction card on card 0.4, card on felt 0.5 (estimated). In simulation a frame of cards leaned 22 degrees each slid apart; at 15 degrees it stands. Unmodified YAM arms, 40 N grippers.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-PA73CL"
+}

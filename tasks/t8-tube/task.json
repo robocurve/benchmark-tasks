@@ -1,0 +1,23 @@
+{
+  "title": "Take a dead T8 tube out of a strip light under a shelf: the quarter turn frees it, so it must already be held",
+  "category": "Impact on jobs",
+  "keywords": [
+    "relamping",
+    "fluorescent lamp",
+    "F17T8",
+    "G13 bi-pin",
+    "rotor-lock lampholder",
+    "overhead",
+    "two-hand turn",
+    "building maintenance"
+  ],
+  "instruction": "Take the dead tube out of the light under the shelf and put it in the recycling box.",
+  "context": "Relamping is routine work for building maintenance workers and janitors. A 2-ft T8 lamp in an overhead strip light is held by two rotor-lock G13 lampholders whose slots open downward: the lamp turns a quarter turn about its own axis against both rotor detents, and the instant its pins line up with the slots nothing holds it up. So it must already be held as the turn ends: both hands pinch the 25 mm glass tube and turn it together in two or three strokes with regrips (YAM wrist range); then it can only come straight down out of the slots, and the 0.6 m glass lamp must reach the recycling carton without a fall. Unlike fitting a lamp tube from above, where it rests in the slots before the turn, here gravity frees the lamp at the end of the turn. Unlike a quarter-turn bayonet cap, the turn is made by two hands on one long part and ends in releasing it. Unlike carrying a carton that opens unless held, the hands must take the full load during a two-hand turn.",
+  "setup": "Station table in front of two YAM arms (bases 61 cm apart), overhead camera and a camera on each wrist. Positions in cm: x forward from the line between the arm bases, y to the robot's left of their midpoint. A 90 x 28 cm wooden shelf on a wall rail; under its front edge a 2-ft one-lamp T8 strip light (white channel 6 cm wide) whose rotor-lock G13 lampholders hold a dead F17T8 lamp (604 mm, 25.4 mm across, blackened ends, blue print) with its axis 5.5 cm below the channel. The fixture's lamp centre is at x 36-43.5, y -4 to 4, 27-33 cm above the bench, the shelf turned 4-8 deg either way. An open corrugated lamp-recycling carton (inner 10.5 x 65 x 7 cm) lies on the bench at x 19.5-23.5, y -4 to 4, turned up to 6 deg. Both arms start at their ready pose.",
+  "scoring": "Any free drop above 0.8 m/s or sustained lampholder overload (60 N for 0.1 s) scores 0 for the trial. With the tube fully removed, both ends supported, untouched and stable for four consecutive seconds: 1.0 on the carton bottom, 0.5 on the tabletop completely outside the carton. Otherwise 0.",
+  "reset_notes": "Real trials use an unpowered fixture and a shatterproof 2-ft G13 LED T8 tube (no glass lamp). Put the tube back in the lampholders and turn it until both rotors click (marked side facing the robot); set the shelf brackets and the carton on the next start marks. About 1 minute.",
+  "fidelity": "Isaac Lab-Arena yam_arena, PhysX (CPU) 480 Hz, 20 Hz control. Real-size lamp, fixture, shelf and carton as convex pieces (sizes estimated, no CAD). Lampholder model: pins and rotors are not collided; drives hold the lamp at its seat (60 N per lampholder strength), with a rotor detent (0.2 N m click, 0.08 N m drag each) and release down the slots at 90 deg. A fall over ~3 cm counts as broken; glass breakage is not simulated. Full statement: README.",
+  "run_limit": "1500 control steps (75 s at 20 Hz). The trial also ends as soon as the score reaches 1.0.",
+  "scores": "Revised seed 0: Dream-1 0.0 (1500/1500), reference 1.0 (789/1500), released stable tabletop placement 0.5 (935), high release 0.0 (865, drop veto).",
+  "media": "M-ZSTMXM"
+}

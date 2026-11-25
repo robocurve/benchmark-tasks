@@ -1,0 +1,22 @@
+{
+  "title": "Pose an unpowered XGO-lite robot dog for joint calibration: every leg in the maker's posture, standing on its own",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "robot building",
+    "joint calibration",
+    "passive joints",
+    "quadruped",
+    "XGO-lite",
+    "bimanual",
+    "whole-body posing"
+  ],
+  "instruction": "Set every leg of this unpowered XGO-lite robot dog to its calibration posture (shoulders square to the body, thighs vertical, lower legs level on the table), then move both hands clear.",
+  "context": "Robot building: the XGO-lite kit's servo-replacement steps refit the lower leg and end \"switch on and re-calibrate it\"; its servos then \"no longer output torque\" and a person sets every leg by hand (shoulder square to the body, thigh vertical, lower leg square to the thigh) before the zeros are stored. Hard part: every joint holds about the same small torque, then slips and stays, so turning a lower leg also turns its thigh unless that is held, and legs already set must stay set.",
+  "setup": "Station table: level 1.10 x 1.30 m laminate. Coordinates in metres from the midpoint between the arm bases, x forward, y left, z up from the tabletop. One complete XGO-lite V2 robot dog (ElecFreaks XGO Robot Kit V2, US$449; 500 g, 250 x 145 x 170 mm standing; 12 leg joints; its arm folded on its back with the jaws open), servos without torque; geometry, axes, limits and link masses from the robot maker's open XGO-lite3 model, unscaled. Lot A: head toward the left arm (84 degrees from +x), the midpoint of its four shoulder axes over (0.310, -0.060); both rear legs in the illustrated posture, lying level on the table; both front shoulders and thighs in it too, the front lower legs turned toe-up from it (front left 22, front right 26 degrees), resting on the heels under the knees. Lot B: the same start with the head at 102 degrees, over (0.330, -0.045). No jig, stand, added grip or stop. YAM finger force capped at 40 N. Trials alternate A and B and are averaged; the screenshot shows A.",
+  "scoring": "Score 0 if any part of the robot ever goes past a table edge or more than 10 mm below the tabletop (kept for the trial). Otherwise read the last 1 s; every row above 0 needs, for that whole second: both rear legs still complete; both hands (housings and fingers) 30 mm or more from the robot and no arm link touching it (video, steel rule); the body's lowest surface 15 mm or more above the table and within 10 degrees of level; the robot's own arm 10 mm or more above the table; no point on the robot moving more than 2 mm (video against a steel rule). A leg is complete when its shoulder, thigh and lower-leg angles are each within 7 degrees of the illustrated posture and its thigh within 7 degrees of vertical (protractor on square-on photos against the supplied reference drawing; a hidden point earns nothing). 1.0: both front legs complete; 0.5: one; 0: neither. Lots A and B are averaged.",
+  "run_limit": "3,600 steps per lot (180 s at 20 Hz); two lots",
+  "reset_notes": "Keep the servos without torque; do not confirm the calibration or overwrite zeros. Fold the arm on the back with the jaws open. Set every leg to the illustrated posture, then turn the front lower legs toe-up from it (front left 22, front right 26 degrees; reference drawing, protractor). Place the robot at the lot's position and heading and check that both rear legs are in the posture and neither front leg is.",
+  "fidelity": "Maker's open XGO-lite3 model (the V2's published size, build and 2.3 kg cm servos), unscaled; 155 g missing from the V2's 500 g added to the body; arm's two joints modelled, jaws fixed open. Unpowered gearboxes: each joint holds 0.06 N m (2 N m/rad spring, 0.04 N m s/rad), then slips and keeps the new angle; never pulls toward the posture (estimate, 26% of the 0.23 N m powered torque; unmeasured). Friction estimates 0.6/0.5. Lower leg collides as heel, bar and toe pad. Self-collision off.",
+  "scores": "Scripted demo: 1.0 (lots A and B: 1.0, 1.0; 970 and 977 steps). Dream-1 run: 0.0 (lots A and B: 0.0, 0.0; 3,600-step limit; both arms lowered near their bases and never touched the robot).",
+  "media": "M-UJ2VAH"
+}
