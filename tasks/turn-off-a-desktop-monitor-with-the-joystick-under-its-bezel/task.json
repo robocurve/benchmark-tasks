@@ -1,0 +1,25 @@
+{
+  "title": "Turn off a monitor with the joystick nub hidden under its bottom edge: press it straight up, then push it to Power Off",
+  "category": "Societal relatability",
+  "keywords": [
+    "monitor",
+    "on-screen menu",
+    "joystick button",
+    "power off",
+    "hidden control",
+    "under-edge reach",
+    "straight press",
+    "four-way stick",
+    "screen-guided",
+    "everyday"
+  ],
+  "instruction": "Turn the monitor off with the joystick button under the middle of its bottom edge. If no menu is on the screen, press the button straight up once to open the menu, then push it toward the back of the monitor (Up) to choose Power Off. If the menu is already showing, just push Up; if the Settings menu is showing, push the button left until it closes first. Do not change the volume or the input. Then take your hand away.",
+  "context": "Switching a monitor off is an everyday act, and on most current monitors the only control is a small joystick nub under the bottom edge, out of sight, that is both a button and a four-way stick. Everyone who owns one knows the annoyance: a press that is not straight registers as a direction and changes the volume or opens the input list instead. Here the nub sits 89 mm above the desk under a 23.8-inch screen: the hand must come in level under the bezel with about 2 mm to spare above the finger, press up along the nub's axis (a direction wins if the nub tips 3.3 degrees first, about 0.5 N sideways at its tip, or the fingertip slips half a millimetre), then push it Up without pressing. The monitor stands free on its stand and must not be shoved. The menu state at the start varies (none, the main menu, a Settings page), so the presses must follow what the screen shows.",
+  "setup": "Metres; x forward from the line through the arm bases, y to the robot's left, z up from the desk top; arm bases at (0, +0.305) and (0, -0.305). (1) Monitor: LG 24MR400-B, 23.8 in, 540 x 200 x 414 mm with its stand, 2.9 kg, matte black plastic panel and stand on a steel base plate (estimate), standing free on a laminate desk, screen toward the robot, turned 10 degrees toward the right arm; its joystick (centre of the bottom edge, pointing down) at (0.41, 0.00), 89 mm above the desk (estimate); bottom edge of the screen 93 mm up (estimate), tilt 0 degrees. Power on, showing a desktop picture; HDMI input, volume 30, picture mode Custom. Start menu state, set by the experimenter just before the trial with the joystick: none, the main menu, or the Settings menu on its Quick Settings page (in simulation by episode: 1 none, 2 main menu, 3 Settings page, then repeating). (2) Robot fingertip: the right gripper closed, as it is (its plastic fingers); no tool. Both arms start at the ready pose, grippers open.",
+  "scoring": "Score 0 if the screen is still on at the end (any picture or menu) or the monitor toppled (tilted over 30 degrees). Otherwise the lowest of these numbers: 1.0; 0.5 if the volume, input or picture mode differs from the start; 0.25 if the monitor's base moved more than 25 mm or turned more than 8 degrees; 0.75 if it moved more than 10 mm or turned more than 3 degrees; 0.75 unless the hand is out from under the monitor (tool point 40 mm or more in front of the screen face, or 73 mm from the joystick) for 1 s with the monitor still. Success: 1.0 held 1 s more.",
+  "run_limit": "1,600 steps (80 s at 20 Hz), about 1.9x the scripted demo's 43 s plan",
+  "reset_notes": "Press the joystick once to switch the monitor back on and wait for the picture. Check on the screen that the volume is 30, the input HDMI and the picture mode Custom (Settings > Quick Settings, Input, Picture); set back any that changed. Close every menu (push left until it exits), then set the next trial's start state with the joystick: nothing, the main menu (one press), or Settings > Quick Settings (press, right, press). Put the monitor's base back on its tape outline, screen at 0 degrees tilt. Ready pose, grippers open. About 60 s a trial.",
+  "fidelity": "Menu logic follows the maker's manual (main menu Up = Power Off, Left = Input, Right = Settings, Down = Picture Mode; Left backs out of Settings; 5 s hold also turns off). Switch forces, travels and the 3.3 deg tilt threshold are estimates from a typical four-way + push switch; nub, bezel height and stand shape are estimates. Joints read at 20 Hz; first event wins. Screen is drawn, not emitted; no menu time-out; stand tilt hinge fixed.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-7S3TQ3"
+}

@@ -1,0 +1,20 @@
+{
+  "title": "Sharpen a loose pencil with an X-ACTO KS 1031 hand crank",
+  "category": "Societal relatability",
+  "keywords": [
+    "pencil sharpening",
+    "hand crank",
+    "bimanual tool use",
+    "progressive axial feed",
+    "X-ACTO KS 1031"
+  ],
+  "instruction": "Sharpen one end of the yellow pencil in the X-ACTO KS 1031. Pick it up from the table and feed it into the front opening while turning the crank clockwise. Withdraw it when it has an intact complete point, set it on the table, release it, and move both hands clear.",
+  "context": "This models ordinary classroom or household use of a desk-mounted manual sharpener. One hand progressively feeds the pencil under cutting resistance while the other turns the crank. The pencil starts loose on the tabletop.",
+  "setup": "Use stock X-ACTO KS 1031 (1031LMR), desk screw-mounted using its base, with the standard 5/16 in selector hole lined up to the cutter. The closed nickel-colored shavings housing is stationary. In the calibrated dual-YAM world frame (metres), table height is 0.7475. The guide mouth is (0.215,-0.040,0.8210). The feed axis is rotated 30 degrees clockwise from +X as viewed from above, with the opening toward the left arm. The rear crank axis anchor is (0.28082,-0.07800,0.8210). The crank is 40 mm radius, initially pointing down, with a 26 mm by 17 mm free-turning black knob. The simulation estimates these model dimensions from the reference envelope; exact dimensions and all native geometry are in assets/geometry.json. A 140 mm long, 7 mm across the corners, hexagonal blunt yellow wooden pencil rests flat on the table parallel to the feed axis at (0.140,0.120,0.75053). Both arms start ready and open; seed 0, jitter 0, 20 Hz control.",
+  "scoring": "0.25 for a new taper at least one-third of the stock reference length with visible inward feed during clockwise cutting. 0.50 at two-thirds. 0.75 at reference length with an intact exposed graphite point. 1.00 when the sharpened pencil is also withdrawn, released flat and still on the bare table for 1 s, with both hands over 100 mm clear of its midpoint. Empty turns and fixed-depth turning from reset earn zero. The simulated taper tiers are 5, 10 and 15 mm and progress depends on measured insertion and loaded crank rotation. For physical calibration with the stock sharpener and matching pencils, see assets/PROTOCOL.md.",
+  "run_limit": "1,600 control steps (80 simulated seconds at 20 Hz)",
+  "reset_notes": "Secure the sharpener by the three stock mounting screws, set the standard opening and clear the shavings. Put the crank knob below its axis and lay a fresh blunt pencil flat at its start mark. The simulator resets spring and cut depths. The pencil rests directly on the table.",
+  "fidelity": "The scene models the screw-mounted KS 1031 layout, stock selector and manually driven feed/crank with native contacts. Housing and crank dimensions are documented estimates. A retracting spring face and viscous crank load approximate the helical cutting action. The 15 mm simulated taper and nominal forces were not measured on a physical KS 1031. The taper is rendered; the pencil retains its original collider. The demo uses state feedback.",
+  "scores": "Dream-1 beta refused after 848 recorded steps; last native state score: 0.00; scripted native-contact demo: 1.00",
+  "media": "M-8QUWQP"
+}

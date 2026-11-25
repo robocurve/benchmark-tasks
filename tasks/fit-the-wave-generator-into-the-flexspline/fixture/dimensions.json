@@ -1,0 +1,165 @@
+{
+  "units": "mm (positions in the world frame: m, x away from the arm bases, y to the robot's left, z up)",
+  "sources": {
+    "product_page": "https://www.omc-stepperonline.com/hss-series-harmonic-drive-gearbox-73mm-ratio-50-1-backlash-20arcsec-8mm-input-diameter-hss-14-50-i-d8",
+    "dimension_drawing": "https://www.omc-stepperonline.com/image/catalog/dimensions/HSS-14-50-I-D8_Dimension-1.svg",
+    "read_on": "2026-11-23",
+    "not_read": "PDFs text-readable through web fetch on continuation; direct local downloads blocked by HTTP403; browser service unavailable. HSS manual column visual attribution pending.",
+    "full_datasheet": "https://files.omc-stepperonline.com/HSS-14-50-I-D8_Full_Datasheet.pdf",
+    "manual": "https://files.omc-stepperonline.com/Harmonic_Gearbox_User_Manual.pdf"
+  },
+  "gearbox": {
+    "product": "StepperOnline HSS-14-50-I-D8 housed strain-wave (harmonic) gearbox, ratio 50:1, cup-type flexspline, cross-roller output bearing",
+    "price_usd": {
+      "qty_1": 222.09,
+      "status": "pre-order / backorder, ships from China",
+      "date": "2026-11-23"
+    },
+    "published": {
+      "flange_od": 73.0,
+      "length_overall": 36.0,
+      "output_face_to_input_face": 34.0,
+      "input_register": "38 h7",
+      "output_pilot": "56 h7",
+      "flange_holes": "8 x 4.5 and 8 x M4 on a 65 circle",
+      "output_flange": "6 x M4 on a 23 circle, 11 H7 bore",
+      "input_bore": "8 H7, key 3 JS9/P9",
+      "rated_torque_Nm_at_2000rpm": 5.4,
+      "peak_start_stop_torque_Nm": 18.0,
+      "max_axial_load_kN": 1.88,
+      "backlash_arcsec": "<= 20",
+      "whole_unit_mass_kg": 0.51
+    },
+    "estimates": {
+      "flange_thickness": 7.0,
+      "register_height": 2.0,
+      "input_bore": 33.0,
+      "circular_spline_tooth_tip_d": 35.6,
+      "flexspline_rim_od": 35.4,
+      "flexspline_open_end": "level with the input face",
+      "open_end_lead_in": 1.0,
+      "housing_plus_cradle_mass_kg": 0.775
+    },
+    "technician_live_chat_Nov2026": {
+      "insertion_load_N": [
+        10,
+        30
+      ],
+      "installed_hub_depth_mm": 8.5,
+      "flexspline_bore_mm": 31,
+      "lead_time_weeks": [
+        2,
+        4
+      ],
+      "lubrication": "supplied coated with harmonic-drive grease",
+      "attribution": "obtained by live chat from a technician who works with this product (Nov 2026)",
+      "generator": "separate part, pushed in while slowly rotating/rocking; repeat removal/reset not confirmed"
+    }
+  },
+  "wave_generator": {
+    "published": {
+      "variant": "A (B is the alternative on the same drawing)",
+      "key": "3 JS9/P9",
+      "clearance_to_inner_face": 4.1,
+      "inner_face_above_output_face": 21.4,
+      "variant_B_length": "12 (0/-0.1)",
+      "bore": "8 mm with 3 JS9/P9 keyway (main view)",
+      "installed_dimension": "8.5 +/- 0.2 (generator A), 10.5 +/- 0.2 (B); read as the inner (hub) end below the input face"
+    },
+    "inferred": {
+      "separate_part": "Inferred from drawing detail views and installed position; separately confirmed by technician (live chat, Nov 2026), not a validated repeat removal procedure",
+      "variant_A_length": "about 10: B is 12 long and sits 2 deeper (10.5 vs 8.5) with the same outer end",
+      "hub_length_below_plug": 2.0,
+      "generator_detail_assumed_for_A": "14 hub, 8 H7 bore, 2 x M2.5 and 2 x M2 set screws, from the detail labelled B"
+    },
+    "estimates": {
+      "plug_od": 30.4,
+      "plug_height": 8.0,
+      "plug_chamfer": 1.2,
+      "mass_kg": 0.035
+    }
+  },
+  "shaft_and_handle": {
+    "shaft": "8 mm stainless shaft, cut to 51.0 mm, flat filed for the set screws; generator hub end flush with the shaft end, shaft top flush with the knob top",
+    "handle": "printed PETG: 30 x 3 disc and 20 x 20 x 16 square grip, glued at 30 above plug bottom, top 49 above plug bottom",
+    "assembly_mass_kg": 0.064
+  },
+  "cradle": {
+    "material": "PLA",
+    "base_plate": [
+      120,
+      120,
+      10
+    ],
+    "riser_od": 84,
+    "riser_bore": 56.5,
+    "riser_top": 53,
+    "bolting": "8 x M4 x 16 socket head screws through the flange's 4.5 holes into 3.3 tapped holes, 12 deep, 65 circle",
+    "files": [
+      "cradle.scad",
+      "cradle.stl",
+      "make_stl.py"
+    ],
+    "cradle_mass_kg_estimate": 0.3
+  },
+  "layout": {
+    "gearbox_axis": [
+      0.29,
+      -0.09
+    ],
+    "input_face_above_bench": 60.0,
+    "tray_lot_A": [
+      0.195,
+      -0.225
+    ],
+    "tray_lot_B": [
+      0.385,
+      -0.215
+    ],
+    "tray": "aluminium parts tray 140 x 100 x 15 mm, 4 mm floor; the generator stands on its hub at the centre, shaft up",
+    "bench_items": "NEMA 23 stepper (57 x 57 x 56 mm, 8 mm shaft) on a printed 70 x 70 x 8 mm adapter plate at (0.540, 0.020); printed joint cover 80 x 20 mm at (0.540, -0.090)"
+  },
+  "mesh_rule": {
+    "mouth_mm": 1.5,
+    "home_mm": 6.5,
+    "home_tolerance_mm": 0.2,
+    "feed_mm_per_turn": 4.0,
+    "press_min_N": 10,
+    "dedoidal_straight_push_N": 20.0,
+    "dedoidal_hold_s": 0.25,
+    "tilt_jam_deg": 3.0,
+    "tilted_press_N": 8.0,
+    "mesh_drag_source": "Harmonic Drive CSF/CSG catalogue printed p. 46, Table 38: maximum no-load starting torque, CSF-14 housed unit, ratio 50, 4.1 N cm (sibling value; none published for the HSS-14)",
+    "mesh_drag_source_url": "https://www.harmonicdrive.net/_hd/content/catalogs/pdf/csf-csg.pdf#page=46",
+    "drag_contact_load_min_N": 0.05,
+    "sibling_starting_torque_Nm": 0.041,
+    "brake_friction_coefficient": 0.4,
+    "brake_contact_min_radius_mm": 11.0,
+    "brake_min_sliding_capacity_at_feed_Nm": 0.044,
+    "brake_model": "Passive PhysX friction contacts; capacity rises with measured axial load. Diagnostic drag_est is not actual measured torque; no external torque.",
+    "press_source": "10-30 N obtained by live chat from a technician who works with this product (Nov 2026); minimum feed requires lower end 10 N",
+    "stop_proxy_mass_kg": 0.05,
+    "simulated_articulated_housing_and_cradle_total_kg": 0.825,
+    "overload_status": "30 N benchmark limit, not a bearing damage rating",
+    "force_measurement": "PhysX detailed wg/stop axial normal impulse divided by 1/240 s; touching separation <=0.05 mm. Whole-trial 0.25 s time-weighted sum of axial normal and friction component magnitudes on wg/stop and wg/base paths, independent of offset/tilt. No force inferred from spring deflection.",
+    "contact_separation_tolerance_mm": 0.05,
+    "collision_offset_mm": 0.2,
+    "withdrawal_resets_at_plug_depth_less_than_mm": 0.5,
+    "benchmark_force_limit_N": 30.0
+  },
+  "runout_check": {
+    "cutoff_mm": 0.3,
+    "baseline_enrolment_max_mm": 0.1,
+    "derivation": "flexspline teeth 2 x 50 = 100 (two-tooth difference, assumed); pitch diameter about 35 mm (estimate) gives module about 0.35 mm; one-tooth jump offsets generator between about one module and one tooth height, 0.35-0.7 mm, giving roughly 0.7-1.4 mm two-turn shaft runout; shaft response is unknown. The 0.3 mm cutoff is under half the low end and at least three times the enrolled baseline.",
+    "status": "derived estimate; not verified on a physical specimen",
+    "indicator_contact_force_N_estimate": 0.5,
+    "indicator_model_status": "ARVONELLE 0-10 mm dial indicator with magnetic base, 0.01 mm divisions, $54.99 displayed; stock status must be confirmed; contact force unmeasured"
+  },
+  "fixture_export_checks": {
+    "method": "make_stl.py verifies every directed boundary edge has exactly one opposite edge and positive volume; no internal caps at layer joins",
+    "cradle_solid_volume_cm3": 248.524,
+    "handle_solid_volume_cm3": 7.59,
+    "cradle_bolt_hole_to_bore_min_wall_mm": 2.6,
+    "cradle_bolt_hole_to_outer_min_wall_mm": 7.85
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "status": "provisional_unmeasured",
+  "furniture": {
+    "product": "IKEA LACK 305.147.91",
+    "source": "https://www.ikea.com/gb/en/p/lack-side-table-white-30514791/",
+    "size_m": [0.35, 0.35, 0.35],
+    "mass_kg": 1.8,
+    "published_packaged_mass_kg_not_body_mass": 1.96,
+    "foot_width_m": 0.05,
+    "foot_spacing_m": 0.30,
+    "top_thickness_m": 0.03,
+    "top_mass_fraction": 0.5555555556,
+    "unmeasured": ["mass_kg", "foot_width_m", "foot_spacing_m", "top_thickness_m", "top_mass_fraction", "COM", "inertia", "grip_crushing_load"]
+  },
+  "slider": {
+    "product": "Shepherd FeltGard 9407 reusable slider",
+    "source": "https://www.shepherdhardware.com/product/3-1-2-inch-reusable-round-heavy-duty-feltgard-slider-pads-4-pack",
+    "diameter_m": 0.0889,
+    "usable_foam_radius_m": 0.043,
+    "mass_kg": 0.02,
+    "felt_thickness_m": 0.002,
+    "backing_thickness_m": 0.002,
+    "foam_thickness_m": 0.009,
+    "model": "rigid_preview_only",
+    "compression_max_m": null,
+    "force_retention_relative_error": null,
+    "indentation_capture_significant": null,
+    "unmeasured": ["usable_foam_radius_m", "mass_kg", "felt_thickness_m", "backing_thickness_m", "foam_thickness_m", "compression", "shear", "recovery", "rim_profile"]
+  },
+  "floor": {
+    "surface": "clean dry fully cured polyurethane oak panel, secured on stock table",
+    "collision_model": "watertight_static_triangle_mesh_v1",
+    "center_m": [0.42, 0.0, 0.7525],
+    "size_m": [0.8, 1.1, 0.01]
+  },
+  "layout": {
+    "start_xy_m": [0.32, 0.0],
+    "pads_xy_m": [[0.17, 0.28], [0.17, -0.28], [0.34, 0.28], [0.34, -0.28]],
+    "goal_xy_m": [0.52, 0.0],
+    "goal_size_m": [0.4, 0.4]
+  },
+  "materials": {
+    "status": "illustrative_coefficients_not_measured_not_tuned_for_success",
+    "combine_mode": "min",
+    "foot": {"static": 0.8, "dynamic": 0.65},
+    "foam": {"static": 0.8, "dynamic": 0.65},
+    "felt": {"static": 0.15, "dynamic": 0.12},
+    "plastic": {"static": 0.3, "dynamic": 0.25},
+    "floor": {"static": 0.4, "dynamic": 0.3}
+  },
+  "control": {"hz": 20, "max_steps": 6000, "one_pad_max_steps": 1600, "lift_clearance_m": 0.005, "max_corner_lift_m": 0.03},
+  "simulation": {"physics_hz": 480, "position_iterations": 64, "velocity_iterations": 8, "contact_offset_m": 0.002},
+  "score": {
+    "containment_margin_m": 0.002,
+    "contact_gap_m": 0.0005,
+    "max_penetration_m": 0.0005,
+    "max_final_tilt_deg": 3.0,
+    "max_pad_tilt_deg": 5.0,
+    "release_clearance_m": 0.05,
+    "hold_s": 2.0,
+    "stable_translation_m": 0.002,
+    "stable_rotation_deg": 1.0,
+    "transport_distance_m": 0.15,
+    "transport_foot_center_offset_m": 0.020,
+    "transport_height_tolerance_m": 0.010,
+    "transport_upright_tolerance_deg": 15.0,
+    "one_pad_distance_m": 0.10,
+    "one_pad_max_drift_m": 0.005,
+    "one_pad_min_load_N": 1.0
+  },
+  "measurement_evidence": []
+}

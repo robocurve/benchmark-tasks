@@ -1,0 +1,20 @@
+{
+  "title": "Move a loaded hand truck over a doorway sill",
+  "category": "Societal relatability",
+  "keywords": [
+    "load handling",
+    "hand truck",
+    "threshold",
+    "balance",
+    "rolling"
+  ],
+  "instruction": "Move the loaded hand truck fully across the metal sill toward the arms, then leave it standing upright with the case still on its plate. Keep the case on the truck throughout. Keep at least one wheel tread within 3 mm of the floor or sill throughout; do not carry the truck across.",
+  "context": "Hand trucks carry cases and household supplies through doorways. A sill interrupts rolling support and requires control of the truck and its load while crossing.",
+  "setup": "Floor scene in metres: x forward from the arm bases, y left, z up. Two standard YAM arms stand on fixed steel pedestals 0.15 x 0.15 x 0.95 m at (0,+/-0.305,0.475). Full-size aluminium folding hand truck, 3.084 kg, 0.9906 m tall, 0.381 x 0.2794 x 0.004 m nose plate and two 0.127 m diameter, 0.028 m wide rubber wheels. Wheel axle at (0.455,0,0.0635), wheel centres y=+/-0.1955; plate projects forward from the axle. Frame/plate/axle/handle together weigh 2.684 kg and each wheel 200 g. Frame has two hollow aluminium 20 x 20 x 900 mm rails, with centres relative to the axle (0,+/-0.145,0.450), three 20 x 300 x 20 mm crosspieces at local z=0.150,0.360,0.650, a 16 mm diameter x 420 mm steel axle along y, and a rectangular rubber handle 22 x 340 x 25 mm centred at (0.455,0,0.9781). Free closed polypropylene case, 220 x 300 x 160 mm and 1 kg including contents, starts at (0.575,0,0.084) on the plate. Fixed aluminium sill, 20 x 1300 x 15 mm, centred at (0.380,0,0.0075). Fixed concrete floor, 1.8 x 1.4 x 0.06 m, centred at (0.35,0,-0.03). Gravity and native contacts support the free frame, wheels and case. No attachments to hands or load.",
+  "scoring": "Both wheel treads more than 3 mm clear of the nearest floor/sill surface at any 20 Hz observation permanently scores 0, including all partial credit. Check with continuous low side-view video and a millimetre scale at the sill. Any dropped/off-plate case, wheel separation over 2 mm or fixed floor/sill displacement over 2 mm, cart roll beyond 15 degrees, cart pitch beyond 35 degrees, or movable part outside x[-0.35,1.1], y[-0.65,0.65], z[-0.005,1.4] permanently scores 0. Otherwise 0.25 when the axle is at least 40 mm nearer the arms than reset; 0.5 when both wheels are entirely past x=0.365 m; 1.0 when the whole truck and case are past that plane, pitch and roll <=3 degrees, yaw <=5 degrees, plate bottom within 2 mm of the floor, case still supported on the plate, both hands >=5 mm clear and all bodies move less than 10 mm/s and 2 degrees/s for 10 consecutive steps. Otherwise 0. Partial credit describes the current state. The case remains on the plate when its four bottom corners are within the plate footprint (3 mm tolerance) and within 15 mm of its top plane.",
+  "run_limit": "2,000 control steps (100 seconds at 20 Hz)",
+  "reset_notes": "Return the upright truck, wheel angles, case and robot joints to the specified fixed layout; zero all velocities and scorer counters and recreate all three camera buffers. Nothing consumed.",
+  "fidelity": "Full-size rigid cart with freely rotating contact-driven wheels, a separate 1 kg rigid case and a 15 mm sill. Published compact-cart height, wheel diameter, plate size and mass are preserved. Telescoping and folding joints are locked as in use; square rails, rectangular grip, mass distribution, tire friction and bearing drag are approximate. No grasp attachment or automatic cart motion.",
+  "scores": "Dream-1 beta: 0.0 (1,200 steps); scripted RGB-only demo: 1.0 (1,376 steps, 10-step dwell). Seed 0, object jitter 0, 20 Hz.",
+  "media": "M-758EAU"
+}

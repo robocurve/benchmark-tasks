@@ -1,0 +1,22 @@
+{
+  "title": "Transfer an exposed-die FCBGA chip from a waffle pack to a test socket with a bent vacuum pen",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "vacuum pickup pen",
+    "bimanual",
+    "exposed-die flip-chip",
+    "waffle pack",
+    "test socket",
+    "suction latch",
+    "semiconductor test"
+  ],
+  "instruction": "Use the bent vacuum pen to transfer the chip from the waffle pack into the test socket with pin-1 corners aligned, then return the pen.",
+  "context": "AI-hardware bring-up and test technicians (O*NET 17-3023, 51-9141) move lidless FCBGAs (accelerators, FPGAs) with a bent vacuum pen: recessed edges block tweezers, metal chips bare silicon, grippers crush balls. Unlike pane suction lifters or wafer tweezers, two hands coordinate priming, seal press, and 4 mm hover release.",
+  "setup": "Positions are centres in cm from the arm-base midpoint: x forward, y left; heights above table top. Table: wood. ESD mat: blue-grey, 22 x 36 x 0.4 cm, centred x 27, y -4.5. Waffle pack: charcoal conductive tray (Entegris H44-999-62C02), 10.16 x 10.16 x 0.65 cm at x 30.5, y +4.5 on the mat, nine 2.532 cm pockets at 3.08 cm pitch, 0.32 cm floor. Chip: AMD/Xilinx SBG484 FCBGA, 5 g, emerald 1.9 x 1.9 x 0.175 cm substrate with 3.5 mm 45-deg pin-1 chamfer at (-x, -y) and silver 1.4 x 1.4 x 0.075 cm bare die with gold pin-1 mark, flat in centre pocket, die top 0.08 cm below rim. Test socket: ivory PEEK nest (Enplas OTB-484 / Ironwood SG-BGA 19 mm class), 3.8 x 3.8 x 1.0 cm at x 30.5, y -6.5 on the mat, 1.95 x 1.95 cm locating pocket (0.25 mm/side clearance), 2.5 mm walls with 3.65 mm pin-1 corner key and gold mark at (-x, -y), 45-deg funnel to 2.65 cm mouth. Cradle: slate printed, two 1 cm V saddles 10 cm apart at x 24.5, y -17.5, rear stop 0.4 cm behind pen. Pen: Virtual Industries PEN-VAC V8901-A-ESD, silver barrel 1.27 x 14.6 cm, 40 g, black side button (14 x 10 x 4.5 mm, 3.5 mm travel, 2.5 N) 3.3 cm ahead of centre, 45-deg probe, black 9.53 mm cup; level in cradle, nose +x, button up, axis 4.5 cm high.",
+  "scoring": "Score 0 if: a pad touches the chip for 0.1 s; chip hits table/mat, falls faster than 0.55 m/s, released off-pack/nest or > 15 mm above a floor, or drags through pocket wall; or pen leaves table. Suction engages only if button squeezed 2.5 mm >= 5 mm above the die (or > 10 mm off-centre), the cup makes contact (gap <= 0.3 mm, dz -1.5 to +0.3 mm, dxy <= 2.0 mm, tilt <= 4 deg) with a >= 0.6 N seal press for >= 0.20 s, and the button returns within 0.6 mm in contact; squeezing again breaks it. At end (chip unsealed, still 2 s, grippers 3 cm clear): 0.25 chip lifted by suction >= 10 mm above rim and resting in pack or nest; 0.60 requires that suction lift and transfer into the socket (checked in trial video), flat on the keyed floor (xy/z <= 1.0 mm, tilt <= 3 deg) with pin-1 aligned (yaw <= 8 deg); 1.0 also pen back on cradle (15 mm, 10 deg) and still. Chip on pen scores 0.",
+  "run_limit": "3,000 steps (2.5 minutes at 20 Hz)",
+  "reset_notes": "Put the chip back in the centre pocket, die up, pin-1 chamfer at the front right (-x, -y); set the pen level on the cradle, button up and released; check the cup for lint and wipe it with isopropyl alcohol if it has picked up dust. Nothing is consumed.",
+  "fidelity": "Approximate. The vacuum is a scorer-side 240 Hz hold after actual cup-to-die contact (<= 0.3 mm gap) and >= 0.6 N / 0.20 s seal press while primed; a held chip never outscores a released one and the demo never moves the chip. The V9038-ESD cup (6 in.Hg, 150 g) and probe are rigid (press compliance is arm/grip compliance); 2.5 N spring button; 3 mm probe collider (real 1.27 mm); no solder balls (pin-1 chamfer/key carry alignment).",
+  "scores": "Dream-1 run: 0 (both arms moved to the pen at the cradle, chip stayed in waffle pack); demo: 1 (right arm lifted pen, chip moved from waffle pack into socket, pen returned)",
+  "media": "M-LZ48V3"
+}

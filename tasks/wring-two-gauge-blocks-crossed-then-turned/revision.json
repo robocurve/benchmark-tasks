@@ -1,0 +1,194 @@
+{
+ "task": "wring-two-gauge-blocks-crossed-then-turned",
+ "responds_to": [
+  "TK-LLVFBR (round 1)",
+  "TK-V8695N (round 2)"
+ ],
+ "points": [
+  {
+   "round": 1,
+   "from": "reviewer decision, verbatim",
+   "quote": "The simulated wringing rule accepts a 0.2 mm face gap",
+   "kind": "construct",
+   "status": "in_task",
+   "fix": "No face gap is accepted. The old rule (the block's lowest point within 0.2 mm) is gone: a step counts only when EVERY corner of the patch where the two 35 x 9 mm faces overlap is within 0.05 mm of the 50 mm block's face, measured between the two rigid faces (not the simulator's 1 mm contact margin). 0.05 mm bounds the residual rocking of a pressed block in a rigid-body simulator (see the round-2 row), four times tighter than the 0.2 mm the reviewer named.",
+   "code": "wring_two_gauge_blocks_crossed_then_turned.py: FACE_TOL line 73; gaps line 119; ok line 209",
+   "text": "task.json scoring: \"face to face: every corner of the patch where the faces overlap within 0.05 mm of the 50 mm block's face, at every counted step\"",
+   "test": "test_9_gap_counts_nothing: a pressed, held 90 deg turn with the faces 0.2 mm apart, and 0.06 mm apart, counts nothing",
+   "trace": "largest corner gap 0.045 mm of the 0.05 mm limit over the turn (the step that opened the spell, which adds no turn, read 0.048 mm as the block settled under the press, in run 8's trace of the same motion); 0.001-0.032 mm at the half-second trace samples"
+  },
+  {
+   "round": 1,
+   "from": "reviewer decision, verbatim",
+   "quote": "and requires no pressing force, allowing a full score without the physical work of wringing",
+   "kind": "construct",
+   "status": "in_task",
+   "fix": "A pressing force is required at every counted step: at least 3 N, read on a bench platform scale under the plate (a sprung platform in simulation, tared in the first second with both arms clear). A block that only rests on the face (0.6 N) or is turned at a light touch counts nothing.",
+   "code": "wring_two_gauge_blocks_crossed_then_turned.py: PRESS_MIN line 74; scale_force line 201; ok line 209",
+   "text": "task.json scoring: \"pressed onto it with at least 3 N, read on the bench scale under the plate\"",
+   "test": "test_10_no_press_counts_nothing: 0 N and 2.9 N count nothing, 3.0 N counts; demo mode 'light' (the same turn at about 1 N) scores 0.25 in the physics check (test_4)",
+   "trace": "scale 3.7-4.4 N through the counted turn (floor 3 N)"
+  },
+  {
+   "round": 1,
+   "from": "reviewer decision, verbatim",
+   "quote": "Revise the simulated wringing condition so the faces must remain in contact under a realistic light pressing force during the turn, rather than allowing a gap and no force.",
+   "kind": "construct",
+   "status": "in_task",
+   "fix": "Contact and force are required together and throughout: the net 60 deg turn must be made in ONE unbroken spell in which every control step has the block gripped, face to face at every overlap corner, and at least 3 N on the scale; one failing step restarts the turn at zero, and only the turn between two counted steps counts. So that the scale's load can only come through the two faces, no part of either arm (gripper, wrist or forearm) may be within 5 mm of the 50 mm block, the plate or the scale during it.",
+   "code": "wring_two_gauge_blocks_crossed_then_turned.py: _watch_wring line 208; ok line 209; RUN[\"prev\"] line 225; hands_off line 253",
+   "text": "task.json scoring: \"turned a net at least 60 deg (turning back subtracts) in one unbroken spell of being gripped with its lower face touching the 50 mm block's top face\"; task.json scoring: \"(so the load comes only through the faces)\"",
+   "test": "test_9 (gap), test_10 (no force), test_11_hand_on_the_base_counts_nothing, test_14_an_arm_link_on_the_plate_or_scale_is_not_hands_off, test_16_a_turn_made_before_the_contact_counts_does_not_count; demo modes light, leftpress and platepress score at most 0.25 (test_4)",
+   "trace": "one unbroken counted spell from 22.5 s through the 60 deg mark (62 deg at the 33.5 s sample; it ran on to 36.0 s and 76 deg): gripped, no arm link in the 5 mm fence, scale 3.7-4.4 N and tilt at most 0.20 deg at every trace sample in it"
+  },
+  {
+   "round": 1,
+   "from": "reviewer decision, verbatim",
+   "quote": "Provide a full-score demo under the revised condition",
+   "kind": "feasibility",
+   "status": "in_task",
+   "fix": "The scripted demo earns 1.0 under the final condition on the GPU simulator, with this exact task file: it servos its press on the scale and levels the block from its live tilt at every step of the turn.",
+   "code": "wring_two_gauge_blocks_crossed_then_turned.py: PRESS_N line 339; _pressing line 417; demo line 562",
+   "text": "task.json scores: \"Dream-1 run: 0.0; demo: 1.0\"; README.md Runs, the Isaac line",
+   "test": "test_5_demo_scores_1_in_physcheck",
+   "trace": "Isaac run 9 (this exact task file, code sha f1778dd7): scripted demo 1.0 in 61.0 s. One unbroken counted spell from 22.5 s: every overlap corner within 0.05 mm at every control step (largest in the turn 0.045 mm; 0.001-0.032 mm at the half-second trace samples), scale 3.7-4.4 N, no arm link within 5 mm of the 50 mm block, plate or scale from 18.5 to 39.0 s; wrung by 33.5 s (62 deg turned at that trace sample; 60 needed), 4.2 mm from the face's middle; afterwards the block's corners lifted at most 0.43 mm (limit 1) and it stayed over the face (at most 7.9 mm off centre); in line at 45.5 s, released at 48.5 s, within 0.4 mm and 0.6 deg, still. README Runs; demo video."
+  },
+  {
+   "round": 1,
+   "from": "reviewer decision, verbatim",
+   "quote": "and document how the force threshold relates to the real procedure.",
+   "kind": "clarity",
+   "status": "in_task",
+   "fix": "Documented in README Fidelity and task.json fidelity. Source: the maker's own procedure (Mitutoyo Gauge Blocks Quick Guide, linked in the README) says to rotate the blocks 'while applying slight force' and publishes no figure; we found no published figure in newtons. The 3 N floor is therefore a chosen one and stated as such: about five times the 25 mm block's own weight (0.6 N), so resting or brushing the block never counts, and under the roughly 6 N at which this rig's pinched block pivots in the pads. A real trial reads the same threshold on the filmed scale: at least 306 g (3 N) above tare through the turn. The round-2 decision named only the tilt limit as still open.",
+   "code": "wring_two_gauge_blocks_crossed_then_turned.py: PRESS_MIN line 74; PRESS_N line 339",
+   "text": "README.md: \"Press: the maker says \"slight force\" and publishes no figure, so the floor is a chosen one: 3 N, about five times the 25 mm block's weight (0.6 N), so a resting block or a brushing touch never counts. A real trial checks the same floor on the filmed scale (at least 306 g above tare): simulator and bench need the same press.\"; task.json fidelity: \"Mitutoyo gives only 'slight force'; 3 N (5x the block's weight) is the floor\"; task.json scoring: \"every scale reading during it at least 306 g (3 N) above its tare\"",
+   "test": "test_1_text_matches_code (3 N in the text = PRESS_MIN in the code); test_10_no_press_counts_nothing",
+   "trace": "the demo's press read 3.7-4.4 N on the scale"
+  },
+  {
+   "round": 2,
+   "from": "reviewer decision, verbatim",
+   "quote": "Still open from the earlier feedback: the 1.5-degree tilt limit can credit a turn on one edge while the opposite edge is up to 0.24 mm clear.",
+   "kind": "construct",
+   "status": "in_task",
+   "fix": "The 1.5 deg tilt limit and the closest-point gap are removed from the code. The gap is now computed at every corner of the overlap patch (both faces clipped against each other), so a block riding on one edge fails on its far corners: at 1.5 deg they are 0.24 mm clear against a 0.05 mm limit. The most one-edge tilt that still counts is 0.3 deg (0.047 mm at the far edge of the 9 mm face).",
+   "code": "wring_two_gauge_blocks_crossed_then_turned.py: overlap_patch line 127; corners line 118; face_gap line 121",
+   "text": "README.md: \"One edge down and the other up does not count: at 1.5 deg the far edge of the 9 mm face is 0.24 mm clear\"",
+   "test": "test_8_tilted_turn_on_one_edge_counts_nothing: the reviewer's exact case (1.5 deg, one edge down, the other 0.24 mm clear) through a pressed, held 90 deg turn counts nothing; 0.4 deg (0.063 mm) counts nothing; 0.3 deg (0.047 mm) counts",
+   "trace": "largest corner gap 0.045 mm of the 0.05 mm limit over the turn (the step that opened the spell, which adds no turn, read 0.048 mm as the block settled under the press, in run 8's trace of the same motion)"
+  },
+  {
+   "round": 2,
+   "from": "reviewer decision, verbatim",
+   "quote": "Please require face-to-face contact throughout the pressed turn",
+   "kind": "construct",
+   "status": "in_task",
+   "fix": "Required at ALL corners and at EVERY step: every corner of the overlap patch within 0.05 mm of the 50 mm block's face at each control step of the counted turn; one step outside restarts the turn. Why 0.05 mm and not zero: (1) rigid bodies have no oil film or surface give, so a block pressed and turned by a compliant arm never sits at exactly zero: in the demo's pressed, levelled turn the corners read 0.003 mm typically and up to 0.045 mm for single steps, and a 0.02 mm limit breaks such a turn (Isaac runs 4-6 failed at 0.02 mm; run 5 broke 14 times on readings of 0.020-0.037 mm with the tilt under 0.25 deg and no lift); (2) the simulator's own contact test is far looser: it creates contact points from 1 mm away (contact_offset), so 'the solver reports contact at every corner' would have accepted the reviewer's 0.24 mm case; (3) the real-trial equivalent: 0.05 mm is the thinnest leaf of a common feeler set, 0.32 deg across the 9 mm face, about five times tighter than the reviewer's 0.24 mm case. After the turn the contact must also last: leaving the face (any of the block's four lower corners more than 1 mm off its plane, slid off it, or more than 20 mm off centre) loses the wringing for good.",
+   "code": "wring_two_gauge_blocks_crossed_then_turned.py: FACE_TOL line 73; ok line 209; if r[\"peel\"] > SEP line 210",
+   "text": "task.json scoring: \"face to face: every corner of the patch where the faces overlap within 0.05 mm of the 50 mm block's face, at every counted step\"; README.md: \"Why 0.05 mm (0.32 deg across the 9 mm face) and not zero: rigid bodies have no oil film or surface give, so a block pressed and turned by a compliant arm never sits at exactly zero.\"; README.md: \"The simulator's own contact test is far looser (contact points from 1 mm away).\"; README.md: \"0.05 mm is the thinnest leaf of a common feeler set.\"",
+   "test": "test_8_tilted_turn_on_one_edge_counts_nothing; test_12_one_edge_0_06_mm_counts_nothing; test_9_gap_counts_nothing; test_13_peel_and_put_back_loses_the_wringing; test_15_leaving_the_face_loses_the_wringing; test_17_peel_on_a_corner_of_overlap_loses_the_wringing",
+   "trace": "one unbroken counted spell from 22.5 s through the 60 deg mark (62 deg at the 33.5 s sample; it ran on to 36.0 s and 76 deg): gripped, no arm link in the 5 mm fence, scale 3.7-4.4 N and tilt at most 0.20 deg at every trace sample in it; largest corner gap 0.045 mm of the 0.05 mm limit over the turn (the step that opened the spell, which adds no turn, read 0.048 mm as the block settled under the press, in run 8's trace of the same motion); 0.001-0.032 mm at the trace samples; after the turn the block's corners lifted at most 0.43 mm (limit 1 mm)"
+  },
+  {
+   "round": 2,
+   "from": "reviewer decision, verbatim",
+   "quote": "and provide a full-score demo under that condition.",
+   "kind": "feasibility",
+   "status": "in_task",
+   "fix": "The scripted demo earns 1.0 under exactly this condition on the GPU simulator, with this exact task file.",
+   "code": "wring_two_gauge_blocks_crossed_then_turned.py: PRESS_N line 339; _pressing line 417; demo line 562",
+   "text": "task.json scores: \"Dream-1 run: 0.0; demo: 1.0\"; README.md Runs, the Isaac line",
+   "test": "test_5_demo_scores_1_in_physcheck",
+   "trace": "Isaac run 9 (this exact task file, code sha f1778dd7): scripted demo 1.0 in 61.0 s. One unbroken counted spell from 22.5 s: every overlap corner within 0.05 mm at every control step (largest in the turn 0.045 mm; 0.001-0.032 mm at the half-second trace samples), scale 3.7-4.4 N, no arm link within 5 mm of the 50 mm block, plate or scale from 18.5 to 39.0 s; wrung by 33.5 s (62 deg turned at that trace sample; 60 needed), 4.2 mm from the face's middle; afterwards the block's corners lifted at most 0.43 mm (limit 1) and it stayed over the face (at most 7.9 mm off centre); in line at 45.5 s, released at 48.5 s, within 0.4 mm and 0.6 deg, still. README Runs; demo video."
+  },
+  {
+   "round": 2,
+   "from": "our own checks on the revision",
+   "quote": "the press must come through the faces (a forearm resting on the plate could load the scale)",
+   "kind": "construct",
+   "status": "in_task",
+   "fix": "hands_off() takes every link hull of both arms, not only the grippers: none may have a vertex inside, or come within 5 mm of, the 50 mm block, the plate or the scale platform. The tare uses only first-second steps with both arms 30 mm clear of everything the scale carries.",
+   "code": "wring_two_gauge_blocks_crossed_then_turned.py: hands_off line 253; arm_hulls line 230; RUN[\"base_free\"] line 309",
+   "text": "task.json scoring: \"while no part of either arm (gripper, wrist or forearm) is within 5 mm of the 50 mm block, the plate or the scale\"",
+   "test": "test_14_an_arm_link_on_the_plate_or_scale_is_not_hands_off: a forearm on the plate, a 4 mm fingertip between grid points, a link over the plate edge and a link beside the platform each break hands-off, and a pressed 90 deg turn under one counts nothing",
+   "trace": "no arm link within 5 mm of the 50 mm block, plate or scale through the counted spell ('free True' at every trace sample in it)"
+  },
+  {
+   "round": 2,
+   "from": "our own checks on the revision",
+   "quote": "peel and put back (a wrung block tipped up on one edge and laid flat again stayed wrung)",
+   "kind": "construct",
+   "status": "in_task",
+   "fix": "The wringing is cleared when ANY of the 25 mm block's four lower corners is more than 1 mm off the face's plane.",
+   "code": "wring_two_gauge_blocks_crossed_then_turned.py: if r[\"peel\"] > SEP line 210",
+   "text": "task.json scoring: \"lifted or peeled, at any of its lower face's four corners, more than 1 mm off the face's plane\"",
+   "test": "test_13_peel_and_put_back_loses_the_wringing: peeled on an edge or an end past 1 mm and laid flat again is no longer wrung; a 0.5 deg rock keeps it",
+   "trace": "after the turn the block's corners lifted at most 0.43 mm (limit 1 mm)"
+  },
+  {
+   "round": 2,
+   "from": "our own checks on the revision",
+   "quote": "the wringing survived the block leaving the face (slid right off and put back still scored 1.0)",
+   "kind": "construct",
+   "status": "in_task",
+   "fix": "With nothing over the face there was no corner to measure. The wringing and the counted turn are now lost when no part of the block is over the face, when any of its four lower corners is more than 1 mm off the face's plane, or when it is more than 20 mm off the face's centre; putting it back does not restore it.",
+   "code": "wring_two_gauge_blocks_crossed_then_turned.py: if r[\"peel\"] > SEP line 210; ON_TOL line 90",
+   "text": "task.json scoring: \"slid until no part of it is over the face, or slid more than 20 mm off its centre\"",
+   "test": "test_15_leaving_the_face_loses_the_wringing: slid 12 mm across, stood on the plate beside the block, lowered beside the face, slid off a corner: each loses it and stays lost when put back (0.25), while a 4 mm slide with overlap keeps it; test_17_peel_on_a_corner_of_overlap_loses_the_wringing: tipped 26 deg on a corner of overlap loses it; the demo's own worst pose keeps it",
+   "trace": "the demo's block stayed over the face throughout; corners lifted at most 0.43 mm"
+  },
+  {
+   "round": 2,
+   "from": "our own checks on the revision",
+   "quote": "'on the face' paid 0.25 with a sliver or nothing over the face",
+   "kind": "scoring",
+   "status": "in_task",
+   "fix": "on_face() now needs the block's centre over the 50 mm block's top face, within 1 mm of it wherever they overlap, tilted under 3 deg.",
+   "code": "wring_two_gauge_blocks_crossed_then_turned.py: on_face line 159",
+   "text": "task.json scoring: \"the 25 mm block's lower face over the 50 mm block's top face and within 1 mm of it wherever they overlap, its centre over that face, tilted under 3 deg\"",
+   "test": "test_15 (a block beside the face, over nothing, grades 0, not 0.25) and test_16 (a 0.1 mm sliver held in the air grades 0; centre over the face grades 0.25)",
+   "trace": "n/a (the demo passes this rung on the way to 1.0)"
+  },
+  {
+   "round": 2,
+   "from": "our own checks on the revision",
+   "quote": "a turn made before the contact counted was credited at the first counted step",
+   "kind": "construct",
+   "status": "in_task",
+   "fix": "Only the turn between two counted steps counts; the first counted step adds nothing.",
+   "code": "wring_two_gauge_blocks_crossed_then_turned.py: RUN[\"prev\"] line 225",
+   "text": "task.json scoring: \"in one unbroken spell of being gripped with its lower face touching the 50 mm block's top face\"",
+   "test": "test_16_a_turn_made_before_the_contact_counts_does_not_count: 55 deg turned with no press, then 10 deg pressed, is 10 deg, not 65",
+   "trace": "one unbroken counted spell from 22.5 s through the 60 deg mark (62 deg at the 33.5 s sample; it ran on to 36.0 s and 76 deg): gripped, no arm link in the 5 mm fence, scale 3.7-4.4 N and tilt at most 0.20 deg at every trace sample in it"
+  },
+  {
+   "round": 2,
+   "from": "our own checks on the revision",
+   "quote": "'drops off the surface plate' was coded stricter than the scoring text",
+   "kind": "scoring",
+   "status": "in_task",
+   "fix": "The code also zeroed a block carried past the plate's outline in the air, which the text never said. Dropped is now exactly the stated rule: a block more than 5 mm below the plate's top, the 50 mm block lifted more than 5 mm, or a block tilted more than 30 deg.",
+   "code": "wring_two_gauge_blocks_crossed_then_turned.py: off line 301; OFF_DROP line 97",
+   "text": "task.json scoring: \"a block falls over (tilts more than 30 deg) or drops off the surface plate, or the 50 mm block is lifted more than 5 mm off the plate\"",
+   "test": "test_18_dropped_is_below_the_plate_top_as_the_text_says: carried 5 cm past the plate's edge 2 cm up is not dropped; 6 mm below the top is 0 for good; the 50 mm block lifted 6 mm is 0; 31 deg is fallen, 29 deg is not",
+   "trace": "n/a (no block left the plate in the demo)"
+  },
+  {
+   "round": 2,
+   "from": "our own checks on the revision",
+   "quote": "how a real trial reads the turn and 'in line'",
+   "kind": "clarity",
+   "status": "in_task",
+   "fix": "The scoring text now says how each is read on a bench, and the setup puts the scale's display in the fixed camera's frame.",
+   "code": "n/a (text only)",
+   "text": "task.json scoring: \"read in the frames at the turn's start and end from the line of the two fingers on its 35 mm ends against the 50 mm block's long edges\"; task.json scoring: \"the two blocks' long edges diverge by under 2.4 mm from one end to the other\"; task.json setup: \"its display in the frame of the trial video's fixed camera\"",
+   "test": "n/a (documentation point)",
+   "trace": "n/a"
+  }
+ ],
+ "known_limits": [
+  "Face to face is a band, not zero: a step counts with every corner of the overlap within 0.05 mm of the face (0.32 deg across the 9 mm face; about five times tighter than the 0.24 mm one-edge gap named in the review). A block riding one edge with the other up to 0.05 mm clear therefore still counts. In this run the largest gap at a step that added turn was 0.038 mm (0.003 mm median at the trace samples after the block settled).",
+  "The 5 mm hands-off fence checks each arm link's corners against the plate and platform, and points about 20 mm apart on them against each link. A flat link laid across the plate's top rim midway between two points (a pocket about 1.4 mm long and 3 deg wide) reads hands-off while resting on the plate, so a press made there could load the scale. Found by our own check after this run; rim points every 2 mm close it in later code that has no simulator run on the GPU yet, so it is not in this package.",
+  "After the turn the wringing survives a lift of under 1 mm at every corner; a real trial settles it with the hand lift test."
+ ]
+}

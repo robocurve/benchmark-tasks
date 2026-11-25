@@ -1,0 +1,23 @@
+{
+  "title": "Open a wrapped sterile pack: far flap first, then each side, near flap last, by the edges only",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "nursing",
+    "sterile technique",
+    "sterile field",
+    "unwrapping",
+    "fabric",
+    "ordering rule",
+    "no reaching over"
+  ],
+  "instruction": "Open the sterile pack by its border: open the far flap first, each side flap with its same-side hand, then the near flap, without touching or passing over the exposed sterile field; release the wrap and move both hands clear.",
+  "context": "Nurses, surgical technologists and medical assistants open wrapped sterile packs for dressing changes, catheters and minor procedures. The wrap's inside becomes the sterile field, so it is opened by its outside and 2.5 cm border only: the top flap away first, reaching round not over it, then each side flap with the hand on that side (either side first), then the near flap toward you, each opened out away from the tray. Nothing may pass over the opened field.",
+  "setup": "Station table as bedside tray table; cm from the arm-base midpoint (x forward, y left; bases at y +-30.5), heights above the table. Stainless instrument tray 15 x 20 x 4, 0.35 kg, centre (30, 0), envelope-wrapped in one Halyard H300 sheet (45 x 45 cm, blue SMS) laid as a diamond: near corner folded over first (tip folded back at x 36), then left (crease y -3), right (crease y +3), far corner last (crease x 24). All tabs near the pack centre, 4.5-5.5 up. Full fold template in the README.",
+  "scoring": "0 if a gripper touches the bare tray or a lifted/open flap's inner part (while held, its tab may be touched), any robot part passes over a previously opened and released flap's inner part or uncovered tray, the wrong hand pinches a side flap, a flap first meets the open criteria out of order, or tray displacement exceeds 3 cm. Otherwise 0.2 per flap currently open: tip at least 5 cm outside the tray and at most 3 cm high, with at most 3% of the flap over the tray more than 1 cm inside its edges. 1.0 requires all four open, the tray top uncovered, jaws open and nothing held, hands at least 10 cm clear of tray and wrap, and still under 2 cm/s for 0.5 s.",
+  "run_limit": "2,400 steps (120 seconds at 20 Hz)",
+  "reset_notes": "Unfold, smooth the sheet flat as a diamond under the tray at its mark, and re-wrap in the same order (near, left, right, far) with the same creases and tabs (README template).",
+  "fidelity": "Tray: one rigid box. Wrap: reduced position-based sheet (1.5 cm lattice), tension-only stretch and shear, weak bending with crease memory that eases over ~1.5 s, ply contact and friction, uncalibrated. Cloth nodes under the closed pads are pinned to the pads; released on opening or slip. Only border nodes of the top ply in the pad contact patch are pinned. Open, over-the-field and touch checks are geometric. Full-surface flatness and rebound are not separately scored. Tearing is not modeled.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-RDBRBQ"
+}

@@ -1,0 +1,20 @@
+{
+  "title": "Hook a hanging travel scale onto a bag and hold it steady until the weight locks",
+  "category": "Societal relatability",
+  "keywords": [
+    "luggage weighing",
+    "hanging load",
+    "hook capture",
+    "stable weight",
+    "travel"
+  ],
+  "instruction": "Weigh the blue travel bag with the hanging scale. Hook it by the carry handle, lift the bag clear, and wait until the weight locks on the display. Lower the bag gently onto the bench. Return the unloaded scale to its peg with the reading still locked.",
+  "context": "Before packing or traveling, a hanging luggage scale reads the loaded bag through the handle. The hook must carry the whole bag, and the suspended load has to settle for the lock reading. Leaning it on the bench or steadying it by hand alters the load. Once the display locks, the bag can be lowered under control.",
+  "setup": "Station bench, cm from the center of the two arm bases. The blue zippered travel bag (23 × 18 × 11 cm, 642 g packed) rests at x 30.2, y 5.7, hinged D handle folded toward the robot's left. A vertical handheld scale with an open metal hook starts powered on, zeroed and in lock mode, hanging from an Ø8 mm peg at x 35.4 and z 27.6 cm, scale body centered at y −14.2. The peg projects 83 mm from the upright toward the bag, ending at y −13.5 cm. Both arms start at ready.",
+  "scoring": "Cumulative tiers. 0.25 once the whole bag clears the bench by 25 mm and only the scale hook supports it through its handle. The hands and stand must stay clear of the bag and hook. 0.6 if a reading within 85 g of 642 g locks while that sole support and clearance hold throughout the settling interval. 1.0 after also lowering the bag onto the bench and releasing the unloaded scale on its peg with the same lock reading for 1 s, both hands clear. A drop after lifting gives 0. Verify from synchronized side and display video with a ruler at the bag's lowest point.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Fold the packed case's handle, hang the scale, select automatic hold and tare it empty before each attempt. Choose a scale that holds the 642 g test load after unloading on three consecutive checks. The README lists reference models and the verification sequence.",
+  "fidelity": "Rigid bodies and the hinged carry handle approximate the case and strap. Hook spring deflection drives the display. PhysX pair contact forces distinguish hook-to-handle support from competing contacts with either robot, the scale case or the stand. Geometry checks bench clearance. A stable upright load locks the display, and only a correct lock during verified sole hook support earns credit.",
+  "scores": "Dream-1 scored 0.0 in 1,200 steps. Scripted demo scored 1.0 in 464 steps and retained 0.64 kg. The low-lift control locked 0.64 kg at about 17 mm and scored 0.0 in 350 steps.",
+  "media": "M-XP4CEZ"
+}

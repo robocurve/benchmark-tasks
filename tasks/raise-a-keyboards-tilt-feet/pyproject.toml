@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "yam-keyboard-feet-candidate"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = ["inspect-robots==1.0.0", "inspect-robots-yam==0.38.0", "yam-arena==0.1.0", "numpy>=1.26", "scipy>=1.11", "pillow>=10", "imageio[ffmpeg]"]
+[project.entry-points."inspect_robots.embodiments"]
+yam_keyboard_feet = "rdb_keyboard_feet.adapter:make_embodiment"
+[project.entry-points."inspect_robots.policies"]
+keyboard_feet_scripted = "rdb_keyboard_feet.adapter:make_scripted"
+[project.entry-points."inspect_robots.scorers"]
+keyboard_feet_score = "rdb_keyboard_feet.grading:make_scorer"
+[tool.setuptools.packages.find]
+include = ["rdb_keyboard_feet*"]
+[tool.setuptools.package-data]
+rdb_keyboard_feet = ["*.usda"]
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+dream = ["dreamlabs-client==1.0.14", "inspect-robots-dream @ git+https://github.com/kairosiann/inspect-robots-dream.git@b5e936a201cec66c54c297e522c920d98445e339"]

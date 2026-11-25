@@ -1,0 +1,77 @@
+{
+  "status": "local_scripted_and_dream_evaluated",
+  "submitted": false,
+  "accepted": false,
+  "fixed_start_only": true,
+  "control_hz": 20,
+  "physics_hz": 240.0,
+  "max_steps": 1800,
+  "source_sha256": {
+    "adapter.py": "00f496e10169e62730cf01f7c0453e90b1624a441f53479ae15da8ec248c970c",
+    "fixed_scene.py": "ebed6adcfff6d968552bcab4e794666d6314f4b41153fadd144f8e750f63543c",
+    "grading.py": "33b91388265824e04803ffc13e9fe1a4a5f23a4c3cd8e3e97b54899859ddb854",
+    "keyboard_feet.usda": "19976db6934917989037415acbd417c13873170843aad3945fed551d2dabfff2",
+    "layout.py": "19af750a7ccbf52f969184c144baedf34445be567b6bd4ea13d4cbc05022c048",
+    "recording.py": "472a1bd3c619f4f9b05b4c89f129f708733f7a70fce96a468831b3cdf4d9d60b",
+    "run.py": "b50a5619cd2e9762fee341548ab593d2ab061c9a185ef1abeb892bc421b16465",
+    "scripted.py": "684af457076473fa5d71afd34df81c2812127b0177cfeb5c3cf88a3dc2e32619"
+  },
+  "runs": {
+    "scripted": {
+      "score": 1.0,
+      "executed_steps": 1411,
+      "step_limit": 1800,
+      "trials": 2,
+      "successful_trials": 2,
+      "seed": 0,
+      "source_unchanged": true,
+      "smoke_only": false,
+      "trial_paths": [
+        "evidence/scripted-001/RESULT-SUMMARY.json",
+        "evidence/scripted-002/RESULT-SUMMARY.json"
+      ]
+    },
+    "dream": {
+      "model": "dreamlabs/dream-1-beta",
+      "score": 0.0,
+      "executed_steps": 1800,
+      "step_limit": 1800,
+      "seed": 0,
+      "trials": 1,
+      "action_requests": 37,
+      "successful_replies": 37,
+      "session_expiration_errors": 0,
+      "guard_modified_steps": 0,
+      "result_path": "evidence/dream/RESULT-SUMMARY.json",
+      "source_unchanged": true
+    }
+  },
+  "media_sha256": {
+    "demo.mp4": "52e6492f02a51839be0fdeecbc71e6f0bd10f0b6c6c7ba1ae3afffa1bf9d5d58",
+    "model_run.mp4": "1b748e9b1d40bc320d75284458a23d3cd7c1c524ad3d0127a4bcc9f2f6a3249e",
+    "setup.png": "82feb349daad70d956326d73348052b78aaf3e1bc65e927f21efb54ed7b3f160"
+  },
+  "limitations": [
+    "One fixed initial state; no hardware or randomized robustness claim.",
+    "Service session renewal and stock joint-bound clamping are recorded in the Dream result.",
+    "No official media upload, PR receipt or acceptance is claimed."
+  ],
+  "submission_grader": {
+    "recording_sha256": "cc69544a6e3a842af18edd871ba1fb4059627ecee579b75fdec2b4cede0246d3",
+    "current_sha256": "a29984b198217b4586e958156ce337910a317c7c20ac8e6f295f364f417fa88d",
+    "verification": "The two archived demonstrations were rescored from native pose/contact samples. Dream never opened either foot; the recorded cumulative opening flags rule out partial or full credit under the revised rubric. No fresh policy inference is claimed.",
+    "verified_results": {
+      "formal-001": {
+        "first_full_sample": 16912,
+        "samples": 16932,
+        "score": 1.0
+      },
+      "formal-002": {
+        "first_full_sample": 16912,
+        "samples": 16932,
+        "score": 1.0
+      },
+      "dream": 0
+    }
+  }
+}

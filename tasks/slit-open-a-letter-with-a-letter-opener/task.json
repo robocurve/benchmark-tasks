@@ -1,0 +1,20 @@
+{
+  "title": "Slit a sealed envelope open along its top fold with a letter opener, holding it down, without cutting the letter inside",
+  "category": "Societal relatability",
+  "keywords": [
+    "letter opener",
+    "envelope",
+    "mail handling",
+    "thin tool insertion",
+    "hold and cut"
+  ],
+  "instruction": "Open the envelope along its top edge with the letter opener without cutting the letter inside, then put the opener down on the desk.",
+  "context": "Opening a sealed letter at a desk is an everyday office and home task. In the usual method, one hand keeps the envelope flat, while the other inserts a thin letter opener under the unglued corner of the flap and runs it along the top fold. The tool must stay inside the seam and above the folded letter for the entire 241 mm. If it backs out, the fold stays shut. If it goes too deep, it damages the letter. The loose envelope otherwise moves with the blade.",
+  "setup": "Positions in cm from the midpoint between the arm bases: x forward, y to the robot's left. (1) Sealed #10 business envelope (24.1 x 10.5 cm, white paper), flap side up, loose on the desk, centred at x 19, y 0, its long sides along y and its top fold (the flap's fold) on the far side at x 24.25. Inside: a letter of about 12 sheets folded in thirds (21.6 x 9.3 cm), its top edge 1.2 cm below the fold; envelope and letter 0.5 cm thick, 80 g. The flap is glued except at its two corners (the last 1.2 cm below the fold at each end). (2) Steel letter opener, 22.9 cm (9 in), 40 g: wooden handle 10.5 x 1.5 x 0.9 cm; blade 12.4 cm long, 1.5 mm thick, 1.6 cm wide at the root tapering to a 3 mm point; lying flat on the desk beyond the fold, handle centred at x 30, y -25, point toward +y. Both arms start at the ready pose, grippers open. The layout is the same in every trial, as in the screenshot.",
+  "scoring": "Each 1 cm piece of the fold (24) counts as slit when the blade's point is inside the envelope, the piece before it is slit, and the blade pushes on it with 1.5 N or more. 0.25: 6 pieces slit; 0.5: 12; 0.75: all 24 (corner to corner); 1.0 (held 1 s): all 24 and the opener resting on the desk (lowest point within 5 mm of it), still, every finger point 1 cm or more from it. The letter touched by the blade with 1.0 N or more (cut) scores 0 for the rest of the run. Real trial: a ruler along the slit, then check the letter for cuts.",
+  "run_limit": "1,200 steps (60 seconds at 20 Hz)",
+  "reset_notes": "Use a fresh sealed envelope with the same folded letter for each trial (seal the flap with its gum, leaving the corners unglued as they come), laid flap up with its fold on the far side at the marked position; lay the opener flat at its mark, point toward the robot's left. Simulation: each trial starts the simulator afresh.",
+  "fidelity": "Rigid bodies, 20 Hz. The envelope is two 0.5 mm rigid layers at true length and width with the letter (a rigid block) between them; the fold and the top layer's 14 mm next to it are 24 pieces on sprung hinges. Paper cutting is a rule: a piece is slit at 1.5 N of blade contact force (PhysX) with the point inside, and then swings up 25 deg; the letter counts as cut at 1.0 N. Forces are estimates; paper bending and tearing are not simulated.",
+  "scores": "Dream-1: 0.0 in 1,200 steps. Scripted demo: 1.0 in 879 steps. Deep-blade and unsupported-envelope controls: 0.0 each.",
+  "media": "M-VFBMAR"
+}

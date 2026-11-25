@@ -1,0 +1,28 @@
+--- a/task.py
++++ b/task.py
+@@ -656,7 +656,7 @@
+         return value(_STATE,True)
+     except (KeyError,TypeError,ValueError,AttributeError):return 0.
+ 
+-def success(objects):return score(objects)==1.
++def success(objects):return False  # diagnostic continuation only
+ 
+ 
+ def demo():
+@@ -764,6 +764,16 @@
+     right(1.,L,FINGER_OPEN,'release retained rod',dip=-SEAT_TILT,branch=2,angle_lead=lead,z_lead=.015)
+     add('right',2.,(.13,-.22,TOP+.14),FINGER_OPEN,'withdraw turning hand',0.,0.,lean=0.)
+     add('right',2.,(.13,-.22,TOP+.14),FINGER_OPEN,'released stillness',0.,0.,lean=0.)
++    # DIAGNOSTIC ONLY: regrasp after the released scored hold, then rotate
++    # the clipped end upward about the existing tilt hinge. The initial arc
++    # tangent is the clip normal; rod/lip contacts still supply every force.
++    left(4.,L,FINGER_OPEN,'probe wait after release',above=.10,dip=-SEAT_TILT,radius=.073)
++    left(2.,L,FINGER_OPEN,'probe approach',above=.025,dip=-SEAT_TILT,radius=.073)
++    left(1.5,L,FINGER_OPEN,'probe lower',dip=-SEAT_TILT,radius=.073)
++    left(1.5,L,0.,'probe regrasp',dip=-SEAT_TILT,radius=.073)
++    for i in range(1,61):
++        left(.25,L,0.,'probe extraction arc',dip=-SEAT_TILT+math.radians(30.)*i/60.,radius=.073)
++    left(2.,L,0.,'probe hold extracted',dip=-SEAT_TILT+math.radians(30.),radius=.073)
+     for side,waypoints in plans.items():
+         q=None
+         for i,w in enumerate(waypoints):

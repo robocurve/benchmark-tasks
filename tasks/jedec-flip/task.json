@@ -1,0 +1,23 @@
+{
+  "title": "Flip 21 BGAs ball side up by sandwiching their JEDEC tray under an empty one, lip seated and pin-1 chamfers together",
+  "category": "Impact on AI timelines",
+  "keywords": [
+    "chip inspection",
+    "BGA",
+    "JEDEC tray",
+    "dead-bug",
+    "ball inspection",
+    "tray flip",
+    "bimanual",
+    "semiconductor back end"
+  ],
+  "instruction": "Turn the BGA packages in the loaded tray over into the empty tray, ball side up, for ball inspection, and put the old tray aside on the table.",
+  "context": "In AI-accelerator package inspection, BGA packages are checked ball side up (missing, bridged or damaged balls, coplanarity), so before ball-side inspection they must lie dead-bug. They are never turned one by one: an empty JEDEC tray is stacked on the loaded one, the two-tray stack is held at both ends and turned over, and the old tray, now on top, is lifted off; the parts then sit in the cells under the new tray. The empty tray must drop over the loaded tray's stacking lip (0.5 mm play) with the chamfered pin-1 corners together; the trays start in a different place each trial, so this is judged by eye (flush edges, chamfers, lip). A cover left riding on the lip shifts during the roll and the parts end up on the cell walls instead of in the cells. The stack is 322.6 mm long and only rests together; inside it each 12 g part drops 3 mm from one tray into the other. A dropped BGA is scrapped.",
+  "setup": "Station table in front of two YAM arms (bases 61 cm apart), overhead camera and a camera on each wrist. Positions in cm: x forward from the line between the arm bases, y to the robot's left of their midpoint. (1) ESD-safe riser block, 15 x 22 x 5.5 cm (x by y), dark red, centred at x 33, y 0. (2) Loaded tray on the riser: black JEDEC thin matrix tray, outline 322.6 x 135.9 mm, 7.62 mm stack pitch, length along y so both ends overhang the riser by about 5 cm, pin-1 chamfered corner at the robot's left, nearest the robot; 3 x 7 pockets 36 mm square at 40 mm pitch, a 1.4 mm stacking lip on the wall top, a 70 x 17 mm handling slot at each end. (3) In its pockets, lid side up: 21 BGA packages, 35 x 35 mm lidded flip-chip, 1156 balls, 3.4 mm thick, 12 g (green substrate, nickel lid). (4) Empty tray, identical, flat on the table centred at x 15, y 0, same orientation. Per trial (from the seed) the loaded tray is moved on the riser by up to 10 mm in x, 5 mm in y and 4 deg, and the empty tray on the table by up to 12 mm in x, 15 mm in y and 8 deg, never within 8 mm and 3 deg of a straight move onto the loaded tray, and the loaded tray always at least 3 mm off its nominal place at its ends. Named check setups 0-4 are listed in the README. Fabricate two trays and 21 inert 12 g coupons from the included millimetre STL solids. The README specifies layer stock and a nesting/transfer acceptance test.",
+  "scoring": "Levels in order, read at the end. 0.25: empty tray stacked on the loaded one, walls over the lip, edges flush, chamfers together. 0.5: the stack turned over with all 21 packages still between the trays. 1.0 (ends the trial): all 21 lie flat, ball side up, each in a cell of the new tray (photo); the old tray lies on the table clear of it; both hands 3 cm or more from both trays and the parts; all still 1 s. 0 at any time: any package outside both trays.",
+  "reset_notes": "Lift the new tray off the riser, tip the 21 packages back lid up into the loaded tray's pockets by the same sandwich flip (or with a vacuum pen), put that tray on the riser and the empty tray on the table at the next setup's offsets (marks every 5 mm and 2 deg). Check no package is chipped and no ball is damaged.",
+  "fidelity": "Isaac Lab-Arena yam_arena, PhysX (CPU) 480 Hz, 20 Hz control. JEDEC tray outline 322.6 x 135.9 x 7.62 mm; pocket, lip and slot details representative (no vendor drawing). Trays and 21 packages (35 x 35 x 3.4 mm, 12 g, three slabs each) are free rigid bodies; riser kinematic. No welds, snaps or proximity rules; scoring from poses. Friction values are estimates. Full statement: README.",
+  "run_limit": "2400 control steps (2 min at 20 Hz). The trial also ends as soon as the score reaches 1.0.",
+  "scores": "Dream-1: 0.0 (seed 0, 2,400 steps). Scripted demo: 1.0 in the official Inspect Robots run (default seed, 1,429 steps); 1.0 twice, identical; 1.0 at seed 7. Doing nothing: 0. Open-loop replay at another start: 0. Cover put down unlooked: 0. Tray turned without cover: 0.",
+  "media": "M-S53MFN"
+}

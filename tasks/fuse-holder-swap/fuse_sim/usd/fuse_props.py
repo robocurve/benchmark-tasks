@@ -1,0 +1,667 @@
+"""Generate the props of the fuse-holder swap (the named flip-open DIN fuse holder, fuses, stand and tray) as USD.
+
+Real parts (references in the README). (P) published, (D) measured on the
+published drawing (Bussmann Technical Data 720147 p.3, side view with the carrier open dashed, ~14.3 px/mm at
+600 dpi), (I) inferred, (TM) to measure on a bought part.
+
+- Fuse holder: Eaton Bussmann CHM1DU, 1-pole modular holder for 10 x 38 mm midget fuses. (P) 17.5 mm wide,
+  73.9 mm tall, 52.8 mm from the back to the carrier's front face, the grip tab reaching 61.8 mm; the body's
+  front steps back to 42.6 mm (lower) and 43.2 mm (upper) from the back. (D) carrier hinge 29.5 mm above the
+  bottom and 4 mm behind the front face; fully open about 72 deg (the 4 mm lockout hole in the grip tab sits on
+  a circle about the hinge boss in both drawn positions). (I) the fuse's axis 18 mm behind the carrier face, its
+  centre 40 mm above the bottom (chosen within the body so the YAM's fingers clear the open carrier); the carrier's internals (a U clip round the inner ferrule, open toward the body, with
+  sprung lips that retain it (LIP_*), a saddle under the outer ferrule, a bottom stop and an end wall) are ours:
+  Bussmann does not publish them.
+  Each carrier is a rigid body on a revolute joint about y at the hinge (0 = closed, opening is negative about
+  +y: its top swings toward the robot). The latch is a task rule (a spring pulling the carrier shut inside
+  LATCH_DEG); the open stop is the joint limit; gravity swings an unlatched carrier open, as on the real part.
+  Collision: the plate, the grip tab, the U clip, saddle and bottom stop; the body's blocks and side walls; an
+  upper contact block behind the outer ferrule (the inner contact is visual, so the swinging inner end clears).
+- Fuse: Bussmann KTK class 10 x 38 midget (P: 10.3 x 38.1 mm). Caps 10 mm long, tube 8.8 mm across (I, from the
+  Schurter ASO 10.3x38 drawing). 9 g (P, Weidmueller 10x38). The rating is printed on the
+  tube ("BUSSMANN KTK-6"), black on the grey-white body, along the axis, as on the KTK-10 photo.
+  Collision: three 16-gon prisms.
+- Spare cartons: one opened 10-pack carton per rating, as the fuses ship (Bussmann sells KTK fuses 10 to a carton,
+  P). The carton's size is not published, so it is inferred (I) from the fuse: two layers of five 10 x 38 mm fuses
+  side by side, 0.6 mm board, 56 x 42 x 23 mm outside, a finger cut-out in the front wall, a lid hinged at the far
+  top edge and standing open; one fuse left, in the middle slot of the bottom layer. The lid's inside carries the
+  maker, the catalogue number and the rating, the rating on a field of its colour code (lettering as thin shapes).
+  The cartons stand on a closed steel bench-top box (ours) that brings them to the old stand's height.
+- Tray, back pan and the circuit legends: ours. Legend lettering is geometry, not a texture (the renderer was seen
+  to show textured labels blank or with another scene's image).
+
+Holder frame: d = depth behind the carrier's front face (world +x), y across, z above the holder's bottom.
+Usage: python -m fuse_sim.usd.fuse_props [<out dir>]   (default: fuse_sim/assets)
+"""
+
+from __future__ import annotations
+
+import math
+import sys
+from pathlib import Path
+
+from PIL import Image, ImageDraw, ImageFont
+from pxr import Gf, Sdf, UsdGeom, UsdPhysics, UsdShade, Vt
+
+from fuse_sim.spec import (BASE_Z, CIRCUITS, FRONT_X, RATING_COLOURS, SLOT_Y, SPARE_AXIS_Z, SPARE_RATINGS, SPARE_X,
+                           SPARE_Y, TRAY_XY)
+from fuse_sim.usd import usd_kit as kit
+
+MM = 0.001
+# Holder (CHM1DU), holder frame, metres ------------------------------------------------------------------------------
+W = 17.5 * MM
+H = 73.9 * MM
+DEPTH = 52.8 * MM
+LOWER_FRONT_D = (52.8 - 42.6) * MM
+UPPER_FRONT_D = (52.8 - 43.2) * MM
+LOWER_TOP = 11.0 * MM
+"""Top of the lower block (I): low enough that the swinging fuse and bottom stop clear it."""
+UPPER_BOTTOM = 65.5 * MM
+"""Underside of the upper block. (D) the body's upper front starts 61.4 mm up; inside it there must be room for the
+fuse's upper end to swing out (the real body houses the upper clip there), so the block starts at 65.5 mm (I):
+at 61.4 the swinging fuse caught on it and held the carrier 8.6 deg open."""
+BACK_D = 31.0 * MM
+"""Front of the back block (I): the cavity the carrier swings in."""
+WALL_IN = 7.75 * MM
+HINGE_D, HINGE_Z = 4.0 * MM, 29.5 * MM
+OPEN_DEG = 72.0
+PLATE = (0.0, 2.0 * MM)
+PLATE_Z = (21.0 * MM, 52.0 * MM)
+PLATE_HALF_Y = 7.4 * MM
+TAB_D = (-9.0 * MM, 0.0)
+"""Grip tab: 9 mm proud of the carrier face (P: 61.8 - 52.8)."""
+TAB_Z = (52.0 * MM, 61.0 * MM)
+TAB_HALF_Y = 8.6 * MM
+CARRIER_MASS = 0.015
+CARRIER_COM = (-8.0 * MM, 0.0, 14.0 * MM)
+"""Carrier centre of mass relative to the hinge (I): toward the grip tab, so that past ~8 deg the carrier with its
+fuse falls open by gravity (with the default uniform-density COM it crept from 32 to 45 deg in 12 s)."""
+
+# Fuse (10 x 38 midget) --------------------------------------------------------------------------------------------
+FUSE_R = 5.15 * MM
+FUSE_L = 38.1 * MM
+CAP_L = 10.0 * MM
+TUBE_R = 4.4 * MM
+FUSE_MASS = 0.009
+AXIS_D = 18.0 * MM
+FUSE_ZC = 40.0 * MM
+FUSE_Z0 = FUSE_ZC - FUSE_L / 2
+FUSE_Z1 = FUSE_ZC + FUSE_L / 2
+GAP = 0.1 * MM
+CLIP_CLR = 1.0 * MM
+CLIP_T = 1.5 * MM
+CLIP_LIP = -1.0 * MM
+CLIP_Z = (FUSE_Z0, FUSE_Z0 + CAP_L)
+"""The inner clip (I): a U round the inner ferrule, open toward the body (up when the carrier is open), its cheeks
+ending 1 mm short of the ferrule's axis, 1 mm clearance, so a ferrule lowered up to 4 mm off centre slides in off
+the cheek's edge (with the cheeks 1 mm past the axis and 0.8 mm clearance a 1 mm offset left it perched on a cheek); with the bottom stop and a saddle under the outer ferrule it holds
+the fuse in the carrier against gravity at any opening, and the body's upper contact block closes it in when shut.
+The fuse is laid in and lifted out across its axis. A closed sleeve that it slid into along its axis jammed the
+new fuse short of its seat."""
+LIP_R = 1.5 * MM
+LIP_IN = 0.7 * MM
+LIP_X0 = 2.7 * MM
+"""Ferrule retention clip (I, see the README "Retention"): at the inner ferrule a pair of spring fingers, one either side,
+each ending in a rounded lip (a 3 mm rod along the fuse) whose centre stands LIP_X0 out from the ferrule's axis toward
+the clip's open side, overlapping the ferrule's radius by up to LIP_IN where it passes. A ferrule pushed in spreads
+the lips over its widest part and they close behind it (the detent); pulled out, it spreads them again. Each lip is a
+fixed collider with a compliant-contact material: PhysX's contact force is then a spring on the penetration, i.e. the
+finger's spring deflection (the method the station's clip-held fuse blocks use). Seated, the lips still press on the
+ferrule (0.12 mm deflection); a ferrule is free once its centre is 5.7 mm out."""
+LIP_K = 10000.0
+"""Compliant-contact spring rate of a lip (N/m). Measured without the robot (README, "Retention"): a seated fuse levers
+out at 1.4 N lifted by its outer end and comes out at 4.2 N pulled straight at the inner ferrule. At 15 kN/m the
+station arm's fingertip press at mid-tube could not push the spare past the lips."""
+LIP_DAMPING = 30.0
+LIP_MU = 0.15
+"""Friction of the lips on the ferrule (min-combined): lubricated contact-grade metal."""
+INNER_LIP_Z = (FUSE_Z0 + 1.0 * MM, FUSE_Z0 + CAP_L - 1.0 * MM)
+STOP_Z = (FUSE_Z0 - 2.3 * MM, FUSE_Z0 - GAP)
+SADDLE_HALF_Y = 2.5 * MM
+SADDLE_Z = (FUSE_Z1 - 9.5 * MM, FUSE_Z1 - 3.0 * MM)
+UPPER_CONTACT_D = (AXIS_D + FUSE_R + GAP, AXIS_D + FUSE_R + 1.2 * MM)
+
+LATCH_DEG = 6.0
+OPEN_DETENT_DEG = 8.0
+CARTON_T = 0.6 * MM
+CARTON_W = 56.0 * MM
+"""Outside width (y): five fuses side by side (I)."""
+CARTON_H = 23.0 * MM
+"""Outside height: two layers (I)."""
+CARTON_NOTCH = 22.0 * MM
+"""Half-width of the finger cut-out in the front wall, down to the floor (I)."""
+LID_OPEN_DEG = 100.0
+"""The lid stands open, leaning 10 deg back past vertical; its inside faces the robot."""
+BENCH_BOX_X = (0.215, 0.285)
+LEGEND_W, LEGEND_H = 0.030, 0.025
+"""Legend plate (ours): 30 x 25 mm, the rating's colour field on its lower half."""
+LEGEND_Z0 = H + 0.008
+"""Height of the legend plate's lower edge above the holders' bottom."""
+LEGEND_TILT_DEG = 45.0
+"""The plate leans back 45 deg from vertical (face up toward the robot) on its bracket."""
+FUSE_FRICTION = 0.6
+
+COLORS = {
+    "body": (0.86, 0.86, 0.84),
+    "carrier": (0.80, 0.80, 0.78),
+    "red": (0.78, 0.10, 0.12),
+    "rail": (0.70, 0.72, 0.74),
+    "pan": (0.84, 0.85, 0.83),
+    "stand": (0.40, 0.40, 0.42),
+    "copper": (0.80, 0.45, 0.22),
+    "steel": (0.62, 0.64, 0.67),
+    "fuse_tube": (0.88, 0.87, 0.82),
+    "fuse_cap": (0.78, 0.79, 0.81),
+    "tray": (0.20, 0.35, 0.65),
+    "dark": (0.15, 0.15, 0.16),
+    "carton": (0.40, 0.24, 0.10),
+    "ink": (0.03, 0.03, 0.03),
+    "paper": (0.95, 0.95, 0.91),
+    "white_ink": (0.98, 0.98, 0.98),
+    "bench_box": (0.16, 0.17, 0.19),
+    "buss_red": (0.75, 0.10, 0.12),
+}
+FONT_B = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+
+
+def _mats(stage, root, names):
+    out = {}
+    for name in names:
+        path = f"{root}/Looks/{name}"
+        material = UsdShade.Material.Define(stage, path)
+        shader = UsdShade.Shader.Define(stage, f"{path}/Shader")
+        shader.CreateIdAttr("UsdPreviewSurface")
+        shader.CreateInput("diffuseColor", Sdf.ValueTypeNames.Color3f).Set(Gf.Vec3f(*COLORS[name]))
+        shader.CreateInput("roughness", Sdf.ValueTypeNames.Float).Set(0.5)
+        if name in ("fuse_cap", "steel", "rail"):
+            shader.CreateInput("metallic", Sdf.ValueTypeNames.Float).Set(0.6)
+        material.CreateSurfaceOutput().ConnectToSource(shader.ConnectableAPI(), "surface")
+        out[name] = material
+    return out
+
+
+def _plain_material(stage, root, name, rgb):
+    path = f"{root}/Looks/{name}"
+    material = UsdShade.Material.Define(stage, path)
+    shader = UsdShade.Shader.Define(stage, f"{path}/Shader")
+    shader.CreateIdAttr("UsdPreviewSurface")
+    shader.CreateInput("diffuseColor", Sdf.ValueTypeNames.Color3f).Set(Gf.Vec3f(*rgb))
+    shader.CreateInput("roughness", Sdf.ValueTypeNames.Float).Set(0.6)
+    material.CreateSurfaceOutput().ConnectToSource(shader.ConnectableAPI(), "surface")
+    return material
+
+
+def _tex(stage, root, name, file_rel):
+    path = f"{root}/Looks/tex_{name}"
+    material = UsdShade.Material.Define(stage, path)
+    shader = UsdShade.Shader.Define(stage, f"{path}/Shader")
+    shader.CreateIdAttr("UsdPreviewSurface")
+    shader.CreateInput("roughness", Sdf.ValueTypeNames.Float).Set(0.7)
+    reader = UsdShade.Shader.Define(stage, f"{path}/st")
+    reader.CreateIdAttr("UsdPrimvarReader_float2")
+    reader.CreateInput("varname", Sdf.ValueTypeNames.Token).Set("st")
+    tex = UsdShade.Shader.Define(stage, f"{path}/tex")
+    tex.CreateIdAttr("UsdUVTexture")
+    tex.CreateInput("file", Sdf.ValueTypeNames.Asset).Set(file_rel)
+    tex.CreateInput("st", Sdf.ValueTypeNames.Float2).ConnectToSource(reader.ConnectableAPI(), "result")
+    tex.CreateInput("wrapS", Sdf.ValueTypeNames.Token).Set("clamp")
+    tex.CreateInput("wrapT", Sdf.ValueTypeNames.Token).Set("clamp")
+    tex.CreateOutput("rgb", Sdf.ValueTypeNames.Float3)
+    shader.CreateInput("diffuseColor", Sdf.ValueTypeNames.Color3f).ConnectToSource(tex.ConnectableAPI(), "rgb")
+    material.CreateSurfaceOutput().ConnectToSource(shader.ConnectableAPI(), "surface")
+    return material
+
+
+def _quad(stage, path, corners, material):
+    """A textured quad (visual). corners: image bottom-left, bottom-right, top-right, top-left."""
+    mesh = UsdGeom.Mesh.Define(stage, path)
+    mesh.CreatePointsAttr([Gf.Vec3f(*c) for c in corners])
+    mesh.CreateFaceVertexCountsAttr([4])
+    mesh.CreateFaceVertexIndicesAttr([0, 1, 2, 3])
+    mesh.CreateDoubleSidedAttr(True)
+    st = UsdGeom.PrimvarsAPI(mesh).CreatePrimvar("st", Sdf.ValueTypeNames.TexCoord2fArray, UsdGeom.Tokens.faceVarying)
+    st.Set(Vt.Vec2fArray([Gf.Vec2f(0, 0), Gf.Vec2f(1, 0), Gf.Vec2f(1, 1), Gf.Vec2f(0, 1)]))
+    UsdShade.MaterialBindingAPI.Apply(mesh.GetPrim()).Bind(material)
+    return mesh
+
+
+def _plain_quad(stage, path, corners, material):
+    """A flat visual quad without texture coordinates."""
+    mesh = UsdGeom.Mesh.Define(stage, path)
+    mesh.CreatePointsAttr([Gf.Vec3f(*c) for c in corners])
+    mesh.CreateFaceVertexCountsAttr([4])
+    mesh.CreateFaceVertexIndicesAttr([0, 1, 2, 3])
+    mesh.CreateDoubleSidedAttr(True)
+    UsdShade.MaterialBindingAPI.Apply(mesh.GetPrim()).Bind(material)
+    return mesh
+
+
+def _text_runs(text: str, bold: bool = True, px: int = 24) -> tuple[list, int, int]:
+    """The text as runs of set pixels: [(row, col0, col1)], image width, height (PIL, 1 bit)."""
+    font = _font(bold, px)
+    l, t, r, bt = font.getbbox(text)
+    w, h = r - l + 2, bt - t + 2
+    img = Image.new("1", (w, h), 0)
+    ImageDraw.Draw(img).text((1 - l, 1 - t), text, fill=1, font=font)
+    runs = []
+    for row in range(h):
+        col = 0
+        while col < w:
+            if img.getpixel((col, row)):
+                c0 = col
+                while col < w and img.getpixel((col, row)):
+                    col += 1
+                runs.append((row, c0, col))
+            else:
+                col += 1
+    return runs, w, h
+
+
+def plane_point(origin, u, v, a, b, lift=0.0):
+    """origin + a*u + b*v (+ lift along u x v)."""
+    n = (u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0])
+    return tuple(origin[i] + a * u[i] + b * v[i] + lift * n[i] for i in range(3))
+
+
+def plane_rect(stage, path, origin, u, v, a, b, material, lift=0.0):
+    """A visual rectangle on the plane (origin, u right, v up), spanning a = (a0, a1), b = (b0, b1)."""
+    c = [plane_point(origin, u, v, a[0], b[0], lift), plane_point(origin, u, v, a[1], b[0], lift),
+         plane_point(origin, u, v, a[1], b[1], lift), plane_point(origin, u, v, a[0], b[1], lift)]
+    return _plain_quad(stage, path, c, material)
+
+
+def plane_text(stage, path, text, origin, u, v, centre, height, max_width, material, bold=True, lift=0.0003):
+    """Lettering as thin visual quads on the plane (origin, u right, v up), centred at ``centre`` = (a, b),
+    ``height`` tall (narrowed to ``max_width``). Geometry, so it cannot be dropped or swapped by the renderer."""
+    runs, w, h = _text_runs(text, bold)
+    pix = min(height / h, max_width / w)
+    UsdGeom.Xform.Define(stage, path)
+    for i, (row, c0, c1) in enumerate(runs):
+        a0 = centre[0] + (c0 - w / 2) * pix
+        a1 = centre[0] + (c1 - w / 2) * pix
+        b1 = centre[1] + (h / 2 - row) * pix
+        plane_rect(stage, f"{path}/r{i}", origin, u, v, (a0, a1), (b1 - pix, b1), material, lift)
+
+
+def _span(stage, path, xs, ys, zs, material, collide=True):
+    return kit.box(stage, path, ((xs[0] + xs[1]) / 2, (ys[0] + ys[1]) / 2, (zs[0] + zs[1]) / 2),
+                   (abs(xs[1] - xs[0]), abs(ys[1] - ys[0]), abs(zs[1] - zs[0])), material, collide)
+
+
+def _contacts(stage, offset=0.001):
+    for prim in stage.Traverse():
+        if prim.HasAPI(UsdPhysics.CollisionAPI):
+            prim.AddAppliedSchema("PhysxCollisionAPI")
+            prim.CreateAttribute("physxCollision:contactOffset", Sdf.ValueTypeNames.Float).Set(offset)
+            prim.CreateAttribute("physxCollision:restOffset", Sdf.ValueTypeNames.Float).Set(0.0)
+
+
+def _phys_mat(stage, root, prim_path, friction, name):
+    mat = UsdShade.Material.Define(stage, f"{root}/PhysicsMaterials/{name}")
+    api = UsdPhysics.MaterialAPI.Apply(mat.GetPrim())
+    api.CreateStaticFrictionAttr(friction)
+    api.CreateDynamicFrictionAttr(friction)
+    UsdShade.MaterialBindingAPI(stage.GetPrimAtPath(prim_path)).Bind(mat, UsdShade.Tokens.weakerThanDescendants,
+                                                                     "physics")
+
+
+def _compliant_mat(stage, root, name, mu, k, c):
+    mat = UsdShade.Material.Define(stage, f"{root}/PhysicsMaterials/{name}")
+    api = UsdPhysics.MaterialAPI.Apply(mat.GetPrim())
+    api.CreateStaticFrictionAttr(mu)
+    api.CreateDynamicFrictionAttr(mu)
+    prim = mat.GetPrim()
+    prim.AddAppliedSchema("PhysxMaterialAPI")
+    prim.CreateAttribute("physxMaterial:frictionCombineMode", Sdf.ValueTypeNames.Token).Set("min")
+    prim.CreateAttribute("physxMaterial:compliantContactStiffness", Sdf.ValueTypeNames.Float).Set(k)
+    prim.CreateAttribute("physxMaterial:compliantContactDamping", Sdf.ValueTypeNames.Float).Set(c)
+    return mat
+
+
+def _bind_compliant(stage, path, mat):
+    UsdShade.MaterialBindingAPI.Apply(stage.GetPrimAtPath(path)).Bind(mat, UsdShade.Tokens.strongerThanDescendants,
+                                                                       "physics")
+
+
+def ngon(r, n=16):
+    return [(r * math.cos(2 * math.pi * (k + 0.5) / n), r * math.sin(2 * math.pi * (k + 0.5) / n)) for k in range(n)]
+
+
+# Geometry helpers shared with the task and the reference ---------------------------------------------------------------
+def holder_to_world(slot: int, d: float, y: float, z: float) -> tuple[float, float, float]:
+    return (FRONT_X + d, SLOT_Y[slot] + y, BASE_Z + z)
+
+
+def hinge_world(slot: int) -> tuple[float, float, float]:
+    return holder_to_world(slot, HINGE_D, 0.0, HINGE_Z)
+
+
+def seat_in_carrier() -> tuple[float, float, float]:
+    """The seated fuse's centre in the carrier (hinge) frame; its axis is the carrier's +z."""
+    return (AXIS_D - HINGE_D, 0.0, FUSE_ZC - HINGE_Z)
+
+
+def fuse_seat_world(slot: int) -> tuple[float, float, float]:
+    return holder_to_world(slot, AXIS_D, 0.0, FUSE_ZC)
+
+
+def carrier_names():
+    return [f"carrier{s}" for s in range(3)]
+
+
+def joint_names():
+    return [f"carrier{s}_joint" for s in range(3)]
+
+
+def spare_pose(k: int) -> tuple:
+    """A spare lying in its carton, axis along +x (local z -> world +x), centred between its ends."""
+    x = 0.5 * (SPARE_X[0] + SPARE_X[1])
+    s = math.sqrt(0.5)
+    return (x, SPARE_Y[k], SPARE_AXIS_Z, 0.0, s, 0.0, s)
+
+
+# Holders -------------------------------------------------------------------------------------------------------------
+def make_holders(out_path: Path) -> None:
+    root = "/holders"
+    stage, root_prim = kit.new_stage(out_path, root)
+    kit.articulation_root(stage, root_prim)
+    rp = root_prim
+    rp.CreateAttribute("physxArticulation:solverPositionIterationCount", Sdf.ValueTypeNames.Int).Set(32)
+    rp.CreateAttribute("physxArticulation:solverVelocityIterationCount", Sdf.ValueTypeNames.Int).Set(4)
+    m = _mats(stage, root, ("body", "carrier", "red", "rail", "pan", "stand", "copper", "steel", "fuse_tube",
+                            "fuse_cap", "dark"))
+    lip_mat = _compliant_mat(stage, root, "clip_lip", LIP_MU, LIP_K, LIP_DAMPING)
+    base = kit.rigid_body(stage, f"{root}/base", (0, 0, 0), 2.0)
+    kit.fix_to_world(stage, root, base.GetPath())
+    b = f"{root}/base"
+
+    def hb(name, slot, ds, ys, zs, mat, collide=True):
+        x0 = holder_to_world(slot, ds[0], ys[0], zs[0])
+        x1 = holder_to_world(slot, ds[1], ys[1], zs[1])
+        _span(stage, f"{b}/{name}", (x0[0], x1[0]), (x0[1], x1[1]), (x0[2], x1[2]), mat, collide)
+
+    rail_d = (DEPTH, DEPTH + 7.5 * MM)
+    rail_z = (39.0 * MM - 17.5 * MM, 39.0 * MM + 17.5 * MM)
+    hb("rail", 1, rail_d, (-0.10, 0.10), rail_z, m["rail"], collide=False)
+    pan_d = (rail_d[1], rail_d[1] + 3.0 * MM)
+    hb("pan", 1, pan_d, (-0.12, 0.12), (-BASE_Z + 0.02, 0.15), m["pan"])
+    hb("pan_foot", 1, (pan_d[0], pan_d[0] + 0.10), (-0.10, 0.10), (-BASE_Z, -BASE_Z + 0.02), m["stand"])
+    hb("pan_brace", 1, (pan_d[1], pan_d[1] + 0.05), (-0.01, 0.01), (-BASE_Z + 0.02, 0.12), m["stand"])
+    hw = W / 2 - 0.05 * MM
+    for s in range(3):
+        hb(f"lower{s}", s, (LOWER_FRONT_D, DEPTH), (-hw, hw), (0.0, LOWER_TOP), m["body"])
+        hb(f"back{s}", s, (BACK_D, DEPTH), (-hw, hw), (LOWER_TOP, UPPER_BOTTOM), m["body"])
+        hb(f"upper{s}", s, (UPPER_FRONT_D, DEPTH), (-hw, hw), (UPPER_BOTTOM, H), m["body"])
+        for k, sv in enumerate((-1, 1)):
+            hb(f"wall{s}{k}", s, (0.0, BACK_D), tuple(sorted((sv * WALL_IN, sv * hw))), (LOWER_TOP, UPPER_BOTTOM),
+               m["body"])
+        # Contacts: the upper one is a rear stop for the outer ferrule; the lower one is visual (see docstring).
+        hb(f"contact_hi{s}", s, UPPER_CONTACT_D, (-3.0 * MM, 3.0 * MM), (FUSE_Z1 - 9.0 * MM, FUSE_Z1 - 1.0 * MM),
+           m["copper"])
+        hb(f"contact_lo{s}", s, UPPER_CONTACT_D, (-3.0 * MM, 3.0 * MM), (FUSE_Z0 + 1.0 * MM, FUSE_Z0 + 9.0 * MM),
+           m["copper"], collide=False)
+        # Terminal screws (visual) on the lower and upper fronts.
+        for nm, dz, z in (("screw_lo", LOWER_FRONT_D, 5.5 * MM), ("screw_hi", UPPER_FRONT_D, 67.5 * MM)):
+            c = holder_to_world(s, dz - 0.6 * MM, 0.0, z)
+            kit.cylinder(stage, f"{b}/{nm}{s}", c, 3.5 * MM, 1.2 * MM, m["steel"], axis="X")
+    # Carriers.
+    for s in range(3):
+        name = f"carrier{s}"
+        pivot = hinge_world(s)
+        body = kit.rigid_body(stage, f"{root}/{name}", pivot, CARRIER_MASS)
+        UsdPhysics.MassAPI(body.GetPrim()).CreateCenterOfMassAttr(Gf.Vec3f(*CARRIER_COM))
+        p = f"{root}/{name}"
+
+        def cb(nm, ds, ys, zs, mat, collide=True):
+            return _span(stage, f"{p}/{nm}", (ds[0] - HINGE_D, ds[1] - HINGE_D), ys, (zs[0] - HINGE_Z, zs[1] - HINGE_Z), mat,
+                  collide)
+
+        cb("plate", PLATE, (-PLATE_HALF_Y, PLATE_HALF_Y), PLATE_Z, m["carrier"])
+        cb("tab", TAB_D, (-TAB_HALF_Y, TAB_HALF_Y), TAB_Z, m["carrier"])
+        # Bottom stop: up to 1 mm short of the axis, so a fuse lowered a little too far in lands on its end face
+        # rather than perching on the stop's top (perched 3 mm high on a stop that reached 2 mm past the axis).
+        cb("stop", (PLATE[1], AXIS_D - 1.0 * MM), (-FUSE_R - 2.0 * MM, FUSE_R + 2.0 * MM), STOP_Z, m["carrier"])
+        # The inner clip: a U open toward the body (up when the carrier is open) round the inner ferrule.
+        r_in = FUSE_R + CLIP_CLR
+        cb("clip_floor", (PLATE[1], AXIS_D - FUSE_R - GAP), (-r_in - CLIP_T, r_in + CLIP_T), CLIP_Z, m["carrier"])
+        for k, sv in enumerate((-1, 1)):
+            cb(f"clip_side{k}", (AXIS_D - r_in, AXIS_D + CLIP_LIP), tuple(sorted((sv * r_in, sv * (r_in + CLIP_T)))),
+               CLIP_Z, m["carrier"])
+        cb("saddle", (PLATE[1], AXIS_D - FUSE_R - GAP), (-SADDLE_HALF_Y, SADDLE_HALF_Y), SADDLE_Z, m["carrier"])
+        # End wall of the fuse pocket beyond the outer ferrule's end (3 mm clear of it, room to lay the fuse in
+        # tilted), low and narrow so that the fingertips gripping the outer ferrule pass either side of it: without it
+        # the fuse crept along its axis out of the inner clip as the carrier fell open; it still lifts out across its
+        # axis.
+        cb("end_stop", (AXIS_D - FUSE_R, AXIS_D - 2.5 * MM), (-1.5 * MM, 1.5 * MM),
+           (FUSE_Z1 + 3.0 * MM, FUSE_Z1 + 5.0 * MM), m["carrier"])
+        # Ferrule retention: spring fingers with lips either side of each ferrule (compliant contact).
+        lip_x = AXIS_D + LIP_X0 - HINGE_D
+        for e, lz in (("in", INNER_LIP_Z),):
+            for k, sv in enumerate((-1, 1)):
+                cy = sv * (FUSE_R + LIP_R - LIP_IN)
+                lip = prism(stage, f"{p}/lip_{e}{k}", [(lip_x + u, cy + v) for u, v in ngon(LIP_R)],
+                            lz[0] - HINGE_Z, lz[1] - HINGE_Z, m["steel"])
+                _bind_compliant(stage, lip.GetPath(), lip_mat)
+                y_out = sv * (FUSE_R + CLIP_CLR + CLIP_T)
+                cb(f"finger_{e}{k}", (AXIS_D - FUSE_R, AXIS_D + LIP_X0), tuple(sorted((cy + sv * 0.5 * LIP_R, y_out))),
+                   lz, m["steel"], collide=False)
+        # Window recess in the face (visual) and the hinge boss.
+        cb("window", (-0.4 * MM, 0.0), (-5.5 * MM, 5.5 * MM), (30.0 * MM, 44.0 * MM), m["dark"], collide=False)
+        kit.cylinder(stage, f"{p}/boss", (0.0, 0.0, 0.0), 2.5 * MM, 2 * TAB_HALF_Y + 0.4 * MM, m["carrier"], axis="Y")
+        # Red Bussmann label on the grip tab's front and top.
+        tm = _tex(stage, root, f"tab{s}", "./textures/tab.png")
+        d0, d1 = TAB_D[0] - 0.2 * MM - HINGE_D, TAB_D[1] - HINGE_D
+        z0, z1 = TAB_Z[0] - HINGE_Z, TAB_Z[1] - HINGE_Z + 0.2 * MM
+        hy = TAB_HALF_Y - 0.3 * MM
+        _quad(stage, f"{p}/label_front", [(d0, hy, z0 + 1 * MM), (d0, -hy, z0 + 1 * MM), (d0, -hy, z1 - 1 * MM),
+                                          (d0, hy, z1 - 1 * MM)], tm)
+        _quad(stage, f"{p}/label_top", [(d0, hy, z1), (d0, -hy, z1), (d1, -hy, z1), (d1, hy, z1)], tm)
+        if s != 1:  # decoy holders keep their fuse (visual; the task only scores the named holder's fuses)
+            c = (AXIS_D - HINGE_D, 0.0, FUSE_ZC - HINGE_Z)
+            kit.cylinder(stage, f"{p}/fuse_tube", c, TUBE_R, FUSE_L - 2 * CAP_L, m["fuse_tube"])
+            for e in (-1, 1):
+                kit.cylinder(stage, f"{p}/fuse_cap{e + 1}", (c[0], 0.0, c[2] + e * (FUSE_L - CAP_L) / 2), FUSE_R,
+                             CAP_L, m["fuse_cap"])
+        rb = body.GetPrim()
+        rb.AddAppliedSchema("PhysxRigidBodyAPI")
+        rb.CreateAttribute("physxRigidBody:maxDepenetrationVelocity", Sdf.ValueTypeNames.Float).Set(0.3)
+        kit.revolute(stage, f"{root}/joints/{name}_joint", base.GetPath(), body.GetPath(), "Y", pivot, -OPEN_DEG, 0.0)
+    # Circuit legends: a plate per holder on a bracket off the pan above it, tilted LEGEND_TILT_DEG up toward the
+    # robot (a vertical plate is seen almost edge-on from the overhead camera).
+    lm = _mats(stage, root, ("paper", "ink", "white_ink"))
+    for s_, (tag, circuit, amps) in enumerate(CIRCUITS):
+        _, rgb = RATING_COLOURS[amps]
+        field = _plain_material(stage, root, f"legend_field{s_}", rgb)
+        y0 = SLOT_Y[s_]
+        x_back = FRONT_X + pan_d[0]
+        zb = BASE_Z + LEGEND_Z0
+        t = math.radians(LEGEND_TILT_DEG)
+        origin = (x_back - LEGEND_H * math.sin(t), y0, zb)  # middle of the lower front edge
+        u = (0.0, -1.0, 0.0)  # the text's right, seen from the robot
+        v = (math.sin(t), 0.0, math.cos(t))  # up the plate
+        w = LEGEND_W / 2
+        plane_rect(stage, f"{b}/legend{s_}", origin, u, v, (-w, w), (0.0, LEGEND_H), lm["paper"])
+        plane_rect(stage, f"{b}/legend{s_}_field", origin, u, v, (-w, w), (0.0, LEGEND_H / 2), field, lift=0.0002)
+        plane_text(stage, f"{b}/legend{s_}_tag", tag, origin, u, v, (0.0, 0.0205), 0.0055, 0.024, lm["ink"])
+        plane_text(stage, f"{b}/legend{s_}_circuit", circuit, origin, u, v, (0.0, 0.0150), 0.0026, 0.026, lm["ink"])
+        plane_text(stage, f"{b}/legend{s_}_rating", f"{amps} A", origin, u, v, (0.0, 0.0062), 0.0072, 0.024,
+                   lm["white_ink"], lift=0.0005)
+        # Its bracket to the pan (visual).
+        hb(f"legend_bracket{s_}", s_, (pan_d[0] - 0.012, pan_d[0]), (-0.003, 0.003), (LEGEND_Z0, LEGEND_Z0 + 0.004),
+           m["dark"], collide=False)
+    _phys_mat(stage, root, root, 0.5, "pbt")
+    _contacts(stage)
+    stage.GetRootLayer().Save()
+    _textures(out_path.parent / "textures")
+    print(f"wrote {out_path}")
+
+
+def _font(bold, size):
+    return ImageFont.truetype(FONT_B if bold else FONT, size)
+
+
+def _textures(tex: Path) -> None:
+    tex.mkdir(parents=True, exist_ok=True)
+    img = Image.new("RGB", (240, 120), (190, 25, 30))
+    d = ImageDraw.Draw(img)
+    d.rectangle([0, 0, 240, 40], fill=(225, 225, 225))
+    d.text((120, 20), "Bussmann", fill=(190, 25, 30), font=_font(True, 28), anchor="mm")
+    d.text((120, 66), "Midget 10x38", fill=(255, 255, 255), font=_font(True, 22), anchor="mm")
+    d.text((120, 98), "690V  32A", fill=(255, 255, 255), font=_font(False, 20), anchor="mm")
+    img.save(tex / "tab.png")
+    for amps in (6, 10):
+        for blown in ((False, True) if amps == 6 else (False,)):
+            img = Image.new("RGB", (360, 120), (226, 224, 214))
+            d = ImageDraw.Draw(img)
+            d.rectangle([0, 0, 110, 120], fill=(15, 15, 15))
+            d.text((55, 60), "BUSS", fill=(255, 255, 255), font=_font(True, 30), anchor="mm")
+            d.text((235, 42), f"KTK-{amps}", fill=(0, 0, 0), font=_font(True, 50), anchor="mm")
+            d.text((235, 95), "600Vac FAST", fill=(0, 0, 0), font=_font(False, 22), anchor="mm")
+            if blown:  # a black marker X over the whole printed face, as an electrician marks a fuse found open
+                for a, b in (((0, 0), (360, 120)), ((0, 120), (360, 0))):
+                    d.line([a, b], fill=(5, 5, 5), width=26)
+            img.save(tex / f"fuse_{amps}{'_blown' if blown else ''}.png")
+
+
+# Fuse --------------------------------------------------------------------------------------------------------------
+def prism(stage, path, poly, z0, z1, material, collide=True):
+    """A convex prism from a counter-clockwise xy polygon, between z0 and z1 (convex-hull collision)."""
+    n = len(poly)
+    pts = [Gf.Vec3f(x, y, z0) for x, y in poly] + [Gf.Vec3f(x, y, z1) for x, y in poly]
+    faces, counts = list(range(n - 1, -1, -1)), [n]
+    faces += list(range(n, 2 * n))
+    counts.append(n)
+    for k in range(n):
+        a, b = k, (k + 1) % n
+        faces += [a, b, n + b, n + a]
+        counts.append(4)
+    mesh = UsdGeom.Mesh.Define(stage, path)
+    mesh.CreatePointsAttr(pts)
+    mesh.CreateFaceVertexIndicesAttr(faces)
+    mesh.CreateFaceVertexCountsAttr(counts)
+    mesh.CreateSubdivisionSchemeAttr("none")
+    UsdShade.MaterialBindingAPI.Apply(mesh.GetPrim()).Bind(material)
+    if collide:
+        UsdPhysics.CollisionAPI.Apply(mesh.GetPrim())
+        UsdPhysics.MeshCollisionAPI.Apply(mesh.GetPrim()).CreateApproximationAttr("convexHull")
+    return mesh
+
+
+def make_fuse(out_path: Path, amps: int, blown: bool = False) -> None:
+    tex = f"{amps}_blown" if blown else f"{amps}"
+    root = "/fuse"
+    stage, root_prim = kit.new_stage(out_path, root)
+    m = _mats(stage, root, ("fuse_tube", "fuse_cap"))
+    UsdPhysics.RigidBodyAPI.Apply(root_prim)
+    UsdPhysics.MassAPI.Apply(root_prim).CreateMassAttr(FUSE_MASS)
+    root_prim.AddAppliedSchema("PhysxRigidBodyAPI")
+    root_prim.CreateAttribute("physxRigidBody:solverPositionIterationCount", Sdf.ValueTypeNames.Int).Set(32)
+    root_prim.CreateAttribute("physxRigidBody:maxDepenetrationVelocity", Sdf.ValueTypeNames.Float).Set(0.3)
+    h = FUSE_L / 2
+    prism(stage, f"{root}/cap_lo", ngon(FUSE_R, 32), -h, -h + CAP_L, m["fuse_cap"])
+    prism(stage, f"{root}/tube", ngon(TUBE_R), -h + CAP_L, h - CAP_L, m["fuse_tube"])
+    prism(stage, f"{root}/cap_hi", ngon(FUSE_R, 32), h - CAP_L, h, m["fuse_cap"])
+    # Printed rating on four faces of the tube (reads along the axis).
+    tm = _tex(stage, root, "print", f"./textures/fuse_{tex}.png")
+    r = TUBE_R + 0.15 * MM
+    a, half = h - CAP_L - 0.5 * MM, 2.6 * MM
+    for k in range(4):
+        ang = k * math.pi / 2
+        n = (math.cos(ang), math.sin(ang))
+        t = (-math.sin(ang), math.cos(ang))
+        c = (r * n[0], r * n[1])
+        corners = [(c[0] + half * t[0], c[1] + half * t[1], -a), (c[0] + half * t[0], c[1] + half * t[1], a),
+                   (c[0] - half * t[0], c[1] - half * t[1], a), (c[0] - half * t[0], c[1] - half * t[1], -a)]
+        _quad(stage, f"{root}/print{k}", corners, tm)
+    _phys_mat(stage, root, root, FUSE_FRICTION, "nickel")
+    _contacts(stage)
+    stage.GetRootLayer().Save()
+    print(f"wrote {out_path}")
+
+
+# Spares stand and tray --------------------------------------------------------------------------------------------------
+def carton_frame(k: int) -> dict:
+    """Carton k's outside extents (desk frame) and its lid's plane: the lid's hinge (far top edge), u (the text's right,
+    seen from the robot) and v (up the open lid, from the hinge toward its free edge, which is the text's up)."""
+    y = SPARE_Y[k]
+    floor_top = SPARE_AXIS_Z - FUSE_R
+    x0 = SPARE_X[0] - 0.5 * MM - CARTON_T
+    x1 = SPARE_X[1] + 0.5 * MM + CARTON_T
+    z0, z1 = floor_top - CARTON_T, floor_top - CARTON_T + CARTON_H
+    a = math.radians(LID_OPEN_DEG)
+    v = (-math.cos(a), 0.0, math.sin(a))  # from the hinge toward the lid's free edge
+    return {"x": (x0, x1), "y": (y - CARTON_W / 2, y + CARTON_W / 2), "z": (z0, z1), "floor_top": floor_top,
+            "hinge": (x1, y, z1), "u": (0.0, -1.0, 0.0), "v": v, "lid_len": x1 - x0}
+
+
+def carton_label_point(k: int) -> tuple[float, float, float]:
+    """Middle of the rating's colour field on carton k's open lid (desk frame)."""
+    f = carton_frame(k)
+    return plane_point(f["hinge"], f["u"], f["v"], 0.0, 0.40 * f["lid_len"])
+
+
+def make_stands(out_path: Path) -> None:
+    root = "/stands"
+    stage, _ = kit.new_stage(out_path, root)
+    m = _mats(stage, root, ("stand", "tray", "dark", "carton", "ink", "white_ink", "paper", "bench_box", "buss_red"))
+    t = CARTON_T
+    fr = [carton_frame(k) for k in range(2)]
+    # The bench-top box the cartons stand on (closed steel parts box).
+    _span(stage, f"{root}/bench_box", BENCH_BOX_X, (fr[1]["y"][0] - 2 * MM, fr[0]["y"][1] + 2 * MM),
+          (0.0, fr[0]["z"][0]), m["bench_box"])
+    for k, f in enumerate(fr):
+        amps = SPARE_RATINGS[k]
+        (x0, x1), (y0, y1), (z0, z1) = f["x"], f["y"], f["z"]
+        y = SPARE_Y[k]
+        p = f"{root}/carton{k}"
+        _span(stage, f"{p}_floor", (x0, x1), (y0, y1), (z0, z0 + t), m["carton"])
+        _span(stage, f"{p}_back", (x1 - t, x1), (y0, y1), (z0, z1), m["carton"])
+        for j, (ya, yb) in enumerate(((y0, y0 + t), (y1 - t, y1))):
+            _span(stage, f"{p}_side{j}", (x0, x1), (ya, yb), (z0, z1), m["carton"])
+        # Front wall with the finger cut-out round the middle slot.
+        for j, (ya, yb) in enumerate(((y0, y - CARTON_NOTCH), (y + CARTON_NOTCH, y1))):
+            _span(stage, f"{p}_front{j}", (x0, x0 + t), (ya, yb), (z0, z1), m["carton"])
+        # Slot dividers of the bottom layer are not modelled (the other nine fuses are gone).
+        # The lid, standing open, its inside toward the robot (visual): maker, catalogue number, rating on its colour.
+        _, rgb = RATING_COLOURS[amps]
+        field = _plain_material(stage, root, f"carton_field{k}", rgb)
+        h, u, v, L = f["hinge"], f["u"], f["v"], f["lid_len"]
+        hw = CARTON_W / 2
+        plane_rect(stage, f"{p}_lid", h, u, v, (-hw, hw), (0.0, L), m["carton"])
+        plane_rect(stage, f"{p}_lid_print", h, u, v, (-hw + 2 * MM, hw - 2 * MM), (0.66 * L, L - 2 * MM), m["paper"],
+                   lift=0.0002)
+        plane_rect(stage, f"{p}_lid_field", h, u, v, (-hw + 2 * MM, hw - 2 * MM), (0.10 * L, 0.62 * L), field,
+                   lift=0.0002)
+        plane_text(stage, f"{p}_lid_maker", "BUSSMANN", h, u, v, (0.0, 0.90 * L), 0.0045, 0.040, m["buss_red"])
+        plane_text(stage, f"{p}_lid_cat", f"KTK-{amps}", h, u, v, (0.0, 0.76 * L), 0.0060, 0.040, m["ink"])
+        plane_text(stage, f"{p}_lid_rating", f"{amps} A", h, u, v, (0.0, 0.38 * L), 0.0110, 0.040, m["white_ink"],
+                   lift=0.0005)
+        plane_text(stage, f"{p}_lid_qty", "10 FUSES  600V", h, u, v, (0.0, 0.18 * L), 0.0022, 0.040, m["white_ink"],
+                   lift=0.0005)
+        # Its outside front: the rating band (visual).
+        _span(stage, f"{p}_band", (x0 - 0.2 * MM, x0), (y0, y - CARTON_NOTCH), (z0 + 6 * MM, z1 - 6 * MM), field,
+              collide=False)
+        _span(stage, f"{p}_band1", (x0 - 0.2 * MM, x0), (y + CARTON_NOTCH, y1), (z0 + 6 * MM, z1 - 6 * MM), field,
+              collide=False)
+    tx, ty = TRAY_XY
+    a, h = 0.09, 0.025
+    _span(stage, f"{root}/tray_floor", (tx - a / 2, tx + a / 2), (ty - a / 2, ty + a / 2), (0.0, 0.003), m["tray"])
+    for k, s in enumerate((-1, 1)):
+        _span(stage, f"{root}/tray_wx{k}", (tx + s * a / 2 - 0.0015, tx + s * a / 2 + 0.0015), (ty - a / 2, ty + a / 2),
+              (0.0, h), m["tray"])
+        _span(stage, f"{root}/tray_wy{k}", (tx - a / 2, tx + a / 2), (ty + s * a / 2 - 0.0015, ty + s * a / 2 + 0.0015),
+              (0.0, h), m["tray"])
+    _contacts(stage)
+    stage.GetRootLayer().Save()
+    print(f"wrote {out_path}")
+
+
+if __name__ == "__main__":
+    out_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(__file__).resolve().parents[1] / "assets"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    make_holders(out_dir / "holders.usda")
+    make_fuse(out_dir / "fuse_6_blown.usda", 6, blown=True)
+    make_fuse(out_dir / "fuse_6.usda", 6)
+    make_fuse(out_dir / "fuse_10.usda", 10)
+    make_stands(out_dir / "stands.usda")
