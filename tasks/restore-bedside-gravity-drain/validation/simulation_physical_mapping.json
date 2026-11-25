@@ -1,0 +1,256 @@
+{
+  "status": "Source surveyed and physical design specified. No as-built measurements.",
+  "source_id": "5018a09491d76c69b9e40dbb1088012df688b4be638fd058cf92db1f68d46e1d",
+  "layouts": {
+    "raised": {
+      "ear_world_z_mm": 1060.0,
+      "zero_world_z_mm": 940.0,
+      "sill_centre_world_z_mm": 1040.0,
+      "slide_limits_world_z_mm": [
+        910.0,
+        1090.0
+      ]
+    },
+    "lowered": {
+      "ear_world_z_mm": 940.0,
+      "zero_world_z_mm": 1060.0,
+      "sill_centre_world_z_mm": 1160.0,
+      "slide_limits_world_z_mm": [
+        910.0,
+        1090.0
+      ]
+    },
+    "aligned": {
+      "ear_world_z_mm": 1060.0,
+      "zero_world_z_mm": 1060.0,
+      "sill_centre_world_z_mm": 1160.0,
+      "slide_limits_world_z_mm": [
+        910.0,
+        1090.0
+      ]
+    },
+    "shifted": {
+      "ear_world_z_mm": 1084.0,
+      "zero_world_z_mm": 964.0,
+      "sill_centre_world_z_mm": 1064.0,
+      "slide_limits_world_z_mm": [
+        910.0,
+        1090.0
+      ]
+    }
+  },
+  "components": {
+    "rack": {
+      "source": "mast/rackTooth0…17",
+      "simulated": {
+        "count": 18,
+        "pitch_mm": 12,
+        "tooth_xyz_mm": [
+          6,
+          18,
+          3
+        ]
+      },
+      "bench_design": "Machined rectangular-tooth comb; reference tooth indices and bench survey in physical/RESET.md.",
+      "verification_boundary": "Specified identical tooth pitch and bearing faces."
+    },
+    "locking_tongue": {
+      "source": "brake/lockingPin",
+      "simulated": {
+        "centre_xyz_world_mm": [
+          384.0,
+          -65.0,
+          985.0
+        ],
+        "envelope_xyz_mm": [
+          7.0,
+          15.0,
+          3.0
+        ]
+      },
+      "bench_design": "7 × 15 × 3 mm flat load-bearing tongue mounted to a guided yoke.",
+      "verification_boundary": "Contact dimensions drawn from USD; capture, bearing clearance and retention need measurement."
+    },
+    "brake_tab": {
+      "source": "brake/pressTab + brakeSlide",
+      "simulated": {
+        "centre_xyz_world_mm": [
+          315.0,
+          -65.0,
+          985.0
+        ],
+        "envelope_xyz_mm": [
+          28.0,
+          20.0,
+          20.0
+        ],
+        "physics:axis": "X",
+        "physics:lowerLimit": 0.0,
+        "physics:upperLimit": 0.008,
+        "drive:linear:physics:damping": 3.0,
+        "drive:linear:physics:stiffness": 550.0,
+        "drive:linear:physics:targetPosition": -0.002
+      },
+      "bench_design": "+X press, 8 mm positive stop; return spring at nominal 0.55 N/mm with 2 mm initial compression.",
+      "verification_boundary": "Model includes viscous damping. Friction and spring tolerances distinguished in commissioning."
+    },
+    "lift": {
+      "source": "carriage/liftNeck",
+      "simulated": {
+        "centre_xyz_world_mm": [
+          315.0,
+          45.0,
+          940.0
+        ],
+        "envelope_xyz_mm": [
+          30.0,
+          22.0,
+          18.0
+        ]
+      },
+      "bench_design": "Bolt-on neck and stem at the source control position.",
+      "verification_boundary": "Specified identical grip envelope."
+    },
+    "carriage": {
+      "source": "carriage/backboard + slide",
+      "simulated": {
+        "backboard": {
+          "centre_xyz_world_mm": [
+            385.0,
+            0.0,
+            960.0
+          ],
+          "envelope_xyz_mm": [
+            9.0,
+            215.0,
+            200.0
+          ]
+        },
+        "zero_world_z_limits_mm": [
+          910.0,
+          1090.0
+        ],
+        "body_masses_kg": {
+          "carriage": 0.40000001,
+          "brake": 0.045,
+          "tap": 0.025
+        }
+      },
+      "bench_design": "Cut a rack clearance lane, add structural bridges and guide hardware; weigh the filled assembly and adjust ballast.",
+      "verification_boundary": "Robot-facing grip preserved. Solid backboard and ideal prismatic guide in USD require different internal construction on the bench."
+    },
+    "tap": {
+      "source": "tap/knob + tapHinge",
+      "simulated": {
+        "centre_xyz_world_mm": [
+          315.0,
+          -85.0,
+          910.0
+        ],
+        "envelope_xyz_mm": [
+          26.0,
+          12.0,
+          12.0
+        ],
+        "physics:axis": "X",
+        "physics:lowerLimit": -90.0,
+        "physics:upperLimit": 0.0,
+        "drive:angular:physics:damping": 0.00025,
+        "drive:angular:physics:maxForce": 0.035,
+        "drive:angular:physics:stiffness": 0.006,
+        "drive:angular:physics:targetPosition": 0.0
+      },
+      "bench_design": "Coaxial plug, shaft, 20 mm radius knob, dry detent and hard stops. Register the engraved witness to the wet cartridge.",
+      "verification_boundary": "Stop angles and grip geometry are specified. Intermediate flow, hysteresis and breakaway torque require physical characterization."
+    },
+    "registration": {
+      "source": "carriage/spillSill + patient/tragus",
+      "simulated": {
+        "sill": {
+          "centre_xyz_world_mm": [
+            372.0,
+            50.0,
+            1040.0
+          ],
+          "envelope_xyz_mm": [
+            7.0,
+            54.0,
+            5.0
+          ]
+        },
+        "ear": {
+          "centre_xyz_world_mm": [
+            478.0,
+            152.0,
+            1060.0
+          ],
+          "envelope_xyz_mm": [
+            11.0,
+            9.0,
+            12.0
+          ]
+        },
+        "offset_mm": 100
+      },
+      "bench_design": "Outlet lip and magenta witness on one moving carriage. Green witness fixed to the head platform.",
+      "verification_boundary": "Survey real wet lip and both sights to a common ruler on each reset."
+    },
+    "constant_head": {
+      "source": "evd/instrument.py Monitor.sample",
+      "simulated": {
+        "source_minus_ear_mm": 150,
+        "gain_ml_per_s_per_mm": 0.01,
+        "nominal_head_mm": 50,
+        "stale_raised_mm": 170,
+        "stale_lowered_mm": -70
+      },
+      "bench_design": "Sealed rigid reservoir and vent carried by the independent inert support; restricted FEP path to atmospheric break.",
+      "verification_boundary": "Effective conductance, source stability and wetting are measured on commissioning."
+    },
+    "collection": {
+      "source": "evd/visual.py + checks/scorer.py",
+      "simulated": {
+        "receiver_model_capacity_ml": 100,
+        "slope_mm_per_ml": 2.5,
+        "atmospheric_break": true,
+        "required_ml_each_15s": [
+          6,
+          9
+        ]
+      },
+      "bench_design": "Shallow broad receiver weighed below free discharge. Keep a separate air break upstream of the waste route.",
+      "verification_boundary": "The simulated measuring column is taller than the lowest sill. The physical receiver uses a balance so its level cannot set downstream head."
+    },
+    "robot_and_table": {
+      "source": "yam_arena.station + evd/cameras.py",
+      "simulated": {
+        "bases_xyz_world_mm": [
+          [
+            0,
+            305,
+            750
+          ],
+          [
+            0,
+            -305,
+            750
+          ]
+        ],
+        "tabletop_world_z_mm": 747.5,
+        "bases_face": "+X"
+      },
+      "bench_design": "Stock mounting, independent bracket, dry approach and wet load checks.",
+      "verification_boundary": "YAM model hash verified. Kinematic checks and recorded rigid-body contacts cover the simulator."
+    },
+    "circuit_integrity": {
+      "source": "evd/instrument.py Monitor.sample",
+      "simulated": {
+        "model_hose_od_mm": 3,
+        "forbidden_surrogate_clearance_mm": 0,
+        "interface_clearance_mm": 30
+      },
+      "bench_design": "Fixed clips, sealed restrictor, independently observed circuit, outcome scored from actual water.",
+      "verification_boundary": "Kinks, leaks and attempts to move a receiver are physical observations. Numerical blocked control disables modeled flow."
+    }
+  }
+}

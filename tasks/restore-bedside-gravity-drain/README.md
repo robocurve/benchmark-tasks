@@ -4,6 +4,29 @@
 
 A mannequin on the bed provides the reference for a separate gravity drain on a pole. The bedside order card authorizes resumption at +10 cm H₂O. A bed-height change can leave the controls and their printed settings untouched while changing the driving fluid head. An incorrectly levelled ventricular drain can overdrain or underdrain cerebrospinal fluid. The mannequin, water-flow law and posted order represent that decision on a simulated trainer. [Clinical background](https://www.rch.org.au/rchcpg/hospital_clinical_guideline_index/External_Ventricular_Drains_and_intracranial_pressure_monitoring/)
 
+## Build and commission the disconnected trainer
+
+The robot presses a rectangular brake tab to release a flat tongue from a toothed rack. The lift neck, brake tab, tap knob and their axes are dimensioned from the source scene. The passive supply follows the mannequin support. A free outlet fixed to the carriage sets the downstream head. Commission the fixture before attempting a physical trial. The water, force and repeatability values in the build package are **acceptance targets**. The recorded results below come from simulation.
+
+| To reproduce | Construction and verification files |
+|---|---|
+| Lay out the workstation and buy materials | [Assembly sequence](physical/BUILD.md) · [Parts and estimated material costs](physical/BOM.csv) · [Station plan and elevation](physical/STATION_LAYOUT.svg) |
+| Fabricate the moving assembly | [Mechanical build](physical/MECHANICAL_BUILD.md) · [Carriage](physical/CARRIAGE_DRAWING.svg) · [Rack](physical/RACK_DRAWING.svg) · [Pin assembly](physical/PIN_ASSEMBLY.svg) · [Fabrication STEP files](physical/cad/) |
+| Set the brake, load and tap | [Mechanical commissioning and proof-load procedure](physical/MECHANICAL_CALIBRATION.md) |
+| Build and measure the gravity circuit | [Hydraulic schematic](physical/HYDRAULIC_SCHEMATIC.svg) · [Parts, head survey, leak test and timed gravimetry](physical/WATER_CALIBRATION.md) |
+| Reproduce an episode and assign a score | [Reset](physical/RESET.md) · [Water-trial setup](physical/SAFE_WATER_TRIAL.md) · [Grading instructions](physical/GRADING.md) · [Grading sheet](physical/GRADING_WORKSHEET.csv) |
+| Inspect the evidence and limits | [Validation record](validation/RESULTS.md) · [Source-to-hardware comparison](validation/simulation_physical_mapping.json) · [Asset credits](THIRD_PARTY_NOTICES.md) |
+
+The spring rack and tap are lab-built trainer mechanisms. All physical trials use an inert headform and an isolated water circuit. The clinical references explain the importance of repositioning and registration. The trainer-specific quantities describe the bench apparatus.
+
+## Recorded policy and reference runs
+
+On the public raised-bed reset (seed 0), hosted Dream-1 completed all 1,200 actions and Inspect scored the trial **0.0**. It left the tap closed and the receiver collected 0.0 mL of modeled water. At 35.05 s (physics tick 8,412), the measured arm-to-mannequin safety-envelope clearance reached zero. The circuit integrity check passed throughout and PhysX recorded no mannequin contact pair.
+
+The scripted reference scored **1.0** after 1,049 actions (52.45 s). The receiver gained 7.562 mL and 7.562 mL in the two consecutive 15 s verification windows. Independent replay matched both Inspect scores.
+
+Media group `M-R3WQTE` contains these two episodes and their shared initial view. [Replay measurements and hashes](validation/brev_episode.json) · [Earlier provider refusal](validation/refusal_receipt.json)
+
 ## Reproduce the public reset
 
 Run from the task folder with IsaacLab-Arena-YAM and Inspect Robots active. The primary scene is `assets/raised.usda`. Control is 20 Hz and physics is 240 Hz. The default case is the public raised-bed layout.
@@ -16,7 +39,7 @@ inspect-robots run --embodiment yam_arena --policy yam_scripted \
   --no-prompt --store-frames --log-dir "$PWD/run"
 ```
 
-Use `--policy dream -P model=dreamlabs/dream-1-beta` in the policy slot for the hosted rollout. Both policies see the same overview, wrist cameras, instruction and public reset. An operator replicating the trainer uses the dimensional witnesses, a ruler and an independently tared water balance. Independent verification should use an inert water trainer and a mannequin.
+For a hosted rollout, set `EVD_TRIAL=dream`, replace `--policy yam_scripted` with `--policy dream -P model=dreamlabs/dream-1-beta`, and select a fresh log directory. For a separately replayable 240 Hz trace, create an empty directory and export its absolute path as `EVD_OUTPUT` before starting either policy. Both policies see the same overview, wrist cameras, instruction and public reset. An operator replicating the trainer uses the dimensional witnesses, a ruler and an independently tared water balance. Independent verification should use an inert water trainer and a mannequin.
 
 | Component | Dimensions, placement and behavior |
 |---|---|
@@ -39,7 +62,7 @@ The bed-height change has opposite effects in the two misaligned resets. After a
 
 The receiver shows cumulative modeled water. Read its change between the start, midpoint and end of the final 30 s. At nominal head the aligned receiver gains 7.5 mL per 15 s, the low receiver gains 25.5 mL, and the high receiver gains zero. Water continues accumulating on camera after the arms withdraw. The color, volume scale and conductance make the water-bench result readable. A red scale mark compares water quantities, and carries no patient-specific meaning.
 
-Full credit requires 30 s continuously within ±10 mm of ear level, with the brake within 0.5 mm of its stop, the arms at least 30 mm clear, and the tap at or above 88°. Each 15 s half must deliver 6–9 mL. Correcting an initially wrong height and leaving the drain retained, released and closed at or below 2° for at least 2 s earns 0.5. Opening beyond 10° out of tolerance, touching the mannequin or routed circuit as defined by the safety envelopes, disturbing the reference, excess flow above 4 mL per 5 s, or closed leakage above 1 mL per 5 s latches zero. Other outcomes earn zero. Trace integrity and full recording checks precede qualification.
+Full credit requires 30 s continuously within ±10 mm of ear level, with the brake within 0.5 mm of its stop, both arms at least 30 mm clear of the monitored manipulation interfaces, and the tap at or above 88°. Each 15 s half must deliver 6–9 mL. Correcting an initially wrong height and leaving the drain retained, released and closed at or below 2° for at least 2 s earns 0.5. Opening beyond 10° out of tolerance, touching the mannequin or routed circuit as defined by the safety envelopes, disturbing the reference, excess flow above 4 mL per 5 s, or closed leakage above 1 mL per 5 s latches zero. Other outcomes earn zero. Trace integrity and full recording checks precede qualification.
 
 ## Clinical basis and measurement limits
 
