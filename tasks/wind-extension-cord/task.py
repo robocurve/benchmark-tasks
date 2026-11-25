@@ -109,7 +109,7 @@ OBJECTS = [Reel("reel", pos=tuple(map(float, asset_pos)), size=(0.20, 0.29, 0.32
                 usd="assets/reel.usdc", rot_xyzw=(0, 0, math.sin(yaw / 2), math.cos(yaw / 2)),
                 articulation=True, fix_root=True, material=False, solver_iters=32)]
 
-def winding(points):
+def _wound_profile(points):
     delta = points - CENTER
     radial = np.column_stack((delta @ EXIT_AXIS, delta[:, 2]))
     axial = delta @ AXLE_AXIS
@@ -118,22 +118,46 @@ def winding(points):
               & (np.abs(axial) <= HALF_WIDTH - CORD_RADIUS))
     outside = np.flatnonzero(~inside)
     count = int(outside[0]) if outside.size else len(points)
-    if count < 2:
-        return 0.0, 0.0, 0.0
     angles = np.unwrap(np.arctan2(radial[:count, 1], radial[:count, 0]))
+    return angles, axial[:count], radius[:count]
+
+
+def winding(points):
+    angles, axial, radius = _wound_profile(points)
+    if len(angles) < 2:
+        return 0.0, 0.0, 0.0, 0.0
     turns = abs(float(angles[-1] - angles[0])) / math.tau
-    return count * LINK_LENGTH, turns, float(np.ptp(axial[:count]))
+    return len(angles) * LINK_LENGTH, turns, float(np.ptp(axial)), float(radius.max())
+
+
+def turn_spacing(points):
+    """Signed axial advance between consecutive wraps on every shared radial ray."""
+    angles, axial, _ = _wound_profile(points)
+    if len(angles) < 2:
+        return np.empty(0)
+    phase = (angles - angles[0]) * np.sign(angles[-1] - angles[0])
+    limit = phase[-1] - math.tau
+    if limit < 0 or np.any(np.diff(phase) <= 0):
+        return np.empty(0)
+    # Between these knots both axial interpolants are linear, so their extrema
+    # occur at a knot of either the first or second wrap.
+    rays = np.concatenate(([0.0, limit], phase, phase - math.tau))
+    rays = rays[(rays >= 0) & (rays <= limit)]
+    return np.interp(rays + math.tau, phase, axial) - np.interp(rays, phase, axial)
 
 
 def score(objects):
     state = objects["reel"]
-    length, turns, spread = winding(state.cord)
+    length, turns, _, thickness = winding(state.cord)
     released = (np.linalg.norm(state.tcp[:, None] - state.cord[None], axis=2).min() >= 0.03
                 and np.linalg.norm(state.tcp - crank(state.crank_angle), axis=1).min() >= 0.04)
     if not released or length < 0.42 or turns < 0.85:
         return 0.0
-    if length >= 0.84 and turns >= 1.65 and spread >= 0.016:
-        return 1.0
+    if length >= 0.84 and turns >= 1.65 and thickness <= 0.057:
+        spacing = turn_spacing(state.cord)
+        if spacing.size and any(np.all((0.006 <= gap) & (gap <= 0.030))
+                                for gap in (spacing, -spacing)):
+            return 1.0
     return 0.5
 
 
