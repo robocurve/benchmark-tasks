@@ -31,12 +31,13 @@ import numpy as np  # noqa: E402
 from yam_arena.task_file import TABLE_TOP  # noqa: E402
 
 import cuffkit  # noqa: E402,F401
+import presskit  # noqa: E402
 from cuffkit import Plug, cable  # noqa: E402
 from scenekit import Shape, UsdBody, on_reset, on_step, robot_links  # noqa: E402
 
 SCENE = "station"
 SCORE_OVER = "end"
-SUCCESS_HOLD_S = 1.0
+SUCCESS_HOLD_S = 2.0
 
 INSTRUCTION = ("Put the blood-pressure cuff on the arm: wrap the bladder end round first, then the hook end over it, press it "
                "shut, snug, with the index line over the artery mark.")
@@ -89,14 +90,23 @@ OBJECTS = [BOARD, UPPER, ARM_MESH, CREASE, ARTERY, CUFF]
 
 # -- scoring -----------------------------------------------------------------------------------------------------------
 WRAP_MIN = 2 * math.pi  # the plates on the arm must go round it once
-TOUCH_GAP = 0.002  # a hook plate touches the layer under it within this (plus the cuff's thickness)
-FASTEN_N, FASTEN_S = 3, 0.5  # hook plates touching at once, for this long: fastened (latched)
+TOUCH_GAP = 0.002  # a hook plate lies on the layer under it within this (plus the cuff's thickness)
+ALIGN = math.radians(25.0)  # ... and runs within this angle of it (flat on it, not across or on edge)
+FASTEN_N, FASTEN_S = 2, 0.5  # hook plates lying flat on the cuff at once, while pressed, for this long: fastened (latched)
+HOOK_FORCE = 2.0  # N: the hook tab (its plates and hem) pressed on the cuff's outer face, measured from PhysX contacts
+PAD_FORCE = 2.0  # N: ... while the finger pads push the tab towards the arm with this net force (a pinch cancels)
+EMA_S = 0.1  # s: both forces smoothed over this
+HOLD_FORCE = 0.2  # N: still fastened at the end = latched, a hook plate still flat on the cuff, and the tab still in contact
+# with the cuff (contact force at least this, smoothed)
+RELEASE_D = 0.10  # m: hands clear = no finger pad touching the cuff, and every pad this far from every plate and hem
 EDGE_LO, EDGE_HI, SKEW_MAX = 0.015, 0.035, 0.020  # lower edge above the crease; skew of the wrapped plates along x
 INDEX_ARC = 0.020  # the index line within this arc of the artery mark
 SNUG_GAP = 0.006  # mean gap between the inner layer and the skin
+TIGHT_MAX = 0.001  # ... and no plate pressed more than this into the skin (not over-tightened)
 CLEAR_D = 0.04  # full credit only with both hands' pads this far clear of the arm's surface (or 15 cm along it from the cuff)
 PAD_REACH = 0.080  # the pads' centre lies this far beyond the tip links' origins along the hand's approach axis
-_STATE: dict = {"touch_s": 0.0, "fastened": False, "clear": False, "t": 0.0, "last": -1.0}
+_STATE: dict = {"touch_s": 0.0, "fastened": False, "clear": False, "t": 0.0, "last": -1.0, "hook_f": 0.0, "pad_f": 0.0,
+                "pad_any": 0.0}
 
 
 def pads(side: dict) -> np.ndarray:
@@ -105,9 +115,16 @@ def pads(side: dict) -> np.ndarray:
     return mid + PAD_REACH * a / max(np.linalg.norm(a), 1e-6)
 
 
-def hands_clear(pad_points) -> bool:
+def hands_clear(pad_points, cuff_points, pad_contact: float) -> bool:
+    """No finger pad touching any part of the cuff (contact force under 0.05 N) and every pad at least RELEASE_D from
+    every plate centre and hem, and CLEAR_D clear of the arm's surface near the cuff."""
+    if pad_contact >= 0.05:
+        return False
+    c = np.asarray(cuff_points, float)
     for p in pad_points:
         p = np.asarray(p, float)
+        if np.min(np.linalg.norm(c - p, axis=1)) < RELEASE_D:
+            return False
         if abs(p[0] - X_CUFF) < 0.15 and math.hypot(p[1] - ARM_Y, p[2] - ZA) < R + CUFF_T * 2 + CLEAR_D:
             return False
     return True
@@ -136,48 +153,82 @@ def wrap_angle(points) -> float:
     return float(a.max() - a.min())
 
 
+def tangents(points) -> np.ndarray:
+    p = np.asarray(points, float)
+    t = np.zeros_like(p)
+    t[1:-1] = p[2:] - p[:-2]
+    t[0], t[-1] = p[1] - p[0], p[-1] - p[-2]
+    return t / np.maximum(np.linalg.norm(t, axis=1, keepdims=True), 1e-9)
+
+
 def hook_touching(points) -> int:
-    """Hook plates lying flat on the cuff's own outer face: another plate under them (same angle within 0.15 rad, nearer
-    the axis) with a gap of at most TOUCH_GAP."""
+    """Hook plates lying flat on the cuff's own outer face: another plate under them (same angle round the arm within
+    0.15 rad, nearer the axis) with a gap of at most TOUCH_GAP, the two running within ALIGN of each other."""
     rho, ang, x = polar(points)
+    tan = tangents(points)
     n = 0
     for h in HOOK:
         if not on_arm(rho[h]):
             continue
         under = [j for j in range(HOOK.start - 1) if on_arm(rho[j]) and abs(math.remainder(ang[h] - ang[j], 2 * math.pi)) < 0.15
                  and rho[j] < rho[h] - CUFF_T * 0.5]
-        if any(rho[h] - rho[j] - CUFF_T <= TOUCH_GAP for j in under):
+        if any(rho[h] - rho[j] - CUFF_T <= TOUCH_GAP and abs(float(tan[h] @ tan[j])) >= math.cos(ALIGN) for j in under):
             n += 1
     return n
 
 
-def status(points, fastened=None, clear=None) -> dict:
+def press_force(points, pad_vec) -> float:
+    """How hard the grippers press the hook tab onto the arm (N): the four finger pads' contact forces on the tab (hook
+    plates and the hook end's hem, as one piece; each force points into the body it pushes, see presskit), added, and
+    the component of the sum towards the arm's axis. A pinch pushes equally from both sides and adds nothing; pulling
+    the tab outward or dragging it along the cuff gives nothing (never negative)."""
+    tab = list(HOOK) + [NSEG + 1]
+    net = np.asarray(pad_vec, float)[tab].sum(axis=(0, 1))
+    c = np.asarray(points, float)[list(HOOK)].mean(axis=0)
+    inward = np.array([0.0, ARM_Y - c[1], ZA - c[2]])
+    inward /= max(np.linalg.norm(inward), 1e-9)
+    return max(0.0, float(net @ inward))
+
+
+def pressed(n_flat: int, hook_force: float, pad_force: float) -> bool:
+    """One control step of fastening: at least FASTEN_N hook plates lie flat on the cuff's outer face, the hook tab is
+    in contact with the cuff pressing on it with at least HOOK_FORCE, and the finger pads push the tab towards the arm
+    with a net PAD_FORCE (press_force; a pinch cancels) (both from the simulator's contact forces, smoothed over EMA_S). Proximity alone, or the
+    tab resting on the cuff under its own weight, does not count."""
+    return n_flat >= FASTEN_N and hook_force >= HOOK_FORCE and pad_force >= PAD_FORCE
+
+
+def status(points, fastened=None, clear=None, contact=None) -> dict:
     rho, ang, x = polar(points)
     m = on_arm(rho)
     inner = [i for i in range(NSEG) if m[i] and not any(m[j] and abs(math.remainder(ang[i] - ang[j], 2 * math.pi)) < 0.12
                                                         and rho[j] < rho[i] - CUFF_T * 0.5 for j in range(NSEG))]
-    gap = float(np.mean([rho[i] - R - CUFF_T / 2 for i in inner])) if inner else 1.0
+    gaps = [rho[i] - R - CUFF_T / 2 for i in inner]
+    gap = float(np.mean(gaps)) if inner else 1.0
+    min_gap = float(np.min(gaps)) if inner else 1.0
     xs = x[m] if m.any() else x
     idx_arc = abs(math.remainder(ang[INDEX_SEG] - ART_ANGLE, 2 * math.pi)) * R_EFF if m[INDEX_SEG] else 1.0
     return {"wrap": wrap_angle(points), "touching": hook_touching(points),
             "fastened": _STATE["fastened"] if fastened is None else fastened,
+            "contact": _STATE["hook_f"] if contact is None else contact,
             "edge": float(xs.min() - CUFF_W / 2 - X_CREASE), "skew": float(xs.max() - xs.min()), "index_arc": float(idx_arc),
-            "gap": gap, "clear": _STATE["clear"] if clear is None else clear}
+            "gap": gap, "min_gap": min_gap, "clear": _STATE["clear"] if clear is None else clear}
 
 
 def score_status(st: dict) -> float:
     """0 unless the cuff goes once round the arm. 0.25 wrapped; 0.5 also fastened (the hook tab pressed flat on the
-    cuff, latched, and at least one hook plate still on it at the end); 0.75 also in place (lower edge 1.5-3.5 cm above
+    cuff, latched, and at the end a hook plate still flat on it with the tab in contact, at least HOLD_FORCE); 0.75 also in place (lower edge 1.5-3.5 cm above
     the crease, skew along the arm under 2 cm, index line within 2 cm of the artery mark); 1.0 also snug (mean gap
-    between the inner layer and the skin at most 6 mm) with both hands' pads at least 4 cm clear of the arm."""
+    between the inner layer and the skin at most 6 mm, and no plate pressed more than 1 mm into the skin: not over-tight)
+    with both hands off the cuff (no pad touching it, every pad at least 10 cm from it)."""
     if st["wrap"] < WRAP_MIN:
         return 0.0
     s = 0.25
-    if st["fastened"] and st["touching"] >= 1:
+    if st["fastened"] and st["touching"] >= 1 and st["contact"] >= HOLD_FORCE:
         s = 0.5
         if EDGE_LO <= st["edge"] <= EDGE_HI and st["skew"] <= SKEW_MAX and st["index_arc"] <= INDEX_ARC:
             s = 0.75
-            if st["gap"] <= SNUG_GAP and st["clear"]:
+            if st["gap"] <= SNUG_GAP and st["min_gap"] >= -TIGHT_MAX and st["clear"]:
                 s = 1.0
     return s
 
@@ -192,7 +243,8 @@ def success(objects) -> bool:
 
 @on_reset
 def _reset(environment) -> None:
-    _STATE.update(touch_s=0.0, fastened=False, clear=False, t=0.0, last=-1.0)
+    _STATE.update(touch_s=0.0, fastened=False, clear=False, t=0.0, last=-1.0, hook_f=0.0, pad_f=0.0, pad_any=0.0)
+    presskit.reset()
 
 
 @on_step
@@ -203,12 +255,23 @@ def _watch(environment) -> None:
         dt = environment.unwrapped.step_dt
         cuff = object_states(environment, ["cuff"])["cuff"]
         n = hook_touching(cuff.points)
-        _STATE["touch_s"] = _STATE["touch_s"] + dt if n >= FASTEN_N else 0.0
+        hems = [cuff.start_plug, cuff.end_plug]
+        centers = np.vstack([cuff.points] + [h[None] if h is not None else cuff.points[-1:] for h in hems])
+        f = presskit.forces(environment, centers)
+        k = min(1.0, dt / EMA_S)
+        hook_now = float(f["hook_on_cuff"].sum())
+        pad_now = press_force(cuff.points, f["pad_vec"])
+        _STATE["hook_f"] += k * (hook_now - _STATE["hook_f"])
+        _STATE["pad_f"] += k * (pad_now - _STATE["pad_f"])
+        _STATE["pad_any"] = float(f["pads"].sum())
+        ok = pressed(n, _STATE["hook_f"], _STATE["pad_f"])
+        _STATE["touch_s"] = _STATE["touch_s"] + dt if ok else 0.0
         if _STATE["touch_s"] >= FASTEN_S:
             _STATE["fastened"] = True
         links = robot_links(environment)
-        pp = [pads(links[k]) for k in ("left", "right")]
-        _STATE["clear"] = hands_clear(pp)
+        pp = [pads(links[s_]) for s_ in ("left", "right")]
+        hems = [cuff.start_plug, cuff.end_plug]
+        _STATE["clear"] = hands_clear(pp, np.vstack([cuff.points] + [h[None] for h in hems if h is not None]), _STATE["pad_any"])
         _STATE["pads"] = pp
         _STATE["t"] += dt
         if os.environ.get("CUFF_LOG") and _STATE["t"] - _STATE["last"] >= 0.5:
@@ -217,7 +280,7 @@ def _watch(environment) -> None:
             rho, ang, x = polar(cuff.points)
             print(f"LOG t={_STATE['t']:.1f} wrap={math.degrees(st['wrap']):.0f}deg touching={n} fastened={st['fastened']} "
                   f"edge={st['edge'] * 1000:.0f}mm skew={st['skew'] * 1000:.0f}mm index={st['index_arc'] * 1000:.0f}mm "
-                  f"gap={st['gap'] * 1000:.1f}mm clear={st['clear']} padL={np.round(_STATE['pads'][0], 3).tolist()} padR={np.round(_STATE['pads'][1], 3).tolist()} score={score_status(st):.2f}", flush=True)
+                  f"gap={st['gap'] * 1000:.1f}mm mingap={st['min_gap'] * 1000:.1f}mm clear={st['clear']} hookF={_STATE['hook_f']:.2f}N padF={_STATE['pad_f']:.2f}N padAny={_STATE['pad_any']:.2f}N padL={np.round(_STATE['pads'][0], 3).tolist()} padR={np.round(_STATE['pads'][1], 3).tolist()} score={score_status(st):.2f}", flush=True)
             if os.environ.get("CUFF_LOG") == "2":
                 print("SEG " + " ".join(f"{i}:{r * 1000:.0f}/{math.degrees(a):.0f}" for i, (r, a) in enumerate(zip(rho, ang))), flush=True)
     except Exception:
@@ -247,6 +310,8 @@ def self_test() -> int:
     flat = np.array([(X_CUFF, ARM_Y - NEAR + (i + 0.5) * SEG, Z_CUFF) for i in range(NSEG)])
     snug = ideal_points()
     loose = ideal_points(extra=0.012)
+    _STATE["hook_f"] = 1.0  # the tab in contact with the cuff, unless a case says otherwise
+    assert score_status(status(snug, fastened=True, clear=True, contact=0.0)) == 0.25  # pressed once, but no longer touching
     cases = {
         "flat at the start": (status(flat, fastened=False), 0.0),
         "snug, never pressed": (status(snug, fastened=False), 0.25),
@@ -271,8 +336,30 @@ def self_test() -> int:
     half = ideal_points()[:12]
     assert wrap_angle(np.vstack([half, flat[12:]])) < WRAP_MIN  # bladder end round, hook end still on the table
     assert R * 2 * math.pi < CUFF_L - 0.10  # the cuff overlaps itself by more than 10 cm on this arm
-    assert hands_clear([(X_CUFF, ARM_Y, ZA + R + 0.06)]) and not hands_clear([(X_CUFF, ARM_Y, ZA + R + 0.02)])
-    return len(cases) + 5
+    squeezed = ideal_points(extra=-0.003)  # pressed 3 mm into the skin all round: over-tight
+    assert score_status(status(squeezed, fastened=True, clear=True)) == 0.75
+    far = [(X_CUFF, ARM_Y, ZA + R + 0.15)]
+    assert hands_clear(far, snug, 0.0)
+    assert not hands_clear(far, snug, 0.3)  # a pad still touching the cuff
+    assert not hands_clear([tuple(snug[18] + np.array([0.0, 0.0, 0.01]))], snug, 0.0)  # a pad 1 cm off the hook end
+    # fastening needs the press itself: flat hook plates, the tab pressed on the cuff, and a gripper pressing it
+    c = snug[list(HOOK)].mean(axis=0)
+    inward = np.array([0.0, ARM_Y - c[1], ZA - c[2]]); inward /= np.linalg.norm(inward)
+    vec = np.zeros((NSEG + 2, 4, 3))  # force each pad puts on each body
+    vec[18, 0] = 3.0 * inward  # one pad pushes the tab onto the cuff
+    assert abs(press_force(snug, vec) - 3.0) < 1e-6
+    vec[NSEG + 1, 2] = 40.0 * inward; vec[NSEG + 1, 3] = -40.0 * inward  # plus a 40 N pinch on the hem: cancels
+    assert abs(press_force(snug, vec) - 3.0) < 1e-6
+    vec[:] = 0.0; vec[18, 1] = -4.0 * inward  # a pad between the tab and the arm pulls it outward, off the cuff
+    assert press_force(snug, vec) == 0.0
+    vec[:] = 0.0; vec[19, 0] = 5.0 * np.cross(inward, [1.0, 0.0, 0.0])  # dragging the tab along the cuff: no press
+    assert press_force(snug, vec) < 1e-6
+    assert pressed(3, 2.5, 3.0)
+    assert not pressed(3, 2.5, 0.0)  # tab lying on the cuff, nobody pressing (its own weight)
+    assert not pressed(3, 0.3, 3.0)  # pressing the tab, but it is not in loaded contact with the cuff
+    assert not pressed(1, 2.5, 3.0)  # pressed, but only one hook plate lies flat on the cuff
+    assert hook_touching(snug) >= FASTEN_N
+    return len(cases) + 16
 
 
 # -- the scripted demo ------------------------------------------------------------------------------------------------
@@ -391,8 +478,9 @@ def demo():
         far_h = (X_CUFF, ARM_Y + FAR + HEM.size[0] / 2, HEM_Z)
         left.append(W(2.0, (0.25, 0.25, T + 0.14), O, "start", tilt(joint=True)))
         wait(left, right)
-        PRESS2 = float(os.environ.get("PRESS2", "0.012"))
+        PRESS2 = float(os.environ.get("PRESS2", "0.020"))
         lay = (X_CUFF, ARM_Y - R - 0.016, ZA + 0.015)  # the hem on the near side, outside the bladder end
+        NEG = os.environ.get("CUFF_NEGATIVE", "")  # scorer checks: "nopress" lays the tab on and lets go; "held" never lets go
         left += [W(2.0, (far_h[0], far_h[1], T + 0.10), PO, "over the hook end's hem", g),
                  W(1.5, far_h, PO, "down round the hem", g), W(1.0, far_h, C, "pinch the hem", g),
                  W(2.0, (far_h[0], far_h[1], top_z), C, "lift it straight up", g),
@@ -405,6 +493,16 @@ def demo():
                  W(1.2, (lay[0], lay[1] - 0.05, lay[2] + 0.01), NN, "further right, clear of the cuff", g),
                  W(1.5, (lay[0], lay[1] - 0.05, top_z - 0.02), O, "up", g),
                  W(2.5, (0.25, 0.25, T + 0.14), O, "clear", tilt(joint=True))]
+        if NEG == "nopress":  # carry it taut over the near side and let go there, above the cuff: the hand never comes
+            # down on the tab; the band's tension and gravity lay it on the cuff
+            i = next(k for k, w in enumerate(left) if w.label == "lay it down the near side, over the bladder end")
+            taut = left[i - 1].pos
+            left[i:] = [W(1.0, taut, NN, "let go, taut above the near side", g),
+                        W(1.5, (taut[0], taut[1] - 0.06, taut[2] + 0.04), O, "away from the cuff", g),
+                        W(2.5, (0.25, 0.25, T + 0.14), O, "clear", tilt(joint=True))]
+        if NEG == "held":  # press it on and keep holding it to the end
+            i = next(k for k, w in enumerate(left) if w.label == "let go" and k > 10)
+            left[i:] = [W(20.0, left[i - 1].pos, C, "keep holding", left[i - 1].yaw)]
         wait(right, left)
         if HOLD:
             right += [W(1.5, (X_CUFF, ARM_Y - R - 0.06, ZA - 0.03), C, "let the bladder end go", tilt()),

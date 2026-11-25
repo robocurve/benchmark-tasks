@@ -218,6 +218,8 @@ def _spawn_cable(prim_path: str, cfg, translation=None, orientation=None, **kwar
         rb.CreateSolverPositionIterationCountAttr(32)
         rb.CreateLinearDampingAttr(0.5)
         rb.CreateAngularDampingAttr(2.0)
+        cr = PhysxSchema.PhysxContactReportAPI.Apply(prim)  # contact forces are read by presskit.py (fastening, release)
+        cr.CreateThresholdAttr(0.0)
         return prim
 
     def collide(geom_prim, color_path: str):

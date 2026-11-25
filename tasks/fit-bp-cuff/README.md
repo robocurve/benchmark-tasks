@@ -27,8 +27,9 @@ the leading sources of measurement error (AHA 2019 statement).
 
 | File | What |
 |---|---|
-| `task.py` | The yam_arena task file: scene, scoring (`status`, `score_status`, `hook_touching`, `hands_clear`), `success()`, `self_test()` and the scripted `demo()` |
-| `cuffkit.py` | The cuff: a chain of thin plates hinged across its width (adapted from the shared cable helper) |
+| `task.py` | The yam_arena task file: scene, scoring (`status`, `score_status`, `hook_touching`, `pressed`, `hands_clear`), `success()`, `self_test()` and the scripted `demo()` |
+| `cuffkit.py` | The cuff: a chain of thin plates hinged across its width (adapted from the shared cable helper), with contact reports on |
+| `presskit.py` | Reads the simulator's contact forces: the hook tab on the cuff, and the finger pads on each part of the cuff |
 | `scenekit.py`, `tiltkit.py` | Fixed shapes and USD bodies for yam_arena task files; the tilted grip used by the demo (shared helpers) |
 | `assets/arm.usdc` | The visible training arm (a skin-coloured mesh; the upper arm collides as a capsule in `task.py`) |
 | `scripts/make_arm.py` | Builds `assets/arm.usdc` |
@@ -65,24 +66,42 @@ About 4 minutes per trial including start-up on one GPU. `CUFF_LOG=1` prints, ev
 goes, the hook plates touching the cuff, whether it is fastened, the lower edge's height above the crease, the skew, the index
 line's distance from the artery mark, the gap to the skin, whether both hands are clear, and the score.
 
-In simulation the score is computed from the plates' poses at every control step: the angle the cuff covers round the arm,
-the hook plates lying within 2 mm of the plate under them (fastened once 3 do so for 0.5 s), the plates' positions along
-the arm and round it, the inner layer's gap to the skin, and the distance of both hands' pads from the arm. `python task.py`
-runs 10 scoring cases on hand-made shapes and replays the demo's plan through both arms' kinematics.
+In simulation the score is computed at every control step from the plates' poses and the simulator's contact forces
+(`presskit.py` reads PhysX contact reports): the angle the cuff covers round the arm; fastening, which needs at least 2 hook
+plates lying flat (within 25 degrees) on the cuff's outer face while the hook tab presses on the cuff with at least 2 N and a
+gripper's finger pads push the tab towards the arm with a net 2 N (a pinch on the hem cancels out), for 0.5 s (proximity alone, or the tab resting on
+the cuff under its own weight, does not count); the plates' positions along the arm and round it; the inner layer's gap to the
+skin (snug, and no plate pressed more than 1 mm into it); and the hands, which must be off the cuff (no finger pad in
+contact with it, every pad at least 10 cm from every plate and hem) for the final 2 s. `python task.py` runs the scoring cases
+on hand-made shapes and forces (including a tab lying unpressed, a press without loaded contact, and an over-tight cuff) and
+replays the demo's plan through both arms' kinematics.
 
 Scripted demo (`--policy yam_scripted`, same command otherwise): each hand keeps one tilted orientation throughout. The
 right hand pinches the bladder end's hem, lifts it straight up above the arm, carries it left over the top, lays it down
 the far side and lets go, then moves further left, clear of the cuff. The left hand pinches the hook end's hem, lifts it,
-slides it right over the top and a little past the near side to pull it taut, lays it down on the bladder end, presses it
-on and holds, lets go and moves further right. The run scores 1.0 at 31.7 s (634 steps); the run limit is 2,000 steps.
+slides it right over the top and a little past the near side to pull it taut, lays it down on the bladder end (the hem
+slips from the pinch here, and the closed fingers come down on the tab and push it on), presses it on 2 cm more and holds,
+lets go and moves further right. Fastening registers at 30.7 s, with about 10 N between the tab and the cuff and a net
+7 N from the finger pads. The run scores 1.0 from 38.2 s (764 steps), once both hands are 10 cm off the cuff; the run limit is 2,000 steps.
 
 Model run: Dream-1 refused the instruction before acting (`DA-4000 ... unsafe instruction, refused: Wrapping and tightening a cuff on a person risks forceful physical contact.`), so there is no model-run video.
 
-Wrong strategy, scored 0: wrapping the hook end first and laying the bladder end over it (`scripts/naive_cuff.py`); the cuff ends 296 degrees round the arm and never fastens.
+### Checks of the scorer
+
+Each row is one simulated run on the fixed starting layout (same command as the demo, with the variable shown).
+
+| Run | What it does | Outcome | Score |
+| --- | --- | --- | --- |
+| (none) | The full demonstration | Wrapped 472 degrees; fastened at 30.7 s (tab on cuff about 10 N, pads a net 7 N); edge 2.9 cm above the crease, index line 4 mm from the mark, snug; both hands 10 cm clear | 1.00 |
+| `CUFF_NEGATIVE=nopress` | Carries the hook end taut over the near side and lets go there, above the cuff; the hand never comes down on the tab | The tab settles flat on the cuff (2 hook plates flat, in contact, placed and snug) but is never pressed; not fastened | 0.25 |
+| `CUFF_NEGATIVE=held` | Presses the tab on and keeps holding it to the end | Fastened, placed and snug, but a gripper stays on the cuff | 0.75 |
+| `scripts/naive_cuff.py` | Wraps the hook end first and lays the bladder end over it | The cuff ends 296 degrees round the arm and never fastens | 0.00 |
+
+The demonstration was run twice with identical results (1.0 from 38.2 s).
 
 ## Testing in real life
 
-Materials: an adult reusable blood-pressure cuff (16 x 30 cm bladder, for 27-34 cm arms) with a 16 x 16 mm foam hem taped
+Materials: a small luggage scale and a 1 mm plastic card (for the scoring checks), an adult reusable blood-pressure cuff (16 x 30 cm bladder, for 27-34 cm arms) with a 16 x 16 mm foam hem taped
 across each end, a life-size mannequin arm (upper arm about 31 cm round), a 3 cm foam board, a marker for the crease and
 artery lines, a ruler, a 6 mm dowel, and a phone camera.
 
@@ -99,9 +118,9 @@ The score at the end of the episode counts. The same rule applies in simulation 
 |---|---|
 | The cuff does not go once round the arm | 0 |
 | Wrapped | 0.25 |
-| Also fastened (the hook tab pressed flat on the cuff's outer face, and still on it at the end) | 0.5 |
+| Also fastened: the hook tab laid flat on the cuff's outer face and pressed onto it by a gripper, still holding the cuff closed at the end (real trial: it does not open under a 2 N outward pull on the hook end's hem) | 0.5 |
 | Also in place: lower edge 1.5-3.5 cm above the crease, skew round the arm under 2 cm, index line within 2 cm of the artery mark | 0.75 |
-| Also snug (the 6 mm dowel cannot be pushed under the edge; in simulation, mean gap to the skin at most 6 mm) and both hands at least 4 cm clear of the arm | 1.0 |
+| Also snug but not over-tight (the 6 mm dowel cannot be pushed under the edge, the 1 mm card can; in simulation, mean gap to the skin at most 6 mm and no plate pressed more than 1 mm into it), and both grippers off the cuff (no finger touching it, every finger at least 10 cm from it) for the final 2 s | 1.0 |
 
 ## Reset
 
@@ -112,5 +131,32 @@ mark and the bladder end to the robot's right, the ends on the table.
 
 The arm and board are fixed; the upper arm collides as a 10 cm capsule with skin-like friction, and the visible arm is a mesh
 1 mm proud of it. The cuff is 20 rigid 2.5 cm plates hinged across its width with light bending springs; it cannot stretch
-or crumple. The hook-and-loop is a rule: fastened when 3 hook plates are pressed flat onto the cuff for 0.5 s; after that
-only friction and gravity hold the closure.
+or crumple. The hook-and-loop is a rule on the simulator's contact forces: the hook tab must lie flat on the cuff's outer face
+and be pressed onto it by a gripper (at least 2 N between the tab and the cuff, and a net 2 N from the finger pads pushing the
+tab towards the arm, for 0.5 s); after that only friction and gravity hold the closure.
+
+How fastening is decided, in detail (`pressed` and `press_force` in `task.py`, forces from `presskit.py`):
+
+- **Laid flat on the cuff:** at least 2 of the 4 hook plates have a cuff plate under them, at the same angle round the arm,
+  with at most 2 mm between them, and run within 25 degrees of it (not across it or on edge).
+- **In loaded contact:** PhysX reports at least 2 N of normal force between the hook tab (its plates and hem) and the cuff's
+  other plates.
+- **Pressed by a gripper:** the net contact force of all four finger pads on the tab, along the line from the tab to the arm's
+  axis, is at least 2 N. Each pad's contact force is taken as pushing away from that pad (a pad can only push), so
+  holding the hem in a pinch pushes equally from both sides and adds nothing, and pulling the tab outward or dragging it
+  along the cuff gives nothing; only pushing it onto the cuff counts.
+- All three hold together, smoothed over 0.1 s, for 0.5 s (10 controls). Proximity alone, the tab resting on the cuff
+  under its own weight, or the band's tension pulling it against the cuff without a press, does not fasten.
+- **Still fastened at the end:** after the press has fastened it, at the end at least one hook plate still lies flat on
+  the cuff and the tab is still in contact with it (at least 0.2 N, smoothed). A tab that was pressed and then came off
+  loses the credit.
+
+Over-tightening: the simulated plates are rigid and the band cannot stretch, so the only way the simulated cuff can be
+too tight is plates driven into the skin, which the scorer caps at 1 mm. The real trial checks it directly: the 1 mm card
+must still slide under the cuff's edge.
+
+The gripper requirement is a simulation-only simplification: in a real trial any press that closes the faces counts, and
+the closure is judged by whether it holds against a 2 N outward pull on the hook end's hem. 2 N is a light press. Standard
+hook-and-loop strength tests close the faces much harder before measuring them: ASTM D5170 rolls a 4 lb (18 N) roller over
+the specimen five times, and the ISO 22776/22777 closing roller applies 1.0 N per mm of width. So the model closes more
+easily than real tape; this eases the task. The scripted demonstration follows a fixed plan and never reads the score.
