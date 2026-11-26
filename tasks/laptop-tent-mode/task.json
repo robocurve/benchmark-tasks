@@ -1,0 +1,21 @@
+{
+  "title": "Turn a 2-in-1 laptop into a tent display",
+  "category": "Societal relatability",
+  "keywords": [
+    "convertible laptop",
+    "bimanual",
+    "friction hinge",
+    "regrasp",
+    "tent mode",
+    "load transfer"
+  ],
+  "instruction": "Set up the laptop for viewing in tent mode. Fold the screen back, stand the laptop on both front edges with the hinge up and screen facing out, then let go.",
+  "context": "A convertible laptop can stand on its own to watch a video or follow a recipe. The hands have to support the chassis and display while folding the hinge past flat, then set the weight down on the two narrow case edges.",
+  "setup": "One 304 × 218 × 17.45 mm, 1.37 kg Lenovo Yoga 6 13ALC7 reference laptop, with aluminum display, PC-ABS base and four rubber feet. It starts flat on its feet on an 800 × 800 mm wood desk, with the keyboard facing the robot, hinge at x = 360 mm and y = 0, and screen 112° open. The left case rim extends 19 mm past the side of the desk, with all feet supported. The two YAM grippers start open in the ready pose. Setup coordinates and the side camera are described in the README.",
+  "scoring": "0.5 after 0.5 continuous seconds and 1.0 after 2 seconds in the qualifying tent. The hinge must be 238–304° open and 125 mm or more above both front edges, the edges 100–360 mm apart and within 4 mm of the desk at both ends, and the screen facing outward and upward. Each front edge must support at least 15% of the weight and together they must support at least 90%. No other support may carry 0.05 N or more, and each link must stay under 8 mm/s and 0.10 rad/s. A failed condition clears the hold. All other results score 0.",
+  "run_limit": "800 actions (40 s at 20 Hz)",
+  "reset_notes": "Use the fixed 112° typing pose with all four feet on the desk, grippers open, and object jitter disabled. The same reset is used for all scripted verification cases.",
+  "fidelity": "Full-size rigid shells with a single passive friction hinge and four rubber foot colliders. The mass split, hinge torque and friction coefficients are estimates. Two real hinge assemblies, frame flex and the tablet-mode offset are simplified. The display graphic is static. The simulation does not model glass damage or electronics.",
+  "scores": "Dream-1 scored 0.0 in 800 actions. YAM demo scored 1.0 in 706 actions. Flat control 0.0 in 519 actions. Gripper-supported tent control 0.0 in 684 actions.",
+  "media": "M-EF3436"
+}
