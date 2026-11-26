@@ -1,0 +1,318 @@
+# Scripted demo: refit the sprung bed slat in the empty pair of holders.
+#
+# Inputs, all observable: top-camera images (where the slat lies on the bench: its two grey end caps), the arms' own
+# joint angles (forward kinematics) and the frame layout and slat dimensions from the setup text. It never reads the
+# simulator's object poses or the slat's joints.
+#
+# 1. Top image: find the two grey end caps on the bench, so the slat's axis and where each end is.
+# 2. Left hand grips the slat across its width at mid-span, right hand 10 cm in from the right-hand cap, each hand
+#    tilted to the slat's slope there. Lift, carry over the frame, slat along y.
+# 3. Lower the left-hand cap into its holder inboard of the lip, onto the floor, and push the slat end-wise until that
+#    cap is home under the lip against the end wall (the right-hand cap rides over the other holder).
+# 4. Bow the slat: lift mid-span and draw the right-hand end in, keeping the seated cap home, until the slat is 7 mm
+#    shorter than the holders' span (about 50 mm of bow; a beech slat cracks past 60 mm); lower the right-hand cap
+#    into its holder inside the lip.
+# 5. Let go with the right hand, lower mid-span back so the slat springs out to its length and the second cap slides
+#    home under its lip, let go with the left hand and back off.
+import math
+import numpy as np
+
+
+class TopCam:
+    def __init__(self, img):
+        from yam_arena import station
+        from yam_arena.urdf import quat_xyzw_to_matrix
+
+        cam = station.top_camera("calibrated")
+        self.ln = cam.lens
+        self.H, self.W = img.shape[:2]
+        self.sx, self.sy = self.W / self.ln.width, self.H / self.ln.height
+        self.R = quat_xyzw_to_matrix(np.array(cam.rot_xyzw))
+        self.p0 = np.array(cam.pos)
+
+    def rays(self):
+        vv, uu = np.mgrid[0:self.H, 0:self.W]
+        u, v = (uu + 0.5) / self.sx, (vv + 0.5) / self.sy
+        return np.stack([(u - self.ln.cx) / self.ln.fx, -(v - self.ln.cy) / self.ln.fy, -np.ones_like(u)], -1) @ self.R.T
+
+
+def grey_points(img, z, box):
+    """Grey, colourless pixels of middle brightness (the plastic end caps; the bench and slat are coloured, the arms
+    black or white) cast onto the horizontal plane at height z, kept inside box (x0, x1, y0, y1)."""
+    cam = TopCam(img)
+    d = cam.rays()
+    g = img.astype(float)
+    mx, mn = g.max(-1), g.min(-1)
+    grey = (mx > 45) & (mx < 210) & (mx - mn < 0.12 * mx)
+    t = (z - cam.p0[2]) / d[..., 2]
+    P = cam.p0 + t[..., None] * d
+    x0, x1, y0, y1 = box
+    sel = grey & (P[..., 0] > x0) & (P[..., 0] < x1) & (P[..., 1] > y0) & (P[..., 1] < y1)
+    return P[sel][:, :2]
+
+
+def rot_angle(E):
+    return math.degrees(math.acos(max(-1.0, min(1.0, (np.trace(E) - 1) / 2))))
+
+
+# ---- the slat as the setup text gives it: 755 mm over its caps, bowed 20 mm at rest, a smooth bow ------------------
+S_ALL, RISE0, CAP_T, CAP_L, TH = 0.755, 0.020, 0.013, 0.045, 0.008
+
+
+def rise_for(C):
+    """Bow (mid-span above the chord) of a slat of length S_ALL bent to chord C (shallow parabola)."""
+    return math.sqrt(max(0.0, 3 * C * (S_ALL - C) / 8))
+
+
+C_REST = S_ALL - 8 * RISE0 ** 2 / (3 * 0.7536)
+
+
+class Shape:
+    """A slat bent to a parabola between its end-face centres Ta (the -y end) and Tb (+y end) with bow R."""
+
+    def __init__(self, Ta, Tb, R=None):
+        self.Ta, self.Tb = np.asarray(Ta, float), np.asarray(Tb, float)
+        ch = self.Tb - self.Ta
+        self.C = float(np.linalg.norm(ch))
+        self.a = ch / self.C
+        h = np.array([self.a[0], self.a[1], 0.0])
+        side = np.cross(h, [0.0, 0.0, 1.0])               # horizontal, across the slat
+        self.side = side / np.linalg.norm(side)
+        up = np.cross(self.side, self.a)
+        self.up = up / np.linalg.norm(up)
+        self.R = rise_for(self.C) if R is None else R
+        u = np.linspace(0, 1, 401)
+        pts = self.at_u(u)
+        seg = np.linalg.norm(np.diff(pts, axis=0), axis=1)
+        self.u, self.s = u, np.r_[0.0, np.cumsum(seg)]
+
+    def at_u(self, u):
+        u = np.atleast_1d(u)[:, None]
+        return self.Ta + u * (self.Tb - self.Ta) + self.up * (4 * self.R * u * (1 - u))
+
+    def point(self, s):
+        """Centre line point and unit tangent at arc distance s from Ta."""
+        u = float(np.interp(s, self.s, self.u))
+        p = self.at_u(u)[0]
+        t = self.Tb - self.Ta + self.up * (4 * self.R * (1 - 2 * u))
+        t = t / np.linalg.norm(t)
+        return p, t
+
+    def top(self, s, lift=0.0):
+        """Top-surface point at arc distance s and the surface normal there."""
+        p, t = self.point(s)
+        n = np.cross(self.side, t)
+        n = n / np.linalg.norm(n)
+        return p + n * (TH / 2 + lift), n, t
+
+
+def script(task, ctx):
+    from yam_arena import ik
+    from yam_arena.demo import grip_rotation
+    from yam_arena.urdf import axis_angle_matrix
+
+    ctx.notes = []
+    L, R = ctx.left, ctx.right
+    T, ZF, YW, XS = task.TOP, task.ZF, task.YW, task.XS
+    img = lambda: np.asarray(ctx.obs.images["top_cam"])
+    for arm in (L, R):
+        arm.offset = np.zeros(3)
+        arm.rcmd = None
+    S_MID, S_R = S_ALL / 2 + 0.133, 0.100   # grips: 13 cm left of mid-span (left hand), 10 cm in from the -y cap (right)
+    LIFT = 0.002                            # TCP 2 mm above the wood's top face: the pads reach 3 mm below its bottom
+
+    def fk(arm):
+        rob = ctx.emb._env.unwrapped.scene[f"{arm.name}_robot"]
+        qa = np.asarray(getattr(rob.data.joint_pos, "torch", rob.data.joint_pos)[0].detach().cpu())[:6]
+        return ik.tcp_pose(qa, arm.base)
+
+    def inhand(arm):
+        """Where the slat's centre line sits between this hand's jaws, from the two finger joints (the pads close
+        along the TCP's x axis; a part held off-centre leaves one finger nearer its stop): world vector, m."""
+        rob = ctx.emb._env.unwrapped.scene[f"{arm.name}_robot"]
+        q = np.asarray(getattr(rob.data.joint_pos, "torch", rob.data.joint_pos)[0].detach().cpu())
+        if len(q) < 8:
+            return np.zeros(3)
+        return fk(arm)[1][:, 0] * (float(q[6]) - float(q[7])) / 2
+
+    def settle(arm, goal, rot, duration=0.6, rounds=6, tol=0.001, free=()):
+        """Go to goal/rot, then re-aim from the measured joints. Axes in ``free`` are not re-aimed (the slat may
+        drag the hand along them)."""
+        cmd_p = goal + arm.offset
+        cmd_r = rot if arm.rcmd is None else arm.rcmd
+        yield from arm.move(cmd_p, cmd_r, duration)
+        for _ in range(rounds):
+            yield from wait(0.3)
+            p, Rm = fk(arm)
+            err = p - goal
+            for i in free:
+                err[i] = 0.0
+            E = rot @ Rm.T
+            if np.linalg.norm(err) < tol and rot_angle(E) < 0.4:
+                break
+            cmd_p = cmd_p - err
+            cmd_r = E @ cmd_r
+            yield from arm.move(cmd_p, cmd_r, 0.35)
+        arm.offset, arm.rcmd = cmd_p - goal, cmd_r
+        arm.rcorr = cmd_r @ rot.T
+
+    def grips(sh):
+        """TCP goals (position, rotation) of both hands for slat shape sh."""
+        out = {}
+        for arm, s in ((L, S_MID), (R, S_R)):
+            p, n, t = sh.top(s, LIFT)
+            th = math.atan2(t[2], math.hypot(t[0], t[1]))      # slope along the slat (toward +y end)
+            yaw = arm.flip + math.atan2(sh.a[1], sh.a[0])
+            Rm = axis_angle_matrix(sh.side, th) @ grip_rotation(yaw)
+            out[arm.name] = (p - inhand(arm), Rm)
+        return out
+
+    def both_to(sh, duration, rounds=4, tol=0.0015):
+        g = grips(sh)
+        yield from both(settle(L, g["left"][0], g["left"][1], duration, rounds, tol),
+                        settle(R, g["right"][0], g["right"][1], duration, rounds, tol))
+
+    def carry_to(sh, duration, rounds=4, tol=0.002):
+        """Both hands holding the slat: plain moves with each hand's grasp-time offset, then shared corrections (the
+        mean of the two measured errors, the same for both hands, so they never pull the slat out of their grips)."""
+        g = grips(sh)
+        yield from both(L.move(g["left"][0] + L.offset, L.rcorr @ g["left"][1], duration),
+                        R.move(g["right"][0] + R.offset, R.rcorr @ g["right"][1], duration))
+        for _ in range(rounds):
+            yield from wait(0.3)
+            err = np.mean([fk(L)[0] - g["left"][0], fk(R)[0] - g["right"][0]], axis=0)
+            if np.linalg.norm(err) < tol:
+                break
+            L.offset, R.offset = L.offset - err, R.offset - err
+            yield from both(L.move(g["left"][0] + L.offset, L.rcorr @ g["left"][1], 0.4),
+                            R.move(g["right"][0] + R.offset, R.rcorr @ g["right"][1], 0.4))
+
+    def both_ramp(shapes, dt=0.1):
+        """Follow a sequence of shapes open-loop with the current offsets (slow, smooth)."""
+        for sh in shapes:
+            g = grips(sh)
+            yield from both(L.move(g["left"][0] + L.offset, L.rcorr @ g["left"][1], dt),
+                            R.move(g["right"][0] + R.offset, R.rcorr @ g["right"][1], dt))
+
+    # --- 1. find the slat on the bench: its two grey caps -----------------------------------------------------------
+    yield from wait(0.3)
+    pts = grey_points(img(), T + CAP_T, (0.12, 0.30, -0.47, 0.47))
+    A = pts[pts[:, 1] < 0]
+    B = pts[pts[:, 1] > 0]
+    ca, cb = np.median(A, axis=0), np.median(B, axis=0)
+    ax = (cb - ca) / np.linalg.norm(cb - ca)
+    # cap centres are 22.5 mm in from the end faces (the cap's top face seen from above)
+    ta, tb = ca - ax * CAP_L / 2, cb + ax * CAP_L / 2
+    mid = (ta + tb) / 2
+    ta, tb = mid - ax * C_REST / 2, mid + ax * C_REST / 2     # catalog length; the pixel ends only set the middle
+    ctx.notes.append(f"caps on the bench: {np.round(ca * 1000, 1).tolist()} / {np.round(cb * 1000, 1).tolist()} mm "
+                     f"({len(A)}/{len(B)} px), axis {math.degrees(math.atan2(ax[1], ax[0])):.1f} deg")
+    zc = T + CAP_T / 2                                   # end-face centres: the caps lie on the bench
+    bench = Shape(np.r_[ta, zc], np.r_[tb, zc], RISE0)
+    psi = math.atan2(ax[1], ax[0])
+    flips = {}
+    for flip in (0.0, math.pi):          # the same jaw orientation for both hands (jaws close across the slat)
+        worst = 0.0
+        for arm, s in ((L, S_MID), (R, S_R)):
+            p, _, _ = bench.top(s, LIFT)
+            for pp, yy in ((p, psi), (np.array([XS, p[1], ZF + 0.08]), math.pi / 2)):
+                _, pe, re = ik.solve(pp, ik.matrix_to_quat_xyzw(grip_rotation(yy + flip)), arm.q, base_pos=arm.base,
+                                     iters=200)
+                worst = max(worst, pe + 0.05 * re)
+        flips[flip] = worst
+    L.flip = R.flip = 0.0 if flips[0.0] < 0.002 else math.pi    # jaws turned so the hands stay nearer the robot
+    ctx.notes.append(f"grip flip {math.degrees(L.flip):.0f} deg (IK check {flips})")
+
+    # --- 2. grip and lift -------------------------------------------------------------------------------------------
+    yield from both(L.set_grip(1.0, 0.3), R.set_grip(1.0, 0.3))
+    hi = Shape(bench.Ta + [0, 0, 0.06], bench.Tb + [0, 0, 0.06], RISE0)
+    yield from both_to(hi, 2.0, rounds=3)
+    yield from both_to(bench, 1.2, rounds=3, tol=0.001)
+    g0 = grips(bench)
+    ctx.notes.append(f"grasp: L goal {np.round(g0['left'][0] * 1000).tolist()} fk {np.round(fk(L)[0] * 1000).tolist()}; "
+                     f"R goal {np.round(g0['right'][0] * 1000).tolist()} fk {np.round(fk(R)[0] * 1000).tolist()}")
+    yield from both(L.set_grip(0.0, 0.8), R.set_grip(0.0, 0.8))
+    yield from wait(0.3)
+
+    # --- 3. carry over the frame; seat the +y cap end-wise ----------------------------------------------------------
+    ZB = ZF + CAP_T / 2                                  # end-face centre with the cap on the holder floor
+    def rest_at(tb_y, zb, za):
+        Tb = np.array([XS, tb_y, zb])
+        dz = za - zb
+        Ta = Tb - np.array([0.0, math.sqrt(C_REST ** 2 - dz ** 2), -dz])
+        return Shape(Ta, Tb, RISE0)
+
+    up = Shape(bench.Ta + [0, 0, 0.07], bench.Tb + [0, 0, 0.07], RISE0)
+    yield from both_to(up, 2.0, rounds=3, tol=0.002)
+    over = rest_at(YW - 0.012, ZB + 0.040, ZB + 0.040)          # over the near slat
+    over = Shape(over.Ta - [XS - 0.38, 0, 0], over.Tb - [XS - 0.38, 0, 0], RISE0)
+    mid_way = Shape((up.Ta + over.Ta) / 2 + [0, 0, 0.01], (up.Tb + over.Tb) / 2 + [0, 0, 0.01], RISE0)
+    yield from both_to(mid_way, 2.5, rounds=3, tol=0.002)
+    yield from both_to(over, 2.5, rounds=3, tol=0.002)
+    hi = rest_at(YW - 0.012, ZB + 0.020, ZB + 0.034)          # over the empty holders, the +y cap 20 mm up
+    yield from both_to(hi, 2.5, rounds=4, tol=0.0015)
+    ctx.notes.append(f"slat in the hands (finger joints): L {np.round(inhand(L) * 1000, 1).tolist()} "
+                     f"R {np.round(inhand(R) * 1000, 1).tolist()} mm")
+    yield from both_to(hi, 0.6, rounds=3, tol=0.0015)
+    yield from both_to(rest_at(YW - 0.012, ZB + 0.004, ZB + 0.030), 1.0, rounds=4)
+    yield from both_to(rest_at(YW - 0.012, ZB - 0.001, ZB + 0.030), 0.8, rounds=3)
+    n = 15
+    for k in range(1, n + 1):
+        yield from both_ramp([rest_at(YW - 0.012 + 0.014 * k / n, ZB - 0.001, ZB + 0.030)], 0.12)
+    yield from wait(0.5)
+    ctx.notes.append(f"seated end: L tcp {np.round(fk(L)[0] * 1000, 1).tolist()} R tcp {np.round(fk(R)[0] * 1000, 1).tolist()}")
+
+    # --- 4. bow it and drop the -y cap inside its lip ---------------------------------------------------------------
+    # The +y cap is home under its lip. Lift the slat 30 mm at the left hand (its y left free, so the slat can draw
+    # it along) while the right hand draws the -y end 9 mm in toward the seated end: the slat bows up and its chord
+    # shortens until the -y end face is inside the lip's edge. Then lower the -y cap into its holder.
+    pL0, rL0 = fk(L)
+    pR0, rR0 = fk(R)
+    LIFT_L, DRAW_R, DROP_R = 0.030, 0.009, 0.026
+    def on_line(arm, p):
+        """The same goal with x set so the slat (not the TCP) is on the holders' centre line: the slat can slide
+        across the jaws, and the finger joints show where it sits."""
+        p = np.array(p, float)
+        p[0] = XS - inhand(arm)[0]
+        return p
+
+    n = 10
+    for k in range(1, n + 1):
+        yield from both(settle(L, on_line(L, pL0 + [0.0, 0.0, LIFT_L * k / n]), rL0, 0.5, rounds=3, tol=0.0015,
+                               free=(1,)),
+                        settle(R, on_line(R, pR0 + [0.0, DRAW_R * k / n, 0.0]), rR0, 0.5, rounds=3, tol=0.0015))
+    ctx.notes.append(f"bowed over its holder: L tcp {np.round(fk(L)[0] * 1000, 1).tolist()} R tcp "
+                     f"{np.round(fk(R)[0] * 1000, 1).tolist()}")
+    pL1 = fk(L)[0]
+    for k in range(1, 5):
+        yield from both(settle(L, on_line(L, pL1), rL0, 0.5, rounds=2, tol=0.0015, free=(1,)),
+                        settle(R, on_line(R, pR0 + [0.0, DRAW_R, -DROP_R * k / 4]), rR0, 0.5, rounds=3, tol=0.0015))
+    yield from wait(0.5)
+    ctx.notes.append(f"-y cap lowered: L tcp {np.round(fk(L)[0] * 1000, 1).tolist()} R tcp "
+                     f"{np.round(fk(R)[0] * 1000, 1).tolist()}")
+
+    # --- 5. let go with the right hand, let the slat spring out, let go with the left -------------------------------
+    def let_go(arm):
+        """Open, then slide the hand 6 mm toward the side the slat sits on (the finger it rests against comes off
+        its edge) before lifting straight up."""
+        side = inhand(arm)
+        side = side / max(np.linalg.norm(side), 1e-6)
+        yield from arm.set_grip(1.0, 0.8)
+        yield from arm.move(arm.pos + side * 0.006, arm.rot, 0.5)
+        p, Rm = fk(arm)
+        yield from settle(arm, p + np.array([0.0, 0.0, 0.05]), Rm, 1.0, rounds=2, tol=0.003)   # well clear first
+
+    # lower mid-span back while the right hand keeps the -y cap down on its holder floor and lets it slide out
+    # (neither hand is held in y): the slat springs out to its length and the cap goes home under the lip
+    pR1 = fk(R)[0]
+    for k in range(1, 13):
+        f = k / 12
+        yield from both(settle(L, pL1 + [0.0, 0.0, -(LIFT_L + 0.004) * f], rL0, 0.4, rounds=1, tol=0.002, free=(1,)),
+                        settle(R, pR1 + [0.0, -(DRAW_R + 0.003) * f, 0.0], rR0, 0.4, rounds=1, tol=0.002, free=(1,)))
+    yield from wait(0.5)
+    ctx.notes.append(f"unbowed: L tcp {np.round(fk(L)[0] * 1000, 1).tolist()} R tcp {np.round(fk(R)[0] * 1000, 1).tolist()}")
+    yield from let_go(R)
+    yield from R.move(np.array([0.25, -0.25, T + 0.20]), R.rot, 1.5)
+    yield from let_go(L)
+    yield from L.move(np.array([0.25, 0.25, T + 0.20]), L.rot, 1.5)
+    yield from wait(2.0)
