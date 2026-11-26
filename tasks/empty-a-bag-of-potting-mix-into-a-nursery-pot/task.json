@@ -1,0 +1,22 @@
+{
+  "title": "Empty an opened, floppy bag of potting mix into a nursery pot with both hands, then put the bag down",
+  "category": "Societal relatability",
+  "keywords": [
+    "bimanual",
+    "deformable",
+    "bag",
+    "pouring",
+    "granular",
+    "gardening",
+    "shaking"
+  ],
+  "instruction": "Empty the bag of potting mix into the black nursery pot without spilling, then put the empty bag down on the bench, clear of the pot.",
+  "context": "Filling a pot from an opened bag of potting mix is the everyday move of home repotting and of hand potting at a nursery bench. The bag is floppy film: only the part full of mix keeps its shape, and it narrows and folds as it empties. One hand holds the mouth over the pot while the other turns the heavy bottom over and shakes it, because mix hangs up on the film of the turned-over bag.",
+  "setup": "A station table in front of two YAM arms (bases 61 cm apart); distances are forward from the line between the arm bases and sideways from the midpoint between them. (1) An opened stand-up quad-seal (block-bottom) bag of about 0.1 mm PE film: front and back panels 160 mm wide, side gussets 80 mm deep, four vertical corner heat seals and a flat bottom; filled, it bulges to a rounded oval about 190 x 100 mm. Its top is cut off square 150 mm above the bottom and left open. It stands with its floor centre 40 cm forward and 12.5 cm left, its front panel and two front corner seals facing the arms. (2) In the bag, 2.0 L of peat-based all-purpose potting mix with perlite, damp, weighed to 0.80 kg (0.78 to 0.82 kg; mist in water or air-dry to adjust) and poured in loosely; it fills the bag about 115 mm deep and shows about 35 mm below the cut edge. (3) An empty black polypropylene 1-gallon (trade size) nursery pot, 165 mm across the top, 135 mm at the base, 160 mm tall (about 2.7 L), standing free with its base centre 40 cm forward and 13.5 cm right. In a real trial a sheet of kraft paper about 90 x 60 cm lies under the scene to catch spills. The layout is the same in every trial and matches the screenshot.",
+  "scoring": "Judged by mass at the end of the trial. Mix in the pot = the pot's weight gain; mix left in the bag = the bag's weight minus the empty bag's; spilled = 0.80 kg minus both (anything on the bench, the floor, the pot's rim or outside, or the robot). Mix still inside the bag never counts as in the pot, even if the bag is in the pot. 1.0: at least 95 % of the mix (760 g) in the pot and at most 3 % (24 g) spilled, the pot upright (tilted less than 20 degrees), both grippers open at least 20 mm, and no part of the bag inside the pot's rim circle (plus 10 mm) lower than 20 mm above its rim. 0.5: at least 70 % (560 g) in the pot and at most 8 % (64 g) spilled, the pot upright. 0.25: at least 30 % (240 g) in the pot and at most 15 % (120 g) spilled, the pot upright. Otherwise 0, including the pot tilted 20 degrees or more. Tools: a kitchen scale (1 g) and the video. In simulation each grain carries its mass and is placed by its centre: in the bag if inside the film, else in the pot if inside the pot's wall below its rim.",
+  "run_limit": "1,200 steps (60 s at 20 Hz)",
+  "reset_notes": "Collect the transferred and spilled mix, refill the bag to 0.80 kg (topping up with fresh mix at the stated dampness), stand it in place, and empty and wipe the pot. In simulation the film's shape, every grain and the pot are put back to the saved start (bag_start.npz, mix_start.npz).",
+  "fidelity": "Isaac Sim 6.1 PhysX, 20 Hz, stock YAM gains. The bag is a PhysX cloth film (2,169 vertices, polyethylene stiffness, self-collision) that folds and narrows as it empties. Simplified: the film weighs 50 g (real: 8-12 g) with a 3 mm contact layer, or grains push through it; the two gripped corner seals are 20 g rigid tabs attached to the film. The mix is 2,300 rigid grains 9-12 mm across (0.80 kg, 2.0 L), coarser than real mix, with no cohesion. The fill is made once and restored at every reset.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0 (scripted, 1,045 steps: 788 g of 801 g in the pot, 13 g spilled)",
+  "media": "M-SZF9DQ"
+}
