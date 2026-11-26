@@ -1,0 +1,23 @@
+{
+  "title": "Refill commercial pricing gun ink roller: open door, eject spent roller, seat fresh ink roller, latch shut",
+  "category": "Impact on jobs",
+  "keywords": [
+    "retail",
+    "grocery",
+    "pricing gun",
+    "ink roller",
+    "hinged door",
+    "roller carrier",
+    "snap latch"
+  ],
+  "name": "refill-commercial-label-pricing-gun-ink-roller",
+  "instruction": "Refill the commercial pricing gun ink roller: swing open the front ink door, eject the spent ink roller to the waste tray, snap a fresh ink roller into the carrier arms, and latch the door shut.",
+  "context": "Commercial handheld label pricing guns (Monarch 1131, Garvey 22-8) are ubiquitous marking equipment across retail sales, grocery supermarkets, logistics centers, and inventory stockrooms. Over 3,500,000 workers (BLS SOC 41-2031 Retail Salespersons and BLS SOC 53-7065 Stockers and Order Fillers) regularly replace depleted ink rollers to maintain legible pricing, SKU, and date codes on retail stock. Periodic replenishment is an essential operational maintenance procedure: the operator unlatches the front access door swinging it past 55 deg, ejects the depleted ink roller spindle from the carrier retention journals into a waste tray, seats a fresh 12 mm OD cylindrical ink roller into the journal stops, swings the door shut until the snap detent clicks flush, and clears hands to verify equilibrium retention.",
+  "setup": "All positions in cm from table center. Commercial pricing marker housing (18.0 x 12.0 x 4.5 cm, 380 g, rigid ABS) clamped to bench fixture at x = 28.0, y = 5.0, z = 7.0 cm. Front ink access door hinged at x = 33.5, y = 2.0, z = 7.0 cm on a 100 deg revolute joint. Spent cylindrical ink roller (1.2 cm OD, 2.6 cm length, 8 g, multi-faceted porous core on rigid steel axle pins) seated in carrier journals. Fresh replacement ink roller (1.2 cm OD, 2.6 cm length, 12 g, steel axle pins) staged upright at x = 22.0, y = -14.0, z = 2.0 cm. Discard waste tray located on bench at x = 36.0, y = 16.0 cm.",
+  "scoring": "Evaluated at trial end. 0.00 at start. 0.20 when front door is swung open past detent (>= 55 deg). 0.45 when spent ink roller is removed into discard waste tray (> 8 cm from carrier and inside tray). 0.75 when fresh ink roller is seated in carrier journals (< 1.5 cm horizontal, < 1.2 cm vertical error). 0.90 when door is swung shut onto retention latch (< 5 deg from closed). 1.00 strictly requires spent roller discarded, fresh roller seated in journals, door latched shut, hands clear (>= 50 mm), and held continuously for 1.0 s (20 control steps).",
+  "reset_notes": "Swing door open, place spent roller back into carrier journals, return fresh roller to staging mark at x = 22.0, y = -14.0 cm, and swing door shut.",
+  "fidelity": "Rigid bodies. Commercial pricing gun housing modeled with true internal feed cavity and journal stops. Front door articulated with USD Physics revolute joint (0.05 N*m/rad stiffness, 0.10 N*m friction). Ink rollers modeled as 12 mm OD multi-faceted cylindrical bodies with steel axle pins seating into U-channel retention journals.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0 (two runs, 320 steps each).",
+  "run_limit": "800 steps (40.0 s at 20 Hz).",
+  "media": "M-TDLLN8"
+}
