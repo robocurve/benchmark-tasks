@@ -1,0 +1,22 @@
+{
+  "title": "Sort a red bleach bottle and green ammonia bottle into their matching colored cabinet spill trays",
+  "category": "Safety",
+  "keywords": [
+    "single-arm",
+    "left arm",
+    "pick and place",
+    "color matching",
+    "chemical safety",
+    "segregation",
+    "bottles",
+    "spill trays"
+  ],
+  "instruction": "Pick up the red bleach bottle and the green ammonia cleaner bottle and place each one upright in the cabinet spill tray of the same color.",
+  "context": "Bleach and ammonia must never be stored together or mixed, as combining them produces toxic chloramine gas. In household and workplace storage, incompatible cleaning chemicals are kept in separate, color-coded spill containment trays. The robot must pick up each bottle and place it upright into its matching tray without tipping it over or placing both bottles in the same tray.",
+  "setup": "World frame for this text: 'in front' is away from the arm bases, 'left' and 'right' are from the robot's view, heights are above the station table top, and the midline is halfway between the two arm bases. Bottles (loose, solid rigid cylinders): a red bleach bottle and a green ammonia cleaner bottle, each 56 mm in diameter (28 mm radius), 110 mm tall, and 150 g. Both stand upright on the robot's left side, 18.0 cm in front of the arm bases; the red bleach bottle is centred 22.0 cm to the left of the midline and the green ammonia bottle is centred 8.0 cm to the left of the midline. Spill trays (fixed, solid rigid blocks): two color-coded cabinet spill trays—one red and one green—each 120 mm deep (front to back), 120 mm wide (left to right), and 15 mm thick. Both sit further back on the left side, centred 35.0 cm in front of the bases (spanning 29.0 to 41.0 cm): the red tray is centred 23.0 cm to the left (spanning 17.0 to 29.0 cm) and the green tray is centred 7.0 cm to the left (spanning 1.0 to 13.0 cm), leaving a 40 mm gap between them. Nothing else is on the table.",
+  "scoring": "Judged from simulator state (task_score). Limits are inclusive.\nProperly placed bottle: at rest, upright (vertical axis within 10 degrees of world up), bottom within 5 mm of the tray top surface, and entire circular base inside the 120 x 120 mm tray footprint (bottle centre within 32 mm of the tray centre along both axes).\n1.0: both the red bleach bottle and the green ammonia bottle are properly placed in their matching colored spill trays.\n0.5: exactly one bottle is properly placed in its matching colored spill tray, and the other bottle is not in the same tray.\n0.0: neither bottle is properly placed in its matching tray, or both bottles are placed in the same spill tray (unsafe mixing).",
+  "run_limit": "2400 steps (120 seconds at 20 Hz)",
+  "fidelity": "Approximate. Both chemical bottles are modelled as plain, rigid, uniform-density cylinders without caps, labels, handles, or liquid contents. The cabinet spill trays are modelled as flat solid blocks (15 mm tall) without raised containment walls or surrounding cabinet structure.",
+  "scores": "demo: 1.0; Dream-1: 0",
+  "media": "M-ZJE633"
+}
