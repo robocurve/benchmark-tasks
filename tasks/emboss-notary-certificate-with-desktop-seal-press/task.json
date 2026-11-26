@@ -1,0 +1,23 @@
+{
+  "title": "Emboss notary certificate with desktop seal press",
+  "category": "Impact on jobs",
+  "keywords": [
+    "notary seal",
+    "desktop embosser",
+    "certificate embossing",
+    "legal document",
+    "bimanual",
+    "spring lever",
+    "crimp press"
+  ],
+  "instruction": "Emboss the official notary seal on the certificate card.",
+  "context": "Paralegals and legal assistants (BLS SOC 23-2011: 352,000 workers), legal secretaries (BLS SOC 43-6012: 168,000 workers), and administrative assistants (BLS SOC 43-6014: 1,980,000 workers), representing over 2.5 million legal and administrative personnel, authenticate legal deeds, affidavits, diplomas, and corporate certificates daily using heavy-duty cast-iron desktop seal embosser presses. The bimanual operation requires holding the stiff certificate card aligned inside the die throat against the mechanical depth stop while depressing the long spring-return lever handle through a 35-degree stroke (~25 N compression force) to crimp the raised gold seal into the cardstock, and retracting both hands clear.",
+  "setup": "Standard office desk counter (Z=0.7475 m). Center: heavy cast-iron desktop seal embosser press (200 x 80 x 140 mm, 2.50 kg) at (0.280, -0.060) m with non-slip rubber pads, upper/lower brass die platens at the throat opening, and spring-loaded chrome lever handle propped at 35 deg. Right side: stiff 300 gsm notary certificate card (120 x 80 x 1.5 mm) with gold foil seal target and grip pinch tab staged on desk at (0.280, 0.130) m. Bimanual coordination: left gripper grasps certificate tab and slides card 140 mm into the press throat stop; right gripper depresses lever knob down to seated crimp position.",
+  "scoring": "Monotonic multi-stage progression: 0.20: certificate card grasped and advanced >40 mm toward press throat; 0.40: certificate seated squarely against internal depth stop (<20 mm alignment tolerance); 0.65: lever handle depressed past halfway point (q < 22.0 deg); 0.85: lever depressed to full crimp stop (q <= 6.0 deg) embossing seal impression; 1.00: both hands released and retracted clear (TCPs >= 45 mm, link hulls >= 10 mm clear) for >= 20 consecutive simulation steps (1.0 s at 20 Hz) with assembly resting still. Defect latches (0.0): press base sliding off anchor (>40 mm) or non-finite state.",
+  "run_limit": "800 steps (40 seconds at 20 Hz)",
+  "reset_notes": "Extract certificate card from press throat and re-stage on desk at (0.280, 0.130) m. Return spring lever handle to propped 35 deg rest position. Re-center press base at (0.280, -0.060) m.",
+  "fidelity": "Rigid bodies and composite collision boxes for cast-iron platen base, vertical throat column, upper/lower brass die platens, spring-return chrome lever arm with spherical palm knob, and stiff 300 gsm cardstock certificate with gold foil seal. Authentic 1:1 desktop dimensions. Multi-stage physics-verified scoring with stillness hold requirement.",
+  "scores": "Dream-1: 0.0; scripted demo: 1.0 (two complete runs, seed 0 and seed 1).",
+  "media": "M-DYWPFX",
+  "no_model_video_reason": "Dream-1 policy completed 400 simulation steps but did not produce a video recording artifact on the cluster; task_score=0.0."
+}
