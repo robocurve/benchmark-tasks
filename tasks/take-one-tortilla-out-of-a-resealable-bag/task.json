@@ -1,0 +1,22 @@
+{
+  "title": "Take one tortilla out of its resealable bag: open the zip, slide the top one out and lay it flat on the plate",
+  "category": "Societal relatability",
+  "keywords": [
+    "kitchen",
+    "deformable",
+    "resealable bag",
+    "press-to-close zip",
+    "tortilla",
+    "bimanual",
+    "thin sheets"
+  ],
+  "instruction": "Take one tortilla out of the bag and lay it flat on the plate.",
+  "context": "Taking a tortilla out of its bag is an everyday kitchen job: open the press-to-close zip by pulling its two lips apart, lift the clear film, slide the top tortilla out without dragging the rest of the stack, and lay it flat. Bag and tortillas are thin floppy sheets: each lip must be taken alone, and pulling one lip lifts the whole bag front.",
+  "setup": "Counter top z = 0.7475 m; x forward from the arm bases' line, y left of the centre line. (1) End-grain maple cutting board, 12 x 14 x 1.5 in (305 x 356 x 38 mm), loose, near edge at x = 0.36, centred on y = 0. (2) The clear LDPE (about 0.06 mm) press-to-close bag of an 8 in flour tortilla pack, opened once, 6 tortillas left: inside 240 mm across the mouth and 285 mm deep, 8 mm side seals, 10 mm bottom seal; zip closed; front lip 22 mm (curled up as an opened bag's lip is), back lip 34 mm. It lies flat on the board, mouth toward the arms, zip 20 mm in from the board's near edge, centred. (3) Six shelf-stable 8 in (203 mm) flour tortillas, about 2 mm thick and 50 g each, stacked flat in the bag, the stack's near edge 15 mm behind the zip. (4) White ceramic dinner plate, 10.5 in (267 mm), on the counter at x = 0.33, y = +0.32 (left of the board). Fixed layout, as in the screenshot.",
+  "scoring": "At the end. 1.0: one tortilla all the way out of the bag, lying flat on the plate (90 % of it inside the rim, not folded: footprint at least 85 % of its area), at rest; the other five still in the bag (no more than a quarter of any past the zip); both hands open, holding nothing, at least 10 cm from it. 0.75: one fully out and the others in, but not lying flat on the plate. 0.5: one at least half out past the zip, the others in. 0.25: zip open along at least 150 of its 240 mm. Else 0; two or more at least half out scores 0. Real trial: a tear over 20 mm scores 0.",
+  "run_limit": "2,400 control steps (120 seconds at 20 Hz)",
+  "reset_notes": "Put the tortilla back on top of the stack (replace it if torn), lay the bag flat in its marked place, press the zip shut end to end, fold the front lip down onto the back lip, and put the plate back on its mark. A pack (shelf-stable tortillas) serves a day of trials; start each day with a fresh pack.",
+  "fidelity": "PhysX 240 Hz. Films and tortillas are surface deformables (FEM shells); the zip is 37 rigid rib pairs on breakable joints (0.15 N each). PhysX cloth friction cannot hold a sheet in rubber pads, so a two-pad pinch (also of a sheet crossing the closing gap at a slant), or a closed-finger press, fixes the touched sheet vertices to the finger (any policy); film pressed onto a tortilla slides. No tearing; film modelled 1 mm thick.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-M8WJ8U"
+}
