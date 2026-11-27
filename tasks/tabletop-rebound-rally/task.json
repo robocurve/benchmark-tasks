@@ -1,0 +1,18 @@
+{
+  "title": "Three returns against a tabletop rebound board",
+  "category": "Societal relatability",
+  "keywords": [
+    "table tennis",
+    "rebound board",
+    "dynamic interception"
+  ],
+  "instruction": "Using the held paddle, complete three consecutive returns from the rebound board: hit the board, let the ball bounce once on the table, and strike it again.",
+  "context": "Practise returning a table-tennis ball with a held paddle against a return board, as in solo recreational table-tennis practice; the task tests timing and directional control through repeated physical rallies.",
+  "setup": "Unchanged YAM station table (1.10x1.30 m, top 0.7475 m), bases and calibrated cameras. Fixed board centred (0.750,0.100,0.8975) m: 600x300 mm, 15 mm MDF plus 2 mm rubber, estimated panel mass 2.25 kg. Two aluminum feet 160x40x30 mm at (0.800,-0.140,0.7625) and (0.800,0.340,0.7625) m, two M6 table clamps represented as fixed anchors. Wood/rubber paddle 170 g: diameter 156x7 mm wood head, two diameter 154x3 mm rubber faces, handle 110x26x26 mm; handle centre (0.320,0.120,0.910), head +130 mm along Y, face normal +X, physically held by left jaws. Right arm ready. Plastic ball diameter 40 mm, 2.7 g at (0.680,0.250,1.000); feeder releases at t=2 s with velocity (-1.2,0,-0.5) m/s and zero spin.",
+  "scoring": "Final score: completed returns/3, capped at 1. Each return is held-blade strike -> board front -> exactly one table bounce -> next held-blade strike; full score requires four paddle strikes and three intervening wall/table pairs. Both jaw fingertips must contact the paddle within two physics ticks of each strike. Unheld/handle strikes or robot/ball contact erase all credit. Misses, double bounce, wrong order, simultaneous different surfaces or leaving bounds end the drill and preserve completed returns. Terminal results are absorbing. Board/table tolerances and bounds are in README.",
+  "run_limit": "480 control steps (24 simulated seconds at 20 Hz); fixed seed 0. Miss ends sooner.",
+  "reset_notes": "Restore paddle/joint poses and a fresh ball to the specified feed. The prescribed feeder is an initial condition, not a scored robot skill. Nothing consumed.",
+  "fidelity": "Rigid native contacts at 480 Hz on the stock station. Product-referenced 15 mm MDF board construction; custom 600x300 mm panel with 2 mm rubber uses one fixed 17 mm envelope. Original paddle geometry, published 170 g mass anchor and compound inertia. Ball is a 40 mm, 2.7 g thin shell. Estimated restitution/friction; no rubber or shell deformation, air drag, spin lift or hardware qualification. Only the feeder writes ball velocity; subsequent motion is native physics.",
+  "scores": "Scripted demo: 1.0 (76 steps); Dream-1 beta: 0.0 (52 steps). Same final environment revision, seed 0, 480-step limit.",
+  "media": "M-4S4XDB"
+}
