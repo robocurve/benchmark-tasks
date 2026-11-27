@@ -1,0 +1,19 @@
+{
+  "title": "Cap and sort four pens",
+  "category": "Societal relatability",
+  "keywords": [
+    "bimanual assembly",
+    "insertion",
+    "color matching",
+    "sorting"
+  ],
+  "instruction": "Fit each pen with a cap of the same color. Put the two red pens on the left and the two blue pens on the right.",
+  "context": "Preparing pens for storage requires fitting the right closures, keeping the caps attached and sorting the finished pens by color.",
+  "setup": "Physical counterpart: hollow pigmented PP pen bodies, polyester felt nibs, lightened/ribbed PP cap shells, Smooth-On SORTA-Clear 40 silicone liners and paper destination prints. The 19.0 mm free liner ID engages a 19.4 mm barrel; straight grip is cap x=10–16 mm, with a 21 mm entrance at x=17.5 mm. A 25.8 mm-across-flats seat and four radial 3 mm molded-through keys with 5 mm counterbored heads mechanically capture each liner, without adhesive. Finished mass targets: 35 g per pen, 8 g per cap including liner; construction, tolerances and unperformed physical qualification are specified in PHYSICAL_REPRODUCTION.md. Simulation uses original analytic assets, assigned masses and a geometric retention approximation. Four pens (165.2 mm long) and four independent caps (35 mm long, about 32.6 mm across), fixed seed-0 layout in task.py, no jitter. Two 240 x 200 mm paper destination markers at (0.300,+0.230) m red/left and (0.300,-0.230) m blue/right, on tabletop z=0.7475 m. Control 20 Hz; cameras 640 x 360; existing station and wrist calibration.",
+  "scoring": "Score the final state. Each pen earns 0.125 for a matching cap retained after measured insertion and one second with both hands clear, plus 0.125 for resting in its correct area for one second. Capping credit lasts while the matching pair remains retained; placement credit is lost if the pen is held or moved out. Wrong-color and uncapped pens earn no placement credit. Rest requires the pen root 6–25 mm above the table, its axis within 8° of horizontal and (root displacement + 0.06 × full orientation change in radians) / control-interval duration < 0.015 m/s. The conservative projected pen/cap envelope must fit inside the rectangle with a 1 mm inset. Both tool-center points must be more than 60 mm from the full pen segment and cap. Full score requires all four matching caps retained and all four pens released and resting in the correct areas.",
+  "run_limit": "6,000 steps (300 seconds at 20 Hz)",
+  "reset_notes": "Remove all cap-retention joints, restore the separate pens and caps to their starting poses, clear insertion, release and scoring histories, and capture fresh observations after clearing camera history.",
+  "fidelity": "Original analytic pen/cap geometry; PP body/shell and Shore A40 silicone are specified physical materials. A 19.0 mm liner bore engages a 19.4 mm barrel; molded keys capture the liner without adhesive. Keys and mass-relief cavities are omitted. Inner silicone is visible/noncolliding, backing rigid; measured engagement for 0.2 s creates a pose-preserving joint. No calibrated elasticity, holding or break force. Physical build/forces untested. Demo and Dream use the same approximation.",
+  "scores": "Scripted demo: 1.0 (4,910 actions); Dream-1 beta: 0.0 (6,000 actions), same 6,000-action limit. Both revised videos and the matching setup image are uploaded as M-CYJ5YA.",
+  "media": "M-CYJ5YA"
+}
