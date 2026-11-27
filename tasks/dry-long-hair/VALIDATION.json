@@ -1,0 +1,153 @@
+{
+  "status": "granular_native_observed_4p3s_timeout_full_task_incomplete",
+  "date": "2026-11-16",
+  "local_model_tests_passed": 57,
+  "native_runtime": true,
+  "demo_score": null,
+  "video": null,
+  "remaining": [
+    "Redesign the measured dryer-holder egress path/grasp without collisions or saturated joint targets",
+    "Native loaded sweep, lower/inner hair access and all960patch drying",
+    "Calibrate passive bundles and airflow/thermal approximations",
+    "Full-score feedback-free demo, genuine Dream attempt and media"
+  ],
+  "native_mechanics_probe": {
+    "run": "hair-native-001",
+    "max_joint_separation_m": 0.0009245453,
+    "max_lock_motion_m": 0.1177754,
+    "power_off_water_loss_kg": 0.0,
+    "task_score": null
+  },
+  "current_model": {
+    "locks": 24,
+    "segments_per_lock": 10,
+    "passive_articulation": true,
+    "actuated_hair_joints": false,
+    "head_mount": "world FixedJoint on ordinary stand; HEAD/180-degree yaw rest frame (XYZW 0,0,1,0)",
+    "head_swivel_dof": false,
+    "passive_hair_dofs": 240,
+    "patches": 960,
+    "capsule_length_m": 0.025,
+    "capsule_radius_m": 0.0035
+  },
+  "current_native_mechanics_probe": {
+    "run": "hair-skin012",
+    "max_joint_separation_m": 2.417935e-07,
+    "max_lock_motion_m": 0.036507876,
+    "max_skin_attachment_error_m": 6.4461915e-07,
+    "scalp_contact_respected": true,
+    "power_off_water_loss_kg": 0.0,
+    "task_score": null
+  },
+  "current_revision_native_validated": false,
+  "historical_swivelling_head_controller": {
+    "run": "hair-power011",
+    "score": 0.0,
+    "failure": "insert_below_switch did not settle within measured tolerances",
+    "diagnosed": "actual dryer roll makes body-aligned wrist orientation unreachable; world-fixed orientation solves measured pose within43um, pending native repeat",
+    "current_fixed_head_validation": false
+  },
+  "latest_historical_power_probe": {
+    "run": "hair-power013",
+    "score": 0.0,
+    "current_fixed_head_validation": false,
+    "swivelling_head_video_outdated": true,
+    "failure": "physical slider did not remain on after horizontal retraction",
+    "dry_fraction": 0.0,
+    "worst_remaining_water_fraction": 1.0,
+    "scope": "Historical power-only attempt; not a fixed-head drying demonstration"
+  },
+  "fixed_head_requirement": {
+    "head_position_m": [
+      0.43,
+      0.0,
+      1.045
+    ],
+    "head_rotation_xyzw": [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "native_joint_type": "PhysicsFixedJoint",
+    "exclude_from_articulation": true,
+    "max_translation_m": 0.002,
+    "max_rotation_deg": 1.0,
+    "partial_credit_invalidated_on_motion": true,
+    "missing_nonfinite_pose_invalid": true,
+    "reference_rebased_from_observation": false,
+    "pose_writes_or_reset_loop": false,
+    "native_validated": false
+  },
+  "fixed_head_cpu_checks": {
+    "all_tests_passed_usd_env": 42,
+    "standard_env_passed": 40,
+    "standard_env_skipped_usd": 2,
+    "real_UsdPhysics_topology_tests": 2,
+    "PhysxSchema_plugin_available_locally": false,
+    "native_dynamics_tested": false,
+    "unchanged_fields": [
+      "60passivehairDOFs",
+      "skinattachment",
+      "slider/detent",
+      "bodymasses",
+      "thermal/moistureparameters",
+      "dryingthresholds"
+    ]
+  },
+  "opposite_head_revision": {
+    "native_validated": false,
+    "quaternion_xyzw": [
+      0,
+      0,
+      1,
+      0
+    ],
+    "nose_direction_world": [
+      1,
+      0,
+      0
+    ],
+    "all_hair_and_skin_frames_rotated": true,
+    "head_actuation": false,
+    "usd_fixed_frame_tests_passed": 8,
+    "partial_sweep_bands": 2,
+    "partial_sweep_native_validated": false,
+    "full_drying_controller": false
+  },
+  "native_full_demo_verified": false,
+  "latest_native": {
+    "orientation": "hair-opposite-orientation-002:180rows/9s,headtranslation4.22e-7m/rotation3.41e-5deg,nose+X",
+    "switch": "PhysicalsliderONretainedafterfingerwithdrawal",
+    "sweep": "hair-opposite-sweep-002:813rows/40.65s,failedlift,0drying,unscored",
+    "trace_sha256": "13fa63aa7e0b893a45e043decf2ad84e1e66777bcd5b5f9838b5712c6418ddb9"
+  },
+  "granularity_revision": {
+    "native_validated": false,
+    "reference_model": "12 locks x5links of50mm;14mmdiameter",
+    "current_model": "24 locks x10links of25mm;7mmdiameter",
+    "conserved": [
+      "250mmlocklength",
+      "32gdrymass",
+      "6.4gwater",
+      "total lateral thermal area",
+      "dryheatcapacity",
+      "uniform-curvature total bend energy"
+    ],
+    "limitations": "Reduced alternating-axis bundles, not calibrated fibre mechanics. Prior native evidence is for coarser60link model."
+  },
+  "native_granular_restart_001": {
+    "status": "partial_native_observation_timeout_before_planned_9s",
+    "source_commit": "7cf9177",
+    "controls": 86,
+    "observed_time_s": 4.3,
+    "owners": 262,
+    "max_head_translation_m": 4.666440307116416e-07,
+    "max_head_rotation_deg": 1.6355552082883253e-07,
+    "max_crease_separation_m": 2.552083833510802e-07,
+    "max_skin_attachment_error_m": 7.539732678196742e-07,
+    "dry_fraction": 0.0,
+    "trace_sha256": "e09f1457a3fcfe2aac0a8a01324fd10e5cf180f859ff6596dde4a0df1e15f783",
+    "full_drying_demo": false
+  }
+}
