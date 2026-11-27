@@ -1,0 +1,20 @@
+{
+  "title": "Open a shelf-ready tray of cans: peel the front panel out and down so the perforation tears (a straight lift holds)",
+  "category": "Impact on jobs",
+  "keywords": [
+    "tearing",
+    "perforation",
+    "retail",
+    "shelf-ready packaging",
+    "restocking"
+  ],
+  "instruction": "Open this shelf-ready tray so it can go straight onto the shelf: take its front panel off along the perforation and leave every can standing in the tray.",
+  "context": "Stockers and order fillers (O*NET 53-7065) open shelf-ready trays all shift when they restock: the front panel comes off by hand along a printed perforation, with no knife, and the tray goes on the shelf as the display. The hard part is the peel: a finger goes down behind the panel between touching cans, and the panel must come out and down, since pulled straight up the perforation holds, all without dragging the 5 kg tray or knocking a can over.",
+  "setup": "Positions in cm from the midpoint between the arm bases (x forward, y left), heights above the table; one fixed layout, as in the screenshot. On the table, square to its edge and centred on y 0, stands an open-top shelf-ready tray: a FEFCO 0200 half-slotted case (no top flaps) of brown 44 ECT single-wall B-flute board, 3 mm thick, about 260 g, shrink film already off, 31.0 across (y), 24.1 front to back (x) and 11.5 tall outside, its front face at x 25. Twelve 15 oz steel cans of vegetables (7.5 cm diameter, 11.1 cm tall, 425 g, paper labels) stand upright inside in 3 rows of 4, touching each other, the front row 8 mm back from the front wall. The part that comes off is the front wall above a 4 cm strip that stays as a lip, plus a triangle of each side wall above a line from the side wall's top edge 9 cm back from the front down to the top of the lip at the front corner. Its tear line is an easy-open perforation, cut through except at 15 short ties (9 along the lip line, 3 down each diagonal) as drawn 1:1 in tray_template.svg, and marked with printed dashes. Nothing else is on the table.",
+  "scoring": "Judged at the end of the trial (on a real rig: the video, tape marks at the tray's corners and a look at the torn edges). 0, whatever else: the board torn more than 5 mm off the perforation line anywhere, or the tray ever tipped more than 10 degrees. Otherwise 1.0: the panel off (every tie torn) and not in or on the tray, the tray moved no more than 2 cm at any corner, all 12 cans upright (within 10 degrees) in the tray, both grippers 3 cm or more from the tray and the panel, and everything still (under 1 cm/s) for 1 s. 0.5: the panel off, but not all of that. 0.25: the tear started (at least one tie torn), the panel still on. 0: nothing torn.",
+  "run_limit": "2,400 steps (120 seconds at 20 Hz)",
+  "reset_notes": "Each trial tears a fresh tray: a stock FEFCO 0200 case with its tear line cut from tray_template.svg by laser, a box maker's CAD table or a craft knife along a steel rule (5 to 10 min a tray; README). Two spares per batch must pass a pull test with a luggage scale clipped to the middle of the panel's top edge: a 20 N straight lift holds, and a horizontal peel breaks the first tie at 4.5-9 N. Load the same 12 cans in the same pattern and square the tray on its tape marks.",
+  "fidelity": "Rigid board: the tray, the front panel and two side flaps, joined at the corners by sprung folds. The tear line is modelled tie for tie: 15 ties that hold only against being pulled open or sheared out of plane and break past 1.8 N (diagonals) or 3.6 N (lip); a push that closes the line bears on the board below. A peel at the panel's top edge starts the tear at about 6.7 N; a straight lift holds to about 43 N. Real trays must pass the same two pulls (README). Tears off the line aren't modelled.",
+  "scores": "Dream-1 run: 0.0; demo: 1.0",
+  "media": "M-AC7LZY"
+}
