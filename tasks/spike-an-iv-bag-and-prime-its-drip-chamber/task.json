@@ -1,0 +1,20 @@
+{
+  "title": "Spike an IV bag and prime its drip chamber",
+  "category": "Impact on jobs",
+  "keywords": [
+    "bimanual",
+    "nursing",
+    "infusion",
+    "spike insertion",
+    "drip-chamber priming"
+  ],
+  "instruction": "Prepare the hanging IV bag aseptically: remove the blue spike-port cap and the navy giving-set spike cap without touching either exposed sterile interface, turn the drip chamber upright, seat the upward-pointing spike to its collar, keep the chamber axis within 12 degrees of vertical below the port, then squeeze and release until the gravity-referenced liquid height from the outlet end is 15-27 mm. Release everything and return both arms to their starting poses.",
+  "context": "Spiking an IV bag and setting the drip-chamber liquid level are routine preparation steps performed by nurses and infusion technicians. The task tests coordinated stabilization, cap removal, axial insertion and controlled priming.",
+  "setup": "Fixed YAM station, metres from arm-base midpoint: x forward, y left. A nonsterile stainless tray covers x 0.16-0.50 and y -0.30-0.24. The sealed 500 mL bag hangs vertically at (0.39,-0.122,0.99), ports down. The upright giving-set chamber starts at (0.36,-0.30,0.8315) in a white molded cradle with a raised support and simulated release latch. The bag-port cap has an extended handling strip; the giving-set spike cap has an offset handling tab. The chamber/spike assembly is a 20 g rigid proxy, with a 20 mm-diameter, 45 mm-long chamber, 39 mm graduated span, handling wings and flanges; tubing and closed roller clamp are visual proxies. Both sterile interfaces begin capped. After exposure, all gripper collision meshes, including the palms, finger shafts and fingertip pads, are checked for contact. The tray is nonsterile. Priming requires the chamber within 12 degrees of vertical with the outlet end below the inlet and the lower liquid region at least 10 mm below the port.",
+  "scoring": "Contamination latches 0 before spike lock if the open-port disk or exposed-spike segment intersects any measured palm/fingertip collision envelope, or if either sterile surface reaches within 0.5 mm of the nonsterile work tray. Overfill above 34 mm also latches 0. Otherwise, measured at trial end: 0.25 when both protective caps are displaced at least 6 mm; 0.5 when the spike is also seated 23-25 mm with its collar at the port mouth; 1.0 when the gravity-referenced liquid height is 15-27 mm with the chamber axis within 12 degrees of vertical, the hanging bag remains on its support, both TCPs are at least 4 cm from chamber and port and within 5 cm of their starts, and bag and set rest for 1 s. All other outcomes score the highest completed uncontaminated stage.",
+  "run_limit": "2,400 steps (2 minutes at 20 Hz)",
+  "reset_notes": "Restore the sealed bag to (0.39,-0.122,0.99), ports down, and upright chamber to (0.36,-0.30,0.8315) in its molded cradle. Both caps are attached, chamber empty, roller clamp closed. Simulation reset restores cap seals, presentation latch, contamination latch, spike joint and liquid height. Use object_jitter=0. For real trials use fresh sterile components and follow their aseptic handling instructions.",
+  "fidelity": "Rigid-body approximation with geometric cap displacement and spike depth. Contact uses convex hulls of every URDF gripper collision mesh, expanded by sterile-interface radius, plus the tray plane. Microorganisms are not simulated. A discrete rack latch releases upon enclosure. Liquid is a calibrated squeeze/release height proxy, enabled only when seated, upright and below the port; no fluid dynamics or elastic chamber deformation is simulated.",
+  "scores": "Dream-1: 0.0 (2,400 control steps); scripted demo: 1.0 (1,132 control steps). Both recordings are native 1280x720.",
+  "media": "M-2MVTBS"
+}
